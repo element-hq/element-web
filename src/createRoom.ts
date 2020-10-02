@@ -289,9 +289,9 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
     if (existingDMRoom) {
         roomId = existingDMRoom.roomId;
     } else {
-        let encryption;
+        let encryption: boolean = undefined;
         if (privateShouldBeEncrypted()) {
-            encryption = canEncryptToAllUsers(client, [userId]);
+            encryption = await canEncryptToAllUsers(client, [userId]);
         }
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
         await _waitForMember(client, roomId, userId);

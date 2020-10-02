@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {MatrixClientPeg} from './MatrixClientPeg';
-import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
-import {WidgetType} from "./widgets/WidgetType";
 import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 
 function textForMemberEvent(ev) {
@@ -29,7 +27,6 @@ function textForMemberEvent(ev) {
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
 
-    const ConferenceHandler = CallHandler.getConferenceHandler();
     const reason = content.reason ? (_t('Reason') + ': ' + content.reason) : '';
     switch (content.membership) {
         case 'invite': {
@@ -44,11 +41,7 @@ function textForMemberEvent(ev) {
                     return _t('%(targetName)s accepted an invitation.', {targetName});
                 }
             } else {
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('%(senderName)s requested a VoIP conference.', {senderName});
-                } else {
-                    return _t('%(senderName)s invited %(targetName)s.', {senderName, targetName});
-                }
+                return _t('%(senderName)s invited %(targetName)s.', {senderName, targetName});
             }
         }
         case 'ban':
@@ -85,17 +78,11 @@ function textForMemberEvent(ev) {
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('VoIP conference started.');
-                } else {
-                    return _t('%(targetName)s joined the room.', {targetName});
-                }
+                return _t('%(targetName)s joined the room.', {targetName});
             }
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('VoIP conference finished.');
-                } else if (prevContent.membership === "invite") {
+                if (prevContent.membership === "invite") {
                     return _t('%(targetName)s rejected the invitation.', {targetName});
                 } else {
                     return _t('%(targetName)s left the room.', {targetName});
@@ -476,10 +463,6 @@ function textForWidgetEvent(event) {
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
 
-    if (WidgetType.JITSI.matches(type) || WidgetType.JITSI.matches(prevType)) {
-        return textForJitsiWidgetEvent(event, senderName, url, prevUrl);
-    }
-
     let widgetName = name || prevName || type || prevType || '';
     // Apply sentence case to widget name
     if (widgetName && widgetName.length > 0) {
@@ -501,24 +484,6 @@ function textForWidgetEvent(event) {
     } else {
         return _t('%(widgetName)s widget removed by %(senderName)s', {
             widgetName, senderName,
-        });
-    }
-}
-
-function textForJitsiWidgetEvent(event, senderName, url, prevUrl) {
-    if (url) {
-        if (prevUrl) {
-            return _t('Group call modified by %(senderName)s', {
-                senderName,
-            });
-        } else {
-            return _t('Group call started by %(senderName)s', {
-                senderName,
-            });
-        }
-    } else {
-        return _t('Group call ended by %(senderName)s', {
-            senderName,
         });
     }
 }

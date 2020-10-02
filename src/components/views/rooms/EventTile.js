@@ -34,6 +34,7 @@ import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
+import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
 
 const eventTileTypes = {
@@ -108,6 +109,19 @@ export function getHandlerTile(ev) {
         const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
         if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
             return;
+        }
+    }
+
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
+    if (type === "im.vector.modular.widgets") {
+        let type = ev.getContent()['type'];
+        if (!type) {
+            // deleted/invalid widget - try the past widget type
+            type = ev.getPrevContent()['type'];
+        }
+
+        if (WidgetType.JITSI.matches(type)) {
+            return "messages.MJitsiWidgetEvent";
         }
     }
 
@@ -627,16 +641,18 @@ export default class EventTile extends React.Component {
         const msgtype = content.msgtype;
         const eventType = this.props.mxEvent.getType();
 
+        let tileHandler = getHandlerTile(this.props.mxEvent);
+
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === "m.room.encryption");
+            (eventType === "m.room.encryption") ||
+            (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (
             !isBubbleMessage && eventType !== 'm.room.message' &&
             eventType !== 'm.sticker' && eventType !== 'm.room.create'
         );
 
-        let tileHandler = getHandlerTile(this.props.mxEvent);
         // If we're showing hidden events in the timeline, we should use the
         // source tile when there's no regular tile for an event and also for
         // replace relations (which otherwise would display as a confusing

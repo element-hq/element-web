@@ -221,7 +221,6 @@ export default class GeneralUserSettingsTab extends React.Component {
     _renderProfileSection() {
         return (
             <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 <ProfileSettings />
             </div>
         );

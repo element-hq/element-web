@@ -217,7 +217,7 @@ limitations under the License.
         }
     }
 
-    &.mx_MessageComposer_hangup::before {
+    &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
         background-color: $warning-color;
     }
 }

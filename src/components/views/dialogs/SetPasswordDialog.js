@@ -117,7 +117,9 @@ export default class SetPasswordDialog extends React.Component {
                         autoFocusNewPasswordInput={true}
                         shouldAskForEmail={true}
                         onError={this._onPasswordChangeError}
-                        onFinished={this._onPasswordChanged} />
+                        onFinished={this._onPasswordChanged}
+                        buttonLabel={_t("Set Password")}
+                    />
                     <div className="error">
                         { this.state.error }
                     </div>

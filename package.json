@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -79,6 +79,7 @@
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.19",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+    "matrix-widget-api": "^0.1.0-beta.2",
     "minimist": "^1.2.5",
     "pako": "^1.0.11",
     "parse5": "^5.1.1",
@@ -95,7 +96,7 @@
     "react-transition-group": "^4.4.1",
     "resize-observer-polyfill": "^1.5.1",
     "rfc4648": "^1.4.0",
-    "sanitize-html": "^1.27.1",
+    "sanitize-html": "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db",
     "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.2",
     "url": "^0.11.0",

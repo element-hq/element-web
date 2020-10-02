@@ -44,3 +44,26 @@ export function mapKeyChanges<K, V>(a: Map<K, V>, b: Map<K, V>): K[] {
     const diff = mapDiff(a, b);
     return arrayMerge(diff.removed, diff.added, diff.changed);
 }
+
+/**
+ * A Map<K, V> with added utility.
+ */
+export class EnhancedMap<K, V> extends Map<K, V> {
+    public constructor(entries?: Iterable<[K, V]>) {
+        super(entries);
+    }
+
+    public getOrCreate(key: K, def: V): V {
+        if (this.has(key)) {
+            return this.get(key);
+        }
+        this.set(key, def);
+        return def;
+    }
+
+    public remove(key: K): V {
+        const v = this.get(key);
+        this.delete(key);
+        return v;
+    }
+}
