@@ -25,6 +25,7 @@ import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
 import BaseCard from "../views/right_panel/BaseCard";
 import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
+import DesktopBuildsNotice, {WarningKind} from "../views/elements/DesktopBuildsNotice";
 
 /*
  * Component which shows the filtered file using a TimelinePanel
@@ -222,6 +223,8 @@ class FilePanel extends React.Component {
             <p>{_t('Attach files from chat or just drag and drop them anywhere in a room.')}</p>
         </div>);
 
+        const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
+
         if (this.state.timelineSet) {
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
@@ -232,6 +235,7 @@ class FilePanel extends React.Component {
                     previousPhase={RightPanelPhases.RoomSummary}
                     withoutScrollContainer
                 >
+                    <DesktopBuildsNotice isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                     <TimelinePanel
                         manageReadReceipts={false}
                         manageReadMarkers={false}

@@ -82,6 +82,7 @@ export default class PersistentApp extends React.Component {
                     showDelete={false}
                     showMinimise={false}
                     miniMode={true}
+                    showMenubar={false}
                 />;
             }
         }

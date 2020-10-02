@@ -65,6 +65,15 @@ export default class ProfileSettings extends React.Component {
         });
     };
 
+    _clearProfile = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (!this.state.enableProfileSave) return;
+        this._removeAvatar();
+        this.setState({enableProfileSave: false, displayName: this.state.originalDisplayName});
+    };
+
     _saveProfile = async (e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -144,18 +153,27 @@ export default class ProfileSettings extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
         return (
-            <form onSubmit={this._saveProfile} autoComplete="off" noValidate={true}>
+            <form
+                onSubmit={this._saveProfile}
+                autoComplete="off"
+                noValidate={true}
+                className="mx_ProfileSettings_profileForm"
+            >
                 <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
                        onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
+                        <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
+                        <Field
+                            label={_t("Display Name")}
+                            type="text" value={this.state.displayName}
+                            autoComplete="off"
+                            onChange={this._onDisplayNameChanged}
+                        />
                         <p>
                             {this.state.userId}
                             {hostingSignup}
                         </p>
-                        <Field label={_t("Display Name")}
-                               type="text" value={this.state.displayName} autoComplete="off"
-                               onChange={this._onDisplayNameChanged} />
                     </div>
                     <AvatarSetting
                         avatarUrl={this.state.avatarUrl}
@@ -164,10 +182,22 @@ export default class ProfileSettings extends React.Component {
                         uploadAvatar={this._uploadAvatar}
                         removeAvatar={this._removeAvatar} />
                 </div>
-                <AccessibleButton onClick={this._saveProfile} kind="primary"
-                                  disabled={!this.state.enableProfileSave}>
-                    {_t("Save")}
-                </AccessibleButton>
+                <div className="mx_ProfileSettings_buttons">
+                    <AccessibleButton
+                        onClick={this._clearProfile}
+                        kind="link"
+                        disabled={!this.state.enableProfileSave}
+                    >
+                        {_t("Cancel")}
+                    </AccessibleButton>
+                    <AccessibleButton
+                        onClick={this._saveProfile}
+                        kind="primary"
+                        disabled={!this.state.enableProfileSave}
+                    >
+                        {_t("Save")}
+                    </AccessibleButton>
+                </div>
             </form>
         );
     }
