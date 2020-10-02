@@ -275,12 +275,17 @@ export async function _waitForMember(client: MatrixClient, roomId: string, userI
  * can encrypt to.
  */
 export async function canEncryptToAllUsers(client: MatrixClient, userIds: string[]) {
-    const usersDeviceMap = await client.downloadKeys(userIds);
-    // { "@user:host": { "DEVICE": {...}, ... }, ... }
-    return Object.values(usersDeviceMap).every((userDevices) =>
-        // { "DEVICE": {...}, ... }
-        Object.keys(userDevices).length > 0,
-    );
+    try {
+        const usersDeviceMap = await client.downloadKeys(userIds);
+        // { "@user:host": { "DEVICE": {...}, ... }, ... }
+        return Object.values(usersDeviceMap).every((userDevices) =>
+            // { "DEVICE": {...}, ... }
+            Object.keys(userDevices).length > 0,
+        );
+    } catch (e) {
+        console.error("Error determining if it's possible to encrypt to all users: ", e);
+        return false; // assume not
+    }
 }
 
 export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string> {
