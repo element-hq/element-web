@@ -2517,5 +2517,6 @@
     "Join the conference from the room information card on the right": "Konferenzgespräch in den Rauminformationen rechts beitreten",
     "Video conference ended by %(senderName)s": "Videokonferenz von %(senderName)s beendet",
     "Video conference updated by %(senderName)s": "Videokonferenz wurde von %(senderName)s aktualisiert",
-    "Video conference started by %(senderName)s": "Videokonferenz wurde von %(senderName)s gestartet"
+    "Video conference started by %(senderName)s": "Videokonferenz wurde von %(senderName)s gestartet",
+    "Ignored attempt to disable encryption": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert"
 }
