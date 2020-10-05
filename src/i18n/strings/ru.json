@@ -1325,7 +1325,7 @@
     "Invalid homeserver discovery response": "Неверный ответ при попытке обнаружения домашнего сервера",
     "Failed to get autodiscovery configuration from server": "Не удалось получить конфигурацию автообнаружения с сервера",
     "Invalid base_url for m.homeserver": "Неверный base_url для m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-адрес сервера не является действительным URL-адресом сервера Матрица",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-адрес домашнего сервера не является допустимым домашним сервером Matrix",
     "Invalid identity server discovery response": "Неверный ответ на запрос идентификации сервера",
     "Invalid base_url for m.identity_server": "Неверный base_url для m.identity_server",
     "Identity server URL does not appear to be a valid identity server": "URL-адрес сервера идентификации не является действительным сервером идентификации",
@@ -2411,7 +2411,7 @@
     "Explore public rooms": "Просмотреть публичные комнаты",
     "Uploading logs": "Загрузка журналов",
     "Downloading logs": "Скачивание журналов",
-    "Can't see what you’re looking for?": "Не видите то, что ищете?",
+    "Can't see what you’re looking for?": "Не нашли, что искали?",
     "Explore all public rooms": "Просмотреть все публичные комнаты",
     "%(count)s results|other": "%(count)s результатов",
     "Preparing to download logs": "Подготовка к загрузке журналов",
@@ -2508,5 +2508,12 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Эта версия %(brand)s не поддерживает просмотр некоторых зашифрованных файлов",
     "This version of %(brand)s does not support searching encrypted messages": "Эта версия %(brand)s не поддерживает поиск зашифрованных сообщений",
     "Cannot create rooms in this community": "Невозможно создать комнаты в этом сообществе",
-    "You do not have permission to create rooms in this community.": "У вас нет разрешения на создание комнат в этом сообществе."
+    "You do not have permission to create rooms in this community.": "У вас нет разрешения на создание комнат в этом сообществе.",
+    "Join the conference at the top of this room": "Присоединяйтесь к конференции в верхней части этой комнаты",
+    "Join the conference from the room information card on the right": "Присоединяйтесь к конференции, используя информационную карточку комнаты справа",
+    "Video conference ended by %(senderName)s": "%(senderName)s завершил(а) видеоконференцию",
+    "Video conference updated by %(senderName)s": "%(senderName)s обновил(а) видеоконференцию",
+    "Video conference started by %(senderName)s": "%(senderName)s начал(а) видеоконференцию",
+    "End conference": "Завершить конференцию",
+    "This will end the conference for everyone. Continue?": "Это завершит конференцию для всех. Продолжить?"
 }
