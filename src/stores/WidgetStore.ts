@@ -119,6 +119,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     private loadRoomWidgets(room: Room) {
+        if (!room) return;
         const roomInfo = this.roomMap.get(room.roomId);
         roomInfo.widgets = [];
         this.generateApps(room).forEach(app => {
