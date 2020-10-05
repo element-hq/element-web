@@ -186,6 +186,8 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         console.log("Logged in with token");
         return _clearStorage().then(() => {
             _persistCredentialsToLocalStorage(creds);
+            // remember that we just logged in
+            sessionStorage.setItem("mx_fresh_login", true);
             return true;
         });
     }).catch((err) => {
@@ -312,6 +314,9 @@ async function _restoreFromLocalStorage(opts) {
             console.log("No pickle key available");
         }
 
+        const freshLogin = sessionStorage.getItem("mx_fresh_login");
+        sessionStorage.removeItem("mx_fresh_login");
+
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
             userId: userId,
@@ -321,6 +326,7 @@ async function _restoreFromLocalStorage(opts) {
             identityServerUrl: isUrl,
             guest: isGuest,
             pickleKey: pickleKey,
+            freshLogin: freshLogin,
         }, false);
         return true;
     } else {
@@ -364,6 +370,7 @@ async function _handleLoadSessionFailure(e) {
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 export async function setLoggedIn(credentials) {
+    credentials.freshLogin = true;
     stopMatrixClient();
     const pickleKey = credentials.userId && credentials.deviceId
           ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
@@ -429,6 +436,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         " guest: " + credentials.guest +
         " hs: " + credentials.homeserverUrl +
         " softLogout: " + softLogout,
+        " freshLogin: " + credentials.freshLogin,
     );
 
     // This is dispatched to indicate that the user is still in the process of logging in
@@ -462,9 +470,27 @@ async function _doSetLoggedIn(credentials, clearStorage) {
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
+    MatrixClientPeg.replaceUsingCreds(credentials);
+    const client = MatrixClientPeg.get();
+
+    if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
+        // If we just logged in, try to rehydrate a device instead of using a
+        // new device.  If it succeeds, we'll get a new device ID, so make sure
+        // we persist that ID to localStorage
+        const newDeviceId = await client.rehydrateDevice();
+        if (newDeviceId) {
+            credentials.deviceId = newDeviceId;
+        }
+
+        delete credentials.freshLogin;
+    }
+
     if (localStorage) {
         try {
             _persistCredentialsToLocalStorage(credentials);
+
+            // make sure we don't think that it's a fresh login any more
+            sessionStorage.removeItem("mx_fresh_login");
 
             // The user registered as a PWLU (PassWord-Less User), the generated password
             // is cached here such that the user can change it at a later time.
@@ -482,12 +508,10 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         console.warn("No local storage available: can't persist session!");
     }
 
-    MatrixClientPeg.replaceUsingCreds(credentials);
-
     dis.dispatch({ action: 'on_logged_in' });
 
     await startMatrixClient(/*startSyncing=*/!softLogout);
-    return MatrixClientPeg.get();
+    return client;
 }
 
 function _showStorageEvictedDialog() {
