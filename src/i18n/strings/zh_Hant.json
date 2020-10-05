@@ -2515,5 +2515,13 @@
     "This version of %(brand)s does not support viewing some encrypted files": "此版本的 %(brand)s 不支援檢視某些加密檔案",
     "This version of %(brand)s does not support searching encrypted messages": "此版本的 %(brand)s 不支援搜尋加密訊息",
     "Cannot create rooms in this community": "無法在此社群中建立聊天室",
-    "You do not have permission to create rooms in this community.": "您沒有在此社群中建立聊天室的權限。"
+    "You do not have permission to create rooms in this community.": "您沒有在此社群中建立聊天室的權限。",
+    "Join the conference at the top of this room": "加入此聊天室頂部的會議",
+    "Join the conference from the room information card on the right": "從右側的聊天室資訊卡片加入會議",
+    "Video conference ended by %(senderName)s": "視訊會議由 %(senderName)s 結束",
+    "Video conference updated by %(senderName)s": "視訊會議由 %(senderName)s 更新",
+    "Video conference started by %(senderName)s": "視訊會議由 %(senderName)s 開始",
+    "End conference": "結束會議",
+    "This will end the conference for everyone. Continue?": "這將會對所有人結束會議。要繼續嗎？",
+    "Ignored attempt to disable encryption": "已忽略嘗試停用加密"
 }
