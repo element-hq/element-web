@@ -2520,5 +2520,8 @@
     "Join the conference from the room information card on the right": "Entra nella conferenza dalla scheda di informazione della stanza a destra",
     "Video conference ended by %(senderName)s": "Conferenza video terminata da %(senderName)s",
     "Video conference updated by %(senderName)s": "Conferenza video aggiornata da %(senderName)s",
-    "Video conference started by %(senderName)s": "Conferenza video iniziata da %(senderName)s"
+    "Video conference started by %(senderName)s": "Conferenza video iniziata da %(senderName)s",
+    "End conference": "Termina conferenza",
+    "This will end the conference for everyone. Continue?": "Verrà terminata la conferenza per tutti. Continuare?",
+    "Ignored attempt to disable encryption": "Tentativo di disattivare la crittografia ignorato"
 }
