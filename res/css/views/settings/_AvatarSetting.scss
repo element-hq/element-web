@@ -16,6 +16,7 @@ limitations under the License.
 
 .mx_AvatarSetting_avatar {
     width: 90px;
+    min-width: 90px; // so it doesn't get crushed by the flexbox in languages with longer words
     height: 90px;
     margin-top: 8px;
     position: relative;
