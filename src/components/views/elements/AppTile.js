@@ -563,8 +563,8 @@ export default class AppTile extends React.Component {
             const canUserModify = this._canUserModify();
             const showEditButton = Boolean(this._sgWidget.isManagedByManager && canUserModify);
             const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
-            const showPictureSnapshotButton = this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.Screenshots)
-                && this.props.show;
+            const showPictureSnapshotButton = this.props.show && this._sgWidget.widgetApi &&
+                this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.Screenshots);
 
             const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');
             contextMenu = (
