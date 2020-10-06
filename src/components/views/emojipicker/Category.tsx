@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,32 +15,53 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {RefObject} from 'react';
+
 import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
-import * as sdk from '../../../index';
+import LazyRenderList from "../elements/LazyRenderList";
+import {DATA_BY_CATEGORY, IEmoji} from "../../../emoji";
+import Emoji from './Emoji';
 
 const OVERFLOW_ROWS = 3;
 
-class Category extends React.PureComponent {
-    static propTypes = {
-        emojis: PropTypes.arrayOf(PropTypes.object).isRequired,
-        name: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-        onMouseEnter: PropTypes.func.isRequired,
-        onMouseLeave: PropTypes.func.isRequired,
-        onClick: PropTypes.func.isRequired,
-        selectedEmojis: PropTypes.instanceOf(Set),
-    };
+export type CategoryKey = (keyof typeof DATA_BY_CATEGORY) | "recent";
 
-    _renderEmojiRow = (rowIndex) => {
+export interface ICategory {
+    id: CategoryKey;
+    name: string;
+    enabled: boolean;
+    visible: boolean;
+    ref: RefObject<HTMLButtonElement>;
+}
+
+interface IProps {
+    id: string;
+    name: string;
+    emojis: IEmoji[];
+    selectedEmojis: Set<string>;
+    heightBefore: number;
+    viewportHeight: number;
+    scrollTop: number;
+    onClick(emoji: IEmoji): void;
+    onMouseEnter(emoji: IEmoji): void;
+    onMouseLeave(emoji: IEmoji): void;
+}
+
+class Category extends React.PureComponent<IProps> {
+    private renderEmojiRow = (rowIndex: number) => {
         const { onClick, onMouseEnter, onMouseLeave, selectedEmojis, emojis } = this.props;
         const emojisForRow = emojis.slice(rowIndex * 8, (rowIndex + 1) * 8);
-        const Emoji = sdk.getComponent("emojipicker.Emoji");
         return (<div key={rowIndex}>{
-            emojisForRow.map(emoji =>
-                <Emoji key={emoji.hexcode} emoji={emoji} selectedEmojis={selectedEmojis}
-                    onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />)
+            emojisForRow.map(emoji => ((
+                <Emoji
+                    key={emoji.hexcode}
+                    emoji={emoji}
+                    selectedEmojis={selectedEmojis}
+                    onClick={onClick}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                />
+            )))
         }</div>);
     };
 
@@ -52,7 +74,6 @@ class Category extends React.PureComponent {
         for (let counter = 0; counter < rows.length; ++counter) {
             rows[counter] = counter;
         }
-        const LazyRenderList = sdk.getComponent('elements.LazyRenderList');
 
         const viewportTop = scrollTop;
         const viewportBottom = viewportTop + viewportHeight;
@@ -84,7 +105,7 @@ class Category extends React.PureComponent {
                     height={localHeight}
                     overflowItems={OVERFLOW_ROWS}
                     overflowMargin={0}
-                    renderItem={this._renderEmojiRow}>
+                    renderItem={this.renderEmojiRow}>
                 </LazyRenderList>
             </section>
         );

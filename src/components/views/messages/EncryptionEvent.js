@@ -25,10 +25,8 @@ export default class EncryptionEvent extends React.Component {
 
         let body;
         let classes = "mx_EventTile_bubble mx_cryptoEvent mx_cryptoEvent_icon";
-        if (
-            mxEvent.getContent().algorithm === 'm.megolm.v1.aes-sha2' &&
-            MatrixClientPeg.get().isRoomEncrypted(mxEvent.getRoomId())
-        ) {
+        const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(mxEvent.getRoomId());
+        if (mxEvent.getContent().algorithm === 'm.megolm.v1.aes-sha2' && isRoomEncrypted) {
             body = <div>
                 <div className="mx_cryptoEvent_title">{_t("Encryption enabled")}</div>
                 <div className="mx_cryptoEvent_subtitle">
@@ -36,6 +34,13 @@ export default class EncryptionEvent extends React.Component {
                         "Messages in this room are end-to-end encrypted. " +
                         "Learn more & verify this user in their user profile.",
                     )}
+                </div>
+            </div>;
+        } else if (isRoomEncrypted) {
+            body = <div>
+                <div className="mx_cryptoEvent_title">{_t("Encryption enabled")}</div>
+                <div className="mx_cryptoEvent_subtitle">
+                    {_t("Ignored attempt to disable encryption")}
                 </div>
             </div>;
         } else {
