@@ -96,11 +96,21 @@ limitations under the License.
 }
 
 .mx_MemberList_invite span {
-    background-image: url('$(res)/img/element-icons/room/invite.svg');
-    background-repeat: no-repeat;
-    background-position: center left;
-    background-size: 20px;
-    padding: 8px 0 8px 25px;
+    padding: 8px 0;
+    display: inline-flex;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        background-color: #fff;
+        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 20px;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
 }
 
 .mx_MemberList_inviteCommunity span {
