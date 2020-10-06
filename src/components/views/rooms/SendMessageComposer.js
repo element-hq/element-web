@@ -40,7 +40,6 @@ import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
 
@@ -103,10 +102,9 @@ export default class SendMessageComposer extends React.Component {
         this.model = null;
         this._editorRef = null;
         this.currentlyComposedEditorState = null;
-        const cli = MatrixClientPeg.get();
-        if (cli.isCryptoEnabled() && cli.isRoomEncrypted(this.props.room.roomId)) {
+        if (this.context.isCryptoEnabled() && this.context.isRoomEncrypted(this.props.room.roomId)) {
             this._prepareToEncrypt = new RateLimitedFunc(() => {
-                cli.prepareToEncrypt(this.props.room);
+                this.context.prepareToEncrypt(this.props.room);
             }, 60000);
         }
 
