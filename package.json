@@ -151,8 +151,9 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^2.5.1",
     "glob": "^5.0.15",
-    "jest": "^24.9.0",
-    "jest-canvas-mock": "^2.2.0",
+    "jest": "^26.5.2",
+    "jest-canvas-mock": "^2.3.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
@@ -165,6 +166,7 @@
     "walk": "^2.3.14"
   },
   "jest": {
+    "testEnvironment": "jest-environment-jsdom-sixteen",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
