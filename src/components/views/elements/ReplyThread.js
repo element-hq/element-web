@@ -29,6 +29,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
 import {UIFeature} from "../../../settings/UIFeature";
+import {PERMITTED_URL_SCHEMES} from "../../../HtmlUtils";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -106,6 +107,9 @@ export default class ReplyThread extends React.Component {
             {
                 allowedTags: false, // false means allow everything
                 allowedAttributes: false,
+                // we somehow can't allow all schemes, so we allow all that we
+                // know of and mxc (for img tags)
+                allowedSchemes: [...PERMITTED_URL_SCHEMES, 'mxc'],
                 exclusiveFilter: (frame) => frame.tag === "mx-reply",
             },
         );
