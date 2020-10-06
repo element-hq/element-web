@@ -8187,9 +8187,9 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-"olm@https://packages.matrix.org/npm/olm/olm-3.1.4.tgz":
-  version "3.1.4"
-  resolved "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz#0f03128b7d3b2f614d2216409a1dfccca765fdb3"
+"olm@https://packages.matrix.org/npm/olm/olm-3.2.0.tgz":
+  version "3.2.0"
+  resolved "https://packages.matrix.org/npm/olm/olm-3.2.0.tgz#c91b4daa81e3fd9e45bfce7fd3d58e4472ce0bbf"
 
 on-finished@~2.3.0:
   version "2.3.0"
