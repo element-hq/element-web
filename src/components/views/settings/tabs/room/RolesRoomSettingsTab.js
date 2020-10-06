@@ -239,7 +239,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                 defaultValue: 50,
             },
             "redact": {
-                desc: _t('Remove messages'),
+                desc: _t('Remove messages sent by others'),
                 defaultValue: 50,
             },
             "notifications.room": {
