@@ -369,11 +369,14 @@ const UserOptionsSection: React.FC<{
                 });
             };
 
-            readReceiptButton = (
-                <AccessibleButton onClick={onReadReceiptButton} className="mx_UserInfo_field">
-                    { _t('Jump to read receipt') }
-                </AccessibleButton>
-            );
+            const room = cli.getRoom(member.roomId);
+            if (room && room.getEventReadUpTo(member.userId)) {
+                readReceiptButton = (
+                    <AccessibleButton onClick={onReadReceiptButton} className="mx_UserInfo_field">
+                        { _t('Jump to read receipt') }
+                    </AccessibleButton>
+                );
+            }
 
             insertPillButton = (
                 <AccessibleButton onClick={onInsertPillButton} className={"mx_UserInfo_field"}>
