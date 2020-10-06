@@ -918,6 +918,7 @@ export default class EventTile extends React.Component {
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            onHeightChanged={this.props.onHeightChanged}
+                                           replacingEventId={this.props.replacingEventId}
                                            showUrlPreview={false} />
                         </div>
                     </div>
