@@ -16,12 +16,14 @@ limitations under the License.
 */
 
 import {clamp} from "lodash";
+import {SerializedPart} from "./editor/parts";
+import EditorModel from "./editor/model";
 
 export default class SendHistoryManager {
-    history: Array<HistoryItem> = [];
+    history: Array<SerializedPart[]> = [];
     prefix: string;
-    lastIndex: number = 0; // used for indexing the storage
-    currentIndex: number = 0; // used for indexing the loaded validated history Array
+    lastIndex = 0; // used for indexing the storage
+    currentIndex = 0; // used for indexing the loaded validated history Array
 
     constructor(roomId: string, prefix: string) {
         this.prefix = prefix + roomId;
@@ -45,7 +47,7 @@ export default class SendHistoryManager {
         this.currentIndex = this.lastIndex + 1;
     }
 
-    save(editorModel: Object) {
+    save(editorModel: EditorModel) {
         const serializedParts = editorModel.serializeParts();
         this.history.push(serializedParts);
         this.currentIndex = this.history.length;
@@ -53,7 +55,7 @@ export default class SendHistoryManager {
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex}]`, JSON.stringify(serializedParts));
     }
 
-    getItem(offset: number): ?HistoryItem {
+    getItem(offset: number): SerializedPart[] {
         this.currentIndex = clamp(this.currentIndex + offset, 0, this.history.length - 1);
         return this.history[this.currentIndex];
     }
