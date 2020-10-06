@@ -19,34 +19,70 @@ limitations under the License.
 */
 
 import Matrix from "matrix-js-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { IMatrixClientCreds } from "./MatrixClientPeg";
+
+interface ILoginOptions {
+    defaultDeviceDisplayName?: string;
+}
+
+// TODO: Move this to JS SDK
+interface ILoginFlow {
+    type: string;
+}
+
+// TODO: Move this to JS SDK
+/* eslint-disable camelcase */
+interface ILoginParams {
+    identifier?: string;
+    password?: string;
+    token?: string;
+    device_id?: string;
+    initial_device_display_name?: string;
+}
+/* eslint-enable camelcase */
 
 export default class Login {
-    constructor(hsUrl, isUrl, fallbackHsUrl, opts) {
-        this._hsUrl = hsUrl;
-        this._isUrl = isUrl;
-        this._fallbackHsUrl = fallbackHsUrl;
-        this._currentFlowIndex = 0;
-        this._flows = [];
-        this._defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
-        this._tempClient = null; // memoize
+    private hsUrl: string;
+    private isUrl: string;
+    private fallbackHsUrl: string;
+    private currentFlowIndex: number;
+    // TODO: Flows need a type in JS SDK
+    private flows: Array<ILoginFlow>;
+    private defaultDeviceDisplayName: string;
+    private tempClient: MatrixClient;
+
+    constructor(
+        hsUrl: string,
+        isUrl: string,
+        fallbackHsUrl?: string,
+        opts?: ILoginOptions,
+    ) {
+        this.hsUrl = hsUrl;
+        this.isUrl = isUrl;
+        this.fallbackHsUrl = fallbackHsUrl;
+        this.currentFlowIndex = 0;
+        this.flows = [];
+        this.defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
+        this.tempClient = null; // memoize
     }
 
-    getHomeserverUrl() {
-        return this._hsUrl;
+    public getHomeserverUrl(): string {
+        return this.hsUrl;
     }
 
-    getIdentityServerUrl() {
-        return this._isUrl;
+    public getIdentityServerUrl(): string {
+        return this.isUrl;
     }
 
-    setHomeserverUrl(hsUrl) {
-        this._tempClient = null; // clear memoization
-        this._hsUrl = hsUrl;
+    public setHomeserverUrl(hsUrl: string): void {
+        this.tempClient = null; // clear memoization
+        this.hsUrl = hsUrl;
     }
 
-    setIdentityServerUrl(isUrl) {
-        this._tempClient = null; // clear memoization
-        this._isUrl = isUrl;
+    public setIdentityServerUrl(isUrl: string): void {
+        this.tempClient = null; // clear memoization
+        this.isUrl = isUrl;
     }
 
     /**
@@ -54,40 +90,41 @@ export default class Login {
      * requests.
      * @returns {MatrixClient}
      */
-    createTemporaryClient() {
-        if (this._tempClient) return this._tempClient; // use memoization
-        return this._tempClient = Matrix.createClient({
-            baseUrl: this._hsUrl,
-            idBaseUrl: this._isUrl,
+    public createTemporaryClient(): MatrixClient {
+        if (this.tempClient) return this.tempClient; // use memoization
+        return this.tempClient = Matrix.createClient({
+            baseUrl: this.hsUrl,
+            idBaseUrl: this.isUrl,
         });
     }
 
-    getFlows() {
-        const self = this;
+    public async getFlows(): Promise<Array<ILoginFlow>> {
         const client = this.createTemporaryClient();
-        return client.loginFlows().then(function(result) {
-            self._flows = result.flows;
-            self._currentFlowIndex = 0;
-            // technically the UI should display options for all flows for the
-            // user to then choose one, so return all the flows here.
-            return self._flows;
-        });
+        const { flows } = await client.loginFlows();
+        this.flows = flows;
+        this.currentFlowIndex = 0;
+        // technically the UI should display options for all flows for the
+        // user to then choose one, so return all the flows here.
+        return this.flows;
     }
 
-    chooseFlow(flowIndex) {
-        this._currentFlowIndex = flowIndex;
+    public chooseFlow(flowIndex): void {
+        this.currentFlowIndex = flowIndex;
     }
 
-    getCurrentFlowStep() {
+    public getCurrentFlowStep(): string {
         // technically the flow can have multiple steps, but no one does this
         // for login so we can ignore it.
-        const flowStep = this._flows[this._currentFlowIndex];
+        const flowStep = this.flows[this.currentFlowIndex];
         return flowStep ? flowStep.type : null;
     }
 
-    loginViaPassword(username, phoneCountry, phoneNumber, pass) {
-        const self = this;
-
+    public loginViaPassword(
+        username: string,
+        phoneCountry: string,
+        phoneNumber: string,
+        password: string,
+    ): Promise<IMatrixClientCreds> {
         const isEmail = username.indexOf("@") > 0;
 
         let identifier;
@@ -113,14 +150,14 @@ export default class Login {
         }
 
         const loginParams = {
-            password: pass,
-            identifier: identifier,
-            initial_device_display_name: this._defaultDeviceDisplayName,
+            password,
+            identifier,
+            initial_device_display_name: this.defaultDeviceDisplayName,
         };
 
         const tryFallbackHs = (originalError) => {
             return sendLoginRequest(
-                self._fallbackHsUrl, this._isUrl, 'm.login.password', loginParams,
+                this.fallbackHsUrl, this.isUrl, 'm.login.password', loginParams,
             ).catch((fallbackError) => {
                 console.log("fallback HS login failed", fallbackError);
                 // throw the original error
@@ -130,11 +167,11 @@ export default class Login {
 
         let originalLoginError = null;
         return sendLoginRequest(
-            self._hsUrl, self._isUrl, 'm.login.password', loginParams,
+            this.hsUrl, this.isUrl, 'm.login.password', loginParams,
         ).catch((error) => {
             originalLoginError = error;
             if (error.httpStatus === 403) {
-                if (self._fallbackHsUrl) {
+                if (this.fallbackHsUrl) {
                     return tryFallbackHs(originalLoginError);
                 }
             }
@@ -154,11 +191,16 @@ export default class Login {
  * @param {string} hsUrl   the base url of the Homeserver used to log in.
  * @param {string} isUrl   the base url of the default identity server
  * @param {string} loginType the type of login to do
- * @param {object} loginParams the parameters for the login
+ * @param {ILoginParams} loginParams the parameters for the login
  *
  * @returns {MatrixClientCreds}
  */
-export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
+export async function sendLoginRequest(
+    hsUrl: string,
+    isUrl: string,
+    loginType: string,
+    loginParams: ILoginParams,
+): Promise<IMatrixClientCreds> {
     const client = Matrix.createClient({
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
