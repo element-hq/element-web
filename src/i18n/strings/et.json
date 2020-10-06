@@ -2520,5 +2520,6 @@
     "Video conference started by %(senderName)s": "%(senderName)s alustas video rühmakõne",
     "End conference": "Lõpeta videokonverents",
     "This will end the conference for everyone. Continue?": "Sellega lõpetame kõikide osalejate jaoks videokonverentsi. Nõus?",
-    "Ignored attempt to disable encryption": "Eirasin katset lõpetada krüptimise kasutamine"
+    "Ignored attempt to disable encryption": "Eirasin katset lõpetada krüptimise kasutamine",
+    "Offline encrypted messaging using dehydrated devices": "Võrguühenduseta kasutamiseks mõeldud krüptitud sõnumid dehydrated teenuse abil"
 }
