@@ -370,7 +370,7 @@ const UserOptionsSection: React.FC<{
             };
 
             const room = cli.getRoom(member.roomId);
-            if (room && room.getEventReadUpTo(member.userId)) {
+            if (room?.getEventReadUpTo(member.userId)) {
                 readReceiptButton = (
                     <AccessibleButton onClick={onReadReceiptButton} className="mx_UserInfo_field">
                         { _t('Jump to read receipt') }
