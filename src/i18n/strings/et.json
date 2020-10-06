@@ -2522,5 +2522,7 @@
     "This will end the conference for everyone. Continue?": "Sellega lõpetame kõikide osalejate jaoks videokonverentsi. Nõus?",
     "Ignored attempt to disable encryption": "Eirasin katset lõpetada krüptimise kasutamine",
     "Offline encrypted messaging using dehydrated devices": "Võrguühenduseta kasutamiseks mõeldud krüptitud sõnumid dehydrated teenuse abil",
-    "Remove messages sent by others": "Kustuta teiste saadetud sõnumid"
+    "Remove messages sent by others": "Kustuta teiste saadetud sõnumid",
+    "Failed to save your profile": "Sinu profiili salvestamine ei õnnestunud",
+    "The operation could not be completed": "Toimingut ei õnnestunud lõpetada"
 }
