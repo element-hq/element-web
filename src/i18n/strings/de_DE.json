@@ -2518,5 +2518,6 @@
     "Video conference ended by %(senderName)s": "Videokonferenz von %(senderName)s beendet",
     "Video conference updated by %(senderName)s": "Videokonferenz wurde von %(senderName)s aktualisiert",
     "Video conference started by %(senderName)s": "Videokonferenz wurde von %(senderName)s gestartet",
-    "Ignored attempt to disable encryption": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert"
+    "Ignored attempt to disable encryption": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert",
+    "Failed to save your profile": "Profil speichern fehlgeschlagen"
 }
