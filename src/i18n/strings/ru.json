@@ -2515,5 +2515,7 @@
     "Video conference updated by %(senderName)s": "%(senderName)s обновил(а) видеоконференцию",
     "Video conference started by %(senderName)s": "%(senderName)s начал(а) видеоконференцию",
     "End conference": "Завершить конференцию",
-    "This will end the conference for everyone. Continue?": "Это завершит конференцию для всех. Продолжить?"
+    "This will end the conference for everyone. Continue?": "Это завершит конференцию для всех. Продолжить?",
+    "Failed to save your profile": "Не удалось сохранить ваш профиль",
+    "The operation could not be completed": "Операция не может быть выполнена"
 }
