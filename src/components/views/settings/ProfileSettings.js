@@ -21,6 +21,8 @@ import Field from "../elements/Field";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
@@ -75,21 +77,26 @@ export default class ProfileSettings extends React.Component {
         const client = MatrixClientPeg.get();
         const newState = {};
 
-        // TODO: What do we do about errors?
+        try {
+            if (this.state.originalDisplayName !== this.state.displayName) {
+                await client.setDisplayName(this.state.displayName);
+                newState.originalDisplayName = this.state.displayName;
+            }
 
-        if (this.state.originalDisplayName !== this.state.displayName) {
-            await client.setDisplayName(this.state.displayName);
-            newState.originalDisplayName = this.state.displayName;
-        }
-
-        if (this.state.avatarFile) {
-            const uri = await client.uploadContent(this.state.avatarFile);
-            await client.setAvatarUrl(uri);
-            newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
-            newState.originalAvatarUrl = newState.avatarUrl;
-            newState.avatarFile = null;
-        } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
-            await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
+            if (this.state.avatarFile) {
+                const uri = await client.uploadContent(this.state.avatarFile);
+                await client.setAvatarUrl(uri);
+                newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
+                newState.originalAvatarUrl = newState.avatarUrl;
+                newState.avatarFile = null;
+            } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
+                await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
+            }
+        } catch (err) {
+            Modal.createTrackedDialog('Failed to save profile', '', ErrorDialog, {
+                title: _t("Failed to save your profile"),
+                description: ((err && err.message) ? err.message : _t("The operation could not be completed")),
+            });
         }
 
         this.setState(newState);
