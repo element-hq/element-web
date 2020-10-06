@@ -235,13 +235,17 @@ export default class ReplyThread extends React.Component {
         }
     }
 
+    updateForEventId = (eventId) => {
+        if (this.state.events.some(event => event.getId() === eventId)) {
+            this.forceUpdate();
+        }
+    };
+
     onEventReplaced = (ev) => {
         if (this.unmounted) return;
 
-        // If one of the events we are rendering gets redacted, force a re-render
-        if (this.state.events.some(event => event.getId() === ev.getId())) {
-            this.forceUpdate();
-        }
+        // If one of the events we are rendering gets replaced, force a re-render
+        this.updateForEventId(ev.getId());
     };
 
     onRoomRedaction = (ev) => {
@@ -251,9 +255,7 @@ export default class ReplyThread extends React.Component {
         if (!eventId) return;
 
         // If one of the events we are rendering gets redacted, force a re-render
-        if (this.state.events.some(event => event.getId() === eventId)) {
-            this.forceUpdate();
-        }
+        this.updateForEventId(eventId);
     };
 
     async initialize() {
