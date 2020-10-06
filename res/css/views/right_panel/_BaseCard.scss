@@ -40,6 +40,7 @@ limitations under the License.
             width: 20px;
             margin: 12px;
             top: 0;
+            border-radius: 10px;
 
             &::before {
                 content: "";
@@ -55,7 +56,6 @@ limitations under the License.
         }
 
         .mx_BaseCard_back {
-            border-radius: 4px;
             left: 0;
 
             &::before {
@@ -66,7 +66,6 @@ limitations under the License.
         }
 
         .mx_BaseCard_close {
-            border-radius: 10px;
             right: 0;
 
             &::before {
