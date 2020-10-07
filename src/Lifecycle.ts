@@ -448,7 +448,7 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
  */
 async function doSetLoggedIn(
     credentials: IMatrixClientCreds,
-    clearStorage: boolean,
+    clearStorageEnabled: boolean,
 ): Promise<MatrixClient> {
     credentials.guest = Boolean(credentials.guest);
 
@@ -472,7 +472,7 @@ async function doSetLoggedIn(
     // (dis.dispatch uses `setTimeout`, which does not guarantee ordering.)
     dis.dispatch({action: 'on_logging_in'}, true);
 
-    if (clearStorage) {
+    if (clearStorageEnabled) {
         await clearStorage();
     }
 
