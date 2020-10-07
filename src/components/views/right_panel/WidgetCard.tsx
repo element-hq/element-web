@@ -32,9 +32,6 @@ import WidgetStore from "../../../stores/WidgetStore";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import classNames from "classnames";
-import dis from "../../../dispatcher/dispatcher";
-import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { MatrixCapabilities } from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
 
 interface IProps {
