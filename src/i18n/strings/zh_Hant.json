@@ -2524,5 +2524,8 @@
     "End conference": "結束會議",
     "This will end the conference for everyone. Continue?": "這將會對所有人結束會議。要繼續嗎？",
     "Ignored attempt to disable encryption": "已忽略嘗試停用加密",
-    "Offline encrypted messaging using dehydrated devices": "使用乾淨裝置的離線加密訊息"
+    "Offline encrypted messaging using dehydrated devices": "使用乾淨裝置的離線加密訊息",
+    "Failed to save your profile": "儲存您的設定檔失敗",
+    "The operation could not be completed": "無法完成操作",
+    "Remove messages sent by others": "移除其他人傳送的訊息"
 }
