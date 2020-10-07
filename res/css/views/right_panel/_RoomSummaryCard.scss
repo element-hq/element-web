@@ -116,9 +116,9 @@ limitations under the License.
             .mx_RoomSummaryCard_app_pinToggle,
             .mx_RoomSummaryCard_app_options {
                 position: relative;
-                height: 20px;
-                width: 20px;
-                padding: 10px;
+                height: 16px;
+                width: 16px;
+                padding: 8px;
                 border-radius: 8px;
 
                 &:hover {
@@ -128,8 +128,8 @@ limitations under the License.
                 &::before {
                     content: '';
                     position: absolute;
-                    height: 20px;
-                    width: 20px;
+                    height: 16px;
+                    width: 16px;
                     mask-repeat: no-repeat;
                     mask-position: center;
                     mask-size: 16px;
@@ -158,6 +158,8 @@ limitations under the License.
 
         .mx_RoomSummaryCard_Button {
             padding-left: 12px;
+            padding-top: 6px;
+            padding-bottom: 6px;
             color: $tertiary-fg-color;
             flex: 1;
 
@@ -173,6 +175,10 @@ limitations under the License.
 
             &::before {
                 content: unset;
+            }
+
+            &::after {
+                top: 6px; // re-align based on the height change
             }
         }
     }

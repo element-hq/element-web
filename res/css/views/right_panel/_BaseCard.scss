@@ -129,6 +129,13 @@ limitations under the License.
                 mask-size: 20px;
                 mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
             }
+
+            &.mx_AccessibleButton_disabled {
+                padding: 10px 12px;
+                &::after {
+                    content: unset;
+                }
+            }
         }
     }
 

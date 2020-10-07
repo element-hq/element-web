@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, {useContext} from "react";
+import {MatrixCapabilities} from "matrix-widget-api";
 
 import IconizedContextMenu, {IconizedContextMenuOption, IconizedContextMenuOptionList} from "./IconizedContextMenu";
 import {ChevronFace} from "../../structures/ContextMenu";
@@ -23,9 +24,8 @@ import {IApp} from "../../../stores/WidgetStore";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
 import {Action} from "../../../dispatcher/actions";
-import {Capability} from "../../../widgets/WidgetApi";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
 import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
@@ -35,8 +35,10 @@ interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
 const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, ...props}) => {
     const {roomId} = useContext(RoomContext);
 
+    const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
+
     let snapshotButton;
-    if (ActiveWidgetStore.widgetHasCapability(app.id, Capability.Screenshot)) {
+    if (widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
         const onSnapshotClick = () => {
             WidgetUtils.snapshotWidget(app);
             onFinished();

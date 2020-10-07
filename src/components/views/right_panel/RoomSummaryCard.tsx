@@ -143,7 +143,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
             className="mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_app"
             onClick={onOpenWidgetClick}
             // only show a tooltip if the widget is pinned
-            title={isPinned ? _t("You can't view pinned widgets in the right panel") : ""}
+            title={isPinned ? _t("Unpin a widget to view it in this panel") : ""}
             forceHide={!isPinned}
             disabled={isPinned}
         >
