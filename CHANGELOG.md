@@ -1,3 +1,59 @@
+Changes in [1.7.9-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.9-rc.1) (2020-10-07)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.8...v1.7.9-rc.1)
+
+ * Upgrade to React SDK 3.6.0-rc.1 and JS SDK 8.5.0-rc.1
+ * Update from Weblate
+   [\#15406](https://github.com/vector-im/element-web/pull/15406)
+ * Update Jest and JSDOM
+   [\#15402](https://github.com/vector-im/element-web/pull/15402)
+ * Add support for dehydration/fallback keys
+   [\#15398](https://github.com/vector-im/element-web/pull/15398)
+ * Remove riot-bot from sample config
+   [\#15376](https://github.com/vector-im/element-web/pull/15376)
+ * Switch to using the Widget API SDK for Jitsi widgets
+   [\#15102](https://github.com/vector-im/element-web/pull/15102)
+ * Remove workbox
+   [\#15352](https://github.com/vector-im/element-web/pull/15352)
+ * Disable workbox when running in webpack dev server, not in dev mode
+   [\#15345](https://github.com/vector-im/element-web/pull/15345)
+ * Update Riot -> Element in contribute.json
+   [\#15326](https://github.com/vector-im/element-web/pull/15326)
+ * Update Riot -> Element in redeploy.py
+   [\#15336](https://github.com/vector-im/element-web/pull/15336)
+ * Update Riot -> Element in docs/feature-flags.md
+   [\#15325](https://github.com/vector-im/element-web/pull/15325)
+ * Update Riot -> Element in element.io/README.md
+   [\#15327](https://github.com/vector-im/element-web/pull/15327)
+ * Update Riot -> Element in VectorAuthFooter
+   [\#15328](https://github.com/vector-im/element-web/pull/15328)
+ * Update Riot -> Element in VectorEmbeddedPage
+   [\#15329](https://github.com/vector-im/element-web/pull/15329)
+ * Update Riot -> Element in docs/review.md
+   [\#15330](https://github.com/vector-im/element-web/pull/15330)
+ * Update Riot -> Element in welcome.html
+   [\#15332](https://github.com/vector-im/element-web/pull/15332)
+ * Update Riot -> Element in issues-burndown.pl
+   [\#15333](https://github.com/vector-im/element-web/pull/15333)
+ * Update Riot -> Element in redeploy.py
+   [\#15334](https://github.com/vector-im/element-web/pull/15334)
+ * Update Riot -> Element in index.ts
+   [\#15335](https://github.com/vector-im/element-web/pull/15335)
+ * Update Riot -> Element Web in issue templates
+   [\#15324](https://github.com/vector-im/element-web/pull/15324)
+ * Give the Jitsi widget an icon to help with discovery
+   [\#15316](https://github.com/vector-im/element-web/pull/15316)
+ * Jitsi widget wrapper updates for hangup button
+   [\#15219](https://github.com/vector-im/element-web/pull/15219)
+ * Tidy up Service Worker, only run Workbox in production
+   [\#15271](https://github.com/vector-im/element-web/pull/15271)
+ * Remove conference handler
+   [\#15274](https://github.com/vector-im/element-web/pull/15274)
+ * Rebrand the webpack pipeline for Element
+   [\#15266](https://github.com/vector-im/element-web/pull/15266)
+ * Replace dummy sw.js with pre-caching and runtime-caching workbox SW
+   [\#15196](https://github.com/vector-im/element-web/pull/15196)
+
 Changes in [1.7.8](https://github.com/vector-im/element-web/releases/tag/v1.7.8) (2020-09-28)
 =============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.8-rc.1...v1.7.8)
