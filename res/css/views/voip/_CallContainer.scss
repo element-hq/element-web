@@ -23,9 +23,16 @@ limitations under the License.
     z-index: 100;
     box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
 
-    cursor: pointer;
+    // Disable pointer events for Jitsi widgets to function. Direct
+    // calls have their own cursor and behaviour, but we need to make
+    // sure the cursor hits the iframe for Jitsi which will be at a
+    // different level.
+    pointer-events: none;
 
     .mx_CallPreview {
+        pointer-events: initial; // restore pointer events so the user can leave/interact
+        cursor: pointer;
+
         .mx_VideoView {
             width: 350px;
         }
@@ -37,7 +44,7 @@ limitations under the License.
     }
 
     .mx_AppTile_persistedWrapper div {
-        min-width: 300px;
+        min-width: 350px;
     }
 
     .mx_IncomingCallBox {
@@ -45,11 +52,14 @@ limitations under the License.
         background-color: $primary-bg-color;
         padding: 8px;
 
+        pointer-events: initial; // restore pointer events so the user can accept/decline
+        cursor: pointer;
+
         .mx_IncomingCallBox_CallerInfo {
             display: flex;
             direction: row;
 
-            img {
+            img, .mx_BaseAvatar_initial {
                 margin: 8px;
             }
 

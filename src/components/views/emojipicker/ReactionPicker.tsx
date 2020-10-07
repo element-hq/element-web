@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,26 +16,29 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from "prop-types";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+
 import EmojiPicker from "./EmojiPicker";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 
-class ReactionPicker extends React.Component {
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired,
-        onFinished: PropTypes.func.isRequired,
-        reactions: PropTypes.object,
-    };
+interface IProps {
+    mxEvent: MatrixEvent;
+    reactions: any; // TODO type this once js-sdk is more typescripted
+    onFinished(): void;
+}
 
+interface IState {
+    selectedEmojis: Set<string>;
+}
+
+class ReactionPicker extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
         this.state = {
             selectedEmojis: new Set(Object.keys(this.getReactions())),
         };
-        this.onChoose = this.onChoose.bind(this);
-        this.onReactionsChange = this.onReactionsChange.bind(this);
         this.addListeners();
     }
 
@@ -45,7 +49,7 @@ class ReactionPicker extends React.Component {
         }
     }
 
-    addListeners() {
+    private addListeners() {
         if (this.props.reactions) {
             this.props.reactions.on("Relations.add", this.onReactionsChange);
             this.props.reactions.on("Relations.remove", this.onReactionsChange);
@@ -55,22 +59,13 @@ class ReactionPicker extends React.Component {
 
     componentWillUnmount() {
         if (this.props.reactions) {
-            this.props.reactions.removeListener(
-                "Relations.add",
-                this.onReactionsChange,
-            );
-            this.props.reactions.removeListener(
-                "Relations.remove",
-                this.onReactionsChange,
-            );
-            this.props.reactions.removeListener(
-                "Relations.redaction",
-                this.onReactionsChange,
-            );
+            this.props.reactions.removeListener("Relations.add", this.onReactionsChange);
+            this.props.reactions.removeListener("Relations.remove", this.onReactionsChange);
+            this.props.reactions.removeListener("Relations.redaction", this.onReactionsChange);
         }
     }
 
-    getReactions() {
+    private getReactions() {
         if (!this.props.reactions) {
             return {};
         }
@@ -81,13 +76,13 @@ class ReactionPicker extends React.Component {
             .map(event => [event.getRelation().key, event.getId()]));
     }
 
-    onReactionsChange() {
+    private onReactionsChange = () => {
         this.setState({
             selectedEmojis: new Set(Object.keys(this.getReactions())),
         });
-    }
+    };
 
-    onChoose(reaction) {
+    onChoose = (reaction: string) => {
         this.componentWillUnmount();
         this.props.onFinished();
         const myReactions = this.getReactions();
@@ -109,7 +104,7 @@ class ReactionPicker extends React.Component {
             dis.dispatch({action: "message_sent"});
             return true;
         }
-    }
+    };
 
     render() {
         return <EmojiPicker

@@ -1820,7 +1820,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         let aux = null;
         let previewBar;
         let hideCancel = false;
-        let forceHideRightPanel = false;
         if (this.state.forwardingEvent) {
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
@@ -1865,8 +1864,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                         { previewBar }
                     </div>
                 );
-            } else {
-                forceHideRightPanel = true;
             }
         } else if (hiddenHighlightCount > 0) {
             aux = (
@@ -2069,7 +2066,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             "mx_fadable_faded": this.props.disabled,
         });
 
-        const showRightPanel = !forceHideRightPanel && this.state.room && this.state.showRightPanel;
+        const showRightPanel = this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
             ? <RightPanel room={this.state.room} resizeNotifier={this.props.resizeNotifier} />
             : null;

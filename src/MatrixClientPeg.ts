@@ -31,7 +31,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import { crossSigningCallbacks } from './SecurityManager';
+import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 export interface IMatrixClientCreds {
@@ -42,6 +42,7 @@ export interface IMatrixClientCreds {
     accessToken: string;
     guest: boolean;
     pickleKey?: string;
+    freshLogin?: boolean;
 }
 
 // TODO: Move this to the js-sdk
@@ -192,6 +193,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
                 this.matrixClient.setCryptoTrustCrossSignedDevices(
                     !SettingsStore.getValue('e2ee.manuallyVerifyAllSessions'),
                 );
+                await tryToUnlockSecretStorageWithDehydrationKey(this.matrixClient);
                 StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {

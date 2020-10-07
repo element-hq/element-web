@@ -1,9 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -162,7 +159,7 @@ export default class RightPanel extends React.Component {
     }
 
     onRoomStateMember(ev, state, member) {
-        if (member.roomId !== this.props.room.roomId) {
+        if (!this.props.room || member.roomId !== this.props.room.roomId) {
             return;
         }
         // redraw the badge on the membership list
@@ -202,13 +199,19 @@ export default class RightPanel extends React.Component {
             dis.dispatch({
                 action: "view_home_page",
             });
+        } else if (this.state.phase === RightPanelPhases.EncryptionPanel &&
+            this.state.verificationRequest && this.state.verificationRequest.pending
+        ) {
+            // When the user clicks close on the encryption panel cancel the pending request first if any
+            this.state.verificationRequest.cancel();
         } else {
             // Otherwise we have got our user from RoomViewStore which means we're being shown
             // within a room/group, so go back to the member panel if we were in the encryption panel,
             // or the member list if we were in the member panel... phew.
+            const isEncryptionPhase = this.state.phase === RightPanelPhases.EncryptionPanel;
             dis.dispatch({
                 action: Action.ViewUser,
-                member: this.state.phase === RightPanelPhases.EncryptionPanel ? this.state.member : null,
+                member: isEncryptionPhase ? this.state.member : null,
             });
         }
     };

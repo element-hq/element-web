@@ -74,6 +74,9 @@ import {base32} from "rfc4648";
 
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import WidgetStore from "./stores/WidgetStore";
+import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
+import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 
 // until we ts-ify the js-sdk voip code
 type Call = any;
@@ -110,11 +113,9 @@ export default class CallHandler {
     }
 
     getAnyActiveCall() {
-        const roomsWithCalls = Object.keys(this.calls);
-        for (let i = 0; i < roomsWithCalls.length; i++) {
-            if (this.calls.get(roomsWithCalls[i]) &&
-                    this.calls.get(roomsWithCalls[i]).call_state !== "ended") {
-                return this.calls.get(roomsWithCalls[i]);
+        for (const call of this.calls.values()) {
+            if (call.state !== "ended") {
+                return call;
             }
         }
         return null;
@@ -180,7 +181,7 @@ export default class CallHandler {
             });
         });
         call.on("hangup", () => {
-            this.setCallState(undefined, call.roomId, "ended");
+            this.removeCallForRoom(call.roomId);
         });
         // map web rtc states to dummy UI state
         // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
@@ -192,7 +193,7 @@ export default class CallHandler {
                 this.setCallState(call, call.roomId, "ringback");
                 this.play("ringbackAudio");
             } else if (newState === "ended" && oldState === "connected") {
-                this.setCallState(undefined, call.roomId, "ended");
+                this.removeCallForRoom(call.roomId);
                 this.pause("ringbackAudio");
                 this.play("callendAudio");
             } else if (newState === "ended" && oldState === "invite_sent" &&
@@ -223,7 +224,11 @@ export default class CallHandler {
         console.log(
             `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
         );
-        this.calls.set(roomId, call);
+        if (call) {
+            this.calls.set(roomId, call);
+        } else {
+            this.calls.delete(roomId);
+        }
 
         if (status === "ringing") {
             this.play("ringAudio");
@@ -239,6 +244,10 @@ export default class CallHandler {
             room_id: roomId,
             state: status,
         });
+    }
+
+    private removeCallForRoom(roomId: string) {
+        this.setCallState(null, roomId, null);
     }
 
     private showICEFallbackPrompt() {
@@ -283,7 +292,7 @@ export default class CallHandler {
             } else if (payload.type === 'screensharing') {
                 const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
                 if (screenCapErrorString) {
-                    this.setCallState(undefined, newCall.roomId, "ended");
+                    this.removeCallForRoom(newCall.roomId);
                     console.log("Can't capture screen: " + screenCapErrorString);
                     Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
                         title: _t('Unable to capture screen'),
@@ -351,6 +360,14 @@ export default class CallHandler {
                 console.info("Place conference call in %s", payload.room_id);
                 this.startCallApp(payload.room_id, payload.type);
                 break;
+            case 'end_conference':
+                console.info("Terminating conference call in %s", payload.room_id);
+                this.terminateCallApp(payload.room_id);
+                break;
+            case 'hangup_conference':
+                console.info("Leaving conference call in %s", payload.room_id);
+                this.hangupCallApp(payload.room_id);
+                break;
             case 'incoming_call':
                 {
                     if (this.getAnyActiveCall()) {
@@ -376,7 +393,7 @@ export default class CallHandler {
                     return; // no call to hangup
                 }
                 this.calls.get(payload.room_id).hangup();
-                this.setCallState(null, payload.room_id, "ended");
+                this.removeCallForRoom(payload.room_id);
                 break;
             case 'answer':
                 if (!this.calls.get(payload.room_id)) {
@@ -398,41 +415,16 @@ export default class CallHandler {
             show: true,
         });
 
+        // prevent double clicking the call button
         const room = MatrixClientPeg.get().getRoom(roomId);
         const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
-
-        if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI)) {
+        const hasJitsi = currentJitsiWidgets.length > 0
+            || WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI);
+        if (hasJitsi) {
             Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
                 title: _t('Call in Progress'),
                 description: _t('A call is currently being placed!'),
             });
-            return;
-        }
-
-        if (currentJitsiWidgets.length > 0) {
-            console.warn(
-                "Refusing to start conference call widget in " + roomId +
-                " a conference call widget is already present",
-            );
-
-            if (WidgetUtils.canUserModifyWidgets(roomId)) {
-                Modal.createTrackedDialog('Already have Jitsi Widget', '', QuestionDialog, {
-                    title: _t('End Call'),
-                    description: _t('Remove the group call from the room?'),
-                    button: _t('End Call'),
-                    cancelButton: _t('Cancel'),
-                    onFinished: (endCall) => {
-                        if (endCall) {
-                            WidgetUtils.setRoomWidget(roomId, currentJitsiWidgets[0].getContent()['id']);
-                        }
-                    },
-                });
-            } else {
-                Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
-                    title: _t('Call in Progress'),
-                    description: _t("You don't have permission to remove the call from the room"),
-                });
-            }
             return;
         }
 
@@ -482,6 +474,40 @@ export default class CallHandler {
                 });
             }
             console.error(e);
+        });
+    }
+
+    private terminateCallApp(roomId: string) {
+        Modal.createTrackedDialog('Confirm Jitsi Terminate', '', QuestionDialog, {
+            hasCancelButton: true,
+            title: _t("End conference"),
+            description: _t("This will end the conference for everyone. Continue?"),
+            button: _t("End conference"),
+            onFinished: (proceed) => {
+                if (!proceed) return;
+
+                // We'll just obliterate them all. There should only ever be one, but might as well
+                // be safe.
+                const roomInfo = WidgetStore.instance.getRoom(roomId);
+                const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+                jitsiWidgets.forEach(w => {
+                    // setting invalid content removes it
+                    WidgetUtils.setRoomWidget(roomId, w.id);
+                });
+            },
+        });
+    }
+
+    private hangupCallApp(roomId: string) {
+        const roomInfo = WidgetStore.instance.getRoom(roomId);
+        if (!roomInfo) return; // "should never happen" clauses go here
+
+        const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+        jitsiWidgets.forEach(w => {
+            const messaging = WidgetMessagingStore.instance.getMessagingForId(w.id);
+            if (!messaging) return; // more "should never happen" words
+
+            messaging.transport.send(ElementWidgetActions.HangupCall, {});
         });
     }
 }
