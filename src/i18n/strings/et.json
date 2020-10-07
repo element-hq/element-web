@@ -2512,5 +2512,17 @@
     "This version of %(brand)s does not support viewing some encrypted files": "See %(brand)s versioon ei toeta mõnede krüptitud failide vaatatamist",
     "This version of %(brand)s does not support searching encrypted messages": "See %(brand)s versioon ei toeta otsingut krüptitud sõnumite seast",
     "Cannot create rooms in this community": "Siia kogukonda ei saa jututubasid luua",
-    "You do not have permission to create rooms in this community.": "Sul pole õigusi luua siin kogukonnas uusi jututubasid."
+    "You do not have permission to create rooms in this community.": "Sul pole õigusi luua siin kogukonnas uusi jututubasid.",
+    "Join the conference at the top of this room": "Liitu konverentsiga selle jututoa ülaosas",
+    "Join the conference from the room information card on the right": "Liitu konverentsiga selle jututoa infolehelt paremal",
+    "Video conference ended by %(senderName)s": "%(senderName)s lõpetas video rühmakõne",
+    "Video conference updated by %(senderName)s": "%(senderName)s uuendas video rühmakõne",
+    "Video conference started by %(senderName)s": "%(senderName)s alustas video rühmakõne",
+    "End conference": "Lõpeta videokonverents",
+    "This will end the conference for everyone. Continue?": "Sellega lõpetame kõikide osalejate jaoks videokonverentsi. Nõus?",
+    "Ignored attempt to disable encryption": "Eirasin katset lõpetada krüptimise kasutamine",
+    "Offline encrypted messaging using dehydrated devices": "Võrguühenduseta kasutamiseks mõeldud krüptitud sõnumid dehydrated teenuse abil",
+    "Remove messages sent by others": "Kustuta teiste saadetud sõnumid",
+    "Failed to save your profile": "Sinu profiili salvestamine ei õnnestunud",
+    "The operation could not be completed": "Toimingut ei õnnestunud lõpetada"
 }
