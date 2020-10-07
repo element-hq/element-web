@@ -107,7 +107,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             fragmentQueryParams.guest_access_token
         ) {
             console.log("Using guest access credentials");
-            return _doSetLoggedIn({
+            return doSetLoggedIn({
                 userId: fragmentQueryParams.guest_user_id,
                 accessToken: fragmentQueryParams.guest_access_token,
                 homeserverUrl: guestHsUrl,
@@ -115,7 +115,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                 guest: true,
             }, true).then(() => true);
         }
-        const success = await _restoreFromLocalStorage({
+        const success = await restoreFromLocalStorage({
             ignoreGuest: Boolean(opts.ignoreGuest),
         });
         if (success) {
@@ -123,7 +123,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         }
 
         if (enableGuest) {
-            return _registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
+            return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
         }
 
         // fall back to welcome screen
@@ -134,7 +134,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             // need to show the general failure dialog. Instead, just go back to welcome.
             return false;
         }
-        return _handleLoadSessionFailure(e);
+        return handleLoadSessionFailure(e);
     }
 }
 
@@ -192,8 +192,8 @@ export function attemptTokenLogin(
         },
     ).then(function(creds) {
         console.log("Logged in with token");
-        return _clearStorage().then(() => {
-            _persistCredentialsToLocalStorage(creds);
+        return clearStorage().then(() => {
+            persistCredentialsToLocalStorage(creds);
             // remember that we just logged in
             sessionStorage.setItem("mx_fresh_login", String(true));
             return true;
@@ -239,7 +239,7 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
     }
 }
 
-function _registerAsGuest(
+function registerAsGuest(
     hsUrl: string,
     isUrl: string,
     defaultDeviceDisplayName: string,
@@ -257,7 +257,7 @@ function _registerAsGuest(
         },
     }).then((creds) => {
         console.log(`Registered as guest: ${creds.user_id}`);
-        return _doSetLoggedIn({
+        return doSetLoggedIn({
             userId: creds.user_id,
             deviceId: creds.device_id,
             accessToken: creds.access_token,
@@ -313,7 +313,7 @@ export function getLocalStorageSessionVars(): ILocalStorageSession {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. isGuest etc.)
-async function _restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
     const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {
@@ -339,7 +339,7 @@ async function _restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promi
         sessionStorage.removeItem("mx_fresh_login");
 
         console.log(`Restoring session for ${userId}`);
-        await _doSetLoggedIn({
+        await doSetLoggedIn({
             userId: userId,
             deviceId: deviceId,
             accessToken: accessToken,
@@ -356,7 +356,7 @@ async function _restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promi
     }
 }
 
-async function _handleLoadSessionFailure(e: Error): Promise<boolean> {
+async function handleLoadSessionFailure(e: Error): Promise<boolean> {
     console.error("Unable to load session", e);
 
     const SessionRestoreErrorDialog =
@@ -369,7 +369,7 @@ async function _handleLoadSessionFailure(e: Error): Promise<boolean> {
     const [success] = await modal.finished;
     if (success) {
         // user clicked continue.
-        await _clearStorage();
+        await clearStorage();
         return false;
     }
 
@@ -403,7 +403,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
         console.log("Pickle key not created");
     }
 
-    return _doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
+    return doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
 }
 
 /**
@@ -434,7 +434,7 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
         console.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
-    return _doSetLoggedIn(credentials, overwrite);
+    return doSetLoggedIn(credentials, overwrite);
 }
 
 /**
@@ -446,7 +446,7 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-async function _doSetLoggedIn(
+async function doSetLoggedIn(
     credentials: IMatrixClientCreds,
     clearStorage: boolean,
 ): Promise<MatrixClient> {
@@ -473,7 +473,7 @@ async function _doSetLoggedIn(
     dis.dispatch({action: 'on_logging_in'}, true);
 
     if (clearStorage) {
-        await _clearStorage();
+        await clearStorage();
     }
 
     const results = await StorageManager.checkConsistency();
@@ -481,9 +481,9 @@ async function _doSetLoggedIn(
     // crypto store, we'll be generally confused when handling encrypted data.
     // Show a modal recommending a full reset of storage.
     if (results.dataInLocalStorage && results.cryptoInited && !results.dataInCryptoStore) {
-        const signOut = await _showStorageEvictedDialog();
+        const signOut = await showStorageEvictedDialog();
         if (signOut) {
-            await _clearStorage();
+            await clearStorage();
             // This error feels a bit clunky, but we want to make sure we don't go any
             // further and instead head back to sign in.
             throw new AbortLoginAndRebuildStorage(
@@ -511,7 +511,7 @@ async function _doSetLoggedIn(
 
     if (localStorage) {
         try {
-            _persistCredentialsToLocalStorage(credentials);
+            persistCredentialsToLocalStorage(credentials);
             // make sure we don't think that it's a fresh login any more
             sessionStorage.removeItem("mx_fresh_login");
         } catch (e) {
@@ -527,7 +527,7 @@ async function _doSetLoggedIn(
     return client;
 }
 
-function _showStorageEvictedDialog(): Promise<boolean> {
+function showStorageEvictedDialog(): Promise<boolean> {
     const StorageEvictedDialog = sdk.getComponent('views.dialogs.StorageEvictedDialog');
     return new Promise(resolve => {
         Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
@@ -540,7 +540,7 @@ function _showStorageEvictedDialog(): Promise<boolean> {
 // `instanceof`. Babel 7 supports this natively in their class handling.
 class AbortLoginAndRebuildStorage extends Error { }
 
-function _persistCredentialsToLocalStorage(credentials: IMatrixClientCreds): void {
+function persistCredentialsToLocalStorage(credentials: IMatrixClientCreds): void {
     localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
         localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
@@ -704,14 +704,14 @@ export async function onLoggedOut(): Promise<void> {
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
-    await _clearStorage({deleteEverything: true});
+    await clearStorage({deleteEverything: true});
 }
 
 /**
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-async function _clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
+async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
     Analytics.disable();
 
     if (window.localStorage) {
