@@ -2521,5 +2521,8 @@
     "Join the conference from the room information card on the right": "Csatlakozz a konferenciához a jobb oldali szoba információs panel segítségével",
     "Video conference ended by %(senderName)s": "A videókonferenciát befejezte: %(senderName)s",
     "Video conference updated by %(senderName)s": "A videókonferenciát frissítette: %(senderName)s",
-    "Video conference started by %(senderName)s": "A videókonferenciát elindította: %(senderName)s"
+    "Video conference started by %(senderName)s": "A videókonferenciát elindította: %(senderName)s",
+    "Failed to save your profile": "A profilodat nem sikerült elmenteni",
+    "The operation could not be completed": "A műveletet nem lehetett befejezni",
+    "Remove messages sent by others": "Mások által küldött üzenetek törlése"
 }
