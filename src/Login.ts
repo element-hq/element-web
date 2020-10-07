@@ -18,6 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
 import Matrix from "matrix-js-sdk";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
