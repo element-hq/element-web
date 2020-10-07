@@ -30,7 +30,7 @@ import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { MatrixClientPeg, IMatrixClientCreds } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
@@ -290,7 +290,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // When the session loads it'll be detected as soft logged out and a dispatch
             // will be sent out to say that, triggering this MatrixChat to show the soft
             // logout page.
-            Lifecycle.loadSession({});
+            Lifecycle.loadSession();
         }
 
         this.accountPassword = null;
@@ -1814,12 +1814,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("forgot_password");
     };
 
-    onRegisterFlowComplete = (credentials: object, password: string) => {
+    onRegisterFlowComplete = (credentials: IMatrixClientCreds, password: string) => {
         return this.onUserCompletedLoginFlow(credentials, password);
     };
 
     // returns a promise which resolves to the new MatrixClient
-    onRegistered(credentials: object) {
+    onRegistered(credentials: IMatrixClientCreds) {
         return Lifecycle.setLoggedIn(credentials);
     }
 
@@ -1905,7 +1905,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    onUserCompletedLoginFlow = async (credentials: object, password: string) => {
+    onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, password: string) => {
         this.accountPassword = password;
         // self-destruct the password after 5mins
         if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);

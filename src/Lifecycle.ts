@@ -18,8 +18,10 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
+import { InvalidStoreError } from "matrix-js-sdk/src/errors";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import {IMatrixClientCreds, MatrixClientPeg} from './MatrixClientPeg';
 import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
@@ -47,44 +49,46 @@ import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
 
+interface ILoadSessionOpts {
+    enableGuest?: boolean;
+    guestHsUrl?: string;
+    guestIsUrl?: string;
+    ignoreGuest?: boolean;
+    defaultDeviceDisplayName?: string;
+    fragmentQueryParams?: Record<string, string>;
+}
+
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
  * a number of things:
  *
- *
  * 1. if we have a guest access token in the fragment query params, it uses
  *    that.
- *
  * 2. if an access token is stored in local storage (from a previous session),
  *    it uses that.
- *
  * 3. it attempts to auto-register as a guest user.
  *
  * If any of steps 1-4 are successful, it will call {_doSetLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
- * @param {object} opts
- *
- * @param {object} opts.fragmentQueryParams: string->string map of the
+ * @param {object} [opts]
+ * @param {object} [opts.fragmentQueryParams]: string->string map of the
  *     query-parameters extracted from the #-fragment of the starting URI.
- *
- * @param {boolean} opts.enableGuest: set to true to enable guest access tokens
- *     and auto-guest registrations.
- *
- * @params {string} opts.guestHsUrl: homeserver URL. Only used if enableGuest is
- *     true; defines the HS to register against.
- *
- * @params {string} opts.guestIsUrl: homeserver URL. Only used if enableGuest is
- *     true; defines the IS to use.
- *
- * @params {bool} opts.ignoreGuest: If the stored session is a guest account, ignore
- *     it and don't load it.
- *
+ * @param {boolean} [opts.enableGuest]: set to true to enable guest access
+ *     tokens and auto-guest registrations.
+ * @param {string} [opts.guestHsUrl]: homeserver URL. Only used if enableGuest
+ *     is true; defines the HS to register against.
+ * @param {string} [opts.guestIsUrl]: homeserver URL. Only used if enableGuest
+ *     is true; defines the IS to use.
+ * @param {bool} [opts.ignoreGuest]: If the stored session is a guest account,
+ *     ignore it and don't load it.
+ * @param {string} [opts.defaultDeviceDisplayName]: Default display name to use
+ *     when registering as a guest.
  * @returns {Promise} a promise which resolves when the above process completes.
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
-export async function loadSession(opts) {
+export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean> {
     try {
         let enableGuest = opts.enableGuest || false;
         const guestHsUrl = opts.guestHsUrl;
@@ -97,10 +101,11 @@ export async function loadSession(opts) {
             enableGuest = false;
         }
 
-        if (enableGuest &&
+        if (
+            enableGuest &&
             fragmentQueryParams.guest_user_id &&
             fragmentQueryParams.guest_access_token
-           ) {
+        ) {
             console.log("Using guest access credentials");
             return _doSetLoggedIn({
                 userId: fragmentQueryParams.guest_user_id,
@@ -139,7 +144,7 @@ export async function loadSession(opts) {
  * is associated with them. The session is not loaded.
  * @returns {String} The persisted session's owner, if an owner exists. Null otherwise.
  */
-export function getStoredSessionOwner() {
+export function getStoredSessionOwner(): string {
     const {hsUrl, userId, accessToken} = getLocalStorageSessionVars();
     return hsUrl && userId && accessToken ? userId : null;
 }
@@ -148,7 +153,7 @@ export function getStoredSessionOwner() {
  * @returns {bool} True if the stored session is for a guest user or false if it is
  *     for a real user. If there is no stored session, return null.
  */
-export function getStoredSessionIsGuest() {
+export function getStoredSessionIsGuest(): boolean {
     const sessVars = getLocalStorageSessionVars();
     return sessVars.hsUrl && sessVars.userId && sessVars.accessToken ? sessVars.isGuest : null;
 }
@@ -163,7 +168,10 @@ export function getStoredSessionIsGuest() {
  * @returns {Promise} promise which resolves to true if we completed the token
  *    login, else false
  */
-export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
+export function attemptTokenLogin(
+    queryParams: Record<string, string>,
+    defaultDeviceDisplayName?: string,
+): Promise<boolean> {
     if (!queryParams.loginToken) {
         return Promise.resolve(false);
     }
@@ -187,7 +195,7 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return _clearStorage().then(() => {
             _persistCredentialsToLocalStorage(creds);
             // remember that we just logged in
-            sessionStorage.setItem("mx_fresh_login", true);
+            sessionStorage.setItem("mx_fresh_login", String(true));
             return true;
         });
     }).catch((err) => {
@@ -197,8 +205,8 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
     });
 }
 
-export function handleInvalidStoreError(e) {
-    if (e.reason === Matrix.InvalidStoreError.TOGGLED_LAZY_LOADING) {
+export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
+    if (e.reason === InvalidStoreError.TOGGLED_LAZY_LOADING) {
         return Promise.resolve().then(() => {
             const lazyLoadEnabled = e.value;
             if (lazyLoadEnabled) {
@@ -231,7 +239,11 @@ export function handleInvalidStoreError(e) {
     }
 }
 
-function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
+function _registerAsGuest(
+    hsUrl: string,
+    isUrl: string,
+    defaultDeviceDisplayName: string,
+): Promise<boolean> {
     console.log(`Doing guest login on ${hsUrl}`);
 
     // create a temporary MatrixClient to do the login
@@ -259,12 +271,21 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     });
 }
 
+export interface ILocalStorageSession {
+    hsUrl: string;
+    isUrl: string;
+    accessToken: string;
+    userId: string;
+    deviceId: string;
+    isGuest: boolean;
+}
+
 /**
  * Retrieves information about the stored session in localstorage. The session
  * may not be valid, as it is not tested for consistency here.
  * @returns {Object} Information about the session - see implementation for variables.
  */
-export function getLocalStorageSessionVars() {
+export function getLocalStorageSessionVars(): ILocalStorageSession {
     const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
     const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
     const accessToken = localStorage.getItem("mx_access_token");
@@ -292,8 +313,8 @@ export function getLocalStorageSessionVars() {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. isGuest etc.)
-async function _restoreFromLocalStorage(opts) {
-    const ignoreGuest = opts.ignoreGuest;
+async function _restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+    const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {
         return false;
@@ -314,7 +335,7 @@ async function _restoreFromLocalStorage(opts) {
             console.log("No pickle key available");
         }
 
-        const freshLogin = sessionStorage.getItem("mx_fresh_login");
+        const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
 
         console.log(`Restoring session for ${userId}`);
@@ -335,7 +356,7 @@ async function _restoreFromLocalStorage(opts) {
     }
 }
 
-async function _handleLoadSessionFailure(e) {
+async function _handleLoadSessionFailure(e: Error): Promise<boolean> {
     console.error("Unable to load session", e);
 
     const SessionRestoreErrorDialog =
@@ -369,12 +390,12 @@ async function _handleLoadSessionFailure(e) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export async function setLoggedIn(credentials) {
+export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     credentials.freshLogin = true;
     stopMatrixClient();
     const pickleKey = credentials.userId && credentials.deviceId
-          ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
-          : null;
+        ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
+        : null;
 
     if (pickleKey) {
         console.log("Created pickle key");
@@ -400,7 +421,7 @@ export async function setLoggedIn(credentials) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function hydrateSession(credentials) {
+export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     const oldUserId = MatrixClientPeg.get().getUserId();
     const oldDeviceId = MatrixClientPeg.get().getDeviceId();
 
@@ -425,7 +446,10 @@ export function hydrateSession(credentials) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-async function _doSetLoggedIn(credentials, clearStorage) {
+async function _doSetLoggedIn(
+    credentials: IMatrixClientCreds,
+    clearStorage: boolean,
+): Promise<MatrixClient> {
     credentials.guest = Boolean(credentials.guest);
 
     const softLogout = isSoftLogout();
@@ -514,7 +538,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     return client;
 }
 
-function _showStorageEvictedDialog() {
+function _showStorageEvictedDialog(): Promise<boolean> {
     const StorageEvictedDialog = sdk.getComponent('views.dialogs.StorageEvictedDialog');
     return new Promise(resolve => {
         Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
@@ -527,7 +551,7 @@ function _showStorageEvictedDialog() {
 // `instanceof`. Babel 7 supports this natively in their class handling.
 class AbortLoginAndRebuildStorage extends Error { }
 
-function _persistCredentialsToLocalStorage(credentials) {
+function _persistCredentialsToLocalStorage(credentials: IMatrixClientCreds): void {
     localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
         localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
@@ -537,7 +561,7 @@ function _persistCredentialsToLocalStorage(credentials) {
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
 
     if (credentials.pickleKey) {
-        localStorage.setItem("mx_has_pickle_key", true);
+        localStorage.setItem("mx_has_pickle_key", String(true));
     } else {
         if (localStorage.getItem("mx_has_pickle_key")) {
             console.error("Expected a pickle key, but none provided.  Encryption may not work.");
@@ -561,7 +585,7 @@ let _isLoggingOut = false;
 /**
  * Logs the current session out and transitions to the logged-out state
  */
-export function logout() {
+export function logout(): void {
     if (!MatrixClientPeg.get()) return;
 
     if (MatrixClientPeg.get().isGuest()) {
@@ -590,7 +614,7 @@ export function logout() {
     );
 }
 
-export function softLogout() {
+export function softLogout(): void {
     if (!MatrixClientPeg.get()) return;
 
     // Track that we've detected and trapped a soft logout. This helps prevent other
@@ -611,11 +635,11 @@ export function softLogout() {
     // DO NOT CALL LOGOUT. A soft logout preserves data, logout does not.
 }
 
-export function isSoftLogout() {
+export function isSoftLogout(): boolean {
     return localStorage.getItem("mx_soft_logout") === "true";
 }
 
-export function isLoggingOut() {
+export function isLoggingOut(): boolean {
     return _isLoggingOut;
 }
 
@@ -625,7 +649,7 @@ export function isLoggingOut() {
  * @param {boolean} startSyncing True (default) to actually start
  * syncing the client.
  */
-async function startMatrixClient(startSyncing=true) {
+async function startMatrixClient(startSyncing = true): Promise<void> {
     console.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -684,7 +708,7 @@ async function startMatrixClient(startSyncing=true) {
  * Stops a running client and all related services, and clears persistent
  * storage. Used after a session has been logged out.
  */
-export async function onLoggedOut() {
+export async function onLoggedOut(): Promise<void> {
     _isLoggingOut = false;
     // Ensure that we dispatch a view change **before** stopping the client so
     // so that React components unmount first. This avoids React soft crashes
@@ -698,7 +722,7 @@ export async function onLoggedOut() {
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-async function _clearStorage(opts: {deleteEverything: boolean}) {
+async function _clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
     Analytics.disable();
 
     if (window.localStorage) {
@@ -736,7 +760,7 @@ async function _clearStorage(opts: {deleteEverything: boolean}) {
  * @param {boolean} unsetClient True (default) to abandon the client
  * on MatrixClientPeg after stopping.
  */
-export function stopMatrixClient(unsetClient=true) {
+export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
