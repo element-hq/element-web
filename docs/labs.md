@@ -106,3 +106,8 @@ To enable message previews for reactions in DMs, enable `feature_roomlist_previe
 represent what communities v2 will look/feel like and can/will change without notice. Due to the early
 stages this feature is in and the requirement for a compatible homeserver, we will not be accepting issues
 or feedback for this functionality at this time.
+
+## Dehydrated devices (`feature_dehydration`)
+
+Allows users to receive encrypted messages by creating a device that is stored
+encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
