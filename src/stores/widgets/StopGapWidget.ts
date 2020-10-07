@@ -66,7 +66,7 @@ class ElementWidget extends Widget {
         if (WidgetType.JITSI.matches(this.type)) {
             return WidgetUtils.getLocalJitsiWrapperUrl({
                 forLocalRender: true,
-                auth: this.rawData?.auth,
+                auth: super.rawData?.auth, // this.rawData can call templateUrl, do this to prevent looping
             });
         }
         return super.templateUrl;

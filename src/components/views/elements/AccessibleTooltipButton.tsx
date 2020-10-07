@@ -62,7 +62,8 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
     };
 
     render() {
-        const {title, tooltip, children, tooltipClassName, ...props} = this.props;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const {title, tooltip, children, tooltipClassName, forceHide, ...props} = this.props;
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
