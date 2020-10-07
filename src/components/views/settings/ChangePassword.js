@@ -19,13 +19,11 @@ import Field from "../elements/Field";
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
+import Spinner from '../elements/Spinner';
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
-
-import sessionStore from '../../../stores/SessionStore';
 
 export default class ChangePassword extends React.Component {
     static propTypes = {
@@ -66,31 +64,9 @@ export default class ChangePassword extends React.Component {
 
     state = {
         phase: ChangePassword.Phases.Edit,
-        cachedPassword: null,
         oldPassword: "",
         newPassword: "",
         newPasswordConfirm: "",
-    };
-
-    componentDidMount() {
-        this._sessionStore = sessionStore;
-        this._sessionStoreToken = this._sessionStore.addListener(
-            this._setStateFromSessionStore,
-        );
-
-        this._setStateFromSessionStore();
-    }
-
-    componentWillUnmount() {
-        if (this._sessionStoreToken) {
-            this._sessionStoreToken.remove();
-        }
-    }
-
-    _setStateFromSessionStore = () => {
-        this.setState({
-            cachedPassword: this._sessionStore.getCachedPassword(),
-        });
     };
 
     changePassword(oldPassword, newPassword) {
@@ -119,8 +95,11 @@ export default class ChangePassword extends React.Component {
                 </div>,
             button: _t("Continue"),
             extraButtons: [
-                <button className="mx_Dialog_primary"
-                        onClick={this._onExportE2eKeysClicked}>
+                <button
+                    key="exportRoomKeys"
+                    className="mx_Dialog_primary"
+                    onClick={this._onExportE2eKeysClicked}
+                >
                     { _t('Export E2E room keys') }
                 </button>,
             ],
@@ -150,9 +129,6 @@ export default class ChangePassword extends React.Component {
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
-            // Notify SessionStore that the user's password was changed
-            dis.dispatch({action: 'password_changed'});
-
             if (this.props.shouldAskForEmail) {
                 return this._optionallySetEmail().then((confirmed) => {
                     this.props.onFinished({
@@ -212,7 +188,7 @@ export default class ChangePassword extends React.Component {
 
     onClickChange = (ev) => {
         ev.preventDefault();
-        const oldPassword = this.state.cachedPassword || this.state.oldPassword;
+        const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
         const err = this.props.onCheckPassword(
@@ -231,31 +207,22 @@ export default class ChangePassword extends React.Component {
         const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 
-        let currentPassword = null;
-        if (!this.state.cachedPassword) {
-            currentPassword = (
-                <div className={rowClassName}>
-                    <Field
-                        type="password"
-                        label={_t('Current password')}
-                        value={this.state.oldPassword}
-                        onChange={this.onChangeOldPassword}
-                    />
-                </div>
-            );
-        }
-
         switch (this.state.phase) {
             case ChangePassword.Phases.Edit:
-                const passwordLabel = this.state.cachedPassword ?
-                    _t('Password') : _t('New Password');
                 return (
                     <form className={this.props.className} onSubmit={this.onClickChange}>
-                        { currentPassword }
                         <div className={rowClassName}>
                             <Field
                                 type="password"
-                                label={passwordLabel}
+                                label={_t('Current password')}
+                                value={this.state.oldPassword}
+                                onChange={this.onChangeOldPassword}
+                            />
+                        </div>
+                        <div className={rowClassName}>
+                            <Field
+                                type="password"
+                                label={_t('New Password')}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
@@ -277,10 +244,9 @@ export default class ChangePassword extends React.Component {
                     </form>
                 );
             case ChangePassword.Phases.Uploading:
-                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <div className="mx_Dialog_content">
-                        <Loader />
+                        <Spinner />
                     </div>
                 );
         }

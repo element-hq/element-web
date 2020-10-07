@@ -670,9 +670,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_home_page':
                 this.viewHome();
                 break;
-            case 'view_set_mxid':
-                this.setMxId(payload);
-                break;
             case 'view_start_chat_or_reuse':
                 this.chatCreateOrReuse(payload.user_id);
                 break;
@@ -983,36 +980,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.setState({currentUserId: userId});
             this.setPage(PageTypes.UserView);
         });
-    }
-
-    private setMxId(payload) {
-        const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-        const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
-            homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
-            onFinished: (submitted, credentials) => {
-                if (!submitted) {
-                    dis.dispatch({
-                        action: 'cancel_after_sync_prepared',
-                    });
-                    if (payload.go_home_on_cancel) {
-                        dis.dispatch({
-                            action: 'view_home_page',
-                        });
-                    }
-                    return;
-                }
-                MatrixClientPeg.setJustRegisteredUserId(credentials.user_id);
-                this.onRegistered(credentials);
-            },
-            onDifferentServerClicked: (ev) => {
-                dis.dispatch({action: 'start_registration'});
-                close();
-            },
-            onLoginClick: (ev) => {
-                dis.dispatch({action: 'start_login'});
-                close();
-            },
-        }).close;
     }
 
     private async createRoom(defaultPublic = false) {

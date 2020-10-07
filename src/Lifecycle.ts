@@ -512,19 +512,8 @@ async function _doSetLoggedIn(
     if (localStorage) {
         try {
             _persistCredentialsToLocalStorage(credentials);
-
             // make sure we don't think that it's a fresh login any more
             sessionStorage.removeItem("mx_fresh_login");
-
-            // The user registered as a PWLU (PassWord-Less User), the generated password
-            // is cached here such that the user can change it at a later time.
-            if (credentials.password) {
-                // Update SessionStore
-                dis.dispatch({
-                    action: 'cached_password',
-                    cachedPassword: credentials.password,
-                });
-            }
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
         }
