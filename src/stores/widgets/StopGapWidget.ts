@@ -163,6 +163,7 @@ export class StopGapWidget extends EventEmitter {
         if (this.started) return;
         const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
+        this.messaging.addEventListener("preparing", () => this.emit("preparing"));
         this.messaging.addEventListener("ready", () => this.emit("ready"));
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
