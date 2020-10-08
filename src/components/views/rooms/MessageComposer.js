@@ -437,6 +437,7 @@ export default class MessageComposer extends React.Component {
                     const canEndConf = WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
                     controls.push(
                         <HangupButton
+                            key="controls_hangup"
                             roomId={this.props.room.roomId}
                             isConference={true}
                             canEndConference={canEndConf}
