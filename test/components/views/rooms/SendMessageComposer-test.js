@@ -220,7 +220,7 @@ describe('<SendMessageComposer/>', () => {
             });
 
             expect(wrapper.text()).toBe("");
-            const str = sessionStorage.getItem(`mx_cider_composer_history_${mockRoom.roomId}[0]`);
+            const str = sessionStorage.getItem(`mx_cider_history_${mockRoom.roomId}[0]`);
             expect(JSON.parse(str)).toStrictEqual({
                 parts: [{"type": "plain", "text": "This is a message"}],
                 replyEventId: mockEvent.getId(),
