@@ -1,0 +1,103 @@
+/*
+Copyright 2020 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: Match the user's theme: https://github.com/vector-im/riot-web/issues/12794
+
+@font-face {
+    font-family: 'Inter';
+    font-style:  normal;
+    font-weight: 400;
+    font-display: swap;
+    unicode-range: U+0000-20e2,U+20e4-23ce,U+23d0-24c1,U+24c3-259f,U+25c2-2664,U+2666-2763,U+2765-2b05,U+2b07-2b1b,U+2b1d-10FFFF;
+    src: url("~matrix-react-sdk/res/fonts/Inter/Inter-Regular.woff2?v=3.13") format("woff2"),
+    url("~matrix-react-sdk/res/fonts/Inter/Inter-Regular.woff?v=3.13") format("woff");
+}
+
+body {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+body, html {
+    padding: 10px;
+    margin: 0;
+}
+
+body.client-element-web {
+    &.is-dark {
+        background-color: #181b21;
+        color: #edf3ff;
+    }
+
+    &:not(.is-dark) {
+        background-color: #edf3ff;
+        color: #181b21;
+    }
+
+    button {
+        cursor: pointer;
+        padding: 7px 18px;
+        text-align: center;
+        border-radius: 4px;
+        display: inline-block;
+        font-size: 14px;
+        color: #ffffff;
+        background-color: var(--accent-color, #03b381);
+        border: 0;
+    }
+
+    button.danger {
+        background-color: #ff4b55;
+    }
+
+    button.cancel {
+        background-color: transparent;
+        color: #03b381;
+    }
+}
+
+body.client-element-android {
+    &.is-dark {
+        background-color: #062600;
+        color: #c6ffc6;
+    }
+
+    &:not(.is-dark) {
+        background-color: #c6ffc6;
+        color: #181b21;
+    }
+
+    button {
+        cursor: pointer;
+        padding: 12px 24px;
+        text-align: center;
+        border-radius: 12px;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: var(--accent-color, #03b381);
+        border: 0;
+    }
+
+    button.danger {
+        background-color: #ff4b55;
+    }
+
+    button.cancel {
+        background-color: transparent;
+        color: var(--accent-color, #03b381);
+    }
+}
