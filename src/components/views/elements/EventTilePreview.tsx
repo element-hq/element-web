@@ -80,6 +80,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
     private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
         // Fake it till we make it
+        /* eslint-disable quote-props */
         const rawEvent = {
             type: "m.room.message",
             sender: userId,
@@ -102,6 +103,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             room_id: "!999999999999999999:example.org",
         };
         const event = new MatrixEvent(rawEvent);
+        /* eslint-enable quote-props */
 
         // Fake it more
         event.sender = {
