@@ -80,27 +80,28 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
     private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
         // Fake it till we make it
-        const event = new MatrixEvent(JSON.parse(`{
-                "type": "m.room.message",
-                "sender": "${userId}",
-                "content": {
-                  "m.new_content": {
-                    "msgtype": "m.text",
-                    "body": "${this.props.message}",
-                    "displayname": "${displayname}",
-                    "avatar_url": "${avatarUrl}"
-                  },
-                  "msgtype": "m.text",
-                  "body": "${this.props.message}",
-                  "displayname": "${displayname}",
-                  "avatar_url": "${avatarUrl}"
+        const rawEvent = {
+            type: "m.room.message",
+            sender: userId,
+            content: {
+                "m.new_content": {
+                    msgtype: "m.text",
+                    body: this.props.message,
+                    displayname: displayname,
+                    avatar_url: avatarUrl,
                 },
-                "unsigned": {
-                  "age": 97
-                },
-                "event_id": "$9999999999999999999999999999999999999999999",
-                "room_id": "!999999999999999999:matrix.org"
-              }`));
+                msgtype: "m.text",
+                body: this.props.message,
+                displayname: displayname,
+                avatar_url: avatarUrl,
+            },
+            unsigned: {
+                age: 97,
+            },
+            event_id: "$9999999999999999999999999999999999999999999",
+            room_id: "!999999999999999999:example.org",
+        };
+        const event = new MatrixEvent(rawEvent);
 
         // Fake it more
         event.sender = {
