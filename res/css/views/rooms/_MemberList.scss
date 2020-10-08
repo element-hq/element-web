@@ -102,7 +102,7 @@ limitations under the License.
     &::before {
         content: '';
         display: inline-block;
-        background-color: #fff; // Same colour for all themes
+        background-color: $button-fg-color;
         mask-image: url('$(res)/img/element-icons/room/invite.svg');
         mask-position: center;
         mask-repeat: no-repeat;
