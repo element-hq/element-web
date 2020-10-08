@@ -338,11 +338,11 @@ export default class SendMessageComposer extends React.Component {
         const parts = this._restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
         this.dispatcherRef = dis.register(this.onAction);
-        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, 'mx_cider_composer_history_');
+        this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, 'mx_cider_history_');
     }
 
     get _editorStateKey() {
-        return `cider_editor_state_${this.props.room.roomId}`;
+        return `mx_cider_state_${this.props.room.roomId}`;
     }
 
     _clearStoredEditorState() {
@@ -352,15 +352,19 @@ export default class SendMessageComposer extends React.Component {
     _restoreStoredEditorState(partCreator) {
         const json = localStorage.getItem(this._editorStateKey);
         if (json) {
-            const {parts: serializedParts, replyEventId} = SendHistoryManager.parseItem(JSON.parse(json));
-            const parts = serializedParts.map(p => partCreator.deserializePart(p));
-            if (replyEventId) {
-                dis.dispatch({
-                    action: 'reply_to_event',
-                    event: this.props.room.findEventById(replyEventId),
-                });
+            try {
+                const {parts: serializedParts, replyEventId} = JSON.parse(json);
+                const parts = serializedParts.map(p => partCreator.deserializePart(p));
+                if (replyEventId) {
+                    dis.dispatch({
+                        action: 'reply_to_event',
+                        event: this.props.room.findEventById(replyEventId),
+                    });
+                }
+                return parts;
+            } catch (e) {
+                console.error(e);
             }
-            return parts;
         }
     }
 

@@ -41,7 +41,7 @@ export default class SendHistoryManager {
 
         while (itemJSON = sessionStorage.getItem(`${this.prefix}[${index}]`)) {
             try {
-                this.history.push(SendHistoryManager.parseItem(JSON.parse(itemJSON)));
+                this.history.push(JSON.parse(itemJSON));
             } catch (e) {
                 console.warn("Throwing away unserialisable history", e);
                 break;
@@ -58,16 +58,6 @@ export default class SendHistoryManager {
             parts: model.serializeParts(),
             replyEventId: replyEvent ? replyEvent.getId() : undefined,
         };
-    }
-
-    static parseItem(item: IHistoryItem | SerializedPart[]): IHistoryItem {
-        if (Array.isArray(item)) {
-            // XXX: migrate from old format already in Storage
-            return {
-                parts: item,
-            };
-        }
-        return item;
     }
 
     save(editorModel: EditorModel, replyEvent?: MatrixEvent) {
