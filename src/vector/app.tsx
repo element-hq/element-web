@@ -92,7 +92,7 @@ function onNewScreen(screen: string, replaceLast = false) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use app.element.io for now instead.
-function makeRegistrationUrl(params: object) {
+function makeRegistrationUrl(params: any) {
     let url = params.hs_url + "/#/register";
 
     const keys = Object.keys(params);

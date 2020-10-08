@@ -183,8 +183,8 @@ async function start() {
             // Now that we've loaded the theme (CSS), display the config syntax error if needed.
             if (error.err && error.err instanceof SyntaxError) {
                 // This uses the default brand since the app config is unavailable.
-                return showError(_t("Your Element is misconfigured"), [
-                    _t("Your Element configuration contains invalid JSON. " +
+                return showError(_t("Your Tchap is misconfigured"), [
+                    _t("Your Tchap configuration contains invalid JSON. " +
                         "Please correct the problem and reload the page."),
                     _t(
                         "The message from the parser is: %(message)s",
