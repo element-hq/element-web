@@ -18,7 +18,7 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {ButtonKind, KnownWidgetActions, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
+import {ModalButtonKind, WidgetApi, WidgetApiToWidgetAction} from 'matrix-widget-api';
 
 let widgetApi: WidgetApi;
 (async function() {
@@ -35,20 +35,23 @@ let widgetApi: WidgetApi;
         };
 
         // Set this up as early as possible because Element will be hitting it almost immediately.
-        widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), []);
+        const parentOrigin = new URL(qsParam('parentUrl')).origin;
+        widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
 
-        widgetApi.on(KnownWidgetActions.CloseModalWidget, req => {
-            document.getElementById("answer").innerText = "Response from Modal: " + JSON.stringify(req.data);
+        widgetApi.addEventListener(WidgetApiToWidgetAction.CloseModalWidget, (req: CustomEvent) => {
+            document.getElementById("answer").innerText = "Response from Modal: " + JSON.stringify(req.detail);
         });
+
+        widgetApi.start();
 
         document.getElementById("demoBtn").onclick = () => {
             const url = new URL(window.location.href);
             url.pathname = url.pathname.substr(0, url.pathname.lastIndexOf("/")) + "/theme_widget.html";
             url.search = "";
             widgetApi.openModalWidget(url.toString(), "Test Modal Widget", [
-                {id: "m.close", kind: ButtonKind.Danger, label: "Danger"},
-                {id: "org.secondary", kind: ButtonKind.Secondary, label: "Secondary"},
-                {id: "org.primary", kind: ButtonKind.Primary, label: "Primary"},
+                {id: "m.close", kind: ModalButtonKind.Danger, label: "Danger"},
+                {id: "org.secondary", kind: ModalButtonKind.Secondary, label: "Secondary"},
+                {id: "org.primary", kind: ModalButtonKind.Primary, label: "Primary"},
             ], {question: "Answer to everything?"});
         };
     } catch (e) {

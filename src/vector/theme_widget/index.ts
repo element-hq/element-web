@@ -18,7 +18,7 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import { KnownWidgetActions, WidgetApi } from 'matrix-react-sdk/src/widgets/WidgetApi';
+import {WidgetApi, WidgetApiToWidgetAction, IWidgetApiRequest} from 'matrix-widget-api';
 
 let widgetApi: WidgetApi;
 (async function() {
@@ -35,20 +35,28 @@ let widgetApi: WidgetApi;
         };
 
         // Set this up as early as possible because Element will be hitting it almost immediately.
-        widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), []);
+        const parentOrigin = new URL(qsParam('parentUrl')).origin;
+        widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
 
-        widgetApi.on(KnownWidgetActions.ButtonClicked, req => {
-            console.log("@@ clickety", req);
-            document.getElementById("button").innerText = "BUTTON CLICKED: " + JSON.stringify(req.data);
-            setTimeout(() => {
-                widgetApi.closeModalWidget(req.data);
-            }, 3000);
-        });
+        widgetApi.addEventListener(
+            `action:${WidgetApiToWidgetAction.ButtonClicked}`,
+            (ev: CustomEvent<IWidgetApiRequest>) => {
+                console.log("@@ clickety", ev.detail);
+                document.getElementById("button").innerText = "BUTTON CLICKED: " + JSON.stringify(req.data);
+                setTimeout(() => {
+                    widgetApi.closeModalWidget(ev.detail.data);
+                }, 3000);
+            },
+        );
 
-        widgetApi.on(KnownWidgetActions.GetWidgetConfig, (config) => {
-            console.log("Got widget config: ", config);
-            document.getElementById("question").innerText = "INIT PARAMS: " + JSON.stringify(config.data);
-        });
+        widgetApi.addEventListener(
+            `action:${WidgetApiToWidgetAction.WidgetConfig}`,
+            (ev: CustomEvent<IWidgetApiRequest>) => {
+                console.log("Got widget config: ", ev.detail.data);
+                document.getElementById("question").innerText = "INIT PARAMS: " + JSON.stringify(ev.detail.data);
+            },
+        );
+        widgetApi.start();
 
         document.getElementById("closeButton").onclick = () => {
             widgetApi.closeModalWidget({answer: 42});
