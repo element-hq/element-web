@@ -121,7 +121,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@babel/register": "^7.10.5",
     "@babel/traverse": "^7.11.0",
-    "@peculiar/webcrypto": "^1.1.2",
+    "@peculiar/webcrypto": "^1.1.3",
     "@types/classnames": "^2.2.10",
     "@types/counterpart": "^0.18.1",
     "@types/flux": "^3.1.9",
@@ -151,8 +151,9 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^2.5.1",
     "glob": "^5.0.15",
-    "jest": "^24.9.0",
-    "jest-canvas-mock": "^2.2.0",
+    "jest": "^26.5.2",
+    "jest-canvas-mock": "^2.3.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
@@ -165,6 +166,7 @@
     "walk": "^2.3.14"
   },
   "jest": {
+    "testEnvironment": "./__test-utils__/environment.js",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
