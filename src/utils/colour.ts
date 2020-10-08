@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { number } from "prop-types";
-
 export function textToHtmlRainbow(str: string): string {
     const frequency = (2 * Math.PI) / str.length;
 
@@ -48,7 +46,7 @@ function generateAB(hue: number, chroma: number): [number, number] {
 
 function labToRGB(l: number, a: number, b: number): [number, number, number] {
     // Convert CIELAB to CIEXYZ (D65)
-    var y = (l + 16) / 116;
+    let y = (l + 16) / 116;
     const x = adjustXYZ(y + a / 500) * 0.9505;
     const z = adjustXYZ(y - b / 200) * 1.089;
 
