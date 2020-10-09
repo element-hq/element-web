@@ -20,7 +20,6 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import AccessibleButton from "../elements/AccessibleButton";
 import AppTile from "../elements/AppTile";
 import {_t} from "../../../languageHandler";
 import {useWidgets} from "./RoomSummaryCard";
@@ -30,8 +29,6 @@ import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPa
 import {Action} from "../../../dispatcher/actions";
 import WidgetStore from "../../../stores/WidgetStore";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import classNames from "classnames";
 import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
 
 interface IProps {
