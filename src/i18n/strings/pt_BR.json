@@ -2343,5 +2343,7 @@
     "Secure Backup": "Backup online",
     "Your keys are being backed up (the first backup could take a few minutes).": "O backup de suas chaves está sendo feito (o primeiro backup pode demorar alguns minutos).",
     "Secure your backup with a recovery passphrase": "Proteja o seu backup com uma frase de recuperação",
-    "You can also set up Secure Backup & manage your keys in Settings.": "Você também pode configurar o Backup online & configurar as suas senhas nas Configurações."
+    "You can also set up Secure Backup & manage your keys in Settings.": "Você também pode configurar o Backup online & configurar as suas senhas nas Configurações.",
+    "End conference": "Terminar conferência",
+    "This will end the conference for everyone. Continue?": "Isto vai terminar a conferência para todo mundo. Continuar?"
 }
