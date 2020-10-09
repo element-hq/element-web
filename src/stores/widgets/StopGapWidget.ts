@@ -19,11 +19,13 @@ import {
     ClientWidgetApi,
     IStickerActionRequest,
     IStickyActionRequest,
+    ITemplateParams,
     IWidget,
     IWidgetApiRequest,
     IWidgetApiRequestEmptyData,
     IWidgetData,
     MatrixCapabilities,
+    runTemplate,
     Widget,
     WidgetApiFromWidgetAction,
 } from "matrix-widget-api";
@@ -76,14 +78,32 @@ class ElementWidget extends Widget {
         let conferenceId = super.rawData['conferenceId'];
         if (conferenceId === undefined) {
             // we'll need to parse the conference ID out of the URL for v1 Jitsi widgets
-            const parsedUrl = new URL(this.templateUrl);
+            const parsedUrl = new URL(super.templateUrl); // use super to get the raw widget URL
             conferenceId = parsedUrl.searchParams.get("confId");
+        }
+        let domain = super.rawData['domain'];
+        if (domain === undefined) {
+            // v1 widgets default to jitsi.riot.im regardless of user settings
+            domain = "jitsi.riot.im";
         }
         return {
             ...super.rawData,
             theme: SettingsStore.getValue("theme"),
             conferenceId,
+            domain,
         };
+    }
+
+    public getCompleteUrl(params: ITemplateParams): string {
+        return runTemplate(this.templateUrl, {
+            // we need to supply a whole widget to the template, but don't have
+            // easy access to the definition the superclass is using, so be sad
+            // and gutwrench it.
+            // This isn't a problem when the widget architecture is fixed and this
+            // subclass gets deleted.
+            ...super['definition'], // XXX: Private member access
+            data: this.rawData,
+        }, params);
     }
 }
 
