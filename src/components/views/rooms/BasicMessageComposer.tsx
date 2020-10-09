@@ -92,7 +92,7 @@ interface IProps {
     label?: string;
     initialCaret?: DocumentOffset;
 
-    onChange();
+    onChange?();
     onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
 }
 
