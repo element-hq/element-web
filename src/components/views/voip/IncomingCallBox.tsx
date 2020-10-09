@@ -25,6 +25,7 @@ import CallHandler from '../../../CallHandler';
 import PulsedAvatar from '../avatars/PulsedAvatar';
 import RoomAvatar from '../avatars/RoomAvatar';
 import FormButton from '../elements/FormButton';
+import { CallState } from 'matrix-js-sdk/lib/webrtc/call';
 
 interface IProps {
 }
@@ -53,7 +54,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         switch (payload.action) {
             case 'call_state': {
                 const call = CallHandler.sharedInstance().getCallForRoom(payload.room_id);
-                if (call && call.call_state === 'ringing') {
+                if (call && call.state === CallState.Ringing) {
                     this.setState({
                         incomingCall: call,
                     });

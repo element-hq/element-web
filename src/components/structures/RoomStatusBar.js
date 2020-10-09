@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015-2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -46,10 +44,12 @@ export default class RoomStatusBar extends React.Component {
         // Used to suggest to the user to invite someone
         sentMessageAndIsAlone: PropTypes.bool,
 
-        // true if there is an active call in this room (means we show
-        // the 'Active Call' text in the status bar if there is nothing
-        // more interesting)
-        hasActiveCall: PropTypes.bool,
+        // The active call in the room, if any (means we show the call bar
+        // along with the status of the call)
+        callState: PropTypes.string,
+
+        // The type of the call in progress, or null if no call is in progress
+        callType: PropTypes.string,
 
         // true if the room is being peeked at. This affects components that shouldn't
         // logically be shown when peeking, such as a prompt to invite people to a room.
@@ -121,6 +121,10 @@ export default class RoomStatusBar extends React.Component {
         });
     };
 
+    _showCallBar() {
+        return this.props.callState !== 'ended' && this.props.callState !== 'ringing';
+    }
+
     _onResendAllClick = () => {
         Resend.resendUnsentEvents(this.props.room);
         dis.fire(Action.FocusComposer);
@@ -153,7 +157,7 @@ export default class RoomStatusBar extends React.Component {
     // indicate other sizes.
     _getSize() {
         if (this._shouldShowConnectionError() ||
-            this.props.hasActiveCall ||
+            this._showCallBar() ||
             this.props.sentMessageAndIsAlone
         ) {
             return STATUS_BAR_EXPANDED;
@@ -165,7 +169,7 @@ export default class RoomStatusBar extends React.Component {
 
     // return suitable content for the image on the left of the status bar.
     _getIndicator() {
-        if (this.props.hasActiveCall) {
+        if (this._showCallBar()) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
                 <TintableSvg src={require("../../../res/img/element-icons/room/in-call.svg")} width="23" height="20" />
@@ -269,6 +273,25 @@ export default class RoomStatusBar extends React.Component {
         </div>;
     }
 
+    _getCallStatusText() {
+        switch (this.props.callState) {
+            case 'create_offer':
+            case 'invite_sent':
+                return _t('Calling...');
+            case 'connecting':
+            case 'create_answer':
+                return _t('Call connecting...');
+            case 'connected':
+                return _t('Active call');
+            case 'wait_local_media':
+                if (this.props.callType === 'video') {
+                    return _t('Starting camera...');
+                } else {
+                    return _t('Starting microphone...');
+                }
+        }
+    }
+
     // return suitable content for the main (text) part of the status bar.
     _getContent() {
         if (this._shouldShowConnectionError()) {
@@ -291,10 +314,10 @@ export default class RoomStatusBar extends React.Component {
             return this._getUnsentMessageContent();
         }
 
-        if (this.props.hasActiveCall) {
+        if (this._showCallBar()) {
             return (
                 <div className="mx_RoomStatusBar_callBar">
-                    <b>{ _t('Active call') }</b>
+                    <b>{ this._getCallStatusText() }</b>
                 </div>
             );
         }
