@@ -51,7 +51,6 @@ const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
 // Regex pattern for whitespace characters
 const WHITESPACE_REGEX = new RegExp("\\s", "g");
 
-
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
@@ -471,7 +470,6 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtmlMessage && !emojiBody,
     });
-
 
     return isDisplayedWithHtml ?
         <span
