@@ -182,7 +182,7 @@ export interface IState {
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     rejectError?: Error;
-    hasPinnedWidgets: boolean;
+    hasPinnedWidgets?: boolean;
 }
 
 export default class RoomView extends React.Component<IProps, IState> {
@@ -234,7 +234,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReply: false,
             useIRCLayout: SettingsStore.getValue("useIRCLayout"),
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
-            hasPinnedWidgets: false,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
