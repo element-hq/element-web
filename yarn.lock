@@ -6527,10 +6527,10 @@ matrix-react-test-utils@^0.2.2:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
-matrix-widget-api@^0.1.0-beta.2:
-  version "0.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.2.tgz#367da1ccd26b711f73fc5b6e02edf55ac2ea2692"
-  integrity sha512-q5g5RZN+RRjM4HmcJ+LYoQAYrB1wzyERmoQ+LvKbTV/+9Ov36Kp0QEP8CleSXEd5WLp6bkRlt60axDaY6pWGmg==
+matrix-widget-api@^0.1.0-beta.3:
+  version "0.1.0-beta.3"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.3.tgz#356965ca357172ee056e3fd86fd96879b059a114"
+  integrity sha512-j7nxdhLQfdU6snsdBA29KQR0DmT8/vl6otOvGqPCV0OCHpq1312cP79Eg4JzJKIFI3A76Qha3nYx6G9/aapwXg==
 
 mdast-util-compact@^1.0.0:
   version "1.0.4"

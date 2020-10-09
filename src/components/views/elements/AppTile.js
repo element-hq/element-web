@@ -50,6 +50,7 @@ export default class AppTile extends React.Component {
         // The key used for PersistedElement
         this._persistKey = 'widget_' + this.props.app.id;
         this._sgWidget = new StopGapWidget(this.props);
+        this._sgWidget.on("preparing", this._onWidgetPrepared);
         this._sgWidget.on("ready", this._onWidgetReady);
         this.iframe = null; // ref to the iframe (callback style)
 
@@ -142,6 +143,7 @@ export default class AppTile extends React.Component {
             this._sgWidget.stop();
         }
         this._sgWidget = new StopGapWidget(newProps);
+        this._sgWidget.on("preparing", this._onWidgetPrepared);
         this._sgWidget.on("ready", this._onWidgetReady);
         this._startWidget();
     }
@@ -295,8 +297,11 @@ export default class AppTile extends React.Component {
         this._revokeWidgetPermission();
     }
 
-    _onWidgetReady = () => {
+    _onWidgetPrepared = () => {
         this.setState({loading: false});
+    };
+
+    _onWidgetReady = () => {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             this._sgWidget.widgetApi.transport.send(ElementWidgetActions.ClientReady, {});
         }
