@@ -74,13 +74,10 @@ export default class PersistentApp extends React.Component {
                     fullWidth={true}
                     room={persistentWidgetInRoom}
                     userId={MatrixClientPeg.get().credentials.userId}
-                    show={true}
                     creatorUserId={app.creatorUserId}
                     widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                     waitForIframeLoad={app.waitForIframeLoad}
                     whitelistCapabilities={capWhitelist}
-                    showDelete={false}
-                    showMinimise={false}
                     miniMode={true}
                     showMenubar={false}
                 />;

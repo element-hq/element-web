@@ -20,27 +20,58 @@ import {MatrixCapabilities} from "matrix-widget-api";
 import IconizedContextMenu, {IconizedContextMenuOption, IconizedContextMenuOptionList} from "./IconizedContextMenu";
 import {ChevronFace} from "../../structures/ContextMenu";
 import {_t} from "../../../languageHandler";
-import {IApp} from "../../../stores/WidgetStore";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
-import {Action} from "../../../dispatcher/actions";
+import WidgetStore, {IApp} from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
 import RoomContext from "../../../contexts/RoomContext";
+import dis from "../../../dispatcher/dispatcher";
+import SettingsStore from "../../../settings/SettingsStore";
+import {SettingLevel} from "../../../settings/SettingLevel";
+import Modal from "../../../Modal";
+import QuestionDialog from "../dialogs/QuestionDialog";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
+    showUnpin?: boolean;
+    // override delete handler
+    onDeleteClick?(): void;
 }
 
-const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, ...props}) => {
-    const {roomId} = useContext(RoomContext);
+const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, onDeleteClick, showUnpin, ...props}) => {
+    const {room, roomId} = useContext(RoomContext);
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
+    const canModify = WidgetUtils.canUserModifyWidgets(roomId);
+
+    let unpinButton;
+    if (showUnpin) {
+        const onUnpinClick = () => {
+            WidgetStore.instance.unpinWidget(app.id);
+        };
+
+        unpinButton = <IconizedContextMenuOption onClick={onUnpinClick} label={_t("Unpin")} />;
+    }
+
+    let editButton;
+    if (canModify && WidgetUtils.isManagedByManager(app)) {
+        const onEditClick = () => {
+            WidgetUtils.editWidget(room, app);
+        };
+
+        editButton = <IconizedContextMenuOption onClick={onEditClick} label={_t("Edit")} />
+    }
 
     let snapshotButton;
     if (widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
         const onSnapshotClick = () => {
-            WidgetUtils.snapshotWidget(app);
+            widgetMessaging?.takeScreenshot().then(data => {
+                dis.dispatch({
+                    action: 'picture_snapshot',
+                    file: data.screenshot,
+                });
+            }).catch(err => {
+                console.error("Failed to take screenshot: ", err);
+            });
             onFinished();
         };
 
@@ -48,29 +79,45 @@ const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, ...props}) =
     }
 
     let deleteButton;
-    if (WidgetUtils.canUserModifyWidgets(roomId)) {
+    if (onDeleteClick || canModify) {
         const onDeleteClick = () => {
-            defaultDispatcher.dispatch<AppTileActionPayload>({
-                action: Action.AppTileDelete,
-                widgetId: app.id,
+            // Show delete confirmation dialog
+            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                title: _t("Delete Widget"),
+                description: _t(
+                    "Deleting a widget removes it for all users in this room." +
+                    " Are you sure you want to delete this widget?"),
+                button: _t("Delete widget"),
+                onFinished: (confirmed) => {
+                    if (!confirmed) return;
+                    WidgetUtils.setRoomWidget(roomId, app.id);
+                },
             });
             onFinished();
         };
 
-        deleteButton = <IconizedContextMenuOption onClick={onDeleteClick} label={_t("Remove for everyone")} />;
+        deleteButton = <IconizedContextMenuOption
+            onClick={onDeleteClick || onDeleteClick}
+            label={_t("Remove for everyone")}
+        />;
     }
 
     const onRevokeClick = () => {
-        defaultDispatcher.dispatch<AppTileActionPayload>({
-            action: Action.AppTileRevoke,
-            widgetId: app.id,
+        console.info("Revoking permission for widget to load: " + app.eventId);
+        const current = SettingsStore.getValue("allowedWidgets", roomId);
+        current[app.eventId] = false;
+        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).catch(err => {
+            console.error(err);
+            // We don't really need to do anything about this - the user will just hit the button again.
         });
         onFinished();
     };
 
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
+            { unpinButton }
             { snapshotButton }
+            { editButton }
             { deleteButton }
             <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />
         </IconizedContextMenuOptionList>

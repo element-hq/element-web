@@ -118,12 +118,6 @@ $MiniAppTileHeight: 200px;
     height: $MiniAppTileHeight;
 }
 
-.mx_AppTile.mx_AppTile_minimised,
-.mx_AppTileFullWidth.mx_AppTile_minimised,
-.mx_AppTile_mini.mx_AppTile_minimised {
-    height: 14px;
-}
-
 .mx_AppTile .mx_AppTile_persistedWrapper,
 .mx_AppTileFullWidth .mx_AppTile_persistedWrapper,
 .mx_AppTile_mini .mx_AppTile_persistedWrapper {
@@ -143,11 +137,7 @@ $MiniAppTileHeight: 200px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
     width: 100%;
-}
-
-.mx_AppTileMenuBar_expanded {
     padding-bottom: 5px;
 }
 
@@ -179,31 +169,12 @@ $MiniAppTileHeight: 200px;
     margin: 0 3px;
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_minimise {
-    mask-image: url('$(res)/img/feather-customised/widget/minimise.svg');
-    background-color: $accent-color;
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_maximise {
-    mask-image: url('$(res)/img/feather-customised/widget/maximise.svg');
-    background-color: $accent-color;
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout { // TODO replace icon
     mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_menu {
-    mask-image: url('$(res)/img/icon_context.svg');
-}
-
-.mx_AppTileMenuBarWidgetDelete {
-    filter: none;
-}
-
-.mx_AppTileMenuBarWidget:hover {
-    border: 1px solid $primary-fg-color;
-    border-radius: 2px;
+    mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
 }
 
 .mx_AppTileBody {

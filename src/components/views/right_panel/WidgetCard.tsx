@@ -62,67 +62,22 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     // Don't render anything as we are about to transition
     if (!app || isPinned) return null;
 
-    const header = <React.Fragment>
-        <h2>{ WidgetUtils.getWidgetName(app) }</h2>
-    </React.Fragment>;
-
-    const canModify = WidgetUtils.canUserModifyWidgets(room.roomId);
-
     let contextMenu;
     if (menuDisplayed) {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = (
             <RoomWidgetContextMenu
                 chevronFace={ChevronFace.None}
-                right={window.innerWidth - rect.right}
-                bottom={window.innerHeight - rect.top}
+                right={window.innerWidth - rect.right - 12}
+                top={rect.bottom + 12}
                 onFinished={closeMenu}
                 app={app}
             />
         );
     }
 
-    const onPinClick = () => {
-        WidgetStore.instance.pinWidget(app.id);
-    };
-
-    const onEditClick = () => {
-        WidgetUtils.editWidget(room, app);
-    };
-
-    let editButton;
-    if (canModify) {
-        editButton = <AccessibleButton kind="secondary" onClick={onEditClick}>
-            { _t("Edit") }
-        </AccessibleButton>;
-    }
-
-    const pinButtonClasses = canModify ? "" : "mx_WidgetCard_widePinButton";
-
-    let pinButton;
-    if (WidgetStore.instance.canPin(app.id)) {
-        pinButton = <AccessibleButton
-            kind="secondary"
-            onClick={onPinClick}
-            className={pinButtonClasses}
-        >
-            { _t("Pin to room") }
-        </AccessibleButton>;
-    } else {
-        pinButton = <AccessibleTooltipButton
-            title={_t("You can only pin 2 widgets at a time")}
-            tooltipClassName="mx_WidgetCard_maxPinnedTooltip"
-            kind="secondary"
-            className={pinButtonClasses}
-            disabled
-        >
-            { _t("Pin to room") }
-        </AccessibleTooltipButton>;
-    }
-
-    const footer = <React.Fragment>
-        { editButton }
-        { pinButton }
+    const header = <React.Fragment>
+        <h2>{ WidgetUtils.getWidgetName(app) }</h2>
         <ContextMenuButton
             kind="secondary"
             className="mx_WidgetCard_optionsButton"
@@ -131,16 +86,12 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
             isExpanded={menuDisplayed}
             label={_t("Options")}
         />
-
         { contextMenu }
     </React.Fragment>;
 
     return <BaseCard
         header={header}
-        footer={footer}
-        className={classNames("mx_WidgetCard", {
-            mx_WidgetCard_noEdit: !canModify,
-        })}
+        className="mx_WidgetCard"
         onClose={onClose}
         previousPhase={RightPanelPhases.RoomSummary}
         withoutScrollContainer

@@ -24,10 +24,8 @@ import AppTile from '../elements/AppTile';
 import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
-import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
-import AccessibleButton from '../elements/AccessibleButton';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
@@ -101,15 +99,6 @@ export default class AppsDrawer extends React.Component {
         });
     };
 
-    _canUserModify() {
-        try {
-            return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-        } catch (err) {
-            console.error(err);
-            return false;
-        }
-    }
-
     _launchManageIntegrations() {
         if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll();
@@ -118,12 +107,9 @@ export default class AppsDrawer extends React.Component {
         }
     }
 
-    onClickAddWidget = (e) => {
-        e.preventDefault();
-        this._launchManageIntegrations();
-    };
-
     render() {
+        if (!this.props.showApps) return <div />;
+
         const apps = this.state.apps.map((app, index, arr) => {
             const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
 
@@ -133,7 +119,6 @@ export default class AppsDrawer extends React.Component {
                 fullWidth={arr.length < 2}
                 room={this.props.room}
                 userId={this.props.userId}
-                show={this.props.showApps}
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}
@@ -143,21 +128,6 @@ export default class AppsDrawer extends React.Component {
 
         if (apps.length === 0) {
             return <div />;
-        }
-
-        let addWidget;
-        if (this.props.showApps &&
-            this._canUserModify()
-        ) {
-            addWidget = <AccessibleButton
-                onClick={this.onClickAddWidget}
-                className={this.state.apps.length<2 ?
-                    'mx_AddWidget_button mx_AddWidget_button_full_width' :
-                    'mx_AddWidget_button'
-                }
-                title={_t('Add a widget')}>
-                [+] { _t('Add a widget') }
-            </AccessibleButton>;
         }
 
         let spinner;
@@ -191,7 +161,6 @@ export default class AppsDrawer extends React.Component {
                     { apps }
                     { spinner }
                 </PersistentVResizer>
-                { this._canUserModify() && addWidget }
             </div>
         );
     }

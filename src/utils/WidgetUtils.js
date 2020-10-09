@@ -494,4 +494,16 @@ export default class WidgetUtils {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
     }
+
+    static isManagedByManager(app) {
+        if (WidgetUtils.isScalarUrl(app.url)) {
+            const managers = IntegrationManagers.sharedInstance();
+            if (managers.hasManager()) {
+                // TODO: Pick the right manager for the widget
+                const defaultManager = managers.getPrimaryManager();
+                return WidgetUtils.isScalarUrl(defaultManager.apiUrl);
+            }
+        }
+        return false;
+    }
 }
