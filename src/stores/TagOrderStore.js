@@ -33,7 +33,7 @@ const INITIAL_STATE = {
 };
 
 /**
- * A class for storing application state for ordering tags in the TagPanel.
+ * A class for storing application state for ordering tags in the GroupFilterPanel.
  */
 class TagOrderStore extends Store {
     constructor() {
@@ -41,7 +41,7 @@ class TagOrderStore extends Store {
 
         // Initialise state
         this._state = Object.assign({}, INITIAL_STATE);
-        SettingsStore.monitorSetting("TagPanel.enableTagPanel", null);
+        SettingsStore.monitorSetting("GroupFilterPanel.enableGroupFilterPanel", null);
     }
 
     _setState(newState) {
@@ -190,7 +190,7 @@ class TagOrderStore extends Store {
                 break;
             }
             case 'setting_updated':
-                if (payload.settingName === 'TagPanel.enableTagPanel' && !payload.newValue) {
+                if (payload.settingName === 'GroupFilterPanel.enableGroupFilterPanel' && !payload.newValue) {
                     this._setState({
                         selectedTags: [],
                     });

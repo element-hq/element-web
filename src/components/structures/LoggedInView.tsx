@@ -518,7 +518,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             // Could be "GroupTile +groupId:domain"
             const draggableId = result.draggableId.split(' ').pop();
 
-            // Dispatch synchronously so that the TagPanel receives an
+            // Dispatch synchronously so that the GroupFilterPanel receives an
             // optimistic update from TagOrderStore before the previous
             // state is shown.
             dis.dispatch(TagOrderActions.moveTag(

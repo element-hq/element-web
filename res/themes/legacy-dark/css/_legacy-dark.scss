@@ -37,8 +37,8 @@ $info-plinth-fg-color: #888;
 
 $preview-bar-bg-color: $header-panel-bg-color;
 
-$tagpanel-bg-color: $base-color;
-$inverted-bg-color: $tagpanel-bg-color;
+$GroupFilterPanel-bg-color: $base-color;
+$inverted-bg-color: $GroupFilterPanel-bg-color;
 
 // used by AddressSelector
 $selected-color: $room-highlight-color;
@@ -95,7 +95,7 @@ $topleftmenu-color: $text-primary-color;
 $roomheader-color: $text-primary-color;
 $roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
 $roomheader-addroom-fg-color: $text-primary-color;
-$tagpanel-button-color: $header-panel-text-primary-color;
+$GroupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
 $icon-button-color: $header-panel-text-primary-color;
@@ -115,7 +115,7 @@ $roomlist-bg-color: $header-panel-bg-color;
 
 $roomsublist-divider-color: $primary-fg-color;
 
-$tagpanel-divider-color: $roomlist-header-color;
+$GroupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -182,7 +182,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: #000000;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-bg-color: $GroupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: $base-color;

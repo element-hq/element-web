@@ -12,8 +12,8 @@
         background-position: left top;
     }
 
-    .mx_TagPanel {
-        backdrop-filter: blur($tagpanel-background-blur-amount);
+    .mx_GroupFilterPanel {
+        backdrop-filter: blur($GroupFilterPanel-background-blur-amount);
     }
 
     .mx_LeftPanel .mx_LeftPanel_roomListContainer {

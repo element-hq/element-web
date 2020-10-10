@@ -620,7 +620,7 @@ export default class GroupView extends React.Component {
                 profileForm: newProfileForm,
 
                 // Indicate that FlairStore needs to be poked to show this change
-                // in TagTile (TagPanel), Flair and GroupTile (MyGroups).
+                // in TagTile (GroupFilterPanel), Flair and GroupTile (MyGroups).
                 avatarChanged: true,
             });
         }).catch((e) => {

@@ -46,7 +46,7 @@ function commonPrefix(a, b) {
     return "";
 }
 /**
- * A class for storing application state for ordering tags in the TagPanel.
+ * A class for storing application state for ordering tags in the GroupFilterPanel.
  */
 class CustomRoomTagStore extends EventEmitter {
     constructor() {

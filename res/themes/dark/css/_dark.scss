@@ -39,7 +39,7 @@ $info-plinth-fg-color: #888;
 
 $preview-bar-bg-color: $header-panel-bg-color;
 
-$tagpanel-bg-color: rgba(38, 39, 43, 0.82);
+$GroupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
 $inverted-bg-color: $base-color;
 
 // used by AddressSelector
@@ -98,7 +98,7 @@ $roomheader-color: $text-primary-color;
 $roomheader-bg-color: $bg-color;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $text-primary-color;
-$tagpanel-button-color: $header-panel-text-primary-color;
+$GroupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
 $icon-button-color: #8E99A4;
@@ -118,7 +118,7 @@ $roomlist-bg-color: rgba(33, 38, 44, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
 
-$tagpanel-divider-color: $roomlist-header-color;
+$GroupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -187,7 +187,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: #000000;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-bg-color: $GroupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: $base-color;
@@ -202,7 +202,7 @@ $appearance-tab-border-color: $room-highlight-color;
 
 // blur amounts for left left panel (only for element theme, used in _mods.scss)
 $roomlist-background-blur-amount: 60px;
-$tagpanel-background-blur-amount: 30px;
+$GroupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 

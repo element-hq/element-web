@@ -67,8 +67,8 @@ $preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #f2f5f8;
 $tertiary-accent-color: #d3efe1;
 
-$tagpanel-bg-color: #27303a;
-$inverted-bg-color: $tagpanel-bg-color;
+$GroupFilterPanel-bg-color: #27303a;
+$inverted-bg-color: $GroupFilterPanel-bg-color;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -162,7 +162,7 @@ $roomheader-color: #45474a;
 $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
-$tagpanel-button-color: #91a1c0;
+$GroupFilterPanel-button-color: #91a1c0;
 $groupheader-button-color: #91a1c0;
 $rightpanel-button-color: #91a1c0;
 $icon-button-color: #91a1c0;
@@ -182,7 +182,7 @@ $roomlist-bg-color: $header-panel-bg-color;
 $roomlist-header-color: $primary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
 
-$tagpanel-divider-color: $roomlist-header-color;
+$GroupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -305,7 +305,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: $reaction-row-button-border-color;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-bg-color: $GroupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: #27303a;
