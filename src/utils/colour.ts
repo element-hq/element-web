@@ -45,6 +45,9 @@ function generateAB(hue: number, chroma: number): [number, number] {
 }
 
 function labToRGB(l: number, a: number, b: number): [number, number, number] {
+    // https://en.wikipedia.org/wiki/CIELAB_color_space#Reverse_transformation
+    // https://en.wikipedia.org/wiki/SRGB#The_forward_transformation_(CIE_XYZ_to_sRGB)
+
     // Convert CIELAB to CIEXYZ (D65)
     let y = (l + 16) / 116;
     const x = adjustXYZ(y + a / 500) * 0.9505;
