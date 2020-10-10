@@ -28,7 +28,7 @@ import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
-import SdkConfig from './SdkConfig';
+import SettingsStore from './settings/SettingsStore';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
@@ -412,7 +412,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         if (isHtmlMessage) {
             isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
-            if (SdkConfig.get()['latex_maths']) {
+            if (SettingsStore.getValue("feature_latex_maths")) {
                 const mathDelimiters = [
                     { pattern: "<div data-mx-maths=\"([^\"]*)\">(.|\\s)*?</div>", display: true },
                     { pattern: "<span data-mx-maths=\"([^\"]*)\">(.|\\s)*?</span>", display: false },

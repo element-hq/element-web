@@ -16,7 +16,7 @@ limitations under the License.
 
 import commonmark from 'commonmark';
 import {escape} from "lodash";
-import SdkConfig from './SdkConfig';
+import SettingsStore from './settings/SettingsStore';
 
 const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
@@ -30,7 +30,7 @@ function is_math_node(node) {
 }
 
 function is_allowed_html_tag(node) {
-    if (SdkConfig.get()['latex_maths'] &&
+    if (SettingsStore.getValue("feature_latex_maths") &&
         (is_math_node(node) ||
          (node.literal.match(/^<\/?code>$/) && is_math_node(node.parent)))) {
         return true;

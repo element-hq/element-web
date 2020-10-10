@@ -19,6 +19,7 @@ import Markdown from '../Markdown';
 import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
 import { AllHtmlEntities } from 'html-entities';
+import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
 
 export function mdSerialize(model: EditorModel) {
@@ -42,7 +43,7 @@ export function mdSerialize(model: EditorModel) {
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
     let md = mdSerialize(model);
 
-    if (SdkConfig.get()['latex_maths']) {
+    if (SettingsStore.getValue("feature_latex_maths")) {
         const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
             "\\$\\$\\$(([^$]|\\\\\\$)*)\\$\\$\\$";
         const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
