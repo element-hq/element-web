@@ -519,7 +519,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             const draggableId = result.draggableId.split(' ').pop();
 
             // Dispatch synchronously so that the GroupFilterPanel receives an
-            // optimistic update from TagOrderStore before the previous
+            // optimistic update from GroupFilterOrderStore before the previous
             // state is shown.
             dis.dispatch(TagOrderActions.moveTag(
                 this._matrixClient,

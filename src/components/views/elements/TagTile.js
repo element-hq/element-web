@@ -26,7 +26,7 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
-import TagOrderStore from '../../../stores/TagOrderStore';
+import GroupFilterOrderStore from '../../../stores/GroupFilterOrderStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -142,7 +142,7 @@ export default class TagTile extends React.Component {
             mx_TagTile_selected_prototype: this.props.selected && isPrototype,
         });
 
-        const badge = TagOrderStore.getGroupBadge(this.props.tag);
+        const badge = GroupFilterOrderStore.getGroupBadge(this.props.tag);
         let badgeElement;
         if (badge && !this.state.hover && !this.props.menuDisplayed) {
             const badgeClasses = classNames({

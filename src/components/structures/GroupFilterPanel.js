@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import TagOrderStore from '../../stores/TagOrderStore';
+import GroupFilterOrderStore from '../../stores/GroupFilterOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
 
@@ -44,13 +44,13 @@ class GroupFilterPanel extends React.Component {
         this.context.on("Group.myMembership", this._onGroupMyMembership);
         this.context.on("sync", this._onClientSync);
 
-        this._tagOrderStoreToken = TagOrderStore.addListener(() => {
+        this._GroupFilterOrderStoreToken = GroupFilterOrderStore.addListener(() => {
             if (this.unmounted) {
                 return;
             }
             this.setState({
-                orderedTags: TagOrderStore.getOrderedTags() || [],
-                selectedTags: TagOrderStore.getSelectedTags(),
+                orderedTags: GroupFilterOrderStore.getOrderedTags() || [],
+                selectedTags: GroupFilterOrderStore.getSelectedTags(),
             });
         });
         // This could be done by anything with a matrix client
@@ -61,8 +61,8 @@ class GroupFilterPanel extends React.Component {
         this.unmounted = true;
         this.context.removeListener("Group.myMembership", this._onGroupMyMembership);
         this.context.removeListener("sync", this._onClientSync);
-        if (this._tagOrderStoreToken) {
-            this._tagOrderStoreToken.remove();
+        if (this._GroupFilterOrderStoreToken) {
+            this._GroupFilterOrderStoreToken.remove();
         }
     }
 
