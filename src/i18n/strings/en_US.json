@@ -128,6 +128,7 @@
     "Kick": "Kick",
     "Kicks user with given id": "Kicks user with given id",
     "Labs": "Labs",
+    "LaTeX math in messages": "LaTeX math in messages",
     "Ignore": "Ignore",
     "Unignore": "Unignore",
     "You are now ignoring %(userId)s": "You are now ignoring %(userId)s",

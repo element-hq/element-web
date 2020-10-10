@@ -199,6 +199,7 @@
     "%(targetName)s joined the room.": "%(targetName)s is tot het gesprek toegetreden.",
     "Jump to first unread message.": "Spring naar het eerste ongelezen bericht.",
     "Labs": "Experimenteel",
+    "LaTeX math in messages": "LaTeX wiskunde in berichten",
     "Last seen": "Laatst gezien",
     "Leave room": "Gesprek verlaten",
     "%(targetName)s left the room.": "%(targetName)s heeft het gesprek verlaten.",
