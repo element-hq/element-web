@@ -18,14 +18,21 @@ import commonmark from 'commonmark';
 import {escape} from "lodash";
 import SdkConfig from './SdkConfig';
 
-const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u', 'code'];
+const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
+function is_math_node(node) {
+    return node != null &&
+        node.literal != null &&
+        node.literal.match(/^<((div|span) data-mx-maths="[^"]*"|\/(div|span))>$/) != null;
+}
+
 function is_allowed_html_tag(node) {
     if (SdkConfig.get()['latex_maths'] &&
-        node.literal.match(/^<\/?(div|span)( data-mx-maths="[^"]*")?>$/) != null) {
+        (is_math_node(node) ||
+         (node.literal.match(/^<\/?code>$/) && is_math_node(node.parent)))) {
         return true;
     }
 
