@@ -18,8 +18,14 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {Capability, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
 import {KJUR} from 'jsrsasign';
+import {
+    IOpenIDCredentials,
+    IWidgetApiRequest,
+    VideoConferenceCapabilities,
+    WidgetApi,
+} from "matrix-widget-api";
+import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
 
@@ -38,8 +44,10 @@ let avatarUrl: string;
 let userId: string;
 let jitsiAuth: string;
 let roomId: string;
+let openIdToken: IOpenIDCredentials;
 
 let widgetApi: WidgetApi;
+let meetApi: any; // JitsiMeetExternalAPI
 
 (async function() {
     try {
@@ -61,11 +69,26 @@ let widgetApi: WidgetApi;
         const widgetId = qsParam('widgetId', true);
 
         // Set this up as early as possible because Element will be hitting it almost immediately.
+        let readyPromise: Promise<[void, void]>;
         if (parentUrl && widgetId) {
-            widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
-                Capability.AlwaysOnScreen,
+            const parentOrigin = new URL(qsParam('parentUrl')).origin;
+            widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
+            widgetApi.requestCapabilities(VideoConferenceCapabilities);
+            readyPromise = Promise.all([
+                new Promise<void>(resolve => {
+                    widgetApi.once<CustomEvent<IWidgetApiRequest>>(`action:${ElementWidgetActions.ClientReady}`, ev => {
+                        ev.preventDefault();
+                        widgetApi.transport.reply(ev.detail, {});
+                        resolve();
+                    });
+                }),
+                new Promise<void>(resolve => {
+                    widgetApi.once("ready", () => resolve());
+                }),
             ]);
-            widgetApi.expectingExplicitReady = true;
+            widgetApi.start();
+        } else {
+            throw new Error("No parent URL or no widget ID");
         }
 
         // Populate the Jitsi params now
@@ -78,38 +101,32 @@ let widgetApi: WidgetApi;
         roomId = qsParam('roomId', true);
 
         if (widgetApi) {
-            await widgetApi.waitReady();
+            await readyPromise;
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
 
             // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
                 // Request credentials, give callback to continue when received
-                widgetApi.requestOpenIDCredentials(credentialsResponseCallback);
-            } else {
-                enableJoinButton();
+                openIdToken = await widgetApi.requestOpenIDConnectToken();
+                console.log("Got OpenID Connect token");
             }
+
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
-        } else {
-            enableJoinButton();
+
+            widgetApi.addEventListener(`action:${ElementWidgetActions.HangupCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    if (meetApi) meetApi.executeCommand('hangup');
+                    widgetApi.transport.reply(ev.detail, {}); // ack
+                },
+            );
         }
+
+        enableJoinButton(); // always enable the button
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
     }
 })();
-
-/**
- * Enable or show error depending on what the credentials response is.
- */
-function credentialsResponseCallback() {
-    if (widgetApi.openIDCredentials) {
-        console.info('Successfully got OpenID credentials.');
-        enableJoinButton();
-    } else {
-        console.warn('OpenID credentials request was blocked by user.');
-        document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
-    }
-}
 
 function enableJoinButton() {
     document.getElementById("joinButton").onclick = () => joinConference();
@@ -140,7 +157,7 @@ function createJWTToken() {
         room: "*",
         context: {
             matrix: {
-                token: widgetApi.openIDCredentials.accessToken,
+                token: openIdToken.access_token,
                 room_id: roomId,
             },
             user: {
@@ -163,7 +180,7 @@ function createJWTToken() {
 function joinConference() { // event handler bound in HTML
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-        if (!widgetApi.openIDCredentials || !widgetApi.openIDCredentials.accessToken) {
+        if (!openIdToken?.access_token) { // eslint-disable-line camelcase
             // We've failing to get a token, don't try to init conference
             console.warn('Expected to have an OpenID credential, cannot initialize widget.');
             document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
@@ -199,7 +216,7 @@ function joinConference() { // event handler bound in HTML
         jwt: jwt,
     };
 
-    const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
+    meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
     if (displayName) meetApi.executeCommand("displayName", displayName);
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
@@ -214,5 +231,6 @@ function joinConference() { // event handler bound in HTML
         }
 
         document.getElementById("jitsiContainer").innerHTML = "";
+        meetApi = null;
     });
 }
