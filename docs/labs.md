@@ -7,6 +7,10 @@ to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
+## LaTeX math in messages (`feature_latex_maths`)
+
+Enables LaTeX math in messages using [KaTeX](https://katex.org/).
+
 ## New spinner design (`feature_new_spinner`)
 
 Replaces the old spinner image with a new, svg-based one featuring a sleeker design.
