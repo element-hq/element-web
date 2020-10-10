@@ -80,6 +80,7 @@ export function createTestClient() {
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
+        isCryptoEnabled: () => false,
     };
 }
 

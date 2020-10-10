@@ -31,6 +31,7 @@ interface IProps {
     className?: string;
     withoutScrollContainer?: boolean;
     previousPhase?: RightPanelPhases;
+    closeLabel?: string;
     onClose?(): void;
 }
 
@@ -47,6 +48,7 @@ export const Group: React.FC<IGroupProps> = ({ className, title, children }) => 
 };
 
 const BaseCard: React.FC<IProps> = ({
+    closeLabel,
     onClose,
     className,
     header,
@@ -68,7 +70,11 @@ const BaseCard: React.FC<IProps> = ({
 
     let closeButton;
     if (onClose) {
-        closeButton = <AccessibleButton className="mx_BaseCard_close" onClick={onClose} title={_t("Close")} />;
+        closeButton = <AccessibleButton
+            className="mx_BaseCard_close"
+            onClick={onClose}
+            title={closeLabel || _t("Close")}
+        />;
     }
 
     if (!withoutScrollContainer) {

@@ -29,16 +29,17 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {Action} from "../../../dispatcher/actions";
 import WidgetStore from "../../../stores/WidgetStore";
-import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
-import {Capability} from "../../../widgets/WidgetApi";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import classNames from "classnames";
+import dis from "../../../dispatcher/dispatcher";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
+import { MatrixCapabilities } from "matrix-widget-api";
 
 interface IProps {
     room: Room;
@@ -77,9 +78,17 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     let contextMenu;
     if (menuDisplayed) {
         let snapshotButton;
-        if (ActiveWidgetStore.widgetHasCapability(app.id, Capability.Screenshot)) {
+        const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
+        if (widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
             const onSnapshotClick = () => {
-                WidgetUtils.snapshotWidget(app);
+                widgetMessaging.takeScreenshot().then(data => {
+                    dis.dispatch({
+                        action: 'picture_snapshot',
+                        file: data.screenshot,
+                    });
+                }).catch(err => {
+                    console.error("Failed to take screenshot: ", err);
+                });
                 closeMenu();
             };
 

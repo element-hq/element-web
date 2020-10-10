@@ -27,7 +27,6 @@ import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
-import sessionStore from '../../stores/SessionStore';
 import {MatrixClientPeg, IMatrixClientCreds} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -41,10 +40,6 @@ import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
-import {
-    showToast as showSetPasswordToast,
-    hideToast as hideSetPasswordToast,
-} from "../../toasts/SetPasswordToast";
 import {
     showToast as showServerLimitToast,
     hideToast as hideServerLimitToast,
@@ -85,7 +80,6 @@ interface IProps {
     threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     currentRoomId: string;
-    ConferenceHandler?: object;
     collapseLhs: boolean;
     config: {
         piwik: {
@@ -150,8 +144,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
-    protected readonly _sessionStore: sessionStore;
-    protected readonly _sessionStoreToken: { remove: () => void };
     protected readonly _compactLayoutWatcherRef: string;
     protected resizer: Resizer;
 
@@ -171,12 +163,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onNativeKeyDown, false);
-
-        this._sessionStore = sessionStore;
-        this._sessionStoreToken = this._sessionStore.addListener(
-            this._setStateFromSessionStore,
-        );
-        this._setStateFromSessionStore();
 
         this._updateServerNoticeEvents();
 
@@ -206,9 +192,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
         SettingsStore.unwatchSetting(this._compactLayoutWatcherRef);
-        if (this._sessionStoreToken) {
-            this._sessionStoreToken.remove();
-        }
         this.resizer.detach();
     }
 
@@ -227,14 +210,6 @@ class LoggedInView extends React.Component<IProps, IState> {
             return true;
         }
         return this._roomView.current.canResetTimeline();
-    };
-
-    _setStateFromSessionStore = () => {
-        if (this._sessionStore.getCachedPassword()) {
-            showSetPasswordToast();
-        } else {
-            hideSetPasswordToast();
-        }
     };
 
     _createResizer() {
@@ -637,7 +612,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     disabled={this.props.middleDisabled}
-                    ConferenceHandler={this.props.ConferenceHandler}
                     resizeNotifier={this.props.resizeNotifier}
                 />;
                 break;

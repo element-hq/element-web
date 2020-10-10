@@ -92,7 +92,7 @@ interface IProps {
     label?: string;
     initialCaret?: DocumentOffset;
 
-    onChange();
+    onChange?();
     onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
 }
 
@@ -619,13 +619,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     private onFormatAction = (action: Formatting) => {
-        const range = getRangeForSelection(
-            this.editorRef.current,
-            this.props.model,
-            document.getSelection());
+        const range = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
+        // trim the range as we want it to exclude leading/trailing spaces
+        range.trim();
+
         if (range.length === 0) {
             return;
         }
+
         this.historyManager.ensureLastChangesPushed(this.props.model);
         this.modifiedFlag = true;
         switch (action) {

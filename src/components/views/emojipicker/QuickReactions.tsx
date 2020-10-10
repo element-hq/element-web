@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +16,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {getEmojiFromUnicode} from "../../../emoji";
+import {getEmojiFromUnicode, IEmoji} from "../../../emoji";
+import Emoji from "./Emoji";
 
 // We use the variation-selector Heart in Quick Reactions for some reason
 const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"].map(emoji => {
@@ -30,36 +30,36 @@ const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀
     return data;
 });
 
-class QuickReactions extends React.Component {
-    static propTypes = {
-        onClick: PropTypes.func.isRequired,
-        selectedEmojis: PropTypes.instanceOf(Set),
-    };
+interface IProps {
+    selectedEmojis?: Set<string>;
+    onClick(emoji: IEmoji): void;
+}
 
+interface IState {
+    hover?: IEmoji;
+}
+
+class QuickReactions extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
         this.state = {
             hover: null,
         };
-        this.onMouseEnter = this.onMouseEnter.bind(this);
-        this.onMouseLeave = this.onMouseLeave.bind(this);
     }
 
-    onMouseEnter(emoji) {
+    private onMouseEnter = (emoji: IEmoji) => {
         this.setState({
             hover: emoji,
         });
-    }
+    };
 
-    onMouseLeave() {
+    private onMouseLeave = () => {
         this.setState({
             hover: null,
         });
-    }
+    };
 
     render() {
-        const Emoji = sdk.getComponent("emojipicker.Emoji");
-
         return (
             <section className="mx_EmojiPicker_footer mx_EmojiPicker_quick mx_EmojiPicker_category">
                 <h2 className="mx_EmojiPicker_quick_header mx_EmojiPicker_category_label">
@@ -72,10 +72,16 @@ class QuickReactions extends React.Component {
                     }
                 </h2>
                 <ul className="mx_EmojiPicker_list" aria-label={_t("Quick Reactions")}>
-                    {QUICK_REACTIONS.map(emoji => <Emoji
-                        key={emoji.hexcode} emoji={emoji} onClick={this.props.onClick}
-                        onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
-                        selectedEmojis={this.props.selectedEmojis} />)}
+                    {QUICK_REACTIONS.map(emoji => ((
+                        <Emoji
+                            key={emoji.hexcode}
+                            emoji={emoji}
+                            onClick={this.props.onClick}
+                            onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                            selectedEmojis={this.props.selectedEmojis}
+                        />
+                    )))}
                 </ul>
             </section>
         );

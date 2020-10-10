@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SetPasswordDialog_change_password input {
-    border-radius: 3px;
-    border: 1px solid $input-border-color;
-    padding: 9px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
-    font-size: $font-15px;
-    max-width: 280px;
-    margin-bottom: 10px;
-}
+.mx_DesktopBuildsNotice {
+    text-align: center;
+    padding: 0 16px;
 
-.mx_SetPasswordDialog_change_password_button {
-    margin-top: 68px;
-}
+    > * {
+        vertical-align: middle;
+    }
 
-.mx_SetPasswordDialog .mx_Dialog_content {
-    margin-bottom: 0px;
+    > img {
+        margin-right: 8px;
+    }
 }

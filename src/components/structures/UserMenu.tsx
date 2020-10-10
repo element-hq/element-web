@@ -343,6 +343,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let secondarySection = null;
 
         if (prototypeCommunityName) {
+            const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
             primaryHeader = (
                 <div className="mx_UserMenu_contextMenu_name">
                     <span className="mx_UserMenu_contextMenu_displayName">
@@ -350,24 +351,36 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     </span>
                 </div>
             );
-            primaryOptionList = (
-                <IconizedContextMenuOptionList>
+            let settingsOption;
+            let inviteOption;
+            if (CommunityPrototypeStore.instance.canInviteTo(communityId)) {
+                inviteOption = (
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconInvite"
+                        label={_t("Invite")}
+                        onClick={this.onCommunityInviteClick}
+                    />
+                );
+            }
+            if (CommunityPrototypeStore.instance.isAdminOf(communityId)) {
+                settingsOption = (
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
                         label={_t("Settings")}
                         aria-label={_t("Community settings")}
                         onClick={this.onCommunitySettingsClick}
                     />
+                );
+            }
+            primaryOptionList = (
+                <IconizedContextMenuOptionList>
+                    {settingsOption}
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconMembers"
                         label={_t("Members")}
                         onClick={this.onCommunityMembersClick}
                     />
-                    <IconizedContextMenuOption
-                        iconClassName="mx_UserMenu_iconInvite"
-                        label={_t("Invite")}
-                        onClick={this.onCommunityInviteClick}
-                    />
+                    {inviteOption}
                 </IconizedContextMenuOptionList>
             );
             secondarySection = (

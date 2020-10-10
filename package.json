@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -80,6 +80,7 @@
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.19",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+    "matrix-widget-api": "^0.1.0-beta.3",
     "minimist": "^1.2.5",
     "pako": "^1.0.11",
     "parse5": "^5.1.1",
@@ -96,7 +97,7 @@
     "react-transition-group": "^4.4.1",
     "resize-observer-polyfill": "^1.5.1",
     "rfc4648": "^1.4.0",
-    "sanitize-html": "^1.27.1",
+    "sanitize-html": "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db",
     "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.2",
     "url": "^0.11.0",
@@ -121,7 +122,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@babel/register": "^7.10.5",
     "@babel/traverse": "^7.11.0",
-    "@peculiar/webcrypto": "^1.1.2",
+    "@peculiar/webcrypto": "^1.1.3",
     "@types/classnames": "^2.2.10",
     "@types/counterpart": "^0.18.1",
     "@types/flux": "^3.1.9",
@@ -151,8 +152,9 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^2.5.1",
     "glob": "^5.0.15",
-    "jest": "^24.9.0",
-    "jest-canvas-mock": "^2.2.0",
+    "jest": "^26.5.2",
+    "jest-canvas-mock": "^2.3.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
@@ -165,6 +167,7 @@
     "walk": "^2.3.14"
   },
   "jest": {
+    "testEnvironment": "./__test-utils__/environment.js",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],

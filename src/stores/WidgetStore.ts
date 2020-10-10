@@ -22,6 +22,7 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import SettingsStore from "../settings/SettingsStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
+import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import {SettingLevel} from "../settings/SettingLevel";
 import {WidgetType} from "../widgets/WidgetType";
@@ -118,6 +119,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     private loadRoomWidgets(room: Room) {
+        if (!room) return;
         const roomInfo = this.roomMap.get(room.roomId);
         roomInfo.widgets = [];
         this.generateApps(room).forEach(app => {
@@ -158,7 +160,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
         let pinned = roomInfo && roomInfo.pinned[widgetId];
         // Jitsi widgets should be pinned by default
-        if (pinned === undefined && WidgetType.JITSI.matches(this.widgetMap.get(widgetId).type)) pinned = true;
+        const widget = this.widgetMap.get(widgetId);
+        if (pinned === undefined && WidgetType.JITSI.matches(widget?.type)) pinned = true;
         return pinned;
     }
 
@@ -168,7 +171,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
         return roomInfo && Object.keys(roomInfo.pinned).filter(k => {
-            return roomInfo.widgets.some(app => app.id === k);
+            return roomInfo.pinned[k] && roomInfo.widgets.some(app => app.id === k);
         }).length < 2;
     }
 
@@ -205,6 +208,24 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
             return roomInfo.widgets.filter(app => this.isPinned(app.id));
         }
         return roomInfo.widgets;
+    }
+
+    public doesRoomHaveConference(room: Room): boolean {
+        const roomInfo = this.getRoom(room.roomId);
+        if (!roomInfo) return false;
+
+        const currentWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+        const hasPendingWidgets = WidgetEchoStore.roomHasPendingWidgetsOfType(room.roomId, [], WidgetType.JITSI);
+        return currentWidgets.length > 0 || hasPendingWidgets;
+    }
+
+    public isJoinedToConferenceIn(room: Room): boolean {
+        const roomInfo = this.getRoom(room.roomId);
+        if (!roomInfo) return false;
+
+        // A persistent conference widget indicates that we're participating
+        const widgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+        return widgets.some(w => ActiveWidgetStore.getWidgetPersistence(w.id));
     }
 }
 

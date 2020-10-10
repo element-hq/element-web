@@ -29,6 +29,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
 import {UIFeature} from "../../../settings/UIFeature";
+import {PERMITTED_URL_SCHEMES} from "../../../HtmlUtils";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -61,6 +62,12 @@ export default class ReplyThread extends React.Component {
             // Whether as error was encountered fetching a replied to event.
             err: false,
         };
+
+        this.unmounted = false;
+        this.context.on("Event.replaced", this.onEventReplaced);
+        this.room = this.context.getRoom(this.props.parentEv.getRoomId());
+        this.room.on("Room.redaction", this.onRoomRedaction);
+        this.room.on("Room.redactionCancelled", this.onRoomRedaction);
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
         this.canCollapse = this.canCollapse.bind(this);
@@ -106,6 +113,9 @@ export default class ReplyThread extends React.Component {
             {
                 allowedTags: false, // false means allow everything
                 allowedAttributes: false,
+                // we somehow can't allow all schemes, so we allow all that we
+                // know of and mxc (for img tags)
+                allowedSchemes: [...PERMITTED_URL_SCHEMES, 'mxc'],
                 exclusiveFilter: (frame) => frame.tag === "mx-reply",
             },
         );
@@ -213,11 +223,6 @@ export default class ReplyThread extends React.Component {
     }
 
     componentDidMount() {
-        this.unmounted = false;
-        this.room = this.context.getRoom(this.props.parentEv.getRoomId());
-        this.room.on("Room.redaction", this.onRoomRedaction);
-        // same event handler as Room.redaction as for both we just do forceUpdate
-        this.room.on("Room.redactionCancelled", this.onRoomRedaction);
         this.initialize();
     }
 
@@ -227,19 +232,34 @@ export default class ReplyThread extends React.Component {
 
     componentWillUnmount() {
         this.unmounted = true;
+        this.context.removeListener("Event.replaced", this.onEventReplaced);
         if (this.room) {
             this.room.removeListener("Room.redaction", this.onRoomRedaction);
             this.room.removeListener("Room.redactionCancelled", this.onRoomRedaction);
         }
     }
 
-    onRoomRedaction = (ev, room) => {
-        if (this.unmounted) return;
-
-        // If one of the events we are rendering gets redacted, force a re-render
-        if (this.state.events.some(event => event.getId() === ev.getId())) {
+    updateForEventId = (eventId) => {
+        if (this.state.events.some(event => event.getId() === eventId)) {
             this.forceUpdate();
         }
+    };
+
+    onEventReplaced = (ev) => {
+        if (this.unmounted) return;
+
+        // If one of the events we are rendering gets replaced, force a re-render
+        this.updateForEventId(ev.getId());
+    };
+
+    onRoomRedaction = (ev) => {
+        if (this.unmounted) return;
+
+        const eventId = ev.getAssociatedId();
+        if (!eventId) return;
+
+        // If one of the events we are rendering gets redacted, force a re-render
+        this.updateForEventId(eventId);
     };
 
     async initialize() {
@@ -368,6 +388,7 @@ export default class ReplyThread extends React.Component {
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     useIRCLayout={this.props.useIRCLayout}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                    replacingEventId={ev.replacingEventId()}
                 />
             </blockquote>;
         });

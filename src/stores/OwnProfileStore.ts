@@ -66,12 +66,14 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     /**
      * Gets the user's avatar as an HTTP URL of the given size. If the user's
      * avatar is not present, this returns null.
-     * @param size The size of the avatar
+     * @param size The size of the avatar. If zero, a full res copy of the avatar
+     * will be returned as an HTTP URL.
      * @returns The HTTP URL of the user's avatar
      */
-    public getHttpAvatarUrl(size: number): string {
+    public getHttpAvatarUrl(size = 0): string {
         if (!this.avatarMxc) return null;
-        return this.matrixClient.mxcUrlToHttp(this.avatarMxc, size, size);
+        const adjustedSize = size > 1 ? size : undefined; // don't let negatives or zero through
+        return this.matrixClient.mxcUrlToHttp(this.avatarMxc, adjustedSize, adjustedSize);
     }
 
     protected async onNotReady() {

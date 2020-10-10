@@ -31,11 +31,6 @@ interface IProps {
         // room; if not, we will show any active call.
         room?: Room;
 
-        // A Conference Handler implementation
-        // Must have a function signature:
-        //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler?: any;
-
         // maxHeight style attribute for the video panel
         maxVideoHeight?: number;
 
@@ -96,14 +91,13 @@ export default class CallView extends React.Component<IProps, IState> {
 
         if (this.props.room) {
             const roomId = this.props.room.roomId;
-            call = CallHandler.getCallForRoom(roomId) ||
-                (this.props.ConferenceHandler ? this.props.ConferenceHandler.getConferenceCallForRoom(roomId) : null);
+            call = CallHandler.sharedInstance().getCallForRoom(roomId);
 
             if (this.call) {
                 this.setState({ call: call });
             }
         } else {
-            call = CallHandler.getAnyActiveCall();
+            call = CallHandler.sharedInstance().getAnyActiveCall();
             // Ignore calls if we can't get the room associated with them.
             // I think the underlying problem is that the js-sdk sends events
             // for calls before it has made the rooms available in the store,
@@ -115,20 +109,19 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         if (call) {
-            call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
-            call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
-            // always use a separate element for audio stream playback.
-            // this is to let us move CallView around the DOM without interrupting remote audio
-            // during playback, by having the audio rendered by a top-level <audio/> element.
-            // rather than being rendered by the main remoteVideo <video/> element.
-            call.setRemoteAudioElement(this.getVideoView().getRemoteAudioElement());
+            if (this.getVideoView()) {
+                call.setLocalVideoElement(this.getVideoView().getLocalVideoElement());
+                call.setRemoteVideoElement(this.getVideoView().getRemoteVideoElement());
+
+                // always use a separate element for audio stream playback.
+                // this is to let us move CallView around the DOM without interrupting remote audio
+                // during playback, by having the audio rendered by a top-level <audio/> element.
+                // rather than being rendered by the main remoteVideo <video/> element.
+                call.setRemoteAudioElement(this.getVideoView().getRemoteAudioElement());
+            }
         }
         if (call && call.type === "video" && call.call_state !== "ended" && call.call_state !== "ringing") {
-            // if this call is a conf call, don't display local video as the
-            // conference will have us in it
-            this.getVideoView().getLocalVideoElement().style.display = (
-                call.confUserId ? "none" : "block"
-            );
+            this.getVideoView().getLocalVideoElement().style.display = "block";
             this.getVideoView().getRemoteVideoElement().style.display = "block";
         } else {
             this.getVideoView().getLocalVideoElement().style.display = "none";

@@ -18,6 +18,8 @@ limitations under the License.
 
 @import "./_font-sizes.scss";
 
+$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
+
 :root {
     font-size: 10px;
 }
@@ -260,7 +262,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     font-weight: 300;
     font-size: $font-15px;
     position: relative;
-    padding: 25px 30px 30px 30px;
+    padding: 24px;
     max-height: 80%;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
     border-radius: 8px;
