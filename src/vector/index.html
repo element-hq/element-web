@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="height: 100%;">
+<html lang="en" style="height: 80%;">
   <head>
     <meta charset="utf-8">
     <title>Element</title>
@@ -50,7 +50,7 @@
         <% }
     } %>
   </head>
-  <body style="height: 100%; margin: 0;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
+  <body style="height: 100%; margin: 20;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
