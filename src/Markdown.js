@@ -16,7 +16,6 @@ limitations under the License.
 
 import commonmark from 'commonmark';
 import {escape} from "lodash";
-import SettingsStore from './settings/SettingsStore';
 
 const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
@@ -71,7 +70,6 @@ function is_allowed_html_tag(node) {
         const tag = matches[1];
         return ALLOWED_HTML_TAGS.indexOf(tag) > -1;
     }
-
     return false;
 }
 
