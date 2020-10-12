@@ -17,7 +17,6 @@ limitations under the License.
 import React, {useCallback, useState, useEffect, useContext} from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from '../../../hooks/useIsEncrypted';
@@ -37,7 +36,7 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import BaseAvatar from "../avatars/BaseAvatar";
+import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, {IApp, MAX_PINNED} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
@@ -90,25 +89,9 @@ interface IAppRowProps {
 }
 
 const AppRow: React.FC<IAppRowProps> = ({ app }) => {
-    const cli = useContext(MatrixClientContext);
-
     const name = WidgetUtils.getWidgetName(app);
     const dataTitle = WidgetUtils.getWidgetDataTitle(app);
     const subtitle = dataTitle && " - " + dataTitle;
-
-    let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg")];
-    // heuristics for some better icons until Widgets support their own icons
-    if (app.type.includes("meeting") || app.type.includes("calendar")) {
-        iconUrls = [require("../../../../res/img/element-icons/room/default_cal.svg")];
-    } else if (app.type.includes("pad") || app.type.includes("doc") || app.type.includes("calc")) {
-        iconUrls = [require("../../../../res/img/element-icons/room/default_doc.svg")];
-    } else if (app.type.includes("clock")) {
-        iconUrls = [require("../../../../res/img/element-icons/room/default_clock.svg")];
-    }
-
-    if (app.avatar_url) { // MSC2765
-        iconUrls.unshift(getHttpUriForMxc(cli.getHomeserverUrl(), app.avatar_url, 20, 20, "crop"));
-    }
 
     const onOpenWidgetClick = () => {
         defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
@@ -156,7 +139,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
             forceHide={!isPinned}
             disabled={isPinned}
         >
-            <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
+            <WidgetAvatar app={app} />
             <span>{name}</span>
             { subtitle }
         </AccessibleTooltipButton>

@@ -165,10 +165,9 @@ limitations under the License.
                 color: $primary-fg-color;
             }
 
-            img {
+            .mx_BaseAvatar_image {
                 vertical-align: top;
                 margin-right: 12px;
-                border-radius: 4px;
             }
 
             &::before {

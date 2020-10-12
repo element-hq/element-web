@@ -16,6 +16,10 @@
         border-bottom: none;
     }
 
+    .mx_AppTileMenuBar {
+        padding: 0;
+    }
+
     iframe {
         // Sticker picker depends on the fixed height previously used for all tiles
         height: 273px;

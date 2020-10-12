@@ -39,6 +39,7 @@ import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
 import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
 import {MatrixCapabilities} from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
+import WidgetAvatar from "../avatars/WidgetAvatar";
 
 export default class AppTile extends React.Component {
     constructor(props) {
@@ -273,6 +274,7 @@ export default class AppTile extends React.Component {
 
         return (
             <span>
+                <WidgetAvatar app={this.props.app} />
                 <b>{ name }</b>
                 <span>{ title ? titleSpacer : '' }{ title }</span>
             </span>
