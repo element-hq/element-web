@@ -1242,5 +1242,6 @@
     "Safeguard against losing access to encrypted messages & data": "Захист від втрати доступу до зашифрованих повідомлень та даних",
     "The person who invited you already left the room.": "Особа, що вас запросила, вже залишила кімнату.",
     "The person who invited you already left the room, or their server is offline.": "Особа, що вас запросила вже залишила кімнату, або її сервер відімкнено.",
-    "Change notification settings": "Змінити налаштування сповіщень"
+    "Change notification settings": "Змінити налаштування сповіщень",
+    "Render simple counters in room header": "Відображати звичайні лічильники у заголовку кімнати"
 }
