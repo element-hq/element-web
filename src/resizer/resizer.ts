@@ -1,6 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,36 +27,59 @@ classNames:
     resizing: string
 */
 
+import FixedDistributor from "./distributors/fixed";
+import Sizer from "./sizer";
+import ResizeItem from "./item";
 
-export default class Resizer {
+interface IClassNames {
+    handle?: string;
+    reverse?: string;
+    vertical?: string;
+    resizing?: string;
+}
+
+export interface IConfig {
+    onResizeStart?(): void;
+    onResizeStop?(): void;
+    onResized?(size: number, id: string, element: HTMLElement): void;
+}
+
+export default class Resizer<C extends IConfig = IConfig> {
+    private classNames: IClassNames;
+
     // TODO move vertical/horizontal to config option/container class
     // as it doesn't make sense to mix them within one container/Resizer
-    constructor(container, distributorCtor, config) {
+    constructor(
+        private readonly container: HTMLElement,
+        private readonly distributorCtor: {
+            new(item: ResizeItem): FixedDistributor<C, any>;
+            createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem;
+            createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
+        },
+        public readonly config?: C,
+    ) {
         if (!container) {
             throw new Error("Resizer requires a non-null `container` arg");
         }
-        this.container = container;
-        this.distributorCtor = distributorCtor;
-        this.config = config;
+
         this.classNames = {
             handle: "resizer-handle",
             reverse: "resizer-reverse",
             vertical: "resizer-vertical",
             resizing: "resizer-resizing",
         };
-        this._onMouseDown = this._onMouseDown.bind(this);
     }
 
-    setClassNames(classNames) {
+    public setClassNames(classNames: IClassNames) {
         this.classNames = classNames;
     }
 
-    attach() {
-        this.container.addEventListener("mousedown", this._onMouseDown, false);
+    public attach() {
+        this.container.addEventListener("mousedown", this.onMouseDown, false);
     }
 
-    detach() {
-        this.container.removeEventListener("mousedown", this._onMouseDown, false);
+    public detach() {
+        this.container.removeEventListener("mousedown", this.onMouseDown, false);
     }
 
     /**
@@ -65,36 +88,36 @@ export default class Resizer {
     @param {number} handleIndex the index of the resize handle in the container
     @return {Distributor} a new distributor for the given handle
     */
-    forHandleAt(handleIndex) {
-        const handles = this._getResizeHandles();
+    public forHandleAt(handleIndex: number): FixedDistributor<C> {
+        const handles = this.getResizeHandles();
         const handle = handles[handleIndex];
         if (handle) {
-            const {distributor} = this._createSizerAndDistributor(handle);
+            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
         }
     }
 
-    forHandleWithId(id) {
-        const handles = this._getResizeHandles();
+    public forHandleWithId(id: string): FixedDistributor<C> {
+        const handles = this.getResizeHandles();
         const handle = handles.find((h) => h.getAttribute("data-id") === id);
         if (handle) {
-            const {distributor} = this._createSizerAndDistributor(handle);
+            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
         }
     }
 
-    isReverseResizeHandle(el) {
+    public isReverseResizeHandle(el: HTMLElement): boolean {
         return el && el.classList.contains(this.classNames.reverse);
     }
 
-    isResizeHandle(el) {
+    public isResizeHandle(el: HTMLElement): boolean {
         return el && el.classList.contains(this.classNames.handle);
     }
 
-    _onMouseDown(event) {
+    private onMouseDown = (event: MouseEvent) => {
         // use closest in case the resize handle contains
         // child dom nodes that can be the target
-        const resizeHandle = event.target && event.target.closest(`.${this.classNames.handle}`);
+        const resizeHandle = event.target && (<HTMLElement>event.target).closest(`.${this.classNames.handle}`);
         if (!resizeHandle || resizeHandle.parentElement !== this.container) {
             return;
         }
@@ -109,7 +132,7 @@ export default class Resizer {
             this.config.onResizeStart();
         }
 
-        const {sizer, distributor} = this._createSizerAndDistributor(resizeHandle);
+        const {sizer, distributor} = this.createSizerAndDistributor(<HTMLDivElement>resizeHandle);
         distributor.start();
 
         const onMouseMove = (event) => {
@@ -133,21 +156,23 @@ export default class Resizer {
         body.addEventListener("mouseup", finishResize, false);
         document.addEventListener("mouseleave", finishResize, false);
         body.addEventListener("mousemove", onMouseMove, false);
-    }
+    };
 
-    _createSizerAndDistributor(resizeHandle) {
+    private createSizerAndDistributor(
+        resizeHandle: HTMLDivElement,
+    ): {sizer: Sizer, distributor: FixedDistributor<any>} {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = this.isReverseResizeHandle(resizeHandle);
         const Distributor = this.distributorCtor;
         const sizer = Distributor.createSizer(this.container, vertical, reverse);
         const item = Distributor.createItem(resizeHandle, this, sizer);
-        const distributor = new Distributor(item, this.config);
+        const distributor = new Distributor(item);
         return {sizer, distributor};
     }
 
-    _getResizeHandles() {
+    private getResizeHandles() {
         return Array.from(this.container.children).filter(el => {
-            return this.isResizeHandle(el);
-        });
+            return this.isResizeHandle(<HTMLElement>el);
+        }) as HTMLElement[];
     }
 }

@@ -16,9 +16,15 @@ limitations under the License.
 
 import FixedDistributor from "./fixed";
 import ResizeItem from "../item";
+import {IConfig} from "../resizer";
 
-class CollapseItem extends ResizeItem {
-    notifyCollapsed(collapsed) {
+interface ICollapseConfig extends IConfig {
+    toggleSize: number;
+    onCollapsed?(collapsed: boolean, id: string, element: HTMLElement): void;
+}
+
+class CollapseItem extends ResizeItem<ICollapseConfig> {
+    notifyCollapsed(collapsed: boolean) {
         const callback = this.resizer.config.onCollapsed;
         if (callback) {
             callback(collapsed, this.id, this.domNode);
@@ -26,18 +32,21 @@ class CollapseItem extends ResizeItem {
     }
 }
 
-export default class CollapseDistributor extends FixedDistributor {
+export default class CollapseDistributor extends FixedDistributor<ICollapseConfig, CollapseItem> {
     static createItem(resizeHandle, resizer, sizer) {
         return new CollapseItem(resizeHandle, resizer, sizer);
     }
 
-    constructor(item, config) {
+    private readonly toggleSize: number;
+    private isCollapsed: boolean;
+
+    constructor(item: CollapseItem) {
         super(item);
-        this.toggleSize = config && config.toggleSize;
+        this.toggleSize = item.resizer?.config?.toggleSize;
         this.isCollapsed = false;
     }
 
-    resize(newSize) {
+    public resize(newSize: number) {
         const isCollapsedSize = newSize < this.toggleSize;
         if (isCollapsedSize && !this.isCollapsed) {
             this.isCollapsed = true;

@@ -19,18 +19,18 @@ implements DOM/CSS operations for resizing.
 The sizer determines what CSS mechanism is used for sizing items, like flexbox, ...
 */
 export default class Sizer {
-    constructor(container, vertical, reverse) {
-        this.container = container;
-        this.reverse = reverse;
-        this.vertical = vertical;
-    }
+    constructor(
+        protected readonly container: HTMLElement,
+        protected readonly vertical: boolean,
+        protected readonly reverse: boolean,
+    ) {}
 
     /**
         @param {Element} item the dom element being resized
         @return {number} how far the edge of the item is from the edge of the container
     */
-    getItemOffset(item) {
-        const offset = (this.vertical ? item.offsetTop : item.offsetLeft) - this._getOffset();
+    public getItemOffset(item: HTMLElement): number {
+        const offset = (this.vertical ? item.offsetTop : item.offsetLeft) - this.getOffset();
         if (this.reverse) {
             return this.getTotalSize() - (offset + this.getItemSize(item));
         } else {
@@ -42,33 +42,33 @@ export default class Sizer {
         @param {Element} item the dom element being resized
         @return {number} the width/height of an item in the container
     */
-    getItemSize(item) {
+    public getItemSize(item: HTMLElement): number {
         return this.vertical ? item.offsetHeight : item.offsetWidth;
     }
 
     /** @return {number} the width/height of the container */
-    getTotalSize() {
+    public getTotalSize(): number {
         return this.vertical ? this.container.offsetHeight : this.container.offsetWidth;
     }
 
     /** @return {number} container offset to offsetParent */
-    _getOffset() {
+    private getOffset(): number {
         return this.vertical ? this.container.offsetTop : this.container.offsetLeft;
     }
 
     /** @return {number} container offset to document */
-    _getPageOffset() {
+    private getPageOffset() {
         let element = this.container;
         let offset = 0;
         while (element) {
             const pos = this.vertical ? element.offsetTop : element.offsetLeft;
             offset = offset + pos;
-            element = element.offsetParent;
+            element = element.offsetParent as HTMLElement;
         }
         return offset;
     }
 
-    setItemSize(item, size) {
+    public setItemSize(item: HTMLElement, size: number) {
         if (this.vertical) {
             item.style.height = `${Math.round(size)}px`;
         } else {
@@ -76,7 +76,7 @@ export default class Sizer {
         }
     }
 
-    clearItemSize(item) {
+    public clearItemSize(item: HTMLElement) {
         if (this.vertical) {
             item.style.height = null;
         } else {
@@ -84,17 +84,23 @@ export default class Sizer {
         }
     }
 
+    // TODO
+    public start(item: HTMLElement) {}
+
+    // TODO
+    public finish(item: HTMLElement) {}
+
     /**
         @param {MouseEvent} event the mouse event
         @return {number} the distance between the cursor and the edge of the container,
             along the applicable axis (vertical or horizontal)
     */
-    offsetFromEvent(event) {
+    public offsetFromEvent(event: MouseEvent) {
         const pos = this.vertical ? event.pageY : event.pageX;
         if (this.reverse) {
-            return (this._getPageOffset() + this.getTotalSize()) - pos;
+            return (this.getPageOffset() + this.getTotalSize()) - pos;
         } else {
-            return pos - this._getPageOffset();
+            return pos - this.getPageOffset();
         }
     }
 }
