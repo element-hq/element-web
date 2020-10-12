@@ -188,8 +188,6 @@ export default class CallHandler {
         call.on("hangup", () => {
             this.removeCallForRoom(call.roomId);
         });
-        // map web rtc states to dummy UI state
-        // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
         call.on("state", (newState: CallState, oldState: CallState) => {
             this.setCallState(call, newState);
 
