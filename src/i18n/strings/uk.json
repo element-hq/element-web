@@ -1233,5 +1233,14 @@
     "End conference": "Завершити конференцію",
     "This will end the conference for everyone. Continue?": "Це завершить конференцію для всіх. Продовжити?",
     "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Додає ( ͡° ͜ʖ ͡°) на початку текстового повідомлення",
-    "about a day ago": "близько однієї доби тому"
+    "about a day ago": "близько доби тому",
+    "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
+    "Unexpected server error trying to leave the room": "Виникла неочікувана помилка серверу під час спроби залишити кімнату",
+    "Unknown App": "Невідомий додаток",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.": "Відправляти <UsageDataLink>анонімну статистику користування</UsageDataLink>, що дозволяє нам покращувати %(brand)s. Це використовує <PolicyLink>кукі</PolicyLink>.",
+    "Set up Secure Backup": "Налаштувати захищене резервне копіювання",
+    "Safeguard against losing access to encrypted messages & data": "Захист від втрати доступу до зашифрованих повідомлень та даних",
+    "The person who invited you already left the room.": "Особа, що вас запросила, вже залишила кімнату.",
+    "The person who invited you already left the room, or their server is offline.": "Особа, що вас запросила вже залишила кімнату, або її сервер відімкнено.",
+    "Change notification settings": "Змінити налаштування сповіщень"
 }
