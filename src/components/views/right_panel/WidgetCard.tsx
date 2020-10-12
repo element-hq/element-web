@@ -29,7 +29,7 @@ import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPa
 import {Action} from "../../../dispatcher/actions";
 import WidgetStore from "../../../stores/WidgetStore";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
-import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
+import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 
 interface IProps {
     room: Room;
@@ -63,7 +63,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     if (menuDisplayed) {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = (
-            <RoomWidgetContextMenu
+            <WidgetContextMenu
                 chevronFace={ChevronFace.None}
                 right={window.innerWidth - rect.right - 12}
                 top={rect.bottom + 12}

@@ -39,13 +39,13 @@ import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import WidgetStore, {IApp} from "../../../stores/WidgetStore";
+import WidgetStore, {IApp, MAX_PINNED} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
 import {ContextMenuButton} from "../../../accessibility/context_menu/ContextMenuButton";
 import {ChevronFace, useContextMenu} from "../../structures/ContextMenu";
-import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
+import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 
 interface IProps {
     room: Room;
@@ -129,13 +129,22 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
     let contextMenu;
     if (menuDisplayed) {
         const rect = handle.current.getBoundingClientRect();
-        contextMenu = <RoomWidgetContextMenu
+        contextMenu = <WidgetContextMenu
             chevronFace={ChevronFace.None}
             right={window.innerWidth - rect.right}
             bottom={window.innerHeight - rect.top}
             onFinished={closeMenu}
             app={app}
         />;
+    }
+
+    const cannotPin = !isPinned && !WidgetStore.instance.canPin(app.id);
+
+    let pinTitle: string;
+    if (cannotPin) {
+        pinTitle = _t("You can only pin up to %(count)s widgets", { count: MAX_PINNED });
+    } else {
+        pinTitle = isPinned ? _t("Unpin") : _t("Pin");
     }
 
     return <div className="mx_RoomSummaryCard_widgetRow" ref={handle}>
@@ -157,7 +166,8 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
                 mx_RoomSummaryCard_app_pinned: isPinned,
             })}
             onClick={togglePin}
-            title={isPinned ? _t("Unpin") : _t("Pin")}
+            title={pinTitle}
+            disabled={cannotPin}
         />
 
         <ContextMenuButton

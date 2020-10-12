@@ -29,19 +29,28 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import {WidgetType} from "../../../widgets/WidgetType";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
+    userWidget?: boolean;
     showUnpin?: boolean;
     // override delete handler
     onDeleteClick?(): void;
 }
 
-const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, onDeleteClick, showUnpin, ...props}) => {
+const WidgetContextMenu: React.FC<IProps> = ({
+    onFinished,
+    app,
+    userWidget,
+    onDeleteClick,
+    showUnpin,
+    ...props
+}) => {
     const {room, roomId} = useContext(RoomContext);
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
-    const canModify = WidgetUtils.canUserModifyWidgets(roomId);
+    const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
 
     let unpinButton;
     if (showUnpin) {
@@ -80,7 +89,7 @@ const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, onDeleteClic
 
     let deleteButton;
     if (onDeleteClick || canModify) {
-        const onDeleteClick = () => {
+        const onDeleteClickDefault = () => {
             // Show delete confirmation dialog
             Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
                 title: _t("Delete Widget"),
@@ -97,21 +106,27 @@ const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, onDeleteClic
         };
 
         deleteButton = <IconizedContextMenuOption
-            onClick={onDeleteClick || onDeleteClick}
-            label={_t("Remove for everyone")}
+            onClick={onDeleteClick || onDeleteClickDefault}
+            label={userWidget ? _t("Remove") : _t("Remove for everyone")}
         />;
     }
 
-    const onRevokeClick = () => {
-        console.info("Revoking permission for widget to load: " + app.eventId);
-        const current = SettingsStore.getValue("allowedWidgets", roomId);
-        current[app.eventId] = false;
-        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).catch(err => {
-            console.error(err);
-            // We don't really need to do anything about this - the user will just hit the button again.
-        });
-        onFinished();
-    };
+    const isLocalWidget = WidgetType.JITSI.matches(app.type);
+    let revokeButton;
+    if (!userWidget && !isLocalWidget) {
+        const onRevokeClick = () => {
+            console.info("Revoking permission for widget to load: " + app.eventId);
+            const current = SettingsStore.getValue("allowedWidgets", roomId);
+            current[app.eventId] = false;
+            SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).catch(err => {
+                console.error(err);
+                // We don't really need to do anything about this - the user will just hit the button again.
+            });
+            onFinished();
+        };
+
+        revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />;
+    }
 
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
@@ -119,10 +134,10 @@ const RoomWidgetContextMenu: React.FC<IProps> = ({ onFinished, app, onDeleteClic
             { snapshotButton }
             { editButton }
             { deleteButton }
-            <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />
+            { revokeButton }
         </IconizedContextMenuOptionList>
     </IconizedContextMenu>;
 };
 
-export default RoomWidgetContextMenu;
+export default WidgetContextMenu;
 

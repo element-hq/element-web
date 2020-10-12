@@ -46,7 +46,7 @@ interface IRoomWidgets {
     pinned: Record<string, boolean>;
 }
 
-const MAX_PINNED = 3;
+export const MAX_PINNED = 3;
 
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this

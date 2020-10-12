@@ -38,7 +38,7 @@ import {SettingLevel} from "../../../settings/SettingLevel";
 import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
 import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
 import {MatrixCapabilities} from "matrix-widget-api";
-import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
+import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 
 export default class AppTile extends React.Component {
     constructor(props) {
@@ -62,6 +62,9 @@ export default class AppTile extends React.Component {
         if (this._usingLocalWidget()) return true;
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
+        if (currentlyAllowedWidgets[props.app.eventId] === undefined) {
+            return props.userId === props.creatorUserId;
+        }
         return !!currentlyAllowedWidgets[props.app.eventId];
     };
 
@@ -78,7 +81,7 @@ export default class AppTile extends React.Component {
             loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: newProps.userId === newProps.creatorUserId || this.hasPermissionToLoad(newProps),
+            hasPermissionToLoad: this.hasPermissionToLoad(newProps),
             error: null,
             widgetPageTitle: newProps.widgetPageTitle,
             menuDisplayed: false,
@@ -86,8 +89,7 @@ export default class AppTile extends React.Component {
     }
 
     onAllowedWidgetsChange = () => {
-        const hasPermissionToLoad =
-            this.props.userId === this.prop.creatorUserId || this.hasPermissionToLoad(this.props);
+        const hasPermissionToLoad = this.hasPermissionToLoad(this.props);
 
         if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
@@ -399,6 +401,7 @@ export default class AppTile extends React.Component {
                     app={this.props.app}
                     onFinished={this._closeContextMenu}
                     showUnpin={!this.props.userWidget}
+                    userWidget={this.props.userWidget}
                 />
             );
         }
