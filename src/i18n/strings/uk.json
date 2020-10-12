@@ -222,7 +222,7 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Чи використовуєте ви режим форматованого тексту у редакторі Rich Text Editor",
     "Your homeserver's URL": "URL адреса вашого домашнього сервера",
     "Failed to verify email address: make sure you clicked the link in the email": "Не вдалось перевірити адресу електронної пошти: переконайтесь, що ви перейшли за посиланням у листі",
-    "The platform you're on": "Використовувана платформа",
+    "The platform you're on": "Платформа, на якій ви працюєте",
     "e.g. %(exampleValue)s": "напр. %(exampleValue)s",
     "Every page you use in the app": "Кожна сторінка, яку ви використовуєте в програмі",
     "e.g. <CurrentPageURL>": "напр. <CurrentPageURL>",
