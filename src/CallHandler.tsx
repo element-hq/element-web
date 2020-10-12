@@ -79,7 +79,7 @@ import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { MatrixCall, CallErrorCode, CallState, CallType } from "matrix-js-sdk/lib/webrtc/call";
 
-enum AudioId {
+enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
@@ -88,7 +88,7 @@ enum AudioId {
 
 export default class CallHandler {
     private calls = new Map<string, MatrixCall>();
-    private audioPromises = new Map<AudioId, Promise<void>>();
+    private audioPromises = new Map<AudioID, Promise<void>>();
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -126,7 +126,7 @@ export default class CallHandler {
         return null;
     }
 
-    play(audioId: AudioId) {
+    play(audioId: AudioID) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -155,7 +155,7 @@ export default class CallHandler {
         }
     }
 
-    pause(audioId: AudioId) {
+    pause(audioId: AudioID) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -195,19 +195,19 @@ export default class CallHandler {
 
             switch (oldState) {
                 case CallState.Ringing:
-                    this.pause(AudioId.Ring);
+                    this.pause(AudioID.Ring);
                     break;
                 case CallState.InviteSent:
-                    this.pause(AudioId.Ringback);
+                    this.pause(AudioID.Ringback);
                     break;
             }
 
             switch (newState) {
                 case CallState.Ringing:
-                    this.play(AudioId.Ring);
+                    this.play(AudioID.Ring);
                     break;
                 case CallState.InviteSent:
-                    this.play(AudioId.Ringback);
+                    this.play(AudioID.Ringback);
                     break;
                 case CallState.Ended:
                     this.removeCallForRoom(call.roomId);
@@ -215,13 +215,13 @@ export default class CallHandler {
                         call.hangupParty === "remote" ||
                         (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
                     )) {
-                        this.play(AudioId.Busy);
+                        this.play(AudioID.Busy);
                         Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
                             title: _t('Call Timeout'),
                             description: _t('The remote side failed to pick up') + '.',
                         });
                     } else {
-                        this.play(AudioId.CallEnd);
+                        this.play(AudioID.CallEnd);
                     }
             }
         });
