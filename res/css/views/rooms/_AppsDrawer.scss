@@ -61,6 +61,15 @@ $MiniAppTileHeight: 200px;
     justify-content: center;
     height: 100%;
     margin-bottom: 8px;
+
+    .mx_AppTile:first-of-type {
+        border-left-width: 8px;
+        border-radius: 10px 0 0 10px;
+    }
+    .mx_AppTile:last-of-type {
+        border-right-width: 8px;
+        border-radius: 0 10px 10px 0;
+    }
 }
 
 .mx_AppsDrawer_minimised .mx_AppsContainer {
@@ -89,13 +98,15 @@ $MiniAppTileHeight: 200px;
 
 .mx_AppTile {
     width: 50%;
-    border: 5px solid $widget-menu-bar-bg-color;
-    border-radius: 4px;
+    border: 8px solid $widget-menu-bar-bg-color;
+    border-left-width: 5px;
+    border-right-width: 5px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 
     & + .mx_AppTile {
-        margin-left: 5px;
+
     }
 }
 
@@ -138,14 +149,19 @@ $MiniAppTileHeight: 200px;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-bottom: 5px;
+    padding-top: 8px;
+    padding-bottom: 12px;
 }
 
 .mx_AppTileMenuBarTitle {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    pointer-events: none;
+    line-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .mx_WidgetAvatar {
+        margin-right: 12px;
+    }
 }
 
 .mx_AppTileMenuBarTitle > :last-child {

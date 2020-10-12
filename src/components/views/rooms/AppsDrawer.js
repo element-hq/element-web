@@ -107,6 +107,10 @@ export default class AppsDrawer extends React.Component {
         }
     }
 
+    setResizing = (resizing) => {
+        this.setState({ resizing });
+    };
+
     render() {
         if (!this.props.showApps) return <div />;
 
@@ -142,10 +146,11 @@ export default class AppsDrawer extends React.Component {
         }
 
         const classes = classNames({
-            "mx_AppsDrawer": true,
-            "mx_AppsDrawer_hidden": this.props.hide,
-            "mx_AppsDrawer_fullWidth": apps.length < 2,
-            "mx_AppsDrawer_minimised": !this.props.showApps,
+            mx_AppsDrawer: true,
+            mx_AppsDrawer_hidden: this.props.hide,
+            mx_AppsDrawer_fullWidth: apps.length < 2,
+            mx_AppsDrawer_minimised: !this.props.showApps,
+            mx_AppsDrawer_resizing: this.state.resizing,
         });
 
         return (
@@ -157,6 +162,7 @@ export default class AppsDrawer extends React.Component {
                     handleClass="mx_AppsContainer_resizerHandle"
                     className="mx_AppsContainer"
                     resizeNotifier={this.props.resizeNotifier}
+                    setResizing={this.setResizing}
                 >
                     { apps }
                     { spinner }
@@ -174,17 +180,17 @@ const PersistentVResizer = ({
     handleWrapperClass,
     handleClass,
     resizeNotifier,
+    setResizing,
     children,
 }) => {
     const [height, setHeight] = useLocalStorageState("pvr_" + id, 280); // old fixed height was 273px
-    const [resizing, setResizing] = useState(false);
 
     return <Resizable
         size={{height: Math.min(height, maxHeight)}}
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
-            if (!resizing) setResizing(true);
+            setResizing(true);
             resizeNotifier.startResizing();
         }}
         onResize={() => {
@@ -192,14 +198,12 @@ const PersistentVResizer = ({
         }}
         onResizeStop={(e, dir, ref, d) => {
             setHeight(height + d.height);
-            if (resizing) setResizing(false);
+            setResizing(false);
             resizeNotifier.stopResizing();
         }}
         handleWrapperClass={handleWrapperClass}
         handleClasses={{bottom: handleClass}}
-        className={classNames(className, {
-            mx_AppsDrawer_resizing: resizing,
-        })}
+        className={className}
         enable={{bottom: true}}
     >
         { children }
