@@ -2518,5 +2518,7 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Ky version i %(brand)s nuk mbulon parjen për disa kartela të fshehtëzuara",
     "This version of %(brand)s does not support searching encrypted messages": "Ky version i %(brand)s nuk mbulon kërkimin në mesazhe të fshehtëzuar",
     "Cannot create rooms in this community": "S’mund të krijohen dhoma në këtë bashkësi",
-    "You do not have permission to create rooms in this community.": "S’keni leje të krijoni dhoma në këtë bashkësi."
+    "You do not have permission to create rooms in this community.": "S’keni leje të krijoni dhoma në këtë bashkësi.",
+    "Failed to save your profile": "S’u arrit të ruhej profili juaj",
+    "The operation could not be completed": "Veprimi s’u plotësua dot"
 }
