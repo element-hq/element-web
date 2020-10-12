@@ -79,7 +79,7 @@ async function confirmToDismiss(): Promise<boolean> {
 
 function makeInputToKey(
     keyInfo: ISecretStorageKeyInfo,
-): ({ passphrase, recoveryKey }: { passphrase: string, recoveryKey: string }) => Promise<Uint8Array> {
+): (keyParams: { passphrase: string, recoveryKey: string }) => Promise<Uint8Array> {
     return async ({ passphrase, recoveryKey }) => {
         if (passphrase) {
             return deriveKey(
