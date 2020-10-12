@@ -1229,5 +1229,8 @@
     "Cancel autocomplete": "Скасувати самодоповнення",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Журнали зневадження містять дані використання застосунку, включно з вашим користувацьким ім’ям, ідентифікаторами або псевдонімами відвіданих вами кімнат або груп, а також іменами інших користувачів. Вони не містять повідомлень.",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Підтвердьте знедіяння вашого облікового запису через Single Sign On щоб підтвердити вашу особу.",
-    "This account has been deactivated.": "Цей обліковий запис було знедіяно."
+    "This account has been deactivated.": "Цей обліковий запис було знедіяно.",
+    "End conference": "Завершити конференцію",
+    "This will end the conference for everyone. Continue?": "Це завершить конференцію для всіх. Продовжити?",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Додає ( ͡° ͜ʖ ͡°) на початку текстового повідомлення"
 }
