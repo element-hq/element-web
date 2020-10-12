@@ -71,7 +71,7 @@ import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
-import { CallState, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -1892,7 +1892,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (activeCall) {
             let zoomButton; let videoMuteButton;
 
-            if (activeCall.type === "video") {
+            if (activeCall.type === CallType.Video) {
                 zoomButton = (
                     <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title={_t("Fill screen")}>
                         <TintableSvg

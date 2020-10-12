@@ -77,7 +77,7 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
-import { MatrixCall, CallErrorCode, CallState, CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { MatrixCall, CallErrorCode, CallState, CallType, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -119,7 +119,7 @@ export default class CallHandler {
 
     getAnyActiveCall() {
         for (const call of this.calls.values()) {
-            if (call.state !== "ended") {
+            if (call.state !== CallState.Ended) {
                 return call;
             }
         }
@@ -170,7 +170,7 @@ export default class CallHandler {
     }
 
     private setCallListeners(call: MatrixCall) {
-        call.on("error", (err) => {
+        call.on(CallEvent.Error, (err) => {
             console.error("Call error:", err);
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
@@ -185,10 +185,10 @@ export default class CallHandler {
                 description: err.message,
             });
         });
-        call.on("hangup", () => {
+        call.on(CallEvent.Hangup, () => {
             this.removeCallForRoom(call.roomId);
         });
-        call.on("state", (newState: CallState, oldState: CallState) => {
+        call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
             this.setCallState(call, newState);
 
             switch (oldState) {
@@ -210,8 +210,8 @@ export default class CallHandler {
                 case CallState.Ended:
                     this.removeCallForRoom(call.roomId);
                     if (oldState === CallState.InviteSent && (
-                        call.hangupParty === "remote" ||
-                        (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
+                        call.hangupParty === CallParty.Remote ||
+                        (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
                     )) {
                         this.play(AudioID.Busy);
                         Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {

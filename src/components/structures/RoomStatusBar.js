@@ -24,6 +24,7 @@ import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 import {Action} from "../../dispatcher/actions";
+import { CallState, CallType } from 'matrix-js-sdk/lib/webrtc/call';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -122,7 +123,7 @@ export default class RoomStatusBar extends React.Component {
     };
 
     _showCallBar() {
-        return this.props.callState !== 'ended' && this.props.callState !== 'ringing';
+        return this.props.callState !== CallState.Ended && this.props.callState !== CallState.Ringing;
     }
 
     _onResendAllClick = () => {
@@ -275,16 +276,16 @@ export default class RoomStatusBar extends React.Component {
 
     _getCallStatusText() {
         switch (this.props.callState) {
-            case 'create_offer':
-            case 'invite_sent':
+            case CallState.CreateOffer:
+            case CallState.InviteSent:
                 return _t('Calling...');
-            case 'connecting':
-            case 'create_answer':
+            case CallState.Connecting:
+            case CallState.CreateAnswer:
                 return _t('Call connecting...');
-            case 'connected':
+            case CallState.Connected:
                 return _t('Active call');
-            case 'wait_local_media':
-                if (this.props.callType === 'video') {
+            case CallState.WaitLocalMedia:
+                if (this.props.callType === CallType.Video) {
                     return _t('Starting camera...');
                 } else {
                     return _t('Starting microphone...');
