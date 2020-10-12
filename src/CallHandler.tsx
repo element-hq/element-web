@@ -77,13 +77,23 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
-import { MatrixCall, CallErrorCode, CallState, CallType, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
 
 enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
     Busy = 'busyAudio',
+}
+
+// Unlike 'CallType' in js-sdk, this one includes screen sharing
+// (because a screen sharing call is only a screen sharing call to the caller,
+// to the callee it's just a video call, at least as far as the current impl
+// is concerned).
+export enum PlaceCallType {
+    Voice = 'voice',
+    Video = 'video',
+    ScreenSharing = 'screensharing',
 }
 
 export default class CallHandler {
@@ -271,18 +281,21 @@ export default class CallHandler {
     }
 
 
-    private placeCall(roomId: string, type: CallType, localElement: HTMLVideoElement, remoteElement: HTMLVideoElement) {
+    private placeCall(
+        roomId: string, type: PlaceCallType,
+        localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
+    ) {
         const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
         this.calls.set(roomId, call);
         this.setCallListeners(call);
-        if (type === 'voice') {
+        if (type === PlaceCallType.Voice) {
             call.placeVoiceCall();
         } else if (type === 'video') {
             call.placeVideoCall(
                 remoteElement,
                 localElement,
             );
-        } else if (type === 'screensharing') {
+        } else if (type === PlaceCallType.ScreenSharing) {
             const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
             if (screenCapErrorString) {
                 this.removeCallForRoom(roomId);
