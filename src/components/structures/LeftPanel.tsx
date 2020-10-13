@@ -79,7 +79,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.bgImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage", null, this.onBackgroundImageUpdate);
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
-            this.setState({showTagPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
+            this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
 
         // We watch the middle panel because we don't actually get resized, the middle panel does.
