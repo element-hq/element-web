@@ -207,9 +207,9 @@ function textForServerACLEvent(ev) {
 
     let text = "";
     if (prev.deny.length === 0 && prev.allow.length === 0) {
-        text = `${senderDisplayName} set server ACLs for this room. `;
+        text = _t("%(senderDisplayName)s set the server ACLs for this room.", {senderDisplayName});
     } else {
-        text = `${senderDisplayName} changed the server ACLs for this room. `;
+        text = _t("%(senderDisplayName)s changed the server ACLs for this room.", {senderDisplayName});
     }
 
     if (!Array.isArray(current.allow)) {
@@ -218,10 +218,10 @@ function textForServerACLEvent(ev) {
 
     // If we know for sure everyone is banned, mark the room as obliterated
     if (current.allow.length === 0) {
-        return text + "🎉 All servers are banned from participating! This room can no longer be used.";
+        return text + " " + _t("🎉 All servers are banned from participating! This room can no longer be used.");
     }
 
-    return text.trim();
+    return text;
 }
 
 function textForMessageEvent(ev) {
