@@ -52,6 +52,7 @@ import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import Modal from "../../Modal";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -450,6 +451,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     dis.dispatch({
                         action: 'view_home_page',
                     });
+                    Modal.closeCurrentModal("homeKeyboardShortcut");
                     handled = true;
                 }
                 break;
