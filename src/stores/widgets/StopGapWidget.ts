@@ -283,8 +283,8 @@ export class StopGapWidget extends EventEmitter {
         }
     }
 
-    public stop() {
-        if (ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
+    public stop(opts = {forceDestroy: false}) {
+        if (!opts?.forceDestroy && ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
             console.log("Skipping destroy - persistent widget");
             return;
         }
