@@ -17,7 +17,7 @@ limitations under the License.
 import * as React from "react";
 import { createRef } from "react";
 import GroupFilterPanel from "./GroupFilterPanel";
-import CustomRoomGroupFilterPanel from "./CustomRoomGroupFilterPanel";
+import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -78,7 +78,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onBackgroundImageUpdate);
         this.bgImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage", null, this.onBackgroundImageUpdate);
-        this.GroupFilterPanelWatcherRef = SettingsStore.watchSetting("GroupFilterPanel.enableGroupFilterPanel", null, () => {
+        this.GroupFilterPanelWatcherRef = SettingsStore.watchSetting("GroupFilterPanel.enableGroupFilterPanel", null, 
+        () => {
             this.setState({showGroupFilterPanel: SettingsStore.getValue("GroupFilterPanel.enableGroupFilterPanel")});
         });
 
@@ -375,10 +376,10 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const GroupFilterPanel = !this.state.showGroupFilterPanel ? null : (
+        const groupFilterPanel = !this.state.showGroupFilterPanel ? null : (
             <div className="mx_LeftPanel_GroupFilterPanelContainer">
                 <GroupFilterPanel />
-                {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomGroupFilterPanel /> : null}
+                {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
             </div>
         );
 
