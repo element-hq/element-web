@@ -423,7 +423,7 @@ export class Analytics {
     };
 }
 
-if (!global.mxAnalytics) {
-    global.mxAnalytics = new Analytics();
+if (!window.mxAnalytics) {
+    window.mxAnalytics = new Analytics();
 }
-export default global.mxAnalytics;
+export default window.mxAnalytics;

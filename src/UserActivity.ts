@@ -51,10 +51,10 @@ export default class UserActivity {
     }
 
     static sharedInstance() {
-        if (global.mxUserActivity === undefined) {
-            global.mxUserActivity = new UserActivity(window, document);
+        if (window.mxUserActivity === undefined) {
+            window.mxUserActivity = new UserActivity(window, document);
         }
-        return global.mxUserActivity;
+        return window.mxUserActivity;
     }
 
     /**

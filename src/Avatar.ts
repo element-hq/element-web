@@ -22,7 +22,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
 
-type ResizeMethod = "crop" | "scale";
+export type ResizeMethod = "crop" | "scale";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(member: RoomMember, width: number, height: number, resizeMethod: ResizeMethod) {
@@ -46,7 +46,7 @@ export function avatarUrlForMember(member: RoomMember, width: number, height: nu
     return url;
 }
 
-export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod: ResizeMethod) {
+export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
     const url = getHttpUriForMxc(
         MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
         Math.floor(width * window.devicePixelRatio),
@@ -151,7 +151,7 @@ export function getInitialLetter(name: string): string {
     return firstChar.toUpperCase();
 }
 
-export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod: ResizeMethod) {
+export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod?: ResizeMethod) {
     if (!room) return null; // null-guard
 
     const explicitRoomAvatar = room.getAvatarUrl(
