@@ -24,13 +24,14 @@ import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
+import { CallState, MatrixCall } from 'matrix-js-sdk/lib/webrtc/call';
 
 interface IProps {
 }
 
 interface IState {
     roomId: string;
-    activeCall: any;
+    activeCall: MatrixCall;
 }
 
 export default class CallPreview extends React.Component<IProps, IState> {
@@ -84,7 +85,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         if (call) {
             dis.dispatch({
                 action: 'view_room',
-                room_id: call.groupRoomId || call.roomId,
+                room_id: call.roomId,
             });
         }
     };
@@ -93,7 +94,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         const callForRoom = CallHandler.sharedInstance().getCallForRoom(this.state.roomId);
         const showCall = (
             this.state.activeCall &&
-            this.state.activeCall.call_state === 'connected' &&
+            this.state.activeCall.state === CallState.Connected &&
             !callForRoom
         );
 
