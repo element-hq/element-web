@@ -51,6 +51,7 @@ export const MAX_PINNED = 3;
 // TODO change order to be order that they were pinned
 // TODO HARD cap at 3, truncating if needed
 // TODO call finish more proactively to lock things in
+// TODO auto-open the appsDrawer for the room when widgets get pinned
 
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
