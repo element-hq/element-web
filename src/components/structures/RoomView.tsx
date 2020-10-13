@@ -1879,7 +1879,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 draggingFile={this.state.draggingFile}
                 maxHeight={this.state.auxPanelMaxHeight}
                 showApps={this.state.showApps}
-                hideAppsDrawer={false}
                 onResize={this.onResize}
                 resizeNotifier={this.props.resizeNotifier}
             >

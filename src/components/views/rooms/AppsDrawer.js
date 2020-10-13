@@ -38,12 +38,10 @@ export default class AppsDrawer extends React.Component {
         room: PropTypes.object.isRequired,
         resizeNotifier: PropTypes.instanceOf(ResizeNotifier).isRequired,
         showApps: PropTypes.bool, // Should apps be rendered
-        hide: PropTypes.bool, // If rendered, should apps drawer be visible
     };
 
     static defaultProps = {
         showApps: true,
-        hide: false,
     };
 
     constructor(props) {
@@ -147,9 +145,7 @@ export default class AppsDrawer extends React.Component {
 
         const classes = classNames({
             mx_AppsDrawer: true,
-            mx_AppsDrawer_hidden: this.props.hide,
             mx_AppsDrawer_fullWidth: apps.length < 2,
-            mx_AppsDrawer_minimised: !this.props.showApps,
             mx_AppsDrawer_resizing: this.state.resizing,
         });
 
