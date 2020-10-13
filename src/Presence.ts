@@ -19,30 +19,34 @@ limitations under the License.
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";
 import Timer from './utils/Timer';
+import {ActionPayload} from "./dispatcher/payloads";
 
- // Time in ms after that a user is considered as unavailable/away
+// Time in ms after that a user is considered as unavailable/away
 const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
-const PRESENCE_STATES = ["online", "offline", "unavailable"];
+
+enum State {
+    Online = "online",
+    Offline = "offline",
+    Unavailable = "unavailable",
+}
 
 class Presence {
-    constructor() {
-        this._activitySignal = null;
-        this._unavailableTimer = null;
-        this._onAction = this._onAction.bind(this);
-        this._dispatcherRef = null;
-    }
+    private unavailableTimer: Timer = null;
+    private dispatcherRef: string = null;
+    private state: State = null;
+
     /**
      * Start listening the user activity to evaluate his presence state.
      * Any state change will be sent to the homeserver.
      */
-    async start() {
-        this._unavailableTimer = new Timer(UNAVAILABLE_TIME_MS);
+    public async start() {
+        this.unavailableTimer = new Timer(UNAVAILABLE_TIME_MS);
         // the user_activity_start action starts the timer
-        this._dispatcherRef = dis.register(this._onAction);
-        while (this._unavailableTimer) {
+        this.dispatcherRef = dis.register(this.onAction);
+        while (this.unavailableTimer) {
             try {
-                await this._unavailableTimer.finished();
-                this.setState("unavailable");
+                await this.unavailableTimer.finished();
+                this.setState(State.Unavailable);
             } catch (e) { /* aborted, stop got called */ }
         }
     }
@@ -50,14 +54,14 @@ class Presence {
     /**
      * Stop tracking user activity
      */
-    stop() {
-        if (this._dispatcherRef) {
-            dis.unregister(this._dispatcherRef);
-            this._dispatcherRef = null;
+    public stop() {
+        if (this.dispatcherRef) {
+            dis.unregister(this.dispatcherRef);
+            this.dispatcherRef = null;
         }
-        if (this._unavailableTimer) {
-            this._unavailableTimer.abort();
-            this._unavailableTimer = null;
+        if (this.unavailableTimer) {
+            this.unavailableTimer.abort();
+            this.unavailableTimer = null;
         }
     }
 
@@ -65,14 +69,14 @@ class Presence {
      * Get the current presence state.
      * @returns {string} the presence state (see PRESENCE enum)
      */
-    getState() {
+    public getState() {
         return this.state;
     }
 
-    _onAction(payload) {
+    private onAction = (payload: ActionPayload) => {
         if (payload.action === 'user_activity') {
-            this.setState("online");
-            this._unavailableTimer.restart();
+            this.setState(State.Online);
+            this.unavailableTimer.restart();
         }
     }
 
@@ -81,13 +85,11 @@ class Presence {
      * If the state has changed, the homeserver will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
      */
-    async setState(newState) {
+    private async setState(newState: State) {
         if (newState === this.state) {
             return;
         }
-        if (PRESENCE_STATES.indexOf(newState) === -1) {
-            throw new Error("Bad presence state: " + newState);
-        }
+
         const oldState = this.state;
         this.state = newState;
 
