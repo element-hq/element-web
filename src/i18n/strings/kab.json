@@ -2438,5 +2438,16 @@
     "There was an error updating your community. The server is unable to process your request.": "Tella-d tuccḍa deg uleqqem n temɣiwent-ik•im. Aqeddac ur izmir ara ad isesfer asuter.",
     "Update community": "Leqqem tamɣiwent",
     "May include members not in %(communityName)s": "Yezmer ad d-isseddu iɛeggalen ur nelli deg %(communityName)s",
-    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Bdu adiwenni akked ḥedd s useqdec n yisem-is, isem uffir (am <userId/>) neɣ tansa imayl. Aya ur ten-iecced ara ɣer %(communityName)s. Akked ad d-tnecdeḍ yiwen ɣer %(communityName)s sit ɣef <a>da</a>."
+    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Bdu adiwenni akked ḥedd s useqdec n yisem-is, isem uffir (am <userId/>) neɣ tansa imayl. Aya ur ten-iecced ara ɣer %(communityName)s. Akked ad d-tnecdeḍ yiwen ɣer %(communityName)s sit ɣef <a>da</a>.",
+    "not found in storage": "Ulac-it deg uklas",
+    "Failed to save your profile": "Yecceḍ usekles n umaɣnu-ik•im",
+    "The operation could not be completed": "Tamahilt ur tezmir ara ad tettwasmed",
+    "Backup key cached:": "Tasarut n ukles tettwaffer:",
+    "Secret storage:": "Aklas uffir:",
+    "Remove messages sent by others": "Kkes iznan i uznen wiyaḍ",
+    "%(count)s results|one": "%(count)s n ugmuḍ",
+    "Widgets": "Iwiǧiten",
+    "Unpin app": "Serreḥ i usnas",
+    "Pin to room": "Sentu deg texxamt",
+    "You can only pin 2 widgets at a time": "Tzemreḍ ad tsentuḍ 2 kan n yiwiǧiten ɣef tikkelt"
 }

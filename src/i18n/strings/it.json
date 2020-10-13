@@ -2523,5 +2523,8 @@
     "Video conference started by %(senderName)s": "Conferenza video iniziata da %(senderName)s",
     "End conference": "Termina conferenza",
     "This will end the conference for everyone. Continue?": "Verrà terminata la conferenza per tutti. Continuare?",
-    "Ignored attempt to disable encryption": "Tentativo di disattivare la crittografia ignorato"
+    "Ignored attempt to disable encryption": "Tentativo di disattivare la crittografia ignorato",
+    "Failed to save your profile": "Salvataggio del profilo fallito",
+    "The operation could not be completed": "Impossibile completare l'operazione",
+    "Remove messages sent by others": "Rimuovi i messaggi inviati dagli altri"
 }

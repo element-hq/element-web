@@ -36,7 +36,7 @@
     "Unavailable": "غیرقابل‌دسترسی",
     "View Decrypted Source": "دیدن منبع رمزگشایی شده",
     "Failed to update keywords": "به‌روزرسانی کلیدواژه‌ها موفقیت‌آمیز نبود",
-    "remove %(name)s from the directory.": "%(name)s را از فهرست گپ‌ها حذف کن",
+    "remove %(name)s from the directory.": "برداشتن %(name)s از فهرست گپ‌ها.",
     "Please set a password!": "لطفا یک پسورد اختیار کنید!",
     "powered by Matrix": "قدرت‌یافته از ماتریکس",
     "You have successfully set a password!": "شما با موفقیت رمزتان را انتخاب کردید!",
@@ -149,5 +149,7 @@
     "Restart": "شروع دوباره",
     "Upgrade your %(brand)s": "ارتقای %(brand)s تان",
     "A new version of %(brand)s is available!": "نگارشی جدید از %(brand)s موجود است!",
-    "Guest": "مهمان"
+    "Guest": "مهمان",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "برای تأیید هویتتان، این نشانی رایانامه را با ورود یکپارچه تأیید کنید.",
+    "Click the button below to confirm adding this email address.": "برای تأیید افزودن این نشانی رایانامه، دکمهٔ زیر را بزنید."
 }
