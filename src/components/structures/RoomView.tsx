@@ -1740,6 +1740,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         let activeCall = null;
         {
+            // New block because this variable doesn't need to hang around for the rest of the function
             const call = this.getCallForRoom();
             if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
                 activeCall = call;
