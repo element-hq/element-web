@@ -240,10 +240,14 @@ export default class AppTile extends React.Component {
             this.iframe.src = 'about:blank';
         }
 
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
+            dis.dispatch({action: 'hangup_conference'});
+        }
+
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this._persistKey);
 
-        this._sgWidget.stop();
+        this._sgWidget.stop({forceDestroy: true});
     }
 
     /* If user has permission to modify widgets, delete the widget,
@@ -387,6 +391,9 @@ export default class AppTile extends React.Component {
             if (this.props.show) {
                 // if we were being shown, end the widget as we're about to be minimized.
                 this._endWidgetActions();
+            } else {
+                // restart the widget actions
+                this._resetWidget(this.props);
             }
             dis.dispatch({
                 action: 'appsDrawer',
