@@ -77,13 +77,28 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
 
-// until we ts-ify the js-sdk voip code
-type Call = any;
+enum AudioID {
+    Ring = 'ringAudio',
+    Ringback = 'ringbackAudio',
+    CallEnd = 'callendAudio',
+    Busy = 'busyAudio',
+}
+
+// Unlike 'CallType' in js-sdk, this one includes screen sharing
+// (because a screen sharing call is only a screen sharing call to the caller,
+// to the callee it's just a video call, at least as far as the current impl
+// is concerned).
+export enum PlaceCallType {
+    Voice = 'voice',
+    Video = 'video',
+    ScreenSharing = 'screensharing',
+}
 
 export default class CallHandler {
-    private calls = new Map<string, Call>();
-    private audioPromises = new Map<string, Promise<void>>();
+    private calls = new Map<string, MatrixCall>();
+    private audioPromises = new Map<AudioID, Promise<void>>();
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -108,20 +123,20 @@ export default class CallHandler {
         }
     }
 
-    getCallForRoom(roomId: string): Call {
+    getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
     }
 
     getAnyActiveCall() {
         for (const call of this.calls.values()) {
-            if (call.state !== "ended") {
+            if (call.state !== CallState.Ended) {
                 return call;
             }
         }
         return null;
     }
 
-    play(audioId: string) {
+    play(audioId: AudioID) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -150,7 +165,7 @@ export default class CallHandler {
         }
     }
 
-    pause(audioId: string) {
+    pause(audioId: AudioID) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -164,8 +179,8 @@ export default class CallHandler {
         }
     }
 
-    private setCallListeners(call: Call) {
-        call.on("error", (err) => {
+    private setCallListeners(call: MatrixCall) {
+        call.on(CallEvent.Error, (err) => {
             console.error("Call error:", err);
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
@@ -180,74 +195,60 @@ export default class CallHandler {
                 description: err.message,
             });
         });
-        call.on("hangup", () => {
+        call.on(CallEvent.Hangup, () => {
             this.removeCallForRoom(call.roomId);
         });
-        // map web rtc states to dummy UI state
-        // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
-        call.on("state", (newState, oldState) => {
-            if (newState === "ringing") {
-                this.setCallState(call, call.roomId, "ringing");
-                this.pause("ringbackAudio");
-            } else if (newState === "invite_sent") {
-                this.setCallState(call, call.roomId, "ringback");
-                this.play("ringbackAudio");
-            } else if (newState === "ended" && oldState === "connected") {
-                this.removeCallForRoom(call.roomId);
-                this.pause("ringbackAudio");
-                this.play("callendAudio");
-            } else if (newState === "ended" && oldState === "invite_sent" &&
-                    (call.hangupParty === "remote" ||
-                    (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
+        call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
+            this.setCallState(call, newState);
+
+            switch (oldState) {
+                case CallState.Ringing:
+                    this.pause(AudioID.Ring);
+                    break;
+                case CallState.InviteSent:
+                    this.pause(AudioID.Ringback);
+                    break;
+            }
+
+            switch (newState) {
+                case CallState.Ringing:
+                    this.play(AudioID.Ring);
+                    break;
+                case CallState.InviteSent:
+                    this.play(AudioID.Ringback);
+                    break;
+                case CallState.Ended:
+                    this.removeCallForRoom(call.roomId);
+                    if (oldState === CallState.InviteSent && (
+                        call.hangupParty === CallParty.Remote ||
+                        (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
                     )) {
-                this.setCallState(call, call.roomId, "busy");
-                this.pause("ringbackAudio");
-                this.play("busyAudio");
-                Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
-                    title: _t('Call Timeout'),
-                    description: _t('The remote side failed to pick up') + '.',
-                });
-            } else if (oldState === "invite_sent") {
-                this.setCallState(call, call.roomId, "stop_ringback");
-                this.pause("ringbackAudio");
-            } else if (oldState === "ringing") {
-                this.setCallState(call, call.roomId, "stop_ringing");
-                this.pause("ringbackAudio");
-            } else if (newState === "connected") {
-                this.setCallState(call, call.roomId, "connected");
-                this.pause("ringbackAudio");
+                        this.play(AudioID.Busy);
+                        Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
+                            title: _t('Call Timeout'),
+                            description: _t('The remote side failed to pick up') + '.',
+                        });
+                    } else {
+                        this.play(AudioID.CallEnd);
+                    }
             }
         });
     }
 
-    private setCallState(call: Call, roomId: string, status: string) {
+    private setCallState(call: MatrixCall, status: CallState) {
         console.log(
-            `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
+            `Call state in ${call.roomId} changed to ${status}`,
         );
-        if (call) {
-            this.calls.set(roomId, call);
-        } else {
-            this.calls.delete(roomId);
-        }
 
-        if (status === "ringing") {
-            this.play("ringAudio");
-        } else if (call && call.call_state === "ringing") {
-            this.pause("ringAudio");
-        }
-
-        if (call) {
-            call.call_state = status;
-        }
         dis.dispatch({
             action: 'call_state',
-            room_id: roomId,
+            room_id: call.roomId,
             state: status,
         });
     }
 
     private removeCallForRoom(roomId: string) {
-        this.setCallState(null, roomId, null);
+        this.calls.delete(roomId);
     }
 
     private showICEFallbackPrompt() {
@@ -279,36 +280,39 @@ export default class CallHandler {
         }, null, true);
     }
 
-    private onAction = (payload: ActionPayload) => {
-        const placeCall = (newCall) => {
-            this.setCallListeners(newCall);
-            if (payload.type === 'voice') {
-                newCall.placeVoiceCall();
-            } else if (payload.type === 'video') {
-                newCall.placeVideoCall(
-                    payload.remote_element,
-                    payload.local_element,
-                );
-            } else if (payload.type === 'screensharing') {
-                const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
-                if (screenCapErrorString) {
-                    this.removeCallForRoom(newCall.roomId);
-                    console.log("Can't capture screen: " + screenCapErrorString);
-                    Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
-                        title: _t('Unable to capture screen'),
-                        description: screenCapErrorString,
-                    });
-                    return;
-                }
-                newCall.placeScreenSharingCall(
-                    payload.remote_element,
-                    payload.local_element,
-                );
-            } else {
-                console.error("Unknown conf call type: %s", payload.type);
-            }
-        }
 
+    private placeCall(
+        roomId: string, type: PlaceCallType,
+        localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
+    ) {
+        const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
+        this.calls.set(roomId, call);
+        this.setCallListeners(call);
+        if (type === PlaceCallType.Voice) {
+            call.placeVoiceCall();
+        } else if (type === 'video') {
+            call.placeVideoCall(
+                remoteElement,
+                localElement,
+            );
+        } else if (type === PlaceCallType.ScreenSharing) {
+            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
+            if (screenCapErrorString) {
+                this.removeCallForRoom(roomId);
+                console.log("Can't capture screen: " + screenCapErrorString);
+                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
+                    title: _t('Unable to capture screen'),
+                    description: screenCapErrorString,
+                });
+                return;
+            }
+            call.placeScreenSharingCall(remoteElement, localElement);
+        } else {
+            console.error("Unknown conf call type: %s", type);
+        }
+    }
+
+    private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
             case 'place_call':
                 {
@@ -343,8 +347,8 @@ export default class CallHandler {
                         return;
                     } else if (members.length === 2) {
                         console.info("Place %s call in %s", payload.type, payload.room_id);
-                        const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
-                        placeCall(call);
+
+                        this.placeCall(payload.room_id, payload.type, payload.local_element, payload.remote_element);
                     } else { // > 2
                         dis.dispatch({
                             action: "place_conference_call",
@@ -383,24 +387,23 @@ export default class CallHandler {
                         return;
                     }
 
-                    const call = payload.call;
+                    const call = payload.call as MatrixCall;
+                    this.calls.set(call.roomId, call)
                     this.setCallListeners(call);
-                    this.setCallState(call, call.roomId, "ringing");
                 }
                 break;
             case 'hangup':
                 if (!this.calls.get(payload.room_id)) {
                     return; // no call to hangup
                 }
-                this.calls.get(payload.room_id).hangup();
+                this.calls.get(payload.room_id).hangup(CallErrorCode.UserHangup, false)
                 this.removeCallForRoom(payload.room_id);
                 break;
             case 'answer':
-                if (!this.calls.get(payload.room_id)) {
+                if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer
                 }
                 this.calls.get(payload.room_id).answer();
-                this.setCallState(this.calls.get(payload.room_id), payload.room_id, "connected");
                 dis.dispatch({
                     action: "view_room",
                     room_id: payload.room_id,

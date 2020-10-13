@@ -25,6 +25,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import VideoView from "./VideoView";
 import RoomAvatar from "../avatars/RoomAvatar";
 import PulsedAvatar from '../avatars/PulsedAvatar';
+import { CallState, MatrixCall } from 'matrix-js-sdk/lib/webrtc/call';
 
 interface IProps {
         // js-sdk room object. If set, we will only show calls for the given
@@ -87,7 +88,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private showCall() {
-        let call;
+        let call: MatrixCall;
 
         if (this.props.room) {
             const roomId = this.props.room.roomId;
@@ -120,7 +121,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 call.setRemoteAudioElement(this.getVideoView().getRemoteAudioElement());
             }
         }
-        if (call && call.type === "video" && call.call_state !== "ended" && call.call_state !== "ringing") {
+        if (call && call.type === "video" && call.state !== CallState.Ended && call.state !== CallState.Ringing) {
             this.getVideoView().getLocalVideoElement().style.display = "block";
             this.getVideoView().getRemoteVideoElement().style.display = "block";
         } else {

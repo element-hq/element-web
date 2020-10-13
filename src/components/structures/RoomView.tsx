@@ -71,6 +71,7 @@ import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 
@@ -143,7 +144,7 @@ export interface IState {
     }>;
     searchHighlights?: string[];
     searchInProgress?: boolean;
-    callState?: string;
+    callState?: CallState;
     guestsCanJoin: boolean;
     canPeek: boolean;
     showApps: boolean;
@@ -496,7 +497,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     componentDidMount() {
         const call = this.getCallForRoom();
-        const callState = call ? call.call_state : "ended";
+        const callState = call ? call.state : null;
         this.setState({
             callState: callState,
         });
@@ -730,14 +731,9 @@ export default class RoomView extends React.Component<IProps, IState> {
                 }
 
                 const call = this.getCallForRoom();
-                let callState = "ended";
-
-                if (call) {
-                    callState = call.call_state;
-                }
 
                 this.setState({
-                    callState: callState,
+                    callState: call ? call.state : null,
                 });
                 break;
             }
@@ -1631,7 +1627,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     /**
      * get any current call for this room
      */
-    private getCallForRoom() {
+    private getCallForRoom(): MatrixCall {
         if (!this.state.room) {
             return null;
         }
@@ -1768,10 +1764,13 @@ export default class RoomView extends React.Component<IProps, IState> {
         // We have successfully loaded this room, and are not previewing.
         // Display the "normal" room view.
 
-        const call = this.getCallForRoom();
-        let inCall = false;
-        if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
-            inCall = true;
+        let activeCall = null;
+        {
+            // New block because this variable doesn't need to hang around for the rest of the function
+            const call = this.getCallForRoom();
+            if (call && (this.state.callState !== 'ended' && this.state.callState !== 'ringing')) {
+                activeCall = call;
+            }
         }
 
         const scrollheaderClasses = classNames({
@@ -1790,7 +1789,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             statusBar = <RoomStatusBar
                 room={this.state.room}
                 sentMessageAndIsAlone={this.state.isAlone}
-                hasActiveCall={inCall}
+                callState={this.state.callState}
+                callType={activeCall ? activeCall.type : null}
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
@@ -1915,10 +1915,10 @@ export default class RoomView extends React.Component<IProps, IState> {
             };
         }
 
-        if (inCall) {
+        if (activeCall) {
             let zoomButton; let videoMuteButton;
 
-            if (call.type === "video") {
+            if (activeCall.type === CallType.Video) {
                 zoomButton = (
                     <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title={_t("Fill screen")}>
                         <TintableSvg
@@ -1933,10 +1933,11 @@ export default class RoomView extends React.Component<IProps, IState> {
                 videoMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
                         <TintableSvg
-                            src={call.isLocalVideoMuted() ?
+                            src={activeCall.isLocalVideoMuted() ?
                                 require("../../../res/img/element-icons/call/video-muted.svg") :
                                 require("../../../res/img/element-icons/call/video-call.svg")}
-                            alt={call.isLocalVideoMuted() ? _t("Click to unmute video") : _t("Click to mute video")}
+                            alt={activeCall.isLocalVideoMuted() ? _t("Click to unmute video") :
+                                _t("Click to mute video")}
                             width=""
                             height="27"
                         />
@@ -1945,10 +1946,10 @@ export default class RoomView extends React.Component<IProps, IState> {
             const voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
                     <TintableSvg
-                        src={call.isMicrophoneMuted() ?
+                        src={activeCall.isMicrophoneMuted() ?
                             require("../../../res/img/element-icons/call/voice-muted.svg") :
                             require("../../../res/img/element-icons/call/voice-unmuted.svg")}
-                        alt={call.isMicrophoneMuted() ? _t("Click to unmute audio") : _t("Click to mute audio")}
+                        alt={activeCall.isMicrophoneMuted() ? _t("Click to unmute audio") : _t("Click to mute audio")}
                         width="21"
                         height="26"
                     />
@@ -2066,7 +2067,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
 
         const mainClasses = classNames("mx_RoomView", {
-            mx_RoomView_inCall: inCall,
+            mx_RoomView_inCall: Boolean(activeCall),
         });
 
         return (
