@@ -105,10 +105,13 @@ export default abstract class BaseEventIndexManager {
     /**
      * Initialize the event index for the given user.
      *
+     * @param {string} user_id The event that should be added to the index.
+     * @param {string} device_id The profile of the event sender at the
+     *
      * @return {Promise} A promise that will resolve when the event index is
      * initialized.
      */
-    async initEventIndex(): Promise<void> {
+    async initEventIndex(user_id: string, device_id: string): Promise<void> {
         throw new Error("Unimplemented");
     }
 
