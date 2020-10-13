@@ -123,7 +123,9 @@ export default class RoomStatusBar extends React.Component {
     };
 
     _showCallBar() {
-        return this.props.callState !== CallState.Ended && this.props.callState !== CallState.Ringing;
+        return (this.props.callState &&
+            (this.props.callState !== CallState.Ended && this.props.callState !== CallState.Ringing)
+        );
     }
 
     _onResendAllClick = () => {
