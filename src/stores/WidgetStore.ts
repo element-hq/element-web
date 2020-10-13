@@ -48,6 +48,10 @@ interface IRoomWidgets {
 
 export const MAX_PINNED = 3;
 
+// TODO change order to be order that they were pinned
+// TODO HARD cap at 3, truncating if needed
+// TODO call finish more proactively to lock things in
+
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
 export default class WidgetStore extends AsyncStoreWithClient<IState> {

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Resizable} from "re-resizable";
@@ -31,6 +31,9 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import WidgetStore from "../../../stores/WidgetStore";
+import ResizeHandle from "../elements/ResizeHandle";
+import Resizer from "../../../resizer/resizer";
+import PercentageDistributor from "../../../resizer/distributors/percentage";
 
 export default class AppsDrawer extends React.Component {
     static propTypes = {
@@ -50,6 +53,9 @@ export default class AppsDrawer extends React.Component {
         this.state = {
             apps: this._getApps(),
         };
+
+        this._resizeContainer = null;
+        this.resizer = this._createResizer();
     }
 
     componentDidMount() {
@@ -62,6 +68,9 @@ export default class AppsDrawer extends React.Component {
         ScalarMessaging.stopListening();
         WidgetStore.instance.off(this.props.room.roomId, this._updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        if (this._resizeContainer) {
+            this.resizer.detach();
+        }
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -70,6 +79,70 @@ export default class AppsDrawer extends React.Component {
         // Room has changed probably, update apps
         this._updateApps();
     }
+
+    _createResizer() {
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse",
+        };
+        const collapseConfig = {
+            onResizeStart: () => {
+                this._resizeContainer.classList.add("mx_AppsDrawer_resizing");
+            },
+            onResizeStop: () => {
+                this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
+                // persist to localStorage
+                localStorage.setItem(this._getStorageKey(), JSON.stringify([
+                    this._getIdString(),
+                    ...this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
+                ]));
+            },
+        };
+        // pass a truthy container for now, we won't call attach until we update it
+        const resizer = new Resizer({}, PercentageDistributor, collapseConfig);
+        resizer.setClassNames(classNames);
+        return resizer;
+    }
+
+    _collectResizer = (ref) => {
+        console.log("@@ _collectResizer");
+        if (this._resizeContainer) {
+            this.resizer.detach();
+        }
+
+        if (ref) {
+            this.resizer.container = ref;
+            this.resizer.attach();
+        }
+        this._resizeContainer = ref;
+        this._loadResizerPreferences();
+    };
+
+    _getStorageKey = () => `mx_apps_drawer-${this.props.room.roomId}`;
+
+    _getIdString = () => this.state.apps.map(app => app.id).join("~");
+
+    _loadResizerPreferences = () => { // TODO call this when changing pinned apps
+        console.log("@@ _loadResizerPreferences");
+        try {
+            const [idString, ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
+            // format: [idString: string, ...percentages: string];
+            if (this._getIdString() !== idString) return;
+            sizes.forEach((size, i) => {
+                const distributor = this.resizer.forHandleAt(i);
+                distributor.size = size;
+                distributor.finish();
+            });
+        } catch (e) {
+            console.error(e);
+            this.state.apps.slice(1).forEach((_, i) => {
+                const distributor = this.resizer.forHandleAt(i);
+                distributor.item.clearSize();
+                distributor.finish();
+            });
+        }
+    };
 
     onAction = (action) => {
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
@@ -94,7 +167,7 @@ export default class AppsDrawer extends React.Component {
     _updateApps = () => {
         this.setState({
             apps: this._getApps(),
-        });
+        }, this._loadResizerPreferences);
     };
 
     _launchManageIntegrations() {
@@ -147,6 +220,9 @@ export default class AppsDrawer extends React.Component {
             mx_AppsDrawer: true,
             mx_AppsDrawer_fullWidth: apps.length < 2,
             mx_AppsDrawer_resizing: this.state.resizing,
+            mx_AppsDrawer_has1: apps.length === 1,
+            mx_AppsDrawer_has2: apps.length === 2,
+            mx_AppsDrawer_has3: apps.length === 3,
         });
 
         return (
@@ -156,13 +232,21 @@ export default class AppsDrawer extends React.Component {
                     minHeight={100}
                     maxHeight={this.props.maxHeight ? this.props.maxHeight - 50 : undefined}
                     handleClass="mx_AppsContainer_resizerHandle"
-                    className="mx_AppsContainer"
+                    className="mx_AppsContainer_resizer"
                     resizeNotifier={this.props.resizeNotifier}
                     setResizing={this.setResizing}
                 >
-                    { apps }
-                    { spinner }
+                    <div className="mx_AppsContainer" ref={this._collectResizer}>
+                        { apps.map((app, i) => {
+                            if (i < 1) return app;
+                            return <React.Fragment key={app.key}>
+                                <ResizeHandle reverse={i > apps.length / 2} />
+                                { app }
+                            </React.Fragment>;
+                        }) }
+                    </div>
                 </PersistentVResizer>
+                { spinner }
             </div>
         );
     }

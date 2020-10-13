@@ -50,8 +50,8 @@ $MiniAppTileHeight: 200px;
     }
 }
 
-.mx_AppsDrawer_hidden {
-    display: none;
+.mx_AppsContainer_resizer {
+    margin-bottom: 8px;
 }
 
 .mx_AppsContainer {
@@ -60,7 +60,9 @@ $MiniAppTileHeight: 200px;
     align-items: stretch;
     justify-content: center;
     height: 100%;
-    margin-bottom: 8px;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
 
     .mx_AppTile:first-of-type {
         border-left-width: 8px;
@@ -70,25 +72,52 @@ $MiniAppTileHeight: 200px;
         border-right-width: 8px;
         border-radius: 0 10px 10px 0;
     }
+
+    .mx_ResizeHandle_horizontal {
+        position: relative;
+
+        > div {
+            width: 0;
+        }
+
+        &:hover::before {
+            position: absolute;
+            left: 3px;
+            top: 50%;
+            transform: translate(0, -50%);
+
+            height: 64px; // to match width of the ones on roomlist
+            width: 4px;
+            border-radius: 4px;
+
+            content: ' ';
+
+            background-color: $primary-fg-color;
+            opacity: 0.8;
+        }
+    }
 }
 
-.mx_AppsDrawer_minimised .mx_AppsContainer {
-    // override the re-resizable inline styles
-    height: inherit !important;
-    min-height: inherit !important;
-}
+.mx_AppsDrawer_has2 .mx_AppTile {
+    width: 50%;
 
-.mx_AddWidget_button {
-    order: 2;
-    cursor: pointer;
-    padding: 0;
-    margin: -3px auto 5px 0;
-    color: $accent-color;
-    font-size: $font-12px;
+    &:nth-child(3) {
+        flex-grow: 1;
+        width: 0;
+    }
+}
+.mx_AppsDrawer_has3 .mx_AppTile {
+    width: 33%;
+
+    &:nth-child(3) {
+        flex-grow: 1;
+        width: 0;
+    }
 }
 
 .mx_AppTile {
     width: 50%;
+    min-width: 200px;
     border: 8px solid $widget-menu-bar-bg-color;
     border-left-width: 5px;
     border-right-width: 5px;
@@ -102,7 +131,7 @@ $MiniAppTileHeight: 200px;
 }
 
 .mx_AppTileFullWidth {
-    width: 100%;
+    width: 100% !important; // to override the inline style set by the resizer
     margin: 0;
     padding: 0;
     border: 5px solid $widget-menu-bar-bg-color;
