@@ -19,14 +19,14 @@ import Sizer from "./sizer";
 import Resizer, {IConfig} from "./resizer";
 
 export default class ResizeItem<C extends IConfig = IConfig> {
-    protected readonly domNode: HTMLElement;
+    public readonly domNode: HTMLElement;
     protected readonly id: string;
     protected reverse: boolean;
 
     constructor(
         handle: HTMLElement,
         public readonly resizer: Resizer<C>,
-        protected readonly sizer: Sizer,
+        public readonly sizer: Sizer,
     ) {
         const id = handle.getAttribute("data-id");
         const reverse = resizer.isReverseResizeHandle(handle);
@@ -89,8 +89,16 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         this.sizer.finish(this.domNode);
     }
 
-    public setSize(size: number) {
+    public getSize() {
+        return this.sizer.getDesiredItemSize(this.domNode);
+    }
+
+    public setRawSize(size: string) {
         this.sizer.setItemSize(this.domNode, size);
+    }
+
+    public setSize(size: number) {
+        this.setRawSize(`${Math.round(size)}px`);
         const callback = this.resizer.config.onResized;
         if (callback) {
             callback(size, this.id, this.domNode);

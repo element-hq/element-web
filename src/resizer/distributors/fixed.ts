@@ -39,8 +39,16 @@ export default class FixedDistributor<C extends IConfig, I extends ResizeItem<an
 
     private readonly beforeOffset: number;
 
-    constructor(protected item: I) {
+    constructor(public readonly item: I) {
         this.beforeOffset = item.offset();
+    }
+
+    public get size() {
+        return this.item.getSize();
+    }
+
+    public set size(size: string) {
+        this.item.setRawSize(size);
     }
 
     public resize(size: number) {

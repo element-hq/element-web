@@ -50,7 +50,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     // TODO move vertical/horizontal to config option/container class
     // as it doesn't make sense to mix them within one container/Resizer
     constructor(
-        private readonly container: HTMLElement,
+        public container: HTMLElement,
         private readonly distributorCtor: {
             new(item: ResizeItem): FixedDistributor<C, any>;
             createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem;
@@ -145,10 +145,10 @@ export default class Resizer<C extends IConfig = IConfig> {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
             }
+            distributor.finish();
             if (this.config.onResizeStop) {
                 this.config.onResizeStop();
             }
-            distributor.finish();
             body.removeEventListener("mouseup", finishResize, false);
             document.removeEventListener("mouseleave", finishResize, false);
             body.removeEventListener("mousemove", onMouseMove, false);

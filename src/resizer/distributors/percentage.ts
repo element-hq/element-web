@@ -29,6 +29,7 @@ class PercentageSizer extends Sizer {
 
     public finish(item: HTMLElement) {
         const parent = item.offsetParent as HTMLElement;
+        if (!parent) return;
         if (this.vertical) {
             const p = ((item.offsetHeight / parent.offsetHeight) * 100).toFixed(2) + "%";
             item.style.minHeight = p;

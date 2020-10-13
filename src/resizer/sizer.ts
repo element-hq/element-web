@@ -68,11 +68,19 @@ export default class Sizer {
         return offset;
     }
 
-    public setItemSize(item: HTMLElement, size: number) {
+    public getDesiredItemSize(item: HTMLElement) {
         if (this.vertical) {
-            item.style.height = `${Math.round(size)}px`;
+            return item.style.height;
         } else {
-            item.style.width = `${Math.round(size)}px`;
+            return item.style.width;
+        }
+    }
+
+    public setItemSize(item: HTMLElement, size: string) {
+        if (this.vertical) {
+            item.style.height = size;
+        } else {
+            item.style.width = size;
         }
     }
 
