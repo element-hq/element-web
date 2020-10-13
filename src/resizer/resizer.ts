@@ -27,6 +27,8 @@ classNames:
     resizing: string
 */
 
+import {throttle} from "lodash";
+
 import FixedDistributor from "./distributors/fixed";
 import Sizer from "./sizer";
 import ResizeItem from "./item";
@@ -76,10 +78,12 @@ export default class Resizer<C extends IConfig = IConfig> {
 
     public attach() {
         this.container.addEventListener("mousedown", this.onMouseDown, false);
+        window.addEventListener("resize", this.onResize);
     }
 
     public detach() {
         this.container.removeEventListener("mousedown", this.onMouseDown, false);
+        window.removeEventListener("resize", this.onResize);
     }
 
     /**
@@ -157,6 +161,17 @@ export default class Resizer<C extends IConfig = IConfig> {
         document.addEventListener("mouseleave", finishResize, false);
         body.addEventListener("mousemove", onMouseMove, false);
     };
+
+    private onResize = throttle(() => {
+        const distributors = this.getResizeHandles().map(handle => {
+            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
+            return distributor;
+        });
+
+        // relax all items if they had any overconstrained flexboxes
+        distributors.forEach(d => d.start());
+        distributors.forEach(d => d.finish());
+    }, 100, {trailing: true, leading: true});
 
     private createSizerAndDistributor(
         resizeHandle: HTMLDivElement,

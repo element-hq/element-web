@@ -124,10 +124,6 @@ $MiniAppTileHeight: 200px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-
-    & + .mx_AppTile {
-
-    }
 }
 
 .mx_AppTileFullWidth {
