@@ -74,6 +74,16 @@ class ElementWidget extends Widget {
         return super.templateUrl;
     }
 
+    public get popoutTemplateUrl(): string {
+        if (WidgetType.JITSI.matches(this.type)) {
+            return WidgetUtils.getLocalJitsiWrapperUrl({
+                forLocalRender: false, // The only important difference between this and templateUrl()
+                auth: super.rawData?.auth,
+            });
+        }
+        return this.templateUrl; // use this instead of super to ensure we get appropriate templating
+    }
+
     public get rawData(): IWidgetData {
         let conferenceId = super.rawData['conferenceId'];
         if (conferenceId === undefined) {
@@ -94,8 +104,8 @@ class ElementWidget extends Widget {
         };
     }
 
-    public getCompleteUrl(params: ITemplateParams): string {
-        return runTemplate(this.templateUrl, {
+    public getCompleteUrl(params: ITemplateParams, asPopout=false): string {
+        return runTemplate(asPopout ? this.popoutTemplateUrl : this.templateUrl, {
             // we need to supply a whole widget to the template, but don't have
             // easy access to the definition the superclass is using, so be sad
             // and gutwrench it.
@@ -109,7 +119,7 @@ class ElementWidget extends Widget {
 
 export class StopGapWidget extends EventEmitter {
     private messaging: ClientWidgetApi;
-    private mockWidget: Widget;
+    private mockWidget: ElementWidget;
     private scalarToken: string;
 
     constructor(private appTileProps: IAppTileProps) {
@@ -133,12 +143,23 @@ export class StopGapWidget extends EventEmitter {
      * The URL to use in the iframe
      */
     public get embedUrl(): string {
+        return this.runUrlTemplate({asPopout: false});
+    }
+
+    /**
+     * The URL to use in the popout
+     */
+    public get popoutUrl(): string {
+        return this.runUrlTemplate({asPopout: true});
+    }
+
+    private runUrlTemplate(opts = {asPopout: false}): string {
         const templated = this.mockWidget.getCompleteUrl({
             currentRoomId: RoomViewStore.getRoomId(),
             currentUserId: MatrixClientPeg.get().getUserId(),
             userDisplayName: OwnProfileStore.instance.displayName,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
-        });
+        }, opts?.asPopout);
 
         // Add in some legacy support sprinkles
         // TODO: Replace these with proper widget params
@@ -156,19 +177,6 @@ export class StopGapWidget extends EventEmitter {
         // Replace the encoded dollar signs back to dollar signs. They have no special meaning
         // in HTTP, but URL parsers encode them anyways.
         return parsed.toString().replace(/%24/g, '$');
-    }
-
-    /**
-     * The URL to use in the popout
-     */
-    public get popoutUrl(): string {
-        if (WidgetType.JITSI.matches(this.mockWidget.type)) {
-            return WidgetUtils.getLocalJitsiWrapperUrl({
-                forLocalRender: false,
-                auth: this.mockWidget.rawData?.auth,
-            });
-        }
-        return this.embedUrl;
     }
 
     public get isManagedByManager(): boolean {
@@ -275,8 +283,8 @@ export class StopGapWidget extends EventEmitter {
         }
     }
 
-    public stop() {
-        if (ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
+    public stop(opts = {forceDestroy: false}) {
+        if (!opts?.forceDestroy && ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
             console.log("Skipping destroy - persistent widget");
             return;
         }
