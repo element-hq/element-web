@@ -153,7 +153,7 @@ export class StopGapWidget extends EventEmitter {
         return this.runUrlTemplate({asPopout: true});
     }
 
-    private runUrlTemplate(opts: {asPopout: boolean} = {asPopout: false}): string {
+    private runUrlTemplate(opts = {asPopout: false}): string {
         const templated = this.mockWidget.getCompleteUrl({
             currentRoomId: RoomViewStore.getRoomId(),
             currentUserId: MatrixClientPeg.get().getUserId(),
