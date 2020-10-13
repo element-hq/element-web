@@ -344,7 +344,7 @@ export class Analytics {
         this.visitVariables[customVariables[key].id] = [key, value];
     }
 
-    setLoggedIn(isGuest, homeserverUrl, identityServerUrl) {
+    public setLoggedIn(isGuest: boolean, homeserverUrl: string) {
         if (this.disabled) return;
 
         const config = SdkConfig.get();
@@ -356,12 +356,12 @@ export class Analytics {
         this.setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
     }
 
-    setBreadcrumbs(state) {
+    public setBreadcrumbs(state: boolean) {
         if (this.disabled) return;
         this.setVisitVariable('Breadcrumbs', state ? 'enabled' : 'disabled');
     }
 
-    showDetailsModal = () => {
+    public showDetailsModal = () => {
         let rows = [];
         if (!this.disabled) {
             rows = Object.values(this.visitVariables);
