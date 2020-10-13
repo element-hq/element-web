@@ -31,7 +31,9 @@ const WidgetAvatar: React.FC<IProps> = ({ app, className, width = 20, height = 2
 
     let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg")];
     // heuristics for some better icons until Widgets support their own icons
-    if (app.type.includes("meeting") || app.type.includes("calendar")) {
+    if (app.type.includes("jitsi")) {
+        iconUrls = [require("../../../../res/img/element-icons/room/default_video.svg")];
+    } else if (app.type.includes("meeting") || app.type.includes("calendar")) {
         iconUrls = [require("../../../../res/img/element-icons/room/default_cal.svg")];
     } else if (app.type.includes("pad") || app.type.includes("doc") || app.type.includes("calc")) {
         iconUrls = [require("../../../../res/img/element-icons/room/default_doc.svg")];

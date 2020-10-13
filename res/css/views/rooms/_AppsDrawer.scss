@@ -47,6 +47,22 @@ $MiniAppTileHeight: 200px;
             opacity: 0.8;
             background: $primary-fg-color;
         }
+
+        .mx_ResizeHandle_horizontal::before {
+            position: absolute;
+            left: 3px;
+            top: 50%;
+            transform: translate(0, -50%);
+
+            height: 64px; // to match width of the ones on roomlist
+            width: 4px;
+            border-radius: 4px;
+
+            content: ' ';
+
+            background-color: $primary-fg-color;
+            opacity: 0.8;
+        }
     }
 }
 
@@ -78,22 +94,6 @@ $MiniAppTileHeight: 200px;
 
         > div {
             width: 0;
-        }
-
-        &:hover::before {
-            position: absolute;
-            left: 3px;
-            top: 50%;
-            transform: translate(0, -50%);
-
-            height: 64px; // to match width of the ones on roomlist
-            width: 4px;
-            border-radius: 4px;
-
-            content: ' ';
-
-            background-color: $primary-fg-color;
-            opacity: 0.8;
         }
     }
 }
