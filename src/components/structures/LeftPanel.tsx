@@ -60,7 +60,7 @@ const cssClasses = [
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
-    private GroupFilterPanelWatcherRef: string;
+    private groupFilterPanelWatcherRef: string;
     private bgImageWatcherRef: string;
     private focusedElement = null;
     private isDoingStickyHeaders = false;
@@ -70,7 +70,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         this.state = {
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
-            showGroupFilterPanel: SettingsStore.getValue('GroupFilterPanel.enableGroupFilterPanel'),
+            showGroupFilterPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
@@ -78,9 +78,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onBackgroundImageUpdate);
         this.bgImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage", null, this.onBackgroundImageUpdate);
-        this.GroupFilterPanelWatcherRef = SettingsStore.watchSetting("GroupFilterPanel.enableGroupFilterPanel", null, 
-        () => {
-            this.setState({showGroupFilterPanel: SettingsStore.getValue("GroupFilterPanel.enableGroupFilterPanel")});
+        this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
+            this.setState({showTagPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
 
         // We watch the middle panel because we don't actually get resized, the middle panel does.
@@ -89,7 +88,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        SettingsStore.unwatchSetting(this.GroupFilterPanelWatcherRef);
+        SettingsStore.unwatchSetting(this.groupFilterPanelWatcherRef);
         SettingsStore.unwatchSetting(this.bgImageWatcherRef);
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
@@ -395,7 +394,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         const containerClasses = classNames({
             "mx_LeftPanel": true,
-            "mx_LeftPanel_hasGroupFilterPanel": !!GroupFilterPanel,
+            "mx_LeftPanel_hasGroupFilterPanel": !!groupFilterPanel,
             "mx_LeftPanel_minimized": this.props.isMinimized,
         });
 
@@ -406,7 +405,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses}>
-                {GroupFilterPanel}
+                {groupFilterPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
