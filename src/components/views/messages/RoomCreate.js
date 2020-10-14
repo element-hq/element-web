@@ -45,7 +45,7 @@ export default class RoomCreate extends React.Component {
     render() {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
         if (predecessor === undefined) {
-            return <div />; // We should never have been instaniated in this case
+            return <div />; // We should never have been instantiated in this case
         }
         const prevRoom = MatrixClientPeg.get().getRoom(predecessor['room_id']);
         const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
