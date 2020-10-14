@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {Room} from "matrix-js-sdk/src/models/room";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import { _t } from './languageHandler';
 
-export function usersTypingApartFromMeAndIgnored(room) {
-    return usersTyping(
-        room, [MatrixClientPeg.get().credentials.userId].concat(MatrixClientPeg.get().getIgnoredUsers()),
-    );
+export function usersTypingApartFromMeAndIgnored(room: Room): RoomMember[] {
+    return usersTyping(room, [MatrixClientPeg.get().getUserId()].concat(MatrixClientPeg.get().getIgnoredUsers()));
 }
 
-export function usersTypingApartFromMe(room) {
-    return usersTyping(
-        room, [MatrixClientPeg.get().credentials.userId],
-    );
+export function usersTypingApartFromMe(room: Room): RoomMember[] {
+    return usersTyping(room, [MatrixClientPeg.get().getUserId()]);
 }
 
 /**
@@ -34,14 +33,10 @@ export function usersTypingApartFromMe(room) {
  * to exclude, return a list of user objects who are typing.
  * @param {Room} room: room object to get users from.
  * @param {string[]} exclude: list of user mxids to exclude.
- * @returns {string[]} list of user objects who are typing.
+ * @returns {RoomMember[]} list of user objects who are typing.
  */
-export function usersTyping(room, exclude) {
+export function usersTyping(room: Room, exclude: string[] = []): RoomMember[] {
     const whoIsTyping = [];
-
-    if (exclude === undefined) {
-        exclude = [];
-    }
 
     const memberKeys = Object.keys(room.currentState.members);
     for (let i = 0; i < memberKeys.length; ++i) {
@@ -57,20 +52,21 @@ export function usersTyping(room, exclude) {
     return whoIsTyping;
 }
 
-export function whoIsTypingString(whoIsTyping, limit) {
+export function whoIsTypingString(whoIsTyping: RoomMember[], limit: number): string {
     let othersCount = 0;
     if (whoIsTyping.length > limit) {
         othersCount = whoIsTyping.length - limit + 1;
     }
+
     if (whoIsTyping.length === 0) {
         return '';
     } else if (whoIsTyping.length === 1) {
         return _t('%(displayName)s is typing …', {displayName: whoIsTyping[0].name});
     }
-    const names = whoIsTyping.map(function(m) {
-        return m.name;
-    });
-    if (othersCount>=1) {
+
+    const names = whoIsTyping.map(m => m.name);
+
+    if (othersCount >= 1) {
         return _t('%(names)s and %(count)s others are typing …', {
             names: names.slice(0, limit - 1).join(', '),
             count: othersCount,

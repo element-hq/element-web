@@ -14,14 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import {User} from "matrix-js-sdk/src/models/user";
+import {Room} from "matrix-js-sdk/src/models/room";
+
 import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+
+export type ResizeMethod = "crop" | "scale";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
-export function avatarUrlForMember(member, width, height, resizeMethod) {
-    let url;
+export function avatarUrlForMember(member: RoomMember, width: number, height: number, resizeMethod: ResizeMethod) {
+    let url: string;
     if (member && member.getAvatarUrl) {
         url = member.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
@@ -41,7 +46,7 @@ export function avatarUrlForMember(member, width, height, resizeMethod) {
     return url;
 }
 
-export function avatarUrlForUser(user, width, height, resizeMethod) {
+export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
     const url = getHttpUriForMxc(
         MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
         Math.floor(width * window.devicePixelRatio),
@@ -54,14 +59,14 @@ export function avatarUrlForUser(user, width, height, resizeMethod) {
     return url;
 }
 
-function isValidHexColor(color) {
+function isValidHexColor(color: string): boolean {
     return typeof color === "string" &&
-        (color.length === 7 || color.lengh === 9) &&
+        (color.length === 7 || color.length === 9) &&
         color.charAt(0) === "#" &&
         !color.substr(1).split("").some(c => isNaN(parseInt(c, 16)));
 }
 
-function urlForColor(color) {
+function urlForColor(color: string): string {
     const size = 40;
     const canvas = document.createElement("canvas");
     canvas.width = size;
@@ -79,9 +84,9 @@ function urlForColor(color) {
 // XXX: Ideally we'd clear this cache when the theme changes
 // but since this function is at global scope, it's a bit
 // hard to install a listener here, even if there were a clear event to listen to
-const colorToDataURLCache = new Map();
+const colorToDataURLCache = new Map<string, string>();
 
-export function defaultAvatarUrlForString(s) {
+export function defaultAvatarUrlForString(s: string): string {
     if (!s) return ""; // XXX: should never happen but empirically does by evidence of a rageshake
     const defaultColors = ['#0DBD8B', '#368bd6', '#ac3ba8'];
     let total = 0;
@@ -113,7 +118,7 @@ export function defaultAvatarUrlForString(s) {
  * @param {string} name
  * @return {string} the first letter
  */
-export function getInitialLetter(name) {
+export function getInitialLetter(name: string): string {
     if (!name) {
         // XXX: We should find out what causes the name to sometimes be falsy.
         console.trace("`name` argument to `getInitialLetter` not supplied");
@@ -146,7 +151,7 @@ export function getInitialLetter(name) {
     return firstChar.toUpperCase();
 }
 
-export function avatarUrlForRoom(room, width, height, resizeMethod) {
+export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod?: ResizeMethod) {
     if (!room) return null; // null-guard
 
     const explicitRoomAvatar = room.getAvatarUrl(

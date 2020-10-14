@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import * as ModernizrStatic from "modernizr";
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
@@ -31,6 +32,8 @@ import type {Renderer} from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
+import {Analytics} from "../Analytics";
+import UserActivity from "../UserActivity";
 
 declare global {
     interface Window {
@@ -55,6 +58,8 @@ declare global {
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxCallHandler: CallHandler;
+        mxAnalytics: Analytics;
+        mxUserActivity: UserActivity;
     }
 
     interface Document {
