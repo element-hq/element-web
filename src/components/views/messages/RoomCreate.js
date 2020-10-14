@@ -22,7 +22,6 @@ import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import ViewSourceEvent from "./ViewSourceEvent";
 
 export default class RoomCreate extends React.Component {
     static propTypes = {
@@ -46,8 +45,7 @@ export default class RoomCreate extends React.Component {
     render() {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
         if (predecessor === undefined) {
-            // We would never have been instantiated in this case except if user has showHiddenEventsInTimeline enabled
-            return <ViewSourceEvent mxEvent={this.props.mxEvent} />;
+            return <div />; // We should never have been instantiated in this case
         }
         const prevRoom = MatrixClientPeg.get().getRoom(predecessor['room_id']);
         const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
