@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,13 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+const EMAIL_ADDRESS_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-export default function(dest, src) {
-    for (const i in src) {
-        if (src.hasOwnProperty(i)) {
-            dest[i] = src[i];
-        }
-    }
-    return dest;
+export function looksValid(email: string): boolean {
+    return EMAIL_ADDRESS_REGEX.test(email);
 }

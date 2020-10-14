@@ -38,26 +38,23 @@ const RECENTLY_ACTIVE_THRESHOLD_MS = 2 * 60 * 1000;
  * see doc on the userActive* functions for what these mean.
  */
 export default class UserActivity {
-    constructor(windowObj, documentObj) {
-        this._window = windowObj;
-        this._document = documentObj;
+    private readonly activeNowTimeout: Timer;
+    private readonly activeRecentlyTimeout: Timer;
+    private attachedActiveNowTimers: Timer[] = [];
+    private attachedActiveRecentlyTimers: Timer[] = [];
+    private lastScreenX = 0;
+    private lastScreenY = 0;
 
-        this._attachedActiveNowTimers = [];
-        this._attachedActiveRecentlyTimers = [];
-        this._activeNowTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
-        this._activeRecentlyTimeout = new Timer(RECENTLY_ACTIVE_THRESHOLD_MS);
-        this._onUserActivity = this._onUserActivity.bind(this);
-        this._onWindowBlurred = this._onWindowBlurred.bind(this);
-        this._onPageVisibilityChanged = this._onPageVisibilityChanged.bind(this);
-        this.lastScreenX = 0;
-        this.lastScreenY = 0;
+    constructor(private readonly window: Window, private readonly document: Document) {
+        this.activeNowTimeout = new Timer(CURRENTLY_ACTIVE_THRESHOLD_MS);
+        this.activeRecentlyTimeout = new Timer(RECENTLY_ACTIVE_THRESHOLD_MS);
     }
 
     static sharedInstance() {
-        if (global.mxUserActivity === undefined) {
-            global.mxUserActivity = new UserActivity(window, document);
+        if (window.mxUserActivity === undefined) {
+            window.mxUserActivity = new UserActivity(window, document);
         }
-        return global.mxUserActivity;
+        return window.mxUserActivity;
     }
 
     /**
@@ -69,8 +66,8 @@ export default class UserActivity {
      * later on when the user does become active.
      * @param {Timer} timer the timer to use
      */
-    timeWhileActiveNow(timer) {
-        this._timeWhile(timer, this._attachedActiveNowTimers);
+    public timeWhileActiveNow(timer: Timer) {
+        this.timeWhile(timer, this.attachedActiveNowTimers);
         if (this.userActiveNow()) {
             timer.start();
         }
@@ -85,14 +82,14 @@ export default class UserActivity {
      * later on when the user does become active.
      * @param {Timer} timer the timer to use
      */
-    timeWhileActiveRecently(timer) {
-        this._timeWhile(timer, this._attachedActiveRecentlyTimers);
+    public timeWhileActiveRecently(timer: Timer) {
+        this.timeWhile(timer, this.attachedActiveRecentlyTimers);
         if (this.userActiveRecently()) {
             timer.start();
         }
     }
 
-    _timeWhile(timer, attachedTimers) {
+    private timeWhile(timer: Timer, attachedTimers: Timer[]) {
         // important this happens first
         const index = attachedTimers.indexOf(timer);
         if (index === -1) {
@@ -112,36 +109,36 @@ export default class UserActivity {
     /**
      * Start listening to user activity
      */
-    start() {
-        this._document.addEventListener('mousedown', this._onUserActivity);
-        this._document.addEventListener('mousemove', this._onUserActivity);
-        this._document.addEventListener('keydown', this._onUserActivity);
-        this._document.addEventListener("visibilitychange", this._onPageVisibilityChanged);
-        this._window.addEventListener("blur", this._onWindowBlurred);
-        this._window.addEventListener("focus", this._onUserActivity);
+    public start() {
+        this.document.addEventListener('mousedown', this.onUserActivity);
+        this.document.addEventListener('mousemove', this.onUserActivity);
+        this.document.addEventListener('keydown', this.onUserActivity);
+        this.document.addEventListener("visibilitychange", this.onPageVisibilityChanged);
+        this.window.addEventListener("blur", this.onWindowBlurred);
+        this.window.addEventListener("focus", this.onUserActivity);
         // can't use document.scroll here because that's only the document
         // itself being scrolled. Need to use addEventListener's useCapture.
         // also this needs to be the wheel event, not scroll, as scroll is
         // fired when the view scrolls down for a new message.
-        this._window.addEventListener('wheel', this._onUserActivity, {
-            passive: true, capture: true,
+        this.window.addEventListener('wheel', this.onUserActivity, {
+            passive: true,
+            capture: true,
         });
     }
 
     /**
      * Stop tracking user activity
      */
-    stop() {
-        this._document.removeEventListener('mousedown', this._onUserActivity);
-        this._document.removeEventListener('mousemove', this._onUserActivity);
-        this._document.removeEventListener('keydown', this._onUserActivity);
-        this._window.removeEventListener('wheel', this._onUserActivity, {
-            passive: true, capture: true,
+    public stop() {
+        this.document.removeEventListener('mousedown', this.onUserActivity);
+        this.document.removeEventListener('mousemove', this.onUserActivity);
+        this.document.removeEventListener('keydown', this.onUserActivity);
+        this.window.removeEventListener('wheel', this.onUserActivity, {
+            capture: true,
         });
-
-        this._document.removeEventListener("visibilitychange", this._onPageVisibilityChanged);
-        this._window.removeEventListener("blur", this._onWindowBlurred);
-        this._window.removeEventListener("focus", this._onUserActivity);
+        this.document.removeEventListener("visibilitychange", this.onPageVisibilityChanged);
+        this.window.removeEventListener("blur", this.onWindowBlurred);
+        this.window.removeEventListener("focus", this.onUserActivity);
     }
 
     /**
@@ -151,8 +148,8 @@ export default class UserActivity {
      * user's attention at any given moment.
      * @returns {boolean} true if user is currently 'active'
      */
-    userActiveNow() {
-        return this._activeNowTimeout.isRunning();
+    public userActiveNow() {
+        return this.activeNowTimeout.isRunning();
     }
 
     /**
@@ -163,27 +160,27 @@ export default class UserActivity {
      * (or they may have gone to make tea and left the window focused).
      * @returns {boolean} true if user has been active recently
      */
-    userActiveRecently() {
-        return this._activeRecentlyTimeout.isRunning();
+    public userActiveRecently() {
+        return this.activeRecentlyTimeout.isRunning();
     }
 
-    _onPageVisibilityChanged(e) {
-        if (this._document.visibilityState === "hidden") {
-            this._activeNowTimeout.abort();
-            this._activeRecentlyTimeout.abort();
+    private onPageVisibilityChanged = e => {
+        if (this.document.visibilityState === "hidden") {
+            this.activeNowTimeout.abort();
+            this.activeRecentlyTimeout.abort();
         } else {
-            this._onUserActivity(e);
+            this.onUserActivity(e);
         }
-    }
+    };
 
-    _onWindowBlurred() {
-        this._activeNowTimeout.abort();
-        this._activeRecentlyTimeout.abort();
-    }
+    private onWindowBlurred = () => {
+        this.activeNowTimeout.abort();
+        this.activeRecentlyTimeout.abort();
+    };
 
-    _onUserActivity(event) {
+    private onUserActivity = (event: MouseEvent) => {
         // ignore anything if the window isn't focused
-        if (!this._document.hasFocus()) return;
+        if (!this.document.hasFocus()) return;
 
         if (event.screenX && event.type === "mousemove") {
             if (event.screenX === this.lastScreenX && event.screenY === this.lastScreenY) {
@@ -195,25 +192,25 @@ export default class UserActivity {
         }
 
         dis.dispatch({action: 'user_activity'});
-        if (!this._activeNowTimeout.isRunning()) {
-            this._activeNowTimeout.start();
+        if (!this.activeNowTimeout.isRunning()) {
+            this.activeNowTimeout.start();
             dis.dispatch({action: 'user_activity_start'});
 
-            this._runTimersUntilTimeout(this._attachedActiveNowTimers, this._activeNowTimeout);
+            UserActivity.runTimersUntilTimeout(this.attachedActiveNowTimers, this.activeNowTimeout);
         } else {
-            this._activeNowTimeout.restart();
+            this.activeNowTimeout.restart();
         }
 
-        if (!this._activeRecentlyTimeout.isRunning()) {
-            this._activeRecentlyTimeout.start();
+        if (!this.activeRecentlyTimeout.isRunning()) {
+            this.activeRecentlyTimeout.start();
 
-            this._runTimersUntilTimeout(this._attachedActiveRecentlyTimers, this._activeRecentlyTimeout);
+            UserActivity.runTimersUntilTimeout(this.attachedActiveRecentlyTimers, this.activeRecentlyTimeout);
         } else {
-            this._activeRecentlyTimeout.restart();
+            this.activeRecentlyTimeout.restart();
         }
-    }
+    };
 
-    async _runTimersUntilTimeout(attachedTimers, timeout) {
+    private static async runTimersUntilTimeout(attachedTimers: Timer[], timeout: Timer) {
         attachedTimers.forEach((t) => t.start());
         try {
             await timeout.finished();

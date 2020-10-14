@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from "react";
-import extend from './extend';
 import dis from './dispatcher/dispatcher';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {MatrixClient} from "matrix-js-sdk/src/client";
@@ -497,7 +496,7 @@ export default class ContentMessages {
             if (file.type.indexOf('image/') === 0) {
                 content.msgtype = 'm.image';
                 infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
-                    extend(content.info, imageInfo);
+                    Object.assign(content.info, imageInfo);
                     resolve();
                 }, (e) => {
                     console.error(e);
@@ -510,7 +509,7 @@ export default class ContentMessages {
             } else if (file.type.indexOf('video/') === 0) {
                 content.msgtype = 'm.video';
                 infoForVideoFile(matrixClient, roomId, file).then((videoInfo) => {
-                    extend(content.info, videoInfo);
+                    Object.assign(content.info, videoInfo);
                     resolve();
                 }, (e) => {
                     content.msgtype = 'm.file';
