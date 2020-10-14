@@ -21,6 +21,7 @@ import EditorModel from "./model";
 import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
+import cheerio from 'cheerio';
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
@@ -51,18 +52,29 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
 
         md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
-            return `<div data-mx-maths="${p1e}"><code>${p1e}</code></div>`;
+            return `<div data-mx-maths="${p1e}"></div>`;
         });
 
         md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
-            return `<span data-mx-maths="${p1e}"><code>${p1e}</code></span>`;
+            return `<span data-mx-maths="${p1e}"></span>`;
         });
     }
 
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
-        return parser.toHTML();
+        // feed Markdown output to HTML parser
+        const phtml = cheerio.load(parser.toHTML(),
+            { _useHtmlParser2: true, decodeEntities: false })
+
+        // add fallback output for latex math, which should not be interpreted as markdown
+        phtml('div, span').each(function() {
+            const tex = phtml(this).attr('data-mx-maths')
+            if (tex) {
+                phtml(this).html(`<code>${tex}</code>`)
+            }
+        });
+        return phtml.html();
     }
     // ensure removal of escape backslashes in non-Markdown messages
     if (md.indexOf("\\") > -1) {

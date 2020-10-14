@@ -22,47 +22,12 @@ const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
-// prevent renderer from interpreting contents of AST node
-function freeze_node(walker, node) {
-    const newNode = new commonmark.Node('custom_inline', node.sourcepos);
-    newNode.onEnter = node.literal;
-    node.insertAfter(newNode);
-    node.unlink();
-    walker.resumeAt(newNode.next, true);
-}
-
-// prevent renderer from interpreting contents of latex math tags
-function freeze_math(parsed) {
-    const walker = parsed.walker();
-    let ev;
-    let inMath = false;
-    while ( (ev = walker.next()) ) {
-        const node = ev.node;
-        if (ev.entering) {
-            if (!inMath) {
-                // entering a math tag
-                if (node.literal != null && node.literal.match('^<(div|span) data-mx-maths="[^"]*">$') != null) {
-                    inMath = true;
-                    freeze_node(walker, node);
-                }
-            } else {
-                // math tags should only contain a single code block, with URL-escaped latex as fallback output
-                if (node.literal != null && node.literal.match('^(<code>|</code>|[^<>]*)$')) {
-                    freeze_node(walker, node);
-                // leave when span or div is closed
-                } else if (node.literal == '</span>' || node.literal == '</div>') {
-                    inMath = false;
-                    freeze_node(walker, node);
-                // this case only happens if we have improperly formatted math tags, so bail
-                } else {
-                    inMath = false;
-                }
-            }
-        }
-    }
-}
-
 function is_allowed_html_tag(node) {
+    if (node.literal != null &&
+        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|\/(div|span))>$') != null) {
+        return true;
+    }
+
     // Regex won't work for tags with attrs, but we only
     // allow <del> anyway.
     const matches = /^<\/?(.*)>$/.exec(node.literal);
@@ -70,6 +35,7 @@ function is_allowed_html_tag(node) {
         const tag = matches[1];
         return ALLOWED_HTML_TAGS.indexOf(tag) > -1;
     }
+
     return false;
 }
 
@@ -198,9 +164,6 @@ export default class Markdown {
             if (isMultiLine) this.cr();
 */
         };
-
-        // prevent strange behaviour when mixing latex math and markdown
-        freeze_math(this.parsed);
 
         return renderer.render(this.parsed);
     }
