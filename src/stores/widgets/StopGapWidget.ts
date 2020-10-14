@@ -161,17 +161,20 @@ export class StopGapWidget extends EventEmitter {
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
         }, opts?.asPopout);
 
-        // Add in some legacy support sprinkles
+        const parsed = new URL(templated);
+
+        // Add in some legacy support sprinkles (for non-popout widgets)
         // TODO: Replace these with proper widget params
         // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
-        const parsed = new URL(templated);
-        parsed.searchParams.set('widgetId', this.mockWidget.id);
-        parsed.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
+        if (!opts?.asPopout) {
+            parsed.searchParams.set('widgetId', this.mockWidget.id);
+            parsed.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
 
-        // Give the widget a scalar token if we're supposed to (more legacy)
-        // TODO: Stop doing this
-        if (this.scalarToken) {
-            parsed.searchParams.set('scalar_token', this.scalarToken);
+            // Give the widget a scalar token if we're supposed to (more legacy)
+            // TODO: Stop doing this
+            if (this.scalarToken) {
+                parsed.searchParams.set('scalar_token', this.scalarToken);
+            }
         }
 
         // Replace the encoded dollar signs back to dollar signs. They have no special meaning
