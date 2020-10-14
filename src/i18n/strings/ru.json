@@ -2517,5 +2517,9 @@
     "End conference": "Завершить конференцию",
     "This will end the conference for everyone. Continue?": "Это завершит конференцию для всех. Продолжить?",
     "Failed to save your profile": "Не удалось сохранить ваш профиль",
-    "The operation could not be completed": "Операция не может быть выполнена"
+    "The operation could not be completed": "Операция не может быть выполнена",
+    "Calling...": "Звонок…",
+    "Call connecting...": "Устанавливается соединение…",
+    "Starting camera...": "Запуск камеры…",
+    "Starting microphone...": "Запуск микрофона…"
 }
