@@ -85,6 +85,7 @@ limitations under the License.
     .mx_AvatarSetting_avatarPlaceholder {
         display: block;
         height: 90px;
+        width: inherit;
         border-radius: 90px;
         cursor: pointer;
     }
