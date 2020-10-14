@@ -30,6 +30,7 @@ import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from './settings/SettingsStore';
+import cheerio from 'cheerio';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
@@ -414,23 +415,20 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         if (isHtmlMessage) {
             isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
-            if (SettingsStore.getValue("feature_latex_maths")) {
-                const mathDelimiters = [
-                    { pattern: "<div data-mx-maths=\"([^\"]*)\">(.|\\s)*?</div>", display: true },
-                    { pattern: "<span data-mx-maths=\"([^\"]*)\">(.|\\s)*?</span>", display: false },
-                ];
+            const phtml = cheerio.load(safeBody,
+                { _useHtmlParser2: true, decodeEntities: false })
 
-                mathDelimiters.forEach(function(d) {
-                    safeBody = safeBody.replace(RegExp(d.pattern, "gm"), function(m, p1) {
-                        return katex.renderToString(
-                            AllHtmlEntities.decode(p1),
-                            {
-                                throwOnError: false,
-                                displayMode: d.display,
-                                output: "htmlAndMathml",
-                            })
-                    });
+            if (SettingsStore.getValue("feature_latex_maths")) {
+                phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
+                    return katex.renderToString(
+                        AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
+                        {
+                            throwOnError: false,
+                            displayMode: e.name == 'div',
+                            output: "htmlAndMathml",
+                        });
                 });
+                safeBody = phtml.html();
             }
         }
     } finally {
