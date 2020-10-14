@@ -218,6 +218,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse",
         };
+        let size;
         const collapseConfig = {
             toggleSize: 260 - 50,
             onCollapsed: (collapsed) => {
@@ -228,21 +229,19 @@ class LoggedInView extends React.Component<IProps, IState> {
                     dis.dispatch({action: "show_left_panel"}, true);
                 }
             },
-            onResized: (size) => {
-                window.localStorage.setItem("mx_lhs_size", '' + size);
+            onResized: (_size) => {
+                size = _size;
                 this.props.resizeNotifier.notifyLeftHandleResized();
             },
             onResizeStart: () => {
                 this.props.resizeNotifier.startResizing();
             },
             onResizeStop: () => {
+                window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.stopResizing();
             },
         };
-        const resizer = new Resizer(
-            this._resizeContainer.current,
-            CollapseDistributor,
-            collapseConfig);
+        const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
         resizer.setClassNames(classNames);
         return resizer;
     }
