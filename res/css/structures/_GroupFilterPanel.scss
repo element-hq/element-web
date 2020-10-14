@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_GroupFilterPanel {
     flex: 1;
-    background-color: $GroupFilterPanel-bg-color;
+    background-color: $groupFilterPanel-bg-color;
     cursor: pointer;
 
     display: flex;
@@ -34,7 +34,7 @@ limitations under the License.
     height: 0px;
     width: 90%;
     border: none;
-    border-bottom: 1px solid $GroupFilterPanel-divider-color;
+    border-bottom: 1px solid $groupFilterPanel-divider-color;
 }
 
 .mx_GroupFilterPanel .mx_GroupFilterPanel_scroller {
