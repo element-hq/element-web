@@ -2527,5 +2527,9 @@
     "Offline encrypted messaging using dehydrated devices": "使用乾淨裝置的離線加密訊息",
     "Failed to save your profile": "儲存您的設定檔失敗",
     "The operation could not be completed": "無法完成操作",
-    "Remove messages sent by others": "移除其他人傳送的訊息"
+    "Remove messages sent by others": "移除其他人傳送的訊息",
+    "Calling...": "正在通話……",
+    "Call connecting...": "正在連線通話……",
+    "Starting camera...": "正在開啟攝影機……",
+    "Starting microphone...": "正在開啟麥克風……"
 }
