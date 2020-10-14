@@ -44,7 +44,7 @@ class GroupFilterPanel extends React.Component {
         this.context.on("Group.myMembership", this._onGroupMyMembership);
         this.context.on("sync", this._onClientSync);
 
-        this._GroupFilterOrderStoreToken = GroupFilterOrderStore.addListener(() => {
+        this._groupFilterOrderStoreToken = GroupFilterOrderStore.addListener(() => {
             if (this.unmounted) {
                 return;
             }
@@ -61,8 +61,8 @@ class GroupFilterPanel extends React.Component {
         this.unmounted = true;
         this.context.removeListener("Group.myMembership", this._onGroupMyMembership);
         this.context.removeListener("sync", this._onClientSync);
-        if (this._GroupFilterOrderStoreToken) {
-            this._GroupFilterOrderStoreToken.remove();
+        if (this._groupFilterOrderStoreToken) {
+            this._groupFilterOrderStoreToken.remove();
         }
     }
 
