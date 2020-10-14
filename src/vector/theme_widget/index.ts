@@ -42,7 +42,7 @@ let widgetApi: WidgetApi;
             `action:${WidgetApiToWidgetAction.ButtonClicked}`,
             (ev: CustomEvent<IWidgetApiRequest>) => {
                 console.log("@@ clickety", ev.detail);
-                document.getElementById("button").innerText = "BUTTON CLICKED: " + JSON.stringify(req.data);
+                document.getElementById("button").innerText = "BUTTON CLICKED: " + JSON.stringify(ev.detail.data);
                 setTimeout(() => {
                     widgetApi.closeModalWidget(ev.detail.data);
                 }, 3000);
