@@ -88,7 +88,7 @@ let meetApi: any; // JitsiMeetExternalAPI
             ]);
             widgetApi.start();
         } else {
-            throw new Error("No parent URL or no widget ID");
+            console.warn("No parent URL or no widget ID - assuming no widget API is available");
         }
 
         // Populate the Jitsi params now
