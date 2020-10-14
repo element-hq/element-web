@@ -41,7 +41,7 @@ class GroupFilterOrderStore extends Store {
 
         // Initialise state
         this._state = Object.assign({}, INITIAL_STATE);
-        SettingsStore.monitorSetting("GroupFilterPanel.enableGroupFilterPanel", null);
+        SettingsStore.monitorSetting("TagPanel.enableTagPanel", null);
     }
 
     _setState(newState) {
@@ -190,7 +190,7 @@ class GroupFilterOrderStore extends Store {
                 break;
             }
             case 'setting_updated':
-                if (payload.settingName === 'GroupFilterPanel.enableGroupFilterPanel' && !payload.newValue) {
+                if (payload.settingName === 'TagPanel.enableTagPanel' && !payload.newValue) {
                     this._setState({
                         selectedTags: [],
                     });
