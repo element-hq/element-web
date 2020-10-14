@@ -201,10 +201,14 @@ export default class AppTile extends React.Component {
             this.iframe.src = 'about:blank';
         }
 
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
+            dis.dispatch({action: 'hangup_conference'});
+        }
+
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this._persistKey);
 
-        this._sgWidget.stop();
+        this._sgWidget.stop({forceDestroy: true});
     }
 
     _onWidgetPrepared = () => {
