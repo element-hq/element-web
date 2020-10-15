@@ -205,7 +205,38 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT);
     }
 
-    public getPinnedApps(roomId): IApp[] {
+    public movePinnedWidget(widgetId: string, delta: 1 | -1) {
+        // TODO simplify this by changing the storage medium of pinned to an array once the Jitsi default-on goes away
+        const roomId = this.getRoomId(widgetId);
+        const roomInfo = this.getRoom(roomId);
+        if (!roomInfo || roomInfo.pinned[widgetId] === false) return;
+
+        const pinnedApps = this.getPinnedApps(roomId).map(app => app.id);
+        const i = pinnedApps.findIndex(id => id === widgetId);
+
+        if (delta > 0) {
+            pinnedApps.splice(i, 2, pinnedApps[i + 1], pinnedApps[i]);
+        } else {
+            pinnedApps.splice(i - 1, 2, pinnedApps[i], pinnedApps[i - 1]);
+        }
+
+        const reorderedPinned: IRoomWidgets["pinned"] = {};
+        pinnedApps.forEach(id => {
+            reorderedPinned[id] = true;
+        });
+        Object.keys(roomInfo.pinned).forEach(id => {
+            if (reorderedPinned[id] === undefined) {
+                reorderedPinned[id] = roomInfo.pinned[id];
+            }
+        });
+        roomInfo.pinned = reorderedPinned;
+
+        SettingsStore.setValue("Widgets.pinned", roomId, SettingLevel.ROOM_ACCOUNT, roomInfo.pinned);
+        this.emit(roomId);
+        this.emit(UPDATE_EVENT);
+    }
+
+    public getPinnedApps(roomId: string): IApp[] {
         // returns the apps in the order they were pinned with, up to the maximum
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return [];

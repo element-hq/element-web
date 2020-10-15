@@ -92,10 +92,8 @@ export default class Sizer {
         }
     }
 
-    // TODO
     public start(item: HTMLElement) {}
 
-    // TODO
     public finish(item: HTMLElement) {}
 
     /**

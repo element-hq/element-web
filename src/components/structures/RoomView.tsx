@@ -1374,7 +1374,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onAppsClick = () => {
         dis.dispatch({
-            action: "appsDrawer", // TODO should this go into the RVS?
+            action: "appsDrawer",
             show: !this.state.showApps,
         });
     };

@@ -95,7 +95,7 @@ export default class AppsDrawer extends React.Component {
                 // persist to localStorage
                 console.log("@@ _saveResizerPreferences");
                 localStorage.setItem(this._getStorageKey(), JSON.stringify([
-                    this._getAppsHash(this.state.apps),
+                    this.state.apps.map(app => app.id),
                     ...this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
                 ]));
             },
@@ -133,10 +133,9 @@ export default class AppsDrawer extends React.Component {
     _loadResizerPreferences = () => {
         console.log("@@ _loadResizerPreferences");
         try {
-            const [idString, ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
-            // format: [idString: string, ...percentages: string];
-            // TODO determine the exact behaviour we want for layout changing when pinning/unpinning
-            if (this._getAppsHash() === idString || true) {
+            const [[...lastIds], ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
+            // Every app was included in the last split, reuse the last sizes
+            if (this.state.apps.length <= lastIds.length && this.state.apps.every(app => lastIds.includes(app.id))) {
                 sizes.forEach((size, i) => {
                     const distributor = this.resizer.forHandleAt(i);
                     if (distributor) {

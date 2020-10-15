@@ -141,12 +141,6 @@ limitations under the License.
                 box-sizing: border-box;
                 min-width: 24px; // prevent flexbox crushing
 
-                .mx_AccessibleTooltipButton_container {
-                    // TODO
-                    position: absolute;
-                    top: -50px;
-                }
-
                 &:hover {
                     &::after {
                         content: '';

@@ -56,6 +56,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     if (showUnpin) {
         const onUnpinClick = () => {
             WidgetStore.instance.unpinWidget(app.id);
+            onFinished();
         };
 
         unpinButton = <IconizedContextMenuOption onClick={onUnpinClick} label={_t("Unpin")} />;
@@ -65,9 +66,10 @@ const WidgetContextMenu: React.FC<IProps> = ({
     if (canModify && WidgetUtils.isManagedByManager(app)) {
         const onEditClick = () => {
             WidgetUtils.editWidget(room, app);
+            onFinished();
         };
 
-        editButton = <IconizedContextMenuOption onClick={onEditClick} label={_t("Edit")} />
+        editButton = <IconizedContextMenuOption onClick={onEditClick} label={_t("Edit")} />;
     }
 
     let snapshotButton;
@@ -128,13 +130,38 @@ const WidgetContextMenu: React.FC<IProps> = ({
         revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />;
     }
 
+    const pinnedWidgets = WidgetStore.instance.getPinnedApps(roomId);
+    const widgetIndex = pinnedWidgets.findIndex(widget => widget.id === app.id);
+
+    let moveLeftButton;
+    if (showUnpin && widgetIndex > 0) {
+        const onClick = () => {
+            WidgetStore.instance.movePinnedWidget(app.id, -1);
+            onFinished();
+        };
+
+        moveLeftButton = <IconizedContextMenuOption onClick={onClick} label={_t("Move left")} />;
+    }
+
+    let moveRightButton;
+    if (showUnpin && widgetIndex < pinnedWidgets.length - 1) {
+        const onClick = () => {
+            WidgetStore.instance.movePinnedWidget(app.id, 1);
+            onFinished();
+        };
+
+        moveRightButton = <IconizedContextMenuOption onClick={onClick} label={_t("Move right")} />;
+    }
+
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
-            { unpinButton }
-            { snapshotButton }
             { editButton }
-            { deleteButton }
             { revokeButton }
+            { deleteButton }
+            { snapshotButton }
+            { moveLeftButton }
+            { moveRightButton }
+            { unpinButton }
         </IconizedContextMenuOptionList>
     </IconizedContextMenu>;
 };
