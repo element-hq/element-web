@@ -109,20 +109,55 @@ limitations under the License.
     }
 
     .mx_RoomSummaryCard_appsGroup {
-        .mx_RoomSummaryCard_widgetRow {
-            margin: 0;
-            display: flex;
+        .mx_RoomSummaryCard_Button {
+            // this button is special so we have to override some of the original styling
+            // as we will be applying it in its children
+            padding: 0;
+            height: auto;
+            color: $tertiary-fg-color;
+
+            .mx_RoomSummaryCard_icon_app {
+                padding: 8px 48px 8px 12px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                .mx_BaseAvatar_image {
+                    vertical-align: top;
+                    margin-right: 12px;
+                }
+
+                span {
+                    color: $primary-fg-color;
+                }
+            }
 
             .mx_RoomSummaryCard_app_pinToggle,
             .mx_RoomSummaryCard_app_options {
-                position: relative;
-                height: 16px;
-                width: 16px;
-                padding: 8px;
-                border-radius: 8px;
+                position: absolute;
+                top: 0;
+                height: 100%; // to give bigger interactive zone
+                width: 24px;
+                padding: 10px 4px;
+                box-sizing: border-box;
+                min-width: 24px; // prevent flexbox crushing
+
+                .mx_AccessibleTooltipButton_container {
+                    // TODO
+                    position: absolute;
+                    top: -50px;
+                }
 
                 &:hover {
-                    background-color: rgba(141, 151, 165, 0.1);
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        height: 24px;
+                        width: 24px;
+                        top: 6px; // equal to top-margin of parent
+                        left: 0;
+                        border-radius: 12px;
+                        background-color: rgba(141, 151, 165, 0.1);
+                    }
                 }
 
                 &::before {
@@ -138,36 +173,40 @@ limitations under the License.
             }
 
             .mx_RoomSummaryCard_app_pinToggle {
+                right: 24px;
+
                 &::before {
                     mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
-                }
-
-                &.mx_RoomSummaryCard_app_pinned {
-                    &::before {
-                        background-color: $accent-color;
-                    }
                 }
             }
 
             .mx_RoomSummaryCard_app_options {
+                right: 48px;
+                display: none;
+
                 &::before {
                     mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
                 }
             }
-        }
 
-        .mx_RoomSummaryCard_Button {
-            padding: 6px 24px 6px 12px;
-            color: $tertiary-fg-color;
-            flex: 1;
+            &.mx_RoomSummaryCard_Button_pinned {
+                &::after {
+                    opacity: 0.2;
+                }
 
-            span {
-                color: $primary-fg-color;
+                .mx_RoomSummaryCard_app_pinToggle::before {
+                    background-color: $accent-color;
+                }
             }
 
-            .mx_BaseAvatar_image {
-                vertical-align: top;
-                margin-right: 12px;
+            &:hover {
+                .mx_RoomSummaryCard_icon_app {
+                    padding-right: 72px;
+                }
+
+                .mx_RoomSummaryCard_app_options {
+                    display: unset;
+                }
             }
 
             &::before {
@@ -175,7 +214,8 @@ limitations under the License.
             }
 
             &::after {
-                top: 6px; // re-align based on the height change
+                top: 8px; // re-align based on the height change
+                pointer-events: none; // pass through to the real button
             }
         }
     }

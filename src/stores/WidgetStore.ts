@@ -22,6 +22,7 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import SettingsStore from "../settings/SettingsStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
+import RoomViewStore from "../stores/RoomViewStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import {SettingLevel} from "../settings/SettingLevel";
@@ -48,11 +49,6 @@ interface IRoomWidgets {
 
 export const MAX_PINNED = 3;
 
-// TODO change order to be order that they were pinned
-// TODO HARD cap at 3, truncating if needed
-// TODO call finish more proactively to lock things in
-// TODO auto-open the appsDrawer for the room when widgets get pinned
-
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
 export default class WidgetStore extends AsyncStoreWithClient<IState> {
@@ -75,7 +71,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private initRoom(roomId: string) {
         if (!this.roomMap.has(roomId)) {
             this.roomMap.set(roomId, {
-                pinned: {},
+                pinned: {}, // ordered
                 widgets: [],
             });
         }
@@ -163,25 +159,24 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
     public isPinned(widgetId: string) {
         const roomId = this.getRoomId(widgetId);
-        const roomInfo = this.getRoom(roomId);
-
-        let pinned = roomInfo && roomInfo.pinned[widgetId];
-        // Jitsi widgets should be pinned by default
-        const widget = this.widgetMap.get(widgetId);
-        if (pinned === undefined && WidgetType.JITSI.matches(widget?.type)) pinned = true;
-        return pinned;
+        return !!this.getPinnedApps(roomId).find(w => w.id === widgetId);
     }
 
     public canPin(widgetId: string) {
         const roomId = this.getRoomId(widgetId);
-        const roomInfo = this.getRoom(roomId);
-        return roomInfo && Object.keys(roomInfo.pinned).filter(k => {
-            return roomInfo.pinned[k] && roomInfo.widgets.some(app => app.id === k);
-        }).length < MAX_PINNED;
+        return this.getPinnedApps(roomId).length < MAX_PINNED;
     }
 
     public pinWidget(widgetId: string) {
         this.setPinned(widgetId, true);
+
+        // Show the apps drawer upon the user pinning a widget
+        if (RoomViewStore.getRoomId() === this.getRoomId(widgetId)) {
+            defaultDispatcher.dispatch({
+                action: "appsDrawer",
+                show: true,
+            })
+        }
     }
 
     public unpinWidget(widgetId: string) {
@@ -192,6 +187,10 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return;
+        if (roomInfo.pinned[widgetId] === false && value) {
+            // delete this before write to maintain the correct object insertion order
+            delete roomInfo.pinned[widgetId];
+        }
         roomInfo.pinned[widgetId] = value;
 
         // Clean up the pinned record
@@ -206,13 +205,30 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT);
     }
 
-    public getApps(room: Room, pinned?: boolean): IApp[] {
-        const roomInfo = this.getRoom(room.roomId);
+    public getPinnedApps(roomId): IApp[] {
+        // returns the apps in the order they were pinned with, up to the maximum
+        const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return [];
-        if (pinned) {
-            return roomInfo.widgets.filter(app => this.isPinned(app.id));
+
+        // Show Jitsi widgets even if the user already had the maximum pinned, instead of their latest pinned,
+        // except if the user already explicitly unpinned the Jitsi widget
+        const priorityWidget = roomInfo.widgets.find(widget => {
+            return roomInfo.pinned[widget.id] === undefined && WidgetType.JITSI.matches(widget.type);
+        });
+
+        const order = Object.keys(roomInfo.pinned).filter(k => roomInfo.pinned[k]);
+        let apps = order.map(wId => this.widgetMap.get(wId)).filter(Boolean);
+        apps = apps.slice(0, priorityWidget ? MAX_PINNED - 1 : MAX_PINNED);
+        if (priorityWidget) {
+            apps.push(priorityWidget);
         }
-        return roomInfo.widgets;
+
+        return apps;
+    }
+
+    public getApps(roomId: string): IApp[] {
+        const roomInfo = this.getRoom(roomId);
+        return roomInfo?.widgets || [];
     }
 
     public doesRoomHaveConference(room: Room): boolean {

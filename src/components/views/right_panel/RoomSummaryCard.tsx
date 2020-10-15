@@ -43,7 +43,7 @@ import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
 import {ContextMenuButton} from "../../../accessibility/context_menu/ContextMenuButton";
-import {ChevronFace, useContextMenu} from "../../structures/ContextMenu";
+import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 
 interface IProps {
@@ -70,11 +70,11 @@ const Button: React.FC<IButtonProps> = ({ children, className, onClick }) => {
 };
 
 export const useWidgets = (room: Room) => {
-    const [apps, setApps] = useState<IApp[]>(WidgetStore.instance.getApps(room));
+    const [apps, setApps] = useState<IApp[]>(WidgetStore.instance.getApps(room.roomId));
 
     const updateApps = useCallback(() => {
         // Copy the array so that we always trigger a re-render, as some updates mutate the array of apps/settings
-        setApps([...WidgetStore.instance.getApps(room)]);
+        setApps([...WidgetStore.instance.getApps(room.roomId)]);
     }, [room]);
 
     useEffect(updateApps, [room]);
@@ -130,34 +130,39 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         pinTitle = isPinned ? _t("Unpin") : _t("Pin");
     }
 
-    return <div className="mx_RoomSummaryCard_widgetRow" ref={handle}>
+    const classes = classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", {
+        mx_RoomSummaryCard_Button_pinned: isPinned,
+    });
+
+    return <div className={classes} ref={handle}>
         <AccessibleTooltipButton
-            className="mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_app"
+            className="mx_RoomSummaryCard_icon_app"
             onClick={onOpenWidgetClick}
             // only show a tooltip if the widget is pinned
             title={isPinned ? _t("Unpin a widget to view it in this panel") : ""}
             forceHide={!isPinned}
             disabled={isPinned}
+            yOffset={-48}
         >
             <WidgetAvatar app={app} />
             <span>{name}</span>
             { subtitle }
         </AccessibleTooltipButton>
 
-        <AccessibleTooltipButton
-            className={classNames("mx_RoomSummaryCard_app_pinToggle", {
-                mx_RoomSummaryCard_app_pinned: isPinned,
-            })}
-            onClick={togglePin}
-            title={pinTitle}
-            disabled={cannotPin}
-        />
-
-        <ContextMenuButton
+        <ContextMenuTooltipButton
             className="mx_RoomSummaryCard_app_options"
             isExpanded={menuDisplayed}
             onClick={openMenu}
-            label={_t("Options")}
+            title={_t("Options")}
+            yOffset={-24}
+        />
+
+        <AccessibleTooltipButton
+            className="mx_RoomSummaryCard_app_pinToggle"
+            onClick={togglePin}
+            title={pinTitle}
+            disabled={cannotPin}
+            yOffset={-24}
         />
 
         { contextMenu }

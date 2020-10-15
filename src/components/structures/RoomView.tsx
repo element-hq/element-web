@@ -276,7 +276,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private checkWidgets = (room) => {
         this.setState({
-            hasPinnedWidgets: WidgetStore.instance.getApps(room, true).length > 0,
+            hasPinnedWidgets: WidgetStore.instance.getPinnedApps(room.roomId).length > 0,
         })
     };
 

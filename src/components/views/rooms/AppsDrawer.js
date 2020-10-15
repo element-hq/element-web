@@ -93,8 +93,9 @@ export default class AppsDrawer extends React.Component {
             onResizeStop: () => {
                 this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
                 // persist to localStorage
+                console.log("@@ _saveResizerPreferences");
                 localStorage.setItem(this._getStorageKey(), JSON.stringify([
-                    this._getIdString(),
+                    this._getAppsHash(this.state.apps),
                     ...this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
                 ]));
             },
@@ -121,26 +122,39 @@ export default class AppsDrawer extends React.Component {
 
     _getStorageKey = () => `mx_apps_drawer-${this.props.room.roomId}`;
 
-    _getIdString = () => this.state.apps.map(app => app.id).join("~");
+    _getAppsHash = (apps) => apps.map(app => app.id).join("~");
 
-    _loadResizerPreferences = () => { // TODO call this when changing pinned apps
+    componentDidUpdate(prevProps, prevState) {
+        if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
+            this._loadResizerPreferences();
+        }
+    }
+
+    _loadResizerPreferences = () => {
         console.log("@@ _loadResizerPreferences");
         try {
             const [idString, ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
             // format: [idString: string, ...percentages: string];
-            if (this._getIdString() !== idString) return;
-            sizes.forEach((size, i) => {
-                const distributor = this.resizer.forHandleAt(i);
-                distributor.size = size;
-                distributor.finish();
-            });
+            // TODO determine the exact behaviour we want for layout changing when pinning/unpinning
+            if (this._getAppsHash() === idString || true) {
+                sizes.forEach((size, i) => {
+                    const distributor = this.resizer.forHandleAt(i);
+                    if (distributor) {
+                        distributor.size = size;
+                        distributor.finish();
+                    }
+                });
+                return;
+            }
         } catch (e) {
-            console.error(e);
-            this.state.apps.slice(1).forEach((_, i) => {
-                const distributor = this.resizer.forHandleAt(i);
-                distributor.item.clearSize();
-                distributor.finish();
-            });
+            // this is expected
+        }
+
+        if (this.state.apps) {
+            console.log("@@ full relaxation");
+            const distributors = this.resizer.getDistributors();
+            distributors.forEach(d => d.item.clearSize());
+            distributors.forEach(d => d.finish());
         }
     };
 
@@ -162,12 +176,12 @@ export default class AppsDrawer extends React.Component {
         }
     };
 
-    _getApps = () => WidgetStore.instance.getApps(this.props.room, true);
+    _getApps = () => WidgetStore.instance.getPinnedApps(this.props.room.roomId);
 
     _updateApps = () => {
         this.setState({
             apps: this._getApps(),
-        }, this._loadResizerPreferences);
+        });
     };
 
     _launchManageIntegrations() {

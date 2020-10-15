@@ -163,15 +163,19 @@ export default class Resizer<C extends IConfig = IConfig> {
     };
 
     private onResize = throttle(() => {
-        const distributors = this.getResizeHandles().map(handle => {
-            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
-            return distributor;
-        });
+        const distributors = this.getDistributors();
 
         // relax all items if they had any overconstrained flexboxes
         distributors.forEach(d => d.start());
         distributors.forEach(d => d.finish());
     }, 100, {trailing: true, leading: true});
+
+    public getDistributors = () => {
+        return this.getResizeHandles().map(handle => {
+            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
+            return distributor;
+        });
+    };
 
     private createSizerAndDistributor(
         resizeHandle: HTMLDivElement,
@@ -186,6 +190,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     }
 
     private getResizeHandles() {
+        if (!this.container.children) return [];
         return Array.from(this.container.children).filter(el => {
             return this.isResizeHandle(<HTMLElement>el);
         }) as HTMLElement[];
