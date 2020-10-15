@@ -649,7 +649,6 @@ export default class GroupView extends React.Component {
                 editing: false,
                 summary: null,
             });
-            dis.dispatch({action: 'panel_disable'});
             this._initGroupStore(this.props.groupId);
 
             if (this.state.avatarChanged) {
@@ -870,10 +869,7 @@ export default class GroupView extends React.Component {
                     { _t('Add rooms to this community') }
                 </div>
             </AccessibleButton>) : <div />;
-        const roomDetailListClassName = classnames({
-            "mx_fadable": true,
-            "mx_fadable_faded": this.state.editing,
-        });
+
         return <div className="mx_GroupView_rooms">
             <div className="mx_GroupView_rooms_header">
                 <h3>
@@ -884,9 +880,7 @@ export default class GroupView extends React.Component {
             </div>
             { this.state.groupRoomsLoading ?
                 <Spinner /> :
-                <RoomDetailList
-                    rooms={this.state.groupRooms}
-                    className={roomDetailListClassName} />
+                <RoomDetailList rooms={this.state.groupRooms} />
             }
         </div>;
     }

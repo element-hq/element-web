@@ -304,14 +304,8 @@ export default class RightPanel extends React.Component {
                 break;
         }
 
-        const classes = classNames("mx_RightPanel", "mx_fadable", {
-            "collapsed": this.props.collapsed,
-            "mx_fadable_faded": this.props.disabled,
-            "dark-panel": true,
-        });
-
         return (
-            <aside className={classes} id="mx_RightPanel">
+            <aside className="mx_RightPanel dark-panel" id="mx_RightPanel">
                 { panel }
             </aside>
         );

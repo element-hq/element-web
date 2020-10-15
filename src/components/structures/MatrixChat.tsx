@@ -181,9 +181,6 @@ interface IState {
     currentUserId?: string;
     // this is persisted as mx_lhs_size, loaded in LoggedInView
     collapseLhs: boolean;
-    leftDisabled: boolean;
-    middleDisabled: boolean;
-    // the right panel's disabled state is tracked in its store.
     // Parameters used in the registration dance with the IS
     // eslint-disable-next-line camelcase
     register_client_secret?: string;
@@ -236,8 +233,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.state = {
             view: Views.LOADING,
             collapseLhs: false,
-            leftDisabled: false,
-            middleDisabled: false,
 
             hideToSRUsers: false,
 
@@ -710,14 +705,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.state.resizeNotifier.notifyLeftHandleResized();
                 });
                 break;
-            case 'panel_disable': {
-                this.setState({
-                    leftDisabled: payload.leftDisabled || payload.sideDisabled || false,
-                    middleDisabled: payload.middleDisabled || false,
-                    // We don't track the right panel being disabled here - it's tracked in the store.
-                });
-                break;
-            }
             case 'on_logged_in':
                 if (
                     !Lifecycle.isSoftLogout() &&
