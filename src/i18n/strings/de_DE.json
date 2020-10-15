@@ -2521,5 +2521,9 @@
     "Ignored attempt to disable encryption": "Versuch, die Verschlüsselung zu deaktivieren, wurde ignoriert",
     "Failed to save your profile": "Profil speichern fehlgeschlagen",
     "The operation could not be completed": "Die Operation konnte nicht abgeschlossen werden",
-    "Remove messages sent by others": "Nachrichten von anderen entfernen"
+    "Remove messages sent by others": "Nachrichten von anderen entfernen",
+    "Starting camera...": "Starte Kamera...",
+    "Call connecting...": "Verbinde den Anruf...",
+    "Calling...": "Rufe an...",
+    "Starting microphone...": "Starte Mikrofon..."
 }
