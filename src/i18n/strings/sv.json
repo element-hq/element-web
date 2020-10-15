@@ -2457,5 +2457,9 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Den här versionen av %(brand)s stöder inte visning av vissa krypterade filer",
     "This version of %(brand)s does not support searching encrypted messages": "Den här versionen av %(brand)s stöder inte sökning bland krypterade meddelanden",
     "Cannot create rooms in this community": "Kan inte skapa rum i den här gemenskapen",
-    "You do not have permission to create rooms in this community.": "Du har inte behörighet att skapa rum i den här gemenskapen."
+    "You do not have permission to create rooms in this community.": "Du har inte behörighet att skapa rum i den här gemenskapen.",
+    "Calling...": "Ringer…",
+    "Call connecting...": "Samtal ansluts…",
+    "Starting camera...": "Startar kamera…",
+    "Starting microphone...": "Startar mikrofon…"
 }
