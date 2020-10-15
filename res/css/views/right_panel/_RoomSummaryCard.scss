@@ -117,7 +117,7 @@ limitations under the License.
             color: $tertiary-fg-color;
 
             .mx_RoomSummaryCard_icon_app {
-                padding: 8px 48px 8px 12px;
+                padding: 10px 48px 10px 12px; // based on typical mx_RoomSummaryCard_Button padding
                 text-overflow: ellipsis;
                 overflow: hidden;
 
@@ -137,7 +137,7 @@ limitations under the License.
                 top: 0;
                 height: 100%; // to give bigger interactive zone
                 width: 24px;
-                padding: 10px 4px;
+                padding: 12px 4px;
                 box-sizing: border-box;
                 min-width: 24px; // prevent flexbox crushing
 
@@ -147,7 +147,7 @@ limitations under the License.
                         position: absolute;
                         height: 24px;
                         width: 24px;
-                        top: 6px; // equal to top-margin of parent
+                        top: 8px; // equal to padding-top of parent
                         left: 0;
                         border-radius: 12px;
                         background-color: rgba(141, 151, 165, 0.1);
