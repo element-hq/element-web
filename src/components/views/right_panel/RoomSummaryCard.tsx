@@ -42,7 +42,6 @@ import WidgetStore, {IApp, MAX_PINNED} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
-import {ContextMenuButton} from "../../../accessibility/context_menu/ContextMenuButton";
 import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 
