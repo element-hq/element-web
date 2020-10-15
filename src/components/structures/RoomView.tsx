@@ -105,7 +105,6 @@ interface IProps {
     viaServers?: string[];
 
     autoJoin?: boolean;
-    disabled?: boolean;
     resizeNotifier: ResizeNotifier;
 
     // Called with the credentials of a registered user (if they were a ROU that transitioned to PWLU)
@@ -1871,7 +1870,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 <MessageComposer
                     room={this.state.room}
                     callState={this.state.callState}
-                    disabled={this.props.disabled}
                     showApps={this.state.showApps}
                     e2eStatus={this.state.e2eStatus}
                     resizeNotifier={this.props.resizeNotifier}
@@ -2027,10 +2025,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
         });
 
-        const fadableSectionClasses = classNames("mx_RoomView_body", "mx_fadable", {
-            "mx_fadable_faded": this.props.disabled,
-        });
-
         const showRightPanel = this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
             ? <RightPanel room={this.state.room} resizeNotifier={this.props.resizeNotifier} />
@@ -2062,7 +2056,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                             e2eStatus={this.state.e2eStatus}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
-                            <div className={fadableSectionClasses}>
+                            <div className="mx_RoomView_body">
                                 {auxPanel}
                                 <div className={timelineClasses}>
                                     {topUnreadMessagesBar}
