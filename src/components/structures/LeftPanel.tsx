@@ -123,7 +123,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const avatarUrlProp = `url(${avatarUrl})`;
         if (!avatarUrl) {
             document.body.style.removeProperty("--avatar-url");
-        } else if (avatarUrl && document.body.style.getPropertyValue("--avatar-url") !== avatarUrlProp) {
+        } else if (document.body.style.getPropertyValue("--avatar-url") !== avatarUrlProp) {
             document.body.style.setProperty("--avatar-url", avatarUrlProp);
         }
     };
