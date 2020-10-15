@@ -2524,5 +2524,9 @@
     "Video conference started by %(senderName)s": "A videókonferenciát elindította: %(senderName)s",
     "Failed to save your profile": "A profilodat nem sikerült elmenteni",
     "The operation could not be completed": "A műveletet nem lehetett befejezni",
-    "Remove messages sent by others": "Mások által küldött üzenetek törlése"
+    "Remove messages sent by others": "Mások által küldött üzenetek törlése",
+    "Starting microphone...": "Mikrofon bekapcsolása…",
+    "Starting camera...": "Kamera bekapcsolása…",
+    "Call connecting...": "Híváshoz csatlakozás…",
+    "Calling...": "Hívás…"
 }
