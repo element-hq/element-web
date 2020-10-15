@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import {Room} from "matrix-js-sdk/src/models/room";
 
 import * as sdk from '../../index';
