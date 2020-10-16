@@ -30,6 +30,7 @@ import {SettingLevel} from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
@@ -47,6 +48,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     showUnpin,
     ...props
 }) => {
+    const cli = useContext(MatrixClientContext);
     const {room, roomId} = useContext(RoomContext);
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
@@ -113,9 +115,14 @@ const WidgetContextMenu: React.FC<IProps> = ({
         />;
     }
 
+    let isAllowedWidget = SettingsStore.getValue("allowedWidgets", roomId)[app.eventId];
+    if (isAllowedWidget === undefined) {
+        isAllowedWidget = app.creatorUserId === cli.getUserId();
+    }
+
     const isLocalWidget = WidgetType.JITSI.matches(app.type);
     let revokeButton;
-    if (!userWidget && !isLocalWidget) {
+    if (!userWidget && !isLocalWidget && isAllowedWidget) {
         const onRevokeClick = () => {
             console.info("Revoking permission for widget to load: " + app.eventId);
             const current = SettingsStore.getValue("allowedWidgets", roomId);
@@ -127,7 +134,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
             onFinished();
         };
 
-        revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />;
+        revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Revoke permissions")} />;
     }
 
     const pinnedWidgets = WidgetStore.instance.getPinnedApps(roomId);
