@@ -42,6 +42,14 @@ export default class IntegrationManager extends React.Component {
         loading: false,
     };
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            errored: false,
+        };
+    }
+
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener("keydown", this.onKeyDown);
@@ -66,6 +74,10 @@ export default class IntegrationManager extends React.Component {
         }
     };
 
+    onError = () => {
+        this.setState({ errored: true });
+    };
+
     render() {
         if (this.props.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
@@ -77,7 +89,7 @@ export default class IntegrationManager extends React.Component {
             );
         }
 
-        if (!this.props.connected) {
+        if (!this.props.connected || this.state.errored) {
             return (
                 <div className='mx_IntegrationManager_error'>
                     <h3>{_t("Cannot connect to integration manager")}</h3>
@@ -86,6 +98,6 @@ export default class IntegrationManager extends React.Component {
             );
         }
 
-        return <iframe src={this.props.url}></iframe>;
+        return <iframe src={this.props.url} onError={this.onError} />;
     }
 }
