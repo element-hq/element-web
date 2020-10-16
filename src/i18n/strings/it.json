@@ -2530,5 +2530,8 @@
     "Calling...": "Chiamata in corso...",
     "Call connecting...": "In connessione...",
     "Starting camera...": "Avvio fotocamera...",
-    "Starting microphone...": "Avvio microfono..."
+    "Starting microphone...": "Avvio microfono...",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Tutti i server sono banditi dalla partecipazione! Questa stanza non può più essere usata.",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ha cambiato le ACL del server per questa stanza.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ha impostato le ACL del server per questa stanza."
 }
