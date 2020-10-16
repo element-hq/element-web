@@ -2461,5 +2461,8 @@
     "Calling...": "Ringer…",
     "Call connecting...": "Samtal ansluts…",
     "Starting camera...": "Startar kamera…",
-    "Starting microphone...": "Startar mikrofon…"
+    "Starting microphone...": "Startar mikrofon…",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Alla servrar har bannats från att delta! Det här rummet kan inte längre användas.",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ändrade server-ACL:erna för det här rummet.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ställde in server-ACL:er för det här rummet."
 }
