@@ -18,7 +18,7 @@ const fname = path.join("webapp", "jitsi_external_api.min.js");
 
 const options = {};
 if (process.env.HTTPS_PROXY) {
-   options.agent = new ProxyAgent(process.env.HTTPS_PROXY, { tunnel : true } );
+   options.agent = new ProxyAgent(process.env.HTTPS_PROXY, {tunnel: true});
 }
 
 fetch("https://jitsi.riot.im/libs/external_api.min.js", options).then(res => {
