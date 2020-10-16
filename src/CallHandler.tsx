@@ -240,7 +240,7 @@ export default class CallHandler {
                         this.play(AudioID.Busy);
                         let title;
                         let description;
-                        if (call.hangupReason == CallErrorCode.UserHangup) {
+                        if (call.hangupReason === CallErrorCode.UserHangup) {
                             title = _t("Call Declined");
                             description = _t("The other party declined the call.");
                         } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
