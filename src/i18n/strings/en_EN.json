@@ -1909,7 +1909,7 @@
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?",
     "Delete widget": "Delete widget",
     "Remove for everyone": "Remove for everyone",
-    "Remove for me": "Remove for me",
+    "Revoke permissions": "Revoke permissions",
     "Move left": "Move left",
     "Move right": "Move right",
     "This room is public": "This room is public",
