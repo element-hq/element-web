@@ -2527,5 +2527,8 @@
     "Calling...": "Chamando...",
     "Call connecting...": "Conectando a chamada...",
     "Starting camera...": "Iniciando a cámara...",
-    "Starting microphone...": "Iniciando o micrófono..."
+    "Starting microphone...": "Iniciando o micrófono...",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Tódolos servidores están prohibidos! Esta sala xa non pode ser utilizada.",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s cambiou ACLs de servidor para esta sala.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s estableceu ACLs de servidor para esta sala."
 }
