@@ -2518,5 +2518,14 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Ky version i %(brand)s nuk mbulon parjen për disa kartela të fshehtëzuara",
     "This version of %(brand)s does not support searching encrypted messages": "Ky version i %(brand)s nuk mbulon kërkimin në mesazhe të fshehtëzuar",
     "Cannot create rooms in this community": "S’mund të krijohen dhoma në këtë bashkësi",
-    "You do not have permission to create rooms in this community.": "S’keni leje të krijoni dhoma në këtë bashkësi."
+    "You do not have permission to create rooms in this community.": "S’keni leje të krijoni dhoma në këtë bashkësi.",
+    "Failed to save your profile": "S’u arrit të ruhej profili juaj",
+    "The operation could not be completed": "Veprimi s’u plotësua dot",
+    "Starting microphone...": "Po vihet mikrofoni në punë…",
+    "Starting camera...": "Po vihet kamera në punë…",
+    "Call connecting...": "Po bëhet lidhja për thirrje…",
+    "Calling...": "Po thirret…",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Janë dëbuar nga pjesëmarrja krejt shërbyesit! Kjo dhomë s’mund të përdoret më.",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ndryshoi ACL-ra shërbyesi për këtë dhomë.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s caktoi ACL-ra shërbyesi për këtë dhomë."
 }
