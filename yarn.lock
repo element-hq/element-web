@@ -11286,6 +11286,13 @@ simple-get@^3.0.3:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
+simple-proxy-agent@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/simple-proxy-agent/-/simple-proxy-agent-1.1.0.tgz#974cd1130dd32554775e2d4caeb70d701f7ca8b3"
+  integrity sha512-amJaLagzNELaNNB2UXdXiORVbbU/RC4yRwtGvF4cttJheTm4JvL2fZ1SfuLU952XC7TLamYdgzzJtWUbGM6Jcw==
+  dependencies:
+    socks "^2.3.2"
+
 simple-swizzle@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
@@ -11385,6 +11392,14 @@ socks-proxy-agent@^4.0.0:
   dependencies:
     agent-base "~4.2.1"
     socks "~2.3.2"
+
+socks@^2.3.2:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/socks/-/socks-2.4.4.tgz#f1a3382e7814ae28c97bb82a38bc1ac24b21cca2"
+  integrity sha512-7LmHN4IHj1Vpd/k8D872VGCHJ6yIVyeFkfIBExRmGPYQ/kdUkpdg9eKh9oOzYYYKQhuxavayJHTnmBG+EzluUA==
+  dependencies:
+    ip "^1.1.5"
+    smart-buffer "^4.1.0"
 
 socks@~2.3.2:
   version "2.3.3"
