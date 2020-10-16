@@ -13,7 +13,7 @@ Web so that you can add your own code. Even though the default module is part of
 the React SDK, you can still override it from the Element Web layer:
 
 1. Copy the default customisation module to
-   `element-web/src/customisations/YourNameSecurity.js`
+   `element-web/src/customisations/YourNameSecurity.ts`
 2. Edit customisations points and make sure export the ones you actually want to
    activate
 3. Tweak the Element build process to use the customised module instead of the
