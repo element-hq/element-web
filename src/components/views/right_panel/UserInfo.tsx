@@ -801,6 +801,11 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     } = powerLevels;
 
     const me = room.getMember(cli.getUserId());
+    if (!me) {
+        // we aren't in the room, so return no admin tooling
+        return <div />;
+    }
+
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
