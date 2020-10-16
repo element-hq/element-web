@@ -23,6 +23,7 @@ import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import {IMatrixClientCreds, MatrixClientPeg} from './MatrixClientPeg';
+import SecurityCustomisations from "./customisations/Security";
 import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
@@ -566,6 +567,8 @@ function persistCredentialsToLocalStorage(credentials: IMatrixClientCreds): void
     if (credentials.deviceId) {
         localStorage.setItem("mx_device_id", credentials.deviceId);
     }
+
+    SecurityCustomisations.persistCredentials?.(credentials);
 
     console.log(`Session persisted for ${credentials.userId}`);
 }
