@@ -2531,5 +2531,8 @@
     "Calling...": "正在通話……",
     "Call connecting...": "正在連線通話……",
     "Starting camera...": "正在開啟攝影機……",
-    "Starting microphone...": "正在開啟麥克風……"
+    "Starting microphone...": "正在開啟麥克風……",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 所有伺服器都被禁止加入！ 這間聊天室無法使用。",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s 為此房間更改了伺服器的存取控制列表。",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s 為此房間設置了伺服器的存取控制列表。"
 }
