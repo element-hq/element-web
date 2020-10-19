@@ -2459,5 +2459,15 @@
     "Calling...": "Chamando...",
     "Call connecting...": "Iniciando chamada...",
     "Starting camera...": "Iniciando a câmera...",
-    "Starting microphone...": "Iniciando o microfone..."
+    "Starting microphone...": "Iniciando o microfone...",
+    "(their device couldn't start the camera / microphone)": "(o aparelho não conseguiu iniciar a câmera/microfone)",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s alterou a lista de controle de acesso do servidor para esta sala.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s definiu a lista de controle de acesso do servidor para esta sala.",
+    "The call could not be established": "Não foi possível iniciar a chamada",
+    "The other party declined the call.": "O contato recusou a chamada.",
+    "%(senderName)s declined the call.": "%(senderName)s recusou a chamada.",
+    "(an error occurred)": "(ocorreu um erro)",
+    "(connection failed)": "(a conexão falhou)",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Todos os servidores foram banidos desta sala! Esta sala não pode mais ser utilizada.",
+    "Call Declined": "Chamada recusada"
 }
