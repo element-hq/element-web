@@ -53,7 +53,6 @@ interface IProps {
     onBlur: (ev: React.FocusEvent) => void;
     onResize: () => void;
     resizeNotifier: ResizeNotifier;
-    collapsed: boolean;
     isMinimized: boolean;
 }
 
