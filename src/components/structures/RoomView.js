@@ -754,14 +754,14 @@ export default createReactClass({
             }
         }
     },
-    onEventDecrypted(ev) {
-    if (!SettingsStore.getValue('dontShowChatEffects')) {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() ||
-            this.state.room.getUnreadNotificationCount() === 0) return;
-        this.handleConfetti(ev);
-    }
+    onEventDecrypted: (ev) => {
+        if (!SettingsStore.getValue('dontShowChatEffects')) {
+            if (ev.isBeingDecrypted() || ev.isDecryptionFailure() ||
+                this.state.room.getUnreadNotificationCount() === 0) return;
+            this.handleConfetti(ev);
+        }
     },
-    handleConfetti(ev) {
+    handleConfetti: (ev) => {
         if (this.state.matrixClientIsReady) {
             const messageBody = _t('sends confetti');
             if (isConfettiEmoji(ev.getContent()) || ev.getContent().body === messageBody) {
