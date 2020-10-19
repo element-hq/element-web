@@ -132,7 +132,7 @@ export class ModalManager {
     public createTrackedDialogAsync<T extends any[]>(
         analyticsAction: string,
         analyticsInfo: string,
-        ...rest: Parameters<ModalManager["appendDialogAsync"]>
+        ...rest: Parameters<ModalManager["createDialogAsync"]>
     ) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
         return this.createDialogAsync<T>(...rest);

@@ -23,7 +23,7 @@ import SettingsStore from "../settings/SettingsStore";
 import * as utils from "matrix-js-sdk/src/utils";
 import { UPDATE_EVENT } from "./AsyncStore";
 import FlairStore from "./FlairStore";
-import TagOrderStore from "./TagOrderStore";
+import GroupFilterOrderStore from "./GroupFilterOrderStore";
 import GroupStore from "./GroupStore";
 import dis from "../dispatcher/dispatcher";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
@@ -50,7 +50,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
     public getSelectedCommunityId(): string {
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
-            return TagOrderStore.getSelectedTags()[0];
+            return GroupFilterOrderStore.getSelectedTags()[0];
         }
         return null; // no selection as far as this function is concerned
     }

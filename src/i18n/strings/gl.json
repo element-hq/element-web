@@ -2512,5 +2512,16 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Esta versión de %(brand)s non soporta o visionado dalgúns ficheiros cifrados",
     "This version of %(brand)s does not support searching encrypted messages": "Esta versión de %(brand)s non soporta a busca de mensaxes cifradas",
     "Cannot create rooms in this community": "Non se poden crear salas nesta comunidade",
-    "You do not have permission to create rooms in this community.": "Non tes permiso para crear salas nesta comunidade."
+    "You do not have permission to create rooms in this community.": "Non tes permiso para crear salas nesta comunidade.",
+    "Join the conference at the top of this room": "Únete á conferencia na ligazón arriba nesta sala",
+    "Join the conference from the room information card on the right": "Únete á conferencia desde a tarxeta con información da sala á dereita",
+    "Video conference ended by %(senderName)s": "Video conferencia rematada por %(senderName)s",
+    "Video conference updated by %(senderName)s": "Video conferencia actualizada por %(senderName)s",
+    "Video conference started by %(senderName)s": "Video conferencia iniciada por %(senderName)s",
+    "End conference": "Rematar conferencia",
+    "This will end the conference for everyone. Continue?": "Así finalizarás a conferencia para todas. ¿Adiante?",
+    "Ignored attempt to disable encryption": "Intento ignorado de desactivar o cifrado",
+    "Failed to save your profile": "Non se gardaron os cambios",
+    "The operation could not be completed": "Non se puido realizar a acción",
+    "Remove messages sent by others": "Eliminar mensaxes enviadas por outras"
 }

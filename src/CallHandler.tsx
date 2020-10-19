@@ -74,13 +74,32 @@ import {base32} from "rfc4648";
 
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import WidgetStore from "./stores/WidgetStore";
+import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
+import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
+import Analytics from './Analytics';
 
-// until we ts-ify the js-sdk voip code
-type Call = any;
+enum AudioID {
+    Ring = 'ringAudio',
+    Ringback = 'ringbackAudio',
+    CallEnd = 'callendAudio',
+    Busy = 'busyAudio',
+}
+
+// Unlike 'CallType' in js-sdk, this one includes screen sharing
+// (because a screen sharing call is only a screen sharing call to the caller,
+// to the callee it's just a video call, at least as far as the current impl
+// is concerned).
+export enum PlaceCallType {
+    Voice = 'voice',
+    Video = 'video',
+    ScreenSharing = 'screensharing',
+}
 
 export default class CallHandler {
-    private calls = new Map<string, Call>();
-    private audioPromises = new Map<string, Promise<void>>();
+    private calls = new Map<string, MatrixCall>();
+    private audioPromises = new Map<AudioID, Promise<void>>();
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -105,22 +124,20 @@ export default class CallHandler {
         }
     }
 
-    getCallForRoom(roomId: string): Call {
+    getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
     }
 
     getAnyActiveCall() {
-        const roomsWithCalls = Object.keys(this.calls);
-        for (let i = 0; i < roomsWithCalls.length; i++) {
-            if (this.calls.get(roomsWithCalls[i]) &&
-                    this.calls.get(roomsWithCalls[i]).call_state !== "ended") {
-                return this.calls.get(roomsWithCalls[i]);
+        for (const call of this.calls.values()) {
+            if (call.state !== CallState.Ended) {
+                return call;
             }
         }
         return null;
     }
 
-    play(audioId: string) {
+    play(audioId: AudioID) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -149,7 +166,7 @@ export default class CallHandler {
         }
     }
 
-    pause(audioId: string) {
+    pause(audioId: AudioID) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -163,8 +180,19 @@ export default class CallHandler {
         }
     }
 
-    private setCallListeners(call: Call) {
-        call.on("error", (err) => {
+    private matchesCallForThisRoom(call: MatrixCall) {
+        // We don't allow placing more than one call per room, but that doesn't mean there
+        // can't be more than one, eg. in a glare situation. This checks that the given call
+        // is the call we consider 'the' call for its room.
+        const callForThisRoom = this.getCallForRoom(call.roomId);
+        return callForThisRoom && call.callId === callForThisRoom.callId;
+    }
+
+    private setCallListeners(call: MatrixCall) {
+        call.on(CallEvent.Error, (err) => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
+            Analytics.trackEvent('voip', 'callError', 'error', err);
             console.error("Call error:", err);
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
@@ -179,66 +207,97 @@ export default class CallHandler {
                 description: err.message,
             });
         });
-        call.on("hangup", () => {
-            this.setCallState(undefined, call.roomId, "ended");
+        call.on(CallEvent.Hangup, () => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
+            Analytics.trackEvent('voip', 'callHangup');
+
+            this.removeCallForRoom(call.roomId);
         });
-        // map web rtc states to dummy UI state
-        // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
-        call.on("state", (newState, oldState) => {
-            if (newState === "ringing") {
-                this.setCallState(call, call.roomId, "ringing");
-                this.pause("ringbackAudio");
-            } else if (newState === "invite_sent") {
-                this.setCallState(call, call.roomId, "ringback");
-                this.play("ringbackAudio");
-            } else if (newState === "ended" && oldState === "connected") {
-                this.setCallState(undefined, call.roomId, "ended");
-                this.pause("ringbackAudio");
-                this.play("callendAudio");
-            } else if (newState === "ended" && oldState === "invite_sent" &&
-                    (call.hangupParty === "remote" ||
-                    (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
-                    )) {
-                this.setCallState(call, call.roomId, "busy");
-                this.pause("ringbackAudio");
-                this.play("busyAudio");
-                Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
-                    title: _t('Call Timeout'),
-                    description: _t('The remote side failed to pick up') + '.',
-                });
-            } else if (oldState === "invite_sent") {
-                this.setCallState(call, call.roomId, "stop_ringback");
-                this.pause("ringbackAudio");
-            } else if (oldState === "ringing") {
-                this.setCallState(call, call.roomId, "stop_ringing");
-                this.pause("ringbackAudio");
-            } else if (newState === "connected") {
-                this.setCallState(call, call.roomId, "connected");
-                this.pause("ringbackAudio");
+        call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
+            this.setCallState(call, newState);
+
+            switch (oldState) {
+                case CallState.Ringing:
+                    this.pause(AudioID.Ring);
+                    break;
+                case CallState.InviteSent:
+                    this.pause(AudioID.Ringback);
+                    break;
             }
+
+            switch (newState) {
+                case CallState.Ringing:
+                    this.play(AudioID.Ring);
+                    break;
+                case CallState.InviteSent:
+                    this.play(AudioID.Ringback);
+                    break;
+                case CallState.Ended:
+                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
+                    this.removeCallForRoom(call.roomId);
+                    if (oldState === CallState.InviteSent && (
+                        call.hangupParty === CallParty.Remote ||
+                        (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
+                    )) {
+                        this.play(AudioID.Busy);
+                        let title;
+                        let description;
+                        if (call.hangupReason === CallErrorCode.UserHangup) {
+                            title = _t("Call Declined");
+                            description = _t("The other party declined the call.");
+                        } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
+                            title = _t("Call Failed");
+                            // XXX: full stop appended as some relic here, but these
+                            // strings need proper input from design anyway, so let's
+                            // not change this string until we have a proper one.
+                            description = _t('The remote side failed to pick up') + '.';
+                        } else {
+                            title = _t("Call Failed");
+                            description = _t("The call could not be established");
+                        }
+
+                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                            title, description,
+                        });
+                    } else {
+                        this.play(AudioID.CallEnd);
+                    }
+            }
+        });
+        call.on(CallEvent.Replaced, (newCall: MatrixCall) => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
+            console.log(`Call ID ${call.callId} is being replaced by call ID ${newCall.callId}`);
+
+            if (call.state === CallState.Ringing) {
+                this.pause(AudioID.Ring);
+            } else if (call.state === CallState.InviteSent) {
+                this.pause(AudioID.Ringback);
+            }
+
+            this.calls.set(newCall.roomId, newCall);
+            this.setCallListeners(newCall);
+            this.setCallState(newCall, newCall.state);
         });
     }
 
-    private setCallState(call: Call, roomId: string, status: string) {
+    private setCallState(call: MatrixCall, status: CallState) {
         console.log(
-            `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
+            `Call state in ${call.roomId} changed to ${status}`,
         );
-        this.calls.set(roomId, call);
 
-        if (status === "ringing") {
-            this.play("ringAudio");
-        } else if (call && call.call_state === "ringing") {
-            this.pause("ringAudio");
-        }
-
-        if (call) {
-            call.call_state = status;
-        }
         dis.dispatch({
             action: 'call_state',
-            room_id: roomId,
+            room_id: call.roomId,
             state: status,
         });
+    }
+
+    private removeCallForRoom(roomId: string) {
+        this.calls.delete(roomId);
     }
 
     private showICEFallbackPrompt() {
@@ -270,36 +329,40 @@ export default class CallHandler {
         }, null, true);
     }
 
-    private onAction = (payload: ActionPayload) => {
-        const placeCall = (newCall) => {
-            this.setCallListeners(newCall);
-            if (payload.type === 'voice') {
-                newCall.placeVoiceCall();
-            } else if (payload.type === 'video') {
-                newCall.placeVideoCall(
-                    payload.remote_element,
-                    payload.local_element,
-                );
-            } else if (payload.type === 'screensharing') {
-                const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
-                if (screenCapErrorString) {
-                    this.setCallState(undefined, newCall.roomId, "ended");
-                    console.log("Can't capture screen: " + screenCapErrorString);
-                    Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
-                        title: _t('Unable to capture screen'),
-                        description: screenCapErrorString,
-                    });
-                    return;
-                }
-                newCall.placeScreenSharingCall(
-                    payload.remote_element,
-                    payload.local_element,
-                );
-            } else {
-                console.error("Unknown conf call type: %s", payload.type);
-            }
-        }
 
+    private placeCall(
+        roomId: string, type: PlaceCallType,
+        localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
+    ) {
+        Analytics.trackEvent('voip', 'placeCall', 'type', type);
+        const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
+        this.calls.set(roomId, call);
+        this.setCallListeners(call);
+        if (type === PlaceCallType.Voice) {
+            call.placeVoiceCall();
+        } else if (type === 'video') {
+            call.placeVideoCall(
+                remoteElement,
+                localElement,
+            );
+        } else if (type === PlaceCallType.ScreenSharing) {
+            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
+            if (screenCapErrorString) {
+                this.removeCallForRoom(roomId);
+                console.log("Can't capture screen: " + screenCapErrorString);
+                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
+                    title: _t('Unable to capture screen'),
+                    description: screenCapErrorString,
+                });
+                return;
+            }
+            call.placeScreenSharingCall(remoteElement, localElement);
+        } else {
+            console.error("Unknown conf call type: %s", type);
+        }
+    }
+
+    private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
             case 'place_call':
                 {
@@ -334,8 +397,8 @@ export default class CallHandler {
                         return;
                     } else if (members.length === 2) {
                         console.info("Place %s call in %s", payload.type, payload.room_id);
-                        const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
-                        placeCall(call);
+
+                        this.placeCall(payload.room_id, payload.type, payload.local_element, payload.remote_element);
                     } else { // > 2
                         dis.dispatch({
                             action: "place_conference_call",
@@ -349,7 +412,16 @@ export default class CallHandler {
                 break;
             case 'place_conference_call':
                 console.info("Place conference call in %s", payload.room_id);
+                Analytics.trackEvent('voip', 'placeConferenceCall');
                 this.startCallApp(payload.room_id, payload.type);
+                break;
+            case 'end_conference':
+                console.info("Terminating conference call in %s", payload.room_id);
+                this.terminateCallApp(payload.room_id);
+                break;
+            case 'hangup_conference':
+                console.info("Leaving conference call in %s", payload.room_id);
+                this.hangupCallApp(payload.room_id);
                 break;
             case 'incoming_call':
                 {
@@ -366,24 +438,29 @@ export default class CallHandler {
                         return;
                     }
 
-                    const call = payload.call;
+                    const call = payload.call as MatrixCall;
+                    Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
+                    this.calls.set(call.roomId, call)
                     this.setCallListeners(call);
-                    this.setCallState(call, call.roomId, "ringing");
                 }
                 break;
             case 'hangup':
+            case 'reject':
                 if (!this.calls.get(payload.room_id)) {
                     return; // no call to hangup
                 }
-                this.calls.get(payload.room_id).hangup();
-                this.setCallState(null, payload.room_id, "ended");
+                if (payload.action === 'reject') {
+                    this.calls.get(payload.room_id).reject();
+                } else {
+                    this.calls.get(payload.room_id).hangup(CallErrorCode.UserHangup, false);
+                }
+                this.removeCallForRoom(payload.room_id);
                 break;
             case 'answer':
-                if (!this.calls.get(payload.room_id)) {
+                if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer
                 }
                 this.calls.get(payload.room_id).answer();
-                this.setCallState(this.calls.get(payload.room_id), payload.room_id, "connected");
                 dis.dispatch({
                     action: "view_room",
                     room_id: payload.room_id,
@@ -398,41 +475,16 @@ export default class CallHandler {
             show: true,
         });
 
+        // prevent double clicking the call button
         const room = MatrixClientPeg.get().getRoom(roomId);
         const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
-
-        if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI)) {
+        const hasJitsi = currentJitsiWidgets.length > 0
+            || WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI);
+        if (hasJitsi) {
             Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
                 title: _t('Call in Progress'),
                 description: _t('A call is currently being placed!'),
             });
-            return;
-        }
-
-        if (currentJitsiWidgets.length > 0) {
-            console.warn(
-                "Refusing to start conference call widget in " + roomId +
-                " a conference call widget is already present",
-            );
-
-            if (WidgetUtils.canUserModifyWidgets(roomId)) {
-                Modal.createTrackedDialog('Already have Jitsi Widget', '', QuestionDialog, {
-                    title: _t('End Call'),
-                    description: _t('Remove the group call from the room?'),
-                    button: _t('End Call'),
-                    cancelButton: _t('Cancel'),
-                    onFinished: (endCall) => {
-                        if (endCall) {
-                            WidgetUtils.setRoomWidget(roomId, currentJitsiWidgets[0].getContent()['id']);
-                        }
-                    },
-                });
-            } else {
-                Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
-                    title: _t('Call in Progress'),
-                    description: _t("You don't have permission to remove the call from the room"),
-                });
-            }
             return;
         }
 
@@ -482,6 +534,40 @@ export default class CallHandler {
                 });
             }
             console.error(e);
+        });
+    }
+
+    private terminateCallApp(roomId: string) {
+        Modal.createTrackedDialog('Confirm Jitsi Terminate', '', QuestionDialog, {
+            hasCancelButton: true,
+            title: _t("End conference"),
+            description: _t("This will end the conference for everyone. Continue?"),
+            button: _t("End conference"),
+            onFinished: (proceed) => {
+                if (!proceed) return;
+
+                // We'll just obliterate them all. There should only ever be one, but might as well
+                // be safe.
+                const roomInfo = WidgetStore.instance.getRoom(roomId);
+                const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+                jitsiWidgets.forEach(w => {
+                    // setting invalid content removes it
+                    WidgetUtils.setRoomWidget(roomId, w.id);
+                });
+            },
+        });
+    }
+
+    private hangupCallApp(roomId: string) {
+        const roomInfo = WidgetStore.instance.getRoom(roomId);
+        if (!roomInfo) return; // "should never happen" clauses go here
+
+        const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+        jitsiWidgets.forEach(w => {
+            const messaging = WidgetMessagingStore.instance.getMessagingForId(w.id);
+            if (!messaging) return; // more "should never happen" words
+
+            messaging.transport.send(ElementWidgetActions.HangupCall, {});
         });
     }
 }

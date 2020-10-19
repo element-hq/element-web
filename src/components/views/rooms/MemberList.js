@@ -121,8 +121,8 @@ export default class MemberList extends React.Component {
                     this.setState(this._getMembersState(this.roomMembers()));
                     this._listenForMembersChanges();
                 }
-            } else if (membership === "invite") {
-                // show the members we've got when invited
+            } else {
+                // show the members we already have loaded
                 this.setState(this._getMembersState(this.roomMembers()));
             }
         }

@@ -30,7 +30,7 @@ import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { MatrixClientPeg, IMatrixClientCreds } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
@@ -181,9 +181,6 @@ interface IState {
     currentUserId?: string;
     // this is persisted as mx_lhs_size, loaded in LoggedInView
     collapseLhs: boolean;
-    leftDisabled: boolean;
-    middleDisabled: boolean;
-    // the right panel's disabled state is tracked in its store.
     // Parameters used in the registration dance with the IS
     // eslint-disable-next-line camelcase
     register_client_secret?: string;
@@ -236,8 +233,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.state = {
             view: Views.LOADING,
             collapseLhs: false,
-            leftDisabled: false,
-            middleDisabled: false,
 
             hideToSRUsers: false,
 
@@ -290,7 +285,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // When the session loads it'll be detected as soft logged out and a dispatch
             // will be sent out to say that, triggering this MatrixChat to show the soft
             // logout page.
-            Lifecycle.loadSession({});
+            Lifecycle.loadSession();
         }
 
         this.accountPassword = null;
@@ -670,9 +665,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_home_page':
                 this.viewHome();
                 break;
-            case 'view_set_mxid':
-                this.setMxId(payload);
-                break;
             case 'view_start_chat_or_reuse':
                 this.chatCreateOrReuse(payload.user_id);
                 break;
@@ -713,14 +705,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.state.resizeNotifier.notifyLeftHandleResized();
                 });
                 break;
-            case 'panel_disable': {
-                this.setState({
-                    leftDisabled: payload.leftDisabled || payload.sideDisabled || false,
-                    middleDisabled: payload.middleDisabled || false,
-                    // We don't track the right panel being disabled here - it's tracked in the store.
-                });
-                break;
-            }
             case 'on_logged_in':
                 if (
                     !Lifecycle.isSoftLogout() &&
@@ -985,41 +969,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private setMxId(payload) {
-        const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-        const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
-            homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
-            onFinished: (submitted, credentials) => {
-                if (!submitted) {
-                    dis.dispatch({
-                        action: 'cancel_after_sync_prepared',
-                    });
-                    if (payload.go_home_on_cancel) {
-                        dis.dispatch({
-                            action: 'view_home_page',
-                        });
-                    }
-                    return;
-                }
-                MatrixClientPeg.setJustRegisteredUserId(credentials.user_id);
-                this.onRegistered(credentials);
-            },
-            onDifferentServerClicked: (ev) => {
-                dis.dispatch({action: 'start_registration'});
-                close();
-            },
-            onLoginClick: (ev) => {
-                dis.dispatch({action: 'start_login'});
-                close();
-            },
-        }).close;
-    }
-
     private async createRoom(defaultPublic = false) {
         const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
         if (communityId) {
             // double check the user will have permission to associate this room with the community
-            if (CommunityPrototypeStore.instance.isAdminOf(communityId)) {
+            if (!CommunityPrototypeStore.instance.isAdminOf(communityId)) {
                 Modal.createTrackedDialog('Pre-failure to create room', '', ErrorDialog, {
                     title: _t("Cannot create rooms in this community"),
                     description: _t("You do not have permission to create rooms in this community."),
@@ -1814,12 +1768,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("forgot_password");
     };
 
-    onRegisterFlowComplete = (credentials: object, password: string) => {
+    onRegisterFlowComplete = (credentials: IMatrixClientCreds, password: string) => {
         return this.onUserCompletedLoginFlow(credentials, password);
     };
 
     // returns a promise which resolves to the new MatrixClient
-    onRegistered(credentials: object) {
+    onRegistered(credentials: IMatrixClientCreds) {
         return Lifecycle.setLoggedIn(credentials);
     }
 
@@ -1905,7 +1859,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    onUserCompletedLoginFlow = async (credentials: object, password: string) => {
+    onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, password: string) => {
         this.accountPassword = password;
         // self-destruct the password after 5mins
         if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);

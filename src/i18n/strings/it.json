@@ -2515,5 +2515,13 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Questa versione di %(brand)s non supporta la visualizzazione di alcuni file cifrati",
     "This version of %(brand)s does not support searching encrypted messages": "Questa versione di %(brand)s non supporta la ricerca di messaggi cifrati",
     "Cannot create rooms in this community": "Impossibile creare stanze in questa comunità",
-    "You do not have permission to create rooms in this community.": "Non hai i permessi per creare stanze in questa comunità."
+    "You do not have permission to create rooms in this community.": "Non hai i permessi per creare stanze in questa comunità.",
+    "Join the conference at the top of this room": "Entra nella conferenza in cima alla stanza",
+    "Join the conference from the room information card on the right": "Entra nella conferenza dalla scheda di informazione della stanza a destra",
+    "Video conference ended by %(senderName)s": "Conferenza video terminata da %(senderName)s",
+    "Video conference updated by %(senderName)s": "Conferenza video aggiornata da %(senderName)s",
+    "Video conference started by %(senderName)s": "Conferenza video iniziata da %(senderName)s",
+    "End conference": "Termina conferenza",
+    "This will end the conference for everyone. Continue?": "Verrà terminata la conferenza per tutti. Continuare?",
+    "Ignored attempt to disable encryption": "Tentativo di disattivare la crittografia ignorato"
 }

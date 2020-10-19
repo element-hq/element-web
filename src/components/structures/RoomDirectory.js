@@ -30,12 +30,12 @@ import Analytics from '../../Analytics';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {ALL_ROOMS} from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
-import TagOrderStore from "../../stores/TagOrderStore";
+import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
 
 const MAX_NAME_LENGTH = 80;
-const MAX_TOPIC_LENGTH = 160;
+const MAX_TOPIC_LENGTH = 800;
 
 function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
@@ -49,7 +49,7 @@ export default class RoomDirectory extends React.Component {
     constructor(props) {
         super(props);
 
-        const selectedCommunityId = TagOrderStore.getSelectedTags()[0];
+        const selectedCommunityId = GroupFilterOrderStore.getSelectedTags()[0];
         this.state = {
             publicRooms: [],
             loading: true,
@@ -497,6 +497,9 @@ export default class RoomDirectory extends React.Component {
         }
 
         let topic = room.topic || '';
+        // Additional truncation based on line numbers is done via CSS,
+        // but to ensure that the DOM is not polluted with a huge string
+        // we give it a hard limit before rendering.
         if (topic.length > MAX_TOPIC_LENGTH) {
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
