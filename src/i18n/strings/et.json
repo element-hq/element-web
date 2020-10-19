@@ -2531,5 +2531,12 @@
     "Starting microphone...": "Lülitan mikrofoni sisse...",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s muutis seda jututuba teenindavate koduserverite loendit.",
     "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s seadistas seda jututuba teenindavate koduserverite loendi.",
-    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Kõikidel serveritel on keeld seda jututuba teenindada! Seega seda jututuba ei saa enam kasutada."
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Kõikidel serveritel on keeld seda jututuba teenindada! Seega seda jututuba ei saa enam kasutada.",
+    "(an error occurred)": "(tekkis viga)",
+    "(their device couldn't start the camera / microphone)": "(teise osapoole seadmes ei õnnestunud sisse lülitada kaamerat või mikrofoni)",
+    "(connection failed)": "(ühendus ebaõnnestus)",
+    "The call could not be established": "Kõnet ei saa korraldada",
+    "%(senderName)s declined the call.": "%(senderName)s ei võtnud kõnet vastu.",
+    "The other party declined the call.": "Teine osapool ei võtnud kõnet vastu.",
+    "Call Declined": "Kõne on tagasilükatud"
 }
