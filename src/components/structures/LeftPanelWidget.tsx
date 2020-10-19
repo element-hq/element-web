@@ -23,7 +23,7 @@ import {useRovingTabIndex} from "../../accessibility/RovingTabIndex";
 import {Key} from "../../Keyboard";
 import {useLocalStorageState} from "../../hooks/useLocalStorageState";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import WidgetUtils, {IWidget} from "../../utils/WidgetUtils";
+import WidgetUtils, {IWidgetEvent} from "../../utils/WidgetUtils";
 import {useAccountData} from "../../hooks/useAccountData";
 import AppTile from "../views/elements/AppTile";
 import {useSettingValue} from "../../hooks/useSettings";
@@ -39,7 +39,7 @@ const INITIAL_HEIGHT = 280;
 const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
     const cli = useContext(MatrixClientContext);
 
-    const mWidgetsEvent = useAccountData<Record<string, IWidget>>(cli, "m.widgets");
+    const mWidgetsEvent = useAccountData<Record<string, IWidgetEvent>>(cli, "m.widgets");
     const leftPanelWidgetId = useSettingValue("Widgets.leftPanel");
     const app = useMemo(() => {
         if (!mWidgetsEvent || !leftPanelWidgetId) return null;
