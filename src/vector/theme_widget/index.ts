@@ -18,7 +18,12 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {WidgetApi, WidgetApiToWidgetAction, IWidgetApiRequest} from 'matrix-widget-api';
+import {
+    WidgetApi,
+    WidgetApiToWidgetAction,
+    IModalWidgetButtonClickedRequest,
+    IModalWidgetOpenRequest,
+} from 'matrix-widget-api';
 
 let widgetApi: WidgetApi;
 (async function() {
@@ -38,22 +43,26 @@ let widgetApi: WidgetApi;
         const parentOrigin = new URL(qsParam('parentUrl')).origin;
         widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
 
-        widgetApi.addEventListener(
+        widgetApi.on(
             `action:${WidgetApiToWidgetAction.ButtonClicked}`,
-            (ev: CustomEvent<IWidgetApiRequest>) => {
+            (ev: CustomEvent<IModalWidgetButtonClickedRequest>) => {
+                ev.preventDefault();
                 console.log("@@ clickety", ev.detail);
                 document.getElementById("button").innerText = "BUTTON CLICKED: " + JSON.stringify(ev.detail.data);
                 setTimeout(() => {
                     widgetApi.closeModalWidget(ev.detail.data);
                 }, 3000);
+                widgetApi.transport.reply(ev.detail, {}); // ack
             },
         );
 
-        widgetApi.addEventListener(
+        widgetApi.on(
             `action:${WidgetApiToWidgetAction.WidgetConfig}`,
-            (ev: CustomEvent<IWidgetApiRequest>) => {
+            (ev: CustomEvent<IModalWidgetOpenRequest>) => {
+                ev.preventDefault();
                 console.log("Got widget config: ", ev.detail.data);
                 document.getElementById("question").innerText = "INIT PARAMS: " + JSON.stringify(ev.detail.data);
+                widgetApi.transport.reply(ev.detail, {}); // ack
             },
         );
         widgetApi.start();

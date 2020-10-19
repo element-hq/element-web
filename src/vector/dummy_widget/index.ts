@@ -18,7 +18,12 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {ModalButtonKind, WidgetApi, WidgetApiToWidgetAction} from 'matrix-widget-api';
+import {
+    ModalButtonKind,
+    WidgetApi,
+    WidgetApiToWidgetAction,
+    IModalWidgetCloseNotificationRequest,
+} from 'matrix-widget-api';
 
 let widgetApi: WidgetApi;
 (async function() {
@@ -38,9 +43,13 @@ let widgetApi: WidgetApi;
         const parentOrigin = new URL(qsParam('parentUrl')).origin;
         widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
 
-        widgetApi.addEventListener(WidgetApiToWidgetAction.CloseModalWidget, (req: CustomEvent) => {
-            document.getElementById("answer").innerText = "Response from Modal: " + JSON.stringify(req.detail);
-        });
+        widgetApi.on(`action:${WidgetApiToWidgetAction.CloseModalWidget}`,
+            (ev: CustomEvent<IModalWidgetCloseNotificationRequest>) => {
+                ev.preventDefault();
+                document.getElementById("answer").innerText = "Response from Modal: " + JSON.stringify(ev.detail);
+                widgetApi.transport.reply(ev.detail, {}); // ack
+            },
+        );
 
         widgetApi.start();
 
