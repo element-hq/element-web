@@ -236,7 +236,7 @@ export default class CallHandler {
                     this.play(AudioID.Ringback);
                     break;
                 case CallState.Ended:
-                    Analytics.trackEvent('voip', 'callEnded', "hangupReason", call.hangupReason);
+                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
                     this.removeCallForRoom(call.roomId);
                     if (oldState === CallState.InviteSent && (
                         call.hangupParty === CallParty.Remote ||
