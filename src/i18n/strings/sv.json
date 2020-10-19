@@ -2464,5 +2464,12 @@
     "Starting microphone...": "Startar mikrofon…",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Alla servrar har bannats från att delta! Det här rummet kan inte längre användas.",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ändrade server-ACL:erna för det här rummet.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ställde in server-ACL:er för det här rummet."
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ställde in server-ACL:er för det här rummet.",
+    "%(senderName)s declined the call.": "%(senderName)s avböjde samtalet.",
+    "(an error occurred)": "(ett fel inträffade)",
+    "(their device couldn't start the camera / microphone)": "(deras enhet kunde inte starta kameran/mikrofonen)",
+    "(connection failed)": "(anslutning misslyckad)",
+    "The call could not be established": "Samtalet kunde inte etableras",
+    "The other party declined the call.": "Den andra parten avböjde samtalet.",
+    "Call Declined": "Samtal avböjt"
 }
