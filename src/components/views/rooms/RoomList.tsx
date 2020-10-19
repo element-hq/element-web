@@ -45,6 +45,7 @@ import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
+import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -129,7 +130,9 @@ const TAG_AESTHETICS: {
                     }}
                 />
                 <IconizedContextMenuOption
-                    label={_t("Explore public rooms")}
+                    label={CommunityPrototypeStore.instance.getSelectedCommunityId()
+                        ? _t("Explore community rooms")
+                        : _t("Explore public rooms")}
                     iconClassName="mx_RoomList_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();
@@ -215,7 +218,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private getRoomDelta = (roomId: string, delta: number, unread = false) => {
         const lists = RoomListStore.instance.orderedLists;
-        let rooms: Room = [];
+        const rooms: Room = [];
         TAG_ORDER.forEach(t => {
             let listRooms = lists[t];
 
@@ -287,7 +290,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
-           return g.myMembership === 'invite';
+            return g.myMembership === 'invite';
         }).map(g => {
             const avatar = (
                 <GroupAvatar
@@ -343,21 +346,19 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 : TAG_AESTHETICS[orderedTagId];
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
-            components.push(
-                <RoomSublist
-                    key={`sublist-${orderedTagId}`}
-                    tagId={orderedTagId}
-                    forRooms={true}
-                    startAsHidden={aesthetics.defaultHidden}
-                    label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
-                    onAddRoom={aesthetics.onAddRoom}
-                    addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
-                    addRoomContextMenu={aesthetics.addRoomContextMenu}
-                    isMinimized={this.props.isMinimized}
-                    onResize={this.props.onResize}
-                    extraBadTilesThatShouldntExist={extraTiles}
-                />
-            );
+            components.push(<RoomSublist
+                key={`sublist-${orderedTagId}`}
+                tagId={orderedTagId}
+                forRooms={true}
+                startAsHidden={aesthetics.defaultHidden}
+                label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
+                onAddRoom={aesthetics.onAddRoom}
+                addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
+                addRoomContextMenu={aesthetics.addRoomContextMenu}
+                isMinimized={this.props.isMinimized}
+                onResize={this.props.onResize}
+                extraBadTilesThatShouldntExist={extraTiles}
+            />);
         }
 
         return components;

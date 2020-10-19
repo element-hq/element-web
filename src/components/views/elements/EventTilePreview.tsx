@@ -21,6 +21,8 @@ import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import * as Avatar from '../../../Avatar';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 interface IProps {
     /**
@@ -39,11 +41,13 @@ interface IProps {
     className: string;
 }
 
+/* eslint-disable camelcase */
 interface IState {
     userId: string;
     displayname: string;
     avatar_url: string;
 }
+/* eslint-enable camelcase */
 
 const AVATAR_SIZE = 32;
 
@@ -63,48 +67,50 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
-        const avatar_url = Avatar.avatarUrlForUser(
+        const avatarUrl = Avatar.avatarUrlForUser(
             {avatarUrl: profileInfo.avatar_url},
             AVATAR_SIZE, AVATAR_SIZE, "crop");
 
         this.setState({
             userId,
             displayname: profileInfo.displayname,
-            avatar_url,
+            avatar_url: avatarUrl,
         });
-
     }
 
-    private fakeEvent({userId, displayname, avatar_url}: IState) {
+    private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
         // Fake it till we make it
-        const event = new MatrixEvent(JSON.parse(`{
-                "type": "m.room.message",
-                "sender": "${userId}",
-                "content": {
-                  "m.new_content": {
-                    "msgtype": "m.text",
-                    "body": "${this.props.message}",
-                    "displayname": "${displayname}",
-                    "avatar_url": "${avatar_url}"
-                  },
-                  "msgtype": "m.text",
-                  "body": "${this.props.message}",
-                  "displayname": "${displayname}",
-                  "avatar_url": "${avatar_url}"
+        /* eslint-disable quote-props */
+        const rawEvent = {
+            type: "m.room.message",
+            sender: userId,
+            content: {
+                "m.new_content": {
+                    msgtype: "m.text",
+                    body: this.props.message,
+                    displayname: displayname,
+                    avatar_url: avatarUrl,
                 },
-                "unsigned": {
-                  "age": 97
-                },
-                "event_id": "$9999999999999999999999999999999999999999999",
-                "room_id": "!999999999999999999:matrix.org"
-              }`));
+                msgtype: "m.text",
+                body: this.props.message,
+                displayname: displayname,
+                avatar_url: avatarUrl,
+            },
+            unsigned: {
+                age: 97,
+            },
+            event_id: "$9999999999999999999999999999999999999999999",
+            room_id: "!999999999999999999:example.org",
+        };
+        const event = new MatrixEvent(rawEvent);
+        /* eslint-enable quote-props */
 
         // Fake it more
         event.sender = {
             name: displayname,
             userId: userId,
             getAvatarUrl: (..._) => {
-                return avatar_url;
+                return avatarUrl;
             },
         };
 
@@ -114,16 +120,17 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     public render() {
         const event = this.fakeEvent(this.state);
 
-        let className = classnames(
-            this.props.className,
-            {
-                "mx_IRCLayout": this.props.useIRCLayout,
-                "mx_GroupLayout": !this.props.useIRCLayout,
-            }
-        );
+        const className = classnames(this.props.className, {
+            "mx_IRCLayout": this.props.useIRCLayout,
+            "mx_GroupLayout": !this.props.useIRCLayout,
+        });
 
         return <div className={className}>
-            <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
+            <EventTile
+                mxEvent={event}
+                useIRCLayout={this.props.useIRCLayout}
+                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+            />
         </div>;
     }
 }

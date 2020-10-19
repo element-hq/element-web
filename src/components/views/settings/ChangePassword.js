@@ -18,88 +18,58 @@ limitations under the License.
 import Field from "../elements/Field";
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
+import Spinner from '../elements/Spinner';
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 
-import sessionStore from '../../../stores/SessionStore';
-
-export default createReactClass({
-    displayName: 'ChangePassword',
-
-    propTypes: {
+export default class ChangePassword extends React.Component {
+    static propTypes = {
         onFinished: PropTypes.func,
         onError: PropTypes.func,
         onCheckPassword: PropTypes.func,
         rowClassName: PropTypes.string,
         buttonClassName: PropTypes.string,
         buttonKind: PropTypes.string,
+        buttonLabel: PropTypes.string,
         confirm: PropTypes.bool,
         // Whether to autoFocus the new password input
         autoFocusNewPasswordInput: PropTypes.bool,
-    },
+    };
 
-    Phases: {
+    static Phases = {
         Edit: "edit",
         Uploading: "uploading",
         Error: "error",
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            onFinished: function() {},
-            onError: function() {},
-            onCheckPassword: function(oldPass, newPass, confirmPass) {
-                if (newPass !== confirmPass) {
-                    return {
-                        error: _t("New passwords don't match"),
-                    };
-                } else if (!newPass || newPass.length === 0) {
-                    return {
-                        error: _t("Passwords can't be empty"),
-                    };
-                }
-            },
-            confirm: true,
-        };
-    },
+    static defaultProps = {
+        onFinished() {},
+        onError() {},
+        onCheckPassword(oldPass, newPass, confirmPass) {
+            if (newPass !== confirmPass) {
+                return {
+                    error: _t("New passwords don't match"),
+                };
+            } else if (!newPass || newPass.length === 0) {
+                return {
+                    error: _t("Passwords can't be empty"),
+                };
+            }
+        },
+        confirm: true,
+    }
 
-    getInitialState: function() {
-        return {
-            phase: this.Phases.Edit,
-            cachedPassword: null,
-            oldPassword: "",
-            newPassword: "",
-            newPasswordConfirm: "",
-        };
-    },
+    state = {
+        phase: ChangePassword.Phases.Edit,
+        oldPassword: "",
+        newPassword: "",
+        newPasswordConfirm: "",
+    };
 
-    componentDidMount: function() {
-        this._sessionStore = sessionStore;
-        this._sessionStoreToken = this._sessionStore.addListener(
-            this._setStateFromSessionStore,
-        );
-
-        this._setStateFromSessionStore();
-    },
-
-    componentWillUnmount: function() {
-        if (this._sessionStoreToken) {
-            this._sessionStoreToken.remove();
-        }
-    },
-
-    _setStateFromSessionStore: function() {
-        this.setState({
-            cachedPassword: this._sessionStore.getCachedPassword(),
-        });
-    },
-
-    changePassword: function(oldPassword, newPassword) {
+    changePassword(oldPassword, newPassword) {
         const cli = MatrixClientPeg.get();
 
         if (!this.props.confirm) {
@@ -125,8 +95,11 @@ export default createReactClass({
                 </div>,
             button: _t("Continue"),
             extraButtons: [
-                <button className="mx_Dialog_primary"
-                        onClick={this._onExportE2eKeysClicked}>
+                <button
+                    key="exportRoomKeys"
+                    className="mx_Dialog_primary"
+                    onClick={this._onExportE2eKeysClicked}
+                >
                     { _t('Export E2E room keys') }
                 </button>,
             ],
@@ -136,9 +109,9 @@ export default createReactClass({
                 }
             },
         });
-    },
+    }
 
-    _changePassword: function(cli, oldPassword, newPassword) {
+    _changePassword(cli, oldPassword, newPassword) {
         const authDict = {
             type: 'm.login.password',
             identifier: {
@@ -152,13 +125,10 @@ export default createReactClass({
         };
 
         this.setState({
-            phase: this.Phases.Uploading,
+            phase: ChangePassword.Phases.Uploading,
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
-            // Notify SessionStore that the user's password was changed
-            dis.dispatch({action: 'password_changed'});
-
             if (this.props.shouldAskForEmail) {
                 return this._optionallySetEmail().then((confirmed) => {
                     this.props.onFinished({
@@ -172,53 +142,53 @@ export default createReactClass({
             this.props.onError(err);
         }).finally(() => {
             this.setState({
-                phase: this.Phases.Edit,
+                phase: ChangePassword.Phases.Edit,
                 oldPassword: "",
                 newPassword: "",
                 newPasswordConfirm: "",
             });
         });
-    },
+    }
 
-    _optionallySetEmail: function() {
+    _optionallySetEmail() {
         // Ask for an email otherwise the user has no way to reset their password
         const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
         const modal = Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
         });
         return modal.finished.then(([confirmed]) => confirmed);
-    },
+    }
 
-    _onExportE2eKeysClicked: function() {
+    _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
-            import('../../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            import('../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {
                 matrixClient: MatrixClientPeg.get(),
             },
         );
-    },
+    };
 
-    onChangeOldPassword(ev) {
+    onChangeOldPassword = (ev) => {
         this.setState({
             oldPassword: ev.target.value,
         });
-    },
+    };
 
-    onChangeNewPassword(ev) {
+    onChangeNewPassword = (ev) => {
         this.setState({
             newPassword: ev.target.value,
         });
-    },
+    };
 
-    onChangeNewPasswordConfirm(ev) {
+    onChangeNewPasswordConfirm = (ev) => {
         this.setState({
             newPasswordConfirm: ev.target.value,
         });
-    },
+    };
 
-    onClickChange: function(ev) {
+    onClickChange = (ev) => {
         ev.preventDefault();
-        const oldPassword = this.state.cachedPassword || this.state.oldPassword;
+        const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
         const err = this.props.onCheckPassword(
@@ -229,39 +199,30 @@ export default createReactClass({
         } else {
             this.changePassword(oldPassword, newPassword);
         }
-    },
+    };
 
-    render: function() {
+    render() {
         // TODO: Live validation on `new pw == confirm pw`
 
         const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 
-        let currentPassword = null;
-        if (!this.state.cachedPassword) {
-            currentPassword = (
-                <div className={rowClassName}>
-                    <Field
-                        type="password"
-                        label={_t('Current password')}
-                        value={this.state.oldPassword}
-                        onChange={this.onChangeOldPassword}
-                    />
-                </div>
-            );
-        }
-
         switch (this.state.phase) {
-            case this.Phases.Edit:
-                const passwordLabel = this.state.cachedPassword ?
-                    _t('Password') : _t('New Password');
+            case ChangePassword.Phases.Edit:
                 return (
                     <form className={this.props.className} onSubmit={this.onClickChange}>
-                        { currentPassword }
                         <div className={rowClassName}>
                             <Field
                                 type="password"
-                                label={passwordLabel}
+                                label={_t('Current password')}
+                                value={this.state.oldPassword}
+                                onChange={this.onChangeOldPassword}
+                            />
+                        </div>
+                        <div className={rowClassName}>
+                            <Field
+                                type="password"
+                                label={_t('New Password')}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
@@ -278,17 +239,16 @@ export default createReactClass({
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
-                            { _t('Change Password') }
+                            { this.props.buttonLabel || _t('Change Password') }
                         </AccessibleButton>
                     </form>
                 );
-            case this.Phases.Uploading:
-                var Loader = sdk.getComponent("elements.Spinner");
+            case ChangePassword.Phases.Uploading:
                 return (
                     <div className="mx_Dialog_content">
-                        <Loader />
+                        <Spinner />
                     </div>
                 );
         }
-    },
-});
+    }
+}

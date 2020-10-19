@@ -18,16 +18,13 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
 /**
  * Basic container for buttons in modal dialogs.
  */
-export default createReactClass({
-    displayName: "DialogButtons",
-
-    propTypes: {
+export default class DialogButtons extends React.Component {
+    static propTypes = {
         // The primary button which is styled differently and has default focus.
         primaryButton: PropTypes.node.isRequired,
 
@@ -57,20 +54,18 @@ export default createReactClass({
 
         // disables only the primary button
         primaryDisabled: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            hasCancel: true,
-            disabled: false,
-        };
-    },
+    static defaultProps = {
+        hasCancel: true,
+        disabled: false,
+    };
 
-    _onCancelClick: function() {
+    _onCancelClick = () => {
         this.props.onCancel();
-    },
+    };
 
-    render: function() {
+    render() {
         let primaryButtonClassName = "mx_Dialog_primary";
         if (this.props.primaryButtonClass) {
             primaryButtonClassName += " " + this.props.primaryButtonClass;
@@ -104,5 +99,5 @@ export default createReactClass({
                 </button>
             </div>
         );
-    },
-});
+    }
+}

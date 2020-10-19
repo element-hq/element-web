@@ -19,6 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
+import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
@@ -52,7 +53,7 @@ const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
-const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
+export const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
 
 /*
  * Return true if the given string contains emoji
@@ -151,7 +152,7 @@ export function isUrlPermitted(inputUrl: string) {
     }
 }
 
-const transformTags: sanitizeHtml.IOptions["transformTags"] = { // custom to matrix
+const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to matrix
     // add blank targets to all hyperlinks except vector URLs
     'a': function(tagName: string, attribs: sanitizeHtml.Attributes) {
         if (attribs.href) {
@@ -224,7 +225,7 @@ const transformTags: sanitizeHtml.IOptions["transformTags"] = { // custom to mat
     },
 };
 
-const sanitizeHtmlParams: sanitizeHtml.IOptions = {
+const sanitizeHtmlParams: IExtendedSanitizeOptions = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
@@ -245,13 +246,14 @@ const sanitizeHtmlParams: sanitizeHtml.IOptions = {
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
     // URL schemes we permit
     allowedSchemes: PERMITTED_URL_SCHEMES,
-
     allowProtocolRelative: false,
     transformTags,
+    // 50 levels deep "should be enough for anyone"
+    nestingLimit: 50,
 };
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: sanitizeHtml.IOptions = {
+const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
         'code': transformTags['code'],
@@ -339,33 +341,9 @@ class HtmlHighlighter extends BaseHighlighter<string> {
     }
 }
 
-class TextHighlighter extends BaseHighlighter<React.ReactNode> {
-    private key = 0;
-
-    /* create a <span> node to hold the given content
-     *
-     * snippet: content of the span
-     * highlight: true to highlight as a search match
-     *
-     * returns a React node
-     */
-    protected processSnippet(snippet: string, highlight: boolean): React.ReactNode {
-        const key = this.key++;
-
-        let node = <span key={key} className={highlight ? this.highlightClass : null}>
-            { snippet }
-        </span>;
-
-        if (highlight && this.highlightLink) {
-            node = <a key={key} href={this.highlightLink}>{ node }</a>;
-        }
-
-        return node;
-    }
-}
-
 interface IContent {
     format?: string;
+    // eslint-disable-next-line camelcase
     formatted_body?: string;
     body: string;
 }
@@ -474,8 +452,13 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     });
 
     return isDisplayedWithHtml ?
-        <span key="body" ref={opts.ref} className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
+        <span
+            key="body"
+            ref={opts.ref}
+            className={className}
+            dangerouslySetInnerHTML={{ __html: safeBody }}
+            dir="auto"
+        /> : <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
 }
 
 /**

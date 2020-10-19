@@ -135,6 +135,9 @@ export default class MessagePanel extends React.Component {
 
         // whether to use the irc layout
         useIRCLayout: PropTypes.bool,
+
+        // whether or not to show flair at all
+        enableFlair: PropTypes.bool,
     };
 
     // Force props to be loaded for useIRCLayout
@@ -515,10 +518,13 @@ export default class MessagePanel extends React.Component {
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
                 if (wantTile) {
+                    const nextEvent = i < this.props.events.length - 1
+                        ? this.props.events[i + 1]
+                        : null;
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last));
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, nextEvent));
                     prevEvent = mxEv;
                 }
 
@@ -534,7 +540,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last) {
+    _getTilesForEvent(prevEvent, mxEv, last, nextEvent) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -559,6 +565,11 @@ export default class MessagePanel extends React.Component {
             ret.push(dateSeparator);
         }
 
+        let willWantDateSeparator = false;
+        if (nextEvent) {
+            willWantDateSeparator = this._wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
+        }
+
         // is this a continuation of the previous message?
         const continuation = !wantsDateSeparator && shouldFormContinuation(prevEvent, mxEv);
 
@@ -579,7 +590,8 @@ export default class MessagePanel extends React.Component {
                 data-scroll-tokens={scrollToken}
             >
                 <TileErrorBoundary mxEvent={mxEv}>
-                    <EventTile mxEvent={mxEv}
+                    <EventTile
+                        mxEvent={mxEv}
                         continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
                         replacingEventId={mxEv.replacingEventId()}
@@ -594,10 +606,12 @@ export default class MessagePanel extends React.Component {
                         isTwelveHour={this.props.isTwelveHour}
                         permalinkCreator={this.props.permalinkCreator}
                         last={last}
+                        lastInSection={willWantDateSeparator}
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
                         useIRCLayout={this.props.useIRCLayout}
+                        enableFlair={this.props.enableFlair}
                     />
                 </TileErrorBoundary>
             </li>,

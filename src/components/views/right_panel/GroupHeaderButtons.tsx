@@ -41,13 +41,9 @@ interface IProps {}
 export default class GroupHeaderButtons extends HeaderButtons {
     constructor(props: IProps) {
         super(props, HeaderKind.Group);
-        this.onMembersClicked = this.onMembersClicked.bind(this);
-        this.onRoomsClicked = this.onRoomsClicked.bind(this);
     }
 
     protected onAction(payload: ActionPayload) {
-        super.onAction(payload);
-
         if (payload.action === Action.ViewUser) {
             if ((payload as ViewUserPayload).member) {
                 this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
@@ -70,7 +66,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         }
     }
 
-    private onMembersClicked() {
+    private onMembersClicked = () => {
         if (this.state.phase === RightPanelPhases.GroupMemberInfo) {
             // send the active phase to trigger a toggle
             this.setPhase(RightPanelPhases.GroupMemberInfo);
@@ -78,12 +74,12 @@ export default class GroupHeaderButtons extends HeaderButtons {
             // This toggles for us, if needed
             this.setPhase(RightPanelPhases.GroupMemberList);
         }
-    }
+    };
 
-    private onRoomsClicked() {
+    private onRoomsClicked = () => {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.GroupRoomList);
-    }
+    };
 
     renderButtons() {
         return [

@@ -15,14 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import createReactClass from 'create-react-class';
 import {_t} from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 
-export default createReactClass({
-    displayName: 'InlineSpinner',
-
-    render: function() {
+export default class InlineSpinner extends React.Component {
+    render() {
         const w = this.props.w || 16;
         const h = this.props.h || 16;
         const imgClass = this.props.imgClassName || "";
@@ -45,5 +42,5 @@ export default createReactClass({
                 />
             </div>
         );
-    },
-});
+    }
+}

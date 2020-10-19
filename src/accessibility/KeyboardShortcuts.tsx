@@ -168,7 +168,7 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 key: Key.U,
             }],
             description: _td("Upload a file"),
-        }
+        },
     ],
 
     [Categories.ROOM_LIST]: [

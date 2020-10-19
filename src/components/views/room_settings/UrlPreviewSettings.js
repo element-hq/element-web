@@ -19,7 +19,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -29,20 +28,18 @@ import {Action} from "../../../dispatcher/actions";
 import {SettingLevel} from "../../../settings/SettingLevel";
 
 
-export default createReactClass({
-    displayName: 'UrlPreviewSettings',
-
-    propTypes: {
+export default class UrlPreviewSettings extends React.Component {
+    static propTypes = {
         room: PropTypes.object,
-    },
+    };
 
-    _onClickUserSettings: (e) => {
+    _onClickUserSettings = (e) => {
         e.preventDefault();
         e.stopPropagation();
         dis.fire(Action.ViewUserSettings);
-    },
+    };
 
-    render: function() {
+    render() {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         const roomId = this.props.room.roomId;
         const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
@@ -110,5 +107,5 @@ export default createReactClass({
                 <label>{ previewsForRoomAccount }</label>
             </div>
         );
-    },
-});
+    }
+}

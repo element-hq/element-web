@@ -33,6 +33,8 @@ interface RightPanelStoreState {
     lastRoomPhase: RightPanelPhases;
     lastGroupPhase: RightPanelPhases;
 
+    previousPhase?: RightPanelPhases;
+
     // Extra information about the last phase
     lastRoomPhaseParams: {[key: string]: any};
 }
@@ -87,6 +89,10 @@ export default class RightPanelStore extends Store<ActionPayload> {
 
     get groupPanelPhase(): RightPanelPhases {
         return this.state.lastGroupPhase;
+    }
+
+    get previousPhase(): RightPanelPhases | null {
+        return RIGHT_PANEL_PHASES_NO_ARGS.includes(this.state.previousPhase) ? this.state.previousPhase : null;
     }
 
     get visibleRoomPanelPhase(): RightPanelPhases {
@@ -176,23 +182,27 @@ export default class RightPanelStore extends Store<ActionPayload> {
                     if (targetPhase === this.state.lastGroupPhase) {
                         this.setState({
                             showGroupPanel: !this.state.showGroupPanel,
+                            previousPhase: null,
                         });
                     } else {
                         this.setState({
                             lastGroupPhase: targetPhase,
                             showGroupPanel: true,
+                            previousPhase: this.state.lastGroupPhase,
                         });
                     }
                 } else {
                     if (targetPhase === this.state.lastRoomPhase && !refireParams) {
                         this.setState({
                             showRoomPanel: !this.state.showRoomPanel,
+                            previousPhase: null,
                         });
                     } else {
                         this.setState({
                             lastRoomPhase: targetPhase,
                             showRoomPanel: true,
                             lastRoomPhaseParams: refireParams || {},
+                            previousPhase: this.state.lastRoomPhase,
                         });
                     }
                 }
@@ -223,3 +233,5 @@ export default class RightPanelStore extends Store<ActionPayload> {
         return RightPanelStore.instance;
     }
 }
+
+window.mxRightPanelStore = RightPanelStore.getSharedInstance();

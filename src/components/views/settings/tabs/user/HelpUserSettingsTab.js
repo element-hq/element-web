@@ -204,9 +204,9 @@ export default class HelpUserSettingsTab extends React.Component {
             updateButton = <UpdateCheckButton />;
         }
 
-        return (
-            <div className="mx_SettingsTab mx_HelpUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
+        let bugReportingSection;
+        if (SdkConfig.get().bug_report_endpoint_url) {
+            bugReportingSection = (
                 <div className="mx_SettingsTab_section">
                     <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -223,22 +223,24 @@ export default class HelpUserSettingsTab extends React.Component {
                                 {_t("Submit debug logs")}
                             </AccessibleButton>
                         </div>
-                        <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
-                                {_t("Clear cache and reload")}
-                            </AccessibleButton>
-                        </div>
                         {
                             _t( "To report a Matrix-related security issue, please read the Matrix.org " +
                                 "<a>Security Disclosure Policy</a>.", {},
                                 {
                                     'a': (sub) =>
                                         <a href="https://matrix.org/security-disclosure-policy/"
-                                        rel="noreferrer noopener" target="_blank">{sub}</a>,
+                                           rel="noreferrer noopener" target="_blank">{sub}</a>,
                                 })
                         }
                     </div>
                 </div>
+            );
+        }
+
+        return (
+            <div className="mx_SettingsTab mx_HelpUserSettingsTab">
+                <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
+                { bugReportingSection }
                 <div className='mx_SettingsTab_section'>
                     <span className='mx_SettingsTab_subheading'>{_t("FAQ")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -268,6 +270,11 @@ export default class HelpUserSettingsTab extends React.Component {
                                           data-spoiler={MatrixClientPeg.get().getAccessToken()}>
                             &lt;{ _t("click to reveal") }&gt;
                         </AccessibleButton>
+                        <div className='mx_HelpUserSettingsTab_debugButton'>
+                            <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
+                                {_t("Clear cache and reload")}
+                            </AccessibleButton>
+                        </div>
                     </div>
                 </div>
             </div>

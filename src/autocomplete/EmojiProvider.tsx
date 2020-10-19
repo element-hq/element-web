@@ -23,8 +23,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import {ICompletion, ISelectionRange} from './Autocompleter';
-import _uniq from 'lodash/uniq';
-import _sortBy from 'lodash/sortBy';
+import {uniq, sortBy} from 'lodash';
 import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
 import { EMOJI, IEmoji } from '../emoji';
@@ -115,7 +114,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             }
             // Finally, sort by original ordering
             sorters.push((c) => c._orderBy);
-            completions = _sortBy(_uniq(completions), sorters);
+            completions = sortBy(uniq(completions), sorters);
 
             completions = completions.map(({shortname}) => {
                 const unicode = shortcodeToUnicode(shortname);
@@ -139,7 +138,11 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
-            <div className="mx_Autocomplete_Completion_container_pill" role="listbox" aria-label={_t("Emoji Autocomplete")}>
+            <div
+                className="mx_Autocomplete_Completion_container_pill"
+                role="listbox"
+                aria-label={_t("Emoji Autocomplete")}
+            >
                 { completions }
             </div>
         );

@@ -28,10 +28,11 @@ const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
-import {Capability} from "../widgets/WidgetApi";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
+import {_t} from "../languageHandler";
+import {MatrixCapabilities} from "matrix-widget-api";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -405,6 +406,7 @@ export default class WidgetUtils {
         app.creatorUserId = senderUserId;
 
         app.id = appId;
+        app.roomId = roomId;
         app.eventId = eventId;
         app.name = app.name || app.type;
 
@@ -414,15 +416,14 @@ export default class WidgetUtils {
     static getCapWhitelistForAppTypeInRoomId(appType, roomId) {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
-        const capWhitelist = enableScreenshots ? [Capability.Screenshot] : [];
+        const capWhitelist = enableScreenshots ? [MatrixCapabilities.Screenshots] : [];
 
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
         if (WidgetType.JITSI.matches(appType)) {
-            capWhitelist.push(Capability.AlwaysOnScreen);
+            capWhitelist.push(MatrixCapabilities.AlwaysOnScreen);
         }
-        capWhitelist.push(Capability.ReceiveTerminate);
 
         return capWhitelist;
     }
@@ -448,16 +449,21 @@ export default class WidgetUtils {
         return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
     }
 
-    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean}={}) {
+    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string}={}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
-        const queryString = [
+        const queryStringParts = [
             'conferenceDomain=$domain',
             'conferenceId=$conferenceId',
             'isAudioOnly=$isAudioOnly',
             'displayName=$matrix_display_name',
             'avatarUrl=$matrix_avatar_url',
             'userId=$matrix_user_id',
-        ].join('&');
+            'roomId=$matrix_room_id',
+        ];
+        if (opts.auth) {
+            queryStringParts.push(`auth=${opts.auth}`);
+        }
+        const queryString = queryStringParts.join('&');
 
         let baseUrl = window.location;
         if (window.location.protocol !== "https:" && !opts.forLocalRender) {
@@ -470,5 +476,22 @@ export default class WidgetUtils {
         }
         const url = new URL("jitsi.html#" + queryString, baseUrl); // this strips hash fragment from baseUrl
         return url.href;
+    }
+
+    static getWidgetName(app) {
+        return app?.name?.trim() || _t("Unknown App");
+    }
+
+    static getWidgetDataTitle(app) {
+        return app?.data?.title?.trim() || "";
+    }
+
+    static editWidget(room, app) {
+        // TODO: Open the right manager for the widget
+        if (SettingsStore.getValue("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll(room, 'type_' + app.type, app.id);
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
+        }
     }
 }

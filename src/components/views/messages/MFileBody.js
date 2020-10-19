@@ -17,7 +17,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import filesize from 'filesize';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
@@ -117,16 +116,8 @@ function computedStyle(element) {
     return cssText;
 }
 
-export default createReactClass({
-    displayName: 'MFileBody',
-
-    getInitialState: function() {
-        return {
-            decryptedBlob: (this.props.decryptedBlob ? this.props.decryptedBlob : null),
-        };
-    },
-
-    propTypes: {
+export default class MFileBody extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
         /* already decrypted blob */
@@ -135,7 +126,19 @@ export default createReactClass({
         onHeightChanged: PropTypes.func,
         /* the shape of the tile, used */
         tileShape: PropTypes.string,
-    },
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            decryptedBlob: (this.props.decryptedBlob ? this.props.decryptedBlob : null),
+        };
+
+        this._iframe = createRef();
+        this._dummyLink = createRef();
+        this._downloadImage = createRef();
+    }
 
     /**
      * Extracts a human readable label for the file attachment to use as
@@ -144,7 +147,7 @@ export default createReactClass({
      * @params {Object} content The "content" key of the matrix event.
      * @return {string} the human readable link text for the attachment.
      */
-    presentableTextForFile: function(content) {
+    presentableTextForFile(content) {
         let linkText = _t("Attachment");
         if (content.body && content.body.length > 0) {
             // The content body should be the name of the file including a
@@ -163,40 +166,33 @@ export default createReactClass({
             linkText += ' (' + filesize(content.info.size) + ')';
         }
         return linkText;
-    },
+    }
 
-    _getContentUrl: function() {
+    _getContentUrl() {
         const content = this.props.mxEvent.getContent();
         return MatrixClientPeg.get().mxcUrlToHttp(content.url);
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._iframe = createRef();
-        this._dummyLink = createRef();
-        this._downloadImage = createRef();
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         // Add this to the list of mounted components to receive notifications
         // when the tint changes.
         this.id = nextMountId++;
         mounts[this.id] = this;
         this.tint();
-    },
+    }
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
             this.props.onHeightChanged();
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         // Remove this from the list of mounted components
         delete mounts[this.id];
-    },
+    }
 
-    tint: function() {
+    tint = () => {
         // Update our tinted copy of require("../../../../res/img/download.svg")
         if (this._downloadImage.current) {
             this._downloadImage.current.src = tintedDownloadImageURL;
@@ -210,9 +206,9 @@ export default createReactClass({
                 style: computedStyle(this._dummyLink.current),
             }, "*");
         }
-    },
+    };
 
-    render: function() {
+    render() {
         const content = this.props.mxEvent.getContent();
         const text = this.presentableTextForFile(content);
         const isEncrypted = content.file !== undefined;
@@ -378,5 +374,5 @@ export default createReactClass({
                 { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;
         }
-    },
-});
+    }
+}

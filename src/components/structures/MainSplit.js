@@ -19,9 +19,18 @@ import React from 'react';
 import { Resizable } from 're-resizable';
 
 export default class MainSplit extends React.Component {
-    _onResized = (event, direction, refToElement, delta) => {
+    _onResizeStart = () => {
+        this.props.resizeNotifier.startResizing();
+    };
+
+    _onResize = () => {
+        this.props.resizeNotifier.notifyRightHandleResized();
+    };
+
+    _onResizeStop = (event, direction, refToElement, delta) => {
+        this.props.resizeNotifier.stopResizing();
         window.localStorage.setItem("mx_rhs_size", this._loadSidePanelSize().width + delta.width);
-    }
+    };
 
     _loadSidePanelSize() {
         let rhsSize = parseInt(window.localStorage.getItem("mx_rhs_size"), 10);
@@ -58,7 +67,9 @@ export default class MainSplit extends React.Component {
                     bottomLeft: false,
                     topLeft: false,
                 }}
-                onResizeStop={this._onResized}
+                onResizeStart={this._onResizeStart}
+                onResize={this._onResize}
+                onResizeStop={this._onResizeStop}
                 className="mx_RightPanel_ResizeWrapper"
                 handleClasses={{left: "mx_RightPanel_ResizeHandle"}}
             >

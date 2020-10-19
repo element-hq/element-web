@@ -18,7 +18,13 @@ interface Room {
     roomId: string;
 }
 
-export async function shieldStatusForRoom(client: Client, room: Room): Promise<string> {
+export enum E2EStatus {
+    Warning = "warning",
+    Verified = "verified",
+    Normal = "normal"
+}
+
+export async function shieldStatusForRoom(client: Client, room: Room): Promise<E2EStatus> {
     const members = (await room.getEncryptionTargetMembers()).map(({userId}) => userId);
     const inDMMap = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
@@ -33,7 +39,7 @@ export async function shieldStatusForRoom(client: Client, room: Room): Promise<s
     /* Alarm if any unverified users were verified before. */
     for (const userId of unverified) {
         if (client.checkUserTrust(userId).wasCrossSigningVerified()) {
-            return "warning";
+            return E2EStatus.Warning;
         }
     }
 
@@ -50,9 +56,9 @@ export async function shieldStatusForRoom(client: Client, room: Room): Promise<s
             return !client.checkDeviceTrust(userId, deviceId).isVerified();
         });
         if (anyDeviceNotVerified) {
-            return "warning";
+            return E2EStatus.Warning;
         }
     }
 
-    return unverified.length === 0 ? "verified" : "normal";
+    return unverified.length === 0 ? E2EStatus.Verified : E2EStatus.Normal;
 }

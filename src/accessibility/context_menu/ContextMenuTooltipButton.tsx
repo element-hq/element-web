@@ -20,7 +20,7 @@ import React from "react";
 
 import AccessibleTooltipButton from "../../components/views/elements/AccessibleTooltipButton";
 
-interface IProps extends React.ComponentProps<typeof AccessibleTooltipButton>  {
+interface IProps extends React.ComponentProps<typeof AccessibleTooltipButton> {
     // whether or not the context menu is currently open
     isExpanded: boolean;
 }

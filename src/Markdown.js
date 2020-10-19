@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import commonmark from 'commonmark';
-import escape from 'lodash/escape';
+import {escape} from "lodash";
 
 const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 

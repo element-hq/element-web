@@ -19,9 +19,7 @@ import classNames from "classnames";
 import {
     RovingAccessibleButton,
     RovingAccessibleTooltipButton,
-    RovingTabIndexWrapper
 } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../views/elements/AccessibleButton";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 

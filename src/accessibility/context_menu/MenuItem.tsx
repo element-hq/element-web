@@ -26,8 +26,9 @@ interface IProps extends React.ComponentProps<typeof AccessibleButton> {
 
 // Semantic component for representing a role=menuitem
 export const MenuItem: React.FC<IProps> = ({children, label, ...props}) => {
+    const ariaLabel = props["aria-label"] || label;
     return (
-        <AccessibleButton {...props} role="menuitem" tabIndex={-1} aria-label={label}>
+        <AccessibleButton {...props} role="menuitem" tabIndex={-1} aria-label={ariaLabel}>
             { children }
         </AccessibleButton>
     );

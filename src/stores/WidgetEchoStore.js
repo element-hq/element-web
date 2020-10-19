@@ -93,13 +93,13 @@ class WidgetEchoStore extends EventEmitter {
         if (this._roomWidgetEcho[roomId] === undefined) this._roomWidgetEcho[roomId] = {};
 
         this._roomWidgetEcho[roomId][widgetId] = state;
-        this.emit('update');
+        this.emit('update', roomId, widgetId);
     }
 
     removeRoomWidgetEcho(roomId, widgetId) {
         delete this._roomWidgetEcho[roomId][widgetId];
         if (Object.keys(this._roomWidgetEcho[roomId]).length === 0) delete this._roomWidgetEcho[roomId];
-        this.emit('update');
+        this.emit('update', roomId, widgetId);
     }
 }
 

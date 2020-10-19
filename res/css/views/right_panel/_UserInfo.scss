@@ -15,7 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_UserInfo {
+.mx_UserInfo.mx_BaseCard {
+    // UserInfo has a circular image at the top so it fits between the back & close buttons
+    padding-top: 0;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -217,9 +219,8 @@ limitations under the License.
         text-overflow: clip;
     }
 
-    .mx_UserInfo_scrollContainer {
+    .mx_AutoHideScrollbar {
         flex: 1 1 0;
-        padding-bottom: 16px;
     }
 
     .mx_UserInfo_container:not(.mx_UserInfo_separator) {

@@ -105,6 +105,9 @@ export default class Resizer {
         if (this.classNames.resizing) {
             this.container.classList.add(this.classNames.resizing);
         }
+        if (this.config.onResizeStart) {
+            this.config.onResizeStart();
+        }
 
         const {sizer, distributor} = this._createSizerAndDistributor(resizeHandle);
         distributor.start();
@@ -118,6 +121,9 @@ export default class Resizer {
         const finishResize = () => {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
+            }
+            if (this.config.onResizeStop) {
+                this.config.onResizeStop();
             }
             distributor.finish();
             body.removeEventListener("mouseup", finishResize, false);

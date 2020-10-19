@@ -25,6 +25,7 @@ import CallHandler from '../../../CallHandler';
 import PulsedAvatar from '../avatars/PulsedAvatar';
 import RoomAvatar from '../avatars/RoomAvatar';
 import FormButton from '../elements/FormButton';
+import { CallState } from 'matrix-js-sdk/lib/webrtc/call';
 
 interface IProps {
 }
@@ -51,9 +52,9 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
     private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
-            case 'call_state':
-                const call = CallHandler.getCall(payload.room_id);
-                if (call && call.call_state === 'ringing') {
+            case 'call_state': {
+                const call = CallHandler.sharedInstance().getCallForRoom(payload.room_id);
+                if (call && call.state === CallState.Ringing) {
                     this.setState({
                         incomingCall: call,
                     });
@@ -62,6 +63,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                         incomingCall: null,
                     });
                 }
+            }
         }
     };
 
@@ -76,7 +78,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
     private onRejectClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
         dis.dispatch({
-            action: 'hangup',
+            action: 'reject',
             room_id: this.state.incomingCall.roomId,
         });
     };

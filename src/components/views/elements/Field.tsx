@@ -17,7 +17,7 @@ limitations under the License.
 import React, {InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes} from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
-import { debounce } from 'lodash';
+import {debounce} from "lodash";
 import {IFieldState, IValidationResult} from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
@@ -198,11 +198,9 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     }
 
-
-
     public render() {
-        const {
-            element, prefixComponent, postfixComponent, className, onValidate, children,
+        /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
+        const { element, prefixComponent, postfixComponent, className, onValidate, children,
             tooltipContent, forceValidity, tooltipClassName, list, ...inputProps} = this.props;
 
         // Set some defaults for the <input> element

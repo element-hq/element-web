@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from "react";
-import extend from './extend';
 import dis from './dispatcher/dispatcher';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {MatrixClient} from "matrix-js-sdk/src/client";
@@ -70,6 +69,7 @@ interface IContent {
 
 interface IThumbnail {
     info: {
+        // eslint-disable-next-line camelcase
         thumbnail_info: {
             w: number;
             h: number;
@@ -104,7 +104,12 @@ interface IAbortablePromise<T> extends Promise<T> {
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-function createThumbnail(element: ThumbnailableElement, inputWidth: number, inputHeight: number, mimeType: string): Promise<IThumbnail> {
+function createThumbnail(
+    element: ThumbnailableElement,
+    inputWidth: number,
+    inputHeight: number,
+    mimeType: string,
+): Promise<IThumbnail> {
     return new Promise((resolve) => {
         let targetWidth = inputWidth;
         let targetHeight = inputHeight;
@@ -437,11 +442,13 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                const {finished} = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation', '', UploadConfirmDialog, {
-                    file,
-                    currentIndex: i,
-                    totalFiles: okFiles.length,
-                });
+                const {finished} = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
+                    '', UploadConfirmDialog, {
+                        file,
+                        currentIndex: i,
+                        totalFiles: okFiles.length,
+                    },
+                );
                 const [shouldContinue, shouldUploadAll] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
@@ -489,7 +496,7 @@ export default class ContentMessages {
             if (file.type.indexOf('image/') === 0) {
                 content.msgtype = 'm.image';
                 infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
-                    extend(content.info, imageInfo);
+                    Object.assign(content.info, imageInfo);
                     resolve();
                 }, (e) => {
                     console.error(e);
@@ -502,7 +509,7 @@ export default class ContentMessages {
             } else if (file.type.indexOf('video/') === 0) {
                 content.msgtype = 'm.video';
                 infoForVideoFile(matrixClient, roomId, file).then((videoInfo) => {
-                    extend(content.info, videoInfo);
+                    Object.assign(content.info, videoInfo);
                     resolve();
                 }, (e) => {
                     content.msgtype = 'm.file';

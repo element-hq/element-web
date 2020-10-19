@@ -26,7 +26,7 @@ limitations under the License.
  * on unmount or similar to cancel any pending update.
  */
 
-import { throttle } from "lodash";
+import {throttle} from "lodash";
 
 export default function ratelimitedfunc(fn, time) {
     const throttledFn = throttle(fn, time, {

@@ -43,8 +43,8 @@ export default class EmbeddedPage extends React.PureComponent {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this._dispatcherRef = null;
 

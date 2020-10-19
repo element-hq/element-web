@@ -17,15 +17,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
 
-export default createReactClass({
-    displayName: 'InfoDialog',
-    propTypes: {
+export default class InfoDialog extends React.Component {
+    static propTypes = {
         className: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.node,
@@ -33,21 +31,19 @@ export default createReactClass({
         onFinished: PropTypes.func,
         hasCloseButton: PropTypes.bool,
         onKeyDown: PropTypes.func,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            title: '',
-            description: '',
-            hasCloseButton: false,
-        };
-    },
+    static defaultProps = {
+        title: '',
+        description: '',
+        hasCloseButton: false,
+    };
 
-    onFinished: function() {
+    onFinished = () => {
         this.props.onFinished();
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
@@ -69,5 +65,5 @@ export default createReactClass({
                 </DialogButtons>
             </BaseDialog>
         );
-    },
-});
+    }
+}

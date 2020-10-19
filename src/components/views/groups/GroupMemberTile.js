@@ -18,37 +18,28 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-export default createReactClass({
-    displayName: 'GroupMemberTile',
-
-    propTypes: {
+export default class GroupMemberTile extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
         member: GroupMemberType.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {};
-    },
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
-
-    onClick: function(e) {
+    onClick = e => {
         dis.dispatch({
             action: 'view_group_user',
             member: this.props.member,
             groupId: this.props.groupId,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
@@ -74,5 +65,5 @@ export default createReactClass({
                 powerStatus={this.props.member.isPrivileged ? EntityTile.POWER_STATUS_ADMIN : null}
             />
         );
-    },
-});
+    }
+}

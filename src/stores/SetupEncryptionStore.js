@@ -16,7 +16,7 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import { MatrixClientPeg } from '../MatrixClientPeg';
-import { accessSecretStorage, AccessCancelledError } from '../CrossSigningManager';
+import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 export const PHASE_INTRO = 0;
@@ -137,10 +137,10 @@ export class SetupEncryptionStore extends EventEmitter {
         }
     }
 
-    _onUserTrustStatusChanged = async (userId) => {
+    _onUserTrustStatusChanged = (userId) => {
         if (userId !== MatrixClientPeg.get().getUserId()) return;
-        const crossSigningReady = await MatrixClientPeg.get().isCrossSigningReady();
-        if (crossSigningReady) {
+        const publicKeysTrusted = MatrixClientPeg.get().getCrossSigningId();
+        if (publicKeysTrusted) {
             this.phase = PHASE_DONE;
             this.emit("update");
         }
@@ -150,7 +150,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this._setActiveVerificationRequest(request);
     }
 
-    onVerificationRequestChange = async () => {
+    onVerificationRequestChange = () => {
         if (this.verificationRequest.cancelled) {
             this.verificationRequest.off("change", this.onVerificationRequestChange);
             this.verificationRequest = null;
@@ -161,8 +161,8 @@ export class SetupEncryptionStore extends EventEmitter {
             // At this point, the verification has finished, we just need to wait for
             // cross signing to be ready to use, so wait for the user trust status to
             // change (or change to DONE if it's already ready).
-            const crossSigningReady = await MatrixClientPeg.get().isCrossSigningReady();
-            this.phase = crossSigningReady ? PHASE_DONE : PHASE_BUSY;
+            const publicKeysTrusted = MatrixClientPeg.get().getCrossSigningId();
+            this.phase = publicKeysTrusted ? PHASE_DONE : PHASE_BUSY;
             this.emit("update");
         }
     }

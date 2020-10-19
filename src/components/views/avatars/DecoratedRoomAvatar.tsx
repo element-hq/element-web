@@ -126,7 +126,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
     private onPresenceUpdate = () => {
         if (this.isUnmounted) return;
 
-        let newIcon = this.getPresenceIcon();
+        const newIcon = this.getPresenceIcon();
         if (newIcon !== this.state.icon) this.setState({icon: newIcon});
     };
 

@@ -24,6 +24,7 @@ import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from "../../../settings/SettingsStore";
 
 @replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent {
@@ -56,7 +57,7 @@ export default class BridgeTile extends React.PureComponent {
                         type={Pill.TYPE_USER_MENTION}
                         room={this.props.room}
                         url={makeUserPermalink(content.creator)}
-                        shouldShowPillAvatar={true}
+                        shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
                     />,
             });
         }
@@ -66,7 +67,7 @@ export default class BridgeTile extends React.PureComponent {
                 type={Pill.TYPE_USER_MENTION}
                 room={this.props.room}
                 url={makeUserPermalink(this.props.ev.getSender())}
-                shouldShowPillAvatar={true}
+                shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
                 />,
         });
 

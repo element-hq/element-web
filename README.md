@@ -160,8 +160,8 @@ yarn link matrix-js-sdk
 yarn install
 ```
 
-See the [help for `yarn link`](https://yarnpkg.com/docs/cli/link) for more
-details about this.
+See the [help for `yarn link`](https://classic.yarnpkg.com/docs/cli/link) for
+more details about this.
 
 Running tests
 =============

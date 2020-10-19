@@ -6,14 +6,14 @@
 
 @supports (backdrop-filter: none) {
     .mx_LeftPanel {
-        background-image: var(--avatar-url);
+        background-image: var(--avatar-url, unset);
         background-repeat: no-repeat;
         background-size: cover;
         background-position: left top;
     }
 
-    .mx_TagPanel {
-        backdrop-filter: blur($tagpanel-background-blur-amount);
+    .mx_GroupFilterPanel {
+        backdrop-filter: blur($groupFilterPanel-background-blur-amount);
     }
 
     .mx_LeftPanel .mx_LeftPanel_roomListContainer {

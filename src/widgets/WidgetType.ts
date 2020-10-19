@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// TODO: Move to matrix-widget-api
 export class WidgetType {
     public static readonly JITSI = new WidgetType("m.jitsi", "jitsi");
     public static readonly STICKERPICKER = new WidgetType("m.stickerpicker", "m.stickerpicker");

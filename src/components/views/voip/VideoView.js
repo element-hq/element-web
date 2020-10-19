@@ -18,7 +18,6 @@ limitations under the License.
 import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 
 import * as sdk from '../../../index';
@@ -35,10 +34,8 @@ function getFullScreenElement() {
     );
 }
 
-export default createReactClass({
-    displayName: 'VideoView',
-
-    propTypes: {
+export default class VideoView extends React.Component {
+    static propTypes = {
         // maxHeight style attribute for the video element
         maxHeight: PropTypes.number,
 
@@ -48,27 +45,28 @@ export default createReactClass({
         // a callback which is called when the video element is resized due to
         // a change in video metadata
         onResize: PropTypes.func,
-    },
+    };
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
+    constructor(props) {
+        super(props);
+
         this._local = createRef();
         this._remote = createRef();
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-    },
+    }
 
-    getRemoteVideoElement: function() {
+    getRemoteVideoElement = () => {
         return ReactDOM.findDOMNode(this._remote.current);
-    },
+    };
 
-    getRemoteAudioElement: function() {
+    getRemoteAudioElement = () => {
         // this needs to be somewhere at the top of the DOM which
         // always exists to avoid audio interruptions.
         // Might as well just use DOM.
@@ -78,17 +76,17 @@ export default createReactClass({
                 + "You need to add an <audio/> to the DOM.");
         }
         return remoteAudioElement;
-    },
+    };
 
-    getLocalVideoElement: function() {
+    getLocalVideoElement = () => {
         return ReactDOM.findDOMNode(this._local.current);
-    },
+    };
 
-    setContainer: function(c) {
+    setContainer = (c) => {
         this.container = c;
-    },
+    };
 
-    onAction: function(payload) {
+    onAction = (payload) => {
         switch (payload.action) {
             case 'video_fullscreen': {
                 if (!this.container) {
@@ -117,9 +115,9 @@ export default createReactClass({
                 break;
             }
         }
-    },
+    };
 
-    render: function() {
+    render() {
         const VideoFeed = sdk.getComponent('voip.VideoFeed');
 
         // if we're fullscreen, we don't want to set a maxHeight on the video element.
@@ -140,5 +138,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

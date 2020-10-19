@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015-2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
@@ -27,6 +24,7 @@ import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 import {Action} from "../../dispatcher/actions";
+import { CallState, CallType } from 'matrix-js-sdk/lib/webrtc/call';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -39,20 +37,20 @@ function getUnsentMessages(room) {
     });
 }
 
-export default createReactClass({
-    displayName: 'RoomStatusBar',
-
-    propTypes: {
+export default class RoomStatusBar extends React.Component {
+    static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
         // This is true when the user is alone in the room, but has also sent a message.
         // Used to suggest to the user to invite someone
         sentMessageAndIsAlone: PropTypes.bool,
 
-        // true if there is an active call in this room (means we show
-        // the 'Active Call' text in the status bar if there is nothing
-        // more interesting)
-        hasActiveCall: PropTypes.bool,
+        // The active call in the room, if any (means we show the call bar
+        // along with the status of the call)
+        callState: PropTypes.string,
+
+        // The type of the call in progress, or null if no call is in progress
+        callType: PropTypes.string,
 
         // true if the room is being peeked at. This affects components that shouldn't
         // logically be shown when peeking, such as a prompt to invite people to a room.
@@ -86,37 +84,35 @@ export default createReactClass({
         // callback for when the status bar is displaying something and should
         // be visible
         onVisible: PropTypes.func,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            syncState: MatrixClientPeg.get().getSyncState(),
-            syncStateData: MatrixClientPeg.get().getSyncStateData(),
-            unsentMessages: getUnsentMessages(this.props.room),
-        };
-    },
+    state = {
+        syncState: MatrixClientPeg.get().getSyncState(),
+        syncStateData: MatrixClientPeg.get().getSyncStateData(),
+        unsentMessages: getUnsentMessages(this.props.room),
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
 
         this._checkSize();
-    },
+    }
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         this._checkSize();
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
         }
-    },
+    }
 
-    onSyncStateChange: function(state, prevState, data) {
+    onSyncStateChange = (state, prevState, data) => {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }
@@ -124,41 +120,47 @@ export default createReactClass({
             syncState: state,
             syncStateData: data,
         });
-    },
+    };
 
-    _onResendAllClick: function() {
+    _showCallBar() {
+        return (this.props.callState &&
+            (this.props.callState !== CallState.Ended && this.props.callState !== CallState.Ringing)
+        );
+    }
+
+    _onResendAllClick = () => {
         Resend.resendUnsentEvents(this.props.room);
         dis.fire(Action.FocusComposer);
-    },
+    };
 
-    _onCancelAllClick: function() {
+    _onCancelAllClick = () => {
         Resend.cancelUnsentEvents(this.props.room);
         dis.fire(Action.FocusComposer);
-    },
+    };
 
-    _onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
+    _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
         if (room.roomId !== this.props.room.roomId) return;
 
         this.setState({
             unsentMessages: getUnsentMessages(this.props.room),
         });
-    },
+    };
 
     // Check whether current size is greater than 0, if yes call props.onVisible
-    _checkSize: function() {
+    _checkSize() {
         if (this._getSize()) {
             if (this.props.onVisible) this.props.onVisible();
         } else {
             if (this.props.onHidden) this.props.onHidden();
         }
-    },
+    }
 
     // We don't need the actual height - just whether it is likely to have
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
-    _getSize: function() {
+    _getSize() {
         if (this._shouldShowConnectionError() ||
-            this.props.hasActiveCall ||
+            this._showCallBar() ||
             this.props.sentMessageAndIsAlone
         ) {
             return STATUS_BAR_EXPANDED;
@@ -166,11 +168,11 @@ export default createReactClass({
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
-    },
+    }
 
     // return suitable content for the image on the left of the status bar.
-    _getIndicator: function() {
-        if (this.props.hasActiveCall) {
+    _getIndicator() {
+        if (this._showCallBar()) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
                 <TintableSvg src={require("../../../res/img/element-icons/room/in-call.svg")} width="23" height="20" />
@@ -182,9 +184,9 @@ export default createReactClass({
         }
 
         return null;
-    },
+    }
 
-    _shouldShowConnectionError: function() {
+    _shouldShowConnectionError() {
         // no conn bar trumps the "some not sent" msg since you can't resend without
         // a connection!
         // There's one situation in which we don't show this 'no connection' bar, and that's
@@ -195,9 +197,9 @@ export default createReactClass({
             this.state.syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED',
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
-    },
+    }
 
-    _getUnsentMessageContent: function() {
+    _getUnsentMessageContent() {
         const unsentMessages = this.state.unsentMessages;
         if (!unsentMessages.length) return null;
 
@@ -272,10 +274,29 @@ export default createReactClass({
                 </div>
             </div>
         </div>;
-    },
+    }
+
+    _getCallStatusText() {
+        switch (this.props.callState) {
+            case CallState.CreateOffer:
+            case CallState.InviteSent:
+                return _t('Calling...');
+            case CallState.Connecting:
+            case CallState.CreateAnswer:
+                return _t('Call connecting...');
+            case CallState.Connected:
+                return _t('Active call');
+            case CallState.WaitLocalMedia:
+                if (this.props.callType === CallType.Video) {
+                    return _t('Starting camera...');
+                } else {
+                    return _t('Starting microphone...');
+                }
+        }
+    }
 
     // return suitable content for the main (text) part of the status bar.
-    _getContent: function() {
+    _getContent() {
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
@@ -296,10 +317,10 @@ export default createReactClass({
             return this._getUnsentMessageContent();
         }
 
-        if (this.props.hasActiveCall) {
+        if (this._showCallBar()) {
             return (
                 <div className="mx_RoomStatusBar_callBar">
-                    <b>{ _t('Active call') }</b>
+                    <b>{ this._getCallStatusText() }</b>
                 </div>
             );
         }
@@ -323,9 +344,9 @@ export default createReactClass({
         }
 
         return null;
-    },
+    }
 
-    render: function() {
+    render() {
         const content = this._getContent();
         const indicator = this._getIndicator();
 
@@ -339,5 +360,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

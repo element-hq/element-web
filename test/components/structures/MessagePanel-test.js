@@ -18,9 +18,7 @@ limitations under the License.
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 const TestUtils = require('react-dom/test-utils');
 const expect = require('expect');
 import { EventEmitter } from "events";
@@ -47,21 +45,19 @@ let client;
 const room = new Matrix.Room();
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
-const WrappedMessagePanel = createReactClass({
-    getInitialState: function() {
-        return {
-            resizeNotifier: new EventEmitter(),
-        };
-    },
+class WrappedMessagePanel extends React.Component {
+    state = {
+        resizeNotifier: new EventEmitter(),
+    };
 
-    render: function() {
+    render() {
         return <MatrixClientContext.Provider value={client}>
             <RoomContext.Provider value={{ canReact: true, canReply: true }}>
                 <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>;
-    },
-});
+    }
+}
 
 describe('MessagePanel', function() {
     const clock = mockclock.clock();
@@ -214,7 +210,7 @@ describe('MessagePanel', function() {
                 room: roomId,
                 user: alice,
                 content: {
-                    "join_rule": "invite"
+                    "join_rule": "invite",
                 },
                 ts: ts0 + 2,
             }),

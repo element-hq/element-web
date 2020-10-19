@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -25,25 +24,21 @@ import { _t } from '../../../languageHandler';
 import { UserAddressType } from '../../../UserAddress.js';
 
 
-export default createReactClass({
-    displayName: 'AddressTile',
-
-    propTypes: {
+export default class AddressTile extends React.Component {
+    static propTypes = {
         address: UserAddressType.isRequired,
         canDismiss: PropTypes.bool,
         onDismissed: PropTypes.func,
         justified: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            canDismiss: false,
-            onDismissed: function() {}, // NOP
-            justified: false,
-        };
-    },
+    static defaultProps = {
+        canDismiss: false,
+        onDismissed: function() {}, // NOP
+        justified: false,
+    };
 
-    render: function() {
+    render() {
         const address = this.props.address;
         const name = address.displayName || address.address;
 
@@ -144,5 +139,5 @@ export default createReactClass({
                 { dismiss }
             </div>
         );
-    },
-});
+    }
+}

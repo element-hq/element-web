@@ -7,12 +7,19 @@
     height: 300px;
 }
 
-#mx_persistedElement_stickerPicker .mx_AppTileFullWidth {
-    height: unset;
-    box-sizing: border-box;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
+#mx_persistedElement_stickerPicker {
+    .mx_AppTileFullWidth {
+        height: unset;
+        box-sizing: border-box;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    iframe {
+        // Sticker picker depends on the fixed height previously used for all tiles
+        height: 273px;
+    }
 }
 
 .mx_Stickers_contentPlaceholder {

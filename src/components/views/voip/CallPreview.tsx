@@ -24,17 +24,14 @@ import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
+import { CallState, MatrixCall } from 'matrix-js-sdk/lib/webrtc/call';
 
 interface IProps {
-    // A Conference Handler implementation
-    // Must have a function signature:
-    //  getConferenceCallForRoom(roomId: string): MatrixCall
-    ConferenceHandler: any;
 }
 
 interface IState {
     roomId: string;
-    activeCall: any;
+    activeCall: MatrixCall;
 }
 
 export default class CallPreview extends React.Component<IProps, IState> {
@@ -47,7 +44,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
         this.state = {
             roomId: RoomViewStore.getRoomId(),
-            activeCall: CallHandler.getAnyActiveCall(),
+            activeCall: CallHandler.sharedInstance().getAnyActiveCall(),
         };
     }
 
@@ -77,27 +74,27 @@ export default class CallPreview extends React.Component<IProps, IState> {
             // may hide the global CallView if the call it is tracking is dead
             case 'call_state':
                 this.setState({
-                    activeCall: CallHandler.getAnyActiveCall(),
+                    activeCall: CallHandler.sharedInstance().getAnyActiveCall(),
                 });
                 break;
         }
     };
 
     private onCallViewClick = () => {
-        const call = CallHandler.getAnyActiveCall();
+        const call = CallHandler.sharedInstance().getAnyActiveCall();
         if (call) {
             dis.dispatch({
                 action: 'view_room',
-                room_id: call.groupRoomId || call.roomId,
+                room_id: call.roomId,
             });
         }
     };
 
     public render() {
-        const callForRoom = CallHandler.getCallForRoom(this.state.roomId);
+        const callForRoom = CallHandler.sharedInstance().getCallForRoom(this.state.roomId);
         const showCall = (
             this.state.activeCall &&
-            this.state.activeCall.call_state === 'connected' &&
+            this.state.activeCall.state === CallState.Connected &&
             !callForRoom
         );
 
@@ -106,7 +103,6 @@ export default class CallPreview extends React.Component<IProps, IState> {
                 <CallView
                     className="mx_CallPreview"
                     onClick={this.onCallViewClick}
-                    ConferenceHandler={this.props.ConferenceHandler}
                     showHangup={true}
                 />
             );

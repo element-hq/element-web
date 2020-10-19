@@ -236,10 +236,6 @@ limitations under the License.
     }
 }
 
-.mx_RoomHeader_settingsButton::before {
-    mask-image: url('$(res)/img/element-icons/settings.svg');
-}
-
 .mx_RoomHeader_forgetButton::before {
     mask-image: url('$(res)/img/element-icons/leave.svg');
     width: 26px;
@@ -247,14 +243,6 @@ limitations under the License.
 
 .mx_RoomHeader_searchButton::before {
     mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
-}
-
-.mx_RoomHeader_shareButton::before {
-    mask-image: url('$(res)/img/element-icons/room/share.svg');
-}
-
-.mx_RoomHeader_manageIntegsButton::before {
-    mask-image: url('$(res)/img/element-icons/room/integrations.svg');
 }
 
 .mx_RoomHeader_showPanel {

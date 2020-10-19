@@ -56,6 +56,18 @@ export default class Sizer {
         return this.vertical ? this.container.offsetTop : this.container.offsetLeft;
     }
 
+    /** @return {number} container offset to document */
+    _getPageOffset() {
+        let element = this.container;
+        let offset = 0;
+        while (element) {
+            const pos = this.vertical ? element.offsetTop : element.offsetLeft;
+            offset = offset + pos;
+            element = element.offsetParent;
+        }
+        return offset;
+    }
+
     setItemSize(item, size) {
         if (this.vertical) {
             item.style.height = `${Math.round(size)}px`;
@@ -80,9 +92,9 @@ export default class Sizer {
     offsetFromEvent(event) {
         const pos = this.vertical ? event.pageY : event.pageX;
         if (this.reverse) {
-            return (this._getOffset() + this.getTotalSize()) - pos;
+            return (this._getPageOffset() + this.getTotalSize()) - pos;
         } else {
-            return pos - this._getOffset();
+            return pos - this._getPageOffset();
         }
     }
 }

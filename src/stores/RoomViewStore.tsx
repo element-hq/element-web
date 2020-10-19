@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from "react";
 import {Store} from 'flux/utils';
+import {MatrixError} from "matrix-js-sdk/src/http-api";
 
 import dis from '../dispatcher/dispatcher';
 import {MatrixClientPeg} from '../MatrixClientPeg';
@@ -26,6 +27,9 @@ import Modal from '../Modal';
 import { _t } from '../languageHandler';
 import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';
 import {ActionPayload} from "../dispatcher/payloads";
+import {retry} from "../utils/promise";
+
+const NUM_JOIN_RETRY = 5;
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
@@ -259,24 +263,32 @@ class RoomViewStore extends Store<ActionPayload> {
         });
     }
 
-    private joinRoom(payload: ActionPayload) {
+    private async joinRoom(payload: ActionPayload) {
         this.setState({
             joining: true,
         });
-        MatrixClientPeg.get().joinRoom(
-            this.state.roomAlias || this.state.roomId, payload.opts,
-        ).then(() => {
+
+        const cli = MatrixClientPeg.get();
+        const address = this.state.roomAlias || this.state.roomId;
+        try {
+            await retry<void, MatrixError>(() => cli.joinRoom(address, payload.opts), NUM_JOIN_RETRY, (err) => {
+                // if we received a Gateway timeout then retry
+                return err.httpStatus === 504;
+            });
+
             // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
             // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
             // room.
             dis.dispatch({ action: 'join_room_ready' });
-        }, (err) => {
+        } catch (err) {
             dis.dispatch({
                 action: 'join_room_error',
                 err: err,
             });
+
             let msg = err.message ? err.message : JSON.stringify(err);
             console.log("Failed to join room:", msg);
+
             if (err.name === "ConnectionError") {
                 msg = _t("There was an error joining the room");
             } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
@@ -296,12 +308,13 @@ class RoomViewStore extends Store<ActionPayload> {
                     }
                 }
             }
+
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
                 title: _t("Failed to join room"),
                 description: msg,
             });
-        });
+        }
     }
 
     private getInvitingUserId(roomId: string): string {

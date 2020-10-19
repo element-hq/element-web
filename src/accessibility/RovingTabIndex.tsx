@@ -166,7 +166,8 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
 
     const onKeyDownHandler = useCallback((ev) => {
         let handled = false;
-        if (handleHomeEnd) {
+        // Don't interfere with input default keydown behaviour
+        if (handleHomeEnd && ev.target.tagName !== "INPUT") {
             // check if we actually have any items
             switch (ev.key) {
                 case Key.HOME:
@@ -190,7 +191,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
             ev.preventDefault();
             ev.stopPropagation();
         } else if (onKeyDown) {
-            return onKeyDown(ev, state);
+            return onKeyDown(ev, context.state);
         }
     }, [context.state, onKeyDown, handleHomeEnd]);
 

@@ -20,7 +20,6 @@ import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 export function getDisplayAliasForRoom(room) {
@@ -40,47 +39,48 @@ export const roomShape = PropTypes.shape({
     guestCanJoin: PropTypes.bool,
 });
 
-export default createReactClass({
-    propTypes: {
+export default class RoomDetailRow extends React.Component {
+    static propTypes = {
         room: roomShape,
         // passes ev, room as args
         onClick: PropTypes.func,
         onMouseDown: PropTypes.func,
-    },
+    };
 
-    _linkifyTopic: function() {
+    constructor(props) {
+        super(props);
+
+        this._topic = createRef();
+    }
+
+    componentDidMount() {
+        this._linkifyTopic();
+    }
+
+    componentDidUpdate() {
+        this._linkifyTopic();
+    }
+
+    _linkifyTopic() {
         if (this._topic.current) {
             linkifyElement(this._topic.current);
         }
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._topic = createRef();
-    },
-
-    componentDidMount: function() {
-        this._linkifyTopic();
-    },
-
-    componentDidUpdate: function() {
-        this._linkifyTopic();
-    },
-
-    onClick: function(ev) {
+    onClick = (ev) => {
         ev.preventDefault();
         if (this.props.onClick) {
             this.props.onClick(ev, this.props.room);
         }
-    },
+    };
 
-    onTopicClick: function(ev) {
+    onTopicClick = (ev) => {
         // When clicking a link in the topic, prevent the event being propagated
         // to `onClick`.
         ev.stopPropagation();
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const room = this.props.room;
@@ -118,5 +118,5 @@ export default createReactClass({
                 { room.numJoinedMembers }
             </td>
         </tr>;
-    },
-});
+    }
+}

@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-
+import {throttle} from "lodash";
 import ResizeObserver from 'resize-observer-polyfill';
 
 import dis from '../../../dispatcher/dispatcher';
@@ -156,7 +156,7 @@ export default class PersistedElement extends React.Component {
         child.style.display = visible ? 'block' : 'none';
     }
 
-    updateChildPosition(child, parent) {
+    updateChildPosition = throttle((child, parent) => {
         if (!child || !parent) return;
 
         const parentRect = parent.getBoundingClientRect();
@@ -167,9 +167,9 @@ export default class PersistedElement extends React.Component {
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
         });
-    }
+    }, 100, {trailing: true, leading: true});
 
     render() {
-        return <div ref={this.collectChildContainer}></div>;
+        return <div ref={this.collectChildContainer} />;
     }
 }
