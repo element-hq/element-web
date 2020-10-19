@@ -278,10 +278,10 @@ export default class WidgetUtils {
     static setRoomWidget(
         roomId: string,
         widgetId: string,
-        widgetType: WidgetType,
-        widgetUrl: string,
-        widgetName: string,
-        widgetData: object,
+        widgetType?: WidgetType,
+        widgetUrl?: string,
+        widgetName?: string,
+        widgetData?: object,
     ) {
         let content;
 
