@@ -3791,6 +3791,11 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
+events@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
+  integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
+
 except@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/except/-/except-0.1.3.tgz#98261c91958551536b44482238e9783fb73d292a"
@@ -5954,10 +5959,12 @@ matrix-react-test-utils@^0.2.2:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
-matrix-widget-api@^0.1.0-beta.3:
-  version "0.1.0-beta.3"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.3.tgz#356965ca357172ee056e3fd86fd96879b059a114"
-  integrity sha512-j7nxdhLQfdU6snsdBA29KQR0DmT8/vl6otOvGqPCV0OCHpq1312cP79Eg4JzJKIFI3A76Qha3nYx6G9/aapwXg==
+matrix-widget-api@^0.1.0-beta.5:
+  version "0.1.0-beta.5"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.5.tgz#dd7f24a177aa590d812bd4e92e2c3ac225c5557e"
+  integrity sha512-J3GBJtVMFuEM/EWFylc0IlkPjdgmWxrkGYPaZ0LSmxp+OlNJxYfnWPR6F6HveW+Z8C1i0vq+BTueofSqKv2zDg==
+  dependencies:
+    events "^3.2.0"
 
 mdast-util-compact@^1.0.0:
   version "1.0.4"
