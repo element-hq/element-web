@@ -253,9 +253,9 @@ export class StopGapWidget extends EventEmitter {
         if (this.started) return;
         const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
-        this.messaging.addEventListener("preparing", () => this.emit("preparing"));
-        this.messaging.addEventListener("ready", () => this.emit("ready"));
-        this.messaging.addEventListener(`action:${WidgetApiFromWidgetAction.GetOpenIDCredentials}`, this.onOpenIdReq);
+        this.messaging.on("preparing", () => this.emit("preparing"));
+        this.messaging.on("ready", () => this.emit("ready"));
+        this.messaging.on(`action:${WidgetApiFromWidgetAction.GetOpenIDCredentials}`, this.onOpenIdReq);
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
         if (!this.appTileProps.userWidget && this.appTileProps.room) {
@@ -263,7 +263,7 @@ export class StopGapWidget extends EventEmitter {
         }
 
         if (WidgetType.JITSI.matches(this.mockWidget.type)) {
-            this.messaging.addEventListener("action:set_always_on_screen",
+            this.messaging.on("action:set_always_on_screen",
                 (ev: CustomEvent<IStickyActionRequest>) => {
                     if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                         ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
@@ -273,7 +273,7 @@ export class StopGapWidget extends EventEmitter {
                 },
             );
         } else if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
-            this.messaging.addEventListener(`action:${ElementWidgetActions.OpenIntegrationManager}`,
+            this.messaging.on(`action:${ElementWidgetActions.OpenIntegrationManager}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
@@ -307,7 +307,7 @@ export class StopGapWidget extends EventEmitter {
 
             // TODO: Replace this event listener with appropriate driver functionality once the API
             // establishes a sane way to send events back and forth.
-            this.messaging.addEventListener(`action:${WidgetApiFromWidgetAction.SendSticker}`,
+            this.messaging.on(`action:${WidgetApiFromWidgetAction.SendSticker}`,
                 (ev: CustomEvent<IStickerActionRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
