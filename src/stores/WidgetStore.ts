@@ -16,6 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IWidget } from "matrix-widget-api";
 
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -30,18 +31,9 @@ import {UPDATE_EVENT} from "./AsyncStore";
 
 interface IState {}
 
-export interface IApp {
-    id: string;
-    url: string;
-    type: string;
-    name: string;
+export interface IApp extends IWidget {
     roomId: string;
     eventId: string;
-    creatorUserId: string;
-    waitForIframeLoad?: boolean;
-    data?: {
-        title?: string;
-    };
     // eslint-disable-next-line camelcase
     avatar_url: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }

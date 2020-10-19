@@ -30,14 +30,14 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
 import {_t} from "../languageHandler";
-import {MatrixCapabilities} from "matrix-widget-api";
+import {Capability, IWidgetData, MatrixCapabilities} from "matrix-widget-api";
 import {IApp} from "../stores/WidgetStore"; // TODO @@
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 
-export interface IWidget { // TODO @@
+export interface IWidgetEvent {
     id: string;
     type: string;
     sender: string;
@@ -230,7 +230,7 @@ export default class WidgetUtils {
         widgetType: WidgetType,
         widgetUrl: string,
         widgetName: string,
-        widgetData: object,
+        widgetData: IWidgetData,
     ) {
         const content = {
             type: widgetType.preferred,
@@ -332,7 +332,7 @@ export default class WidgetUtils {
      * Get user specific widgets (not linked to a specific room)
      * @return {object} Event content object containing current / active user widgets
      */
-    static getUserWidgets(): Record<string, IWidget> {
+    static getUserWidgets(): Record<string, IWidgetEvent> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
@@ -348,7 +348,7 @@ export default class WidgetUtils {
      * Get user specific widgets (not linked to a specific room) as an array
      * @return {[object]} Array containing current / active user widgets
      */
-    static getUserWidgetsArray(): IWidget[] {
+    static getUserWidgetsArray(): IWidgetEvent[] {
         return Object.values(WidgetUtils.getUserWidgets());
     }
 
@@ -356,7 +356,7 @@ export default class WidgetUtils {
      * Get active stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {[object]} Array containing current / active stickerpicker widgets
      */
-    static getStickerpickerWidgets(): IWidget[] {
+    static getStickerpickerWidgets(): IWidgetEvent[] {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter((widget) => widget.content && widget.content.type === "m.stickerpicker");
     }
@@ -365,12 +365,12 @@ export default class WidgetUtils {
      * Get all integration manager widgets for this user.
      * @returns {Object[]} An array of integration manager user widgets.
      */
-    static getIntegrationManagerWidgets(): IWidget[] {
+    static getIntegrationManagerWidgets(): IWidgetEvent[] {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
     }
 
-    static getRoomWidgetsOfType(room: Room, type: WidgetType): IWidget[] {
+    static getRoomWidgetsOfType(room: Room, type: WidgetType): IWidgetEvent[] {
         const widgets = WidgetUtils.getRoomWidgets(room);
         return (widgets || []).filter(w => {
             const content = w.getContent();
@@ -385,7 +385,7 @@ export default class WidgetUtils {
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets: IWidget[] = widgets.getContent() || {};
+        const userWidgets: IWidgetEvent[] = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];
@@ -415,7 +415,7 @@ export default class WidgetUtils {
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets: Record<string, IWidget> = widgets.getContent() || {};
+        const userWidgets: Record<string, IWidgetEvent> = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === 'm.stickerpicker') {
                 delete userWidgets[key];
