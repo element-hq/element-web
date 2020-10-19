@@ -17,77 +17,95 @@ limitations under the License.
 import * as React from 'react';
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
-import WidgetMessaging from "../../../WidgetMessaging";
-import {ButtonKind, IButton, KnownWidgetActions} from "../../../widgets/WidgetApi";
 import AccessibleButton from "../elements/AccessibleButton";
-
-interface IModalWidget {
-    type: string;
-    url: string;
-    name: string;
-    data: any;
-    waitForIframeLoad?: boolean;
-    buttons?: IButton[];
-}
+import {
+    ClientWidgetApi,
+    IModalWidgetCloseRequest,
+    IModalWidgetOpenRequestData,
+    IModalWidgetReturnData,
+    ModalButtonKind,
+    Widget,
+    WidgetApiFromWidgetAction,
+} from "matrix-widget-api";
+import {StopGapWidgetDriver} from "../../../stores/widgets/StopGapWidgetDriver";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import RoomViewStore from "../../../stores/RoomViewStore";
+import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 
 interface IProps {
-    widgetDefinition: IModalWidget;
+    widgetDefinition: IModalWidgetOpenRequestData;
     sourceWidgetId: string;
-    onFinished(success: boolean, data?: any): void;
+    onFinished(success: boolean, data?: IModalWidgetReturnData): void;
 }
 
 interface IState {
-    messaging?: WidgetMessaging;
+    messaging?: ClientWidgetApi;
 }
 
 const MAX_BUTTONS = 3;
 
 export default class ModalWidgetDialog extends React.PureComponent<IProps, IState> {
+    private readonly widget: Widget;
     private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
 
     state: IState = {};
 
-    private getWidgetId() {
-        return `modal_${this.props.sourceWidgetId}`;
+    constructor(props) {
+        super(props);
+
+        this.widget = new Widget({
+            ...this.props.widgetDefinition,
+            creatorUserId: MatrixClientPeg.get().getUserId(),
+            id: `modal_${this.props.sourceWidgetId}`,
+        });
     }
 
     public componentDidMount() {
-        // TODO: Don't violate every principle of widget creation
-        const messaging = new WidgetMessaging(
-            this.getWidgetId(),
-            this.props.widgetDefinition.url,
-            this.props.widgetDefinition.url, // TODO templating and such
-            true,
-            this.appFrame.current.contentWindow,
-        );
+        const driver = new StopGapWidgetDriver( []);
+        const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
         this.setState({messaging});
     }
 
     public componentWillUnmount() {
-        this.state.messaging.fromWidget.removeListener(KnownWidgetActions.CloseModalWidget, this.onWidgetClose);
+        this.state.messaging.off("ready", this.onReady);
+        this.state.messaging.off(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
         this.state.messaging.stop();
     }
 
-    private onLoad = () => {
-        this.state.messaging.getCapabilities().then(caps => {
-            console.log("Requested capabilities: ", caps);
-            this.state.messaging.sendWidgetConfig(this.props.widgetDefinition.data);
-        });
-        this.state.messaging.fromWidget.addListener(KnownWidgetActions.CloseModalWidget, this.onWidgetClose);
+    private onReady = () => {
+        this.state.messaging.sendWidgetConfig(this.props.widgetDefinition);
     };
 
-    private onWidgetClose = (req) => {
-        this.props.onFinished(true, req.data);
+    private onLoad = () => {
+        this.state.messaging.once("ready", this.onReady);
+        this.state.messaging.on(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
+    };
+
+    private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>) => {
+        this.props.onFinished(true, ev.detail.data);
     }
 
     public render() {
         // TODO: Don't violate every single security principle
+        // TODO copied from SGWidget
+        const templated = this.widget.getCompleteUrl({
+            currentRoomId: RoomViewStore.getRoomId(),
+            currentUserId: MatrixClientPeg.get().getUserId(),
+            userDisplayName: OwnProfileStore.instance.displayName,
+            userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
+        });
 
-        const widgetUrl = new URL(this.props.widgetDefinition.url);
+        const parsed = new URL(templated);
+
+        // Add in some legacy support sprinkles (for non-popout widgets)
         // TODO: Replace these with proper widget params
         // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
-        widgetUrl.searchParams.set("widgetId", this.getWidgetId());
-        widgetUrl.searchParams.set("parentUrl", window.location.href);
+        parsed.searchParams.set('widgetId', this.widget.id);
+        parsed.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
+
+        // Replace the encoded dollar signs back to dollar signs. They have no special meaning
+        // in HTTP, but URL parsers encode them anyways.
+        const widgetUrl = parsed.toString().replace(/%24/g, '$');
 
         let buttons;
         if (this.props.widgetDefinition.buttons) {
@@ -95,19 +113,19 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             buttons = this.props.widgetDefinition.buttons.slice(0, MAX_BUTTONS).reverse().map(def => {
                 let kind = "secondary";
                 switch (def.kind) {
-                    case ButtonKind.Primary:
+                    case ModalButtonKind.Primary:
                         kind = "primary";
                         break;
-                    case ButtonKind.Secondary:
+                    case ModalButtonKind.Secondary:
                         kind = "primary_outline";
                         break
-                    case ButtonKind.Danger:
+                    case ModalButtonKind.Danger:
                         kind = "danger";
                         break;
                 }
 
                 const onClick = () => {
-                    this.state.messaging.sendModalButtonClicked(def.id);
+                    this.state.messaging.notifyModalWidgetButtonClicked(def.id);
                 };
 
                 return <AccessibleButton key={def.id} kind={kind} onClick={onClick}>
