@@ -23,11 +23,19 @@ limitations under the License.
     src: url('~matrix-react-sdk/res/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
 }
 
-$fg-color: #edf3ff;
+$dark-fg: #edf3ff;
+$dark-bg: rgba(141, 151, 165, 0.2);
+$light-fg: #2e2f32;
+$light-bg: #fff;
 body {
     font-family: Nunito, Arial, Helvetica, sans-serif;
-    background-color: #181b21;
-    color: $fg-color;
+    background-color: $dark-bg;
+    color: $dark-fg;
+}
+
+body.theme-light {
+    background-color: $light-bg;
+    color: $light-fg;
 }
 
 body, html {
@@ -82,7 +90,7 @@ body, html {
     &::before {
         content: '';
         background-size: contain;
-        background-color: $fg-color;
+        background-color: $dark-fg;
         mask-repeat: no-repeat;
         mask-position: center;
         mask-image: url("~matrix-react-sdk/res/img/element-icons/call/video-call.svg");
@@ -92,4 +100,8 @@ body, html {
         height: $icon-size;
         margin: 0 auto; // center
     }
+}
+
+body.theme-light .icon::before {
+    background-color: $light-fg;
 }
