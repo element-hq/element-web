@@ -824,7 +824,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.calculateRecommendedVersion(room);
         this.updateE2EStatus(room);
         this.updatePermissions(room);
-        //TODO: forceStopConfetti();
     };
 
     private async calculateRecommendedVersion(room: Room) {
