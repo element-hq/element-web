@@ -76,7 +76,7 @@ let meetApi: any; // JitsiMeetExternalAPI
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
             readyPromise = Promise.all([
                 new Promise<void>(resolve => {
-                    widgetApi.once<CustomEvent<IWidgetApiRequest>>(`action:${ElementWidgetActions.ClientReady}`, ev => {
+                    widgetApi.once(`action:${ElementWidgetActions.ClientReady}`, ev => {
                         ev.preventDefault();
                         widgetApi.transport.reply(ev.detail, {});
                         resolve();
@@ -113,7 +113,7 @@ let meetApi: any; // JitsiMeetExternalAPI
 
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
-            widgetApi.addEventListener(`action:${ElementWidgetActions.HangupCall}`,
+            widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     if (meetApi) meetApi.executeCommand('hangup');
                     widgetApi.transport.reply(ev.detail, {}); // ack
