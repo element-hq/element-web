@@ -693,7 +693,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 this.checkIfAlone(this.state.room);
                 break;
             case 'confetti':
-                animateConfetti(this._roomView.current.offsetWidth);
+                animateConfetti(this.roomView.current.offsetWidth);
                 break;
             case 'post_sticker_message':
                 this.injectSticker(
