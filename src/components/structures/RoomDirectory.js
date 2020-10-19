@@ -30,7 +30,7 @@ import Analytics from '../../Analytics';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {ALL_ROOMS} from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
-import TagOrderStore from "../../stores/TagOrderStore";
+import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
 
@@ -49,7 +49,7 @@ export default class RoomDirectory extends React.Component {
     constructor(props) {
         super(props);
 
-        const selectedCommunityId = TagOrderStore.getSelectedTags()[0];
+        const selectedCommunityId = GroupFilterOrderStore.getSelectedTags()[0];
         this.state = {
             publicRooms: [],
             loading: true,

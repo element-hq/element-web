@@ -179,8 +179,18 @@ export default class CallHandler {
         }
     }
 
+    private matchesCallForThisRoom(call: MatrixCall) {
+        // We don't allow placing more than one call per room, but that doesn't mean there
+        // can't be more than one, eg. in a glare situation. This checks that the given call
+        // is the call we consider 'the' call for its room.
+        const callForThisRoom = this.getCallForRoom(call.roomId);
+        return callForThisRoom && call.callId === callForThisRoom.callId;
+    }
+
     private setCallListeners(call: MatrixCall) {
         call.on(CallEvent.Error, (err) => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
             console.error("Call error:", err);
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
@@ -196,9 +206,13 @@ export default class CallHandler {
             });
         });
         call.on(CallEvent.Hangup, () => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
             this.removeCallForRoom(call.roomId);
         });
         call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
             this.setCallState(call, newState);
 
             switch (oldState) {
@@ -224,14 +238,44 @@ export default class CallHandler {
                         (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
                     )) {
                         this.play(AudioID.Busy);
-                        Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
-                            title: _t('Call Timeout'),
-                            description: _t('The remote side failed to pick up') + '.',
+                        let title;
+                        let description;
+                        if (call.hangupReason === CallErrorCode.UserHangup) {
+                            title = _t("Call Declined");
+                            description = _t("The other party declined the call.");
+                        } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
+                            title = _t("Call Failed");
+                            // XXX: full stop appended as some relic here, but these
+                            // strings need proper input from design anyway, so let's
+                            // not change this string until we have a proper one.
+                            description = _t('The remote side failed to pick up') + '.';
+                        } else {
+                            title = _t("Call Failed");
+                            description = _t("The call could not be established");
+                        }
+
+                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                            title, description,
                         });
                     } else {
                         this.play(AudioID.CallEnd);
                     }
             }
+        });
+        call.on(CallEvent.Replaced, (newCall: MatrixCall) => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
+            console.log(`Call ID ${call.callId} is being replaced by call ID ${newCall.callId}`);
+
+            if (call.state === CallState.Ringing) {
+                this.pause(AudioID.Ring);
+            } else if (call.state === CallState.InviteSent) {
+                this.pause(AudioID.Ringback);
+            }
+
+            this.calls.set(newCall.roomId, newCall);
+            this.setCallListeners(newCall);
+            this.setCallState(newCall, newCall.state);
         });
     }
 
@@ -393,10 +437,15 @@ export default class CallHandler {
                 }
                 break;
             case 'hangup':
+            case 'reject':
                 if (!this.calls.get(payload.room_id)) {
                     return; // no call to hangup
                 }
-                this.calls.get(payload.room_id).hangup(CallErrorCode.UserHangup, false)
+                if (payload.action === 'reject') {
+                    this.calls.get(payload.room_id).reject();
+                } else {
+                    this.calls.get(payload.room_id).hangup(CallErrorCode.UserHangup, false);
+                }
                 this.removeCallForRoom(payload.room_id);
                 break;
             case 'answer':

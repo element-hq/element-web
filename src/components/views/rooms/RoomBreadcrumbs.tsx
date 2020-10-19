@@ -76,7 +76,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
     };
 
     private viewRoom = (room: Room, index: number) => {
-        Analytics.trackEvent("Breadcrumbs", "click_node", index);
+        Analytics.trackEvent("Breadcrumbs", "click_node", String(index));
         defaultDispatcher.dispatch({action: "view_room", room_id: room.roomId});
     };
 

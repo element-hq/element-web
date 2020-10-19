@@ -32,6 +32,8 @@ import type {Renderer} from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
+import {Analytics} from "../Analytics";
+import UserActivity from "../UserActivity";
 
 declare global {
     interface Window {
@@ -56,6 +58,8 @@ declare global {
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxCallHandler: CallHandler;
+        mxAnalytics: Analytics;
+        mxUserActivity: UserActivity;
     }
 
     interface Document {

@@ -71,9 +71,6 @@ interface IProps {
     viaServers?: string[];
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
-    middleDisabled: boolean;
-    leftDisabled: boolean;
-    rightDisabled: boolean;
     // eslint-disable-next-line camelcase
     page_type: string;
     autoJoin: boolean;
@@ -100,10 +97,6 @@ interface IUsageLimit {
 }
 
 interface IState {
-    mouseDown?: {
-        x: number;
-        y: number;
-    };
     syncErrorData?: {
         error: {
             data: IUsageLimit;
@@ -151,7 +144,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         super(props, context);
 
         this.state = {
-            mouseDown: undefined,
             syncErrorData: undefined,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
@@ -517,8 +509,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             // Could be "GroupTile +groupId:domain"
             const draggableId = result.draggableId.split(' ').pop();
 
-            // Dispatch synchronously so that the TagPanel receives an
-            // optimistic update from TagOrderStore before the previous
+            // Dispatch synchronously so that the GroupFilterPanel receives an
+            // optimistic update from GroupFilterOrderStore before the previous
             // state is shown.
             dis.dispatch(TagOrderActions.moveTag(
                 this._matrixClient,
@@ -549,48 +541,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         ), true);
     };
 
-    _onMouseDown = (ev) => {
-        // When the panels are disabled, clicking on them results in a mouse event
-        // which bubbles to certain elements in the tree. When this happens, close
-        // any settings page that is currently open (user/room/group).
-        if (this.props.leftDisabled && this.props.rightDisabled) {
-            const targetClasses = new Set(ev.target.className.split(' '));
-            if (
-                targetClasses.has('mx_MatrixChat') ||
-                targetClasses.has('mx_MatrixChat_middlePanel') ||
-                targetClasses.has('mx_RoomView')
-            ) {
-                this.setState({
-                    mouseDown: {
-                        x: ev.pageX,
-                        y: ev.pageY,
-                    },
-                });
-            }
-        }
-    };
-
-    _onMouseUp = (ev) => {
-        if (!this.state.mouseDown) return;
-
-        const deltaX = ev.pageX - this.state.mouseDown.x;
-        const deltaY = ev.pageY - this.state.mouseDown.y;
-        const distance = Math.sqrt((deltaX * deltaX) + (deltaY + deltaY));
-        const maxRadius = 5; // People shouldn't be straying too far, hopefully
-
-        // Note: we track how far the user moved their mouse to help
-        // combat against https://github.com/vector-im/element-web/issues/7158
-
-        if (distance < maxRadius) {
-            // This is probably a real click, and not a drag
-            dis.dispatch({ action: 'close_settings' });
-        }
-
-        // Always clear the mouseDown state to ensure we don't accidentally
-        // use stale values due to the mouseDown checks.
-        this.setState({mouseDown: null});
-    };
-
     render() {
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
@@ -610,7 +560,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     oobData={this.props.roomOobData}
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
-                    disabled={this.props.middleDisabled}
                     resizeNotifier={this.props.resizeNotifier}
                 />;
                 break;
@@ -658,8 +607,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     onKeyDown={this._onReactKeyDown}
                     className='mx_MatrixChat_wrapper'
                     aria-hidden={this.props.hideToSRUsers}
-                    onMouseDown={this._onMouseDown}
-                    onMouseUp={this._onMouseUp}
                 >
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>

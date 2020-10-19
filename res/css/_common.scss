@@ -208,12 +208,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 0;
 }
 
-/* applied to side-panels and messagepanel when in RoomSettings */
-.mx_fadable {
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
-}
-
 // These are magic constants which are excluded from tinting, to let themes
 // (which only have CSS, unlike skins) tell the app what their non-tinted
 // colourscheme is by inspecting the stylesheet DOM.

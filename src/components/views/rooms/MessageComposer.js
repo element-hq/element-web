@@ -38,6 +38,7 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import { PlaceCallType } from "../../../CallHandler";
+import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -104,8 +105,11 @@ function HangupButton(props) {
         if (!call) {
             return;
         }
+
+        const action = call.state === CallState.Ringing ? 'reject' : 'hangup';
+
         dis.dispatch({
-            action: 'hangup',
+            action,
             // hangup the call for this room, which may not be the room in props
             // (e.g. conferences which will hangup the 1:1 room instead)
             room_id: call.roomId,

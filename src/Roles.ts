@@ -13,9 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import { _t } from './languageHandler';
 
-export function levelRoleMap(usersDefault) {
+export function levelRoleMap(usersDefault: number) {
     return {
         undefined: _t('Default'),
         0: _t('Restricted'),
@@ -25,7 +26,7 @@ export function levelRoleMap(usersDefault) {
     };
 }
 
-export function textualPowerLevel(level, usersDefault) {
+export function textualPowerLevel(level: number, usersDefault: number): string {
     const LEVEL_ROLE_MAP = levelRoleMap(usersDefault);
     if (LEVEL_ROLE_MAP[level]) {
         return LEVEL_ROLE_MAP[level];
