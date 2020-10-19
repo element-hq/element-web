@@ -2524,5 +2524,19 @@
     "Video conference started by %(senderName)s": "A videókonferenciát elindította: %(senderName)s",
     "Failed to save your profile": "A profilodat nem sikerült elmenteni",
     "The operation could not be completed": "A műveletet nem lehetett befejezni",
-    "Remove messages sent by others": "Mások által küldött üzenetek törlése"
+    "Remove messages sent by others": "Mások által küldött üzenetek törlése",
+    "Starting microphone...": "Mikrofon bekapcsolása…",
+    "Starting camera...": "Kamera bekapcsolása…",
+    "Call connecting...": "Híváshoz csatlakozás…",
+    "Calling...": "Hívás…",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Minden szerver ki van tiltva! Ezt a szobát nem lehet többet használni.",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s megváltoztatta a jogosultságokat a szobában.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s beállította a jogosultságokat a szobában.",
+    "%(senderName)s declined the call.": "%(senderName)s visszautasította a hívást.",
+    "(an error occurred)": "(hiba történt)",
+    "(their device couldn't start the camera / microphone)": "(az ő eszköze nem tudja a kamerát / mikrofont használni)",
+    "(connection failed)": "(kapcsolódás sikertelen)",
+    "The call could not be established": "A hívás kapcsolatot nem lehet felépíteni",
+    "The other party declined the call.": "A másik fél elutasította a hívást.",
+    "Call Declined": "Hívás elutasítva"
 }
