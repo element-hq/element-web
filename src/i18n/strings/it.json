@@ -2533,5 +2533,12 @@
     "Starting microphone...": "Avvio microfono...",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Tutti i server sono banditi dalla partecipazione! Questa stanza non può più essere usata.",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ha cambiato le ACL del server per questa stanza.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ha impostato le ACL del server per questa stanza."
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ha impostato le ACL del server per questa stanza.",
+    "%(senderName)s declined the call.": "%(senderName)s ha rifiutato la chiamata.",
+    "(an error occurred)": "(si è verificato un errore)",
+    "(their device couldn't start the camera / microphone)": "(il suo dispositivo non ha potuto avviare la fotocamera / il microfono)",
+    "(connection failed)": "(connessione fallita)",
+    "The call could not be established": "Impossibile stabilire la chiamata",
+    "The other party declined the call.": "Il destinatario ha rifiutato la chiamata.",
+    "Call Declined": "Chiamata rifiutata"
 }
