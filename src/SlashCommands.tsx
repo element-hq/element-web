@@ -77,6 +77,7 @@ export const CommandCategories = {
     "actions": _td("Actions"),
     "admin": _td("Admin"),
     "advanced": _td("Advanced"),
+    "effects": _td("Effects"),
     "other": _td("Other"),
 };
 
@@ -1045,19 +1046,16 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             return success((async () => {
-                const isChatEffectsDisabled = SettingsStore.getValue('dontShowChatEffects');
-                if ((!args) || (!args && isChatEffectsDisabled)) {
+                if (!args) {
                     args = _t("sends confetti");
                     MatrixClientPeg.get().sendEmoteMessage(roomId, args);
                 } else {
                     MatrixClientPeg.get().sendTextMessage(roomId, args);
                 }
-                if (!isChatEffectsDisabled) {
-                    dis.dispatch({action: 'confetti'});
-                }
+                dis.dispatch({action: 'effects.confetti'});
             })());
         },
-        category: CommandCategories.actions,
+        category: CommandCategories.effects,
     }),
 
     // Command definitions for autocompletion ONLY:

@@ -42,7 +42,7 @@ import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
-import {isConfettiEmoji} from "../elements/Confetti";
+import {isConfettiEmoji} from "../elements/effects/confetti";
 import SettingsStore from "../../../settings/SettingsStore";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
@@ -318,10 +318,8 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
-            if (!SettingsStore.getValue('dontShowChatEffects')) {
-                if (isConfettiEmoji(content)) {
-                dis.dispatch({action: 'confetti'});
-                }
+            if (isConfettiEmoji(content)) {
+                dis.dispatch({action: 'effects.confetti'});
             }
         }
 

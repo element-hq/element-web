@@ -56,7 +56,6 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {E2EStatus, shieldStatusForRoom} from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
 import {SettingLevel} from "../../settings/SettingLevel";
-import {animateConfetti, forceStopConfetti, isConfettiEmoji} from "../views/elements/Confetti";
 import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {IMatrixClientCreds} from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
@@ -73,7 +72,7 @@ import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
-import ConfettiOverlay from "../views/elements/ConfettiOverlay";
+import EffectsOverlay from "../views/elements/effects/EffectsOverlay";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -248,8 +247,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
-        this.context.on("Event.decrypted", this.onEventDecrypted);
-        this.context.on("event", this.onEvent);
         // Start listening for RoomViewStore updates
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
@@ -570,8 +567,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
-            this.context.removeListener("Event.decrypted", this.onEventDecrypted);
-            this.context.removeListener("event", this.onEvent);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -693,9 +688,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             case 'message_sent':
                 this.checkIfAlone(this.state.room);
                 break;
-            case 'confetti':
-                //TODO: animateConfetti(this.roomView.current.offsetWidth);
-                break;
             case 'post_sticker_message':
                 this.injectSticker(
                     payload.data.content.url,
@@ -800,28 +792,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
-            }
-        }
-    };
-
-    private onEventDecrypted = (ev) => {
-        if (!SettingsStore.getValue('dontShowChatEffects')) {
-            if (ev.isBeingDecrypted() || ev.isDecryptionFailure() ||
-                this.state.room.getUnreadNotificationCount() === 0) return;
-            this.handleConfetti(ev);
-        }
-    };
-
-    private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        this.handleConfetti(ev);
-    };
-
-    private handleConfetti = (ev) => {
-        if (this.state.matrixClientIsReady) {
-            const messageBody = _t('sends confetti');
-            if (isConfettiEmoji(ev.getContent()) || ev.getContent().body === messageBody) {
-                dis.dispatch({action: 'confetti'});
             }
         }
     };
@@ -2070,11 +2040,13 @@ export default class RoomView extends React.Component<IProps, IState> {
             mx_RoomView_inCall: Boolean(activeCall),
         });
 
+        const showChatEffects = SettingsStore.getValue('showChatEffects');
+
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
-                    {this.roomView.current &&
-                        <ConfettiOverlay roomWidth={this.roomView.current.offsetWidth} />
+                    {showChatEffects && this.roomView.current &&
+                        <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     }
                     <ErrorBoundary>
                         <RoomHeader
