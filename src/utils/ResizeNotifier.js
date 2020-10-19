@@ -40,10 +40,12 @@ export default class ResizeNotifier extends EventEmitter {
 
     startResizing() {
         this._isResizing = true;
+        this.emit("isResizing", true);
     }
 
     stopResizing() {
         this._isResizing = false;
+        this.emit("isResizing", false);
     }
 
     _noisyMiddlePanel() {

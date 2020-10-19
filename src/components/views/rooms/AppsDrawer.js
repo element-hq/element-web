@@ -56,6 +56,8 @@ export default class AppsDrawer extends React.Component {
 
         this._resizeContainer = null;
         this.resizer = this._createResizer();
+
+        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
     }
 
     componentDidMount() {
@@ -71,6 +73,7 @@ export default class AppsDrawer extends React.Component {
         if (this._resizeContainer) {
             this.resizer.detach();
         }
+        this.props.resizeNotifier.off("isResizing", this.onIsResizing);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -79,6 +82,13 @@ export default class AppsDrawer extends React.Component {
         // Room has changed probably, update apps
         this._updateApps();
     }
+
+    onIsResizing = (resizing) => {
+        this.setState({ resizing });
+        if (!resizing) {
+            this._relaxResizer();
+        }
+    };
 
     _createResizer() {
         const classNames = {
@@ -129,6 +139,14 @@ export default class AppsDrawer extends React.Component {
             this._loadResizerPreferences();
         }
     }
+
+    _relaxResizer = () => {
+        const distributors = this.resizer.getDistributors();
+
+        // relax all items if they had any overconstrained flexboxes
+        distributors.forEach(d => d.start());
+        distributors.forEach(d => d.finish());
+    };
 
     _loadResizerPreferences = () => {
         console.log("@@ _loadResizerPreferences");
@@ -191,10 +209,6 @@ export default class AppsDrawer extends React.Component {
         }
     }
 
-    setResizing = (resizing) => {
-        this.setState({ resizing });
-    };
-
     render() {
         if (!this.props.showApps) return <div />;
 
@@ -247,7 +261,6 @@ export default class AppsDrawer extends React.Component {
                     handleClass="mx_AppsContainer_resizerHandle"
                     className="mx_AppsContainer_resizer"
                     resizeNotifier={this.props.resizeNotifier}
-                    setResizing={this.setResizing}
                 >
                     <div className="mx_AppsContainer" ref={this._collectResizer}>
                         { apps.map((app, i) => {
@@ -273,7 +286,6 @@ const PersistentVResizer = ({
     handleWrapperClass,
     handleClass,
     resizeNotifier,
-    setResizing,
     children,
 }) => {
     const [height, setHeight] = useLocalStorageState("pvr_" + id, 280); // old fixed height was 273px
@@ -283,7 +295,6 @@ const PersistentVResizer = ({
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
-            setResizing(true);
             resizeNotifier.startResizing();
         }}
         onResize={() => {
@@ -291,7 +302,6 @@ const PersistentVResizer = ({
         }}
         onResizeStop={(e, dir, ref, d) => {
             setHeight(height + d.height);
-            setResizing(false);
             resizeNotifier.stopResizing();
         }}
         handleWrapperClass={handleWrapperClass}
