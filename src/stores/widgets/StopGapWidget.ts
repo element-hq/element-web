@@ -17,6 +17,8 @@
 import { Room } from "matrix-js-sdk/src/models/room";
 import {
     ClientWidgetApi,
+    IGetOpenIDActionRequest,
+    IGetOpenIDActionResponseData,
     IStickerActionRequest,
     IStickyActionRequest,
     ITemplateParams,
@@ -25,8 +27,10 @@ import {
     IWidgetApiRequestEmptyData,
     IWidgetData,
     MatrixCapabilities,
+    OpenIDRequestState,
     runTemplate,
     Widget,
+    WidgetApiToWidgetAction,
     WidgetApiFromWidgetAction,
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
@@ -43,6 +47,8 @@ import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ElementWidgetActions } from "./ElementWidgetActions";
+import Modal from "../../Modal";
+import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 
 // TODO: Destroy all of this code
 
@@ -190,12 +196,66 @@ export class StopGapWidget extends EventEmitter {
         return !!this.messaging;
     }
 
+    private get widgetId() {
+        return this.messaging.widget.id;
+    }
+
+    private onOpenIdReq = async (ev: CustomEvent<IGetOpenIDActionRequest>) => {
+        if (ev?.detail?.widgetId !== this.widgetId) return;
+
+        const rawUrl = this.appTileProps.app.url;
+        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, rawUrl, this.appTileProps.userWidget);
+
+        const settings = SettingsStore.getValue("widgetOpenIDPermissions");
+        if (settings.deny && settings.deny.includes(widgetSecurityKey)) {
+            this.messaging.transport.reply(ev.detail, <IGetOpenIDActionResponseData>{
+                state: OpenIDRequestState.Blocked,
+            });
+            return;
+        }
+        if (settings.allow && settings.allow.includes(widgetSecurityKey)) {
+            const credentials = await MatrixClientPeg.get().getOpenIdToken();
+            this.messaging.transport.reply(ev.detail, <IGetOpenIDActionResponseData>{
+                state: OpenIDRequestState.Allowed,
+                ...credentials,
+            });
+            return;
+        }
+
+        // Confirm that we received the request
+        this.messaging.transport.reply(ev.detail, <IGetOpenIDActionResponseData>{
+            state: OpenIDRequestState.PendingUserConfirmation,
+        });
+
+        // Actually ask for permission to send the user's data
+        Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
+            widgetUrl: rawUrl.substr(0, rawUrl.lastIndexOf("?")),
+            widgetId: this.widgetId,
+            isUserWidget: this.appTileProps.userWidget,
+
+            onFinished: async (confirm) => {
+                const responseBody: IGetOpenIDActionResponseData = {
+                    state: confirm ? OpenIDRequestState.Allowed : OpenIDRequestState.Blocked,
+                    original_request_id: ev.detail.requestId, // eslint-disable-line camelcase
+                };
+                if (confirm) {
+                    const credentials = await MatrixClientPeg.get().getOpenIdToken();
+                    Object.assign(responseBody, credentials);
+                }
+                this.messaging.transport.send(WidgetApiToWidgetAction.OpenIDCredentials, responseBody).catch(error => {
+                    console.error("Failed to send OpenID credentials: ", error);
+                });
+            },
+        });
+    };
+
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
         const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.addEventListener("preparing", () => this.emit("preparing"));
         this.messaging.addEventListener("ready", () => this.emit("ready"));
+        this.messaging.addEventListener(`action:${WidgetApiFromWidgetAction.GetOpenIDCredentials}`, this.onOpenIdReq);
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
         if (!this.appTileProps.userWidget && this.appTileProps.room) {
