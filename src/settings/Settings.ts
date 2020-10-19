@@ -626,6 +626,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Don't show chat effects"),
         default: false,
+    },
     "Widgets.pinned": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
