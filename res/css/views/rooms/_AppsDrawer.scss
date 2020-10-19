@@ -64,6 +64,11 @@ $MiniAppTileHeight: 200px;
             opacity: 0.8;
         }
     }
+
+    .mx_AppTileBody, .mx_AppTile_persistedWrapper {
+        // match bg of border so that the cut corners have the right fill
+        background-color: $widget-menu-bar-bg-color;
+    }
 }
 
 .mx_AppsContainer_resizer {
@@ -170,8 +175,8 @@ $MinWidth: 240px;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-top: 8px;
-    padding-bottom: 12px;
+    padding-top: 2px;
+    padding-bottom: 8px;
 }
 
 .mx_AppTileMenuBarTitle {
@@ -206,7 +211,7 @@ $MinWidth: 240px;
     margin: 0 3px;
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout { // TODO replace icon
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
     mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
 }
 
@@ -248,17 +253,19 @@ $MinWidth: 240px;
     padding: 0;
     margin: 0;
     display: block;
+    border-radius: 8px;
 }
 
 .mx_AppPermissionWarning {
     text-align: center;
-    background-color: $widget-menu-bar-bg-color;
+    background-color: $widget-body-bg-color;
     display: flex;
     height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: $font-16px;
+    border-radius: 8px;
 }
 
 .mx_AppPermissionWarning_row {
