@@ -78,6 +78,7 @@ import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
+import Analytics from './Analytics';
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -191,6 +192,7 @@ export default class CallHandler {
         call.on(CallEvent.Error, (err) => {
             if (!this.matchesCallForThisRoom(call)) return;
 
+            Analytics.trackEvent('voip', 'callError', 'error', err);
             console.error("Call error:", err);
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
@@ -207,6 +209,8 @@ export default class CallHandler {
         });
         call.on(CallEvent.Hangup, () => {
             if (!this.matchesCallForThisRoom(call)) return;
+
+            Analytics.trackEvent('voip', 'callHangup');
 
             this.removeCallForRoom(call.roomId);
         });
@@ -232,6 +236,7 @@ export default class CallHandler {
                     this.play(AudioID.Ringback);
                     break;
                 case CallState.Ended:
+                    Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
                     this.removeCallForRoom(call.roomId);
                     if (oldState === CallState.InviteSent && (
                         call.hangupParty === CallParty.Remote ||
@@ -329,6 +334,7 @@ export default class CallHandler {
         roomId: string, type: PlaceCallType,
         localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
     ) {
+        Analytics.trackEvent('voip', 'placeCall', 'type', type);
         const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
         this.calls.set(roomId, call);
         this.setCallListeners(call);
@@ -406,6 +412,7 @@ export default class CallHandler {
                 break;
             case 'place_conference_call':
                 console.info("Place conference call in %s", payload.room_id);
+                Analytics.trackEvent('voip', 'placeConferenceCall');
                 this.startCallApp(payload.room_id, payload.type);
                 break;
             case 'end_conference':
@@ -432,6 +439,7 @@ export default class CallHandler {
                     }
 
                     const call = payload.call as MatrixCall;
+                    Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(call.roomId, call)
                     this.setCallListeners(call);
                 }
