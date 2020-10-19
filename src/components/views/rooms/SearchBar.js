@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
 import {Key} from "../../../Keyboard";
+import DesktopBuildsNotice, {WarningKind} from "../elements/DesktopBuildsNotice";
 
 export default class SearchBar extends React.Component {
     constructor(props) {
@@ -72,21 +74,24 @@ export default class SearchBar extends React.Component {
         });
 
         return (
-            <div className="mx_SearchBar">
-                <div className="mx_SearchBar_buttons" role="radiogroup">
-                    <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick} aria-checked={this.state.scope === 'Room'} role="radio">
-                        {_t("This Room")}
-                    </AccessibleButton>
-                    <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick} aria-checked={this.state.scope === 'All'} role="radio">
-                        {_t("All Rooms")}
-                    </AccessibleButton>
+            <>
+                <div className="mx_SearchBar">
+                    <div className="mx_SearchBar_buttons" role="radiogroup">
+                        <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick} aria-checked={this.state.scope === 'Room'} role="radio">
+                            {_t("This Room")}
+                        </AccessibleButton>
+                        <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick} aria-checked={this.state.scope === 'All'} role="radio">
+                            {_t("All Rooms")}
+                        </AccessibleButton>
+                    </div>
+                    <div className="mx_SearchBar_input mx_textinput">
+                        <input ref={this._search_term} type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                        <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch} />
+                    </div>
+                    <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
                 </div>
-                <div className="mx_SearchBar_input mx_textinput">
-                    <input ref={this._search_term} type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
-                    <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch} />
-                </div>
-                <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
-            </div>
+                <DesktopBuildsNotice isRoomEncrypted={this.props.isRoomEncrypted} kind={WarningKind.Search} />
+            </>
         );
     }
 }

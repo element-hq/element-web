@@ -22,6 +22,7 @@ import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEnc
 import { accessSecretStorage } from "../SecurityManager";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
+import SecurityCustomisations from "../customisations/Security";
 
 const TOAST_KEY = "setupencryption";
 
@@ -78,6 +79,10 @@ const onReject = () => {
 };
 
 export const showToast = (kind: Kind) => {
+    if (SecurityCustomisations.setupEncryptionNeeded?.(kind)) {
+        return;
+    }
+
     const onAccept = async () => {
         if (kind === Kind.VERIFY_THIS_SESSION) {
             Modal.createTrackedDialog("Verify session", "Verify session", SetupEncryptionDialog,

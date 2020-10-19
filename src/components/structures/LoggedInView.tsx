@@ -27,7 +27,6 @@ import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
-import sessionStore from '../../stores/SessionStore';
 import {MatrixClientPeg, IMatrixClientCreds} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -41,10 +40,6 @@ import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
-import {
-    showToast as showSetPasswordToast,
-    hideToast as hideSetPasswordToast,
-} from "../../toasts/SetPasswordToast";
 import {
     showToast as showServerLimitToast,
     hideToast as hideServerLimitToast,
@@ -76,16 +71,12 @@ interface IProps {
     viaServers?: string[];
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
-    middleDisabled: boolean;
-    leftDisabled: boolean;
-    rightDisabled: boolean;
     // eslint-disable-next-line camelcase
     page_type: string;
     autoJoin: boolean;
     threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     currentRoomId: string;
-    ConferenceHandler?: object;
     collapseLhs: boolean;
     config: {
         piwik: {
@@ -106,10 +97,6 @@ interface IUsageLimit {
 }
 
 interface IState {
-    mouseDown?: {
-        x: number;
-        y: number;
-    };
     syncErrorData?: {
         error: {
             data: IUsageLimit;
@@ -150,8 +137,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
-    protected readonly _sessionStore: sessionStore;
-    protected readonly _sessionStoreToken: { remove: () => void };
     protected readonly _compactLayoutWatcherRef: string;
     protected resizer: Resizer;
 
@@ -159,7 +144,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         super(props, context);
 
         this.state = {
-            mouseDown: undefined,
             syncErrorData: undefined,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
@@ -171,12 +155,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onNativeKeyDown, false);
-
-        this._sessionStore = sessionStore;
-        this._sessionStoreToken = this._sessionStore.addListener(
-            this._setStateFromSessionStore,
-        );
-        this._setStateFromSessionStore();
 
         this._updateServerNoticeEvents();
 
@@ -206,9 +184,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
         SettingsStore.unwatchSetting(this._compactLayoutWatcherRef);
-        if (this._sessionStoreToken) {
-            this._sessionStoreToken.remove();
-        }
         this.resizer.detach();
     }
 
@@ -229,20 +204,13 @@ class LoggedInView extends React.Component<IProps, IState> {
         return this._roomView.current.canResetTimeline();
     };
 
-    _setStateFromSessionStore = () => {
-        if (this._sessionStore.getCachedPassword()) {
-            showSetPasswordToast();
-        } else {
-            hideSetPasswordToast();
-        }
-    };
-
     _createResizer() {
         const classNames = {
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
             reverse: "mx_ResizeHandle_reverse",
         };
+        let size;
         const collapseConfig = {
             toggleSize: 260 - 50,
             onCollapsed: (collapsed) => {
@@ -253,21 +221,19 @@ class LoggedInView extends React.Component<IProps, IState> {
                     dis.dispatch({action: "show_left_panel"}, true);
                 }
             },
-            onResized: (size) => {
-                window.localStorage.setItem("mx_lhs_size", '' + size);
+            onResized: (_size) => {
+                size = _size;
                 this.props.resizeNotifier.notifyLeftHandleResized();
             },
             onResizeStart: () => {
                 this.props.resizeNotifier.startResizing();
             },
             onResizeStop: () => {
+                window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.stopResizing();
             },
         };
-        const resizer = new Resizer(
-            this._resizeContainer.current,
-            CollapseDistributor,
-            collapseConfig);
+        const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
         resizer.setClassNames(classNames);
         return resizer;
     }
@@ -543,8 +509,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             // Could be "GroupTile +groupId:domain"
             const draggableId = result.draggableId.split(' ').pop();
 
-            // Dispatch synchronously so that the TagPanel receives an
-            // optimistic update from TagOrderStore before the previous
+            // Dispatch synchronously so that the GroupFilterPanel receives an
+            // optimistic update from GroupFilterOrderStore before the previous
             // state is shown.
             dis.dispatch(TagOrderActions.moveTag(
                 this._matrixClient,
@@ -575,48 +541,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         ), true);
     };
 
-    _onMouseDown = (ev) => {
-        // When the panels are disabled, clicking on them results in a mouse event
-        // which bubbles to certain elements in the tree. When this happens, close
-        // any settings page that is currently open (user/room/group).
-        if (this.props.leftDisabled && this.props.rightDisabled) {
-            const targetClasses = new Set(ev.target.className.split(' '));
-            if (
-                targetClasses.has('mx_MatrixChat') ||
-                targetClasses.has('mx_MatrixChat_middlePanel') ||
-                targetClasses.has('mx_RoomView')
-            ) {
-                this.setState({
-                    mouseDown: {
-                        x: ev.pageX,
-                        y: ev.pageY,
-                    },
-                });
-            }
-        }
-    };
-
-    _onMouseUp = (ev) => {
-        if (!this.state.mouseDown) return;
-
-        const deltaX = ev.pageX - this.state.mouseDown.x;
-        const deltaY = ev.pageY - this.state.mouseDown.y;
-        const distance = Math.sqrt((deltaX * deltaX) + (deltaY + deltaY));
-        const maxRadius = 5; // People shouldn't be straying too far, hopefully
-
-        // Note: we track how far the user moved their mouse to help
-        // combat against https://github.com/vector-im/element-web/issues/7158
-
-        if (distance < maxRadius) {
-            // This is probably a real click, and not a drag
-            dis.dispatch({ action: 'close_settings' });
-        }
-
-        // Always clear the mouseDown state to ensure we don't accidentally
-        // use stale values due to the mouseDown checks.
-        this.setState({mouseDown: null});
-    };
-
     render() {
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
@@ -636,8 +560,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     oobData={this.props.roomOobData}
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
-                    disabled={this.props.middleDisabled}
-                    ConferenceHandler={this.props.ConferenceHandler}
                     resizeNotifier={this.props.resizeNotifier}
                 />;
                 break;
@@ -685,8 +607,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     onKeyDown={this._onReactKeyDown}
                     className='mx_MatrixChat_wrapper'
                     aria-hidden={this.props.hideToSRUsers}
-                    onMouseDown={this._onMouseDown}
-                    onMouseUp={this._onMouseUp}
                 >
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>

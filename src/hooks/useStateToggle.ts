@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 
 // Hook to simplify toggling of a boolean state value
 // Returns value, method to toggle boolean value and method to set the boolean value
-export const useStateToggle = (initialValue: boolean) => {
+export const useStateToggle = (initialValue: boolean): [boolean, () => void, Dispatch<SetStateAction<boolean>>] => {
     const [value, setValue] = useState(initialValue);
     const toggleValue = () => {
         setValue(!value);

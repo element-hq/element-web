@@ -39,7 +39,7 @@ $info-plinth-fg-color: #888;
 
 $preview-bar-bg-color: $header-panel-bg-color;
 
-$tagpanel-bg-color: rgba(38, 39, 43, 0.82);
+$groupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
 $inverted-bg-color: $base-color;
 
 // used by AddressSelector
@@ -87,11 +87,10 @@ $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
 
 $settings-grey-fg-color: #a2a2a2;
-$settings-profile-placeholder-bg-color: #e7e7e7;
-$settings-profile-overlay-bg-color: #000;
-$settings-profile-overlay-placeholder-bg-color: transparent;
-$settings-profile-overlay-fg-color: #fff;
+$settings-profile-placeholder-bg-color: #21262c;
 $settings-profile-overlay-placeholder-fg-color: #454545;
+$settings-profile-button-bg-color: #e7e7e7;
+$settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
 $settings-subsection-fg-color: $text-secondary-color;
 
 $topleftmenu-color: $text-primary-color;
@@ -99,7 +98,7 @@ $roomheader-color: $text-primary-color;
 $roomheader-bg-color: $bg-color;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $text-primary-color;
-$tagpanel-button-color: $header-panel-text-primary-color;
+$groupFilterPanel-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
 $icon-button-color: #8E99A4;
@@ -119,7 +118,7 @@ $roomlist-bg-color: rgba(33, 38, 44, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
 
-$tagpanel-divider-color: $roomlist-header-color;
+$groupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -188,7 +187,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: #000000;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: $base-color;
@@ -203,7 +202,7 @@ $appearance-tab-border-color: $room-highlight-color;
 
 // blur amounts for left left panel (only for element theme, used in _mods.scss)
 $roomlist-background-blur-amount: 60px;
-$tagpanel-background-blur-amount: 30px;
+$groupFilterPanel-background-blur-amount: 30px;
 
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 

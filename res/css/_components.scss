@@ -27,7 +27,7 @@
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_TabbedView.scss";
-@import "./structures/_TagPanel.scss";
+@import "./structures/_GroupFilterPanel.scss";
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_UploadBar.scss";
 @import "./structures/_UserMenu.scss";
@@ -82,8 +82,6 @@
 @import "./views/dialogs/_RoomUpgradeWarningDialog.scss";
 @import "./views/dialogs/_ServerOfflineDialog.scss";
 @import "./views/dialogs/_SetEmailDialog.scss";
-@import "./views/dialogs/_SetMxIdDialog.scss";
-@import "./views/dialogs/_SetPasswordDialog.scss";
 @import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_SlashCommandHelpDialog.scss";
@@ -102,6 +100,7 @@
 @import "./views/elements/_AccessibleButton.scss";
 @import "./views/elements/_AddressSelector.scss";
 @import "./views/elements/_AddressTile.scss";
+@import "./views/elements/_DesktopBuildsNotice.scss";
 @import "./views/elements/_DirectorySearchBox.scss";
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
@@ -141,6 +140,7 @@
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
+@import "./views/messages/_MJitsiWidgetEvent.scss";
 @import "./views/messages/_MNoticeBody.scss";
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";

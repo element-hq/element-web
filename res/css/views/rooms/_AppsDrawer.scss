@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$MiniAppTileHeight: 114px;
+$MiniAppTileHeight: 200px;
 
 .mx_AppsDrawer {
     margin: 5px 5px 5px 18px;
@@ -50,10 +50,6 @@ $MiniAppTileHeight: 114px;
     }
 }
 
-.mx_AppsDrawer_hidden {
-    display: none;
-}
-
 .mx_AppsContainer {
     display: flex;
     flex-direction: row;
@@ -78,21 +74,7 @@ $MiniAppTileHeight: 114px;
     font-size: $font-12px;
 }
 
-.mx_AddWidget_button_full_width {
-    max-width: 960px;
-}
-
-.mx_SetAppURLDialog_input {
-    border-radius: 3px;
-    border: 1px solid $input-border-color;
-    padding: 9px;
-    color: $primary-hairline-color;
-    background-color: $primary-bg-color;
-    font-size: $font-15px;
-}
-
 .mx_AppTile {
-    max-width: 960px;
     width: 50%;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 4px;
@@ -105,7 +87,6 @@ $MiniAppTileHeight: 114px;
 }
 
 .mx_AppTileFullWidth {
-    max-width: 960px;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -116,7 +97,6 @@ $MiniAppTileHeight: 114px;
 }
 
 .mx_AppTile_mini {
-    max-width: 960px;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -220,9 +200,10 @@ $MiniAppTileHeight: 114px;
 }
 
 .mx_AppTileBody_mini {
-    height: 112px;
+    height: $MiniAppTileHeight;
     width: 100%;
     overflow: hidden;
+    border-radius: 8px;
 }
 
 .mx_AppTile .mx_AppTileBody,
@@ -246,72 +227,6 @@ $MiniAppTileHeight: 114px;
     padding: 0;
     margin: 0;
     display: block;
-}
-
-.mx_AppTileMenuBarWidgetPadding {
-    margin-right: 5px;
-}
-
-.mx_AppIconTile {
-    background-color: $lightbox-bg-color;
-    border: 1px solid rgba(0, 0, 0, 0);
-    width: 200px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-    border-radius: 3px;
-    margin: 5px;
-    display: inline-block;
-}
-
-.mx_AppIconTile.mx_AppIconTile_active {
-    color: $accent-color;
-    border-color: $accent-color;
-}
-
-.mx_AppIconTile:hover {
-    border: 1px solid $accent-color;
-    box-shadow: 0 0 10px 5px rgba(200, 200, 200, 0.5);
-}
-
-.mx_AppIconTile_content {
-    padding: 2px 16px;
-    height: 60px;
-    overflow: hidden;
-}
-
-.mx_AppIconTile_content h4 {
-    margin-top: 5px;
-    margin-bottom: 2px;
-}
-
-.mx_AppIconTile_content p {
-    margin-top: 0;
-    margin-bottom: 5px;
-    font-size: smaller;
-}
-
-.mx_AppIconTile_image {
-    padding: 10px;
-    max-width: 100px;
-    max-height: 100px;
-    width: auto;
-    height: auto;
-}
-
-.mx_AppIconTile_imageContainer {
-    text-align: center;
-    width: 100%;
-    background-color: white;
-    border-radius: 3px 3px 0 0;
-    height: 155px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-form.mx_Custom_Widget_Form div {
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .mx_AppPermissionWarning {

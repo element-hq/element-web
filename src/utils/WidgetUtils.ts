@@ -26,18 +26,18 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
-import {Capability} from "../widgets/WidgetApi";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
 import {_t} from "../languageHandler";
-import {IApp} from "../stores/WidgetStore";
+import {MatrixCapabilities} from "matrix-widget-api";
+import {IApp} from "../stores/WidgetStore"; // TODO @@
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 
-export interface IWidget {
+export interface IWidget { // TODO @@
     id: string;
     type: string;
     sender: string;
@@ -447,15 +447,14 @@ export default class WidgetUtils {
     static getCapWhitelistForAppTypeInRoomId(appType: string, roomId: string): Capability[] {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
-        const capWhitelist = enableScreenshots ? [Capability.Screenshot] : [];
+        const capWhitelist = enableScreenshots ? [MatrixCapabilities.Screenshots] : [];
 
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
         if (WidgetType.JITSI.matches(appType)) {
-            capWhitelist.push(Capability.AlwaysOnScreen);
+            capWhitelist.push(MatrixCapabilities.AlwaysOnScreen);
         }
-        capWhitelist.push(Capability.ReceiveTerminate);
 
         return capWhitelist;
     }
@@ -525,17 +524,5 @@ export default class WidgetUtils {
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
-    }
-
-    static snapshotWidget(app: IApp): void {
-        console.log("Requesting widget snapshot");
-        ActiveWidgetStore.getWidgetMessaging(app.id).getScreenshot().catch((err) => {
-            console.error("Failed to get screenshot", err);
-        }).then((screenshot) => {
-            dis.dispatch({
-                action: 'picture_snapshot',
-                file: screenshot,
-            }, true);
-        });
     }
 }
