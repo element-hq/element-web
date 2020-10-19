@@ -1047,7 +1047,7 @@ export const Commands = [
         runFn: function(roomId, args) {
             return success((async () => {
                 if (!args) {
-                    args = _t("sends confetti");
+                    args = "sends confetti";
                     MatrixClientPeg.get().sendEmoteMessage(roomId, args);
                 } else {
                     MatrixClientPeg.get().sendTextMessage(roomId, args);
