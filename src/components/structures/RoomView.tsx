@@ -73,6 +73,7 @@ import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import ConfettiOverlay from "../views/elements/ConfettiOverlay";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -693,7 +694,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 this.checkIfAlone(this.state.room);
                 break;
             case 'confetti':
-                animateConfetti(this.roomView.current.offsetWidth);
+                //TODO: animateConfetti(this.roomView.current.offsetWidth);
                 break;
             case 'post_sticker_message':
                 this.injectSticker(
@@ -853,7 +854,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.calculateRecommendedVersion(room);
         this.updateE2EStatus(room);
         this.updatePermissions(room);
-        forceStopConfetti();
+        //TODO: forceStopConfetti();
     };
 
     private async calculateRecommendedVersion(room: Room) {
@@ -2072,6 +2073,9 @@ export default class RoomView extends React.Component<IProps, IState> {
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
+                    {this.roomView.current &&
+                        <ConfettiOverlay roomWidth={this.roomView.current.offsetWidth} />
+                    }
                     <ErrorBoundary>
                         <RoomHeader
                             room={this.state.room}

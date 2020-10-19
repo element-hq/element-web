@@ -1,14 +1,18 @@
 /*
 MIT License
+
 Copyright (c) 2018 MathuSum Mut
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -89,9 +93,7 @@ const confetti = {
         }
     }
 
-    function startConfetti(roomWidth, timeout) {
-        const width = roomWidth;
-        const height = window.innerHeight;
+    function startConfetti(canvas, roomWidth, timeout) {
         window.requestAnimationFrame = (function() {
             return window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
@@ -102,26 +104,12 @@ const confetti = {
                     return window.setTimeout(callback, confetti.frameInterval);
                 };
         })();
-        let canvas = document.getElementById("confetti-canvas");
-        if (canvas === null) {
-            canvas = document.createElement("canvas");
-            canvas.setAttribute("id", "confetti-canvas");
-            canvas.setAttribute("style",
-                "display:block;z-index:999999;pointer-events:none;position:fixed;top:0; right:0");
-            document.body.prepend(canvas);
-            canvas.width = width;
-            canvas.height = height;
-            window.addEventListener("resize", function() {
-                canvas.width = roomWidth;
-                canvas.height = window.innerHeight;
-            }, true);
-            context = canvas.getContext("2d");
-        } else if (context === null) {
+        if (context === null) {
             context = canvas.getContext("2d");
         }
         const count = confetti.maxCount;
         while (particles.length < count) {
-            particles.push(resetParticle({}, width, height));
+            particles.push(resetParticle({}, canvas.width, canvas.height));
         }
         streamingConfetti = true;
         runAnimation();
@@ -211,8 +199,8 @@ export function isConfettiEmoji(content) {
     return !!(hexArray.includes('1f389') || hexArray.includes('1f38a'));
 }
 
-export function animateConfetti(roomWidth) {
-    confetti.start(roomWidth, 3000);
+export function animateConfetti(canvas, roomWidth) {
+    confetti.start(canvas, roomWidth, 3000);
 }
 export function forceStopConfetti() {
     confetti.remove();
