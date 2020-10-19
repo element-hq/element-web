@@ -78,7 +78,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
     private onRejectClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
         dis.dispatch({
-            action: 'hangup',
+            action: 'reject',
             room_id: this.state.incomingCall.roomId,
         });
     };

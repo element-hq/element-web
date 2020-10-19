@@ -46,6 +46,7 @@ const eventTileTypes = {
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
+    'm.call.reject': 'messages.TextualEvent',
 };
 
 const stateEventTileTypes = {
