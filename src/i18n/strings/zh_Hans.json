@@ -32,5 +32,5 @@
     "Open": "打开",
     "Your browser can't run %(brand)s": "浏览器无法运行%(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "当前浏览器不支持%(brand)s调用的高级浏览器特性。",
-    "Powered by Matrix": "Powered by Matrix"
+    "Powered by Matrix": "由 Matrix 驱动"
 }

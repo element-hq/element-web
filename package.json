@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "version": "1.7.7",
+  "version": "1.7.9",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -62,7 +62,8 @@
     "jsrsasign": "^9.1.5",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
-    "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
+    "matrix-widget-api": "^0.1.0-beta.5",
+    "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -92,6 +93,7 @@
     "@types/node": "^12.12.41",
     "@types/react": "16.9",
     "@types/react-dom": "^16.9.4",
+    "@types/sanitize-html": "^1.23.3",
     "autoprefixer": "^9.7.3",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
@@ -112,8 +114,8 @@
     "file-loader": "^5.0.2",
     "fs-extra": "^0.30.0",
     "html-webpack-plugin": "^3.2.0",
-    "jest": "^24.9.0",
-    "jest-environment-jsdom-fourteen": "^1.0.1",
+    "jest": "^26.5.2",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "json-loader": "^0.5.3",
     "loader-utils": "^1.2.3",
     "matrix-mock-request": "^1.2.3",
@@ -137,16 +139,16 @@
     "postcss-strip-inline-comments": "^0.1.5",
     "rimraf": "^2.4.3",
     "shell-escape": "^0.2.0",
+    "simple-proxy-agent": "^1.1.0",
     "stylelint": "^12.0.1",
     "terser-webpack-plugin": "^2.3.0",
     "typescript": "^3.7.3",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
-    "workbox-webpack-plugin": "^5.1.4"
+    "webpack-dev-server": "^3.9.0"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom-fourteen",
+    "testEnvironment": "jest-environment-jsdom-sixteen",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
