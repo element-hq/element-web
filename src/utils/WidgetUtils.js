@@ -459,6 +459,7 @@ export default class WidgetUtils {
             'avatarUrl=$matrix_avatar_url',
             'userId=$matrix_user_id',
             'roomId=$matrix_room_id',
+            'theme=$theme',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);
