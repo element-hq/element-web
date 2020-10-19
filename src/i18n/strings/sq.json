@@ -2527,5 +2527,12 @@
     "Calling...": "Po thirret…",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Janë dëbuar nga pjesëmarrja krejt shërbyesit! Kjo dhomë s’mund të përdoret më.",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ndryshoi ACL-ra shërbyesi për këtë dhomë.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s caktoi ACL-ra shërbyesi për këtë dhomë."
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s caktoi ACL-ra shërbyesi për këtë dhomë.",
+    "%(senderName)s declined the call.": "%(senderName)s hodhi poshtë thirrjen.",
+    "(an error occurred)": "(ndodhi një gabim)",
+    "(their device couldn't start the camera / microphone)": "(pajisja e tyre s’vuri dot në punë kamerën / mikrofonin)",
+    "(connection failed)": "(dështoi lidhja)",
+    "The call could not be established": "Thirrja s’u nis dot",
+    "The other party declined the call.": "Pala tjetër hodhi poshtë thirrjen.",
+    "Call Declined": "Thirrja u Hodh Poshtë"
 }
