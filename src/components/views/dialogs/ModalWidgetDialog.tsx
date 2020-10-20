@@ -87,7 +87,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
 
     public render() {
         // TODO: Don't violate every single security principle
-        // TODO copied from SGWidget
+        // TODO: DRY - copied from SGWidget
         const templated = this.widget.getCompleteUrl({
             currentRoomId: RoomViewStore.getRoomId(),
             currentUserId: MatrixClientPeg.get().getUserId(),
@@ -140,15 +140,26 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             contentId="mx_Dialog_content"
             onFinished={this.props.onFinished}
         >
+            <div className="mx_ModalWidgetDialog_warning">
+                <img
+                    src={require("../../../../res/img/element-icons/warning-badge.svg")}
+                    height="16"
+                    width="16"
+                    alt=""
+                />
+                {_t("Data on this screen is shared with %(widgetDomain)s", {
+                    widgetDomain: parsed.hostname,
+                })}
+            </div>
             <div>
                 <iframe
                     ref={this.appFrame}
-                    // sandbox="allow-forms allow-scripts" TODO
-                    src={widgetUrl.toString()}
+                    sandbox="allow-forms allow-scripts"
+                    src={widgetUrl}
                     onLoad={this.onLoad}
                 />
             </div>
-            <div className="mx_ModalWidgetDialog_buttons" style={{float: "right"}}>
+            <div className="mx_ModalWidgetDialog_buttons">
                 { buttons }
             </div>
         </BaseDialog>;

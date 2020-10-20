@@ -1769,6 +1769,7 @@
     "Your homeserver doesn't seem to support this feature.": "Your homeserver doesn't seem to support this feature.",
     "Message edits": "Message edits",
     "Modal Widget": "Modal Widget",
+    "Data on this screen is shared with %(widgetDomain)s": "Data on this screen is shared with %(widgetDomain)s",
     "Your account is not secure": "Your account is not secure",
     "Your password": "Your password",
     "This session, or the other session": "This session, or the other session",
