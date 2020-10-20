@@ -2527,5 +2527,19 @@
     "Offline encrypted messaging using dehydrated devices": "使用乾淨裝置的離線加密訊息",
     "Failed to save your profile": "儲存您的設定檔失敗",
     "The operation could not be completed": "無法完成操作",
-    "Remove messages sent by others": "移除其他人傳送的訊息"
+    "Remove messages sent by others": "移除其他人傳送的訊息",
+    "Calling...": "正在通話……",
+    "Call connecting...": "正在連線通話……",
+    "Starting camera...": "正在開啟攝影機……",
+    "Starting microphone...": "正在開啟麥克風……",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 所有伺服器都被禁止加入！ 這間聊天室無法使用。",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s 為此房間更改了伺服器的存取控制列表。",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s 為此房間設置了伺服器的存取控制列表。",
+    "%(senderName)s declined the call.": "%(senderName)s 拒絕了通話。",
+    "(an error occurred)": "（遇到錯誤）",
+    "(their device couldn't start the camera / microphone)": "（他們的裝置無法開啟攝影機／麥克風）",
+    "(connection failed)": "（連線失敗）",
+    "The call could not be established": "無法建立通話",
+    "The other party declined the call.": "對方拒絕了電話。",
+    "Call Declined": "通話已拒絕"
 }
