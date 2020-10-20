@@ -1,3 +1,11 @@
+Changes in [1.7.10](https://github.com/vector-im/element-web/releases/tag/v1.7.10) (2020-10-20)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.9...v1.7.10)
+
+ * [Release] Adjust for new widget messaging APIs
+   [\#15497](https://github.com/vector-im/element-web/pull/15497)
+ * Upgrade to React SDK 3.6.1
+
 Changes in [1.7.9](https://github.com/vector-im/element-web/releases/tag/v1.7.9) (2020-10-12)
 =============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.9-rc.1...v1.7.9)
