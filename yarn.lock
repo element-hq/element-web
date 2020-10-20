@@ -4778,10 +4778,10 @@ eventemitter3@^4.0.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.4.tgz#b5463ace635a083d018bdc7c917b4c5f10a85384"
   integrity sha512-rlaVLnVxtxvoyLsQQFBx53YmXHDxRIzzTLbdfxqi4yocpSjAxXwkU0cScM5JgSKMqEhrZpnvQ2D9gjylR0AimQ==
 
-events@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/events/-/events-3.1.0.tgz#84279af1b34cb75aa88bf5ff291f6d0bd9b31a59"
-  integrity sha512-Rv+u8MLHNOdMjTAFeT3nCjHn2aGlx435FP/sDHNaRhDEMwyI/aB22Kj2qIN8R0cw3z28psEQLYwxVKLsKrMgWg==
+events@^3.0.0, events@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
+  integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
 
 eventsource@^1.0.7:
   version "1.0.7"
@@ -7982,15 +7982,12 @@ matrix-react-test-utils@^0.2.2:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
-matrix-widget-api@^0.1.0-beta.2:
-  version "0.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.2.tgz#367da1ccd26b711f73fc5b6e02edf55ac2ea2692"
-  integrity sha512-q5g5RZN+RRjM4HmcJ+LYoQAYrB1wzyERmoQ+LvKbTV/+9Ov36Kp0QEP8CleSXEd5WLp6bkRlt60axDaY6pWGmg==
-
-matrix-widget-api@^0.1.0-beta.3:
-  version "0.1.0-beta.3"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.3.tgz#356965ca357172ee056e3fd86fd96879b059a114"
-  integrity sha512-j7nxdhLQfdU6snsdBA29KQR0DmT8/vl6otOvGqPCV0OCHpq1312cP79Eg4JzJKIFI3A76Qha3nYx6G9/aapwXg==
+matrix-widget-api@^0.1.0-beta.3, matrix-widget-api@^0.1.0-beta.5:
+  version "0.1.0-beta.5"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.5.tgz#dd7f24a177aa590d812bd4e92e2c3ac225c5557e"
+  integrity sha512-J3GBJtVMFuEM/EWFylc0IlkPjdgmWxrkGYPaZ0LSmxp+OlNJxYfnWPR6F6HveW+Z8C1i0vq+BTueofSqKv2zDg==
+  dependencies:
+    events "^3.2.0"
 
 md5.js@^1.3.4:
   version "1.3.5"
