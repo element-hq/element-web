@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,9 +16,16 @@ limitations under the License.
 
 import FixedDistributor from "./fixed";
 import ResizeItem from "../item";
+import Resizer, {IConfig} from "../resizer";
+import Sizer from "../sizer";
 
-class CollapseItem extends ResizeItem {
-    notifyCollapsed(collapsed) {
+export interface ICollapseConfig extends IConfig {
+    toggleSize: number;
+    onCollapsed?(collapsed: boolean, id: string, element: HTMLElement): void;
+}
+
+class CollapseItem extends ResizeItem<ICollapseConfig> {
+    notifyCollapsed(collapsed: boolean) {
         const callback = this.resizer.config.onCollapsed;
         if (callback) {
             callback(collapsed, this.id, this.domNode);
@@ -26,18 +33,20 @@ class CollapseItem extends ResizeItem {
     }
 }
 
-export default class CollapseDistributor extends FixedDistributor {
-    static createItem(resizeHandle, resizer, sizer) {
+export default class CollapseDistributor extends FixedDistributor<ICollapseConfig, CollapseItem> {
+    static createItem(resizeHandle: HTMLDivElement, resizer: Resizer<ICollapseConfig>, sizer: Sizer) {
         return new CollapseItem(resizeHandle, resizer, sizer);
     }
 
-    constructor(item, config) {
+    private readonly toggleSize: number;
+    private isCollapsed = false;
+
+    constructor(item: CollapseItem) {
         super(item);
-        this.toggleSize = config && config.toggleSize;
-        this.isCollapsed = false;
+        this.toggleSize = item.resizer?.config?.toggleSize;
     }
 
-    resize(newSize) {
+    public resize(newSize: number) {
         const isCollapsedSize = newSize < this.toggleSize;
         if (isCollapsedSize && !this.isCollapsed) {
             this.isCollapsed = true;
