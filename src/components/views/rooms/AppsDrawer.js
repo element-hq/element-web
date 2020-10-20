@@ -153,7 +153,7 @@ export default class AppsDrawer extends React.Component {
         try {
             const [[...lastIds], ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
             // Every app was included in the last split, reuse the last sizes
-            if (this.state.apps.length <= lastIds.length && this.state.apps.every(app => lastIds.includes(app.id))) {
+            if (this.state.apps.length <= lastIds.length && this.state.apps.every((app, i) => lastIds[i] === app.id)) {
                 sizes.forEach((size, i) => {
                     const distributor = this.resizer.forHandleAt(i);
                     if (distributor) {
@@ -171,6 +171,7 @@ export default class AppsDrawer extends React.Component {
             console.log("@@ full relaxation");
             const distributors = this.resizer.getDistributors();
             distributors.forEach(d => d.item.clearSize());
+            distributors.forEach(d => d.start());
             distributors.forEach(d => d.finish());
         }
     };
