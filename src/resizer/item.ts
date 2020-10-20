@@ -14,25 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default class ResizeItem {
-    constructor(handle, resizer, sizer) {
-        const id = handle.getAttribute("data-id");
-        const reverse = resizer.isReverseResizeHandle(handle);
-        const domNode = reverse ? handle.nextElementSibling : handle.previousElementSibling;
+import Resizer, {IConfig} from "./resizer";
+import Sizer from "./sizer";
 
-        this.domNode = domNode;
-        this.id = id;
-        this.reverse = reverse;
-        this.resizer = resizer;
-        this.sizer = sizer;
+export default class ResizeItem<C extends IConfig = IConfig> {
+    public readonly domNode: HTMLElement;
+    protected readonly id: string;
+    protected reverse: boolean;
+
+    constructor(
+        handle: HTMLElement,
+        public readonly resizer: Resizer<C>,
+        public readonly sizer: Sizer,
+    ) {
+        this.reverse = resizer.isReverseResizeHandle(handle);
+        this.domNode = <HTMLElement>(this.reverse ? handle.nextElementSibling : handle.previousElementSibling);
+        this.id = handle.getAttribute("data-id");
     }
 
-    _copyWith(handle, resizer, sizer) {
-        const Ctor = this.constructor;
+    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer) {
+        const Ctor = this.constructor as typeof ResizeItem;
         return new Ctor(handle, resizer, sizer);
     }
 
-    _advance(forwards) {
+    private advance(forwards: boolean) {
         // opposite direction from fromResizeHandle to get back to handle
         let handle = this.reverse ?
             this.domNode.previousElementSibling :
@@ -45,32 +50,32 @@ export default class ResizeItem {
             } else {
                 handle = handle.previousElementSibling;
             }
-        } while (handle && !this.resizer.isResizeHandle(handle));
+        } while (handle && !this.resizer.isResizeHandle(<HTMLElement>handle));
 
         if (handle) {
-            const nextHandle = this._copyWith(handle, this.resizer, this.sizer);
+            const nextHandle = this.copyWith(<HTMLElement>handle, this.resizer, this.sizer);
             nextHandle.reverse = this.reverse;
             return nextHandle;
         }
     }
 
-    next() {
-        return this._advance(true);
+    public next() {
+        return this.advance(true);
     }
 
-    previous() {
-        return this._advance(false);
+    public previous() {
+        return this.advance(false);
     }
 
-    size() {
+    public size() {
         return this.sizer.getItemSize(this.domNode);
     }
 
-    offset() {
+    public offset() {
         return this.sizer.getItemOffset(this.domNode);
     }
 
-    setSize(size) {
+    public setSize(size: number) {
         this.sizer.setItemSize(this.domNode, size);
         const callback = this.resizer.config.onResized;
         if (callback) {
@@ -78,7 +83,7 @@ export default class ResizeItem {
         }
     }
 
-    clearSize() {
+    public clearSize() {
         this.sizer.clearItemSize(this.domNode);
         const callback = this.resizer.config.onResized;
         if (callback) {
@@ -86,22 +91,21 @@ export default class ResizeItem {
         }
     }
 
-
-    first() {
+    public first() {
         const firstHandle = Array.from(this.domNode.parentElement.children).find(el => {
-            return this.resizer.isResizeHandle(el);
+            return this.resizer.isResizeHandle(<HTMLElement>el);
         });
         if (firstHandle) {
-            return this._copyWith(firstHandle, this.resizer, this.sizer);
+            return this.copyWith(<HTMLElement>firstHandle, this.resizer, this.sizer);
         }
     }
 
-    last() {
+    public last() {
         const lastHandle = Array.from(this.domNode.parentElement.children).reverse().find(el => {
-            return this.resizer.isResizeHandle(el);
+            return this.resizer.isResizeHandle(<HTMLElement>el);
         });
         if (lastHandle) {
-            return this._copyWith(lastHandle, this.resizer, this.sizer);
+            return this.copyWith(<HTMLElement>lastHandle, this.resizer, this.sizer);
         }
     }
 }
