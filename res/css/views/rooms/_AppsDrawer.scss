@@ -64,11 +64,6 @@ $MiniAppTileHeight: 200px;
             opacity: 0.8;
         }
     }
-
-    .mx_AppTileBody, .mx_AppTile_persistedWrapper {
-        // match bg of border so that the cut corners have the right fill
-        background-color: $widget-menu-bar-bg-color;
-    }
 }
 
 .mx_AppsContainer_resizer {
@@ -134,6 +129,7 @@ $MinWidth: 240px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    background-color: $widget-menu-bar-bg-color;
 }
 
 .mx_AppTileFullWidth {
@@ -144,6 +140,7 @@ $MinWidth: 240px;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    background-color: $widget-menu-bar-bg-color;
 }
 
 .mx_AppTile_mini {
@@ -223,6 +220,8 @@ $MinWidth: 240px;
     height: 100%;
     width: 100%;
     overflow: hidden;
+    border-radius: 8px;
+    background-color: $widget-body-bg-color;
 }
 
 .mx_AppTileBody_mini {
@@ -253,19 +252,16 @@ $MinWidth: 240px;
     padding: 0;
     margin: 0;
     display: block;
-    border-radius: 8px;
 }
 
 .mx_AppPermissionWarning {
     text-align: center;
-    background-color: $widget-body-bg-color;
     display: flex;
     height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: $font-16px;
-    border-radius: 8px;
 }
 
 .mx_AppPermissionWarning_row {
@@ -324,6 +320,10 @@ $MinWidth: 240px;
     font-weight: bold;
     position: relative;
     height: 100%;
+
+    // match bg of border so that the cut corners have the right fill
+    background-color: $widget-body-bg-color !important;
+    border-radius: 8px;
 }
 
 .mx_AppLoading .mx_Spinner {
