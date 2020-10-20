@@ -2305,5 +2305,22 @@
     "You were uninvited": "Поканата към вас беше премахната",
     "%(targetName)s was uninvited": "Поканата към %(targetName)s беше премахната",
     "You were banned (%(reason)s)": "Бяхте блокирани (%(reason)s)",
-    "%(targetName)s was banned (%(reason)s)": "%(targetName)s беше блокиран(а) (%(reason)s)"
+    "%(targetName)s was banned (%(reason)s)": "%(targetName)s беше блокиран(а) (%(reason)s)",
+    "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
+    "* %(senderName)s %(emote)s": "%(senderName)s%(emote)s",
+    "The person who invited you already left the room, or their server is offline.": "Участникът който ви е поканил вече е напуснал стаята или техният сървър не е на линия.",
+    "The person who invited you already left the room.": "Участникът който ви покани вече напусна стаята.",
+    "Safeguard against losing access to encrypted messages & data": "Защитете се срещу загуба на достъп до криптирани съобшения и информация",
+    "Set up Secure Backup": "Конфигуриране на Защитен Архив",
+    "Unknown App": "Неизвестно приложение",
+    "Error leaving room": "Грешка при напускане на стаята",
+    "%(senderName)s declined the call.": "%(senderName)s отказа разговора.",
+    "(their device couldn't start the camera / microphone)": "(тяхното устройство не може да стартира камерата / микрофонът)",
+    "(connection failed)": "(връзката се разпадна)",
+    "Are you sure you want to cancel entering passphrase?": "Сигурни ли сте че желате да прекратите въвеждането на паролата?",
+    "This will end the conference for everyone. Continue?": "Това ще прекрати конферентният разговор за всички. Продължи?",
+    "End conference": "Прекрати конфетентният разговор",
+    "Call Declined": "Обаждането е отказано",
+    "The call could not be established": "Обаждането не може да бъде осъществено",
+    "The other party declined the call.": "Другата страна отказа обаждането."
 }
