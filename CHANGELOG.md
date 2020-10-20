@@ -1,3 +1,12 @@
+Changes in [3.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.6.1) (2020-10-20)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.6.0...v3.6.1)
+
+ * [Release] Adjust for new widget messaging APIs
+   [\#5342](https://github.com/matrix-org/matrix-react-sdk/pull/5342)
+ * [Release] Fix Jitsi OpenIDC auth
+   [\#5335](https://github.com/matrix-org/matrix-react-sdk/pull/5335)
+
 Changes in [3.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.6.0) (2020-10-12)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.6.0-rc.1...v3.6.0)
