@@ -168,6 +168,16 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     public pinWidget(widgetId: string) {
+        const roomId = this.getRoomId(widgetId);
+        const roomInfo = this.getRoom(roomId);
+        if (!roomInfo) return;
+
+        // When pinning, first confirm all the widgets (Jitsi) which were autopinned so that the order is correct
+        const autoPinned = this.getPinnedApps(roomId).filter(app => !roomInfo.pinned[app.id]);
+        autoPinned.forEach(app => {
+            this.setPinned(app.id, true);
+        });
+
         this.setPinned(widgetId, true);
 
         // Show the apps drawer upon the user pinning a widget
