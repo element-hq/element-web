@@ -21,12 +21,12 @@
 
 ## How to check if your language already is being translated
 
-Go to https://translate.element.io/projects/riot-web/ and visit the 2 sub-projects.
+Go to https://translate.element.io/projects/element-web/ and visit the 2 sub-projects.
 If your language is listed go to Step 2a and if not go to Step 2b
 
 ## Step 2a: Helping on existing languages.
 
-1. Head to one of the projects listed https://translate.element.io/projects/riot-web/
+1. Head to one of the projects listed https://translate.element.io/projects/element-web/
 2. Click on the ``translate`` button on the right side of your language
 3. Fill in the translations in the writeable field. You will see the original English string and the string of your second language above.
 
@@ -34,7 +34,7 @@ Head to the explanations under Steb 2b
 
 ## Step 2b: Adding a new language
 
-1. Go to one of the projects listed https://translate.element.io/projects/riot-web/
+1. Go to one of the projects listed https://translate.element.io/projects/element-web/
 2. Click the ``Start new translation`` button at the bottom
 3. Select a language
 4. Start translating like in 2a.3
