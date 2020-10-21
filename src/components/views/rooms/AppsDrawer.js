@@ -244,9 +244,8 @@ export default class AppsDrawer extends React.Component {
             mx_AppsDrawer: true,
             mx_AppsDrawer_fullWidth: apps.length < 2,
             mx_AppsDrawer_resizing: this.state.resizing,
-            mx_AppsDrawer_has1: apps.length === 1,
-            mx_AppsDrawer_has2: apps.length === 2,
-            mx_AppsDrawer_has3: apps.length === 3,
+            mx_AppsDrawer_2apps: apps.length === 2,
+            mx_AppsDrawer_3apps: apps.length === 3,
         });
 
         return (

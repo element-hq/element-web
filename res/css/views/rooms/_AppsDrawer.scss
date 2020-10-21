@@ -58,7 +58,7 @@ $MiniAppTileHeight: 200px;
             width: 4px;
             border-radius: 4px;
 
-            content: ' ';
+            content: '';
 
             background-color: $primary-fg-color;
             opacity: 0.8;
@@ -101,7 +101,7 @@ $MiniAppTileHeight: 200px;
 // TODO this should be 300px but that's too large
 $MinWidth: 240px;
 
-.mx_AppsDrawer_has2 .mx_AppTile {
+.mx_AppsDrawer_2apps .mx_AppTile {
     width: 50%;
 
     &:nth-child(3) {
@@ -110,7 +110,7 @@ $MinWidth: 240px;
         min-width: $MinWidth !important;
     }
 }
-.mx_AppsDrawer_has3 .mx_AppTile {
+.mx_AppsDrawer_3apps .mx_AppTile {
     width: 33%;
 
     &:nth-child(3) {
