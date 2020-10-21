@@ -78,9 +78,8 @@ export default class Confetti implements ICanvasEffect {
                     return window.setTimeout(callback, this.options.frameInterval);
                 };
         })();
-        if (this.context === null) {
-            this.context = canvas.getContext('2d');
-        }
+        this.context = canvas.getContext('2d');
+        this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
             this.particles.push(this.resetParticle({} as ConfettiParticle, canvas.width, canvas.height));
@@ -109,9 +108,11 @@ export default class Confetti implements ICanvasEffect {
     }
 
     private runAnimation = (): void => {
+        if (!this.context || !this.context.canvas) {
+            return;
+        }
         if (this.particles.length === 0) {
             this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-            //animationTimer = null;
         } else {
             const now = Date.now();
             const delta = now - this.lastFrameTime;
@@ -127,6 +128,9 @@ export default class Confetti implements ICanvasEffect {
 
 
     private drawParticles = (context: CanvasRenderingContext2D): void => {
+        if (!this.context || !this.context.canvas) {
+            return;
+        }
         let particle;
         let x; let x2; let y2;
         for (let i = 0; i < this.particles.length; i++) {
@@ -151,6 +155,9 @@ export default class Confetti implements ICanvasEffect {
     }
 
     private updateParticles = () => {
+        if (!this.context || !this.context.canvas) {
+            return;
+        }
         const width = this.context.canvas.width;
         const height = this.context.canvas.height;
         let particle: ConfettiParticle;
