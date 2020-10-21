@@ -109,7 +109,8 @@ export enum Views {
     // flow to setup SSSS / cross-signing on this account
     E2E_SETUP = 7,
 
-    // we are logged in with an active matrix client.
+    // we are logged in with an active matrix client. The logged_in state also
+    //includes guests users as they too are logged in at the client level.
     LOGGED_IN = 8,
 
     // We are logged out (invalid token) but have our local state again. The user
