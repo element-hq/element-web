@@ -257,7 +257,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const signupLink = getHostingLink("user-context-menu");
         if (signupLink) {
             hostingLink = (
-                <div className="mx_UserMenu_contextMenu_header">
+                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
                     {_t(
                         "<a>Upgrade</a> to your own domain", {},
                         {

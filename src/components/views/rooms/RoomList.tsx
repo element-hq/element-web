@@ -53,7 +53,6 @@ interface IProps {
     onBlur: (ev: React.FocusEvent) => void;
     onResize: () => void;
     resizeNotifier: ResizeNotifier;
-    collapsed: boolean;
     isMinimized: boolean;
 }
 
@@ -366,7 +365,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     public render() {
         let explorePrompt: JSX.Element;
-        if (RoomListStore.instance.getFirstNameFilterCondition()) {
+        if (!this.props.isMinimized && RoomListStore.instance.getFirstNameFilterCondition()) {
             explorePrompt = <div className="mx_RoomList_explorePrompt">
                 <div>{_t("Can't see what you’re looking for?")}</div>
                 <AccessibleButton kind="link" onClick={this.onExplore}>

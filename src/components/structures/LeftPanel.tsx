@@ -398,7 +398,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
             resizeNotifier={null}
-            collapsed={false}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
