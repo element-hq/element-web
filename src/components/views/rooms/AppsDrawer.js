@@ -103,7 +103,6 @@ export default class AppsDrawer extends React.Component {
             onResizeStop: () => {
                 this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
                 // persist to localStorage
-                console.log("@@ _saveResizerPreferences");
                 localStorage.setItem(this._getStorageKey(), JSON.stringify([
                     this.state.apps.map(app => app.id),
                     ...this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
@@ -117,7 +116,6 @@ export default class AppsDrawer extends React.Component {
     }
 
     _collectResizer = (ref) => {
-        console.log("@@ _collectResizer");
         if (this._resizeContainer) {
             this.resizer.detach();
         }
@@ -149,7 +147,6 @@ export default class AppsDrawer extends React.Component {
     };
 
     _loadResizerPreferences = () => {
-        console.log("@@ _loadResizerPreferences");
         try {
             const [[...lastIds], ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
             // Every app was included in the last split, reuse the last sizes
@@ -168,7 +165,6 @@ export default class AppsDrawer extends React.Component {
         }
 
         if (this.state.apps) {
-            console.log("@@ full relaxation");
             const distributors = this.resizer.getDistributors();
             distributors.forEach(d => d.item.clearSize());
             distributors.forEach(d => d.start());
