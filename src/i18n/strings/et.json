@@ -2541,10 +2541,10 @@
     "Call Declined": "Kõne on tagasilükatud",
     "Move right": "Liigu paremale",
     "Move left": "Liigu vasakule",
-    "Revoke permissions": "Tühista load",
+    "Revoke permissions": "Tühista õigused",
     "Unpin a widget to view it in this panel": "Sellel paneelil kuvamiseks eemaldage vidin lemmikutest",
-    "You can only pin up to %(count)s widgets|other": "Saab kinnitada ainult kuni %(count)s vidinaid",
-    "Show Widgets": "Kuva vidinad",
+    "You can only pin up to %(count)s widgets|other": "Sa saad kinnitada kuni %(count)s vidinat",
+    "Show Widgets": "Näita vidinaid",
     "Hide Widgets": "Peida vidinad",
     "The call was answered on another device.": "Kõnele vastati teises seadmes.",
     "Answered Elsewhere": "Vastatud mujal"
