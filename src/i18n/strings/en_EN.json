@@ -39,6 +39,8 @@
     "The other party declined the call.": "The other party declined the call.",
     "The remote side failed to pick up": "The remote side failed to pick up",
     "The call could not be established": "The call could not be established",
+    "Answered Elsewhere": "Answered Elsewhere",
+    "The call was answered on another device.": "The call was answered on another device.",
     "Call failed due to misconfigured server": "Call failed due to misconfigured server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.",
