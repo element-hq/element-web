@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useRef } from 'react';
 import dis from '../../../../dispatcher/dispatcher';
 import ICanvasEffect from './ICanvasEffect.js';
 
-type EffectsOverlayProps = {
+export type EffectsOverlayProps = {
     roomWidth: number;
 }
 

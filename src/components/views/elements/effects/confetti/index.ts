@@ -27,7 +27,7 @@ type ConfettiParticle = {
     tiltAngle: number,
 }
 
-const DefaultOptions: ConfettiOptions = {
+export const DefaultOptions: ConfettiOptions = {
     //set max confetti count
     maxCount: 150,
     //syarn addet the particle animation speed
