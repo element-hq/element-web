@@ -1,4 +1,4 @@
-import {_t, _td} from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 
 type Effect = {
     emojis: Array<string>;

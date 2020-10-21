@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef} from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import dis from '../../../../dispatcher/dispatcher';
 import ICanvasEffect from './ICanvasEffect.js';
 
@@ -6,7 +6,7 @@ type EffectsOverlayProps = {
     roomWidth: number;
 }
 
-const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({roomWidth}) => {
+const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const effectsRef = useRef<Map<String, ICanvasEffect>>(new Map<String, ICanvasEffect>());
 
@@ -15,9 +15,9 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({roomWidth}) => 
     };
 
     const lazyLoadEffectModule = async (name: string): Promise<ICanvasEffect> => {
-        if(!name) return null;
+        if (!name) return null;
         let effect = effectsRef.current[name] ?? null;
-        if(effect === null) {
+        if (effect === null) {
             try {
                 var { default: Effect } = await import(`./${name}`);
                 effect = new Effect();
@@ -31,7 +31,7 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({roomWidth}) => 
 
     const onAction = (payload: { action: string }) => {
         const actionPrefix = 'effects.';
-        if(payload.action.indexOf(actionPrefix) === 0) {
+        if (payload.action.indexOf(actionPrefix) === 0) {
             const effect = payload.action.substr(actionPrefix.length);
             lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current));
         }
@@ -44,11 +44,11 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({roomWidth}) => 
         canvas.width = roomWidth;
         canvas.height = window.innerHeight;
         window.addEventListener('resize', resize, true);
-        
-        return () => {            
+
+        return () => {
             dis.unregister(dispatcherRef);
             window.removeEventListener('resize', resize);
-            for(const effect in effectsRef.current) {
+            for (const effect in effectsRef.current) {
                 effectsRef.current[effect]?.stop();
             }
         };
@@ -58,7 +58,7 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({roomWidth}) => 
     useEffect(() => {
         canvasRef.current.width = roomWidth;
     }, [roomWidth]);
-    
+
     return (
         <canvas
             ref={canvasRef}

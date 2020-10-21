@@ -65,16 +65,16 @@ export default class Confetti implements ICanvasEffect {
     public isRunning: boolean;
 
     public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
-        if(!canvas) {
+        if (!canvas) {
             return;
         }
-        window.requestAnimationFrame = (function () {
+        window.requestAnimationFrame = (function() {
             return window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
-                function (callback) {
+                function(callback) {
                     return window.setTimeout(callback, this.options.frameInterval);
                 };
         })();
