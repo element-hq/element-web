@@ -2541,5 +2541,14 @@
     "The call could not be established": "Impossibile stabilire la chiamata",
     "The other party declined the call.": "Il destinatario ha rifiutato la chiamata.",
     "Call Declined": "Chiamata rifiutata",
-    "Offline encrypted messaging using dehydrated devices": "Messaggistica offline criptata usando dispositivi \"deidratati\""
+    "Offline encrypted messaging using dehydrated devices": "Messaggistica offline criptata usando dispositivi \"deidratati\"",
+    "Move right": "Sposta a destra",
+    "Move left": "Sposta a sinistra",
+    "Revoke permissions": "Revoca autorizzazioni",
+    "Unpin a widget to view it in this panel": "Sblocca un widget per vederlo in questo pannello",
+    "You can only pin up to %(count)s widgets|other": "Puoi ancorare al massimo %(count)s widget",
+    "Show Widgets": "Mostra i widget",
+    "Hide Widgets": "Nascondi i widget",
+    "The call was answered on another device.": "La chiamata è stata accettata su un altro dispositivo.",
+    "Answered Elsewhere": "Risposto altrove"
 }
