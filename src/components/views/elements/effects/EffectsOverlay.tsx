@@ -10,16 +10,12 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const effectsRef = useRef<Map<String, ICanvasEffect>>(new Map<String, ICanvasEffect>());
 
-    const resize = () => {
-        canvasRef.current.height = window.innerHeight;
-    };
-
     const lazyLoadEffectModule = async (name: string): Promise<ICanvasEffect> => {
         if (!name) return null;
         let effect = effectsRef.current[name] ?? null;
         if (effect === null) {
             try {
-                var { default: Effect } = await import(`./${name}`);
+                const { default: Effect } = await import(`./${name}`);
                 effect = new Effect();
                 effectsRef.current[name] = effect;
             } catch (err) {
@@ -27,41 +23,41 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
             }
         }
         return effect;
-    }
-
-    const onAction = (payload: { action: string }) => {
-        const actionPrefix = 'effects.';
-        if (payload.action.indexOf(actionPrefix) === 0) {
-            const effect = payload.action.substr(actionPrefix.length);
-            lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current));
-        }
     };
 
-    // on mount
     useEffect(() => {
+        const resize = () => {
+            canvasRef.current.height = window.innerHeight;
+        };
+        const onAction = (payload: { action: string }) => {
+            const actionPrefix = 'effects.';
+            if (payload.action.indexOf(actionPrefix) === 0) {
+                const effect = payload.action.substr(actionPrefix.length);
+                lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current));
+            }
+        }
         const dispatcherRef = dis.register(onAction);
         const canvas = canvasRef.current;
-        canvas.width = roomWidth;
         canvas.height = window.innerHeight;
         window.addEventListener('resize', resize, true);
 
         return () => {
             dis.unregister(dispatcherRef);
             window.removeEventListener('resize', resize);
-            for (const effect in effectsRef.current) {
-                effectsRef.current[effect]?.stop();
+            const currentEffects = effectsRef.current;
+            for (const effect in currentEffects) {
+                const effectModule: ICanvasEffect = currentEffects[effect];
+                if(effectModule && effectModule.isRunning) {
+                    effectModule.stop();
+                }
             }
         };
     }, []);
 
-    // on roomWidth change
-    useEffect(() => {
-        canvasRef.current.width = roomWidth;
-    }, [roomWidth]);
-
     return (
         <canvas
             ref={canvasRef}
+            width={roomWidth}
             style={{
                 display: 'block',
                 zIndex: 999999,
