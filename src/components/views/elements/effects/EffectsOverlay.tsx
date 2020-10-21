@@ -43,11 +43,12 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
 
         return () => {
             dis.unregister(dispatcherRef);
-            window.removeEventListener('resize', resize);
-            const currentEffects = effectsRef.current;
+            window.removeEventListener('resize', resize); 
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            const currentEffects = effectsRef.current; // this is not a react node ref, warning can be safely ignored
             for (const effect in currentEffects) {
                 const effectModule: ICanvasEffect = currentEffects[effect];
-                if(effectModule && effectModule.isRunning) {
+                if (effectModule && effectModule.isRunning) {
                     effectModule.stop();
                 }
             }
