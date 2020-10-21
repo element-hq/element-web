@@ -9,10 +9,25 @@ declare global {
 }
 
 export type ConfettiOptions = {
+    /**
+     * max confetti count
+     */
     maxCount: number,
+    /**
+     * particle animation speed
+     */
     speed: number,
+    /**
+     * the confetti animation frame interval in milliseconds
+     */
     frameInterval: number,
+    /**
+     * the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
+     */
     alpha: number,
+    /**
+     * use gradient instead of solid particle color
+     */
     gradient: boolean,
 }
 
@@ -28,15 +43,10 @@ type ConfettiParticle = {
 }
 
 export const DefaultOptions: ConfettiOptions = {
-    //set max confetti count
     maxCount: 150,
-    //syarn addet the particle animation speed
     speed: 3,
-    //the confetti animation frame interval in milliseconds
     frameInterval: 15,
-    //the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
     alpha: 1.0,
-    //use gradient instead of solid particle color
     gradient: false,
 };
 

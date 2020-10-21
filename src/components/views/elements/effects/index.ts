@@ -1,25 +1,59 @@
 import { _t, _td } from "../../../../languageHandler";
 
-export type Effect = {
+export type Effect<TOptions extends { [key: string]: any }> = {
+    /**
+     * one or more emojis that will trigger this effect
+     */
     emojis: Array<string>;
+    /**
+     * the matrix message type that will trigger this effect
+     */
     msgType: string;
+    /**
+     * the room command to trigger this effect
+     */
     command: string;
+    /**
+     * a function that returns the translated description of the effect
+     */
     description: () => string;
+    /**
+     * a function that returns the translated fallback message. this message will be shown if the user did not provide a custom message
+     */
     fallbackMessage: () => string;
-    options: {
-        [key: string]: any
-    }
+    /**
+     * animation options
+     */
+    options: TOptions;
 }
 
 type ConfettiOptions = {
+    /**
+     * max confetti count
+     */
     maxCount: number,
+    /**
+     * particle animation speed
+     */
     speed: number,
+    /**
+     * the confetti animation frame interval in milliseconds
+     */
     frameInterval: number,
+    /**
+     * the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
+     */
     alpha: number,
+    /**
+     * use gradient instead of solid particle color
+     */
     gradient: boolean,
 }
 
-const effects: Array<Effect> = [
+/**
+ * This configuration defines room effects that can be triggered by custom message types and emojis
+ */
+const effects: Array<Effect<{ [key: string]: any }>> = [
     {
         emojis: ['🎊', '🎉'],
         msgType: 'nic.custom.confetti',
@@ -27,18 +61,13 @@ const effects: Array<Effect> = [
         description: () => _td("Sends the given message with confetti"),
         fallbackMessage: () => _t("sends confetti") + " 🎉",
         options: {
-            //set max confetti count
             maxCount: 150,
-            //syarn addet the particle animation speed
             speed: 3,
-            //the confetti animation frame interval in milliseconds
             frameInterval: 15,
-            //the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
             alpha: 1.0,
-            //use gradient instead of solid particle color
             gradient: false,
-        } as ConfettiOptions,
-    },
+        },
+    } as Effect<ConfettiOptions>,
 ];
 
 export default effects;
