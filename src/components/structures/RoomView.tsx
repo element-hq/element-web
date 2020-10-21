@@ -822,15 +822,15 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onEventDecrypted = (ev) => {
         if (ev.isDecryptionFailure()) return;
-        this.handleConfetti(ev);
+        this.handleEffects(ev);
     };
 
     private onEvent = (ev) => {
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        this.handleConfetti(ev);
+        this.handleEffects(ev);
     };
 
-    private handleConfetti = (ev) => {
+    private handleEffects = (ev) => {
         if (this.state.room.getUnreadNotificationCount() === 0) return;
         if (this.state.matrixClientIsReady) {
             effects.forEach(effect => {
