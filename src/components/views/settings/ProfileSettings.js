@@ -23,6 +23,7 @@ import * as sdk from "../../../index";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import SdkConfig from "../../../SdkConfig";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
@@ -151,6 +152,13 @@ export default class ProfileSettings extends React.Component {
                 </a>
             </span>;
         }
+        const hostingSignupIFrame = SdkConfig.get().hosting_signup_iframe;
+        let hostingIFrame;
+        if (hostingSignupIFrame) {
+            hostingIFrame = <span className="mx_ProfileSettings_hostingIFrame">
+                Get your own personal Element!
+            </span>;
+        }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
@@ -175,6 +183,7 @@ export default class ProfileSettings extends React.Component {
                         <p>
                             {this.state.userId}
                             {hostingSignup}
+                            {hostingIFrame}
                         </p>
                     </div>
                     <AvatarSetting
