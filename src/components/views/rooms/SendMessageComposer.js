@@ -318,10 +318,10 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
-            effects.map( (effect) => {
+            effects.forEach((effect) => {
                 if (containsEmoji(content, effect.emojis)) {
-                dis.dispatch({action: `effects.${effect.command}`});
-            }
+                    dis.dispatch({action: `effects.${effect.command}`});
+                }
             });
         }
 

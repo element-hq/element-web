@@ -1,6 +1,14 @@
 import {_t, _td} from "../../../../languageHandler";
 
-export default [
+type Effect = {
+    emojis: Array<string>;
+    msgType: string;
+    command: string;
+    description: () => string;
+    fallbackMessage: () => string;
+}
+
+const effects: Array<Effect> = [
     {
         emojis: ['🎊', '🎉'],
         msgType: 'nic.custom.confetti',
@@ -8,4 +16,8 @@ export default [
         description: () => _td("Sends the given message with confetti"),
         fallbackMessage: () => _t("sends confetti") + " 🎉",
     },
-]
+];
+
+export default effects;
+
+

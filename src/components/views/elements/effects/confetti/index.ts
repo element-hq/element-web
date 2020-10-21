@@ -94,7 +94,6 @@ export default class Confetti implements ICanvasEffect {
 
     public stop = async () => {
         this.isRunning = false;
-       // this.particles = [];
     }
 
     private resetParticle = (particle: ConfettiParticle, width: number, height: number): ConfettiParticle => {
