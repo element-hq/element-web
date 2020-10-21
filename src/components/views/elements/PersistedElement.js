@@ -21,6 +21,8 @@ import {throttle} from "lodash";
 import ResizeObserver from 'resize-observer-polyfill';
 
 import dis from '../../../dispatcher/dispatcher';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -144,9 +146,11 @@ export default class PersistedElement extends React.Component {
     }
 
     renderApp() {
-        const content = <div ref={this.collectChild} style={this.props.style}>
-            {this.props.children}
-        </div>;
+        const content = <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
+            <div ref={this.collectChild} style={this.props.style}>
+                {this.props.children}
+            </div>
+        </MatrixClientContext.Provider>;
 
         ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
     }
