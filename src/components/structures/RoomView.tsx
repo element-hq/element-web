@@ -1277,7 +1277,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         if (!this.state.searchResults.next_batch) {
-            if (this.state.searchResults.results.length == 0) {
+            if (!this.state.searchResults?.results?.length) {
                 ret.push(<li key="search-top-marker">
                     <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
                 </li>,
@@ -1301,7 +1301,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         let lastRoomId;
 
-        for (let i = this.state.searchResults.results.length - 1; i >= 0; i--) {
+        for (let i = (this.state.searchResults?.results?.length || 0) - 1; i >= 0; i--) {
             const result = this.state.searchResults.results[i];
 
             const mxEv = result.context.getEvent();
@@ -1970,7 +1970,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         if (this.state.searchResults) {
             // show searching spinner
-            if (this.state.searchResults.results === undefined) {
+            if (this.state.searchResults.count === undefined) {
                 searchResultsPanel = (
                     <div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />
                 );

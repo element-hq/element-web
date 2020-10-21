@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -57,13 +57,13 @@ export default class Sizer {
     }
 
     /** @return {number} container offset to document */
-    private getPageOffset() {
+    private getPageOffset(): number {
         let element = this.container;
         let offset = 0;
         while (element) {
             const pos = this.vertical ? element.offsetTop : element.offsetLeft;
             offset = offset + pos;
-            element = element.offsetParent as HTMLElement;
+            element = <HTMLElement>element.offsetParent;
         }
         return offset;
     }

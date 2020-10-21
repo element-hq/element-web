@@ -1,6 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,28 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/*
-classNames:
-    // class on resize-handle
-    handle: string
-    // class on resize-handle
-    reverse: string
-    // class on resize-handle
-    vertical: string
-    // class on container
-    resizing: string
-*/
-
 import {throttle} from "lodash";
 
 import FixedDistributor from "./distributors/fixed";
-import Sizer from "./sizer";
 import ResizeItem from "./item";
+import Sizer from "./sizer";
 
 interface IClassNames {
+    // class on resize-handle
     handle?: string;
+    // class on resize-handle
     reverse?: string;
+    // class on resize-handle
     vertical?: string;
+    // class on container
     resizing?: string;
 }
 
@@ -90,7 +81,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     Gives the distributor for a specific resize handle, as if you would have started
     to drag that handle. Can be used to manipulate the size of an item programmatically.
     @param {number} handleIndex the index of the resize handle in the container
-    @return {Distributor} a new distributor for the given handle
+    @return {FixedDistributor} a new distributor for the given handle
     */
     public forHandleAt(handleIndex: number): FixedDistributor<C> {
         const handles = this.getResizeHandles();
@@ -121,7 +112,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     private onMouseDown = (event: MouseEvent) => {
         // use closest in case the resize handle contains
         // child dom nodes that can be the target
-        const resizeHandle = event.target && (<HTMLElement>event.target).closest(`.${this.classNames.handle}`);
+        const resizeHandle = event.target && (<HTMLDivElement>event.target).closest(`.${this.classNames.handle}`);
         if (!resizeHandle || resizeHandle.parentElement !== this.container) {
             return;
         }

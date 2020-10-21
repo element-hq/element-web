@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ they have two methods:
         This method usually ends up calling `resize` once the start offset is subtracted.
 */
 export default class FixedDistributor<C extends IConfig, I extends ResizeItem<any> = ResizeItem<C>> {
-    static createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer) {
+    static createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem {
         return new ResizeItem(resizeHandle, resizer, sizer);
     }
 
-    static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean) {
+    static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer {
         return new Sizer(containerElement, vertical, reverse);
     }
 

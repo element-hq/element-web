@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Sizer from "./sizer";
 import Resizer, {IConfig} from "./resizer";
+import Sizer from "./sizer";
 
 export default class ResizeItem<C extends IConfig = IConfig> {
     public readonly domNode: HTMLElement;
@@ -28,38 +27,31 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         public readonly resizer: Resizer<C>,
         public readonly sizer: Sizer,
     ) {
-        const id = handle.getAttribute("data-id");
-        const reverse = resizer.isReverseResizeHandle(handle);
-
-        this.domNode = <HTMLElement>(reverse ? handle.nextElementSibling : handle.previousElementSibling);
-        this.id = id;
-        this.reverse = reverse;
-        this.resizer = resizer;
-        this.sizer = sizer;
+        this.reverse = resizer.isReverseResizeHandle(handle);
+        this.domNode = <HTMLElement>(this.reverse ? handle.nextElementSibling : handle.previousElementSibling);
+        this.id = handle.getAttribute("data-id");
     }
 
-    private copyWith(handle: Element, resizer: Resizer, sizer: Sizer) {
+    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer) {
         const Ctor = this.constructor as typeof ResizeItem;
-        return new Ctor(<HTMLElement>handle, resizer, sizer);
+        return new Ctor(handle, resizer, sizer);
     }
 
     private advance(forwards: boolean) {
         // opposite direction from fromResizeHandle to get back to handle
-        let handle = <HTMLElement>(this.reverse ?
-            this.domNode.previousElementSibling :
-            this.domNode.nextElementSibling);
+        let handle = this.reverse ? this.domNode.previousElementSibling : this.domNode.nextElementSibling;
         const moveNext = forwards !== this.reverse; // xor
         // iterate at least once to avoid infinite loop
         do {
             if (moveNext) {
-                handle = <HTMLElement>handle.nextElementSibling;
+                handle = handle.nextElementSibling;
             } else {
-                handle = <HTMLElement>handle.previousElementSibling;
+                handle = handle.previousElementSibling;
             }
-        } while (handle && !this.resizer.isResizeHandle(handle));
+        } while (handle && !this.resizer.isResizeHandle(<HTMLElement>handle));
 
         if (handle) {
-            const nextHandle = this.copyWith(handle, this.resizer, this.sizer);
+            const nextHandle = this.copyWith(<HTMLElement>handle, this.resizer, this.sizer);
             nextHandle.reverse = this.reverse;
             return nextHandle;
         }
@@ -118,7 +110,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
             return this.resizer.isResizeHandle(<HTMLElement>el);
         });
         if (firstHandle) {
-            return this.copyWith(firstHandle, this.resizer, this.sizer);
+            return this.copyWith(<HTMLElement>firstHandle, this.resizer, this.sizer);
         }
     }
 
@@ -127,7 +119,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
             return this.resizer.isResizeHandle(<HTMLElement>el);
         });
         if (lastHandle) {
-            return this.copyWith(lastHandle, this.resizer, this.sizer);
+            return this.copyWith(<HTMLElement>lastHandle, this.resizer, this.sizer);
         }
     }
 }
