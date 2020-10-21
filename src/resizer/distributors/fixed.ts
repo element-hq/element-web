@@ -43,6 +43,14 @@ export default class FixedDistributor<C extends IConfig, I extends ResizeItem<an
         this.beforeOffset = item.offset();
     }
 
+    public get size() {
+        return this.item.getSize();
+    }
+
+    public set size(size: string) {
+        this.item.setRawSize(size);
+    }
+
     public resize(size: number) {
         this.item.setSize(size);
     }
@@ -51,7 +59,11 @@ export default class FixedDistributor<C extends IConfig, I extends ResizeItem<an
         this.resize(offset - this.beforeOffset);
     }
 
-    public start() {}
+    public start() {
+        this.item.start();
+    }
 
-    public finish() {}
+    public finish() {
+        this.item.finish();
+    }
 }

@@ -39,9 +39,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
 
     private advance(forwards: boolean) {
         // opposite direction from fromResizeHandle to get back to handle
-        let handle = this.reverse ?
-            this.domNode.previousElementSibling :
-            this.domNode.nextElementSibling;
+        let handle = this.reverse ? this.domNode.previousElementSibling : this.domNode.nextElementSibling;
         const moveNext = forwards !== this.reverse; // xor
         // iterate at least once to avoid infinite loop
         do {
@@ -75,8 +73,24 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         return this.sizer.getItemOffset(this.domNode);
     }
 
-    public setSize(size: number) {
+    public start() {
+        this.sizer.start(this.domNode);
+    }
+
+    public finish() {
+        this.sizer.finish(this.domNode);
+    }
+
+    public getSize() {
+        return this.sizer.getDesiredItemSize(this.domNode);
+    }
+
+    public setRawSize(size: string) {
         this.sizer.setItemSize(this.domNode, size);
+    }
+
+    public setSize(size: number) {
+        this.setRawSize(`${Math.round(size)}px`);
         const callback = this.resizer.config.onResized;
         if (callback) {
             callback(size, this.id, this.domNode);

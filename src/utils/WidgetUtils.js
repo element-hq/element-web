@@ -459,6 +459,7 @@ export default class WidgetUtils {
             'avatarUrl=$matrix_avatar_url',
             'userId=$matrix_user_id',
             'roomId=$matrix_room_id',
+            'theme=$theme',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);
@@ -493,5 +494,17 @@ export default class WidgetUtils {
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
+    }
+
+    static isManagedByManager(app) {
+        if (WidgetUtils.isScalarUrl(app.url)) {
+            const managers = IntegrationManagers.sharedInstance();
+            if (managers.hasManager()) {
+                // TODO: Pick the right manager for the widget
+                const defaultManager = managers.getPrimaryManager();
+                return WidgetUtils.isScalarUrl(defaultManager.apiUrl);
+            }
+        }
+        return false;
     }
 }

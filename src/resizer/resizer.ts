@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {throttle} from "lodash";
+
 import FixedDistributor from "./distributors/fixed";
 import ResizeItem from "./item";
 import Sizer from "./sizer";
@@ -43,7 +45,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     constructor(
         public container: HTMLElement,
         private readonly distributorCtor: {
-            new(item: ResizeItem): FixedDistributor<C>;
+            new(item: ResizeItem): FixedDistributor<C, any>;
             createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem;
             createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
         },
@@ -67,10 +69,12 @@ export default class Resizer<C extends IConfig = IConfig> {
 
     public attach() {
         this.container.addEventListener("mousedown", this.onMouseDown, false);
+        window.addEventListener("resize", this.onResize);
     }
 
     public detach() {
         this.container.removeEventListener("mousedown", this.onMouseDown, false);
+        window.removeEventListener("resize", this.onResize);
     }
 
     /**
@@ -97,11 +101,11 @@ export default class Resizer<C extends IConfig = IConfig> {
         }
     }
 
-    public isReverseResizeHandle(el: HTMLElement) {
+    public isReverseResizeHandle(el: HTMLElement): boolean {
         return el && el.classList.contains(this.classNames.reverse);
     }
 
-    public isResizeHandle(el: HTMLElement) {
+    public isResizeHandle(el: HTMLElement): boolean {
         return el && el.classList.contains(this.classNames.handle);
     }
 
@@ -136,10 +140,10 @@ export default class Resizer<C extends IConfig = IConfig> {
             if (this.classNames.resizing) {
                 this.container.classList.remove(this.classNames.resizing);
             }
+            distributor.finish();
             if (this.config.onResizeStop) {
                 this.config.onResizeStop();
             }
-            distributor.finish();
             body.removeEventListener("mouseup", finishResize, false);
             document.removeEventListener("mouseleave", finishResize, false);
             body.removeEventListener("mousemove", onMouseMove, false);
@@ -149,7 +153,24 @@ export default class Resizer<C extends IConfig = IConfig> {
         body.addEventListener("mousemove", onMouseMove, false);
     };
 
-    private createSizerAndDistributor(resizeHandle: HTMLDivElement) {
+    private onResize = throttle(() => {
+        const distributors = this.getDistributors();
+
+        // relax all items if they had any overconstrained flexboxes
+        distributors.forEach(d => d.start());
+        distributors.forEach(d => d.finish());
+    }, 100, {trailing: true, leading: true});
+
+    public getDistributors = () => {
+        return this.getResizeHandles().map(handle => {
+            const {distributor} = this.createSizerAndDistributor(<HTMLDivElement>handle);
+            return distributor;
+        });
+    };
+
+    private createSizerAndDistributor(
+        resizeHandle: HTMLDivElement,
+    ): {sizer: Sizer, distributor: FixedDistributor<any>} {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = this.isReverseResizeHandle(resizeHandle);
         const Distributor = this.distributorCtor;
@@ -159,9 +180,10 @@ export default class Resizer<C extends IConfig = IConfig> {
         return {sizer, distributor};
     }
 
-    private getResizeHandles(): HTMLDivElement[] {
+    private getResizeHandles() {
+        if (!this.container.children) return [];
         return Array.from(this.container.children).filter(el => {
             return this.isResizeHandle(<HTMLElement>el);
-        }) as HTMLDivElement[];
+        }) as HTMLElement[];
     }
 }

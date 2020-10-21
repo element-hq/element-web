@@ -173,3 +173,5 @@ export default class PersistedElement extends React.Component {
         return <div ref={this.collectChildContainer} />;
     }
 }
+
+export const getPersistKey = (appId: string) => 'widget_' + appId;

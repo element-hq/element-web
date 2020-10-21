@@ -14,10 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ActionPayload } from "../payloads";
-import { Action } from "../actions";
-
-export interface AppTileActionPayload extends ActionPayload {
-    action: Action.AppTileDelete | Action.AppTileRevoke;
-    widgetId: string;
+.mx_WidgetAvatar {
+    border-radius: 4px;
 }
