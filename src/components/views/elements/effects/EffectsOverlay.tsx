@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import dis from '../../../../dispatcher/dispatcher';
-import ICanvasEffect from './ICanvasEffect.js';
+import ICanvasEffect, { ICanvasEffectConstructable } from './ICanvasEffect.js';
+import effects from './index'
 
 export type EffectsOverlayProps = {
     roomWidth: number;
@@ -8,15 +9,16 @@ export type EffectsOverlayProps = {
 
 const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const effectsRef = useRef<Map<String, ICanvasEffect>>(new Map<String, ICanvasEffect>());
+    const effectsRef = useRef<Map<string, ICanvasEffect>>(new Map<string, ICanvasEffect>());
 
     const lazyLoadEffectModule = async (name: string): Promise<ICanvasEffect> => {
         if (!name) return null;
-        let effect = effectsRef.current[name] ?? null;
+        let effect: ICanvasEffect | null = effectsRef.current[name] || null;
         if (effect === null) {
+            const options = effects.find((e) => e.command === name)?.options
             try {
-                const { default: Effect } = await import(`./${name}`);
-                effect = new Effect();
+                const { default: Effect }: { default: ICanvasEffectConstructable } = await import(`./${name}`);
+                effect = new Effect(options);
                 effectsRef.current[name] = effect;
             } catch (err) {
                 console.warn('Unable to load effect module at \'./${name}\'.', err)

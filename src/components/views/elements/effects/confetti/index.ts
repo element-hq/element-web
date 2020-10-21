@@ -43,8 +43,8 @@ export const DefaultOptions: ConfettiOptions = {
 export default class Confetti implements ICanvasEffect {
     private readonly options: ConfettiOptions;
 
-    constructor(options: ConfettiOptions = DefaultOptions) {
-        this.options = options;
+    constructor(options: { [key: string]: any }) {
+        this.options = {...DefaultOptions, ...options};
     }
 
     private context: CanvasRenderingContext2D | null = null;
