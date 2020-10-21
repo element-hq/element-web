@@ -230,6 +230,10 @@ limitations under the License.
             align-items: center;
             justify-content: center;
         }
+
+        &.mx_UserMenu_contextMenu_hostingLink {
+            padding-top: 0;
+        }
     }
 
     .mx_IconizedContextMenu_icon {

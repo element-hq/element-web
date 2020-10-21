@@ -75,6 +75,8 @@ import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import EffectsOverlay from "../views/elements/effects/EffectsOverlay";
 import {containsEmoji} from '../views/elements/effects/effectUtilities';
 import effects from '../views/elements/effects'
+import WidgetStore from "../../stores/WidgetStore";
+import {UPDATE_EVENT} from "../../stores/AsyncStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -183,6 +185,7 @@ export interface IState {
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     rejectError?: Error;
+    hasPinnedWidgets?: boolean;
 }
 
 export default class RoomView extends React.Component<IProps, IState> {
@@ -255,7 +258,9 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
 
-        WidgetEchoStore.on('update', this.onWidgetEchoStoreUpdate);
+        WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
+        WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
+
         this.showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
             this.onReadReceiptsChange);
         this.layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
@@ -266,6 +271,18 @@ export default class RoomView extends React.Component<IProps, IState> {
     UNSAFE_componentWillMount() {
         this.onRoomViewStoreUpdate(true);
     }
+
+    private onWidgetStoreUpdate = () => {
+        if (this.state.room) {
+            this.checkWidgets(this.state.room);
+        }
+    }
+
+    private checkWidgets = (room) => {
+        this.setState({
+            hasPinnedWidgets: WidgetStore.instance.getPinnedApps(room.roomId).length > 0,
+        })
+    };
 
     private onReadReceiptsChange = () => {
         this.setState({
@@ -591,7 +608,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.rightPanelStoreToken.remove();
         }
 
-        WidgetEchoStore.removeListener('update', this.onWidgetEchoStoreUpdate);
+        WidgetEchoStore.removeListener(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
+        WidgetStore.instance.removeListener(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
         if (this.showReadReceiptsWatchRef) {
             SettingsStore.unwatchSetting(this.showReadReceiptsWatchRef);
@@ -851,6 +869,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.calculateRecommendedVersion(room);
         this.updateE2EStatus(room);
         this.updatePermissions(room);
+        this.checkWidgets(room);
     };
 
     private async calculateRecommendedVersion(room: Room) {
@@ -1286,7 +1305,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         if (!this.state.searchResults.next_batch) {
-            if (this.state.searchResults.results.length == 0) {
+            if (!this.state.searchResults?.results?.length) {
                 ret.push(<li key="search-top-marker">
                     <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
                 </li>,
@@ -1310,7 +1329,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         let lastRoomId;
 
-        for (let i = this.state.searchResults.results.length - 1; i >= 0; i--) {
+        for (let i = (this.state.searchResults?.results?.length || 0) - 1; i >= 0; i--) {
             const result = this.state.searchResults.results[i];
 
             const mxEv = result.context.getEvent();
@@ -1378,6 +1397,13 @@ export default class RoomView extends React.Component<IProps, IState> {
             });
         }
         dis.fire(Action.FocusComposer);
+    };
+
+    private onAppsClick = () => {
+        dis.dispatch({
+            action: "appsDrawer",
+            show: !this.state.showApps,
+        });
     };
 
     private onLeaveClick = () => {
@@ -1972,7 +1998,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         if (this.state.searchResults) {
             // show searching spinner
-            if (this.state.searchResults.results === undefined) {
+            if (this.state.searchResults.count === undefined) {
                 searchResultsPanel = (
                     <div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />
                 );
@@ -2087,6 +2113,8 @@ export default class RoomView extends React.Component<IProps, IState> {
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
+                            onAppsClick={this.state.hasPinnedWidgets ? this.onAppsClick : null}
+                            appsShown={this.state.showApps}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
