@@ -38,6 +38,7 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
+import LeftPanelWidget from "./LeftPanelWidget";
 
 interface IProps {
     isMinimized: boolean;
@@ -142,7 +143,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist");
 
-        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
         const headerStickyWidth = list.clientWidth - headerRightMargin;
 
         // We track which styles we want on a target before making the changes to avoid
@@ -213,9 +214,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
+
+                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const newBottom = `${offset}px`;
+                if (header.style.bottom !== newBottom) {
+                    header.style.bottom = newBottom;
+                }
             } else {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
+                }
+                if (header.style.bottom) {
+                    header.style.removeProperty('bottom');
                 }
             }
 
@@ -425,6 +435,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
+                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
                 </aside>
             </div>
         );

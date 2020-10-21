@@ -61,6 +61,7 @@ export default class AppTile extends React.Component {
     // This is a function to make the impact of calling SettingsStore slightly less
     hasPermissionToLoad = (props) => {
         if (this._usingLocalWidget()) return true;
+        if (!props.room) return true; // user widgets always have permissions
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
         if (currentlyAllowedWidgets[props.app.eventId] === undefined) {
@@ -335,6 +336,7 @@ export default class AppTile extends React.Component {
             </div>
         );
         if (!this.state.hasPermissionToLoad) {
+            // only possible for room widgets, can assert this.props.room here
             const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
                 <div className={appTileBodyClass}>
@@ -446,7 +448,9 @@ AppTile.displayName = 'AppTile';
 
 AppTile.propTypes = {
     app: PropTypes.object.isRequired,
-    room: PropTypes.object.isRequired,
+    // If room is not specified then it is an account level widget
+    // which bypasses permission prompts as it was added explicitly by that user
+    room: PropTypes.object,
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth: PropTypes.bool,
