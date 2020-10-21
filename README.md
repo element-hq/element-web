@@ -18,7 +18,7 @@ are currently filed against vector-im/element-web rather than this project).
 
 Translation Status
 ==================
-[![Translation status](https://translate.riot.im/widgets/element-web/-/multi-auto.svg)](https://translate.riot.im/engage/element-web/?utm_source=widget)
+[![Translation status](https://translate.element.io/widgets/element-web/-/multi-auto.svg)](https://translate.element.io/engage/element-web/?utm_source=widget)
 
 Developer Guide
 ===============
