@@ -73,7 +73,8 @@ import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import EffectsOverlay from "../views/elements/effects/EffectsOverlay";
-import { isConfettiEmoji } from '../views/elements/effects/confetti';
+import {containsEmoji} from '../views/elements/effects/effectUtilities';
+import effects from '../views/elements/effects'
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -800,10 +801,9 @@ export default class RoomView extends React.Component<IProps, IState> {
             }
         }
     };
-    
+
     private onEventDecrypted = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() ||
-            this.state.room.getUnreadNotificationCount() === 0) return;
+        if (ev.isDecryptionFailure()) return;
         this.handleConfetti(ev);
     };
 
@@ -813,11 +813,13 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private handleConfetti = (ev) => {
+        if (this.state.room.getUnreadNotificationCount() === 0) return;
         if (this.state.matrixClientIsReady) {
-            const messageBody = 'sends confetti';
-            if (isConfettiEmoji(ev.getContent()) || ev.getContent().body === messageBody) {
-                dis.dispatch({action: 'effects.confetti'});
-            }
+            effects.map(effect => {
+                if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
+                    dis.dispatch({action: `effects.${effect.command}`});
+                }
+            })
         }
     };
 

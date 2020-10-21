@@ -46,6 +46,7 @@ import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from 
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
+import effects from "./components/views/elements/effects"
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -1040,22 +1041,28 @@ export const Commands = [
         },
         category: CommandCategories.actions,
     }),
-    new Command({
-        command: "confetti",
-        description: _td("Sends the given message with confetti"),
-        args: '<message>',
-        runFn: function(roomId, args) {
-            return success((async () => {
-                if (!args) {
-                    args = "sends confetti";
-                    MatrixClientPeg.get().sendEmoteMessage(roomId, args);
-                } else {
-                    MatrixClientPeg.get().sendTextMessage(roomId, args);
-                }
-                dis.dispatch({action: 'effects.confetti'});
-            })());
-        },
-        category: CommandCategories.effects,
+    ...effects.map((effect) => {
+        return new Command({
+            command: effect.command,
+            description: effect.description(),
+            args: '<message>',
+            runFn: function(roomId, args) {
+                return success((async () => {
+                    if (!args) {
+                        args = effect.fallbackMessage();
+                        MatrixClientPeg.get().sendEmoteMessage(roomId, args);
+                    } else {
+                        const content = {
+                            msgtype: effect.msgType,
+                            body: args,
+                        };
+                        MatrixClientPeg.get().sendMessage(roomId, content);
+                    }
+                    dis.dispatch({action: `effects.${effect.command}`});
+                })());
+            },
+            category: CommandCategories.effects,
+        })
     }),
 
     // Command definitions for autocompletion ONLY:

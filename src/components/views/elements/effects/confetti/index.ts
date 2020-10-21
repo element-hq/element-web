@@ -47,7 +47,7 @@ export default class Confetti implements ICanvasEffect {
         this.options = options;
     }
 
-    private context: CanvasRenderingContext2D | null;
+    private context: CanvasRenderingContext2D | null = null;
     private supportsAnimationFrame = window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
@@ -64,7 +64,7 @@ export default class Confetti implements ICanvasEffect {
 
     public isRunning: boolean;
 
-    public start = async (canvas: HTMLCanvasElement, timeout?: number) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
         if(!canvas) {
             return;
         }
@@ -88,13 +88,13 @@ export default class Confetti implements ICanvasEffect {
         this.isRunning = true;
         this.runAnimation();
         if (timeout) {
-            window.setTimeout(this.stop, timeout || 3000);
+            window.setTimeout(this.stop, timeout);
         }
     }
 
     public stop = async () => {
         this.isRunning = false;
-        this.particles = [];
+       // this.particles = [];
     }
 
     private resetParticle = (particle: ConfettiParticle, width: number, height: number): ConfettiParticle => {
@@ -176,22 +176,4 @@ export default class Confetti implements ICanvasEffect {
             }
         }
     }
-}
-
-const convertToHex = (data: string): Array<string> => {
-    const contentBodyToHexArray = [];
-    if (!data) return contentBodyToHexArray;
-    let hex;
-    if (data) {
-        for (let i = 0; i < data.length; i++) {
-            hex = data.codePointAt(i).toString(16);
-            contentBodyToHexArray.push(hex);
-        }
-    }
-    return contentBodyToHexArray;
-}
-
-export const isConfettiEmoji = (content: { msgtype: string, body: string }): boolean => {
-    const hexArray = convertToHex(content.body);
-    return !!(hexArray.includes('1f389') || hexArray.includes('1f38a'));
 }

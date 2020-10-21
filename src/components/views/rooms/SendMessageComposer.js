@@ -42,8 +42,8 @@ import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
-import {isConfettiEmoji} from "../elements/effects/confetti";
-import SettingsStore from "../../../settings/SettingsStore";
+import {containsEmoji} from "../elements/effects/effectUtilities";
+import effects from '../elements/effects';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -318,9 +318,11 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
-            if (isConfettiEmoji(content)) {
-                dis.dispatch({action: 'effects.confetti'});
+            effects.map( (effect) => {
+                if (containsEmoji(content, effect.emojis)) {
+                dis.dispatch({action: `effects.${effect.command}`});
             }
+            });
         }
 
         this.sendHistoryManager.save(this.model, replyToEvent);
