@@ -67,6 +67,11 @@ let meetApi: any; // JitsiMeetExternalAPI
         // out into a browser.
         const parentUrl = qsParam('parentUrl', true);
         const widgetId = qsParam('widgetId', true);
+        const theme = qsParam('theme', true);
+
+        if (theme) {
+            document.body.classList.add(`theme-${theme}`);
+        }
 
         // Set this up as early as possible because Element will be hitting it almost immediately.
         let readyPromise: Promise<[void, void]>;
