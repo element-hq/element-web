@@ -107,7 +107,7 @@ export default class Confetti implements ICanvasEffect {
 
     private resetParticle = (particle: ConfettiParticle, width: number, height: number): ConfettiParticle => {
         particle.color = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
-        if(this.options.gradient) {
+        if (this.options.gradient) {
             particle.color2 = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
         } else {
             particle.color2 = particle.color;
