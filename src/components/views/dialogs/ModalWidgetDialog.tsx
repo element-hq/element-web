@@ -152,7 +152,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             <div>
                 <iframe
                     ref={this.appFrame}
-                    sandbox="allow-forms allow-scripts"
+                    sandbox="allow-forms allow-scripts allow-same-origin"
                     src={widgetUrl}
                     onLoad={this.onLoad}
                 />
