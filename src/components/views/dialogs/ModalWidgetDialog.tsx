@@ -86,8 +86,6 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     public render() {
-        // TODO: Don't violate every single security principle
-        // TODO: DRY - copied from SGWidget
         const templated = this.widget.getCompleteUrl({
             currentRoomId: RoomViewStore.getRoomId(),
             currentUserId: MatrixClientPeg.get().getUserId(),
