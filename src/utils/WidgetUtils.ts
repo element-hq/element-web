@@ -1,7 +1,6 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
 Copyright 2019 Travis Ralston
+Copyright 2017 - 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import * as url from "url";
+
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher/dispatcher';
-import * as url from "url";
 import WidgetEchoStore from '../stores/WidgetEchoStore';
-
-// How long we wait for the state event echo to come back from the server
-// before waitFor[Room/User]Widget rejects its promise
-const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
@@ -32,7 +28,21 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
 import {_t} from "../languageHandler";
-import {MatrixCapabilities} from "matrix-widget-api";
+import {Capability, IWidgetData, MatrixCapabilities} from "matrix-widget-api";
+import {IApp} from "../stores/WidgetStore"; // TODO @@
+
+// How long we wait for the state event echo to come back from the server
+// before waitFor[Room/User]Widget rejects its promise
+const WIDGET_WAIT_TIME = 20000;
+
+export interface IWidgetEvent {
+    id: string;
+    type: string;
+    sender: string;
+    // eslint-disable-next-line camelcase
+    state_key: string;
+    content: Partial<IApp>;
+}
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -41,7 +51,7 @@ export default class WidgetUtils {
      * @return Boolean -- true if the user can modify widgets in this room
      * @throws Error -- specifies the error reason
      */
-    static canUserModifyWidgets(roomId) {
+    static canUserModifyWidgets(roomId: string): boolean {
         if (!roomId) {
             console.warn('No room ID specified');
             return false;
@@ -80,7 +90,7 @@ export default class WidgetUtils {
      * @param  {[type]}  testUrlString URL to check
      * @return {Boolean} True if specified URL is a scalar URL
      */
-    static isScalarUrl(testUrlString) {
+    static isScalarUrl(testUrlString: string): boolean {
         if (!testUrlString) {
             console.error('Scalar URL check failed. No URL specified');
             return false;
@@ -123,7 +133,7 @@ export default class WidgetUtils {
      * @returns {Promise} that resolves when the widget is in the
      *     requested state according to the `add` param
      */
-    static waitForUserWidget(widgetId, add) {
+    static waitForUserWidget(widgetId: string, add: boolean): Promise<void> {
         return new Promise((resolve, reject) => {
             // Tests an account data event, returning true if it's in the state
             // we're waiting for it to be in
@@ -170,7 +180,7 @@ export default class WidgetUtils {
      * @returns {Promise} that resolves when the widget is in the
      *     requested state according to the `add` param
      */
-    static waitForRoomWidget(widgetId, roomId, add) {
+    static waitForRoomWidget(widgetId: string, roomId: string, add: boolean): Promise<void> {
         return new Promise((resolve, reject) => {
             // Tests a list of state events, returning true if it's in the state
             // we're waiting for it to be in
@@ -213,7 +223,13 @@ export default class WidgetUtils {
         });
     }
 
-    static setUserWidget(widgetId, widgetType: WidgetType, widgetUrl, widgetName, widgetData) {
+    static setUserWidget(
+        widgetId: string,
+        widgetType: WidgetType,
+        widgetUrl: string,
+        widgetName: string,
+        widgetData: IWidgetData,
+    ) {
         const content = {
             type: widgetType.preferred,
             url: widgetUrl,
@@ -257,7 +273,14 @@ export default class WidgetUtils {
         });
     }
 
-    static setRoomWidget(roomId, widgetId, widgetType: WidgetType, widgetUrl, widgetName, widgetData) {
+    static setRoomWidget(
+        roomId: string,
+        widgetId: string,
+        widgetType?: WidgetType,
+        widgetUrl?: string,
+        widgetName?: string,
+        widgetData?: object,
+    ) {
         let content;
 
         const addingWidget = Boolean(widgetUrl);
@@ -307,7 +330,7 @@ export default class WidgetUtils {
      * Get user specific widgets (not linked to a specific room)
      * @return {object} Event content object containing current / active user widgets
      */
-    static getUserWidgets() {
+    static getUserWidgets(): Record<string, IWidgetEvent> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
@@ -323,7 +346,7 @@ export default class WidgetUtils {
      * Get user specific widgets (not linked to a specific room) as an array
      * @return {[object]} Array containing current / active user widgets
      */
-    static getUserWidgetsArray() {
+    static getUserWidgetsArray(): IWidgetEvent[] {
         return Object.values(WidgetUtils.getUserWidgets());
     }
 
@@ -331,7 +354,7 @@ export default class WidgetUtils {
      * Get active stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {[object]} Array containing current / active stickerpicker widgets
      */
-    static getStickerpickerWidgets() {
+    static getStickerpickerWidgets(): IWidgetEvent[] {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter((widget) => widget.content && widget.content.type === "m.stickerpicker");
     }
@@ -340,12 +363,12 @@ export default class WidgetUtils {
      * Get all integration manager widgets for this user.
      * @returns {Object[]} An array of integration manager user widgets.
      */
-    static getIntegrationManagerWidgets() {
+    static getIntegrationManagerWidgets(): IWidgetEvent[] {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
     }
 
-    static getRoomWidgetsOfType(room: Room, type: WidgetType) {
+    static getRoomWidgetsOfType(room: Room, type: WidgetType): IWidgetEvent[] {
         const widgets = WidgetUtils.getRoomWidgets(room);
         return (widgets || []).filter(w => {
             const content = w.getContent();
@@ -353,14 +376,14 @@ export default class WidgetUtils {
         });
     }
 
-    static removeIntegrationManagerWidgets() {
+    static removeIntegrationManagerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets = widgets.getContent() || {};
+        const userWidgets: IWidgetEvent[] = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];
@@ -369,7 +392,7 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
+    static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string): Promise<void> {
         return WidgetUtils.setUserWidget(
             "integration_manager_" + (new Date().getTime()),
             WidgetType.INTEGRATION_MANAGER,
@@ -383,14 +406,14 @@ export default class WidgetUtils {
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
-    static removeStickerpickerWidgets() {
+    static removeStickerpickerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error('User not logged in');
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets = widgets.getContent() || {};
+        const userWidgets: Record<string, IWidgetEvent> = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === 'm.stickerpicker') {
                 delete userWidgets[key];
@@ -399,7 +422,13 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static makeAppConfig(appId, app, senderUserId, roomId, eventId) {
+    static makeAppConfig(
+        appId: string,
+        app: Partial<IApp>,
+        senderUserId: string,
+        roomId: string | null,
+        eventId: string,
+    ): IApp {
         if (!senderUserId) {
             throw new Error("Widgets must be created by someone - provide a senderUserId");
         }
@@ -410,10 +439,10 @@ export default class WidgetUtils {
         app.eventId = eventId;
         app.name = app.name || app.type;
 
-        return app;
+        return app as IApp;
     }
 
-    static getCapWhitelistForAppTypeInRoomId(appType, roomId) {
+    static getCapWhitelistForAppTypeInRoomId(appType: string, roomId: string): Capability[] {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
         const capWhitelist = enableScreenshots ? [MatrixCapabilities.Screenshots] : [];
@@ -428,7 +457,7 @@ export default class WidgetUtils {
         return capWhitelist;
     }
 
-    static getWidgetSecurityKey(widgetId, widgetUrl, isUserWidget) {
+    static getWidgetSecurityKey(widgetId: string, widgetUrl: string, isUserWidget: boolean): string {
         let widgetLocation = ActiveWidgetStore.getRoomId(widgetId);
 
         if (isUserWidget) {
@@ -449,7 +478,7 @@ export default class WidgetUtils {
         return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
     }
 
-    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string}={}) {
+    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string} = {}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
         const queryStringParts = [
             'conferenceDomain=$domain',
@@ -459,13 +488,14 @@ export default class WidgetUtils {
             'avatarUrl=$matrix_avatar_url',
             'userId=$matrix_user_id',
             'roomId=$matrix_room_id',
+            'theme=$theme',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);
         }
         const queryString = queryStringParts.join('&');
 
-        let baseUrl = window.location;
+        let baseUrl = window.location.href;
         if (window.location.protocol !== "https:" && !opts.forLocalRender) {
             // Use an external wrapper if we're not locally rendering the widget. This is usually
             // the URL that will end up in the widget event, so we want to make sure it's relatively
@@ -478,20 +508,32 @@ export default class WidgetUtils {
         return url.href;
     }
 
-    static getWidgetName(app) {
+    static getWidgetName(app?: IApp): string {
         return app?.name?.trim() || _t("Unknown App");
     }
 
-    static getWidgetDataTitle(app) {
+    static getWidgetDataTitle(app?: IApp): string {
         return app?.data?.title?.trim() || "";
     }
 
-    static editWidget(room, app) {
+    static editWidget(room: Room, app: IApp): void {
         // TODO: Open the right manager for the widget
         if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll(room, 'type_' + app.type, app.id);
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
+    }
+
+    static isManagedByManager(app) {
+        if (WidgetUtils.isScalarUrl(app.url)) {
+            const managers = IntegrationManagers.sharedInstance();
+            if (managers.hasManager()) {
+                // TODO: Pick the right manager for the widget
+                const defaultManager = managers.getPrimaryManager();
+                return WidgetUtils.isScalarUrl(defaultManager.apiUrl);
+            }
+        }
+        return false;
     }
 }

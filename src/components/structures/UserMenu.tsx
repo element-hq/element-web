@@ -257,7 +257,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const signupLink = getHostingLink("user-context-menu");
         if (signupLink) {
             hostingLink = (
-                <div className="mx_UserMenu_contextMenu_header">
+                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
                     {_t(
                         "<a>Upgrade</a> to your own domain", {},
                         {
@@ -452,7 +452,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public render() {
         const avatarSize = 32; // should match border-radius of the avatar
 
-        const displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
+        const userId = MatrixClientPeg.get().getUserId();
+        const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
         const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
@@ -507,7 +508,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <div className="mx_UserMenu_row">
                         <span className="mx_UserMenu_userAvatarContainer">
                             <BaseAvatar
-                                idName={displayName}
+                                idName={userId}
                                 name={displayName}
                                 url={avatarUrl}
                                 width={avatarSize}

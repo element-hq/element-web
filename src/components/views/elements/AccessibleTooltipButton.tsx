@@ -26,6 +26,7 @@ interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     tooltip?: React.ReactNode;
     tooltipClassName?: string;
     forceHide?: boolean;
+    yOffset?: number;
 }
 
 interface IState {
@@ -63,12 +64,13 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
 
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const {title, tooltip, children, tooltipClassName, forceHide, ...props} = this.props;
+        const {title, tooltip, children, tooltipClassName, forceHide, yOffset, ...props} = this.props;
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
             tooltipClassName={classNames("mx_AccessibleTooltipButton_tooltip", tooltipClassName)}
             label={tooltip || title}
+            yOffset={yOffset}
         /> : <div />;
         return (
             <AccessibleButton

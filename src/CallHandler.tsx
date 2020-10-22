@@ -262,6 +262,12 @@ export default class CallHandler {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title, description,
                         });
+                    } else if (call.hangupReason === CallErrorCode.AnsweredElsewhere) {
+                        this.play(AudioID.Busy);
+                        Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
+                            title: _t("Answered Elsewhere"),
+                            description: _t("The call was answered on another device."),
+                        });
                     } else {
                         this.play(AudioID.CallEnd);
                     }

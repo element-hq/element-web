@@ -52,6 +52,7 @@ import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { ICollapseConfig } from "../../resizer/distributors/collapse";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -205,13 +206,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     _createResizer() {
-        const classNames = {
-            handle: "mx_ResizeHandle",
-            vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse",
-        };
         let size;
-        const collapseConfig = {
+        const collapseConfig: ICollapseConfig = {
             toggleSize: 260 - 50,
             onCollapsed: (collapsed) => {
                 if (collapsed) {
@@ -234,7 +230,11 @@ class LoggedInView extends React.Component<IProps, IState> {
             },
         };
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
-        resizer.setClassNames(classNames);
+        resizer.setClassNames({
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse",
+        });
         return resizer;
     }
 

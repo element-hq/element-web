@@ -76,7 +76,7 @@ class ElementWidget extends Widget {
         if (WidgetType.JITSI.matches(this.type)) {
             return WidgetUtils.getLocalJitsiWrapperUrl({
                 forLocalRender: true,
-                auth: super.rawData?.auth, // this.rawData can call templateUrl, do this to prevent looping
+                auth: super.rawData?.auth as string, // this.rawData can call templateUrl, do this to prevent looping
             });
         }
         return super.templateUrl;
@@ -86,7 +86,7 @@ class ElementWidget extends Widget {
         if (WidgetType.JITSI.matches(this.type)) {
             return WidgetUtils.getLocalJitsiWrapperUrl({
                 forLocalRender: false, // The only important difference between this and templateUrl()
-                auth: super.rawData?.auth,
+                auth: super.rawData?.auth as string,
             });
         }
         return this.templateUrl; // use this instead of super to ensure we get appropriate templating
