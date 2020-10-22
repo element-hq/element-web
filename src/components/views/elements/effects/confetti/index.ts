@@ -107,11 +107,15 @@ export default class Confetti implements ICanvasEffect {
 
     private resetParticle = (particle: ConfettiParticle, width: number, height: number): ConfettiParticle => {
         particle.color = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
-        particle.color2 = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
+        if(this.options.gradient) {
+            particle.color2 = this.colors[(Math.random() * this.colors.length) | 0] + (this.options.alpha + ')');
+        } else {
+            particle.color2 = particle.color;
+        }
         particle.x = Math.random() * width;
-        particle.y = Math.random() * height - height;
+        particle.y = Math.random() * -height;
         particle.diameter = Math.random() * 10 + 5;
-        particle.tilt = Math.random() * 10 - 10;
+        particle.tilt = Math.random() * -10;
         particle.tiltAngleIncrement = Math.random() * 0.07 + 0.05;
         particle.tiltAngle = Math.random() * Math.PI;
         return particle;
@@ -141,10 +145,8 @@ export default class Confetti implements ICanvasEffect {
         if (!this.context || !this.context.canvas) {
             return;
         }
-        let particle;
         let x; let x2; let y2;
-        for (let i = 0; i < this.particles.length; i++) {
-            particle = this.particles[i];
+        for (const particle of this.particles) {
             this.context.beginPath();
             context.lineWidth = particle.diameter;
             x2 = particle.x + particle.tilt;
