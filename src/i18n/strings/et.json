@@ -2547,5 +2547,7 @@
     "Show Widgets": "Näita vidinaid",
     "Hide Widgets": "Peida vidinad",
     "The call was answered on another device.": "Kõnele vastati teises seadmes.",
-    "Answered Elsewhere": "Vastatud mujal"
+    "Answered Elsewhere": "Vastatud mujal",
+    "Data on this screen is shared with %(widgetDomain)s": "Andmeid selles vaates jagatakse %(widgetDomain)s serveriga",
+    "Modal Widget": "Modaalne vidin"
 }
