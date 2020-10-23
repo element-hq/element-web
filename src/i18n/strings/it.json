@@ -2540,5 +2540,6 @@
     "(connection failed)": "(connessione fallita)",
     "The call could not be established": "Impossibile stabilire la chiamata",
     "The other party declined the call.": "Il destinatario ha rifiutato la chiamata.",
-    "Call Declined": "Chiamata rifiutata"
+    "Call Declined": "Chiamata rifiutata",
+    "Offline encrypted messaging using dehydrated devices": "Messaggistica offline criptata usando dispositivi \"deidratati\""
 }
