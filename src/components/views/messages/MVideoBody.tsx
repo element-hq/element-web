@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import MFileBody from './MFileBody';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
@@ -24,23 +23,32 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
 
-export default class MVideoBody extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
+interface IProps {
+    /* the MatrixEvent to show */
+    mxEvent: any;
+    /* called when the video has loaded */
+    onHeightChanged: () => void;
+}
 
-        /* called when the video has loaded */
-        onHeightChanged: PropTypes.func.isRequired,
-    };
+interface IState {
+    decryptedUrl: string|null,
+    decryptedThumbnailUrl: string|null,
+    decryptedBlob: Blob|null,
+    error: string|null,
+}
 
-    state = {
-        decryptedUrl: null,
-        decryptedThumbnailUrl: null,
-        decryptedBlob: null,
-        error: null,
-    };
+export default class MVideoBody extends React.PureComponent<IProps, IState> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            decryptedUrl: null,
+            decryptedThumbnailUrl: null,
+            decryptedBlob: null,
+            error: null,
+        }
+    }
 
-    thumbScale(fullWidth, fullHeight, thumbWidth, thumbHeight) {
+    thumbScale(fullWidth: number, fullHeight: number, thumbWidth: number, thumbHeight: number) {
         if (!fullWidth || !fullHeight) {
             // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
             // log this because it's spammy
@@ -61,7 +69,7 @@ export default class MVideoBody extends React.Component {
         }
     }
 
-    _getContentUrl() {
+    _getContentUrl(): string {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
@@ -70,7 +78,7 @@ export default class MVideoBody extends React.Component {
         }
     }
 
-    _getThumbUrl() {
+    _getThumbUrl(): string|null {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedThumbnailUrl;
