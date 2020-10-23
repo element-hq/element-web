@@ -2469,5 +2469,14 @@
     "(an error occurred)": "(ocorreu um erro)",
     "(connection failed)": "(a conexão falhou)",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Todos os servidores foram banidos desta sala! Esta sala não pode mais ser utilizada.",
-    "Call Declined": "Chamada recusada"
+    "Call Declined": "Chamada recusada",
+    "You can only pin up to %(count)s widgets|other": "Você pode fixar até %(count)s widgets",
+    "Move right": "Mover para a direita",
+    "Move left": "Mover para a esquerda",
+    "Revoke permissions": "Revogar permissões",
+    "Unpin a widget to view it in this panel": "Desafixe um widget para exibi-lo neste painel",
+    "Show Widgets": "Mostrar widgets",
+    "Hide Widgets": "Esconder widgets",
+    "The call was answered on another device.": "A chamada foi atendida em outro aparelho.",
+    "Answered Elsewhere": "Atendida em algum lugar"
 }
