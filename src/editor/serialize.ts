@@ -68,10 +68,10 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
             { _useHtmlParser2: true, decodeEntities: false })
 
         // add fallback output for latex math, which should not be interpreted as markdown
-        phtml('div, span').each(function() {
-            const tex = phtml(this).attr('data-mx-maths')
+        phtml('div, span').each(function(i, e) {
+            const tex = phtml(e).attr('data-mx-maths')
             if (tex) {
-                phtml(this).html(`<code>${tex}</code>`)
+                phtml(e).html(`<code>${tex}</code>`)
             }
         });
         return phtml.html();
