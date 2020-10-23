@@ -34,13 +34,15 @@ interface IState {
     decryptedUrl: string|null,
     decryptedThumbnailUrl: string|null,
     decryptedBlob: Blob|null,
-    error: string|null,
+    error: any|null,
+    fetchingData: boolean,
 }
 
 export default class MVideoBody extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
         this.state = {
+            fetchingData: false,
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
             decryptedBlob: null,
@@ -69,7 +71,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    _getContentUrl(): string {
+    _getContentUrl(): string|null {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
@@ -89,7 +91,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -100,26 +103,33 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                     return URL.createObjectURL(blob);
                 });
             }
-            let decryptedBlob;
-            thumbnailPromise.then((thumbnailUrl) => {
-                return decryptFile(content.file).then(function(blob) {
-                    decryptedBlob = blob;
-                    return URL.createObjectURL(blob);
-                }).then((contentUrl) => {
+            try {
+                const thumbnailUrl = await thumbnailPromise;
+                if (autoplay) {
+                    console.log("Preloading video");
+                    const decryptedBlob = await decryptFile(content.file);
+                    const contentUrl = URL.createObjectURL(decryptedBlob);
                     this.setState({
                         decryptedUrl: contentUrl,
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
                     this.props.onHeightChanged();
-                });
-            }).catch((err) => {
+                } else {
+                    console.log("NOT preloading video");
+                    this.setState({
+                        decryptedUrl: null,
+                        decryptedThumbnailUrl: thumbnailUrl,
+                        decryptedBlob: null,
+                    });
+                }
+            } catch (err) {
                 console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,
                 });
-            });
+            }
         }
     }
 
@@ -132,8 +142,35 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
+    async _videoOnPlay() {
+        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
+        if (autoplay || this.state.decryptedUrl || this.state.fetchingData || this.state.error) {
+            // The video has or will have the data.
+            return;
+        }
+        this.setState({
+            // To stop subsequent download attempts
+            fetchingData: true,
+        });
+        const content = this.props.mxEvent.getContent();
+        if (!content.file) {
+            this.setState({
+                error: "No file given in content",
+            });
+            return;
+        }
+        const decryptedBlob = await decryptFile(content.file);
+        const contentUrl = URL.createObjectURL(decryptedBlob);
+        this.setState({
+            decryptedUrl: contentUrl,
+            decryptedBlob: decryptedBlob,
+        });
+        this.props.onHeightChanged();
+    }
+
     render() {
         const content = this.props.mxEvent.getContent();
+        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
 
         if (this.state.error !== null) {
             return (
@@ -144,7 +181,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             );
         }
 
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
+        // Important: If we aren't autoplaying and we haven't decrypred it yet, show a video with a poster.
+        if (content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
@@ -159,7 +197,6 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
 
         const contentUrl = this._getContentUrl();
         const thumbUrl = this._getThumbUrl();
-        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
         let height = null;
         let width = null;
         let poster = null;
@@ -180,7 +217,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             <span className="mx_MVideoBody">
                 <video className="mx_MVideoBody" src={contentUrl} alt={content.body}
                     controls preload={preload} muted={autoplay} autoPlay={autoplay}
-                    height={height} width={width} poster={poster}>
+                    height={height} width={width} poster={poster} onPlay={this._videoOnPlay.bind(this)}>
                 </video>
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
