@@ -215,7 +215,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
         return (
             <span className="mx_MVideoBody">
-                <video className="mx_MVideoBody" src={contentUrl} alt={content.body}
+                <video className="mx_MVideoBody" src={contentUrl} title={content.body}
                     controls preload={preload} muted={autoplay} autoPlay={autoplay}
                     height={height} width={width} poster={poster} onPlay={this._videoOnPlay.bind(this)}>
                 </video>
