@@ -34,6 +34,7 @@ import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
 import {Analytics} from "../Analytics";
 import UserActivity from "../UserActivity";
+import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 
 declare global {
     interface Window {
@@ -60,6 +61,7 @@ declare global {
         mxCallHandler: CallHandler;
         mxAnalytics: Analytics;
         mxUserActivity: UserActivity;
+        mxModalWidgetStore: ModalWidgetStore;
     }
 
     interface Document {

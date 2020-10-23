@@ -32,6 +32,7 @@ import {
     Widget,
     WidgetApiToWidgetAction,
     WidgetApiFromWidgetAction,
+    IModalWidgetOpenRequest,
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
@@ -49,6 +50,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ElementWidgetActions } from "./ElementWidgetActions";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
+import {ModalWidgetStore} from "../ModalWidgetStore";
 
 // TODO: Destroy all of this code
 
@@ -201,7 +203,7 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private onOpenIdReq = async (ev: CustomEvent<IGetOpenIDActionRequest>) => {
-        if (ev?.detail?.widgetId !== this.widgetId) return;
+        ev.preventDefault();
 
         const rawUrl = this.appTileProps.app.url;
         const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, rawUrl, this.appTileProps.userWidget);
@@ -249,6 +251,20 @@ export class StopGapWidget extends EventEmitter {
         });
     };
 
+    private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>) => {
+        ev.preventDefault();
+        if (ModalWidgetStore.instance.canOpenModalWidget()) {
+            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget);
+            this.messaging.transport.reply(ev.detail, {}); // ack
+        } else {
+            this.messaging.transport.reply(ev.detail, {
+                error: {
+                    message: "Unable to open modal at this time",
+                },
+            })
+        }
+    };
+
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
         const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
@@ -256,6 +272,7 @@ export class StopGapWidget extends EventEmitter {
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.GetOpenIDCredentials}`, this.onOpenIdReq);
+        this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
         if (!this.appTileProps.userWidget && this.appTileProps.room) {
