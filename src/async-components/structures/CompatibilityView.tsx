@@ -80,12 +80,12 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                         <p><strong>iOS</strong> (iPhone or iPad)</p>
                         <a href="https://itunes.apple.com/fr/app/tchap/id1446253779" target="_blank"
                            className="mx_ClearDecoration" rel="noreferrer nofollow noopener">
-                            <img height="48" src="themes/riot/img/download/apple.svg" alt="Apple App Store" />
+                            <img height="48" src="themes/tchap/img/download/apple.svg" alt="Apple App Store" />
                         </a>
                         <p className="mx_Spacer"><strong>Android</strong></p>
                         <a href="https://play.google.com/store/apps/details?id=fr.gouv.tchap.a" target="_blank"
                            className="mx_ClearDecoration" rel="noreferrer nofollow noopener">
-                            <img height="48" src="themes/riot/img/download/google.svg" alt="Google Play Store" />
+                            <img height="48" src="themes/tchap/img/download/google.svg" alt="Google Play Store" />
                         </a>
                     </div>
                 </div>

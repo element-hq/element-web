@@ -211,7 +211,7 @@ async function start() {
         console.error(err);
         // Like the compatibility page, AWOOOOOGA at the user
         // This uses the default brand since the app config is unavailable.
-        await showError(_t("Your Element is misconfigured"), [
+        await showError(_t("Your Tchap is misconfigured"), [
             err.translatedMessage || _t("Unexpected error preparing the app. See console for details."),
         ]);
     }
