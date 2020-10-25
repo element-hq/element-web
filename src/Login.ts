@@ -22,6 +22,7 @@ limitations under the License.
 import Matrix from "matrix-js-sdk";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
+import SecurityCustomisations from "./customisations/Security";
 
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;
@@ -222,11 +223,15 @@ export async function sendLoginRequest(
         }
     }
 
-    return {
+    const creds: IMatrixClientCreds = {
         homeserverUrl: hsUrl,
         identityServerUrl: isUrl,
         userId: data.user_id,
         deviceId: data.device_id,
         accessToken: data.access_token,
     };
+
+    SecurityCustomisations.examineLoginResponse?.(data, creds);
+
+    return creds;
 }

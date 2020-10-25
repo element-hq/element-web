@@ -58,6 +58,11 @@ export default class PersistentApp extends React.Component {
             const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
             if (this.state.roomId !== persistentWidgetInRoomId) {
                 const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
+
+                // Sanity check the room - the widget may have been destroyed between render cycles, and
+                // thus no room is associated anymore.
+                if (!persistentWidgetInRoom) return null;
+
                 // get the widget data
                 const appEvent = WidgetUtils.getRoomWidgets(persistentWidgetInRoom).find((ev) => {
                     return ev.getStateKey() === ActiveWidgetStore.getPersistentWidgetId();
@@ -74,13 +79,10 @@ export default class PersistentApp extends React.Component {
                     fullWidth={true}
                     room={persistentWidgetInRoom}
                     userId={MatrixClientPeg.get().credentials.userId}
-                    show={true}
                     creatorUserId={app.creatorUserId}
                     widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                     waitForIframeLoad={app.waitForIframeLoad}
                     whitelistCapabilities={capWhitelist}
-                    showDelete={false}
-                    showMinimise={false}
                     miniMode={true}
                     showMenubar={false}
                 />;

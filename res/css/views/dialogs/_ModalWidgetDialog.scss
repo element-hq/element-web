@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundaction C.I.C.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_WidgetContextMenu {
-    padding: 6px;
+.mx_ModalWidgetDialog {
+    .mx_ModalWidgetDialog_warning {
+        margin-bottom: 24px;
 
-    .mx_WidgetContextMenu_option {
-        padding: 3px 6px 3px 6px;
-        cursor: pointer;
-        white-space: nowrap;
+        > img {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
     }
 
-    .mx_WidgetContextMenu_separator {
-        margin-top: 0;
-        margin-bottom: 0;
-        border-bottom-style: none;
-        border-left-style: none;
-        border-right-style: none;
-        border-top-style: solid;
-        border-top-width: 1px;
-        border-color: $menu-border-color;
+    .mx_ModalWidgetDialog_buttons {
+        float: right;
+        margin-top: 24px;
+
+        .mx_AccessibleButton + .mx_AccessibleButton {
+            margin-left: 8px;
+        }
+    }
+
+    iframe {
+        width: 100%;
+        height: 450px;
+        border: 0;
+        border-radius: 8px;
     }
 }

@@ -1423,5 +1423,15 @@
     "Upload files": "ファイルのアップロード",
     "Upload all": "全てアップロード",
     "No files visible in this room": "この部屋にファイルはありません",
-    "Attach files from chat or just drag and drop them anywhere in a room.": "チャットでファイルを添付するか、部屋のどこかにドラッグ＆ドロップするとファイルを追加できます。"
+    "Attach files from chat or just drag and drop them anywhere in a room.": "チャットでファイルを添付するか、部屋のどこかにドラッグ＆ドロップするとファイルを追加できます。",
+    "Add widgets, bridges & bots": "ウィジェット、ブリッジ、ボットの追加",
+    "Widgets": "ウィジェット",
+    "Cross-signing is ready for use.": "クロス署名の使用準備が完了しています。",
+    "Secure Backup": "セキュアバックアップ",
+    "Set up Secure Backup": "セキュアバックアップのセットアップ",
+    "Restart": "再起動",
+    "Go back": "戻る",
+    "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "重複した issue の報告が発生しないようにするため、まず<existingIssuesLink>既存の issue を確認</existingIssuesLink>してあなたが行おうとしているのと同様の報告が見つかった場合はその issue を +1 してください。見つからなかった場合は、<newIssueLink>新しい issue を作成</newIssueLink>して報告を行ってください。",
+    "If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.": "バグが発生したり、共有したいフィードバックがある場合は、GitHub でお知らせください。",
+    "Report bugs & give feedback": "バグ報告とフィードバック"
 }

@@ -14,10 +14,20 @@
  limitations under the License.
  */
 
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+
 import SettingsStore from "./settings/SettingsStore";
 
-function memberEventDiff(ev) {
-    const diff = {
+interface IDiff {
+    isMemberEvent: boolean;
+    isJoin?: boolean;
+    isPart?: boolean;
+    isDisplaynameChange?: boolean;
+    isAvatarChange?: boolean;
+}
+
+function memberEventDiff(ev: MatrixEvent): IDiff {
+    const diff: IDiff = {
         isMemberEvent: ev.getType() === 'm.room.member',
     };
 
@@ -37,7 +47,7 @@ function memberEventDiff(ev) {
     return diff;
 }
 
-export default function shouldHideEvent(ev) {
+export default function shouldHideEvent(ev: MatrixEvent): boolean {
     // Wrap getValue() for readability. Calling the SettingsStore can be
     // fairly resource heavy, so the checks below should avoid hitting it
     // where possible.

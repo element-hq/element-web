@@ -28,7 +28,7 @@ import AsyncWrapper from './AsyncWrapper';
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
 
-interface IModal<T extends any[]> {
+export interface IModal<T extends any[]> {
     elem: React.ReactNode;
     className?: string;
     beforeClosePromise?: Promise<boolean>;
@@ -38,7 +38,7 @@ interface IModal<T extends any[]> {
     close(...args: T): void;
 }
 
-interface IHandle<T extends any[]> {
+export interface IHandle<T extends any[]> {
     finished: Promise<T>;
     close(...args: T): void;
 }
@@ -132,7 +132,7 @@ export class ModalManager {
     public createTrackedDialogAsync<T extends any[]>(
         analyticsAction: string,
         analyticsInfo: string,
-        ...rest: Parameters<ModalManager["appendDialogAsync"]>
+        ...rest: Parameters<ModalManager["createDialogAsync"]>
     ) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
         return this.createDialogAsync<T>(...rest);

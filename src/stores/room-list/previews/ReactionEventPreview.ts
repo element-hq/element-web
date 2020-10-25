@@ -27,7 +27,13 @@ export class ReactionEventPreview implements IPreview {
         const showDms = SettingsStore.getValue("feature_roomlist_preview_reactions_dms");
         const showAll = SettingsStore.getValue("feature_roomlist_preview_reactions_all");
 
-        if (!showAll && (!showDms || DMRoomMap.shared().getUserIdForRoomId(event.getRoomId()))) return null;
+        // If we're not showing all reactions, see if we're showing DMs instead
+        if (!showAll) {
+            // If we're not showing reactions on DMs, or we are and the room isn't a DM, skip
+            if (!(showDms && DMRoomMap.shared().getUserIdForRoomId(event.getRoomId()))) {
+                return null;
+            }
+        }
 
         const relation = event.getRelation();
         if (!relation) return null; // invalid reaction (probably redacted)

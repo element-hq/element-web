@@ -399,6 +399,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
         await RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
+        this.forceUpdate(); // because if the sublist doesn't have any changes then we will miss the list order change
     };
 
     private onTagSortChanged = async (sort: SortAlgorithm) => {

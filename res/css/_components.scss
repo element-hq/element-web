@@ -13,6 +13,7 @@
 @import "./structures/_HeaderButtons.scss";
 @import "./structures/_HomePage.scss";
 @import "./structures/_LeftPanel.scss";
+@import "./structures/_LeftPanelWidget.scss";
 @import "./structures/_MainSplit.scss";
 @import "./structures/_MatrixChat.scss";
 @import "./structures/_MyGroups.scss";
@@ -26,7 +27,7 @@
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_TabbedView.scss";
-@import "./structures/_TagPanel.scss";
+@import "./structures/_GroupFilterPanel.scss";
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_UploadBar.scss";
 @import "./structures/_UserMenu.scss";
@@ -51,11 +52,11 @@
 @import "./views/avatars/_DecoratedRoomAvatar.scss";
 @import "./views/avatars/_MemberStatusMessageAvatar.scss";
 @import "./views/avatars/_PulsedAvatar.scss";
+@import "./views/avatars/_WidgetAvatar.scss";
 @import "./views/context_menus/_IconizedContextMenu.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
-@import "./views/context_menus/_WidgetContextMenu.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
@@ -74,6 +75,7 @@
 @import "./views/dialogs/_InviteDialog.scss";
 @import "./views/dialogs/_KeyboardShortcutsDialog.scss";
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
+@import "./views/dialogs/_ModalWidgetDialog.scss";
 @import "./views/dialogs/_NewSessionReviewDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialogBridges.scss";

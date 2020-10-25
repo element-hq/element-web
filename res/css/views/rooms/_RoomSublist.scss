@@ -59,10 +59,6 @@ limitations under the License.
                 width: calc(100% - 22px);
             }
 
-            &.mx_RoomSublist_headerContainer_stickyBottom {
-                bottom: 0;
-            }
-
             // We don't have a top style because the top is dependent on the room list header's
             // height, and is therefore calculated in JS.
             // The class, mx_RoomSublist_headerContainer_stickyTop, is applied though.
