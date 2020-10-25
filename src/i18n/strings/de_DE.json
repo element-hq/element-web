@@ -2544,5 +2544,8 @@
     "Answered Elsewhere": "Anderswo beantwortet",
     "The call could not be established": "Der Anruf konnte nicht hergestellt werden",
     "The other party declined the call.": "Die andere Seite hat den Anruf abgelehnt.",
-    "Call Declined": "Anruf abgelehnt"
+    "Call Declined": "Anruf abgelehnt",
+    "Data on this screen is shared with %(widgetDomain)s": "Daten auf diesem Bildschirm werden mit %(widgetDomain)s geteilt",
+    "Modal Widget": "Modales Widget",
+    "Offline encrypted messaging using dehydrated devices": "Offline verschlüsselte Kommunikation mit Hilfe von dehydrierten Geräten"
 }
