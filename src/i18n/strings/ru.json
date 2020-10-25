@@ -98,7 +98,7 @@
     "click to reveal": "нажмите для открытия",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s пригласил %(targetName)s.",
     "%(targetName)s joined the room.": "%(targetName)s вошёл в комнату.",
-    "%(senderName)s kicked %(targetName)s.": "%(senderName)s выгнал(а) %(targetName)s.",
+    "%(senderName)s kicked %(targetName)s.": "%(senderName)s исключил(а) %(targetName)s.",
     "%(targetName)s left the room.": "%(targetName)s покинул(а) комнату.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s сделал(а) историю разговора видимой для всех собеседников с момента их приглашения.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s сделал(а) историю разговора видимой для всех собеседников с момента их входа в комнату.",
