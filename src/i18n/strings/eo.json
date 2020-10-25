@@ -1480,7 +1480,7 @@
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Se vi ne povas trovi la serĉatan ĉambron, petu inviton aŭ <a>kreu novan ĉambron</a>.",
     "Explore rooms": "Esplori ĉambrojn",
     "Add Email Address": "Aldoni Retpoŝtadreson",
-    "Add Phone Number": "Aldoni telefonnumeron",
+    "Add Phone Number": "Aldoni Telefonumeron",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ĉi tiu ago bezonas atingi la norman identigan servilon <server /> por kontroli retpoŝtadreson aŭ telefonnumeron, sed la servilo ne havas uzokondiĉojn.",
     "Trust": "Fido",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
