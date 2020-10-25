@@ -52,13 +52,17 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
 
         md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
-            return `<div data-mx-maths="${p1e}"></div>`;
+            return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
         });
 
         md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
             return `<span data-mx-maths="${p1e}"></span>`;
         });
+
+        // make sure div tags always start on a new line, otherwise it will confuse
+        // the markdown parser
+        md = md.replace(/(.)<div/g, function(m, p1) { return `${p1}\n<div`; });
     }
 
     const parser = new Markdown(md);
