@@ -27,6 +27,7 @@ import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
+import AccessTokenDialog from '../../../dialogs/AccessTokenDialog';
 
 export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
@@ -148,6 +149,17 @@ export default class HelpUserSettingsTab extends React.Component {
         );
     }
 
+    onAccessTokenSpoilerClick = async (event) => {
+        // React throws away the event before we can use it (we are async, after all).
+        event.persist();
+
+        // We make the user accept a scary popup to combat Social Engineering. No peeking!
+        await Modal.createTrackedDialog('Reveal Access Token', '', AccessTokenDialog).finished;
+
+        // Pass it onto the handler.
+        this._showSpoiler(event);
+    }
+
     render() {
         const brand = SdkConfig.get().brand;
 
@@ -266,7 +278,7 @@ export default class HelpUserSettingsTab extends React.Component {
                         {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
                         {_t("Access Token:") + ' '}
-                        <AccessibleButton element="span" onClick={this._showSpoiler}
+                        <AccessibleButton element="span" onClick={this.onAccessTokenSpoilerClick}
                                           data-spoiler={MatrixClientPeg.get().getAccessToken()}>
                             &lt;{ _t("click to reveal") }&gt;
                         </AccessibleButton>
