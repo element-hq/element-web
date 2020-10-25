@@ -2550,5 +2550,7 @@
     "Show Widgets": "顯示小工具",
     "Hide Widgets": "隱藏小工具",
     "The call was answered on another device.": "通話已在其他裝置上回應。",
-    "Answered Elsewhere": "在其他地方回答"
+    "Answered Elsewhere": "在其他地方回答",
+    "Data on this screen is shared with %(widgetDomain)s": "在此畫面上的資料會與 %(widgetDomain)s 分享",
+    "Modal Widget": "程式小工具"
 }
