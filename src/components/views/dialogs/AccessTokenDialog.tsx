@@ -1,4 +1,4 @@
-    /*
+/*
 Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ type IProps = Exclude<
     "title" | "danger" | "description"
     >;
 
-export default function AccessTokenDialog (props: IProps) {
+export default function AccessTokenDialog(props: IProps) {
     return (
         <QuestionDialog
             {...props}
@@ -32,7 +32,7 @@ export default function AccessTokenDialog (props: IProps) {
             description={_t(
                 "Do not reveal your Access Token to anyone, under any circumstances. " +
                 "Sharing your Access Token with someone would allow them to login to " +
-                "your account, and access your private information."
+                "your account, and access your private information.",
             )}
         ></QuestionDialog>
     );
