@@ -831,14 +831,14 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private handleEffects = (ev) => {
-        if (this.state.room.getUnreadNotificationCount() === 0) return;
-        if (this.state.matrixClientIsReady) {
-            effects.forEach(effect => {
-                if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
-                    dis.dispatch({action: `effects.${effect.command}`});
-                }
-            })
-        }
+        if (!this.state.room ||
+            !this.state.matrixClientIsReady ||
+            this.state.room.getUnreadNotificationCount() === 0) return;
+        effects.forEach(effect => {
+            if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
+                dis.dispatch({action: `effects.${effect.command}`});
+            }
+        })
     };
 
     private onRoomName = (room: Room) => {
