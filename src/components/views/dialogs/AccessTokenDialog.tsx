@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2020 Resynth <resynth1943.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ import QuestionDialog from './QuestionDialog';
 type IProps = Exclude<
     React.ComponentProps<QuestionDialog>,
     "title" | "danger" | "description"
-    >;
+>;
 
 export default function AccessTokenDialog(props: IProps) {
     return (
