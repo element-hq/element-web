@@ -2538,5 +2538,16 @@
     "(connection failed)": "(kapcsolódás sikertelen)",
     "The call could not be established": "A hívás kapcsolatot nem lehet felépíteni",
     "The other party declined the call.": "A másik fél elutasította a hívást.",
-    "Call Declined": "Hívás elutasítva"
+    "Call Declined": "Hívás elutasítva",
+    "Move right": "Jobbra mozgat",
+    "Move left": "Balra mozgat",
+    "Revoke permissions": "Jogosultságok visszavonása",
+    "Data on this screen is shared with %(widgetDomain)s": "Az adatok erről a képernyőről megosztásra kerülnek ezzel: %(widgetDomain)s",
+    "Modal Widget": "Előugró kisalkalmazás",
+    "Unpin a widget to view it in this panel": "Kisalkalmazás megjelenítése ezen a panelen",
+    "You can only pin up to %(count)s widgets|other": "Csak %(count)s kisalkalmazást tudsz kitűzni",
+    "Show Widgets": "Kisalkalmazások megjelenítése",
+    "Hide Widgets": "Kisalkalmazások elrejtése",
+    "The call was answered on another device.": "A hívás másik eszközön lett fogadva.",
+    "Answered Elsewhere": "Máshol lett felvéve"
 }
