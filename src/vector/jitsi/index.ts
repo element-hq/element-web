@@ -70,7 +70,7 @@ let meetApi: any; // JitsiMeetExternalAPI
         const theme = qsParam('theme', true);
 
         if (theme) {
-            document.body.classList.add(`theme-${theme}`);
+            document.body.classList.add(`theme-${theme.replace(" ", "_")}`);
         }
 
         // Set this up as early as possible because Element will be hitting it almost immediately.
