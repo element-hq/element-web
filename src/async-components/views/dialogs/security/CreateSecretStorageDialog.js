@@ -470,6 +470,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 value={CREATE_STORAGE_OPTION_KEY}
                 name="keyPassphrase"
                 checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
+                onChange={this._onKeyPassphraseChange}
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
@@ -488,6 +489,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 value={CREATE_STORAGE_OPTION_PASSPHRASE}
                 name="keyPassphrase"
                 checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
+                onChange={this._onKeyPassphraseChange}
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
@@ -509,7 +511,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "Safeguard against losing access to encrypted messages & data by " +
                 "backing up encryption keys on your server.",
             )}</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup" onChange={this._onKeyPassphraseChange}>
+            <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup">
                 {optionKey}
                 {optionPassphrase}
             </div>
