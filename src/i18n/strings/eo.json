@@ -1407,7 +1407,7 @@
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Bonvolu peti la administranton de via hejmservilo (<code>%(homeserverDomain)s</code>) agordi TURN-servilon, por ke vokoj funkciu dependeble.",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternative, vi povas prove uzi la publikan servilon je <code>turn.matrix.org</code>, sed tio ne estas same dependebla, kaj ĝi havigos vian IP-adreson al tiu servilo. Vi povas administri tion ankaŭ en Agordoj.",
     "Try using turn.matrix.org": "Provu uzi servilon turn.matrix.org",
-    "Sends a message as plain text, without interpreting it as markdown": "Sendas mesaĝon kiel platan tekston, sen interpreto al MarkDown",
+    "Sends a message as plain text, without interpreting it as markdown": "Sendas mesaĝon kiel platan tekston, sen interpreto al Markdown",
     "You do not have the required permissions to use this command.": "Vi ne havas sufiĉajn permesojn por uzi ĉi tiun komandon.",
     "Changes the avatar of the current room": "Ŝanĝas la profilbildon de la nuna ĉambro",
     "Use an identity server": "Uzi identigan servilon",
@@ -2089,7 +2089,7 @@
     "Review where you’re logged in": "Kontrolu, kie vi salutis",
     "New login. Was this you?": "Nova saluto. Ĉu tio estis vi?",
     "%(name)s is requesting verification": "%(name)s petas kontrolon",
-    "Sends a message as html, without interpreting it as markdown": "Sendas mesaĝon kiel HTML, ne interpretante ĝin kiel MarkDown",
+    "Sends a message as html, without interpreting it as markdown": "Sendas mesaĝon kiel HTML, ne interpretante ĝin kiel Markdown",
     "Failed to set topic": "Malsukcesis agordi temon",
     "Command failed": "Komando malsukcesis",
     "Could not find user in room": "Ne povis trovi uzanton en ĉambro",
@@ -2522,7 +2522,7 @@
     "End conference": "Fini grupan vokon",
     "The call was answered on another device.": "La voko estis respondita per alia aparato.",
     "Answered Elsewhere": "Respondita aliloke",
-    "The call could not be established": "Ne povis meti la vokon.",
+    "The call could not be established": "Ne povis meti la vokon",
     "The other party declined the call.": "La alia persono rifuzis la vokon.",
     "Call Declined": "Voko rifuziĝis"
 }
