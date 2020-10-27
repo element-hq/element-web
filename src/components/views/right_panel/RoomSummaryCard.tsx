@@ -31,7 +31,6 @@ import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPa
 import Modal from "../../../Modal";
 import ShareDialog from '../dialogs/ShareDialog';
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -77,7 +76,6 @@ export const useWidgets = (room: Room) => {
     }, [room]);
 
     useEffect(updateApps, [room]);
-    useEventEmitter(WidgetEchoStore, "update", updateApps);
     useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
 
     return apps;
