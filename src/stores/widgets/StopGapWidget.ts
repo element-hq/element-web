@@ -51,6 +51,8 @@ import { ElementWidgetActions } from "./ElementWidgetActions";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import {ModalWidgetStore} from "../ModalWidgetStore";
+import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import {getCustomTheme} from "../../theme";
 
 // TODO: Destroy all of this code
 
@@ -104,9 +106,25 @@ class ElementWidget extends Widget {
             // v1 widgets default to jitsi.riot.im regardless of user settings
             domain = "jitsi.riot.im";
         }
+
+        let theme = new ThemeWatcher().getEffectiveTheme();
+        if (theme.startsWith("custom-")) {
+            const customTheme = getCustomTheme(theme.substr(7));
+            // Jitsi only understands light/dark
+            theme = customTheme.is_dark ? "dark" : "light";
+        }
+
+        // only allow light/dark through, defaulting to dark as that was previously the only state
+        // accounts for legacy-light/legacy-dark themes too
+        if (theme.includes("light")) {
+            theme = "light";
+        } else {
+            theme = "dark";
+        }
+
         return {
             ...super.rawData,
-            theme: SettingsStore.getValue("theme"),
+            theme,
             conferenceId,
             domain,
         };
