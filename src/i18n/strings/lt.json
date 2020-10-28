@@ -1569,7 +1569,7 @@
     "Import E2E room keys": "Importuoti E2E (visapusio šifravimo) kambarių raktus",
     "Session ID:": "Seanso ID:",
     "Session key:": "Seanso raktas:",
-    "%(brand)s collects anonymous analytics to allow us to improve the application.": "%(brand)s renka anoniminę analizę, kad galėtume patobulinti programą.",
+    "%(brand)s collects anonymous analytics to allow us to improve the application.": "%(brand)s renka anoniminius duomenis, kad mes galėtume tobulinti programą.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privatumas mums yra svarbus, todėl mes nerenkame jokių asmeninių ar identifikuojamų duomenų savo analitikai.",
     "Learn more about how we use analytics.": "Sužinokite daugiau apie tai, kaip mes naudojame analitiką.",
     "Reset": "Iš naujo nustatyti",
@@ -1653,7 +1653,7 @@
     "Set a new custom sound": "Nustatyti naują pasirinktinį garsą",
     "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "Paskyros deaktyvavimas, <b>pagal nutylėjimą, nepriverčia mūsų sistemos užmiršti jūsų siųstų žinučių.</b> Jei norite, kad jūsų žinutės mūsų sistemos būtų užmirštos, pažymėkite žemiau esantį laukelį.",
     "Use default": "Naudoti numatytąjį",
-    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Serverio administratorius išjungė visapusį šifravimą kaip numatytą privačiuose kambariuose ir Tiesioginėse Žinutėse.",
+    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Serverio administratorius išjungė visapusį šifravimą, kaip numatytą, privačiuose kambariuose ir Tiesioginėse Žinutėse.",
     "Notification sound": "Pranešimo garsas",
     "Sounds": "Garsai",
     "Privileged Users": "Privilegijuoti Nariai",
@@ -2007,5 +2007,8 @@
     "Verify the link in your inbox": "Patvirtinkite nuorodą savo el. pašto dėžutėje",
     "Click the link in the email you received to verify and then click continue again.": "Paspauskite nuorodą gautame el. laiške, kad patvirtintumėte, tada dar kartą spustelėkite tęsti.",
     "Please verify the room ID or address and try again.": "Patikrinkite kambario ID arba adresą ir bandykite dar kartą.",
-    "Verify this session by confirming the following number appears on its screen.": "Patvirtinkite šį seansą, įsitikindami, kad jo ekrane rodomas toliau esantis skaičius."
+    "Verify this session by confirming the following number appears on its screen.": "Patvirtinkite šį seansą, įsitikindami, kad jo ekrane rodomas toliau esantis skaičius.",
+    "Privacy": "Privatumas",
+    "Accept all %(invitedRooms)s invites": "Priimti visus %(invitedRooms)s pakvietimus",
+    "Bulk options": "Grupinės parinktys"
 }
