@@ -29,6 +29,7 @@ import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
+import SettingsStore from './settings/SettingsStore';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
@@ -171,7 +172,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
-        if (!attribs.src || !attribs.src.startsWith('mxc://')) {
+        if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
             return { tagName, attribs: {}};
         }
         attribs.src = MatrixClientPeg.get().mxcUrlToHttp(
