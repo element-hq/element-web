@@ -129,14 +129,14 @@ Running from Docker
 The Docker image can be used to serve element-web as a web server. The easiest way to use
 it is to use the prebuilt image:
 ```bash
-docker run -p 80:80 vectorim/riot-web
+docker run -p 80:80 vectorim/element-web
 ```
 
 To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
 if your custom config was located at `/etc/element-web/config.json` then your Docker command
 would be:
 ```bash
-docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/riot-web
+docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
 ```
 
 To build the image yourself:
