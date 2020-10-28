@@ -1,3 +1,11 @@
+Changes in [1.7.12](https://github.com/vector-im/element-web/releases/tag/v1.7.12) (2020-10-28)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.11...v1.7.12)
+
+ * Upgrade to React SDK 3.7.1 and JS SDK 9.0.1
+ * [Release] Fix Jitsi regressions with custom themes
+   [\#15577](https://github.com/vector-im/element-web/pull/15577)
+
 Changes in [1.7.11](https://github.com/vector-im/element-web/releases/tag/v1.7.11) (2020-10-26)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.11-rc.1...v1.7.11)
