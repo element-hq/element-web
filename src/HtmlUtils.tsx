@@ -172,6 +172,9 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
+        // We also drops inline images (as if they were not present at all) when the "show
+        // images" preference is disabled. Future work might expose some UI to reveal them
+        // like standalone image events have.
         if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
             return { tagName, attribs: {}};
         }
