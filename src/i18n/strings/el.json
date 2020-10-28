@@ -29,5 +29,8 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Μπορείτε να συνεχίσετε να χρησιμοποιείτε το τρέχον πρόγραμμα περιήγησής σας, αλλά ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν και η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι λανθασμένη.",
     "I understand the risks and wish to continue": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
     "Go to element.io": "Πήγαινε στο element.io",
-    "Failed to start": "Αποτυχία έναρξης"
+    "Failed to start": "Αποτυχία έναρξης",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
+    "Missing indexeddb worker script!": "Απουσία indexeddb worker script!"
 }
