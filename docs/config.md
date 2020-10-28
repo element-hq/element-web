@@ -192,3 +192,5 @@ Currently, the following UI feature flags are supported:
   useful if accounts are managed externally.
 * `UIFeature.advancedEncryption` - Whether or not advanced encryption options are shown to the
   user.
+* `UIFeature.roomHistorySettings` - Whether or not the room history settings are shown to the user.
+  This should only be used if the room history visibility options are managed by the server.
