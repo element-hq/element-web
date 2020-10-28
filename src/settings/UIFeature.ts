@@ -31,4 +31,5 @@ export enum UIFeature {
     Flair = "UIFeature.flair",
     Communities = "UIFeature.communities",
     AdvancedSettings = "UIFeature.advancedSettings",
+    RoomHistorySettings = "UIFeature.roomHistorySettings",
 }
