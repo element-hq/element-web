@@ -77,8 +77,9 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
-import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/lib/webrtc/call";
 import Analytics from './Analytics';
+import CountlyAnalytics from "./CountlyAnalytics";
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -341,6 +342,7 @@ export default class CallHandler {
         localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
     ) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
+        CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
         const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
         this.calls.set(roomId, call);
         this.setCallListeners(call);
@@ -419,6 +421,7 @@ export default class CallHandler {
             case 'place_conference_call':
                 console.info("Place conference call in %s", payload.room_id);
                 Analytics.trackEvent('voip', 'placeConferenceCall');
+                CountlyAnalytics.instance.trackStartCall(payload.room_id, payload.type === PlaceCallType.Video, true);
                 this.startCallApp(payload.room_id, payload.type);
                 break;
             case 'end_conference':
@@ -462,16 +465,19 @@ export default class CallHandler {
                 }
                 this.removeCallForRoom(payload.room_id);
                 break;
-            case 'answer':
+            case 'answer': {
                 if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer
                 }
-                this.calls.get(payload.room_id).answer();
+                const call = this.calls.get(payload.room_id);
+                call.answer();
+                CountlyAnalytics.instance.trackJoinCall(payload.room_id, call.type === CallType.Video, false);
                 dis.dispatch({
                     action: "view_room",
                     room_id: payload.room_id,
                 });
                 break;
+            }
         }
     }
 

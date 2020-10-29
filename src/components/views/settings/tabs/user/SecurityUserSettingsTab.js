@@ -33,6 +33,7 @@ import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
 import {isE2eAdvancedPanelPossible} from "../../E2eAdvancedPanel";
+import CountlyAnalytics from "../../../../../CountlyAnalytics";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -102,6 +103,7 @@ export default class SecurityUserSettingsTab extends React.Component {
 
     _updateAnalytics = (checked) => {
         checked ? Analytics.enable() : Analytics.disable();
+        checked ? CountlyAnalytics.enable() : CountlyAnalytics.disable();
     };
 
     _onExportE2eKeysClicked = () => {
@@ -339,7 +341,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         }
 
         let privacySection;
-        if (Analytics.canEnable()) {
+        if (Analytics.canEnable() || CountlyAnalytics.canEnable()) {
             privacySection = <React.Fragment>
                 <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
                 <div className="mx_SettingsTab_section">

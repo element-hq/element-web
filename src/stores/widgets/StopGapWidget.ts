@@ -53,6 +53,7 @@ import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/Widget
 import {ModalWidgetStore} from "../ModalWidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import {getCustomTheme} from "../../theme";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
 // TODO: Destroy all of this code
 
@@ -301,6 +302,7 @@ export class StopGapWidget extends EventEmitter {
             this.messaging.on("action:set_always_on_screen",
                 (ev: CustomEvent<IStickyActionRequest>) => {
                     if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                        CountlyAnalytics.instance.trackJoinCall(this.appTileProps.room.roomId, true, true);
                         ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
                         ev.preventDefault();
                         this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack

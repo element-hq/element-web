@@ -28,6 +28,7 @@ import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
 import { getE2EEWellKnown } from "./utils/WellKnownUtils";
 import GroupStore from "./stores/GroupStore";
+import CountlyAnalytics from "./CountlyAnalytics";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -107,6 +108,8 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
     if (opts.encryption === undefined) opts.encryption = false;
+
+    const startTime = CountlyAnalytics.getTimestamp();
 
     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
     const Loader = sdk.getComponent("elements.Spinner");
@@ -203,6 +206,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
                 joining: true,
             });
         }
+        CountlyAnalytics.instance.trackRoomCreate(startTime, roomId);
         return roomId;
     }, function(err) {
         // Raise the error if the caller requested that we do so.
