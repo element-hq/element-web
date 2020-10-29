@@ -23,7 +23,6 @@ import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
-import RoomViewStore from '../../../stores/RoomViewStore';
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
@@ -254,7 +253,6 @@ export default class MessageComposer extends React.Component {
         super(props);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
-        this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
         WidgetStore.instance.on(UPDATE_EVENT, this._onWidgetUpdate);
@@ -262,7 +260,6 @@ export default class MessageComposer extends React.Component {
         this._dispatcherRef = null;
 
         this.state = {
-            replyToEvent: RoomViewStore.getQuotingEvent(),
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
             showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
@@ -294,7 +291,6 @@ export default class MessageComposer extends React.Component {
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
     }
 
@@ -318,9 +314,6 @@ export default class MessageComposer extends React.Component {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
         }
-        if (this._roomStoreToken) {
-            this._roomStoreToken.remove();
-        }
         WidgetStore.instance.removeListener(UPDATE_EVENT, this._onWidgetUpdate);
         ActiveWidgetStore.removeListener('update', this._onActiveWidgetUpdate);
         dis.unregister(this.dispatcherRef);
@@ -339,12 +332,6 @@ export default class MessageComposer extends React.Component {
 
     _getRoomTombstone() {
         return this.props.room.currentState.getStateEvents('m.room.tombstone', '');
-    }
-
-    _onRoomViewStoreUpdate() {
-        const replyToEvent = RoomViewStore.getQuotingEvent();
-        if (this.state.replyToEvent === replyToEvent) return;
-        this.setState({ replyToEvent });
     }
 
     onInputStateChanged(inputState) {
@@ -383,7 +370,7 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (this.state.replyToEvent) {
+        if (this.props.replyToEvent) {
             if (this.props.e2eStatus) {
                 return _t('Send an encrypted reply…');
             } else {
@@ -429,7 +416,7 @@ export default class MessageComposer extends React.Component {
                     placeholder={this.renderPlaceholderText()}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
-                    replyToEvent={this.state.replyToEvent}
+                    replyToEvent={this.props.replyToEvent}
                 />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
