@@ -9,6 +9,7 @@
 @import "./structures/_CustomRoomTagPanel.scss";
 @import "./structures/_FilePanel.scss";
 @import "./structures/_GenericErrorPage.scss";
+@import "./structures/_GroupFilterPanel.scss";
 @import "./structures/_GroupView.scss";
 @import "./structures/_HeaderButtons.scss";
 @import "./structures/_HomePage.scss";
@@ -27,7 +28,6 @@
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_TabbedView.scss";
-@import "./structures/_GroupFilterPanel.scss";
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_UploadBar.scss";
 @import "./structures/_UserMenu.scss";
@@ -227,4 +227,4 @@
 @import "./views/verification/_VerificationShowSas.scss";
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallView.scss";
-@import "./views/voip/_VideoView.scss";
+@import "./views/voip/_VideoFeed.scss";

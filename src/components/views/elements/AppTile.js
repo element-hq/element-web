@@ -163,7 +163,7 @@ export default class AppTile extends React.Component {
         if (ref) {
             this._sgWidget.start(ref);
         } else {
-            this._resetWidget(this.props);
+            //this._resetWidget(this.props);
         }
     };
 
