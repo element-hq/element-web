@@ -1153,7 +1153,7 @@
     "No homeserver URL provided": "URL-адрес домашнего сервера не указан",
     "Unexpected error resolving homeserver configuration": "Неожиданная ошибка в настройках домашнего сервера",
     "The user's homeserver does not support the version of the room.": "Домашний сервер пользователя не поддерживает версию комнаты.",
-    "Show read receipts sent by other users": "Показывать отметки о прочтении, посылаемые другими пользователями",
+    "Show read receipts sent by other users": "Показывать информацию о прочтении, посылаемую другими пользователями",
     "Show hidden events in timeline": "Показать скрытые события в хронологии",
     "When rooms are upgraded": "При обновлении комнат",
     "<a>Upgrade</a> to your own domain": "<a>Обновление</a> до собственного домена",
