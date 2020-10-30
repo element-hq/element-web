@@ -250,7 +250,7 @@ export class StopGapWidget extends EventEmitter {
 
         // Actually ask for permission to send the user's data
         Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
-            widgetUrl: rawUrl.includes("?") ? rawUrl.substr(0, rawUrl.indexOf("?")) : rawUrl,
+            widgetUrl: rawUrl,
             widgetId: this.widgetId,
             isUserWidget: this.appTileProps.userWidget,
 

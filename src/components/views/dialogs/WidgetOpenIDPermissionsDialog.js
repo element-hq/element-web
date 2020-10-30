@@ -84,7 +84,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
                             "A widget located at %(widgetUrl)s would like to verify your identity. " +
                             "By allowing this, the widget will be able to verify your user ID, but not " +
                             "perform actions as you.", {
-                                widgetUrl: this.props.widgetUrl,
+                                widgetUrl: this.props.widgetUrl.split("?")[0],
                             },
                         )}
                     </p>
