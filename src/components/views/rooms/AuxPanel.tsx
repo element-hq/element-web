@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2015, 2016, 2017, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,8 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { Room } from 'matrix-js-sdk/src/models/room'
 import * as sdk from '../../../index';
 import dis from "../../../dispatcher/dispatcher";
 import * as ObjectUtils from '../../../ObjectUtils';
@@ -29,28 +28,42 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import CallView from "../voip/CallView";
 import {UIFeature} from "../../../settings/UIFeature";
+import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 
+interface IProps {
+    // js-sdk room object
+    room: Room,
+    userId: string,
+    showApps: boolean, // Render apps
 
-export default class AuxPanel extends React.Component {
-    static propTypes = {
-        // js-sdk room object
-        room: PropTypes.object.isRequired,
-        userId: PropTypes.string.isRequired,
-        showApps: PropTypes.bool, // Render apps
+    // set to true to show the file drop target
+    draggingFile: boolean,
 
-        // set to true to show the file drop target
-        draggingFile: PropTypes.bool,
+    // maxHeight attribute for the aux panel and the video
+    // therein
+    maxHeight: number,
 
-        // maxHeight attribute for the aux panel and the video
-        // therein
-        maxHeight: PropTypes.number,
+    // a callback which is called when the content of the aux panel changes
+    // content in a way that is likely to make it change size.
+    onResize: () => void,
+    fullHeight: boolean,
 
-        // a callback which is called when the content of the aux panel changes
-        // content in a way that is likely to make it change size.
-        onResize: PropTypes.func,
-        fullHeight: PropTypes.bool,
-    };
+    resizeNotifier: ResizeNotifier,
+}
 
+interface Counter {
+    title: string,
+    value: number,
+    link: string,
+    severity: string,
+    stateKey: string,
+}
+
+interface IState {
+    counters: Counter[],
+}
+
+export default class AuxPanel extends React.Component<IProps, IState> {
     static defaultProps = {
         showApps: true,
     };
@@ -104,7 +117,7 @@ export default class AuxPanel extends React.Component {
     }, 500);
 
     _computeCounters() {
-        let counters = [];
+        const counters = [];
 
         if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
             const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
@@ -112,7 +125,7 @@ export default class AuxPanel extends React.Component {
                 return a.getStateKey() < b.getStateKey();
             });
 
-            stateEvs.forEach((ev, idx) => {
+            for (const ev of stateEvs) {
                 const title = ev.getContent().title;
                 const value = ev.getContent().value;
                 const link = ev.getContent().link;
@@ -123,14 +136,14 @@ export default class AuxPanel extends React.Component {
                 // zero)
                 if (title && value !== undefined) {
                     counters.push({
-                        "title": title,
-                        "value": value,
-                        "link": link,
-                        "severity": severity,
-                        "stateKey": stateKey
+                        title,
+                        value,
+                        link,
+                        severity,
+                        stateKey,
                     })
                 }
-            });
+            }
         }
 
         return counters;
@@ -143,8 +156,7 @@ export default class AuxPanel extends React.Component {
         if (this.props.draggingFile) {
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
-                    <div className="mx_RoomView_fileDropTargetLabel"
-                      title={_t("Drop File Here")}>
+                    <div className="mx_RoomView_fileDropTargetLabel" title={_t("Drop File Here")}>
                         <TintableSvg src={require("../../../../res/img/upload-big.svg")} width="45" height="59" />
                         <br />
                         { _t("Drop file here to upload") }
@@ -208,7 +220,7 @@ export default class AuxPanel extends React.Component {
                     <span
                         className="m_RoomView_auxPanel_stateViews_delim"
                         key={"delim" + idx}
-                    > ─ </span>
+                    > ─ </span>,
                 );
             });
 
@@ -226,7 +238,7 @@ export default class AuxPanel extends React.Component {
             "mx_RoomView_auxPanel": true,
             "mx_RoomView_auxPanel_fullHeight": this.props.fullHeight,
         });
-        const style = {};
+        const style: React.CSSProperties = {};
         if (!this.props.fullHeight) {
             style.maxHeight = this.props.maxHeight;
         }
