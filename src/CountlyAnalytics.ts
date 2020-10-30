@@ -210,6 +210,10 @@ interface ISendMessageEvent extends IEvent {
 
 interface IRoomDirectoryEvent extends IEvent {
     key: "room_directory";
+}
+
+interface IRoomDirectoryDoneEvent extends IEvent {
+    key: "room_directory_done";
     dur: number; // time spent in the room directory modal
 }
 
@@ -666,8 +670,8 @@ export default class CountlyAnalytics {
     private queue(args: Omit<IEvent, "timestamp" | "hour" | "dow" | "count"> & Partial<Pick<IEvent, "count">>) {
         const {count = 1, ...rest} = args;
         const ev = {
-            ...rest,
             ...this.getTimeParams(),
+            ...rest,
             count,
             platform: this.appPlatform,
             app_version: this.appVersion,
@@ -913,8 +917,12 @@ export default class CountlyAnalytics {
         }, roomId);
     }
 
+    public trackRoomDirectoryBegin() {
+        this.track<IRoomDirectoryEvent>("room_directory");
+    }
+
     public trackRoomDirectory(startTime: number) {
-        this.track<IRoomDirectoryEvent>("room_directory", {}, null, {
+        this.track<IRoomDirectoryDoneEvent>("room_directory_done", {}, null, {
             dur: CountlyAnalytics.getTimestamp() - startTime,
         });
     }
@@ -932,7 +940,7 @@ export default class CountlyAnalytics {
         key: E["key"],
         segments?: Omit<E["segmentation"], "room_id" | "num_users" | "is_encrypted" | "is_public">,
         roomId?: string,
-        args?: Partial<Pick<E, "dur" | "sum">>,
+        args?: Partial<Pick<E, "dur" | "sum" | "timestamp">>,
         anonymous = false,
     ) {
         if (this.disabled && !anonymous) return;
