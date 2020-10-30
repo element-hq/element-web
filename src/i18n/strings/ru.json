@@ -1085,7 +1085,7 @@
     "Folder": "Папка",
     "Pin": "Кнопка",
     "Your keys are being backed up (the first backup could take a few minutes).": "Выполняется резервная копия ключей  (первый раз это может занять несколько минут).",
-    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Размер файла '%(fileName)s' превышает допустимый размер для этого сервера",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Размер файла '%(fileName)s' превышает ограничения сервера для загрузки.",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения",
     "Changes your display nickname in the current room only": "Изменяет ваш псевдоним только для текущей комнаты",
     "Gets or sets the room topic": "Читает или устанавливает тему комнаты",
