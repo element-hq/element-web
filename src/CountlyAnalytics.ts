@@ -666,11 +666,11 @@ export default class CountlyAnalytics {
         return window.innerWidth > window.innerHeight ? Orientation.Landscape : Orientation.Portrait;
     };
 
-    private reportOrientation() {
+    private reportOrientation = () => {
         this.track<IOrientationEvent>("[CLY]_orientation", {
             mode: this.getOrientation(),
         });
-    }
+    };
 
     private startTime() {
         if (!this.trackTime) {
@@ -754,7 +754,7 @@ export default class CountlyAnalytics {
         }
     }
 
-    private endSession() {
+    private endSession = () => {
         if (this.sessionStarted) {
             window.removeEventListener("resize", this.reportOrientation)
 
@@ -765,7 +765,7 @@ export default class CountlyAnalytics {
             });
         }
         this.sessionStarted = false;
-    }
+    };
 
     private onVisibilityChange = () => {
         if (document.hidden) {
