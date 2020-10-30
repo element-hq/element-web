@@ -350,10 +350,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
-            CountlyAnalytics.instance.enable(false);
-        } else {
-            CountlyAnalytics.instance.enable(true);
         }
+        CountlyAnalytics.instance.enable(true); // anonymous
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
