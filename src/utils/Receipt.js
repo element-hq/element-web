@@ -18,6 +18,10 @@ limitations under the License.
  * Given MatrixEvent containing receipts, return the first
  * read receipt from the given user ID, or null if no such
  * receipt exists.
+ *
+ * @param {Object} receiptEvent A Matrix Event
+ * @param {string} userId A user ID
+ * @returns {Object} Read receipt
  */
 export function findReadReceiptFromUserId(receiptEvent, userId) {
     const receiptKeys = Object.keys(receiptEvent.getContent());

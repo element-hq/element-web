@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
@@ -78,14 +77,14 @@ export default class DirectorySearchBox extends React.Component {
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
-        const searchbox_classes = {
+        const searchboxClasses = {
             mx_DirectorySearchBox: true,
         };
-        searchbox_classes[this.props.className] = true;
+        searchboxClasses[this.props.className] = true;
 
-        let join_button;
+        let joinButton;
         if (this.props.showJoinButton) {
-            join_button = <AccessibleButton className="mx_DirectorySearchBox_joinButton"
+            joinButton = <AccessibleButton className="mx_DirectorySearchBox_joinButton"
                 onClick={this._onJoinButtonClick}
             >{_t("Join")}</AccessibleButton>;
         }
@@ -97,7 +96,7 @@ export default class DirectorySearchBox extends React.Component {
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
                     placeholder={this.props.placeholder} autoFocus
                 />
-                { join_button }
+                { joinButton }
                 <AccessibleButton className="mx_DirectorySearchBox_clear" onClick={this._onClearClick}></AccessibleButton>
             </div>;
     }
