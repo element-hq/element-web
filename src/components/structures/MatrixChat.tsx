@@ -351,7 +351,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
         }
-        CountlyAnalytics.instance.enable(true); // anonymous
+        CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
@@ -420,7 +420,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({action: "view_welcome_page"});
                 }
             } else if (SettingsStore.getValue("analyticsOptIn")) {
-                CountlyAnalytics.instance.enable(false);
+                CountlyAnalytics.instance.enable(/* anonymous = */ false);
             }
         });
         // Note we don't catch errors from this: we catch everything within
@@ -760,7 +760,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     Analytics.enable();
                 }
                 if (CountlyAnalytics.instance.canEnable()) {
-                    CountlyAnalytics.instance.enable(false);
+                    CountlyAnalytics.instance.enable(/* anonymous = */ false);
                 }
                 break;
             case 'reject_cookies':
