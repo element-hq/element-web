@@ -238,7 +238,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             "mx_RoomView_auxPanel": true,
             "mx_RoomView_auxPanel_fullHeight": this.props.fullHeight,
         });
-        const style:any = {};
+        const style: React.CSSProperties = {};
         if (!this.props.fullHeight) {
             style.maxHeight = this.props.maxHeight;
         }
