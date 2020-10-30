@@ -12,8 +12,6 @@ src/utils/MultiInviter.js
 test/components/structures/MessagePanel-test.js
 test/components/views/dialogs/InteractiveAuthDialog-test.js
 test/mock-clock.js
-test/notifications/ContentRules-test.js
-test/notifications/PushRuleVectorState-test.js
 src/component-index.js
 test/end-to-end-tests/node_modules/
 test/end-to-end-tests/riot/
