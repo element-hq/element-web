@@ -114,7 +114,10 @@ export default class LinkPreviewWidget extends React.Component {
 
         let thumbHeight = imageMaxHeight;
         if (p["og:image:width"] && p["og:image:height"]) {
-            thumbHeight = ImageUtils.thumbHeight(p["og:image:width"], p["og:image:height"], imageMaxWidth, imageMaxHeight);
+            thumbHeight = ImageUtils.thumbHeight(
+                p["og:image:width"], p["og:image:height"],
+                imageMaxWidth, imageMaxHeight,
+            );
         }
 
         let img;
