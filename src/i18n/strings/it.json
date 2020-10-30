@@ -2550,5 +2550,6 @@
     "Show Widgets": "Mostra i widget",
     "Hide Widgets": "Nascondi i widget",
     "The call was answered on another device.": "La chiamata è stata accettata su un altro dispositivo.",
-    "Answered Elsewhere": "Risposto altrove"
+    "Answered Elsewhere": "Risposto altrove",
+    "Data on this screen is shared with %(widgetDomain)s": "I dati in questa schermata vengono condivisi con %(widgetDomain)s"
 }
