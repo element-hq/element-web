@@ -341,7 +341,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         }
 
         let privacySection;
-        if (Analytics.canEnable() || CountlyAnalytics.canEnable()) {
+        if (Analytics.canEnable() || CountlyAnalytics.instance.canEnable()) {
             privacySection = <React.Fragment>
                 <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
                 <div className="mx_SettingsTab_section">
