@@ -393,6 +393,11 @@ export default class CountlyAnalytics {
         if (!this.disabled && this.anonymous === anonymous) return;
         if (!this.canEnable()) return;
 
+        if (!this.disabled) {
+            // flush request queue as our userKey is going to change, no need to await it
+            this.request();
+        }
+
         const config = SdkConfig.get();
         this.baseUrl = new URL("/i", config.countly.url);
         this.appKey = config.countly.appKey;
