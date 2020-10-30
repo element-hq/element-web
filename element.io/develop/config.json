@@ -18,6 +18,10 @@
         "siteId": 1,
         "policyUrl": "https://element.io/cookie-policy"
     },
+    "countly": {
+        "url": "https://try.count.ly",
+        "appKey": "8abf1ee15646bc884556b82e5053857904264b66"
+    },
     "roomDirectory": {
         "servers": [
             "matrix.org"
