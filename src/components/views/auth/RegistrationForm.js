@@ -29,6 +29,7 @@ import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import PassphraseField from "./PassphraseField";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -77,6 +78,8 @@ export default class RegistrationForm extends React.Component {
             passwordConfirm: this.props.defaultPassword || "",
             passwordComplexity: null,
         };
+
+        CountlyAnalytics.instance.track("onboarding_registration_begin");
     }
 
     onSubmit = async ev => {
@@ -86,6 +89,7 @@ export default class RegistrationForm extends React.Component {
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
+            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
             return;
         }
 
@@ -110,6 +114,8 @@ export default class RegistrationForm extends React.Component {
                 return;
             }
 
+            CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
+
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                 title: _t("Warning!"),
@@ -128,6 +134,11 @@ export default class RegistrationForm extends React.Component {
 
     _doSubmit(ev) {
         const email = this.state.email.trim();
+
+        CountlyAnalytics.instance.track("onboarding_registration_submit_ok", {
+            email: !!email,
+        });
+
         const promise = this.props.onRegisterClick({
             username: this.state.username.trim(),
             password: this.state.password.trim(),
@@ -422,6 +433,8 @@ export default class RegistrationForm extends React.Component {
             value={this.state.email}
             onChange={this.onEmailChange}
             onValidate={this.onEmailValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_email_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
         />;
     }
 
@@ -433,6 +446,8 @@ export default class RegistrationForm extends React.Component {
             value={this.state.password}
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_password_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_password_blur")}
         />;
     }
 
@@ -447,6 +462,8 @@ export default class RegistrationForm extends React.Component {
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_blur")}
         />;
     }
 
@@ -487,6 +504,8 @@ export default class RegistrationForm extends React.Component {
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_username_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_username_blur")}
         />;
     }
 

@@ -33,6 +33,7 @@ import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
 import {Analytics} from "../Analytics";
+import CountlyAnalytics from "../CountlyAnalytics";
 import UserActivity from "../UserActivity";
 import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 
@@ -60,6 +61,7 @@ declare global {
         mxWidgetStore: WidgetStore;
         mxCallHandler: CallHandler;
         mxAnalytics: Analytics;
+        mxCountlyAnalytics: typeof CountlyAnalytics;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
     }
@@ -95,5 +97,14 @@ declare global {
 
     interface HTMLAudioElement {
         type?: string;
+    }
+
+    interface Error {
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/fileName
+        fileName?: string;
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/lineNumber
+        lineNumber?: number;
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber
+        columnNumber?: number;
     }
 }

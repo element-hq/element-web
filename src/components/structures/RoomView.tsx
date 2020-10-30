@@ -1113,6 +1113,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 dis.dispatch({
                     action: 'join_room',
                     opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                    _type: "unknown", // TODO: instrumentation
                 });
                 return Promise.resolve();
             });

@@ -358,6 +358,7 @@ export default class MessageComposer extends React.Component {
             event_id: createEventId,
             room_id: replacementRoomId,
             auto_join: true,
+            _type: "tombstone", // instrumentation
 
             // Try to join via the server that sent the event. This converts @something:example.org
             // into a server domain by splitting on colons and ignoring the first entry ("@something").

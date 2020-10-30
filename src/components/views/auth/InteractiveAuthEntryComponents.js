@@ -26,6 +26,7 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -189,6 +190,7 @@ export class RecaptchaAuthEntry extends React.Component {
     }
 
     _onCaptchaResponse = response => {
+        CountlyAnalytics.instance.track("onboarding_grecaptcha_submit");
         this.props.submitAuthDict({
             type: RecaptchaAuthEntry.LOGIN_TYPE,
             response: response,
@@ -297,6 +299,8 @@ export class TermsAuthEntry extends React.Component {
             toggledPolicies: initToggles,
             policies: pickedPolicies,
         };
+
+        CountlyAnalytics.instance.track("onboarding_terms_begin");
     }
 
 
@@ -326,8 +330,12 @@ export class TermsAuthEntry extends React.Component {
             allChecked = allChecked && checked;
         }
 
-        if (allChecked) this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
-        else this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
+        if (allChecked) {
+            this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
+            CountlyAnalytics.instance.track("onboarding_terms_complete");
+        } else {
+            this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
+        }
     };
 
     render() {

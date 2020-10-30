@@ -40,6 +40,7 @@ import RoomListStore from "../../../stores/room-list/RoomListStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -325,6 +326,8 @@ export default class InviteDialog extends React.PureComponent {
             room.getMembersWithMembership('join').forEach(m => alreadyInvited.add(m.userId));
             // add banned users, so we don't try to invite them
             room.getMembersWithMembership('ban').forEach(m => alreadyInvited.add(m.userId));
+
+            CountlyAnalytics.instance.trackBeginInvite(props.roomId);
         }
 
         this.state = {
@@ -627,6 +630,7 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _inviteUsers = () => {
+        const startTime = CountlyAnalytics.getTimestamp();
         this.setState({busy: true});
         this._convertFilter();
         const targets = this._convertFilter();
@@ -643,6 +647,7 @@ export default class InviteDialog extends React.PureComponent {
         }
 
         inviteMultipleToRoom(this.props.roomId, targetIds).then(result => {
+            CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
             if (!this._shouldAbortAfterInviteError(result)) { // handles setting error message too
                 this.props.onFinished();
             }
