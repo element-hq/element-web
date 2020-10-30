@@ -15,8 +15,7 @@ module.exports = {
         "sourceType": "module"
     },
     "plugins": [
-        "react",
-        "node"
+        "react"
     ],
     "rules": {
     }
