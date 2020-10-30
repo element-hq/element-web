@@ -33,7 +33,7 @@ import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
 import {Analytics} from "../Analytics";
-import {CountlyAnalytics} from "../CountlyAnalytics";
+import CountlyAnalytics from "../CountlyAnalytics";
 import UserActivity from "../UserActivity";
 import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 
