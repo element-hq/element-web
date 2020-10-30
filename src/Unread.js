@@ -16,12 +16,14 @@ limitations under the License.
 
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
-import * as sdk from "./index";
 import {haveTileForEvent} from "./components/views/rooms/EventTile";
 
 /**
  * Returns true iff this event arriving in a room should affect the room's
  * count of unread messages
+ *
+ * @param {Object} ev The event
+ * @returns {boolean} True if the given event should affect the unread message count
  */
 export function eventTriggersUnreadCount(ev) {
     if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
