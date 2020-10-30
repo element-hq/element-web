@@ -2395,5 +2395,22 @@
     "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "La signature croisée est prête à l'emploi, mais le coffre secret n'est pas actuellement utilisé pour sauvegarder vos clés.",
     "Master private key:": "Clé privée maîtresse :",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s ne peut actuellement mettre en cache vos messages chiffrés localement de manière sécurisée via le navigateur Web. Utilisez <desktopLink>%(brand)s Desktop</desktopLink> pour que les messages chiffrés apparaissent dans vos résultats de recherche.",
-    "There are advanced notifications which are not shown here.": "Des notifications avancées ne sont pas affichées ici."
+    "There are advanced notifications which are not shown here.": "Des notifications avancées ne sont pas affichées ici.",
+    "ready": "prêt",
+    "The operation could not be completed": "L'opération n'a pas pu être terminée",
+    "Failed to save your profile": "Erreur lors de l'enregistrement du profile",
+    "Unknown App": "Application inconnue",
+    "%(senderName)s declined the call.": "%(senderName)s a refusé l'appel.",
+    "(an error occurred)": "(une erreur est survenue)",
+    "(connection failed)": "(échec de connexion)",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s a changé les paramètres d'accès du serveur pour ce salon.",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s a défini les paramètres d'accès du serveur pour ce salon.",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Ajoute ( ͡° ͜ʖ ͡°) devant un message en texte brut",
+    "This will end the conference for everyone. Continue?": "Ceci arrêtera la téléconférence pour tout le monde. Continuer ?",
+    "End conference": "Finir la téléconférence",
+    "The call was answered on another device.": "L'appel a été répondu sur un autre appareil.",
+    "Answered Elsewhere": "Répondu autre-part",
+    "The call could not be established": "L'appel n'a pas pu être établi",
+    "The other party declined the call.": "L'autre personne a décliné l'appel.",
+    "Call Declined": "Appel rejeté"
 }
