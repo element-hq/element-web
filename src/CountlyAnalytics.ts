@@ -525,9 +525,9 @@ export default class CountlyAnalytics {
 
         const metrics = this.getMetrics();
         const ob: ICrash = {
-            _resolution: metrics._resolution,
+            _resolution: metrics?._resolution,
             _error: error,
-            _app_version: metrics._app_version,
+            _app_version: this.appVersion,
             _run: CountlyAnalytics.getTimestamp() - this.initTime,
             _nonfatal: !fatal,
             _view: this.lastView,
@@ -729,11 +729,17 @@ export default class CountlyAnalytics {
                 },
             };
 
-            await this.request({
+            const request: Parameters<typeof CountlyAnalytics.prototype.request>[0] = {
                 begin_session: 1,
-                metrics: JSON.stringify(this.getMetrics()),
                 user_details: JSON.stringify(userDetails),
-            });
+            }
+
+            const metrics = this.getMetrics();
+            if (metrics) {
+                request.metrics = JSON.stringify(metrics);
+            }
+
+            await this.request(request);
         }
     }
 
