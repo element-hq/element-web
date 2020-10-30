@@ -31,7 +31,7 @@ if (!TextEncoder) {
 }
 
 const INACTIVITY_TIME = 20; // seconds
-const HEARTBEAT_INTERVAL = 5_000;
+const HEARTBEAT_INTERVAL = 5_000; // ms
 const SESSION_UPDATE_INTERVAL = 60; // seconds
 const MAX_PENDING_EVENTS = 1000;
 
@@ -938,4 +938,5 @@ export default class CountlyAnalytics {
     }
 }
 
+// expose on window for easy access from the console
 window.mxCountlyAnalytics = CountlyAnalytics;
