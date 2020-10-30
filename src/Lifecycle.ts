@@ -583,7 +583,7 @@ export function logout(): void {
     if (!MatrixClientPeg.get()) return;
     if (!CountlyAnalytics.instance.disabled) {
         // user has logged out, fall back to anonymous
-        CountlyAnalytics.instance.enable(true);
+        CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
 
     if (MatrixClientPeg.get().isGuest()) {
