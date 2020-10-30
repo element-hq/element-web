@@ -2548,5 +2548,8 @@
     "The call was answered on another device.": "A chamada foi respondida noutro dispositivo.",
     "Answered Elsewhere": "Respondido noutro lugar",
     "Data on this screen is shared with %(widgetDomain)s": "Os datos nesta pantalla compártense con %(widgetDomain)s",
-    "Modal Widget": "Widget modal"
+    "Modal Widget": "Widget modal",
+    "Tell us below how you feel about %(brand)s so far.": "Cóntanos que opinas acerca de  %(brand)s ata o momento.",
+    "Rate %(brand)s": "Valora %(brand)s",
+    "Feedback sent": "Comentario enviado"
 }
