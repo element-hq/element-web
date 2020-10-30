@@ -2534,5 +2534,14 @@
     "(connection failed)": "(dështoi lidhja)",
     "The call could not be established": "Thirrja s’u nis dot",
     "The other party declined the call.": "Pala tjetër hodhi poshtë thirrjen.",
-    "Call Declined": "Thirrja u Hodh Poshtë"
+    "Call Declined": "Thirrja u Hodh Poshtë",
+    "Move right": "Lëvize djathtas",
+    "Move left": "Lëvize majtas",
+    "Revoke permissions": "Shfuqizoji lejet",
+    "Unpin a widget to view it in this panel": "Që ta shihni te ku panel, shfiksojeni një widget",
+    "You can only pin up to %(count)s widgets|other": "Mundeni të fiksoni deri në %(count)s widget-e",
+    "Show Widgets": "Shfaqi Widget-et",
+    "Hide Widgets": "Fshihi Widget-et",
+    "The call was answered on another device.": "Thirrjes iu përgjigj në një tjetër pajisje.",
+    "Answered Elsewhere": "Përgjigjur Gjetkë"
 }
