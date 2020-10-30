@@ -47,6 +47,7 @@ import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
+import CountlyAnalytics from "./CountlyAnalytics";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -580,6 +581,10 @@ let _isLoggingOut = false;
  */
 export function logout(): void {
     if (!MatrixClientPeg.get()) return;
+    if (!CountlyAnalytics.instance.disabled) {
+        // user has logged out, fall back to anonymous
+        CountlyAnalytics.instance.enable(/* anonymous = */ true);
+    }
 
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions

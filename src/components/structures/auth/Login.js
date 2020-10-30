@@ -30,6 +30,7 @@ import SSOButton from "../../views/elements/SSOButton";
 import PlatformPeg from '../../../PlatformPeg';
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -126,6 +127,8 @@ export default class LoginComponent extends React.Component {
             'm.login.cas': () => this._renderSsoStep("cas"),
             'm.login.sso': () => this._renderSsoStep("sso"),
         };
+
+        CountlyAnalytics.instance.track("onboarding_login_begin");
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event

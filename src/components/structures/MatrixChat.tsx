@@ -29,6 +29,7 @@ import 'focus-visible';
 import 'what-input';
 
 import Analytics from "../../Analytics";
+import CountlyAnalytics from "../../CountlyAnalytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { MatrixClientPeg, IMatrixClientCreds } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
@@ -109,7 +110,8 @@ export enum Views {
     // flow to setup SSSS / cross-signing on this account
     E2E_SETUP = 7,
 
-    // we are logged in with an active matrix client.
+    // we are logged in with an active matrix client. The logged_in state also
+    // includes guests users as they too are logged in at the client level.
     LOGGED_IN = 8,
 
     // We are logged out (invalid token) but have our local state again. The user
@@ -349,6 +351,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
         }
+        CountlyAnalytics.instance.enable(/* anonymous = */ true);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
@@ -363,6 +366,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
             Analytics.trackPageChange(durationMs);
+            CountlyAnalytics.instance.trackPageChange(durationMs);
         }
         if (this.focusComposer) {
             dis.fire(Action.FocusComposer);
@@ -415,6 +419,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 } else {
                     dis.dispatch({action: "view_welcome_page"});
                 }
+            } else if (SettingsStore.getValue("analyticsOptIn")) {
+                CountlyAnalytics.instance.enable(/* anonymous = */ false);
             }
         });
         // Note we don't catch errors from this: we catch everything within
@@ -750,7 +756,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, true);
                 SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
                 hideAnalyticsToast();
-                Analytics.enable();
+                if (Analytics.canEnable()) {
+                    Analytics.enable();
+                }
+                if (CountlyAnalytics.instance.canEnable()) {
+                    CountlyAnalytics.instance.enable(/* anonymous = */ false);
+                }
                 break;
             case 'reject_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
@@ -1200,7 +1211,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         StorageManager.tryPersistStorage();
 
-        if (SettingsStore.getValue("showCookieBar") && Analytics.canEnable()) {
+        if (SettingsStore.getValue("showCookieBar") &&
+            (Analytics.canEnable() || CountlyAnalytics.instance.canEnable())
+        ) {
             showAnalyticsToast(this.props.config.piwik?.policyUrl);
         }
     }
@@ -1581,6 +1594,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'require_registration',
             });
         } else if (screen === 'directory') {
+            if (this.state.view === Views.WELCOME) {
+                CountlyAnalytics.instance.track("onboarding_room_directory");
+            }
             dis.fire(Action.ViewRoomDirectory);
         } else if (screen === "start_sso" || screen === "start_cas") {
             // TODO if logged in, skip SSO

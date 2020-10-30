@@ -33,6 +33,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -48,6 +49,8 @@ export default class RoomDirectory extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.startTime = CountlyAnalytics.getTimestamp();
 
         const selectedCommunityId = GroupFilterOrderStore.getSelectedTags()[0];
         this.state = {
@@ -196,6 +199,11 @@ export default class RoomDirectory extends React.Component {
             if (this._unmounted) {
                 // if we've been unmounted, we don't care either.
                 return;
+            }
+
+            if (this.state.filterString) {
+                const count = data.total_room_count_estimate || data.chunk.length;
+                CountlyAnalytics.instance.trackRoomDirectorySearch(count, this.state.filterString);
             }
 
             this.nextBatch = data.next_batch;
@@ -407,7 +415,7 @@ export default class RoomDirectory extends React.Component {
     };
 
     onCreateRoomClick = room => {
-        this.props.onFinished();
+        this.onFinished();
         dis.dispatch({
             action: 'view_create_room',
             public: true,
@@ -419,11 +427,12 @@ export default class RoomDirectory extends React.Component {
     }
 
     showRoom(room, room_alias, autoJoin = false, shouldPeek = false) {
-        this.props.onFinished();
+        this.onFinished();
         const payload = {
             action: 'view_room',
             auto_join: autoJoin,
             should_peek: shouldPeek,
+            _type: "room_directory", // instrumentation
         };
         if (room) {
             // Don't let the user view a room they won't be able to either
@@ -575,6 +584,11 @@ export default class RoomDirectory extends React.Component {
         }
     };
 
+    onFinished = () => {
+        CountlyAnalytics.instance.trackRoomDirectory(this.startTime);
+        this.props.onFinished();
+    };
+
     render() {
         const Loader = sdk.getComponent("elements.Spinner");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
@@ -693,7 +707,7 @@ export default class RoomDirectory extends React.Component {
             <BaseDialog
                 className={'mx_RoomDirectory_dialog'}
                 hasCancel={true}
-                onFinished={this.props.onFinished}
+                onFinished={this.onFinished}
                 title={title}
             >
                 <div className="mx_RoomDirectory">

@@ -17,6 +17,7 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 const DIV_ID = 'mx_recaptcha';
 
@@ -45,6 +46,8 @@ export default class CaptchaForm extends React.Component {
         this._captchaWidgetId = null;
 
         this._recaptchaContainer = createRef();
+
+        CountlyAnalytics.instance.track("onboarding_grecaptcha_begin");
     }
 
     componentDidMount() {
@@ -99,10 +102,12 @@ export default class CaptchaForm extends React.Component {
         console.log("Loaded recaptcha script.");
         try {
             this._renderRecaptcha(DIV_ID);
+            CountlyAnalytics.instance.track("onboarding_grecaptcha_loaded");
         } catch (e) {
             this.setState({
                 errorText: e.toString(),
             });
+            CountlyAnalytics.instance.track("onboarding_grecaptcha_error", { error: e.toString() });
         }
     }
 

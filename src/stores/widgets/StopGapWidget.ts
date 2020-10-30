@@ -32,6 +32,7 @@ import {
     Widget,
     WidgetApiToWidgetAction,
     WidgetApiFromWidgetAction,
+    IModalWidgetOpenRequest,
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
@@ -49,6 +50,10 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ElementWidgetActions } from "./ElementWidgetActions";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
+import {ModalWidgetStore} from "../ModalWidgetStore";
+import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import {getCustomTheme} from "../../theme";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
 // TODO: Destroy all of this code
 
@@ -102,9 +107,25 @@ class ElementWidget extends Widget {
             // v1 widgets default to jitsi.riot.im regardless of user settings
             domain = "jitsi.riot.im";
         }
+
+        let theme = new ThemeWatcher().getEffectiveTheme();
+        if (theme.startsWith("custom-")) {
+            const customTheme = getCustomTheme(theme.substr(7));
+            // Jitsi only understands light/dark
+            theme = customTheme.is_dark ? "dark" : "light";
+        }
+
+        // only allow light/dark through, defaulting to dark as that was previously the only state
+        // accounts for legacy-light/legacy-dark themes too
+        if (theme.includes("light")) {
+            theme = "light";
+        } else {
+            theme = "dark";
+        }
+
         return {
             ...super.rawData,
-            theme: SettingsStore.getValue("theme"),
+            theme,
             conferenceId,
             domain,
         };
@@ -201,7 +222,7 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private onOpenIdReq = async (ev: CustomEvent<IGetOpenIDActionRequest>) => {
-        if (ev?.detail?.widgetId !== this.widgetId) return;
+        ev.preventDefault();
 
         const rawUrl = this.appTileProps.app.url;
         const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, rawUrl, this.appTileProps.userWidget);
@@ -249,6 +270,20 @@ export class StopGapWidget extends EventEmitter {
         });
     };
 
+    private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>) => {
+        ev.preventDefault();
+        if (ModalWidgetStore.instance.canOpenModalWidget()) {
+            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget);
+            this.messaging.transport.reply(ev.detail, {}); // ack
+        } else {
+            this.messaging.transport.reply(ev.detail, {
+                error: {
+                    message: "Unable to open modal at this time",
+                },
+            })
+        }
+    };
+
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
         const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
@@ -256,6 +291,7 @@ export class StopGapWidget extends EventEmitter {
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.GetOpenIDCredentials}`, this.onOpenIdReq);
+        this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
         if (!this.appTileProps.userWidget && this.appTileProps.room) {
@@ -266,6 +302,7 @@ export class StopGapWidget extends EventEmitter {
             this.messaging.on("action:set_always_on_screen",
                 (ev: CustomEvent<IStickyActionRequest>) => {
                     if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                        CountlyAnalytics.instance.trackJoinCall(this.appTileProps.room.roomId, true, true);
                         ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
                         ev.preventDefault();
                         this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack

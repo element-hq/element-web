@@ -518,6 +518,7 @@ export const Commands = [
                         action: 'view_room',
                         room_alias: roomAlias,
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     });
                     return success();
                 } else if (params[0][0] === '!') {
@@ -532,6 +533,7 @@ export const Commands = [
                         },
                         via_servers: viaServers, // for the rejoin button
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     });
                     return success();
                 } else if (isPermalink) {
@@ -556,6 +558,7 @@ export const Commands = [
                     const dispatch = {
                         action: 'view_room',
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     };
 
                     if (entity[0] === '!') dispatch["room_id"] = entity;

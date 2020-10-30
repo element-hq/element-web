@@ -26,6 +26,7 @@ import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from 'classnames';
 import AuthPage from "../../views/auth/AuthPage";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 // Phases
 // Show controls to configure server details
@@ -63,6 +64,12 @@ export default class ForgotPassword extends React.Component {
         serverDeadError: "",
         serverRequiresIdServer: null,
     };
+
+    constructor(props) {
+        super(props);
+
+        CountlyAnalytics.instance.track("onboarding_forgot_password_begin");
+    }
 
     componentDidMount() {
         this.reset = null;
@@ -299,6 +306,8 @@ export default class ForgotPassword extends React.Component {
                         value={this.state.email}
                         onChange={this.onInputChanged.bind(this, "email")}
                         autoFocus
+                        onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_focus")}
+                        onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_blur")}
                     />
                 </div>
                 <div className="mx_AuthBody_fieldRow">
@@ -308,6 +317,8 @@ export default class ForgotPassword extends React.Component {
                         label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onInputChanged.bind(this, "password")}
+                        onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_focus")}
+                        onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_blur")}
                     />
                     <Field
                         name="reset_password_confirm"
@@ -315,6 +326,8 @@ export default class ForgotPassword extends React.Component {
                         label={_t('Confirm')}
                         value={this.state.password2}
                         onChange={this.onInputChanged.bind(this, "password2")}
+                        onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_focus")}
+                        onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_blur")}
                     />
                 </div>
                 <span>{_t(

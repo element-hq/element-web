@@ -129,6 +129,7 @@ export interface IState {
     initialEventPixelOffset?: number;
     // Whether to highlight the event scrolled to
     isInitialEventHighlighted?: boolean;
+    replyToEvent?: MatrixEvent;
     forwardingEvent?: MatrixEvent;
     numUnreadMessages: number;
     draggingFile: boolean;
@@ -315,6 +316,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             joining: RoomViewStore.isJoining(),
             initialEventId: RoomViewStore.getInitialEventId(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
+            replyToEvent: RoomViewStore.getQuotingEvent(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
@@ -1111,6 +1113,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 dis.dispatch({
                     action: 'join_room',
                     opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                    _type: "unknown", // TODO: instrumentation
                 });
                 return Promise.resolve();
             });
@@ -1899,6 +1902,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     showApps={this.state.showApps}
                     e2eStatus={this.state.e2eStatus}
                     resizeNotifier={this.props.resizeNotifier}
+                    replyToEvent={this.state.replyToEvent}
                     permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
                 />;
         }
