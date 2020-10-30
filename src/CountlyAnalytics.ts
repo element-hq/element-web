@@ -343,6 +343,18 @@ const getRoomStats = (roomId: string) => {
     }
 }
 
+// async wrapper for regex-powered String.prototype.replace
+const strReplaceAsync = async (str: string, regex: RegExp, fn: (...args: string[]) => Promise<string>) => {
+    const promises: Promise<string>[] = [];
+    // dry-run to calculate the replace values
+    str.replace(regex, (...args: string[]) => {
+        promises.push(fn(...args));
+        return "";
+    });
+    const values = await Promise.all(promises);
+    return str.replace(regex, () => values.shift());
+};
+
 export default class CountlyAnalytics {
     private baseUrl: URL = null;
     private appKey: string = null;
@@ -495,7 +507,7 @@ export default class CountlyAnalytics {
         return this.lastMsTs;
     }
 
-    public recordError(err: Error | string, fatal = false) {
+    public async recordError(err: Error | string, fatal = false) {
         if (this.disabled || this.anonymous) return;
 
         let error = "";
@@ -522,6 +534,11 @@ export default class CountlyAnalytics {
         } else {
             error = err + "";
         }
+
+        // sanitize the error from identifiers
+        error = await strReplaceAsync(error, /([!@+#]).+?:[\w:.]+/g, async (substring: string, glyph: string) => {
+            return glyph + await hashHex(substring.substring(1));
+        });
 
         const metrics = this.getMetrics();
         const ob: ICrash = {
