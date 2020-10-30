@@ -50,6 +50,7 @@ export default class RoomDirectory extends React.Component {
     constructor(props) {
         super(props);
 
+        CountlyAnalytics.instance.trackRoomDirectoryBegin();
         this.startTime = CountlyAnalytics.getTimestamp();
 
         const selectedCommunityId = GroupFilterOrderStore.getSelectedTags()[0];
