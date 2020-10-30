@@ -143,9 +143,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     async _videoOnPlay() {
-        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos") as boolean;
-        if (autoplay || this.state.decryptedUrl || this.state.fetchingData || this.state.error) {
-            // The video has or will have the data.
+        if (this._getContentUrl() || this.state.fetchingData || this.state.error) {
+            // We have the file, we are fetching the file, or there is an error.
             return;
         }
         this.setState({
@@ -164,6 +163,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         this.setState({
             decryptedUrl: contentUrl,
             decryptedBlob: decryptedBlob,
+            fetchingData: false,
         });
         this.props.onHeightChanged();
     }
