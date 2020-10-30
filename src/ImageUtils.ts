@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015, 2016, 2020 Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,8 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-'use strict';
 
 /**
  * Returns the actual height that an image of dimensions (fullWidth, fullHeight)
@@ -30,11 +28,11 @@ limitations under the License.
  * consume in the timeline, when performing scroll offset calcuations
  * (e.g. scroll locking)
  */
-export function thumbHeight(fullWidth, fullHeight, thumbWidth, thumbHeight) {
+export function thumbHeight(fullWidth: number, fullHeight: number, thumbWidth: number, thumbHeight: number) {
     if (!fullWidth || !fullHeight) {
         // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
         // log this because it's spammy
-        return undefined;
+        return null;
     }
     if (fullWidth < thumbWidth && fullHeight < thumbHeight) {
         // no scaling needs to be applied
