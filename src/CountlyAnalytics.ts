@@ -292,22 +292,23 @@ interface IViewData {
 
 // Apply fn to all hash path parts after the 1st one
 async function getViewData(anonymous = true): Promise<IViewData> {
+    const rand = randomString(8);
     const { origin, hash } = window.location;
     let { pathname } = window.location;
 
     // Redact paths which could contain unexpected PII
     if (origin.startsWith('file://')) {
-        pathname = "/<redacted>/";
+        pathname = `/<redacted_${rand}>/`; // XXX: inject rand because Count.ly doesn't like X->X transitions
     }
 
     let [_, screen, ...parts] = hash.split("/");
 
     if (!knownScreens.has(screen)) {
-        screen = "<redacted>";
+        screen = `<redacted_${rand}>`;
     }
 
     for (let i = 0; i < parts.length; i++) {
-        parts[i] = anonymous ? "<redacted>" : await hashHex(parts[i]);
+        parts[i] = anonymous ? `<redacted_${rand}>` : await hashHex(parts[i]);
     }
 
     const hashStr = `${_}/${screen}/${parts.join("/")}`;
@@ -342,19 +343,28 @@ const getRoomStats = (roomId: string) => {
     }
 }
 
-export class CountlyAnalytics {
+export default class CountlyAnalytics {
     private baseUrl: URL = null;
     private appKey: string = null;
     private userKey: string = null;
-    private firstPage = true;
-    private heartbeatIntervalID: number = null;
-
-    private anonymous = true;
-    private pendingEvents: IEvent[] = [];
-
+    private anonymous: boolean;
     private appPlatform: string;
     private appVersion = "unknown";
+
     private initTime = CountlyAnalytics.getTimestamp();
+    private firstPage = true;
+    private heartbeatIntervalId: NodeJS.Timeout;
+    private activityIntervalId: NodeJS.Timeout;
+    private trackTime = true;
+    private lastBeat: number;
+    private storedDuration = 0;
+    private lastView: string;
+    private lastViewTime = 0;
+    private lastViewStoredDuration = 0;
+    private sessionStarted = false;
+    private heartbeatEnabled = false;
+    private inactivityCounter = 0;
+    private pendingEvents: IEvent[] = [];
 
     private static internalInstance = new CountlyAnalytics();
 
@@ -374,8 +384,8 @@ export class CountlyAnalytics {
     private async changeUserKey(userKey: string, merge = false) {
         const oldUserKey = this.userKey;
         this.userKey = userKey;
-        if (merge) {
-            this.request({ old_device_id: oldUserKey });
+        if (oldUserKey && merge) {
+            await this.request({ old_device_id: oldUserKey });
         }
     }
 
@@ -383,26 +393,15 @@ export class CountlyAnalytics {
         if (!this.disabled && this.anonymous === anonymous) return;
         if (!this.canEnable()) return;
 
-        if (!this.disabled && this.anonymous !== anonymous) {
-            this.anonymous = anonymous;
-            if (anonymous) {
-                await this.changeUserKey(randomString(64))
-            } else {
-                await this.changeUserKey(await hashHex(MatrixClientPeg.get().getUserId()), true);
-            }
-            return;
-        }
-
         const config = SdkConfig.get();
-
         this.baseUrl = new URL("/i", config.countly.url);
         this.appKey = config.countly.appKey;
 
         this.anonymous = anonymous;
-        if (this.anonymous) {
-            this.userKey = randomString(64);
+        if (anonymous) {
+            await this.changeUserKey(randomString(64))
         } else {
-            this.userKey = await hashHex(MatrixClientPeg.get().getUserId());
+            await this.changeUserKey(await hashHex(MatrixClientPeg.get().getUserId()), true);
         }
 
         const platform = PlatformPeg.get();
@@ -414,19 +413,26 @@ export class CountlyAnalytics {
         }
 
         // start heartbeat
-        this.heartbeatIntervalID = window.setInterval(this.heartbeat.bind(this), HEARTBEAT_INTERVAL);
-        this.trackSessions(); // TODO clear on disable
-        this.trackErrors(); // TODO clear on disable
+        this.heartbeatIntervalId = setInterval(this.heartbeat.bind(this), HEARTBEAT_INTERVAL);
+        this.trackSessions();
+        this.trackErrors();
     }
 
-    /**
-     * Disable Analytics, stop the heartbeat and clear identifiers from localStorage
-     */
-    public disable() {
+    public async disable() {
         if (this.disabled) return;
-        this.queue({ key: "Opt-Out" });
-        window.clearInterval(this.heartbeatIntervalID);
+        await this.track("Opt-Out" );
+        this.endSession();
+        window.clearInterval(this.heartbeatIntervalId);
+        window.clearTimeout(this.activityIntervalId)
         this.baseUrl = null;
+        // remove listeners bound in trackSessions()
+        window.removeEventListener("beforeunload", this.endSession);
+        window.removeEventListener("unload", this.endSession);
+        window.removeEventListener("visibilitychange", this.onVisibilityChange);
+        window.removeEventListener("mousemove", this.onUserActivity);
+        window.removeEventListener("click", this.onUserActivity);
+        window.removeEventListener("keydown", this.onUserActivity);
+        window.removeEventListener("scroll", this.onUserActivity);
     }
 
     public reportFeedback(rating: 1 | 2 | 3 | 4 | 5, comment: string) {
@@ -435,12 +441,6 @@ export class CountlyAnalytics {
 
     public trackPageChange(generationTimeMs?: number) {
         if (this.disabled) return;
-
-        if (typeof generationTimeMs !== 'number') {
-            console.warn('Analytics.trackPageChange: expected generationTimeMs to be a number');
-            // But continue anyway because we still want to track the change
-        }
-
         // TODO use generationTimeMs
         this.trackPageView();
     }
@@ -491,7 +491,7 @@ export class CountlyAnalytics {
     }
 
     public recordError(err: Error | string, fatal = false) {
-        if (this.disabled) return;
+        if (this.disabled || this.anonymous) return;
 
         let error = "";
         if (typeof err === "object") {
@@ -533,11 +533,6 @@ export class CountlyAnalytics {
         }
 
         ob._background = document.hasFocus();
-
-        // if (crashLogs.length > 0) {
-        //     ob._logs = crashLogs.join("\n");
-        // }
-        // crashLogs = [];
 
         this.request({ crash: JSON.stringify(ob) });
     }
@@ -672,13 +667,6 @@ export class CountlyAnalytics {
         });
     }
 
-    private trackTime = true;
-    private lastBeat: number;
-    private storedDuration = 0;
-    private lastView: string;
-    private lastViewTime = 0;
-    private lastViewStoredDuration = 0;
-
     private startTime() {
         if (!this.trackTime) {
             this.trackTime = true;
@@ -697,6 +685,7 @@ export class CountlyAnalytics {
     }
 
     private getMetrics(): IMetrics {
+        if (this.anonymous) return undefined;
         const metrics: IMetrics = {};
 
         // getting app version
@@ -719,13 +708,10 @@ export class CountlyAnalytics {
         return metrics;
     }
 
-    private sessionStarted = false;
-    private heartbeatEnabled = false;
-
     private async beginSession(heartbeat = true) {
         if (!this.sessionStarted) {
             this.reportOrientation();
-            window.addEventListener("resize", this.reportOrientation)
+            window.addEventListener("resize", this.reportOrientation);
 
             this.lastBeat = CountlyAnalytics.getTimestamp();
             this.sessionStarted = true;
@@ -738,7 +724,7 @@ export class CountlyAnalytics {
                 },
             };
 
-            this.request({
+            await this.request({
                 begin_session: 1,
                 metrics: JSON.stringify(this.getMetrics()),
                 user_details: JSON.stringify(userDetails),
@@ -761,9 +747,11 @@ export class CountlyAnalytics {
         if (this.sessionStarted) {
             window.removeEventListener("resize", this.reportOrientation)
 
-            const sec = CountlyAnalytics.getTimestamp() - this.lastBeat;
             this.reportViewDuration();
-            this.request({ end_session: 1, session_duration: sec });
+            this.request({
+                end_session: 1,
+                session_duration: CountlyAnalytics.getTimestamp() - this.lastBeat,
+            });
         }
         this.sessionStarted = false;
     }
@@ -783,8 +771,6 @@ export class CountlyAnalytics {
         this.inactivityCounter = 0;
     };
 
-    private inactivityCounter = 0;
-
     private trackSessions() {
         this.beginSession();
         this.startTime();
@@ -797,7 +783,7 @@ export class CountlyAnalytics {
         window.addEventListener("keydown", this.onUserActivity);
         window.addEventListener("scroll", this.onUserActivity);
 
-        setInterval(() => {
+        this.activityIntervalId = setInterval(() => {
             this.inactivityCounter++;
             if (this.inactivityCounter >= INACTIVITY_TIME) {
                 this.stopTime();
@@ -942,10 +928,9 @@ export class CountlyAnalytics {
 
         // if this event can be sent anonymously and we are disabled then dispatch it right away
         if (this.disabled && anonymous) {
-            this.request({ device_id: randomString(64) });
+            await this.request({ device_id: randomString(64) });
         }
     }
 }
 
 window.mxCountlyAnalytics = CountlyAnalytics;
-export default CountlyAnalytics;

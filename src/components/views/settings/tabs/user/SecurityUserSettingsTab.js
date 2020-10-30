@@ -103,7 +103,7 @@ export default class SecurityUserSettingsTab extends React.Component {
 
     _updateAnalytics = (checked) => {
         checked ? Analytics.enable() : Analytics.disable();
-        checked ? CountlyAnalytics.enable() : CountlyAnalytics.disable();
+        CountlyAnalytics.instance.enable(!checked);
     };
 
     _onExportE2eKeysClicked = () => {
