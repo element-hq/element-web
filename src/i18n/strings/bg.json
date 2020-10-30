@@ -2322,5 +2322,7 @@
     "End conference": "Прекрати конфетентният разговор",
     "Call Declined": "Обаждането е отказано",
     "The call could not be established": "Обаждането не може да бъде осъществено",
-    "The other party declined the call.": "Другата страна отказа обаждането."
+    "The other party declined the call.": "Другата страна отказа обаждането.",
+    "Answered Elsewhere": "Отговорено на друго място",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s зададе ACLs на сървър за тази стая."
 }
