@@ -6,19 +6,15 @@
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2016",
+    "target": "es6",
     "noImplicitAny": false,
     "sourceMap": false,
     "outDir": "./lib",
     "declaration": true,
     "jsx": "react",
-    "types": [
-      "node",
-      "react",
-      "flux"
-    ],
+    "types": [],
     "lib": [
-      "es2019",
+      "es2020",
       "dom",
       "dom.iterable"
     ]

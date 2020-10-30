@@ -107,7 +107,7 @@
     "eslint-config-matrix-org": "^0.1.2",
     "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-flowtype": "^2.50.3",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^2.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fake-indexeddb": "^3.0.0",
