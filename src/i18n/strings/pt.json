@@ -13,5 +13,10 @@
     "Sign In": "Iniciar sessão",
     "Create Account": "Criar conta",
     "Explore rooms": "Explorar rooms",
-    "Go to your browser to complete Sign In": "Abra o seu navegador para completar o inicio de sessão"
+    "Go to your browser to complete Sign In": "Abra o seu navegador para completar o inicio de sessão",
+    "Open": "Abrir",
+    "Download Completed": "Transferência concluída",
+    "Unable to load config file: please refresh the page to try again.": "Não foi possível carregar o ficheiro de configuração: atualize a página para tentar novamente.",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "A configuração do Element contém um JSON inválido. Corrija o problema e recarregue a página.",
+    "Your Element is misconfigured": "O Element está configurado incorretamente"
 }
