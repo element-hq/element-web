@@ -137,7 +137,7 @@
     "Enable automatic language detection for syntax highlighting": "Activar a detección automática de idioma para o resalte da sintaxe",
     "Automatically replace plain text Emoji": "Substituír automaticamente Emoji en texto plano",
     "Enable inline URL previews by default": "Activar por defecto as vistas previas en liña de URL",
-    "Enable URL previews for this room (only affects you)": "Activar avista previa de URL nesta sala (só che afesta a ti)",
+    "Enable URL previews for this room (only affects you)": "Activar vista previa de URL nesta sala (só che afecta a ti)",
     "Enable URL previews by default for participants in this room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
     "Room Colour": "Cor da sala",
     "Active call (%(roomName)s)": "Chamada activa (%(roomName)s)",
