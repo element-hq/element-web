@@ -2552,5 +2552,16 @@
     "The call was answered on another device.": "通話已在其他裝置上回應。",
     "Answered Elsewhere": "在其他地方回答",
     "Data on this screen is shared with %(widgetDomain)s": "在此畫面上的資料會與 %(widgetDomain)s 分享",
-    "Modal Widget": "程式小工具"
+    "Modal Widget": "程式小工具",
+    "Send feedback": "傳送回饋",
+    "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "專業建議：如果您開始了一個新臭蟲，請遞交<debugLogsLink>除錯紀錄檔</debugLogsLink>以協助我們尋找問題。",
+    "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "請先檢視 <existingIssuesLink>GitHub 上既有的臭蟲</existingIssuesLink>。沒有符合的嗎？<newIssueLink>開始新的</newIssueLink>。",
+    "Report a bug": "回報臭蟲",
+    "There are two ways you can provide feedback and help us improve %(brand)s.": "您有兩種方式可以提供回饋並協助我們改善 %(brand)s。",
+    "Comment": "評論",
+    "Add comment": "新增評論",
+    "Please go into as much detail as you like, so we can track down the problem.": "請盡可能地描述問題，讓握們可以找出問題所在。",
+    "Tell us below how you feel about %(brand)s so far.": "請在下面告訴我們您到目前為止對 %(brand)s 的看法。",
+    "Rate %(brand)s": "評價 %(brand)s",
+    "Feedback sent": "已傳送回饋"
 }
