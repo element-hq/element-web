@@ -61,7 +61,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     public componentDidMount() {
-        const driver = new StopGapWidgetDriver( []);
+        const driver = new StopGapWidgetDriver( [], this.widget.type);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
         this.setState({messaging});
     }
