@@ -201,6 +201,7 @@ interface IState {
     roomOobData?: object;
     viaServers?: string[];
     pendingInitialSync?: boolean;
+    justRegistered?: boolean;
 }
 
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
@@ -479,6 +480,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         const newState = {
             currentUserId: null,
+            justRegistered: false,
         };
         Object.assign(newState, state);
         this.setState(newState);
@@ -669,7 +671,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewWelcome();
                 break;
             case 'view_home_page':
-                this.viewHome();
+                this.viewHome(payload.justRegistered);
                 break;
             case 'view_start_chat_or_reuse':
                 this.chatCreateOrReuse(payload.user_id);
@@ -953,10 +955,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
     }
 
-    private viewHome() {
+    private viewHome(justRegistered = false) {
         // The home page requires the "logged in" view, so we'll set that.
         this.setStateForNewView({
             view: Views.LOGGED_IN,
+            justRegistered,
         });
         this.setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
@@ -1190,7 +1193,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 if (welcomeUserRoom === null) {
                     // We didn't redirect to the welcome user room, so show
                     // the homepage.
-                    dis.dispatch({action: 'view_home_page'});
+                    dis.dispatch({action: 'view_home_page', justRegistered: true});
                 }
             } else if (ThreepidInviteStore.instance.pickBestInvite()) {
                 // The user has a 3pid invite pending - show them that
@@ -1203,7 +1206,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 // The user has just logged in after registering,
                 // so show the homepage.
-                dis.dispatch({action: 'view_home_page'});
+                dis.dispatch({action: 'view_home_page', justRegistered: true});
             }
         } else {
             this.showScreenAfterLogin();
