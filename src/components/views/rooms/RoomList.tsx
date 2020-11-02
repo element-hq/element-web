@@ -368,13 +368,28 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     public render() {
         let explorePrompt: JSX.Element;
-        if (!this.props.isMinimized && RoomListStore.instance.getFirstNameFilterCondition()) {
-            explorePrompt = <div className="mx_RoomList_explorePrompt">
-                <div>{_t("Can't see what you’re looking for?")}</div>
-                <AccessibleButton kind="link" onClick={this.onExplore}>
-                    {_t("Explore all public rooms")}
-                </AccessibleButton>
-            </div>;
+        if (!this.props.isMinimized) {
+            if (RoomListStore.instance.getFirstNameFilterCondition()) {
+                explorePrompt = <div className="mx_RoomList_explorePrompt">
+                    <div>{_t("Can't see what you’re looking for?")}</div>
+                    <AccessibleButton kind="link" onClick={this.onExplore}>
+                        {_t("Explore all public rooms")}
+                    </AccessibleButton>
+                </div>;
+            } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
+                const unfilteredLists = RoomListStore.instance.unfilteredLists
+                const unfilteredRooms = unfilteredLists[DefaultTagID.Untagged] || [];
+                const unfilteredHistorical = unfilteredLists[DefaultTagID.Archived] || [];
+                // show a prompt to join/create rooms if the user is in 0 rooms and no historical
+                if (unfilteredRooms.length < 1 && unfilteredHistorical < 1) {
+                    explorePrompt = <div className="mx_RoomList_explorePrompt">
+                        <div>{_t("Use the + to make a new room or explore existing ones below")}</div>
+                        <AccessibleButton kind="link" onClick={this.onExplore}>
+                            {_t("Explore all public rooms")}
+                        </AccessibleButton>
+                    </div>;
+                }
+            }
         }
 
         const sublists = this.renderSublists();
