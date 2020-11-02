@@ -2412,5 +2412,22 @@
     "Answered Elsewhere": "Répondu autre-part",
     "The call could not be established": "L'appel n'a pas pu être établi",
     "The other party declined the call.": "L'autre personne a décliné l'appel.",
-    "Call Declined": "Appel rejeté"
+    "Call Declined": "Appel rejeté",
+    "Ignored attempt to disable encryption": "Essai de désactiver le chiffrement ignoré",
+    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Ajoutez les utilisateurs et les serveurs que vous voulez ignorer ici. Utilisez des astérisques pour que %(brand)s comprenne tous les caractères. Par exemple, <code>@bot:*</code> va ignorer tous les utilisateurs ayant le nom 'bot' sur n'importe quel serveur.",
+    "not ready": "pas prêt",
+    "Secret storage:": "Coffre secret :",
+    "Backup key cached:": "Clé de sauvegarde mise en cache :",
+    "Backup key stored:": "Clé de sauvegarde enregistrée :",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Sauvegarder vos clés de chiffrement avec les données de votre compte dans le cas où vous perdez l'accès à vos sessions. Vos clés seront sécurisées grâce à une unique clé de récupération.",
+    "Backup version:": "Version de la sauvegarde :",
+    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "Vous les avez peut-être configurés dans un autre client que %(brand)s. Vous ne pouvez pas les configurer dans %(brand)s mais ils s'appliquent quand même.",
+    "not found in storage": "non trouvé dans le coffre",
+    "Cross-signing is not set up.": "La signature croisée n'est pas configurée.",
+    "Cross-signing is ready for use.": "La signature croisée est prête à être utilisée.",
+    "Offline encrypted messaging using dehydrated devices": "Messagerie hors-ligne chiffrée utilisant des appareils déshydratés",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Prototype de communautés v2. Requiert un serveur d'accueil compatible. Très expérimental - à utiliser avec précaution.",
+    "Safeguard against losing access to encrypted messages & data": "Sécurité contre la perte d'accès aux messages & données chiffrées",
+    "(their device couldn't start the camera / microphone)": "(son appareil ne peut pas démarrer la caméra / le microphone)",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Tous les serveurs sont interdits de participation ! Ce salon ne peut plus être utilisé."
 }
