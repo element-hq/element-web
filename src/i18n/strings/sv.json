@@ -2482,5 +2482,16 @@
     "Show Widgets": "Visa widgets",
     "Hide Widgets": "Dölj widgets",
     "The call was answered on another device.": "Samtalet mottogs på en annan enhet.",
-    "Answered Elsewhere": "Mottaget någon annanstans"
+    "Answered Elsewhere": "Mottaget någon annanstans",
+    "Send feedback": "Skicka återkoppling",
+    "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "TIPS: Om du startar en bugg, vänligen inkludera <debugLogsLink>avbuggninsloggar</debugLogsLink> för att hjälpa oss att hitta problemet.",
+    "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Vänligen se <existingIssuesLink> existerade buggar på GitHub</existingIssuesLink> först. Finns det ingen som matchar? <newIssueLink>Starta en ny</newIssueLink>.",
+    "Report a bug": "Rapportera en bugg",
+    "There are two ways you can provide feedback and help us improve %(brand)s.": "Det finns två sätt du kan ge återkoppling och hjälpa oss att förbättra %(brand)s.",
+    "Comment": "Kommentera",
+    "Add comment": "Lägg till kommentar",
+    "Please go into as much detail as you like, so we can track down the problem.": "Vänligen gå in i hur mycket detalj du vill, så att vi kan hitta problemet.",
+    "Tell us below how you feel about %(brand)s so far.": "Berätta för oss vad du tycker om %(brand)s än så länge.",
+    "Rate %(brand)s": "Betygsätt %(brand)s",
+    "Feedback sent": "Återkoppling skickad"
 }
