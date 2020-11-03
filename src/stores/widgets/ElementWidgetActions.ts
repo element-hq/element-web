@@ -25,6 +25,6 @@ export enum ElementWidgetActions {
 
 export interface IViewRoomApiRequest extends IWidgetApiRequest {
     data: {
-        room_id: string;
+        room_id: string; // eslint-disable-line camelcase
     };
 }
