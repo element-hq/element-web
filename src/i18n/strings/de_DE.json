@@ -1756,7 +1756,7 @@
     "Delete sessions|one": "Lösche Sitzung",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Alle Sitzungen einzeln verifizieren, anstatt auch Sitzungen zu vertrauen, die durch Cross-Signing verifiziert sind.",
     "Securely cache encrypted messages locally for them to appear in search results, using ": "Der Zwischenspeicher für die lokale Suche in verschlüsselten Nachrichten benötigt ",
-    " to store messages from ": " um Nachrichten zu speichern von ",
+    " to store messages from ": " um Nachrichten von ",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s benötigt weitere Komponenten um verschlüsselte Nachrichten lokal zu durchsuchen. Wenn du diese Funktion testen möchtest kannst du dir deine eigene Version von %(brand)s Desktop mit der <nativeLink>integrierten Suchfunktion bauen</nativeLink>.",
     "Backup has a <validity>valid</validity> signature from this user": "Die Sicherung hat eine <validity>gültige</validity> Signatur dieses Benutzers",
     "Backup has a <validity>invalid</validity> signature from this user": "Die Sicherung hat eine <validity>ungültige</validity> Signatur dieses Benutzers",
