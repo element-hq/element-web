@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 @import "./_font-sizes.scss";
+@import "./_font-weights.scss";
 
 $hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
 
@@ -323,6 +324,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_title {
     font-size: $font-22px;
+    font-weight: $font-semi-bold;
     line-height: $font-36px;
     color: $dialog-title-fg-color;
 }
