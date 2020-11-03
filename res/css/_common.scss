@@ -348,8 +348,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     background-color: $dialog-close-fg-color;
     cursor: pointer;
     position: absolute;
-    top: 4px;
-    right: 0px;
+    top: 10px;
+    right: 0;
 }
 
 .mx_Dialog_content {
