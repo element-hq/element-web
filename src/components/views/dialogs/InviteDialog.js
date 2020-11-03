@@ -1103,7 +1103,7 @@ export default class InviteDialog extends React.PureComponent {
 
             if (identityServersEnabled) {
                 helpText = _t(
-                    "Start a conversation with someone using their name, username (like <userId/>) or email address.",
+                    "Start a conversation with someone using their name, email address or username (like <userId/>).",
                     {},
                     {userId: () => {
                         return (
@@ -1158,7 +1158,7 @@ export default class InviteDialog extends React.PureComponent {
 
             if (identityServersEnabled) {
                 helpText = _t(
-                    "Invite someone using their name, username (like <userId/>), email address or " +
+                    "Invite someone using their name, email address, username (like <userId/>) or " +
                         "<a>share this room</a>.",
                     {},
                     {
