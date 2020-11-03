@@ -42,7 +42,7 @@ for (const key of Object.keys(SETTINGS)) {
     if (SETTINGS[key].invertedSettingName) {
         // Invert now so that the rest of the system will invert it back
         // to what was intended.
-        invertedDefaultSettings[key] = !SETTINGS[key].default;
+        invertedDefaultSettings[SETTINGS[key].invertedSettingName] = !SETTINGS[key].default;
     }
 }
 
