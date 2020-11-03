@@ -19,32 +19,32 @@ import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 /**
  * Generates permalinks that self-reference the running webapp
  */
-export default class RiotPermalinkConstructor extends PermalinkConstructor {
-    _riotUrl: string;
+export default class ElementPermalinkConstructor extends PermalinkConstructor {
+    _elementUrl: string;
 
-    constructor(riotUrl: string) {
+    constructor(elementUrl: string) {
         super();
-        this._riotUrl = riotUrl;
+        this._elementUrl = elementUrl;
 
-        if (!this._riotUrl.startsWith("http:") && !this._riotUrl.startsWith("https:")) {
-            throw new Error("Riot prefix URL does not appear to be an HTTP(S) URL");
+        if (!this._elementUrl.startsWith("http:") && !this._elementUrl.startsWith("https:")) {
+            throw new Error("Element prefix URL does not appear to be an HTTP(S) URL");
         }
     }
 
     forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
-        return `${this._riotUrl}/#/room/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this._elementUrl}/#/room/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
-        return `${this._riotUrl}/#/room/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this._elementUrl}/#/room/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     forUser(userId: string): string {
-        return `${this._riotUrl}/#/user/${userId}`;
+        return `${this._elementUrl}/#/user/${userId}`;
     }
 
     forGroup(groupId: string): string {
-        return `${this._riotUrl}/#/group/${groupId}`;
+        return `${this._elementUrl}/#/group/${groupId}`;
     }
 
     forEntity(entityId: string): string {
@@ -58,7 +58,7 @@ export default class RiotPermalinkConstructor extends PermalinkConstructor {
     }
 
     isPermalinkHost(testHost: string): boolean {
-        const parsedUrl = new URL(this._riotUrl);
+        const parsedUrl = new URL(this._elementUrl);
         return testHost === (parsedUrl.host || parsedUrl.hostname); // one of the hosts should match
     }
 
@@ -69,13 +69,13 @@ export default class RiotPermalinkConstructor extends PermalinkConstructor {
 
     // Heavily inspired by/borrowed from the matrix-bot-sdk (with permission):
     // https://github.com/turt2live/matrix-js-bot-sdk/blob/7c4665c9a25c2c8e0fe4e509f2616505b5b66a1c/src/Permalinks.ts#L33-L61
-    // Adapted for Riot's URL format
+    // Adapted for Element's URL format
     parsePermalink(fullUrl: string): PermalinkParts {
-        if (!fullUrl || !fullUrl.startsWith(this._riotUrl)) {
+        if (!fullUrl || !fullUrl.startsWith(this._elementUrl)) {
             throw new Error("Does not appear to be a permalink");
         }
 
-        const parts = fullUrl.substring(`${this._riotUrl}/#/`.length).split("/");
+        const parts = fullUrl.substring(`${this._elementUrl}/#/`.length).split("/");
         if (parts.length < 2) { // we're expecting an entity and an ID of some kind at least
             throw new Error("URL is missing parts");
         }
@@ -100,7 +100,7 @@ export default class RiotPermalinkConstructor extends PermalinkConstructor {
             const eventId = secondaryParts[0];
             const query = secondaryParts.length > 1 ? secondaryParts[1] : "";
 
-            // TODO: Verify Riot works with via args
+            // TODO: Verify Element works with via args
             const via = query.split("via=").filter(p => !!p);
 
             return PermalinkParts.forEvent(entity, eventId, via);
