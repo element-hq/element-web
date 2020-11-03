@@ -31,6 +31,7 @@ import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -783,14 +784,14 @@ export default class Notifications extends React.Component {
 
         const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
         let emailNotificationsRows;
-        if (emailThreepids.length === 0) {
-            emailNotificationsRows = <div>
-                { _t('Add an email address to configure email notifications') }
-            </div>;
-        } else {
+        if (emailThreepids.length > 0) {
             emailNotificationsRows = emailThreepids.map((threePid) => this.emailNotificationsRow(
                 threePid.address, `${_t('Enable email notifications')} (${threePid.address})`,
             ));
+        } else if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+            emailNotificationsRows = <div>
+                { _t('Add an email address to configure email notifications') }
+            </div>;
         }
 
         // Build external push rules
