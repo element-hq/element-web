@@ -37,7 +37,7 @@ limitations under the License.
         }
 
         // Mostly copied from AddressPickerDialog; overrides bunch of our default text input styles
-        input, input:focus {
+        > input[type="text"] {
             margin: 6px 0 !important;
             height: 24px;
             line-height: $font-24px;
@@ -138,6 +138,10 @@ limitations under the License.
             left: 6px; // 50%
             background-color: #ffffff; // this is fine without a var because it's for both themes
         }
+    }
+
+    .mx_InviteDialog_roomTile_nameStack {
+        display: inline-block;
     }
 
     .mx_InviteDialog_roomTile_name {

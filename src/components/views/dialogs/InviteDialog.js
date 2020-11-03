@@ -280,11 +280,17 @@ class DMRoomTile extends React.PureComponent {
             </span>
         );
 
+        const caption = this.props.member.isEmail
+            ? _t("Invite by email")
+            : this._highlightName(this.props.member.userId);
+
         return (
             <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
-                <span className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
-                <span className='mx_InviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
+                <span className="mx_InviteDialog_roomTile_nameStack">
+                    <div className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</div>
+                    <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
+                </span>
                 {timestamp}
             </div>
         );
