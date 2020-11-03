@@ -55,6 +55,8 @@ import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import {getCustomTheme} from "../../theme";
 import CountlyAnalytics from "../../CountlyAnalytics";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import ActiveRoomObserver from "../../ActiveRoomObserver";
 
 // TODO: Destroy all of this code
 
@@ -329,6 +331,10 @@ export class StopGapWidget extends EventEmitter {
             this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
         });
 
+        // Attach listeners for feeding events - the underlying widget classes handle permissions for us
+        MatrixClientPeg.get().on('event', this.onEvent);
+        MatrixClientPeg.get().on('Event.decrypted', this.onEventDecrypted);
+
         if (WidgetType.JITSI.matches(this.mockWidget.type)) {
             this.messaging.on("action:set_always_on_screen",
                 (ev: CustomEvent<IStickyActionRequest>) => {
@@ -422,5 +428,31 @@ export class StopGapWidget extends EventEmitter {
         if (!this.started) return;
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget);
         ActiveWidgetStore.delRoomId(this.mockWidget.id);
+
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().off('event', this.onEvent);
+            MatrixClientPeg.get().off('Event.decrypted', this.onEventDecrypted);
+        }
+    }
+
+    private onEvent = (ev: MatrixEvent) => {
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
+        if (ev.getRoomId() !== ActiveRoomObserver.activeRoomId) return;
+        this.feedEvent(ev);
+    };
+
+    private onEventDecrypted = (ev: MatrixEvent) => {
+        if (ev.isDecryptionFailure()) return;
+        if (ev.getRoomId() !== ActiveRoomObserver.activeRoomId) return;
+        this.feedEvent(ev);
+    };
+
+    private feedEvent(ev: MatrixEvent) {
+        if (!this.messaging) return;
+
+        const raw = ev.event;
+        this.messaging.feedEvent(raw).catch(e => {
+            console.error("Error sending event to widget: ", e);
+        });
     }
 }

@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { Capability, WidgetDriver, WidgetType } from "matrix-widget-api";
+import { Capability, ISendEventDetails, WidgetDriver, WidgetEventCapability, WidgetType } from "matrix-widget-api";
 import { iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { arrayFastClone } from "../../utils/arrays";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
+import ActiveRoomObserver from "../../ActiveRoomObserver";
 
 // TODO: Purge this from the universe
 
@@ -47,7 +48,30 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     allowedCaps.push(ElementWidgetCapabilities.CanChangeViewedRoom);
                 }
             }
+            if (Array.isArray(wkPerms["event_actions"])) {
+                if (wkPerms["event_actions"].includes(this.forType)) {
+                    allowedCaps.push(...WidgetEventCapability.findEventCapabilities(requested).map(c => c.raw));
+                }
+            }
         }
         return new Set(iterableUnion(requested, allowedCaps));
+    }
+
+    public async sendEvent(eventType: string, content: any, stateKey: string = null): Promise<ISendEventDetails> {
+        const client = MatrixClientPeg.get();
+        const roomId = ActiveRoomObserver.activeRoomId;
+
+        if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
+
+        let r: {event_id: string} = null;
+        if (stateKey !== null) {
+            // state event
+            r = await client.sendStateEvent(roomId, eventType, content, stateKey);
+        } else {
+            // message event
+            r = await client.sendEvent(roomId, eventType, content);
+        }
+
+        return {roomId, eventId: r.event_id};
     }
 }
