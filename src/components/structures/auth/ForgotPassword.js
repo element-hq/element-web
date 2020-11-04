@@ -314,7 +314,7 @@ export default class ForgotPassword extends React.Component {
                     <Field
                         name="reset_password"
                         type="password"
-                        label={_t('Password')}
+                        label={_t('New Password')}
                         value={this.state.password}
                         onChange={this.onInputChanged.bind(this, "password")}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_focus")}
