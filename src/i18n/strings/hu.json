@@ -2549,5 +2549,15 @@
     "Show Widgets": "Kisalkalmazások megjelenítése",
     "Hide Widgets": "Kisalkalmazások elrejtése",
     "The call was answered on another device.": "A hívás másik eszközön lett fogadva.",
-    "Answered Elsewhere": "Máshol lett felvéve"
+    "Answered Elsewhere": "Máshol lett felvéve",
+    "Tell us below how you feel about %(brand)s so far.": "Mond el nekünk, hogy tetszik eddig ez: %(brand)s.",
+    "Rate %(brand)s": "Értékeld ezt: %(brand)s",
+    "Feedback sent": "Visszajelzés elküldve",
+    "Use the + to make a new room or explore existing ones below": "Új szoba készítéshez vagy kereséshez alább, használd a + jelet",
+    "%(senderName)s ended the call": "%(senderName)s befejezte a hívást",
+    "You ended the call": "Befejezted a hívást",
+    "New version of %(brand)s is available": "Új verzió érhető el ebből: %(brand)s",
+    "Update %(brand)s": "%(brand)s frissítése",
+    "Enable desktop notifications": "Asztali értesítések engedélyezése",
+    "Don't miss a reply": "Ne szalassz el egy választ se"
 }
