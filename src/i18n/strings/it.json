@@ -2551,5 +2551,18 @@
     "Hide Widgets": "Nascondi i widget",
     "The call was answered on another device.": "La chiamata è stata accettata su un altro dispositivo.",
     "Answered Elsewhere": "Risposto altrove",
-    "Data on this screen is shared with %(widgetDomain)s": "I dati in questa schermata vengono condivisi con %(widgetDomain)s"
+    "Data on this screen is shared with %(widgetDomain)s": "I dati in questa schermata vengono condivisi con %(widgetDomain)s",
+    "Send feedback": "Invia feedback",
+    "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "CONSIGLIO: se segnali un errore, invia <debugLogsLink>i log di debug</debugLogsLink> per aiutarci ad individuare il problema.",
+    "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Prima controlla <existingIssuesLink>gli errori esistenti su Github</existingIssuesLink>. Non l'hai trovato? <newIssueLink>Apri una segnalazione</newIssueLink>.",
+    "Report a bug": "Segnala un errore",
+    "There are two ways you can provide feedback and help us improve %(brand)s.": "Ci sono due modi per fornire un feedback ed aiutarci a migliorare %(brand)s.",
+    "Comment": "Commento",
+    "Add comment": "Aggiungi commento",
+    "Please go into as much detail as you like, so we can track down the problem.": "Cerca di aggiungere più dettagli possibile, in modo che possiamo individuare il problema.",
+    "Tell us below how you feel about %(brand)s so far.": "Dicci qua sotto come ti sembra %(brand)s finora.",
+    "Rate %(brand)s": "Valuta %(brand)s",
+    "Feedback sent": "Feedback inviato",
+    "%(senderName)s ended the call": "%(senderName)s ha terminato la chiamata",
+    "You ended the call": "Hai terminato la chiamata"
 }
