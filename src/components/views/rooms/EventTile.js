@@ -647,6 +647,7 @@ export default class EventTile extends React.Component {
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
+            (eventType === "m.room.create") ||
             (eventType === "m.room.encryption") ||
             (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (

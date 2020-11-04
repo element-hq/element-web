@@ -14,18 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CreateEvent {
-    // override default EventTileBubble styling
-    padding-left: 80px !important;
+import React, {ReactNode} from "react";
+import classNames from "classnames";
 
-    &::before {
-        background-color: $primary-fg-color;
-        mask-image: url('$(res)/img/room-continuation.svg');
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 100%;
-        width: 72px !important;
-        height: 34px !important;
-        left: -64px !important;
-    }
+interface IProps {
+    className: string;
+    title: string;
+    subtitle?: ReactNode;
 }
+
+const EventTileBubble: React.FC<IProps> = ({ className, title, subtitle, children }) => {
+    return <div className={classNames("mx_EventTileBubble", className)}>
+        <div className="mx_EventTileBubble_title">{ title }</div>
+        { subtitle && <div className="mx_EventTileBubble_subtitle">{ subtitle }</div> }
+        { children }
+    </div>;
+};
+
+export default EventTileBubble;

@@ -18,42 +18,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import EventTileBubble from "./EventTileBubble";
 
 export default class EncryptionEvent extends React.Component {
     render() {
         const {mxEvent} = this.props;
 
-        let body;
-        let classes = "mx_EventTile_bubble mx_cryptoEvent mx_cryptoEvent_icon";
         const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(mxEvent.getRoomId());
         if (mxEvent.getContent().algorithm === 'm.megolm.v1.aes-sha2' && isRoomEncrypted) {
-            body = <div>
-                <div className="mx_cryptoEvent_title">{_t("Encryption enabled")}</div>
-                <div className="mx_cryptoEvent_subtitle">
-                    {_t(
-                        "Messages in this room are end-to-end encrypted. " +
-                        "Learn more & verify this user in their user profile.",
-                    )}
-                </div>
-            </div>;
+            return <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                title={_t("Encryption enabled")}
+                subtitle={_t(
+                    "Messages in this room are end-to-end encrypted. " +
+                    "Learn more & verify this user in their user profile.",
+                )}
+            />;
         } else if (isRoomEncrypted) {
-            body = <div>
-                <div className="mx_cryptoEvent_title">{_t("Encryption enabled")}</div>
-                <div className="mx_cryptoEvent_subtitle">
-                    {_t("Ignored attempt to disable encryption")}
-                </div>
-            </div>;
-        } else {
-            body = <div>
-                <div className="mx_cryptoEvent_title">{_t("Encryption not enabled")}</div>
-                <div className="mx_cryptoEvent_subtitle">{_t("The encryption used by this room isn't supported.")}</div>
-            </div>;
-            classes += " mx_cryptoEvent_icon_warning";
+            return <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                title={_t("Encryption enabled")}
+                subtitle={_t("Ignored attempt to disable encryption")}
+            />;
         }
 
-        return (<div className={classes}>
-            {body}
-        </div>);
+        return <EventTileBubble
+            className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
+            title={_t("Encryption not enabled")}
+            subtitle={_t("The encryption used by this room isn't supported.")}
+        />;
     }
 }
 
