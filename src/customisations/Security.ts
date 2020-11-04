@@ -45,6 +45,13 @@ function getSecretStorageKey(): Uint8Array {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+function getDehydrationKey(
+    keyInfo: ISecretStorageKeyInfo,
+): Promise<Uint8Array> {
+    return Promise.resolve(null);
+}
+
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function catchAccessSecretStorageError(e: Error): void {
     // E.g. notify the user in some way
 }
@@ -74,6 +81,9 @@ export interface ISecurityCustomisations {
     setupEncryptionNeeded?: (
         kind: SetupEncryptionKind,
     ) => boolean,
+    getDehydrationKey?: (
+        keyInfo: ISecretStorageKeyInfo,
+    ) => Promise<Uint8Array>,
 }
 
 // A real customisation module will define and export one or more of the

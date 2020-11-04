@@ -34,6 +34,7 @@ import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import SecurityCustomisations from "./customisations/Security";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -273,7 +274,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
-        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
+        const customisatedCallbacks = {
+            getDehydrationKey: SecurityCustomisations.getDehydrationKey,
+        };
+        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks, customisatedCallbacks);
 
         this.matrixClient = createMatrixClient(opts);
 
