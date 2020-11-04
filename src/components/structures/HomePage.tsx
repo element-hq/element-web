@@ -109,7 +109,7 @@ const UserWelcomeTop = () => {
         </AccessibleButton>
 
         <h1>{ _t("Welcome %(name)s", { name: ownProfile.displayName }) }</h1>
-        <h4>{ _t("Now, lets help you get started") }</h4>
+        <h4>{ _t("Now, let's help you get started") }</h4>
     </div>;
 };
 
