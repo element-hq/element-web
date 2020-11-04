@@ -383,3 +383,22 @@ limitations under the License.
 .mx_RoomSublist_addRoomTooltip {
     margin-top: -3px;
 }
+
+.mx_RoomSublist_skeletonUI {
+    position: relative;
+    margin-left: 4px;
+    height: 288px;
+
+    &::before {
+        background: $roomsublist-skeleton-ui-bg;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+        position: absolute;
+        mask-repeat: repeat-y;
+        mask-size: auto 48px;
+        mask-image: url('$(res)/img/element-icons/roomlist/skeleton-ui.svg');
+    }
+}

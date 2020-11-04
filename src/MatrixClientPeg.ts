@@ -101,6 +101,12 @@ export interface IMatrixClientPeg {
     currentUserIsJustRegistered(): boolean;
 
     /**
+     * If the current user has been registered by this device then this
+     * returns a boolean of whether it was within the last N hours given.
+     */
+    userRegisteredWithinLastHours(hours: number): boolean;
+
+    /**
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      *
@@ -150,6 +156,9 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
     public setJustRegisteredUserId(uid: string): void {
         this.justRegisteredUserId = uid;
+        if (uid) {
+            window.localStorage.setItem("mx_registration_time", String(new Date().getTime()));
+        }
     }
 
     public currentUserIsJustRegistered(): boolean {
@@ -157,6 +166,15 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             this.matrixClient &&
             this.matrixClient.credentials.userId === this.justRegisteredUserId
         );
+    }
+
+    public userRegisteredWithinLastHours(hours: number): boolean {
+        try {
+            const date = new Date(window.localStorage.getItem("mx_registration_time"));
+            return ((new Date().getTime() - date.getTime()) / 36e5) <= hours;
+        } catch (e) {
+            return false;
+        }
     }
 
     public replaceUsingCreds(creds: IMatrixClientCreds): void {

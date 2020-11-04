@@ -71,6 +71,7 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
+    showSkeleton?: boolean;
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
@@ -877,6 +878,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     </Resizable>
                 </React.Fragment>
             );
+        } else if (this.props.showSkeleton && this.state.isExpanded) {
+            content = <div className="mx_RoomSublist_skeletonUI" />;
         }
 
         return (

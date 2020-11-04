@@ -74,6 +74,8 @@ import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
+import Notifier from "../../Notifier";
+import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -1050,6 +1052,11 @@ export default class RoomView extends React.Component<IProps, IState> {
         let joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
         if (countInfluence) joinedOrInvitedMemberCount += countInfluence;
         this.setState({isAlone: joinedOrInvitedMemberCount === 1});
+
+        // if they are not alone additionally prompt the user about notifications so they don't miss replies
+        if (joinedOrInvitedMemberCount > 1 && Notifier.shouldShowPrompt()) {
+            showNotificationsToast(true);
+        }
     }
 
     private updateDMState() {
