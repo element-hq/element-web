@@ -1231,7 +1231,7 @@
     "Power level": "權力等級",
     "Want more than a community? <a>Get your own server</a>": "想要的不只是社群？<a>架設您自己的伺服器</a>",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "請安裝 <chromeLink>Chrome</chromeLink>、<firefoxLink>Firefox</firefoxLink> 或 <safariLink>Safari</safariLink> 以取得最佳體驗。",
-    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>警告</b>：升級聊天室<i>不會自動將聊天室成員遷移到新版的聊天室<i>。我們會在舊版聊天室中貼出到新聊天室的連結，聊天室成員必須點選此連結以加入新聊天室。",
+    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>警告</b>：升級聊天室<i>不會自動將聊天室成員遷移到新版的聊天室</i>。我們會在舊版聊天室中貼出到新聊天室的連結，聊天室成員必須點選此連結以加入新聊天室。",
     "Adds a custom widget by URL to the room": "透過 URL 新增自訂小工具到聊天室",
     "Please supply a https:// or http:// widget URL": "請提供 https:// 或 http:// 小工具 URL",
     "You cannot modify widgets in this room.": "您無法在此聊天室中修改小工具。",
@@ -2563,5 +2563,7 @@
     "Please go into as much detail as you like, so we can track down the problem.": "請盡可能地描述問題，讓握們可以找出問題所在。",
     "Tell us below how you feel about %(brand)s so far.": "請在下面告訴我們您到目前為止對 %(brand)s 的看法。",
     "Rate %(brand)s": "評價 %(brand)s",
-    "Feedback sent": "已傳送回饋"
+    "Feedback sent": "已傳送回饋",
+    "%(senderName)s ended the call": "%(senderName)s 結束了通話",
+    "You ended the call": "您結束了通話"
 }
