@@ -84,6 +84,9 @@ export default class ProfileSettings extends React.Component {
             }
 
             if (this.state.avatarFile) {
+                console.log(
+                    `Uploading new avatar, ${this.state.avatarFile.name} of type ${this.state.avatarFile.type},` +
+                    ` (${this.state.avatarFile.size}) bytes`);
                 const uri = await client.uploadContent(this.state.avatarFile);
                 await client.setAvatarUrl(uri);
                 newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
@@ -93,6 +96,7 @@ export default class ProfileSettings extends React.Component {
                 await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
             }
         } catch (err) {
+            console.log("Failed to save profile", err);
             Modal.createTrackedDialog('Failed to save profile', '', ErrorDialog, {
                 title: _t("Failed to save your profile"),
                 description: ((err && err.message) ? err.message : _t("The operation could not be completed")),
