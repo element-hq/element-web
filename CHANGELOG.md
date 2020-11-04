@@ -1,3 +1,19 @@
+Changes in [1.7.13-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.13-rc.1) (2020-11-04)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.12...v1.7.13-rc.1)
+
+ * Upgrade to React SDK 3.8.0-rc.1 and JS SDK 9.1.0-rc.1
+ * Translations update from Weblate
+   [\#15644](https://github.com/vector-im/element-web/pull/15644)
+ * Add countly experiment to develop/nightly configs
+   [\#15614](https://github.com/vector-im/element-web/pull/15614)
+ * Add documentation for new UIFeature flag regarding room history settings
+   [\#15592](https://github.com/vector-im/element-web/pull/15592)
+ * Rename Docker repo in docs
+   [\#15590](https://github.com/vector-im/element-web/pull/15590)
+ * Fix Jitsi regressions with custom themes
+   [\#15575](https://github.com/vector-im/element-web/pull/15575)
+
 Changes in [1.7.12](https://github.com/vector-im/element-web/releases/tag/v1.7.12) (2020-10-28)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.11...v1.7.12)
