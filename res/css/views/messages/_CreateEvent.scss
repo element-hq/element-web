@@ -15,17 +15,8 @@ limitations under the License.
 */
 
 .mx_CreateEvent {
-    // override default EventTileBubble styling
-    padding-left: 80px !important;
-
     &::before {
         background-color: $primary-fg-color;
-        mask-image: url('$(res)/img/room-continuation.svg');
-        mask-repeat: no-repeat;
-        mask-position: center;
-        mask-size: 100%;
-        width: 72px !important;
-        height: 34px !important;
-        left: -64px !important;
+        mask-image: url('$(res)/img/element-icons/chat-bubbles.svg');
     }
 }
