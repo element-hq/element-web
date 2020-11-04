@@ -1,3 +1,73 @@
+Changes in [3.8.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.8.0-rc.1) (2020-11-04)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.7.1...v3.8.0-rc.1)
+
+ * Upgrade JS SDK to 9.1.0-rc.1
+ * Log when saving profile
+   [\#5394](https://github.com/matrix-org/matrix-react-sdk/pull/5394)
+ * Translations update from Weblate
+   [\#5395](https://github.com/matrix-org/matrix-react-sdk/pull/5395)
+ * Hide prompt to add email for notifications if 3pid ui feature is off
+   [\#5392](https://github.com/matrix-org/matrix-react-sdk/pull/5392)
+ * Fix room list message preview copy for hangup events
+   [\#5388](https://github.com/matrix-org/matrix-react-sdk/pull/5388)
+ * Track UISIs as Countly Events
+   [\#5382](https://github.com/matrix-org/matrix-react-sdk/pull/5382)
+ * Don't let users accidentally redact ACL events
+   [\#5384](https://github.com/matrix-org/matrix-react-sdk/pull/5384)
+ * Two more easy files to remove from eslintignore
+   [\#5378](https://github.com/matrix-org/matrix-react-sdk/pull/5378)
+ * Fix Widget OpenID Permissions for realsies
+   [\#5381](https://github.com/matrix-org/matrix-react-sdk/pull/5381)
+ * Fix regression with OpenID permissions on widgets
+   [\#5380](https://github.com/matrix-org/matrix-react-sdk/pull/5380)
+ * Fix room directory events happening in the wrong order for Funnels
+   [\#5379](https://github.com/matrix-org/matrix-react-sdk/pull/5379)
+ * Remove a couple more files from eslintignore
+   [\#5377](https://github.com/matrix-org/matrix-react-sdk/pull/5377)
+ * Fix countly method bindings and errors
+   [\#5376](https://github.com/matrix-org/matrix-react-sdk/pull/5376)
+ * Fix a bunch of silly lint errors
+   [\#5375](https://github.com/matrix-org/matrix-react-sdk/pull/5375)
+ * Typescript: ImageUtils
+   [\#5374](https://github.com/matrix-org/matrix-react-sdk/pull/5374)
+ * Convert AuxPanel to TypeScript
+   [\#5373](https://github.com/matrix-org/matrix-react-sdk/pull/5373)
+ * Only pass metrics if they exist otherwise Countly will be unhappy!
+   [\#5372](https://github.com/matrix-org/matrix-react-sdk/pull/5372)
+ * Fix CountlyAnalytics NPE on MatrixClientPeg
+   [\#5370](https://github.com/matrix-org/matrix-react-sdk/pull/5370)
+ * fix CountlyAnalytics canEnable on wrong target
+   [\#5369](https://github.com/matrix-org/matrix-react-sdk/pull/5369)
+ * Initial Countly work
+   [\#5365](https://github.com/matrix-org/matrix-react-sdk/pull/5365)
+ * Fix videos not playing in non-encrypted rooms
+   [\#5368](https://github.com/matrix-org/matrix-react-sdk/pull/5368)
+ * Fix custom tag layout which regressed in #5309
+   [\#5367](https://github.com/matrix-org/matrix-react-sdk/pull/5367)
+ * Watch replyToEvent at RoomView to prevent races
+   [\#5360](https://github.com/matrix-org/matrix-react-sdk/pull/5360)
+ * Add a UI Feature flag for room history settings
+   [\#5362](https://github.com/matrix-org/matrix-react-sdk/pull/5362)
+ * Hide inline images when preference disabled
+   [\#5361](https://github.com/matrix-org/matrix-react-sdk/pull/5361)
+ * Fix React warning by moving handler to each button
+   [\#5359](https://github.com/matrix-org/matrix-react-sdk/pull/5359)
+ * Do not preload encrypted videos|images unless autoplay or thumbnailing is on
+   [\#5352](https://github.com/matrix-org/matrix-react-sdk/pull/5352)
+ * Fix theme variable passed to Jitsi
+   [\#5357](https://github.com/matrix-org/matrix-react-sdk/pull/5357)
+ * docs: added comment explanation
+   [\#5349](https://github.com/matrix-org/matrix-react-sdk/pull/5349)
+ * Modal Widgets - MSC2790
+   [\#5252](https://github.com/matrix-org/matrix-react-sdk/pull/5252)
+ * Widgets fixes
+   [\#5350](https://github.com/matrix-org/matrix-react-sdk/pull/5350)
+ * Fix User Menu avatar colouring being based on wrong string
+   [\#5348](https://github.com/matrix-org/matrix-react-sdk/pull/5348)
+ * Support 'answered elsewhere'
+   [\#5345](https://github.com/matrix-org/matrix-react-sdk/pull/5345)
+
 Changes in [3.7.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.7.1) (2020-10-28)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.7.0...v3.7.1)
