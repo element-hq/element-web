@@ -122,9 +122,9 @@ $left-gutter: 64px;
     grid-template-columns: 1fr 100px;
 
     .mx_EventTile_line {
-        margin-right: 0px;
+        margin-right: 0;
         grid-column: 1 / 3;
-        padding: 0;
+        padding: 0 !important;
     }
 
     .mx_EventTile_msgOption {
