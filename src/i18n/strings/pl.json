@@ -1570,5 +1570,6 @@
     "Answered Elsewhere": "Odebrane gdzie indziej",
     "The call was answered on another device.": "Połączenie zostało odebrane na innym urządzeniu.",
     "The other party declined the call.": "Połączenie zostało odrzucone przez drugą stronę.",
-    "Call Declined": "Połączenie odrzucone"
+    "Call Declined": "Połączenie odrzucone",
+    "Messages in this room are end-to-end encrypted.": "Wiadomości w tym pokoju są szyfrowane end-to-end."
 }
