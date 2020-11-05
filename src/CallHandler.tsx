@@ -103,8 +103,11 @@ function getRemoteAudioElement(): HTMLAudioElement {
     // Might as well just use DOM.
     const remoteAudioElement = document.getElementById("remoteAudio") as HTMLAudioElement;
     if (!remoteAudioElement) {
-        console.error("Failed to find remoteAudio element - cannot play audio!"
-            + "You need to add an <audio/> to the DOM.");
+        console.error(
+            "Failed to find remoteAudio element - cannot play audio!" +
+            "You need to add an <audio/> to the DOM.",
+        );
+        return null;
     }
     return remoteAudioElement;
 }
