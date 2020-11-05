@@ -964,7 +964,7 @@ class CreationGrouper {
             summaryText = _t("%(creator)s created and configured the room.", { creator });
         }
 
-        ret.push(<NewRoomIntro />);
+        ret.push(<NewRoomIntro key="newroomintro" />);
 
         ret.push(
             <EventListSummary
