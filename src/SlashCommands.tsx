@@ -1045,7 +1045,7 @@ export const Commands = [
     }),
     new Command({
         command: "holdcall",
-        description: _td('Places the call in the current room on hold'),
+        description: _td("Places the call in the current room on hold"),
         category: CommandCategories.other,
         runFn: function(roomId, args) {
             const call = CallHandler.sharedInstance().getCallForRoom(roomId);
@@ -1058,7 +1058,7 @@ export const Commands = [
     }),
     new Command({
         command: "unholdcall",
-        description: _td('Takes the call in the current room off hold'),
+        description: _td("Takes the call in the current room off hold"),
         category: CommandCategories.other,
         runFn: function(roomId, args) {
             const call = CallHandler.sharedInstance().getCallForRoom(roomId);
