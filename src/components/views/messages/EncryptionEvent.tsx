@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext} from 'react';
+import React, {forwardRef, useContext} from 'react';
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
 import { _t } from '../../../languageHandler';
@@ -27,7 +27,7 @@ interface IProps {
     mxEvent: MatrixEvent;
 }
 
-const EncryptionEvent: React.FC<IProps> = ({mxEvent}) => {
+const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({mxEvent}, ref) => {
     const cli = useContext(MatrixClientContext);
     const roomId = mxEvent.getRoomId();
     const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
@@ -61,7 +61,8 @@ const EncryptionEvent: React.FC<IProps> = ({mxEvent}) => {
         className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
         title={_t("Encryption not enabled")}
         subtitle={_t("The encryption used by this room isn't supported.")}
+        ref={ref}
     />;
-}
+});
 
 export default EncryptionEvent;

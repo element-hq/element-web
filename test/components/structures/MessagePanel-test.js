@@ -38,6 +38,7 @@ import { configure, mount } from "enzyme";
 import Velocity from 'velocity-animate';
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
 
 configure({ adapter: new Adapter() });
 
@@ -79,6 +80,8 @@ describe('MessagePanel', function() {
         // complete without this even if we mock the clock and tick it
         // what should be the correct amount of time).
         Velocity.mock = true;
+
+        DMRoomMap.makeShared();
     });
 
     afterEach(function() {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from "react";
+import React, {forwardRef, ReactNode} from "react";
 import classNames from "classnames";
 
 interface IProps {
@@ -23,12 +23,12 @@ interface IProps {
     subtitle?: ReactNode;
 }
 
-const EventTileBubble: React.FC<IProps> = ({ className, title, subtitle, children }) => {
-    return <div className={classNames("mx_EventTileBubble", className)}>
+const EventTileBubble = forwardRef<HTMLDivElement, IProps>(({ className, title, subtitle, children }, ref) => {
+    return <div className={classNames("mx_EventTileBubble", className)} ref={ref}>
         <div className="mx_EventTileBubble_title">{ title }</div>
         { subtitle && <div className="mx_EventTileBubble_subtitle">{ subtitle }</div> }
         { children }
     </div>;
-};
+});
 
 export default EventTileBubble;
