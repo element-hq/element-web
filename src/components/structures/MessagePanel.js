@@ -31,6 +31,7 @@ import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
+import NewRoomIntro from "../views/rooms/NewRoomIntro";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -955,12 +956,15 @@ class CreationGrouper {
         const ev = this.events[this.events.length - 1];
 
         let summaryText;
+        const roomId = ev.getRoomId();
         const creator = ev.sender ? ev.sender.name : ev.getSender();
-        if (DMRoomMap.shared().getUserIdForRoomId(ev.getRoomId())) {
+        if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
             summaryText = _t("%(creator)s created this DM.", { creator });
         } else {
             summaryText = _t("%(creator)s created and configured the room.", { creator });
         }
+
+        ret.push(<NewRoomIntro />);
 
         ret.push(
             <EventListSummary
