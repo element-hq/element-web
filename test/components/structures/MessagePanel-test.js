@@ -436,8 +436,8 @@ describe('MessagePanel', function() {
         const rm = res.find('.mx_RoomView_myReadMarker_container').getDOMNode();
 
         const rows = res.find('.mx_RoomView_MessageList').children();
-        expect(rows.length).toEqual(6);
-        expect(rm.previousSibling).toEqual(rows.at(4).getDOMNode());
+        expect(rows.length).toEqual(7); // 6 events + the NewRoomIntro
+        expect(rm.previousSibling).toEqual(rows.at(5).getDOMNode());
 
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
