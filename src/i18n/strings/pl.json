@@ -1571,5 +1571,6 @@
     "The call was answered on another device.": "Połączenie zostało odebrane na innym urządzeniu.",
     "The other party declined the call.": "Połączenie zostało odrzucone przez drugą stronę.",
     "Call Declined": "Połączenie odrzucone",
-    "Messages in this room are end-to-end encrypted.": "Wiadomości w tym pokoju są szyfrowane end-to-end."
+    "Messages in this room are end-to-end encrypted.": "Wiadomości w tym pokoju są szyfrowane end-to-end.",
+    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Klucz podpisujący, który podano jest taki sam jak klucz podpisujący otrzymany od %(userId)s oraz sesji %(deviceId)s. Sesja została oznaczona jako zweryfikowana."
 }
