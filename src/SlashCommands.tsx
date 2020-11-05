@@ -46,6 +46,7 @@ import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from 
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
+import CallHandler from "./CallHandler";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -1041,6 +1042,32 @@ export const Commands = [
             return reject(this.getUsage());
         },
         category: CommandCategories.actions,
+    }),
+    new Command({
+        command: "holdcall",
+        description: _td("Places the call in the current room on hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(true);
+            return success();
+        },
+    }),
+    new Command({
+        command: "unholdcall",
+        description: _td("Takes the call in the current room off hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(false);
+            return success();
+        },
     }),
 
     // Command definitions for autocompletion ONLY:

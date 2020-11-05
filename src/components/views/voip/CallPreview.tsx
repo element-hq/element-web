@@ -24,7 +24,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
-import { CallState, MatrixCall } from 'matrix-js-sdk/lib/webrtc/call';
+import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 
 interface IProps {
 }

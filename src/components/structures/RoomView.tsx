@@ -71,7 +71,7 @@ import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
-import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
