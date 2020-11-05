@@ -53,11 +53,8 @@ limitations under the License.
     }
 
     .mx_EventTileBubble_subtitle {
+        font-size: $font-12px;
         grid-column: 2;
         grid-row: 2;
-    }
-
-    .mx_EventTileBubble_subtitle {
-        font-size: $font-12px;
     }
 }
