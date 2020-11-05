@@ -41,9 +41,6 @@ export default class RoomStatusBar extends React.Component {
     static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
-        // This is true when the user is alone in the room, but has also sent a message.
-        // Used to suggest to the user to invite someone
-        sentMessageAndIsAlone: PropTypes.bool,
 
         // The active call in the room, if any (means we show the call bar
         // along with the status of the call)
@@ -67,10 +64,6 @@ export default class RoomStatusBar extends React.Component {
         // callback for when the user clicks on the 'invite others' button in the
         // 'you are alone' bar
         onInviteClick: PropTypes.func,
-
-        // callback for when the user clicks on the 'stop warning me' button in the
-        // 'you are alone' bar
-        onStopWarningClick: PropTypes.func,
 
         // callback for when we do something that changes the size of the
         // status bar. This is used to trigger a re-layout in the parent
@@ -159,10 +152,7 @@ export default class RoomStatusBar extends React.Component {
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
     _getSize() {
-        if (this._shouldShowConnectionError() ||
-            this._showCallBar() ||
-            this.props.sentMessageAndIsAlone
-        ) {
+        if (this._shouldShowConnectionError() || this._showCallBar()) {
             return STATUS_BAR_EXPANDED;
         } else if (this.state.unsentMessages.length > 0) {
             return STATUS_BAR_EXPANDED_LARGE;
@@ -321,24 +311,6 @@ export default class RoomStatusBar extends React.Component {
             return (
                 <div className="mx_RoomStatusBar_callBar">
                     <b>{ this._getCallStatusText() }</b>
-                </div>
-            );
-        }
-
-        // If you're alone in the room, and have sent a message, suggest to invite someone
-        if (this.props.sentMessageAndIsAlone && !this.props.isPeeking) {
-            return (
-                <div className="mx_RoomStatusBar_isAlone">
-                    { _t("There's no one else here! Would you like to <inviteText>invite others</inviteText> " +
-                            "or <nowarnText>stop warning about the empty room</nowarnText>?",
-                        {},
-                        {
-                            'inviteText': (sub) =>
-                                <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
-                            'nowarnText': (sub) =>
-                                <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
-                        },
-                    ) }
                 </div>
             );
         }
