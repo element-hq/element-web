@@ -1572,5 +1572,17 @@
     "The other party declined the call.": "Połączenie zostało odrzucone przez drugą stronę.",
     "Call Declined": "Połączenie odrzucone",
     "Messages in this room are end-to-end encrypted.": "Wiadomości w tym pokoju są szyfrowane end-to-end.",
-    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Klucz podpisujący, który podano jest taki sam jak klucz podpisujący otrzymany od %(userId)s oraz sesji %(deviceId)s. Sesja została oznaczona jako zweryfikowana."
+    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Klucz podpisujący, który podano jest taki sam jak klucz podpisujący otrzymany od %(userId)s oraz sesji %(deviceId)s. Sesja została oznaczona jako zweryfikowana.",
+    "Sends a message to the given user": "Wysyła wiadomość do wybranego użytkownika",
+    "Opens chat with the given user": "Otwiera rozmowę z wybranym użytkownikiem",
+    "Please supply a widget URL or embed code": "Proszę podać adres URL widżetu lub embed code",
+    "Command failed": "Wykonywanie komendy nie powiodło się",
+    "Unrecognised room address:": "Nieznany adres pokoju:",
+    "Joins room with given address": "Dołącz do pokoju o wybranym adresie",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Dodaje ( ͡° ͜ʖ ͡°) na początku wiadomości tekstowej",
+    "Are you sure you want to cancel entering passphrase?": "Czy na pewno chcesz anulować wpisywanie hasła?",
+    "Cancel entering passphrase?": "Anulować wpisywanie hasła?",
+    "Room name or address": "Nazwa lub adres pokoju",
+    "This will end the conference for everyone. Continue?": "Czy na pewno chcesz zakończyc połączenie grupowe? To zakończy je dla wszystkich uczestnikow.",
+    "End conference": "Zakończ połączenie grupowe"
 }
