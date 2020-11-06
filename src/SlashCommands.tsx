@@ -1001,14 +1001,29 @@ export const Commands = [
         description: _td("Opens chat with the given user"),
         args: "<user-id>",
         runFn: function(roomId, userId) {
-            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+            // easter-egg for now: look up phone numbers through the thirdparty API
+            // (very dumb phone number detection...)
+            const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
+            if (!userId || (!userId.startsWith("@") || !userId.includes(":")) && !isPhoneNumber) {
                 return reject(this.getUsage());
             }
 
             return success((async () => {
+                if (isPhoneNumber) {
+                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
+                        'm.id.phone': userId,
+                    });
+                    if (!results || results.length === 0 || !results[0].userid) {
+                        throw new Error("Unable to find Matrix ID for phone number");
+                    }
+                    userId = results[0].userid;
+                }
+
+                const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
+
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: await ensureDMExists(MatrixClientPeg.get(), userId),
+                    room_id: roomId,
                 });
             })());
         },
