@@ -33,7 +33,7 @@ interface IRule<T, D = void> {
 interface IArgs<T, D = void> {
     rules: IRule<T, D>[];
     description(this: T, derivedData: D): React.ReactChild;
-    hideDescriptionIfValid: Boolean;
+    hideDescriptionIfValid?: Boolean;
     deriveData?(data: Data): Promise<D>;
 }
 
