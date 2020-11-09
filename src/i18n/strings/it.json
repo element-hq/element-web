@@ -2576,5 +2576,6 @@
     "New version of %(brand)s is available": "Nuova versione di %(brand)s disponibile",
     "Update %(brand)s": "Aggiorna %(brand)s",
     "Enable desktop notifications": "Attiva le notifiche desktop",
-    "Don't miss a reply": "Non perdere una risposta"
+    "Don't miss a reply": "Non perdere una risposta",
+    "Modal Widget": "Widget modale"
 }
