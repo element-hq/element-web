@@ -2562,5 +2562,18 @@
     "Rate %(brand)s": "Hinda %(brand)s rakendust",
     "Feedback sent": "Tagasiside on saadetud",
     "%(senderName)s ended the call": "%(senderName)s lõpetas kõne",
-    "You ended the call": "Sina lõpetasid kõne"
+    "You ended the call": "Sina lõpetasid kõne",
+    "Now, lets help you get started": "Nüüd näitame sulle, mida saad järgmiseks teha",
+    "Welcome %(name)s": "Tere tulemast, %(name)s",
+    "Add a photo so people know it's you.": "Enda tutvustamiseks lisa foto.",
+    "Great, that'll help people know it's you": "Suurepärane, nüüd teised teavad et tegemist on sinuga",
+    "Use the + to make a new room or explore existing ones below": "Uue jututoa tegemiseks või olemasolevatega tutvumiseks klõpsi + märki",
+    "New version of %(brand)s is available": "%(brand)s ralenduse uus versioon on saadaval",
+    "Update %(brand)s": "Uuenda %(brand)s rakendust",
+    "Enable desktop notifications": "Võta kasutusele töölauakeskkonna teavitused",
+    "Don't miss a reply": "Ära jäta vastust vahele",
+    "Now, let's help you get started": "Nüüd näitame sulle, mida saad järgmiseks teha",
+    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Kutsu teist osapoolt tema nime, e-posti aadressi, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",
+    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Alusta vestlust kasutades teise osapoole nime, e-posti aadressi või kasutajanime (näiteks <userId/>).",
+    "Invite by email": "Saada kutse e-kirjaga"
 }
