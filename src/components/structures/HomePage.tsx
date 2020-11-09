@@ -34,10 +34,26 @@ import {useEventEmitter} from "../../hooks/useEventEmitter";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import classNames from "classnames";
 import {ENTERING} from "react-transition-group/Transition";
+import Analytics from "../../Analytics";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
-const onClickSendDm = () => dis.dispatch({action: 'view_create_chat'});
-const onClickExplore = () => dis.fire(Action.ViewRoomDirectory);
-const onClickNewRoom = () => dis.dispatch({action: 'view_create_room'});
+const onClickSendDm = () => {
+    Analytics.trackEvent('home_page', 'button', 'dm');
+    CountlyAnalytics.instance.track("home_page_button", { button: "dm" });
+    dis.dispatch({action: 'view_create_chat'});
+};
+
+const onClickExplore = () => {
+    Analytics.trackEvent('home_page', 'button', 'room_directory');
+    CountlyAnalytics.instance.track("home_page_button", { button: "room_directory" });
+    dis.fire(Action.ViewRoomDirectory);
+};
+
+const onClickNewRoom = () => {
+    Analytics.trackEvent('home_page', 'button', 'create_room');
+    CountlyAnalytics.instance.track("home_page_button", { button: "create_room" });
+    dis.dispatch({action: 'view_create_room'});
+};
 
 interface IProps {
     justRegistered?: boolean;
@@ -69,6 +85,8 @@ const UserWelcomeTop = () => {
             onChange={async (ev) => {
                 if (!ev.target.files?.length) return;
                 setBusy(true);
+                Analytics.trackEvent("home_page", "upload_avatar");
+                CountlyAnalytics.instance.track("home_page_upload_avatar");
                 const file = ev.target.files[0];
                 const uri = await cli.uploadContent(file);
                 await cli.setAvatarUrl(uri);
