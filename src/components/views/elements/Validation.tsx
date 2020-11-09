@@ -74,7 +74,9 @@ export interface IValidationResult {
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
-export default function withValidation<T = undefined, D = void>({ description, hideDescriptionIfValid, deriveData, rules }: IArgs<T, D>) {
+export default function withValidation<T = undefined, D = void>({
+    description, hideDescriptionIfValid, deriveData, rules
+}: IArgs<T, D>) {
     return async function onValidate({ value, focused, allowEmpty = true }: IFieldState): Promise<IValidationResult> {
         if (!value && allowEmpty) {
             return {
