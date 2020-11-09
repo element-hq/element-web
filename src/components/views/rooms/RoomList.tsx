@@ -332,7 +332,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             return p;
         }, [] as TagID[]);
 
-        const showSkeleton = tagOrder.every(tag => !this.state.sublists[tag]?.length);
+        const showSkeleton = Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
         for (const orderedTagId of tagOrder) {
             const orderedRooms = this.state.sublists[orderedTagId] || [];
