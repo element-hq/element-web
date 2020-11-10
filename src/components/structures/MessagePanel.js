@@ -30,6 +30,8 @@ import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
+import DMRoomMap from "../../utils/DMRoomMap";
+import NewRoomIntro from "../views/rooms/NewRoomIntro";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -952,15 +954,25 @@ class CreationGrouper {
         }).reduce((a, b) => a.concat(b), []);
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1];
+
+        let summaryText;
+        const roomId = ev.getRoomId();
+        const creator = ev.sender ? ev.sender.name : ev.getSender();
+        if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
+            summaryText = _t("%(creator)s created this DM.", { creator });
+        } else {
+            summaryText = _t("%(creator)s created and configured the room.", { creator });
+        }
+
+        ret.push(<NewRoomIntro key="newroomintro" />);
+
         ret.push(
             <EventListSummary
                  key="roomcreationsummary"
                  events={this.events}
                  onToggle={panel._onHeightChanged} // Update scroll state
                  summaryMembers={[ev.sender]}
-                 summaryText={_t("%(creator)s created and configured the room.", {
-                     creator: ev.sender ? ev.sender.name : ev.getSender(),
-                 })}
+                 summaryText={summaryText}
             >
                  { eventTiles }
             </EventListSummary>,

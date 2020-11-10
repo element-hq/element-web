@@ -242,6 +242,7 @@ export function mkStubRoom(roomId = null) {
         setBlacklistUnverifiedDevices: jest.fn(),
         on: jest.fn(),
         removeListener: jest.fn(),
+        getDMInviter: jest.fn(),
     };
 }
 

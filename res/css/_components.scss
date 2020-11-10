@@ -115,6 +115,7 @@
 @import "./views/elements/_InfoTooltip.scss";
 @import "./views/elements/_InlineSpinner.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
+@import "./views/elements/_MiniAvatarUploader.scss";
 @import "./views/elements/_PowerSelector.scss";
 @import "./views/elements/_ProgressBar.scss";
 @import "./views/elements/_QRCode.scss";
@@ -139,6 +140,7 @@
 @import "./views/groups/_GroupUserSettings.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
+@import "./views/messages/_EventTileBubble.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
@@ -182,6 +184,7 @@
 @import "./views/rooms/_MemberList.scss";
 @import "./views/rooms/_MessageComposer.scss";
 @import "./views/rooms/_MessageComposerFormatBar.scss";
+@import "./views/rooms/_NewRoomIntro.scss";
 @import "./views/rooms/_NotificationBadge.scss";
 @import "./views/rooms/_PinnedEventTile.scss";
 @import "./views/rooms/_PinnedEventsPanel.scss";
