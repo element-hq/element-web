@@ -2489,5 +2489,19 @@
     "New version of %(brand)s is available": "Налична е нова версия на %(brand)s",
     "Update %(brand)s": "Обнови %(brand)s",
     "Enable desktop notifications": "Включете уведомления на работния плот",
-    "Don't miss a reply": "Не пропускайте отговор"
+    "Don't miss a reply": "Не пропускайте отговор",
+    "User menu": "Потребителско меню",
+    "Search rooms": "Търси стаи",
+    "Save your Security Key": "Запази ключа за сигурност",
+    "Confirm Security Phrase": "Потвърди фразата за сигурност",
+    "Set a Security Phrase": "Настрой фраза за сигурност",
+    "You can also set up Secure Backup & manage your keys in Settings.": "Също така, може да конфигурирате защитено резервно копиране и да управлявате ключовете си от Настройки.",
+    "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Ако се откажете сега, може да загубите достъп до шифрованите съобщения и данни, в случай че загубите достъп до тази сесия.",
+    "Store your Security Key somewhere safe, like a password manager or a safe, as it’s used to safeguard your encrypted data.": "Запазете ключа за сигурност на сигурно място, като password manager или сейф, понеже се използва за предпазване на шифрованите данни.",
+    "Enter a security phrase only you know, as it’s used to safeguard your data. To be secure, you shouldn’t re-use your account password.": "Въведете фраза за сигурност, която знаете само вие. Тя ще се използва за предпазване на данните ви. За да е по-сигурно, не използвайте паролата за профила си.",
+    "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "Използвайте секретна фраза, която знаете само вие. При необходимост запазете и ключа за сигурност за резервното копие.",
+    "Enter a Security Phrase": "Въведете фраза за сигурност",
+    "We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "Ще генерираме ключ за сигурност, който да съхраните на сигурно място, като password manager или сейф.",
+    "Generate a Security Key": "Генерирай ключ за сигурност",
+    "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Предпазете се от загуба на достъп до шифрованите съобщения и данни като направите резервно копие на ключовете за шифроване върху сървъра."
 }
