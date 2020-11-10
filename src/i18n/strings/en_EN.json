@@ -2317,6 +2317,7 @@
     "Cannot create rooms in this community": "Cannot create rooms in this community",
     "You do not have permission to create rooms in this community.": "You do not have permission to create rooms in this community.",
     "This room is not public. You will not be able to rejoin without an invite.": "This room is not public. You will not be able to rejoin without an invite.",
+    "You are the only member of this room. This room will become unjoinable if you leave.": "You are the only member of this room. This room will become unjoinable if you leave.",
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
     "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",
     "Signed Out": "Signed Out",

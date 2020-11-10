@@ -1056,8 +1056,21 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         // Show a warning if there are additional complications.
-        const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
         const warnings = [];
+
+        const memberCount = roomToLeave.currentState.getJoinedMemberCount();
+        if (memberCount === 1) {
+            warnings.push(
+                <span className="warning" key="only_member_warning">
+                    {' '/* Whitespace, otherwise the sentences get smashed together */ }
+                    { _t("You are the only member of this room. This room will become unjoinable if you leave.") }
+                </span>
+            );
+
+            return warnings;
+        }
+
+        const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
         if (joinRules) {
             const rule = joinRules.getContent().join_rule;
             if (rule !== "public") {
@@ -1076,6 +1089,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
+        const hasWarnings = warnings.length > 0;
 
         Modal.createTrackedDialog('Leave room', '', QuestionDialog, {
             title: _t("Leave room"),
@@ -1086,6 +1100,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </span>
             ),
             button: _t("Leave"),
+            danger: hasWarnings,
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
                     const d = leaveRoomBehaviour(roomId);
