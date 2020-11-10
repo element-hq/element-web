@@ -2824,5 +2824,20 @@
     "Åland Islands": "Ahvenamaa",
     "Afghanistan": "Afganistan",
     "United States": "Ameerika Ühendriigid",
-    "United Kingdom": "Suurbritannia"
+    "United Kingdom": "Suurbritannia",
+    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad kontrollida nende profiili.",
+    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Sõnumid siin jututoas on läbivalt krüptitud. Klõpsides tunnuspilti saad kontrollida kasutaja %(displayName)s profiili.",
+    "%(creator)s created this DM.": "%(creator)s alustas seda otsesuhtlust.",
+    "This is the start of <roomName/>.": "See on <roomName/> jututoa algus.",
+    "Add a photo, so people can easily spot your room.": "Selle, et teised märkaks sinu jututuba lihtsamini, palun lisa üks pilt.",
+    "%(displayName)s created this room.": "%(displayName)s lõi selle jututoa.",
+    "You created this room.": "Sa lõid selle jututoa.",
+    "<a>Add a topic</a> to help people know what it is about.": "Selleks, et teised teaks millega on tegemist, palun <a>lisa teema</a>.",
+    "Topic: %(topic)s ": "Teema: %(topic)s ",
+    "Topic: %(topic)s (<a>edit</a>)": "Teema: %(topic)s (<a>muudetud</a>)",
+    "This is the beginning of your direct message history with <displayName/>.": "See on sinu ja kasutaja <displayName/> otsesuhtluse ajaloo algus.",
+    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Seni kuni emb-kumb teist kolmandaid osapooli liituma ei kutsu, olete siin vestluses vaid teie kahekesi.",
+    "Call Paused": "Kõne on ajutiselt peatatud",
+    "Takes the call in the current room off hold": "Võtab selles jututoas ootel oleva kõne",
+    "Places the call in the current room on hold": "Jätab kõne selles jututoas ootele"
 }
