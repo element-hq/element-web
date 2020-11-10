@@ -59,8 +59,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
-// @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from 'matrix-js-sdk';
+import { createNewMatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
@@ -77,8 +76,9 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
-import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty } from "matrix-js-sdk/lib/webrtc/call";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
 import Analytics from './Analytics';
+import CountlyAnalytics from "./CountlyAnalytics";
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -95,6 +95,21 @@ export enum PlaceCallType {
     Voice = 'voice',
     Video = 'video',
     ScreenSharing = 'screensharing',
+}
+
+function getRemoteAudioElement(): HTMLAudioElement {
+    // this needs to be somewhere at the top of the DOM which
+    // always exists to avoid audio interruptions.
+    // Might as well just use DOM.
+    const remoteAudioElement = document.getElementById("remoteAudio") as HTMLAudioElement;
+    if (!remoteAudioElement) {
+        console.error(
+            "Failed to find remoteAudio element - cannot play audio!" +
+            "You need to add an <audio/> to the DOM.",
+        );
+        return null;
+    }
+    return remoteAudioElement;
 }
 
 export default class CallHandler {
@@ -290,6 +305,11 @@ export default class CallHandler {
         });
     }
 
+    private setCallAudioElement(call: MatrixCall) {
+        const audioElement = getRemoteAudioElement();
+        if (audioElement) call.setRemoteAudioElement(audioElement);
+    }
+
     private setCallState(call: MatrixCall, status: CallState) {
         console.log(
             `Call state in ${call.roomId} changed to ${status}`,
@@ -341,9 +361,12 @@ export default class CallHandler {
         localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
     ) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
-        const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
+        CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
+        const call = createNewMatrixCall(MatrixClientPeg.get(), roomId);
         this.calls.set(roomId, call);
         this.setCallListeners(call);
+        this.setCallAudioElement(call);
+
         if (type === PlaceCallType.Voice) {
             call.placeVoiceCall();
         } else if (type === 'video') {
@@ -419,6 +442,7 @@ export default class CallHandler {
             case 'place_conference_call':
                 console.info("Place conference call in %s", payload.room_id);
                 Analytics.trackEvent('voip', 'placeConferenceCall');
+                CountlyAnalytics.instance.trackStartCall(payload.room_id, payload.type === PlaceCallType.Video, true);
                 this.startCallApp(payload.room_id, payload.type);
                 break;
             case 'end_conference':
@@ -448,6 +472,7 @@ export default class CallHandler {
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(call.roomId, call)
                     this.setCallListeners(call);
+                    this.setCallAudioElement(call);
                 }
                 break;
             case 'hangup':
@@ -462,16 +487,19 @@ export default class CallHandler {
                 }
                 this.removeCallForRoom(payload.room_id);
                 break;
-            case 'answer':
+            case 'answer': {
                 if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer
                 }
-                this.calls.get(payload.room_id).answer();
+                const call = this.calls.get(payload.room_id);
+                call.answer();
+                CountlyAnalytics.instance.trackJoinCall(payload.room_id, call.type === CallType.Video, false);
                 dis.dispatch({
                     action: "view_room",
                     room_id: payload.room_id,
                 });
                 break;
+            }
         }
     }
 

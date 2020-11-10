@@ -33,6 +33,7 @@ import SettingsStore from './settings/SettingsStore';
 import cheerio from 'cheerio';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
+import SettingsStore from './settings/SettingsStore';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
@@ -175,7 +176,10 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
-        if (!attribs.src || !attribs.src.startsWith('mxc://')) {
+        // We also drop inline images (as if they were not present at all) when the "show
+        // images" preference is disabled. Future work might expose some UI to reveal them
+        // like standalone image events have.
+        if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
             return { tagName, attribs: {}};
         }
         attribs.src = MatrixClientPeg.get().mxcUrlToHttp(

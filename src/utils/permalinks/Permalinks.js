@@ -19,7 +19,7 @@ import isIp from "is-ip";
 import * as utils from 'matrix-js-sdk/src/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
-import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
+import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
 import SdkConfig from "../../SdkConfig";
 
@@ -325,7 +325,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         return m[1];
     }
 
-    // A bit of a hack to convert permalinks of unknown origin to Riot links
+    // A bit of a hack to convert permalinks of unknown origin to Element links
     try {
         const permalinkParts = parsePermalink(permalink);
         if (permalinkParts) {
@@ -357,7 +357,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
             const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
             if (m) {
                 // A bit of a hack, but it gets the job done
-                const handler = new RiotPermalinkConstructor("http://localhost");
+                const handler = new ElementPermalinkConstructor("http://localhost");
                 const entityInfo = m[1].split('#').slice(1).join('#');
                 permalinkParts = handler.parsePermalink(`http://localhost/#${entityInfo}`);
             }
@@ -375,20 +375,20 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {
-    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
-    if (riotPrefix && riotPrefix !== matrixtoBaseUrl) {
-        return new RiotPermalinkConstructor(riotPrefix);
+    const elementPrefix = SdkConfig.get()['permalinkPrefix'];
+    if (elementPrefix && elementPrefix !== matrixtoBaseUrl) {
+        return new ElementPermalinkConstructor(elementPrefix);
     }
 
     return new SpecPermalinkConstructor();
 }
 
 export function parsePermalink(fullUrl: string): PermalinkParts {
-    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
+    const elementPrefix = SdkConfig.get()['permalinkPrefix'];
     if (fullUrl.startsWith(matrixtoBaseUrl)) {
         return new SpecPermalinkConstructor().parsePermalink(fullUrl);
-    } else if (riotPrefix && fullUrl.startsWith(riotPrefix)) {
-        return new RiotPermalinkConstructor(riotPrefix).parsePermalink(fullUrl);
+    } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
+        return new ElementPermalinkConstructor(elementPrefix).parsePermalink(fullUrl);
     }
 
     return null; // not a permalink we can handle

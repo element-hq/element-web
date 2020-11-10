@@ -21,6 +21,9 @@ import {MatrixClientPeg} from './MatrixClientPeg';
  * if any. This could be the canonical alias if one exists, otherwise
  * an alias selected arbitrarily but deterministically from the list
  * of aliases. Otherwise return null;
+ *
+ * @param {Object} room The room object
+ * @returns {string} A display alias for the given room
  */
 export function getDisplayAliasForRoom(room) {
     return room.getCanonicalAlias() || room.getAltAliases()[0];

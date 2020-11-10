@@ -23,11 +23,18 @@ import AuthPage from "./AuthPage";
 import {_td} from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
 
 export default class Welcome extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        CountlyAnalytics.instance.track("onboarding_welcome");
+    }
+
     render() {
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');

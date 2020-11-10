@@ -31,6 +31,7 @@ import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -94,7 +95,9 @@ export default class Notifications extends React.Component {
             phase: Notifications.phases.LOADING,
         });
 
-        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).then(function() {
+        MatrixClientPeg.get().setPushRuleEnabled(
+            'global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked,
+        ).then(function() {
            self._refreshFromServer();
         });
     };
@@ -216,8 +219,8 @@ export default class Notifications extends React.Component {
             description: _t('Enter keywords separated by a comma:'),
             button: _t('OK'),
             value: keywords,
-            onFinished: (should_leave, newValue) => {
-                if (should_leave && newValue !== keywords) {
+            onFinished: (shouldLeave, newValue) => {
+                if (shouldLeave && newValue !== keywords) {
                     let newKeywords = newValue.split(',');
                     for (const i in newKeywords) {
                         newKeywords[i] = newKeywords[i].trim();
@@ -403,7 +406,9 @@ export default class Notifications extends React.Component {
                 // when creating the new rule.
                 // Thus, this new rule will join the 'vectorContentRules' set.
                 if (self.state.vectorContentRules.rules.length) {
-                    pushRuleVectorStateKind = PushRuleVectorState.contentRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                    pushRuleVectorStateKind = PushRuleVectorState.contentRuleVectorStateKind(
+                        self.state.vectorContentRules.rules[0],
+                    );
                 } else {
                     // ON is default
                     pushRuleVectorStateKind = PushRuleVectorState.ON;
@@ -415,10 +420,9 @@ export default class Notifications extends React.Component {
 
                 if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
                     if (self.state.vectorContentRules.vectorState !== PushRuleVectorState.OFF) {
-                        deferreds.push(cli.addPushRule
-                        ('global', 'content', keyword, {
-                           actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
-                           pattern: keyword,
+                        deferreds.push(cli.addPushRule('global', 'content', keyword, {
+                            actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
+                            pattern: keyword,
                         }));
                     } else {
                         deferreds.push(self._addDisabledPushRule('global', 'content', keyword, {
@@ -482,12 +486,14 @@ export default class Notifications extends React.Component {
 
     _refreshFromServer = () => {
         const self = this;
-        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).then(function(rulesets) {
+        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(
+            self._portRulesToNewAPI,
+        ).then(function(rulesets) {
             /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
-            const rule_categories = {
+            const ruleCategories = {
                 // The master rule (all notifications disabling)
                 '.m.rule.master': 'master',
 
@@ -514,7 +520,7 @@ export default class Notifications extends React.Component {
             for (const kind in rulesets.global) {
                 for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
                     const r = rulesets.global[kind][i];
-                    const cat = rule_categories[r.rule_id];
+                    const cat = ruleCategories[r.rule_id];
                     r.kind = kind;
 
                     if (r.rule_id[0] === '.') {
@@ -750,7 +756,7 @@ export default class Notifications extends React.Component {
         if (this.state.masterPushRule) {
             masterPushRuleDiv = <LabelledToggleSwitch value={!this.state.masterPushRule.enabled}
                                                       onChange={this.onEnableNotificationsChange}
-                                                      label={_t('Enable notifications for this account')}/>;
+                                                      label={_t('Enable notifications for this account')} />;
         }
 
         let clearNotificationsButton;
@@ -778,14 +784,14 @@ export default class Notifications extends React.Component {
 
         const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
         let emailNotificationsRows;
-        if (emailThreepids.length === 0) {
-            emailNotificationsRows = <div>
-                { _t('Add an email address to configure email notifications') }
-            </div>;
-        } else {
+        if (emailThreepids.length > 0) {
             emailNotificationsRows = emailThreepids.map((threePid) => this.emailNotificationsRow(
                 threePid.address, `${_t('Enable email notifications')} (${threePid.address})`,
             ));
+        } else if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+            emailNotificationsRows = <div>
+                { _t('Add an email address to configure email notifications') }
+            </div>;
         }
 
         // Build external push rules
@@ -803,7 +809,10 @@ export default class Notifications extends React.Component {
         }
         if (externalKeywords.length) {
             externalKeywords = externalKeywords.join(", ");
-            externalRules.push(<li>{ _t('Notifications on the following keywords follow rules which can’t be displayed here:') } { externalKeywords }</li>);
+            externalRules.push(<li>
+                {_t('Notifications on the following keywords follow rules which can’t be displayed here:') }
+                { externalKeywords }
+            </li>);
         }
 
         let devicesSection;

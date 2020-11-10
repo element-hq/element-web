@@ -51,6 +51,9 @@ import { ElementWidgetActions } from "./ElementWidgetActions";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import {ModalWidgetStore} from "../ModalWidgetStore";
+import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import {getCustomTheme} from "../../theme";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
 // TODO: Destroy all of this code
 
@@ -104,9 +107,25 @@ class ElementWidget extends Widget {
             // v1 widgets default to jitsi.riot.im regardless of user settings
             domain = "jitsi.riot.im";
         }
+
+        let theme = new ThemeWatcher().getEffectiveTheme();
+        if (theme.startsWith("custom-")) {
+            const customTheme = getCustomTheme(theme.substr(7));
+            // Jitsi only understands light/dark
+            theme = customTheme.is_dark ? "dark" : "light";
+        }
+
+        // only allow light/dark through, defaulting to dark as that was previously the only state
+        // accounts for legacy-light/legacy-dark themes too
+        if (theme.includes("light")) {
+            theme = "light";
+        } else {
+            theme = "dark";
+        }
+
         return {
             ...super.rawData,
-            theme: SettingsStore.getValue("theme"),
+            theme,
             conferenceId,
             domain,
         };
@@ -231,7 +250,7 @@ export class StopGapWidget extends EventEmitter {
 
         // Actually ask for permission to send the user's data
         Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
-            widgetUrl: rawUrl.substr(0, rawUrl.lastIndexOf("?")),
+            widgetUrl: rawUrl,
             widgetId: this.widgetId,
             isUserWidget: this.appTileProps.userWidget,
 
@@ -283,6 +302,7 @@ export class StopGapWidget extends EventEmitter {
             this.messaging.on("action:set_always_on_screen",
                 (ev: CustomEvent<IStickyActionRequest>) => {
                     if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                        CountlyAnalytics.instance.trackJoinCall(this.appTileProps.room.roomId, true, true);
                         ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
                         ev.preventDefault();
                         this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack

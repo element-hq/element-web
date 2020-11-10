@@ -60,6 +60,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
 import InfoDialog from "../dialogs/InfoDialog";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 interface IDevice {
     deviceId: string;
@@ -586,7 +587,10 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({member}) => {
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
                 if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction() &&
-                    event.getType() !== "m.room.create"
+                    event.getType() !== EventType.RoomCreate &&
+                    // Don't redact ACLs because that'll obliterate the room
+                    // See https://github.com/matrix-org/synapse/issues/4042 for details.
+                    event.getType() !== EventType.RoomServerAcl
                 ) {
                     return events.concat(event);
                 } else {

@@ -9,6 +9,7 @@
 @import "./structures/_CustomRoomTagPanel.scss";
 @import "./structures/_FilePanel.scss";
 @import "./structures/_GenericErrorPage.scss";
+@import "./structures/_GroupFilterPanel.scss";
 @import "./structures/_GroupView.scss";
 @import "./structures/_HeaderButtons.scss";
 @import "./structures/_HomePage.scss";
@@ -27,7 +28,6 @@
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_TabbedView.scss";
-@import "./structures/_GroupFilterPanel.scss";
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_UploadBar.scss";
 @import "./structures/_UserMenu.scss";
@@ -70,6 +70,7 @@
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
 @import "./views/dialogs/_DevtoolsDialog.scss";
 @import "./views/dialogs/_EditCommunityPrototypeDialog.scss";
+@import "./views/dialogs/_FeedbackDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
@@ -114,6 +115,7 @@
 @import "./views/elements/_InfoTooltip.scss";
 @import "./views/elements/_InlineSpinner.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
+@import "./views/elements/_MiniAvatarUploader.scss";
 @import "./views/elements/_PowerSelector.scss";
 @import "./views/elements/_ProgressBar.scss";
 @import "./views/elements/_QRCode.scss";
@@ -138,6 +140,7 @@
 @import "./views/groups/_GroupUserSettings.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
+@import "./views/messages/_EventTileBubble.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";
@@ -181,6 +184,7 @@
 @import "./views/rooms/_MemberList.scss";
 @import "./views/rooms/_MessageComposer.scss";
 @import "./views/rooms/_MessageComposerFormatBar.scss";
+@import "./views/rooms/_NewRoomIntro.scss";
 @import "./views/rooms/_NotificationBadge.scss";
 @import "./views/rooms/_PinnedEventTile.scss";
 @import "./views/rooms/_PinnedEventsPanel.scss";
@@ -228,4 +232,4 @@
 @import "./views/verification/_VerificationShowSas.scss";
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallView.scss";
-@import "./views/voip/_VideoView.scss";
+@import "./views/voip/_VideoFeed.scss";
