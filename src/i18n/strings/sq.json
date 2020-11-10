@@ -2556,5 +2556,19 @@
     "Please go into as much detail as you like, so we can track down the problem.": "Ju lutemi, shkoni aq thellë sa doni, që të mund të ndjekim problemin.",
     "Tell us below how you feel about %(brand)s so far.": "Tregonani më poshtë se si ndiheni rreth %(brand)s deri këtu.",
     "Rate %(brand)s": "Vlerësojeni %(brand)s",
-    "Feedback sent": "Përshtypjet u dërguan"
+    "Feedback sent": "Përshtypjet u dërguan",
+    "Now, let's help you get started": "Tani, le t’ju ndihmojmë për t’ia filluar",
+    "Welcome %(name)s": "Mirë se vini %(name)s",
+    "Add a photo so people know it's you.": "Shtoni një foto, që njerëzit ta dinë se jeni ju.",
+    "Great, that'll help people know it's you": "Bukur, kjo do t’i ndihmojë njerëzit ta dinë se jeni ju",
+    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Ftoni dikë duke përdorur emrin e tij, adresën email, emrin e përdoruesit (bie fjala, <userId/>) ose <a>ndani me të këtë dhomë</a>.",
+    "Start a conversation with someone using their name, email address or username (like <userId/>).": "Nisni një bisedë me dikë duke përdorur emrin e tij, adresën email ose emrin e përdoruesit (bie fjala, <userId/>).",
+    "Invite by email": "Ftojeni me email",
+    "Use the + to make a new room or explore existing ones below": "Përdorni + për të krijuar një dhomë të re ose eksploroni ato ekzistuese më poshtë",
+    "%(senderName)s ended the call": "%(senderName)s e përfundoi thirrjen",
+    "You ended the call": "E përfunduat thirrjen",
+    "New version of %(brand)s is available": "Ka gati një version të ri të %(brand)s",
+    "Update %(brand)s": "Përditësoni %(brand)s",
+    "Enable desktop notifications": "Aktivizoni njoftime desktopi",
+    "Don't miss a reply": "Mos humbni asnjë përgjigje"
 }
