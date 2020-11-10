@@ -2565,5 +2565,17 @@
     "Rate %(brand)s": "評價 %(brand)s",
     "Feedback sent": "已傳送回饋",
     "%(senderName)s ended the call": "%(senderName)s 結束了通話",
-    "You ended the call": "您結束了通話"
+    "You ended the call": "您結束了通話",
+    "Now, let's help you get started": "現在，讓我們協助您開始",
+    "Welcome %(name)s": "歡迎 %(name)s",
+    "Add a photo so people know it's you.": "新增照片以讓其他人知道是您。",
+    "Great, that'll help people know it's you": "太好了，這會讓人們知道是您",
+    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、電子郵件地址或使用者名稱來與他們開始對話（如 <userId/>）或是<a>分享此聊天室</a>。",
+    "Start a conversation with someone using their name, email address or username (like <userId/>).": "使用某人的名字、電子郵件地址或使用者名稱來與他們開始對話（如 <userId/>）。",
+    "Invite by email": "透過電子郵件邀請",
+    "Use the + to make a new room or explore existing ones below": "使用 + 建立新的聊天室或在下方探索既有的聊天室",
+    "New version of %(brand)s is available": "%(brand)s 的新版本已可使用",
+    "Update %(brand)s": "更新 %(brand)s",
+    "Enable desktop notifications": "啟用桌面通知",
+    "Don't miss a reply": "不要錯過回覆"
 }
