@@ -39,14 +39,14 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
 
     useTimeout(() => {
         setShow(true);
-    }, 3_000); // show after 3 seconds
+    }, 3000); // show after 3 seconds
     useTimeout(() => {
         setShow(false);
-    }, 13_000); // hide after being shown for 10 seconds
+    }, 13000); // hide after being shown for 10 seconds
 
     const uploadRef = useRef<HTMLInputElement>();
 
-    const label = hasAvatar || busy ? hasAvatarLabel : noAvatarLabel;
+    const label = (hasAvatar || busy) ? hasAvatarLabel : noAvatarLabel;
 
     return <React.Fragment>
         <input

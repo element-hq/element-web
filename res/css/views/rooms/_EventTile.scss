@@ -124,6 +124,7 @@ $left-gutter: 64px;
     .mx_EventTile_line {
         margin-right: 0;
         grid-column: 1 / 3;
+        // override default padding of mx_EventTile_line so that we can be centered
         padding: 0 !important;
     }
 
