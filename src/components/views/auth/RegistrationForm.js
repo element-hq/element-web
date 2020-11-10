@@ -250,6 +250,7 @@ export default class RegistrationForm extends React.Component {
 
     validateEmailRules = withValidation({
         description: () => _t("Use an email address to recover your account"),
+        hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
@@ -326,6 +327,7 @@ export default class RegistrationForm extends React.Component {
 
     validatePhoneNumberRules = withValidation({
         description: () => _t("Other users can invite you to rooms using your contact details"),
+        hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
@@ -356,6 +358,7 @@ export default class RegistrationForm extends React.Component {
 
     validateUsernameRules = withValidation({
         description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
+        hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
