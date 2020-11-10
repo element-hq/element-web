@@ -46,9 +46,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
 
     if (SettingsStore.getValue("feature_latex_maths")) {
         const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
-            "\\$\\$\\$(([^$]|\\\\\\$)*)\\$\\$\\$";
-        const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
             "\\$\\$(([^$]|\\\\\\$)*)\\$\\$";
+        const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
+            "\\$(([^$]|\\\\\\$)*)\\$";
 
         md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
