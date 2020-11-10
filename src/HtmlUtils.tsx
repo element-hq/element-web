@@ -33,7 +33,6 @@ import SettingsStore from './settings/SettingsStore';
 import cheerio from 'cheerio';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import SettingsStore from './settings/SettingsStore';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
