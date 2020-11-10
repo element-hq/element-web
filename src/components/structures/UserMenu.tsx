@@ -210,6 +210,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         defaultDispatcher.dispatch({action: 'view_home_page'});
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onCommunitySettingsClick = (ev: ButtonEvent) => {
