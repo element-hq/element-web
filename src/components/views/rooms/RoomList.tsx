@@ -332,6 +332,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             return p;
         }, [] as TagID[]);
 
+        // show a skeleton UI if the user is in no rooms
         const showSkeleton = Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
         for (const orderedTagId of tagOrder) {
