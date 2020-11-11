@@ -2826,5 +2826,20 @@
     "Åland Islands": "奧蘭",
     "Afghanistan": "阿富汗",
     "United States": "美國",
-    "United Kingdom": "英國"
+    "United Kingdom": "英國",
+    "%(creator)s created this DM.": "%(creator)s 建立了此直接訊息。",
+    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "此聊天適中的訊息為端到端加密。當人們加入，您可以在他們的個人檔案中驗證他們，只要點擊他們的大頭照就可以了。",
+    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "此處的訊息為端到端加密。請在他們的個人檔案中驗證 %(displayName)s，只要點擊他們的大頭照就可以了。",
+    "This is the start of <roomName/>.": "這是 <roomName/> 的開頭。",
+    "Add a photo, so people can easily spot your room.": "新增圖片，這樣人們就可以輕鬆發現您的聊天室。",
+    "%(displayName)s created this room.": "%(displayName)s 建立了此聊天室。",
+    "You created this room.": "您建立了此聊天室。",
+    "<a>Add a topic</a> to help people know what it is about.": "<a>新增主題</a>以協助人們了解這裡在做什麼。",
+    "Topic: %(topic)s ": "主題：%(topic)s ",
+    "Topic: %(topic)s (<a>edit</a>)": "主題：%(topic)s（<a>編輯</a>）",
+    "This is the beginning of your direct message history with <displayName/>.": "這是使用 <displayName/> 傳送的您的直接訊息歷史紀錄的開頭。",
+    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "除非你們兩個其中一個邀請任何人加入，否則只會有你們兩個在此對話中。",
+    "Call Paused": "通話已暫停",
+    "Takes the call in the current room off hold": "讓目前聊天室中的通話保持等候接聽的狀態",
+    "Places the call in the current room on hold": "在目前的聊天室撥打通話並等候接聽"
 }
