@@ -58,6 +58,7 @@ interface IProps {
 
 interface IState {
     sublists: ITagMap;
+    isNameFiltering: boolean;
 }
 
 const TAG_ORDER: TagID[] = [
@@ -183,6 +184,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
         this.state = {
             sublists: {},
+            isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -253,7 +255,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             return CustomRoomTagStore.getTags()[t];
         });
 
-        let doUpdate = arrayHasDiff(previousListIds, newListIds);
+        const isNameFiltering = !!RoomListStore.instance.getFirstNameFilterCondition();
+        let doUpdate = this.state.isNameFiltering !== isNameFiltering || arrayHasDiff(previousListIds, newListIds);
         if (!doUpdate) {
             // so we didn't have the visible sublists change, but did the contents of those
             // sublists change significantly enough to break the sticky headers? Probably, so
@@ -275,7 +278,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
-            this.setState({sublists}, () => {
+            this.setState({sublists, isNameFiltering}, () => {
                 this.props.onResize();
             });
         }
@@ -370,7 +373,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     public render() {
         let explorePrompt: JSX.Element;
         if (!this.props.isMinimized) {
-            if (RoomListStore.instance.getFirstNameFilterCondition()) {
+            if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{_t("Can't see what you’re looking for?")}</div>
                     <AccessibleButton kind="link" onClick={this.onExplore}>

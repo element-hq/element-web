@@ -46,7 +46,6 @@ interface IProps {
 }
 
 interface IState {
-    isFiltering: boolean;
     showBreadcrumbs: boolean;
     showGroupFilterPanel: boolean;
 }
@@ -71,7 +70,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            isFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
             showGroupFilterPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
         };
@@ -104,10 +102,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     };
 
     private onBreadcrumbsUpdate = () => {
-        const showBreadcrumbs = BreadcrumbsStore.instance.visible;
-        const isFiltering = !!RoomListStore.instance.getFirstNameFilterCondition();
-        if (showBreadcrumbs !== this.state.showBreadcrumbs || isFiltering !== this.state.isFiltering) {
-            this.setState({showBreadcrumbs, isFiltering});
+        const newVal = BreadcrumbsStore.instance.visible;
+        if (newVal !== this.state.showBreadcrumbs) {
+            this.setState({showBreadcrumbs: newVal});
 
             // Update the sticky headers too as the breadcrumbs will be popping in or out.
             if (!this.listContainerRef.current) return; // ignore: no headers to sticky
