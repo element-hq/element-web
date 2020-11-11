@@ -1829,7 +1829,7 @@
     "Change settings": "Alterar configurações",
     "Send %(eventType)s events": "Enviar eventos de %(eventType)s",
     "Roles & Permissions": "Papeis & Permissões",
-    "Select the roles required to change various parts of the room": "Selecione as permissões necessárias para alterar várias partes da sala",
+    "Select the roles required to change various parts of the room": "Selecione os papeis necessários para alterar várias partes da sala",
     "Emoji picker": "Enviar emoji",
     "Room %(name)s": "Sala %(name)s",
     "No recently visited rooms": "Nenhuma sala foi visitada recentemente",
@@ -2769,5 +2769,6 @@
     "Wallis & Futuna": "Wallis e Futuna",
     "Vatican City": "Cidade do Vaticano",
     "Vanuatu": "Vanuatu",
-    "Uzbekistan": "Uzbequistão"
+    "Uzbekistan": "Uzbequistão",
+    "Role": "Função"
 }
