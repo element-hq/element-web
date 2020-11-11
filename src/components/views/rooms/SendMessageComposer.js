@@ -308,6 +308,9 @@ export default class SendMessageComposer extends React.Component {
             const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
             const content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+            // don't bother sending an empty message
+            if (!content.body.trim()) return;
+
             const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
