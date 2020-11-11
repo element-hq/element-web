@@ -285,11 +285,13 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     };
 
     private onStartChat = () => {
-        dis.dispatch({action: "view_create_chat"});
+        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
+        dis.dispatch({ action: "view_create_chat", initialText });
     };
 
     private onExplore = () => {
-        dis.fire(Action.ViewRoomDirectory);
+        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
+        dis.dispatch({ action: Action.ViewRoomDirectory, initialText });
     };
 
     private renderCommunityInvites(): TemporaryTile[] {

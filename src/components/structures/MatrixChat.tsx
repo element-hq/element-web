@@ -653,8 +653,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
             case Action.ViewRoomDirectory: {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
-                    'mx_RoomDirectory_dialogWrapper', false, true);
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                    initialText: payload.initialText,
+                }, 'mx_RoomDirectory_dialogWrapper', false, true);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -677,7 +678,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.chatCreateOrReuse(payload.user_id);
                 break;
             case 'view_create_chat':
-                showStartChatInviteDialog();
+                showStartChatInviteDialog(payload.initialText || "");
                 break;
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
