@@ -11,8 +11,21 @@
     "The message from the parser is: %(message)s": "Meldingen fra parseren er: %(message)s",
     "Invalid JSON": "Ugyldig JSON",
     "Invalid configuration: no default server specified.": "Ugyldig konfigurasjon: ingen standardserver spesifisert.",
-    "Unexpected error preparing the app. See console for details.": "Uventet feil oppsto mens appen ble gjort klar. Se konsollen for detaljer.",
+    "Unexpected error preparing the app. See console for details.": "Uventet feil ved klargjøring av appen. Se konsollen for detaljer.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: Spesifiser kun en av følgende: default_server_config, default_server_name eller default_hs_url.",
     "Open user settings": "Åpne brukerinnstillinger",
-    "Go to your browser to complete Sign In": "Gå til nettleseren din for å fullføre innloggingen"
+    "Go to your browser to complete Sign In": "Gå til nettleseren din for å fullføre innloggingen",
+    "Failed to start": "Kunne ikke starte",
+    "Go to element.io": "Gå til element.io",
+    "I understand the risks and wish to continue": "Jeg forstår risikoen og ønsker å fortsette",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kan fortsette å bruke din nåværende nettleser, men noen eller alle funksjonene fungerer kanskje ikke, og utseendet og følelsen av applikasjonen kan være feil.",
+    "Your browser can't run %(brand)s": "Nettleseren din kan ikke kjøre %(brand)s",
+    "Unsupported browser": "Ustøttet nettleser",
+    "Powered by Matrix": "Drevet av Matrix",
+    "Previous/next recently visited room or community": "Forrige/neste nylig besøkte rom eller samfunn",
+    "Download Completed": "Nedlasting Fullført",
+    "Unable to load config file: please refresh the page to try again.": "Kan ikke laste inn konfigurasjonsfil: oppdater siden for å prøve igjen.",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Ditt Element konfigurasjonen inneholder ugyldig JSON. Løs problemet og last siden på nytt.",
+    "Your Element is misconfigured": "Ditt Element er feilkonfigurert",
+    "Missing indexeddb worker script!": "Mangler indexeddb arbeiderskript!"
 }
