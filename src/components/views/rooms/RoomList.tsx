@@ -284,6 +284,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private onStartChat = () => {
+        dis.dispatch({action: "view_create_chat"});
+    };
+
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
     };
@@ -335,8 +339,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             return p;
         }, [] as TagID[]);
 
-        // show a skeleton UI if the user is in no rooms
-        const showSkeleton = Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
+        // show a skeleton UI if the user is in no rooms and they are not filtering
+        const showSkeleton = !this.state.isNameFiltering &&
+            Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
         for (const orderedTagId of tagOrder) {
             const orderedRooms = this.state.sublists[orderedTagId] || [];
@@ -376,7 +381,18 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{_t("Can't see what you’re looking for?")}</div>
-                    <AccessibleButton kind="link" onClick={this.onExplore}>
+                    <AccessibleButton
+                        className="mx_RoomList_explorePrompt_startChat"
+                        kind="link"
+                        onClick={this.onStartChat}
+                    >
+                        {_t("Start a new chat")}
+                    </AccessibleButton>
+                    <AccessibleButton
+                        className="mx_RoomList_explorePrompt_explore"
+                        kind="link"
+                        onClick={this.onExplore}
+                    >
                         {_t("Explore all public rooms")}
                     </AccessibleButton>
                 </div>;
@@ -388,7 +404,18 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 if (unfilteredRooms.length < 1 && unfilteredHistorical < 1) {
                     explorePrompt = <div className="mx_RoomList_explorePrompt">
                         <div>{_t("Use the + to make a new room or explore existing ones below")}</div>
-                        <AccessibleButton kind="link" onClick={this.onExplore}>
+                        <AccessibleButton
+                            className="mx_RoomList_explorePrompt_startChat"
+                            kind="link"
+                            onClick={this.onStartChat}
+                        >
+                            {_t("Start a new chat")}
+                        </AccessibleButton>
+                        <AccessibleButton
+                            className="mx_RoomList_explorePrompt_explore"
+                            kind="link"
+                            onClick={this.onExplore}
+                        >
                             {_t("Explore all public rooms")}
                         </AccessibleButton>
                     </div>;
