@@ -507,6 +507,19 @@ export default class Registration extends React.Component {
             return null;
         }
 
+        // If we're on a different phase, we only show the server type selector,
+        // which is always shown if we allow custom URLs at all.
+        // (if there's a fatal server error, we need to show the full server
+        // config as the user may need to change servers to resolve the error).
+        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS && !this.state.serverErrorIsFatal) {
+            return <div>
+                <ServerTypeSelector
+                    selected={this.state.serverType}
+                    onChange={this.onServerTypeChange}
+                />
+            </div>;
+        }
+
         const serverDetailsProps = {};
         if (PHASES_ENABLED) {
             serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
@@ -704,10 +717,10 @@ export default class Registration extends React.Component {
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }
-                <h3>
+                { this.state.phase !== PHASE_SERVER_DETAILS && <h3>
                     {yourMatrixAccountText}
                     {editLink}
-                </h3>
+                </h3> }
                 { this.renderRegisterComponent() }
                 { goBack }
                 { signIn }
