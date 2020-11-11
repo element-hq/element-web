@@ -99,6 +99,10 @@ const NewRoomIntro = () => {
             });
         }
 
+        const onInviteClick = () => {
+            dis.dispatch({ action: "view_invite", roomId });
+        };
+
         const avatarUrl = room.currentState.getStateEvents(EventType.RoomAvatar, "")?.getContent()?.url;
         body = <React.Fragment>
             <MiniAvatarUploader
@@ -116,7 +120,7 @@ const NewRoomIntro = () => {
             })}</p>
             <p>{topicText}</p>
             <div className="mx_NewRoomIntro_buttons">
-                <AccessibleButton className="mx_NewRoomIntro_inviteButton" kind="primary">
+                <AccessibleButton className="mx_NewRoomIntro_inviteButton" kind="primary" onClick={onInviteClick}>
                     {_t("Invite to this room")}
                 </AccessibleButton>
             </div>
