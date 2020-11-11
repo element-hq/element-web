@@ -461,7 +461,7 @@ export default class RegistrationForm extends React.Component {
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
             autoComplete="new-password"
-            label={_t("Confirm")}
+            label={_t("Confirm password")}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
