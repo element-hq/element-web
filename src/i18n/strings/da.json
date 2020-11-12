@@ -17,5 +17,12 @@
     "Unable to load config file: please refresh the page to try again.": "Ikke i stand til at loade config fil: genopfrisk venligst siden for at prøve igen.",
     "Open user settings": "Åbn brugerindstillinger",
     "Previous/next recently visited room or community": "Forrige/næste besøgte rum eller fællesskab",
-    "Go to your browser to complete Sign In": "Gå til din browser for at færdiggøre Log ind"
+    "Go to your browser to complete Sign In": "Gå til din browser for at færdiggøre Log ind",
+    "Go to element.io": "Gå til element.io",
+    "I understand the risks and wish to continue": "Jeg forstår risikoen og ønsker at fortsætte",
+    "Unsupported browser": "Usupporteret browser",
+    "Open": "Åbn",
+    "Download Completed": "Hentning færdig",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Din Element konfiguration indeholder ugyldig JSON. Løs venligst problemet og genindlæs siden.",
+    "Your Element is misconfigured": "Din Element er konfigureret forkert"
 }
