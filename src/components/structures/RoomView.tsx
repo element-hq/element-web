@@ -1115,16 +1115,9 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         ev.dataTransfer.dropEffect = 'none';
 
-        const items = [...ev.dataTransfer.items];
-        if (items.length >= 1) {
-            const isDraggingFiles = items.every(function(item) {
-                return item.kind == 'file';
-            });
-
-            if (isDraggingFiles) {
-                this.setState({ draggingFile: true });
-                ev.dataTransfer.dropEffect = 'copy';
-            }
+        if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
+            this.setState({ draggingFile: true });
+            ev.dataTransfer.dropEffect = 'copy';
         }
     };
 
