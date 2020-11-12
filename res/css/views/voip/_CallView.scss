@@ -15,47 +15,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_CallView {
+    border-radius: 10px;
+    background-color: $input-lighter-bg-color;
+    padding-left: 8px;
+    padding-right: 8px;
+    // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
+    pointer-events: initial;
+}
+
+.mx_CallView_large {
+    padding-bottom: 10px;
+
+    .mx_CallView_voice {
+        height: 360px;
+    }
+}
+
+.mx_CallView_pip {
+    width: 320px;
+
+    .mx_CallView_voice {
+        height: 180px
+    }
+}
+
 .mx_CallView_voice {
-    background-color: $accent-color;
-    color: $accent-fg-color;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $inverted-bg-color;
+}
+
+/*
+.mx_CallView_voice {
     padding: 6px;
     font-weight: bold;
 
-    border-radius: 8px;
     min-width: 200px;
-
-    display: flex;
-    align-items: center;
-
-    img {
-        margin: 4px;
-        margin-right: 10px;
-    }
-
-    > div {
-        display: flex;
-        flex-direction: column;
-        // Hacky vertical align
-        padding-top: 3px;
-    }
-
-    > div > p,
-    > div > h1 {
-        padding: 0;
-        margin: 0;
-        font-size: $font-13px;
-        line-height: $font-15px;
-    }
-
-    > div > p {
-        font-weight: bold;
-    }
-
-    > * {
-        flex-grow: 0;
-        flex-shrink: 0;
-    }
+    text-align: center;
+    vertical-align: middle;
 }
 
 .mx_CallView_hangup {
@@ -92,6 +91,7 @@ limitations under the License.
         background-color: $primary-fg-color;
     }
 }
+*/
 
 .mx_CallView_video {
     width: 100%;
@@ -99,3 +99,76 @@ limitations under the License.
     z-index: 30;
 }
 
+.mx_CallView_header {
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+
+    .mx_BaseAvatar {
+        margin-right: 12px;
+    }
+}
+
+.mx_CallView_header_callType {
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.mx_CallView_header_controls {
+    margin-left: auto;
+}
+
+.mx_CallView_header_control_fullscreen {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+        background-color: $secondary-fg-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        mask-image: url('$(res)/img/element-icons/call/fullscreen.svg');
+    }
+}
+
+.mx_CallView_header_roomName {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: initial;
+}
+
+.mx_CallView_header_callTypeSmall {
+    font-size: 12px;
+    color: $secondary-fg-color;
+    line-height: initial;
+}
+
+.mx_CallView_header_phoneIcon {
+    display: inline-block;
+    margin-right: 6px;
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        vertical-align: top;
+
+        height: 16px;
+        width: 16px;
+        background-color: $warning-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+    }
+}

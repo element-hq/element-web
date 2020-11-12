@@ -73,8 +73,6 @@ export default class VideoFeed extends React.Component<IProps> {
         let videoStyle = {};
         if (this.props.maxHeight) videoStyle = { maxHeight: this.props.maxHeight };
 
-        return <div className={classnames(videoClasses)}>
-            <video ref={this.vid} style={videoStyle}></video>
-        </div>;
+        return <video className={classnames(videoClasses)} ref={this.vid} style={videoStyle} />;
     }
 }

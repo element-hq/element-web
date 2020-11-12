@@ -21,10 +21,8 @@ import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import AccessibleButton from '../elements/AccessibleButton';
 import VideoFeed, { VideoFeedType } from "./VideoFeed";
 import RoomAvatar from "../avatars/RoomAvatar";
-import PulsedAvatar from '../avatars/PulsedAvatar';
 import { CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 
@@ -42,9 +40,6 @@ interface IProps {
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
         onResize?: any;
-
-        // classname applied to view,
-        className?: string;
 
         // Whether to show the hang up icon:W
         showHangup?: boolean;
@@ -85,7 +80,7 @@ function exitFullscreen() {
 
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
-    private container = createRef<HTMLDivElement>();
+    private contentRef = createRef<HTMLDivElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -111,11 +106,11 @@ export default class CallView extends React.Component<IProps, IState> {
     private onAction = (payload) => {
         switch (payload.action) {
             case 'video_fullscreen': {
-                if (!this.container.current) {
+                if (!this.contentRef.current) {
                     return;
                 }
                 if (payload.fullscreen) {
-                    requestFullscreen(this.container.current);
+                    requestFullscreen(this.contentRef.current);
                 } else if (getFullScreenElement()) {
                     exitFullscreen();
                 }
@@ -144,11 +139,6 @@ export default class CallView extends React.Component<IProps, IState> {
         if (this.props.room) {
             const roomId = this.props.room.roomId;
             call = CallHandler.sharedInstance().getCallForRoom(roomId);
-
-            // We don't currently show voice calls in this view when in the room:
-            // they're represented in the room status bar at the bottom instead
-            // (but this will all change with the new designs)
-            if (call && call.type == CallType.Voice) call = null;
         } else {
             call = CallHandler.sharedInstance().getAnyActiveCall();
             // Ignore calls if we can't get the room associated with them.
@@ -160,7 +150,7 @@ export default class CallView extends React.Component<IProps, IState> {
             }
         }
 
-        if (call && call.state == CallState.Ended) return null;
+        if (call && [CallState.Ended, CallState.Ringing].includes(call.state)) return null;
         return call;
     }
 
@@ -177,51 +167,91 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
+    private onFullscreenClick = () => {
+        dis.dispatch({
+            action: 'video_fullscreen',
+            fullscreen: true,
+        });
+    };
+
     public render() {
-        let view: React.ReactNode;
+        if (!this.state.call) return null;
 
-        if (this.state.call) {
-            if (this.state.call.type === "voice") {
-                const client = MatrixClientPeg.get();
-                const callRoom = client.getRoom(this.state.call.roomId);
+        const client = MatrixClientPeg.get();
+        const callRoom = client.getRoom(this.state.call.roomId);
 
-                let caption = _t("Active call");
-                if (this.state.isLocalOnHold) {
-                    // we currently have no UI for holding / unholding a call (apart from slash
-                    // commands) so we don't disintguish between when we've put the call on hold
-                    // (ie. we'd show an unhold button) and when the other side has put us on hold
-                    // (where obviously we would not show such a button).
-                    caption = _t("Call Paused");
-                }
+        //const callControls = <div className="mx_CallView_callControls">
 
-                view = <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
-                    <PulsedAvatar>
-                        <RoomAvatar
-                            room={callRoom}
-                            height={35}
-                            width={35}
-                        />
-                    </PulsedAvatar>
-                    <div>
-                        <h1>{callRoom.name}</h1>
-                        <p>{ caption }</p>
-                    </div>
-                </AccessibleButton>;
-            } else {
-                // For video calls, we currently ignore the call hold state altogether
-                // (the video will just go black)
+        //</div>;
 
-                // if we're fullscreen, we don't want to set a maxHeight on the video element.
-                const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight;
-                view = <div className="mx_CallView_video" onClick={this.props.onClick}>
-                    <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
-                        maxHeight={maxVideoHeight}
-                    />
-                    <VideoFeed type={VideoFeedType.Local} call={this.state.call} />
-                </div>;
-            }
+        // The 'content' for the call, ie. the videos for a video call and profile picture
+        // for voice calls (fills the bg)
+        let contentView: React.ReactNode;
+
+        if (this.state.call.type === CallType.Video) {
+            // if we're fullscreen, we don't want to set a maxHeight on the video element.
+            const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight;
+            contentView = <div className="mx_CallView_video" ref={this.contentRef}>
+                <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
+                    maxHeight={maxVideoHeight}
+                />
+                <VideoFeed type={VideoFeedType.Local} call={this.state.call} />
+            </div>;
+        } else {
+            const avatarSize = this.props.room ? 200 : 75;
+            contentView = <div className="mx_CallView_voice">
+                <RoomAvatar
+                    room={callRoom}
+                    height={avatarSize}
+                    width={avatarSize}
+                />
+            </div>;
         }
 
+        /*
+        if (!this.props.room) {
+            const client = MatrixClientPeg.get();
+            const callRoom = client.getRoom(this.state.call.roomId);
+
+            let caption = _t("Active call");
+            if (this.state.isLocalOnHold) {
+                // we currently have no UI for holding / unholding a call (apart from slash
+                // commands) so we don't disintguish between when we've put the call on hold
+                // (ie. we'd show an unhold button) and when the other side has put us on hold
+                // (where obviously we would not show such a button).
+                caption = _t("Call Paused");
+            }
+
+            view = <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
+                <PulsedAvatar>
+                    <RoomAvatar
+                        room={callRoom}
+                        height={35}
+                        width={35}
+                    />
+                </PulsedAvatar>
+                <div>
+                    <h1>{callRoom.name}</h1>
+                    <p>{ caption }</p>
+                </div>
+            </AccessibleButton>;
+        } else {
+            // For video calls, we currently ignore the call hold state altogether
+            // (the video will just go black)
+
+            // if we're fullscreen, we don't want to set a maxHeight on the video element.
+            const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight;
+            view = <div className="mx_CallView_video" onClick={this.props.onClick}>
+                <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
+                    maxHeight={maxVideoHeight}
+                />
+                <VideoFeed type={VideoFeedType.Local} call={this.state.call} />
+            </div>;
+        }
+        */
+
+
+        /*
         let hangup: React.ReactNode;
         if (this.props.showHangup) {
             hangup = <div
@@ -234,10 +264,45 @@ export default class CallView extends React.Component<IProps, IState> {
                 }}
             />;
         }
+        */
 
-        return <div className={this.props.className} ref={this.container}>
-            {view}
-            {hangup}
+        const callTypeText = this.state.call.type === CallType.Video ? _t("Video Call") : _t("Voice Call");
+        let myClassName;
+
+        let fullScreenButton;
+        if (this.state.call.type === CallType.Video) {
+            fullScreenButton = <div className="mx_CallView_header_control_fullscreen"
+                onClick={this.onFullscreenClick} title={_t("Fill screen")}
+            />;
+        }
+
+        const headerControls = <div className="mx_CallView_header_controls">
+            {fullScreenButton}
+        </div>;
+
+        let header: React.ReactNode;
+        if (this.props.room) {
+            header = <div className="mx_CallView_header">
+                <div className="mx_CallView_header_phoneIcon"></div>
+                <span className="mx_CallView_header_callType">{callTypeText}</span>
+                {headerControls}
+            </div>;
+            myClassName = 'mx_CallView_large';
+        } else {
+            header = <div className="mx_CallView_header">
+                <RoomAvatar room={callRoom} height={32} width={32} />
+                <div>
+                    <div className="mx_CallView_header_roomName">{callRoom.name}</div>
+                    <div className="mx_CallView_header_callTypeSmall">{callTypeText}</div>
+                </div>
+                {headerControls}
+            </div>;
+            myClassName = 'mx_CallView_pip';
+        }
+
+        return <div className={"mx_CallView " + myClassName}>
+            {header}
+            {contentView}
         </div>;
     }
 }

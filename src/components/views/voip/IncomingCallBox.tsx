@@ -22,7 +22,6 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import CallHandler from '../../../CallHandler';
-import PulsedAvatar from '../avatars/PulsedAvatar';
 import RoomAvatar from '../avatars/RoomAvatar';
 import FormButton from '../elements/FormButton';
 import { CallState } from 'matrix-js-sdk/lib/webrtc/call';
@@ -108,13 +107,11 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
         return <div className="mx_IncomingCallBox">
             <div className="mx_IncomingCallBox_CallerInfo">
-                <PulsedAvatar>
-                    <RoomAvatar
-                        room={room}
-                        height={32}
-                        width={32}
-                    />
-                </PulsedAvatar>
+                <RoomAvatar
+                    room={room}
+                    height={32}
+                    width={32}
+                />
                 <div>
                     <h1>{caller}</h1>
                     <p>{incomingCallText}</p>
