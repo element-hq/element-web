@@ -2840,5 +2840,7 @@
     "Call Paused": "Kõne on ajutiselt peatatud",
     "Takes the call in the current room off hold": "Võtab selles jututoas ootel oleva kõne",
     "Places the call in the current room on hold": "Jätab kõne selles jututoas ootele",
-    "Role": "Roll"
+    "Role": "Roll",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(count)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(count)s jututoa andmete salvestamiseks kulub hetkel %(size)s."
 }
