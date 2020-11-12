@@ -56,7 +56,6 @@ import {getCustomTheme} from "../../theme";
 import CountlyAnalytics from "../../CountlyAnalytics";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import ActiveRoomObserver from "../../ActiveRoomObserver";
 
 // TODO: Destroy all of this code
 
@@ -151,6 +150,7 @@ export class StopGapWidget extends EventEmitter {
     private messaging: ClientWidgetApi;
     private mockWidget: ElementWidget;
     private scalarToken: string;
+    private roomId?: string;
 
     constructor(private appTileProps: IAppTileProps) {
         super();
@@ -163,6 +163,18 @@ export class StopGapWidget extends EventEmitter {
         }
 
         this.mockWidget = new ElementWidget(app);
+        this.roomId = appTileProps.room?.roomId;
+    }
+
+    private get eventListenerRoomId(): string {
+        // When widgets are listening to events, we need to make sure they're only
+        // receiving events for the right room. In particular, room widgets get locked
+        // to the room they were added in while account widgets listen to the currently
+        // active room.
+
+        if (this.roomId) return this.roomId;
+
+        return RoomViewStore.getRoomId();
     }
 
     public get widgetApi(): ClientWidgetApi {
@@ -310,7 +322,7 @@ export class StopGapWidget extends EventEmitter {
             const targetRoomId = (ev.detail.data || {}).room_id;
             if (!targetRoomId) {
                 return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
-                    error: {message: "Invalid room ID."},
+                    error: {message: "Room ID not supplied."},
                 });
             }
 
@@ -437,13 +449,13 @@ export class StopGapWidget extends EventEmitter {
 
     private onEvent = (ev: MatrixEvent) => {
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-        if (ev.getRoomId() !== ActiveRoomObserver.activeRoomId) return;
+        if (ev.getRoomId() !== this.eventListenerRoomId) return;
         this.feedEvent(ev);
     };
 
     private onEventDecrypted = (ev: MatrixEvent) => {
         if (ev.isDecryptionFailure()) return;
-        if (ev.getRoomId() !== ActiveRoomObserver.activeRoomId) return;
+        if (ev.getRoomId() !== this.eventListenerRoomId) return;
         this.feedEvent(ev);
     };
 
