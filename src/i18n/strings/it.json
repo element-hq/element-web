@@ -2841,5 +2841,8 @@
     "Åland Islands": "Isole Åland",
     "Afghanistan": "Afghanistan",
     "United States": "Stati Uniti",
-    "United Kingdom": "Regno Unito"
+    "United Kingdom": "Regno Unito",
+    "Role": "Ruolo",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(count)s stanza.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(count)s stanze."
 }
