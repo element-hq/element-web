@@ -14,22 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HostingProviderDialog .mx_Dialog {
-    width: 60%;
-    height: 70%;
-    overflow: hidden;
-    padding: 0;
-    max-width: initial;
-    max-height: initial;
-    position: relative;
+.mx_HostingSignupDialog .mx_Dialog {
+    height: 50%;
 }
 
-.mx_HostingProviderDialog_container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+.mx_HostingSignupBaseDialog {
+    height: 100%;
+}
+
+.mx_HostingSignupDialog_container {
+    height: 100%;
 
     iframe {
         width: 100%;
@@ -39,6 +33,6 @@ limitations under the License.
     }
 }
 
-.mx_HostingProviderTrigger {
+.mx_HostingSignupTrigger {
     cursor: pointer;
 }
