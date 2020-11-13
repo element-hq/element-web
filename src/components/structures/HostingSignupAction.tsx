@@ -23,15 +23,34 @@ interface IProps {}
 interface IState {}
 
 export default class HostingSignupAction extends React.PureComponent<IProps, IState> {
-    private static openDialog() {
-        Modal.createDialog(
-            HostingSignupDialog, {}, "mx_HostingSignupDialog",
+    closingAllowed = false;
+    modalRef: any;
+
+    private openDialog = () => {
+        this.modalRef = Modal.createTrackedDialog(
+            'Hosting Signup Open',
+            '',
+            HostingSignupDialog,
+            {
+                requestClose: this.requestClose,
+            },
+            "mx_HostingSignupDialog",
+            false,
+            true,
+            {
+                onBeforeClose: async () => this.closingAllowed,
+            },
         );
+    }
+
+    private requestClose = () => {
+        this.closingAllowed = true;
+        this.modalRef.close();
     }
 
     public render(): React.ReactNode {
         return (
-            <div onClick={HostingSignupAction.openDialog} className="mx_HostingSignupAction">
+            <div onClick={this.openDialog} className="mx_HostingSignupAction">
                 Get your own personal Element!
             </div>
         );

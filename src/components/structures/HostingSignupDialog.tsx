@@ -15,10 +15,14 @@ limitations under the License.
 */
 
 import * as React from "react";
+import * as sdk from '../../index';
+import Modal from "../../Modal";
 import SdkConfig from "../../SdkConfig";
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 
-interface IProps {}
+interface IProps {
+    requestClose(): void,
+}
 
 interface IState {
     error: string,
@@ -49,6 +53,29 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                 // noinspection JSIgnoredPromiseFromCall
                 this.fetchOpenIDToken();
                 break;
+            case 'setup_complete':
+                this.onFinished(true);
+                break;
+        }
+    }
+
+    private onFinished = (result: boolean) => {
+        if (result) {
+            // We're done, close
+            this.props.requestClose();
+        } else {
+            const ConfirmDialog = sdk.getComponent('views.dialogs.ConfirmCloseHostingSignupDialog');
+            Modal.createDialog(
+                ConfirmDialog,
+                {
+                    onFinished: result => {
+                        if (result) {
+                            // TODO call an API endpoint to clean up?
+                            this.props.requestClose();
+                        }
+                    },
+                },
+            )
         }
     }
 
@@ -82,18 +109,25 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
     }
 
     public render(): React.ReactNode {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_HostingSignupDialog_container">
-                <iframe
-                    src={this.hostingSignupUrl}
-                    ref={ref => this.iframeRef = ref}
-                />
-                {this.state.error &&
-                    <div>
-                        {this.state.error}
-                    </div>
-                }
-            </div>
+            <BaseDialog
+                onFinished={this.onFinished}
+                title="Set up your own personal Element host"
+                hasCancel={true}
+            >
+                <div className="mx_HostingSignupDialog_container">
+                    <iframe
+                        src={this.hostingSignupUrl}
+                        ref={ref => this.iframeRef = ref}
+                    />
+                    {this.state.error &&
+                        <div>
+                            {this.state.error}
+                        </div>
+                    }
+                </div>
+            </BaseDialog>
         );
     }
 }
