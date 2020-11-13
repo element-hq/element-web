@@ -315,12 +315,19 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const hostingSignupIFrame = SdkConfig.get().hosting_signup_iframe;
         let hostingIFrame;
         if (hostingSignupIFrame) {
-            hostingIFrame = <div
-                className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink"
-                onClick={this.onCloseMenu}
-            >
-                <HostingProviderTrigger />
-            </div>;
+            // If hosting_signup_domains is set to a non-empty array, only show
+            // dialog if the user is on the domain or a subdomain.
+            const hostingSignupDomains = SdkConfig.get().hosting_signup_domains || [];
+            const mxDomain = MatrixClientPeg.get().getDomain();
+            const validDomains = hostingSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
+            if (!hostingSignupDomains || validDomains.length > 0) {
+                hostingIFrame = <div
+                    className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink"
+                    onClick={this.onCloseMenu}
+                >
+                    <HostingProviderTrigger />
+                </div>;
+            }
         }
 
         let homeButton = null;
