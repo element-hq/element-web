@@ -2770,5 +2770,7 @@
     "Vatican City": "Cidade do Vaticano",
     "Vanuatu": "Vanuatu",
     "Uzbekistan": "Uzbequistão",
-    "Role": "Função"
+    "Role": "Função",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Armazene localmente com segurança as mensagens criptografadas para que apareçam nos resultados da pesquisa, usando %(size)s para armazenar mensagens de %(count)s sala.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Armazene localmente com segurança as mensagens criptografadas para que apareçam nos resultados da pesquisa, usando %(size)s para armazenar mensagens de %(count)s salas."
 }
