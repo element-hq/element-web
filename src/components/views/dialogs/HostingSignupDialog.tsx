@@ -49,6 +49,9 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         }
 
         switch (message.data.action) {
+            case 'access_token_credential_request':
+                this.sendAccessToken();
+                break;
             case 'openid_credentials_request':
                 // noinspection JSIgnoredPromiseFromCall
                 this.fetchOpenIDToken();
@@ -98,6 +101,13 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                 error: "Failed to connect to your homeserver. Please close this dialog and try again.",
             });
         }
+    }
+
+    private sendAccessToken() {
+        this.sendMessage({
+            action: 'access_token_credential',
+            token: MatrixClientPeg.get().getAccessToken(),
+        });
     }
 
     public componentDidMount() {
