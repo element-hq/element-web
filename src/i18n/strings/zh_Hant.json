@@ -2842,5 +2842,7 @@
     "Call Paused": "通話已暫停",
     "Takes the call in the current room off hold": "讓目前聊天室中的通話保持等候接聽的狀態",
     "Places the call in the current room on hold": "在目前的聊天室撥打通話並等候接聽",
-    "Role": "角色"
+    "Role": "角色",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "使用 %(size)s 儲存來自 %(count)s 個聊天室的訊息，在本機安全地快取已加密的訊息以讓它們可以在搜尋結果中出現。",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "使用 %(size)s 儲存來自 %(count)s 個聊天室的訊息，在本機安全地快取已加密的訊息以讓它們可以在搜尋結果中出現。"
 }
