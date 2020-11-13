@@ -16,7 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import Modal from "../../Modal";
-import HostingSignupDialog from "./HostingSignupDialog";
+import HostingSignupDialog from "../views/dialogs/HostingSignupDialog";
 
 interface IProps {}
 

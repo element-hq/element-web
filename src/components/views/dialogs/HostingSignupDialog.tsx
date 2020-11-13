@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import * as React from "react";
-import * as sdk from '../../index';
-import Modal from "../../Modal";
-import SdkConfig from "../../SdkConfig";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from '../../../index';
+import Modal from "../../../Modal";
+import SdkConfig from "../../../SdkConfig";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 interface IProps {
     requestClose(): void,
