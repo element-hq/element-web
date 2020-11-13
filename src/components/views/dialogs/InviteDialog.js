@@ -31,7 +31,7 @@ import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
-import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
+import createRoom, {canEncryptToAllUsers, findDMForUser, privateShouldBeEncrypted} from "../../../createRoom";
 import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
@@ -41,6 +41,7 @@ import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
+import {Room} from "matrix-js-sdk/src/models/room";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -575,7 +576,12 @@ export default class InviteDialog extends React.PureComponent {
         const targetIds = targets.map(t => t.userId);
 
         // Check if there is already a DM with these people and reuse it if possible.
-        const existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        let existingRoom: Room;
+        if (targetIds.length === 1) {
+            existingRoom = findDMForUser(MatrixClientPeg.get(), targetIds[0]);
+        } else {
+            existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        }
         if (existingRoom) {
             dis.dispatch({
                 action: 'view_room',
