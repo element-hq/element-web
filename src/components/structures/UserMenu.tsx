@@ -51,7 +51,7 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
 import {UIFeature} from "../../settings/UIFeature";
-import HostingProviderTrigger from "./HostingProviderTrigger";
+import HostingSignupAction from "./HostingSignupAction";
 
 interface IProps {
     isMinimized: boolean;
@@ -312,20 +312,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </div>
             );
         }
-        const hostingSignupIFrame = SdkConfig.get().hosting_signup_iframe;
-        let hostingIFrame;
-        if (hostingSignupIFrame) {
+        const hostingSignupOptions = SdkConfig.get().hosting_signup;
+        let hostingSignupIFrame;
+        if (hostingSignupOptions && hostingSignupOptions.url) {
             // If hosting_signup_domains is set to a non-empty array, only show
             // dialog if the user is on the domain or a subdomain.
-            const hostingSignupDomains = SdkConfig.get().hosting_signup_domains || [];
+            const hostingSignupDomains = hostingSignupOptions.domains || [];
             const mxDomain = MatrixClientPeg.get().getDomain();
             const validDomains = hostingSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
             if (!hostingSignupDomains || validDomains.length > 0) {
-                hostingIFrame = <div
+                hostingSignupIFrame = <div
                     className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink"
                     onClick={this.onCloseMenu}
                 >
-                    <HostingProviderTrigger />
+                    <HostingSignupAction />
                 </div>;
             }
         }
@@ -513,7 +513,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </AccessibleTooltipButton>
             </div>
             {topSection}
-            {hostingIFrame}
+            {hostingSignupIFrame}
             {primaryOptionList}
             {secondarySection}
         </IconizedContextMenu>;

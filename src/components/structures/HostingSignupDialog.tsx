@@ -24,7 +24,7 @@ interface IState {
     error: string,
 }
 
-export default class HostingProviderDialog extends React.PureComponent<IProps, IState> {
+export default class HostingSignupDialog extends React.PureComponent<IProps, IState> {
     iframeRef;
     hostingSignupUrl: string;
 
@@ -36,7 +36,7 @@ export default class HostingProviderDialog extends React.PureComponent<IProps, I
         };
 
         this.iframeRef = React.createRef();
-        this.hostingSignupUrl = SdkConfig.get().hosting_signup_iframe;
+        this.hostingSignupUrl = SdkConfig.get().hosting_signup.url;
     }
 
     private messageHandler = (message) => {
@@ -83,7 +83,7 @@ export default class HostingProviderDialog extends React.PureComponent<IProps, I
 
     public render(): React.ReactNode {
         return (
-            <div className="mx_HostingProviderDialog_container">
+            <div className="mx_HostingSignupDialog_container">
                 <iframe
                     src={this.hostingSignupUrl}
                     ref={ref => this.iframeRef = ref}

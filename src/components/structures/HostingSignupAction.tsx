@@ -16,22 +16,22 @@ limitations under the License.
 
 import * as React from "react";
 import Modal from "../../Modal";
-import HostingProviderDialog from "./HostingProviderDialog";
+import HostingSignupDialog from "./HostingSignupDialog";
 
 interface IProps {}
 
 interface IState {}
 
-export default class HostingProviderTrigger extends React.PureComponent<IProps, IState> {
+export default class HostingSignupAction extends React.PureComponent<IProps, IState> {
     private static openDialog() {
         Modal.createDialog(
-            HostingProviderDialog, {}, "mx_HostingProviderDialog",
+            HostingSignupDialog, {}, "mx_HostingSignupDialog",
         );
     }
 
     public render(): React.ReactNode {
         return (
-            <div onClick={HostingProviderTrigger.openDialog} className="mx_HostingProviderTrigger">
+            <div onClick={HostingSignupAction.openDialog} className="mx_HostingSignupAction">
                 Get your own personal Element!
             </div>
         );
