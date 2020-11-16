@@ -51,7 +51,6 @@ import BaseCard from "./BaseCard";
 import {E2EStatus} from "../../../utils/ShieldUtils";
 import ImageView from "../elements/ImageView";
 import Spinner from "../elements/Spinner";
-import IconButton from "../elements/IconButton";
 import PowerSelector from "../elements/PowerSelector";
 import MemberAvatar from "../avatars/MemberAvatar";
 import PresenceLabel from "../rooms/PresenceLabel";
@@ -60,6 +59,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
 import InfoDialog from "../dialogs/InfoDialog";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 interface IDevice {
     deviceId: string;
@@ -586,7 +586,10 @@ const RedactMessagesButton: React.FC<IBaseProps> = ({member}) => {
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
                 if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction() &&
-                    event.getType() !== "m.room.create"
+                    event.getType() !== EventType.RoomCreate &&
+                    // Don't redact ACLs because that'll obliterate the room
+                    // See https://github.com/matrix-org/synapse/issues/4042 for details.
+                    event.getType() !== EventType.RoomServerAcl
                 ) {
                     return events.concat(event);
                 } else {
@@ -1024,24 +1027,15 @@ const PowerLevelSection: React.FC<{
     roomPermissions: IRoomPermissions;
     powerLevels: IPowerLevelsContent;
 }> = ({user, room, roomPermissions, powerLevels}) => {
-    const [isEditing, setEditing] = useState(false);
-    if (isEditing) {
-        return (<PowerLevelEditor
-            user={user} room={room} roomPermissions={roomPermissions}
-            onFinished={() => setEditing(false)} />);
+    if (roomPermissions.canEdit) {
+        return (<PowerLevelEditor user={user} room={room} roomPermissions={roomPermissions} />);
     } else {
         const powerLevelUsersDefault = powerLevels.users_default || 0;
         const powerLevel = parseInt(user.powerLevel, 10);
-        const modifyButton = roomPermissions.canEdit ?
-            (<IconButton icon="edit" onClick={() => setEditing(true)} />) : null;
         const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
-        const label = _t("<strong>%(role)s</strong> in %(roomName)s",
-            {role, roomName: room.name},
-            {strong: label => <strong>{label}</strong>},
-        );
         return (
             <div className="mx_UserInfo_profileField">
-                <div className="mx_UserInfo_roleDescription">{label}{modifyButton}</div>
+                <div className="mx_UserInfo_roleDescription">{role}</div>
             </div>
         );
     }
@@ -1051,20 +1045,15 @@ const PowerLevelEditor: React.FC<{
     user: User;
     room: Room;
     roomPermissions: IRoomPermissions;
-    onFinished(): void;
-}> = ({user, room, roomPermissions, onFinished}) => {
+}> = ({user, room, roomPermissions}) => {
     const cli = useContext(MatrixClientContext);
 
-    const [isUpdating, setIsUpdating] = useState(false);
     const [selectedPowerLevel, setSelectedPowerLevel] = useState(parseInt(user.powerLevel, 10));
-    const [isDirty, setIsDirty] = useState(false);
-    const onPowerChange = useCallback((powerLevel) => {
-        setIsDirty(true);
-        setSelectedPowerLevel(parseInt(powerLevel, 10));
-    }, [setSelectedPowerLevel, setIsDirty]);
+    const onPowerChange = useCallback(async (powerLevelStr: string) => {
+        const powerLevel = parseInt(powerLevelStr, 10);
+        setSelectedPowerLevel(powerLevel);
 
-    const changePowerLevel = useCallback(async () => {
-        const _applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
+        const applyPowerChange = (roomId, target, powerLevel, powerLevelEvent) => {
             return cli.setPowerLevel(roomId, target, parseInt(powerLevel), powerLevelEvent).then(
                 function() {
                     // NO-OP; rely on the m.room.member event coming down else we could
@@ -1080,64 +1069,42 @@ const PowerLevelEditor: React.FC<{
             );
         };
 
-        try {
-            if (!isDirty) {
-                return;
-            }
+        const roomId = user.roomId;
+        const target = user.userId;
 
-            setIsUpdating(true);
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
 
-            const powerLevel = selectedPowerLevel;
+        const myUserId = cli.getUserId();
+        const myPower = powerLevelEvent.getContent().users[myUserId];
+        if (myPower && parseInt(myPower) === powerLevel) {
+            const {finished} = Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are promoting the user " +
+                            "to have the same power level as yourself.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+            });
 
-            const roomId = user.roomId;
-            const target = user.userId;
-
-            const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-            if (!powerLevelEvent) return;
-
-            if (!powerLevelEvent.getContent().users) {
-                _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                return;
-            }
-
-            const myUserId = cli.getUserId();
+            const [confirmed] = await finished;
+            if (!confirmed) return;
+        } else if (myUserId === target) {
             // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
-            if (myUserId === target) {
-                try {
-                    if (!(await warnSelfDemote())) return;
-                } catch (e) {
-                    console.error("Failed to warn about self demotion: ", e);
-                }
-                await _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                return;
+            try {
+                if (!(await warnSelfDemote())) return;
+            } catch (e) {
+                console.error("Failed to warn about self demotion: ", e);
             }
-
-            const myPower = powerLevelEvent.getContent().users[myUserId];
-            if (parseInt(myPower) === powerLevel) {
-                const {finished} = Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description:
-                        <div>
-                            { _t("You will not be able to undo this change as you are promoting the user " +
-                                "to have the same power level as yourself.") }<br />
-                            { _t("Are you sure?") }
-                        </div>,
-                    button: _t("Continue"),
-                });
-
-                const [confirmed] = await finished;
-                if (!confirmed) return;
-            }
-            await _applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-        } finally {
-            onFinished();
         }
-    }, [user.roomId, user.userId, cli, selectedPowerLevel, isDirty, setIsUpdating, onFinished, room]);
+
+        await applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+    }, [user.roomId, user.userId, cli, room]);
 
     const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
     const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
-    const buttonOrSpinner = isUpdating ? <Spinner w={16} h={16} /> :
-        <IconButton icon="check" onClick={changePowerLevel} />;
 
     return (
         <div className="mx_UserInfo_profileField">
@@ -1147,9 +1114,7 @@ const PowerLevelEditor: React.FC<{
                 maxValue={roomPermissions.modifyLevelMax}
                 usersDefault={powerLevelUsersDefault}
                 onChange={onPowerChange}
-                disabled={isUpdating}
             />
-            {buttonOrSpinner}
         </div>
     );
 };
@@ -1339,13 +1304,17 @@ const BasicUserInfo: React.FC<{
     }
 
     let memberDetails;
-    if (room && member.roomId) {
-        memberDetails = <PowerLevelSection
-            powerLevels={powerLevels}
-            user={member}
-            room={room}
-            roomPermissions={roomPermissions}
-        />;
+    // hide the Roles section for DMs as it doesn't make sense there
+    if (room && member.roomId && !DMRoomMap.shared().getUserIdForRoomId(member.roomId)) {
+        memberDetails = <div className="mx_UserInfo_container">
+            <h3>{ _t("Role") }</h3>
+            <PowerLevelSection
+                powerLevels={powerLevels}
+                user={member}
+                room={room}
+                roomPermissions={roomPermissions}
+            />
+        </div>;
     }
 
     // only display the devices list if our client supports E2E
@@ -1415,12 +1384,7 @@ const BasicUserInfo: React.FC<{
     );
 
     return <React.Fragment>
-        { memberDetails &&
-        <div className="mx_UserInfo_container mx_UserInfo_separator mx_UserInfo_memberDetailsContainer">
-            <div className="mx_UserInfo_memberDetails">
-                { memberDetails }
-            </div>
-        </div> }
+        { memberDetails }
 
         { securitySection }
         <UserOptionsSection

@@ -280,11 +280,17 @@ class DMRoomTile extends React.PureComponent {
             </span>
         );
 
+        const caption = this.props.member.isEmail
+            ? _t("Invite by email")
+            : this._highlightName(this.props.member.userId);
+
         return (
             <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
-                <span className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
-                <span className='mx_InviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
+                <span className="mx_InviteDialog_roomTile_nameStack">
+                    <div className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</div>
+                    <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
+                </span>
                 {timestamp}
             </div>
         );
@@ -663,12 +669,21 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _onKeyDown = (e) => {
-        // when the field is empty and the user hits backspace remove the right-most target
-        if (!e.target.value && !this.state.busy && this.state.targets.length > 0 && e.key === Key.BACKSPACE &&
-            !e.ctrlKey && !e.shiftKey && !e.metaKey
-        ) {
+        if (this.state.busy) return;
+        const value = e.target.value.trim();
+        const hasModifiers = e.ctrlKey || e.shiftKey || e.metaKey;
+        if (!value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !hasModifiers) {
+            // when the field is empty and the user hits backspace remove the right-most target
             e.preventDefault();
             this._removeMember(this.state.targets[this.state.targets.length - 1]);
+        } else if (value && e.key === Key.ENTER && !hasModifiers) {
+            // when the user hits enter with something in their field try to convert it
+            e.preventDefault();
+            this._convertFilter();
+        } else if (value && e.key === Key.SPACE && !hasModifiers && value.includes("@") && !value.includes(" ")) {
+            // when the user hits space and their input looks like an e-mail/MXID then try to convert it
+            e.preventDefault();
+            this._convertFilter();
         }
     };
 
@@ -811,6 +826,10 @@ export default class InviteDialog extends React.PureComponent {
             filterText = ""; // clear the filter when the user accepts a suggestion
         }
         this.setState({targets, filterText});
+
+        if (this._editorRef && this._editorRef.current) {
+            this._editorRef.current.focus();
+        }
     };
 
     _removeMember = (member: Member) => {
@@ -819,6 +838,10 @@ export default class InviteDialog extends React.PureComponent {
         if (idx >= 0) {
             targets.splice(idx, 1);
             this.setState({targets});
+        }
+
+        if (this._editorRef && this._editorRef.current) {
+            this._editorRef.current.focus();
         }
     };
 
@@ -829,7 +852,7 @@ export default class InviteDialog extends React.PureComponent {
             return;
         }
 
-        // Prevent the text being pasted into the textarea
+        // Prevent the text being pasted into the input
         e.preventDefault();
 
         // Process it as a list of addresses to add instead
@@ -1024,8 +1047,8 @@ export default class InviteDialog extends React.PureComponent {
             <DMUserTile member={t} onRemove={!this.state.busy && this._removeMember} key={t.userId} />
         ));
         const input = (
-            <textarea
-                rows={1}
+            <input
+                type="text"
                 onKeyDown={this._onKeyDown}
                 onChange={this._updateFilter}
                 value={this.state.filterText}
@@ -1033,6 +1056,7 @@ export default class InviteDialog extends React.PureComponent {
                 onPaste={this._onPaste}
                 autoFocus={true}
                 disabled={this.state.busy}
+                autoComplete="off"
             />
         );
         return (
@@ -1103,7 +1127,7 @@ export default class InviteDialog extends React.PureComponent {
 
             if (identityServersEnabled) {
                 helpText = _t(
-                    "Start a conversation with someone using their name, username (like <userId/>) or email address.",
+                    "Start a conversation with someone using their name, email address or username (like <userId/>).",
                     {},
                     {userId: () => {
                         return (
@@ -1158,7 +1182,7 @@ export default class InviteDialog extends React.PureComponent {
 
             if (identityServersEnabled) {
                 helpText = _t(
-                    "Invite someone using their name, username (like <userId/>), email address or " +
+                    "Invite someone using their name, email address, username (like <userId/>) or " +
                         "<a>share this room</a>.",
                     {},
                     {

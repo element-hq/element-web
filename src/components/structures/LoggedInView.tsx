@@ -88,6 +88,7 @@ interface IProps {
     currentUserId?: string;
     currentGroupId?: string;
     currentGroupIsNew?: boolean;
+    justRegistered?: boolean;
 }
 
 interface IUsageLimit {
@@ -573,7 +574,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.HomePage:
-                pageElement = <HomePage />;
+                pageElement = <HomePage justRegistered={this.props.justRegistered} />;
                 break;
 
             case PageTypes.UserView:

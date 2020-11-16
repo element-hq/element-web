@@ -34,6 +34,7 @@ import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import SecurityCustomisations from "./customisations/Security";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -101,6 +102,12 @@ export interface IMatrixClientPeg {
     currentUserIsJustRegistered(): boolean;
 
     /**
+     * If the current user has been registered by this device then this
+     * returns a boolean of whether it was within the last N hours given.
+     */
+    userRegisteredWithinLastHours(hours: number): boolean;
+
+    /**
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      *
@@ -150,6 +157,9 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
     public setJustRegisteredUserId(uid: string): void {
         this.justRegisteredUserId = uid;
+        if (uid) {
+            window.localStorage.setItem("mx_registration_time", String(new Date().getTime()));
+        }
     }
 
     public currentUserIsJustRegistered(): boolean {
@@ -157,6 +167,15 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             this.matrixClient &&
             this.matrixClient.credentials.userId === this.justRegisteredUserId
         );
+    }
+
+    public userRegisteredWithinLastHours(hours: number): boolean {
+        try {
+            const date = new Date(window.localStorage.getItem("mx_registration_time"));
+            return ((new Date().getTime() - date.getTime()) / 36e5) <= hours;
+        } catch (e) {
+            return false;
+        }
     }
 
     public replaceUsingCreds(creds: IMatrixClientCreds): void {
@@ -273,7 +292,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
-        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
+        const customisedCallbacks = {
+            getDehydrationKey: SecurityCustomisations.getDehydrationKey,
+        };
+        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks, customisedCallbacks);
 
         this.matrixClient = createMatrixClient(opts);
 

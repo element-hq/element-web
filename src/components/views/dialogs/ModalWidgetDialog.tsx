@@ -23,6 +23,11 @@ import {
     IModalWidgetCloseRequest,
     IModalWidgetOpenRequestData,
     IModalWidgetReturnData,
+    ISetModalButtonEnabledActionRequest,
+    IWidgetApiAcknowledgeResponseData,
+    IWidgetApiErrorResponseData,
+    BuiltInModalButtonID,
+    ModalButtonID,
     ModalButtonKind,
     Widget,
     WidgetApiFromWidgetAction,
@@ -31,6 +36,7 @@ import {StopGapWidgetDriver} from "../../../stores/widgets/StopGapWidgetDriver";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import { arrayFastClone } from "../../../utils/arrays";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -40,15 +46,19 @@ interface IProps {
 
 interface IState {
     messaging?: ClientWidgetApi;
+    disabledButtonIds: ModalButtonID[];
 }
 
 const MAX_BUTTONS = 3;
 
 export default class ModalWidgetDialog extends React.PureComponent<IProps, IState> {
     private readonly widget: Widget;
+    private readonly possibleButtons: ModalButtonID[];
     private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
 
-    state: IState = {};
+    state: IState = {
+        disabledButtonIds: [],
+    };
 
     constructor(props) {
         super(props);
@@ -58,6 +68,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             creatorUserId: MatrixClientPeg.get().getUserId(),
             id: `modal_${this.props.sourceWidgetId}`,
         });
+        this.possibleButtons = (this.props.widgetDefinition.buttons || []).map(b => b.id);
     }
 
     public componentDidMount() {
@@ -79,11 +90,34 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     private onLoad = () => {
         this.state.messaging.once("ready", this.onReady);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
+        this.state.messaging.on(`action:${WidgetApiFromWidgetAction.SetModalButtonEnabled}`, this.onButtonEnableToggle);
     };
 
     private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>) => {
         this.props.onFinished(true, ev.detail.data);
     }
+
+    private onButtonEnableToggle = (ev: CustomEvent<ISetModalButtonEnabledActionRequest>) => {
+        ev.preventDefault();
+        const isClose = ev.detail.data.button === BuiltInModalButtonID.Close;
+        if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
+            return this.state.messaging.transport.reply(ev.detail, {
+                error: {message: "Invalid button"},
+            } as IWidgetApiErrorResponseData);
+        }
+
+        let buttonIds: ModalButtonID[];
+        if (ev.detail.data.enabled) {
+            buttonIds = arrayFastClone(this.state.disabledButtonIds).filter(i => i !== ev.detail.data.button);
+        } else {
+            // use a set to swap the operation to avoid memory leaky arrays.
+            const tempSet = new Set(this.state.disabledButtonIds);
+            tempSet.add(ev.detail.data.button);
+            buttonIds = Array.from(tempSet);
+        }
+        this.setState({disabledButtonIds: buttonIds});
+        this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
+    };
 
     public render() {
         const templated = this.widget.getCompleteUrl({

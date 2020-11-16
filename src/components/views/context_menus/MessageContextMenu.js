@@ -31,6 +31,7 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import {MenuItem} from "../../structures/ContextMenu";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 
 function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -72,7 +73,10 @@ export default class MessageContextMenu extends React.Component {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
-        const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
+        // We explicitly decline to show the redact option on ACL events as it has a potential
+        // to obliterate the room - https://github.com/matrix-org/synapse/issues/4042
+        const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)
+            && this.props.mxEvent.getType() !== EventType.RoomServerAcl;
         let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality

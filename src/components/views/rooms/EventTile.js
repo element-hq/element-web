@@ -21,6 +21,7 @@ import ReplyThread from "../elements/ReplyThread";
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
@@ -646,12 +647,13 @@ export default class EventTile extends React.Component {
 
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === "m.room.encryption") ||
+            (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+            (eventType === EventType.RoomCreate) ||
+            (eventType === EventType.RoomEncryption) ||
             (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (
-            !isBubbleMessage && eventType !== 'm.room.message' &&
-            eventType !== 'm.sticker' && eventType !== 'm.room.create'
+            !isBubbleMessage && eventType !== EventType.RoomMessage &&
+            eventType !== EventType.Sticker && eventType !== EventType.RoomCreate
         );
 
         // If we're showing hidden events in the timeline, we should use the
