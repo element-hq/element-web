@@ -116,6 +116,8 @@ export enum Views {
     SOFT_LOGOUT,
 }
 
+const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
+
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
@@ -1546,6 +1548,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     showScreen(screen: string, params?: {[key: string]: any}) {
+        const cli = MatrixClientPeg.get();
+        const isLoggedOutOrGuest = !cli || cli.isGuest();
+        if (!isLoggedOutOrGuest && AUTH_SCREENS.includes(screen)) {
+            // user is logged in and landing on an auth page which will uproot their session, redirect them home instead
+            dis.dispatch({ action: "view_home_page" });
+            return;
+        }
+
         if (screen === 'register') {
             dis.dispatch({
                 action: 'start_registration',
@@ -1562,7 +1572,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params: params,
             });
         } else if (screen === 'soft_logout') {
-            if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId() && !Lifecycle.isSoftLogout()) {
+            if (cli.getUserId() && !Lifecycle.isSoftLogout()) {
                 // Logged in - visit a room
                 this.viewLastRoom();
             } else {
