@@ -2841,5 +2841,9 @@
     "El Salvador": "O Salvador",
     "Egypt": "Exipto",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(count)s sala.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(count)s salas."
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(count)s salas.",
+    "Filter rooms and people": "Fitrar salas e persoas",
+    "Open the link in the email to continue registration.": "Abre a ligazón que hai no email para continuar co rexistro.",
+    "A confirmation email has been sent to %(emailAddress)s": "Enviouse un email de confirmación a %(emailAddress)s",
+    "Start a new chat": "Comezar nova conversa"
 }
