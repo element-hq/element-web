@@ -14,47 +14,57 @@
  * limitations under the License.
  */
 
-import { Capability, ISendEventDetails, WidgetDriver, WidgetEventCapability, WidgetType } from "matrix-widget-api";
-import { iterableUnion } from "../../utils/iterables";
+import {
+    Capability,
+    ISendEventDetails,
+    MatrixCapabilities, Widget,
+    WidgetDriver,
+} from "matrix-widget-api";
+import { iterableDiff, iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { arrayFastClone } from "../../utils/arrays";
-import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
+import Modal from "../../Modal";
+import WidgetCapabilitiesPromptDialog, { getRememberedCapabilitiesForWidget } from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 
 // TODO: Purge this from the universe
 
 export class StopGapWidgetDriver extends WidgetDriver {
-    constructor(private allowedCapabilities: Capability[], private forType: WidgetType) {
+    private allowedCapabilities: Set<Capability>;
+
+    constructor(allowedCapabilities: Capability[], private forWidget: Widget) {
         super();
+
+        // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
+        // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
+        // button if the widget says it supports screenshots.
+        this.allowedCapabilities = new Set([...allowedCapabilities, MatrixCapabilities.Screenshots]);
     }
 
     public async validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
-        // TODO: All of this should be a capabilities prompt.
-        // See https://github.com/vector-im/element-web/issues/13111
-
-        // Note: None of this well-known widget permissions stuff is documented intentionally. We
-        // do not want to encourage people relying on this, but need to be able to support it at
-        // the moment.
-        //
-        // If you're a widget developer and seeing this message, please ask the Element team if
-        // it is safe for you to use this permissions system before trying to use it - it might
-        // not be here in the future.
-
-        const wkPerms = (MatrixClientPeg.get().getClientWellKnown() || {})['io.element.widget_permissions'];
-        const allowedCaps = arrayFastClone(this.allowedCapabilities);
-        if (wkPerms) {
-            if (Array.isArray(wkPerms["view_room_action"])) {
-                if (wkPerms["view_room_action"].includes(this.forType)) {
-                    allowedCaps.push(ElementWidgetCapabilities.CanChangeViewedRoom);
-                }
-            }
-            if (Array.isArray(wkPerms["event_actions"])) {
-                if (wkPerms["event_actions"].includes(this.forType)) {
-                    allowedCaps.push(...WidgetEventCapability.findEventCapabilities(requested).map(c => c.raw));
-                }
+        // Check to see if any capabilities aren't automatically accepted (such as sticker pickers
+        // allowing stickers to be sent). If there are excess capabilities to be approved, the user
+        // will be prompted to accept them.
+        const diff = iterableDiff(requested, this.allowedCapabilities);
+        const missing = new Set(diff.removed); // "removed" is "in A (requested) but not in B (allowed)"
+        const allowedSoFar = new Set(this.allowedCapabilities);
+        getRememberedCapabilitiesForWidget(this.forWidget).forEach(cap => allowedSoFar.add(cap));
+        // TODO: Do something when the widget requests new capabilities not yet asked for
+        if (missing.size > 0) {
+            try {
+                const [result] = await Modal.createTrackedDialog(
+                    'Approve Widget Caps', '',
+                    WidgetCapabilitiesPromptDialog,
+                    {
+                        requestedCapabilities: missing,
+                        widget: this.forWidget,
+                    }).finished;
+                (result.approved || []).forEach(cap => allowedSoFar.add(cap));
+            } catch (e) {
+                console.error("Non-fatal error getting capabilities: ", e);
             }
         }
-        return new Set(iterableUnion(requested, allowedCaps));
+
+        return new Set(iterableUnion(allowedSoFar, requested));
     }
 
     public async sendEvent(eventType: string, content: any, stateKey: string = null): Promise<ISendEventDetails> {
