@@ -28,7 +28,7 @@ import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import {_t} from '../../../languageHandler';
-import createRoom, {privateShouldBeEncrypted} from '../../../createRoom';
+import createRoom, { findDMForUser, privateShouldBeEncrypted } from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -105,17 +105,7 @@ export const getE2EStatus = (cli: MatrixClient, userId: string, devices: IDevice
 };
 
 async function openDMForUser(matrixClient: MatrixClient, userId: string) {
-    const dmRooms = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const lastActiveRoom = dmRooms.reduce((lastActiveRoom, roomId) => {
-        const room = matrixClient.getRoom(roomId);
-        if (!room || room.getMyMembership() === "leave") {
-            return lastActiveRoom;
-        }
-        if (!lastActiveRoom || lastActiveRoom.getLastActiveTimestamp() < room.getLastActiveTimestamp()) {
-            return room;
-        }
-        return lastActiveRoom;
-    }, null);
+    const lastActiveRoom = findDMForUser(matrixClient, userId);
 
     if (lastActiveRoom) {
         dis.dispatch({

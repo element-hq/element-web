@@ -87,37 +87,36 @@ import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 export enum Views {
     // a special initial state which is only used at startup, while we are
     // trying to re-animate a matrix client or register as a guest.
-    LOADING = 0,
+    LOADING,
 
     // we are showing the welcome view
-    WELCOME = 1,
+    WELCOME,
 
     // we are showing the login view
-    LOGIN = 2,
+    LOGIN,
 
     // we are showing the registration view
-    REGISTER = 3,
-
-    // completing the registration flow
-    POST_REGISTRATION = 4,
+    REGISTER,
 
     // showing the 'forgot password' view
-    FORGOT_PASSWORD = 5,
+    FORGOT_PASSWORD,
 
     // showing flow to trust this new device with cross-signing
-    COMPLETE_SECURITY = 6,
+    COMPLETE_SECURITY,
 
     // flow to setup SSSS / cross-signing on this account
-    E2E_SETUP = 7,
+    E2E_SETUP,
 
     // we are logged in with an active matrix client. The logged_in state also
     // includes guests users as they too are logged in at the client level.
-    LOGGED_IN = 8,
+    LOGGED_IN,
 
     // We are logged out (invalid token) but have our local state again. The user
     // should log back in to rehydrate the client.
-    SOFT_LOGOUT = 9,
+    SOFT_LOGOUT,
 }
+
+const AUTH_SCREENS = ["register", "login", "forgot_password", "start_sso", "start_cas"];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -562,11 +561,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ThemeController.isLogin = true;
                 this.themeWatcher.recheck();
                 break;
-            case 'start_post_registration':
-                this.setState({
-                    view: Views.POST_REGISTRATION,
-                });
-                break;
             case 'start_password_recovery':
                 this.setStateForNewView({
                     view: Views.FORGOT_PASSWORD,
@@ -653,8 +647,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
             case Action.ViewRoomDirectory: {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
-                    'mx_RoomDirectory_dialogWrapper', false, true);
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                    initialText: payload.initialText,
+                }, 'mx_RoomDirectory_dialogWrapper', false, true);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -677,7 +672,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.chatCreateOrReuse(payload.user_id);
                 break;
             case 'view_create_chat':
-                showStartChatInviteDialog();
+                showStartChatInviteDialog(payload.initialText || "");
                 break;
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
@@ -1554,6 +1549,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     showScreen(screen: string, params?: {[key: string]: any}) {
+        const cli = MatrixClientPeg.get();
+        const isLoggedOutOrGuest = !cli || cli.isGuest();
+        if (!isLoggedOutOrGuest && AUTH_SCREENS.includes(screen)) {
+            // user is logged in and landing on an auth page which will uproot their session, redirect them home instead
+            dis.dispatch({ action: "view_home_page" });
+            return;
+        }
+
         if (screen === 'register') {
             dis.dispatch({
                 action: 'start_registration',
@@ -1570,7 +1573,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params: params,
             });
         } else if (screen === 'soft_logout') {
-            if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId() && !Lifecycle.isSoftLogout()) {
+            if (cli.getUserId() && !Lifecycle.isSoftLogout()) {
                 // Logged in - visit a room
                 this.viewLastRoom();
             } else {
@@ -1620,14 +1623,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (screen === 'groups') {
             dis.dispatch({
                 action: 'view_my_groups',
-            });
-        } else if (screen === 'complete_security') {
-            dis.dispatch({
-                action: 'start_complete_security',
-            });
-        } else if (screen === 'post_registration') {
-            dis.dispatch({
-                action: 'start_post_registration',
             });
         } else if (screen.indexOf('room/') === 0) {
             // Rooms can have the following formats:
@@ -1799,14 +1794,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return Lifecycle.setLoggedIn(credentials);
     }
 
-    onFinishPostRegistration = () => {
-        // Don't confuse this with "PageType" which is the middle window to show
-        this.setState({
-            view: Views.LOGGED_IN,
-        });
-        this.showScreen("settings");
-    };
-
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();
         if (!cli) {
@@ -1970,13 +1957,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
                     accountPassword={this.accountPassword}
                 />
-            );
-        } else if (this.state.view === Views.POST_REGISTRATION) {
-            // needs to be before normal PageTypes as you are logged in technically
-            const PostRegistration = sdk.getComponent('structures.auth.PostRegistration');
-            view = (
-                <PostRegistration
-                    onComplete={this.onFinishPostRegistration} />
             );
         } else if (this.state.view === Views.LOGGED_IN) {
             // store errors stop the client syncing and require user intervention, so we'll

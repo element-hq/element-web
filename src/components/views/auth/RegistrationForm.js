@@ -51,7 +51,6 @@ export default class RegistrationForm extends React.Component {
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
-        onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
         canSubmit: PropTypes.bool,
@@ -461,7 +460,7 @@ export default class RegistrationForm extends React.Component {
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
             autoComplete="new-password"
-            label={_t("Confirm")}
+            label={_t("Confirm password")}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
@@ -513,33 +512,6 @@ export default class RegistrationForm extends React.Component {
     }
 
     render() {
-        let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
-            serverName: this.props.serverConfig.hsName,
-        });
-        if (this.props.serverConfig.hsNameIsDifferent) {
-            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
-
-            yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
-                'underlinedServerName': () => {
-                    return <TextWithTooltip
-                        class="mx_Login_underlinedServerName"
-                        tooltip={this.props.serverConfig.hsUrl}
-                    >
-                        {this.props.serverConfig.hsName}
-                    </TextWithTooltip>;
-                },
-            });
-        }
-
-        let editLink = null;
-        if (this.props.onEditServerDetailsClick) {
-            editLink = <a className="mx_AuthBody_editServerDetails"
-                href="#" onClick={this.props.onEditServerDetailsClick}
-            >
-                {_t('Change')}
-            </a>;
-        }
-
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
@@ -575,10 +547,6 @@ export default class RegistrationForm extends React.Component {
 
         return (
             <div>
-                <h3>
-                    {yourMatrixAccountText}
-                    {editLink}
-                </h3>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderUsername()}
