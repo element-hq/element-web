@@ -566,9 +566,9 @@ export default class LoginComponent extends React.Component {
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
                onEditServerDetailsClick={onEditServerDetailsClick}
-               initialUsername={this.state.username}
-               initialPhoneCountry={this.state.phoneCountry}
-               initialPhoneNumber={this.state.phoneNumber}
+               username={this.state.username}
+               phoneCountry={this.state.phoneCountry}
+               phoneNumber={this.state.phoneNumber}
                onUsernameChanged={this.onUsernameChanged}
                onUsernameBlur={this.onUsernameBlur}
                onPhoneCountryChanged={this.onPhoneCountryChanged}

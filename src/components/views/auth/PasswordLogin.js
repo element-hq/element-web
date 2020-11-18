@@ -31,22 +31,21 @@ import * as Email from "../../../email";
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
 
-/**
+/*
  * A pure UI component which displays a username/password form.
+ * The email/username/phone fields are fully-controlled, the password field is not.
  */
 export default class PasswordLogin extends React.Component {
     static propTypes = {
         onSubmit: PropTypes.func.isRequired, // fn(username, password)
         onEditServerDetailsClick: PropTypes.func,
         onForgotPasswordClick: PropTypes.func, // fn()
-        initialUsername: PropTypes.string,
-        initialPhoneCountry: PropTypes.string,
-        initialPhoneNumber: PropTypes.string,
-        initialPassword: PropTypes.string,
+        username: PropTypes.string,
+        phoneCountry: PropTypes.string,
+        phoneNumber: PropTypes.string,
         onUsernameChanged: PropTypes.func,
         onPhoneCountryChanged: PropTypes.func,
         onPhoneNumberChanged: PropTypes.func,
-        onPasswordChanged: PropTypes.func,
         loginIncorrect: PropTypes.bool,
         disableSubmit: PropTypes.bool,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
@@ -57,13 +56,11 @@ export default class PasswordLogin extends React.Component {
         onEditServerDetailsClick: null,
         onUsernameChanged: function() {},
         onUsernameBlur: function() {},
-        onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
         onPhoneNumberChanged: function() {},
-        initialUsername: "",
-        initialPhoneCountry: "",
-        initialPhoneNumber: "",
-        initialPassword: "",
+        username: "",
+        phoneCountry: "",
+        phoneNumber: "",
         loginIncorrect: false,
         disableSubmit: false,
     };
@@ -78,11 +75,8 @@ export default class PasswordLogin extends React.Component {
         this.state = {
             // Field error codes by field ID
             fieldValid: {},
-            username: this.props.initialUsername,
-            password: this.props.initialPassword,
-            phoneCountry: this.props.initialPhoneCountry,
-            phoneNumber: this.props.initialPhoneNumber,
             loginType: PasswordLogin.LOGIN_FIELD_MXID,
+            password: "",
         };
 
         this.onForgotPasswordClick = this.onForgotPasswordClick.bind(this);
@@ -120,11 +114,11 @@ export default class PasswordLogin extends React.Component {
         switch (this.state.loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
             case PasswordLogin.LOGIN_FIELD_MXID:
-                username = this.state.username;
+                username = this.props.username;
                 break;
             case PasswordLogin.LOGIN_FIELD_PHONE:
-                phoneCountry = this.state.phoneCountry;
-                phoneNumber = this.state.phoneNumber;
+                phoneCountry = this.props.phoneCountry;
+                phoneNumber = this.props.phoneNumber;
                 break;
         }
 
@@ -137,7 +131,6 @@ export default class PasswordLogin extends React.Component {
     }
 
     onUsernameChanged(ev) {
-        this.setState({username: ev.target.value});
         this.props.onUsernameChanged(ev.target.value);
     }
 
@@ -160,23 +153,16 @@ export default class PasswordLogin extends React.Component {
 
     onLoginTypeChange(ev) {
         const loginType = ev.target.value;
-        this.setState({
-            loginType: loginType,
-            username: "", // Reset because email and username use the same state
-        });
+        this.setState({ loginType });
+        this.props.onUsernameChanged(""); // Reset because email and username use the same state
         CountlyAnalytics.instance.track("onboarding_login_type_changed", { loginType });
     }
 
     onPhoneCountryChanged(country) {
-        this.setState({
-            phoneCountry: country.iso2,
-            phonePrefix: country.prefix,
-        });
         this.props.onPhoneCountryChanged(country.iso2);
     }
 
     onPhoneNumberChanged(ev) {
-        this.setState({phoneNumber: ev.target.value});
         this.props.onPhoneNumberChanged(ev.target.value);
     }
 
@@ -190,7 +176,6 @@ export default class PasswordLogin extends React.Component {
 
     onPasswordChanged(ev) {
         this.setState({password: ev.target.value});
-        this.props.onPasswordChanged(ev.target.value);
     }
 
     async verifyFieldsBeforeSubmit() {
@@ -355,7 +340,7 @@ export default class PasswordLogin extends React.Component {
 
         switch (loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
-                classes.error = this.props.loginIncorrect && !this.state.username;
+                classes.error = this.props.loginIncorrect && !this.props.username;
                 return <Field
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
@@ -363,7 +348,7 @@ export default class PasswordLogin extends React.Component {
                     type="text"
                     label={_t("Email")}
                     placeholder="joe@example.com"
-                    value={this.state.username}
+                    value={this.props.username}
                     onChange={this.onUsernameChanged}
                     onFocus={this.onUsernameFocus}
                     onBlur={this.onUsernameBlur}
@@ -373,14 +358,14 @@ export default class PasswordLogin extends React.Component {
                     ref={field => this[PasswordLogin.LOGIN_FIELD_EMAIL] = field}
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
-                classes.error = this.props.loginIncorrect && !this.state.username;
+                classes.error = this.props.loginIncorrect && !this.props.username;
                 return <Field
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
                     label={_t("Username")}
-                    value={this.state.username}
+                    value={this.props.username}
                     onChange={this.onUsernameChanged}
                     onFocus={this.onUsernameFocus}
                     onBlur={this.onUsernameBlur}
@@ -391,10 +376,10 @@ export default class PasswordLogin extends React.Component {
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
-                classes.error = this.props.loginIncorrect && !this.state.phoneNumber;
+                classes.error = this.props.loginIncorrect && !this.props.phoneNumber;
 
                 const phoneCountry = <CountryDropdown
-                    value={this.state.phoneCountry}
+                    value={this.props.phoneCountry}
                     isSmall={true}
                     showPrefix={true}
                     onOptionChange={this.onPhoneCountryChanged}
@@ -406,7 +391,7 @@ export default class PasswordLogin extends React.Component {
                     key="phone_input"
                     type="text"
                     label={_t("Phone")}
-                    value={this.state.phoneNumber}
+                    value={this.props.phoneNumber}
                     prefixComponent={phoneCountry}
                     onChange={this.onPhoneNumberChanged}
                     onFocus={this.onPhoneNumberFocus}
@@ -424,9 +409,9 @@ export default class PasswordLogin extends React.Component {
         switch (this.state.loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
             case PasswordLogin.LOGIN_FIELD_MXID:
-                return !this.state.username;
+                return !this.props.username;
             case PasswordLogin.LOGIN_FIELD_PHONE:
-                return !this.state.phoneCountry || !this.state.phoneNumber;
+                return !this.props.phoneCountry || !this.props.phoneNumber;
         }
     }
 
