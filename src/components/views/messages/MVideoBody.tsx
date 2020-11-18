@@ -71,7 +71,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    _getContentUrl(): string|null {
+    private getContentUrl(): string|null {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedUrl;
@@ -80,7 +80,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    _getThumbUrl(): string|null {
+    private getThumbUrl(): string|null {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedThumbnailUrl;
@@ -142,8 +142,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    async _videoOnPlay() {
-        if (this._getContentUrl() || this.state.fetchingData || this.state.error) {
+    private videoOnPlay = async () => {
+        if (this.getContentUrl() || this.state.fetchingData || this.state.error) {
             // We have the file, we are fetching the file, or there is an error.
             return;
         }
@@ -195,8 +195,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             );
         }
 
-        const contentUrl = this._getContentUrl();
-        const thumbUrl = this._getThumbUrl();
+        const contentUrl = this.getContentUrl();
+        const thumbUrl = this.getThumbUrl();
         let height = null;
         let width = null;
         let poster = null;
@@ -217,7 +217,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             <span className="mx_MVideoBody">
                 <video className="mx_MVideoBody" src={contentUrl} title={content.body}
                     controls preload={preload} muted={autoplay} autoPlay={autoplay}
-                    height={height} width={width} poster={poster} onPlay={this._videoOnPlay.bind(this)}>
+                    height={height} width={width} poster={poster} onPlay={this.videoOnPlay}>
                 </video>
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
