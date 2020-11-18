@@ -2842,5 +2842,9 @@
     "Places the call in the current room on hold": "Jätab kõne selles jututoas ootele",
     "Role": "Roll",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(count)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(count)s jututoa andmete salvestamiseks kulub hetkel %(size)s."
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(count)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
+    "Filter rooms and people": "Otsi jututubasid ja inimesi",
+    "Open the link in the email to continue registration.": "Registreerimisega jätkamiseks vajuta e-kirjas olevat linki.",
+    "A confirmation email has been sent to %(emailAddress)s": "Saatsime kinnituskirja %(emailAddress)s aadressile",
+    "Start a new chat": "Alusta uut vestlust"
 }
