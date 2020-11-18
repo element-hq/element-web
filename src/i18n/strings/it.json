@@ -2844,5 +2844,9 @@
     "United Kingdom": "Regno Unito",
     "Role": "Ruolo",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(count)s stanza.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(count)s stanze."
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(count)s stanze.",
+    "Filter rooms and people": "Filtra stanze e persone",
+    "Open the link in the email to continue registration.": "Apri il link nell'email per continuare la registrazione.",
+    "A confirmation email has been sent to %(emailAddress)s": "È stata inviata un'email di conferma a %(emailAddress)s",
+    "Start a new chat": "Inizia una nuova chat"
 }
