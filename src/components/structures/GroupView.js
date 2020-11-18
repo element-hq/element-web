@@ -47,7 +47,7 @@ const LONG_DESC_PLACEHOLDER = _td(
     some important <a href="foo">links</a>
 </p>
 <p>
-    You can even use 'img' tags
+    You can even add images with Matrix URLs <img src="mxc://url" />
 </p>
 `);
 
