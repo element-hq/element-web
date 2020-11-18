@@ -1060,12 +1060,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const memberCount = roomToLeave.currentState.getJoinedMemberCount();
         if (memberCount === 1) {
-            warnings.push(
+            warnings.push((
                 <span className="warning" key="only_member_warning">
                     {' '/* Whitespace, otherwise the sentences get smashed together */ }
                     { _t("You are the only member of this room. This room will become unjoinable if you leave.") }
                 </span>
-            );
+            ));
 
             return warnings;
         }
