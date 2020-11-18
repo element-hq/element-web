@@ -2845,5 +2845,7 @@
     "Filter rooms and people": "Fitrar salas e persoas",
     "Open the link in the email to continue registration.": "Abre a ligazón que hai no email para continuar co rexistro.",
     "A confirmation email has been sent to %(emailAddress)s": "Enviouse un email de confirmación a %(emailAddress)s",
-    "Start a new chat": "Comezar nova conversa"
+    "Start a new chat": "Comezar nova conversa",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(rooms)s salas.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(rooms)s salas."
 }
