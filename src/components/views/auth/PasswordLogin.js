@@ -25,6 +25,11 @@ import SdkConfig from '../../../SdkConfig';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import AccessibleButton from "../elements/AccessibleButton";
 import CountlyAnalytics from "../../../CountlyAnalytics";
+import withValidation from "../elements/Validation";
+import * as Email from "../../../email";
+
+// For validating phone numbers without country codes
+const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
 
 /**
  * A pure UI component which displays a username/password form.
@@ -32,7 +37,6 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 export default class PasswordLogin extends React.Component {
     static propTypes = {
         onSubmit: PropTypes.func.isRequired, // fn(username, password)
-        onError: PropTypes.func,
         onEditServerDetailsClick: PropTypes.func,
         onForgotPasswordClick: PropTypes.func, // fn()
         initialUsername: PropTypes.string,
@@ -50,14 +54,12 @@ export default class PasswordLogin extends React.Component {
     };
 
     static defaultProps = {
-        onError: function() {},
         onEditServerDetailsClick: null,
         onUsernameChanged: function() {},
         onUsernameBlur: function() {},
         onPasswordChanged: function() {},
         onPhoneCountryChanged: function() {},
         onPhoneNumberChanged: function() {},
-        onPhoneNumberBlur: function() {},
         initialUsername: "",
         initialPhoneCountry: "",
         initialPhoneNumber: "",
@@ -69,10 +71,13 @@ export default class PasswordLogin extends React.Component {
     static LOGIN_FIELD_EMAIL = "login_field_email";
     static LOGIN_FIELD_MXID = "login_field_mxid";
     static LOGIN_FIELD_PHONE = "login_field_phone";
+    static LOGIN_FIELD_PASSWORD = "login_field_password";
 
     constructor(props) {
         super(props);
         this.state = {
+            // Field error codes by field ID
+            fieldValid: {},
             username: this.props.initialUsername,
             password: this.props.initialPassword,
             phoneCountry: this.props.initialPhoneCountry,
@@ -82,6 +87,7 @@ export default class PasswordLogin extends React.Component {
 
         this.onForgotPasswordClick = this.onForgotPasswordClick.bind(this);
         this.onSubmitForm = this.onSubmitForm.bind(this);
+        this.onUsernameFocus = this.onUsernameFocus.bind(this);
         this.onUsernameChanged = this.onUsernameChanged.bind(this);
         this.onUsernameBlur = this.onUsernameBlur.bind(this);
         this.onLoginTypeChange = this.onLoginTypeChange.bind(this);
@@ -98,44 +104,28 @@ export default class PasswordLogin extends React.Component {
         this.props.onForgotPasswordClick();
     }
 
-    onSubmitForm(ev) {
+    async onSubmitForm(ev) {
         ev.preventDefault();
+
+        const allFieldsValid = await this.verifyFieldsBeforeSubmit();
+        if (!allFieldsValid) {
+            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
+            return;
+        }
 
         let username = ''; // XXX: Synapse breaks if you send null here:
         let phoneCountry = null;
         let phoneNumber = null;
-        let error;
 
         switch (this.state.loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
-                username = this.state.username;
-                if (!username) {
-                    error = _t('The email field must not be blank.');
-                }
-                break;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 username = this.state.username;
-                if (!username) {
-                    error = _t('The username field must not be blank.');
-                }
                 break;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 phoneCountry = this.state.phoneCountry;
                 phoneNumber = this.state.phoneNumber;
-                if (!phoneNumber) {
-                    error = _t('The phone number field must not be blank.');
-                }
                 break;
-        }
-
-        if (error) {
-            this.props.onError(error);
-            return;
-        }
-
-        if (!this.state.password) {
-            this.props.onError(_t('The password field must not be blank.'));
-            return;
         }
 
         this.props.onSubmit(
@@ -170,7 +160,6 @@ export default class PasswordLogin extends React.Component {
 
     onLoginTypeChange(ev) {
         const loginType = ev.target.value;
-        this.props.onError(null); // send a null error to clear any error messages
         this.setState({
             loginType: loginType,
             username: "", // Reset because email and username use the same state
@@ -196,13 +185,167 @@ export default class PasswordLogin extends React.Component {
     }
 
     onPhoneNumberBlur(ev) {
-        this.props.onPhoneNumberBlur(ev.target.value);
         CountlyAnalytics.instance.track("onboarding_login_phone_number_blur");
     }
 
     onPasswordChanged(ev) {
         this.setState({password: ev.target.value});
         this.props.onPasswordChanged(ev.target.value);
+    }
+
+    async verifyFieldsBeforeSubmit() {
+        // Blur the active element if any, so we first run its blur validation,
+        // which is less strict than the pass we're about to do below for all fields.
+        const activeElement = document.activeElement;
+        if (activeElement) {
+            activeElement.blur();
+        }
+
+        const fieldIDsInDisplayOrder = [
+            this.state.loginType,
+            PasswordLogin.LOGIN_FIELD_PASSWORD,
+        ];
+
+        // Run all fields with stricter validation that no longer allows empty
+        // values for required fields.
+        for (const fieldID of fieldIDsInDisplayOrder) {
+            const field = this[fieldID];
+            if (!field) {
+                continue;
+            }
+            // We must wait for these validations to finish before queueing
+            // up the setState below so our setState goes in the queue after
+            // all the setStates from these validate calls (that's how we
+            // know they've finished).
+            await field.validate({ allowEmpty: false });
+        }
+
+        // Validation and state updates are async, so we need to wait for them to complete
+        // first. Queue a `setState` callback and wait for it to resolve.
+        await new Promise(resolve => this.setState({}, resolve));
+
+        if (this.allFieldsValid()) {
+            return true;
+        }
+
+        const invalidField = this.findFirstInvalidField(fieldIDsInDisplayOrder);
+
+        if (!invalidField) {
+            return true;
+        }
+
+        // Focus the first invalid field and show feedback in the stricter mode
+        // that no longer allows empty values for required fields.
+        invalidField.focus();
+        invalidField.validate({ allowEmpty: false, focused: true });
+        return false;
+    }
+
+    allFieldsValid() {
+        const keys = Object.keys(this.state.fieldValid);
+        for (let i = 0; i < keys.length; ++i) {
+            if (!this.state.fieldValid[keys[i]]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    findFirstInvalidField(fieldIDs) {
+        for (const fieldID of fieldIDs) {
+            if (!this.state.fieldValid[fieldID] && this[fieldID]) {
+                return this[fieldID];
+            }
+        }
+        return null;
+    }
+
+    markFieldValid(fieldID, valid) {
+        const { fieldValid } = this.state;
+        fieldValid[fieldID] = valid;
+        this.setState({
+            fieldValid,
+        });
+    }
+
+    validateUsernameRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test({ value, allowEmpty }) {
+                    return allowEmpty || !!value;
+                },
+                invalid: () => _t("Enter username"),
+            },
+        ],
+    });
+
+    onUsernameValidate = async (fieldState) => {
+        const result = await this.validateUsernameRules(fieldState);
+        this.markFieldValid(PasswordLogin.LOGIN_FIELD_MXID, result.valid);
+        return result;
+    };
+
+    validateEmailRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test({ value, allowEmpty }) {
+                    return allowEmpty || !!value;
+                },
+                invalid: () => _t("Enter email address"),
+            }, {
+                key: "email",
+                test: ({ value }) => !value || Email.looksValid(value),
+                invalid: () => _t("Doesn't look like a valid email address"),
+            },
+        ],
+    });
+
+    onEmailValidate = async (fieldState) => {
+        const result = await this.validateEmailRules(fieldState);
+        this.markFieldValid(PasswordLogin.LOGIN_FIELD_EMAIL, result.valid);
+        return result;
+    };
+
+    validatePhoneNumberRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test({ value, allowEmpty }) {
+                    return allowEmpty || !!value;
+                },
+                invalid: () => _t("Enter phone number"),
+            }, {
+                key: "number",
+                test: ({ value }) => !value || PHONE_NUMBER_REGEX.test(value),
+                invalid: () => _t("Doesn't look like a valid phone number"),
+            },
+        ],
+    });
+
+    onPhoneNumberValidate = async (fieldState) => {
+        const result = await this.validatePhoneNumberRules(fieldState);
+        this.markFieldValid(PasswordLogin.LOGIN_FIELD_PHONE, result.valid);
+        return result;
+    };
+
+    validatePasswordRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test({ value, allowEmpty }) {
+                    return allowEmpty || !!value;
+                },
+                invalid: () => _t("Enter password"),
+            },
+        ],
+    });
+
+    onPasswordValidate = async (fieldState) => {
+        const result = await this.validatePasswordRules(fieldState);
+        this.markFieldValid(PasswordLogin.LOGIN_FIELD_PASSWORD, result.valid);
+        return result;
     }
 
     renderLoginField(loginType, autoFocus) {
@@ -226,6 +369,8 @@ export default class PasswordLogin extends React.Component {
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}
+                    onValidate={this.onEmailValidate}
+                    ref={field => this[PasswordLogin.LOGIN_FIELD_EMAIL] = field}
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.error = this.props.loginIncorrect && !this.state.username;
@@ -241,6 +386,8 @@ export default class PasswordLogin extends React.Component {
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}
+                    onValidate={this.onUsernameValidate}
+                    ref={field => this[PasswordLogin.LOGIN_FIELD_MXID] = field}
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -266,6 +413,8 @@ export default class PasswordLogin extends React.Component {
                     onBlur={this.onPhoneNumberBlur}
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}
+                    onValidate={this.onPhoneNumberValidate}
+                    ref={field => this[PasswordLogin.LOGIN_FIELD_PHONE] = field}
                 />;
             }
         }
@@ -363,6 +512,8 @@ export default class PasswordLogin extends React.Component {
                         onChange={this.onPasswordChanged}
                         disabled={this.props.disableSubmit}
                         autoFocus={autoFocusPassword}
+                        onValidate={this.onPasswordValidate}
+                        ref={field => this[PasswordLogin.LOGIN_FIELD_PASSWORD] = field}
                     />
                     {forgotPasswordJsx}
                     { !this.props.busy && <input className="mx_Login_submit"

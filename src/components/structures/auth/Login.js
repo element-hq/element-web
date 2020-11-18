@@ -32,9 +32,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 
-// For validating phone numbers without country codes
-const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
-
 // Phases
 // Show controls to configure server details
 const PHASE_SERVER_DETAILS = 0;
@@ -150,13 +147,6 @@ export default class LoginComponent extends React.Component {
         // Ensure that we end up actually logging in to the right place
         this._initLoginLogic(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
     }
-
-    onPasswordLoginError = errorText => {
-        this.setState({
-            errorText,
-            loginIncorrect: Boolean(errorText),
-        });
-    };
 
     isBusy = () => this.state.busy || this.props.busy;
 
@@ -328,21 +318,6 @@ export default class LoginComponent extends React.Component {
         this.setState({
             phoneNumber: phoneNumber,
         });
-    };
-
-    onPhoneNumberBlur = phoneNumber => {
-        // Validate the phone number entered
-        if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            this.setState({
-                errorText: _t('The phone number entered looks invalid'),
-                canTryLogin: false,
-            });
-        } else {
-            this.setState({
-                errorText: null,
-                canTryLogin: true,
-            });
-        }
     };
 
     onRegisterClick = ev => {
@@ -590,7 +565,6 @@ export default class LoginComponent extends React.Component {
         return (
             <PasswordLogin
                onSubmit={this.onPasswordLogin}
-               onError={this.onPasswordLoginError}
                onEditServerDetailsClick={onEditServerDetailsClick}
                initialUsername={this.state.username}
                initialPhoneCountry={this.state.phoneCountry}
@@ -599,7 +573,6 @@ export default class LoginComponent extends React.Component {
                onUsernameBlur={this.onUsernameBlur}
                onPhoneCountryChanged={this.onPhoneCountryChanged}
                onPhoneNumberChanged={this.onPhoneNumberChanged}
-               onPhoneNumberBlur={this.onPhoneNumberBlur}
                onForgotPasswordClick={this.props.onForgotPasswordClick}
                loginIncorrect={this.state.loginIncorrect}
                serverConfig={this.props.serverConfig}
