@@ -47,10 +47,10 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         if (!this.hostingSignupUrl.startsWith(message.origin)) {
             return;
         }
-
         switch (message.data.action) {
-            case 'access_token_credential_request':
-                this.sendAccessToken();
+            case 'account_credentials_request':
+                // noinspection JSIgnoredPromiseFromCall
+                this.sendAccountDetails();
                 break;
             case 'openid_credentials_request':
                 // noinspection JSIgnoredPromiseFromCall
@@ -103,10 +103,14 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         }
     }
 
-    private sendAccessToken() {
+    private async sendAccountDetails() {
         this.sendMessage({
-            action: 'access_token_credential',
-            token: MatrixClientPeg.get().getAccessToken(),
+            action: 'account_credentials',
+            credentials: {
+                accessToken: await MatrixClientPeg.get().getAccessToken(),
+                serverName: await MatrixClientPeg.get().getDomain(),
+                userLocalpart: await MatrixClientPeg.get().getUserIdLocalpart(),
+            },
         });
     }
 
