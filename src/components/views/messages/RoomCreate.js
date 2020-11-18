@@ -22,6 +22,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import EventTileBubble from "./EventTileBubble";
 
 export default class RoomCreate extends React.Component {
     static propTypes = {
@@ -51,17 +52,16 @@ export default class RoomCreate extends React.Component {
         const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
         permalinkCreator.load();
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
-        return <div className="mx_CreateEvent">
-            <div className="mx_CreateEvent_image" />
-            <div className="mx_CreateEvent_header">
-                {_t("This room is a continuation of another conversation.")}
-            </div>
-            <a className="mx_CreateEvent_link"
-                href={predecessorPermalink}
-                onClick={this._onLinkClicked}
-            >
+        const link = (
+            <a href={predecessorPermalink} onClick={this._onLinkClicked}>
                 {_t("Click here to see older messages.")}
             </a>
-        </div>;
+        );
+
+        return <EventTileBubble
+            className="mx_CreateEvent"
+            title={_t("This room is a continuation of another conversation.")}
+            subtitle={link}
+        />;
     }
 }

@@ -48,8 +48,8 @@ export default (props) => {
                 title: _t('Feedback sent'),
                 description: _t('Thank you!'),
             });
-            props.onFinished();
         }
+        props.onFinished();
     };
 
     const brand = SdkConfig.get().brand;

@@ -15,20 +15,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
-import {getAddressType} from "./UserAddress";
+import { getAddressType } from "./UserAddress";
 import { getE2EEWellKnown } from "./utils/WellKnownUtils";
 import GroupStore from "./stores/GroupStore";
 import CountlyAnalytics from "./CountlyAnalytics";
+import { isJoinedOrNearlyJoined } from "./utils/membership";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -236,9 +237,16 @@ export function findDMForUser(client: MatrixClient, userId: string): Room {
     const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const rooms = roomIds.map(id => client.getRoom(id));
     const suitableDMRooms = rooms.filter(r => {
+        // Validate that we are joined and the other person is also joined. We'll also make sure
+        // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
+        // a DM is a room of two people that contains those two people exactly. This does mean
+        // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
+        // canonical DMs to solve.
         if (r && r.getMyMembership() === "join") {
-            const member = r.getMember(userId);
-            return member && (member.membership === "invite" || member.membership === "join");
+            const members = r.currentState.getMembers();
+            const joinedMembers = members.filter(m => isJoinedOrNearlyJoined(m.membership));
+            const otherMember = joinedMembers.find(m => m.userId === userId);
+            return otherMember && joinedMembers.length === 2;
         }
         return false;
     }).sort((r1, r2) => {

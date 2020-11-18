@@ -44,6 +44,7 @@ function track(action) {
 
 export default class RoomDirectory extends React.Component {
     static propTypes = {
+        initialText: PropTypes.string,
         onFinished: PropTypes.func.isRequired,
     };
 
@@ -61,7 +62,7 @@ export default class RoomDirectory extends React.Component {
             error: null,
             instanceId: undefined,
             roomServer: MatrixClientPeg.getHomeserverName(),
-            filterString: null,
+            filterString: this.props.initialText || "",
             selectedCommunityId: SettingsStore.getValue("feature_communities_v2_prototypes")
                 ? selectedCommunityId
                 : null,
@@ -686,6 +687,7 @@ export default class RoomDirectory extends React.Component {
                     onJoinClick={this.onJoinFromSearchClick}
                     placeholder={placeholder}
                     showJoinButton={showJoinButton}
+                    initialText={this.props.initialText}
                 />
                 {dropdown}
             </div>;
