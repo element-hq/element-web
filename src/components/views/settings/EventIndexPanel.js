@@ -130,10 +130,13 @@ export default class EventIndexPanel extends React.Component {
                 <div>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Securely cache encrypted messages locally for them " +
-                             "to appear in search results, using %(size)s to store messages from %(count)s rooms.",
+                            "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
                             {
                                 size: formatBytes(this.state.eventIndexSize, 0),
-                                count: formatCountLong(this.state.roomCount),
+                                // This drives the singular / plural string
+                                // selection for "room" / "rooms" only.
+                                count: this.state.roomCount,
+                                rooms: formatCountLong(this.state.roomCount),
                             },
                         )}
                     </div>
