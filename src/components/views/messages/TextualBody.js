@@ -416,7 +416,9 @@ export default class TextualBody extends React.Component {
         if (this.props.highlightLink) {
             body = <a href={this.props.highlightLink}>{ body }</a>;
         } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
-            body = <a href="#" onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}>{ body }</a>;
+            body = <a href="#"
+                onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}
+            >{ body }</a>;
         }
 
         let widgets;

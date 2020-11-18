@@ -22,11 +22,12 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
-import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
+import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import AccessSecretStorageDialog from './components/views/dialogs/security/AccessSecretStorageDialog';
 import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
 import SettingsStore from "./settings/SettingsStore";
+import SecurityCustomisations from "./customisations/Security";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -115,6 +116,13 @@ async function getSecretStorageKey(
         }
     }
 
+    const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
+    if (keyFromCustomisations) {
+        console.log("Using key from security customisations (secret storage)")
+        cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
+        return [keyId, keyFromCustomisations];
+    }
+
     if (nonInteractive) {
         throw new Error("Could not unlock non-interactively");
     }
@@ -158,6 +166,12 @@ export async function getDehydrationKey(
     keyInfo: ISecretStorageKeyInfo,
     checkFunc: (Uint8Array) => void,
 ): Promise<Uint8Array> {
+    const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
+    if (keyFromCustomisations) {
+        console.log("Using key from security customisations (dehydration)")
+        return keyFromCustomisations;
+    }
+
     const inputToKey = makeInputToKey(keyInfo);
     const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
         AccessSecretStorageDialog,
@@ -352,14 +366,19 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 }
                 console.log("Setting dehydration key");
                 await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo, "Backup device");
+            } else if (!keyId) {
+                console.warn("Not setting dehydration key: no SSSS key found");
             } else {
-                console.log("Not setting dehydration key: no SSSS key found");
+                console.log("Not setting dehydration key: feature disabled");
             }
         }
 
         // `return await` needed here to ensure `finally` block runs after the
         // inner operation completes.
         return await func();
+    } catch (e) {
+        SecurityCustomisations.catchAccessSecretStorageError?.(e);
+        console.error(e);
     } finally {
         // Clear secret storage key cache now that work is complete
         secretStorageBeingAccessed = false;

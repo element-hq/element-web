@@ -86,7 +86,9 @@ export default class UploadBar extends React.Component {
         }
 
         // MUST use var name 'count' for pluralization to kick in
-        const uploadText = _t("Uploading %(filename)s and %(count)s others", {filename: upload.fileName, count: (uploads.length - 1)});
+        const uploadText = _t(
+            "Uploading %(filename)s and %(count)s others", {filename: upload.fileName, count: (uploads.length - 1)},
+        );
 
         return (
             <div className="mx_UploadBar">

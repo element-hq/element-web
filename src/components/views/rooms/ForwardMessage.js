@@ -18,7 +18,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher/dispatcher';
 import {Key} from '../../../Keyboard';
 
 
@@ -28,19 +27,10 @@ export default class ForwardMessage extends React.Component {
     };
 
     componentDidMount() {
-        dis.dispatch({
-            action: 'panel_disable',
-            middleDisabled: true,
-        });
-
         document.addEventListener('keydown', this._onKeyDown);
     }
 
     componentWillUnmount() {
-        dis.dispatch({
-            action: 'panel_disable',
-            middleDisabled: false,
-        });
         document.removeEventListener('keydown', this._onKeyDown);
     }
 

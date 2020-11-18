@@ -78,12 +78,13 @@ const ALLOWED_BLOB_MIMETYPES = {
 
 /**
  * Decrypt a file attached to a matrix event.
- * @param file {Object} The json taken from the matrix event.
+ * @param {Object} file The json taken from the matrix event.
  *   This passed to [link]{@link https://github.com/matrix-org/browser-encrypt-attachments}
  *   as the encryption info object, so will also have the those keys in addition to
  *   the keys below.
- * @param file.url {string} An mxc:// URL for the encrypted file.
- * @param file.mimetype {string} The MIME-type of the plaintext file.
+ * @param {string} file.url An mxc:// URL for the encrypted file.
+ * @param {string} file.mimetype The MIME-type of the plaintext file.
+ * @returns {Promise}
  */
 export function decryptFile(file) {
     const url = MatrixClientPeg.get().mxcUrlToHttp(file.url);

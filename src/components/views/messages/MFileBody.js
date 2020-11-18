@@ -144,7 +144,7 @@ export default class MFileBody extends React.Component {
      * Extracts a human readable label for the file attachment to use as
      * link text.
      *
-     * @params {Object} content The "content" key of the matrix event.
+     * @param {Object} content The "content" key of the matrix event.
      * @return {string} the human readable link text for the attachment.
      */
     presentableTextForFile(content) {

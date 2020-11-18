@@ -24,6 +24,7 @@ import {ActionPayload} from "./dispatcher/payloads";
 import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
 import {Action} from "./dispatcher/actions";
 import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -105,6 +106,9 @@ export default abstract class BasePlatform {
      * @param newVersion the version string to check
      */
     protected shouldShowUpdate(newVersion: string): boolean {
+        // If the user registered on this client in the last 24 hours then do not show them the update toast
+        if (MatrixClientPeg.userRegisteredWithinLastHours(24)) return false;
+
         try {
             const [version, deferUntil] = JSON.parse(localStorage.getItem(UPDATE_DEFER_KEY));
             return newVersion !== version || Date.now() > deferUntil;

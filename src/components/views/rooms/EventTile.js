@@ -21,6 +21,7 @@ import ReplyThread from "../elements/ReplyThread";
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
@@ -46,6 +47,7 @@ const eventTileTypes = {
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
+    'm.call.reject': 'messages.TextualEvent',
 };
 
 const stateEventTileTypes = {
@@ -645,20 +647,20 @@ export default class EventTile extends React.Component {
 
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === "m.room.encryption") ||
+            (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+            (eventType === EventType.RoomCreate) ||
+            (eventType === EventType.RoomEncryption) ||
             (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (
-            !isBubbleMessage && eventType !== 'm.room.message' &&
-            eventType !== 'm.sticker' && eventType !== 'm.room.create'
+            !isBubbleMessage && eventType !== EventType.RoomMessage &&
+            eventType !== EventType.Sticker && eventType !== EventType.RoomCreate
         );
 
         // If we're showing hidden events in the timeline, we should use the
         // source tile when there's no regular tile for an event and also for
         // replace relations (which otherwise would display as a confusing
         // duplicate of the thing they are replacing).
-        const useSource = !tileHandler || this.props.mxEvent.isRelation("m.replace");
-        if (useSource && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
             tileHandler = "messages.ViewSourceEvent";
             // Reuse info message avatar and sender profile styling
             isInfoMessage = true;

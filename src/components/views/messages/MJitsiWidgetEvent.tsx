@@ -18,6 +18,7 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import WidgetStore from "../../../stores/WidgetStore";
+import EventTileBubble from "./EventTileBubble";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -40,37 +41,24 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
 
         if (!url) {
             // removed
-            return (
-                <div className='mx_EventTile_bubble mx_MJitsiWidgetEvent'>
-                    <div className='mx_MJitsiWidgetEvent_title'>
-                        {_t('Video conference ended by %(senderName)s', {senderName})}
-                    </div>
-                </div>
-            );
+            return <EventTileBubble
+                className="mx_MJitsiWidgetEvent"
+                title={_t('Video conference ended by %(senderName)s', {senderName})}
+            />;
         } else if (prevUrl) {
             // modified
-            return (
-                <div className='mx_EventTile_bubble mx_MJitsiWidgetEvent'>
-                    <div className='mx_MJitsiWidgetEvent_title'>
-                        {_t('Video conference updated by %(senderName)s', {senderName})}
-                    </div>
-                    <div className='mx_MJitsiWidgetEvent_subtitle'>
-                        {joinCopy}
-                    </div>
-                </div>
-            );
+            return <EventTileBubble
+                className="mx_MJitsiWidgetEvent"
+                title={_t('Video conference updated by %(senderName)s', {senderName})}
+                subtitle={joinCopy}
+            />;
         } else {
             // assume added
-            return (
-                <div className='mx_EventTile_bubble mx_MJitsiWidgetEvent'>
-                    <div className='mx_MJitsiWidgetEvent_title'>
-                        {_t("Video conference started by %(senderName)s", {senderName})}
-                    </div>
-                    <div className='mx_MJitsiWidgetEvent_subtitle'>
-                        {joinCopy}
-                    </div>
-                </div>
-            );
+            return <EventTileBubble
+                className="mx_MJitsiWidgetEvent"
+                title={_t("Video conference started by %(senderName)s", {senderName})}
+                subtitle={joinCopy}
+            />;
         }
     }
 }

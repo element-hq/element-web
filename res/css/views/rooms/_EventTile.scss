@@ -25,15 +25,6 @@ $left-gutter: 64px;
     position: relative;
 }
 
-.mx_EventTile_bubble {
-    background-color: $dark-panel-bg-color;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 10px auto;
-    max-width: 75%;
-    box-sizing: border-box;
-}
-
 .mx_EventTile.mx_EventTile_info {
     padding-top: 0px;
 }
@@ -131,9 +122,10 @@ $left-gutter: 64px;
     grid-template-columns: 1fr 100px;
 
     .mx_EventTile_line {
-        margin-right: 0px;
+        margin-right: 0;
         grid-column: 1 / 3;
-        padding: 0;
+        // override default padding of mx_EventTile_line so that we can be centered
+        padding: 0 !important;
     }
 
     .mx_EventTile_msgOption {

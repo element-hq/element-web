@@ -32,6 +32,7 @@ import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
 import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import { getSecureBackupSetupMethods, isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
+import SecurityCustomisations from "../../../../customisations/Security";
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -99,7 +100,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         this._passphraseField = createRef();
 
-        this._fetchBackupInfo();
+        MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
+
         if (this.state.accountPassword) {
             // If we have an account password in memory, let's simplify and
             // assume it means password auth is also supported for device
@@ -110,11 +112,25 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             this._queryKeyUploadAuth();
         }
 
-        MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
+        this._getInitialPhase();
     }
 
     componentWillUnmount() {
         MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
+    }
+
+    _getInitialPhase() {
+        const keyFromCustomisations = SecurityCustomisations.createSecretStorageKey?.();
+        if (keyFromCustomisations) {
+            console.log("Created key via customisations, jumping to bootstrap step");
+            this._recoveryKey = {
+                privateKey: keyFromCustomisations,
+            };
+            this._bootstrapSecretStorage();
+            return;
+        }
+
+        this._fetchBackupInfo();
     }
 
     async _fetchBackupInfo() {
@@ -454,6 +470,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 value={CREATE_STORAGE_OPTION_KEY}
                 name="keyPassphrase"
                 checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
+                onChange={this._onKeyPassphraseChange}
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
@@ -472,6 +489,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 value={CREATE_STORAGE_OPTION_PASSPHRASE}
                 name="keyPassphrase"
                 checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
+                onChange={this._onKeyPassphraseChange}
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
@@ -493,7 +511,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "Safeguard against losing access to encrypted messages & data by " +
                 "backing up encryption keys on your server.",
             )}</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup" onChange={this._onKeyPassphraseChange}>
+            <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup">
                 {optionKey}
                 {optionPassphrase}
             </div>

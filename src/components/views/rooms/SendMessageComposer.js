@@ -42,6 +42,7 @@ import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -304,9 +305,13 @@ export default class SendMessageComposer extends React.Component {
 
         const replyToEvent = this.props.replyToEvent;
         if (shouldSend) {
+            const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
             const content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
-            this.context.sendMessage(roomId, content);
+            // don't bother sending an empty message
+            if (!content.body.trim()) return;
+
+            const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
@@ -316,6 +321,7 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
         this.sendHistoryManager.save(this.model, replyToEvent);

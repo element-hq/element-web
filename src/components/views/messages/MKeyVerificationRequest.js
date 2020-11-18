@@ -24,6 +24,7 @@ import {getNameForEventRoom, userLabelForEventRoom}
 import dis from "../../../dispatcher/dispatcher";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
+import EventTileBubble from "./EventTileBubble";
 
 export default class MKeyVerificationRequest extends React.Component {
     constructor(props) {
@@ -146,10 +147,8 @@ export default class MKeyVerificationRequest extends React.Component {
 
         if (!request.initiatedByMe) {
             const name = getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId());
-            title = (<div className="mx_cryptoEvent_title">{
-                _t("%(name)s wants to verify", {name})}</div>);
-            subtitle = (<div className="mx_cryptoEvent_subtitle">{
-                userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
+            title = _t("%(name)s wants to verify", {name});
+            subtitle = userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId());
             if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
                     <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
@@ -157,18 +156,18 @@ export default class MKeyVerificationRequest extends React.Component {
                 </div>);
             }
         } else { // request sent by us
-            title = (<div className="mx_cryptoEvent_title">{
-                _t("You sent a verification request")}</div>);
-            subtitle = (<div className="mx_cryptoEvent_subtitle">{
-                userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId())}</div>);
+            title = _t("You sent a verification request");
+            subtitle = userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId());
         }
 
         if (title) {
-            return (<div className="mx_EventTile_bubble mx_cryptoEvent mx_cryptoEvent_icon">
-                {title}
-                {subtitle}
-                {stateNode}
-            </div>);
+            return <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                title={title}
+                subtitle={subtitle}
+            >
+                { stateNode }
+            </EventTileBubble>;
         }
         return null;
     }
