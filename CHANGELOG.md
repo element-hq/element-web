@@ -1,3 +1,13 @@
+Changes in [1.7.14-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.14-rc.1) (2020-11-18)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.13...v1.7.14-rc.1)
+
+ * Upgrade to React SDK 3.9.0-rc.1 and JS SDK 9.2.0-rc.1
+ * Translations update from Weblate
+   [\#15767](https://github.com/vector-im/element-web/pull/15767)
+ * Update the widget-api for element-web
+   [\#15717](https://github.com/vector-im/element-web/pull/15717)
+
 Changes in [1.7.13](https://github.com/vector-im/element-web/releases/tag/v1.7.13) (2020-11-09)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.13-rc.1...v1.7.13)
