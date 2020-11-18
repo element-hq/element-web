@@ -25,6 +25,8 @@ import VideoFeed, { VideoFeedType } from "./VideoFeed";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { CallEvent } from 'matrix-js-sdk/src/webrtc/call';
+import classNames from 'classnames';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
         // js-sdk room object. If set, we will only show calls for the given
@@ -48,6 +50,10 @@ interface IProps {
 interface IState {
     call: MatrixCall;
     isLocalOnHold: boolean,
+    micMuted: boolean,
+    vidMuted: boolean,
+    callState: CallState,
+    controlsVisible: boolean,
 }
 
 function getFullScreenElement() {
@@ -78,10 +84,12 @@ function exitFullscreen() {
     if (exitMethod) exitMethod.call(document);
 }
 
+const CONTROLS_HIDE_DELAY = 1000;
+
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();
-
+    private controlsHideTimer: number = null;
     constructor(props: IProps) {
         super(props);
 
@@ -89,6 +97,10 @@ export default class CallView extends React.Component<IProps, IState> {
         this.state = {
             call,
             isLocalOnHold: call ? call.isLocalOnHold() : null,
+            micMuted: call ? call.isMicrophoneMuted() : null,
+            vidMuted: call ? call.isLocalVideoMuted() : null,
+            callState: call ? call.state : null,
+            controlsVisible: true,
         }
 
         this.updateCallListeners(null, call);
@@ -120,9 +132,21 @@ export default class CallView extends React.Component<IProps, IState> {
                 const newCall = this.getCall();
                 if (newCall !== this.state.call) {
                     this.updateCallListeners(this.state.call, newCall);
+                    let newControlsVisible = this.state.controlsVisible;
+                    if (newCall && !this.state.call) {
+                        newControlsVisible = true;
+                        if (this.controlsHideTimer !== null) {
+                            clearTimeout(this.controlsHideTimer);
+                        }
+                        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+                    }
                     this.setState({
                         call: newCall,
                         isLocalOnHold: newCall ? newCall.isLocalOnHold() : null,
+                        micMuted: newCall ? newCall.isMicrophoneMuted() : null,
+                        vidMuted: newCall ? newCall.isLocalVideoMuted() : null,
+                        callState: newCall ? newCall.state : null,
+                        controlsVisible: newControlsVisible,
                     });
                 }
                 if (!newCall && getFullScreenElement()) {
@@ -174,15 +198,115 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
+    onControlsHideTimer = () => {
+        this.controlsHideTimer = null;
+        this.setState({
+            controlsVisible: false,
+        });
+    }
+
+    onMouseMove = () => {
+        if (!this.state.controlsVisible) {
+            this.setState({
+                controlsVisible: true,
+            });
+        }
+        if (this.controlsHideTimer !== null) {
+            clearTimeout(this.controlsHideTimer);
+        }
+        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+    }
+
+    onMicMuteClick = () => {
+        const newVal = !this.state.micMuted;
+
+        this.state.call.setMicrophoneMuted(newVal);
+        this.setState({micMuted: newVal});
+    }
+
+    onVidMuteClick = () => {
+        const newVal = !this.state.vidMuted;
+
+        this.state.call.setLocalVideoMuted(newVal);
+        this.setState({vidMuted: newVal});
+    }
+
+    onRoomAvatarClick = () => {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.call.roomId,
+        });
+    }
+
     public render() {
         if (!this.state.call) return null;
 
         const client = MatrixClientPeg.get();
         const callRoom = client.getRoom(this.state.call.roomId);
 
-        //const callControls = <div className="mx_CallView_callControls">
+        let callControls;
+        if (this.props.room) {
+            const micClasses = classNames({
+                mx_CallView_callControls_button: true,
+                mx_CallView_callControls_button_micOn: !this.state.micMuted,
+                mx_CallView_callControls_button_micOff: this.state.micMuted,
+            });
 
-        //</div>;
+            const vidClasses = classNames({
+                mx_CallView_callControls_button: true,
+                mx_CallView_callControls_button_vidOn: !this.state.vidMuted,
+                mx_CallView_callControls_button_vidOff: this.state.vidMuted,
+            });
+
+            // Put the other states of the mic/video icons in the document to make sure they're cached
+            // (otherwise the icon disappears briefly when toggled)
+            const micCacheClasses = classNames({
+                mx_CallView_callControls_button: true,
+                mx_CallView_callControls_button_micOn: this.state.micMuted,
+                mx_CallView_callControls_button_micOff: !this.state.micMuted,
+                mx_CallView_callControls_button_invisible: true,
+            });
+
+            const vidCacheClasses = classNames({
+                mx_CallView_callControls_button: true,
+                mx_CallView_callControls_button_vidOn: this.state.micMuted,
+                mx_CallView_callControls_button_vidOff: !this.state.micMuted,
+                mx_CallView_callControls_button_invisible: true,
+            });
+
+            const callControlsClasses = classNames({
+                mx_CallView_callControls: true,
+                mx_CallView_callControls_hidden: !this.state.controlsVisible,
+            });
+
+            callControls = <div className={callControlsClasses}>
+                <div
+                    className={micClasses}
+                    onClick={this.onMicMuteClick}
+                />
+                <div
+                    className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
+                    onClick={() => {
+                        dis.dispatch({
+                            action: 'hangup',
+                            room_id: this.state.call.roomId,
+                        });
+                    }}
+                />
+                <div
+                    className={vidClasses}
+                    onClick={this.onVidMuteClick}
+                />
+                <div
+                    className={micCacheClasses}
+                    onClick={this.onMicMuteClick}
+                />
+                <div
+                    className={vidCacheClasses}
+                    onClick={this.onMicMuteClick}
+                />
+            </div>;
+        }
 
         // The 'content' for the call, ie. the videos for a video call and profile picture
         // for voice calls (fills the bg)
@@ -196,75 +320,19 @@ export default class CallView extends React.Component<IProps, IState> {
                     maxHeight={maxVideoHeight}
                 />
                 <VideoFeed type={VideoFeedType.Local} call={this.state.call} />
+                {callControls}
             </div>;
         } else {
             const avatarSize = this.props.room ? 200 : 75;
-            contentView = <div className="mx_CallView_voice">
+            contentView = <div className="mx_CallView_voice" onMouseMove={this.onMouseMove}>
                 <RoomAvatar
                     room={callRoom}
                     height={avatarSize}
                     width={avatarSize}
                 />
+                {callControls}
             </div>;
         }
-
-        /*
-        if (!this.props.room) {
-            const client = MatrixClientPeg.get();
-            const callRoom = client.getRoom(this.state.call.roomId);
-
-            let caption = _t("Active call");
-            if (this.state.isLocalOnHold) {
-                // we currently have no UI for holding / unholding a call (apart from slash
-                // commands) so we don't disintguish between when we've put the call on hold
-                // (ie. we'd show an unhold button) and when the other side has put us on hold
-                // (where obviously we would not show such a button).
-                caption = _t("Call Paused");
-            }
-
-            view = <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
-                <PulsedAvatar>
-                    <RoomAvatar
-                        room={callRoom}
-                        height={35}
-                        width={35}
-                    />
-                </PulsedAvatar>
-                <div>
-                    <h1>{callRoom.name}</h1>
-                    <p>{ caption }</p>
-                </div>
-            </AccessibleButton>;
-        } else {
-            // For video calls, we currently ignore the call hold state altogether
-            // (the video will just go black)
-
-            // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight;
-            view = <div className="mx_CallView_video" onClick={this.props.onClick}>
-                <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
-                    maxHeight={maxVideoHeight}
-                />
-                <VideoFeed type={VideoFeedType.Local} call={this.state.call} />
-            </div>;
-        }
-        */
-
-
-        /*
-        let hangup: React.ReactNode;
-        if (this.props.showHangup) {
-            hangup = <div
-                className="mx_CallView_hangup"
-                onClick={() => {
-                    dis.dispatch({
-                        action: 'hangup',
-                        room_id: this.state.call.roomId,
-                    });
-                }}
-            />;
-        }
-        */
 
         const callTypeText = this.state.call.type === CallType.Video ? _t("Video Call") : _t("Voice Call");
         let myClassName;
@@ -290,7 +358,9 @@ export default class CallView extends React.Component<IProps, IState> {
             myClassName = 'mx_CallView_large';
         } else {
             header = <div className="mx_CallView_header">
-                <RoomAvatar room={callRoom} height={32} width={32} />
+                <AccessibleButton onClick={this.onRoomAvatarClick}>
+                    <RoomAvatar room={callRoom} height={32} width={32} />
+                </AccessibleButton>
                 <div>
                     <div className="mx_CallView_header_roomName">{callRoom.name}</div>
                     <div className="mx_CallView_header_callTypeSmall">{callTypeText}</div>
