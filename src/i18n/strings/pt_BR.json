@@ -2779,5 +2779,6 @@
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s salas.",
     "Filter rooms and people": "Pesquisar salas e pessoas",
     "Open the link in the email to continue registration.": "Abra o link no e-mail para continuar o registro.",
-    "A confirmation email has been sent to %(emailAddress)s": "Um e-mail de confirmação foi enviado para %(emailAddress)s"
+    "A confirmation email has been sent to %(emailAddress)s": "Um e-mail de confirmação foi enviado para %(emailAddress)s",
+    "Go to Home View": "Ir para a tela inicial"
 }
