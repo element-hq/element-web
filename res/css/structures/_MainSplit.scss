@@ -25,6 +25,7 @@ limitations under the License.
     padding: 5px;
     // margin left to not allow the handle to not encroach on the space for the scrollbar
     margin-left: 8px;
+    height: calc(100vh - 51px); // height of .mx_RoomHeader.light-panel
 
     &:hover .mx_RightPanel_ResizeHandle {
         // Need to use important to override element style attributes

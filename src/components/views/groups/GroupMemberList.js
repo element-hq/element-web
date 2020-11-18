@@ -16,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -30,33 +29,29 @@ import {Action} from "../../../dispatcher/actions";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
-export default createReactClass({
-    displayName: 'GroupMemberList',
-
-    propTypes: {
+export default class GroupMemberList extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            members: null,
-            membersError: null,
-            invitedMembers: null,
-            invitedMembersError: null,
-            truncateAt: INITIAL_LOAD_NUM_MEMBERS,
-        };
-    },
+    state = {
+        members: null,
+        membersError: null,
+        invitedMembers: null,
+        invitedMembersError: null,
+        truncateAt: INITIAL_LOAD_NUM_MEMBERS,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._unmounted = false;
         this._initGroupStore(this.props.groupId);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    _initGroupStore: function(groupId) {
+    _initGroupStore(groupId) {
         GroupStore.registerListener(groupId, () => {
             this._fetchMembers();
         });
@@ -73,17 +68,17 @@ export default createReactClass({
                 });
             }
         });
-    },
+    }
 
-    _fetchMembers: function() {
+    _fetchMembers() {
         if (this._unmounted) return;
         this.setState({
             members: GroupStore.getGroupMembers(this.props.groupId),
             invitedMembers: GroupStore.getGroupInvitedMembers(this.props.groupId),
         });
-    },
+    }
 
-    _createOverflowTile: function(overflowCount, totalCount) {
+    _createOverflowTile = (overflowCount, totalCount) => {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const EntityTile = sdk.getComponent("rooms.EntityTile");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
@@ -94,19 +89,19 @@ export default createReactClass({
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={this._showFullMemberList} />
         );
-    },
+    };
 
-    _showFullMemberList: function() {
+    _showFullMemberList = () => {
         this.setState({
             truncateAt: -1,
         });
-    },
+    };
 
-    onSearchQueryChanged: function(ev) {
+    onSearchQueryChanged = ev => {
         this.setState({ searchQuery: ev.target.value });
-    },
+    };
 
-    makeGroupMemberTiles: function(query, memberList, memberListError) {
+    makeGroupMemberTiles(query, memberList, memberListError) {
         if (memberListError) {
             return <div className="warning">{ _t("Failed to load group members") }</div>;
         }
@@ -160,9 +155,9 @@ export default createReactClass({
         >
             { memberTiles }
         </TruncatedList>;
-    },
+    }
 
-    onInviteToGroupButtonClick() {
+    onInviteToGroupButtonClick = () => {
         showGroupInviteDialog(this.props.groupId).then(() => {
             dis.dispatch({
                 action: Action.SetRightPanelPhase,
@@ -170,9 +165,9 @@ export default createReactClass({
                 refireParams: { groupId: this.props.groupId },
             });
         });
-    },
+    };
 
-    render: function() {
+    render() {
         if (this.state.fetching || this.state.fetchingInvitedMembers) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_MemberList">
@@ -230,5 +225,5 @@ export default createReactClass({
                 { inputBox }
             </div>
         );
-    },
-});
+    }
+}

@@ -31,7 +31,7 @@ module.exports = async function invite(session, userId) {
     }
     const inviteButton = await session.query(".mx_MemberList_invite");
     await inviteButton.click();
-    const inviteTextArea = await session.query(".mx_InviteDialog_editor textarea");
+    const inviteTextArea = await session.query(".mx_InviteDialog_editor input");
     await inviteTextArea.type(userId);
     const selectUserItem = await session.query(".mx_InviteDialog_roomTile");
     await selectUserItem.click();

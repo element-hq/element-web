@@ -16,14 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import Spinner from '../elements/Spinner';
 
-export default createReactClass({
-    displayName: 'ChangeAvatar',
-    propTypes: {
+export default class ChangeAvatar extends React.Component {
+    static propTypes = {
         initialAvatarUrl: PropTypes.string,
         room: PropTypes.object,
         // if false, you need to call changeAvatar.onFileSelected yourself.
@@ -31,36 +30,36 @@ export default createReactClass({
         width: PropTypes.number,
         height: PropTypes.number,
         className: PropTypes.string,
-    },
+    };
 
-    Phases: {
+    static Phases = {
         Display: "display",
         Uploading: "uploading",
         Error: "error",
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            showUploadSection: true,
-            className: "",
-            width: 80,
-            height: 80,
-        };
-    },
+    static defaultProps = {
+        showUploadSection: true,
+        className: "",
+        width: 80,
+        height: 80,
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             avatarUrl: this.props.initialAvatarUrl,
-            phase: this.Phases.Display,
+            phase: ChangeAvatar.Phases.Display,
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps: function(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
         if (this.avatarSet) {
             // don't clobber what the user has just set
             return;
@@ -68,15 +67,15 @@ export default createReactClass({
         this.setState({
             avatarUrl: newProps.initialAvatarUrl,
         });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
-    },
+    }
 
-    onRoomStateEvents: function(ev) {
+    onRoomStateEvents = (ev) => {
         if (!this.props.room) {
             return;
         }
@@ -90,13 +89,13 @@ export default createReactClass({
             this.avatarSet = false;
             this.setState({}); // force update
         }
-    },
+    };
 
-    setAvatarFromFile: function(file) {
+    setAvatarFromFile(file) {
         let newUrl = null;
 
         this.setState({
-            phase: this.Phases.Uploading,
+            phase: ChangeAvatar.Phases.Uploading,
         });
         const self = this;
         const httpPromise = MatrixClientPeg.get().uploadContent(file).then(function(url) {
@@ -115,37 +114,39 @@ export default createReactClass({
 
         httpPromise.then(function() {
             self.setState({
-                phase: self.Phases.Display,
+                phase: ChangeAvatar.Phases.Display,
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(newUrl),
             });
         }, function(error) {
             self.setState({
-                phase: self.Phases.Error,
+                phase: ChangeAvatar.Phases.Error,
             });
             self.onError(error);
         });
 
         return httpPromise;
-    },
+    }
 
-    onFileSelected: function(ev) {
+    onFileSelected = (ev) => {
         this.avatarSet = true;
         return this.setAvatarFromFile(ev.target.files[0]);
-    },
+    };
 
-    onError: function(error) {
+    onError = (error) => {
         this.setState({
             errorText: _t("Failed to upload profile picture!"),
         });
-    },
+    };
 
-    render: function() {
+    render() {
         let avatarImg;
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
             const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
-            avatarImg = <RoomAvatar room={this.props.room} width={this.props.width} height={this.props.height} resizeMethod='crop' />;
+            avatarImg = <RoomAvatar
+                room={this.props.room} width={this.props.width} height={this.props.height} resizeMethod='crop'
+            />;
         } else {
             const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
@@ -165,8 +166,8 @@ export default createReactClass({
         }
 
         switch (this.state.phase) {
-            case this.Phases.Display:
-            case this.Phases.Error:
+            case ChangeAvatar.Phases.Display:
+            case ChangeAvatar.Phases.Error:
                 return (
                     <div>
                         <div className={this.props.className}>
@@ -175,11 +176,10 @@ export default createReactClass({
                         { uploadSection }
                     </div>
                 );
-            case this.Phases.Uploading:
-                var Loader = sdk.getComponent("elements.Spinner");
+            case ChangeAvatar.Phases.Uploading:
                 return (
-                    <Loader />
+                    <Spinner />
                 );
         }
-    },
-});
+    }
+}

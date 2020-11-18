@@ -18,16 +18,13 @@ limitations under the License.
 
 import { _t } from '../../../languageHandler';
 import React from 'react';
-import createReactClass from 'create-react-class';
 
-export default createReactClass({
-    displayName: 'AuthFooter',
-
-    render: function() {
+export default class AuthFooter extends React.Component {
+    render() {
         return (
             <div className="mx_AuthFooter">
                 <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t("powered by Matrix") }</a>
             </div>
         );
-    },
-});
+    }
+}

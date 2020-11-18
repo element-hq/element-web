@@ -16,47 +16,47 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
+import classNames from "classnames";
+
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-export default createReactClass({
-    displayName: 'QuestionDialog',
-    propTypes: {
+export default class QuestionDialog extends React.Component {
+    static propTypes = {
         title: PropTypes.string,
         description: PropTypes.node,
         extraButtons: PropTypes.node,
         button: PropTypes.string,
+        buttonDisabled: PropTypes.bool,
         danger: PropTypes.bool,
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
         headerImage: PropTypes.string,
         quitOnly: PropTypes.bool, // quitOnly doesn't show the cancel button just the quit [x].
         fixedWidth: PropTypes.bool,
-    },
+        className: PropTypes.string,
+    };
 
-    getDefaultProps: function() {
-        return {
-            title: "",
-            description: "",
-            extraButtons: null,
-            focus: true,
-            hasCancelButton: true,
-            danger: false,
-            quitOnly: false,
-        };
-    },
+    static defaultProps = {
+        title: "",
+        description: "",
+        extraButtons: null,
+        focus: true,
+        hasCancelButton: true,
+        danger: false,
+        quitOnly: false,
+    };
 
-    onOk: function() {
+    onOk = () => {
         this.props.onFinished(true);
-    },
+    };
 
-    onCancel: function() {
+    onCancel = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         let primaryButtonClass = "";
@@ -65,7 +65,7 @@ export default createReactClass({
         }
         return (
             <BaseDialog
-                className="mx_QuestionDialog"
+                className={classNames("mx_QuestionDialog", this.props.className)}
                 onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
@@ -78,6 +78,7 @@ export default createReactClass({
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
                     primaryButtonClass={primaryButtonClass}
+                    primaryDisabled={this.props.buttonDisabled}
                     cancelButton={this.props.cancelButton}
                     hasCancel={this.props.hasCancelButton && !this.props.quitOnly}
                     onPrimaryButtonClick={this.onOk}
@@ -88,5 +89,5 @@ export default createReactClass({
                 </DialogButtons>
             </BaseDialog>
         );
-    },
-});
+    }
+}

@@ -17,7 +17,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import '../../../VelocityBounce';
 import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
@@ -33,10 +32,8 @@ try {
 } catch (e) {
 }
 
-export default createReactClass({
-    displayName: 'ReadReceiptMarker',
-
-    propTypes: {
+export default class ReadReceiptMarker extends React.Component {
+    static propTypes = {
         // the RoomMember to show the RR for
         member: PropTypes.object,
         // userId to fallback the avatar to
@@ -70,30 +67,27 @@ export default createReactClass({
 
         // True to show twelve hour format, false otherwise
         showTwelveHour: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            leftOffset: 0,
-        };
-    },
+    static defaultProps = {
+        leftOffset: 0,
+    };
 
-    getInitialState: function() {
-        // if we are going to animate the RR, we don't show it on first render,
-        // and instead just add a placeholder to the DOM; once we've been
-        // mounted, we start an animation which moves the RR from its old
-        // position.
-        return {
+    constructor(props) {
+        super(props);
+
+        this._avatar = createRef();
+
+        this.state = {
+            // if we are going to animate the RR, we don't show it on first render,
+            // and instead just add a placeholder to the DOM; once we've been
+            // mounted, we start an animation which moves the RR from its old
+            // position.
             suppressDisplay: !this.props.suppressAnimation,
         };
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._avatar = createRef();
-    },
-
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
         const rrInfo = this.props.readReceiptInfo;
@@ -112,9 +106,9 @@ export default createReactClass({
         rrInfo.top = avatarNode.offsetTop;
         rrInfo.left = avatarNode.offsetLeft;
         rrInfo.parent = avatarNode.offsetParent;
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         if (!this.state.suppressDisplay) {
             // we've already done our display - nothing more to do.
             return;
@@ -172,10 +166,9 @@ export default createReactClass({
             startStyles: startStyles,
             enterTransitionOpts: enterTransitionOpts,
         });
-    },
+    }
 
-
-    render: function() {
+    render() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
             return <div ref={this._avatar} />;
@@ -222,5 +215,5 @@ export default createReactClass({
                 />
             </Velociraptor>
         );
-    },
-});
+    }
+}

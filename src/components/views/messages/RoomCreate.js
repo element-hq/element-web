@@ -17,22 +17,20 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import EventTileBubble from "./EventTileBubble";
 
-export default createReactClass({
-    displayName: 'RoomCreate',
-
-    propTypes: {
+export default class RoomCreate extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
-    },
+    };
 
-    _onLinkClicked: function(e) {
+    _onLinkClicked = e => {
         e.preventDefault();
 
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
@@ -43,28 +41,27 @@ export default createReactClass({
             highlighted: true,
             room_id: predecessor['room_id'],
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
         if (predecessor === undefined) {
-            return <div />; // We should never have been instaniated in this case
+            return <div />; // We should never have been instantiated in this case
         }
         const prevRoom = MatrixClientPeg.get().getRoom(predecessor['room_id']);
         const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor['room_id']);
         permalinkCreator.load();
         const predecessorPermalink = permalinkCreator.forEvent(predecessor['event_id']);
-        return <div className="mx_CreateEvent">
-            <div className="mx_CreateEvent_image" />
-            <div className="mx_CreateEvent_header">
-                {_t("This room is a continuation of another conversation.")}
-            </div>
-            <a className="mx_CreateEvent_link"
-                href={predecessorPermalink}
-                onClick={this._onLinkClicked}
-            >
+        const link = (
+            <a href={predecessorPermalink} onClick={this._onLinkClicked}>
                 {_t("Click here to see older messages.")}
             </a>
-        </div>;
-    },
-});
+        );
+
+        return <EventTileBubble
+            className="mx_CreateEvent"
+            title={_t("This room is a continuation of another conversation.")}
+            subtitle={link}
+        />;
+    }
+}

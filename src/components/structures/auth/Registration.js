@@ -19,7 +19,6 @@ limitations under the License.
 
 import Matrix from 'matrix-js-sdk';
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
@@ -43,10 +42,8 @@ const PHASE_REGISTRATION = 1;
 // Enable phases for registration
 const PHASES_ENABLED = true;
 
-export default createReactClass({
-    displayName: 'Registration',
-
-    propTypes: {
+export default class Registration extends React.Component {
+    static propTypes = {
         // Called when the user has logged in. Params:
         // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
         // - The user's password, if available and applicable (may be cached in memory
@@ -65,12 +62,13 @@ export default createReactClass({
         onLoginClick: PropTypes.func.isRequired,
         onServerConfigChange: PropTypes.func.isRequired,
         defaultDeviceDisplayName: PropTypes.string,
-    },
+    };
 
-    getInitialState: function() {
+    constructor(props) {
+        super(props);
+
         const serverType = ServerType.getTypeFromServerConfig(this.props.serverConfig);
-
-        return {
+        this.state = {
             busy: false,
             errorText: null,
             // We remember the values entered by the user because
@@ -118,14 +116,15 @@ export default createReactClass({
             // this is the user ID that's logged in.
             differentLoggedInUserId: null,
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._unmounted = false;
         this._replaceClient();
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
@@ -142,7 +141,7 @@ export default createReactClass({
                 phase: this.getDefaultPhaseForServerType(serverType),
             });
         }
-    },
+    }
 
     getDefaultPhaseForServerType(type) {
         switch (type) {
@@ -155,9 +154,9 @@ export default createReactClass({
             case ServerType.ADVANCED:
                 return PHASE_SERVER_DETAILS;
         }
-    },
+    }
 
-    onServerTypeChange(type) {
+    onServerTypeChange = type => {
         this.setState({
             serverType: type,
         });
@@ -184,9 +183,9 @@ export default createReactClass({
         this.setState({
             phase: this.getDefaultPhaseForServerType(type),
         });
-    },
+    };
 
-    _replaceClient: async function(serverConfig) {
+    async _replaceClient(serverConfig) {
         this.setState({
             errorText: null,
             serverDeadError: null,
@@ -286,18 +285,18 @@ export default createReactClass({
                 showGenericError(e);
             }
         }
-    },
+    }
 
-    onFormSubmit: function(formVals) {
+    onFormSubmit = formVals => {
         this.setState({
             errorText: "",
             busy: true,
             formVals: formVals,
             doingUIAuth: true,
         });
-    },
+    };
 
-    _requestEmailToken: function(emailAddress, clientSecret, sendAttempt, sessionId) {
+    _requestEmailToken = (emailAddress, clientSecret, sendAttempt, sessionId) => {
         return this.state.matrixClient.requestRegisterEmailToken(
             emailAddress,
             clientSecret,
@@ -309,9 +308,9 @@ export default createReactClass({
                 session_id: sessionId,
             }),
         );
-    },
+    }
 
-    _onUIAuthFinished: async function(success, response, extra) {
+    _onUIAuthFinished = async (success, response, extra) => {
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
@@ -395,9 +394,9 @@ export default createReactClass({
         }
 
         this.setState(newState);
-    },
+    };
 
-    _setupPushers: function() {
+    _setupPushers() {
         if (!this.props.brand) {
             return Promise.resolve();
         }
@@ -418,15 +417,15 @@ export default createReactClass({
         }, (error) => {
             console.error("Couldn't get pushers: " + error);
         });
-    },
+    }
 
-    onLoginClick: function(ev) {
+    onLoginClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onLoginClick();
-    },
+    };
 
-    onGoToFormClicked(ev) {
+    onGoToFormClicked = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this._replaceClient();
@@ -435,23 +434,23 @@ export default createReactClass({
             doingUIAuth: false,
             phase: PHASE_REGISTRATION,
         });
-    },
+    };
 
-    async onServerDetailsNextPhaseClick() {
+    onServerDetailsNextPhaseClick = async () => {
         this.setState({
             phase: PHASE_REGISTRATION,
         });
-    },
+    };
 
-    onEditServerDetailsClick(ev) {
+    onEditServerDetailsClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
             phase: PHASE_SERVER_DETAILS,
         });
-    },
+    };
 
-    _makeRegisterRequest: function(auth) {
+    _makeRegisterRequest = auth => {
         // We inhibit login if we're trying to register with an email address: this
         // avoids a lot of complex race conditions that can occur if we try to log
         // the user in one one or both of the tabs they might end up with after
@@ -471,20 +470,20 @@ export default createReactClass({
         if (auth) registerParams.auth = auth;
         if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;
         return this.state.matrixClient.registerRequest(registerParams);
-    },
+    };
 
-    _getUIAuthInputs: function() {
+    _getUIAuthInputs() {
         return {
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
             phoneNumber: this.state.formVals.phoneNumber,
         };
-    },
+    }
 
     // Links to the login page shown after registration is completed are routed through this
     // which checks the user hasn't already logged in somewhere else (perhaps we should do
     // this more generally?)
-    _onLoginClickWithCheck: async function(ev) {
+    _onLoginClickWithCheck = async ev => {
         ev.preventDefault();
 
         const sessionLoaded = await Lifecycle.loadSession({ignoreGuest: true});
@@ -492,7 +491,7 @@ export default createReactClass({
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();
         }
-    },
+    };
 
     renderServerComponent() {
         const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
@@ -500,6 +499,11 @@ export default createReactClass({
         const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
 
         if (SdkConfig.get()['disable_custom_urls']) {
+            return null;
+        }
+
+        // Hide the server picker once the user is doing UI Auth unless encountered a fatal server error
+        if (this.state.phase !== PHASE_SERVER_DETAILS && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
             return null;
         }
 
@@ -553,7 +557,7 @@ export default createReactClass({
             />
             {serverDetails}
         </div>;
-    },
+    }
 
     renderRegisterComponent() {
         if (PHASES_ENABLED && this.state.phase !== PHASE_REGISTRATION) {
@@ -583,17 +587,6 @@ export default createReactClass({
                 <Spinner />
             </div>;
         } else if (this.state.flows.length) {
-            let onEditServerDetailsClick = null;
-            // If custom URLs are allowed and we haven't selected the Free server type, wire
-            // up the server details edit link.
-            if (
-                PHASES_ENABLED &&
-                !SdkConfig.get()['disable_custom_urls'] &&
-                this.state.serverType !== ServerType.FREE
-            ) {
-                onEditServerDetailsClick = this.onEditServerDetailsClick;
-            }
-
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -601,16 +594,15 @@ export default createReactClass({
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
                 onRegisterClick={this.onFormSubmit}
-                onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
                 canSubmit={!this.state.serverErrorIsFatal}
                 serverRequiresIdServer={this.state.serverRequiresIdServer}
             />;
         }
-    },
+    }
 
-    render: function() {
+    render() {
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -687,11 +679,48 @@ export default createReactClass({
                 { regDoneText }
             </div>;
         } else {
+            let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+                serverName: this.props.serverConfig.hsName,
+            });
+            if (this.props.serverConfig.hsNameIsDifferent) {
+                const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+                yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
+                    'underlinedServerName': () => {
+                        return <TextWithTooltip
+                            class="mx_Login_underlinedServerName"
+                            tooltip={this.props.serverConfig.hsUrl}
+                        >
+                            {this.props.serverConfig.hsName}
+                        </TextWithTooltip>;
+                    },
+                });
+            }
+
+            // If custom URLs are allowed, user is not doing UIA flows and they haven't selected the Free server type,
+            // wire up the server details edit link.
+            let editLink = null;
+            if (PHASES_ENABLED &&
+                !SdkConfig.get()['disable_custom_urls'] &&
+                this.state.serverType !== ServerType.FREE &&
+                !this.state.doingUIAuth
+            ) {
+                editLink = (
+                    <a className="mx_AuthBody_editServerDetails" href="#" onClick={this.onEditServerDetailsClick}>
+                        {_t('Change')}
+                    </a>
+                );
+            }
+
             body = <div>
                 <h2>{ _t('Create your account') }</h2>
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }
+                { this.state.phase !== PHASE_SERVER_DETAILS && <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3> }
                 { this.renderRegisterComponent() }
                 { goBack }
                 { signIn }
@@ -706,5 +735,5 @@ export default createReactClass({
                 </AuthBody>
             </AuthPage>
         );
-    },
-});
+    }
+}

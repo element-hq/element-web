@@ -120,7 +120,7 @@ export class IntegrationManagers {
             if (!data) return;
 
             const uiUrl = w.content['url'];
-            const apiUrl = data['api_url'];
+            const apiUrl = data['api_url'] as string;
             if (!apiUrl || !uiUrl) return;
 
             const manager = new IntegrationManagerInstance(

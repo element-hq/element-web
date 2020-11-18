@@ -26,6 +26,7 @@ import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
 import { createClient } from 'matrix-js-sdk/src/matrix';
 import classNames from 'classnames';
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 /*
  * A pure UI component which displays the HS and IS to use.
@@ -70,6 +71,8 @@ export default class ServerConfig extends React.PureComponent {
             isUrl: props.serverConfig.isUrl,
             showIdentityServer: false,
         };
+
+        CountlyAnalytics.instance.track("onboarding_custom_server");
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event

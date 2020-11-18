@@ -82,7 +82,6 @@ limitations under the License.
             }
 
             span.mx_IconizedContextMenu_label { // labels
-                padding-left: 14px;
                 width: 100%;
                 flex: 1;
 
@@ -90,6 +89,10 @@ limitations under the License.
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
+            }
+
+            .mx_IconizedContextMenu_icon + .mx_IconizedContextMenu_label {
+                padding-left: 14px;
             }
         }
     }

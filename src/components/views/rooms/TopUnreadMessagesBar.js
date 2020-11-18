@@ -18,19 +18,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 
-export default createReactClass({
-    displayName: 'TopUnreadMessagesBar',
-
-    propTypes: {
+export default class TopUnreadMessagesBar extends React.Component {
+    static propTypes = {
         onScrollUpClick: PropTypes.func,
         onCloseClick: PropTypes.func,
-    },
+    };
 
-    render: function() {
+    render() {
         return (
             <div className="mx_TopUnreadMessagesBar">
                 <AccessibleButton className="mx_TopUnreadMessagesBar_scrollUp"
@@ -43,5 +40,5 @@ export default createReactClass({
                 </AccessibleButton>
             </div>
         );
-    },
-});
+    }
+}

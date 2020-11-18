@@ -17,13 +17,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
-export default createReactClass({
-    displayName: 'TruncatedList',
-
-    propTypes: {
+export default class TruncatedList extends React.Component {
+    static propTypes = {
         // The number of elements to show before truncating. If negative, no truncation is done.
         truncateAt: PropTypes.number,
         // The className to apply to the wrapping div
@@ -40,20 +37,18 @@ export default createReactClass({
         // A function which will be invoked when an overflow element is required.
         // This will be inserted after the children.
         createOverflowElement: PropTypes.func,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            truncateAt: 2,
-            createOverflowElement: function(overflowCount, totalCount) {
-                return (
-                    <div>{ _t("And %(count)s more...", {count: overflowCount}) }</div>
-                );
-            },
-        };
-    },
+    static defaultProps ={
+        truncateAt: 2,
+        createOverflowElement(overflowCount, totalCount) {
+            return (
+                <div>{ _t("And %(count)s more...", {count: overflowCount}) }</div>
+            );
+        },
+    };
 
-    _getChildren: function(start, end) {
+    _getChildren(start, end) {
         if (this.props.getChildren && this.props.getChildCount) {
             return this.props.getChildren(start, end);
         } else {
@@ -64,9 +59,9 @@ export default createReactClass({
                 return c != null;
             }).slice(start, end);
         }
-    },
+    }
 
-    _getChildCount: function() {
+    _getChildCount() {
         if (this.props.getChildren && this.props.getChildCount) {
             return this.props.getChildCount();
         } else {
@@ -74,9 +69,9 @@ export default createReactClass({
                 return c != null;
             }).length;
         }
-    },
+    }
 
-    render: function() {
+    render() {
         let overflowNode = null;
 
         const totalChildren = this._getChildCount();
@@ -98,5 +93,5 @@ export default createReactClass({
                 { overflowNode }
             </div>
         );
-    },
-});
+    }
+}

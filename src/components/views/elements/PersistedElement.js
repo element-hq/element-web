@@ -17,10 +17,12 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-
+import {throttle} from "lodash";
 import ResizeObserver from 'resize-observer-polyfill';
 
 import dis from '../../../dispatcher/dispatcher';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -144,9 +146,11 @@ export default class PersistedElement extends React.Component {
     }
 
     renderApp() {
-        const content = <div ref={this.collectChild} style={this.props.style}>
-            {this.props.children}
-        </div>;
+        const content = <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
+            <div ref={this.collectChild} style={this.props.style}>
+                {this.props.children}
+            </div>
+        </MatrixClientContext.Provider>;
 
         ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
     }
@@ -156,7 +160,7 @@ export default class PersistedElement extends React.Component {
         child.style.display = visible ? 'block' : 'none';
     }
 
-    updateChildPosition(child, parent) {
+    updateChildPosition = throttle((child, parent) => {
         if (!child || !parent) return;
 
         const parentRect = parent.getBoundingClientRect();
@@ -167,9 +171,11 @@ export default class PersistedElement extends React.Component {
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
         });
-    }
+    }, 100, {trailing: true, leading: true});
 
     render() {
-        return <div ref={this.collectChildContainer}></div>;
+        return <div ref={this.collectChildContainer} />;
     }
 }
+
+export const getPersistKey = (appId: string) => 'widget_' + appId;

@@ -17,22 +17,19 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as TextForEvent from "../../../TextForEvent";
 
-export default createReactClass({
-    displayName: 'TextualEvent',
-
-    propTypes: {
+export default class TextualEvent extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
-    },
+    };
 
-    render: function() {
+    render() {
         const text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length === 0) return null;
         return (
             <div className="mx_TextualEvent">{ text }</div>
         );
-    },
-});
+    }
+}

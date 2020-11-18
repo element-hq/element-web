@@ -17,49 +17,44 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import Tinter from "../../../Tinter";
 
-const TintableSvg = createReactClass({
-    displayName: 'TintableSvg',
-
-    propTypes: {
+class TintableSvg extends React.Component {
+    static propTypes = {
         src: PropTypes.string.isRequired,
         width: PropTypes.string.isRequired,
         height: PropTypes.string.isRequired,
         className: PropTypes.string,
-    },
+    };
 
-    statics: {
-        // list of currently mounted TintableSvgs
-        mounts: {},
-        idSequence: 0,
-    },
+    // list of currently mounted TintableSvgs
+    static mounts = {};
+    static idSequence = 0;
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.fixups = [];
 
         this.id = TintableSvg.idSequence++;
         TintableSvg.mounts[this.id] = this;
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         delete TintableSvg.mounts[this.id];
-    },
+    }
 
-    tint: function() {
+    tint = () => {
         // TODO: only bother running this if the global tint settings have changed
         // since we loaded!
         Tinter.applySvgFixups(this.fixups);
-    },
+    };
 
-    onLoad: function(event) {
+    onLoad = event => {
         // console.log("TintableSvg.onLoad for " + this.props.src);
         this.fixups = Tinter.calcSvgFixups([event.target]);
         Tinter.applySvgFixups(this.fixups);
-    },
+    };
 
-    render: function() {
+    render() {
         return (
             <object className={"mx_TintableSvg " + (this.props.className ? this.props.className : "")}
                     type="image/svg+xml"
@@ -70,8 +65,8 @@ const TintableSvg = createReactClass({
                     tabIndex="-1"
                 />
         );
-    },
-});
+    }
+}
 
 // Register with the Tinter so that we will be told if the tint changes
 Tinter.registerTintable(function() {

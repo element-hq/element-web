@@ -9,6 +9,9 @@ set -e
 
 cd `dirname $0`
 
+# This link seems to get eaten by the release process, so ensure it exists.
+yarn link matrix-js-sdk
+
 for i in matrix-js-sdk
 do
     echo "Checking version of $i..."
@@ -29,9 +32,7 @@ do
             echo "Upgrading $i to $latestver..."
             yarn add -E $i@$latestver
             git add -u
-            # The `-e` flag opens the editor and gives you a chance to check
-            # the upgrade for correctness.
-            git commit -m "Upgrade $i to $latestver" -e
+            git commit -m "Upgrade $i to $latestver"
         fi
     fi
 done

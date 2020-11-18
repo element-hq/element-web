@@ -16,7 +16,7 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import { MatrixClientPeg } from '../MatrixClientPeg';
-import { accessSecretStorage, AccessCancelledError } from '../CrossSigningManager';
+import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 export const PHASE_INTRO = 0;

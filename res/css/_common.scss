@@ -17,6 +17,9 @@ limitations under the License.
 */
 
 @import "./_font-sizes.scss";
+@import "./_font-weights.scss";
+
+$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
 
 :root {
     font-size: 10px;
@@ -206,12 +209,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 0;
 }
 
-/* applied to side-panels and messagepanel when in RoomSettings */
-.mx_fadable {
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
-}
-
 // These are magic constants which are excluded from tinting, to let themes
 // (which only have CSS, unlike skins) tell the app what their non-tinted
 // colourscheme is by inspecting the stylesheet DOM.
@@ -260,7 +257,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     font-weight: 300;
     font-size: $font-15px;
     position: relative;
-    padding: 25px 30px 30px 30px;
+    padding: 24px;
     max-height: 80%;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
     border-radius: 8px;
@@ -327,6 +324,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_title {
     font-size: $font-22px;
+    font-weight: $font-semi-bold;
     line-height: $font-36px;
     color: $dialog-title-fg-color;
 }
@@ -352,8 +350,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     background-color: $dialog-close-fg-color;
     cursor: pointer;
     position: absolute;
-    top: 4px;
-    right: 0px;
+    top: 10px;
+    right: 0;
 }
 
 .mx_Dialog_content {

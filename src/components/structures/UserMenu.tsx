@@ -23,7 +23,7 @@ import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
-import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
+import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
@@ -44,12 +44,13 @@ import IconizedContextMenu, {
 } from "../views/context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import * as fbEmitter from "fbemitter";
-import TagOrderStore from "../../stores/TagOrderStore";
+import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import { showCommunityInviteDialog } from "../../RoomInvite";
 import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
+import {UIFeature} from "../../settings/UIFeature";
 
 interface IProps {
     isMinimized: boolean;
@@ -86,7 +87,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
-        this.tagStoreRef = TagOrderStore.addListener(this.onTagStoreUpdate);
+        this.tagStoreRef = GroupFilterOrderStore.addListener(this.onTagStoreUpdate);
     }
 
     public componentWillUnmount() {
@@ -185,15 +186,22 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
+        Modal.createTrackedDialog('Feedback Dialog', '', FeedbackDialog);
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
-    private onSignOutClick = (ev: ButtonEvent) => {
+    private onSignOutClick = async (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
+        const cli = MatrixClientPeg.get();
+        if (!cli || !cli.isCryptoEnabled() || !(await cli.exportRoomKeys())?.length) {
+            // log out without user prompt if they have no local megolm sessions
+            dis.dispatch({action: 'logout'});
+        } else {
+            Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
+        }
+
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
@@ -202,6 +210,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         defaultDispatcher.dispatch({action: 'view_home_page'});
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onCommunitySettingsClick = (ev: ButtonEvent) => {
@@ -256,7 +265,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const signupLink = getHostingLink("user-context-menu");
         if (signupLink) {
             hostingLink = (
-                <div className="mx_UserMenu_contextMenu_header">
+                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
                     {_t(
                         "<a>Upgrade</a> to your own domain", {},
                         {
@@ -283,6 +292,15 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     onClick={this.onHomeClick}
                 />
             );
+        }
+
+        let feedbackButton;
+        if (SettingsStore.getValue(UIFeature.Feedback)) {
+            feedbackButton = <IconizedContextMenuOption
+                iconClassName="mx_UserMenu_iconMessage"
+                label={_t("Feedback")}
+                onClick={this.onProvideFeedback}
+            />;
         }
 
         let primaryHeader = (
@@ -319,11 +337,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         label={_t("Archived rooms")}
                         onClick={this.onShowArchived}
                     /> */}
-                    <IconizedContextMenuOption
-                        iconClassName="mx_UserMenu_iconMessage"
-                        label={_t("Feedback")}
-                        onClick={this.onProvideFeedback}
-                    />
+                    { feedbackButton }
                 </IconizedContextMenuOptionList>
                 <IconizedContextMenuOptionList red>
                     <IconizedContextMenuOption
@@ -337,6 +351,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let secondarySection = null;
 
         if (prototypeCommunityName) {
+            const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
             primaryHeader = (
                 <div className="mx_UserMenu_contextMenu_name">
                     <span className="mx_UserMenu_contextMenu_displayName">
@@ -344,24 +359,36 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     </span>
                 </div>
             );
-            primaryOptionList = (
-                <IconizedContextMenuOptionList>
+            let settingsOption;
+            let inviteOption;
+            if (CommunityPrototypeStore.instance.canInviteTo(communityId)) {
+                inviteOption = (
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconInvite"
+                        label={_t("Invite")}
+                        onClick={this.onCommunityInviteClick}
+                    />
+                );
+            }
+            if (CommunityPrototypeStore.instance.isAdminOf(communityId)) {
+                settingsOption = (
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
                         label={_t("Settings")}
                         aria-label={_t("Community settings")}
                         onClick={this.onCommunitySettingsClick}
                     />
+                );
+            }
+            primaryOptionList = (
+                <IconizedContextMenuOptionList>
+                    {settingsOption}
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconMembers"
                         label={_t("Members")}
                         onClick={this.onCommunityMembersClick}
                     />
-                    <IconizedContextMenuOption
-                        iconClassName="mx_UserMenu_iconInvite"
-                        label={_t("Invite")}
-                        onClick={this.onCommunityInviteClick}
-                    />
+                    {inviteOption}
                 </IconizedContextMenuOptionList>
             );
             secondarySection = (
@@ -384,11 +411,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             aria-label={_t("User settings")}
                             onClick={(e) => this.onSettingsOpen(e, null)}
                         />
-                        <IconizedContextMenuOption
-                            iconClassName="mx_UserMenu_iconMessage"
-                            label={_t("Feedback")}
-                            onClick={this.onProvideFeedback}
-                        />
+                        { feedbackButton }
                     </IconizedContextMenuOptionList>
                     <IconizedContextMenuOptionList red>
                         <IconizedContextMenuOption
@@ -437,7 +460,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public render() {
         const avatarSize = 32; // should match border-radius of the avatar
 
-        const displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
+        const userId = MatrixClientPeg.get().getUserId();
+        const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
         const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
@@ -492,7 +516,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <div className="mx_UserMenu_row">
                         <span className="mx_UserMenu_userAvatarContainer">
                             <BaseAvatar
-                                idName={displayName}
+                                idName={userId}
                                 name={displayName}
                                 url={avatarUrl}
                                 width={avatarSize}

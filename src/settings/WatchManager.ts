@@ -18,11 +18,10 @@ import { SettingLevel } from "./SettingLevel";
 
 export type CallbackFn = (changedInRoomId: string, atLevel: SettingLevel, newValAtLevel: any) => void;
 
-const IRRELEVANT_ROOM = Symbol("any room");
+const IRRELEVANT_ROOM: string = null;
 
 interface RoomWatcherMap {
-    // @ts-ignore - TS wants string-only keys but we know better - https://github.com/Microsoft/TypeScript/issues/1863
-    [roomId: string | symbol]: CallbackFn[];
+    [roomId: string]: CallbackFn[];
 }
 
 /**
@@ -69,7 +68,7 @@ export class WatchManager {
         if (!inRoomId) {
             // Fire updates to all the individual room watchers too, as they probably
             // care about the change higher up.
-            callbacks.push(...Object.values(roomWatchers).reduce((r, a) => [...r, ...a], []));
+            callbacks.push(...Object.values(roomWatchers).flat(1));
         } else if (roomWatchers[IRRELEVANT_ROOM]) {
             callbacks.push(...roomWatchers[IRRELEVANT_ROOM]);
         }

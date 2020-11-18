@@ -71,9 +71,12 @@ limitations under the License.
     margin-right: 64px;
 }
 
+.mx_ShareDialog_qrcode_container + .mx_ShareDialog_social_container {
+    width: 299px;
+}
+
 .mx_ShareDialog_social_container {
     display: inline-block;
-    width: 299px;
 }
 
 .mx_ShareDialog_social_icon {

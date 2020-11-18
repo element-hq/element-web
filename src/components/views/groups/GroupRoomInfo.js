@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
@@ -26,50 +25,45 @@ import GroupStore from '../../../stores/GroupStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
-export default createReactClass({
-    displayName: 'GroupRoomInfo',
+export default class GroupRoomInfo extends React.Component {
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
-
-    propTypes: {
+    static propTypes = {
         groupId: PropTypes.string,
         groupRoomId: PropTypes.string,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            isUserPrivilegedInGroup: null,
-            groupRoom: null,
-            groupRoomPublicityLoading: false,
-            groupRoomRemoveLoading: false,
-        };
-    },
+    state = {
+        isUserPrivilegedInGroup: null,
+        groupRoom: null,
+        groupRoomPublicityLoading: false,
+        groupRoomRemoveLoading: false,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._initGroupStore(this.props.groupId);
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
             this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
         }
-    },
+    }
 
     componentWillUnmount() {
         this._unregisterGroupStore(this.props.groupId);
-    },
+    }
 
     _initGroupStore(groupId) {
         GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
-    },
+    }
 
     _unregisterGroupStore(groupId) {
         GroupStore.unregisterListener(this.onGroupStoreUpdated);
-    },
+    }
 
     _updateGroupRoom() {
         this.setState({
@@ -77,16 +71,16 @@ export default createReactClass({
                 (r) => r.roomId === this.props.groupRoomId,
             ),
         });
-    },
+    }
 
-    onGroupStoreUpdated: function() {
+    onGroupStoreUpdated = () => {
         this.setState({
             isUserPrivilegedInGroup: GroupStore.isUserPrivileged(this.props.groupId),
         });
         this._updateGroupRoom();
-    },
+    };
 
-    _onRemove: function(e) {
+    _onRemove = e => {
         const groupId = this.props.groupId;
         const roomName = this.state.groupRoom.displayname;
         e.preventDefault();
@@ -119,15 +113,15 @@ export default createReactClass({
                 });
             },
         });
-    },
+    };
 
-    _onCancel: function(e) {
+    _onCancel = e => {
         dis.dispatch({
             action: "view_group_room_list",
         });
-    },
+    };
 
-    _changeGroupRoomPublicity(e) {
+    _changeGroupRoomPublicity = e => {
         const isPublic = e.target.value === "public";
         this.setState({
             groupRoomPublicityLoading: true,
@@ -150,9 +144,9 @@ export default createReactClass({
                 groupRoomPublicityLoading: false,
             });
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
         if (this.state.groupRoomRemoveLoading || !this.state.groupRoom) {
@@ -235,5 +229,5 @@ export default createReactClass({
                 </AutoHideScrollbar>
             </div>
         );
-    },
-});
+    }
+}
