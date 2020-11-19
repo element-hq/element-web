@@ -151,7 +151,7 @@ export class CapabilityText {
                 if (textForDirection && textForDirection[eventCap.direction]) {
                     return {
                         primary: _t(textForDirection[eventCap.direction]),
-                        byline: CapabilityText.bylineFor(eventCap),
+                        // no byline because we would have already represented the event properly
                     };
                 }
             }
