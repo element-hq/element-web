@@ -27,6 +27,7 @@ import { CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
+import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
 
 interface IProps {
         // js-sdk room object. If set, we will only show calls for the given
@@ -108,9 +109,11 @@ export default class CallView extends React.Component<IProps, IState> {
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
+        document.addEventListener('keydown', this.onNativeKeyDown);
     }
 
     public componentWillUnmount() {
+        document.removeEventListener("keydown", this.onNativeKeyDown);
         this.updateCallListeners(this.state.call, null);
         dis.unregister(this.dispatcherRef);
     }
@@ -198,14 +201,18 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
-    onControlsHideTimer = () => {
+    private onControlsHideTimer = () => {
         this.controlsHideTimer = null;
         this.setState({
             controlsVisible: false,
         });
     }
 
-    onMouseMove = () => {
+    private onMouseMove = () => {
+        this.showControls();
+    }
+
+    private showControls() {
         if (!this.state.controlsVisible) {
             this.setState({
                 controlsVisible: true,
@@ -217,21 +224,58 @@ export default class CallView extends React.Component<IProps, IState> {
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
     }
 
-    onMicMuteClick = () => {
+    private onMicMuteClick = () => {
+        if (!this.state.call) return;
+
         const newVal = !this.state.micMuted;
 
         this.state.call.setMicrophoneMuted(newVal);
         this.setState({micMuted: newVal});
     }
 
-    onVidMuteClick = () => {
+    private onVidMuteClick = () => {
+        if (!this.state.call) return;
+
         const newVal = !this.state.vidMuted;
 
         this.state.call.setLocalVideoMuted(newVal);
         this.setState({vidMuted: newVal});
     }
 
-    onRoomAvatarClick = () => {
+    // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
+    // Note that this assumes we always have a callview on screen at any given time
+    // CallHandler would probably be a better place for this
+    private onNativeKeyDown = ev => {
+        let handled = false;
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
+
+        switch (ev.key) {
+            case Key.D:
+                if (ctrlCmdOnly) {
+                    this.onMicMuteClick();
+                    // show the controls to give feedback
+                    this.showControls();
+                    handled = true;
+                }
+                break;
+
+            case Key.E:
+                if (ctrlCmdOnly) {
+                    this.onVidMuteClick();
+                    // show the controls to give feedback
+                    this.showControls();
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    };
+
+    private onRoomAvatarClick = () => {
         dis.dispatch({
             action: 'view_room',
             room_id: this.state.call.roomId,
@@ -279,6 +323,11 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_callControls_hidden: !this.state.controlsVisible,
             });
 
+            const vidMuteButton = this.state.call.type === CallType.Video ? <div
+                className={vidClasses}
+                onClick={this.onVidMuteClick}
+            /> : null;
+
             callControls = <div className={callControlsClasses}>
                 <div
                     className={micClasses}
@@ -293,18 +342,9 @@ export default class CallView extends React.Component<IProps, IState> {
                         });
                     }}
                 />
-                <div
-                    className={vidClasses}
-                    onClick={this.onVidMuteClick}
-                />
-                <div
-                    className={micCacheClasses}
-                    onClick={this.onMicMuteClick}
-                />
-                <div
-                    className={vidCacheClasses}
-                    onClick={this.onMicMuteClick}
-                />
+                {vidMuteButton}
+                <div className={micCacheClasses} />
+                <div className={vidCacheClasses} />
             </div>;
         }
 

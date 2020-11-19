@@ -145,6 +145,9 @@ limitations under the License.
 
 .mx_CallView_callControls_button {
     cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+
 
     &::before {
         content: '';
@@ -184,9 +187,6 @@ limitations under the License.
 }
 
 .mx_CallView_callControls_button_hangup {
-    margin-left: 16px;
-    margin-right: 16px;
-
     &::before {
         background-image: url('$(res)/img/voip_buttons/hangup.svg');
     }
