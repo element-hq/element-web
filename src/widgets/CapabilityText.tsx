@@ -50,7 +50,7 @@ export interface TranslatedCapabilityText {
 export class CapabilityText {
     private static simpleCaps: IStaticCapText = {
         [MatrixCapabilities.AlwaysOnScreen]: {
-            [WidgetKind.Room]: _td("Remain on your screen when you leave this room (when running)"),
+            [WidgetKind.Room]: _td("Remain on your screen when viewing another room, when running"),
             [GENERIC_WIDGET_KIND]: _td("Remain on your screen while running"),
         },
         [MatrixCapabilities.StickerSending]: {

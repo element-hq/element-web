@@ -17,8 +17,10 @@
 import {
     Capability,
     ISendEventDetails,
-    MatrixCapabilities, Widget,
+    MatrixCapabilities,
+    Widget,
     WidgetDriver,
+    WidgetKind,
 } from "matrix-widget-api";
 import { iterableDiff, iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -31,7 +33,8 @@ import WidgetCapabilitiesPromptDialog, { getRememberedCapabilitiesForWidget } fr
 export class StopGapWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
 
-    constructor(allowedCapabilities: Capability[], private forWidget: Widget) {
+    // TODO: Refactor widgetKind into the Widget class
+    constructor(allowedCapabilities: Capability[], private forWidget: Widget, private forWidgetKind: WidgetKind) {
         super();
 
         // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
@@ -57,6 +60,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     {
                         requestedCapabilities: missing,
                         widget: this.forWidget,
+                        widgetKind: this.forWidgetKind,
                     }).finished;
                 (result.approved || []).forEach(cap => allowedSoFar.add(cap));
             } catch (e) {

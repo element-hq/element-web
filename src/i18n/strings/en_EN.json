@@ -569,7 +569,7 @@
     "%(names)s and %(count)s others are typing …|other": "%(names)s and %(count)s others are typing …",
     "%(names)s and %(count)s others are typing …|one": "%(names)s and one other is typing …",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s and %(lastPerson)s are typing …",
-    "Remain on your screen when you leave this room (when running)": "Remain on your screen when you leave this room (when running)",
+    "Remain on your screen when viewing another room, when running": "Remain on your screen when viewing another room, when running",
     "Remain on your screen while running": "Remain on your screen while running",
     "Send stickers into this room": "Send stickers into this room",
     "Send stickers into your active room": "Send stickers into your active room",

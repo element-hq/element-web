@@ -34,6 +34,7 @@ import {
     WidgetApiFromWidgetAction,
     IModalWidgetOpenRequest,
     IWidgetApiErrorResponseData,
+    WidgetKind,
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
@@ -152,6 +153,7 @@ export class StopGapWidget extends EventEmitter {
     private mockWidget: ElementWidget;
     private scalarToken: string;
     private roomId?: string;
+    private kind: WidgetKind;
 
     constructor(private appTileProps: IAppTileProps) {
         super();
@@ -165,6 +167,7 @@ export class StopGapWidget extends EventEmitter {
 
         this.mockWidget = new ElementWidget(app);
         this.roomId = appTileProps.room?.roomId;
+        this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
     }
 
     private get eventListenerRoomId(): string {
@@ -303,7 +306,7 @@ export class StopGapWidget extends EventEmitter {
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
-        const driver = new StopGapWidgetDriver( allowedCapabilities, this.mockWidget);
+        const driver = new StopGapWidgetDriver( allowedCapabilities, this.mockWidget, this.kind);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
