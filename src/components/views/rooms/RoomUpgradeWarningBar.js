@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018-2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,11 +28,23 @@ export default class RoomUpgradeWarningBar extends React.Component {
         recommendation: PropTypes.object.isRequired,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
     componentDidMount() {
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
 
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvents);
+    }
+
+    componentWillUnmount() {
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener("RoomState.events", this._onStateEvents);
+        }
     }
 
     _onStateEvents = (event, state) => {

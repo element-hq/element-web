@@ -23,7 +23,7 @@ import {Action} from "../../../dispatcher/actions";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import BaseAvatar from "./BaseAvatar";
 
-interface IProps {
+interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;
     fallbackUserId?: string;
     width: number;

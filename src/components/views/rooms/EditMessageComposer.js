@@ -33,6 +33,7 @@ import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import SettingsStore from "../../../settings/SettingsStore";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -186,6 +187,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _sendEdit = () => {
+        const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
@@ -194,8 +196,9 @@ export default class EditMessageComposer extends React.Component {
         if (this._isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId();
             this._cancelPreviousPendingEdit();
-            this.context.sendMessage(roomId, editContent);
+            const prom = this.context.sendMessage(roomId, editContent);
             dis.dispatch({action: "message_sent"});
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
         }
 
         // close the event editing and focus composer

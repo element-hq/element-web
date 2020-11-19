@@ -45,7 +45,11 @@ export default class CreateRoomDialog extends React.Component {
             detailsOpen: false,
             noFederate: config.default_federate === false,
             nameIsValid: false,
+            canChangeEncryption: true,
         };
+
+        MatrixClientPeg.get().doesServerForceEncryptionForPreset("private")
+            .then(isForced => this.setState({canChangeEncryption: !isForced}));
     }
 
     _roomCreateOptions() {
@@ -68,7 +72,13 @@ export default class CreateRoomDialog extends React.Component {
         }
 
         if (!this.state.isPublic) {
-            opts.encryption = this.state.isEncrypted;
+            if (this.state.canChangeEncryption) {
+                opts.encryption = this.state.isEncrypted;
+            } else {
+                // the server should automatically do this for us, but for safety
+                // we'll demand it too.
+                opts.encryption = true;
+            }
         }
 
         if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
@@ -208,7 +218,11 @@ export default class CreateRoomDialog extends React.Component {
         if (!this.state.isPublic) {
             let microcopy;
             if (privateShouldBeEncrypted()) {
-                microcopy = _t("You can’t disable this later. Bridges & most bots won’t work yet.");
+                if (this.state.canChangeEncryption) {
+                    microcopy = _t("You can’t disable this later. Bridges & most bots won’t work yet.");
+                } else {
+                    microcopy = _t("Your server requires encryption to be enabled in private rooms.");
+                }
             } else {
                 microcopy = _t("Your server admin has disabled end-to-end encryption by default " +
                     "in private rooms & Direct Messages.");
@@ -219,6 +233,7 @@ export default class CreateRoomDialog extends React.Component {
                     onChange={this.onEncryptedChange}
                     value={this.state.isEncrypted}
                     className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
+                    disabled={!this.state.canChangeEncryption}
                 />
                 <p>{ microcopy }</p>
             </React.Fragment>;

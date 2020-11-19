@@ -30,6 +30,8 @@ import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
+import DMRoomMap from "../../utils/DMRoomMap";
+import NewRoomIntro from "../views/rooms/NewRoomIntro";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -135,6 +137,9 @@ export default class MessagePanel extends React.Component {
 
         // whether to use the irc layout
         useIRCLayout: PropTypes.bool,
+
+        // whether or not to show flair at all
+        enableFlair: PropTypes.bool,
     };
 
     // Force props to be loaded for useIRCLayout
@@ -515,10 +520,13 @@ export default class MessagePanel extends React.Component {
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
                 if (wantTile) {
+                    const nextEvent = i < this.props.events.length - 1
+                        ? this.props.events[i + 1]
+                        : null;
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last));
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, nextEvent));
                     prevEvent = mxEv;
                 }
 
@@ -534,7 +542,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last) {
+    _getTilesForEvent(prevEvent, mxEv, last, nextEvent) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -559,6 +567,11 @@ export default class MessagePanel extends React.Component {
             ret.push(dateSeparator);
         }
 
+        let willWantDateSeparator = false;
+        if (nextEvent) {
+            willWantDateSeparator = this._wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
+        }
+
         // is this a continuation of the previous message?
         const continuation = !wantsDateSeparator && shouldFormContinuation(prevEvent, mxEv);
 
@@ -579,7 +592,8 @@ export default class MessagePanel extends React.Component {
                 data-scroll-tokens={scrollToken}
             >
                 <TileErrorBoundary mxEvent={mxEv}>
-                    <EventTile mxEvent={mxEv}
+                    <EventTile
+                        mxEvent={mxEv}
                         continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
                         replacingEventId={mxEv.replacingEventId()}
@@ -594,10 +608,12 @@ export default class MessagePanel extends React.Component {
                         isTwelveHour={this.props.isTwelveHour}
                         permalinkCreator={this.props.permalinkCreator}
                         last={last}
+                        lastInSection={willWantDateSeparator}
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
                         useIRCLayout={this.props.useIRCLayout}
+                        enableFlair={this.props.enableFlair}
                     />
                 </TileErrorBoundary>
             </li>,
@@ -938,15 +954,25 @@ class CreationGrouper {
         }).reduce((a, b) => a.concat(b), []);
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1];
+
+        let summaryText;
+        const roomId = ev.getRoomId();
+        const creator = ev.sender ? ev.sender.name : ev.getSender();
+        if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
+            summaryText = _t("%(creator)s created this DM.", { creator });
+        } else {
+            summaryText = _t("%(creator)s created and configured the room.", { creator });
+        }
+
+        ret.push(<NewRoomIntro key="newroomintro" />);
+
         ret.push(
             <EventListSummary
                  key="roomcreationsummary"
                  events={this.events}
                  onToggle={panel._onHeightChanged} // Update scroll state
                  summaryMembers={[ev.sender]}
-                 summaryText={_t("%(creator)s created and configured the room.", {
-                     creator: ev.sender ? ev.sender.name : ev.getSender(),
-                 })}
+                 summaryText={summaryText}
             >
                  { eventTiles }
             </EventListSummary>,

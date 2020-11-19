@@ -74,7 +74,7 @@ export default class DevicesPanel extends React.Component {
     }
 
 
-    /**
+    /*
      * compare two devices, sorting from most-recently-seen to least-recently-seen
      * (and then, for stability, by device id)
      */

@@ -258,6 +258,17 @@ export default class SettingsStore {
     }
 
     /**
+     * Determines if a setting is enabled.
+     * If a setting is disabled then it should be hidden from the user.
+     * @param {string} settingName The setting to look up.
+     * @return {boolean} True if the setting is enabled.
+     */
+    public static isEnabled(settingName: string): boolean {
+        if (!SETTINGS[settingName]) return false;
+        return SETTINGS[settingName].controller ? !SETTINGS[settingName].controller.settingDisabled : true;
+    }
+
+    /**
      * Gets the value of a setting. The room ID is optional if the setting is not to
      * be applied to any particular room, otherwise it should be supplied.
      * @param {string} settingName The name of the setting to read the value of.

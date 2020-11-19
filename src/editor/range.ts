@@ -18,6 +18,10 @@ import EditorModel from "./model";
 import DocumentPosition, {Predicate} from "./position";
 import {Part} from "./parts";
 
+const whitespacePredicate: Predicate = (index, offset, part) => {
+    return part.text[offset].trim() === "";
+};
+
 export default class Range {
     private _start: DocumentPosition;
     private _end: DocumentPosition;
@@ -33,6 +37,11 @@ export default class Range {
             delta -= 1;
             return delta >= 0;
         });
+    }
+
+    trim() {
+        this._start = this._start.forwardsWhile(this.model, whitespacePredicate);
+        this._end = this._end.backwardsWhile(this.model, whitespacePredicate);
     }
 
     expandBackwardsWhile(predicate: Predicate) {

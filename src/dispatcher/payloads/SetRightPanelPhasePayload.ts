@@ -34,4 +34,5 @@ export interface SetRightPanelPhaseRefireParams {
     groupRoomId?: string;
     // XXX: The type for event should 'view_3pid_invite' action's payload
     event?: any;
+    widgetId?: string;
 }

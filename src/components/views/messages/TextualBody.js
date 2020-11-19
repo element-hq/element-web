@@ -401,7 +401,8 @@ export default class TextualBody extends React.Component {
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
-        const stripReply = ReplyThread.getParentEventId(mxEvent);
+        // only strip reply if this is the original replying event, edits thereafter do not have the fallback
+        const stripReply = !mxEvent.replacingEvent() && ReplyThread.getParentEventId(mxEvent);
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
             disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
@@ -415,7 +416,9 @@ export default class TextualBody extends React.Component {
         if (this.props.highlightLink) {
             body = <a href={this.props.highlightLink}>{ body }</a>;
         } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
-            body = <a href="#" onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}>{ body }</a>;
+            body = <a href="#"
+                onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}
+            >{ body }</a>;
         }
 
         let widgets;

@@ -30,12 +30,13 @@ import Analytics from '../../Analytics';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {ALL_ROOMS} from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
-import TagOrderStore from "../../stores/TagOrderStore";
+import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
 const MAX_NAME_LENGTH = 80;
-const MAX_TOPIC_LENGTH = 160;
+const MAX_TOPIC_LENGTH = 800;
 
 function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
@@ -43,13 +44,17 @@ function track(action) {
 
 export default class RoomDirectory extends React.Component {
     static propTypes = {
+        initialText: PropTypes.string,
         onFinished: PropTypes.func.isRequired,
     };
 
     constructor(props) {
         super(props);
 
-        const selectedCommunityId = TagOrderStore.getSelectedTags()[0];
+        CountlyAnalytics.instance.trackRoomDirectoryBegin();
+        this.startTime = CountlyAnalytics.getTimestamp();
+
+        const selectedCommunityId = GroupFilterOrderStore.getSelectedTags()[0];
         this.state = {
             publicRooms: [],
             loading: true,
@@ -57,7 +62,7 @@ export default class RoomDirectory extends React.Component {
             error: null,
             instanceId: undefined,
             roomServer: MatrixClientPeg.getHomeserverName(),
-            filterString: null,
+            filterString: this.props.initialText || "",
             selectedCommunityId: SettingsStore.getValue("feature_communities_v2_prototypes")
                 ? selectedCommunityId
                 : null,
@@ -70,10 +75,10 @@ export default class RoomDirectory extends React.Component {
         this.scrollPanel = null;
         this.protocols = null;
 
-        this.setState({protocolsLoading: true});
+        this.state.protocolsLoading = true;
         if (!MatrixClientPeg.get()) {
             // We may not have a client yet when invoked from welcome page
-            this.setState({protocolsLoading: false});
+            this.state.protocolsLoading = false;
             return;
         }
 
@@ -102,14 +107,16 @@ export default class RoomDirectory extends React.Component {
             });
         } else {
             // We don't use the protocols in the communities v2 prototype experience
-            this.setState({protocolsLoading: false});
+            this.state.protocolsLoading = false;
 
             // Grab the profile info async
             FlairStore.getGroupProfileCached(MatrixClientPeg.get(), this.state.selectedCommunityId).then(profile => {
                 this.setState({communityName: profile.name});
             });
         }
+    }
 
+    componentDidMount() {
         this.refreshRoomList();
     }
 
@@ -194,6 +201,11 @@ export default class RoomDirectory extends React.Component {
             if (this._unmounted) {
                 // if we've been unmounted, we don't care either.
                 return;
+            }
+
+            if (this.state.filterString) {
+                const count = data.total_room_count_estimate || data.chunk.length;
+                CountlyAnalytics.instance.trackRoomDirectorySearch(count, this.state.filterString);
             }
 
             this.nextBatch = data.next_batch;
@@ -390,22 +402,12 @@ export default class RoomDirectory extends React.Component {
     };
 
     onPreviewClick = (ev, room) => {
-        this.props.onFinished();
-        dis.dispatch({
-            action: 'view_room',
-            room_id: room.room_id,
-            should_peek: true,
-        });
+        this.showRoom(room, null, false, true);
         ev.stopPropagation();
     };
 
     onViewClick = (ev, room) => {
-        this.props.onFinished();
-        dis.dispatch({
-            action: 'view_room',
-            room_id: room.room_id,
-            should_peek: false,
-        });
+        this.showRoom(room);
         ev.stopPropagation();
     };
 
@@ -415,7 +417,7 @@ export default class RoomDirectory extends React.Component {
     };
 
     onCreateRoomClick = room => {
-        this.props.onFinished();
+        this.onFinished();
         dis.dispatch({
             action: 'view_create_room',
             public: true,
@@ -426,11 +428,13 @@ export default class RoomDirectory extends React.Component {
         this.showRoom(null, alias, autoJoin);
     }
 
-    showRoom(room, room_alias, autoJoin=false) {
-        this.props.onFinished();
+    showRoom(room, room_alias, autoJoin = false, shouldPeek = false) {
+        this.onFinished();
         const payload = {
             action: 'view_room',
             auto_join: autoJoin,
+            should_peek: shouldPeek,
+            _type: "room_directory", // instrumentation
         };
         if (room) {
             // Don't let the user view a room they won't be able to either
@@ -455,6 +459,7 @@ export default class RoomDirectory extends React.Component {
             };
 
             if (this.state.roomServer) {
+                payload.via_servers = [this.state.roomServer];
                 payload.opts = {
                     viaServers: [this.state.roomServer],
                 };
@@ -503,6 +508,9 @@ export default class RoomDirectory extends React.Component {
         }
 
         let topic = room.topic || '';
+        // Additional truncation based on line numbers is done via CSS,
+        // but to ensure that the DOM is not polluted with a huge string
+        // we give it a hard limit before rendering.
         if (topic.length > MAX_TOPIC_LENGTH) {
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
@@ -576,6 +584,11 @@ export default class RoomDirectory extends React.Component {
         if (this.scrollPanel) {
             this.scrollPanel.handleScrollKey(ev);
         }
+    };
+
+    onFinished = () => {
+        CountlyAnalytics.instance.trackRoomDirectory(this.startTime);
+        this.props.onFinished();
     };
 
     render() {
@@ -674,6 +687,7 @@ export default class RoomDirectory extends React.Component {
                     onJoinClick={this.onJoinFromSearchClick}
                     placeholder={placeholder}
                     showJoinButton={showJoinButton}
+                    initialText={this.props.initialText}
                 />
                 {dropdown}
             </div>;
@@ -696,7 +710,7 @@ export default class RoomDirectory extends React.Component {
             <BaseDialog
                 className={'mx_RoomDirectory_dialog'}
                 hasCancel={true}
-                onFinished={this.props.onFinished}
+                onFinished={this.onFinished}
                 title={title}
             >
                 <div className="mx_RoomDirectory">

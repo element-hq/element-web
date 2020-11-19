@@ -92,3 +92,10 @@ limitations under the License.
         background-color: $primary-fg-color;
     }
 }
+
+.mx_CallView_video {
+    width: 100%;
+    position: relative;
+    z-index: 30;
+}
+

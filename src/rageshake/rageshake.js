@@ -371,7 +371,6 @@ class IndexedDBLogStore {
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
-
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
@@ -469,7 +468,7 @@ export function flush() {
 
 /**
  * Clean up old logs.
- * @return Promise Resolves if cleaned logs.
+ * @return {Promise} Resolves if cleaned logs.
  */
 export async function cleanup() {
     if (!global.mx_rage_store) {

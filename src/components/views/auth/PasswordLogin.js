@@ -24,6 +24,7 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import AccessibleButton from "../elements/AccessibleButton";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 /**
  * A pure UI component which displays a username/password form.
@@ -150,7 +151,20 @@ export default class PasswordLogin extends React.Component {
         this.props.onUsernameChanged(ev.target.value);
     }
 
+    onUsernameFocus() {
+        if (this.state.loginType === PasswordLogin.LOGIN_FIELD_MXID) {
+            CountlyAnalytics.instance.track("onboarding_login_mxid_focus");
+        } else {
+            CountlyAnalytics.instance.track("onboarding_login_email_focus");
+        }
+    }
+
     onUsernameBlur(ev) {
+        if (this.state.loginType === PasswordLogin.LOGIN_FIELD_MXID) {
+            CountlyAnalytics.instance.track("onboarding_login_mxid_blur");
+        } else {
+            CountlyAnalytics.instance.track("onboarding_login_email_blur");
+        }
         this.props.onUsernameBlur(ev.target.value);
     }
 
@@ -161,6 +175,7 @@ export default class PasswordLogin extends React.Component {
             loginType: loginType,
             username: "", // Reset because email and username use the same state
         });
+        CountlyAnalytics.instance.track("onboarding_login_type_changed", { loginType });
     }
 
     onPhoneCountryChanged(country) {
@@ -176,8 +191,13 @@ export default class PasswordLogin extends React.Component {
         this.props.onPhoneNumberChanged(ev.target.value);
     }
 
+    onPhoneNumberFocus() {
+        CountlyAnalytics.instance.track("onboarding_login_phone_number_focus");
+    }
+
     onPhoneNumberBlur(ev) {
         this.props.onPhoneNumberBlur(ev.target.value);
+        CountlyAnalytics.instance.track("onboarding_login_phone_number_blur");
     }
 
     onPasswordChanged(ev) {
@@ -202,6 +222,7 @@ export default class PasswordLogin extends React.Component {
                     placeholder="joe@example.com"
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
+                    onFocus={this.onUsernameFocus}
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}
@@ -216,6 +237,7 @@ export default class PasswordLogin extends React.Component {
                     label={_t("Username")}
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
+                    onFocus={this.onUsernameFocus}
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}
@@ -240,6 +262,7 @@ export default class PasswordLogin extends React.Component {
                     value={this.state.phoneNumber}
                     prefixComponent={phoneCountry}
                     onChange={this.onPhoneNumberChanged}
+                    onFocus={this.onPhoneNumberFocus}
                     onBlur={this.onPhoneNumberBlur}
                     disabled={this.props.disableSubmit}
                     autoFocus={autoFocus}

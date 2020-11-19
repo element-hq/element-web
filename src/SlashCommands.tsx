@@ -38,12 +38,15 @@ import {inviteUsersToRoom} from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml } from "parse5";
-import sendBugReport from "./rageshake/submit-rageshake";
-import SdkConfig from "./SdkConfig";
+import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
+import SdkConfig from "./SdkConfig";
+import SettingsStore from "./settings/SettingsStore";
+import {UIFeature} from "./settings/UIFeature";
+import CallHandler from "./CallHandler";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -88,6 +91,7 @@ interface ICommandOpts {
     runFn?: RunFn;
     category: string;
     hideCompletionAfterSpace?: boolean;
+    isEnabled?(): boolean;
 }
 
 export class Command {
@@ -98,6 +102,7 @@ export class Command {
     runFn: undefined | RunFn;
     category: string;
     hideCompletionAfterSpace: boolean;
+    _isEnabled?: () => boolean;
 
     constructor(opts: ICommandOpts) {
         this.command = opts.command;
@@ -107,6 +112,7 @@ export class Command {
         this.runFn = opts.runFn;
         this.category = opts.category || CommandCategories.other;
         this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
+        this._isEnabled = opts.isEnabled;
     }
 
     getCommand() {
@@ -125,6 +131,10 @@ export class Command {
 
     getUsage() {
         return _t('Usage') + ': ' + this.getCommandWithArgs();
+    }
+
+    isEnabled() {
+        return this._isEnabled ? this._isEnabled() : true;
     }
 }
 
@@ -508,6 +518,7 @@ export const Commands = [
                         action: 'view_room',
                         room_alias: roomAlias,
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     });
                     return success();
                 } else if (params[0][0] === '!') {
@@ -522,6 +533,7 @@ export const Commands = [
                         },
                         via_servers: viaServers, // for the rejoin button
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     });
                     return success();
                 } else if (isPermalink) {
@@ -546,6 +558,7 @@ export const Commands = [
                     const dispatch = {
                         action: 'view_room',
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     };
 
                     if (entity[0] === '!') dispatch["room_id"] = entity;
@@ -790,6 +803,7 @@ export const Commands = [
         command: 'addwidget',
         args: '<url | embed code | Jitsi url>',
         description: _td('Adds a custom widget by URL to the room'),
+        isEnabled: () => SettingsStore.getValue(UIFeature.Widgets),
         runFn: function(roomId, widgetUrl) {
             if (!widgetUrl) {
                 return reject(_t("Please supply a widget URL or embed code"));
@@ -972,19 +986,13 @@ export const Commands = [
         command: "rageshake",
         aliases: ["bugreport"],
         description: _td("Send a bug report with logs"),
+        isEnabled: () => !!SdkConfig.get().bug_report_endpoint_url,
         args: "<description>",
         runFn: function(roomId, args) {
             return success(
-                sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
-                    userText: args,
-                    sendLogs: true,
-                }).then(() => {
-                    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
-                    Modal.createTrackedDialog('Slash Commands', 'Rageshake sent', InfoDialog, {
-                        title: _t('Logs sent'),
-                        description: _t('Thank you!'),
-                    });
-                }),
+                Modal.createTrackedDialog('Slash Commands', 'Bug Report Dialog', BugReportDialog, {
+                    initialText: args,
+                }).finished,
             );
         },
         category: CommandCategories.advanced,
@@ -994,14 +1002,29 @@ export const Commands = [
         description: _td("Opens chat with the given user"),
         args: "<user-id>",
         runFn: function(roomId, userId) {
-            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+            // easter-egg for now: look up phone numbers through the thirdparty API
+            // (very dumb phone number detection...)
+            const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
+            if (!userId || (!userId.startsWith("@") || !userId.includes(":")) && !isPhoneNumber) {
                 return reject(this.getUsage());
             }
 
             return success((async () => {
+                if (isPhoneNumber) {
+                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
+                        'm.id.phone': userId,
+                    });
+                    if (!results || results.length === 0 || !results[0].userid) {
+                        throw new Error("Unable to find Matrix ID for phone number");
+                    }
+                    userId = results[0].userid;
+                }
+
+                const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
+
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: await ensureDMExists(MatrixClientPeg.get(), userId),
+                    room_id: roomId,
                 });
             })());
         },
@@ -1035,6 +1058,32 @@ export const Commands = [
         },
         category: CommandCategories.actions,
     }),
+    new Command({
+        command: "holdcall",
+        description: _td("Places the call in the current room on hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(true);
+            return success();
+        },
+    }),
+    new Command({
+        command: "unholdcall",
+        description: _td("Takes the call in the current room off hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(false);
+            return success();
+        },
+    }),
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
@@ -1056,7 +1105,7 @@ Commands.forEach(cmd => {
     });
 });
 
-export function parseCommandString(input) {
+export function parseCommandString(input: string) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
@@ -1083,10 +1132,10 @@ export function parseCommandString(input) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(roomId, input) {
+export function getCommand(roomId: string, input: string) {
     const {cmd, args} = parseCommandString(input);
 
-    if (CommandMap.has(cmd)) {
+    if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
         return () => CommandMap.get(cmd).run(roomId, args, cmd);
     }
 }

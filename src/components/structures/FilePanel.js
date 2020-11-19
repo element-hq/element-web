@@ -23,6 +23,9 @@ import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
+import BaseCard from "../views/right_panel/BaseCard";
+import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
+import DesktopBuildsNotice, {WarningKind} from "../views/elements/DesktopBuildsNotice";
 
 /*
  * Component which shows the filtered file using a TimelinePanel
@@ -30,6 +33,7 @@ import { _t } from '../../languageHandler';
 class FilePanel extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
+        onClose: PropTypes.func.isRequired,
     };
 
     // This is used to track if a decrypted event was a live event and should be
@@ -188,18 +192,26 @@ class FilePanel extends React.Component {
 
     render() {
         if (MatrixClientPeg.get().isGuest()) {
-            return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
+            return <BaseCard
+                className="mx_FilePanel mx_RoomView_messageListWrapper"
+                onClose={this.props.onClose}
+                previousPhase={RightPanelPhases.RoomSummary}
+            >
                 <div className="mx_RoomView_empty">
                 { _t("You must <a>register</a> to use this functionality",
                     {},
                     { 'a': (sub) => <a href="#/register" key="sub">{ sub }</a> })
                 }
                 </div>
-            </div>;
+            </BaseCard>;
         } else if (this.noRoom) {
-            return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
+            return <BaseCard
+                className="mx_FilePanel mx_RoomView_messageListWrapper"
+                onClose={this.props.onClose}
+                previousPhase={RightPanelPhases.RoomSummary}
+            >
                 <div className="mx_RoomView_empty">{ _t("You must join the room to see its files") }</div>
-            </div>;
+            </BaseCard>;
         }
 
         // wrap a TimelinePanel with the jump-to-event bits turned off.
@@ -211,11 +223,19 @@ class FilePanel extends React.Component {
             <p>{_t('Attach files from chat or just drag and drop them anywhere in a room.')}</p>
         </div>);
 
+        const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
+
         if (this.state.timelineSet) {
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <div className="mx_FilePanel" role="tabpanel">
+                <BaseCard
+                    className="mx_FilePanel"
+                    onClose={this.props.onClose}
+                    previousPhase={RightPanelPhases.RoomSummary}
+                    withoutScrollContainer
+                >
+                    <DesktopBuildsNotice isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                     <TimelinePanel
                         manageReadReceipts={false}
                         manageReadMarkers={false}
@@ -226,13 +246,17 @@ class FilePanel extends React.Component {
                         resizeNotifier={this.props.resizeNotifier}
                         empty={emptyState}
                     />
-                </div>
+                </BaseCard>
             );
         } else {
             return (
-                <div className="mx_FilePanel" role="tabpanel">
+                <BaseCard
+                    className="mx_FilePanel"
+                    onClose={this.props.onClose}
+                    previousPhase={RightPanelPhases.RoomSummary}
+                >
                     <Loader />
-                </div>
+                </BaseCard>
             );
         }
     }

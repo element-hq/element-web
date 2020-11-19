@@ -19,6 +19,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import {haveTileForEvent} from "./EventTile";
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 export default class SearchResultTile extends React.Component {
     static propTypes = {
@@ -45,22 +47,31 @@ export default class SearchResultTile extends React.Component {
         const ret = [<DateSeparator key={ts1 + "-search"} ts={ts1} />];
 
         const timeline = result.context.getTimeline();
-        for (var j = 0; j < timeline.length; j++) {
+        for (let j = 0; j < timeline.length; j++) {
             const ev = timeline[j];
-            var highlights;
+            let highlights;
             const contextual = (j != result.context.getOurEventIndex());
             if (!contextual) {
                 highlights = this.props.searchHighlights;
             }
             if (haveTileForEvent(ev)) {
-                ret.push(<EventTile key={eventId+"+"+j} mxEvent={ev} contextual={contextual} highlights={highlights}
-                          permalinkCreator={this.props.permalinkCreator}
-                          highlightLink={this.props.resultLink}
-                          onHeightChanged={this.props.onHeightChanged} />);
+                ret.push((
+                    <EventTile
+                        key={`${eventId}+${j}`}
+                        mxEvent={ev}
+                        contextual={contextual}
+                        highlights={highlights}
+                        permalinkCreator={this.props.permalinkCreator}
+                        highlightLink={this.props.resultLink}
+                        onHeightChanged={this.props.onHeightChanged}
+                        isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
+                        enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                    />
+                ));
             }
         }
         return (
-            <li data-scroll-tokens={eventId+"+"+j}>
+            <li data-scroll-tokens={eventId}>
                 { ret }
             </li>);
     }

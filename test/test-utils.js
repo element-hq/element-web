@@ -80,6 +80,7 @@ export function createTestClient() {
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
+        isCryptoEnabled: () => false,
     };
 }
 
@@ -241,6 +242,7 @@ export function mkStubRoom(roomId = null) {
         setBlacklistUnverifiedDevices: jest.fn(),
         on: jest.fn(),
         removeListener: jest.fn(),
+        getDMInviter: jest.fn(),
     };
 }
 

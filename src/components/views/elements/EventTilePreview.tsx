@@ -21,6 +21,8 @@ import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import * as Avatar from '../../../Avatar';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 interface IProps {
     /**
@@ -78,27 +80,30 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
     private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
         // Fake it till we make it
-        const event = new MatrixEvent(JSON.parse(`{
-                "type": "m.room.message",
-                "sender": "${userId}",
-                "content": {
-                  "m.new_content": {
-                    "msgtype": "m.text",
-                    "body": "${this.props.message}",
-                    "displayname": "${displayname}",
-                    "avatar_url": "${avatarUrl}"
-                  },
-                  "msgtype": "m.text",
-                  "body": "${this.props.message}",
-                  "displayname": "${displayname}",
-                  "avatar_url": "${avatarUrl}"
+        /* eslint-disable quote-props */
+        const rawEvent = {
+            type: "m.room.message",
+            sender: userId,
+            content: {
+                "m.new_content": {
+                    msgtype: "m.text",
+                    body: this.props.message,
+                    displayname: displayname,
+                    avatar_url: avatarUrl,
                 },
-                "unsigned": {
-                  "age": 97
-                },
-                "event_id": "$9999999999999999999999999999999999999999999",
-                "room_id": "!999999999999999999:matrix.org"
-              }`));
+                msgtype: "m.text",
+                body: this.props.message,
+                displayname: displayname,
+                avatar_url: avatarUrl,
+            },
+            unsigned: {
+                age: 97,
+            },
+            event_id: "$9999999999999999999999999999999999999999999",
+            room_id: "!999999999999999999:example.org",
+        };
+        const event = new MatrixEvent(rawEvent);
+        /* eslint-enable quote-props */
 
         // Fake it more
         event.sender = {
@@ -121,7 +126,11 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         });
 
         return <div className={className}>
-            <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
+            <EventTile
+                mxEvent={event}
+                useIRCLayout={this.props.useIRCLayout}
+                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+            />
         </div>;
     }
 }

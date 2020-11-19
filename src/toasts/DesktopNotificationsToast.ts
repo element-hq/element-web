@@ -24,20 +24,20 @@ const onAccept = () => {
 };
 
 const onReject = () => {
-    Notifier.setToolbarHidden(true);
+    Notifier.setPromptHidden(true);
 };
 
 const TOAST_KEY = "desktopnotifications";
 
-export const showToast = () => {
+export const showToast = (fromMessageSend: boolean) => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Notifications"),
+        title: fromMessageSend ? _t("Don't miss a reply") : _t("Notifications"),
         props: {
-            description: _t("You are not receiving desktop notifications"),
-            acceptLabel: _t("Enable them now"),
+            description: _t("Enable desktop notifications"),
+            acceptLabel: _t("Enable"),
             onAccept,
-            rejectLabel: _t("Close"),
+            rejectLabel: _t("Dismiss"),
             onReject,
         },
         component: GenericToast,

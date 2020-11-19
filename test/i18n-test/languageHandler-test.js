@@ -12,11 +12,11 @@ describe('languageHandler', function() {
         languageHandler.setMissingEntryGenerator(key => key.split("|", 2)[1]);
     });
 
-    it('translates a string to german', function() {
+    it('translates a string to german', function(done) {
         languageHandler.setLanguage('de').then(function() {
             const translated = languageHandler._t('Rooms');
             expect(translated).toBe('Räume');
-        });
+        }).then(done);
     });
 
     it('handles plurals', function() {

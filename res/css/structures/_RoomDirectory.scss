@@ -133,6 +133,10 @@ limitations under the License.
 .mx_RoomDirectory_topic {
     cursor: initial;
     color: $light-fg-color;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
 }
 
 .mx_RoomDirectory_alias {

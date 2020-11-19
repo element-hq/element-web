@@ -71,6 +71,7 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
+    showSkeleton?: boolean;
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
@@ -399,6 +400,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
         await RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
+        this.forceUpdate(); // because if the sublist doesn't have any changes then we will miss the list order change
     };
 
     private onTagSortChanged = async (sort: SortAlgorithm) => {
@@ -420,7 +422,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             room = this.state.rooms && this.state.rooms[0];
         } else {
             // find the first room with a count of the same colour as the badge count
-            room = this.state.rooms.find((r: Room) => {
+            room = RoomListStore.instance.unfilteredLists[this.props.tagId].find((r: Room) => {
                 const notifState = this.notificationState.getForRoom(r);
                 return notifState.count > 0 && notifState.color === this.notificationState.color;
             });
@@ -876,6 +878,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     </Resizable>
                 </React.Fragment>
             );
+        } else if (this.props.showSkeleton && this.state.isExpanded) {
+            content = <div className="mx_RoomSublist_skeletonUI" />;
         }
 
         return (

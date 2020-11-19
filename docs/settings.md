@@ -120,6 +120,18 @@ Call `SettingsStore.getValue()` as you would for any other setting.
 
 Call `SettingsStore.setValue("feature_name", null, SettingLevel.DEVICE, true)`.
 
+### A note on UI features
+
+UI features are a different concept to plain features. Instead of being representative of unstable or
+unpredicatable behaviour, they are logical chunks of UI which can be disabled by deployments for ease
+of understanding with users. They are simply represented as boring settings with a convention of being
+named as `UIFeature.$location` where `$location` is a rough descriptor of what is toggled, such as
+`URLPreviews` or `Communities`.
+
+UI features also tend to have their own setting controller (see below) to manipulate settings which might
+be affected by the UI feature being disabled. For example, if URL previews are disabled as a UI feature
+then the URL preview options will use the `UIFeatureController` to ensure they remain disabled while the
+UI feature is disabled.
 
 ## Setting controllers
 
@@ -226,4 +238,3 @@ In practice, handlers which rely on remote changes (account data, room events, e
 generalized `WatchManager` - a class specifically designed to deduplicate the logic of managing watchers. The handlers 
 which are localized to the local client (device) generally just trigger the `WatchManager` when they manipulate the 
 setting themselves as there's nothing to really 'watch'.
- 

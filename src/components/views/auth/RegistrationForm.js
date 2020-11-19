@@ -29,6 +29,7 @@ import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import PassphraseField from "./PassphraseField";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -50,7 +51,6 @@ export default class RegistrationForm extends React.Component {
         defaultUsername: PropTypes.string,
         defaultPassword: PropTypes.string,
         onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
-        onEditServerDetailsClick: PropTypes.func,
         flows: PropTypes.arrayOf(PropTypes.object).isRequired,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
         canSubmit: PropTypes.bool,
@@ -77,6 +77,8 @@ export default class RegistrationForm extends React.Component {
             passwordConfirm: this.props.defaultPassword || "",
             passwordComplexity: null,
         };
+
+        CountlyAnalytics.instance.track("onboarding_registration_begin");
     }
 
     onSubmit = async ev => {
@@ -86,6 +88,7 @@ export default class RegistrationForm extends React.Component {
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
+            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
             return;
         }
 
@@ -110,6 +113,8 @@ export default class RegistrationForm extends React.Component {
                 return;
             }
 
+            CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
+
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                 title: _t("Warning!"),
@@ -128,6 +133,11 @@ export default class RegistrationForm extends React.Component {
 
     _doSubmit(ev) {
         const email = this.state.email.trim();
+
+        CountlyAnalytics.instance.track("onboarding_registration_submit_ok", {
+            email: !!email,
+        });
+
         const promise = this.props.onRegisterClick({
             username: this.state.username.trim(),
             password: this.state.password.trim(),
@@ -239,6 +249,7 @@ export default class RegistrationForm extends React.Component {
 
     validateEmailRules = withValidation({
         description: () => _t("Use an email address to recover your account"),
+        hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
@@ -315,6 +326,7 @@ export default class RegistrationForm extends React.Component {
 
     validatePhoneNumberRules = withValidation({
         description: () => _t("Other users can invite you to rooms using your contact details"),
+        hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
@@ -345,6 +357,7 @@ export default class RegistrationForm extends React.Component {
 
     validateUsernameRules = withValidation({
         description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
+        hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
@@ -422,6 +435,8 @@ export default class RegistrationForm extends React.Component {
             value={this.state.email}
             onChange={this.onEmailChange}
             onValidate={this.onEmailValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_email_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
         />;
     }
 
@@ -433,6 +448,8 @@ export default class RegistrationForm extends React.Component {
             value={this.state.password}
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_password_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_password_blur")}
         />;
     }
 
@@ -443,10 +460,12 @@ export default class RegistrationForm extends React.Component {
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
             autoComplete="new-password"
-            label={_t("Confirm")}
+            label={_t("Confirm password")}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_blur")}
         />;
     }
 
@@ -487,37 +506,12 @@ export default class RegistrationForm extends React.Component {
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
+            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_username_focus")}
+            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_username_blur")}
         />;
     }
 
     render() {
-        let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
-            serverName: this.props.serverConfig.hsName,
-        });
-        if (this.props.serverConfig.hsNameIsDifferent) {
-            const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
-
-            yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
-                'underlinedServerName': () => {
-                    return <TextWithTooltip
-                        class="mx_Login_underlinedServerName"
-                        tooltip={this.props.serverConfig.hsUrl}
-                    >
-                        {this.props.serverConfig.hsName}
-                    </TextWithTooltip>;
-                },
-            });
-        }
-
-        let editLink = null;
-        if (this.props.onEditServerDetailsClick) {
-            editLink = <a className="mx_AuthBody_editServerDetails"
-                href="#" onClick={this.props.onEditServerDetailsClick}
-            >
-                {_t('Change')}
-            </a>;
-        }
-
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );
@@ -553,10 +547,6 @@ export default class RegistrationForm extends React.Component {
 
         return (
             <div>
-                <h3>
-                    {yourMatrixAccountText}
-                    {editLink}
-                </h3>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderUsername()}

@@ -23,10 +23,10 @@ import SettingsStore from "../settings/SettingsStore";
 import * as utils from "matrix-js-sdk/src/utils";
 import { UPDATE_EVENT } from "./AsyncStore";
 import FlairStore from "./FlairStore";
-import TagOrderStore from "./TagOrderStore";
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import GroupFilterOrderStore from "./GroupFilterOrderStore";
 import GroupStore from "./GroupStore";
 import dis from "../dispatcher/dispatcher";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 interface IState {
     // nothing of value - we use account data
@@ -50,7 +50,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
     public getSelectedCommunityId(): string {
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
-            return TagOrderStore.getSelectedTags()[0];
+            return GroupFilterOrderStore.getSelectedTags()[0];
         }
         return null; // no selection as far as this function is concerned
     }
@@ -77,7 +77,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
     public getGeneralChat(communityId: string): Room {
         const rooms = GroupStore.getGroupRooms(communityId)
-            .map(r => MatrixClientPeg.get().getRoom(r.roomId))
+            .map(r => this.matrixClient.getRoom(r.roomId))
             .filter(r => !!r);
         let chat = rooms.find(r => {
             const idState = r.currentState.getStateEvents("im.vector.general_chat", "");
@@ -86,6 +86,26 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
         });
         if (!chat) chat = rooms[0];
         return chat; // can be null
+    }
+
+    public isAdminOf(communityId: string): boolean {
+        const members = GroupStore.getGroupMembers(communityId);
+        const myMember = members.find(m => m.userId === this.matrixClient.getUserId());
+        return myMember?.isPrivileged;
+    }
+
+    public canInviteTo(communityId: string): boolean {
+        const generalChat = this.getGeneralChat(communityId);
+        if (!generalChat) return this.isAdminOf(communityId);
+
+        const myMember = generalChat.getMember(this.matrixClient.getUserId());
+        if (!myMember) return this.isAdminOf(communityId);
+
+        const pl = generalChat.currentState.getStateEvents("m.room.power_levels", "");
+        if (!pl) return this.isAdminOf(communityId);
+
+        const invitePl = isNullOrUndefined(pl.invite) ? 50 : Number(pl.invite);
+        return invitePl <= myMember.powerLevel;
     }
 
     protected async onAction(payload: ActionPayload): Promise<any> {

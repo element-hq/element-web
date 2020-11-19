@@ -31,13 +31,17 @@ import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
-import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
+import createRoom, {canEncryptToAllUsers, findDMForUser, privateShouldBeEncrypted} from "../../../createRoom";
 import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
+import CountlyAnalytics from "../../../CountlyAnalytics";
+import {Room} from "matrix-js-sdk/src/models/room";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -277,11 +281,17 @@ class DMRoomTile extends React.PureComponent {
             </span>
         );
 
+        const caption = this.props.member.isEmail
+            ? _t("Invite by email")
+            : this._highlightName(this.props.member.userId);
+
         return (
             <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
                 {stackedAvatar}
-                <span className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</span>
-                <span className='mx_InviteDialog_roomTile_userId'>{this._highlightName(this.props.member.userId)}</span>
+                <span className="mx_InviteDialog_roomTile_nameStack">
+                    <div className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</div>
+                    <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
+                </span>
                 {timestamp}
             </div>
         );
@@ -299,10 +309,14 @@ export default class InviteDialog extends React.PureComponent {
 
         // The room ID this dialog is for. Only required for KIND_INVITE.
         roomId: PropTypes.string,
+
+        // Initial value to populate the filter with
+        initialText: PropTypes.string,
     };
 
     static defaultProps = {
         kind: KIND_DM,
+        initialText: "",
     };
 
     _debounceTimer: number = null;
@@ -323,11 +337,13 @@ export default class InviteDialog extends React.PureComponent {
             room.getMembersWithMembership('join').forEach(m => alreadyInvited.add(m.userId));
             // add banned users, so we don't try to invite them
             room.getMembersWithMembership('ban').forEach(m => alreadyInvited.add(m.userId));
+
+            CountlyAnalytics.instance.trackBeginInvite(props.roomId);
         }
 
         this.state = {
             targets: [], // array of Member objects (see interface above)
-            filterText: "",
+            filterText: this.props.initialText,
             recents: InviteDialog.buildRecents(alreadyInvited),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
             suggestions: this._buildSuggestions(alreadyInvited),
@@ -343,6 +359,12 @@ export default class InviteDialog extends React.PureComponent {
         };
 
         this._editorRef = createRef();
+    }
+
+    componentDidMount() {
+        if (this.props.initialText) {
+            this._updateSuggestions(this.props.initialText);
+        }
     }
 
     static buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
@@ -549,7 +571,7 @@ export default class InviteDialog extends React.PureComponent {
         if (this.state.filterText.startsWith('@')) {
             // Assume mxid
             newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null});
-        } else {
+        } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Assume email
             newMember = new ThreepidMember(this.state.filterText);
         }
@@ -564,7 +586,12 @@ export default class InviteDialog extends React.PureComponent {
         const targetIds = targets.map(t => t.userId);
 
         // Check if there is already a DM with these people and reuse it if possible.
-        const existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        let existingRoom: Room;
+        if (targetIds.length === 1) {
+            existingRoom = findDMForUser(MatrixClientPeg.get(), targetIds[0]);
+        } else {
+            existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        }
         if (existingRoom) {
             dis.dispatch({
                 action: 'view_room',
@@ -625,6 +652,7 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _inviteUsers = () => {
+        const startTime = CountlyAnalytics.getTimestamp();
         this.setState({busy: true});
         this._convertFilter();
         const targets = this._convertFilter();
@@ -641,6 +669,7 @@ export default class InviteDialog extends React.PureComponent {
         }
 
         inviteMultipleToRoom(this.props.roomId, targetIds).then(result => {
+            CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
             if (!this._shouldAbortAfterInviteError(result)) { // handles setting error message too
                 this.props.onFinished();
             }
@@ -656,12 +685,130 @@ export default class InviteDialog extends React.PureComponent {
     };
 
     _onKeyDown = (e) => {
-        // when the field is empty and the user hits backspace remove the right-most target
-        if (!e.target.value && !this.state.busy && this.state.targets.length > 0 && e.key === Key.BACKSPACE &&
-            !e.ctrlKey && !e.shiftKey && !e.metaKey
-        ) {
+        if (this.state.busy) return;
+        const value = e.target.value.trim();
+        const hasModifiers = e.ctrlKey || e.shiftKey || e.metaKey;
+        if (!value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !hasModifiers) {
+            // when the field is empty and the user hits backspace remove the right-most target
             e.preventDefault();
             this._removeMember(this.state.targets[this.state.targets.length - 1]);
+        } else if (value && e.key === Key.ENTER && !hasModifiers) {
+            // when the user hits enter with something in their field try to convert it
+            e.preventDefault();
+            this._convertFilter();
+        } else if (value && e.key === Key.SPACE && !hasModifiers && value.includes("@") && !value.includes(" ")) {
+            // when the user hits space and their input looks like an e-mail/MXID then try to convert it
+            e.preventDefault();
+            this._convertFilter();
+        }
+    };
+
+    _updateSuggestions = async (term) => {
+        MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
+            if (term !== this.state.filterText) {
+                // Discard the results - we were probably too slow on the server-side to make
+                // these results useful. This is a race we want to avoid because we could overwrite
+                // more accurate results.
+                return;
+            }
+
+            if (!r.results) r.results = [];
+
+            // While we're here, try and autocomplete a search result for the mxid itself
+            // if there's no matches (and the input looks like a mxid).
+            if (term[0] === '@' && term.indexOf(':') > 1) {
+                try {
+                    const profile = await MatrixClientPeg.get().getProfileInfo(term);
+                    if (profile) {
+                        // If we have a profile, we have enough information to assume that
+                        // the mxid can be invited - add it to the list. We stick it at the
+                        // top so it is most obviously presented to the user.
+                        r.results.splice(0, 0, {
+                            user_id: term,
+                            display_name: profile['displayname'],
+                            avatar_url: profile['avatar_url'],
+                        });
+                    }
+                } catch (e) {
+                    console.warn("Non-fatal error trying to make an invite for a user ID");
+                    console.warn(e);
+
+                    // Add a result anyways, just without a profile. We stick it at the
+                    // top so it is most obviously presented to the user.
+                    r.results.splice(0, 0, {
+                        user_id: term,
+                        display_name: term,
+                        avatar_url: null,
+                    });
+                }
+            }
+
+            this.setState({
+                serverResultsMixin: r.results.map(u => ({
+                    userId: u.user_id,
+                    user: new DirectoryMember(u),
+                })),
+            });
+        }).catch(e => {
+            console.error("Error searching user directory:");
+            console.error(e);
+            this.setState({serverResultsMixin: []}); // clear results because it's moderately fatal
+        });
+
+        // Whenever we search the directory, also try to search the identity server. It's
+        // all debounced the same anyways.
+        if (!this.state.canUseIdentityServer) {
+            // The user doesn't have an identity server set - warn them of that.
+            this.setState({tryingIdentityServer: true});
+            return;
+        }
+        if (term.indexOf('@') > 0 && Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
+            // Start off by suggesting the plain email while we try and resolve it
+            // to a real account.
+            this.setState({
+                // per above: the userId is a lie here - it's just a regular identifier
+                threepidResultsMixin: [{user: new ThreepidMember(term), userId: term}],
+            });
+            try {
+                const authClient = new IdentityAuthClient();
+                const token = await authClient.getAccessToken();
+                if (term !== this.state.filterText) return; // abandon hope
+
+                const lookup = await MatrixClientPeg.get().lookupThreePid(
+                    'email',
+                    term,
+                    undefined, // callback
+                    token,
+                );
+                if (term !== this.state.filterText) return; // abandon hope
+
+                if (!lookup || !lookup.mxid) {
+                    // We weren't able to find anyone - we're already suggesting the plain email
+                    // as an alternative, so do nothing.
+                    return;
+                }
+
+                // We append the user suggestion to give the user an option to click
+                // the email anyways, and so we don't cause things to jump around. In
+                // theory, the user would see the user pop up and think "ah yes, that
+                // person!"
+                const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
+                if (term !== this.state.filterText || !profile) return; // abandon hope
+                this.setState({
+                    threepidResultsMixin: [...this.state.threepidResultsMixin, {
+                        user: new DirectoryMember({
+                            user_id: lookup.mxid,
+                            display_name: profile.displayname,
+                            avatar_url: profile.avatar_url,
+                        }),
+                        userId: lookup.mxid,
+                    }],
+                });
+            } catch (e) {
+                console.error("Error searching identity server:");
+                console.error(e);
+                this.setState({threepidResultsMixin: []}); // clear results because it's moderately fatal
+            }
         }
     };
 
@@ -675,113 +822,8 @@ export default class InviteDialog extends React.PureComponent {
         if (this._debounceTimer) {
             clearTimeout(this._debounceTimer);
         }
-        this._debounceTimer = setTimeout(async () => {
-            MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
-                if (term !== this.state.filterText) {
-                    // Discard the results - we were probably too slow on the server-side to make
-                    // these results useful. This is a race we want to avoid because we could overwrite
-                    // more accurate results.
-                    return;
-                }
-
-                if (!r.results) r.results = [];
-
-                // While we're here, try and autocomplete a search result for the mxid itself
-                // if there's no matches (and the input looks like a mxid).
-                if (term[0] === '@' && term.indexOf(':') > 1) {
-                    try {
-                        const profile = await MatrixClientPeg.get().getProfileInfo(term);
-                        if (profile) {
-                            // If we have a profile, we have enough information to assume that
-                            // the mxid can be invited - add it to the list. We stick it at the
-                            // top so it is most obviously presented to the user.
-                            r.results.splice(0, 0, {
-                                user_id: term,
-                                display_name: profile['displayname'],
-                                avatar_url: profile['avatar_url'],
-                            });
-                        }
-                    } catch (e) {
-                        console.warn("Non-fatal error trying to make an invite for a user ID");
-                        console.warn(e);
-
-                        // Add a result anyways, just without a profile. We stick it at the
-                        // top so it is most obviously presented to the user.
-                        r.results.splice(0, 0, {
-                            user_id: term,
-                            display_name: term,
-                            avatar_url: null,
-                        });
-                    }
-                }
-
-                this.setState({
-                    serverResultsMixin: r.results.map(u => ({
-                        userId: u.user_id,
-                        user: new DirectoryMember(u),
-                    })),
-                });
-            }).catch(e => {
-                console.error("Error searching user directory:");
-                console.error(e);
-                this.setState({serverResultsMixin: []}); // clear results because it's moderately fatal
-            });
-
-            // Whenever we search the directory, also try to search the identity server. It's
-            // all debounced the same anyways.
-            if (!this.state.canUseIdentityServer) {
-                // The user doesn't have an identity server set - warn them of that.
-                this.setState({tryingIdentityServer: true});
-                return;
-            }
-            if (term.indexOf('@') > 0 && Email.looksValid(term)) {
-                // Start off by suggesting the plain email while we try and resolve it
-                // to a real account.
-                this.setState({
-                    // per above: the userId is a lie here - it's just a regular identifier
-                    threepidResultsMixin: [{user: new ThreepidMember(term), userId: term}],
-                });
-                try {
-                    const authClient = new IdentityAuthClient();
-                    const token = await authClient.getAccessToken();
-                    if (term !== this.state.filterText) return; // abandon hope
-
-                    const lookup = await MatrixClientPeg.get().lookupThreePid(
-                        'email',
-                        term,
-                        undefined, // callback
-                        token,
-                    );
-                    if (term !== this.state.filterText) return; // abandon hope
-
-                    if (!lookup || !lookup.mxid) {
-                        // We weren't able to find anyone - we're already suggesting the plain email
-                        // as an alternative, so do nothing.
-                        return;
-                    }
-
-                    // We append the user suggestion to give the user an option to click
-                    // the email anyways, and so we don't cause things to jump around. In
-                    // theory, the user would see the user pop up and think "ah yes, that
-                    // person!"
-                    const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
-                    if (term !== this.state.filterText || !profile) return; // abandon hope
-                    this.setState({
-                        threepidResultsMixin: [...this.state.threepidResultsMixin, {
-                            user: new DirectoryMember({
-                                user_id: lookup.mxid,
-                                display_name: profile.displayname,
-                                avatar_url: profile.avatar_url,
-                            }),
-                            userId: lookup.mxid,
-                        }],
-                    });
-                } catch (e) {
-                    console.error("Error searching identity server:");
-                    console.error(e);
-                    this.setState({threepidResultsMixin: []}); // clear results because it's moderately fatal
-                }
-            }
+        this._debounceTimer = setTimeout(() => {
+            this._updateSuggestions(term);
         }, 150); // 150ms debounce (human reaction time + some)
     };
 
@@ -804,6 +846,10 @@ export default class InviteDialog extends React.PureComponent {
             filterText = ""; // clear the filter when the user accepts a suggestion
         }
         this.setState({targets, filterText});
+
+        if (this._editorRef && this._editorRef.current) {
+            this._editorRef.current.focus();
+        }
     };
 
     _removeMember = (member: Member) => {
@@ -812,6 +858,10 @@ export default class InviteDialog extends React.PureComponent {
         if (idx >= 0) {
             targets.splice(idx, 1);
             this.setState({targets});
+        }
+
+        if (this._editorRef && this._editorRef.current) {
+            this._editorRef.current.focus();
         }
     };
 
@@ -822,7 +872,7 @@ export default class InviteDialog extends React.PureComponent {
             return;
         }
 
-        // Prevent the text being pasted into the textarea
+        // Prevent the text being pasted into the input
         e.preventDefault();
 
         // Process it as a list of addresses to add instead
@@ -1017,8 +1067,8 @@ export default class InviteDialog extends React.PureComponent {
             <DMUserTile member={t} onRemove={!this.state.busy && this._removeMember} key={t.userId} />
         ));
         const input = (
-            <textarea
-                rows={1}
+            <input
+                type="text"
                 onKeyDown={this._onKeyDown}
                 onChange={this._updateFilter}
                 value={this.state.filterText}
@@ -1026,6 +1076,7 @@ export default class InviteDialog extends React.PureComponent {
                 onPaste={this._onPaste}
                 autoFocus={true}
                 disabled={this.state.busy}
+                autoComplete="off"
             />
         );
         return (
@@ -1037,7 +1088,9 @@ export default class InviteDialog extends React.PureComponent {
     }
 
     _renderIdentityServerWarning() {
-        if (!this.state.tryingIdentityServer || this.state.canUseIdentityServer) {
+        if (!this.state.tryingIdentityServer || this.state.canUseIdentityServer ||
+            !SettingsStore.getValue(UIFeature.IdentityServer)
+        ) {
             return null;
         }
 
@@ -1086,22 +1139,38 @@ export default class InviteDialog extends React.PureComponent {
         let buttonText;
         let goButtonFn;
 
+        const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
+
         const userId = MatrixClientPeg.get().getUserId();
         if (this.props.kind === KIND_DM) {
             title = _t("Direct Messages");
-            helpText = _t(
-                "Start a conversation with someone using their name, username (like <userId/>) or email address.",
-                {},
-                {userId: () => {
-                    return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
-                }},
-            );
+
+            if (identityServersEnabled) {
+                helpText = _t(
+                    "Start a conversation with someone using their name, email address or username (like <userId/>).",
+                    {},
+                    {userId: () => {
+                        return (
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
+                        );
+                    }},
+                );
+            } else {
+                helpText = _t(
+                    "Start a conversation with someone using their name or username (like <userId/>).",
+                    {},
+                    {userId: () => {
+                        return (
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
+                        );
+                    }},
+                );
+            }
+
             if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
                 const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-                helpText = _t(
-                    "Start a conversation with someone using their name, username (like <userId/>) or email address. " +
-                    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click " +
-                    "<a>here</a>.",
+                const inviteText = _t("This won't invite them to %(communityName)s. " +
+                    "To invite someone to %(communityName)s, click <a>here</a>",
                     {communityName}, {
                         userId: () => {
                             return (
@@ -1122,21 +1191,40 @@ export default class InviteDialog extends React.PureComponent {
                         },
                     },
                 );
+                helpText = <React.Fragment>
+                    { helpText } {inviteText}
+                </React.Fragment>;
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
         } else { // KIND_INVITE
             title = _t("Invite to this room");
-            helpText = _t(
-                "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
-                {},
-                {
-                    userId: () =>
-                        <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
-                    a: (sub) =>
-                        <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
-                },
-            );
+
+            if (identityServersEnabled) {
+                helpText = _t(
+                    "Invite someone using their name, email address, username (like <userId/>) or " +
+                        "<a>share this room</a>.",
+                    {},
+                    {
+                        userId: () =>
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                        a: (sub) =>
+                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                    },
+                );
+            } else {
+                helpText = _t(
+                    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
+                    {},
+                    {
+                        userId: () =>
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                        a: (sub) =>
+                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                    },
+                );
+            }
+
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
         }

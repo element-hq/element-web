@@ -33,6 +33,9 @@ import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
 import { RightPanelPhases } from "../stores/RightPanelStorePhases";
 import { isMac } from '../Keyboard';
+import UIFeatureController from "./controllers/UIFeatureController";
+import { UIFeature } from "./UIFeature";
+import { OrderedMultiController } from "./controllers/OrderedMultiController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -69,6 +72,10 @@ const LEVELS_DEVICE_ONLY_SETTINGS = [
 const LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG = [
     SettingLevel.DEVICE,
     SettingLevel.CONFIG,
+];
+const LEVELS_UI_FEATURE = [
+    SettingLevel.CONFIG,
+    // in future we might have a .well-known level or something
 ];
 
 export interface ISetting {
@@ -180,6 +187,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_dehydration": {
+        isFeature: true,
+        displayName: _td("Offline encrypted messaging using dehydrated devices"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
@@ -276,16 +289,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Autoplay GIFs and videos'),
         default: false,
     },
-    "alwaysShowEncryptionIcons": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Always show encryption icons'),
-        default: true,
-    },
-    "showRoomRecoveryReminder": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show a reminder to enable Secure Message Recovery in encrypted rooms'),
-        default: true,
-    },
     "enableSyntaxHighlightLanguageDetection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable automatic language detection for syntax highlighting'),
@@ -342,6 +345,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Enable Community Filter Panel'),
         default: true,
         invertedSettingName: 'TagPanel.disableTagPanel',
+        // We force the value to true because the invertedSettingName causes it to flip
+        controller: new UIFeatureController(UIFeature.Communities, true),
     },
     "theme": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -444,6 +449,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
+        controller: new UIFeatureController(UIFeature.AdvancedEncryption),
     },
     "urlPreviewsEnabled": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
@@ -453,6 +459,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "room": _td("Enable URL previews by default for participants in this room"),
         },
         default: true,
+        controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "urlPreviewsEnabled_e2ee": {
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.ROOM_ACCOUNT],
@@ -460,6 +467,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "room-account": _td("Enable URL previews for this room (only affects you)"),
         },
         default: false,
+        controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "roomColor": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
@@ -572,7 +580,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lastRightPanelPhaseForRoom": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: RightPanelPhases.RoomMemberInfo,
+        default: RightPanelPhases.RoomSummary,
     },
     "lastRightPanelPhaseForGroup": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -591,14 +599,21 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "showCallButtonsInComposer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: true,
+        controller: new UIFeatureController(UIFeature.Voip),
     },
     "e2ee.manuallyVerifyAllSessions": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Manually verify all remote sessions"),
         default: false,
-        controller: new PushToMatrixClientController(
-            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
-        ),
+        controller: new OrderedMultiController([
+            // Apply the feature controller first to ensure that the setting doesn't
+            // show up and can't be toggled. PushToMatrixClientController doesn't
+            // do any overrides anyways.
+            new UIFeatureController(UIFeature.AdvancedEncryption),
+            new PushToMatrixClientController(
+                MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+            ),
+        ]),
     },
     "ircDisplayNameWidth": {
         // We specifically want to have room-device > device so that users may set a device default
@@ -612,5 +627,81 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Enable experimental, compact IRC style layout"),
         default: false,
+    },
+    "Widgets.pinned": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: {},
+    },
+    "Widgets.leftPanel": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: null,
+    },
+    [UIFeature.RoomHistorySettings]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AdvancedEncryption]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.URLPreviews]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Widgets]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Voip]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Feedback]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Registration]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PasswordReset]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Deactivate]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShareQRCode]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShareSocial]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.IdentityServer]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+        // Identity Server (Discovery) Settings make no sense if 3PIDs in general are hidden
+        controller: new UIFeatureController(UIFeature.ThirdPartyID),
+    },
+    [UIFeature.ThirdPartyID]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Flair]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+        // Disable Flair when Communities are disabled
+        controller: new UIFeatureController(UIFeature.Communities),
+    },
+    [UIFeature.Communities]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AdvancedSettings]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
     },
 };

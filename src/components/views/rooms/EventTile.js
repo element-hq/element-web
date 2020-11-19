@@ -21,6 +21,7 @@ import ReplyThread from "../elements/ReplyThread";
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
@@ -34,6 +35,8 @@ import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
+import {WidgetType} from "../../../widgets/WidgetType";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -44,6 +47,7 @@ const eventTileTypes = {
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
+    'm.call.reject': 'messages.TextualEvent',
 };
 
 const stateEventTileTypes = {
@@ -110,6 +114,19 @@ export function getHandlerTile(ev) {
         }
     }
 
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
+    if (type === "im.vector.modular.widgets") {
+        let type = ev.getContent()['type'];
+        if (!type) {
+            // deleted/invalid widget - try the past widget type
+            type = ev.getPrevContent()['type'];
+        }
+
+        if (WidgetType.JITSI.matches(type)) {
+            return "messages.MJitsiWidgetEvent";
+        }
+    }
+
     return ev.isState() ? stateEventTileTypes[type] : eventTileTypes[type];
 }
 
@@ -146,6 +163,10 @@ export default class EventTile extends React.Component {
          * of always showing the timestamp)
          */
         last: PropTypes.bool,
+
+        // true if the event is the last event in a section (adds a css class for
+        // targeting)
+        lastInSection: PropTypes.bool,
 
         /* true if this is search context (which has the effect of greying out
          * the text
@@ -206,6 +227,9 @@ export default class EventTile extends React.Component {
 
         // whether to use the irc layout
         useIRCLayout: PropTypes.bool,
+
+        // whether or not to show flair at all
+        enableFlair: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -619,22 +643,24 @@ export default class EventTile extends React.Component {
         const msgtype = content.msgtype;
         const eventType = this.props.mxEvent.getType();
 
+        let tileHandler = getHandlerTile(this.props.mxEvent);
+
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === "m.room.encryption");
+            (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+            (eventType === EventType.RoomCreate) ||
+            (eventType === EventType.RoomEncryption) ||
+            (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (
-            !isBubbleMessage && eventType !== 'm.room.message' &&
-            eventType !== 'm.sticker' && eventType !== 'm.room.create'
+            !isBubbleMessage && eventType !== EventType.RoomMessage &&
+            eventType !== EventType.Sticker && eventType !== EventType.RoomCreate
         );
 
-        let tileHandler = getHandlerTile(this.props.mxEvent);
         // If we're showing hidden events in the timeline, we should use the
         // source tile when there's no regular tile for an event and also for
         // replace relations (which otherwise would display as a confusing
         // duplicate of the thing they are replacing).
-        const useSource = !tileHandler || this.props.mxEvent.isRelation("m.replace");
-        if (useSource && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
             tileHandler = "messages.ViewSourceEvent";
             // Reuse info message avatar and sender profile styling
             isInfoMessage = true;
@@ -670,6 +696,7 @@ export default class EventTile extends React.Component {
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
+            mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
             mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,
@@ -736,10 +763,10 @@ export default class EventTile extends React.Component {
                 else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                                         mxEvent={this.props.mxEvent}
-                                        enableFlair={!text}
+                                        enableFlair={this.props.enableFlair && !text}
                                         text={text} />;
             } else {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={true} />;
+                sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={this.props.enableFlair} />;
             }
         }
 
@@ -818,6 +845,7 @@ export default class EventTile extends React.Component {
                 return (
                     <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_roomName">
+                            <RoomAvatar room={room} width={28} height={28} />
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
                             </a>
@@ -892,6 +920,7 @@ export default class EventTile extends React.Component {
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            onHeightChanged={this.props.onHeightChanged}
+                                           replacingEventId={this.props.replacingEventId}
                                            showUrlPreview={false} />
                         </div>
                     </div>
@@ -1027,11 +1056,7 @@ class E2ePadlock extends React.Component {
             tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} dir="auto" />;
         }
 
-        let classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
-        if (!SettingsStore.getValue("alwaysShowEncryptionIcons")) {
-            classes += ' mx_EventTile_e2eIcon_hidden';
-        }
-
+        const classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
         return (
             <div
                 className={classes}
