@@ -75,7 +75,7 @@ limitations under the License.
     margin-left: auto;
 }
 
-.mx_CallView_header_control_fullscreen {
+.mx_CallView_header_button {
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
@@ -90,7 +90,18 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
+    }
+}
+
+.mx_CallView_header_button_fullscreen {
+    &::before {
         mask-image: url('$(res)/img/element-icons/call/fullscreen.svg');
+    }
+}
+
+.mx_CallView_header_button_expand {
+    &::before {
+        mask-image: url('$(res)/img/element-icons/call/expand.svg');
     }
 }
 

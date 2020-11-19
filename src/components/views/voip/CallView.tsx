@@ -201,6 +201,13 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     };
 
+    private onExpandClick = () => {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.call.roomId,
+        });
+    };
+
     private onControlsHideTimer = () => {
         this.controlsHideTimer = null;
         this.setState({
@@ -355,7 +362,7 @@ export default class CallView extends React.Component<IProps, IState> {
         if (this.state.call.type === CallType.Video) {
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
             const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight;
-            contentView = <div className="mx_CallView_video" ref={this.contentRef}>
+            contentView = <div className="mx_CallView_video" ref={this.contentRef} onMouseMove={this.onMouseMove}>
                 <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
                     maxHeight={maxVideoHeight}
                 />
@@ -378,14 +385,22 @@ export default class CallView extends React.Component<IProps, IState> {
         let myClassName;
 
         let fullScreenButton;
-        if (this.state.call.type === CallType.Video) {
-            fullScreenButton = <div className="mx_CallView_header_control_fullscreen"
+        if (this.state.call.type === CallType.Video && this.props.room) {
+            fullScreenButton = <div className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
                 onClick={this.onFullscreenClick} title={_t("Fill screen")}
+            />;
+        }
+
+        let expandButton;
+        if (!this.props.room) {
+            expandButton = <div className="mx_CallView_header_button mx_CallView_header_button_expand"
+                onClick={this.onExpandClick} title={_t("Return to call")}
             />;
         }
 
         const headerControls = <div className="mx_CallView_header_controls">
             {fullScreenButton}
+            {expandButton}
         </div>;
 
         let header: React.ReactNode;
