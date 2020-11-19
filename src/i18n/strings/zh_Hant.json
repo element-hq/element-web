@@ -2844,5 +2844,12 @@
     "Places the call in the current room on hold": "在目前的聊天室撥打通話並等候接聽",
     "Role": "角色",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "使用 %(size)s 儲存來自 %(count)s 個聊天室的訊息，在本機安全地快取已加密的訊息以讓它們可以在搜尋結果中出現。",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "使用 %(size)s 儲存來自 %(count)s 個聊天室的訊息，在本機安全地快取已加密的訊息以讓它們可以在搜尋結果中出現。"
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "使用 %(size)s 儲存來自 %(count)s 個聊天室的訊息，在本機安全地快取已加密的訊息以讓它們可以在搜尋結果中出現。",
+    "Go to Home View": "轉到主視窗",
+    "Filter rooms and people": "過濾聊天室與人們",
+    "Open the link in the email to continue registration.": "開啟電子郵件中的連結以繼續註冊。",
+    "A confirmation email has been sent to %(emailAddress)s": "確認電子郵件已寄送至 %(emailAddress)s",
+    "Start a new chat": "開始新聊天",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "使用 %(size)s 來儲存來自 %(rooms)s 個聊天室的訊息，在本機安全地快取已加密的訊息以使其出現在搜尋結果中。",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "使用 %(size)s 來儲存來自 %(rooms)s 個聊天室的訊息，在本機安全地快取已加密的訊息以使其出現在搜尋結果中。"
 }
