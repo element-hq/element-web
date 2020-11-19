@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React  from 'react';
+import React from 'react';
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
@@ -22,7 +22,7 @@ import {
     Capability,
     Widget,
     WidgetEventCapability,
-    WidgetKind
+    WidgetKind,
 } from "matrix-widget-api";
 import { objectShallowClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
@@ -107,9 +107,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                 : null;
 
             return (
-                <div className="mx_WidgetCapabilitiesPromptDialog_cap">
+                <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap + i}>
                     <StyledCheckbox
-                        key={cap + i}
                         checked={isChecked}
                         onChange={() => this.onToggle(cap)}
                     >{text.primary}</StyledCheckbox>

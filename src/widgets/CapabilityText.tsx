@@ -228,7 +228,7 @@ export class CapabilityText {
 
         // Now handle all the message types we care about. There are more message types available, however
         // they are not as common so we don't bother rendering them. They'll fall into the generic case.
-        switch(eventCap.keyStr) {
+        switch (eventCap.keyStr) {
             case MsgType.Text: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {

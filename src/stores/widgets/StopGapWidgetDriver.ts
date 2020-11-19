@@ -26,7 +26,9 @@ import { iterableDiff, iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
 import Modal from "../../Modal";
-import WidgetCapabilitiesPromptDialog, { getRememberedCapabilitiesForWidget } from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
+import WidgetCapabilitiesPromptDialog, {
+    getRememberedCapabilitiesForWidget,
+} from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 
 // TODO: Purge this from the universe
 
