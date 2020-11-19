@@ -39,6 +39,8 @@ interface IState {
 }
 
 export default class MVideoBody extends React.PureComponent<IProps, IState> {
+    private videoRef = React.createRef<HTMLVideoElement>();
+
     constructor(props) {
         super(props);
         this.state = {
@@ -80,6 +82,11 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
+    private hasContentUrl(): boolean {
+        const url = this.getContentUrl();
+        return url && !url.startsWith("data:");
+    }
+
     private getThumbUrl(): string|null {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
@@ -118,7 +125,10 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                 } else {
                     console.log("NOT preloading video");
                     this.setState({
-                        decryptedUrl: null,
+                        // For Chrome and Electron, we need to set some non-empty `src` to
+                        // enable the play button. Firefox does not seem to care either
+                        // way, so it's fine to do for all browsers.
+                        decryptedUrl: `data:${content?.info?.mimetype},`,
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: null,
                     });
@@ -143,7 +153,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     private videoOnPlay = async () => {
-        if (this.getContentUrl() || this.state.fetchingData || this.state.error) {
+        if (this.hasContentUrl() || this.state.fetchingData || this.state.error) {
             // We have the file, we are fetching the file, or there is an error.
             return;
         }
@@ -164,6 +174,9 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             decryptedUrl: contentUrl,
             decryptedBlob: decryptedBlob,
             fetchingData: false,
+        }, () => {
+            if (!this.videoRef.current) return;
+            this.videoRef.current.play();
         });
         this.props.onHeightChanged();
     }
@@ -215,9 +228,20 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
         return (
             <span className="mx_MVideoBody">
-                <video className="mx_MVideoBody" src={contentUrl} title={content.body}
-                    controls preload={preload} muted={autoplay} autoPlay={autoplay}
-                    height={height} width={width} poster={poster} onPlay={this.videoOnPlay}>
+                <video
+                    className="mx_MVideoBody"
+                    ref={this.videoRef}
+                    src={contentUrl}
+                    title={content.body}
+                    controls
+                    preload={preload}
+                    muted={autoplay}
+                    autoPlay={autoplay}
+                    height={height}
+                    width={width}
+                    poster={poster}
+                    onPlay={this.videoOnPlay}
+                >
                 </video>
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
             </span>
