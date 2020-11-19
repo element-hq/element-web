@@ -86,6 +86,9 @@ function exitFullscreen() {
 }
 
 const CONTROLS_HIDE_DELAY = 1000;
+// Height of the header duplicated from CSS because we need to subtract it from our max
+// height to get the max height of the video
+const HEADER_HEIGHT = 44;
 
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
@@ -361,7 +364,7 @@ export default class CallView extends React.Component<IProps, IState> {
 
         if (this.state.call.type === CallType.Video) {
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight;
+            const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight - HEADER_HEIGHT;
             contentView = <div className="mx_CallView_video" ref={this.contentRef} onMouseMove={this.onMouseMove}>
                 <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
                     maxHeight={maxVideoHeight}
