@@ -29,7 +29,6 @@ const RoomContext = createContext<IState>({
     guestsCanJoin: false,
     canPeek: false,
     showApps: false,
-    isAlone: false,
     isPeeking: false,
     showingPinned: false,
     showReadReceipts: true,

@@ -102,6 +102,10 @@ export default class CaptchaForm extends React.Component {
         console.log("Loaded recaptcha script.");
         try {
             this._renderRecaptcha(DIV_ID);
+            // clear error if re-rendered
+            this.setState({
+                errorText: null,
+            });
             CountlyAnalytics.instance.track("onboarding_grecaptcha_loaded");
         } catch (e) {
             this.setState({

@@ -25,6 +25,7 @@ export interface IToast<C extends ComponentClass> {
     title: string;
     icon?: string;
     component: C;
+    className?: string;
     props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
 }
 

@@ -71,7 +71,7 @@ import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
-import { CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
@@ -150,7 +150,6 @@ export interface IState {
     guestsCanJoin: boolean;
     canPeek: boolean;
     showApps: boolean;
-    isAlone: boolean;
     isPeeking: boolean;
     showingPinned: boolean;
     showReadReceipts: boolean;
@@ -223,7 +222,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             guestsCanJoin: false,
             canPeek: false,
             showApps: false,
-            isAlone: false,
             isPeeking: false,
             showingPinned: false,
             showReadReceipts: true,
@@ -705,9 +703,8 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onAction = payload => {
         switch (payload.action) {
-            case 'message_send_failed':
             case 'message_sent':
-                this.checkIfAlone(this.state.room);
+                this.checkDesktopNotifications();
                 break;
             case 'post_sticker_message':
                 this.injectSticker(
@@ -1025,36 +1022,15 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     // rate limited because a power level change will emit an event for every member in the room.
-    private updateRoomMembers = rateLimitedFunc((dueToMember) => {
+    private updateRoomMembers = rateLimitedFunc(() => {
         this.updateDMState();
-
-        let memberCountInfluence = 0;
-        if (dueToMember && dueToMember.membership === "invite" && this.state.room.getInvitedMemberCount() === 0) {
-            // A member got invited, but the room hasn't detected that change yet. Influence the member
-            // count by 1 to counteract this.
-            memberCountInfluence = 1;
-        }
-        this.checkIfAlone(this.state.room, memberCountInfluence);
-
         this.updateE2EStatus(this.state.room);
     }, 500);
 
-    private checkIfAlone(room: Room, countInfluence?: number) {
-        let warnedAboutLonelyRoom = false;
-        if (localStorage) {
-            warnedAboutLonelyRoom = Boolean(localStorage.getItem('mx_user_alone_warned_' + this.state.room.roomId));
-        }
-        if (warnedAboutLonelyRoom) {
-            if (this.state.isAlone) this.setState({isAlone: false});
-            return;
-        }
-
-        let joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
-        if (countInfluence) joinedOrInvitedMemberCount += countInfluence;
-        this.setState({isAlone: joinedOrInvitedMemberCount === 1});
-
-        // if they are not alone additionally prompt the user about notifications so they don't miss replies
-        if (joinedOrInvitedMemberCount > 1 && Notifier.shouldShowPrompt()) {
+    private checkDesktopNotifications() {
+        const memberCount = this.state.room.getJoinedMemberCount() + this.state.room.getInvitedMemberCount();
+        // if they are not alone prompt the user about notifications so they don't miss replies
+        if (memberCount > 1 && Notifier.shouldShowPrompt()) {
             showNotificationsToast(true);
         }
     }
@@ -1091,14 +1067,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             action: 'view_invite',
             roomId: this.state.room.roomId,
         });
-        this.setState({isAlone: false}); // there's a good chance they'll invite someone
-    };
-
-    private onStopAloneWarningClick = () => {
-        if (localStorage) {
-            localStorage.setItem('mx_user_alone_warned_' + this.state.room.roomId, String(true));
-        }
-        this.setState({isAlone: false});
     };
 
     private onJoinButtonClicked = () => {
@@ -1147,16 +1115,9 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         ev.dataTransfer.dropEffect = 'none';
 
-        const items = [...ev.dataTransfer.items];
-        if (items.length >= 1) {
-            const isDraggingFiles = items.every(function(item) {
-                return item.kind == 'file';
-            });
-
-            if (isDraggingFiles) {
-                this.setState({ draggingFile: true });
-                ev.dataTransfer.dropEffect = 'copy';
-            }
+        if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
+            this.setState({ draggingFile: true });
+            ev.dataTransfer.dropEffect = 'copy';
         }
     };
 
@@ -1797,12 +1758,10 @@ export default class RoomView extends React.Component<IProps, IState> {
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                sentMessageAndIsAlone={this.state.isAlone}
                 callState={this.state.callState}
                 callType={activeCall ? activeCall.type : null}
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
-                onStopWarningClick={this.onStopAloneWarningClick}
                 onVisible={this.onStatusBarVisible}
                 onHidden={this.onStatusBarHidden}
             />;
