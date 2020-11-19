@@ -126,18 +126,19 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        {_t("This widget would like to:")}
+                        <div className="text-muted">{_t("This widget would like to:")}</div>
                         {checkboxRows}
-                        <LabelledToggleSwitch
-                            value={this.state.rememberSelection}
-                            toggleInFront={true}
-                            onChange={this.onRememberSelectionChange}
-                            label={_t("Remember my selection for this widget")} />
                         <DialogButtons
                             primaryButton={_t("Approve")}
                             cancelButton={_t("Decline All")}
                             onPrimaryButtonClick={this.onSubmit}
                             onCancel={this.onReject}
+                            additive={
+                                <LabelledToggleSwitch
+                                    value={this.state.rememberSelection}
+                                    toggleInFront={true}
+                                    onChange={this.onRememberSelectionChange}
+                                    label={_t("Remember my selection for this widget")} />}
                         />
                     </div>
                 </form>
