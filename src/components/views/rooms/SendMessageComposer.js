@@ -38,10 +38,11 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {Key} from "../../../Keyboard";
+import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
@@ -122,7 +123,11 @@ export default class SendMessageComposer extends React.Component {
             return;
         }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
-        if (event.key === Key.ENTER && !hasModifier) {
+        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+        const send = ctrlEnterToSend
+            ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
+            : event.key === Key.ENTER && !hasModifier;
+        if (send) {
             this._sendMessage();
             event.preventDefault();
         } else if (event.key === Key.ARROW_UP) {

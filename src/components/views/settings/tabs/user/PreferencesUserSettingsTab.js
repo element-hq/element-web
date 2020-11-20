@@ -33,6 +33,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
+        'MessageComposerInput.ctrlEnterToSend',
     ];
 
     static TIMELINE_SETTINGS = [
