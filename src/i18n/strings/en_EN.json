@@ -1585,7 +1585,7 @@
     "Add a new server...": "Add a new server...",
     "%(networkName)s rooms": "%(networkName)s rooms",
     "Matrix rooms": "Matrix rooms",
-    "Do not reveal your Access Token to anyone, under any circumstances. Sharing your Access Token with someone would allow them to login to your account, and access your private information.": "Do not reveal your Access Token to anyone, under any circumstances. Sharing your Access Token with someone would allow them to login to your account, and access your private information.",
+    "Your access token gives full access to your account. Do not share it with anyone.",
     "Matrix ID": "Matrix ID",
     "Matrix Room ID": "Matrix Room ID",
     "email address": "email address",
