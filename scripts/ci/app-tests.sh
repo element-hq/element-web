@@ -7,6 +7,6 @@
 set -ev
 
 scripts/ci/layered.sh
-cd ../element-web
+cd element-web
 yarn build:genfiles # so the tests can run. Faster version of `build`
 yarn test
