@@ -60,6 +60,10 @@ pre, code {
     color: $accent-color;
 }
 
+.text-muted {
+    color: $muted-fg-color;
+}
+
 b {
     // On Firefox, the default weight for `<b>` is `bolder` which results in no bold
     // effect since we only have specific weights of our fonts available.
@@ -364,6 +368,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_Dialog_buttons {
     margin-top: 20px;
     text-align: right;
+
+    .mx_Dialog_buttons_additive {
+        // The consumer is responsible for positioning their elements.
+        float: left;
+    }
 }
 
 /* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied

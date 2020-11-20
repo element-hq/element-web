@@ -33,6 +33,8 @@ import {
     WidgetApiToWidgetAction,
     WidgetApiFromWidgetAction,
     IModalWidgetOpenRequest,
+    IWidgetApiErrorResponseData,
+    WidgetKind,
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
@@ -47,13 +49,15 @@ import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ElementWidgetActions } from "./ElementWidgetActions";
+import { ElementWidgetActions, IViewRoomApiRequest } from "./ElementWidgetActions";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import {ModalWidgetStore} from "../ModalWidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import {getCustomTheme} from "../../theme";
 import CountlyAnalytics from "../../CountlyAnalytics";
+import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // TODO: Destroy all of this code
 
@@ -148,6 +152,8 @@ export class StopGapWidget extends EventEmitter {
     private messaging: ClientWidgetApi;
     private mockWidget: ElementWidget;
     private scalarToken: string;
+    private roomId?: string;
+    private kind: WidgetKind;
 
     constructor(private appTileProps: IAppTileProps) {
         super();
@@ -160,6 +166,19 @@ export class StopGapWidget extends EventEmitter {
         }
 
         this.mockWidget = new ElementWidget(app);
+        this.roomId = appTileProps.room?.roomId;
+        this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
+    }
+
+    private get eventListenerRoomId(): string {
+        // When widgets are listening to events, we need to make sure they're only
+        // receiving events for the right room. In particular, room widgets get locked
+        // to the room they were added in while account widgets listen to the currently
+        // active room.
+
+        if (this.roomId) return this.roomId;
+
+        return RoomViewStore.getRoomId();
     }
 
     public get widgetApi(): ClientWidgetApi {
@@ -286,7 +305,8 @@ export class StopGapWidget extends EventEmitter {
 
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
-        const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
+        const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
+        const driver = new StopGapWidgetDriver( allowedCapabilities, this.mockWidget, this.kind);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
@@ -297,6 +317,39 @@ export class StopGapWidget extends EventEmitter {
         if (!this.appTileProps.userWidget && this.appTileProps.room) {
             ActiveWidgetStore.setRoomId(this.mockWidget.id, this.appTileProps.room.roomId);
         }
+
+        // Always attach a handler for ViewRoom, but permission check it internally
+        this.messaging.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {
+            ev.preventDefault(); // stop the widget API from auto-rejecting this
+
+            // Check up front if this is even a valid request
+            const targetRoomId = (ev.detail.data || {}).room_id;
+            if (!targetRoomId) {
+                return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                    error: {message: "Room ID not supplied."},
+                });
+            }
+
+            // Check the widget's permission
+            if (!this.messaging.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
+                return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                    error: {message: "This widget does not have permission for this action (denied)."},
+                });
+            }
+
+            // at this point we can change rooms, so do that
+            defaultDispatcher.dispatch({
+                action: 'view_room',
+                room_id: targetRoomId,
+            });
+
+            // acknowledge so the widget doesn't freak out
+            this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+        });
+
+        // Attach listeners for feeding events - the underlying widget classes handle permissions for us
+        MatrixClientPeg.get().on('event', this.onEvent);
+        MatrixClientPeg.get().on('Event.decrypted', this.onEventDecrypted);
 
         if (WidgetType.JITSI.matches(this.mockWidget.type)) {
             this.messaging.on("action:set_always_on_screen",
@@ -391,5 +444,31 @@ export class StopGapWidget extends EventEmitter {
         if (!this.started) return;
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget);
         ActiveWidgetStore.delRoomId(this.mockWidget.id);
+
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().off('event', this.onEvent);
+            MatrixClientPeg.get().off('Event.decrypted', this.onEventDecrypted);
+        }
+    }
+
+    private onEvent = (ev: MatrixEvent) => {
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
+        if (ev.getRoomId() !== this.eventListenerRoomId) return;
+        this.feedEvent(ev);
+    };
+
+    private onEventDecrypted = (ev: MatrixEvent) => {
+        if (ev.isDecryptionFailure()) return;
+        if (ev.getRoomId() !== this.eventListenerRoomId) return;
+        this.feedEvent(ev);
+    };
+
+    private feedEvent(ev: MatrixEvent) {
+        if (!this.messaging) return;
+
+        const raw = ev.event;
+        this.messaging.feedEvent(raw).catch(e => {
+            console.error("Error sending event to widget: ", e);
+        });
     }
 }

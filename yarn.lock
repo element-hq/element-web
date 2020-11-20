@@ -6532,10 +6532,10 @@ matrix-react-test-utils@^0.2.2:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
-matrix-widget-api@^0.1.0-beta.8:
-  version "0.1.0-beta.8"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.8.tgz#17e85c03c46353373890b869b1fd46162bdb0026"
-  integrity sha512-sWqyWs0RQqny/BimZUOxUd9BTJBzQmJlJ1i3lsSh1JBygV+aK5xQsONL97fc4i6/nwQPK72uCVDF+HwTtkpAbQ==
+matrix-widget-api@^0.1.0-beta.9:
+  version "0.1.0-beta.9"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.9.tgz#83952132c1610e013acb3e695f923f971ddd5637"
+  integrity sha512-nXo4iaquSya6hYLXccX8o1K960ckSQ0YXIubRDha+YmB+L09F5a7bUPS5JN2tYANOMzyfFAzWVuFwjHv4+K+rg==
   dependencies:
     events "^3.2.0"
 
