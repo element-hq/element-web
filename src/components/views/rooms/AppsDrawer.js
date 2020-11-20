@@ -221,7 +221,6 @@ export default class AppsDrawer extends React.Component {
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}
-                whitelistCapabilities={capWhitelist}
             />);
         });
 
