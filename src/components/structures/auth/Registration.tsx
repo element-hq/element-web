@@ -526,7 +526,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
 
         // Hide the server picker once the user is doing UI Auth unless encountered a fatal server error
-        if (this.state.phase !== PHASE_SERVER_DETAILS && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
+        if (this.state.phase !== Phase.ServerDetails && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
             return null;
         }
 
@@ -702,7 +702,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 { regDoneText }
             </div>;
         } else {
-            let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+            let yourMatrixAccountText: ReactNode = _t('Create your Matrix account on %(serverName)s', {
                 serverName: this.props.serverConfig.hsName,
             });
             if (this.props.serverConfig.hsNameIsDifferent) {
@@ -740,7 +740,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }
-                { this.state.phase !== PHASE_SERVER_DETAILS && <h3>
+                { this.state.phase !== Phase.ServerDetails && <h3>
                     {yourMatrixAccountText}
                     {editLink}
                 </h3> }

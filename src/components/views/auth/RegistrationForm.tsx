@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from 'react';
+import React from 'react';
 
 import * as sdk from '../../../index';
 import * as Email from '../../../email';
