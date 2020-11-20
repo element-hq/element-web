@@ -2834,5 +2834,12 @@
     "Mauritania": "Mauritani",
     "Bangladesh": "Bangladesh",
     "Falkland Islands": "Ishujt Falkland",
-    "Sweden": "Suedi"
+    "Sweden": "Suedi",
+    "Filter rooms and people": "Filtroni dhoma dhe njerëz",
+    "Open the link in the email to continue registration.": "Që të vazhdohet regjistrimi, hapni lidhjen te email-i.",
+    "A confirmation email has been sent to %(emailAddress)s": "Te %(emailAddress)s u dërgua një email ripohimi",
+    "Role": "Rol",
+    "Start a new chat": "Nisni një fjalosje të re",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Ruajini lokalisht në fshehtinë në mënyrë të sigurt mesazhet e fshehtëzuar, që të shfaqen në përfundime kërkimi, duke përdorur %(size)s që të depozitoni mesazhe nga %(rooms)s dhomë.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Ruajini lokalisht në fshehtinë në mënyrë të sigurt mesazhet e fshehtëzuar, që të shfaqen në përfundime kërkimi, duke përdorur %(size)s që të depozitoni mesazhe nga %(rooms)s dhoma."
 }

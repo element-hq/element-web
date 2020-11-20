@@ -2845,5 +2845,9 @@
     "Filter rooms and people": "Fitrar salas e persoas",
     "Open the link in the email to continue registration.": "Abre a ligazón que hai no email para continuar co rexistro.",
     "A confirmation email has been sent to %(emailAddress)s": "Enviouse un email de confirmación a %(emailAddress)s",
-    "Start a new chat": "Comezar nova conversa"
+    "Start a new chat": "Comezar nova conversa",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(rooms)s salas.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Conservar na memoria local as mensaxes cifradas de xeito seguro para que aparezan nas buscas, usando %(size)s para gardar mensaxes de %(rooms)s salas.",
+    "Go to Home View": "Ir á Páxina de Inicio",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML para a páxina da túa comunidade</h1>\n<p>\n    Usa a descrición longa para presentar a comunidade ás novas particpantes, ou publicar \nalgunha  <a href=\"foo\">ligazón</a> importante\n   \n</p>\n<p>\n   Tamén podes engadir imaxes con URLs de Matrix <img src=\"mxc://url\" />\n</p>\n"
 }

@@ -2552,5 +2552,7 @@
     "Report a bug": "Einen Fehler melden",
     "Add comment": "Kommentar hinzufügen",
     "Rate %(brand)s": "%(brand)s bewerten",
-    "Feedback sent": "Feedback gesendet"
+    "Feedback sent": "Feedback gesendet",
+    "Takes the call in the current room off hold": "Beendet das Halten des Anrufs",
+    "Places the call in the current room on hold": "Den aktuellen Anruf halten"
 }

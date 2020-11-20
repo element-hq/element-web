@@ -2846,5 +2846,9 @@
     "Filter rooms and people": "Otsi jututubasid ja inimesi",
     "Open the link in the email to continue registration.": "Registreerimisega jätkamiseks vajuta e-kirjas olevat linki.",
     "A confirmation email has been sent to %(emailAddress)s": "Saatsime kinnituskirja %(emailAddress)s aadressile",
-    "Start a new chat": "Alusta uut vestlust"
+    "Start a new chat": "Alusta uut vestlust",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>Sinu kogukonna lehe HTML'i näidis - see on pealkiri</h1>\n<p>\n     Tutvustamaks uutele liikmetele kogukonda, kasuta seda pikka kirjeldust\n     või jaga olulist teavet <a href=\"foo\">viidetena</a>\n</p>\n<p>\n     Pildite lisaminseks võid sa isegi kasutada img-märgendit Matrix'i url'idega <img src=\"mxc://url\" />\n</p>\n",
+    "Go to Home View": "Avalehele",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s."
 }
