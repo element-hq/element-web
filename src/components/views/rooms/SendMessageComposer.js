@@ -124,7 +124,8 @@ export default class SendMessageComposer extends React.Component {
         }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
         const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
-        const send = ctrlEnterToSend ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
+        const send = ctrlEnterToSend
+            ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
             : event.key === Key.ENTER && !hasModifier;
         if (send) {
             this._sendMessage();
