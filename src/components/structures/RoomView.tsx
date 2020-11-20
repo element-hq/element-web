@@ -1324,10 +1324,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onSettingsClick = () => {
-        dis.dispatch({
-            action: Action.SetRightPanelPhase,
-            phase: RightPanelPhases.RoomSummary,
-        });
+        dis.dispatch({ action: "open_room_settings" });
     };
 
     private onCancelClick = () => {
