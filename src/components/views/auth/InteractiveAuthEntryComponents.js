@@ -421,12 +421,12 @@ export class EmailIdentityAuthEntry extends React.Component {
             return <Spinner />;
         } else {
             return (
-                <div>
-                    <p>{ _t("An email has been sent to %(emailAddress)s",
-                        { emailAddress: (sub) => <i>{ this.props.inputs.emailAddress }</i> },
+                <div className="mx_InteractiveAuthEntryComponents_emailWrapper">
+                    <p>{ _t("A confirmation email has been sent to %(emailAddress)s",
+                        { emailAddress: (sub) => <b>{ this.props.inputs.emailAddress }</b> },
                     ) }
                     </p>
-                    <p>{ _t("Please check your email to continue registration.") }</p>
+                    <p>{ _t("Open the link in the email to continue registration.") }</p>
                 </div>
             );
         }

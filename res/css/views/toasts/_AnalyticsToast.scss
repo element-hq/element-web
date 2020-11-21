@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-span.mx_MVideoBody {
-    video.mx_MVideoBody {
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
+.mx_AnalyticsToast {
+    .mx_AccessibleButton_kind_danger {
+        background: none;
+        color: $accent-color;
+    }
+
+    .mx_AccessibleButton_kind_primary {
+        background: $accent-color;
+        color: #ffffff;
     }
 }

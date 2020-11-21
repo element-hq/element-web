@@ -502,6 +502,11 @@ export default class Registration extends React.Component {
             return null;
         }
 
+        // Hide the server picker once the user is doing UI Auth unless encountered a fatal server error
+        if (this.state.phase !== PHASE_SERVER_DETAILS && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
+            return null;
+        }
+
         // If we're on a different phase, we only show the server type selector,
         // which is always shown if we allow custom URLs at all.
         // (if there's a fatal server error, we need to show the full server
@@ -582,17 +587,6 @@ export default class Registration extends React.Component {
                 <Spinner />
             </div>;
         } else if (this.state.flows.length) {
-            let onEditServerDetailsClick = null;
-            // If custom URLs are allowed and we haven't selected the Free server type, wire
-            // up the server details edit link.
-            if (
-                PHASES_ENABLED &&
-                !SdkConfig.get()['disable_custom_urls'] &&
-                this.state.serverType !== ServerType.FREE
-            ) {
-                onEditServerDetailsClick = this.onEditServerDetailsClick;
-            }
-
             return <RegistrationForm
                 defaultUsername={this.state.formVals.username}
                 defaultEmail={this.state.formVals.email}
@@ -600,7 +594,6 @@ export default class Registration extends React.Component {
                 defaultPhoneNumber={this.state.formVals.phoneNumber}
                 defaultPassword={this.state.formVals.password}
                 onRegisterClick={this.onFormSubmit}
-                onEditServerDetailsClick={onEditServerDetailsClick}
                 flows={this.state.flows}
                 serverConfig={this.props.serverConfig}
                 canSubmit={!this.state.serverErrorIsFatal}
@@ -686,11 +679,48 @@ export default class Registration extends React.Component {
                 { regDoneText }
             </div>;
         } else {
+            let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+                serverName: this.props.serverConfig.hsName,
+            });
+            if (this.props.serverConfig.hsNameIsDifferent) {
+                const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
+
+                yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
+                    'underlinedServerName': () => {
+                        return <TextWithTooltip
+                            class="mx_Login_underlinedServerName"
+                            tooltip={this.props.serverConfig.hsUrl}
+                        >
+                            {this.props.serverConfig.hsName}
+                        </TextWithTooltip>;
+                    },
+                });
+            }
+
+            // If custom URLs are allowed, user is not doing UIA flows and they haven't selected the Free server type,
+            // wire up the server details edit link.
+            let editLink = null;
+            if (PHASES_ENABLED &&
+                !SdkConfig.get()['disable_custom_urls'] &&
+                this.state.serverType !== ServerType.FREE &&
+                !this.state.doingUIAuth
+            ) {
+                editLink = (
+                    <a className="mx_AuthBody_editServerDetails" href="#" onClick={this.onEditServerDetailsClick}>
+                        {_t('Change')}
+                    </a>
+                );
+            }
+
             body = <div>
                 <h2>{ _t('Create your account') }</h2>
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }
+                { this.state.phase !== PHASE_SERVER_DETAILS && <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3> }
                 { this.renderRegisterComponent() }
                 { goBack }
                 { signIn }

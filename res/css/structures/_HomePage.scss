@@ -26,9 +26,10 @@ limitations under the License.
 
 .mx_HomePage_default {
     text-align: center;
+    display: flex;
 
     .mx_HomePage_default_wrapper {
-        padding: 25vh 0 12px;
+        margin: auto;
     }
 
     img {
@@ -55,7 +56,7 @@ limitations under the License.
     }
 
     .mx_HomePage_default_buttons {
-        margin: 80px auto 0;
+        margin: 60px auto 0;
         width: fit-content;
 
         .mx_AccessibleButton {
@@ -63,7 +64,7 @@ limitations under the License.
 
             width: 160px;
             height: 132px;
-            margin: 0 20px;
+            margin: 20px;
             position: relative;
             display: inline-block;
             border-radius: 8px;
