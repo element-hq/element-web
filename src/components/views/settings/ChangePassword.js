@@ -21,9 +21,16 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
+import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
+import PassphraseField from "../auth/PassphraseField";
+
+const FIELD_NEW_PASSWORD = 'field_new_password';
+const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
+
+const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 export default class ChangePassword extends React.Component {
     static propTypes = {
@@ -63,6 +70,7 @@ export default class ChangePassword extends React.Component {
     }
 
     state = {
+        fieldValid: {},
         phase: ChangePassword.Phases.Edit,
         oldPassword: "",
         newPassword: "",
@@ -168,6 +176,14 @@ export default class ChangePassword extends React.Component {
         );
     };
 
+    markFieldValid(fieldID, valid) {
+        const { fieldValid } = this.state;
+        fieldValid[fieldID] = valid;
+        this.setState({
+            fieldValid,
+        });
+    }
+
     onChangeOldPassword = (ev) => {
         this.setState({
             oldPassword: ev.target.value,
@@ -180,11 +196,38 @@ export default class ChangePassword extends React.Component {
         });
     };
 
+    onNewPasswordValidate = result => {
+        this.markFieldValid(FIELD_NEW_PASSWORD, result.valid);
+    };
+
     onChangeNewPasswordConfirm = (ev) => {
         this.setState({
             newPasswordConfirm: ev.target.value,
         });
     };
+
+    onNewPasswordConfirmValidate = async fieldState => {
+        const result = await this.validatePasswordConfirmRules(fieldState);
+        this.markFieldValid(FIELD_NEW_PASSWORD_CONFIRM, result.valid);
+        return result;
+    };
+
+    validatePasswordConfirmRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Confirm password"),
+            },
+            {
+                key: "match",
+                test({ value }) {
+                    return !value || value === this.state.newPassword;
+                },
+                invalid: () => _t("Passwords don't match"),
+            },
+         ],
+    });
 
     onClickChange = (ev) => {
         ev.preventDefault();
@@ -202,8 +245,6 @@ export default class ChangePassword extends React.Component {
     };
 
     render() {
-        // TODO: Live validation on `new pw == confirm pw`
-
         const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 
@@ -220,21 +261,26 @@ export default class ChangePassword extends React.Component {
                             />
                         </div>
                         <div className={rowClassName}>
-                            <Field
+                            <PassphraseField
+                                fieldRef={field => this[FIELD_NEW_PASSWORD] = field}
                                 type="password"
-                                label={_t('New Password')}
+                                label='New Password'
+                                minScore={PASSWORD_MIN_SCORE}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
+                                onValidate={this.onNewPasswordValidate}
                                 autoComplete="new-password"
                             />
                         </div>
                         <div className={rowClassName}>
                             <Field
+                                ref={field => this[FIELD_NEW_PASSWORD_CONFIRM] = field}
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}
                                 onChange={this.onChangeNewPasswordConfirm}
+                                onValidate={this.onNewPasswordConfirmValidate}
                                 autoComplete="new-password"
                             />
                         </div>
