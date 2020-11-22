@@ -26,6 +26,7 @@ import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 const FIELD_NEW_PASSWORD = 'field_new_password';
 const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
@@ -229,8 +230,15 @@ export default class ChangePassword extends React.Component {
          ],
     });
 
-    onClickChange = (ev) => {
+    onClickChange = async (ev) => {
         ev.preventDefault();
+
+        const allFieldsValid = await this.verifyFieldsBeforeSubmit();
+        if (!allFieldsValid) {
+            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
+            return;
+        }
+
         const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
@@ -243,6 +251,73 @@ export default class ChangePassword extends React.Component {
             this.changePassword(oldPassword, newPassword);
         }
     };
+
+    async verifyFieldsBeforeSubmit() {
+        // Blur the active element if any, so we first run its blur validation,
+        // which is less strict than the pass we're about to do below for all fields.
+        const activeElement = document.activeElement;
+        if (activeElement) {
+            activeElement.blur();
+        }
+
+        const fieldIDsInDisplayOrder = [
+            FIELD_NEW_PASSWORD,
+            FIELD_NEW_PASSWORD_CONFIRM
+        ];
+
+        // Run all fields with stricter validation that no longer allows empty
+        // values for required fields.
+        for (const fieldID of fieldIDsInDisplayOrder) {
+            const field = this[fieldID];
+            if (!field) {
+                continue;
+            }
+            // We must wait for these validations to finish before queueing
+            // up the setState below so our setState goes in the queue after
+            // all the setStates from these validate calls (that's how we
+            // know they've finished).
+            await field.validate({ allowEmpty: false });
+        }
+
+        // Validation and state updates are async, so we need to wait for them to complete
+        // first. Queue a `setState` callback and wait for it to resolve.
+        await new Promise(resolve => this.setState({}, resolve));
+
+        if (this.allFieldsValid()) {
+            return true;
+        }
+
+        const invalidField = this.findFirstInvalidField(fieldIDsInDisplayOrder);
+
+        if (!invalidField) {
+            return true;
+        }
+
+        // Focus the first invalid field and show feedback in the stricter mode
+        // that no longer allows empty values for required fields.
+        invalidField.focus();
+        invalidField.validate({ allowEmpty: false, focused: true });
+        return false;
+    }
+
+    allFieldsValid() {
+        const keys = Object.keys(this.state.fieldValid);
+        for (let i = 0; i < keys.length; ++i) {
+            if (!this.state.fieldValid[keys[i]]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    findFirstInvalidField(fieldIDs) {
+        for (const fieldID of fieldIDs) {
+            if (!this.state.fieldValid[fieldID] && this[fieldID]) {
+                return this[fieldID];
+            }
+        }
+        return null;
+    }
 
     render() {
         const rowClassName = this.props.rowClassName;
@@ -271,6 +346,7 @@ export default class ChangePassword extends React.Component {
                                 onChange={this.onChangeNewPassword}
                                 onValidate={this.onNewPasswordValidate}
                                 autoComplete="new-password"
+                                onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
                             />
                         </div>
                         <div className={rowClassName}>
@@ -282,6 +358,7 @@ export default class ChangePassword extends React.Component {
                                 onChange={this.onChangeNewPasswordConfirm}
                                 onValidate={this.onNewPasswordConfirmValidate}
                                 autoComplete="new-password"
+                                onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
