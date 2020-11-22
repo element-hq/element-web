@@ -28,6 +28,7 @@ import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 
+const FIELD_OLD_PASSWORD = 'field_old_password';
 const FIELD_NEW_PASSWORD = 'field_new_password';
 const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
 
@@ -191,6 +192,22 @@ export default class ChangePassword extends React.Component {
         });
     };
 
+    onOldPasswordValidate = async fieldState => {
+        const result = await this.validateOldPasswordRules(fieldState);
+        this.markFieldValid(FIELD_OLD_PASSWORD, result.valid);
+        return result;
+    };
+
+    validateOldPasswordRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Passwords can't be empty"),
+            }
+         ],
+    });
+
     onChangeNewPassword = (ev) => {
         this.setState({
             newPassword: ev.target.value,
@@ -261,8 +278,9 @@ export default class ChangePassword extends React.Component {
         }
 
         const fieldIDsInDisplayOrder = [
+            FIELD_OLD_PASSWORD,
             FIELD_NEW_PASSWORD,
-            FIELD_NEW_PASSWORD_CONFIRM
+            FIELD_NEW_PASSWORD_CONFIRM,
         ];
 
         // Run all fields with stricter validation that no longer allows empty
@@ -329,10 +347,13 @@ export default class ChangePassword extends React.Component {
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         <div className={rowClassName}>
                             <Field
+                                ref={field => this[FIELD_OLD_PASSWORD] = field}
                                 type="password"
                                 label={_t('Current password')}
                                 value={this.state.oldPassword}
                                 onChange={this.onChangeOldPassword}
+                                onValidate={this.onOldPasswordValidate}
+                                onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
                             />
                         </div>
                         <div className={rowClassName}>
