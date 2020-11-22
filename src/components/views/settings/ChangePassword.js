@@ -204,7 +204,7 @@ export default class ChangePassword extends React.Component {
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
                 invalid: () => _t("Passwords can't be empty"),
-            }
+            },
          ],
     });
 
