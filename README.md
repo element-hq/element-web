@@ -279,8 +279,8 @@ for changes. If the inotify limits are too low your build will fail silently or 
 `Error: EMFILE: too many open files`. To avoid these issues, we recommend a watch limit
 of at least `128M` and instance limit around `512`.
 
-Linked issues are [#15750](https://github.com/vector-im/element-web/issues/15750) and
-[#15774](https://github.com/vector-im/element-web/issues/15774).
+You may be interested in issues [#15750](https://github.com/vector-im/element-web/issues/15750) and
+[#15774](https://github.com/vector-im/element-web/issues/15774) for further details.
 
 To set a new inotify watch and instance limit, execute:
 
