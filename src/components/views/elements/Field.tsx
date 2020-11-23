@@ -167,7 +167,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     };
 
-    private async validate({ focused, allowEmpty = true }: {focused: boolean, allowEmpty?: boolean}) {
+    public async validate({ focused, allowEmpty = true }: {focused?: boolean, allowEmpty?: boolean}) {
         if (!this.props.onValidate) {
             return;
         }
@@ -196,6 +196,8 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                 feedbackVisible: false,
             });
         }
+
+        return valid;
     }
 
     public render() {
