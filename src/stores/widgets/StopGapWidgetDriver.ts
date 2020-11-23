@@ -29,6 +29,7 @@ import Modal from "../../Modal";
 import WidgetCapabilitiesPromptDialog, {
     getRememberedCapabilitiesForWidget,
 } from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
+import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 
 // TODO: Purge this from the universe
 
@@ -52,7 +53,19 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const diff = iterableDiff(requested, this.allowedCapabilities);
         const missing = new Set(diff.removed); // "removed" is "in A (requested) but not in B (allowed)"
         const allowedSoFar = new Set(this.allowedCapabilities);
-        getRememberedCapabilitiesForWidget(this.forWidget).forEach(cap => allowedSoFar.add(cap));
+        getRememberedCapabilitiesForWidget(this.forWidget).forEach(cap => {
+            allowedSoFar.add(cap);
+            missing.delete(cap);
+        });
+        if (WidgetPermissionCustomisations.preapproveCapabilities) {
+            const approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
+            if (approved) {
+                approved.forEach(cap => {
+                    allowedSoFar.add(cap);
+                    missing.delete(cap);
+                });
+            }
+        }
         // TODO: Do something when the widget requests new capabilities not yet asked for
         if (missing.size > 0) {
             try {
