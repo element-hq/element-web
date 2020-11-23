@@ -29,7 +29,10 @@ import { Capability, Widget } from "matrix-widget-api";
  * @returns {Set<Capability>} Resolves to the capabilities that are approved for use
  * by the widget. If none are approved, this should return an empty Set.
  */
-async function preapproveCapabilities(widget: Widget, requestedCapabilities: Set<Capability>): Promise<Set<Capability>> {
+async function preapproveCapabilities(
+    widget: Widget,
+    requestedCapabilities: Set<Capability>,
+): Promise<Set<Capability>> {
     return new Set(); // no additional capabilities approved
 }
 
