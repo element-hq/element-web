@@ -357,6 +357,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     key="username_input"
                     type="text"
                     label={_t("Username")}
+                    placeholder={_t("Username").toLocaleLowerCase()}
                     value={this.props.username}
                     onChange={this.onUsernameChanged}
                     onFocus={this.onUsernameFocus}

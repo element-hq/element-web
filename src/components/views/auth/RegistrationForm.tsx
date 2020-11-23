@@ -522,6 +522,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             type="text"
             autoFocus={true}
             label={_t("Username")}
+            placeholder={_t("Username").toLocaleLowerCase()}
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
