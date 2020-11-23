@@ -1827,6 +1827,7 @@
     "This address is available to use": "This address is available to use",
     "This address is already in use": "This address is already in use",
     "Room directory": "Room directory",
+    "Continue with %(provider)s": "Continue with %(provider)s",
     "Sign in with single sign-on": "Sign in with single sign-on",
     "And %(count)s more...|other": "And %(count)s more...",
     "Home": "Home",

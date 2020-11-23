@@ -30,8 +30,23 @@ interface ILoginOptions {
 
 // TODO: Move this to JS SDK
 interface ILoginFlow {
-    type: string;
+    type: "m.login.password" | "m.login.cas";
 }
+
+export interface IIdentityProvider {
+    id: string;
+    name: string;
+    icon?: string;
+}
+
+export interface ISSOFlow {
+    type: "m.login.sso";
+    // eslint-disable-next-line camelcase
+    identity_providers: IIdentityProvider[];
+    "org.matrix.msc2858.identity_providers": IIdentityProvider[]; // Unstable prefix for MSC2858
+}
+
+export type LoginFlow = ISSOFlow | ILoginFlow;
 
 // TODO: Move this to JS SDK
 /* eslint-disable camelcase */
@@ -48,9 +63,8 @@ export default class Login {
     private hsUrl: string;
     private isUrl: string;
     private fallbackHsUrl: string;
-    private currentFlowIndex: number;
     // TODO: Flows need a type in JS SDK
-    private flows: Array<ILoginFlow>;
+    private flows: Array<LoginFlow>;
     private defaultDeviceDisplayName: string;
     private tempClient: MatrixClient;
 
@@ -63,7 +77,6 @@ export default class Login {
         this.hsUrl = hsUrl;
         this.isUrl = isUrl;
         this.fallbackHsUrl = fallbackHsUrl;
-        this.currentFlowIndex = 0;
         this.flows = [];
         this.defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
         this.tempClient = null; // memoize
@@ -100,25 +113,11 @@ export default class Login {
         });
     }
 
-    public async getFlows(): Promise<Array<ILoginFlow>> {
+    public async getFlows(): Promise<Array<LoginFlow>> {
         const client = this.createTemporaryClient();
         const { flows } = await client.loginFlows();
         this.flows = flows;
-        this.currentFlowIndex = 0;
-        // technically the UI should display options for all flows for the
-        // user to then choose one, so return all the flows here.
         return this.flows;
-    }
-
-    public chooseFlow(flowIndex): void {
-        this.currentFlowIndex = flowIndex;
-    }
-
-    public getCurrentFlowStep(): string {
-        // technically the flow can have multiple steps, but no one does this
-        // for login so we can ignore it.
-        const flowStep = this.flows[this.currentFlowIndex];
-        return flowStep ? flowStep.type : null;
     }
 
     public loginViaPassword(

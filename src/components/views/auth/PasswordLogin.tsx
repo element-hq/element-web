@@ -26,7 +26,6 @@ import withValidation from "../elements/Validation";
 import * as Email from "../../../email";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
-import SignInToText from "./SignInToText";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -47,7 +46,6 @@ interface IProps {
     onUsernameBlur?(username: string): void;
     onPhoneCountryChanged?(phoneCountry: string): void;
     onPhoneNumberChanged?(phoneNumber: string): void;
-    onEditServerDetailsClick?(): void;
     onForgotPasswordClick?(): void;
 }
 
@@ -70,7 +68,6 @@ enum LoginField {
  */
 export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     static defaultProps = {
-        onEditServerDetailsClick: null,
         onUsernameChanged: function() {},
         onUsernameBlur: function() {},
         onPhoneCountryChanged: function() {},
@@ -460,8 +457,6 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
 
         return (
             <div>
-                <SignInToText serverConfig={this.props.serverConfig}
-                    onEditServerDetailsClick={this.props.onEditServerDetailsClick} />
                 <form onSubmit={this.onSubmitForm}>
                     {loginType}
                     {loginField}
