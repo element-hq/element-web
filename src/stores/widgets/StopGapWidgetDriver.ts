@@ -16,8 +16,12 @@
 
 import {
     Capability,
+    IOpenIDCredentials,
+    IOpenIDUpdate,
     ISendEventDetails,
     MatrixCapabilities,
+    OpenIDRequestState,
+    SimpleObservable,
     Widget,
     WidgetDriver,
     WidgetKind,
@@ -26,6 +30,9 @@ import { iterableDiff, iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
 import Modal from "../../Modal";
+import WidgetUtils from "../../utils/WidgetUtils";
+import SettingsStore from "../../settings/SettingsStore";
+import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetCapabilitiesPromptDialog, {
     getRememberedCapabilitiesForWidget,
 } from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
@@ -79,7 +86,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
 
-        let r: {event_id: string} = null; // eslint-disable-line camelcase
+        let r: { event_id: string } = null; // eslint-disable-line camelcase
         if (stateKey !== null) {
             // state event
             r = await client.sendStateEvent(roomId, eventType, content, stateKey);
@@ -89,5 +96,39 @@ export class StopGapWidgetDriver extends WidgetDriver {
         }
 
         return {roomId, eventId: r.event_id};
+    }
+
+    public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
+        const isUserWidget = this.forWidgetKind !== WidgetKind.Room; // modal and account widgets are "user" widgets
+        const rawUrl = this.forWidget.templateUrl;
+        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.forWidget.id, rawUrl, isUserWidget);
+
+        const getToken = (): Promise<IOpenIDCredentials> => {
+            return MatrixClientPeg.get().getOpenIdToken();
+        };
+
+        const settings = SettingsStore.getValue("widgetOpenIDPermissions");
+        if (settings?.deny?.includes(widgetSecurityKey)) {
+            return observer.update({state: OpenIDRequestState.Blocked});
+        }
+        if (settings?.allow?.includes(widgetSecurityKey)) {
+            return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+        }
+
+        observer.update({state: OpenIDRequestState.PendingUserConfirmation});
+
+        Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
+            widgetUrl: rawUrl,
+            widgetId: this.forWidget.id,
+            isUserWidget: isUserWidget,
+
+            onFinished: async (confirm) => {
+                if (!confirm) {
+                    return observer.update({state: OpenIDRequestState.Blocked});
+                }
+
+                return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
+            },
+        });
     }
 }
