@@ -1,3 +1,11 @@
+Changes in [3.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.9.0) (2020-11-23)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.9.0-rc.1...v3.9.0)
+
+ * Upgrade JS SDK to 9.2.0
+ * [Release] Fix encrypted video playback in Chrome-based browsers
+   [\#5431](https://github.com/matrix-org/matrix-react-sdk/pull/5431)
+
 Changes in [3.9.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.9.0-rc.1) (2020-11-18)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.8.0...v3.9.0-rc.1)
