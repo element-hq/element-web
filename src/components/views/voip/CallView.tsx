@@ -390,7 +390,7 @@ export default class CallView extends React.Component<IProps, IState> {
         let fullScreenButton;
         if (this.state.call.type === CallType.Video && this.props.room) {
             fullScreenButton = <div className="mx_CallView_header_button mx_CallView_header_button_fullscreen"
-                onClick={this.onFullscreenClick} title={_t("Fill screen")}
+                onClick={this.onFullscreenClick} title={_t("Fill Screen")}
             />;
         }
 
