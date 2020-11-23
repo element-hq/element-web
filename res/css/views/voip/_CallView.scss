@@ -150,7 +150,7 @@ limitations under the License.
 }
 
 .mx_CallView_callControls_hidden {
-    opacity: 0.001;
+    opacity: 0.001; // opacity 0 can cause a re-layout
     pointer-events: none;
 }
 
