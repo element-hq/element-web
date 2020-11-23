@@ -79,6 +79,7 @@ import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
 import Analytics from './Analytics';
 import CountlyAnalytics from "./CountlyAnalytics";
+import {UIFeature} from "./settings/UIFeature";
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -124,7 +125,7 @@ export default class CallHandler {
         return window.mxCallHandler;
     }
 
-    constructor() {
+    start() {
         dis.register(this.onAction);
         // add empty handlers for media actions, otherwise the media keys
         // end up causing the audio elements with our ring/ringback etc
@@ -137,6 +138,27 @@ export default class CallHandler {
             navigator.mediaSession.setActionHandler('previoustrack', function() {});
             navigator.mediaSession.setActionHandler('nexttrack', function() {});
         }
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            MatrixClientPeg.get().on('Call.incoming', this.onCallIncoming);
+        }
+    }
+
+    stop() {
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener('Call.incoming', this.onCallIncoming);
+        }
+    }
+
+    private onCallIncoming = (call) => {
+        // we dispatch this synchronously to make sure that the event
+        // handlers on the call are set up immediately (so that if
+        // we get an immediate hangup, we don't get a stuck call)
+        dis.dispatch({
+            action: 'incoming_call',
+            call: call,
+        }, true);
     }
 
     getCallForRoom(roomId: string): MatrixCall {
