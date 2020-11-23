@@ -762,7 +762,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
  */
 export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
-    CallHandler.sharedInstance().start();
+    CallHandler.sharedInstance().stop();
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
     Presence.stop();
