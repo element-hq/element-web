@@ -650,9 +650,11 @@ export default class Registration extends React.Component<IProps, IState> {
             );
         }
 
-        const signIn = <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-            { _t('Sign in instead') }
-        </a>;
+        const signIn = <span className="mx_AuthBody_changeFlow">
+            {_t("Already have an account? <a>Sign in here</a>", {}, {
+                a: sub => <a onClick={this.onLoginClick} href="#">{ sub }</a>,
+            })}
+        </span>;
 
         // Only show the 'go back' button if you're not looking at the form
         let goBack;
@@ -736,7 +738,7 @@ export default class Registration extends React.Component<IProps, IState> {
             }
 
             body = <div>
-                <h2>{ _t('Create your account') }</h2>
+                <h2>{ _t('Create account') }</h2>
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }

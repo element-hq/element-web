@@ -670,9 +670,11 @@ export default class LoginComponent extends React.Component<IProps, IState> {
             </div>;
         } else if (SettingsStore.getValue(UIFeature.Registration)) {
             footer = (
-                <a className="mx_AuthBody_changeFlow" onClick={this.onTryRegisterClick} href="#">
-                    { _t('Create account') }
-                </a>
+                <span className="mx_AuthBody_changeFlow">
+                    {_t("New? <a>Create account</a>", {}, {
+                        a: sub => <a onClick={this.onTryRegisterClick} href="#">{ sub }</a>,
+                    })}
+                </span>
             );
         }
 

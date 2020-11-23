@@ -411,20 +411,14 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
-            forgotPasswordJsx = <span>
-                {_t('Not sure of your password? <a>Set a new one</a>', {}, {
-                    a: sub => (
-                        <AccessibleButton
-                            className="mx_Login_forgot"
-                            disabled={this.props.busy}
-                            kind="link"
-                            onClick={this.onForgotPasswordClick}
-                        >
-                            {sub}
-                        </AccessibleButton>
-                    ),
-                })}
-            </span>;
+            forgotPasswordJsx = <AccessibleButton
+                className="mx_Login_forgot"
+                disabled={this.props.busy}
+                kind="link"
+                onClick={this.onForgotPasswordClick}
+            >
+                {_t("Forgot password?")}
+            </AccessibleButton>;
         }
 
         const pwFieldClass = classNames({
