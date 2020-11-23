@@ -175,31 +175,31 @@ limitations under the License.
 
 .mx_CallView_callControls_button_micOn {
     &::before {
-        background-image: url('$(res)/img/voip_buttons/mic_on.svg');
+        background-image: url('$(res)/img/voip/mic-on.svg');
     }
 }
 
 .mx_CallView_callControls_button_micOff {
     &::before {
-        background-image: url('$(res)/img/voip_buttons/mic_off.svg');
+        background-image: url('$(res)/img/voip/mic-off.svg');
     }
 }
 
 .mx_CallView_callControls_button_vidOn {
     &::before {
-        background-image: url('$(res)/img/voip_buttons/vid_on.svg');
+        background-image: url('$(res)/img/voip/vid-on.svg');
     }
 }
 
 .mx_CallView_callControls_button_vidOff {
     &::before {
-        background-image: url('$(res)/img/voip_buttons/vid_off.svg');
+        background-image: url('$(res)/img/voip/vid-off.svg');
     }
 }
 
 .mx_CallView_callControls_button_hangup {
     &::before {
-        background-image: url('$(res)/img/voip_buttons/hangup.svg');
+        background-image: url('$(res)/img/voip/hangup.svg');
     }
 }
 
