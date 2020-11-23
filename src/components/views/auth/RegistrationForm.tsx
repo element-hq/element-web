@@ -1,8 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018, 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2015, 2016, 2017, 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import * as sdk from '../../../index';
 import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
@@ -31,32 +29,57 @@ import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import PassphraseField from "./PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 
-const FIELD_EMAIL = 'field_email';
-const FIELD_PHONE_NUMBER = 'field_phone_number';
-const FIELD_USERNAME = 'field_username';
-const FIELD_PASSWORD = 'field_password';
-const FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
+enum RegistrationField {
+    Email = "field_email",
+    PhoneNumber = "field_phone_number",
+    Username = "field_username",
+    Password = "field_password",
+    PasswordConfirm = "field_password_confirm",
+}
 
 const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
+
+interface IProps {
+    // Values pre-filled in the input boxes when the component loads
+    defaultEmail?: string;
+    defaultPhoneCountry?: string;
+    defaultPhoneNumber?: string;
+    defaultUsername?: string;
+    defaultPassword?: string;
+    flows: {
+        stages: string[];
+    }[];
+    serverConfig: ValidatedServerConfig;
+    canSubmit?: boolean;
+    serverRequiresIdServer?: boolean;
+
+    onRegisterClick(params: {
+        username: string;
+        password: string;
+        email?: string;
+        phoneCountry?: string;
+        phoneNumber?: string;
+    }): Promise<void>;
+    onEditServerDetailsClick?(): void;
+}
+
+interface IState {
+    // Field error codes by field ID
+    fieldValid: Partial<Record<RegistrationField, boolean>>;
+    // The ISO2 country code selected in the phone number entry
+    phoneCountry: string;
+    username: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    passwordConfirm: string;
+    passwordComplexity?: number;
+}
 
 /*
  * A pure UI component which displays a registration form.
  */
-export default class RegistrationForm extends React.Component {
-    static propTypes = {
-        // Values pre-filled in the input boxes when the component loads
-        defaultEmail: PropTypes.string,
-        defaultPhoneCountry: PropTypes.string,
-        defaultPhoneNumber: PropTypes.string,
-        defaultUsername: PropTypes.string,
-        defaultPassword: PropTypes.string,
-        onRegisterClick: PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
-        flows: PropTypes.arrayOf(PropTypes.object).isRequired,
-        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
-        canSubmit: PropTypes.bool,
-        serverRequiresIdServer: PropTypes.bool,
-    };
-
+export default class RegistrationForm extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onValidationChange: console.error,
         canSubmit: true,
@@ -66,9 +89,7 @@ export default class RegistrationForm extends React.Component {
         super(props);
 
         this.state = {
-            // Field error codes by field ID
             fieldValid: {},
-            // The ISO2 country code selected in the phone number entry
             phoneCountry: this.props.defaultPhoneCountry,
             username: this.props.defaultUsername || "",
             email: this.props.defaultEmail || "",
@@ -81,7 +102,7 @@ export default class RegistrationForm extends React.Component {
         CountlyAnalytics.instance.track("onboarding_registration_begin");
     }
 
-    onSubmit = async ev => {
+    private onSubmit = async ev => {
         ev.preventDefault();
 
         if (!this.props.canSubmit) return;
@@ -92,7 +113,6 @@ export default class RegistrationForm extends React.Component {
             return;
         }
 
-        const self = this;
         if (this.state.email === '') {
             const haveIs = Boolean(this.props.serverConfig.isUrl);
 
@@ -102,14 +122,14 @@ export default class RegistrationForm extends React.Component {
                     "No identity server is configured so you cannot add an email address in order to " +
                     "reset your password in the future.",
                 );
-            } else if (this._showEmail()) {
+            } else if (this.showEmail()) {
                 desc = _t(
                     "If you don't specify an email address, you won't be able to reset your password. " +
                     "Are you sure?",
                 );
             } else {
                 // user can't set an e-mail so don't prompt them to
-                self._doSubmit(ev);
+                this.doSubmit(ev);
                 return;
             }
 
@@ -120,18 +140,18 @@ export default class RegistrationForm extends React.Component {
                 title: _t("Warning!"),
                 description: desc,
                 button: _t("Continue"),
-                onFinished(confirmed) {
+                onFinished: (confirmed) => {
                     if (confirmed) {
-                        self._doSubmit(ev);
+                        this.doSubmit(ev);
                     }
                 },
             });
         } else {
-            self._doSubmit(ev);
+            this.doSubmit(ev);
         }
     };
 
-    _doSubmit(ev) {
+    private doSubmit(ev) {
         const email = this.state.email.trim();
 
         CountlyAnalytics.instance.track("onboarding_registration_submit_ok", {
@@ -154,20 +174,20 @@ export default class RegistrationForm extends React.Component {
         }
     }
 
-    async verifyFieldsBeforeSubmit() {
+    private async verifyFieldsBeforeSubmit() {
         // Blur the active element if any, so we first run its blur validation,
         // which is less strict than the pass we're about to do below for all fields.
-        const activeElement = document.activeElement;
+        const activeElement = document.activeElement as HTMLElement;
         if (activeElement) {
             activeElement.blur();
         }
 
         const fieldIDsInDisplayOrder = [
-            FIELD_USERNAME,
-            FIELD_PASSWORD,
-            FIELD_PASSWORD_CONFIRM,
-            FIELD_EMAIL,
-            FIELD_PHONE_NUMBER,
+            RegistrationField.Username,
+            RegistrationField.Password,
+            RegistrationField.PasswordConfirm,
+            RegistrationField.Email,
+            RegistrationField.PhoneNumber,
         ];
 
         // Run all fields with stricter validation that no longer allows empty
@@ -208,7 +228,7 @@ export default class RegistrationForm extends React.Component {
     /**
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
-    allFieldsValid() {
+    private allFieldsValid() {
         const keys = Object.keys(this.state.fieldValid);
         for (let i = 0; i < keys.length; ++i) {
             if (!this.state.fieldValid[keys[i]]) {
@@ -218,7 +238,7 @@ export default class RegistrationForm extends React.Component {
         return true;
     }
 
-    findFirstInvalidField(fieldIDs) {
+    private findFirstInvalidField(fieldIDs: RegistrationField[]) {
         for (const fieldID of fieldIDs) {
             if (!this.state.fieldValid[fieldID] && this[fieldID]) {
                 return this[fieldID];
@@ -227,7 +247,7 @@ export default class RegistrationForm extends React.Component {
         return null;
     }
 
-    markFieldValid(fieldID, valid) {
+    private markFieldValid(fieldID: RegistrationField, valid: boolean) {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
@@ -235,26 +255,26 @@ export default class RegistrationForm extends React.Component {
         });
     }
 
-    onEmailChange = ev => {
+    private onEmailChange = ev => {
         this.setState({
             email: ev.target.value,
         });
     };
 
-    onEmailValidate = async fieldState => {
+    private onEmailValidate = async fieldState => {
         const result = await this.validateEmailRules(fieldState);
-        this.markFieldValid(FIELD_EMAIL, result.valid);
+        this.markFieldValid(RegistrationField.Email, result.valid);
         return result;
     };
 
-    validateEmailRules = withValidation({
+    private validateEmailRules = withValidation({
         description: () => _t("Use an email address to recover your account"),
         hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
-                test({ value, allowEmpty }) {
-                    return allowEmpty || !this._authStepIsRequired('m.login.email.identity') || !!value;
+                test(this: RegistrationForm, { value, allowEmpty }) {
+                    return allowEmpty || !this.authStepIsRequired('m.login.email.identity') || !!value;
                 },
                 invalid: () => _t("Enter email address (required on this homeserver)"),
             },
@@ -266,29 +286,29 @@ export default class RegistrationForm extends React.Component {
         ],
     });
 
-    onPasswordChange = ev => {
+    private onPasswordChange = ev => {
         this.setState({
             password: ev.target.value,
         });
     };
 
-    onPasswordValidate = result => {
-        this.markFieldValid(FIELD_PASSWORD, result.valid);
+    private onPasswordValidate = result => {
+        this.markFieldValid(RegistrationField.Password, result.valid);
     };
 
-    onPasswordConfirmChange = ev => {
+    private onPasswordConfirmChange = ev => {
         this.setState({
             passwordConfirm: ev.target.value,
         });
     };
 
-    onPasswordConfirmValidate = async fieldState => {
+    private onPasswordConfirmValidate = async fieldState => {
         const result = await this.validatePasswordConfirmRules(fieldState);
-        this.markFieldValid(FIELD_PASSWORD_CONFIRM, result.valid);
+        this.markFieldValid(RegistrationField.PasswordConfirm, result.valid);
         return result;
     };
 
-    validatePasswordConfirmRules = withValidation({
+    private validatePasswordConfirmRules = withValidation({
         rules: [
             {
                 key: "required",
@@ -297,41 +317,40 @@ export default class RegistrationForm extends React.Component {
             },
             {
                 key: "match",
-                test({ value }) {
+                test(this: RegistrationForm, { value }) {
                     return !value || value === this.state.password;
                 },
                 invalid: () => _t("Passwords don't match"),
             },
-         ],
+        ],
     });
 
-    onPhoneCountryChange = newVal => {
+    private onPhoneCountryChange = newVal => {
         this.setState({
             phoneCountry: newVal.iso2,
-            phonePrefix: newVal.prefix,
         });
     };
 
-    onPhoneNumberChange = ev => {
+    private onPhoneNumberChange = ev => {
         this.setState({
             phoneNumber: ev.target.value,
         });
     };
 
-    onPhoneNumberValidate = async fieldState => {
+    private onPhoneNumberValidate = async fieldState => {
         const result = await this.validatePhoneNumberRules(fieldState);
-        this.markFieldValid(FIELD_PHONE_NUMBER, result.valid);
+        this.markFieldValid(RegistrationField.PhoneNumber, result.valid);
         return result;
     };
 
-    validatePhoneNumberRules = withValidation({
+    private validatePhoneNumberRules = withValidation({
         description: () => _t("Other users can invite you to rooms using your contact details"),
         hideDescriptionIfValid: true,
         rules: [
             {
                 key: "required",
-                test({ value, allowEmpty }) {
-                    return allowEmpty || !this._authStepIsRequired('m.login.msisdn') || !!value;
+                test(this: RegistrationForm, { value, allowEmpty }) {
+                    return allowEmpty || !this.authStepIsRequired('m.login.msisdn') || !!value;
                 },
                 invalid: () => _t("Enter phone number (required on this homeserver)"),
             },
@@ -343,19 +362,19 @@ export default class RegistrationForm extends React.Component {
         ],
     });
 
-    onUsernameChange = ev => {
+    private onUsernameChange = ev => {
         this.setState({
             username: ev.target.value,
         });
     };
 
-    onUsernameValidate = async fieldState => {
+    private onUsernameValidate = async fieldState => {
         const result = await this.validateUsernameRules(fieldState);
-        this.markFieldValid(FIELD_USERNAME, result.valid);
+        this.markFieldValid(RegistrationField.Username, result.valid);
         return result;
     };
 
-    validateUsernameRules = withValidation({
+    private validateUsernameRules = withValidation({
         description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
         hideDescriptionIfValid: true,
         rules: [
@@ -378,7 +397,7 @@ export default class RegistrationForm extends React.Component {
      * @param {string} step A stage name to check
      * @returns {boolean} Whether it is required
      */
-    _authStepIsRequired(step) {
+    private authStepIsRequired(step: string) {
         return this.props.flows.every((flow) => {
             return flow.stages.includes(step);
         });
@@ -390,46 +409,46 @@ export default class RegistrationForm extends React.Component {
      * @param {string} step A stage name to check
      * @returns {boolean} Whether it is used
      */
-    _authStepIsUsed(step) {
+    private authStepIsUsed(step: string) {
         return this.props.flows.some((flow) => {
             return flow.stages.includes(step);
         });
     }
 
-    _showEmail() {
+    private showEmail() {
         const haveIs = Boolean(this.props.serverConfig.isUrl);
         if (
             (this.props.serverRequiresIdServer && !haveIs) ||
-            !this._authStepIsUsed('m.login.email.identity')
+            !this.authStepIsUsed('m.login.email.identity')
         ) {
             return false;
         }
         return true;
     }
 
-    _showPhoneNumber() {
+    private showPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
         const haveIs = Boolean(this.props.serverConfig.isUrl);
         if (
             !threePidLogin ||
             (this.props.serverRequiresIdServer && !haveIs) ||
-            !this._authStepIsUsed('m.login.msisdn')
+            !this.authStepIsUsed('m.login.msisdn')
         ) {
             return false;
         }
         return true;
     }
 
-    renderEmail() {
-        if (!this._showEmail()) {
+    private renderEmail() {
+        if (!this.showEmail()) {
             return null;
         }
         const Field = sdk.getComponent('elements.Field');
-        const emailPlaceholder = this._authStepIsRequired('m.login.email.identity') ?
+        const emailPlaceholder = this.authStepIsRequired('m.login.email.identity') ?
             _t("Email") :
             _t("Email (optional)");
         return <Field
-            ref={field => this[FIELD_EMAIL] = field}
+            ref={field => this[RegistrationField.Email] = field}
             type="text"
             label={emailPlaceholder}
             value={this.state.email}
@@ -440,10 +459,10 @@ export default class RegistrationForm extends React.Component {
         />;
     }
 
-    renderPassword() {
+    private renderPassword() {
         return <PassphraseField
             id="mx_RegistrationForm_password"
-            fieldRef={field => this[FIELD_PASSWORD] = field}
+            fieldRef={field => this[RegistrationField.Password] = field}
             minScore={PASSWORD_MIN_SCORE}
             value={this.state.password}
             onChange={this.onPasswordChange}
@@ -457,7 +476,7 @@ export default class RegistrationForm extends React.Component {
         const Field = sdk.getComponent('elements.Field');
         return <Field
             id="mx_RegistrationForm_passwordConfirm"
-            ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
+            ref={field => this[RegistrationField.PasswordConfirm] = field}
             type="password"
             autoComplete="new-password"
             label={_t("Confirm password")}
@@ -470,12 +489,12 @@ export default class RegistrationForm extends React.Component {
     }
 
     renderPhoneNumber() {
-        if (!this._showPhoneNumber()) {
+        if (!this.showPhoneNumber()) {
             return null;
         }
         const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
         const Field = sdk.getComponent('elements.Field');
-        const phoneLabel = this._authStepIsRequired('m.login.msisdn') ?
+        const phoneLabel = this.authStepIsRequired('m.login.msisdn') ?
             _t("Phone") :
             _t("Phone (optional)");
         const phoneCountry = <CountryDropdown
@@ -485,7 +504,7 @@ export default class RegistrationForm extends React.Component {
             onOptionChange={this.onPhoneCountryChange}
         />;
         return <Field
-            ref={field => this[FIELD_PHONE_NUMBER] = field}
+            ref={field => this[RegistrationField.PhoneNumber] = field}
             type="text"
             label={phoneLabel}
             value={this.state.phoneNumber}
@@ -499,7 +518,7 @@ export default class RegistrationForm extends React.Component {
         const Field = sdk.getComponent('elements.Field');
         return <Field
             id="mx_RegistrationForm_username"
-            ref={field => this[FIELD_USERNAME] = field}
+            ref={field => this[RegistrationField.Username] = field}
             type="text"
             autoFocus={true}
             label={_t("Username")}
@@ -517,8 +536,8 @@ export default class RegistrationForm extends React.Component {
         );
 
         let emailHelperText = null;
-        if (this._showEmail()) {
-            if (this._showPhoneNumber()) {
+        if (this.showEmail()) {
+            if (this.showPhoneNumber()) {
                 emailHelperText = <div>
                     {_t(
                         "Set an email for account recovery. " +

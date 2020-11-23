@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018, 2019 New Vector Ltd
+Copyright 2015, 2016, 2017, 2018, 2019 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {ComponentProps, ReactNode} from 'react';
+
 import {_t, _td} from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Login from '../../../Login';
@@ -31,15 +29,12 @@ import PlatformPeg from '../../../PlatformPeg';
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-
-// For validating phone numbers without country codes
-const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
-
-// Phases
-// Show controls to configure server details
-const PHASE_SERVER_DETAILS = 0;
-// Show the appropriate login flow(s) for the server
-const PHASE_LOGIN = 1;
+import {IMatrixClientCreds} from "../../../MatrixClientPeg";
+import ServerConfig from "../../views/auth/ServerConfig";
+import PasswordLogin from "../../views/auth/PasswordLogin";
+import SignInToText from "../../views/auth/SignInToText";
+import InlineSpinner from "../../views/elements/InlineSpinner";
+import Spinner from "../../views/elements/Spinner";
 
 // Enable phases for login
 const PHASES_ENABLED = true;
@@ -55,64 +50,88 @@ _td("Invalid base_url for m.identity_server");
 _td("Identity server URL does not appear to be a valid identity server");
 _td("General failure");
 
+interface IProps {
+    serverConfig: ValidatedServerConfig;
+    // If true, the component will consider itself busy.
+    busy?: boolean;
+    isSyncing?: boolean;
+    // Secondary HS which we try to log into if the user is using
+    // the default HS but login fails. Useful for migrating to a
+    // different homeserver without confusing users.
+    fallbackHsUrl?: string;
+    defaultDeviceDisplayName?: string;
+    fragmentAfterLogin?: string;
+
+    // Called when the user has logged in. Params:
+    // - The object returned by the login API
+    // - The user's password, if applicable, (may be cached in memory for a
+    //   short time so the user is not required to re-enter their password
+    //   for operations like uploading cross-signing keys).
+    onLoggedIn(data: IMatrixClientCreds, password: string): void;
+
+    // login shouldn't know or care how registration, password recovery, etc is done.
+    onRegisterClick(): void;
+    onForgotPasswordClick?(): void;
+    onServerConfigChange(config: ValidatedServerConfig): void;
+}
+
+enum Phase {
+    // Show controls to configure server details
+    ServerDetails,
+    // Show the appropriate login flow(s) for the server
+    Login,
+}
+
+interface IState {
+    busy: boolean;
+    busyLoggingIn?: boolean;
+    errorText?: ReactNode;
+    loginIncorrect: boolean;
+    // can we attempt to log in or are there validation errors?
+    canTryLogin: boolean;
+
+    // used for preserving form values when changing homeserver
+    username: string;
+    phoneCountry?: string;
+    phoneNumber: string;
+
+    // Phase of the overall login dialog.
+    phase: Phase;
+    // The current login flow, such as password, SSO, etc.
+    // we need to load the flows from the server
+    currentFlow?: string;
+
+    // We perform liveliness checks later, but for now suppress the errors.
+    // We also track the server dead errors independently of the regular errors so
+    // that we can render it differently, and override any other error the user may
+    // be seeing.
+    serverIsAlive: boolean;
+    serverErrorIsFatal: boolean;
+    serverDeadError: string;
+}
+
 /*
  * A wire component which glues together login UI components and Login logic
  */
-export default class LoginComponent extends React.Component {
-    static propTypes = {
-        // Called when the user has logged in. Params:
-        // - The object returned by the login API
-        // - The user's password, if applicable, (may be cached in memory for a
-        //   short time so the user is not required to re-enter their password
-        //   for operations like uploading cross-signing keys).
-        onLoggedIn: PropTypes.func.isRequired,
-
-        // If true, the component will consider itself busy.
-        busy: PropTypes.bool,
-
-        // Secondary HS which we try to log into if the user is using
-        // the default HS but login fails. Useful for migrating to a
-        // different homeserver without confusing users.
-        fallbackHsUrl: PropTypes.string,
-
-        defaultDeviceDisplayName: PropTypes.string,
-
-        // login shouldn't know or care how registration, password recovery,
-        // etc is done.
-        onRegisterClick: PropTypes.func.isRequired,
-        onForgotPasswordClick: PropTypes.func,
-        onServerConfigChange: PropTypes.func.isRequired,
-
-        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
-        isSyncing: PropTypes.bool,
-    };
+export default class LoginComponent extends React.Component<IProps, IState> {
+    private unmounted = false;
+    private loginLogic: Login;
+    private readonly stepRendererMap: Record<string, () => ReactNode>;
 
     constructor(props) {
         super(props);
-
-        this._unmounted = false;
 
         this.state = {
             busy: false,
             busyLoggingIn: null,
             errorText: null,
             loginIncorrect: false,
-            canTryLogin: true, // can we attempt to log in or are there validation errors?
-
-            // used for preserving form values when changing homeserver
+            canTryLogin: true,
             username: "",
             phoneCountry: null,
             phoneNumber: "",
-
-            // Phase of the overall login dialog.
-            phase: PHASE_LOGIN,
-            // The current login flow, such as password, SSO, etc.
-            currentFlow: null, // we need to load the flows from the server
-
-            // We perform liveliness checks later, but for now suppress the errors.
-            // We also track the server dead errors independently of the regular errors so
-            // that we can render it differently, and override any other error the user may
-            // be seeing.
+            phase: Phase.Login,
+            currentFlow: null,
             serverIsAlive: true,
             serverErrorIsFatal: false,
             serverDeadError: "",
@@ -120,12 +139,12 @@ export default class LoginComponent extends React.Component {
 
         // map from login step type to a function which will render a control
         // letting you do that login type
-        this._stepRendererMap = {
-            'm.login.password': this._renderPasswordStep,
+        this.stepRendererMap = {
+            'm.login.password': this.renderPasswordStep,
 
             // CAS and SSO are the same thing, modulo the url we link to
-            'm.login.cas': () => this._renderSsoStep("cas"),
-            'm.login.sso': () => this._renderSsoStep("sso"),
+            'm.login.cas': () => this.renderSsoStep("cas"),
+            'm.login.sso': () => this.renderSsoStep("sso"),
         };
 
         CountlyAnalytics.instance.track("onboarding_login_begin");
@@ -134,11 +153,11 @@ export default class LoginComponent extends React.Component {
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
-        this._initLoginLogic();
+        this.initLoginLogic(this.props.serverConfig);
     }
 
     componentWillUnmount() {
-        this._unmounted = true;
+        this.unmounted = true;
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -148,15 +167,8 @@ export default class LoginComponent extends React.Component {
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
         // Ensure that we end up actually logging in to the right place
-        this._initLoginLogic(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
+        this.initLoginLogic(newProps.serverConfig);
     }
-
-    onPasswordLoginError = errorText => {
-        this.setState({
-            errorText,
-            loginIncorrect: Boolean(errorText),
-        });
-    };
 
     isBusy = () => this.state.busy || this.props.busy;
 
@@ -194,13 +206,13 @@ export default class LoginComponent extends React.Component {
             loginIncorrect: false,
         });
 
-        this._loginLogic.loginViaPassword(
+        this.loginLogic.loginViaPassword(
             username, phoneCountry, phoneNumber, password,
         ).then((data) => {
             this.setState({serverIsAlive: true}); // it must be, we logged in.
             this.props.onLoggedIn(data, password);
         }, (error) => {
-            if (this._unmounted) {
+            if (this.unmounted) {
                 return;
             }
             let errorText;
@@ -212,21 +224,23 @@ export default class LoginComponent extends React.Component {
             } else if (error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
                     error.data.limit_type,
-                    error.data.admin_contact, {
-                    'monthly_active_user': _td(
-                        "This homeserver has hit its Monthly Active User limit.",
-                    ),
-                    '': _td(
-                        "This homeserver has exceeded one of its resource limits.",
-                    ),
-                });
+                    error.data.admin_contact,
+                    {
+                        'monthly_active_user': _td(
+                            "This homeserver has hit its Monthly Active User limit.",
+                        ),
+                        '': _td(
+                            "This homeserver has exceeded one of its resource limits.",
+                        ),
+                    },
+                );
                 const errorDetail = messageForResourceLimitError(
                     error.data.limit_type,
-                    error.data.admin_contact, {
-                    '': _td(
-                        "Please <a>contact your service administrator</a> to continue using this service.",
-                    ),
-                });
+                    error.data.admin_contact,
+                    {
+                        '': _td("Please <a>contact your service administrator</a> to continue using this service."),
+                    },
+                );
                 errorText = (
                     <div>
                         <div>{errorTop}</div>
@@ -253,7 +267,7 @@ export default class LoginComponent extends React.Component {
                 }
             } else {
                 // other errors, not specific to doing a password login
-                errorText = this._errorTextFromError(error);
+                errorText = this.errorTextFromError(error);
             }
 
             this.setState({
@@ -291,7 +305,7 @@ export default class LoginComponent extends React.Component {
                 // the busy state. In the case of a full MXID that resolves to the same
                 // HS as Element's default HS though, there may not be any server change.
                 // To avoid this trap, we clear busy here. For cases where the server
-                // actually has changed, `_initLoginLogic` will be called and manages
+                // actually has changed, `initLoginLogic` will be called and manages
                 // busy state for its own liveness check.
                 this.setState({
                     busy: false,
@@ -304,7 +318,7 @@ export default class LoginComponent extends React.Component {
                     message = e.translatedMessage;
                 }
 
-                let errorText = message;
+                let errorText: ReactNode = message;
                 let discoveryState = {};
                 if (AutoDiscoveryUtils.isLivelinessError(e)) {
                     errorText = this.state.errorText;
@@ -330,21 +344,6 @@ export default class LoginComponent extends React.Component {
         });
     };
 
-    onPhoneNumberBlur = phoneNumber => {
-        // Validate the phone number entered
-        if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            this.setState({
-                errorText: _t('The phone number entered looks invalid'),
-                canTryLogin: false,
-            });
-        } else {
-            this.setState({
-                errorText: null,
-                canTryLogin: true,
-            });
-        }
-    };
-
     onRegisterClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -352,14 +351,14 @@ export default class LoginComponent extends React.Component {
     };
 
     onTryRegisterClick = ev => {
-        const step = this._getCurrentFlowStep();
+        const step = this.getCurrentFlowStep();
         if (step === 'm.login.sso' || step === 'm.login.cas') {
             // If we're showing SSO it means that registration is also probably disabled,
             // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
             ev.preventDefault();
             ev.stopPropagation();
             const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
-            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind,
+            PlatformPeg.get().startSingleSignOn(this.loginLogic.createTemporaryClient(), ssoKind,
                 this.props.fragmentAfterLogin);
         } else {
             // Don't intercept - just go through to the register page
@@ -367,24 +366,21 @@ export default class LoginComponent extends React.Component {
         }
     };
 
-    onServerDetailsNextPhaseClick = () => {
+    private onServerDetailsNextPhaseClick = () => {
         this.setState({
-            phase: PHASE_LOGIN,
+            phase: Phase.Login,
         });
     };
 
-    onEditServerDetailsClick = ev => {
+    private onEditServerDetailsClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
-            phase: PHASE_SERVER_DETAILS,
+            phase: Phase.ServerDetails,
         });
     };
 
-    async _initLoginLogic(hsUrl, isUrl) {
-        hsUrl = hsUrl || this.props.serverConfig.hsUrl;
-        isUrl = isUrl || this.props.serverConfig.isUrl;
-
+    private async initLoginLogic({hsUrl, isUrl}: ValidatedServerConfig) {
         let isDefaultServer = false;
         if (this.props.serverConfig.isDefault
             && hsUrl === this.props.serverConfig.hsUrl
@@ -397,7 +393,7 @@ export default class LoginComponent extends React.Component {
         const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
         });
-        this._loginLogic = loginLogic;
+        this.loginLogic = loginLogic;
 
         this.setState({
             busy: true,
@@ -428,7 +424,7 @@ export default class LoginComponent extends React.Component {
             if (this.state.serverErrorIsFatal) {
                 // Server is dead: show server details prompt instead
                 this.setState({
-                    phase: PHASE_SERVER_DETAILS,
+                    phase: Phase.ServerDetails,
                 });
                 return;
             }
@@ -437,7 +433,7 @@ export default class LoginComponent extends React.Component {
         loginLogic.getFlows().then((flows) => {
             // look for a flow where we understand all of the steps.
             for (let i = 0; i < flows.length; i++ ) {
-                if (!this._isSupportedFlow(flows[i])) {
+                if (!this.isSupportedFlow(flows[i])) {
                     continue;
                 }
 
@@ -446,7 +442,7 @@ export default class LoginComponent extends React.Component {
                 // that for now).
                 loginLogic.chooseFlow(i);
                 this.setState({
-                    currentFlow: this._getCurrentFlowStep(),
+                    currentFlow: this.getCurrentFlowStep(),
                 });
                 return;
             }
@@ -460,7 +456,7 @@ export default class LoginComponent extends React.Component {
             });
         }, (err) => {
             this.setState({
-                errorText: this._errorTextFromError(err),
+                errorText: this.errorTextFromError(err),
                 loginIncorrect: false,
                 canTryLogin: false,
             });
@@ -471,28 +467,28 @@ export default class LoginComponent extends React.Component {
         });
     }
 
-    _isSupportedFlow(flow) {
+    private isSupportedFlow(flow) {
         // technically the flow can have multiple steps, but no one does this
         // for login and loginLogic doesn't support it so we can ignore it.
-        if (!this._stepRendererMap[flow.type]) {
+        if (!this.stepRendererMap[flow.type]) {
             console.log("Skipping flow", flow, "due to unsupported login type", flow.type);
             return false;
         }
         return true;
     }
 
-    _getCurrentFlowStep() {
-        return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null;
+    private getCurrentFlowStep() {
+        return this.loginLogic ? this.loginLogic.getCurrentFlowStep() : null;
     }
 
-    _errorTextFromError(err) {
+    private errorTextFromError(err) {
         let errCode = err.errcode;
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
         }
 
-        let errorText = _t("Error: Problem communicating with the given homeserver.") +
-                (errCode ? " (" + errCode + ")" : "");
+        let errorText: ReactNode = _t("Error: Problem communicating with the given homeserver.") +
+            (errCode ? " (" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
@@ -502,29 +498,27 @@ export default class LoginComponent extends React.Component {
                 errorText = <span>
                     { _t("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
                         "Either use HTTPS or <a>enable unsafe scripts</a>.", {},
-                        {
-                            'a': (sub) => {
-                                return <a target="_blank" rel="noreferrer noopener"
-                                    href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
-                                >
-                                    { sub }
-                                </a>;
-                            },
+                    {
+                        'a': (sub) => {
+                            return <a target="_blank" rel="noreferrer noopener"
+                                href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
+                            >
+                                { sub }
+                            </a>;
                         },
-                    ) }
+                    }) }
                 </span>;
             } else {
                 errorText = <span>
                     { _t("Can't connect to homeserver - please check your connectivity, ensure your " +
                         "<a>homeserver's SSL certificate</a> is trusted, and that a browser extension " +
                         "is not blocking requests.", {},
-                        {
-                            'a': (sub) =>
-                                <a target="_blank" rel="noreferrer noopener" href={this.props.serverConfig.hsUrl}>
-                                    { sub }
-                                </a>,
-                        },
-                    ) }
+                    {
+                        'a': (sub) =>
+                            <a target="_blank" rel="noreferrer noopener" href={this.props.serverConfig.hsUrl}>
+                                { sub }
+                            </a>,
+                    }) }
                 </span>;
             }
         }
@@ -532,18 +526,16 @@ export default class LoginComponent extends React.Component {
         return errorText;
     }
 
-    renderServerComponent() {
-        const ServerConfig = sdk.getComponent("auth.ServerConfig");
-
+    private renderServerComponent() {
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS) {
+        if (PHASES_ENABLED && this.state.phase !== Phase.ServerDetails) {
             return null;
         }
 
-        const serverDetailsProps = {};
+        const serverDetailsProps: ComponentProps<typeof ServerConfig> = {};
         if (PHASES_ENABLED) {
             serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
             serverDetailsProps.submitText = _t("Next");
@@ -558,8 +550,8 @@ export default class LoginComponent extends React.Component {
         />;
     }
 
-    renderLoginComponentForStep() {
-        if (PHASES_ENABLED && this.state.phase !== PHASE_LOGIN) {
+    private renderLoginComponentForStep() {
+        if (PHASES_ENABLED && this.state.phase !== Phase.Login) {
             return null;
         }
 
@@ -569,7 +561,7 @@ export default class LoginComponent extends React.Component {
             return null;
         }
 
-        const stepRenderer = this._stepRendererMap[step];
+        const stepRenderer = this.stepRendererMap[step];
 
         if (stepRenderer) {
             return stepRenderer();
@@ -578,9 +570,7 @@ export default class LoginComponent extends React.Component {
         return null;
     }
 
-    _renderPasswordStep = () => {
-        const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
-
+    private renderPasswordStep = () => {
         let onEditServerDetailsClick = null;
         // If custom URLs are allowed, wire up the server details edit link.
         if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
@@ -589,29 +579,25 @@ export default class LoginComponent extends React.Component {
 
         return (
             <PasswordLogin
-               onSubmit={this.onPasswordLogin}
-               onError={this.onPasswordLoginError}
-               onEditServerDetailsClick={onEditServerDetailsClick}
-               initialUsername={this.state.username}
-               initialPhoneCountry={this.state.phoneCountry}
-               initialPhoneNumber={this.state.phoneNumber}
-               onUsernameChanged={this.onUsernameChanged}
-               onUsernameBlur={this.onUsernameBlur}
-               onPhoneCountryChanged={this.onPhoneCountryChanged}
-               onPhoneNumberChanged={this.onPhoneNumberChanged}
-               onPhoneNumberBlur={this.onPhoneNumberBlur}
-               onForgotPasswordClick={this.props.onForgotPasswordClick}
-               loginIncorrect={this.state.loginIncorrect}
-               serverConfig={this.props.serverConfig}
-               disableSubmit={this.isBusy()}
-               busy={this.props.isSyncing || this.state.busyLoggingIn}
+                onSubmit={this.onPasswordLogin}
+                onEditServerDetailsClick={onEditServerDetailsClick}
+                username={this.state.username}
+                phoneCountry={this.state.phoneCountry}
+                phoneNumber={this.state.phoneNumber}
+                onUsernameChanged={this.onUsernameChanged}
+                onUsernameBlur={this.onUsernameBlur}
+                onPhoneCountryChanged={this.onPhoneCountryChanged}
+                onPhoneNumberChanged={this.onPhoneNumberChanged}
+                onForgotPasswordClick={this.props.onForgotPasswordClick}
+                loginIncorrect={this.state.loginIncorrect}
+                serverConfig={this.props.serverConfig}
+                disableSubmit={this.isBusy()}
+                busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
         );
     };
 
-    _renderSsoStep = loginType => {
-        const SignInToText = sdk.getComponent('views.auth.SignInToText');
-
+    private renderSsoStep = loginType => {
         let onEditServerDetailsClick = null;
         // If custom URLs are allowed, wire up the server details edit link.
         if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
@@ -632,7 +618,7 @@ export default class LoginComponent extends React.Component {
 
                 <SSOButton
                     className="mx_Login_sso_link mx_Login_submit"
-                    matrixClient={this._loginLogic.createTemporaryClient()}
+                    matrixClient={this.loginLogic.createTemporaryClient()}
                     loginType={loginType}
                     fragmentAfterLogin={this.props.fragmentAfterLogin}
                 />
@@ -641,12 +627,10 @@ export default class LoginComponent extends React.Component {
     };
 
     render() {
-        const Loader = sdk.getComponent("elements.Spinner");
-        const InlineSpinner = sdk.getComponent("elements.InlineSpinner");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const loader = this.isBusy() && !this.state.busyLoggingIn ?
-            <div className="mx_Login_loader"><Loader /></div> : null;
+            <div className="mx_Login_loader"><Spinner /></div> : null;
 
         const errorText = this.state.errorText;
 
