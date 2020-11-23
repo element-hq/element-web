@@ -25,5 +25,11 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Możesz kontynuować używanie obecnej przeglądarki, lecz niektóre lub wszystkie funkcje mogą nie działać oraz wygląd aplikacji może być niepoprawny.",
     "I understand the risks and wish to continue": "Rozumiem ryzyko i chcę kontynuować",
     "Go to element.io": "Przejdź do element.io",
-    "Failed to start": "Nie udało się wystartować"
+    "Failed to start": "Nie udało się wystartować",
+    "Download Completed": "Pobieranie Zakończone",
+    "Open": "Otwórz",
+    "Your browser can't run %(brand)s": "Twoja przeglądarka nie obsługuje %(brand)s",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s używa zaawansowanych funkcji przeglądarki, które nie są dostępne w twojej przeglądarce.",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Elementa zawiera niepoprawny JSON. Popraw konfiguracje i odśwież stronę.",
+    "Your Element is misconfigured": "Element jest nieprawidłowo skonfigurowany"
 }

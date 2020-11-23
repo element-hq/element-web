@@ -50,7 +50,22 @@ default, and you are using riot-web 1.6 or newer, set the following on your home
 }
 ```
 
-## Mobile app support
+## Element Android
+
+Element Android (1.0.5+) supports custom Jitsi domains, similar to Element Web above.
+
+1:1 calls, or calls between you and one other person, do not use Jitsi. Instead, those
+calls work directly between clients or via TURN servers configured on the respective 
+homeservers.
+
+For rooms with more than 2 joined members, when creating a Jitsi conference via call/video buttons of the toolbar (not via integration manager), Element Android will create a widget using the [wrapper](https://github.com/vector-im/element-web/blob/develop/docs/jitsi-dev.md) hosted on `app.element.io`.
+The domain used is the one specified by the `/.well-known/matrix/client` endpoint, and if not present it uses the fallback defined in `config.xml` (jitsi.riot.im)
+
+For active Jitsi widgets in the room, a native Jitsi widget UI is created and points to the instance specified in the `domain` key of the widget content data.
+
+Element Android manages allowed native widgets permissions a bit differently than web widgets (as the data shared are different and never shared with the widget URL). For Jitsi widgets, permissions are requested only once per domain (consent saved in account data).
+
+## Element iOS
 
 Currently the Element mobile apps do not support custom Jitsi servers and will instead
 use the default `jitsi.riot.im` server. When users on the mobile apps join the call,

@@ -7,7 +7,7 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Gedecentraliseerd en versleuteld chatten &amp; samenwerken dankzij [matrix]",
     "Sign In": "Aanmelden",
     "Create Account": "Account aanmaken",
-    "Explore rooms": "Gesprekken ontdekken",
+    "Explore rooms": "Kamers verkennen",
     "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratiefout: kan slechts één van default_server_config, default_server_name, of default_hs_url opgeven.",
     "Invalid configuration: no default server specified.": "Configuratie ongeldig: geen standaardserver opgegeven.",
@@ -22,8 +22,13 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Niet-ondersteunde browser",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Installeer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, of <safariLink>Safari</safariLink> voor de beste gebruikservaring.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "U kunt uw huidige browser blijven gebruiken, maar sommige of alle features zouden niet kunnen werken en de uitstraling van het programma kan verkeerd zijn.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "U kunt uw huidige browser blijven gebruiken, maar sommige of alle functies zouden niet kunnen werken en de uitstraling van het programma kan verkeerd zijn.",
     "I understand the risks and wish to continue": "Ik begrijp de risico's en wil verder gaan",
     "Go to element.io": "Ga naar element.io",
-    "Failed to start": "Opstarten gefaald"
+    "Failed to start": "Opstarten mislukt",
+    "Open": "Open",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Uw Element configuratie bevat ongeldige JSON. Gelieve het probleem te corrigeren daarna de pagina te herladen.",
+    "Download Completed": "Download voltooid",
+    "Your Element is misconfigured": "Uw Element is verkeerd geconfigureerd",
+    "Your browser can't run %(brand)s": "Uw browser kan %(brand)s niet draaien."
 }

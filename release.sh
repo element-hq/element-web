@@ -38,9 +38,7 @@ do
             echo "Upgrading $i to $latestver..."
             yarn add -E $i@$latestver
             git add -u
-            # The `-e` flag opens the editor and gives you a chance to check
-            # the upgrade for correctness.
-            git commit -m "Upgrade $i to $latestver" -e
+            git commit -m "Upgrade $i to $latestver"
         fi
     fi
 done

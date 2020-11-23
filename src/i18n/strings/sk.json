@@ -29,7 +29,8 @@
     "Download Completed": "Preberanie dokončené",
     "Open": "Otvoriť",
     "Your Element is misconfigured": "Váš Element je nesprávne nastavený",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Vaša konfigurácia Elementu obsahuje nesprávne JSON. Prosím, opravte chybu a obnovte stránku.",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Vaša konfigurácia Elementu obsahuje nesprávny údaj JSON. Prosím, opravte chybu a obnovte stránku.",
     "Your browser can't run %(brand)s": "Váš prehliadač nerozbehne %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s používa pokročilé funkcie prehliadača, ktoré nie sú podporované vaším aktuálnym prehliadačom."
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s používa pokročilé funkcie prehliadača, ktoré nie sú podporované vaším aktuálnym prehliadačom.",
+    "Powered by Matrix": "používa protokol Matrix"
 }

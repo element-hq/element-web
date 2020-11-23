@@ -16,6 +16,11 @@
       "node",
       "react",
       "flux"
+    ],
+    "lib": [
+      "es2019",
+      "dom",
+      "dom.iterable"
     ]
   },
   "include": [

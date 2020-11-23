@@ -27,7 +27,7 @@ import BaseEventIndexManager, {
     MatrixEvent,
     MatrixProfile,
     SearchArgs,
-    SearchResult
+    SearchResult,
 } from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import {_t, _td} from 'matrix-react-sdk/src/languageHandler';
@@ -99,7 +99,7 @@ interface IPCPayload {
 
 class SeshatIndexManager extends BaseEventIndexManager {
     private pendingIpcCalls: Record<number, { resolve, reject }> = {};
-    private nextIpcCallId: number = 0;
+    private nextIpcCallId = 0;
 
     constructor() {
         super();
@@ -140,8 +140,8 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('supportsEventIndexing');
     }
 
-    async initEventIndex(): Promise<void> {
-        return this._ipcCall('initEventIndex');
+    async initEventIndex(userId: string, deviceId: string): Promise<void> {
+        return this._ipcCall('initEventIndex', userId, deviceId);
     }
 
     async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<void> {
@@ -216,7 +216,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
 export default class ElectronPlatform extends VectorBasePlatform {
     private eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     private pendingIpcCalls: Record<number, { resolve, reject }> = {};
-    private nextIpcCallId: number = 0;
+    private nextIpcCallId = 0;
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
     private ssoID: string = randomString(32);
 
@@ -372,10 +372,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     loudNotification(ev: Event, room: Object) {
         ipcRenderer.send('loudNotification');
-    }
-
-    clearNotification(notif: Notification) {
-        notif.close();
     }
 
     async getAppVersion(): Promise<string> {
