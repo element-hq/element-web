@@ -31,7 +31,7 @@ export default function AccessTokenDialog(props: IProps) {
             title="Reveal Access Token"
             danger={true}
             description={_t(
-                "Your access token gives full access to your account. Do not share it with anyone."
+                "Your access token gives full access to your account. Do not share it with anyone.",
             )}
         ></QuestionDialog>
     );
