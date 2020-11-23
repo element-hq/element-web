@@ -2879,5 +2879,16 @@
     "Change the topic of this room": "Muuda selle jututoa teemat",
     "Change which room you're viewing": "Vaheta vaadatavat jututuba",
     "Send stickers into your active room": "Saada kleepse hetkel aktiivsesse jututuppa",
-    "Send stickers into this room": "Saada kleepse siia jututuppa"
+    "Send stickers into this room": "Saada kleepse siia jututuppa",
+    "See text messages posted to this room": "Vaata selle jututoa tekstisõnumeid",
+    "Send text messages as you in your active room": "Saada oma aktiivses jututoas enda nimel tekstisõnumeid",
+    "Send text messages as you in this room": "Saada selles jututoas oma nimel tekstisõnumeid",
+    "See messages posted to your active room": "Vaata sõnumeid oma aktiivses jututoas",
+    "See messages posted to this room": "Vaata selle jututoa sõnumeid",
+    "Send messages as you in your active room": "Saada oma aktiivses jututoas enda nimel sõnumeid",
+    "Send messages as you in this room": "Saada selles jututoas oma nimel sõnumeid",
+    "The <b>%(capability)s</b> capability": "<b>%(capability)s</b> võimekus",
+    "See <b>%(eventType)s</b> events posted to your active room": "Vaata oma aktiivsesse jututuppa saadetud <b>%(eventType)s</b> sündmusi",
+    "Send <b>%(eventType)s</b> events as you in your active room": "Saada oma nimel oma aktiivses jututoas <b>%(eventType)s</b> sündmusi",
+    "See <b>%(eventType)s</b> events posted to this room": "Vaata siia jututuppa saadetud <b>%(eventType)s</b> sündmusi"
 }
