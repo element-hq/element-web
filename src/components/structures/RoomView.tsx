@@ -41,7 +41,7 @@ import rateLimitedFunc from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch, {searchPagination} from '../../Searching';
-import {isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
+import {isOnlyCtrlOrCmdIgnoreShiftKeyEvent, Key} from '../../Keyboard';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
@@ -56,7 +56,6 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {E2EStatus, shieldStatusForRoom} from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
 import {SettingLevel} from "../../settings/SettingLevel";
-import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {IMatrixClientCreds} from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
@@ -68,10 +67,9 @@ import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import PinnedEventsPanel from "../views/rooms/PinnedEventsPanel";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
-import TintableSvg from "../views/elements/TintableSvg";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
-import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
@@ -508,8 +506,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.props.resizeNotifier.on("middlePanelResized", this.onResize);
         }
         this.onResize();
-
-        document.addEventListener("keydown", this.onNativeKeyDown);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -592,8 +588,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
         }
 
-        document.removeEventListener("keydown", this.onNativeKeyDown);
-
         // Remove RoomStore listener
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
@@ -639,33 +633,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else if (this.getCallForRoom() && this.state.callState !== 'ended') {
             return event.returnValue =
                 _t("You seem to be in a call, are you sure you want to quit?");
-        }
-    };
-
-    // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
-    private onNativeKeyDown = ev => {
-        let handled = false;
-        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
-
-        switch (ev.key) {
-            case Key.D:
-                if (ctrlCmdOnly) {
-                    this.onMuteAudioClick();
-                    handled = true;
-                }
-                break;
-
-            case Key.E:
-                if (ctrlCmdOnly) {
-                    this.onMuteVideoClick();
-                    handled = true;
-                }
-                break;
-        }
-
-        if (handled) {
-            ev.stopPropagation();
-            ev.preventDefault();
         }
     };
 
@@ -1324,10 +1291,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onSettingsClick = () => {
-        dis.dispatch({
-            action: Action.SetRightPanelPhase,
-            phase: RightPanelPhases.RoomSummary,
-        });
+        dis.dispatch({ action: "open_room_settings" });
     };
 
     private onCancelClick = () => {
@@ -1758,8 +1722,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                callState={this.state.callState}
-                callType={activeCall ? activeCall.type : null}
                 isPeeking={myMembership !== "join"}
                 onInviteClick={this.onInviteButtonClick}
                 onVisible={this.onStatusBarVisible}
@@ -1881,56 +1843,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 searchScope: this.state.searchScope,
                 searchCount: this.state.searchResults.count,
             };
-        }
-
-        if (activeCall) {
-            let zoomButton; let videoMuteButton;
-
-            if (activeCall.type === CallType.Video) {
-                zoomButton = (
-                    <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title={_t("Fill screen")}>
-                        <TintableSvg
-                            src={require("../../../res/img/element-icons/call/fullscreen.svg")}
-                            width="29"
-                            height="22"
-                            style={{ marginTop: 1, marginRight: 4 }}
-                        />
-                    </div>
-                );
-
-                videoMuteButton =
-                    <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                        <TintableSvg
-                            src={activeCall.isLocalVideoMuted() ?
-                                require("../../../res/img/element-icons/call/video-muted.svg") :
-                                require("../../../res/img/element-icons/call/video-call.svg")}
-                            alt={activeCall.isLocalVideoMuted() ? _t("Click to unmute video") :
-                                _t("Click to mute video")}
-                            width=""
-                            height="27"
-                        />
-                    </div>;
-            }
-            const voiceMuteButton =
-                <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                    <TintableSvg
-                        src={activeCall.isMicrophoneMuted() ?
-                            require("../../../res/img/element-icons/call/voice-muted.svg") :
-                            require("../../../res/img/element-icons/call/voice-unmuted.svg")}
-                        alt={activeCall.isMicrophoneMuted() ? _t("Click to unmute audio") : _t("Click to mute audio")}
-                        width="21"
-                        height="26"
-                    />
-                </div>;
-
-            // wrap the existing status bar into a 'callStatusBar' which adds more knobs.
-            statusBar =
-                <div className="mx_RoomView_callStatusBar">
-                    { voiceMuteButton }
-                    { videoMuteButton }
-                    { zoomButton }
-                    { statusBar }
-                </div>;
         }
 
         // if we have search results, we keep the messagepanel (so that it preserves its

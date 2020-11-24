@@ -31,6 +31,7 @@ import {
     ModalButtonKind,
     Widget,
     WidgetApiFromWidgetAction,
+    WidgetKind,
 } from "matrix-widget-api";
 import {StopGapWidgetDriver} from "../../../stores/widgets/StopGapWidgetDriver";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -72,7 +73,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     public componentDidMount() {
-        const driver = new StopGapWidgetDriver( []);
+        const driver = new StopGapWidgetDriver( [], this.widget, WidgetKind.Modal);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
         this.setState({messaging});
     }

@@ -210,8 +210,6 @@ export default class AppsDrawer extends React.Component {
         if (!this.props.showApps) return <div />;
 
         const apps = this.state.apps.map((app, index, arr) => {
-            const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
-
             return (<AppTile
                 key={app.id}
                 app={app}
@@ -221,7 +219,6 @@ export default class AppsDrawer extends React.Component {
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}
-                whitelistCapabilities={capWhitelist}
             />);
         });
 
