@@ -62,7 +62,7 @@
     "jsrsasign": "^9.1.5",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
-    "matrix-widget-api": "^0.1.0-beta.8",
+    "matrix-widget-api": "^0.1.0-beta.10",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
