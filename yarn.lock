@@ -7922,7 +7922,7 @@ matrix-mock-request@^1.2.3:
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.9.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/ddc3f275a803269ee301d73d788fd1053120d59a"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/1db130b8f0a77ebf442e8ff7ca5f2a379d176ea9"
   dependencies:
     "@babel/runtime" "^7.10.5"
     await-lock "^2.0.1"
@@ -7950,7 +7950,7 @@ matrix-mock-request@^1.2.3:
     linkifyjs "^2.1.9"
     lodash "^4.17.19"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
-    matrix-widget-api "^0.1.0-beta.9"
+    matrix-widget-api "^0.1.0-beta.10"
     minimist "^1.2.5"
     pako "^1.0.11"
     parse5 "^5.1.1"
