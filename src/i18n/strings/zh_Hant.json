@@ -2914,5 +2914,11 @@
     "Send stickers into your active room": "傳送貼圖到您活躍的聊天室",
     "Send stickers into this room": "傳送貼圖到此聊天室",
     "Remain on your screen while running": "在執行時保留在您的畫面上",
-    "Remain on your screen when viewing another room, when running": "在執行與檢視其他聊天室時仍保留在您的畫面上"
+    "Remain on your screen when viewing another room, when running": "在執行與檢視其他聊天室時仍保留在您的畫面上",
+    "Enter phone number": "輸入電話號碼",
+    "Enter email address": "輸入電子郵件地址",
+    "Return to call": "回到通話",
+    "Fill Screen": "全螢幕",
+    "Voice Call": "音訊通話",
+    "Video Call": "視訊通話"
 }
