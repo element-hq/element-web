@@ -39,14 +39,14 @@ released version of Element:
 
 1. Download the latest version from https://github.com/vector-im/element-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
+1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
-at https://packages.riot.im/riot-release-key.asc.
+at https://packages.riot.im/element-release-key.asc.
 
 Note that for the security of your chats will need to serve Element
 over HTTPS. Major browsers also do not allow you to use VoIP/video
