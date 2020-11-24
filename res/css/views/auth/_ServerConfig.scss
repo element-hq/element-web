@@ -23,13 +23,3 @@ limitations under the License.
     display: block;
     color: $warning-color;
 }
-
-.mx_ServerConfig_identityServer {
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.25s;
-
-    &.mx_ServerConfig_identityServer_shown {
-        transform: scaleY(1);
-    }
-}

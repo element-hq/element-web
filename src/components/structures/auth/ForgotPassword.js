@@ -62,7 +62,6 @@ export default class ForgotPassword extends React.Component {
         serverIsAlive: true,
         serverErrorIsFatal: false,
         serverDeadError: "",
-        serverRequiresIdServer: null,
     };
 
     constructor(props) {
@@ -93,12 +92,8 @@ export default class ForgotPassword extends React.Component {
                 serverConfig.isUrl,
             );
 
-            const pwReset = new PasswordReset(serverConfig.hsUrl, serverConfig.isUrl);
-            const serverRequiresIdServer = await pwReset.doesServerRequireIdServerParam();
-
             this.setState({
                 serverIsAlive: true,
-                serverRequiresIdServer,
             });
         } catch (e) {
             this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
@@ -216,7 +211,6 @@ export default class ForgotPassword extends React.Component {
             serverConfig={this.props.serverConfig}
             onServerConfigChange={this.props.onServerConfigChange}
             delayTimeMs={0}
-            showIdentityServerIfRequiredByHomeserver={true}
             onAfterSubmit={this.onServerDetailsNextPhaseClick}
             submitText={_t("Next")}
             submitClass="mx_Login_submit"
@@ -272,22 +266,6 @@ export default class ForgotPassword extends React.Component {
             >
                 {_t('Change')}
             </a>;
-        }
-
-        if (!this.props.serverConfig.isUrl && this.state.serverRequiresIdServer) {
-            return <div>
-                <h3>
-                    {yourMatrixAccountText}
-                    {editLink}
-                </h3>
-                {_t(
-                    "No identity server is configured: " +
-                    "add one in server settings to reset your password.",
-                )}
-                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
-                    {_t('Sign in instead')}
-                </a>
-            </div>;
         }
 
         return <div>

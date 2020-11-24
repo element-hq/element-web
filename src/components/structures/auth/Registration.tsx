@@ -111,8 +111,6 @@ interface IState {
     // Our matrix client - part of state because we can't render the UI auth
     // component without it.
     matrixClient?: MatrixClient;
-    // whether the HS requires an ID server to register with a threepid
-    serverRequiresIdServer?: boolean;
     // The user ID we've just registered
     registeredUsername?: string;
     // if a different user ID to the one we just registered is logged in,
@@ -254,13 +252,6 @@ export default class Registration extends React.Component<IProps, IState> {
             idBaseUrl: isUrl,
         });
 
-        let serverRequiresIdServer = true;
-        try {
-            serverRequiresIdServer = await cli.doesServerRequireIdServerParam();
-        } catch (e) {
-            console.log("Unable to determine is server needs id_server param", e);
-        }
-
         this.loginLogic.setHomeserverUrl(hsUrl);
         this.loginLogic.setIdentityServerUrl(isUrl);
 
@@ -274,7 +265,6 @@ export default class Registration extends React.Component<IProps, IState> {
 
         this.setState({
             matrixClient: cli,
-            serverRequiresIdServer,
             ssoFlow,
             busy: false,
         });
@@ -573,7 +563,6 @@ export default class Registration extends React.Component<IProps, IState> {
                     serverConfig={this.props.serverConfig}
                     onServerConfigChange={this.props.onServerConfigChange}
                     delayTimeMs={250}
-                    showIdentityServerIfRequiredByHomeserver={true}
                     onAfterSubmit={this.onServerDetailsNextPhaseClick}
                     submitText={_t("Next")}
                     submitClass="mx_Login_submit"
@@ -644,7 +633,6 @@ export default class Registration extends React.Component<IProps, IState> {
                     flows={this.state.flows}
                     serverConfig={this.props.serverConfig}
                     canSubmit={!this.state.serverErrorIsFatal}
-                    serverRequiresIdServer={this.state.serverRequiresIdServer}
                 />
             </React.Fragment>;
         }

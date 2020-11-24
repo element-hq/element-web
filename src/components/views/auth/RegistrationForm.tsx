@@ -54,7 +54,6 @@ interface IProps {
     }[];
     serverConfig: ValidatedServerConfig;
     canSubmit?: boolean;
-    serverRequiresIdServer?: boolean;
 
     onRegisterClick(params: {
         username: string;
@@ -118,21 +117,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
 
         if (this.state.email === '') {
-            const haveIs = Boolean(this.props.serverConfig.isUrl);
-
-            if (this.props.serverRequiresIdServer && !haveIs) {
-                Modal.createTrackedDialog("No identity server no email", '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description: _t(
-                        "No identity server is configured so you cannot add an email address in order to " +
-                        "reset your password in the future.",
-                    ),
-                    button: _t("Continue"),
-                    onFinished: async (confirmed) => {
-                        if (confirmed) this.doSubmit(ev);
-                    },
-                });
-            } else if (this.showEmail()) {
+            if (this.showEmail()) {
                 CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
                 Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
                     onFinished: async (confirmed: boolean, email?: string) => {
@@ -420,11 +405,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     }
 
     private showEmail() {
-        const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if (
-            (this.props.serverRequiresIdServer && !haveIs) ||
-            !this.authStepIsUsed('m.login.email.identity')
-        ) {
+        if (!this.authStepIsUsed('m.login.email.identity')) {
             return false;
         }
         return true;
@@ -432,12 +413,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
     private showPhoneNumber() {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
-        const haveIs = Boolean(this.props.serverConfig.isUrl);
-        if (
-            !threePidLogin ||
-            (this.props.serverRequiresIdServer && !haveIs) ||
-            !this.authStepIsUsed('m.login.msisdn')
-        ) {
+        if (!threePidLogin || !this.authStepIsUsed('m.login.msisdn')) {
             return false;
         }
         return true;
@@ -556,16 +532,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 </div>;
             }
         }
-        const haveIs = Boolean(this.props.serverConfig.isUrl);
-        let noIsText = null;
-        if (this.props.serverRequiresIdServer && !haveIs) {
-            noIsText = <div>
-                {_t(
-                    "No identity server is configured so you cannot add an email address in order to " +
-                    "reset your password in the future.",
-                )}
-            </div>;
-        }
 
         return (
             <div>
@@ -582,7 +548,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                         {this.renderPhoneNumber()}
                     </div>
                     { emailHelperText }
-                    { noIsText }
                     { registerButton }
                 </form>
             </div>
