@@ -5797,11 +5797,6 @@ highlight.js@^10.1.2:
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.1.2.tgz#c20db951ba1c22c055010648dfffd7b2a968e00c"
   integrity sha512-Q39v/Mn5mfBlMff9r+zzA+gWxRsCRKwEMvYTiisLr/XUiFI/4puWt0Ojdko3R3JCNWGdOWaA5g/Yxqa23kC5AA==
 
-highlight.js@^9.13.1:
-  version "9.18.1"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.18.1.tgz#ed21aa001fe6252bb10a3d76d47573c6539fe13c"
-  integrity sha512-OrVKYz70LHsnCgmbXctv/bfuvntIKDz177h0Co37DQ5jamGZLVmoCVMtjMtNZY3X9DrCcKfklHPNeA0uPZhSJg==
-
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
@@ -7984,13 +7979,6 @@ matrix-widget-api@^0.1.0-beta.10:
   version "0.1.0-beta.10"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.10.tgz#2e4d658d90ff3152c5567089b4ddd21fb44ec1dd"
   integrity sha512-yX2UURjM1zVp7snPiOFcH9+FDBdHfAdt5HEAyDUHGJ7w/F2zOtcK/y0dMlZ1+XhxY7Wv0IBZH0US8X/ioJRX1A==
-  dependencies:
-    events "^3.2.0"
-
-matrix-widget-api@^0.1.0-beta.9:
-  version "0.1.0-beta.9"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.9.tgz#83952132c1610e013acb3e695f923f971ddd5637"
-  integrity sha512-nXo4iaquSya6hYLXccX8o1K960ckSQ0YXIubRDha+YmB+L09F5a7bUPS5JN2tYANOMzyfFAzWVuFwjHv4+K+rg==
   dependencies:
     events "^3.2.0"
 
