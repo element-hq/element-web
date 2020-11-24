@@ -47,7 +47,8 @@ import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import {ICompletion} from "../../../autocomplete/Autocompleter";
 
-const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s|(?<=^\\+))(' + EMOTICON_REGEX.source + ')\\s$');
+// matches emoticons which follow the start of a line, whitespace, or a plus at the start of a line
+const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s|^\\+)(' + EMOTICON_REGEX.source + ')\\s$');
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
