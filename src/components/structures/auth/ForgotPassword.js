@@ -319,6 +319,7 @@ export default class ForgotPassword extends React.Component {
                         onChange={this.onInputChanged.bind(this, "password")}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_blur")}
+                        autoComplete="new-password"
                     />
                     <Field
                         name="reset_password_confirm"
@@ -328,6 +329,7 @@ export default class ForgotPassword extends React.Component {
                         onChange={this.onInputChanged.bind(this, "password2")}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_blur")}
+                        autoComplete="new-password"
                     />
                 </div>
                 <span>{_t(

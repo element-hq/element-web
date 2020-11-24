@@ -29,8 +29,8 @@ interface ILoginOptions {
 }
 
 // TODO: Move this to JS SDK
-interface ILoginFlow {
-    type: "m.login.password" | "m.login.cas";
+interface IPasswordFlow {
+    type: "m.login.password";
 }
 
 export interface IIdentityProvider {
@@ -40,13 +40,13 @@ export interface IIdentityProvider {
 }
 
 export interface ISSOFlow {
-    type: "m.login.sso";
+    type: "m.login.sso" | "m.login.cas";
     // eslint-disable-next-line camelcase
     identity_providers: IIdentityProvider[];
     "org.matrix.msc2858.identity_providers": IIdentityProvider[]; // Unstable prefix for MSC2858
 }
 
-export type LoginFlow = ISSOFlow | ILoginFlow;
+export type LoginFlow = ISSOFlow | IPasswordFlow;
 
 // TODO: Move this to JS SDK
 /* eslint-disable camelcase */

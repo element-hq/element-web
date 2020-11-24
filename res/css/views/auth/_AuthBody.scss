@@ -37,6 +37,10 @@ limitations under the License.
         color: $authpage-primary-color;
     }
 
+    h4 {
+        text-align: center;
+    }
+
     a:link,
     a:hover,
     a:visited {
@@ -146,15 +150,14 @@ limitations under the License.
     display: block;
     text-align: center;
     width: 100%;
-    margin-top: 24px;
 
     > a {
         font-weight: $font-semi-bold;
     }
 }
 
-form + .mx_AuthBody_changeFlow {
-    margin-top: 0;
+.mx_SSOButtons + .mx_AuthBody_changeFlow {
+    margin-top: 24px;
 }
 
 .mx_AuthBody_spinner {

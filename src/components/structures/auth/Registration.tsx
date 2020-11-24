@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
-import React, {ComponentProps, ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 
 import * as sdk from '../../../index';
@@ -28,8 +28,9 @@ import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
-import Login from "../../../Login";
+import Login, {ISSOFlow} from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
+import SSOButtons from "../../views/elements/SSOButtons";
 
 // Phases
 enum Phase {
@@ -47,6 +48,7 @@ interface IProps {
     clientSecret?: string;
     sessionId?: string;
     idSid?: string;
+    fragmentAfterLogin?: string;
 
     // Called when the user has logged in. Params:
     // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
@@ -116,12 +118,14 @@ interface IState {
     // if a different user ID to the one we just registered is logged in,
     // this is the user ID that's logged in.
     differentLoggedInUserId?: string;
+    // the SSO flow definition, this is fetched from /login as that's the only
+    // place it is exposed.
+    ssoFlow?: ISSOFlow;
 }
 
-// Enable phases for registration
-const PHASES_ENABLED = true;
-
 export default class Registration extends React.Component<IProps, IState> {
+    loginLogic: Login;
+
     constructor(props) {
         super(props);
 
@@ -141,6 +145,11 @@ export default class Registration extends React.Component<IProps, IState> {
             serverErrorIsFatal: false,
             serverDeadError: "",
         };
+
+        const {hsUrl, isUrl} = this.props.serverConfig;
+        this.loginLogic = new Login(hsUrl, isUrl, null, {
+            defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
+        });
     }
 
     componentDidMount() {
@@ -252,9 +261,21 @@ export default class Registration extends React.Component<IProps, IState> {
             console.log("Unable to determine is server needs id_server param", e);
         }
 
+        this.loginLogic.setHomeserverUrl(hsUrl);
+        this.loginLogic.setIdentityServerUrl(isUrl);
+
+        let ssoFlow: ISSOFlow;
+        try {
+            const loginFlows = await this.loginLogic.getFlows();
+            ssoFlow = loginFlows.find(f => f.type === "m.login.sso" || f.type === "m.login.cas") as ISSOFlow;
+        } catch (e) {
+            console.error("Failed to get login flows to check for SSO support", e);
+        }
+
         this.setState({
             matrixClient: cli,
             serverRequiresIdServer,
+            ssoFlow,
             busy: false,
         });
         const showGenericError = (e) => {
@@ -282,26 +303,16 @@ export default class Registration extends React.Component<IProps, IState> {
                 // At this point registration is pretty much disabled, but before we do that let's
                 // quickly check to see if the server supports SSO instead. If it does, we'll send
                 // the user off to the login page to figure their account out.
-                try {
-                    const loginLogic = new Login(hsUrl, isUrl, null, {
-                        defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
+                if (ssoFlow) {
+                    // Redirect to login page - server probably expects SSO only
+                    dis.dispatch({action: 'start_login'});
+                } else {
+                    this.setState({
+                        serverErrorIsFatal: true, // fatal because user cannot continue on this server
+                        errorText: _t("Registration has been disabled on this homeserver."),
+                        // add empty flows array to get rid of spinner
+                        flows: [],
                     });
-                    const flows = await loginLogic.getFlows();
-                    const hasSsoFlow = flows.find(f => f.type === 'm.login.sso' || f.type === 'm.login.cas');
-                    if (hasSsoFlow) {
-                        // Redirect to login page - server probably expects SSO only
-                        dis.dispatch({action: 'start_login'});
-                    } else {
-                        this.setState({
-                            serverErrorIsFatal: true, // fatal because user cannot continue on this server
-                            errorText: _t("Registration has been disabled on this homeserver."),
-                            // add empty flows array to get rid of spinner
-                            flows: [],
-                        });
-                    }
-                } catch (e) {
-                    console.error("Failed to get login flows to check for SSO support", e);
-                    showGenericError(e);
                 }
             } else {
                 console.log("Unable to query for supported registration methods.", e);
@@ -534,20 +545,13 @@ export default class Registration extends React.Component<IProps, IState> {
         // which is always shown if we allow custom URLs at all.
         // (if there's a fatal server error, we need to show the full server
         // config as the user may need to change servers to resolve the error).
-        if (PHASES_ENABLED && this.state.phase !== Phase.ServerDetails && !this.state.serverErrorIsFatal) {
+        if (this.state.phase !== Phase.ServerDetails && !this.state.serverErrorIsFatal) {
             return <div>
                 <ServerTypeSelector
                     selected={this.state.serverType}
                     onChange={this.onServerTypeChange}
                 />
             </div>;
-        }
-
-        const serverDetailsProps: ComponentProps<typeof ServerConfig> = {};
-        if (PHASES_ENABLED) {
-            serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
-            serverDetailsProps.submitText = _t("Next");
-            serverDetailsProps.submitClass = "mx_Login_submit";
         }
 
         let serverDetails = null;
@@ -559,7 +563,9 @@ export default class Registration extends React.Component<IProps, IState> {
                     serverConfig={this.props.serverConfig}
                     onServerConfigChange={this.props.onServerConfigChange}
                     delayTimeMs={250}
-                    {...serverDetailsProps}
+                    onAfterSubmit={this.onServerDetailsNextPhaseClick}
+                    submitText={_t("Next")}
+                    submitClass="mx_Login_submit"
                 />;
                 break;
             case ServerType.ADVANCED:
@@ -568,7 +574,9 @@ export default class Registration extends React.Component<IProps, IState> {
                     onServerConfigChange={this.props.onServerConfigChange}
                     delayTimeMs={250}
                     showIdentityServerIfRequiredByHomeserver={true}
-                    {...serverDetailsProps}
+                    onAfterSubmit={this.onServerDetailsNextPhaseClick}
+                    submitText={_t("Next")}
+                    submitClass="mx_Login_submit"
                 />;
                 break;
         }
@@ -583,7 +591,7 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     private renderRegisterComponent() {
-        if (PHASES_ENABLED && this.state.phase !== Phase.Registration) {
+        if (this.state.phase !== Phase.Registration) {
             return null;
         }
 
@@ -610,18 +618,35 @@ export default class Registration extends React.Component<IProps, IState> {
                 <Spinner />
             </div>;
         } else if (this.state.flows.length) {
-            return <RegistrationForm
-                defaultUsername={this.state.formVals.username}
-                defaultEmail={this.state.formVals.email}
-                defaultPhoneCountry={this.state.formVals.phoneCountry}
-                defaultPhoneNumber={this.state.formVals.phoneNumber}
-                defaultPassword={this.state.formVals.password}
-                onRegisterClick={this.onFormSubmit}
-                flows={this.state.flows}
-                serverConfig={this.props.serverConfig}
-                canSubmit={!this.state.serverErrorIsFatal}
-                serverRequiresIdServer={this.state.serverRequiresIdServer}
-            />;
+            let ssoSection;
+            if (this.state.ssoFlow) {
+                ssoSection = <React.Fragment>
+                    <h4>{_t("Continue with")}</h4>
+                    <SSOButtons
+                        matrixClient={this.loginLogic.createTemporaryClient()}
+                        flow={this.state.ssoFlow}
+                        loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
+                        fragmentAfterLogin={this.props.fragmentAfterLogin}
+                    />
+                    <h4>{_t("Or")}</h4>
+                </React.Fragment>;
+            }
+
+            return <React.Fragment>
+                { ssoSection }
+                <RegistrationForm
+                    defaultUsername={this.state.formVals.username}
+                    defaultEmail={this.state.formVals.email}
+                    defaultPhoneCountry={this.state.formVals.phoneCountry}
+                    defaultPhoneNumber={this.state.formVals.phoneNumber}
+                    defaultPassword={this.state.formVals.password}
+                    onRegisterClick={this.onFormSubmit}
+                    flows={this.state.flows}
+                    serverConfig={this.props.serverConfig}
+                    canSubmit={!this.state.serverErrorIsFatal}
+                    serverRequiresIdServer={this.state.serverRequiresIdServer}
+                />
+            </React.Fragment>;
         }
     }
 
@@ -658,7 +683,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
         // Only show the 'go back' button if you're not looking at the form
         let goBack;
-        if ((PHASES_ENABLED && this.state.phase !== Phase.Registration) || this.state.doingUIAuth) {
+        if (this.state.phase !== Phase.Registration || this.state.doingUIAuth) {
             goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
                 { _t('Go back') }
             </a>;
@@ -725,8 +750,7 @@ export default class Registration extends React.Component<IProps, IState> {
             // If custom URLs are allowed, user is not doing UIA flows and they haven't selected the Free server type,
             // wire up the server details edit link.
             let editLink = null;
-            if (PHASES_ENABLED &&
-                !SdkConfig.get()['disable_custom_urls'] &&
+            if (!SdkConfig.get()['disable_custom_urls'] &&
                 this.state.serverType !== ServerType.FREE &&
                 !this.state.doingUIAuth
             ) {

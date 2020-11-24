@@ -438,7 +438,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
             if (supportedFlows.length > 0) {
                 this.setState({
-                    currentFlow: this.getCurrentFlowStep(),
+                    flows: supportedFlows,
                 });
                 return;
             }
@@ -520,22 +520,13 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             return null;
         }
 
-        if (PHASES_ENABLED && this.state.phase !== Phase.ServerDetails) {
-            return null;
-        }
-
-        const serverDetailsProps: ComponentProps<typeof ServerConfig> = {};
-        if (PHASES_ENABLED) {
-            serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
-            serverDetailsProps.submitText = _t("Next");
-            serverDetailsProps.submitClass = "mx_Login_submit";
-        }
-
         return <ServerConfig
             serverConfig={this.props.serverConfig}
             onServerConfigChange={this.props.onServerConfigChange}
             delayTimeMs={250}
-            {...serverDetailsProps}
+            onAfterSubmit={this.onServerDetailsNextPhaseClick}
+            submitText={_t("Next")}
+            submitClass="mx_Login_submit"
         />;
     }
 
@@ -591,15 +582,13 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         const flow = this.state.flows.find(flow => flow.type === "m.login." + loginType) as ISSOFlow;
 
         return (
-            <div>
-                <SSOButtons
-                    matrixClient={this.loginLogic.createTemporaryClient()}
-                    flow={flow}
-                    loginType={loginType}
-                    fragmentAfterLogin={this.props.fragmentAfterLogin}
-                    primary={!this.state.flows.find(flow => flow.type === "m.login.password")}
-                />
-            </div>
+            <SSOButtons
+                matrixClient={this.loginLogic.createTemporaryClient()}
+                flow={flow}
+                loginType={loginType}
+                fragmentAfterLogin={this.props.fragmentAfterLogin}
+                primary={!this.state.flows.find(flow => flow.type === "m.login.password")}
+            />
         );
     };
 
