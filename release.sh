@@ -43,7 +43,7 @@ do
     fi
 done
 
-./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
+./node_modules/matrix-js-sdk/release.sh -n -z "$orig_args"
 
 release="${1#v}"
 tag="v${release}"
