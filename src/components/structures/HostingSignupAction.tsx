@@ -17,6 +17,11 @@ limitations under the License.
 import * as React from "react";
 import Modal from "../../Modal";
 import HostingSignupDialog from "../views/dialogs/HostingSignupDialog";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../views/context_menus/IconizedContextMenu";
+import { _t } from "../../languageHandler";
 
 interface IProps {}
 
@@ -50,9 +55,13 @@ export default class HostingSignupAction extends React.PureComponent<IProps, ISt
 
     public render(): React.ReactNode {
         return (
-            <div onClick={this.openDialog} className="mx_HostingSignupAction">
-                Get your own personal Element!
-            </div>
+            <IconizedContextMenuOptionList>
+                <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconHosting"
+                    label={_t("Get your own Element!")}
+                    onClick={(e) => this.openDialog()}
+                />
+            </IconizedContextMenuOptionList>
         );
     }
 }

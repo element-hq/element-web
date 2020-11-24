@@ -322,7 +322,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             const validDomains = hostingSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
             if (!hostingSignupDomains || validDomains.length > 0) {
                 hostingSignupIFrame = <div
-                    className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink"
+                    className=""
                     onClick={this.onCloseMenu}
                 >
                     <HostingSignupAction />
