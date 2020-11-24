@@ -275,22 +275,29 @@ modifying it. See the [configuration docs](docs/config.md) for details.
 Open http://127.0.0.1:8080/ in your browser to see your newly built Element.
 
 **Note**: The build script uses inotify by default on Linux to monitor directories
-for changes. If the inotify watch limit is too low your build will silently fail.
-To avoid this issue, we recommend a limit of at least 128M.
+for changes. If the inotify limits are too low your build will fail silently or with
+`Error: EMFILE: too many open files`. To avoid these issues, we recommend a watch limit
+of at least `128M` and instance limit around `512`.
 
-To set a new inotify watch limit, execute:
+You may be interested in issues [#15750](https://github.com/vector-im/element-web/issues/15750) and
+[#15774](https://github.com/vector-im/element-web/issues/15774) for further details.
 
-```
-$ sudo sysctl fs.inotify.max_user_watches=131072
-$ sudo sysctl -p
-```
-
-If you wish, you can make this new limit permanent, by executing:
+To set a new inotify watch and instance limit, execute:
 
 ```
-$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
-$ sudo sysctl -p
+sudo sysctl fs.inotify.max_user_watches=131072
+sudo sysctl fs.inotify.max_user_instances=512
+sudo sysctl -p
 ```
+
+If you wish, you can make the new limits permanent, by executing:
+
+```
+echo fs.inotify.max_user_watches=131072 | sudo tee -a /etc/sysctl.conf
+echo fs.inotify.max_user_instances=512 | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+```
+
 ___
 
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
