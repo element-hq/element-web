@@ -56,7 +56,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     await registerButton.click();
 
     //confirm dialog saying you cant log back in without e-mail
-    const continueButton = await session.query('.mx_QuestionDialog button.mx_Dialog_primary');
+    const continueButton = await session.query('.mx_RegistrationEmailPromptDialog button.mx_Dialog_primary');
     await continueButton.click();
 
     //find the privacy policy checkbox and check it
