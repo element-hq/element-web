@@ -107,7 +107,7 @@ export default class LinkPreviewWidget extends React.Component {
         if (!SettingsStore.getValue("showImages")) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
-        const imageMaxWidth = 100; const imageMaxHeight = 100;
+        const imageMaxWidth = 320; const imageMaxHeight = 240;
         if (image && image.startsWith("mxc://")) {
             image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
         }
