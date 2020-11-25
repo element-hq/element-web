@@ -20,12 +20,15 @@ limitations under the License.
 
     .mx_SSOButton {
         position: relative;
+        width: 100%;
+        padding-left: 32px;
+        padding-right: 32px;
 
         > img {
             object-fit: contain;
             position: absolute;
-            left: 12px;
-            top: 12px;
+            left: 8px;
+            top: 4px;
         }
     }
 
@@ -33,6 +36,11 @@ limitations under the License.
         box-sizing: border-box;
         width: 50px; // 48px + 1px border on all sides
         height: 50px; // 48px + 1px border on all sides
+
+        > img {
+            left: 12px;
+            top: 12px;
+        }
 
         & + .mx_SSOButton_mini {
             margin-left: 24px;

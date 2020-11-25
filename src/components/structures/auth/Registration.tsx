@@ -22,7 +22,6 @@ import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
-import * as ServerType from '../../views/auth/ServerTypeSelector';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
@@ -31,14 +30,7 @@ import AuthPage from "../../views/auth/AuthPage";
 import Login, {ISSOFlow} from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
-
-// Phases
-enum Phase {
-    // Show controls to configure server details
-    ServerDetails = 0,
-    // Show the appropriate registration flow(s) for the server
-    Registration = 1,
-}
+import ServerPicker from '../../views/elements/ServerPicker';
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -94,9 +86,6 @@ interface IState {
     // If set, we've registered but are not going to log
     // the user in to their new account automatically.
     completedNoSignin: boolean;
-    serverType: ServerType.FREE | ServerType.PREMIUM | ServerType.ADVANCED;
-    // Phase of the overall registration dialog.
-    phase: Phase;
     flows: {
         stages: string[];
     }[];
@@ -127,7 +116,6 @@ export default class Registration extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
-        const serverType = ServerType.getTypeFromServerConfig(this.props.serverConfig);
         this.state = {
             busy: false,
             errorText: null,
@@ -135,8 +123,6 @@ export default class Registration extends React.Component<IProps, IState> {
                 email: this.props.email,
             },
             doingUIAuth: Boolean(this.props.sessionId),
-            serverType,
-            phase: Phase.Registration,
             flows: null,
             completedNoSignin: false,
             serverIsAlive: true,
@@ -161,60 +147,7 @@ export default class Registration extends React.Component<IProps, IState> {
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
         this.replaceClient(newProps.serverConfig);
-
-        // Handle cases where the user enters "https://matrix.org" for their server
-        // from the advanced option - we should default to FREE at that point.
-        const serverType = ServerType.getTypeFromServerConfig(newProps.serverConfig);
-        if (serverType !== this.state.serverType) {
-            // Reset the phase to default phase for the server type.
-            this.setState({
-                serverType,
-                phase: Registration.getDefaultPhaseForServerType(serverType),
-            });
-        }
     }
-
-    private static getDefaultPhaseForServerType(type: IState["serverType"]) {
-        switch (type) {
-            case ServerType.FREE: {
-                // Move directly to the registration phase since the server
-                // details are fixed.
-                return Phase.Registration;
-            }
-            case ServerType.PREMIUM:
-            case ServerType.ADVANCED:
-                return Phase.ServerDetails;
-        }
-    }
-
-    private onServerTypeChange = (type: IState["serverType"]) => {
-        this.setState({
-            serverType: type,
-        });
-
-        // When changing server types, set the HS / IS URLs to reasonable defaults for the
-        // the new type.
-        switch (type) {
-            case ServerType.FREE: {
-                const { serverConfig } = ServerType.TYPES.FREE;
-                this.props.onServerConfigChange(serverConfig);
-                break;
-            }
-            case ServerType.PREMIUM:
-                // We can accept whatever server config was the default here as this essentially
-                // acts as a slightly different "custom server"/ADVANCED option.
-                break;
-            case ServerType.ADVANCED:
-                // Use the default config from the config
-                this.props.onServerConfigChange(SdkConfig.get()["validated_server_config"]);
-                break;
-        }
-
-        // Reset the phase to default phase for the server type.
-        this.setState({
-            phase: Registration.getDefaultPhaseForServerType(type),
-        });
-    };
 
     private async replaceClient(serverConfig: ValidatedServerConfig) {
         this.setState({
@@ -456,21 +389,6 @@ export default class Registration extends React.Component<IProps, IState> {
         this.setState({
             busy: false,
             doingUIAuth: false,
-            phase: Phase.Registration,
-        });
-    };
-
-    private onServerDetailsNextPhaseClick = async () => {
-        this.setState({
-            phase: Phase.Registration,
-        });
-    };
-
-    private onEditServerDetailsClick = ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.setState({
-            phase: Phase.ServerDetails,
         });
     };
 
@@ -520,72 +438,19 @@ export default class Registration extends React.Component<IProps, IState> {
     };
 
     private renderServerComponent() {
-        const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
-        const ServerConfig = sdk.getComponent("auth.ServerConfig");
-        const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
-
         if (SdkConfig.get()['disable_custom_urls']) {
             return null;
         }
 
-        // Hide the server picker once the user is doing UI Auth unless encountered a fatal server error
-        if (this.state.phase !== Phase.ServerDetails && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
-            return null;
-        }
-
-        // If we're on a different phase, we only show the server type selector,
-        // which is always shown if we allow custom URLs at all.
-        // (if there's a fatal server error, we need to show the full server
-        // config as the user may need to change servers to resolve the error).
-        if (this.state.phase !== Phase.ServerDetails && !this.state.serverErrorIsFatal) {
-            return <div>
-                <ServerTypeSelector
-                    selected={this.state.serverType}
-                    onChange={this.onServerTypeChange}
-                />
-            </div>;
-        }
-
-        let serverDetails = null;
-        switch (this.state.serverType) {
-            case ServerType.FREE:
-                break;
-            case ServerType.PREMIUM:
-                serverDetails = <ModularServerConfig
-                    serverConfig={this.props.serverConfig}
-                    onServerConfigChange={this.props.onServerConfigChange}
-                    delayTimeMs={250}
-                    onAfterSubmit={this.onServerDetailsNextPhaseClick}
-                    submitText={_t("Next")}
-                    submitClass="mx_Login_submit"
-                />;
-                break;
-            case ServerType.ADVANCED:
-                serverDetails = <ServerConfig
-                    serverConfig={this.props.serverConfig}
-                    onServerConfigChange={this.props.onServerConfigChange}
-                    delayTimeMs={250}
-                    onAfterSubmit={this.onServerDetailsNextPhaseClick}
-                    submitText={_t("Next")}
-                    submitClass="mx_Login_submit"
-                />;
-                break;
-        }
-
-        return <div>
-            <ServerTypeSelector
-                selected={this.state.serverType}
-                onChange={this.onServerTypeChange}
-            />
-            {serverDetails}
-        </div>;
+        return <ServerPicker
+            title={_t("Host account on")}
+            dialogTitle={_t("Decide where your account is hosted")}
+            serverConfig={this.props.serverConfig}
+            onServerConfigChange={this.state.doingUIAuth ? undefined : this.props.onServerConfigChange}
+        />;
     }
 
     private renderRegisterComponent() {
-        if (this.state.phase !== Phase.Registration) {
-            return null;
-        }
-
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent('elements.Spinner');
         const RegistrationForm = sdk.getComponent('auth.RegistrationForm');
@@ -609,17 +474,25 @@ export default class Registration extends React.Component<IProps, IState> {
                 <Spinner />
             </div>;
         } else if (this.state.flows.length) {
+            let continueWithSection;
+            const providers = this.state.ssoFlow["org.matrix.msc2858.identity_providers"]
+                || this.state.ssoFlow.identity_providers || [];
+            // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
+            if (providers.length > 1) {
+                continueWithSection = <h3 className="mx_AuthBody_centered">{_t("Continue with")}</h3>;
+            }
+
             let ssoSection;
             if (this.state.ssoFlow) {
                 ssoSection = <React.Fragment>
-                    <h4>{_t("Continue with")}</h4>
+                    { continueWithSection }
                     <SSOButtons
                         matrixClient={this.loginLogic.createTemporaryClient()}
                         flow={this.state.ssoFlow}
                         loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
                     />
-                    <h4>{_t("Or")}</h4>
+                    <h3 className="mx_AuthBody_centered">{_t("Or")}</h3>
                 </React.Fragment>;
             }
 
@@ -673,7 +546,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
         // Only show the 'go back' button if you're not looking at the form
         let goBack;
-        if (this.state.phase !== Phase.Registration || this.state.doingUIAuth) {
+        if (this.state.doingUIAuth) {
             goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
                 { _t('Go back') }
             </a>;
@@ -719,47 +592,11 @@ export default class Registration extends React.Component<IProps, IState> {
                 { regDoneText }
             </div>;
         } else {
-            let yourMatrixAccountText: ReactNode = _t('Create your Matrix account on %(serverName)s', {
-                serverName: this.props.serverConfig.hsName,
-            });
-            if (this.props.serverConfig.hsNameIsDifferent) {
-                const TextWithTooltip = sdk.getComponent("elements.TextWithTooltip");
-
-                yourMatrixAccountText = _t('Create your Matrix account on <underlinedServerName />', {}, {
-                    'underlinedServerName': () => {
-                        return <TextWithTooltip
-                            class="mx_Login_underlinedServerName"
-                            tooltip={this.props.serverConfig.hsUrl}
-                        >
-                            {this.props.serverConfig.hsName}
-                        </TextWithTooltip>;
-                    },
-                });
-            }
-
-            // If custom URLs are allowed, user is not doing UIA flows and they haven't selected the Free server type,
-            // wire up the server details edit link.
-            let editLink = null;
-            if (!SdkConfig.get()['disable_custom_urls'] &&
-                this.state.serverType !== ServerType.FREE &&
-                !this.state.doingUIAuth
-            ) {
-                editLink = (
-                    <a className="mx_AuthBody_editServerDetails" href="#" onClick={this.onEditServerDetailsClick}>
-                        {_t('Change')}
-                    </a>
-                );
-            }
-
             body = <div>
                 <h2>{ _t('Create account') }</h2>
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }
-                { this.state.phase !== Phase.ServerDetails && <h3>
-                    {yourMatrixAccountText}
-                    {editLink}
-                </h3> }
                 { this.renderRegisterComponent() }
                 { goBack }
                 { signIn }

@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2018, 2019 New Vector Ltd
+Copyright 2015, 2016, 2017, 2018, 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,15 +30,11 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {IMatrixClientCreds} from "../../../MatrixClientPeg";
-import ServerConfig from "../../views/auth/ServerConfig";
 import PasswordLogin from "../../views/auth/PasswordLogin";
-import SignInToText from "../../views/auth/SignInToText";
 import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
 import SSOButtons from "../../views/elements/SSOButtons";
-
-// Enable phases for login
-const PHASES_ENABLED = true;
+import ServerPicker from "../../views/elements/ServerPicker";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -76,13 +72,6 @@ interface IProps {
     onServerConfigChange(config: ValidatedServerConfig): void;
 }
 
-enum Phase {
-    // Show controls to configure server details
-    ServerDetails,
-    // Show the appropriate login flow(s) for the server
-    Login,
-}
-
 interface IState {
     busy: boolean;
     busyLoggingIn?: boolean;
@@ -91,7 +80,6 @@ interface IState {
     // can we attempt to log in or are there validation errors?
     canTryLogin: boolean;
 
-    phase: Phase;
     flows?: LoginFlow[];
 
     // used for preserving form values when changing homeserver
@@ -127,7 +115,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             loginIncorrect: false,
             canTryLogin: true,
 
-            phase: Phase.Login,
             flows: null,
 
             username: "",
@@ -369,20 +356,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     };
 
-    private onServerDetailsNextPhaseClick = () => {
-        this.setState({
-            phase: Phase.Login,
-        });
-    };
-
-    private onEditServerDetailsClick = ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.setState({
-            phase: Phase.ServerDetails,
-        });
-    };
-
     private async initLoginLogic({hsUrl, isUrl}: ValidatedServerConfig) {
         let isDefaultServer = false;
         if (this.props.serverConfig.isDefault
@@ -423,13 +396,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 busy: false,
                 ...AutoDiscoveryUtils.authComponentStateForError(e),
             });
-            if (this.state.serverErrorIsFatal) {
-                // Server is dead: show server details prompt instead
-                this.setState({
-                    phase: Phase.ServerDetails,
-                });
-                return;
-            }
         }
 
         loginLogic.getFlows().then((flows) => {
@@ -515,21 +481,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         return errorText;
     }
 
-    private renderServerComponent() {
-        if (SdkConfig.get()['disable_custom_urls']) {
-            return null;
-        }
-
-        return <ServerConfig
-            serverConfig={this.props.serverConfig}
-            onServerConfigChange={this.props.onServerConfigChange}
-            delayTimeMs={250}
-            onAfterSubmit={this.onServerDetailsNextPhaseClick}
-            submitText={_t("Next")}
-            submitClass="mx_Login_submit"
-        />;
-    }
-
     renderLoginComponentForFlows() {
         if (!this.state.flows) return null;
 
@@ -539,18 +490,8 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             "m.login.sso",
         ];
 
-        let onEditServerDetailsClick = null;
-        // If custom URLs are allowed, wire up the server details edit link.
-        if (!SdkConfig.get()['disable_custom_urls']) {
-            onEditServerDetailsClick = this.onEditServerDetailsClick;
-        }
-
         const flows = order.map(type => this.state.flows.find(flow => flow.type === type)).filter(Boolean);
         return <React.Fragment>
-            <SignInToText
-                serverConfig={this.props.serverConfig}
-                onEditServerDetailsClick={onEditServerDetailsClick}
-            />
             { flows.map(flow => {
                 const stepRenderer = this.stepRendererMap[flow.type];
                 return <React.Fragment key={flow.type}>{ stepRenderer() }</React.Fragment>
@@ -654,7 +595,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     </h2>
                     { errorTextSection }
                     { serverDeadSection }
-                    { this.renderServerComponent() }
+                    <ServerPicker
+                        serverConfig={this.props.serverConfig}
+                        onServerConfigChange={this.props.onServerConfigChange}
+                    />
                     { this.renderLoginComponentForFlows() }
                     { footer }
                 </AuthBody>

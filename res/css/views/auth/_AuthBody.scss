@@ -37,7 +37,7 @@ limitations under the License.
         color: $authpage-primary-color;
     }
 
-    h4 {
+    h3.mx_AuthBody_centered {
         text-align: center;
     }
 
@@ -98,12 +98,6 @@ limitations under the License.
             background-color: $authpage-focus-bg-color;
         }
     }
-}
-
-.mx_AuthBody_editServerDetails {
-    padding-left: 1em;
-    font-size: $font-12px;
-    font-weight: normal;
 }
 
 .mx_AuthBody_fieldRow {
