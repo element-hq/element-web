@@ -52,7 +52,7 @@ other changes:
     - skins/vector/themes/foo/css
     - skins/vector/themes/foo/img
     - skins/vector/themes/foo/fonts
-  - ideally riot-web would contain almost nothing but skins/vector directory. 
+  - ideally element-web would contain almost nothing but skins/vector directory. 
   - ability to entirely replace CSS rather than override it for a given theme
     - e.g. if we replace `Login.js` with `StatusLogin.js`, then we should similarly be able to replace `_Login.scss` with `_StatusLogin.scss`.
 

@@ -43,7 +43,7 @@ When reviewing code, here are some things we look for and also things we avoid:
 
 ### Workflow
 
-* Authors should request review from the riot-web team by default (if someone on
+* Authors should request review from the element-web team by default (if someone on
   the team is clearly the expert in an area, a direct review request to them may
   be more appropriate)
 * Reviewers should remove the team review request and request review from

@@ -239,7 +239,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         // try to flush the rageshake logs to indexeddb before quit.
         ipcRenderer.on('before-quit', function() {
-            console.log('riot-desktop closing');
+            console.log('element-desktop closing');
             rageshake.flush();
         });
 
