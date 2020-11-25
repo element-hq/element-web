@@ -437,19 +437,6 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     };
 
-    private renderServerComponent() {
-        if (SdkConfig.get()['disable_custom_urls']) {
-            return null;
-        }
-
-        return <ServerPicker
-            title={_t("Host account on")}
-            dialogTitle={_t("Decide where your account is hosted")}
-            serverConfig={this.props.serverConfig}
-            onServerConfigChange={this.state.doingUIAuth ? undefined : this.props.onServerConfigChange}
-        />;
-    }
-
     private renderRegisterComponent() {
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent('elements.Spinner');
@@ -474,16 +461,16 @@ export default class Registration extends React.Component<IProps, IState> {
                 <Spinner />
             </div>;
         } else if (this.state.flows.length) {
-            let continueWithSection;
-            const providers = this.state.ssoFlow["org.matrix.msc2858.identity_providers"]
-                || this.state.ssoFlow.identity_providers || [];
-            // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
-            if (providers.length > 1) {
-                continueWithSection = <h3 className="mx_AuthBody_centered">{_t("Continue with")}</h3>;
-            }
-
             let ssoSection;
             if (this.state.ssoFlow) {
+                let continueWithSection;
+                const providers = this.state.ssoFlow["org.matrix.msc2858.identity_providers"]
+                    || this.state.ssoFlow["identity_providers"] || [];
+                // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
+                if (providers.length > 1) {
+                    continueWithSection = <h3 className="mx_AuthBody_centered">{_t("Continue with")}</h3>;
+                }
+
                 ssoSection = <React.Fragment>
                     { continueWithSection }
                     <SSOButtons
@@ -596,7 +583,12 @@ export default class Registration extends React.Component<IProps, IState> {
                 <h2>{ _t('Create account') }</h2>
                 { errorText }
                 { serverDeadSection }
-                { this.renderServerComponent() }
+                <ServerPicker
+                    title={_t("Host account on")}
+                    dialogTitle={_t("Decide where your account is hosted")}
+                    serverConfig={this.props.serverConfig}
+                    onServerConfigChange={this.state.doingUIAuth ? undefined : this.props.onServerConfigChange}
+                />
                 { this.renderRegisterComponent() }
                 { goBack }
                 { signIn }

@@ -63,7 +63,7 @@ const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }
                 }
             });
         };
-        editBtn = <AccessibleButton kind="link" onClick={onClick}>
+        editBtn = <AccessibleButton className="mx_ServerPicker_change" kind="link" onClick={onClick}>
             {_t("Edit")}
         </AccessibleButton>;
     }
