@@ -6,7 +6,7 @@
 
 set -ex
 
-rm dist/riot-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
+rm dist/element-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
 # Since the deps are fetched from git, we can rev-parse
 REACT_SHA=$(cd node_modules/matrix-react-sdk; git rev-parse --short=12 HEAD)
