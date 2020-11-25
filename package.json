@@ -1,6 +1,5 @@
 {
-  "name": "riot-web",
-  "productName": "Riot",
+  "name": "element-web",
   "version": "1.7.14",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
