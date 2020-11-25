@@ -745,26 +745,22 @@ export default class EventTile extends React.Component {
         }
 
         if (this.props.mxEvent.sender && avatarSize) {
-            if(this.props.mxEvent.getType()==='m.room.third_party_invite') {
-                avatar = (
-                    <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.target}
-                            width={avatarSize} height={avatarSize}
-                            viewUserOnClick={true}
-                        />
-                    </div>
-                );
+            let member;
+            // set member to receiver (target) if it is a 3PID invite
+            // so that the correct avatar is show
+            if (this.props.mxEvent.getContent().third_party_invite) {
+               member=this.props.mxEvent.target;
+            } else {
+                member=this.props.mxEvent.sender;
             }
-            else {
-                avatar = (
-                        <div className="mx_EventTile_avatar">
-                            <MemberAvatar member={this.props.mxEvent.sender}
-                                width={avatarSize} height={avatarSize}
-                                viewUserOnClick={true}
-                            />
-                        </div>
-                );
-            }
+            avatar = (
+                <div className="mx_EventTile_avatar">
+                    <MemberAvatar member={member}
+                        width={avatarSize} height={avatarSize}
+                        viewUserOnClick={true}
+                    />
+                </div>
+        );
         }
 
         if (needsSenderProfile) {
