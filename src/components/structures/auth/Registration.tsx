@@ -20,7 +20,6 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 
 import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
