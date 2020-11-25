@@ -346,7 +346,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             {
                 key: "email",
                 test: ({ value }) => !value || phoneNumberLooksValid(value),
-                invalid: () => _t("Doesn't look like a valid phone number"),
+                invalid: () => _t("That phone number doesn't look quite right, please check and try again"),
             },
         ],
     });

@@ -476,8 +476,8 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             errCode = "HTTP " + err.httpStatus;
         }
 
-        let errorText: ReactNode = _t("Error: Problem communicating with the given homeserver.") +
-            (errCode ? " (" + errCode + ")" : "");
+        let errorText: ReactNode = _t("There was a problem communicating with the homeserver, " +
+            "please try again later.") + (errCode ? " (" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&

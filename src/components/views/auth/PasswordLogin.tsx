@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2019 New Vector Ltd.
+Copyright 2015, 2016, 2017, 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -293,7 +293,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
             }, {
                 key: "number",
                 test: ({ value }) => !value || PHONE_NUMBER_REGEX.test(value),
-                invalid: () => _t("Doesn't look like a valid phone number"),
+                invalid: () => _t("That phone number doesn't look quite right, please check and try again"),
             },
         ],
     });
