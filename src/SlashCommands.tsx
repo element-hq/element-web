@@ -1096,7 +1096,7 @@ export const Commands = [
         category: CommandCategories.messages,
         hideCompletionAfterSpace: true,
     }),
-  
+
     ...effects.map((effect) => {
         return new Command({
             command: effect.command,
