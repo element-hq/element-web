@@ -353,7 +353,6 @@ export default class ChangePassword extends React.Component {
                                 value={this.state.oldPassword}
                                 onChange={this.onChangeOldPassword}
                                 onValidate={this.onOldPasswordValidate}
-                                onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
                             />
                         </div>
                         <div className={rowClassName}>
@@ -367,7 +366,6 @@ export default class ChangePassword extends React.Component {
                                 onChange={this.onChangeNewPassword}
                                 onValidate={this.onNewPasswordValidate}
                                 autoComplete="new-password"
-                                onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
                             />
                         </div>
                         <div className={rowClassName}>
@@ -379,7 +377,6 @@ export default class ChangePassword extends React.Component {
                                 onChange={this.onChangeNewPasswordConfirm}
                                 onValidate={this.onNewPasswordConfirmValidate}
                                 autoComplete="new-password"
-                                onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
