@@ -38,15 +38,6 @@ export class VisibilityProvider {
         // TODO: The `if` statements to control visibility of custom room types
         // would go here. The remainder of this function assumes that the statements
         // will be here.
-
-        // An example of how the `if` statements mentioned above would look follows.
-        // A real check would probably check for a `type` or something instead of the room ID.
-        // Note: the room ID here is intentionally invalid to prevent accidental hiding of someone's room.
-        // TODO: Remove this statement once we have a statement to replace it (just keeping the reference count up)
-        if (room.roomId === '~!JFmkoouJANxFGtmMYC:localhost') {
-            isVisible = false;
-            forced = true;
-        }
         // ------
 
         const isVisibleFn = RoomListCustomisations.isRoomVisible;
