@@ -161,7 +161,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     this.state.messaging.notifyModalWidgetButtonClicked(def.id);
                 };
 
-                return <AccessibleButton key={def.id} kind={kind} onClick={onClick}>
+                const isDisabled = this.state.disabledButtonIds.includes(def.id);
+
+                return <AccessibleButton key={def.id} kind={kind} onClick={onClick} disabled={isDisabled}>
                     { def.label }
                 </AccessibleButton>;
             });
