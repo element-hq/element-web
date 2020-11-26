@@ -418,10 +418,10 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         if (isHtmlMessage) {
             isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
-            const phtml = cheerio.load(safeBody,
-                { _useHtmlParser2: true, decodeEntities: false })
 
             if (SettingsStore.getValue("feature_latex_maths")) {
+                const phtml = cheerio.load(safeBody,
+                { _useHtmlParser2: true, decodeEntities: false })
                 phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
                     return katex.renderToString(
                         AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
