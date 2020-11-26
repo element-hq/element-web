@@ -41,7 +41,7 @@ module.exports = (env, argv) => {
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
 
-            // CSS for math outout
+            // CSS for LaTeX maths outout
             "katex": "./node_modules/matrix-react-sdk/node_modules/katex/dist/katex.min.css",
 
             // CSS themes
