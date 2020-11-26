@@ -341,13 +341,14 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
     onTryRegisterClick = ev => {
         const hasPasswordFlow = this.state.flows.find(flow => flow.type === "m.login.password");
-        if (!hasPasswordFlow) {
-            // If we're showing SSO it means that registration is also probably disabled,
-            // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
+        const ssoFlow = this.state.flows.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
+        // If has no password flow but an SSO flow guess that the user wants to register with SSO.
+        // TODO: instead hide the Register button if registration is disabled by checking with the server,
+        // has no specific errCode currently and uses M_FORBIDDEN.
+        if (ssoFlow && !hasPasswordFlow) {
             ev.preventDefault();
             ev.stopPropagation();
-            const step = this.state.flows.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
-            const ssoKind = step.type === 'm.login.sso' ? 'sso' : 'cas';
+            const ssoKind = ssoFlow.type === 'm.login.sso' ? 'sso' : 'cas';
             PlatformPeg.get().startSingleSignOn(this.loginLogic.createTemporaryClient(), ssoKind,
                 this.props.fragmentAfterLogin);
         } else {
