@@ -16,6 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IWidget } from "matrix-widget-api";
 
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -31,13 +32,9 @@ import {UPDATE_EVENT} from "./AsyncStore";
 
 interface IState {}
 
-export interface IApp {
-    id: string;
-    type: string;
+export interface IApp extends IWidget {
     roomId: string;
     eventId: string;
-    creatorUserId: string;
-    waitForIframeLoad?: boolean;
     // eslint-disable-next-line camelcase
     avatar_url: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }
@@ -125,6 +122,15 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         if (!room) return;
         const roomInfo = this.roomMap.get(room.roomId);
         roomInfo.widgets = [];
+
+        // first clean out old widgets from the map which originate from this room
+        // otherwise we are out of sync with the rest of the app with stale widget events during removal
+        Array.from(this.widgetMap.values()).forEach(app => {
+            if (app.roomId === room.roomId) {
+                this.widgetMap.delete(app.id);
+            }
+        });
+
         this.generateApps(room).forEach(app => {
             this.widgetMap.set(app.id, app);
             roomInfo.widgets.push(app);

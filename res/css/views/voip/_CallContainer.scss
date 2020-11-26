@@ -33,11 +33,11 @@ limitations under the License.
         pointer-events: initial; // restore pointer events so the user can leave/interact
         cursor: pointer;
 
-        .mx_VideoView {
+        .mx_CallView_video {
             width: 350px;
         }
 
-        .mx_VideoView_localVideoFeed {
+        .mx_VideoFeed_local {
             border-radius: 8px;
             overflow: hidden;
         }

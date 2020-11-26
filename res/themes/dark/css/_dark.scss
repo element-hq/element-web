@@ -117,6 +117,7 @@ $roomlist-filter-active-bg-color: $bg-color;
 $roomlist-bg-color: rgba(33, 38, 44, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
 
@@ -272,6 +273,10 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
         tr:nth-child(2n) {
             background-color: #080808;
         }
+    }
+
+    blockquote {
+        color: #919191;
     }
 }
 

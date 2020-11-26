@@ -23,7 +23,6 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import Spinner from './Spinner';
@@ -61,6 +60,7 @@ export default class AppTile extends React.Component {
     // This is a function to make the impact of calling SettingsStore slightly less
     hasPermissionToLoad = (props) => {
         if (this._usingLocalWidget()) return true;
+        if (!props.room) return true; // user widgets always have permissions
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
         if (currentlyAllowedWidgets[props.app.eventId] === undefined) {
@@ -335,6 +335,7 @@ export default class AppTile extends React.Component {
             </div>
         );
         if (!this.state.hasPermissionToLoad) {
+            // only possible for room widgets, can assert this.props.room here
             const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
                 <div className={appTileBodyClass}>
@@ -373,19 +374,18 @@ export default class AppTile extends React.Component {
                         />
                     </div>
                 );
-                // if the widget would be allowed to remain on screen, we must put it in
-                // a PersistedElement from the get-go, otherwise the iframe will be
-                // re-mounted later when we do.
-                if (this.props.whitelistCapabilities.includes('m.always_on_screen')) {
-                    const PersistedElement = sdk.getComponent("elements.PersistedElement");
-                    // Also wrap the PersistedElement in a div to fix the height, otherwise
-                    // AppTile's border is in the wrong place
-                    appTileBody = <div className="mx_AppTile_persistedWrapper">
-                        <PersistedElement persistKey={this._persistKey}>
-                            {appTileBody}
-                        </PersistedElement>
-                    </div>;
-                }
+
+                // all widgets can theoretically be allowed to remain on screen, so we wrap
+                // them all in a PersistedElement from the get-go. If we wait, the iframe will
+                // be re-mounted later, which means the widget has to start over, which is bad.
+
+                // Also wrap the PersistedElement in a div to fix the height, otherwise
+                // AppTile's border is in the wrong place
+                appTileBody = <div className="mx_AppTile_persistedWrapper">
+                    <PersistedElement persistKey={this._persistKey}>
+                        {appTileBody}
+                    </PersistedElement>
+                </div>;
             }
         }
 
@@ -446,7 +446,9 @@ AppTile.displayName = 'AppTile';
 
 AppTile.propTypes = {
     app: PropTypes.object.isRequired,
-    room: PropTypes.object.isRequired,
+    // If room is not specified then it is an account level widget
+    // which bypasses permission prompts as it was added explicitly by that user
+    room: PropTypes.object,
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth: PropTypes.bool,
@@ -470,10 +472,6 @@ AppTile.propTypes = {
     handleMinimisePointerEvents: PropTypes.bool,
     // Optionally hide the popout widget icon
     showPopout: PropTypes.bool,
-    // Widget capabilities to allow by default (without user confirmation)
-    // NOTE -- Use with caution. This is intended to aid better integration / UX
-    // basic widget capabilities, e.g. injecting sticker message events.
-    whitelistCapabilities: PropTypes.array,
     // Is this an instance of a user widget
     userWidget: PropTypes.bool,
 };
@@ -484,7 +482,6 @@ AppTile.defaultProps = {
     showTitle: true,
     showPopout: true,
     handleMinimisePointerEvents: false,
-    whitelistCapabilities: [],
     userWidget: false,
     miniMode: false,
 };

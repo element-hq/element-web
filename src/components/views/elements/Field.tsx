@@ -64,7 +64,7 @@ interface IProps {
     // All other props pass through to the <input>.
 }
 
-interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
+export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The element to create. Defaults to "input".
     element?: "input";
     // The input's value. This is a controlled component, so the value is required.

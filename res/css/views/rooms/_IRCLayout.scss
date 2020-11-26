@@ -186,6 +186,7 @@ $irc-line-height: $font-18px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 min-width: var(--name-width);
+                text-align: end;
             }
         }
     }

@@ -51,7 +51,8 @@ const calculateUrls = (url, urls) => {
         _urls = urls || [];
 
         if (url) {
-            _urls.unshift(url); // put in urls[0]
+            // copy urls and put url first
+            _urls = [url, ..._urls];
         }
     }
 

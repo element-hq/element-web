@@ -23,7 +23,7 @@ import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
-import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
+import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
@@ -186,15 +186,22 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
+        Modal.createTrackedDialog('Feedback Dialog', '', FeedbackDialog);
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
-    private onSignOutClick = (ev: ButtonEvent) => {
+    private onSignOutClick = async (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
+        const cli = MatrixClientPeg.get();
+        if (!cli || !cli.isCryptoEnabled() || !(await cli.exportRoomKeys())?.length) {
+            // log out without user prompt if they have no local megolm sessions
+            dis.dispatch({action: 'logout'});
+        } else {
+            Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
+        }
+
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
@@ -203,6 +210,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         defaultDispatcher.dispatch({action: 'view_home_page'});
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onCommunitySettingsClick = (ev: ButtonEvent) => {
@@ -452,7 +460,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public render() {
         const avatarSize = 32; // should match border-radius of the avatar
 
-        const displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
+        const userId = MatrixClientPeg.get().getUserId();
+        const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
         const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
@@ -507,7 +516,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <div className="mx_UserMenu_row">
                         <span className="mx_UserMenu_userAvatarContainer">
                             <BaseAvatar
-                                idName={displayName}
+                                idName={userId}
                                 name={displayName}
                                 url={avatarUrl}
                                 width={avatarSize}

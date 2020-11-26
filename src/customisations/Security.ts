@@ -16,6 +16,7 @@ limitations under the License.
 
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function examineLoginResponse(
@@ -42,6 +43,13 @@ function createSecretStorageKey(): Uint8Array {
 function getSecretStorageKey(): Uint8Array {
     // E.g. retrieve secret storage key from some other place
     return null;
+}
+
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+function getDehydrationKey(
+    keyInfo: ISecretStorageKeyInfo,
+): Promise<Uint8Array> {
+    return Promise.resolve(null);
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -74,6 +82,9 @@ export interface ISecurityCustomisations {
     setupEncryptionNeeded?: (
         kind: SetupEncryptionKind,
     ) => boolean,
+    getDehydrationKey?: (
+        keyInfo: ISecretStorageKeyInfo,
+    ) => Promise<Uint8Array>,
 }
 
 // A real customisation module will define and export one or more of the

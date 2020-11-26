@@ -38,12 +38,14 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {Key} from "../../../Keyboard";
+import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
 import {containsEmoji} from "../elements/effects/effectUtilities";
 import effects from '../elements/effects';
+import SettingsStore from "../../../settings/SettingsStore";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -123,7 +125,11 @@ export default class SendMessageComposer extends React.Component {
             return;
         }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
-        if (event.key === Key.ENTER && !hasModifier) {
+        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+        const send = ctrlEnterToSend
+            ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
+            : event.key === Key.ENTER && !hasModifier;
+        if (send) {
             this._sendMessage();
             event.preventDefault();
         } else if (event.key === Key.ARROW_UP) {
@@ -306,9 +312,13 @@ export default class SendMessageComposer extends React.Component {
 
         const replyToEvent = this.props.replyToEvent;
         if (shouldSend) {
+            const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
             const content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
-            this.context.sendMessage(roomId, content);
+            // don't bother sending an empty message
+            if (!content.body.trim()) return;
+
+            const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
@@ -323,6 +333,7 @@ export default class SendMessageComposer extends React.Component {
                     dis.dispatch({action: `effects.${effect.command}`});
                 }
             });
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
         this.sendHistoryManager.save(this.model, replyToEvent);

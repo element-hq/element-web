@@ -46,7 +46,7 @@ export default class AddressSelector extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(props) {
+    UNSAFE_componentWillReceiveProps(props) { // eslint-disable-line camelcase
         // Make sure the selected item isn't outside the list bounds
         const selected = this.state.selected;
         const maxSelected = this._maxSelected(props.addressList);

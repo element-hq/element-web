@@ -38,6 +38,7 @@ import { configure, mount } from "enzyme";
 import Velocity from 'velocity-animate';
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
 
 configure({ adapter: new Adapter() });
 
@@ -52,7 +53,7 @@ class WrappedMessagePanel extends React.Component {
 
     render() {
         return <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ canReact: true, canReply: true }}>
+            <RoomContext.Provider value={{ canReact: true, canReply: true, room, roomId: room.roomId }}>
                 <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>;
@@ -79,6 +80,8 @@ describe('MessagePanel', function() {
         // complete without this even if we mock the clock and tick it
         // what should be the correct amount of time).
         Velocity.mock = true;
+
+        DMRoomMap.makeShared();
     });
 
     afterEach(function() {
@@ -433,8 +436,8 @@ describe('MessagePanel', function() {
         const rm = res.find('.mx_RoomView_myReadMarker_container').getDOMNode();
 
         const rows = res.find('.mx_RoomView_MessageList').children();
-        expect(rows.length).toEqual(6);
-        expect(rm.previousSibling).toEqual(rows.at(4).getDOMNode());
+        expect(rows.length).toEqual(7); // 6 events + the NewRoomIntro
+        expect(rm.previousSibling).toEqual(rows.at(5).getDOMNode());
 
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
