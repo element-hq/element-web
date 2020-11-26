@@ -22,6 +22,7 @@ import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
+import SpellCheckSettings from "../../SpellCheckSettings"
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
@@ -49,6 +50,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
+            spellCheckLanguages: [],
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
@@ -182,6 +184,10 @@ export default class GeneralUserSettingsTab extends React.Component {
         PlatformPeg.get().reload();
     };
 
+    _onSpellCheckLanguagesChange = (languages) => {
+        this.setState({spellCheckLanguages: languages})
+    };
+
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         let errMsg = err.error || "";
@@ -303,6 +309,17 @@ export default class GeneralUserSettingsTab extends React.Component {
         );
     }
 
+    _renderSpellCheckSection() {
+        return (
+             <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Spell checking")}</span>
+                <SpellCheckSettings className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
+                            languages={this.state.spellCheckLanguages}
+                            onLanguagesChange={this._onSpellCheckLanguagesChange} />
+            </div>
+        );
+    }
+
     _renderDiscoverySection() {
         const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
@@ -409,6 +426,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderProfileSection()}
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
+                {this._renderSpellCheckSection()}
                 { discoverySection }
                 {this._renderIntegrationManagerSection() /* Has its own title */}
                 { accountManagementSection }
