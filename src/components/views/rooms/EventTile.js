@@ -747,11 +747,11 @@ export default class EventTile extends React.Component {
         if (this.props.mxEvent.sender && avatarSize) {
             let member;
             // set member to receiver (target) if it is a 3PID invite
-            // so that the correct avatar is show
+            // so that the correct avatar is shown
             if (this.props.mxEvent.getContent().third_party_invite) {
-               member=this.props.mxEvent.target;
+               member = this.props.mxEvent.target;
             } else {
-                member=this.props.mxEvent.sender;
+                member = this.props.mxEvent.sender;
             }
             avatar = (
                 <div className="mx_EventTile_avatar">
@@ -760,7 +760,7 @@ export default class EventTile extends React.Component {
                         viewUserOnClick={true}
                     />
                 </div>
-        );
+            );
         }
 
         if (needsSenderProfile) {
