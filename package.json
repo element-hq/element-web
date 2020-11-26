@@ -58,7 +58,7 @@
   "dependencies": {
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
-    "highlight.js": "^9.13.1",
+    "highlight.js": "^10.1.2",
     "jsrsasign": "^9.1.5",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
