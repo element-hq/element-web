@@ -34,6 +34,7 @@ import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { NameFilterCondition } from "./filters/NameFilterCondition";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
+import { VisibilityProvider } from "./filters/VisibilityProvider";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -544,7 +545,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
-        const rooms = this.matrixClient.getVisibleRooms();
+        const rooms = this.matrixClient.getVisibleRooms()
+            .filter(r => VisibilityProvider.instance.isRoomVisible(r));
         const customTags = new Set<TagID>();
         if (this.state.tagsEnabled) {
             for (const room of rooms) {
