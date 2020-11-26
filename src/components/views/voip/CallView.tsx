@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef, CSSProperties } from 'react';
 import Room from 'matrix-js-sdk/src/models/room';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
@@ -28,6 +28,9 @@ import { CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
 import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
+import {aboveLeftOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import CallContextMenu from '../context_menus/CallContextMenu';
+import { avatarUrlForMember } from '../../../Avatar';
 
 interface IProps {
         // js-sdk room object. If set, we will only show calls for the given
@@ -51,10 +54,12 @@ interface IProps {
 interface IState {
     call: MatrixCall;
     isLocalOnHold: boolean,
+    isRemoteOnHold: boolean,
     micMuted: boolean,
     vidMuted: boolean,
     callState: CallState,
     controlsVisible: boolean,
+    showMoreMenu: boolean,
 }
 
 function getFullScreenElement() {
@@ -89,11 +94,14 @@ const CONTROLS_HIDE_DELAY = 1000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
 const HEADER_HEIGHT = 44;
+const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();
     private controlsHideTimer: number = null;
+    private contextMenuButton = createRef<HTMLDivElement>();
+
     constructor(props: IProps) {
         super(props);
 
@@ -101,10 +109,12 @@ export default class CallView extends React.Component<IProps, IState> {
         this.state = {
             call,
             isLocalOnHold: call ? call.isLocalOnHold() : null,
+            isRemoteOnHold: call ? call.isRemoteOnHold() : null,
             micMuted: call ? call.isMicrophoneMuted() : null,
             vidMuted: call ? call.isLocalVideoMuted() : null,
             callState: call ? call.state : null,
             controlsVisible: true,
+            showMoreMenu: false,
         }
 
         this.updateCallListeners(null, call);
@@ -149,10 +159,15 @@ export default class CallView extends React.Component<IProps, IState> {
                     this.setState({
                         call: newCall,
                         isLocalOnHold: newCall ? newCall.isLocalOnHold() : null,
+                        isRemoteOnHold: newCall ? newCall.isRemoteOnHold() : null,
                         micMuted: newCall ? newCall.isMicrophoneMuted() : null,
                         vidMuted: newCall ? newCall.isLocalVideoMuted() : null,
                         callState: newCall ? newCall.state : null,
                         controlsVisible: newControlsVisible,
+                    });
+                } else {
+                    this.setState({
+                        callState: newCall ? newCall.state : null,
                     });
                 }
                 if (!newCall && getFullScreenElement()) {
@@ -187,12 +202,26 @@ export default class CallView extends React.Component<IProps, IState> {
     private updateCallListeners(oldCall: MatrixCall, newCall: MatrixCall) {
         if (oldCall === newCall) return;
 
-        if (oldCall) oldCall.removeListener(CallEvent.HoldUnhold, this.onCallHoldUnhold);
-        if (newCall) newCall.on(CallEvent.HoldUnhold, this.onCallHoldUnhold);
+        if (oldCall) {
+            oldCall.removeListener(CallEvent.LocalHoldUnhold, this.onCallLocalHoldUnhold);
+            oldCall.removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHoldUnhold);
+        }
+        if (newCall) {
+            newCall.on(CallEvent.LocalHoldUnhold, this.onCallLocalHoldUnhold);
+            newCall.on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHoldUnhold);
+        }
     }
 
-    private onCallHoldUnhold = () => {
+    private onCallLocalHoldUnhold = () => {
         this.setState({
+            isLocalOnHold: this.state.call ? this.state.call.isLocalOnHold() : null,
+        });
+    };
+
+    private onCallRemoteHoldUnhold = () => {
+        this.setState({
+            isRemoteOnHold: this.state.call ? this.state.call.isRemoteOnHold() : null,
+            // update both here because isLocalOnHold changes when we hold the call too
             isLocalOnHold: this.state.call ? this.state.call.isLocalOnHold() : null,
         });
     };
@@ -223,6 +252,8 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private showControls() {
+        if (this.state.showMoreMenu) return;
+
         if (!this.state.controlsVisible) {
             this.setState({
                 controlsVisible: true,
@@ -250,6 +281,25 @@ export default class CallView extends React.Component<IProps, IState> {
 
         this.state.call.setLocalVideoMuted(newVal);
         this.setState({vidMuted: newVal});
+    }
+
+    private onMoreClick = () => {
+        if (this.controlsHideTimer) {
+            clearTimeout(this.controlsHideTimer);
+            this.controlsHideTimer = null;
+        }
+
+        this.setState({
+            showMoreMenu: true,
+            controlsVisible: true,
+        });
+    }
+
+    private closeContextMenu = () => {
+        this.setState({
+            showMoreMenu: false,
+        });
+        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
     }
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
@@ -292,14 +342,32 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     }
 
+    private onCallResumeClick = () => {
+        this.state.call.setRemoteOnHold(false);
+    }
+
     public render() {
         if (!this.state.call) return null;
 
         const client = MatrixClientPeg.get();
         const callRoom = client.getRoom(this.state.call.roomId);
 
+        let contextMenu;
+
         let callControls;
         if (this.props.room) {
+            if (this.state.showMoreMenu) {
+                contextMenu = <CallContextMenu
+                    {...aboveLeftOf(
+                        this.contextMenuButton.current.getBoundingClientRect(),
+                        ChevronFace.None,
+                        CONTEXT_MENU_VPADDING,
+                    )}
+                    onFinished={this.closeContextMenu}
+                    call={this.state.call}
+                />;
+            }
+
             const micClasses = classNames({
                 mx_CallView_callControls_button: true,
                 mx_CallView_callControls_button_micOn: !this.state.micMuted,
@@ -333,17 +401,29 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_callControls_hidden: !this.state.controlsVisible,
             });
 
-            const vidMuteButton = this.state.call.type === CallType.Video ? <div
+            const vidMuteButton = this.state.call.type === CallType.Video ? <AccessibleButton
                 className={vidClasses}
                 onClick={this.onVidMuteClick}
             /> : null;
 
+            // The 'more' button actions are only relevant in a connected call
+            // When not connected, we have to put something there to make the flexbox alignment correct
+            const contextMenuButton = this.state.callState === CallState.Connected ? <ContextMenuButton
+                className="mx_CallView_callControls_button mx_CallView_callControls_button_more"
+                onClick={this.onMoreClick}
+                inputRef={this.contextMenuButton}
+                isExpanded={this.state.showMoreMenu}
+            /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_more_hidden" />;
+
+            // in the near future, the dial pad button will go on the left. For now, it's the nothing button
+            // because something needs to have margin-right: auto to make the alignment correct.
             callControls = <div className={callControlsClasses}>
-                <div
+                <div className="mx_CallView_callControls_button mx_CallView_callControls_nothing" />
+                <AccessibleButton
                     className={micClasses}
                     onClick={this.onMicMuteClick}
                 />
-                <div
+                <AccessibleButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
                     onClick={() => {
                         dis.dispatch({
@@ -355,6 +435,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 {vidMuteButton}
                 <div className={micCacheClasses} />
                 <div className={vidCacheClasses} />
+                {contextMenuButton}
             </div>;
         }
 
@@ -362,24 +443,66 @@ export default class CallView extends React.Component<IProps, IState> {
         // for voice calls (fills the bg)
         let contentView: React.ReactNode;
 
+        const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
+        let onHoldText = null;
+        if (this.state.isRemoteOnHold) {
+            onHoldText = _t("You held the call <a>Resume</a>", {}, {
+                a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
+                    {sub}
+                </AccessibleButton>,
+            });
+        } else if (this.state.isLocalOnHold) {
+            onHoldText = _t("%(peerName)s held the call", {
+                peerName: this.state.call.getOpponentMember().name,
+            });
+        }
+
         if (this.state.call.type === CallType.Video) {
+            let onHoldContent = null;
+            let onHoldBackground = null;
+            const backgroundStyle: CSSProperties = {};
+            const containerClasses = classNames({
+                mx_CallView_video: true,
+                mx_CallView_video_hold: isOnHold,
+            });
+            if (isOnHold) {
+                onHoldContent = <div className="mx_CallView_video_holdContent">
+                    {onHoldText}
+                </div>;
+                const backgroundAvatarUrl = avatarUrlForMember(
+                    // is it worth getting the size of the div to pass here?
+                    this.state.call.getOpponentMember(), 1024, 1024, 'crop',
+                );
+                backgroundStyle.backgroundImage = 'url(' + backgroundAvatarUrl + ')';
+                onHoldBackground = <div className="mx_CallView_video_holdBackground" style={backgroundStyle} />;
+            }
+
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
             const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight - HEADER_HEIGHT;
-            contentView = <div className="mx_CallView_video" ref={this.contentRef} onMouseMove={this.onMouseMove}>
+            contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
+                {onHoldBackground}
                 <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
                     maxHeight={maxVideoHeight}
                 />
                 <VideoFeed type={VideoFeedType.Local} call={this.state.call} />
+                {onHoldContent}
                 {callControls}
             </div>;
         } else {
             const avatarSize = this.props.room ? 200 : 75;
-            contentView = <div className="mx_CallView_voice" onMouseMove={this.onMouseMove}>
-                <RoomAvatar
-                    room={callRoom}
-                    height={avatarSize}
-                    width={avatarSize}
-                />
+            const classes = classNames({
+                mx_CallView_voice: true,
+                mx_CallView_voice_hold: isOnHold,
+            });
+            contentView = <div className={classes} onMouseMove={this.onMouseMove}>
+                <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
+                    <RoomAvatar
+                        room={callRoom}
+                        height={avatarSize}
+                        width={avatarSize}
+                    />
+                </div>
+                <div className="mx_CallView_voice_holdText">{onHoldText}</div>
                 {callControls}
             </div>;
         }
@@ -431,6 +554,7 @@ export default class CallView extends React.Component<IProps, IState> {
         return <div className={"mx_CallView " + myClassName}>
             {header}
             {contentView}
+            {contextMenu}
         </div>;
     }
 }

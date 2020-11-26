@@ -43,15 +43,97 @@ limitations under the License.
 .mx_CallView_voice {
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: $inverted-bg-color;
+}
+
+.mx_CallView_voice_hold {
+    // This masks the avatar image so when it's blurred, the edge is still crisp
+    .mx_CallView_voice_avatarContainer {
+        border-radius: 2000px;
+        overflow: hidden;
+        position: relative;
+        &::after {
+            position: absolute;
+            content: '';
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: url('$(res)/img/voip/paused.svg');
+            background-position: center;
+            background-size: cover;
+        }
+    }
+    .mx_BaseAvatar {
+        filter: blur(20px);
+        overflow: hidden;
+    }
+}
+
+.mx_CallView_voice_holdText {
+    height: 16px;
+    color: $accent-fg-color;
+    .mx_AccessibleButton_hasKind {
+        padding: 0px;
+    }
 }
 
 .mx_CallView_video {
     width: 100%;
     position: relative;
     z-index: 30;
+}
+
+.mx_CallView_video_hold {
+    overflow: hidden;
+
+    // we keep these around in the DOM: it saved wiring them up again when the call
+    // is resumed and keeps the container the right size
+    .mx_VideoFeed {
+        visibility: hidden;
+    }
+}
+
+.mx_CallView_video_holdBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px);
+}
+
+.mx_CallView_video_holdContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: $accent-fg-color;
+    text-align: center;
+
+    &::before {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        content: '';
+        width: 20px;
+        height: 20px;
+        background-image: url('$(res)/img/voip/paused.svg');
+        background-position: center;
+        background-size: cover;
+    }
+    .mx_AccessibleButton_hasKind {
+        display: block;
+        padding: 0px;
+    }
 }
 
 .mx_CallView_header {
@@ -173,6 +255,12 @@ limitations under the License.
     }
 }
 
+// Makes the alignment correct
+.mx_CallView_callControls_nothing {
+    margin-right: auto;
+    cursor: initial;
+}
+
 .mx_CallView_callControls_button_micOn {
     &::before {
         background-image: url('$(res)/img/voip/mic-on.svg');
@@ -201,6 +289,18 @@ limitations under the License.
     &::before {
         background-image: url('$(res)/img/voip/hangup.svg');
     }
+}
+
+.mx_CallView_callControls_button_more {
+    margin-left: auto;
+    &::before {
+        background-image: url('$(res)/img/voip/more.svg');
+    }
+}
+
+.mx_CallView_callControls_button_more_hidden {
+    margin-left: auto;
+    cursor: initial;
 }
 
 .mx_CallView_callControls_button_invisible {
