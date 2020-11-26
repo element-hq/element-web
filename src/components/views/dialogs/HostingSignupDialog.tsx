@@ -138,6 +138,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                 onFinished={this.onFinished}
                 title="Set up your own personal Element host"
                 hasCancel={true}
+                fixedWidth={false}
             >
                 <div className="mx_HostingSignupDialog_container">
                     <iframe

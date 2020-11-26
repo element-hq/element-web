@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 .mx_HostingSignupDialog .mx_Dialog {
-    height: 50%;
+    height: 66%;
+    min-width: 50%;
 }
 
 .mx_HostingSignupBaseDialog {
@@ -23,7 +24,7 @@ limitations under the License.
 }
 
 .mx_HostingSignupDialog_container {
-    height: 95%;
+    height: 90%;
 
     iframe {
         width: 100%;
