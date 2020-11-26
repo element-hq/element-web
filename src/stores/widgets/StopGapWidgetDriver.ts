@@ -116,8 +116,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
-        const isUserWidget = this.forWidgetKind !== WidgetKind.Room; // modal and account widgets are "user" widgets
-        const rawUrl = this.forWidget.templateUrl;
         const oidcState = WidgetPermissionStore.instance.getOIDCState(
             this.forWidget, this.forWidgetKind, this.inRoomId,
         );

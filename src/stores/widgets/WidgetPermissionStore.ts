@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-import { AsyncStore } from "../AsyncStore";
-import { ActionPayload } from "../../dispatcher/payloads";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 import SettingsStore from "../../settings/SettingsStore";
-import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import { IWidget, Widget, WidgetKind } from "matrix-widget-api";
+import { Widget, WidgetKind } from "matrix-widget-api";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import WidgetUtils from "../../utils/WidgetUtils";
 import { SettingLevel } from "../../settings/SettingLevel";
 
 export enum OIDCState {
