@@ -402,6 +402,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
+        if (!VisibilityProvider.instance.isRoomVisible(room)) {
+            return; // don't do anything on rooms that aren't visible
+        }
+
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
         if (shouldUpdate) {
             if (SettingsStore.getValue("advancedRoomListLogging")) {
