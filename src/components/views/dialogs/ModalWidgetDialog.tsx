@@ -38,6 +38,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
+import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -64,7 +65,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     constructor(props) {
         super(props);
 
-        this.widget = new Widget({
+        this.widget = new ElementWidget({
             ...this.props.widgetDefinition,
             creatorUserId: MatrixClientPeg.get().getUserId(),
             id: `modal_${this.props.sourceWidgetId}`,

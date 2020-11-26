@@ -68,7 +68,7 @@ interface IAppTileProps {
 }
 
 // TODO: Don't use this because it's wrong
-class ElementWidget extends Widget {
+export class ElementWidget extends Widget {
     constructor(private rawDefinition: IWidget) {
         super(rawDefinition);
     }
