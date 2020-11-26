@@ -246,7 +246,7 @@ export class StopGapWidget extends EventEmitter {
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
-        const driver = new StopGapWidgetDriver( allowedCapabilities, this.mockWidget, this.kind);
+        const driver = new StopGapWidgetDriver(allowedCapabilities, this.mockWidget, this.kind, this.roomId);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
