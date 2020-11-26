@@ -46,7 +46,6 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
 
     let icon;
     if (idp && idp.icon && idp.icon.startsWith("https://")) {
-        // TODO sanitize images
         icon = <img src={idp.icon} height="24" width="24" alt={label} />;
     }
 

@@ -67,7 +67,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({onFinished}) => {
     >
         <div className="mx_Dialog_content" id="mx_RegistrationEmailPromptDialog">
             <p>{_t("Just a heads up, if you don't add an email and forget your password, you could " +
-                "<b>permanently lose access to your account.</b>", {}, {
+                "<b>permanently lose access to your account</b>.", {}, {
                 b: sub => <b>{sub}</b>,
             })}</p>
             <form onSubmit={onSubmit}>
