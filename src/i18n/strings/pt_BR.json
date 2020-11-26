@@ -501,7 +501,7 @@
     "Visibility in Room List": "Visibilidade na lista de salas",
     "Visible to everyone": "Visível para todos",
     "Only visible to community members": "Apenas visível para participantes da comunidade",
-    "Filter community rooms": "Filtrar salas da comunidade",
+    "Filter community rooms": "Pesquisar salas da comunidade",
     "Something went wrong when trying to get your communities.": "Não foi possível carregar suas comunidades.",
     "Display your community flair in rooms configured to show it.": "Mostrar o ícone da sua comunidade nas salas que o permitem.",
     "You're not currently a member of any communities.": "No momento, você não é participante de nenhuma comunidade.",
@@ -2772,5 +2772,13 @@
     "Uzbekistan": "Uzbequistão",
     "Role": "Função",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|one": "Armazene localmente com segurança as mensagens criptografadas para que apareçam nos resultados da pesquisa, usando %(size)s para armazenar mensagens de %(count)s sala.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Armazene localmente com segurança as mensagens criptografadas para que apareçam nos resultados da pesquisa, usando %(size)s para armazenar mensagens de %(count)s salas."
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(count)s rooms.|other": "Armazene localmente com segurança as mensagens criptografadas para que apareçam nos resultados da pesquisa, usando %(size)s para armazenar mensagens de %(count)s salas.",
+    "Filter": "Pesquisar",
+    "Start a new chat": "Iniciar uma nova conversa",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s sala.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s salas.",
+    "Filter rooms and people": "Pesquisar salas e pessoas",
+    "Open the link in the email to continue registration.": "Abra o link no e-mail para continuar o registro.",
+    "A confirmation email has been sent to %(emailAddress)s": "Um e-mail de confirmação foi enviado para %(emailAddress)s",
+    "Go to Home View": "Ir para a tela inicial"
 }
