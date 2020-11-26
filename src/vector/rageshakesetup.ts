@@ -38,7 +38,7 @@ export function initRageshake() {
             "Meatball menu → Settings → Blackboxing → Add /rageshake\\.js$");
 
         window.addEventListener('beforeunload', (e) => {
-            console.log('riot-web closing');
+            console.log('element-web closing');
             // try to flush the logs to indexeddb
             rageshake.flush();
         });

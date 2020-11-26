@@ -126,7 +126,7 @@ export async function loadSkin() {
             /* webpackPreload: true */
             "matrix-react-sdk"),
         import(
-            /* webpackChunkName: "riot-web-component-index" */
+            /* webpackChunkName: "element-web-component-index" */
             /* webpackPreload: true */
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore - this module is generated so may fail lint
@@ -143,7 +143,7 @@ export async function loadTheme() {
 export async function loadApp(fragParams: {}) {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
-        /* webpackChunkName: "riot-web-app" */
+        /* webpackChunkName: "element-web-app" */
         /* webpackPreload: true */
         "./app");
     window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),

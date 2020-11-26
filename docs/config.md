@@ -152,7 +152,7 @@ decentralised.
 Desktop app configuration
 =========================
 
-See https://github.com/vector-im/riot-desktop#user-specified-configjson
+See https://github.com/vector-im/element-desktop#user-specified-configjson
 
 UI Features
 ===========
