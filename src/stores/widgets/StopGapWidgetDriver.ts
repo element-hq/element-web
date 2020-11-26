@@ -16,6 +16,7 @@
 
 import {
     Capability,
+    EventDirection,
     IOpenIDCredentials,
     IOpenIDUpdate,
     ISendEventDetails,
@@ -24,6 +25,7 @@ import {
     SimpleObservable,
     Widget,
     WidgetDriver,
+    WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
 import { iterableDiff, iterableUnion } from "../../utils/iterables";
@@ -37,6 +39,8 @@ import WidgetCapabilitiesPromptDialog, {
     getRememberedCapabilitiesForWidget,
 } from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
+import { WidgetType } from "../../widgets/WidgetType";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 // TODO: Purge this from the universe
 
@@ -51,6 +55,15 @@ export class StopGapWidgetDriver extends WidgetDriver {
         // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
         // button if the widget says it supports screenshots.
         this.allowedCapabilities = new Set([...allowedCapabilities, MatrixCapabilities.Screenshots]);
+
+        // Grant the permissions that are specific to given widget types
+        if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {
+            this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
+        } else if (WidgetType.STICKERPICKER.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Account) {
+            const stickerSendingCap = WidgetEventCapability.forRoomEvent(EventDirection.Send, EventType.Sticker).raw;
+            this.allowedCapabilities.add(MatrixCapabilities.StickerSending); // legacy as far as MSC2762 is concerned
+            this.allowedCapabilities.add(stickerSendingCap);
+        }
     }
 
     public async validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
