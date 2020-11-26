@@ -25,6 +25,7 @@ interface IProps {
 }
 
 interface IState {
+    completed: boolean,
     error: string,
 }
 
@@ -36,6 +37,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         super(props);
 
         this.state = {
+            completed: false,
             error: null,
         };
 
@@ -52,18 +54,25 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                 // noinspection JSIgnoredPromiseFromCall
                 this.sendAccountDetails();
                 break;
+            case 'setup_complete':
+                // Set as completed but let the user close the modal themselves
+                // so they have time to finish reading any information
+                this.setState({
+                    completed: true,
+                });
+                break;
             case 'openid_credentials_request':
                 // noinspection JSIgnoredPromiseFromCall
                 this.fetchOpenIDToken();
                 break;
-            case 'setup_complete':
+            case 'close_dialog':
                 this.onFinished(true);
                 break;
         }
     }
 
     private onFinished = (result: boolean) => {
-        if (result) {
+        if (result || this.state.completed) {
             // We're done, close
             this.props.requestClose();
         } else {
@@ -73,7 +82,6 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                 {
                     onFinished: result => {
                         if (result) {
-                            // TODO call an API endpoint to clean up?
                             this.props.requestClose();
                         }
                     },
