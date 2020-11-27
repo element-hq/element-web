@@ -402,7 +402,7 @@ export default class CallHandler {
                 {_t("Call failed because no webcam or microphone could not be accessed. Check that:")}
                 <ul>
                     <li>{_t("A microphone and webcam are plugged in and set up correctly")}</li>
-                    <li>{_t("Permission is granted to usethe webcam")}</li>
+                    <li>{_t("Permission is granted to use the webcam")}</li>
                     <li>{_t("No other application is using the webcam")}</li>
                 </ul>
             </div>;
