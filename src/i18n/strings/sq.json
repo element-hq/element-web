@@ -2904,5 +2904,20 @@
     "Send videos as you in this room": "Dërgoni video si ju në këtë dhomë",
     "See images posted to your active room": "Shihni figura postuar te dhoma juaj aktive",
     "See images posted to this room": "Shihni figura postuar në këtë dhomë",
-    "Send images as you in your active room": "Dërgoni figura si ju në dhomën tuaj aktive"
+    "Send images as you in your active room": "Dërgoni figura si ju në dhomën tuaj aktive",
+    "New here? <a>Create an account</a>": "I sapoardhur? <a>Krijoni një llogari</a>",
+    "Got an account? <a>Sign in</a>": "Keni një llogari? <a>Hyni</a>",
+    "Return to call": "Kthehu te thirrja",
+    "Fill Screen": "Mbushe Ekranin",
+    "Voice Call": "Thirrje Zanore",
+    "Video Call": "Thirrje Video",
+    "Render LaTeX maths in messages": "Formo formula LaTeX në mesazhe",
+    "Send images as you in this room": "Dërgoni figura si ju, në këtë dhomë",
+    "No other application is using the webcam": "Kamerën s’po e përdor aplikacion tjetër",
+    "Permission is granted to use the webcam": "Është dhënë leje për përdorimin e kamerës",
+    "A microphone and webcam are plugged in and set up correctly": "Një mikrofon dhe një kamerë janë futur dhe ujdisur si duhet",
+    "Call failed because no webcam or microphone could not be accessed. Check that:": "Thirrja dështoi, ngaqë s’u bë dot hyrje në kamerë ose mikrofon. Kontrolloni që:",
+    "Unable to access webcam / microphone": "S’arrihet të përdoret kamerë / mikrofon",
+    "Call failed because no microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Thirrja dështoi, ngaqë s’u hap dot ndonjë mikrofon. Shihni që të jetë futur një mikrofon dhe ujdiseni saktë.",
+    "Unable to access microphone": "S’arrihet të përdoret mikrofoni"
 }
