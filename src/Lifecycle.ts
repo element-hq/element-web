@@ -49,6 +49,7 @@ import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import CallHandler from './CallHandler';
+import LifecycleCustomisations from "./customisations/Lifecycle";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -716,6 +717,7 @@ export async function onLoggedOut(): Promise<void> {
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
     await clearStorage({deleteEverything: true});
+    LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
 }
 
 /**
