@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { _t } from "../../../languageHandler";
 import * as sdk from '../../../index';
 
 /*
@@ -26,9 +27,11 @@ export default class ConfirmCloseHostingSignupDialog extends React.Component {
         return (
             <QuestionDialog
                 onFinished={this.props.onFinished}
-                title="Confirm Abort Of Host Creation"
-                description="Are you sure you wish to abort creation of the host? The process cannot be continued."
-                button="Abort"
+                title={_t("Confirm Abort Of Host Creation")}
+                description={_t(
+                    "Are you sure you wish to abort creation of the host? The process cannot be continued.",
+                )}
+                button={_t("Abort")}
             />
         );
     }

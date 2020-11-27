@@ -18,7 +18,8 @@ import * as React from "react";
 import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     requestClose(): void,
@@ -106,7 +107,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
             });
         } else {
             this.setState({
-                error: "Failed to connect to your homeserver. Please close this dialog and try again.",
+                error: _t("Failed to connect to your homeserver. Please close this dialog and try again."),
             });
         }
     }
@@ -136,7 +137,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
             <BaseDialog
                 className="mx_HostingSignupBaseDialog"
                 onFinished={this.onFinished}
-                title="Set up your own personal Element host"
+                title={_t("Set up your own personal Element host")}
                 hasCancel={true}
                 fixedWidth={false}
             >
