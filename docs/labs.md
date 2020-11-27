@@ -7,6 +7,10 @@ to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
+## Render LaTeX maths in messages (`feature_latex_maths`)
+
+Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
+
 ## New spinner design (`feature_new_spinner`)
 
 Replaces the old spinner image with a new, svg-based one featuring a sleeker design.
