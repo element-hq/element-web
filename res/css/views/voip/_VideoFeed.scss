@@ -14,10 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_VideoFeed video {
-    width: 100%;
-}
-
 .mx_VideoFeed_remote {
     width: 100%;
     background-color: #000;
@@ -28,16 +24,12 @@ limitations under the License.
     width: 25%;
     height: 25%;
     position: absolute;
-    left: 10px;
-    bottom: 10px;
+    right: 10px;
+    top: 10px;
     z-index: 100;
+    border-radius: 4px;
 }
 
-.mx_VideoFeed_local video {
-    width: auto;
-    height: 100%;
-}
-
-.mx_VideoFeed_mirror video {
+.mx_VideoFeed_mirror {
     transform: scale(-1, 1);
 }

@@ -1,8 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018, 2019 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016, 2017, 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +15,9 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {ComponentProps, ReactNode} from 'react';
+import {MatrixClient} from "matrix-js-sdk/src/client";
+
 import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
@@ -34,36 +32,96 @@ import Login from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 
 // Phases
-// Show controls to configure server details
-const PHASE_SERVER_DETAILS = 0;
-// Show the appropriate registration flow(s) for the server
-const PHASE_REGISTRATION = 1;
+enum Phase {
+    // Show controls to configure server details
+    ServerDetails = 0,
+    // Show the appropriate registration flow(s) for the server
+    Registration = 1,
+}
+
+interface IProps {
+    serverConfig: ValidatedServerConfig;
+    defaultDeviceDisplayName: string;
+    email?: string;
+    brand?: string;
+    clientSecret?: string;
+    sessionId?: string;
+    idSid?: string;
+
+    // Called when the user has logged in. Params:
+    // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
+    // - The user's password, if available and applicable (may be cached in memory
+    //   for a short time so the user is not required to re-enter their password
+    //   for operations like uploading cross-signing keys).
+    onLoggedIn(params: {
+        userId: string;
+        deviceId: string
+        homeserverUrl: string;
+        identityServerUrl?: string;
+        accessToken: string;
+    }, password: string): void;
+    makeRegistrationUrl(params: {
+        /* eslint-disable camelcase */
+        client_secret: string;
+        hs_url: string;
+        is_url?: string;
+        session_id: string;
+        /* eslint-enable camelcase */
+    }): void;
+    // registration shouldn't know or care how login is done.
+    onLoginClick(): void;
+    onServerConfigChange(config: ValidatedServerConfig): void;
+}
+
+interface IState {
+    busy: boolean;
+    errorText?: ReactNode;
+    // true if we're waiting for the user to complete
+    // We remember the values entered by the user because
+    // the registration form will be unmounted during the
+    // course of registration, but if there's an error we
+    // want to bring back the registration form with the
+    // values the user entered still in it. We can keep
+    // them in this component's state since this component
+    // persist for the duration of the registration process.
+    formVals: Record<string, string>;
+    // user-interactive auth
+    // If we've been given a session ID, we're resuming
+    // straight back into UI auth
+    doingUIAuth: boolean;
+    // If set, we've registered but are not going to log
+    // the user in to their new account automatically.
+    completedNoSignin: boolean;
+    serverType: ServerType.FREE | ServerType.PREMIUM | ServerType.ADVANCED;
+    // Phase of the overall registration dialog.
+    phase: Phase;
+    flows: {
+        stages: string[];
+    }[];
+    // We perform liveliness checks later, but for now suppress the errors.
+    // We also track the server dead errors independently of the regular errors so
+    // that we can render it differently, and override any other error the user may
+    // be seeing.
+    serverIsAlive: boolean;
+    serverErrorIsFatal: boolean;
+    serverDeadError: string;
+
+    // Our matrix client - part of state because we can't render the UI auth
+    // component without it.
+    matrixClient?: MatrixClient;
+    // whether the HS requires an ID server to register with a threepid
+    serverRequiresIdServer?: boolean;
+    // The user ID we've just registered
+    registeredUsername?: string;
+    // if a different user ID to the one we just registered is logged in,
+    // this is the user ID that's logged in.
+    differentLoggedInUserId?: string;
+}
 
 // Enable phases for registration
 const PHASES_ENABLED = true;
 
-export default class Registration extends React.Component {
-    static propTypes = {
-        // Called when the user has logged in. Params:
-        // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
-        // - The user's password, if available and applicable (may be cached in memory
-        //   for a short time so the user is not required to re-enter their password
-        //   for operations like uploading cross-signing keys).
-        onLoggedIn: PropTypes.func.isRequired,
-
-        clientSecret: PropTypes.string,
-        sessionId: PropTypes.string,
-        makeRegistrationUrl: PropTypes.func.isRequired,
-        idSid: PropTypes.string,
-        serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
-        brand: PropTypes.string,
-        email: PropTypes.string,
-        // registration shouldn't know or care how login is done.
-        onLoginClick: PropTypes.func.isRequired,
-        onServerConfigChange: PropTypes.func.isRequired,
-        defaultDeviceDisplayName: PropTypes.string,
-    };
-
+export default class Registration extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
@@ -71,56 +129,22 @@ export default class Registration extends React.Component {
         this.state = {
             busy: false,
             errorText: null,
-            // We remember the values entered by the user because
-            // the registration form will be unmounted during the
-            // course of registration, but if there's an error we
-            // want to bring back the registration form with the
-            // values the user entered still in it. We can keep
-            // them in this component's state since this component
-            // persist for the duration of the registration process.
             formVals: {
                 email: this.props.email,
             },
-            // true if we're waiting for the user to complete
-            // user-interactive auth
-            // If we've been given a session ID, we're resuming
-            // straight back into UI auth
             doingUIAuth: Boolean(this.props.sessionId),
             serverType,
-            // Phase of the overall registration dialog.
-            phase: PHASE_REGISTRATION,
+            phase: Phase.Registration,
             flows: null,
-            // If set, we've registered but are not going to log
-            // the user in to their new account automatically.
             completedNoSignin: false,
-
-            // We perform liveliness checks later, but for now suppress the errors.
-            // We also track the server dead errors independently of the regular errors so
-            // that we can render it differently, and override any other error the user may
-            // be seeing.
             serverIsAlive: true,
             serverErrorIsFatal: false,
             serverDeadError: "",
-
-            // Our matrix client - part of state because we can't render the UI auth
-            // component without it.
-            matrixClient: null,
-
-            // whether the HS requires an ID server to register with a threepid
-            serverRequiresIdServer: null,
-
-            // The user ID we've just registered
-            registeredUsername: null,
-
-            // if a different user ID to the one we just registered is logged in,
-            // this is the user ID that's logged in.
-            differentLoggedInUserId: null,
         };
     }
 
     componentDidMount() {
-        this._unmounted = false;
-        this._replaceClient();
+        this.replaceClient(this.props.serverConfig);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -129,7 +153,7 @@ export default class Registration extends React.Component {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
-        this._replaceClient(newProps.serverConfig);
+        this.replaceClient(newProps.serverConfig);
 
         // Handle cases where the user enters "https://matrix.org" for their server
         // from the advanced option - we should default to FREE at that point.
@@ -138,25 +162,25 @@ export default class Registration extends React.Component {
             // Reset the phase to default phase for the server type.
             this.setState({
                 serverType,
-                phase: this.getDefaultPhaseForServerType(serverType),
+                phase: Registration.getDefaultPhaseForServerType(serverType),
             });
         }
     }
 
-    getDefaultPhaseForServerType(type) {
+    private static getDefaultPhaseForServerType(type: IState["serverType"]) {
         switch (type) {
             case ServerType.FREE: {
                 // Move directly to the registration phase since the server
                 // details are fixed.
-                return PHASE_REGISTRATION;
+                return Phase.Registration;
             }
             case ServerType.PREMIUM:
             case ServerType.ADVANCED:
-                return PHASE_SERVER_DETAILS;
+                return Phase.ServerDetails;
         }
     }
 
-    onServerTypeChange = type => {
+    private onServerTypeChange = (type: IState["serverType"]) => {
         this.setState({
             serverType: type,
         });
@@ -181,11 +205,11 @@ export default class Registration extends React.Component {
 
         // Reset the phase to default phase for the server type.
         this.setState({
-            phase: this.getDefaultPhaseForServerType(type),
+            phase: Registration.getDefaultPhaseForServerType(type),
         });
     };
 
-    async _replaceClient(serverConfig) {
+    private async replaceClient(serverConfig: ValidatedServerConfig) {
         this.setState({
             errorText: null,
             serverDeadError: null,
@@ -194,7 +218,6 @@ export default class Registration extends React.Component {
             // the UI auth component while we don't have a matrix client)
             busy: true,
         });
-        if (!serverConfig) serverConfig = this.props.serverConfig;
 
         // Do a liveliness check on the URLs
         try {
@@ -246,7 +269,7 @@ export default class Registration extends React.Component {
             // do SSO instead. If we've already started the UI Auth process though, we don't
             // need to.
             if (!this.state.doingUIAuth) {
-                await this._makeRegisterRequest(null);
+                await this.makeRegisterRequest(null);
                 // This should never succeed since we specified no auth object.
                 console.log("Expecting 401 from register request but got success!");
             }
@@ -287,7 +310,7 @@ export default class Registration extends React.Component {
         }
     }
 
-    onFormSubmit = formVals => {
+    private onFormSubmit = formVals => {
         this.setState({
             errorText: "",
             busy: true,
@@ -296,7 +319,7 @@ export default class Registration extends React.Component {
         });
     };
 
-    _requestEmailToken = (emailAddress, clientSecret, sendAttempt, sessionId) => {
+    private requestEmailToken = (emailAddress, clientSecret, sendAttempt, sessionId) => {
         return this.state.matrixClient.requestRegisterEmailToken(
             emailAddress,
             clientSecret,
@@ -310,28 +333,26 @@ export default class Registration extends React.Component {
         );
     }
 
-    _onUIAuthFinished = async (success, response, extra) => {
+    private onUIAuthFinished = async (success, response, extra) => {
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?
             if (response.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
                     response.data.limit_type,
-                    response.data.admin_contact, {
-                    'monthly_active_user': _td(
-                        "This homeserver has hit its Monthly Active User limit.",
-                    ),
-                    '': _td(
-                        "This homeserver has exceeded one of its resource limits.",
-                    ),
-                });
+                    response.data.admin_contact,
+                    {
+                        'monthly_active_user': _td("This homeserver has hit its Monthly Active User limit."),
+                        '': _td("This homeserver has exceeded one of its resource limits."),
+                    },
+                );
                 const errorDetail = messageForResourceLimitError(
                     response.data.limit_type,
-                    response.data.admin_contact, {
-                    '': _td(
-                        "Please <a>contact your service administrator</a> to continue using this service.",
-                    ),
-                });
+                    response.data.admin_contact,
+                    {
+                        '': _td("Please <a>contact your service administrator</a> to continue using this service."),
+                    },
+                );
                 msg = <div>
                     <p>{errorTop}</p>
                     <p>{errorDetail}</p>
@@ -339,7 +360,7 @@ export default class Registration extends React.Component {
             } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;
                 for (const flow of response.available_flows) {
-                    msisdnAvailable |= flow.stages.indexOf('m.login.msisdn') > -1;
+                    msisdnAvailable = msisdnAvailable || flow.stages.includes('m.login.msisdn');
                 }
                 if (!msisdnAvailable) {
                     msg = _t('This server does not support authentication with a phone number.');
@@ -358,6 +379,10 @@ export default class Registration extends React.Component {
         const newState = {
             doingUIAuth: false,
             registeredUsername: response.user_id,
+            differentLoggedInUserId: null,
+            completedNoSignin: false,
+            // we're still busy until we get unmounted: don't show the registration form again
+            busy: true,
         };
 
         // The user came in through an email validation link. To avoid overwriting
@@ -372,8 +397,6 @@ export default class Registration extends React.Component {
                 `Found a session for ${sessionOwner} but ${response.userId} has just registered.`,
             );
             newState.differentLoggedInUserId = sessionOwner;
-        } else {
-            newState.differentLoggedInUserId = null;
         }
 
         if (response.access_token) {
@@ -385,9 +408,7 @@ export default class Registration extends React.Component {
                 accessToken: response.access_token,
             }, this.state.formVals.password);
 
-            this._setupPushers();
-            // we're still busy until we get unmounted: don't show the registration form again
-            newState.busy = true;
+            this.setupPushers();
         } else {
             newState.busy = false;
             newState.completedNoSignin = true;
@@ -396,7 +417,7 @@ export default class Registration extends React.Component {
         this.setState(newState);
     };
 
-    _setupPushers() {
+    private setupPushers() {
         if (!this.props.brand) {
             return Promise.resolve();
         }
@@ -419,38 +440,38 @@ export default class Registration extends React.Component {
         });
     }
 
-    onLoginClick = ev => {
+    private onLoginClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onLoginClick();
     };
 
-    onGoToFormClicked = ev => {
+    private onGoToFormClicked = ev => {
         ev.preventDefault();
         ev.stopPropagation();
-        this._replaceClient();
+        this.replaceClient(this.props.serverConfig);
         this.setState({
             busy: false,
             doingUIAuth: false,
-            phase: PHASE_REGISTRATION,
+            phase: Phase.Registration,
         });
     };
 
-    onServerDetailsNextPhaseClick = async () => {
+    private onServerDetailsNextPhaseClick = async () => {
         this.setState({
-            phase: PHASE_REGISTRATION,
+            phase: Phase.Registration,
         });
     };
 
-    onEditServerDetailsClick = ev => {
+    private onEditServerDetailsClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
-            phase: PHASE_SERVER_DETAILS,
+            phase: Phase.ServerDetails,
         });
     };
 
-    _makeRegisterRequest = auth => {
+    private makeRegisterRequest = auth => {
         // We inhibit login if we're trying to register with an email address: this
         // avoids a lot of complex race conditions that can occur if we try to log
         // the user in one one or both of the tabs they might end up with after
@@ -466,13 +487,15 @@ export default class Registration extends React.Component {
             username: this.state.formVals.username,
             password: this.state.formVals.password,
             initial_device_display_name: this.props.defaultDeviceDisplayName,
+            auth: undefined,
+            inhibit_login: undefined,
         };
         if (auth) registerParams.auth = auth;
         if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;
         return this.state.matrixClient.registerRequest(registerParams);
     };
 
-    _getUIAuthInputs() {
+    private getUIAuthInputs() {
         return {
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
@@ -483,7 +506,7 @@ export default class Registration extends React.Component {
     // Links to the login page shown after registration is completed are routed through this
     // which checks the user hasn't already logged in somewhere else (perhaps we should do
     // this more generally?)
-    _onLoginClickWithCheck = async ev => {
+    private onLoginClickWithCheck = async ev => {
         ev.preventDefault();
 
         const sessionLoaded = await Lifecycle.loadSession({ignoreGuest: true});
@@ -493,7 +516,7 @@ export default class Registration extends React.Component {
         }
     };
 
-    renderServerComponent() {
+    private renderServerComponent() {
         const ServerTypeSelector = sdk.getComponent("auth.ServerTypeSelector");
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
         const ModularServerConfig = sdk.getComponent("auth.ModularServerConfig");
@@ -503,7 +526,7 @@ export default class Registration extends React.Component {
         }
 
         // Hide the server picker once the user is doing UI Auth unless encountered a fatal server error
-        if (this.state.phase !== PHASE_SERVER_DETAILS && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
+        if (this.state.phase !== Phase.ServerDetails && this.state.doingUIAuth && !this.state.serverErrorIsFatal) {
             return null;
         }
 
@@ -511,7 +534,7 @@ export default class Registration extends React.Component {
         // which is always shown if we allow custom URLs at all.
         // (if there's a fatal server error, we need to show the full server
         // config as the user may need to change servers to resolve the error).
-        if (PHASES_ENABLED && this.state.phase !== PHASE_SERVER_DETAILS && !this.state.serverErrorIsFatal) {
+        if (PHASES_ENABLED && this.state.phase !== Phase.ServerDetails && !this.state.serverErrorIsFatal) {
             return <div>
                 <ServerTypeSelector
                     selected={this.state.serverType}
@@ -520,7 +543,7 @@ export default class Registration extends React.Component {
             </div>;
         }
 
-        const serverDetailsProps = {};
+        const serverDetailsProps: ComponentProps<typeof ServerConfig> = {};
         if (PHASES_ENABLED) {
             serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
             serverDetailsProps.submitText = _t("Next");
@@ -559,8 +582,8 @@ export default class Registration extends React.Component {
         </div>;
     }
 
-    renderRegisterComponent() {
-        if (PHASES_ENABLED && this.state.phase !== PHASE_REGISTRATION) {
+    private renderRegisterComponent() {
+        if (PHASES_ENABLED && this.state.phase !== Phase.Registration) {
             return null;
         }
 
@@ -571,10 +594,10 @@ export default class Registration extends React.Component {
         if (this.state.matrixClient && this.state.doingUIAuth) {
             return <InteractiveAuth
                 matrixClient={this.state.matrixClient}
-                makeRequest={this._makeRegisterRequest}
-                onAuthFinished={this._onUIAuthFinished}
-                inputs={this._getUIAuthInputs()}
-                requestEmailToken={this._requestEmailToken}
+                makeRequest={this.makeRegisterRequest}
+                onAuthFinished={this.onUIAuthFinished}
+                inputs={this.getUIAuthInputs()}
+                requestEmailToken={this.requestEmailToken}
                 sessionId={this.props.sessionId}
                 clientSecret={this.props.clientSecret}
                 emailSid={this.props.idSid}
@@ -633,7 +656,7 @@ export default class Registration extends React.Component {
 
         // Only show the 'go back' button if you're not looking at the form
         let goBack;
-        if ((PHASES_ENABLED && this.state.phase !== PHASE_REGISTRATION) || this.state.doingUIAuth) {
+        if ((PHASES_ENABLED && this.state.phase !== Phase.Registration) || this.state.doingUIAuth) {
             goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
                 { _t('Go back') }
             </a>;
@@ -651,7 +674,7 @@ export default class Registration extends React.Component {
                             loggedInUserId: this.state.differentLoggedInUserId,
                         },
                     )}</p>
-                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={this._onLoginClickWithCheck}>
+                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={this.onLoginClickWithCheck}>
                         {_t("Continue with previous account")}
                     </AccessibleButton></p>
                 </div>;
@@ -660,7 +683,7 @@ export default class Registration extends React.Component {
                 regDoneText = <h3>{_t(
                     "<a>Log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
+                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{sub}</a>,
                     },
                 )}</h3>;
             } else {
@@ -670,7 +693,7 @@ export default class Registration extends React.Component {
                 regDoneText = <h3>{_t(
                     "You can now close this window or <a>log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this._onLoginClickWithCheck}>{sub}</a>,
+                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{sub}</a>,
                     },
                 )}</h3>;
             }
@@ -679,7 +702,7 @@ export default class Registration extends React.Component {
                 { regDoneText }
             </div>;
         } else {
-            let yourMatrixAccountText = _t('Create your Matrix account on %(serverName)s', {
+            let yourMatrixAccountText: ReactNode = _t('Create your Matrix account on %(serverName)s', {
                 serverName: this.props.serverConfig.hsName,
             });
             if (this.props.serverConfig.hsNameIsDifferent) {
@@ -717,7 +740,7 @@ export default class Registration extends React.Component {
                 { errorText }
                 { serverDeadSection }
                 { this.renderServerComponent() }
-                { this.state.phase !== PHASE_SERVER_DETAILS && <h3>
+                { this.state.phase !== Phase.ServerDetails && <h3>
                     {yourMatrixAccountText}
                     {editLink}
                 </h3> }

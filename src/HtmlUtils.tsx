@@ -27,9 +27,12 @@ import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
+import katex from 'katex';
+import { AllHtmlEntities } from 'html-entities';
+import SettingsStore from './settings/SettingsStore';
+import cheerio from 'cheerio';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import SettingsStore from './settings/SettingsStore';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
@@ -240,7 +243,8 @@ const sanitizeHtmlParams: IExtendedSanitizeOptions = {
     allowedAttributes: {
         // custom ones first:
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
-        span: ['data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
+        span: ['data-mx-maths', 'data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
+        div: ['data-mx-maths'],
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
         img: ['src', 'width', 'height', 'alt', 'title'],
         ol: ['start'],
@@ -414,6 +418,21 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         if (isHtmlMessage) {
             isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
+
+            if (SettingsStore.getValue("feature_latex_maths")) {
+                const phtml = cheerio.load(safeBody,
+                    { _useHtmlParser2: true, decodeEntities: false })
+                phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
+                    return katex.renderToString(
+                        AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
+                        {
+                            throwOnError: false,
+                            displayMode: e.name == 'div',
+                            output: "htmlAndMathml",
+                        });
+                });
+                safeBody = phtml.html();
+            }
         }
     } finally {
         delete sanitizeParams.textFilter;
@@ -515,7 +534,6 @@ export function checkBlockNode(node: Node) {
         case "H6":
         case "PRE":
         case "BLOCKQUOTE":
-        case "DIV":
         case "P":
         case "UL":
         case "OL":
@@ -528,6 +546,9 @@ export function checkBlockNode(node: Node) {
         case "TH":
         case "TD":
             return true;
+        case "DIV":
+            // don't treat math nodes as block nodes for deserializing
+            return !(node as HTMLElement).hasAttribute("data-mx-maths");
         default:
             return false;
     }

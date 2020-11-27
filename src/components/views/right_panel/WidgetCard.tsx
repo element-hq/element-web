@@ -103,7 +103,6 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
             creatorUserId={app.creatorUserId}
             widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
             waitForIframeLoad={app.waitForIframeLoad}
-            whitelistCapabilities={WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, room.roomId)}
         />
     </BaseCard>;
 };

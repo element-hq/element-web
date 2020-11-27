@@ -17,8 +17,6 @@
 import { Room } from "matrix-js-sdk/src/models/room";
 import {
     ClientWidgetApi,
-    IGetOpenIDActionRequest,
-    IGetOpenIDActionResponseData,
     IStickerActionRequest,
     IStickyActionRequest,
     ITemplateParams,
@@ -27,10 +25,8 @@ import {
     IWidgetApiRequestEmptyData,
     IWidgetData,
     MatrixCapabilities,
-    OpenIDRequestState,
     runTemplate,
     Widget,
-    WidgetApiToWidgetAction,
     WidgetApiFromWidgetAction,
     IModalWidgetOpenRequest,
     IWidgetApiErrorResponseData,
@@ -50,8 +46,6 @@ import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ElementWidgetActions, IViewRoomApiRequest } from "./ElementWidgetActions";
-import Modal from "../../Modal";
-import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import {ModalWidgetStore} from "../ModalWidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import {getCustomTheme} from "../../theme";
@@ -74,9 +68,9 @@ interface IAppTileProps {
 }
 
 // TODO: Don't use this because it's wrong
-class ElementWidget extends Widget {
-    constructor(w) {
-        super(w);
+export class ElementWidget extends Widget {
+    constructor(private rawDefinition: IWidget) {
+        super(rawDefinition);
     }
 
     public get templateUrl(): string {
@@ -137,12 +131,7 @@ class ElementWidget extends Widget {
 
     public getCompleteUrl(params: ITemplateParams, asPopout=false): string {
         return runTemplate(asPopout ? this.popoutTemplateUrl : this.templateUrl, {
-            // we need to supply a whole widget to the template, but don't have
-            // easy access to the definition the superclass is using, so be sad
-            // and gutwrench it.
-            // This isn't a problem when the widget architecture is fixed and this
-            // subclass gets deleted.
-            ...super['definition'], // XXX: Private member access
+            ...this.rawDefinition,
             data: this.rawData,
         }, params);
     }
@@ -240,55 +229,6 @@ export class StopGapWidget extends EventEmitter {
         return this.messaging.widget.id;
     }
 
-    private onOpenIdReq = async (ev: CustomEvent<IGetOpenIDActionRequest>) => {
-        ev.preventDefault();
-
-        const rawUrl = this.appTileProps.app.url;
-        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, rawUrl, this.appTileProps.userWidget);
-
-        const settings = SettingsStore.getValue("widgetOpenIDPermissions");
-        if (settings.deny && settings.deny.includes(widgetSecurityKey)) {
-            this.messaging.transport.reply(ev.detail, <IGetOpenIDActionResponseData>{
-                state: OpenIDRequestState.Blocked,
-            });
-            return;
-        }
-        if (settings.allow && settings.allow.includes(widgetSecurityKey)) {
-            const credentials = await MatrixClientPeg.get().getOpenIdToken();
-            this.messaging.transport.reply(ev.detail, <IGetOpenIDActionResponseData>{
-                state: OpenIDRequestState.Allowed,
-                ...credentials,
-            });
-            return;
-        }
-
-        // Confirm that we received the request
-        this.messaging.transport.reply(ev.detail, <IGetOpenIDActionResponseData>{
-            state: OpenIDRequestState.PendingUserConfirmation,
-        });
-
-        // Actually ask for permission to send the user's data
-        Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
-            widgetUrl: rawUrl,
-            widgetId: this.widgetId,
-            isUserWidget: this.appTileProps.userWidget,
-
-            onFinished: async (confirm) => {
-                const responseBody: IGetOpenIDActionResponseData = {
-                    state: confirm ? OpenIDRequestState.Allowed : OpenIDRequestState.Blocked,
-                    original_request_id: ev.detail.requestId, // eslint-disable-line camelcase
-                };
-                if (confirm) {
-                    const credentials = await MatrixClientPeg.get().getOpenIdToken();
-                    Object.assign(responseBody, credentials);
-                }
-                this.messaging.transport.send(WidgetApiToWidgetAction.OpenIDCredentials, responseBody).catch(error => {
-                    console.error("Failed to send OpenID credentials: ", error);
-                });
-            },
-        });
-    };
-
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>) => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
@@ -306,11 +246,10 @@ export class StopGapWidget extends EventEmitter {
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
-        const driver = new StopGapWidgetDriver( allowedCapabilities, this.mockWidget, this.kind);
+        const driver = new StopGapWidgetDriver(allowedCapabilities, this.mockWidget, this.kind, this.roomId);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("ready", () => this.emit("ready"));
-        this.messaging.on(`action:${WidgetApiFromWidgetAction.GetOpenIDCredentials}`, this.onOpenIdReq);
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
 
@@ -351,18 +290,39 @@ export class StopGapWidget extends EventEmitter {
         MatrixClientPeg.get().on('event', this.onEvent);
         MatrixClientPeg.get().on('Event.decrypted', this.onEventDecrypted);
 
-        if (WidgetType.JITSI.matches(this.mockWidget.type)) {
-            this.messaging.on("action:set_always_on_screen",
-                (ev: CustomEvent<IStickyActionRequest>) => {
-                    if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+        this.messaging.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
+            (ev: CustomEvent<IStickyActionRequest>) => {
+                if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                    if (WidgetType.JITSI.matches(this.mockWidget.type)) {
                         CountlyAnalytics.instance.trackJoinCall(this.appTileProps.room.roomId, true, true);
-                        ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
-                        ev.preventDefault();
-                        this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
                     }
-                },
-            );
-        } else if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
+                    ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
+                    ev.preventDefault();
+                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
+                }
+            },
+        );
+
+        // TODO: Replace this event listener with appropriate driver functionality once the API
+        // establishes a sane way to send events back and forth.
+        this.messaging.on(`action:${WidgetApiFromWidgetAction.SendSticker}`,
+            (ev: CustomEvent<IStickerActionRequest>) => {
+                if (this.messaging.hasCapability(MatrixCapabilities.StickerSending)) {
+                    // Acknowledge first
+                    ev.preventDefault();
+                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+
+                    // Send the sticker
+                    defaultDispatcher.dispatch({
+                        action: 'm.sticker',
+                        data: ev.detail.data,
+                        widgetId: this.mockWidget.id,
+                    });
+                }
+            },
+        );
+
+        if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
             this.messaging.on(`action:${ElementWidgetActions.OpenIntegrationManager}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
@@ -392,23 +352,6 @@ export class StopGapWidget extends EventEmitter {
                             integId,
                         );
                     }
-                },
-            );
-
-            // TODO: Replace this event listener with appropriate driver functionality once the API
-            // establishes a sane way to send events back and forth.
-            this.messaging.on(`action:${WidgetApiFromWidgetAction.SendSticker}`,
-                (ev: CustomEvent<IStickerActionRequest>) => {
-                    // Acknowledge first
-                    ev.preventDefault();
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
-
-                    // Send the sticker
-                    defaultDispatcher.dispatch({
-                        action: 'm.sticker',
-                        data: ev.detail.data,
-                        widgetId: this.mockWidget.id,
-                    });
                 },
             );
         }

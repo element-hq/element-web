@@ -1,3 +1,73 @@
+Changes in [3.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.9.0) (2020-11-23)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.9.0-rc.1...v3.9.0)
+
+ * Upgrade JS SDK to 9.2.0
+ * [Release] Fix encrypted video playback in Chrome-based browsers
+   [\#5431](https://github.com/matrix-org/matrix-react-sdk/pull/5431)
+
+Changes in [3.9.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.9.0-rc.1) (2020-11-18)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.8.0...v3.9.0-rc.1)
+
+ * Upgrade JS SDK to 9.2.0-rc.1
+ * Translations update from Weblate
+   [\#5429](https://github.com/matrix-org/matrix-react-sdk/pull/5429)
+ * Fix message search summary text
+   [\#5428](https://github.com/matrix-org/matrix-react-sdk/pull/5428)
+ * Shrink new room intro top margin to half for encryption bubble tile
+   [\#5427](https://github.com/matrix-org/matrix-react-sdk/pull/5427)
+ * Small delight tweaks to improve rough corners in the app
+   [\#5418](https://github.com/matrix-org/matrix-react-sdk/pull/5418)
+ * Fix DM logic to always pick a more reliable DM room
+   [\#5424](https://github.com/matrix-org/matrix-react-sdk/pull/5424)
+ * Update styling of the Analytics toast
+   [\#5408](https://github.com/matrix-org/matrix-react-sdk/pull/5408)
+ * Fix vertical centering of the Homepage and button layout
+   [\#5420](https://github.com/matrix-org/matrix-react-sdk/pull/5420)
+ * Fix BaseAvatar sometimes messing up and duplicating the url
+   [\#5422](https://github.com/matrix-org/matrix-react-sdk/pull/5422)
+ * Disable buttons when required by MSC2790
+   [\#5412](https://github.com/matrix-org/matrix-react-sdk/pull/5412)
+ * Fix drag drop file to upload for Safari
+   [\#5414](https://github.com/matrix-org/matrix-react-sdk/pull/5414)
+ * Fix poorly i18n'd string
+   [\#5416](https://github.com/matrix-org/matrix-react-sdk/pull/5416)
+ * Fix the feedback not closing without feedback/countly
+   [\#5417](https://github.com/matrix-org/matrix-react-sdk/pull/5417)
+ * Fix New Room Intro invite to this room button
+   [\#5419](https://github.com/matrix-org/matrix-react-sdk/pull/5419)
+ * Change how we expose Role in User Info and hide in DMs
+   [\#5413](https://github.com/matrix-org/matrix-react-sdk/pull/5413)
+ * Disallow sending of empty messages
+   [\#5390](https://github.com/matrix-org/matrix-react-sdk/pull/5390)
+ * hide some validation tooltips if fields are valid.
+   [\#5403](https://github.com/matrix-org/matrix-react-sdk/pull/5403)
+ * Improvements around new room empty space interactions
+   [\#5398](https://github.com/matrix-org/matrix-react-sdk/pull/5398)
+ * Implement call hold
+   [\#5366](https://github.com/matrix-org/matrix-react-sdk/pull/5366)
+ * Fix Skeleton UI showing up when not intended.
+   [\#5407](https://github.com/matrix-org/matrix-react-sdk/pull/5407)
+ * Close context menu when user clicks the Home button
+   [\#5406](https://github.com/matrix-org/matrix-react-sdk/pull/5406)
+ * Skip e2ee warn logout prompt if user has no megolm sessions to lose
+   [\#5410](https://github.com/matrix-org/matrix-react-sdk/pull/5410)
+ * Allow country names to be translated
+   [\#5405](https://github.com/matrix-org/matrix-react-sdk/pull/5405)
+ * Support thirdparty lookup for phone numbers
+   [\#5396](https://github.com/matrix-org/matrix-react-sdk/pull/5396)
+ * Change "Password" to "New Password"
+   [\#5371](https://github.com/matrix-org/matrix-react-sdk/pull/5371)
+ * Add customisation point for dehydration key
+   [\#5397](https://github.com/matrix-org/matrix-react-sdk/pull/5397)
+ * Rebrand Riot -> Element in the permalink classes
+   [\#5386](https://github.com/matrix-org/matrix-react-sdk/pull/5386)
+ * Invite / Create DM UX tweaks
+   [\#5387](https://github.com/matrix-org/matrix-react-sdk/pull/5387)
+ * Tweaks to toasts and post-registration landing
+   [\#5383](https://github.com/matrix-org/matrix-react-sdk/pull/5383)
+
 Changes in [3.8.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.8.0) (2020-11-09)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.8.0-rc.1...v3.8.0)

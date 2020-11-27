@@ -48,6 +48,8 @@ import {Jitsi} from "./widgets/Jitsi";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
+import CallHandler from './CallHandler';
+import LifecycleCustomisations from "./customisations/Lifecycle";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -588,9 +590,9 @@ export function logout(): void {
 
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
-        // Also we sometimes want to re-log in a guest session
-        // if we abort the login
-        onLoggedOut();
+        // Also we sometimes want to re-log in a guest session if we abort the login.
+        // defer until next tick because it calls a synchronous dispatch and we are likely here from a dispatch.
+        setImmediate(() => onLoggedOut());
         return;
     }
 
@@ -665,6 +667,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
+    CallHandler.sharedInstance().start();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
     // the thing just wastes CPU cycles, but should result in no actual functionality
@@ -714,6 +717,7 @@ export async function onLoggedOut(): Promise<void> {
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
     await clearStorage({deleteEverything: true});
+    LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
 }
 
 /**
@@ -760,6 +764,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
  */
 export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
+    CallHandler.sharedInstance().stop();
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
     Presence.stop();

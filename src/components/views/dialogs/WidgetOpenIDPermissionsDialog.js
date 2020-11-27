@@ -17,18 +17,17 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
 import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import WidgetUtils from "../../../utils/WidgetUtils";
-import {SettingLevel} from "../../../settings/SettingLevel";
+import {Widget} from "matrix-widget-api";
+import {OIDCState, WidgetPermissionStore} from "../../../stores/widgets/WidgetPermissionStore";
 
 export default class WidgetOpenIDPermissionsDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
-        widgetUrl: PropTypes.string.isRequired,
-        widgetId: PropTypes.string.isRequired,
-        isUserWidget: PropTypes.bool.isRequired,
+        widget: PropTypes.objectOf(Widget).isRequired,
+        widgetKind: PropTypes.string.isRequired, // WidgetKind from widget-api
+        inRoomId: PropTypes.string,
     };
 
     constructor() {
@@ -51,16 +50,10 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
         if (this.state.rememberSelection) {
             console.log(`Remembering ${this.props.widgetId} as allowed=${allowed} for OpenID`);
 
-            const currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
-            if (!currentValues.allow) currentValues.allow = [];
-            if (!currentValues.deny) currentValues.deny = [];
-
-            const securityKey = WidgetUtils.getWidgetSecurityKey(
-                this.props.widgetId,
-                this.props.widgetUrl,
-                this.props.isUserWidget);
-            (allowed ? currentValues.allow : currentValues.deny).push(securityKey);
-            SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);
+            WidgetPermissionStore.instance.setOIDCState(
+                this.props.widget, this.props.widgetKind, this.props.inRoomId,
+                allowed ? OIDCState.Allowed : OIDCState.Denied,
+            );
         }
 
         this.props.onFinished(allowed);
@@ -84,7 +77,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
                             "A widget located at %(widgetUrl)s would like to verify your identity. " +
                             "By allowing this, the widget will be able to verify your user ID, but not " +
                             "perform actions as you.", {
-                                widgetUrl: this.props.widgetUrl.split("?")[0],
+                                widgetUrl: this.props.widget.templateUrl.split("?")[0],
                             },
                         )}
                     </p>
