@@ -589,9 +589,9 @@ export function logout(): void {
 
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
-        // Also we sometimes want to re-log in a guest session
-        // if we abort the login
-        onLoggedOut();
+        // Also we sometimes want to re-log in a guest session if we abort the login.
+        // defer until next tick because it calls a synchronous dispatch and we are likely here from a dispatch.
+        setImmediate(() => onLoggedOut());
         return;
     }
 
