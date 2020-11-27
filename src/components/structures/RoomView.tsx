@@ -804,7 +804,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.state.room.getUnreadNotificationCount() === 0) return;
         CHAT_EFFECTS.forEach(effect => {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
-                dis.dispatch({action: `CHAT_EFFECTS.${effect.command}`});
+                dis.dispatch({action: `effects.${effect.command}`});
             }
         })
     };
