@@ -117,6 +117,12 @@ export interface ISetting {
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
+    "feature_latex_maths": {
+        isFeature: true,
+        displayName: _td("Render LaTeX maths in messages"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_communities_v2_prototypes": {
         isFeature: true,
         displayName: _td(

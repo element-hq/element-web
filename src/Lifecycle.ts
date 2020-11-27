@@ -49,6 +49,7 @@ import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import CallHandler from './CallHandler';
+import LifecycleCustomisations from "./customisations/Lifecycle";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -589,9 +590,9 @@ export function logout(): void {
 
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
-        // Also we sometimes want to re-log in a guest session
-        // if we abort the login
-        onLoggedOut();
+        // Also we sometimes want to re-log in a guest session if we abort the login.
+        // defer until next tick because it calls a synchronous dispatch and we are likely here from a dispatch.
+        setImmediate(() => onLoggedOut());
         return;
     }
 
@@ -716,6 +717,7 @@ export async function onLoggedOut(): Promise<void> {
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
     await clearStorage({deleteEverything: true});
+    LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
 }
 
 /**
