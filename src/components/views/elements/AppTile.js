@@ -375,17 +375,20 @@ export default class AppTile extends React.Component {
                     </div>
                 );
 
-                // all widgets can theoretically be allowed to remain on screen, so we wrap
-                // them all in a PersistedElement from the get-go. If we wait, the iframe will
-                // be re-mounted later, which means the widget has to start over, which is bad.
+                if (!this.props.userWidget) {
+                    // All room widgets can theoretically be allowed to remain on screen, so we
+                    // wrap them all in a PersistedElement from the get-go. If we wait, the iframe
+                    // will be re-mounted later, which means the widget has to start over, which is
+                    // bad.
 
-                // Also wrap the PersistedElement in a div to fix the height, otherwise
-                // AppTile's border is in the wrong place
-                appTileBody = <div className="mx_AppTile_persistedWrapper">
-                    <PersistedElement persistKey={this._persistKey}>
-                        {appTileBody}
-                    </PersistedElement>
-                </div>;
+                    // Also wrap the PersistedElement in a div to fix the height, otherwise
+                    // AppTile's border is in the wrong place
+                    appTileBody = <div className="mx_AppTile_persistedWrapper">
+                        <PersistedElement persistKey={this._persistKey}>
+                            {appTileBody}
+                        </PersistedElement>
+                    </div>;
+                }
             }
         }
 

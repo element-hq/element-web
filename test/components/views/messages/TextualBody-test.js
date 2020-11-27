@@ -36,6 +36,7 @@ describe("<TextualBody />", () => {
         MatrixClientPeg.matrixClient = {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
+            isGuest: () => false,
         };
 
         const ev = mkEvent({
@@ -59,6 +60,7 @@ describe("<TextualBody />", () => {
         MatrixClientPeg.matrixClient = {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
+            isGuest: () => false,
         };
 
         const ev = mkEvent({
@@ -83,6 +85,7 @@ describe("<TextualBody />", () => {
             MatrixClientPeg.matrixClient = {
                 getRoom: () => mkStubRoom("room_id"),
                 getAccountData: () => undefined,
+                isGuest: () => false,
             };
         });
 
@@ -135,6 +138,7 @@ describe("<TextualBody />", () => {
                 getHomeserverUrl: () => "https://my_server/",
                 on: () => undefined,
                 removeListener: () => undefined,
+                isGuest: () => false,
             };
         });
 

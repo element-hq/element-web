@@ -29,7 +29,7 @@ import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
-import {ButtonEvent} from "../views/elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
@@ -205,6 +205,16 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
+    private onSignInClick = () => {
+        dis.dispatch({ action: 'start_login' });
+        this.setState({contextMenuPosition: null}); // also close the menu
+    };
+
+    private onRegisterClick = () => {
+        dis.dispatch({ action: 'start_registration' });
+        this.setState({contextMenuPosition: null}); // also close the menu
+    };
+
     private onHomeClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -261,10 +271,29 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
 
-        let hostingLink;
+        let topSection;
         const signupLink = getHostingLink("user-context-menu");
-        if (signupLink) {
-            hostingLink = (
+        if (MatrixClientPeg.get().isGuest()) {
+            topSection = (
+                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
+                    {_t("Got an account? <a>Sign in</a>", {}, {
+                        a: sub => (
+                            <AccessibleButton kind="link" onClick={this.onSignInClick}>
+                                {sub}
+                            </AccessibleButton>
+                        ),
+                    })}
+                    {_t("New here? <a>Create an account</a>", {}, {
+                        a: sub => (
+                            <AccessibleButton kind="link" onClick={this.onRegisterClick}>
+                                {sub}
+                            </AccessibleButton>
+                        ),
+                    })}
+                </div>
+            )
+        } else if (signupLink) {
+            topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
                     {_t(
                         "<a>Upgrade</a> to your own domain", {},
@@ -422,6 +451,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     </IconizedContextMenuOptionList>
                 </React.Fragment>
             )
+        } else if (MatrixClientPeg.get().isGuest()) {
+            primaryOptionList = (
+                <React.Fragment>
+                    <IconizedContextMenuOptionList>
+                        { homeButton }
+                        <IconizedContextMenuOption
+                            iconClassName="mx_UserMenu_iconSettings"
+                            label={_t("Settings")}
+                            onClick={(e) => this.onSettingsOpen(e, null)}
+                        />
+                        { feedbackButton }
+                    </IconizedContextMenuOptionList>
+                </React.Fragment>
+            );
         }
 
         const classes = classNames({
@@ -451,7 +494,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     />
                 </AccessibleTooltipButton>
             </div>
-            {hostingLink}
+            {topSection}
             {primaryOptionList}
             {secondarySection}
         </IconizedContextMenu>;
