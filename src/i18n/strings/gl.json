@@ -2917,5 +2917,15 @@
     "Return to call": "Volver á chamada",
     "Fill Screen": "Encher a pantalla",
     "Voice Call": "Chamada de voz",
-    "Video Call": "Chamada de vídeo"
+    "Video Call": "Chamada de vídeo",
+    "New here? <a>Create an account</a>": "Acabas de coñecernos? <a>Crea unha conta</a>",
+    "Got an account? <a>Sign in</a>": "Tes unha conta? <a>Conéctate</a>",
+    "Render LaTeX maths in messages": "Mostrar fórmulas matemáticas LaTex",
+    "No other application is using the webcam": "Outra aplicación non está usando a cámara",
+    "Permission is granted to use the webcam": "Tes permiso para acceder ó uso da cámara",
+    "A microphone and webcam are plugged in and set up correctly": "O micrófono e a cámara están conectados e correctamente configurados",
+    "Call failed because no webcam or microphone could not be accessed. Check that:": "A chamada fallou porque non están accesibles a cámara ou o micrófono. Comproba que:",
+    "Unable to access webcam / microphone": "Non se puido acceder a cámara / micrófono",
+    "Call failed because no microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "A chamada fallou porque non se puido acceder a un micrófono. Comproba que o micrófono está conectado e correctamente configurado.",
+    "Unable to access microphone": "Non se puido acceder ó micrófono"
 }
