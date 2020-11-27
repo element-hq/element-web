@@ -80,6 +80,7 @@ import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } 
 import Analytics from './Analytics';
 import CountlyAnalytics from "./CountlyAnalytics";
 import {UIFeature} from "./settings/UIFeature";
+import { CallError } from "matrix-js-sdk/src/webrtc/call";
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -226,11 +227,17 @@ export default class CallHandler {
     }
 
     private setCallListeners(call: MatrixCall) {
-        call.on(CallEvent.Error, (err) => {
+        call.on(CallEvent.Error, (err: CallError) => {
             if (!this.matchesCallForThisRoom(call)) return;
 
-            Analytics.trackEvent('voip', 'callError', 'error', err);
+            Analytics.trackEvent('voip', 'callError', 'error', err.toString());
             console.error("Call error:", err);
+
+            if (err.code === CallErrorCode.NoUserMedia) {
+                this.showMediaCaptureError(call);
+                return;
+            }
+
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
                 SettingsStore.getValue("fallbackICEServerAllowed") === null
@@ -377,6 +384,34 @@ export default class CallHandler {
         }, null, true);
     }
 
+    private showMediaCaptureError(call: MatrixCall) {
+        let title;
+        let description;
+
+        if (call.type === CallType.Voice) {
+            title = _t("Unable to access microphone");
+            description = <div>
+                {_t(
+                    "Call failed because no microphone could not be accessed. " +
+                    "Check that a microphone is plugged in and set up correctly.",
+                )}
+            </div>;
+        } else if (call.type === CallType.Video) {
+            title = _t("Unable to access webcam / microphone");
+            description = <div>
+                {_t("Call failed because no webcam or microphone could not be accessed. Check that:")}
+                <ul>
+                    <li>{_t("A microphone and webcam are plugged in and set up correctly")}</li>
+                    <li>{_t("Permission is granted to usethe webcam")}</li>
+                    <li>{_t("No other application is using the webcam")}</li>
+                </ul>
+            </div>;
+        }
+
+        Modal.createTrackedDialog('Media capture failed', '', ErrorDialog, {
+            title, description,
+        }, null, true);
+    }
 
     private placeCall(
         roomId: string, type: PlaceCallType,
