@@ -274,6 +274,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         let topSection;
         const signupLink = getHostingLink("user-context-menu");
+        const hostingSignupOptions = SdkConfig.get().hosting_signup;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -293,41 +294,45 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     })}
                 </div>
             )
-        } else if (signupLink) {
-            topSection = (
-                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
-                    {_t(
-                        "<a>Upgrade</a> to your own domain", {},
-                        {
-                            a: sub => (
-                                <a
-                                    href={signupLink}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    tabIndex={-1}
-                                >{sub}</a>
-                            ),
-                        },
-                    )}
-                </div>
-            );
-        }
-        const hostingSignupOptions = SdkConfig.get().hosting_signup;
-        let hostingSignupIFrame;
-        if (hostingSignupOptions && hostingSignupOptions.url) {
-            // If hosting_signup_domains is set to a non-empty array, only show
-            // dialog if the user is on the domain or a subdomain.
-            const hostingSignupDomains = hostingSignupOptions.domains || [];
-            const mxDomain = MatrixClientPeg.get().getDomain();
-            const validDomains = hostingSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
-            if (!hostingSignupDomains || validDomains.length > 0) {
-                hostingSignupIFrame = <div
-                    className=""
-                    onClick={this.onCloseMenu}
-                >
-                    <HostingSignupAction />
-                </div>;
+        } else if (signupLink || hostingSignupOptions) {
+            let hostingSignupIFrame;
+            if (hostingSignupOptions && hostingSignupOptions.url) {
+                // If hosting_signup_domains is set to a non-empty array, only show
+                // dialog if the user is on the domain or a subdomain.
+                const hostingSignupDomains = hostingSignupOptions.domains || [];
+                const mxDomain = MatrixClientPeg.get().getDomain();
+                const validDomains = hostingSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
+                if (!hostingSignupDomains || validDomains.length > 0) {
+                    hostingSignupIFrame = <div
+                        className=""
+                        onClick={this.onCloseMenu}
+                    >
+                        <HostingSignupAction />
+                    </div>;
+                }
             }
+            topSection = (
+                <>
+                    {signupLink &&
+                        <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
+                            {_t(
+                                "<a>Upgrade</a> to your own domain", {},
+                                {
+                                    a: sub => (
+                                        <a
+                                            href={signupLink}
+                                            target="_blank"
+                                            rel="noreferrer noopener"
+                                            tabIndex={-1}
+                                        >{sub}</a>
+                                    ),
+                                },
+                            )}
+                        </div>
+                    }
+                    {hostingSignupIFrame}
+                </>
+            );
         }
 
         let homeButton = null;
@@ -513,7 +518,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </AccessibleTooltipButton>
             </div>
             {topSection}
-            {hostingSignupIFrame}
             {primaryOptionList}
             {secondarySection}
         </IconizedContextMenu>;

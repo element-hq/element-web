@@ -17,7 +17,7 @@ limitations under the License.
 import * as React from "react";
 import Modal from "../../Modal";
 import HostingSignupDialog from "../views/dialogs/HostingSignupDialog";
-import IconizedContextMenu, {
+import {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
