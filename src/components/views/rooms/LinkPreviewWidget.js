@@ -134,6 +134,10 @@ export default class LinkPreviewWidget extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_LinkPreviewWidget">
+                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
+                    <img className="mx_filterFlipColor" alt="" role="presentation"
+                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
+                </AccessibleButton>
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a></div>
@@ -142,10 +146,6 @@ export default class LinkPreviewWidget extends React.Component {
                         { description }
                     </div>
                 </div>
-                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
-                    <img className="mx_filterFlipColor" alt="" role="presentation"
-                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
-                </AccessibleButton>
             </div>
         );
     }
