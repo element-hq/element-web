@@ -1,12 +1,22 @@
+/*
+ Copyright 2020 Nurjin Jafar
+ Copyright 2020 Nordeck IT + Consulting GmbH.
+
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 import ICanvasEffect from '../ICanvasEffect';
 
-declare global {
-    interface Window {
-        mozRequestAnimationFrame: any;
-        oRequestAnimationFrame: any;
-        msRequestAnimationFrame: any;
-    }
-}
 
 export type ConfettiOptions = {
     /**
@@ -58,11 +68,7 @@ export default class Confetti implements ICanvasEffect {
     }
 
     private context: CanvasRenderingContext2D | null = null;
-    private supportsAnimationFrame = window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame;
+    private supportsAnimationFrame = window.requestAnimationFrame;
     private colors = ['rgba(30,144,255,', 'rgba(107,142,35,', 'rgba(255,215,0,',
         'rgba(255,192,203,', 'rgba(106,90,205,', 'rgba(173,216,230,',
         'rgba(238,130,238,', 'rgba(152,251,152,', 'rgba(70,130,180,',
@@ -78,16 +84,6 @@ export default class Confetti implements ICanvasEffect {
         if (!canvas) {
             return;
         }
-        window.requestAnimationFrame = (function() {
-            return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.oRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                function(callback) {
-                    return window.setTimeout(callback, this.options.frameInterval);
-                };
-        })();
         this.context = canvas.getContext('2d');
         this.particles = [];
         const count = this.options.maxCount;

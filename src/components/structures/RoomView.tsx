@@ -69,9 +69,9 @@ import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
-import EffectsOverlay from "../views/elements/effects/EffectsOverlay";
-import {containsEmoji} from '../views/elements/effects/effectUtilities';
-import effects from '../views/elements/effects'
+import EffectsOverlay from "../views/elements/EffectsOverlay";
+import {containsEmoji} from '../../effects/effectUtilities';
+import {CHAT_EFFECTS} from '../../effects'
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
@@ -802,9 +802,9 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (!this.state.room ||
             !this.state.matrixClientIsReady ||
             this.state.room.getUnreadNotificationCount() === 0) return;
-        effects.forEach(effect => {
+        CHAT_EFFECTS.forEach(effect => {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
-                dis.dispatch({action: `effects.${effect.command}`});
+                dis.dispatch({action: `CHAT_EFFECTS.${effect.command}`});
             }
         })
     };

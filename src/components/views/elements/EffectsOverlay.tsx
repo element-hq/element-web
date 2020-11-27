@@ -1,7 +1,24 @@
+/*
+ Copyright 2020 Nurjin Jafar
+ Copyright 2020 Nordeck IT + Consulting GmbH.
+
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 import React, { FunctionComponent, useEffect, useRef } from 'react';
-import dis from '../../../../dispatcher/dispatcher';
-import ICanvasEffect, { ICanvasEffectConstructable } from './ICanvasEffect.js';
-import effects from './index'
+import dis from '../../../dispatcher/dispatcher';
+import ICanvasEffect, { ICanvasEffectConstructable } from '../../../effects/ICanvasEffect.js';
+import {CHAT_EFFECTS} from '../../../effects'
 
 export type EffectsOverlayProps = {
     roomWidth: number;
@@ -15,7 +32,7 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
         if (!name) return null;
         let effect: ICanvasEffect | null = effectsRef.current[name] || null;
         if (effect === null) {
-            const options = effects.find((e) => e.command === name)?.options
+            const options = CHAT_EFFECTS.find((e) => e.command === name)?.options
             try {
                 const { default: Effect }: { default: ICanvasEffectConstructable } = await import(`./${name}`);
                 effect = new Effect(options);

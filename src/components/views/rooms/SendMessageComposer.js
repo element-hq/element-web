@@ -42,8 +42,8 @@ import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
-import {containsEmoji} from "../elements/effects/effectUtilities";
-import effects from '../elements/effects';
+import {containsEmoji} from "../../../effects/effectUtilities";
+import {CHAT_EFFECTS} from '../../../effects';
 import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 
@@ -328,7 +328,7 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
-            effects.forEach((effect) => {
+            CHAT_EFFECTS.forEach((effect) => {
                 if (containsEmoji(content, effect.emojis)) {
                     dis.dispatch({action: `effects.${effect.command}`});
                 }

@@ -46,7 +46,7 @@ import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from 
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
-import effects from "./components/views/elements/effects"
+import {CHAT_EFFECTS} from "./effects"
 import CallHandler from "./CallHandler";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
@@ -1097,7 +1097,7 @@ export const Commands = [
         hideCompletionAfterSpace: true,
     }),
 
-    ...effects.map((effect) => {
+    ...CHAT_EFFECTS.map((effect) => {
         return new Command({
             command: effect.command,
             description: effect.description(),
