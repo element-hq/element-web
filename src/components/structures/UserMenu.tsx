@@ -276,7 +276,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
-                    {_t("Not you? <a>Sign in</a>", {}, {
+                    {_t("Got an account? <a>Sign in</a>", {}, {
                         a: sub => (
                             <AccessibleButton kind="link" onClick={this.onSignInClick}>
                                 {sub}
