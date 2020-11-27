@@ -296,6 +296,22 @@ export default class UserMenu extends React.Component<IProps, IState> {
             )
         } else if (signupLink || hostingSignupOptions) {
             let hostingSignupIFrame;
+            /*
+                Config schema:
+
+                ```
+                "hosting_signup": {
+                    // URL to load iframe from.
+                    "url": "https://prodiver.tld/setup",
+                    // Accepted Matrix user server names to show iframe action for.
+                    // Subdomains will also match.
+                    "domains": [
+                        "matrix.org",
+                        "domain.tld"
+                    ]
+                }
+                ```
+            */
             if (hostingSignupOptions && hostingSignupOptions.url) {
                 // If hosting_signup_domains is set to a non-empty array, only show
                 // dialog if the user is on the domain or a subdomain.
