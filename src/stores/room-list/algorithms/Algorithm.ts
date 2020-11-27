@@ -34,6 +34,7 @@ import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } f
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import SettingsStore from "../../../settings/SettingsStore";
+import { VisibilityProvider } from "../filters/VisibilityProvider";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -187,6 +188,10 @@ export class Algorithm extends EventEmitter {
     private async doUpdateStickyRoom(val: Room) {
         // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
         // otherwise we risk duplicating rooms.
+
+        if (val && !VisibilityProvider.instance.isRoomVisible(val)) {
+            val = null; // the room isn't visible - lie to the rest of this function
+        }
 
         // Set the last sticky room to indicate that we're in a change. The code throughout the
         // class can safely handle a null room, so this should be safe to do as a backup.
