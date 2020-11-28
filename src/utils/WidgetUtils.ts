@@ -22,7 +22,6 @@ import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher/dispatcher';
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 import SettingsStore from "../settings/SettingsStore";
-import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
@@ -455,27 +454,6 @@ export default class WidgetUtils {
         }
 
         return capWhitelist;
-    }
-
-    static getWidgetSecurityKey(widgetId: string, widgetUrl: string, isUserWidget: boolean): string {
-        let widgetLocation = ActiveWidgetStore.getRoomId(widgetId);
-
-        if (isUserWidget) {
-            const userWidget = WidgetUtils.getUserWidgetsArray()
-                .find((w) => w.id === widgetId && w.content && w.content.url === widgetUrl);
-
-            if (!userWidget) {
-                throw new Error("No matching user widget to form security key");
-            }
-
-            widgetLocation = userWidget.sender;
-        }
-
-        if (!widgetLocation) {
-            throw new Error("Failed to locate where the widget resides");
-        }
-
-        return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
     }
 
     static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string} = {}) {
