@@ -119,7 +119,7 @@ export async function loadSpellCheckLanguages() {
     const langs = SettingsStore.getValue("spell-check-languages", null, /*excludeDefault=*/true);
 
     try {
-        await languageHandler.setSpellCheckLanguage(langs);
+        await languageHandler.setSpellCheckLanguages(langs);
     } catch (e) {
         console.error("Unable to set spell-check language", e);
     }
