@@ -50,7 +50,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
-            spellCheckLanguages: [],
+            spellCheckLanguages: SettingsStore.getValue("spell-check-languages", null, /*excludeDefault=*/true),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
@@ -185,7 +185,9 @@ export default class GeneralUserSettingsTab extends React.Component {
     };
 
     _onSpellCheckLanguagesChange = (languages) => {
+        SettingsStore.setValue("spell-check-languages", null, SettingLevel.DEVICE, languages);
         this.setState({spellCheckLanguages: languages})
+        PlatformPeg.get().reload();
     };
 
     _onPasswordChangeError = (err) => {
