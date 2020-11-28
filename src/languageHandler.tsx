@@ -346,6 +346,13 @@ export function setLanguage(preferredLangs: string | string[]) {
     });
 }
 
+export function setSpellCheckLanguages(preferredLangs: string[]) {
+    const plaf = PlatformPeg.get();
+    if (plaf) {
+        plaf.setLanguage(preferredLangs);
+    }
+}
+
 export function getAllLanguagesFromJson() {
     return getLangsJson().then((langsObject) => {
         const langs = [];
