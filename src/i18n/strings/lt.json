@@ -2010,5 +2010,12 @@
     "Verify this session by confirming the following number appears on its screen.": "Patvirtinkite šį seansą, įsitikindami, kad jo ekrane rodomas toliau esantis skaičius.",
     "Privacy": "Privatumas",
     "Accept all %(invitedRooms)s invites": "Priimti visus %(invitedRooms)s pakvietimus",
-    "Bulk options": "Grupinės parinktys"
+    "Bulk options": "Grupinės parinktys",
+    "Confirm Security Phrase": "Patvirtinkite Slaptafrazę",
+    "Set a Security Phrase": "Nustatyti Slaptafrazę",
+    "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "Naudokite slaptafrazę, kurią žinote tik jūs ir pasirinktinai išsaugokite Apsaugos Raktą, naudoti kaip atsarginę kopiją.",
+    "Enter a Security Phrase": "Įveskite Slaptafrazę",
+    "Security Phrase": "Slaptafrazė",
+    "Enter a security phrase only you know, as it’s used to safeguard your data. To be secure, you shouldn’t re-use your account password.": "Įveskite slaptafrazę, kurią žinote tik jūs, nes ji naudojama jūsų duomenims apsaugoti. Tam, kad būtumėte saugūs, neturėtumėte vėl naudoti savo paskyros slaptažodžio.",
+    "Enter your Security Phrase or <button>Use your Security Key</button> to continue.": "Įveskite savo Slaptafrazę arba <button>Naudokite savo Apsaugos Raktą</button>, kad tęstumėte."
 }
