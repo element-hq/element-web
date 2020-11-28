@@ -115,6 +115,16 @@ export async function loadLanguage() {
     }
 }
 
+export async function loadSpellCheckLanguages() {
+    const langs = SettingsStore.getValue("spell-check-languages", null, /*excludeDefault=*/true);
+
+    try {
+        await languageHandler.setSpellCheckLanguage(langs);
+    } catch (e) {
+        console.error("Unable to set spell-check language", e);
+    }
+}
+
 export async function loadSkin() {
     // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
     // the SDK until we have to in imports.
