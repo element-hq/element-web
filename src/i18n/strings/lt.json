@@ -18,7 +18,7 @@
     "Missing indexeddb worker script!": "Trūksta indexeddb worker skripto!",
     "Unable to load config file: please refresh the page to try again.": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",
     "Previous/next recently visited room or community": "Ankstesnis/sekantis neseniai lankytas kambarys ar bendruomenė",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Kompiuteriui (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Kompiuteryje (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Nepalaikoma naršyklė",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Jūs galite toliau naudotis savo dabartine naršykle, bet kai kurios arba visos funkcijos gali neveikti ir programos išvaizda bei sąsaja gali būti neteisingai rodoma.",
