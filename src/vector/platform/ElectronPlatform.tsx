@@ -496,6 +496,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
+    async getAvailableSpellCheckLanguages(): Promise<string[]> {
+        return this._ipcCall('getAvailableSpellCheckLanguages');
+    }
+
     getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
