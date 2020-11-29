@@ -43,8 +43,8 @@ export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellChe
 
     render() {
         return (
-            <div className="mx_ExistingSpellCheckerLanguage">
-                <span className="mx_ExistingSpellCheckerLanguage_language">{this.props.language}</span>
+            <div className="mx_ExistingSpellCheckLanguage">
+                <span className="mx_ExistingSpellCheckLanguage_language">{this.props.language}</span>
                 <AccessibleButton onClick={this._onRemove} kind="danger_sm">
                     {_t("Remove")}
                 </AccessibleButton>
@@ -96,10 +96,9 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         );
 
         return (
-            <div className="mx_SpellCheckerLanguages">
+            <div className="mx_SpellCheckLanguages">
                 {existingSpellCheckLanguages}
-                <form onSubmit={this._onAddClick} noValidate={true}
-                      className="mx_mx_SpellCheckerLanguages_new">
+                <form onSubmit={this._onAddClick} noValidate={true}>
                     <LanguageDropdown className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
                                       value={this.state.newLanguage}
                                       onOptionChange={this._onNewLanguageChange} />

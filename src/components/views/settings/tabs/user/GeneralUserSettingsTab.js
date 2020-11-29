@@ -313,11 +313,10 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _renderSpellCheckSection() {
         return (
-             <div className="mx_SettingsTab_section">
+            <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Spell checking")}</span>
-                <SpellCheckSettings className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
-                            languages={this.state.spellCheckLanguages}
-                            onLanguagesChange={this._onSpellCheckLanguagesChange} />
+                <SpellCheckSettings languages={this.state.spellCheckLanguages}
+                                    onLanguagesChange={this._onSpellCheckLanguagesChange} />
             </div>
         );
     }
