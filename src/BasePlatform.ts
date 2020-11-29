@@ -237,6 +237,10 @@ export default abstract class BasePlatform {
 
     setLanguage(preferredLangs: string[]) {}
 
+    getAvailableSpellCheckLanguages(): Promise<string[]> | null {
+        return null;
+    }
+
     protected getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = new URL(window.location.href);
         url.hash = fragmentAfterLogin || "";
