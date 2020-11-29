@@ -50,7 +50,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
-            spellCheckLanguages: SettingsStore.getValue("spell-check-languages", null, /*excludeDefault=*/true),
+            spellCheckLanguages: SettingsStore.getValue("spell-check-languages", null, false),
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
