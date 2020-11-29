@@ -187,7 +187,11 @@ export default class GeneralUserSettingsTab extends React.Component {
     _onSpellCheckLanguagesChange = (languages) => {
         SettingsStore.setValue("spell-check-languages", null, SettingLevel.DEVICE, languages);
         this.setState({spellCheckLanguages: languages})
-        PlatformPeg.get().reload();
+        
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            plaf.setLanguage(languages);
+        }
     };
 
     _onPasswordChangeError = (err) => {
