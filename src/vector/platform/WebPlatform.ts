@@ -137,18 +137,18 @@ export default class WebPlatform extends VectorBasePlatform {
 
     pollForUpdate = () => {
         return this._getVersion().then((ver) => {
+            let updateStatus = UpdateCheckStatus.NotAvailable;
+
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
-            } else if (this.runningVersion !== ver) {
-                if (this.shouldShowUpdate(ver)) {
-                    showUpdateToast(this.runningVersion, ver);
-                }
-                return { status: UpdateCheckStatus.Ready };
+            } else if (this.runningVersion !== ver && this.shouldShowUpdate(ver)) {
+                showUpdateToast(this.runningVersion, ver);
+                updateStatus = UpdateCheckStatus.Ready;
             } else {
                 hideUpdateToast();
             }
 
-            return { status: UpdateCheckStatus.NotAvailable };
+            return { status: updateStatus };
         }, (err) => {
             console.error("Failed to poll for update", err);
             return {
