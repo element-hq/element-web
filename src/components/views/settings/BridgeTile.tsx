@@ -25,9 +25,20 @@ import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponentTs} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
+import type {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+
+interface IProps {
+    ev: MatrixEvent;
+    room: Room;
+}
+
+interface IState {
+    visible: boolean;
+}
 
 @replaceableComponentTs("views.settings.BridgeTile")
-export default class BridgeTile extends React.PureComponent {
+export default class BridgeTile extends React.PureComponent<IProps, IState> {
     static propTypes = {
         ev: PropTypes.object.isRequired,
         room: PropTypes.object.isRequired,
@@ -43,7 +54,7 @@ export default class BridgeTile extends React.PureComponent {
         });
     }
 
-    render(): ReactNode {
+    render() {
         const content = this.props.ev.getContent();
         const { channel, network, protocol } = content;
         const protocolName = protocol.displayname || protocol.id;
@@ -53,22 +64,22 @@ export default class BridgeTile extends React.PureComponent {
         let creator = null;
         if (content.creator) {
             creator = _t("This bridge was provisioned by <user />.", {}, {
-                    user: <Pill
-                        type={Pill.TYPE_USER_MENTION}
-                        room={this.props.room}
-                        url={makeUserPermalink(content.creator)}
-                        shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
-                    />,
+                user: () => <Pill
+                    type={Pill.TYPE_USER_MENTION}
+                    room={this.props.room}
+                    url={makeUserPermalink(content.creator)}
+                    shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
+                />,
             });
         }
 
         const bot = _t("This bridge is managed by <user />.", {}, {
-            user: <Pill
+            user: () => <Pill
                 type={Pill.TYPE_USER_MENTION}
                 room={this.props.room}
                 url={makeUserPermalink(this.props.ev.getSender())}
                 shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
-                />,
+            />,
         });
 
         let networkIcon;
@@ -88,7 +99,7 @@ export default class BridgeTile extends React.PureComponent {
                 url={ avatarUrl }
             />;
         } else {
-            networkIcon = <div class="noProtocolIcon"></div>;
+            networkIcon = <div className="noProtocolIcon"></div>;
         }
 
         const id = this.props.ev.getId();
