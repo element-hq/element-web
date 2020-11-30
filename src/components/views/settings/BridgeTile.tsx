@@ -25,7 +25,7 @@ import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponentTs} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
-import type {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 interface IProps {
@@ -34,6 +34,29 @@ interface IProps {
 }
 
 /**
+ * This should match https://github.com/matrix-org/matrix-doc/blob/hs/msc-bridge-inf/proposals/2346-bridge-info-state-event.md#mbridge
+ */
+interface IBridgeStateEvent {
+    bridgebot: string;
+    creator?: string;
+    protocol: {
+        id: string;
+        displayname?: string;
+        avatar_url?: string;
+        external_url?: string;
+    };
+    network?: {
+        id: string;
+        displayname?: string;
+        avatar_url?: string;
+        external_url?: string;
+    };
+    channel: {
+        id: string;
+        displayname?: string;
+        avatar_url?: string;
+        external_url?: string;
+    };
 }
 
 @replaceableComponentTs("views.settings.BridgeTile")
@@ -45,7 +68,12 @@ export default class BridgeTile extends React.PureComponent<IProps> {
 
 
     render() {
-        const content = this.props.ev.getContent();
+        const content: IBridgeStateEvent = this.props.ev.getContent();
+        // Validate
+        if (!content.bridgebot || !content.channel?.id || !content.protocol?.id) {
+            console.warn(`Bridge info event ${this.props.ev.getId()} has missing content. Tile will not render`);
+            return null;
+        }
         const { channel, network, protocol } = content;
         const protocolName = protocol.displayname || protocol.id;
         const channelName = channel.displayname || channel.id;
