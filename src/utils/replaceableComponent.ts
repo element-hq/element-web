@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { func } from 'prop-types';
 import * as React from 'react';
 import * as sdk from '../index';
 
@@ -37,4 +38,13 @@ export function replaceableComponent(name: string, origComponent: React.Componen
     // ultimately assumes that `getComponent()` won't throw an error and instead
     // return a falsey value like `null` when the skin doesn't have a component.
     return () => sdk.getComponent(name) || origComponent;
+}
+
+/**
+ * Typescript-compatible version of `replaceableComponent`
+ * @see replaceableComponent
+ * @param {string} name The dot-path name of the component being replaced.
+ */
+export function replaceableComponentTs(name: string) {
+    return (origComponent: typeof React.Component) => sdk.getComponent(name) || origComponent;
 }
