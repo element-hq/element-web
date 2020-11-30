@@ -66,7 +66,6 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         room: PropTypes.object.isRequired,
     }
 
-
     render() {
         const content: IBridgeStateEvent = this.props.ev.getContent();
         // Validate
@@ -77,7 +76,6 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         const { channel, network, protocol } = content;
         const protocolName = protocol.displayname || protocol.id;
         const channelName = channel.displayname || channel.id;
-        const networkName = network ? network.displayname || network.id : protocolName;
 
         let creator = null;
         if (content.creator) {
@@ -102,10 +100,10 @@ export default class BridgeTile extends React.PureComponent<IProps> {
 
         let networkIcon;
 
-        if (protocol.avatar) {
+        if (protocol.avatar_url) {
             const avatarUrl = getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                protocol.avatar, 64, 64, "crop",
+                protocol.avatar_url, 64, 64, "crop",
             );
 
             networkIcon = <BaseAvatar className="protocol-icon"
