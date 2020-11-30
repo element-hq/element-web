@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {_t} from "../../../languageHandler";
@@ -23,10 +23,10 @@ import Pill from "../elements/Pill";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {replaceableComponentTs} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 
-@replaceableComponent("views.settings.BridgeTile")
+@replaceableComponentTs("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent {
     static propTypes = {
         ev: PropTypes.object.isRequired,
@@ -43,7 +43,7 @@ export default class BridgeTile extends React.PureComponent {
         });
     }
 
-    render() {
+    render(): ReactNode {
         const content = this.props.ev.getContent();
         const { channel, network, protocol } = content;
         const protocolName = protocol.displayname || protocol.id;
