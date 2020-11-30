@@ -2920,5 +2920,15 @@
     "Return to call": "回到通話",
     "Fill Screen": "全螢幕",
     "Voice Call": "音訊通話",
-    "Video Call": "視訊通話"
+    "Video Call": "視訊通話",
+    "New here? <a>Create an account</a>": "新手？<a>建立帳號</a>",
+    "Got an account? <a>Sign in</a>": "有帳號了嗎？<a>登入</a>",
+    "Render LaTeX maths in messages": "在訊息中彩現 LaTeX 數學",
+    "No other application is using the webcam": "無其他應用程式正在使用網路攝影機",
+    "Permission is granted to use the webcam": "授予使用網路攝影機的權限",
+    "A microphone and webcam are plugged in and set up correctly": "麥克風與網路攝影機已插入並正確設定",
+    "Call failed because no webcam or microphone could not be accessed. Check that:": "因為無法存取網路攝影機或麥克風，所以通話失敗。請檢查：",
+    "Unable to access webcam / microphone": "無法存取網路攝影機／麥克風",
+    "Call failed because no microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "因為無法存取麥克風，所以通話失敗。請檢查是否已插入麥克風並正確設定。",
+    "Unable to access microphone": "無法存取麥克風"
 }
