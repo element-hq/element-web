@@ -2848,5 +2848,9 @@
     "Filter rooms and people": "Filtra stanze e persone",
     "Open the link in the email to continue registration.": "Apri il link nell'email per continuare la registrazione.",
     "A confirmation email has been sent to %(emailAddress)s": "È stata inviata un'email di conferma a %(emailAddress)s",
-    "Start a new chat": "Inizia una nuova chat"
+    "Start a new chat": "Inizia una nuova chat",
+    "Go to Home View": "Vai alla vista home",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML per la pagina della tua comunità</h1>\n<p>\n    Usa la descrizione estesa per introdurre i nuovi membri alla comunità, o distribuisci\n    alcuni <a href=\"foo\">link</a> importanti\n</p>\n<p>\n    Puoi anche aggiungere immagini con gli URL Matrix <img src=\"mxc://url\" />\n</p>\n",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(rooms)s stanza.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Salva in cache i messaggi cifrati localmente in modo che appaiano nei risultati di ricerca, usando %(size)s per salvarli da %(rooms)s stanze."
 }
