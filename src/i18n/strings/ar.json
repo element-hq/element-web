@@ -1056,7 +1056,7 @@
     "Failed to upload profile picture!": "تعذَّر رفع صورة الملف الشخصي!",
     "Show more": "أظهر أكثر",
     "Show less": "أظهر أقل",
-    "Channel: %(channelName)s": "قناة: %(channelName)s",
+    "Channel: <channelLink/>": "قناة: %(channelName)s",
     "This bridge is managed by <user />.": "هذا الجسر يديره <user />.",
     "Upload": "رفع",
     "Accept <policyLink /> to continue:": "قبول <policyLink /> للمتابعة:",
