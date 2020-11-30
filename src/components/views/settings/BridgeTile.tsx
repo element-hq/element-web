@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {_t} from "../../../languageHandler";
@@ -22,7 +22,6 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Pill from "../elements/Pill";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
-import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponentTs} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
@@ -43,19 +42,25 @@ interface IBridgeStateEvent {
     protocol: {
         id: string;
         displayname?: string;
+        // eslint-disable-next-line camelcase
         avatar_url?: string;
+        // eslint-disable-next-line camelcase
         external_url?: string;
     };
     network?: {
         id: string;
         displayname?: string;
+        // eslint-disable-next-line camelcase
         avatar_url?: string;
+        // eslint-disable-next-line camelcase
         external_url?: string;
     };
     channel: {
         id: string;
         displayname?: string;
+        // eslint-disable-next-line camelcase
         avatar_url?: string;
+        // eslint-disable-next-line camelcase
         external_url?: string;
     };
 }
@@ -77,7 +82,8 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         if (!content.bridgebot) {
             // Bridgebot was not required previously, so in order to not break rooms we are allowing
             // the sender to be used in place. When the proposal is merged, this should be removed.
-            console.warn(`Bridge info event ${this.props.ev.getId()} does not provide a 'bridgebot' key which is deprecated behaviour. Using sender for now.`);
+            console.warn(`Bridge info event ${this.props.ev.getId()} does not provide a 'bridgebot' key which`
+             + "is deprecated behaviour. Using sender for now.");
             content.bridgebot = this.props.ev.getSender();
         }
         const { channel, network, protocol } = content;
@@ -151,7 +157,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                 <p className="workspace-channel-details">
                     {networkItem}
                     <span className="channel">{_t("Channel: <channelLink/>", {}, {
-                        channelLink: () => channelLink
+                        channelLink: () => channelLink,
                     })}</span>
                 </p>
                 <ul className="metadata">
