@@ -33,26 +33,16 @@ interface IProps {
     room: Room;
 }
 
-interface IState {
-    visible: boolean;
+/**
 }
 
 @replaceableComponentTs("views.settings.BridgeTile")
-export default class BridgeTile extends React.PureComponent<IProps, IState> {
+export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,
         room: PropTypes.object.isRequired,
     }
 
-    state = {
-        visible: false,
-    }
-
-    _toggleVisible() {
-        this.setState({
-            visible: !this.state.visible,
-        });
-    }
 
     render() {
         const content = this.props.ev.getContent();
@@ -63,24 +53,24 @@ export default class BridgeTile extends React.PureComponent<IProps, IState> {
 
         let creator = null;
         if (content.creator) {
-            creator = _t("This bridge was provisioned by <user />.", {}, {
+            creator = <li>{_t("This bridge was provisioned by <user />.", {}, {
                 user: () => <Pill
                     type={Pill.TYPE_USER_MENTION}
                     room={this.props.room}
                     url={makeUserPermalink(content.creator)}
                     shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
                 />,
-            });
+            })}</li>;
         }
 
-        const bot = _t("This bridge is managed by <user />.", {}, {
+        const bot = <li>{_t("This bridge is managed by <user />.", {}, {
             user: () => <Pill
                 type={Pill.TYPE_USER_MENTION}
                 room={this.props.room}
-                url={makeUserPermalink(this.props.ev.getSender())}
+                url={makeUserPermalink(content.bridgebot)}
                 shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
             />,
-        });
+        })}</li>;
 
         let networkIcon;
 
@@ -103,7 +93,6 @@ export default class BridgeTile extends React.PureComponent<IProps, IState> {
         }
 
         const id = this.props.ev.getId();
-        const metadataClassname = "metadata" + (this.state.visible ? " visible" : "");
         return (<li key={id}>
             <div className="column-icon">
                 {networkIcon}
@@ -114,12 +103,9 @@ export default class BridgeTile extends React.PureComponent<IProps, IState> {
                     <span>{_t("Workspace: %(networkName)s", {networkName})}</span>
                     <span className="channel">{_t("Channel: %(channelName)s", {channelName})}</span>
                 </p>
-                <p className={metadataClassname}>
+                <ul className="metadata">
                     {creator} {bot}
-                </p>
-                <AccessibleButton className="mx_showMore" kind="secondary" onClick={this._toggleVisible.bind(this)}>
-                    { this.state.visible ? _t("Show less") : _t("Show more") }
-                </AccessibleButton>
+                </ul>
             </div>
         </li>);
     }
