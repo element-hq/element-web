@@ -94,6 +94,10 @@ const CONTROLS_HIDE_DELAY = 1000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
 const HEADER_HEIGHT = 44;
+
+// Also duplicated from the CSS: the bottom padding on the call view
+const CALL_PADDING_BOTTOM = 10;
+
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
 export default class CallView extends React.Component<IProps, IState> {
@@ -478,7 +482,9 @@ export default class CallView extends React.Component<IProps, IState> {
             }
 
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() ? null : this.props.maxVideoHeight - HEADER_HEIGHT;
+            const maxVideoHeight = getFullScreenElement() ? null : (
+                this.props.maxVideoHeight - HEADER_HEIGHT - CALL_PADDING_BOTTOM
+            );
             contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
                 {onHoldBackground}
                 <VideoFeed type={VideoFeedType.Remote} call={this.state.call} onResize={this.props.onResize}
