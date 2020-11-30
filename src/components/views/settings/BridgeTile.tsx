@@ -27,6 +27,7 @@ import {replaceableComponentTs} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { isUrlPermitted } from '../../../HtmlUtils';
 
 interface IProps {
     ev: MatrixEvent;
@@ -117,6 +118,22 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         } else {
             networkIcon = <div className="noProtocolIcon"></div>;
         }
+        let networkItem = null;
+        if (network) {
+            const networkName = network.displayname || network.id;
+            let networkLink = <span>{networkName}</span>;
+            if (typeof network.external_url === "string" && isUrlPermitted(network.external_url)) {
+                networkLink = <a href={network.external_url} target="_blank" rel="noreferrer noopener">{networkName}</a>
+            }
+            networkItem = _t("Workspace: <networkLink/>", {}, {
+                networkLink: () => networkLink,
+            });
+        }
+
+        let channelLink = <span>{channelName}</span>;
+        if (typeof channel.external_url === "string" && isUrlPermitted(channel.external_url)) {
+            channelLink = <a href={channel.external_url} target="_blank" rel="noreferrer noopener">{channelName}</a>
+        }
 
         const id = this.props.ev.getId();
         return (<li key={id}>
@@ -126,8 +143,10 @@ export default class BridgeTile extends React.PureComponent<IProps> {
             <div className="column-data">
                 <h3>{protocolName}</h3>
                 <p className="workspace-channel-details">
-                    <span>{_t("Workspace: %(networkName)s", {networkName})}</span>
-                    <span className="channel">{_t("Channel: %(channelName)s", {channelName})}</span>
+                    {networkItem}
+                    <span className="channel">{_t("Channel: <channelLink/>", {}, {
+                        channelLink: () => channelLink
+                    })}</span>
                 </p>
                 <ul className="metadata">
                     {creator} {bot}
