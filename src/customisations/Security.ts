@@ -67,24 +67,13 @@ function setupEncryptionNeeded(kind: SetupEncryptionKind): boolean {
 // them all as optional. This allows customisers to only define and export the
 // customisations they need while still maintaining type safety.
 export interface ISecurityCustomisations {
-    examineLoginResponse?: (
-        response: any,
-        credentials: IMatrixClientCreds,
-    ) => void;
-    persistCredentials?: (
-        credentials: IMatrixClientCreds,
-    ) => void;
-    createSecretStorageKey?: () => Uint8Array,
-    getSecretStorageKey?: () => Uint8Array,
-    catchAccessSecretStorageError?: (
-        e: Error,
-    ) => void,
-    setupEncryptionNeeded?: (
-        kind: SetupEncryptionKind,
-    ) => boolean,
-    getDehydrationKey?: (
-        keyInfo: ISecretStorageKeyInfo,
-    ) => Promise<Uint8Array>,
+    examineLoginResponse?: typeof examineLoginResponse;
+    persistCredentials?: typeof persistCredentials;
+    createSecretStorageKey?: typeof createSecretStorageKey,
+    getSecretStorageKey?: typeof getSecretStorageKey,
+    catchAccessSecretStorageError?: typeof catchAccessSecretStorageError,
+    setupEncryptionNeeded?: typeof setupEncryptionNeeded,
+    getDehydrationKey?: typeof getDehydrationKey,
 }
 
 // A real customisation module will define and export one or more of the

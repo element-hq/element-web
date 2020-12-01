@@ -455,7 +455,7 @@ function textForWidgetEvent(event) {
     let widgetName = name || prevName || type || prevType || '';
     // Apply sentence case to widget name
     if (widgetName && widgetName.length > 0) {
-        widgetName = widgetName[0].toUpperCase() + widgetName.slice(1) + ' ';
+        widgetName = widgetName[0].toUpperCase() + widgetName.slice(1);
     }
 
     // If the widget was removed, its content should be {}, but this is sufficiently
