@@ -34,7 +34,8 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
         if (effect === null) {
             const options = CHAT_EFFECTS.find((e) => e.command === name)?.options
             try {
-                const { default: Effect }: { default: ICanvasEffectConstructable } = await import(`../../../effects/${name}`);
+                const { default: Effect }: { default: ICanvasEffectConstructable }
+                = await import(`../../../effects/${name}`);
                 effect = new Effect(options);
                 effectsRef.current[name] = effect;
             } catch (err) {
