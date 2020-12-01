@@ -33,16 +33,9 @@ export default class HostingSignupAction extends React.PureComponent<IProps, ISt
 
     private openDialog = () => {
         this.modalRef = Modal.createTrackedDialog(
-            'Hosting Signup Open',
-            '',
-            HostingSignupDialog,
-            {
+            'Hosting Signup Open', '', HostingSignupDialog, {
                 requestClose: this.requestClose,
-            },
-            "mx_HostingSignupDialog",
-            false,
-            true,
-            {
+            }, "mx_HostingSignupDialog", false, true, {
                 onBeforeClose: async () => this.closingAllowed,
             },
         );
