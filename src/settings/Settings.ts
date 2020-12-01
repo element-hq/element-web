@@ -404,7 +404,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "spell-check-languages": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: [],
+        default: ["en"],
     },
     "breadcrumb_rooms": {
         // not really a setting
