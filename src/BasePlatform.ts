@@ -237,6 +237,8 @@ export default abstract class BasePlatform {
 
     setLanguage(preferredLangs: string[]) {}
 
+    setSpellCheckLanguages(preferredLangs: string[]) {}
+
     getAvailableSpellCheckLanguages(): Promise<string[]> | null {
         return null;
     }
