@@ -26,8 +26,8 @@ interface IProps {
 }
 
 interface IState {
-    completed: boolean,
-    error: string,
+    completed: boolean;
+    error: string;
 }
 
 export default class HostingSignupDialog extends React.PureComponent<IProps, IState> {
