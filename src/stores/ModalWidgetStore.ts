@@ -64,7 +64,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
                 this.openSourceWidgetId = null;
                 this.modalInstance = null;
             },
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     };
 
     public closeModalWidget = (sourceWidget: Widget, data?: IModalWidgetReturnData) => {
