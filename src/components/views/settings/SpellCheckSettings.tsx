@@ -22,12 +22,12 @@ import {_t} from "../../../languageHandler";
 interface ExistingSpellCheckLanguageIProps {
     language: string,
     onRemoved(language: string),
-};
+}
 
 interface SpellCheckLanguagesIProps {
     languages: Array<string>,
     onLanguagesChange(languages: Array<string>),
-};
+}
 
 interface SpellCheckLanguagesIState {
     newLanguage: string,
@@ -71,7 +71,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         e.preventDefault();
 
         const language = this.state.newLanguage;
-        
+
         if (!language) return;
         if (this.props.languages.includes(language)) return;
 
@@ -89,7 +89,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
             return <ExistingSpellCheckLanguage language={e} onRemoved={this._onRemoved} key={e} />;
         });
 
-        let addButton = (
+        const addButton = (
             <AccessibleButton onClick={this._onAddClick} kind="primary">
                 {_t("Add")}
             </AccessibleButton>
@@ -99,12 +99,13 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
             <div className="mx_SpellCheckLanguages">
                 {existingSpellCheckLanguages}
                 <form onSubmit={this._onAddClick} noValidate={true}>
-                    <SpellCheckLanguagesDropdown className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
-                                      value={this.state.newLanguage}
-                                      onOptionChange={this._onNewLanguageChange} />
+                    <SpellCheckLanguagesDropdown
+                        className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
+                        value={this.state.newLanguage}
+                        onOptionChange={this._onNewLanguageChange} />
                     {addButton}
                 </form>
             </div>
         );
-    };
+    }
 }

@@ -33,14 +33,15 @@ interface SpellCheckLanguagesDropdownIProps {
     className: string,
     value: string,
     onOptionChange(language: string),
-};
+}
 
 interface SpellCheckLanguagesDropdownIState {
     searchQuery: string,
     languages: any,
 }
 
-export default class SpellCheckLanguagesDropdown extends React.Component<SpellCheckLanguagesDropdownIProps, SpellCheckLanguagesDropdownIState> {
+export default class SpellCheckLanguagesDropdown extends React.Component<SpellCheckLanguagesDropdownIProps,
+                                                                         SpellCheckLanguagesDropdownIState> {
     constructor(props) {
         super(props);
         this._onSearchChange = this._onSearchChange.bind(this);
@@ -58,7 +59,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
                 if (a > b) return 1;
                 return 0;
             });
-            var langs = [];
+            const langs = [];
             languages.forEach((language) => {
                 langs.push({
                     label: language,

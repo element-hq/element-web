@@ -22,7 +22,7 @@ import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
-import SpellCheckSettings from "../../SpellCheckSettings"
+import SpellCheckSettings from "../../SpellCheckSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
@@ -186,8 +186,8 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onSpellCheckLanguagesChange = (languages) => {
         SettingsStore.setValue("spell-check-languages", null, SettingLevel.DEVICE, languages);
-        this.setState({spellCheckLanguages: languages})
-        
+        this.setState({spellCheckLanguages: languages});
+
         languageHandler.setSpellCheckLanguages(languages);
     };
 
