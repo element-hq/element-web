@@ -22,7 +22,7 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
-    requestClose(): void,
+    requestClose(): void;
 }
 
 interface IState {
