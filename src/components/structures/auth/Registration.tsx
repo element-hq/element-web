@@ -467,9 +467,13 @@ export default class Registration extends React.Component<IProps, IState> {
                     || this.state.ssoFlow["identity_providers"] || [];
                 // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
                 if (providers.length > 1) {
-                    continueWithSection = <h3 className="mx_AuthBody_centered">{_t("Continue with")}</h3>;
+                    // i18n: ssoButtons is a placeholder to help translators understand context
+                    continueWithSection = <h3 className="mx_AuthBody_centered">
+                        { _t("Continue with %(ssoButtons)s", { ssoButtons: "" }).trim() }
+                    </h3>;
                 }
 
+                // i18n: ssoButtons & usernamePassword are placeholders to help translators understand context
                 ssoSection = <React.Fragment>
                     { continueWithSection }
                     <SSOButtons
@@ -478,7 +482,9 @@ export default class Registration extends React.Component<IProps, IState> {
                         loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
                     />
-                    <h3 className="mx_AuthBody_centered">{_t("Or")}</h3>
+                    <h3 className="mx_AuthBody_centered">
+                        { _t("%(ssoButtons)s Or %(usernamePassword)s", { ssoButtons: "", usernamePassword: ""}).trim() }
+                    </h3>
                 </React.Fragment>;
             }
 
