@@ -16,10 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Dropdown from "../../views/elements/Dropdown"
-import PlatformPeg from "../../../PlatformPeg";
 import * as sdk from '../../../index';
 import * as languageHandler from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
