@@ -87,7 +87,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                         }
                     },
                 },
-            )
+            );
         }
     }
 
