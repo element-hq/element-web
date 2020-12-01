@@ -39,9 +39,11 @@ export interface IApp extends IWidget {
     avatar_url: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }
 
+type PinnedWidgets = Record<string, boolean>;
+
 interface IRoomWidgets {
     widgets: IApp[];
-    pinned: Record<string, boolean>;
+    pinned: PinnedWidgets;
 }
 
 export const MAX_PINNED = 3;
@@ -51,8 +53,9 @@ export const MAX_PINNED = 3;
 export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new WidgetStore();
 
-    private widgetMap = new Map<string, IApp>();
-    private roomMap = new Map<string, IRoomWidgets>();
+    // TODO: Come up with a unique key for widgets as their IDs are not globally unique, but can exist anywhere
+    private widgetMap = new Map<string, IApp>(); // Key is widget ID
+    private roomMap = new Map<string, IRoomWidgets>(); // Key is room ID
 
     private constructor() {
         super(defaultDispatcher, {});
@@ -132,6 +135,15 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         });
 
         this.generateApps(room).forEach(app => {
+            // Sanity check for https://github.com/vector-im/element-web/issues/15705
+            const existingApp = this.widgetMap.get(app.id);
+            if (existingApp) {
+                console.warn(
+                    `Possible widget ID conflict for ${app.id} - wants to store in room ${app.roomId} ` +
+                    `but is currently stored as ${existingApp.roomId} - letting the want win`,
+                );
+            }
+
             this.widgetMap.set(app.id, app);
             roomInfo.widgets.push(app);
         });
@@ -149,6 +161,13 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     public getRoomId = (widgetId: string) => {
         const app = this.widgetMap.get(widgetId);
         if (!app) return null;
+
+        // Sanity check for https://github.com/vector-im/element-web/issues/15705
+        const roomInfo = this.getRoom(app.roomId);
+        if (!roomInfo.widgets?.some(w => w.id === app.id)) {
+            throw new Error(`Widget ${app.id} says it is in ${app.roomId} but was not found there`);
+        }
+
         return app.roomId;
     }
 
@@ -158,49 +177,62 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
     private onPinnedWidgetsChange = (settingName: string, roomId: string) => {
         this.initRoom(roomId);
-        this.getRoom(roomId).pinned = SettingsStore.getValue(settingName, roomId);
+
+        const pinned: PinnedWidgets = SettingsStore.getValue(settingName, roomId);
+
+        // Sanity check for https://github.com/vector-im/element-web/issues/15705
+        const roomInfo = this.getRoom(roomId);
+        const remappedPinned: PinnedWidgets = {};
+        for (const widgetId of Object.keys(pinned)) {
+            const isPinned = pinned[widgetId];
+            if (!roomInfo.widgets?.some(w => w.id === widgetId)) {
+                console.warn(`Skipping pinned widget update for ${widgetId} in ${roomId} -- wrong room`);
+            } else {
+                remappedPinned[widgetId] = isPinned;
+            }
+        }
+        roomInfo.pinned = remappedPinned;
+
         this.emit(roomId);
         this.emit(UPDATE_EVENT);
     };
 
-    public isPinned(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    public isPinned(roomId: string, widgetId: string) {
         return !!this.getPinnedApps(roomId).find(w => w.id === widgetId);
     }
 
-    public canPin(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    // dev note: we don't need the widgetId on this function, but the contract makes more sense
+    // when we require it.
+    public canPin(roomId: string, widgetId: string) {
         return this.getPinnedApps(roomId).length < MAX_PINNED;
     }
 
-    public pinWidget(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    public pinWidget(roomId: string, widgetId: string) {
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return;
 
         // When pinning, first confirm all the widgets (Jitsi) which were autopinned so that the order is correct
         const autoPinned = this.getPinnedApps(roomId).filter(app => !roomInfo.pinned[app.id]);
         autoPinned.forEach(app => {
-            this.setPinned(app.id, true);
+            this.setPinned(roomId, app.id, true);
         });
 
-        this.setPinned(widgetId, true);
+        this.setPinned(roomId, widgetId, true);
 
         // Show the apps drawer upon the user pinning a widget
         if (RoomViewStore.getRoomId() === this.getRoomId(widgetId)) {
             defaultDispatcher.dispatch({
                 action: "appsDrawer",
                 show: true,
-            })
+            });
         }
     }
 
-    public unpinWidget(widgetId: string) {
-        this.setPinned(widgetId, false);
+    public unpinWidget(roomId: string, widgetId: string) {
+        this.setPinned(roomId, widgetId, false);
     }
 
-    private setPinned(widgetId: string, value: boolean) {
-        const roomId = this.getRoomId(widgetId);
+    private setPinned(roomId: string, widgetId: string, value: boolean) {
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return;
         if (roomInfo.pinned[widgetId] === false && value) {
@@ -221,9 +253,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT);
     }
 
-    public movePinnedWidget(widgetId: string, delta: 1 | -1) {
+    public movePinnedWidget(roomId: string, widgetId: string, delta: 1 | -1) {
         // TODO simplify this by changing the storage medium of pinned to an array once the Jitsi default-on goes away
-        const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo || roomInfo.pinned[widgetId] === false) return;
 
