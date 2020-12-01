@@ -58,14 +58,18 @@ limitations under the License.
         &::after {
             position: absolute;
             content: '';
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background-image: url('$(res)/img/voip/paused.svg');
             background-position: center;
             background-size: cover;
+        }
+        .mx_CallView_pip &::after {
+            width: 30px;
+            height: 30px;
         }
     }
     .mx_BaseAvatar {
@@ -75,8 +79,10 @@ limitations under the License.
 }
 
 .mx_CallView_voice_holdText {
-    height: 16px;
+    height: 20px;
+    padding-top: 10px;
     color: $accent-fg-color;
+    font-weight: bold;
     .mx_AccessibleButton_hasKind {
         padding: 0px;
     }
@@ -124,14 +130,17 @@ limitations under the License.
         margin-left: auto;
         margin-right: auto;
         content: '';
-        width: 20px;
-        height: 20px;
+        width: 40px;
+        height: 40px;
         background-image: url('$(res)/img/voip/paused.svg');
         background-position: center;
         background-size: cover;
     }
+    .mx_CallView_pip &::before {
+        width: 30px;
+        height: 30px;
+    }
     .mx_AccessibleButton_hasKind {
-        display: block;
         padding: 0px;
     }
 }
