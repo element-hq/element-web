@@ -34,11 +34,11 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
         if (effect === null) {
             const options = CHAT_EFFECTS.find((e) => e.command === name)?.options
             try {
-                const { default: Effect }: { default: ICanvasEffectConstructable } = await import(`./${name}`);
+                const { default: Effect }: { default: ICanvasEffectConstructable } = await import(`../../../effects/${name}`);
                 effect = new Effect(options);
                 effectsRef.current[name] = effect;
             } catch (err) {
-                console.warn('Unable to load effect module at \'./${name}\'.', err)
+                console.warn('Unable to load effect module at \'../../../effects/${name}\'.', err)
             }
         }
         return effect;
@@ -46,7 +46,9 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
 
     useEffect(() => {
         const resize = () => {
-            canvasRef.current.height = window.innerHeight;
+            if (canvasRef.current) {
+                canvasRef.current.height = window.innerHeight;
+            }
         };
         const onAction = (payload: { action: string }) => {
             const actionPrefix = 'effects.';
