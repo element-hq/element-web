@@ -163,44 +163,42 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT);
     };
 
-    public isPinned(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    public isPinned(roomId: string, widgetId: string) {
         return !!this.getPinnedApps(roomId).find(w => w.id === widgetId);
     }
 
-    public canPin(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    // dev note: we don't need the widgetId on this function, but the contract makes more sense
+    // when we require it.
+    public canPin(roomId: string, widgetId: string) {
         return this.getPinnedApps(roomId).length < MAX_PINNED;
     }
 
-    public pinWidget(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    public pinWidget(roomId: string, widgetId: string) {
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return;
 
         // When pinning, first confirm all the widgets (Jitsi) which were autopinned so that the order is correct
         const autoPinned = this.getPinnedApps(roomId).filter(app => !roomInfo.pinned[app.id]);
         autoPinned.forEach(app => {
-            this.setPinned(app.id, true);
+            this.setPinned(roomId, app.id, true);
         });
 
-        this.setPinned(widgetId, true);
+        this.setPinned(roomId, widgetId, true);
 
         // Show the apps drawer upon the user pinning a widget
         if (RoomViewStore.getRoomId() === this.getRoomId(widgetId)) {
             defaultDispatcher.dispatch({
                 action: "appsDrawer",
                 show: true,
-            })
+            });
         }
     }
 
-    public unpinWidget(widgetId: string) {
-        this.setPinned(widgetId, false);
+    public unpinWidget(roomId: string, widgetId: string) {
+        this.setPinned(roomId, widgetId, false);
     }
 
-    private setPinned(widgetId: string, value: boolean) {
-        const roomId = this.getRoomId(widgetId);
+    private setPinned(roomId: string, widgetId: string, value: boolean) {
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return;
         if (roomInfo.pinned[widgetId] === false && value) {
@@ -221,9 +219,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT);
     }
 
-    public movePinnedWidget(widgetId: string, delta: 1 | -1) {
+    public movePinnedWidget(roomId: string, widgetId: string, delta: 1 | -1) {
         // TODO simplify this by changing the storage medium of pinned to an array once the Jitsi default-on goes away
-        const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo || roomInfo.pinned[widgetId] === false) return;
 

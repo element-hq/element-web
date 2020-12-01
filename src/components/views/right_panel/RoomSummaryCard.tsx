@@ -83,9 +83,10 @@ export const useWidgets = (room: Room) => {
 
 interface IAppRowProps {
     app: IApp;
+    room: Room;
 }
 
-const AppRow: React.FC<IAppRowProps> = ({ app }) => {
+const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     const name = WidgetUtils.getWidgetName(app);
     const dataTitle = WidgetUtils.getWidgetDataTitle(app);
     const subtitle = dataTitle && " - " + dataTitle;
@@ -100,10 +101,10 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         });
     };
 
-    const isPinned = WidgetStore.instance.isPinned(app.id);
+    const isPinned = WidgetStore.instance.isPinned(room.roomId, app.id);
     const togglePin = isPinned
-        ? () => { WidgetStore.instance.unpinWidget(app.id); }
-        : () => { WidgetStore.instance.pinWidget(app.id); };
+        ? () => { WidgetStore.instance.unpinWidget(room.roomId, app.id); }
+        : () => { WidgetStore.instance.pinWidget(room.roomId, app.id); };
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     let contextMenu;
@@ -118,7 +119,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         />;
     }
 
-    const cannotPin = !isPinned && !WidgetStore.instance.canPin(app.id);
+    const cannotPin = !isPinned && !WidgetStore.instance.canPin(room.roomId, app.id);
 
     let pinTitle: string;
     if (cannotPin) {
@@ -183,7 +184,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     };
 
     return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
-        { apps.map(app => <AppRow key={app.id} app={app} />) }
+        { apps.map(app => <AppRow key={app.id} app={app} room={room} />) }
 
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
             { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
