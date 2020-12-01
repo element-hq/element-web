@@ -22,7 +22,7 @@ import * as sdk from '../../../index';
  * A dialog for confirming closing the Hosting signup setup dialog.
  */
 export default class ConfirmCloseHostingSignupDialog extends React.Component {
-    render() {
+    public render() {
         const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
         return (
             <QuestionDialog
