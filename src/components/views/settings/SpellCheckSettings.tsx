@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import LanguageDropdown from "../../../components/views/elements/LanguageDropdown";
+import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import {_t} from "../../../languageHandler";
 
@@ -99,7 +99,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
             <div className="mx_SpellCheckLanguages">
                 {existingSpellCheckLanguages}
                 <form onSubmit={this._onAddClick} noValidate={true}>
-                    <LanguageDropdown className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
+                    <SpellCheckLanguagesDropdown className="mx_GeneralUserSettingsTab_spellCheckLanguageInput"
                                       value={this.state.newLanguage}
                                       onOptionChange={this._onNewLanguageChange} />
                     {addButton}
