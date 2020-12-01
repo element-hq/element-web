@@ -477,18 +477,20 @@ export default class CallHandler {
                 break;
             case 'incoming_call':
                 {
+                    if (this.getAnyActiveCall()) {
+                        // ignore multiple incoming calls. in future, we may want a line-1/line-2 setup.
+                        // we avoid rejecting with "busy" in case the user wants to answer it on a different device.
+                        // in future we could signal a "local busy" as a warning to the caller.
+                        // see https://github.com/vector-im/vector-web/issues/1964
+                        return;
+                    }
+
                     // if the runtime env doesn't do VoIP, stop here.
                     if (!MatrixClientPeg.get().supportsVoip()) {
                         return;
                     }
 
                     const call = payload.call as MatrixCall;
-
-                    if (this.getCallForRoom(call.roomId)) {
-                        // ignore multiple incoming calls to the same room
-                        return;
-                    }
-
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(call.roomId, call)
                     this.setCallListeners(call);
