@@ -2598,5 +2598,12 @@
     "Call failed because no webcam or microphone could not be accessed. Check that:": "Вызов не удался, потому что не удалось получить доступ к веб-камере или микрофону. Проверьте это:",
     "Unable to access webcam / microphone": "Невозможно получить доступ к веб-камере / микрофону",
     "Call failed because no microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Вызов не удался, потому что нет доступа к микрофону. Убедитесь, что микрофон подключен и правильно настроен.",
-    "Unable to access microphone": "Нет доступа к микрофону"
+    "Unable to access microphone": "Нет доступа к микрофону",
+    "Video Call": "Видеовызов",
+    "Voice Call": "Голосовой вызов",
+    "Fill Screen": "Заполнить экран",
+    "Return to call": "Вернуться к звонку",
+    "Got an account? <a>Sign in</a>": "Есть учётная запись? <a>Войти</a>",
+    "New here? <a>Create an account</a>": "Впервые здесь? <a>Создать учётную запись</a>",
+    "Render LaTeX maths in messages": "Отображать математику LaTeX в сообщениях"
 }
