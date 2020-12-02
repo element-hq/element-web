@@ -2776,12 +2776,20 @@
     "Caribbean Netherlands": "Karibiska Nederländerna",
     "Cape Verde": "Kap Verde",
     "Change which room you're viewing": "Ändra vilket rum du visar",
-    "Send stickers into your active room": "Skicka dekaler in i ditt aktiva rum",
-    "Send stickers into this room": "Skicka dekaler in i det här rummet",
+    "Send stickers into your active room": "Skicka in dekaler i ditt aktiva rum",
+    "Send stickers into this room": "Skicka in dekaler i det här rummet",
     "Remain on your screen while running": "Stanna kvar på skärmen när det körs",
     "Remain on your screen when viewing another room, when running": "Stanna kvar på skärmen när ett annat rum visas, när det körs",
     "See when the topic changes in this room": "Se när ämnet ändras i det här rummet",
     "Change the topic of this room": "Ändra ämnet för det här rummet",
     "See when the topic changes in your active room": "Se när ämnet ändras i ditt aktiva rum",
-    "Change the topic of your active room": "Ändra ämnet för ditt aktiva rum"
+    "Change the topic of your active room": "Ändra ämnet för ditt aktiva rum",
+    "Change the avatar of your active room": "Byta avatar för ditt aktiva rum",
+    "Change the avatar of this room": "Byta avatar för det här rummet",
+    "Change the name of your active room": "Byta namn på ditt aktiva rum",
+    "Change the name of this room": "Byta namn på det här rummet",
+    "See when the avatar changes in your active room": "Se när avataren byts för ditt aktiva rum",
+    "See when the avatar changes in this room": "Se när avataren byts för det här rummet",
+    "See when the name changes in your active room": "Se när namnet på ditt aktiva rum byts",
+    "See when the name changes in this room": "Se när namnet på det här rummet byts"
 }
