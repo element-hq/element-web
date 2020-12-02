@@ -15,15 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import QuestionDialog from './QuestionDialog';
 import { _t } from "../../../languageHandler";
-import * as sdk from '../../../index';
+import { IDialogProps } from "./IDialogProps";
+
+interface IProps extends IDialogProps {
+    onFinished(): void;
+}
+
+interface IState {}
 
 /*
  * A dialog for confirming closing the Hosting signup setup dialog.
  */
-export default class ConfirmCloseHostingSignupDialog extends React.Component {
+export default class ConfirmCloseHostingSignupDialog extends React.PureComponent<IProps, IState> {
     public render() {
-        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
         return (
             <QuestionDialog
                 onFinished={this.props.onFinished}
