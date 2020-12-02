@@ -2009,6 +2009,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
+                    fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
                 />
             );
