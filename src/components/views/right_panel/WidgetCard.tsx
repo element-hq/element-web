@@ -42,7 +42,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     const apps = useWidgets(room);
     const app = apps.find(a => a.id === widgetId);
-    const isPinned = app && WidgetStore.instance.isPinned(app.id);
+    const isPinned = app && WidgetStore.instance.isPinned(room.roomId, app.id);
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
