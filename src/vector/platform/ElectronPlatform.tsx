@@ -324,6 +324,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return 'Electron Platform'; // no translation required: only used for analytics
     }
 
+    /**
+     * Return true if platform supports multi-language
+     * spell-checking, otherwise false.
+     */
+    supportsMultiLanguageSpellCheck(): boolean {
+        return true;
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);

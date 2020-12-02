@@ -39,6 +39,14 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     /**
+     * Return true if platform supports multi-language
+     * spell-checking, otherwise false.
+     */
+    supportsMultiLanguageSpellCheck(): boolean {
+        return false;
+    }
+
+    /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      */
