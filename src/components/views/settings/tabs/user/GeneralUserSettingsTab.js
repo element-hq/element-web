@@ -400,6 +400,9 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     render() {
+        const plaf = PlatformPeg.get();
+        const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck() ? true : false;
+
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img className='mx_GeneralUserSettingsTab_warningIcon'
                 src={require("../../../../../../res/img/feather-customised/warning-triangle.svg")}
@@ -428,7 +431,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderProfileSection()}
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
-                {this._renderSpellCheckSection()}
+                {supportsMultiLanguageSpellCheck ? this._renderSpellCheckSection() : null}
                 { discoverySection }
                 {this._renderIntegrationManagerSection() /* Has its own title */}
                 { accountManagementSection }
