@@ -1,3 +1,30 @@
+Changes in [1.7.15-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.15-rc.1) (2020-12-02)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.14...v1.7.15-rc.1)
+
+ * Upgrade to React SDK 3.10.0-rc.1 and JS SDK 9.3.0-rc.1
+ * Include KaTeX CSS as a dependency
+   [\#15843](https://github.com/vector-im/element-web/pull/15843)
+ * Translations update from Weblate
+   [\#15884](https://github.com/vector-im/element-web/pull/15884)
+ * added katex.min.css to webpack for math support (main PR in matrix-react-
+   sdk)
+   [\#15277](https://github.com/vector-im/element-web/pull/15277)
+ * Rebrand package name and other details
+   [\#15828](https://github.com/vector-im/element-web/pull/15828)
+ * Bump highlight.js from 9.18.1 to 10.1.2
+   [\#15819](https://github.com/vector-im/element-web/pull/15819)
+ * Update branding of packaging artifacts
+   [\#15810](https://github.com/vector-im/element-web/pull/15810)
+ * Update the react-sdk reference in the lockfile
+   [\#15814](https://github.com/vector-im/element-web/pull/15814)
+ * Update widget API for good measure in Element Web
+   [\#15812](https://github.com/vector-im/element-web/pull/15812)
+ * Stop publishing Element to NPM
+   [\#15811](https://github.com/vector-im/element-web/pull/15811)
+ * Add inotify instance limit info to README
+   [\#15795](https://github.com/vector-im/element-web/pull/15795)
+
 Changes in [1.7.14](https://github.com/vector-im/element-web/releases/tag/v1.7.14) (2020-11-23)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.14-rc.1...v1.7.14)
