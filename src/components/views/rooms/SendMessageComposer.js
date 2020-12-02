@@ -94,8 +94,7 @@ export function createMessageContent(model, permalinkCreator, replyToEvent) {
 export function isQuickReaction(model) {
     const parts = model.parts;
     if (parts.length == 0) return false;
-    let text = parts[0].text;
-    text += parts[1] ? parts[1].text : "";
+    const text = textSerialize(model);
     // shortcut takes the form "+:emoji:" or "+ :emoji:""
     // can be in 1 or 2 parts
     if (parts.length <= 2) {
