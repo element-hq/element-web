@@ -2503,7 +2503,7 @@
     "No files visible in this room": "Aucun fichier visible dans ce salon",
     "Enter the location of your Element Matrix Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Entrez l'emplacement de votre serveur d'accueil Element Matrix Services. Cela peut utiliser votre propre nom de domaine ou être un sous-domaine de <a>element.io</a>.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Vous pouvez utiliser l'option de serveur personnalisé pour vous connecter à d'autres serveurs Matrix en spécifiant une URL de serveur d'accueil différente. Cela vous permet d'utiliser %(brand)s avec un compte Matrix existant sur un serveur d'accueil différent.",
-    "Away": "Tout droit",
+    "Away": "Absent",
     "Move right": "Aller à droite",
     "Move left": "Aller à gauche",
     "Revoke permissions": "Révoquer les permissions",
