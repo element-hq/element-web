@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Creates an environment similar to one that riot-web would expect for
+# Creates an environment similar to one that element-web would expect for
 # development. This means going one directory up (and assuming we're in
-# a directory like /workdir/matrix-react-sdk) and putting riot-web and
+# a directory like /workdir/matrix-react-sdk) and putting element-web and
 # the js-sdk there.
 
 cd ../  # Assume we're at something like /workdir/matrix-react-sdk
@@ -21,9 +21,9 @@ yarn link
 yarn install
 popd
 
-# Finally, set up riot-web
-matrix-react-sdk/scripts/fetchdep.sh vector-im riot-web
-pushd riot-web
+# Finally, set up element-web
+matrix-react-sdk/scripts/fetchdep.sh vector-im element-web
+pushd element-web
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install

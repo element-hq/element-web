@@ -12,5 +12,5 @@ test/components/views/dialogs/InteractiveAuthDialog-test.js
 test/mock-clock.js
 src/component-index.js
 test/end-to-end-tests/node_modules/
-test/end-to-end-tests/riot/
+test/end-to-end-tests/element/
 test/end-to-end-tests/synapse/
