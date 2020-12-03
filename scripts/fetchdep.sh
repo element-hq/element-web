@@ -34,7 +34,7 @@ elif [[ "${#BUILDKITE_BRANCH_ARRAY[@]}" == "2" ]]; then
 fi
 # Try the target branch of the push or PR.
 clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH
-# Try BRANCH which is set by Netlify
-clone $deforg $defrepo $BRANCH
+# Try HEAD which is set by Netlify
+clone $deforg $defrepo $HEAD
 # Use the default branch as the last resort.
 clone $deforg $defrepo $defbranch
