@@ -355,7 +355,9 @@ export function setSpellCheckLanguages(preferredLangs: string[]) {
 
 export async function getAvailableSpellCheckLanguages(): Promise<string[]> {
     const plaf = PlatformPeg.get();
-    return plaf.getAvailableSpellCheckLanguages();
+    if (plaf) {
+        return plaf.getAvailableSpellCheckLanguages();
+    }
 }
 
 export function getAllLanguagesFromJson() {
