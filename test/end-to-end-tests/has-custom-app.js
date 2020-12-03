@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 // used from run.sh as getopts doesn't support long parameters
-const idx = process.argv.indexOf("--riot-url");
-let hasRiotUrl = false;
+const idx = process.argv.indexOf("--app-url");
+let hasAppUrl = false;
 if (idx !== -1) {
     const value = process.argv[idx + 1];
-    hasRiotUrl = !!value;
+    hasAppUrl = !!value;
 }
-process.stdout.write(hasRiotUrl ? "1" : "0" );
+process.stdout.write(hasAppUrl ? "1" : "0" );
