@@ -116,7 +116,7 @@ export async function loadLanguage() {
 }
 
 export async function loadSpellCheckLanguages() {
-    const langs = SettingsStore.getValue("spell-check-languages", null, /*excludeDefault=*/true);
+    const langs = SettingsStore.getValue("spell-check-languages", null, false);
 
     try {
         await languageHandler.setSpellCheckLanguages(langs);
