@@ -34,7 +34,7 @@ elif [[ "${#BUILDKITE_BRANCH_ARRAY[@]}" == "2" ]]; then
 fi
 # Try the target branch of the push or PR.
 clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH
-# Try the current branch from Jenkins.
-clone $deforg $defrepo `"echo $GIT_BRANCH" | sed -e 's/^origin\///'`
+# Try HEAD which is the branch name in Netlify (not BRANCH which is pull/xxxx/head for PR builds)
+clone $deforg $defrepo $HEAD
 # Use the default branch as the last resort.
 clone $deforg $defrepo $defbranch
