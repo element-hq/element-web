@@ -22,12 +22,12 @@ const {delay} = require('./util');
 
 const DEFAULT_TIMEOUT = 20000;
 
-module.exports = class RiotSession {
-    constructor(browser, page, username, riotserver, hsUrl) {
+module.exports = class ElementSession {
+    constructor(browser, page, username, elementServer, hsUrl) {
         this.browser = browser;
         this.page = page;
         this.hsUrl = hsUrl;
-        this.riotserver = riotserver;
+        this.elementServer = elementServer;
         this.username = username;
         this.consoleLog = new LogBuffer(page, "console", (msg) => `${msg.text()}\n`);
         this.networkLog = new LogBuffer(page, "requestfinished", async (req) => {
@@ -38,7 +38,7 @@ module.exports = class RiotSession {
         this.log = new Logger(this.username);
     }
 
-    static async create(username, puppeteerOptions, riotserver, hsUrl, throttleCpuFactor = 1) {
+    static async create(username, puppeteerOptions, elementServer, hsUrl, throttleCpuFactor = 1) {
         const browser = await puppeteer.launch(puppeteerOptions);
         const page = await browser.newPage();
         await page.setViewport({
@@ -50,7 +50,7 @@ module.exports = class RiotSession {
             console.log("throttling cpu by a factor of", throttleCpuFactor);
             await client.send('Emulation.setCPUThrottlingRate', { rate: throttleCpuFactor });
         }
-        return new RiotSession(browser, page, username, riotserver, hsUrl);
+        return new ElementSession(browser, page, username, elementServer, hsUrl);
     }
 
     async tryGetInnertext(selector) {
@@ -194,7 +194,7 @@ module.exports = class RiotSession {
     }
 
     url(path) {
-        return this.riotserver + path;
+        return this.elementServer + path;
     }
 
     delay(ms) {

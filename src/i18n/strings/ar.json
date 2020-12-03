@@ -1422,5 +1422,71 @@
     "This will end the conference for everyone. Continue?": "هذا سينهي المؤتمر للجميع. استمر؟",
     "The call was answered on another device.": "تم الرد على المكالمة على جهاز آخر.",
     "The call could not be established": "تعذر إجراء المكالمة",
-    "Call Declined": "رُفض الاتصال"
+    "Call Declined": "رُفض الاتصال",
+    "See videos posted to your active room": "أظهر الفيديوهات المرسلة إلى هذه غرفتك النشطة",
+    "See videos posted to this room": "أظهر الفيديوهات المرسلة إلى هذه الغرفة",
+    "Send videos as you in your active room": "أرسل الفيديوهات بهويتك في غرفتك النشطة",
+    "Send videos as you in this room": "أرسل الفيديوهات بهويتك في هذه الغرفة",
+    "See messages posted to this room": "أرسل الرسائل المرسلة إلى هذه الغرفة",
+    "See images posted to your active room": "أظهر الصور المرسلة إلى غرفتك النشطة",
+    "See images posted to this room": "أظهر الصور المرسلة إلى هذه الغرفة",
+    "Send images as you in your active room": "أرسل الصور بهويتك في غرفتك النشطة",
+    "Send images as you in this room": "أرسل الصور بهويتك في هذه الغرفة",
+    "See emotes posted to your active room": "أظهر الرموز التعبيرية المرسلة لغرفتك النشطة",
+    "See emotes posted to this room": "أظهر الرموز التعبيرية المرسلة إلى هذه الغرفة",
+    "Send emotes as you in your active room": "أظهر الرموز التعبيرية بهويتك في غرفتك النشطة",
+    "Send emotes as you in this room": "أرسل الرموز التعبيرية بهويتك",
+    "See text messages posted to your active room": "أظهر الرسائل النصية المرسلة إلى غرفتك النشطة",
+    "See text messages posted to this room": "أظهر الرسائل النصية المرسلة إلى هذه الغرفة",
+    "Send text messages as you in your active room": "أرسل الرسائل النصية بهويتك في غرفتك النشطة",
+    "Send text messages as you in this room": "أرسل الرسائل النصية بهويتك في هذه الغرفة",
+    "See messages posted to your active room": "أظهر الرسائل المرسلة إلى غرفتك النشطة",
+    "Send messages as you in your active room": "أرسل رسائل بهويتك في غرفتك النشطة",
+    "Send messages as you in this room": "أرسل رسائل بهويتك في هذه الغرفة",
+    "The <b>%(capability)s</b> capability": "القدرة <b>%(capability)s</b>",
+    "See <b>%(eventType)s</b> events posted to your active room": "أظهر أحداث <b>%(eventType)s</b> المنشورة بغرفة النشطة",
+    "Send <b>%(eventType)s</b> events as you in your active room": "أرسل أحداث <b>%(eventType)s</b> بهويتك في غرفتك النشطة",
+    "See <b>%(eventType)s</b> events posted to this room": "أظهر أحداث <b>%(eventType)s</b> المنشورة في هذه الغرفة",
+    "Send <b>%(eventType)s</b> events as you in this room": "أرسل أحداث <b>%(eventType)s</b> بهويتك في هذه الغرفة",
+    "with state key %(stateKey)s": "مع مفتاح الحالة %(stateKey)s",
+    "with an empty state key": "بمفتاح حالة فارغ",
+    "See when anyone posts a sticker to your active room": "أظهر وضع أي أحد للملصقات لغرفتك النشطة",
+    "Send stickers to your active room as you": "أرسل ملصقات لغرفتك النشطة بهويتك",
+    "See when a sticker is posted in this room": "أظهر وضع الملصقات في هذه الغرفة",
+    "Send stickers to this room as you": "أرسل ملصقات لهذه الغرفة بهويتك",
+    "See when the avatar changes in your active room": "أظهر تغييرات صورة غرفتك النشطة",
+    "Change the avatar of your active room": "غير صورة غرفتك النشطة",
+    "See when the avatar changes in this room": "أظهر تغييرات الصورة في هذه الغرفة",
+    "Change the avatar of this room": "غير صورة هذه الغرفة",
+    "See when the name changes in your active room": "أظهر تغييرات الاسم في غرفتك النشطة",
+    "Change the name of your active room": "غير اسم غرفتك النشطة",
+    "See when the name changes in this room": "أظهر تغييرات الاسم في هذه الغرفة",
+    "Change the name of this room": "غير اسم هذه الغرفة",
+    "See when the topic changes in your active room": "أظهر تغيير موضوع غرفتك النشطة",
+    "Change the topic of your active room": "غير موضوع غرفتك النشطة",
+    "See when the topic changes in this room": "أظهر تغير موضوع هذه الغرفة",
+    "Change the topic of this room": "تغيير موضوع هذه الغرفة",
+    "Change which room you're viewing": "تغيير الغرفة التي تشاهدها",
+    "Send stickers into your active room": "أرسل ملصقات إلى غرفتك النشطة",
+    "Send stickers into this room": "أرسل ملصقات إلى هذه الغرفة",
+    "Remain on your screen while running": "ابقَ على شاشتك أثناء إجراء",
+    "Remain on your screen when viewing another room, when running": "ابقَ على شاشتك عند مشاهدة غرفة أخرى أثناء إجراء",
+    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر المستخدمين المطابقة %(glob)s بسبب %(reason)s",
+    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الخوادم المطابقة %(glob)s بسبب %(reason)s",
+    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الغرفة المطابقة %(glob)s بسبب %(reason)s",
+    "%(senderName)s declined the call.": "%(senderName)s رفض المكالمة.",
+    "(an error occurred)": "(حدث خطأ)",
+    "(their device couldn't start the camera / microphone)": "(تعذر على جهازهم بدء تشغيل الكاميرا / الميكروفون)",
+    "(connection failed)": "(فشل الاتصال)",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 جميع الخوادم ممنوعة من المشاركة! لم يعد من الممكن استخدام هذه الغرفة.",
+    "Takes the call in the current room off hold": "يوقف المكالمة في الغرفة الحالية",
+    "Places the call in the current room on hold": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "يلصق (͡ ° ͜ʖ ͡ °) أوَّل رسالة نصية عادية",
+    "No other application is using the webcam": "لا يوجد تطبيق آخر يستخدم كاميرا الويب",
+    "Permission is granted to use the webcam": "منح الإذن باستخدام كاميرا الويب",
+    "A microphone and webcam are plugged in and set up correctly": "الميكروفون وكاميرا ويب موصولان ومعدان بشكل صحيح",
+    "Call failed because no webcam or microphone could not be accessed. Check that:": "فشلت المكالمة نظرًا لتعذر الوصول إلى كاميرا الويب أو الميكروفون. تحقق مما يلي:",
+    "Unable to access webcam / microphone": "تعذر الوصول إلى كاميرا الويب / الميكروفون",
+    "Call failed because no microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "فشلت المكالمة لأنه لا يمكن الوصول إلى ميكروفون. تحقق من توصيل الميكروفون وإعداده بشكل صحيح.",
+    "Unable to access microphone": "تعذر الوصول إلى الميكروفون"
 }
