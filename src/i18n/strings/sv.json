@@ -2774,5 +2774,14 @@
     "Central African Republic": "Centralafrikanska republiken",
     "Cayman Islands": "Caymanöarna",
     "Caribbean Netherlands": "Karibiska Nederländerna",
-    "Cape Verde": "Kap Verde"
+    "Cape Verde": "Kap Verde",
+    "Change which room you're viewing": "Ändra vilket rum du visar",
+    "Send stickers into your active room": "Skicka dekaler in i ditt aktiva rum",
+    "Send stickers into this room": "Skicka dekaler in i det här rummet",
+    "Remain on your screen while running": "Stanna kvar på skärmen när det körs",
+    "Remain on your screen when viewing another room, when running": "Stanna kvar på skärmen när ett annat rum visas, när det körs",
+    "See when the topic changes in this room": "Se när ämnet ändras i det här rummet",
+    "Change the topic of this room": "Ändra ämnet för det här rummet",
+    "See when the topic changes in your active room": "Se när ämnet ändras i ditt aktiva rum",
+    "Change the topic of your active room": "Ändra ämnet för ditt aktiva rum"
 }
