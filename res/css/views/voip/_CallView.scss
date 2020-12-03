@@ -38,6 +38,17 @@ limitations under the License.
     .mx_CallView_voice {
         height: 180px;
     }
+
+    .mx_CallView_callControls {
+        bottom: 0px;
+    }
+
+    .mx_CallView_callControls_button {
+        &::before {
+            width: 36px;
+            height: 36px;
+        }
+    }
 }
 
 .mx_CallView_voice {
@@ -81,6 +92,7 @@ limitations under the License.
 .mx_CallView_voice_holdText {
     height: 20px;
     padding-top: 10px;
+    padding-bottom: 15px;
     color: $accent-fg-color;
     font-weight: bold;
     .mx_AccessibleButton_hasKind {
@@ -162,8 +174,34 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_CallView_header_controls {
+.mx_CallView_header_secondaryCallInfo {
     margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    .mx_AccessibleButton_hasKind {
+        padding: 0px;
+    }
+}
+
+.mx_CallView_header_secondaryCallInfo_avatarContainer {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+
+    border-radius: 2000px;
+    overflow: hidden;
+    position: relative;
+
+    .mx_BaseAvatar {
+        filter: blur(3px);
+        overflow: hidden;
+    }
+}
+
+.mx_CallView_header_controls {
+    margin-left: 12px;
 }
 
 .mx_CallView_header_button {
