@@ -71,7 +71,7 @@
     "Collecting logs": "درحال جمع‌آوری گزارش‌ها",
     "Search": "جستجو",
     "(HTTP status %(httpStatus)s)": "(HTTP وضعیت %(httpStatus)s)",
-    "Failed to forget room %(errCode)s": "فراموش کردن گپ‌گاه  %(errCode)s موفقیت‌آمیز نبود",
+    "Failed to forget room %(errCode)s": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s",
     "Wednesday": "چهارشنبه",
     "Quote": "گفتآورد",
     "Send": "ارسال",
@@ -175,7 +175,7 @@
     "Email address": "آدرس ایمیل",
     "Email": "ایمیل",
     "Drop File Here": "پرونده را اینجا رها کنید",
-    "Download %(text)s": "دانلود  2%(text)s",
+    "Download %(text)s": "دانلود 2%(text)s",
     "Disinvite": "پس‌گرفتن دعوت",
     "Default": "پیشفرض",
     "Deops user with given id": "کاربر را با شناسه داده شده را از بین می برد",
@@ -216,5 +216,11 @@
     "Admin": "ادمین",
     "Add": "افزودن",
     "Access Token:": "توکن دسترسی:",
-    "Account": "حساب کابری"
+    "Account": "حساب کابری",
+    "Incorrect verification code": "کد فعال‌سازی اشتباه است",
+    "Incorrect username and/or password.": "نام کاربری و یا گذرواژه اشتباه است.",
+    "I have verified my email address": "ایمیل خود را تأید کردم",
+    "Home": "خانه",
+    "Hangup": "قطع",
+    "For security, this session has been signed out. Please sign in again.": "برای امنیت، این نشست نامعتبر شده است. لطفاً دوباره وارد سیستم شوید."
 }
