@@ -41,7 +41,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
 
     const onClick = () => {
-        PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp.id);
+        PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id);
     };
 
     let icon;
