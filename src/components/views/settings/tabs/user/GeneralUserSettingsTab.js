@@ -401,7 +401,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     render() {
         const plaf = PlatformPeg.get();
-        const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck() ? true : false;
+        const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
 
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img className='mx_GeneralUserSettingsTab_warningIcon'
