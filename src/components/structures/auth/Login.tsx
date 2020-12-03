@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2018, 2019 New Vector Ltd
+Copyright 2015, 2016, 2017, 2018, 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,30 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ComponentProps, ReactNode} from 'react';
+import React, {ReactNode} from 'react';
+import {MatrixError} from "matrix-js-sdk/src/http-api";
 
 import {_t, _td} from '../../../languageHandler';
 import * as sdk from '../../../index';
-import Login from '../../../Login';
+import Login, {ISSOFlow, LoginFlow} from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
-import SSOButton from "../../views/elements/SSOButton";
 import PlatformPeg from '../../../PlatformPeg';
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {IMatrixClientCreds} from "../../../MatrixClientPeg";
-import ServerConfig from "../../views/auth/ServerConfig";
 import PasswordLogin from "../../views/auth/PasswordLogin";
-import SignInToText from "../../views/auth/SignInToText";
 import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
-
-// Enable phases for login
-const PHASES_ENABLED = true;
+import SSOButtons from "../../views/elements/SSOButtons";
+import ServerPicker from "../../views/elements/ServerPicker";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -75,13 +72,6 @@ interface IProps {
     onServerConfigChange(config: ValidatedServerConfig): void;
 }
 
-enum Phase {
-    // Show controls to configure server details
-    ServerDetails,
-    // Show the appropriate login flow(s) for the server
-    Login,
-}
-
 interface IState {
     busy: boolean;
     busyLoggingIn?: boolean;
@@ -90,16 +80,12 @@ interface IState {
     // can we attempt to log in or are there validation errors?
     canTryLogin: boolean;
 
+    flows?: LoginFlow[];
+
     // used for preserving form values when changing homeserver
     username: string;
     phoneCountry?: string;
     phoneNumber: string;
-
-    // Phase of the overall login dialog.
-    phase: Phase;
-    // The current login flow, such as password, SSO, etc.
-    // we need to load the flows from the server
-    currentFlow?: string;
 
     // We perform liveliness checks later, but for now suppress the errors.
     // We also track the server dead errors independently of the regular errors so
@@ -113,9 +99,10 @@ interface IState {
 /*
  * A wire component which glues together login UI components and Login logic
  */
-export default class LoginComponent extends React.Component<IProps, IState> {
+export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     private loginLogic: Login;
+
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
     constructor(props) {
@@ -127,11 +114,13 @@ export default class LoginComponent extends React.Component<IProps, IState> {
             errorText: null,
             loginIncorrect: false,
             canTryLogin: true,
+
+            flows: null,
+
             username: "",
             phoneCountry: null,
             phoneNumber: "",
-            phase: Phase.Login,
-            currentFlow: null,
+
             serverIsAlive: true,
             serverErrorIsFatal: false,
             serverDeadError: "",
@@ -351,33 +340,21 @@ export default class LoginComponent extends React.Component<IProps, IState> {
     };
 
     onTryRegisterClick = ev => {
-        const step = this.getCurrentFlowStep();
-        if (step === 'm.login.sso' || step === 'm.login.cas') {
-            // If we're showing SSO it means that registration is also probably disabled,
-            // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
+        const hasPasswordFlow = this.state.flows.find(flow => flow.type === "m.login.password");
+        const ssoFlow = this.state.flows.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
+        // If has no password flow but an SSO flow guess that the user wants to register with SSO.
+        // TODO: instead hide the Register button if registration is disabled by checking with the server,
+        // has no specific errCode currently and uses M_FORBIDDEN.
+        if (ssoFlow && !hasPasswordFlow) {
             ev.preventDefault();
             ev.stopPropagation();
-            const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
+            const ssoKind = ssoFlow.type === 'm.login.sso' ? 'sso' : 'cas';
             PlatformPeg.get().startSingleSignOn(this.loginLogic.createTemporaryClient(), ssoKind,
                 this.props.fragmentAfterLogin);
         } else {
             // Don't intercept - just go through to the register page
             this.onRegisterClick(ev);
         }
-    };
-
-    private onServerDetailsNextPhaseClick = () => {
-        this.setState({
-            phase: Phase.Login,
-        });
-    };
-
-    private onEditServerDetailsClick = ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.setState({
-            phase: Phase.ServerDetails,
-        });
     };
 
     private async initLoginLogic({hsUrl, isUrl}: ValidatedServerConfig) {
@@ -397,7 +374,6 @@ export default class LoginComponent extends React.Component<IProps, IState> {
 
         this.setState({
             busy: true,
-            currentFlow: null, // reset flow
             loginIncorrect: false,
         });
 
@@ -421,38 +397,22 @@ export default class LoginComponent extends React.Component<IProps, IState> {
                 busy: false,
                 ...AutoDiscoveryUtils.authComponentStateForError(e),
             });
-            if (this.state.serverErrorIsFatal) {
-                // Server is dead: show server details prompt instead
-                this.setState({
-                    phase: Phase.ServerDetails,
-                });
-                return;
-            }
         }
 
         loginLogic.getFlows().then((flows) => {
             // look for a flow where we understand all of the steps.
-            for (let i = 0; i < flows.length; i++ ) {
-                if (!this.isSupportedFlow(flows[i])) {
-                    continue;
-                }
+            const supportedFlows = flows.filter(this.isSupportedFlow);
 
-                // we just pick the first flow where we support all the
-                // steps. (we don't have a UI for multiple logins so let's skip
-                // that for now).
-                loginLogic.chooseFlow(i);
+            if (supportedFlows.length > 0) {
                 this.setState({
-                    currentFlow: this.getCurrentFlowStep(),
+                    flows: supportedFlows,
                 });
                 return;
             }
-            // we got to the end of the list without finding a suitable
-            // flow.
+
+            // we got to the end of the list without finding a suitable flow.
             this.setState({
-                errorText: _t(
-                    "This homeserver doesn't offer any login flows which are " +
-                        "supported by this client.",
-                ),
+                errorText: _t("This homeserver doesn't offer any login flows which are supported by this client."),
             });
         }, (err) => {
             this.setState({
@@ -467,7 +427,7 @@ export default class LoginComponent extends React.Component<IProps, IState> {
         });
     }
 
-    private isSupportedFlow(flow) {
+    private isSupportedFlow = (flow: LoginFlow): boolean => {
         // technically the flow can have multiple steps, but no one does this
         // for login and loginLogic doesn't support it so we can ignore it.
         if (!this.stepRendererMap[flow.type]) {
@@ -475,20 +435,16 @@ export default class LoginComponent extends React.Component<IProps, IState> {
             return false;
         }
         return true;
-    }
+    };
 
-    private getCurrentFlowStep() {
-        return this.loginLogic ? this.loginLogic.getCurrentFlowStep() : null;
-    }
-
-    private errorTextFromError(err) {
+    private errorTextFromError(err: MatrixError): ReactNode {
         let errCode = err.errcode;
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
         }
 
-        let errorText: ReactNode = _t("Error: Problem communicating with the given homeserver.") +
-            (errCode ? " (" + errCode + ")" : "");
+        let errorText: ReactNode = _t("There was a problem communicating with the homeserver, " +
+            "please try again later.") + (errCode ? " (" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
@@ -526,61 +482,28 @@ export default class LoginComponent extends React.Component<IProps, IState> {
         return errorText;
     }
 
-    private renderServerComponent() {
-        if (SdkConfig.get()['disable_custom_urls']) {
-            return null;
-        }
+    renderLoginComponentForFlows() {
+        if (!this.state.flows) return null;
 
-        if (PHASES_ENABLED && this.state.phase !== Phase.ServerDetails) {
-            return null;
-        }
+        // this is the ideal order we want to show the flows in
+        const order = [
+            "m.login.password",
+            "m.login.sso",
+        ];
 
-        const serverDetailsProps: ComponentProps<typeof ServerConfig> = {};
-        if (PHASES_ENABLED) {
-            serverDetailsProps.onAfterSubmit = this.onServerDetailsNextPhaseClick;
-            serverDetailsProps.submitText = _t("Next");
-            serverDetailsProps.submitClass = "mx_Login_submit";
-        }
-
-        return <ServerConfig
-            serverConfig={this.props.serverConfig}
-            onServerConfigChange={this.props.onServerConfigChange}
-            delayTimeMs={250}
-            {...serverDetailsProps}
-        />;
-    }
-
-    private renderLoginComponentForStep() {
-        if (PHASES_ENABLED && this.state.phase !== Phase.Login) {
-            return null;
-        }
-
-        const step = this.state.currentFlow;
-
-        if (!step) {
-            return null;
-        }
-
-        const stepRenderer = this.stepRendererMap[step];
-
-        if (stepRenderer) {
-            return stepRenderer();
-        }
-
-        return null;
+        const flows = order.map(type => this.state.flows.find(flow => flow.type === type)).filter(Boolean);
+        return <React.Fragment>
+            { flows.map(flow => {
+                const stepRenderer = this.stepRendererMap[flow.type];
+                return <React.Fragment key={flow.type}>{ stepRenderer() }</React.Fragment>
+            }) }
+        </React.Fragment>
     }
 
     private renderPasswordStep = () => {
-        let onEditServerDetailsClick = null;
-        // If custom URLs are allowed, wire up the server details edit link.
-        if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
-            onEditServerDetailsClick = this.onEditServerDetailsClick;
-        }
-
         return (
             <PasswordLogin
                 onSubmit={this.onPasswordLogin}
-                onEditServerDetailsClick={onEditServerDetailsClick}
                 username={this.state.username}
                 phoneCountry={this.state.phoneCountry}
                 phoneNumber={this.state.phoneNumber}
@@ -598,31 +521,16 @@ export default class LoginComponent extends React.Component<IProps, IState> {
     };
 
     private renderSsoStep = loginType => {
-        let onEditServerDetailsClick = null;
-        // If custom URLs are allowed, wire up the server details edit link.
-        if (PHASES_ENABLED && !SdkConfig.get()['disable_custom_urls']) {
-            onEditServerDetailsClick = this.onEditServerDetailsClick;
-        }
-        // XXX: This link does *not* have a target="_blank" because single sign-on relies on
-        // redirecting the user back to a URI once they're logged in. On the web, this means
-        // we use the same window and redirect back to Element. On Electron, this actually
-        // opens the SSO page in the Electron app itself due to
-        // https://github.com/electron/electron/issues/8841 and so happens to work.
-        // If this bug gets fixed, it will break SSO since it will open the SSO page in the
-        // user's browser, let them log into their SSO provider, then redirect their browser
-        // to vector://vector which, of course, will not work.
-        return (
-            <div>
-                <SignInToText serverConfig={this.props.serverConfig}
-                    onEditServerDetailsClick={onEditServerDetailsClick} />
+        const flow = this.state.flows.find(flow => flow.type === "m.login." + loginType) as ISSOFlow;
 
-                <SSOButton
-                    className="mx_Login_sso_link mx_Login_submit"
-                    matrixClient={this.loginLogic.createTemporaryClient()}
-                    loginType={loginType}
-                    fragmentAfterLogin={this.props.fragmentAfterLogin}
-                />
-            </div>
+        return (
+            <SSOButtons
+                matrixClient={this.loginLogic.createTemporaryClient()}
+                flow={flow}
+                loginType={loginType}
+                fragmentAfterLogin={this.props.fragmentAfterLogin}
+                primary={!this.state.flows.find(flow => flow.type === "m.login.password")}
+            />
         );
     };
 
@@ -670,9 +578,11 @@ export default class LoginComponent extends React.Component<IProps, IState> {
             </div>;
         } else if (SettingsStore.getValue(UIFeature.Registration)) {
             footer = (
-                <a className="mx_AuthBody_changeFlow" onClick={this.onTryRegisterClick} href="#">
-                    { _t('Create account') }
-                </a>
+                <span className="mx_AuthBody_changeFlow">
+                    {_t("New? <a>Create account</a>", {}, {
+                        a: sub => <a onClick={this.onTryRegisterClick} href="#">{ sub }</a>,
+                    })}
+                </span>
             );
         }
 
@@ -686,8 +596,11 @@ export default class LoginComponent extends React.Component<IProps, IState> {
                     </h2>
                     { errorTextSection }
                     { serverDeadSection }
-                    { this.renderServerComponent() }
-                    { this.renderLoginComponentForStep() }
+                    <ServerPicker
+                        serverConfig={this.props.serverConfig}
+                        onServerConfigChange={this.props.onServerConfigChange}
+                    />
+                    { this.renderLoginComponentForFlows() }
                     { footer }
                 </AuthBody>
             </AuthPage>
