@@ -15,10 +15,10 @@ trap 'handle_error' ERR
 
 echo "--- Building Element"
 scripts/ci/layered.sh
-cd ../element-web
+cd element-web
 element_web_dir=`pwd`
 CI_PACKAGE=true yarn build
-cd ../matrix-react-sdk
+cd ..
 # run end to end tests
 pushd test/end-to-end-tests
 ln -s $element_web_dir element/element-web
