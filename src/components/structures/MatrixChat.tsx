@@ -34,7 +34,6 @@ import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { MatrixClientPeg, IMatrixClientCreds } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
-import * as RoomListSorter from "../../RoomListSorter";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
 
@@ -48,7 +47,6 @@ import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 import '../../stores/LifecycleStore';
 import PageTypes from '../../PageTypes';
-import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
