@@ -45,8 +45,6 @@
 @import "./views/auth/_InteractiveAuthEntryComponents.scss";
 @import "./views/auth/_LanguageSelector.scss";
 @import "./views/auth/_PassphraseField.scss";
-@import "./views/auth/_ServerConfig.scss";
-@import "./views/auth/_ServerTypeSelector.scss";
 @import "./views/auth/_Welcome.scss";
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_DecoratedRoomAvatar.scss";
@@ -78,11 +76,13 @@
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
 @import "./views/dialogs/_ModalWidgetDialog.scss";
 @import "./views/dialogs/_NewSessionReviewDialog.scss";
+@import "./views/dialogs/_RegistrationEmailPromptDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialogBridges.scss";
 @import "./views/dialogs/_RoomUpgradeDialog.scss";
 @import "./views/dialogs/_RoomUpgradeWarningDialog.scss";
 @import "./views/dialogs/_ServerOfflineDialog.scss";
+@import "./views/dialogs/_ServerPickerDialog.scss";
 @import "./views/dialogs/_SetEmailDialog.scss";
 @import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
@@ -124,6 +124,8 @@
 @import "./views/elements/_RichText.scss";
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_RoomAliasField.scss";
+@import "./views/elements/_SSOButtons.scss";
+@import "./views/elements/_ServerPicker.scss";
 @import "./views/elements/_Slider.scss";
 @import "./views/elements/_Spinner.scss";
 @import "./views/elements/_StyledCheckbox.scss";

@@ -31,6 +31,7 @@ export default class InfoDialog extends React.Component {
         onFinished: PropTypes.func,
         hasCloseButton: PropTypes.bool,
         onKeyDown: PropTypes.func,
+        fixedWidth: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -54,6 +55,7 @@ export default class InfoDialog extends React.Component {
                 contentId='mx_Dialog_content'
                 hasCancel={this.props.hasCloseButton}
                 onKeyDown={this.props.onKeyDown}
+                fixedWidth={this.props.fixedWidth}
             >
                 <div className={classNames("mx_Dialog_content", this.props.className)} id="mx_Dialog_content">
                     { this.props.description }
