@@ -31,12 +31,14 @@ import {
     ModalButtonKind,
     Widget,
     WidgetApiFromWidgetAction,
+    WidgetKind,
 } from "matrix-widget-api";
 import {StopGapWidgetDriver} from "../../../stores/widgets/StopGapWidgetDriver";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
+import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
@@ -63,7 +65,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     constructor(props) {
         super(props);
 
-        this.widget = new Widget({
+        this.widget = new ElementWidget({
             ...this.props.widgetDefinition,
             creatorUserId: MatrixClientPeg.get().getUserId(),
             id: `modal_${this.props.sourceWidgetId}`,
@@ -72,7 +74,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     }
 
     public componentDidMount() {
-        const driver = new StopGapWidgetDriver( []);
+        const driver = new StopGapWidgetDriver( [], this.widget, WidgetKind.Modal);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
         this.setState({messaging});
     }
@@ -160,7 +162,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     this.state.messaging.notifyModalWidgetButtonClicked(def.id);
                 };
 
-                return <AccessibleButton key={def.id} kind={kind} onClick={onClick}>
+                const isDisabled = this.state.disabledButtonIds.includes(def.id);
+
+                return <AccessibleButton key={def.id} kind={kind} onClick={onClick} disabled={isDisabled}>
                     { def.label }
                 </AccessibleButton>;
             });

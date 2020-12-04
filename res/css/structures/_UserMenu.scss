@@ -231,8 +231,28 @@ limitations under the License.
             justify-content: center;
         }
 
+        &.mx_UserMenu_contextMenu_guestPrompts,
         &.mx_UserMenu_contextMenu_hostingLink {
             padding-top: 0;
+        }
+
+        &.mx_UserMenu_contextMenu_guestPrompts {
+            display: inline-block;
+
+            > span {
+                font-weight: 600;
+                display: block;
+
+                & + span {
+                    margin-top: 8px;
+                }
+            }
+
+            .mx_AccessibleButton_kind_link {
+                font-weight: normal;
+                font-size: inherit;
+                padding: 0;
+            }
         }
     }
 

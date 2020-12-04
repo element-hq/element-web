@@ -71,7 +71,6 @@ export default class PersistentApp extends React.Component {
                     appEvent.getStateKey(), appEvent.getContent(), appEvent.getSender(),
                     persistentWidgetInRoomId, appEvent.getId(),
                 );
-                const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, persistentWidgetInRoomId);
                 const AppTile = sdk.getComponent('elements.AppTile');
                 return <AppTile
                     key={app.id}
@@ -82,7 +81,6 @@ export default class PersistentApp extends React.Component {
                     creatorUserId={app.creatorUserId}
                     widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                     waitForIframeLoad={app.waitForIframeLoad}
-                    whitelistCapabilities={capWhitelist}
                     miniMode={true}
                     showMenubar={false}
                 />;

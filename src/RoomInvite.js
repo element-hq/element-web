@@ -40,11 +40,11 @@ export function inviteMultipleToRoom(roomId, addrs) {
     return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
-export function showStartChatInviteDialog() {
+export function showStartChatInviteDialog(initialText) {
     // This dialog handles the room creation internally - we don't need to worry about it.
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Start DM', '', InviteDialog, {kind: KIND_DM},
+        'Start DM', '', InviteDialog, {kind: KIND_DM, initialText},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

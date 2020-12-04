@@ -19,57 +19,6 @@ limitations under the License.
     min-height: 50px;
 }
 
-/* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
-.mx_RoomStatusBar_indicator {
-    padding-left: 17px;
-    padding-right: 12px;
-    margin-left: -73px;
-    margin-top: 15px;
-    float: left;
-    width: 24px;
-    text-align: center;
-}
-
-.mx_RoomStatusBar_callBar {
-    height: 50px;
-    line-height: $font-50px;
-}
-
-.mx_RoomStatusBar_placeholderIndicator span {
-    color: $primary-fg-color;
-    opacity: 0.5;
-    position: relative;
-    top: -4px;
-    /*
-    animation-duration: 1s;
-    animation-name: bounce;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    */
-}
-
-.mx_RoomStatusBar_placeholderIndicator span:nth-child(1) {
-    animation-delay: 0.3s;
-}
-.mx_RoomStatusBar_placeholderIndicator span:nth-child(2) {
-    animation-delay: 0.6s;
-}
-.mx_RoomStatusBar_placeholderIndicator span:nth-child(3) {
-    animation-delay: 0.9s;
-}
-
-@keyframes bounce {
-    from {
-        opacity: 0.5;
-        top: 0;
-    }
-
-    to {
-        opacity: 0.2;
-        top: -3px;
-    }
-}
-
 .mx_RoomStatusBar_typingIndicatorAvatars {
     width: 52px;
     margin-top: -1px;
@@ -160,11 +109,6 @@ limitations under the License.
 
     .mx_RoomStatusBar_indicator {
         margin-top: 10px;
-    }
-
-    .mx_RoomStatusBar_callBar {
-        height: 40px;
-        line-height: $font-40px;
     }
 
     .mx_RoomStatusBar_typingBar {

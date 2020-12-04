@@ -1,0 +1,75 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+.mx_WidgetCapabilitiesPromptDialog {
+    .text-muted {
+        font-size: $font-12px;
+    }
+
+    .mx_Dialog_content {
+        margin-bottom: 16px;
+    }
+
+    .mx_WidgetCapabilitiesPromptDialog_cap {
+        margin-top: 20px;
+        font-size: $font-15px;
+        line-height: $font-15px;
+
+        .mx_WidgetCapabilitiesPromptDialog_byline {
+            color: $muted-fg-color;
+            margin-left: 26px;
+            font-size: $font-12px;
+            line-height: $font-12px;
+        }
+    }
+
+    .mx_Dialog_buttons {
+        margin-top: 40px; // double normal
+    }
+
+    .mx_SettingsFlag {
+        line-height: calc($font-14px + 7px + 7px); // 7px top & bottom padding
+        color: $muted-fg-color;
+        font-size: $font-12px;
+
+        .mx_ToggleSwitch {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+
+            // downsize the switch + ball
+            width: $font-32px;
+            height: $font-15px;
+
+
+            &.mx_ToggleSwitch_on > .mx_ToggleSwitch_ball {
+                left: calc(100% - $font-15px);
+            }
+
+            .mx_ToggleSwitch_ball {
+                width: $font-15px;
+                height: $font-15px;
+                border-radius: $font-15px;
+            }
+        }
+
+        .mx_SettingsFlag_label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+}

@@ -18,7 +18,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import url from 'url';
 import classnames from 'classnames';
 
 import * as sdk from '../../../index';
@@ -421,12 +420,12 @@ export class EmailIdentityAuthEntry extends React.Component {
             return <Spinner />;
         } else {
             return (
-                <div>
-                    <p>{ _t("An email has been sent to %(emailAddress)s",
-                        { emailAddress: (sub) => <i>{ this.props.inputs.emailAddress }</i> },
+                <div className="mx_InteractiveAuthEntryComponents_emailWrapper">
+                    <p>{ _t("A confirmation email has been sent to %(emailAddress)s",
+                        { emailAddress: (sub) => <b>{ this.props.inputs.emailAddress }</b> },
                     ) }
                     </p>
-                    <p>{ _t("Please check your email to continue registration.") }</p>
+                    <p>{ _t("Open the link in the email to continue registration.") }</p>
                 </div>
             );
         }
@@ -500,16 +499,10 @@ export class MsisdnAuthEntry extends React.Component {
         });
 
         try {
-            const requiresIdServerParam =
-                await this.props.matrixClient.doesServerRequireIdServerParam();
             let result;
             if (this._submitUrl) {
                 result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
                     this._submitUrl, this._sid, this.props.clientSecret, this.state.token,
-                );
-            } else if (requiresIdServerParam) {
-                result = await this.props.matrixClient.submitMsisdnToken(
-                    this._sid, this.props.clientSecret, this.state.token,
                 );
             } else {
                 throw new Error("The registration with MSISDN flow is misconfigured");
@@ -519,12 +512,6 @@ export class MsisdnAuthEntry extends React.Component {
                     sid: this._sid,
                     client_secret: this.props.clientSecret,
                 };
-                if (requiresIdServerParam) {
-                    const idServerParsedUrl = url.parse(
-                        this.props.matrixClient.getIdentityServerUrl(),
-                    );
-                    creds.id_server = idServerParsedUrl.host;
-                }
                 this.props.submitAuthDict({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
                     // TODO: Remove `threepid_creds` once servers support proper UIA

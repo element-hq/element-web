@@ -20,8 +20,8 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default class DirectorySearchBox extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this._collectInput = this._collectInput.bind(this);
         this._onClearClick = this._onClearClick.bind(this);
         this._onChange = this._onChange.bind(this);
@@ -31,7 +31,7 @@ export default class DirectorySearchBox extends React.Component {
         this.input = null;
 
         this.state = {
-            value: '',
+            value: this.props.initialText || '',
         };
     }
 
@@ -90,15 +90,20 @@ export default class DirectorySearchBox extends React.Component {
         }
 
         return <div className={`mx_DirectorySearchBox ${this.props.className} mx_textinput`}>
-                <input type="text" name="dirsearch" value={this.state.value}
-                    className="mx_textinput_icon mx_textinput_search"
-                    ref={this._collectInput}
-                    onChange={this._onChange} onKeyUp={this._onKeyUp}
-                    placeholder={this.props.placeholder} autoFocus
-                />
-                { joinButton }
-                <AccessibleButton className="mx_DirectorySearchBox_clear" onClick={this._onClearClick}></AccessibleButton>
-            </div>;
+            <input
+                type="text"
+                name="dirsearch"
+                value={this.state.value}
+                className="mx_textinput_icon mx_textinput_search"
+                ref={this._collectInput}
+                onChange={this._onChange}
+                onKeyUp={this._onKeyUp}
+                placeholder={this.props.placeholder}
+                autoFocus
+            />
+            { joinButton }
+            <AccessibleButton className="mx_DirectorySearchBox_clear" onClick={this._onClearClick} />
+        </div>;
     }
 }
 
@@ -109,4 +114,5 @@ DirectorySearchBox.propTypes = {
     onJoinClick: PropTypes.func,
     placeholder: PropTypes.string,
     showJoinButton: PropTypes.bool,
+    initialText: PropTypes.string,
 };

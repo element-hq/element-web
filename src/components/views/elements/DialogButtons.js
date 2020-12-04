@@ -54,6 +54,9 @@ export default class DialogButtons extends React.Component {
 
         // disables only the primary button
         primaryDisabled: PropTypes.bool,
+
+        // something to stick next to the buttons, optionally
+        additive: PropTypes.element,
     };
 
     static defaultProps = {
@@ -85,8 +88,14 @@ export default class DialogButtons extends React.Component {
             </button>;
         }
 
+        let additive = null;
+        if (this.props.additive) {
+            additive = <div className="mx_Dialog_buttons_additive">{this.props.additive}</div>;
+        }
+
         return (
             <div className="mx_Dialog_buttons">
+                { additive }
                 { cancelButton }
                 { this.props.children }
                 <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
