@@ -2955,5 +2955,6 @@
     "Sign into your homeserver": "Logi sisse oma koduserverisse",
     "Matrix.org is the biggest public homeserver in the world, so it’s a good place for many.": "Matrix.org on maailma suurim avalik koduserver ja see sobib paljude jaoks.",
     "Specify a homeserver": "Sisesta koduserver",
-    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Lihtsalt hoiatame, et kui sa ei lisa e-posti aadressi ning unustad oma konto salasõna, siis sa võid <b>püsivalt kaotada ligipääsu oma kontole</b>."
+    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Lihtsalt hoiatame, et kui sa ei lisa e-posti aadressi ning unustad oma konto salasõna, siis sa võid <b>püsivalt kaotada ligipääsu oma kontole</b>.",
+    "Reason (optional)": "Põhjus (kui soovid lisada)"
 }
