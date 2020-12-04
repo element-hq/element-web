@@ -537,7 +537,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 <AccessibleButton onClick={this.onRoomAvatarClick}>
                     <RoomAvatar room={callRoom} height={32} width={32} />
                 </AccessibleButton>
-                <div>
+                <div className="mx_CallView_header_callInfo">
                     <div className="mx_CallView_header_roomName">{callRoom.name}</div>
                     <div className="mx_CallView_header_callTypeSmall">{callTypeText}</div>
                 </div>

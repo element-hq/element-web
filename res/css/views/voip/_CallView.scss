@@ -234,10 +234,19 @@ limitations under the License.
     }
 }
 
+.mx_CallView_header_callInfo {
+    margin-right: 16px;
+}
+
 .mx_CallView_header_roomName {
     font-weight: bold;
     font-size: 12px;
     line-height: initial;
+    height: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 116px;
 }
 
 .mx_CallView_header_callTypeSmall {
