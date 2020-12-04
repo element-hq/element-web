@@ -566,7 +566,8 @@ export default class CallHandler {
                 } else {
                     this.calls.get(payload.room_id).hangup(CallErrorCode.UserHangup, false);
                 }
-                this.removeCallForRoom(payload.room_id);
+                // don't remove the call yet: let the hangup event handler do it (otherwise it will throw
+                // the hangup event away)
                 break;
             case 'answer': {
                 if (!this.calls.has(payload.room_id)) {
