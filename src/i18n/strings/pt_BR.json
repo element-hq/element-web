@@ -2886,5 +2886,6 @@
     "Continue with %(provider)s": "Continuar com %(provider)s",
     "Homeserver": "Servidor local",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Você pode usar as opções personalizadas de servidor para entrar em outros servidores Matrix, especificando um URL de servidor local diferente. Isso permite que você use o Element com uma conta Matrix em um servidor local diferente.",
-    "Server Options": "Opções do servidor"
+    "Server Options": "Opções do servidor",
+    "Reason (optional)": "Motivo (opcional)"
 }
