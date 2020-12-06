@@ -2957,5 +2957,6 @@
     "Continue with %(provider)s": "使用 %(provider)s 繼續",
     "Homeserver": "家伺服器",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "您可以透過指定不同的家伺服器 URL 使用自訂伺服器選項來登入其他 Matrix 伺服器。這讓您可以使用在不同家伺服器上的既有 Matrix 帳號。",
-    "Server Options": "伺服器選項"
+    "Server Options": "伺服器選項",
+    "Reason (optional)": "理由（選擇性）"
 }
