@@ -248,15 +248,16 @@ export default abstract class BasePlatform {
      * @param {MatrixClient} mxClient the matrix client using which we should start the flow
      * @param {"sso"|"cas"} loginType the type of SSO it is, CAS/SSO.
      * @param {string} fragmentAfterLogin the hash to pass to the app during sso callback.
+     * @param {string} idpId The ID of the Identity Provider being targeted, optional.
      */
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string, idpId?: string) {
         // persist hs url and is url for when the user is returned to the app with the login token
         localStorage.setItem(SSO_HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
         if (mxClient.getIdentityServerUrl()) {
             localStorage.setItem(SSO_ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
         }
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
-        window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
+        window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType, idpId); // redirect to SSO
     }
 
     onKeyDown(ev: KeyboardEvent): boolean {

@@ -35,7 +35,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
         const senderName = this.props.mxEvent.sender?.name || this.props.mxEvent.getSender();
 
         let joinCopy = _t('Join the conference at the top of this room');
-        if (!WidgetStore.instance.isPinned(this.props.mxEvent.getStateKey())) {
+        if (!WidgetStore.instance.isPinned(this.props.mxEvent.getRoomId(), this.props.mxEvent.getStateKey())) {
             joinCopy = _t('Join the conference from the room information card on the right');
         }
 

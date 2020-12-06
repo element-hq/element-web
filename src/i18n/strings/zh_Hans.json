@@ -2398,5 +2398,16 @@
     "Privacy": "隐私",
     "Explore community rooms": "探索社区聊天室",
     "%(count)s results|one": "%(count)s 个结果",
-    "Room Info": "聊天室信息"
+    "Room Info": "聊天室信息",
+    "No other application is using the webcam": "没有其他应用程序正在使用摄像头",
+    "Permission is granted to use the webcam": "授予使用网络摄像头的权限",
+    "A microphone and webcam are plugged in and set up correctly": "麦克风和摄像头已插入并正确设置",
+    "Call failed because no webcam or microphone could not be accessed. Check that:": "通话失败，因为无法访问摄像头或麦克风。 检查：",
+    "Unable to access webcam / microphone": "无法访问摄像头/麦克风",
+    "Call failed because no microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "呼叫失败，因为无法访问任何麦克风。 检查是否已插入麦克风并正确设置。",
+    "Unable to access microphone": "无法使用麦克风",
+    "The call was answered on another device.": "在另一台设备上应答了该通话。",
+    "The call could not be established": "无法建立通话",
+    "The other party declined the call.": "对方拒绝了通话。",
+    "Call Declined": "通话被拒绝"
 }

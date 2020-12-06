@@ -50,7 +50,7 @@
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",
-    "test:e2e": "./test/end-to-end-tests/run.sh --riot-url http://localhost:8080"
+    "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.5",

@@ -140,6 +140,6 @@ export async function leaveRoomBehaviour(roomId: string) {
     }
 
     if (RoomViewStore.getRoomId() === roomId) {
-        dis.dispatch({action: 'view_next_room'});
+        dis.dispatch({action: 'view_home_page'});
     }
 }

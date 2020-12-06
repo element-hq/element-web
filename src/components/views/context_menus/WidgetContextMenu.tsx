@@ -57,7 +57,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     let unpinButton;
     if (showUnpin) {
         const onUnpinClick = () => {
-            WidgetStore.instance.unpinWidget(app.id);
+            WidgetStore.instance.unpinWidget(room.roomId, app.id);
             onFinished();
         };
 
@@ -143,7 +143,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     let moveLeftButton;
     if (showUnpin && widgetIndex > 0) {
         const onClick = () => {
-            WidgetStore.instance.movePinnedWidget(app.id, -1);
+            WidgetStore.instance.movePinnedWidget(roomId, app.id, -1);
             onFinished();
         };
 
@@ -153,7 +153,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     let moveRightButton;
     if (showUnpin && widgetIndex < pinnedWidgets.length - 1) {
         const onClick = () => {
-            WidgetStore.instance.movePinnedWidget(app.id, 1);
+            WidgetStore.instance.movePinnedWidget(roomId, app.id, 1);
             onFinished();
         };
 
