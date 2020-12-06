@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {useContext, useRef, useState} from "react";
+import {useContext, useState} from "react";
 
 import AutoHideScrollbar from './AutoHideScrollbar';
 import {getHomePageUrl} from "../../utils/pages";
@@ -24,30 +24,41 @@ import SdkConfig from "../../SdkConfig";
 import * as sdk from "../../index";
 import dis from "../../dispatcher/dispatcher";
 import {Action} from "../../dispatcher/actions";
-import {Transition} from "react-transition-group";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import {OwnProfileStore} from "../../stores/OwnProfileStore";
 import AccessibleButton from "../views/elements/AccessibleButton";
-import Tooltip from "../views/elements/Tooltip";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import {useEventEmitter} from "../../hooks/useEventEmitter";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import classNames from "classnames";
-import {ENTERING} from "react-transition-group/Transition";
+import MiniAvatarUploader, {AVATAR_SIZE} from "../views/elements/MiniAvatarUploader";
+import Analytics from "../../Analytics";
+import CountlyAnalytics from "../../CountlyAnalytics";
 
-const onClickSendDm = () => dis.dispatch({action: 'view_create_chat'});
-const onClickExplore = () => dis.fire(Action.ViewRoomDirectory);
-const onClickNewRoom = () => dis.dispatch({action: 'view_create_room'});
+const onClickSendDm = () => {
+    Analytics.trackEvent('home_page', 'button', 'dm');
+    CountlyAnalytics.instance.track("home_page_button", { button: "dm" });
+    dis.dispatch({action: 'view_create_chat'});
+};
+
+const onClickExplore = () => {
+    Analytics.trackEvent('home_page', 'button', 'room_directory');
+    CountlyAnalytics.instance.track("home_page_button", { button: "room_directory" });
+    dis.fire(Action.ViewRoomDirectory);
+};
+
+const onClickNewRoom = () => {
+    Analytics.trackEvent('home_page', 'button', 'create_room');
+    CountlyAnalytics.instance.track("home_page_button", { button: "create_room" });
+    dis.dispatch({action: 'view_create_room'});
+};
 
 interface IProps {
     justRegistered?: boolean;
 }
 
-const avatarSize = 52;
-
 const getOwnProfile = (userId: string) => ({
     displayName: OwnProfileStore.instance.displayName || userId,
-    avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(avatarSize),
+    avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE),
 });
 
 const UserWelcomeTop = () => {
@@ -57,56 +68,23 @@ const UserWelcomeTop = () => {
     useEventEmitter(OwnProfileStore.instance, UPDATE_EVENT, () => {
         setOwnProfile(getOwnProfile(userId));
     });
-    const [busy, setBusy] = useState(false);
-
-    const uploadRef = useRef<HTMLInputElement>();
 
     return <div>
-        <input
-            type="file"
-            ref={uploadRef}
-            className="mx_ProfileSettings_avatarUpload"
-            onChange={async (ev) => {
-                if (!ev.target.files?.length) return;
-                setBusy(true);
-                const file = ev.target.files[0];
-                const uri = await cli.uploadContent(file);
-                await cli.setAvatarUrl(uri);
-                setBusy(false);
-            }}
-            accept="image/*"
-        />
-
-        <AccessibleButton
-            className={classNames("mx_HomePage_userAvatar", {
-                mx_HomePage_userAvatar_busy: busy,
-            })}
-            disabled={busy}
-            onClick={() => {
-                uploadRef.current.click();
-            }}
+        <MiniAvatarUploader
+            hasAvatar={!!ownProfile.avatarUrl}
+            hasAvatarLabel={_t("Great, that'll help people know it's you")}
+            noAvatarLabel={_t("Add a photo so people know it's you.")}
+            setAvatarUrl={url => cli.setAvatarUrl(url)}
         >
             <BaseAvatar
                 idName={userId}
                 name={ownProfile.displayName}
                 url={ownProfile.avatarUrl}
-                width={avatarSize}
-                height={avatarSize}
+                width={AVATAR_SIZE}
+                height={AVATAR_SIZE}
                 resizeMethod="crop"
             />
-
-            <Transition appear in timeout={3000}>
-                {state => (
-                    <Tooltip
-                        label={ownProfile.avatarUrl || busy
-                            ? _t("Great, that'll help people know it's you")
-                            : _t("Add a photo so people know it's you.")}
-                        visible={state !== ENTERING}
-                        forceOnRight
-                    />
-                )}
-            </Transition>
-        </AccessibleButton>
+        </MiniAvatarUploader>
 
         <h1>{ _t("Welcome %(name)s", { name: ownProfile.displayName }) }</h1>
         <h4>{ _t("Now, let's help you get started") }</h4>

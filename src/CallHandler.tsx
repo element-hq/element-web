@@ -59,8 +59,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
-// @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from 'matrix-js-sdk';
+import { createNewMatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
@@ -77,9 +76,11 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
-import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
 import Analytics from './Analytics';
 import CountlyAnalytics from "./CountlyAnalytics";
+import {UIFeature} from "./settings/UIFeature";
+import { CallError } from "matrix-js-sdk/src/webrtc/call";
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -98,6 +99,21 @@ export enum PlaceCallType {
     ScreenSharing = 'screensharing',
 }
 
+function getRemoteAudioElement(): HTMLAudioElement {
+    // this needs to be somewhere at the top of the DOM which
+    // always exists to avoid audio interruptions.
+    // Might as well just use DOM.
+    const remoteAudioElement = document.getElementById("remoteAudio") as HTMLAudioElement;
+    if (!remoteAudioElement) {
+        console.error(
+            "Failed to find remoteAudio element - cannot play audio!" +
+            "You need to add an <audio/> to the DOM.",
+        );
+        return null;
+    }
+    return remoteAudioElement;
+}
+
 export default class CallHandler {
     private calls = new Map<string, MatrixCall>();
     private audioPromises = new Map<AudioID, Promise<void>>();
@@ -110,7 +126,7 @@ export default class CallHandler {
         return window.mxCallHandler;
     }
 
-    constructor() {
+    start() {
         dis.register(this.onAction);
         // add empty handlers for media actions, otherwise the media keys
         // end up causing the audio elements with our ring/ringback etc
@@ -123,6 +139,27 @@ export default class CallHandler {
             navigator.mediaSession.setActionHandler('previoustrack', function() {});
             navigator.mediaSession.setActionHandler('nexttrack', function() {});
         }
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            MatrixClientPeg.get().on('Call.incoming', this.onCallIncoming);
+        }
+    }
+
+    stop() {
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener('Call.incoming', this.onCallIncoming);
+        }
+    }
+
+    private onCallIncoming = (call) => {
+        // we dispatch this synchronously to make sure that the event
+        // handlers on the call are set up immediately (so that if
+        // we get an immediate hangup, we don't get a stuck call)
+        dis.dispatch({
+            action: 'incoming_call',
+            call: call,
+        }, true);
     }
 
     getCallForRoom(roomId: string): MatrixCall {
@@ -190,11 +227,17 @@ export default class CallHandler {
     }
 
     private setCallListeners(call: MatrixCall) {
-        call.on(CallEvent.Error, (err) => {
+        call.on(CallEvent.Error, (err: CallError) => {
             if (!this.matchesCallForThisRoom(call)) return;
 
-            Analytics.trackEvent('voip', 'callError', 'error', err);
+            Analytics.trackEvent('voip', 'callError', 'error', err.toString());
             console.error("Call error:", err);
+
+            if (err.code === CallErrorCode.NoUserMedia) {
+                this.showMediaCaptureError(call);
+                return;
+            }
+
             if (
                 MatrixClientPeg.get().getTurnServers().length === 0 &&
                 SettingsStore.getValue("fallbackICEServerAllowed") === null
@@ -263,8 +306,9 @@ export default class CallHandler {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title, description,
                         });
-                    } else if (call.hangupReason === CallErrorCode.AnsweredElsewhere) {
-                        this.play(AudioID.Busy);
+                    } else if (
+                        call.hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
+                    ) {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title: _t("Answered Elsewhere"),
                             description: _t("The call was answered on another device."),
@@ -289,6 +333,11 @@ export default class CallHandler {
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
+    }
+
+    private setCallAudioElement(call: MatrixCall) {
+        const audioElement = getRemoteAudioElement();
+        if (audioElement) call.setRemoteAudioElement(audioElement);
     }
 
     private setCallState(call: MatrixCall, status: CallState) {
@@ -336,6 +385,34 @@ export default class CallHandler {
         }, null, true);
     }
 
+    private showMediaCaptureError(call: MatrixCall) {
+        let title;
+        let description;
+
+        if (call.type === CallType.Voice) {
+            title = _t("Unable to access microphone");
+            description = <div>
+                {_t(
+                    "Call failed because no microphone could not be accessed. " +
+                    "Check that a microphone is plugged in and set up correctly.",
+                )}
+            </div>;
+        } else if (call.type === CallType.Video) {
+            title = _t("Unable to access webcam / microphone");
+            description = <div>
+                {_t("Call failed because no webcam or microphone could not be accessed. Check that:")}
+                <ul>
+                    <li>{_t("A microphone and webcam are plugged in and set up correctly")}</li>
+                    <li>{_t("Permission is granted to use the webcam")}</li>
+                    <li>{_t("No other application is using the webcam")}</li>
+                </ul>
+            </div>;
+        }
+
+        Modal.createTrackedDialog('Media capture failed', '', ErrorDialog, {
+            title, description,
+        }, null, true);
+    }
 
     private placeCall(
         roomId: string, type: PlaceCallType,
@@ -343,9 +420,11 @@ export default class CallHandler {
     ) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
         CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
-        const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), roomId);
+        const call = createNewMatrixCall(MatrixClientPeg.get(), roomId);
         this.calls.set(roomId, call);
         this.setCallListeners(call);
+        this.setCallAudioElement(call);
+
         if (type === PlaceCallType.Voice) {
             call.placeVoiceCall();
         } else if (type === 'video') {
@@ -451,6 +530,7 @@ export default class CallHandler {
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(call.roomId, call)
                     this.setCallListeners(call);
+                    this.setCallAudioElement(call);
                 }
                 break;
             case 'hangup':

@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
+import { IWidgetApiRequest } from "matrix-widget-api";
+
 export enum ElementWidgetActions {
     ClientReady = "im.vector.ready",
     HangupCall = "im.vector.hangup",
     OpenIntegrationManager = "integration_manager_open",
+    ViewRoom = "io.element.view_room",
+}
+
+export interface IViewRoomApiRequest extends IWidgetApiRequest {
+    data: {
+        room_id: string; // eslint-disable-line camelcase
+    };
 }

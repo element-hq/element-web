@@ -9,16 +9,16 @@ echo "Please first run $BASE_DIR/install.sh"
     exit 1
 fi
 
-has_custom_riot=$(node has_custom_riot.js $@)
+has_custom_app=$(node has-custom-app.js $@)
 
-if [ ! -d "riot/riot-web" ] && [ $has_custom_riot -ne "1" ]; then
-    echo "Please provide an instance of riot to test against by passing --riot-url <url> or running $BASE_DIR/riot/install.sh"
+if [ ! -d "element/element-web" ] && [ $has_custom_app -ne "1" ]; then
+    echo "Please provide an instance of Element to test against by passing --element-url <url> or running $BASE_DIR/element/install.sh"
     exit 1
 fi
 
 stop_servers() {
-    if [ $has_custom_riot -ne "1" ]; then
-	   ./riot/stop.sh
+    if [ $has_custom_app -ne "1" ]; then
+	   ./element/stop.sh
 	fi
     ./synapse/stop.sh
 }
@@ -32,8 +32,8 @@ handle_error() {
 trap 'handle_error' ERR
 
 ./synapse/start.sh
-if [ $has_custom_riot -ne "1" ]; then
-    ./riot/start.sh
+if [ $has_custom_app -ne "1" ]; then
+    ./element/start.sh
 fi
 node start.js $@
 stop_servers

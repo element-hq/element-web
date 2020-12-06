@@ -50,8 +50,8 @@ class Skinner {
             return null;
         }
 
-        // components have to be functions.
-        const validType = typeof comp === 'function';
+        // components have to be functions or forwardRef objects with a render function.
+        const validType = typeof comp === 'function' || comp.render;
         if (!validType) {
             throw new Error(`Not a valid component: ${name} (type = ${typeof(comp)}).`);
         }

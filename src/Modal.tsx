@@ -147,6 +147,15 @@ export class ModalManager {
         return this.appendDialogAsync<T>(...rest);
     }
 
+    public closeCurrentModal(reason: string) {
+        const modal = this.getCurrentModal();
+        if (!modal) {
+            return;
+        }
+        modal.closeReason = reason;
+        modal.close();
+    }
+
     private buildModal<T extends any[]>(
         prom: Promise<React.ComponentType>,
         props?: IProps<T>,
