@@ -59,15 +59,16 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
-.mx_MemberList_query,
-.mx_GroupMemberList_query,
-.mx_GroupRoomList_query {
-    flex: 1 1 0;
-
+.mx_MemberList_query {
     // stricter rule to override the one in _common.scss
     &[type="text"] {
         font-size: $font-12px;
     }
+}
+
+.mx_GroupMemberList_query,
+.mx_GroupRoomList_query {
+    flex: 0 0 auto;
 }
 
 .mx_MemberList_query {

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_SearchBox {
-    flex: 1 1 0 !important;
+    flex: 1 1 0;
     min-width: 0;
 
     &.mx_SearchBox_blurred:not(:hover) {
