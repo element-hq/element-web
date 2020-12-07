@@ -1360,7 +1360,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             rejecting: true,
         });
         this.context.leave(this.state.roomId).then(() => {
-            dis.dispatch({ action: 'view_next_room' });
+            dis.dispatch({ action: 'view_home_page' });
             this.setState({
                 rejecting: false,
             });
@@ -1394,7 +1394,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             await this.context.setIgnoredUsers(ignoredUsers);
 
             await this.context.leave(this.state.roomId);
-            dis.dispatch({ action: 'view_next_room' });
+            dis.dispatch({ action: 'view_home_page' });
             this.setState({
                 rejecting: false,
             });

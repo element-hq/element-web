@@ -306,8 +306,9 @@ export default class CallHandler {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title, description,
                         });
-                    } else if (call.hangupReason === CallErrorCode.AnsweredElsewhere) {
-                        this.play(AudioID.Busy);
+                    } else if (
+                        call.hangupReason === CallErrorCode.AnsweredElsewhere && oldState === CallState.Connecting
+                    ) {
                         Modal.createTrackedDialog('Call Handler', 'Call Failed', ErrorDialog, {
                             title: _t("Answered Elsewhere"),
                             description: _t("The call was answered on another device."),
@@ -392,14 +393,14 @@ export default class CallHandler {
             title = _t("Unable to access microphone");
             description = <div>
                 {_t(
-                    "Call failed because no microphone could not be accessed. " +
+                    "Call failed because microphone could not be accessed. " +
                     "Check that a microphone is plugged in and set up correctly.",
                 )}
             </div>;
         } else if (call.type === CallType.Video) {
             title = _t("Unable to access webcam / microphone");
             description = <div>
-                {_t("Call failed because no webcam or microphone could not be accessed. Check that:")}
+                {_t("Call failed because webcam or microphone could not be accessed. Check that:")}
                 <ul>
                     <li>{_t("A microphone and webcam are plugged in and set up correctly")}</li>
                     <li>{_t("Permission is granted to use the webcam")}</li>

@@ -37,6 +37,10 @@ limitations under the License.
         color: $authpage-primary-color;
     }
 
+    h3.mx_AuthBody_centered {
+        text-align: center;
+    }
+
     a:link,
     a:hover,
     a:visited {
@@ -96,12 +100,6 @@ limitations under the License.
     }
 }
 
-.mx_AuthBody_editServerDetails {
-    padding-left: 1em;
-    font-size: $font-12px;
-    font-weight: normal;
-}
-
 .mx_AuthBody_fieldRow {
     display: flex;
     margin-bottom: 10px;
@@ -146,6 +144,14 @@ limitations under the License.
     display: block;
     text-align: center;
     width: 100%;
+
+    > a {
+        font-weight: $font-semi-bold;
+    }
+}
+
+.mx_SSOButtons + .mx_AuthBody_changeFlow {
+    margin-top: 24px;
 }
 
 .mx_AuthBody_spinner {
