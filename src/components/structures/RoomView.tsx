@@ -77,6 +77,7 @@ import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
+import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -799,14 +800,16 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private handleEffects = (ev) => {
-        if (!this.state.room ||
-            !this.state.matrixClientIsReady ||
-            this.state.room.getUnreadNotificationCount() === 0) return;
+        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
+
+        const notifState = RoomNotificationStateStore.instance.getRoomState(this.state.room);
+        if (!notifState.isUnread) return;
+
         CHAT_EFFECTS.forEach(effect => {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
                 dis.dispatch({action: `effects.${effect.command}`});
             }
-        })
+        });
     };
 
     private onRoomName = (room: Room) => {
