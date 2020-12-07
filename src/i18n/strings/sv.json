@@ -2852,5 +2852,7 @@
     "See emotes posted to your active room": "Se emotes som skickas i ditt aktiva rum",
     "See emotes posted to this room": "Se emotes som skickas i det här rummet",
     "Send emotes as you in your active room": "Skicka emotes som dig i ditt aktiva rum",
-    "Send emotes as you in this room": "Skicka emotes som dig i det här rummet"
+    "Send emotes as you in this room": "Skicka emotes som dig i det här rummet",
+    "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "En förvarning, om du inte lägger till en e-postadress och glömmer ditt lösenord, så kan du <b>permanent förlora åtkomst till ditt konto</b>.",
+    "Continuing without email": "Fortsätter utan e-post"
 }
