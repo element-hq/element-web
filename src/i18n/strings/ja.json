@@ -1007,7 +1007,7 @@
     "Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)": "他の Matrix ホームサーバーからの参加を禁止する (この設定はあとから変更できません!)",
     "Room Settings - %(roomName)s": "部屋の設定 - %(roomName)s",
     "Explore": "探索",
-    "Filter": "フィルター",
+    "Filter": "検索",
     "Find a room… (e.g. %(exampleRoom)s)": "部屋を探す… (例: %(exampleRoom)s)",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "もしお探しの部屋が見つからない場合、招待してもらうか<a>部屋を作成</a>しましょう。",
     "Enable room encryption": "部屋の暗号化を有効化",
@@ -1466,5 +1466,16 @@
     "Recently Direct Messaged": "最近ダイレクトメッセージで会話したユーザー",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "この部屋に誰かを招待したい場合は、招待したいユーザーの名前、（ <userId/> の様な）ユーザー名、またはメールアドレスを指定するか、<a>この部屋を共有</a>してください。",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "この部屋に誰かを招待したい場合は、招待したいユーザーの名前、メールアドレス、または（ <userId/> の様な）ユーザー名を指定するか、<a>この部屋を共有</a>してください。",
-    "Upgrade your encryption": "暗号化をアップグレード"
+    "Upgrade your encryption": "暗号化をアップグレード",
+    "Role": "役割",
+    "Send a reply…": "返信を送信する…",
+    "Send a message…": "メッセージを送信する…",
+    "This is the beginning of your direct message history with <displayName/>.": "ここがあなたと <displayName/> のダイレクトメッセージの履歴の先頭です。",
+    "This is the start of <roomName/>.": "ここが <roomName/> の先頭です。",
+    "<a>Add a topic</a> to help people know what it is about.": "<a>トピックを追加する</a>と参加者がこの部屋の目的を理解しやすくなります。",
+    "Topic: %(topic)s (<a>edit</a>)": "トピック: %(topic)s (<a>編集</a>)",
+    "Topic: %(topic)s ": "トピック: %(topic)s ",
+    "%(displayName)s created this room.": "%(displayName)s がこの部屋を作成しました。",
+    "You created this room.": "あなたがこの部屋を作成しました。",
+    "%(creator)s created this DM.": "%(creator)s がこの DM を作成しました。"
 }
