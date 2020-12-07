@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 .mx_CallView {
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: $voipcall-plinth-color;
     padding-left: 8px;
     padding-right: 8px;
@@ -47,6 +47,7 @@ limitations under the License.
     align-items: center;
     justify-content: center;
     background-color: $inverted-bg-color;
+    border-radius: 8px;
 }
 
 .mx_CallView_voice_hold {
@@ -92,6 +93,8 @@ limitations under the License.
     width: 100%;
     position: relative;
     z-index: 30;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .mx_CallView_video_hold {
