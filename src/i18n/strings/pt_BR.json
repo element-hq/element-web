@@ -2887,5 +2887,8 @@
     "Homeserver": "Servidor local",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Você pode usar as opções personalizadas de servidor para entrar em outros servidores Matrix, especificando um URL de servidor local diferente. Isso permite que você use o Element com uma conta Matrix em um servidor local diferente.",
     "Server Options": "Opções do servidor",
-    "Reason (optional)": "Motivo (opcional)"
+    "Reason (optional)": "Motivo (opcional)",
+    "We call the places where you can host your account ‘homeservers’.": "Os locais onde você pode hospedar sua conta são chamados de \"servidores locais\".",
+    "Call failed because webcam or microphone could not be accessed. Check that:": "A chamada falhou porque a câmera ou o microfone não puderam ser acessados. Verifique se:",
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "A chamada falhou porque não foi possível acessar o microfone. Verifique se o microfone está conectado e configurado corretamente."
 }
