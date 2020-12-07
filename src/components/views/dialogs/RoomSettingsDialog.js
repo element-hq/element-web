@@ -53,9 +53,9 @@ export default class RoomSettingsDialog extends React.Component {
     }
 
     _onAction = (payload) => {
-        // When room changes below us, close the room settings
+        // When view changes below us, close the room settings
         // whilst the modal is open this can only be triggered when someone hits Leave Room
-        if (payload.action === 'view_next_room') {
+        if (payload.action === 'view_home_page') {
             this.props.onFinished();
         }
     };

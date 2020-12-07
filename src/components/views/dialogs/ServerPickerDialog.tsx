@@ -175,7 +175,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         >
             <form className="mx_Dialog_content" id="mx_ServerPickerDialog" onSubmit={this.onSubmit}>
                 <p>
-                    {_t("We call the places you where you can host your account ‘homeservers’.")} {text}
+                    {_t("We call the places where you can host your account ‘homeservers’.")} {text}
                 </p>
 
                 <StyledRadioButton

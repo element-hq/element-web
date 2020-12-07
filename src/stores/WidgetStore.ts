@@ -29,6 +29,8 @@ import WidgetUtils from "../utils/WidgetUtils";
 import {SettingLevel} from "../settings/SettingLevel";
 import {WidgetType} from "../widgets/WidgetType";
 import {UPDATE_EVENT} from "./AsyncStore";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { arrayDiff, arrayHasDiff, arrayUnion } from "../utils/arrays";
 
 interface IState {}
 
@@ -48,13 +50,16 @@ interface IRoomWidgets {
 
 export const MAX_PINNED = 3;
 
+function widgetUid(app: IApp): string {
+    return `${app.roomId ?? MatrixClientPeg.get().getUserId()}::${app.id}`;
+}
+
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
 export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new WidgetStore();
 
-    // TODO: Come up with a unique key for widgets as their IDs are not globally unique, but can exist anywhere
-    private widgetMap = new Map<string, IApp>(); // Key is widget ID
+    private widgetMap = new Map<string, IApp>(); // Key is widget Unique ID (UID)
     private roomMap = new Map<string, IRoomWidgets>(); // Key is room ID
 
     private constructor() {
@@ -129,14 +134,12 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         // first clean out old widgets from the map which originate from this room
         // otherwise we are out of sync with the rest of the app with stale widget events during removal
         Array.from(this.widgetMap.values()).forEach(app => {
-            if (app.roomId === room.roomId) {
-                this.widgetMap.delete(app.id);
-            }
+            this.widgetMap.delete(widgetUid(app));
         });
 
         this.generateApps(room).forEach(app => {
             // Sanity check for https://github.com/vector-im/element-web/issues/15705
-            const existingApp = this.widgetMap.get(app.id);
+            const existingApp = this.widgetMap.get(widgetUid(app));
             if (existingApp) {
                 console.warn(
                     `Possible widget ID conflict for ${app.id} - wants to store in room ${app.roomId} ` +
@@ -144,7 +147,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
                 );
             }
 
-            this.widgetMap.set(app.id, app);
+            this.widgetMap.set(widgetUid(app), app);
             roomInfo.widgets.push(app);
         });
         this.emit(room.roomId);
@@ -157,19 +160,6 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
         this.emit(UPDATE_EVENT);
     };
-
-    public getRoomId = (widgetId: string) => {
-        const app = this.widgetMap.get(widgetId);
-        if (!app) return null;
-
-        // Sanity check for https://github.com/vector-im/element-web/issues/15705
-        const roomInfo = this.getRoom(app.roomId);
-        if (!roomInfo.widgets?.some(w => w.id === app.id)) {
-            throw new Error(`Widget ${app.id} says it is in ${app.roomId} but was not found there`);
-        }
-
-        return app.roomId;
-    }
 
     public getRoom = (roomId: string) => {
         return this.roomMap.get(roomId);
@@ -220,7 +210,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.setPinned(roomId, widgetId, true);
 
         // Show the apps drawer upon the user pinning a widget
-        if (RoomViewStore.getRoomId() === this.getRoomId(widgetId)) {
+        if (RoomViewStore.getRoomId() === roomId) {
             defaultDispatcher.dispatch({
                 action: "appsDrawer",
                 show: true,
@@ -295,10 +285,31 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         });
 
         const order = Object.keys(roomInfo.pinned).filter(k => roomInfo.pinned[k]);
-        let apps = order.map(wId => this.widgetMap.get(wId)).filter(Boolean);
-        apps = apps.slice(0, priorityWidget ? MAX_PINNED - 1 : MAX_PINNED);
+        const apps = order
+            .map(wId => Array.from(this.widgetMap.values())
+                .find(w2 => w2.roomId === roomId && w2.id === wId))
+            .filter(Boolean)
+            .slice(0, priorityWidget ? MAX_PINNED - 1 : MAX_PINNED);
         if (priorityWidget) {
             apps.push(priorityWidget);
+        }
+
+        // Sanity check for https://github.com/vector-im/element-web/issues/15705
+        // We union the app IDs the above generated with the roomInfo's known widgets to
+        // get a list of IDs which both exist. We then diff that against the generated app
+        // IDs above to ensure that all of the app IDs are captured by the union with the
+        // room - if we grabbed a widget that wasn't part of the roomInfo's list, it wouldn't
+        // be in the union and thus result in a diff.
+        const appIds = apps.map(a => widgetUid(a));
+        const roomAppIds = roomInfo.widgets.map(a => widgetUid(a));
+        const roomAppIdsUnion = arrayUnion(appIds, roomAppIds);
+        const missingSomeApps = arrayHasDiff(roomAppIdsUnion, appIds);
+        if (missingSomeApps) {
+            const diff = arrayDiff(roomAppIdsUnion, appIds);
+            console.warn(
+                `${roomId} appears to have a conflict for which widgets belong to it. ` +
+                `Widget UIDs are: `, [...diff.added, ...diff.removed],
+            );
         }
 
         return apps;

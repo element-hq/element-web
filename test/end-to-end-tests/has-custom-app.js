@@ -1,11 +1,11 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-function tsOfNewestEvent(room) {
-    if (room.timeline.length) {
-        return room.timeline[room.timeline.length - 1].getTs();
-    } else {
-        return Number.MAX_SAFE_INTEGER;
-    }
+// used from run.sh as getopts doesn't support long parameters
+const idx = process.argv.indexOf("--app-url");
+let hasAppUrl = false;
+if (idx !== -1) {
+    const value = process.argv[idx + 1];
+    hasAppUrl = !!value;
 }
-
-export function mostRecentActivityFirst(roomList) {
-    return roomList.sort(function(a, b) {
-        return tsOfNewestEvent(b) - tsOfNewestEvent(a);
-    });
-}
+process.stdout.write(hasAppUrl ? "1" : "0" );
