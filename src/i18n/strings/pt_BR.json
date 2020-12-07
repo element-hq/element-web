@@ -2890,5 +2890,7 @@
     "Reason (optional)": "Motivo (opcional)",
     "We call the places where you can host your account ‘homeservers’.": "Os locais onde você pode hospedar sua conta são chamados de \"servidores locais\".",
     "Call failed because webcam or microphone could not be accessed. Check that:": "A chamada falhou porque a câmera ou o microfone não puderam ser acessados. Verifique se:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "A chamada falhou porque não foi possível acessar o microfone. Verifique se o microfone está conectado e configurado corretamente."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "A chamada falhou porque não foi possível acessar o microfone. Verifique se o microfone está conectado e configurado corretamente.",
+    "Invalid URL": "URL inválido",
+    "Unable to validate homeserver": "Não foi possível validar o servidor local"
 }
