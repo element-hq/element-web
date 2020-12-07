@@ -2,7 +2,6 @@
  Copyright 2020 Nurjin Jafar
  Copyright 2020 Nordeck IT + Consulting GmbH.
 
-
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -17,14 +16,14 @@
  */
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import dis from '../../../dispatcher/dispatcher';
-import ICanvasEffect, { ICanvasEffectConstructable } from '../../../effects/ICanvasEffect.js';
+import ICanvasEffect  from '../../../effects/ICanvasEffect';
 import {CHAT_EFFECTS} from '../../../effects'
 
-export type EffectsOverlayProps = {
+interface IProps {
     roomWidth: number;
 }
 
-const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) => {
+const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const effectsRef = useRef<Map<string, ICanvasEffect>>(new Map<string, ICanvasEffect>());
 
@@ -34,12 +33,11 @@ const EffectsOverlay: FunctionComponent<EffectsOverlayProps> = ({ roomWidth }) =
         if (effect === null) {
             const options = CHAT_EFFECTS.find((e) => e.command === name)?.options
             try {
-                const { default: Effect }: { default: ICanvasEffectConstructable }
-                = await import(`../../../effects/${name}`);
+                const { default: Effect } = await import(`../../../effects/${name}`);
                 effect = new Effect(options);
                 effectsRef.current[name] = effect;
             } catch (err) {
-                console.warn('Unable to load effect module at \'../../../effects/${name}\'.', err)
+                console.warn('Unable to load effect module at \'../../../effects/${name}\'.', err);
             }
         }
         return effect;

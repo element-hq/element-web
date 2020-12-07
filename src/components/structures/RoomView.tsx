@@ -70,8 +70,8 @@ import RoomHeader from "../views/rooms/RoomHeader";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
-import {containsEmoji} from '../../effects/effectUtilities';
-import {CHAT_EFFECTS} from '../../effects'
+import {containsEmoji} from '../../effects/utils';
+import {CHAT_EFFECTS} from '../../effects';
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";

@@ -42,7 +42,7 @@ import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
-import {containsEmoji} from "../../../effects/effectUtilities";
+import {containsEmoji} from "../../../effects/utils";
 import {CHAT_EFFECTS} from '../../../effects';
 import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
