@@ -1,3 +1,86 @@
+Changes in [3.10.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.10.0) (2020-12-07)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.10.0-rc.1...v3.10.0)
+
+ * Upgrade to JS SDK 9.3.0
+
+Changes in [3.10.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.10.0-rc.1) (2020-12-02)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.9.0...v3.10.0-rc.1)
+
+ * Upgrade to JS SDK 9.3.0-rc.1
+ * Translations update from Weblate
+   [\#5461](https://github.com/matrix-org/matrix-react-sdk/pull/5461)
+ * Fix VoIP call plinth on dark theme
+   [\#5460](https://github.com/matrix-org/matrix-react-sdk/pull/5460)
+ * Add sanity checking around widget pinning
+   [\#5459](https://github.com/matrix-org/matrix-react-sdk/pull/5459)
+ * Update i18n for Appearance User Settings
+   [\#5457](https://github.com/matrix-org/matrix-react-sdk/pull/5457)
+ * Only show 'answered elsewhere' if we tried to answer too
+   [\#5455](https://github.com/matrix-org/matrix-react-sdk/pull/5455)
+ * Fixed Avatar for 3PID invites
+   [\#5442](https://github.com/matrix-org/matrix-react-sdk/pull/5442)
+ * Slightly better error if we can't capture user media
+   [\#5449](https://github.com/matrix-org/matrix-react-sdk/pull/5449)
+ * Make it possible in-code to hide rooms from the room list
+   [\#5445](https://github.com/matrix-org/matrix-react-sdk/pull/5445)
+ * Fix the stickerpicker
+   [\#5447](https://github.com/matrix-org/matrix-react-sdk/pull/5447)
+ * Add live password validation to change password dialog
+   [\#5436](https://github.com/matrix-org/matrix-react-sdk/pull/5436)
+ * LaTeX rendering in element-web using KaTeX
+   [\#5244](https://github.com/matrix-org/matrix-react-sdk/pull/5244)
+ * Add lifecycle customisation point after logout
+   [\#5448](https://github.com/matrix-org/matrix-react-sdk/pull/5448)
+ * Simplify UserMenu for Guests as they can't use most of the options
+   [\#5421](https://github.com/matrix-org/matrix-react-sdk/pull/5421)
+ * Fix known issues with modal widgets
+   [\#5444](https://github.com/matrix-org/matrix-react-sdk/pull/5444)
+ * Fix existing widgets not having approved capabilities for their function
+   [\#5443](https://github.com/matrix-org/matrix-react-sdk/pull/5443)
+ * Use the WidgetDriver to run OIDC requests
+   [\#5440](https://github.com/matrix-org/matrix-react-sdk/pull/5440)
+ * Add a customisation point for widget permissions and fix amnesia issues
+   [\#5439](https://github.com/matrix-org/matrix-react-sdk/pull/5439)
+ * Fix Widget event notification text including spurious space
+   [\#5441](https://github.com/matrix-org/matrix-react-sdk/pull/5441)
+ * Move call listener out of MatrixChat
+   [\#5438](https://github.com/matrix-org/matrix-react-sdk/pull/5438)
+ * New Look in-Call View
+   [\#5432](https://github.com/matrix-org/matrix-react-sdk/pull/5432)
+ * Support arbitrary widgets sticking to the screen + sending stickers
+   [\#5435](https://github.com/matrix-org/matrix-react-sdk/pull/5435)
+ * Auth typescripting and validation tweaks
+   [\#5433](https://github.com/matrix-org/matrix-react-sdk/pull/5433)
+ * Add new widget API actions for changing rooms and sending/receiving events
+   [\#5385](https://github.com/matrix-org/matrix-react-sdk/pull/5385)
+ * Revert room header click behaviour to opening room settings
+   [\#5434](https://github.com/matrix-org/matrix-react-sdk/pull/5434)
+ * Add option to send/edit a message with Ctrl + Enter / Command + Enter
+   [\#5160](https://github.com/matrix-org/matrix-react-sdk/pull/5160)
+ * Add Analytics instrumentation to the Homepage
+   [\#5409](https://github.com/matrix-org/matrix-react-sdk/pull/5409)
+ * Fix encrypted video playback in Chrome-based browsers
+   [\#5430](https://github.com/matrix-org/matrix-react-sdk/pull/5430)
+ * Add border-radius for video
+   [\#5333](https://github.com/matrix-org/matrix-react-sdk/pull/5333)
+ * Push name to the end, near text, in IRC layout
+   [\#5166](https://github.com/matrix-org/matrix-react-sdk/pull/5166)
+ * Disable notifications for the room you have recently been active in
+   [\#5325](https://github.com/matrix-org/matrix-react-sdk/pull/5325)
+ * Search through the list of unfiltered rooms rather than the rooms in the
+   state which are already filtered by the search text
+   [\#5331](https://github.com/matrix-org/matrix-react-sdk/pull/5331)
+ * Lighten blockquote colour in dark mode
+   [\#5353](https://github.com/matrix-org/matrix-react-sdk/pull/5353)
+ * Specify community description img must be mxc urls
+   [\#5364](https://github.com/matrix-org/matrix-react-sdk/pull/5364)
+ * Add keyboard shortcut to close the current conversation
+   [\#5253](https://github.com/matrix-org/matrix-react-sdk/pull/5253)
+ * Redirect user home from auth screens if they are already logged in
+   [\#5423](https://github.com/matrix-org/matrix-react-sdk/pull/5423)
+
 Changes in [3.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.9.0) (2020-11-23)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.9.0-rc.1...v3.9.0)
