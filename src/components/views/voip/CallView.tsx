@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, CSSProperties } from 'react';
+import React, { createRef, CSSProperties, ReactNode } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -328,6 +328,7 @@ export default class CallView extends React.Component<IProps, IState> {
     public render() {
         const client = MatrixClientPeg.get();
         const callRoom = client.getRoom(this.props.call.roomId);
+        const secCallRoom = this.props.secondaryCall ? client.getRoom(this.props.secondaryCall.roomId) : null;
 
         let contextMenu;
 
@@ -468,13 +469,31 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_voice: true,
                 mx_CallView_voice_hold: isOnHold,
             });
-            contentView = <div className={classes} onMouseMove={this.onMouseMove}>
-                <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
+            let secondaryCallAvatar: ReactNode;
+
+            if (this.props.secondaryCall) {
+                const secAvatarSize = this.props.pipMode ? 40 : 100;
+                secondaryCallAvatar = <div className="mx_CallView_voice_secondaryAvatarContainer"
+                    style={{width: secAvatarSize, height: secAvatarSize}}
+                >
                     <RoomAvatar
-                        room={callRoom}
-                        height={avatarSize}
-                        width={avatarSize}
+                        room={secCallRoom}
+                        height={secAvatarSize}
+                        width={secAvatarSize}
                     />
+                </div>;
+            }
+
+            contentView = <div className={classes} onMouseMove={this.onMouseMove}>
+                <div className="mx_CallView_voice_avatarsContainer">
+                    <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
+                        <RoomAvatar
+                            room={callRoom}
+                            height={avatarSize}
+                            width={avatarSize}
+                        />
+                    </div>
+                    {secondaryCallAvatar}
                 </div>
                 <div className="mx_CallView_voice_holdText">{onHoldText}</div>
                 {callControls}
@@ -514,7 +533,6 @@ export default class CallView extends React.Component<IProps, IState> {
         } else {
             let secondaryCallInfo;
             if (this.props.secondaryCall) {
-                const secCallRoom = client.getRoom(this.props.secondaryCall.roomId);
                 secondaryCallInfo = <span className="mx_CallView_header_secondaryCallInfo">
                     <AccessibleButton element='span' onClick={this.onSecondaryRoomAvatarClick}>
                         <RoomAvatar room={secCallRoom} height={16} width={16} />
