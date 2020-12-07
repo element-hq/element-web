@@ -463,7 +463,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 {callControls}
             </div>;
         } else {
-            const avatarSize = this.props.pipMode ? 75 : 200;
+            const avatarSize = this.props.pipMode ? 76 : 160;
             const classes = classNames({
                 mx_CallView_voice: true,
                 mx_CallView_voice_hold: isOnHold,
@@ -515,22 +515,14 @@ export default class CallView extends React.Component<IProps, IState> {
             let secondaryCallInfo;
             if (this.props.secondaryCall) {
                 const secCallRoom = client.getRoom(this.props.secondaryCall.roomId);
-                secondaryCallInfo = <div className="mx_CallView_header_secondaryCallInfo">
-                    <div className="mx_CallView_header_secondaryCallInfo_avatarContainer">
-                        <AccessibleButton onClick={this.onSecondaryRoomAvatarClick}>
-                            <RoomAvatar room={secCallRoom} height={32} width={32} />
-                        </AccessibleButton>
-                    </div>
-                    <div>
-                        <div className="mx_CallView_header_roomName">{secCallRoom.name}</div>
-                        <AccessibleButton kind="link" onClick={this.onSecondaryCallResumeClick}>
-                            {_t("Resume")}
-                        </AccessibleButton>
-                    </div>
-                </div>;
-            } else {
-                // keeps it present but empty because it has the margin-left: auto to make the alignment correct
-                secondaryCallInfo = <div className="mx_CallView_header_secondaryCallInfo" />;
+                secondaryCallInfo = <span className="mx_CallView_header_secondaryCallInfo">
+                    <AccessibleButton element='span' onClick={this.onSecondaryRoomAvatarClick}>
+                        <RoomAvatar room={secCallRoom} height={16} width={16} />
+                        <span className="mx_CallView_secondaryCall_roomName">
+                            {_t("%(name)s paused", { name: secCallRoom.name })}
+                        </span>
+                    </AccessibleButton>
+                </span>;
             }
 
             header = <div className="mx_CallView_header">
@@ -539,9 +531,11 @@ export default class CallView extends React.Component<IProps, IState> {
                 </AccessibleButton>
                 <div className="mx_CallView_header_callInfo">
                     <div className="mx_CallView_header_roomName">{callRoom.name}</div>
-                    <div className="mx_CallView_header_callTypeSmall">{callTypeText}</div>
+                    <div className="mx_CallView_header_callTypeSmall">
+                        {callTypeText}
+                        {secondaryCallInfo}
+                    </div>
                 </div>
-                {secondaryCallInfo}
                 {headerControls}
             </div>;
             myClassName = 'mx_CallView_pip';
