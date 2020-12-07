@@ -489,7 +489,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 {callControls}
             </div>;
         } else {
-            const avatarSize = this.props.room ? 200 : 75;
+            const avatarSize = this.props.room ? 160 : 75;
             const classes = classNames({
                 mx_CallView_voice: true,
                 mx_CallView_voice_hold: isOnHold,
