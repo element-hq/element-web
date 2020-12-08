@@ -634,6 +634,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Enable experimental, compact IRC style layout"),
         default: false,
     },
+    "showChatEffects": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show chat effects"),
+        default: true,
+    },
     "Widgets.pinned": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
