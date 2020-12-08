@@ -159,6 +159,7 @@
     "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
+    "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
     "react-test-renderer": "^16.13.1",
     "rimraf": "^2.7.1",
     "stylelint": "^9.10.1",
