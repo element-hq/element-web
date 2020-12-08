@@ -2958,5 +2958,14 @@
     "Homeserver": "家伺服器",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "您可以透過指定不同的家伺服器 URL 使用自訂伺服器選項來登入其他 Matrix 伺服器。這讓您可以使用在不同家伺服器上的既有 Matrix 帳號。",
     "Server Options": "伺服器選項",
-    "Reason (optional)": "理由（選擇性）"
+    "Reason (optional)": "理由（選擇性）",
+    "We call the places where you can host your account ‘homeservers’.": "我們將可以託管您的帳號的地方稱為「家伺服器」。",
+    "Invalid URL": "無效的 URL",
+    "Unable to validate homeserver": "無法驗證家伺服器",
+    "sends confetti": "傳送五彩碎紙",
+    "Sends the given message with confetti": "使用五彩碎紙傳送訊息",
+    "Show chat effects": "顯示聊天特效",
+    "Effects": "影響",
+    "Call failed because webcam or microphone could not be accessed. Check that:": "通話失敗，因為無法存取網路攝影機或麥克風。請檢查：",
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "通話失敗，因為無法存取麥克風。請檢查是否已插入麥克風並正確設定。"
 }
