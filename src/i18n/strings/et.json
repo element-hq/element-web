@@ -2961,5 +2961,9 @@
     "Invalid URL": "Vigane aadress",
     "Unable to validate homeserver": "Koduserveri õigsust ei õnnestunud kontrollida",
     "Call failed because webcam or microphone could not be accessed. Check that:": "Kuna veebikaamerat või mikrofoni kasutada ei saanud, siis kõne ei õnnestunud. Palun kontrolli, et:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Kuna mikrofoni kasutada ei saanud, siis kõne ei õnnestunud. Palun kontrolli, et mikrofon oleks ühendatud ja seadistatud."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Kuna mikrofoni kasutada ei saanud, siis kõne ei õnnestunud. Palun kontrolli, et mikrofon oleks ühendatud ja seadistatud.",
+    "sends confetti": "saatis serpentiine",
+    "Sends the given message with confetti": "Lisab sellele sõnumile serpentiine",
+    "Show chat effects": "Näita vestlustes efekte",
+    "Effects": "Vahvad täiendused"
 }
