@@ -51,7 +51,8 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         const { serverConfig } = this.props;
         this.state = {
             defaultChosen: serverConfig.isDefault,
-            otherHomeserver: serverConfig.isDefault ? "" : (serverConfig.hsName || serverConfig.hsUrl),
+            otherHomeserver: serverConfig.isDefault ? ""
+                : (serverConfig.static ? serverConfig.hsUrl : serverConfig.hsName || serverConfig.hsUrl),
         };
     }
 

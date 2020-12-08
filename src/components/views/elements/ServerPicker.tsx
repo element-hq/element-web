@@ -67,7 +67,7 @@ const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }
         </AccessibleButton>;
     }
 
-    let serverName = serverConfig.hsName;
+    let serverName = serverConfig.static ? serverConfig.hsUrl : serverConfig.hsName;
     if (serverConfig.hsNameIsDifferent) {
         serverName = <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={serverConfig.hsUrl}>
             {serverConfig.hsName}
