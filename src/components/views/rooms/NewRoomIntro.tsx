@@ -60,8 +60,9 @@ const NewRoomIntro = () => {
             { caption && <p>{ caption }</p> }
         </React.Fragment>;
     } else {
+        const inRoom = room && room.getMyMembership() === "join";
         const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
-        const canAddTopic = room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getUserId());
+        const canAddTopic = inRoom && room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getUserId());
 
         const onTopicClick = () => {
             dis.dispatch({
@@ -99,9 +100,25 @@ const NewRoomIntro = () => {
             });
         }
 
-        const onInviteClick = () => {
-            dis.dispatch({ action: "view_invite", roomId });
-        };
+        let canInvite = inRoom;
+        const powerLevels = room.currentState.getStateEvents(EventType.RoomPowerLevels, "")?.getContent();
+        const me = room.getMember(cli.getUserId());
+        if (powerLevels && me && powerLevels.invite > me.powerLevel) {
+            canInvite = false;
+        }
+
+        let buttons;
+        if (canInvite) {
+            const onInviteClick = () => {
+                dis.dispatch({ action: "view_invite", roomId });
+            };
+
+            buttons = <div className="mx_NewRoomIntro_buttons">
+                <AccessibleButton className="mx_NewRoomIntro_inviteButton" kind="primary" onClick={onInviteClick}>
+                    {_t("Invite to this room")}
+                </AccessibleButton>
+            </div>
+        }
 
         const avatarUrl = room.currentState.getStateEvents(EventType.RoomAvatar, "")?.getContent()?.url;
         body = <React.Fragment>
@@ -119,11 +136,7 @@ const NewRoomIntro = () => {
                 roomName: () => <b>{ room.name }</b>,
             })}</p>
             <p>{topicText}</p>
-            <div className="mx_NewRoomIntro_buttons">
-                <AccessibleButton className="mx_NewRoomIntro_inviteButton" kind="primary" onClick={onInviteClick}>
-                    {_t("Invite to this room")}
-                </AccessibleButton>
-            </div>
+            { buttons }
         </React.Fragment>;
     }
 
