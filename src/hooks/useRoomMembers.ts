@@ -21,7 +21,7 @@ import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import {useEventEmitter} from "./useEventEmitter";
 import {throttle} from "lodash";
 
-// Hook to simplify listening to Matrix Room members
+// Hook to simplify watching Matrix Room joined members
 export const useRoomMembers = (room: Room, throttleWait = 250) => {
     const [members, setMembers] = useState<RoomMember[]>(room.getJoinedMembers());
     useEventEmitter(room.currentState, "RoomState.members", throttle(() => {
@@ -30,6 +30,7 @@ export const useRoomMembers = (room: Room, throttleWait = 250) => {
     return members;
 };
 
+// Hook to simplify watching Matrix Room joined member count
 export const useRoomMemberCount = (room: Room, throttleWait = 250) => {
     const [count, setCount] = useState<number>(room.getJoinedMemberCount());
     useEventEmitter(room.currentState, "RoomState.members", throttle(() => {
