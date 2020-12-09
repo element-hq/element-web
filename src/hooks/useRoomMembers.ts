@@ -29,3 +29,11 @@ export const useRoomMembers = (room: Room, throttleWait = 250) => {
     }, throttleWait, {leading: true, trailing: true}));
     return members;
 };
+
+export const useRoomMemberCount = (room: Room, throttleWait = 250) => {
+    const [count, setCount] = useState<number>(room.getJoinedMemberCount());
+    useEventEmitter(room.currentState, "RoomState.members", throttle(() => {
+        setCount(room.getJoinedMemberCount());
+    }, throttleWait, {leading: true, trailing: true}));
+    return count;
+};

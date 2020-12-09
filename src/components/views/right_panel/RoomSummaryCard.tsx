@@ -43,7 +43,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
 import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
-import {useRoomMembers} from "../../../hooks/useRoomMembers";
+import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
 
 interface IProps {
     room: Room;
@@ -244,12 +244,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         </div>
     </React.Fragment>;
 
-    const members = useRoomMembers(room);
+    const memberCount = useRoomMemberCount(room);
 
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
             <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
-                {_t("%(count)s people", { count: members.length })}
+                {_t("%(count)s people", { count: memberCount })}
             </Button>
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                 {_t("Show files")}
