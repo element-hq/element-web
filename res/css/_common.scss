@@ -170,7 +170,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         border: 1px solid rgba($primary-fg-color, .1);
         // these things should probably not be defined globally
         margin: 9px;
-        flex: 0 0 auto;
     }
 
     .mx_textinput {
