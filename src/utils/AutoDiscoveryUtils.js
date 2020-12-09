@@ -35,7 +35,7 @@ export class ValidatedServerConfig {
 
     isDefault: boolean;
     // when the server config is based on static URLs the hsName is not resolvable and things may wish to use hsUrl
-    static: boolean;
+    isNameResolvable: boolean;
 
     warning: string;
 }
@@ -182,11 +182,11 @@ export default class AutoDiscoveryUtils {
      * @param {string} serverName The domain name the AutoDiscovery result is for.
      * @param {*} discoveryResult The AutoDiscovery result.
      * @param {boolean} syntaxOnly If true, errors relating to liveliness of the servers will not be raised.
-     * @param {boolean} isStatic If true, then the discoveryResult was synthesised locally.
+     * @param {boolean} isSynthetic If true, then the discoveryResult was synthesised locally.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
     static buildValidatedConfigFromDiscovery(
-        serverName: string, discoveryResult, syntaxOnly=false, isStatic=false): ValidatedServerConfig {
+        serverName: string, discoveryResult, syntaxOnly=false, isSynthetic=false): ValidatedServerConfig {
         if (!discoveryResult || !discoveryResult["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
             // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
@@ -254,7 +254,7 @@ export default class AutoDiscoveryUtils {
             isUrl: preferredIdentityUrl,
             isDefault: false,
             warning: hsResult.error,
-            static: isStatic,
+            isNameResolvable: !isSynthetic,
         });
     }
 }
