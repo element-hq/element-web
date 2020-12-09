@@ -801,6 +801,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private handleEffects = (ev) => {
         if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
+        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
 
         const notifState = RoomNotificationStateStore.instance.getRoomState(this.state.room);
         if (!notifState.isUnread) return;
