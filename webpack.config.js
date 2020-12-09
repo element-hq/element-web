@@ -269,12 +269,12 @@ module.exports = (env, argv) => {
                             options: {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
-                                outputPath: getImgOutputPath,
+                                outputPath: getAssetOutputPath,
                                 publicPath: function(url, resourcePath) {
                                     // CSS image usages end up in the `bundles/[hash]` output
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
-                                    const outputPath = getImgOutputPath(url, resourcePath);
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(path.join("../..", outputPath));
                                 },
                             },
@@ -285,9 +285,9 @@ module.exports = (env, argv) => {
                             options: {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
-                                outputPath: getImgOutputPath,
+                                outputPath: getAssetOutputPath,
                                 publicPath: function(url, resourcePath) {
-                                    const outputPath = getImgOutputPath(url, resourcePath);
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(outputPath);
                                 },
                             },
@@ -392,15 +392,25 @@ module.exports = (env, argv) => {
 
 /**
  * Merge assets found via CSS and imports into a single tree, while also preserving
- * directories under `res`.
+ * directories under e.g. `res` or similar.
  *
  * @param {string} url The adjusted name of the file, such as `warning.1234567.svg`.
  * @param {string} resourcePath The absolute path to the source file with unmodified name.
  * @return {string} The returned paths will look like `img/warning.1234567.svg`.
  */
-function getImgOutputPath(url, resourcePath) {
-    const prefix = /^.*[/\\]res[/\\]/;
-    const outputDir = path.dirname(resourcePath).replace(prefix, "");
+function getAssetOutputPath(url, resourcePath) {
+    // `res` is the parent dir for our own assets in various layers
+    // `dist` is the parent dir for KaTeX assets
+    const prefix = /^.*[/\\](dist|res)[/\\]/;
+    if (!resourcePath.match(prefix)) {
+        throw new Error(`Unexpected asset path: ${resourcePath}`);
+    }
+    let outputDir = path.dirname(resourcePath).replace(prefix, "");
+    if (resourcePath.includes("KaTeX")) {
+        // Add a clearly named directory segment, rather than leaving the KaTeX
+        // assets loose in each asset type directory.
+        outputDir = path.join(outputDir, "KaTeX");
+    }
     return path.join(outputDir, path.basename(url));
 }
 
