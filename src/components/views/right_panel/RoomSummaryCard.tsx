@@ -43,6 +43,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
 import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
 
 interface IProps {
     room: Room;
@@ -210,14 +211,6 @@ const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
 };
 
-const useMemberCount = (room: Room) => {
-    const [count, setCount] = useState(room.getJoinedMembers().length);
-    useEventEmitter(room.currentState, "RoomState.members", () => {
-        setCount(room.getJoinedMembers().length);
-    });
-    return count;
-};
-
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -251,7 +244,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         </div>
     </React.Fragment>;
 
-    const memberCount = useMemberCount(room);
+    const memberCount = useRoomMemberCount(room);
 
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
