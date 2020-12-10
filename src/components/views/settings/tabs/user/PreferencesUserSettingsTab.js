@@ -50,6 +50,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showAvatarChanges',
         'showDisplaynameChanges',
         'showImages',
+        'showChatEffects',
         'Pill.shouldShowPillAvatar',
     ];
 

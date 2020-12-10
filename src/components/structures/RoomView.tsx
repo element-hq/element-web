@@ -69,11 +69,15 @@ import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import EffectsOverlay from "../views/elements/EffectsOverlay";
+import {containsEmoji} from '../../effects/utils';
+import {CHAT_EFFECTS} from '../../effects';
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import WidgetStore from "../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
+import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -248,6 +252,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
+        this.context.on("Event.decrypted", this.onEventDecrypted);
+        this.context.on("event", this.onEvent);
         // Start listening for RoomViewStore updates
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
@@ -581,6 +587,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
+            this.context.removeListener("Event.decrypted", this.onEventDecrypted);
+            this.context.removeListener("event", this.onEvent);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -779,6 +787,30 @@ export default class RoomView extends React.Component<IProps, IState> {
                 });
             }
         }
+    };
+
+    private onEventDecrypted = (ev) => {
+        if (ev.isDecryptionFailure()) return;
+        this.handleEffects(ev);
+    };
+
+    private onEvent = (ev) => {
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
+        this.handleEffects(ev);
+    };
+
+    private handleEffects = (ev) => {
+        if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
+        if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
+
+        const notifState = RoomNotificationStateStore.instance.getRoomState(this.state.room);
+        if (!notifState.isUnread) return;
+
+        CHAT_EFFECTS.forEach(effect => {
+            if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
+                dis.dispatch({action: `effects.${effect.command}`});
+            }
+        });
     };
 
     private onRoomName = (room: Room) => {
@@ -1946,9 +1978,14 @@ export default class RoomView extends React.Component<IProps, IState> {
             mx_RoomView_inCall: Boolean(activeCall),
         });
 
+        const showChatEffects = SettingsStore.getValue('showChatEffects');
+
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
+                    {showChatEffects && this.roomView.current &&
+                        <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
+                    }
                     <ErrorBoundary>
                         <RoomHeader
                             room={this.state.room}

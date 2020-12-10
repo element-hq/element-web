@@ -20,6 +20,7 @@ limitations under the License.
     background-color: $voipcall-plinth-color;
     padding-left: 8px;
     padding-right: 8px;
+    margin: 5px 5px 5px 18px;
     // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
     pointer-events: initial;
 }
@@ -135,9 +136,9 @@ limitations under the License.
     padding-top: 20px;
     padding-bottom: 15px;
     color: $accent-fg-color;
-    font-weight: bold;
     .mx_AccessibleButton_hasKind {
         padding: 0px;
+        font-weight: bold;
     }
 }
 
@@ -219,6 +220,7 @@ limitations under the License.
 }
 
 .mx_CallView_header_callType {
+    font-size: 1.2rem;
     font-weight: bold;
     vertical-align: middle;
 }

@@ -23,15 +23,17 @@ import { _t } from '../../../languageHandler';
  */
 export default class ConfirmRedactDialog extends React.Component {
     render() {
-        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+        const TextInputDialog = sdk.getComponent('views.dialogs.TextInputDialog');
         return (
-            <QuestionDialog onFinished={this.props.onFinished}
+            <TextInputDialog onFinished={this.props.onFinished}
                 title={_t("Confirm Removal")}
                 description={
                     _t("Are you sure you wish to remove (delete) this event? " +
                        "Note that if you delete a room name or topic change, it could undo the change.")}
+                placeholder={_t("Reason (optional)")}
+                focus
                 button={_t("Remove")}>
-            </QuestionDialog>
+            </TextInputDialog>
         );
     }
 }
