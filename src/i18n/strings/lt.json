@@ -2039,5 +2039,6 @@
     "Update status": "Atnaujinti statusą",
     "Update community": "Atnaujinti bendruomenę",
     "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "Kambario %(roomName)s matomumas bendruomenėje %(groupId)s negalėjo būti atnaujintas.",
-    "Update %(brand)s": "Atnaujinti %(brand)s"
+    "Update %(brand)s": "Atnaujinti %(brand)s",
+    "Someone is using an unknown session": "Kažkas naudoja nežinomą seansą"
 }
