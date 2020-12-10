@@ -820,7 +820,6 @@
     "Show hidden events in timeline": "Show hidden events in timeline",
     "Low bandwidth mode": "Low bandwidth mode",
     "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)",
-    "Send read receipts for messages (requires compatible homeserver to disable)": "Send read receipts for messages (requires compatible homeserver to disable)",
     "Show previews/thumbnails for images": "Show previews/thumbnails for images",
     "Enable message search in encrypted rooms": "Enable message search in encrypted rooms",
     "How fast should messages be downloaded.": "How fast should messages be downloaded.",
