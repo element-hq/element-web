@@ -16,7 +16,8 @@ may be at the end of the list, so you may need scroll a bit to see it. To access
 the preview site, click the "Details" link in the deploy preview row.
 
 **Important:** Please always use test accounts when logging into preview sites,
-as they may contain bugs or other issues that could damage your account.
+as they may contain unreviewed and potentially dangerous code that could damage
+your account, exfiltrate encryption keys, etc.
 
 ## FAQs
 
