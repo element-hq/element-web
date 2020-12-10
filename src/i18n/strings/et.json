@@ -2965,5 +2965,9 @@
     "sends confetti": "saatis serpentiine",
     "Sends the given message with confetti": "Lisab sellele sõnumile serpentiine",
     "Show chat effects": "Näita vestlustes efekte",
-    "Effects": "Vahvad täiendused"
+    "Effects": "Vahvad täiendused",
+    "Hold": "Pane ootele",
+    "Resume": "Jätka",
+    "%(peerName)s held the call": "%(peerName)s pani kõne ootele",
+    "You held the call <a>Resume</a>": "Sa panid kõne ootele. <a>Jätka kõnet</a>"
 }
