@@ -20,13 +20,13 @@ limitations under the License.
     background-color: $voipcall-plinth-color;
     padding-left: 8px;
     padding-right: 8px;
-    margin: 5px 5px 5px 18px;
     // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
     pointer-events: initial;
 }
 
 .mx_CallView_large {
     padding-bottom: 10px;
+    margin: 5px 5px 5px 18px;
 
     .mx_CallView_voice {
         height: 360px;
