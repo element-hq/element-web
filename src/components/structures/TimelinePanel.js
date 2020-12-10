@@ -715,8 +715,6 @@ class TimelinePanel extends React.Component {
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
-            const roomId = this.props.timelineSet.room.roomId;
-
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
@@ -732,7 +730,7 @@ class TimelinePanel extends React.Component {
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
-                        {hidden: hiddenRR},
+                        {},
                     ).catch((e) => {
                         console.error(e);
                         this.lastRRSentEventId = undefined;
