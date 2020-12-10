@@ -564,13 +564,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
     },
-    "sendReadReceipts": {
-        supportedLevels: LEVELS_ROOM_SETTINGS,
-        displayName: _td(
-            "Send read receipts for messages (requires compatible homeserver to disable)",
-        ),
-        default: true,
-    },
     "showImages": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show previews/thumbnails for images"),
