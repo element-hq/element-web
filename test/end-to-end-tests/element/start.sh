@@ -3,7 +3,7 @@ set -e
 
 PORT=5000
 BASE_DIR=$(cd $(dirname $0) && pwd)
-PIDFILE=$BASE_DIR/riot.pid
+PIDFILE=$BASE_DIR/element.pid
 CONFIG_BACKUP=config.e2etests_backup.json
 
 if [ -f $PIDFILE ]; then
@@ -11,8 +11,8 @@ if [ -f $PIDFILE ]; then
 fi
 
 cd $BASE_DIR/
-echo -n "starting riot on http://localhost:$PORT ... "
-pushd riot-web/webapp/ > /dev/null
+echo -n "Starting Element on http://localhost:$PORT ... "
+pushd element-web/webapp/ > /dev/null
 
 # backup config file before we copy template
 if [ -f config.json ]; then
@@ -34,7 +34,7 @@ LOGFILE=$(mktemp)
     # NOT expected SIGTERM (128 + 15)
     # from stop.sh?
     if [ $RESULT -ne 143 ]; then
-        echo "failed"
+        echo "Failed"
         cat $LOGFILE
         rm $PIDFILE 2> /dev/null
     fi
@@ -49,6 +49,6 @@ sleep 0.5 &
 wait -n; RESULT=$?
 # return exit code of first child to exit
 if [ $RESULT -eq 0 ]; then
-    echo "running"
+    echo "Running"
 fi
 exit $RESULT

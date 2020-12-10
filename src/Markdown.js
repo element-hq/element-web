@@ -23,6 +23,11 @@ const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
 function is_allowed_html_tag(node) {
+    if (node.literal != null &&
+        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|\/(div|span))>$') != null) {
+        return true;
+    }
+
     // Regex won't work for tags with attrs, but we only
     // allow <del> anyway.
     const matches = /^<\/?(.*)>$/.exec(node.literal);
@@ -30,6 +35,7 @@ function is_allowed_html_tag(node) {
         const tag = matches[1];
         return ALLOWED_HTML_TAGS.indexOf(tag) > -1;
     }
+
     return false;
 }
 

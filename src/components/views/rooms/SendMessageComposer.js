@@ -42,6 +42,8 @@ import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
+import {containsEmoji} from "../../../effects/utils";
+import {CHAT_EFFECTS} from '../../../effects';
 import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 
@@ -326,6 +328,11 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
+            CHAT_EFFECTS.forEach((effect) => {
+                if (containsEmoji(content, effect.emojis)) {
+                    dis.dispatch({action: `effects.${effect.command}`});
+                }
+            });
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 

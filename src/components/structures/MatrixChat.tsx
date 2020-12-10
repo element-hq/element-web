@@ -34,7 +34,6 @@ import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { MatrixClientPeg, IMatrixClientCreds } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
-import * as RoomListSorter from "../../RoomListSorter";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
 
@@ -48,7 +47,6 @@ import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 import '../../stores/LifecycleStore';
 import PageTypes from '../../PageTypes';
-import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
@@ -591,7 +589,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                             MatrixClientPeg.get().leave(payload.room_id).then(() => {
                                 modal.close();
                                 if (this.state.currentRoomId === payload.room_id) {
-                                    dis.dispatch({action: 'view_next_room'});
+                                    dis.dispatch({action: 'view_home_page'});
                                 }
                             }, (err) => {
                                 modal.close();
@@ -620,9 +618,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
-            case 'view_next_room':
-                this.viewNextRoom(1);
-                break;
             case Action.ViewUserSettings: {
                 const tabPayload = payload as OpenToTabPayload;
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
@@ -800,35 +795,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
         this.notifyNewScreen('register');
-    }
-
-    // TODO: Move to RoomViewStore
-    private viewNextRoom(roomIndexDelta: number) {
-        const allRooms = RoomListSorter.mostRecentActivityFirst(
-            MatrixClientPeg.get().getRooms(),
-        );
-        // If there are 0 rooms or 1 room, view the home page because otherwise
-        // if there are 0, we end up trying to index into an empty array, and
-        // if there is 1, we end up viewing the same room.
-        if (allRooms.length < 2) {
-            dis.dispatch({
-                action: 'view_home_page',
-            });
-            return;
-        }
-        let roomIndex = -1;
-        for (let i = 0; i < allRooms.length; ++i) {
-            if (allRooms[i].roomId === this.state.currentRoomId) {
-                roomIndex = i;
-                break;
-            }
-        }
-        roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
-        if (roomIndex < 0) roomIndex = allRooms.length - 1;
-        dis.dispatch({
-            action: 'view_room',
-            room_id: allRooms[roomIndex].roomId,
-        });
     }
 
     // switch view to the given room
@@ -1097,9 +1063,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private forgetRoom(roomId: string) {
         MatrixClientPeg.get().forget(roomId).then(() => {
-            // Switch to another room view if we're currently viewing the historical room
+            // Switch to home page if we're currently viewing the forgotten room
             if (this.state.currentRoomId === roomId) {
-                dis.dispatch({ action: "view_next_room" });
+                dis.dispatch({ action: "view_home_page" });
             }
         }).catch((err) => {
             const errCode = err.errcode || _td("unknown error code");
@@ -1233,12 +1199,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else {
             if (MatrixClientPeg.get().isGuest()) {
                 dis.dispatch({action: 'view_welcome_page'});
-            } else if (getHomePageUrl(this.props.config)) {
-                dis.dispatch({action: 'view_home_page'});
             } else {
-                this.firstSyncPromise.promise.then(() => {
-                    dis.dispatch({action: 'view_next_room'});
-                });
+                dis.dispatch({action: 'view_home_page'});
             }
         }
     }
@@ -2009,6 +1971,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
+                    fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
                 />
             );

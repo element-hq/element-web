@@ -40,10 +40,6 @@ export default class PasswordReset {
         this.identityServerDomain = identityUrl ? identityUrl.split("://")[1] : null;
     }
 
-    doesServerRequireIdServerParam() {
-        return this.client.doesServerRequireIdServerParam();
-    }
-
     /**
      * Attempt to reset the user's password. This will trigger a side-effect of
      * sending an email to the provided email address.
@@ -78,9 +74,6 @@ export default class PasswordReset {
             sid: this.sessionId,
             client_secret: this.clientSecret,
         };
-        if (await this.doesServerRequireIdServerParam()) {
-            creds.id_server = this.identityServerDomain;
-        }
 
         try {
             await this.client.setPassword({
