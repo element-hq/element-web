@@ -2896,5 +2896,9 @@
     "sends confetti": "envia confetes",
     "Sends the given message with confetti": "Envia a mensagem com confetes",
     "Show chat effects": "Mostrar efeitos em conversas",
-    "Effects": "Efeitos"
+    "Effects": "Efeitos",
+    "Hold": "Pausar",
+    "Resume": "Retomar",
+    "%(peerName)s held the call": "%(peerName)s pausou a chamada",
+    "You held the call <a>Resume</a>": "Você pausou a chamada <a>Retomar</a>"
 }
