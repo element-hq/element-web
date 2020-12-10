@@ -167,6 +167,19 @@ export const Commands = [
         category: CommandCategories.messages,
     }),
     new Command({
+        command: 'tableflip',
+        args: '<message>',
+        description: _td('Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '(╯°□°）╯︵ ┻━┻';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
         command: 'lenny',
         args: '<message>',
         description: _td('Prepends ( ͡° ͜ʖ ͡°) to a plain-text message'),
