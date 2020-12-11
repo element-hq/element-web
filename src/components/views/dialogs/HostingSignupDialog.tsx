@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 import * as React from "react";
-import * as sdk from '../../../index';
+import BaseDialog from '../../views/dialogs/BaseDialog';
+import ConfirmCloseHostingSignupDialog from '../../views/dialogs/ConfirmCloseHostingSignupDialog';
+import HostingSignupAccountDataConfirmDialog from '../../views/dialogs/HostingSignupAccountDataConfirmDialog';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
@@ -53,8 +55,16 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         }
         switch (message.data.action) {
             case 'element_pro_account_details_request':
-                // noinspection JSIgnoredPromiseFromCall
-                this.sendAccountDetails();
+                Modal.createDialog(
+                    HostingSignupAccountDataConfirmDialog,
+                    {
+                        onFinished: result => {
+                            if (result) {
+                                return this.sendAccountDetails();
+                            }
+                        },
+                    },
+                );
                 break;
             case 'setup_complete':
                 // Set as completed but let the user close the modal themselves
@@ -74,9 +84,8 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
             // We're done, close
             this.props.requestClose();
         } else {
-            const ConfirmDialog = sdk.getComponent('views.dialogs.ConfirmCloseHostingSignupDialog');
             Modal.createDialog(
-                ConfirmDialog,
+                ConfirmCloseHostingSignupDialog,
                 {
                     onFinished: result => {
                         if (result) {
@@ -124,7 +133,6 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
     }
 
     public render(): React.ReactNode {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog
                 className="mx_HostingSignupBaseDialog"
