@@ -2960,5 +2960,8 @@
     "Hold": "Удерживать",
     "Resume": "Возобновить",
     "%(peerName)s held the call": "%(peerName)s удерживает звонок",
-    "You held the call <a>Resume</a>": "Вы удерживаете звонок <a>Возобновить</a>"
+    "You held the call <a>Resume</a>": "Вы удерживаете звонок <a>Возобновить</a>",
+    "%(name)s paused": "%(name)s приостановлен",
+    "You've reached the maximum number of simultaneous calls.": "Вы достигли максимального количества одновременных звонков.",
+    "Too Many Calls": "Слишком много звонков"
 }
