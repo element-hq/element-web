@@ -39,7 +39,7 @@ import WidgetCapabilitiesPromptDialog, {
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
