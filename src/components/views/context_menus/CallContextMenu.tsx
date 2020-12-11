@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import { ContextMenu, IProps as IContextMenuProps, MenuItem } from '../../structures/ContextMenu';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import CallHandler from '../../../CallHandler';
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -34,16 +35,23 @@ export default class CallContextMenu extends React.Component<IProps> {
         super(props);
     }
 
-    onHoldUnholdClick = () => {
-        this.props.call.setRemoteOnHold(!this.props.call.isRemoteOnHold());
+    onHoldClick = () => {
+        this.props.call.setRemoteOnHold(true);
+        this.props.onFinished();
+    }
+
+    onUnholdClick = () => {
+        CallHandler.sharedInstance().setActiveCallRoomId(this.props.call.roomId);
+
         this.props.onFinished();
     }
 
     render() {
         const holdUnholdCaption = this.props.call.isRemoteOnHold() ? _t("Resume") : _t("Hold");
+        const handler = this.props.call.isRemoteOnHold() ? this.onUnholdClick : this.onHoldClick;
 
         return <ContextMenu {...this.props}>
-            <MenuItem className="mx_CallContextMenu_item" onClick={this.onHoldUnholdClick}>
+            <MenuItem className="mx_CallContextMenu_item" onClick={handler}>
                 {holdUnholdCaption}
             </MenuItem>
         </ContextMenu>;

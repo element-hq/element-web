@@ -24,7 +24,8 @@ import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
-import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -40,9 +41,50 @@ interface IProps {
 
 interface IState {
     roomId: string;
-    activeCall: MatrixCall;
+
+    // The main call that we are displaying (ie. not including the call in the room being viewed, if any)
+    primaryCall: MatrixCall;
+
+    // Any other call we're displaying: only if the user is on two calls and not viewing either of the rooms
+    // they belong to
+    secondaryCall: MatrixCall;
 }
 
+// Splits a list of calls into one 'primary' one and a list
+// (which should be a single element) of other calls.
+// The primary will be the one not on hold, or an arbitrary one
+// if they're all on hold)
+function getPrimarySecondaryCalls(calls: MatrixCall[]): [MatrixCall, MatrixCall[]] {
+    let primary: MatrixCall = null;
+    let secondaries: MatrixCall[] = [];
+
+    for (const call of calls) {
+        if (!SHOW_CALL_IN_STATES.includes(call.state)) continue;
+
+        if (!call.isRemoteOnHold() && primary === null) {
+            primary = call;
+        } else {
+            secondaries.push(call);
+        }
+    }
+
+    if (primary === null && secondaries.length > 0) {
+        primary = secondaries[0];
+        secondaries = secondaries.slice(1);
+    }
+
+    if (secondaries.length > 1) {
+        // We should never be in more than two calls so this shouldn't happen
+        console.log("Found more than 1 secondary call! Other calls will not be shown.");
+    }
+
+    return [primary, secondaries];
+}
+
+/**
+ * CallPreview shows a small version of CallView hovering over the UI in 'picture-in-picture'
+ * (PiP mode). It displays the call(s) which is *not* in the room the user is currently viewing.
+ */
 export default class CallPreview extends React.Component<IProps, IState> {
     private roomStoreToken: any;
     private dispatcherRef: string;
@@ -51,18 +93,27 @@ export default class CallPreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
+        const roomId = RoomViewStore.getRoomId();
+
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
+            CallHandler.sharedInstance().getAllActiveCallsNotInRoom(roomId),
+        );
+
         this.state = {
-            roomId: RoomViewStore.getRoomId(),
-            activeCall: CallHandler.sharedInstance().getAnyActiveCall(),
+            roomId,
+            primaryCall: primaryCall,
+            secondaryCall: secondaryCalls[0],
         };
     }
 
     public componentDidMount() {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
     }
 
     public componentWillUnmount() {
+        MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
@@ -72,8 +123,16 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private onRoomViewStoreUpdate = (payload) => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
+
+        const roomId = RoomViewStore.getRoomId();
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
+            CallHandler.sharedInstance().getAllActiveCallsNotInRoom(roomId),
+        );
+
         this.setState({
-            roomId: RoomViewStore.getRoomId(),
+            roomId,
+            primaryCall: primaryCall,
+            secondaryCall: secondaryCalls[0],
         });
     };
 
@@ -81,38 +140,35 @@ export default class CallPreview extends React.Component<IProps, IState> {
         switch (payload.action) {
             // listen for call state changes to prod the render method, which
             // may hide the global CallView if the call it is tracking is dead
-            case 'call_state':
+            case 'call_state': {
+                const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
+                    CallHandler.sharedInstance().getAllActiveCallsNotInRoom(this.state.roomId),
+                );
+
                 this.setState({
-                    activeCall: CallHandler.sharedInstance().getAnyActiveCall(),
+                    primaryCall: primaryCall,
+                    secondaryCall: secondaryCalls[0],
                 });
                 break;
+            }
         }
     };
 
-    private onCallViewClick = () => {
-        const call = CallHandler.sharedInstance().getAnyActiveCall();
-        if (call) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: call.roomId,
-            });
-        }
-    };
-
-    public render() {
-        const callForRoom = CallHandler.sharedInstance().getCallForRoom(this.state.roomId);
-        const showCall = (
-            this.state.activeCall &&
-            SHOW_CALL_IN_STATES.includes(this.state.activeCall.state) &&
-            !callForRoom
+    private onCallRemoteHold = () => {
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
+            CallHandler.sharedInstance().getAllActiveCallsNotInRoom(this.state.roomId),
         );
 
-        if (showCall) {
+        this.setState({
+            primaryCall: primaryCall,
+            secondaryCall: secondaryCalls[0],
+        });
+    }
+
+    public render() {
+        if (this.state.primaryCall) {
             return (
-                <CallView
-                    onClick={this.onCallViewClick}
-                    showHangup={true}
-                />
+                <CallView call={this.state.primaryCall} secondaryCall={this.state.secondaryCall} pipMode={true} />
             );
         }
 

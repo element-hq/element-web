@@ -20,14 +20,13 @@ limitations under the License.
     background-color: $voipcall-plinth-color;
     padding-left: 8px;
     padding-right: 8px;
-    margin: 5px 5px 5px 18px;
     // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
     pointer-events: initial;
 }
 
 .mx_CallView_large {
-    // XXX: This should be 10 but somehow it's gaining an extra 4px from somewhere...
-    padding-bottom: 6px;
+    padding-bottom: 10px;
+    margin: 5px 5px 5px 18px;
 
     .mx_CallView_voice {
         height: 360px;
@@ -40,6 +39,22 @@ limitations under the License.
     .mx_CallView_voice {
         height: 180px;
     }
+
+    .mx_CallView_callControls {
+        bottom: 0px;
+    }
+
+    .mx_CallView_callControls_button {
+        &::before {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    .mx_CallView_voice_holdText {
+        padding-top: 10px;
+        padding-bottom: 25px;
+    }
 }
 
 .mx_CallView_voice {
@@ -50,6 +65,17 @@ limitations under the License.
     justify-content: center;
     background-color: $inverted-bg-color;
     border-radius: 8px;
+}
+
+.mx_CallView_voice_avatarsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    div {
+        margin-left: 12px;
+        margin-right: 12px;
+    }
 }
 
 .mx_CallView_voice_hold {
@@ -82,9 +108,33 @@ limitations under the License.
     }
 }
 
+.mx_CallView_voice_secondaryAvatarContainer {
+    border-radius: 2000px;
+    overflow: hidden;
+    position: relative;
+    &::after {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.6);
+        background-image: url('$(res)/img/voip/paused.svg');
+        background-position: center;
+        background-size: 40px;
+        background-repeat: no-repeat;
+    }
+    .mx_CallView_pip &::after {
+        background-size: 24px;
+    }
+}
+
 .mx_CallView_voice_holdText {
     height: 20px;
     padding-top: 20px;
+    padding-bottom: 15px;
     color: $accent-fg-color;
     .mx_AccessibleButton_hasKind {
         padding: 0px;
@@ -167,16 +217,20 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     justify-content: left;
-
-    .mx_BaseAvatar {
-        margin-right: 12px;
-    }
 }
 
 .mx_CallView_header_callType {
     font-size: 1.2rem;
     font-weight: bold;
     vertical-align: middle;
+}
+
+.mx_CallView_header_secondaryCallInfo {
+    &::before {
+        content: '·';
+        margin-left: 6px;
+        margin-right: 6px;
+    }
 }
 
 .mx_CallView_header_controls {
@@ -213,16 +267,31 @@ limitations under the License.
     }
 }
 
+.mx_CallView_header_callInfo {
+    margin-left: 12px;
+    margin-right: 16px;
+}
+
 .mx_CallView_header_roomName {
     font-weight: bold;
     font-size: 12px;
     line-height: initial;
+    height: 15px;
+}
+
+.mx_CallView_secondaryCall_roomName {
+    margin-left: 4px;
 }
 
 .mx_CallView_header_callTypeSmall {
     font-size: 12px;
     color: $secondary-fg-color;
     line-height: initial;
+    height: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 240px;
 }
 
 .mx_CallView_header_phoneIcon {
