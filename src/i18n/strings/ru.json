@@ -2956,5 +2956,9 @@
     "Already have an account? <a>Sign in here</a>": "Уже есть учётная запись? <a>Войдите здесь</a>",
     "Decide where your account is hosted": "Выберите, кто обслуживает вашу учётную запись",
     "We call the places where you can host your account ‘homeservers’.": "Мы называем места, где вы можете разместить свою учётную запись, 'домашними серверами'.",
-    "Sends the given message with confetti": "Отправляет данное сообщение с конфетти"
+    "Sends the given message with confetti": "Отправляет данное сообщение с конфетти",
+    "Hold": "Удерживать",
+    "Resume": "Возобновить",
+    "%(peerName)s held the call": "%(peerName)s удерживает звонок",
+    "You held the call <a>Resume</a>": "Вы удерживаете звонок <a>Возобновить</a>"
 }
