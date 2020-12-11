@@ -20,6 +20,7 @@ import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 
 interface IProps {
     requestClose(): void;
@@ -51,7 +52,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
             return;
         }
         switch (message.data.action) {
-            case 'account_credentials_request':
+            case 'element_pro_account_details_request':
                 // noinspection JSIgnoredPromiseFromCall
                 this.sendAccountDetails();
                 break;
@@ -61,10 +62,6 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
                 this.setState({
                     completed: true,
                 });
-                break;
-            case 'openid_credentials_request':
-                // noinspection JSIgnoredPromiseFromCall
-                this.fetchOpenIDToken();
                 break;
             case 'close_dialog':
                 this.onFinished(true);
@@ -98,25 +95,20 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         )
     }
 
-    private async fetchOpenIDToken() {
-        const token = await MatrixClientPeg.get().getOpenIdToken();
-        if (token && token.access_token) {
-            this.sendMessage({
-                action: 'openid_credentials',
-                tokenData: token,
-            });
-        } else {
+    private async sendAccountDetails() {
+        const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
+        if (!openIdToken || !openIdToken.access_token) {
             this.setState({
                 error: _t("Failed to connect to your homeserver. Please close this dialog and try again."),
             });
+            return;
         }
-    }
-
-    private async sendAccountDetails() {
         this.sendMessage({
-            action: 'account_credentials',
-            credentials: {
+            action: 'element_pro_account_details',
+            account: {
                 accessToken: await MatrixClientPeg.get().getAccessToken(),
+                name: OwnProfileStore.instance.displayName,
+                openIdToken: openIdToken.access_token,
                 serverName: await MatrixClientPeg.get().getDomain(),
                 userLocalpart: await MatrixClientPeg.get().getUserIdLocalpart(),
             },
