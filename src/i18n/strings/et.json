@@ -2969,5 +2969,8 @@
     "Hold": "Pane ootele",
     "Resume": "Jätka",
     "%(peerName)s held the call": "%(peerName)s pani kõne ootele",
-    "You held the call <a>Resume</a>": "Sa panid kõne ootele. <a>Jätka kõnet</a>"
+    "You held the call <a>Resume</a>": "Sa panid kõne ootele. <a>Jätka kõnet</a>",
+    "You've reached the maximum number of simultaneous calls.": "Oled jõudnud suurima lubatud samaaegsete kõnede arvuni.",
+    "%(name)s paused": "%(name)s peatas ajutiselt kõne",
+    "Too Many Calls": "Liiga palju kõnesid"
 }
