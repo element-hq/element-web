@@ -2967,5 +2967,9 @@
     "Show chat effects": "顯示聊天特效",
     "Effects": "影響",
     "Call failed because webcam or microphone could not be accessed. Check that:": "通話失敗，因為無法存取網路攝影機或麥克風。請檢查：",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "通話失敗，因為無法存取麥克風。請檢查是否已插入麥克風並正確設定。"
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "通話失敗，因為無法存取麥克風。請檢查是否已插入麥克風並正確設定。",
+    "Hold": "保留",
+    "Resume": "繼續",
+    "%(peerName)s held the call": "%(peerName)s 保留通話",
+    "You held the call <a>Resume</a>": "您已保留通話 <a>繼續</a>"
 }
