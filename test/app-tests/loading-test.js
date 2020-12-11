@@ -243,7 +243,7 @@ describe('loading:', function() {
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
-            }).then(async () => {
+            }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
 
@@ -617,7 +617,7 @@ describe('loading:', function() {
                 // right state for the reloaded app.
 
                 return tokenLoginCompletePromise;
-            }).then(async () => {
+            }).then(() => {
                 // check that the localstorage has been set up in such a way that
                 // the reloaded app can pick up where we leave off.
                 expect(localStorage.getItem('mx_user_id')).toEqual('@user:localhost');
