@@ -2964,5 +2964,9 @@
     "Show chat effects": "Mostrar efectos do chat",
     "Effects": "Efectos",
     "Call failed because webcam or microphone could not be accessed. Check that:": "A chamada fallou porque non tiñas acceso á cámara ou ó micrófono. Comproba:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "A chamada fallou porque non tiñas acceso ó micrófono. Comproba que o micrófono está conectado e correctamente configurado."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "A chamada fallou porque non tiñas acceso ó micrófono. Comproba que o micrófono está conectado e correctamente configurado.",
+    "Hold": "Colgar",
+    "Resume": "Retomar",
+    "%(peerName)s held the call": "%(peerName)s finalizou a chamada",
+    "You held the call <a>Resume</a>": "Colgaches a chamada, <a>Retomar</a>"
 }
