@@ -39,7 +39,6 @@ import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
 import {cleanLocalstorage} from "../test-utils";
 import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
-import {idbLoad} from "matrix-react-sdk/src/IndexedDB";
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -250,7 +249,7 @@ describe('loading:', function() {
 
                 // and the localstorage should have been updated
                 expect(localStorage.getItem('mx_user_id')).toEqual('@user:id');
-                expect(await idbLoad('account', 'mx_access_token')).toEqual('access_token');
+                expect(localStorage.getItem('mx_access_token')).toEqual('access_token');
                 expect(localStorage.getItem('mx_hs_url')).toEqual(DEFAULT_HS_URL);
                 expect(localStorage.getItem('mx_is_url')).toEqual(DEFAULT_IS_URL);
             });
@@ -622,7 +621,7 @@ describe('loading:', function() {
                 // check that the localstorage has been set up in such a way that
                 // the reloaded app can pick up where we leave off.
                 expect(localStorage.getItem('mx_user_id')).toEqual('@user:localhost');
-                expect(await idbLoad('account', 'mx_access_token')).toEqual('access_token');
+                expect(localStorage.getItem('mx_access_token')).toEqual('access_token');
                 expect(localStorage.getItem('mx_hs_url')).toEqual('https://homeserver');
                 expect(localStorage.getItem('mx_is_url')).toEqual('https://idserver');
             });
