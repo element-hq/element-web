@@ -1686,7 +1686,7 @@
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s pašalino alternatyvius šio kambario adresus %(addresses)s.",
     "Room settings": "Kambario nustatymai",
     "Link to most recent message": "Nuoroda į naujausią žinutę",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Pakviesti ką nors naudojant jų vardą, vartotojo vardą (pavyzdžiui <userId/>) arba <a>bendrinti šį kambarį</a>.",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Pakviesti ką nors naudojant jų vardą, vartotojo vardą (pvz.: <userId/>) arba <a>bendrinti šį kambarį</a>.",
     "Share Room Message": "Bendrinti Kambario Žinutę",
     "Share Room": "Bendrinti Kambarį",
     "Use bots, bridges, widgets and sticker packs": "Naudoti botus, tiltus, valdiklius ir lipdukų pakuotes",
@@ -2040,5 +2040,12 @@
     "Update community": "Atnaujinti bendruomenę",
     "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "Kambario %(roomName)s matomumas bendruomenėje %(groupId)s negalėjo būti atnaujintas.",
     "Update %(brand)s": "Atnaujinti %(brand)s",
-    "Someone is using an unknown session": "Kažkas naudoja nežinomą seansą"
+    "Someone is using an unknown session": "Kažkas naudoja nežinomą seansą",
+    "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "PRO PATARIMAS: Jei pradėjote klaidos pranešimą, pateikite <debugLogsLink>derinimo žurnalus</debugLogsLink>, kad padėtumėte mums išsiaiškinti problemą.",
+    "Please review and accept the policies of this homeserver:": "Peržiūrėkite ir sutikite su šio serverio politika:",
+    "Please review and accept all of the homeserver's policies": "Peržiūrėkite ir sutikite su visa serverio politika",
+    "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Pirmiausia peržiūrėkite <existingIssuesLink>Github'e esančius pranešimus apie klaidas</existingIssuesLink>. Jokio atitikmens? <newIssueLink>Pradėkite naują pranešimą</newIssueLink>.",
+    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Paprastai tai turi įtakos tik kambario apdorojimui serveryje. Jei jūs turite problemų su savo %(brand)s, <a>praneškite apie klaidą</a>.",
+    "Report a bug": "Pranešti apie klaidą",
+    "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Pakviesti ką nors, naudojant jų vardą, el. pašto adresą, vartotojo vardą (pvz.: <userId/>) arba <a>bendrinti šį kambarį</a>."
 }
