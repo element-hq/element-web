@@ -2968,5 +2968,7 @@
     "Hold": "Colgar",
     "Resume": "Retomar",
     "%(peerName)s held the call": "%(peerName)s finalizou a chamada",
-    "You held the call <a>Resume</a>": "Colgaches a chamada, <a>Retomar</a>"
+    "You held the call <a>Resume</a>": "Colgaches a chamada, <a>Retomar</a>",
+    "You've reached the maximum number of simultaneous calls.": "Acadaches o número máximo de chamadas simultáneas.",
+    "Too Many Calls": "Demasiadas chamadas"
 }
