@@ -1487,5 +1487,6 @@
     "No other published addresses yet, add one below": "現在、公開アドレスがありません。以下から追加可能です。",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "検索結果を表示させるために、暗号化されたメッセージをローカルに安全にキャッシュしています。現在、%(rooms)s 件の部屋のメッセージの保存に %(size)s を使用中です。",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "検索結果を表示させるために、暗号化されたメッセージをローカルに安全にキャッシュしています。現在、%(rooms)s 件の部屋のメッセージの保存に %(size)s を使用中です。",
-    "Mentions & Keywords": "メンションとキーワード"
+    "Mentions & Keywords": "メンションとキーワード",
+    "Security Key": "セキュリティキー"
 }
