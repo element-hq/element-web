@@ -177,7 +177,7 @@
     "Can't update user notification settings": "Неможливо оновити налаштування користувацьких сповіщень",
     "Notify for all other messages/rooms": "Сповіщати щодо всіх повідомлень/кімнат",
     "Unable to look up room ID from server": "Неможливо знайти ID кімнати на сервері",
-    "Couldn't find a matching Matrix room": "Неможливо знайти відповідну кімнату",
+    "Couldn't find a matching Matrix room": "Не вдалось знайти відповідну кімнату",
     "Invite to this room": "Запросити до цієї кімнати",
     "Thursday": "Четвер",
     "Search…": "Пошук…",
@@ -1524,5 +1524,9 @@
     "Fiji": "Фіджі",
     "Faroe Islands": "Фарерські Острови",
     "Unable to access microphone": "Неможливо доступитись до мікрофона",
-    "Filter rooms and people": "Відфільтрувати кімнати та людей"
+    "Filter rooms and people": "Відфільтрувати кімнати та людей",
+    "Find a room… (e.g. %(exampleRoom)s)": "Знайти кімнату… (напр. %(exampleRoom)s)",
+    "Find a room…": "Знайти кімнату…",
+    "Can't find this server or its room list": "Не вдалось знайти цей сервер у переліку кімнат",
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Якщо ви не можете знайти потрібну кімнату, попросіть запрошення або <a>Створіть нову кімнату</a> власноруч."
 }
