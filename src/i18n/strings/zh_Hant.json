@@ -2971,5 +2971,8 @@
     "Hold": "保留",
     "Resume": "繼續",
     "%(peerName)s held the call": "%(peerName)s 保留通話",
-    "You held the call <a>Resume</a>": "您已保留通話 <a>繼續</a>"
+    "You held the call <a>Resume</a>": "您已保留通話 <a>繼續</a>",
+    "%(name)s paused": "%(name)s 已暫停",
+    "You've reached the maximum number of simultaneous calls.": "您已達到同時通話的最大數量。",
+    "Too Many Calls": "太多通話"
 }
