@@ -2900,5 +2900,8 @@
     "Hold": "Pausar",
     "Resume": "Retomar",
     "%(peerName)s held the call": "%(peerName)s pausou a chamada",
-    "You held the call <a>Resume</a>": "Você pausou a chamada <a>Retomar</a>"
+    "You held the call <a>Resume</a>": "Você pausou a chamada <a>Retomar</a>",
+    "You've reached the maximum number of simultaneous calls.": "Você atingiu o número máximo de chamadas simultâneas.",
+    "Too Many Calls": "Muitas chamadas",
+    "%(name)s paused": "%(name)s pausou"
 }
