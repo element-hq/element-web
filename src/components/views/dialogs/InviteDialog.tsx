@@ -317,12 +317,12 @@ interface IInviteDialogProps {
 interface IInviteDialogState {
     targets: RoomMember[]; // array of Member objects (see interface above)
     filterText: string;
-    recents: { user: DirectoryMember, userId: string }[];
+    recents: { user: Member, userId: string }[];
     numRecentsShown: number;
-    suggestions: { user: DirectoryMember, userId: string }[];
+    suggestions: { user: Member, userId: string }[];
     numSuggestionsShown: number;
-    serverResultsMixin: { user: DirectoryMember, userId: string }[];
-    threepidResultsMixin: ({ user: ThreepidMember, userId: string} | { user: DirectoryMember, userId: string})[];
+    serverResultsMixin: { user: Member, userId: string }[];
+    threepidResultsMixin: { user: Member, userId: string}[];
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
 
