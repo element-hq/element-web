@@ -526,7 +526,7 @@
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s eemaldas täiendava aadressi %(addresses)s sellelt jututoalt.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s muutis selle jututoa täiendavat aadressi.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s muutis selle jututoa põhiaadressi ja täiendavat aadressi.",
-    "%(senderName)s changed the addresses for this room.": "%(senderName)s muutis selle jututoa aadressid.",
+    "%(senderName)s changed the addresses for this room.": "%(senderName)s muutis selle jututoa aadresse.",
     "Someone": "Keegi",
     "(not supported by this browser)": "(ei ole toetatud selles brauseris)",
     "(could not connect media)": "(ühendus teise osapoolega ei õnnestunud)",
