@@ -2881,7 +2881,7 @@
     "Send stickers into your active room": "Dërgoni ngjitës në dhomën tuaj aktive",
     "Send stickers into this room": "Dërgoni ngjitës në këtë dhomë",
     "Go to Home View": "Kaloni te Pamja Kreu",
-    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML për faqen e bashkësisë tuaj</h1>\n<p>\n    Përdoreni përshkrimin e gjatë që t’i prezantoni bashkësisë anëtarë të rinj, ose për t’u dhënë <a href=\"foo\">lidhje</a> të rëndësishme\n</p>\n<p>\n   Mundeni madje të shtoni figura me URL-ra Matrix <img src=\"mxc://url\" />\n</p>\n",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML për faqen e bashkësisë tuaj</h1>\n<p>\n    Përdoreni përshkrimin e gjatë që t’i prezantoni bashkësisë anëtarë të rinj, ose për t’u dhënë <a href=\"foo\">lidhje</a> të rëndësishme\n</p>\n<p>\n    Mundeni madje të shtoni figura me URL-ra Matrix <img src=\"mxc://url\" />\n</p>\n",
     "Enter phone number": "Jepni numër telefoni",
     "Enter email address": "Jepni adresë email-i",
     "Decline All": "Hidhi Krejt Poshtë",
