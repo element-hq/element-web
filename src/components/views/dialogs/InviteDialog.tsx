@@ -621,7 +621,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             return;
         }
 
-        const createRoomOptions = {inlineErrors: true} as any;
+        const createRoomOptions = {inlineErrors: true} as any; // XXX: Type out `createRoomOptions`
 
         if (privateShouldBeEncrypted()) {
             // Check whether all users have uploaded device keys before.
