@@ -118,6 +118,7 @@ function getRemoteAudioElement(): HTMLAudioElement {
 export default class CallHandler {
     private calls = new Map<string, MatrixCall>(); // roomId -> call
     private audioPromises = new Map<AudioID, Promise<void>>();
+    private dispatcherRef: string;
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -128,7 +129,7 @@ export default class CallHandler {
     }
 
     start() {
-        dis.register(this.onAction);
+        this.dispatcherRef = dis.register(this.onAction);
         // add empty handlers for media actions, otherwise the media keys
         // end up causing the audio elements with our ring/ringback etc
         // audio clips in to play.
@@ -151,6 +152,7 @@ export default class CallHandler {
         if (cli) {
             cli.removeListener('Call.incoming', this.onCallIncoming);
         }
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     }
 
     private onCallIncoming = (call) => {
