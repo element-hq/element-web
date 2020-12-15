@@ -236,7 +236,7 @@ async function verifyServerConfig() {
 
         validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
     } catch (e) {
-        const {hsUrl, isUrl, userId} = Lifecycle.getLocalStorageSessionVars();
+        const {hsUrl, isUrl, userId} = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {
             console.error(e);
             console.warn("A session was found - suppressing config error and using the session's homeserver");
