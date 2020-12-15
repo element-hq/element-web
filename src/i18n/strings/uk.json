@@ -1530,6 +1530,6 @@
     "Can't find this server or its room list": "Не вдалось знайти цей сервер у переліку кімнат",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Якщо ви не можете знайти потрібну кімнату, попросіть запрошення або <a>Створіть нову кімнату</a> власноруч.",
     "Cannot reach homeserver": "Не вдається зв'язатися з домашнім сервером",
-    "Ensure you have a stable internet connection, or get in touch with the server admin": "Переконайтеся, що у вас є стабільне підключення до інтернету, або зв’яжіться з сис-адміном",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Переконайтеся, що у ваше з'єднання з Інтернетом стабільне або зв’яжіться з системним адміністратором",
     "User %(user_id)s may or may not exist": "Користувач %(user_id)s може існувати, а може й не існувати"
 }
