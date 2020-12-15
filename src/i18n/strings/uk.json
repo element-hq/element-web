@@ -1529,5 +1529,6 @@
     "Find a room…": "Знайти кімнату…",
     "Can't find this server or its room list": "Не вдалось знайти цей сервер у переліку кімнат",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Якщо ви не можете знайти потрібну кімнату, попросіть запрошення або <a>Створіть нову кімнату</a> власноруч.",
-    "Cannot reach homeserver": "Не вдається зв`язатися з домашнім сервером"
+    "Cannot reach homeserver": "Не вдається зв`язатися з домашнім сервером",
+    "Ensure you have a stable internet connection, or get in touch with the server admin": "Переконайтеся, що у вас є стабільне підключення до інтернету, або зв’яжіться з сис-адміном"
 }
