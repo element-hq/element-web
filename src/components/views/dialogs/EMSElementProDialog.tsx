@@ -16,8 +16,8 @@ limitations under the License.
 
 import * as React from "react";
 import BaseDialog from '../../views/dialogs/BaseDialog';
-import ConfirmCloseHostingSignupDialog from '../../views/dialogs/ConfirmCloseHostingSignupDialog';
-import HostingSignupAccountDataConfirmDialog from '../../views/dialogs/HostingSignupAccountDataConfirmDialog';
+import EMSElementProConfirmCloseDialog from './EMSElementProConfirmCloseDialog';
+import EMSElementProDataConfirmDialog from './EMSElementProDataConfirmDialog';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
@@ -33,9 +33,9 @@ interface IState {
     error: string;
 }
 
-export default class HostingSignupDialog extends React.PureComponent<IProps, IState> {
+export default class EMSElementProDialog extends React.PureComponent<IProps, IState> {
     iframeRef;
-    hostingSignupUrl: string;
+    elementProSetupUrl: string;
 
     constructor(props: IProps) {
         super(props);
@@ -46,17 +46,17 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         };
 
         this.iframeRef = React.createRef();
-        this.hostingSignupUrl = SdkConfig.get().hosting_signup.url;
+        this.elementProSetupUrl = SdkConfig.get().ems_element_pro.url;
     }
 
     private messageHandler = (message) => {
-        if (!this.hostingSignupUrl.startsWith(message.origin)) {
+        if (!this.elementProSetupUrl.startsWith(message.origin)) {
             return;
         }
         switch (message.data.action) {
             case 'element_pro_account_details_request':
                 Modal.createDialog(
-                    HostingSignupAccountDataConfirmDialog,
+                    EMSElementProDataConfirmDialog,
                     {
                         onFinished: result => {
                             if (result) {
@@ -85,7 +85,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
             this.props.requestClose();
         } else {
             Modal.createDialog(
-                ConfirmCloseHostingSignupDialog,
+                EMSElementProConfirmCloseDialog,
                 {
                     onFinished: result => {
                         if (result) {
@@ -100,7 +100,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
     private sendMessage = (message) => {
         this.iframeRef.contentWindow.postMessage(
             message,
-            this.hostingSignupUrl,
+            this.elementProSetupUrl,
         )
     }
 
@@ -108,6 +108,7 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
         const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
         if (!openIdToken || !openIdToken.access_token) {
             this.setState({
+                completed: true,
                 error: _t("Failed to connect to your homeserver. Please close this dialog and try again."),
             });
             return;
@@ -135,15 +136,15 @@ export default class HostingSignupDialog extends React.PureComponent<IProps, ISt
     public render(): React.ReactNode {
         return (
             <BaseDialog
-                className="mx_HostingSignupBaseDialog"
+                className="mx_EMSElementProBaseDialog"
                 onFinished={this.onFinished}
                 title={_t("Set up your own personal Element host")}
                 hasCancel={true}
                 fixedWidth={false}
             >
-                <div className="mx_HostingSignupDialog_container">
+                <div className="mx_EMSElementProDialog_container">
                     <iframe
-                        src={this.hostingSignupUrl}
+                        src={this.elementProSetupUrl}
                         ref={ref => this.iframeRef = ref}
                     />
                     {this.state.error &&

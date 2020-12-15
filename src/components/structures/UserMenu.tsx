@@ -51,7 +51,7 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
 import {UIFeature} from "../../settings/UIFeature";
-import HostingSignupAction from "./HostingSignupAction";
+import EMSElementProAction from "./EMSElementProAction";
 
 interface IProps {
     isMinimized: boolean;
@@ -274,7 +274,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         let topSection;
         const signupLink = getHostingLink("user-context-menu");
-        const hostingSignupOptions = SdkConfig.get().hosting_signup;
+        const elementProConfig = SdkConfig.get().ems_element_pro;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -294,36 +294,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     })}
                 </div>
             )
-        } else if (signupLink || hostingSignupOptions) {
-            let hostingSignupIFrame;
-            /*
-                Config schema:
-
-                ```
-                "hosting_signup": {
-                    // URL to load iframe from.
-                    "url": "https://prodiver.tld/setup",
-                    // Accepted Matrix user server names to show iframe action for.
-                    // Subdomains will also match.
-                    "domains": [
-                        "matrix.org",
-                        "domain.tld"
-                    ]
-                }
-                ```
-            */
-            if (hostingSignupOptions && hostingSignupOptions.url) {
-                // If hosting_signup_domains is set to a non-empty array, only show
+        } else if (signupLink || elementProConfig) {
+            let elementProIFrame;
+            if (elementProConfig && elementProConfig.url) {
+                // If ems_element_pro.domains is set to a non-empty array, only show
                 // dialog if the user is on the domain or a subdomain.
-                const hostingSignupDomains = hostingSignupOptions.domains || [];
+                const elementProDomains = elementProConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
-                const validDomains = hostingSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
-                if (!hostingSignupDomains || validDomains.length > 0) {
-                    hostingSignupIFrame = <div
+                const validDomains = elementProDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
+                if (!elementProDomains || validDomains.length > 0) {
+                    elementProIFrame = <div
                         className=""
                         onClick={this.onCloseMenu}
                     >
-                        <HostingSignupAction />
+                        <EMSElementProAction />
                     </div>;
                 }
             }
@@ -346,7 +330,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             )}
                         </div>
                     }
-                    {hostingSignupIFrame}
+                    {elementProIFrame}
                 </>
             );
         }

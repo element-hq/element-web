@@ -26,19 +26,18 @@ interface IProps extends IDialogProps {
 interface IState {}
 
 /*
- * A dialog for confirming closing the Hosting signup setup dialog.
+ * A dialog for confirming closing the Element Pro setup dialog.
  */
-export default class HostingSignupAccountDataConfirmDialog extends React.PureComponent<IProps, IState> {
+export default class EMSElementProConfirmCloseDialog extends React.PureComponent<IProps, IState> {
     public render() {
         return (
             <QuestionDialog
                 onFinished={this.props.onFinished}
-                title={_t("Confirm Account Data Transfer")}
-                description={
-                    "Please accept transfer of data to the Element Pro setup wizard to continue. The setup wizard" +
-                    "will be able to access your account for the duration of the setup process."
-                }
-                button={_t("Accept")}
+                title={_t("Confirm Abort Of Host Creation")}
+                description={_t(
+                    "Are you sure you wish to abort creation of the host? The process cannot be continued.",
+                )}
+                button={_t("Abort")}
             />
         );
     }

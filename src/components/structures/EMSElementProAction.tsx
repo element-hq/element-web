@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import * as React from "react";
+import EMSElementProDialog from "../views/dialogs/EMSElementProDialog";
 import Modal from "../../Modal";
-import HostingSignupDialog from "../views/dialogs/HostingSignupDialog";
 import {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
@@ -27,15 +27,15 @@ interface IProps {}
 
 interface IState {}
 
-export default class HostingSignupAction extends React.PureComponent<IProps, IState> {
+export default class EMSElementProAction extends React.PureComponent<IProps, IState> {
     closingAllowed = false;
     modalRef: any;
 
     private openDialog = () => {
         this.modalRef = Modal.createTrackedDialog(
-            'Hosting Signup Open', '', HostingSignupDialog, {
+            'Element Pro Open', '', EMSElementProDialog, {
                 requestClose: this.requestClose,
-            }, "mx_HostingSignupDialog", false, true, {
+            }, "mx_EMSElementProDialog", false, true, {
                 onBeforeClose: async () => this.closingAllowed,
             },
         );
