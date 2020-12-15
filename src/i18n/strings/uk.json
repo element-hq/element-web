@@ -960,7 +960,7 @@
     "Show less": "Згорнути",
     "Show more": "Розгорнути",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Змінення пароля призведе до скидання всіх ключів наскрізного шифрування та унеможливить читання історії листування, якщо тільки ви не експортуєте ваші ключі кімнати та не імпортуєте їх згодом. Це буде вдосконалено у майбутньому.",
-    "Santa": "Микола",
+    "Santa": "Св. Миколай",
     "Gift": "Подарунок",
     "Lock": "Замок",
     "Cross-signing and secret storage are not yet set up.": "Перехресне підписування та таємне сховище ще не налагоджені.",
