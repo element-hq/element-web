@@ -1532,5 +1532,6 @@
     "Cannot reach homeserver": "Не вдається зв'язатися з домашнім сервером",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Переконайтеся, що у ваше з'єднання з Інтернетом стабільне або зв’яжіться з системним адміністратором",
     "User %(user_id)s may or may not exist": "Користувач %(user_id)s можливо існує, а можливо й ні",
-    "No need for symbols, digits, or uppercase letters": "Нема необхідності в символах, цифрах, або заголовних(?) літер"
+    "No need for symbols, digits, or uppercase letters": "Нема необхідності в символах, цифрах, або заголовних(?) літер",
+    "Capitalization doesn't help very much": "Заголовні букви не дуже допомагають"
 }
