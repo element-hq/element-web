@@ -118,7 +118,7 @@ function getRemoteAudioElement(): HTMLAudioElement {
 export default class CallHandler {
     private calls = new Map<string, MatrixCall>(); // roomId -> call
     private audioPromises = new Map<AudioID, Promise<void>>();
-    private dispatcherRef: string;
+    private dispatcherRef: string = null;
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -152,7 +152,7 @@ export default class CallHandler {
         if (cli) {
             cli.removeListener('Call.incoming', this.onCallIncoming);
         }
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef !== null) dis.unregister(this.dispatcherRef);
     }
 
     private onCallIncoming = (call) => {
