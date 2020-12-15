@@ -112,10 +112,10 @@ limitations under the License.
     }
 }
 
-.mx_MemberList_inviteCommunity span {
-    background-image: url('$(res)/img/icon-invite-people.svg');
+.mx_MemberList_inviteCommunity span::before {
+    mask-image: url('$(res)/img/icon-invite-people.svg');
 }
 
-.mx_MemberList_addRoomToCommunity span {
-    background-image: url('$(res)/img/icons-room-add.svg');
+.mx_MemberList_addRoomToCommunity span::before {
+    mask-image: url('$(res)/img/icons-room-add.svg');
 }
