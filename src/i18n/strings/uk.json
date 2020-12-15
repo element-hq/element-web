@@ -1101,7 +1101,7 @@
     "You'll need to authenticate with the server to confirm the upgrade.": "Ви матимете пройти розпізнання на сервері щоб підтвердити поліпшування.",
     "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Поліпште цей сеанс щоб уможливити звіряння інших сеансів, надаючи їм доступ до зашифрованих повідомлень та позначуючи їх довіреними для інших користувачів.",
     "Upgrade your encryption": "Поліпшити ваше шифрування",
-    "Show a placeholder for removed messages": "Показувати плашки замість видалених повідомлень",
+    "Show a placeholder for removed messages": "Показувати замісну позначку замість видалених повідомлень",
     "Show join/leave messages (invites/kicks/bans unaffected)": "Показувати повідомлення про приєднання/залишення (не впливає на запрошення/викидання/заборону)",
     "Show avatar changes": "Показувати зміни личини",
     "Show display name changes": "Показувати зміни видимого імені",
