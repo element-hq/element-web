@@ -2964,5 +2964,12 @@
     "See emotes posted to this room": "Vedi emoticon inviate a questa stanza",
     "Send emotes as you in your active room": "Invia emoticon a tuo nome nella tua stanza attiva",
     "Send emotes as you in this room": "Invia emoticon a tuo nome in questa stanza",
-    "Effects": "Effetti"
+    "Effects": "Effetti",
+    "Hold": "Sospendi",
+    "Resume": "Riprendi",
+    "%(name)s paused": "%(name)s ha messo in pausa",
+    "%(peerName)s held the call": "%(peerName)s ha sospeso la chiamata",
+    "You held the call <a>Resume</a>": "Hai sospeso la chiamata <a>Riprendi</a>",
+    "You've reached the maximum number of simultaneous calls.": "Hai raggiungo il numero massimo di chiamate simultanee.",
+    "Too Many Calls": "Troppe chiamate"
 }
