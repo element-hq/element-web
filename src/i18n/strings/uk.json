@@ -1533,5 +1533,6 @@
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Переконайтеся, що у ваше з'єднання з Інтернетом стабільне або зв’яжіться з системним адміністратором",
     "User %(user_id)s may or may not exist": "Користувач %(user_id)s можливо існує, а можливо й ні",
     "No need for symbols, digits, or uppercase letters": "Цифри або великі букви не вимагаються",
-    "Capitalization doesn't help very much": "Великі букви не дуже допомагають"
+    "Capitalization doesn't help very much": "Великі букви не дуже допомагають",
+    "You're all caught up.": "Готово"
 }
