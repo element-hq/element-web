@@ -2599,5 +2599,7 @@
     "Enable desktop notifications": "Povolit oznámení na ploše",
     "Invalid Recovery Key": "Neplatný klíč pro obnovení",
     "Security Key": "Bezpečnostní klíč",
-    "Use your Security Key to continue.": "Pokračujte pomocí bezpečnostního klíče."
+    "Use your Security Key to continue.": "Pokračujte pomocí bezpečnostního klíče.",
+    "If they don't match, the security of your communication may be compromised.": "Pokud se neshodují, bezpečnost vaší komunikace může být kompromitována.",
+    "Confirm this user's session by comparing the following with their User Settings:": "Potvrďte relaci tohoto uživatele porovnáním následujícího s jeho uživatelským nastavením:"
 }
