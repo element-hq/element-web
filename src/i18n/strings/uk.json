@@ -1121,7 +1121,7 @@
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ви впевнені? Ви загубите ваші зашифровані повідомлення якщо копія ключів не була зроблена коректно.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Зашифровані повідомлення захищені наскрізним шифруванням. Лише ви та отримувачі повідомлень мають ключі для їх читання.",
     "Display Name": "Видиме ім'я",
-    "wait and try again later": "Зачекайте та попробуйте ще раз пізніше",
+    "wait and try again later": "зачекайте та спопробуйте ще раз пізніше",
     "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Якщо ви увімкнете шифрування для кімнати, його неможливо буде вимкнути. Надіслані у зашифровану кімнату повідомлення будуть прочитними тільки для учасників кімнати, натомість для сервера вони будуть непрочитними. Увімкнення шифрування може унеможливити роботу ботів та мостів. <a>Дізнатись більше про шифрування.</a>",
     "Encrypted": "Зашифроване",
     "This room is end-to-end encrypted": "Ця кімната є наскрізно зашифрованою",
