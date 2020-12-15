@@ -1528,5 +1528,6 @@
     "Find a room… (e.g. %(exampleRoom)s)": "Знайти кімнату… (напр. %(exampleRoom)s)",
     "Find a room…": "Знайти кімнату…",
     "Can't find this server or its room list": "Не вдалось знайти цей сервер у переліку кімнат",
-    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Якщо ви не можете знайти потрібну кімнату, попросіть запрошення або <a>Створіть нову кімнату</a> власноруч."
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Якщо ви не можете знайти потрібну кімнату, попросіть запрошення або <a>Створіть нову кімнату</a> власноруч.",
+    "Cannot reach homeserver": "Не вдається зв`язатися з домашнім сервером"
 }
