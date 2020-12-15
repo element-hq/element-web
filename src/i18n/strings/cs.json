@@ -2383,7 +2383,7 @@
     "This is the start of <roomName/>.": "Toto je začátek místnosti <roomName/>.",
     "Topic: %(topic)s ": "Téma: %(topic)s ",
     "Topic: %(topic)s (<a>edit</a>)": "Téma: %(topic)s (<a>upravit</a>)",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Zprávy zde jsou šifrovány end-to-end. Ověřte %(displayName)s v jeho profilu - klepněte na jeho avatar.",
+    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Zprávy zde jsou šifrovány end-to-end. Ověřte uživatele %(displayName)s v jeho profilu - klepněte na jeho avatar.",
     "Enter a security phrase only you know, as it’s used to safeguard your data. To be secure, you shouldn’t re-use your account password.": "Zadejte frázi zabezpečení, kterou znáte jen vy, k ochraně vašich dat. Z důvodu bezpečnosti byste neměli znovu používat heslo k účtu.",
     "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "Použijte tajnou frázi, kterou znáte pouze vy, a volitelně uložte bezpečnostní klíč, který použijete pro zálohování.",
     "Enter a Security Phrase": "Zadání bezpečnostní fráze",
@@ -2392,8 +2392,8 @@
     "Set up Secure Backup": "Nastavení zabezpečené zálohy",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Chraňte se před ztrátou přístupu k šifrovaným zprávám a datům zálohováním šifrovacích klíčů na serveru.",
     "Safeguard against losing access to encrypted messages & data": "Zabezpečení proti ztrátě přístupu k šifrovaným zprávám a datům",
-    "This is the beginning of your direct message history with <displayName/>.": "Toto je začátek historie vašich přímých zpráv s <displayName />.",
-    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "V této konverzaci jste pouze vy dva, pokud nikdo z vás nikoho nepozve, aby se připojil.",
+    "This is the beginning of your direct message history with <displayName/>.": "Toto je začátek historie vašich přímých zpráv s uživatelem <displayName />.",
+    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "V této konverzaci jste pouze vy dva, dokud někdo z vás nepozve někoho dalšího.",
     "You created this room.": "Vytvořili jste tuto místnost.",
     "<a>Add a topic</a> to help people know what it is about.": "<a>Přidejte téma</a>, aby lidé věděli, o co jde.",
     "Invite by email": "Pozvat emailem",
@@ -2594,5 +2594,10 @@
     "Anguilla": "Anguilla",
     "Angola": "Angola",
     "Andorra": "Andorra",
-    "American Samoa": "Americká Samoa"
+    "American Samoa": "Americká Samoa",
+    "Room Info": "Informace o místnosti",
+    "Enable desktop notifications": "Povolit oznámení na ploše",
+    "Invalid Recovery Key": "Neplatný klíč pro obnovení",
+    "Security Key": "Bezpečnostní klíč",
+    "Use your Security Key to continue.": "Pokračujte pomocí bezpečnostního klíče."
 }
