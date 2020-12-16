@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const RiotSession = require('./src/session');
+const ElementSession = require('./src/session');
 const scenario = require('./src/scenario');
 const RestSessionCreator = require('./src/rest/creator');
 const fs = require("fs");
@@ -22,7 +22,7 @@ const fs = require("fs");
 const program = require('commander');
 program
     .option('--no-logs', "don't output logs, document html on error", false)
-    .option('--riot-url [url]', "riot url to test", "http://localhost:5000")
+    .option('--app-url [url]', "url to test", "http://localhost:5000")
     .option('--windowed', "dont run tests headless", false)
     .option('--slow-mo', "type at a human speed", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
@@ -57,7 +57,7 @@ async function runTests() {
     );
 
     async function createSession(username) {
-        const session = await RiotSession.create(username, options, program.riotUrl, hsUrl, program.throttleCpu);
+        const session = await ElementSession.create(username, options, program.appUrl, hsUrl, program.throttleCpu);
         sessions.push(session);
         return session;
     }

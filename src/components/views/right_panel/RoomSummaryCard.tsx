@@ -43,6 +43,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
 import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
 
 interface IProps {
     room: Room;
@@ -83,9 +84,10 @@ export const useWidgets = (room: Room) => {
 
 interface IAppRowProps {
     app: IApp;
+    room: Room;
 }
 
-const AppRow: React.FC<IAppRowProps> = ({ app }) => {
+const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     const name = WidgetUtils.getWidgetName(app);
     const dataTitle = WidgetUtils.getWidgetDataTitle(app);
     const subtitle = dataTitle && " - " + dataTitle;
@@ -100,10 +102,10 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         });
     };
 
-    const isPinned = WidgetStore.instance.isPinned(app.id);
+    const isPinned = WidgetStore.instance.isPinned(room.roomId, app.id);
     const togglePin = isPinned
-        ? () => { WidgetStore.instance.unpinWidget(app.id); }
-        : () => { WidgetStore.instance.pinWidget(app.id); };
+        ? () => { WidgetStore.instance.unpinWidget(room.roomId, app.id); }
+        : () => { WidgetStore.instance.pinWidget(room.roomId, app.id); };
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     let contextMenu;
@@ -118,7 +120,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app }) => {
         />;
     }
 
-    const cannotPin = !isPinned && !WidgetStore.instance.canPin(app.id);
+    const cannotPin = !isPinned && !WidgetStore.instance.canPin(room.roomId, app.id);
 
     let pinTitle: string;
     if (cannotPin) {
@@ -183,7 +185,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     };
 
     return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
-        { apps.map(app => <AppRow key={app.id} app={app} />) }
+        { apps.map(app => <AppRow key={app.id} app={app} room={room} />) }
 
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
             { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
@@ -207,14 +209,6 @@ const onRoomFilesClick = () => {
 
 const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
-};
-
-const useMemberCount = (room: Room) => {
-    const [count, setCount] = useState(room.getJoinedMembers().length);
-    useEventEmitter(room.currentState, "RoomState.members", () => {
-        setCount(room.getJoinedMembers().length);
-    });
-    return count;
 };
 
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
@@ -250,7 +244,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         </div>
     </React.Fragment>;
 
-    const memberCount = useMemberCount(room);
+    const memberCount = useRoomMemberCount(room);
 
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">

@@ -105,6 +105,9 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
+// this probably shouldn't have it's own colour
+$voipcall-plinth-color: #f2f5f8;
+
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
@@ -205,7 +208,7 @@ $composer-shadow-color: tranparent;
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;

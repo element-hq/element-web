@@ -149,7 +149,7 @@ export default class MessageContextMenu extends React.Component {
     onRedactClick = () => {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
         Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
-            onFinished: async (proceed) => {
+            onFinished: async (proceed, reason) => {
                 if (!proceed) return;
 
                 const cli = MatrixClientPeg.get();
@@ -157,6 +157,8 @@ export default class MessageContextMenu extends React.Component {
                     await cli.redactEvent(
                         this.props.mxEvent.getRoomId(),
                         this.props.mxEvent.getId(),
+                        undefined,
+                        reason ? { reason } : {},
                     );
                 } catch (e) {
                     const code = e.errcode || e.statusCode;

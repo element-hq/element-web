@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,21 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ServerConfig_help:link {
-    opacity: 0.8;
-}
-
-.mx_ServerConfig_error {
-    display: block;
-    color: $warning-color;
-}
-
-.mx_ServerConfig_identityServer {
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.25s;
-
-    &.mx_ServerConfig_identityServer_shown {
-        transform: scaleY(1);
-    }
+.mx_CallContextMenu_item {
+    width: 205px;
+    height: 40px;
+    padding-left: 16px;
+    line-height: 40px;
+    vertical-align: center;
 }
