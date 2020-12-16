@@ -28,5 +28,9 @@
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Pro nejlepší zážitek si prosím nainstalujte prohlížeč <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, nebo <safariLink>Safari</safariLink>.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Můžete pokračovat v užívání vašeho současného prohlížeče, ale některé (nebo dokonce všechny) funkce nemusí fungovat a vzhled a chování aplikace nemusí být správné.",
     "I understand the risks and wish to continue": "Rozumím a přesto chci pokračovat",
-    "Go to element.io": "Přejít na element.io"
+    "Go to element.io": "Přejít na element.io",
+    "Failed to start": "Nepovedlo se nastartovat",
+    "Powered by Matrix": "Běží na Matrixu",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s pro desktopový počítač (%(platformName)s)",
+    "Missing indexeddb worker script!": "Nenačetl se skript spravující indexdb!"
 }
