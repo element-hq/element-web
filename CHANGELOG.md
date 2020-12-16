@@ -1,3 +1,9 @@
+Changes in [3.11.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.11.0-rc.2) (2020-12-16)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.11.0-rc.1...v3.11.0-rc.2)
+
+ * Upgrade JS SDK to 9.4.0-rc.2
+
 Changes in [3.11.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.11.0-rc.1) (2020-12-16)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.10.0...v3.11.0-rc.1)
