@@ -7925,9 +7925,10 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "9.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ff6612f9d0aa1a7c08b65a0b41c5ab997506016f"
+matrix-js-sdk@9.4.0-rc.2:
+  version "9.4.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-9.4.0-rc.2.tgz#8cd0eb9a76445c63e152ff7c8eb708513a67481e"
+  integrity sha512-Z2GJ0uv+/0IlwoAyducBBVZUTe4COyKtl6kanZNHK4kSGYZ/8pilTtMBj8fJJtWubOiZ6HxtaLEXrxulOJF+TA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -7947,9 +7948,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.10.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/07a175476822e41c33ef2f0cd4f6fa3c17acdcec"
+matrix-react-sdk@3.11.0-rc.2:
+  version "3.11.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.11.0-rc.2.tgz#ec6ed1b731af16e3e38c5deed85a7137b727a86a"
+  integrity sha512-1iRL7H91tXWzBNXnUy591ZpDSgvcQSSAWFM6rdiAddddCF/exuUurlUWteuqDUhuUaQU/pI3xIn0LbpfRXJ4Pw==
   dependencies:
     "@babel/runtime" "^7.10.5"
     await-lock "^2.0.1"
@@ -7978,7 +7980,7 @@ matrix-mock-request@^1.2.3:
     katex "^0.12.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.19"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "9.4.0-rc.2"
     matrix-widget-api "^0.1.0-beta.10"
     minimist "^1.2.5"
     pako "^1.0.11"
