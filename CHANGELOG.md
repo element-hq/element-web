@@ -2,7 +2,7 @@ Changes in [1.7.16-rc.1](https://github.com/vector-im/element-web/releases/tag/v
 =========================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.15...v1.7.16-rc.1)
 
- * Upgrade to React SDK 3.11.0-rc.1 and JS SDK 9.4.0-rc.1
+ * Upgrade to React SDK 3.11.0-rc.2 and JS SDK 9.4.0-rc.2
  * Translations update from Weblate
    [\#15979](https://github.com/vector-im/element-web/pull/15979)
  * Bump ini from 1.3.5 to 1.3.7
