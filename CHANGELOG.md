@@ -1,3 +1,27 @@
+Changes in [1.7.16-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.16-rc.1) (2020-12-16)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.15...v1.7.16-rc.1)
+
+ * Upgrade to React SDK 3.11.0-rc.1 and JS SDK 9.4.0-rc.1
+ * Translations update from Weblate
+   [\#15979](https://github.com/vector-im/element-web/pull/15979)
+ * Bump ini from 1.3.5 to 1.3.7
+   [\#15949](https://github.com/vector-im/element-web/pull/15949)
+ * Document pull request previews
+   [\#15937](https://github.com/vector-im/element-web/pull/15937)
+ * Improve asset path for KaTeX fonts
+   [\#15939](https://github.com/vector-im/element-web/pull/15939)
+ * Fix an important semicolon
+   [\#15912](https://github.com/vector-im/element-web/pull/15912)
+ * Bump highlight.js from 10.1.2 to 10.4.1
+   [\#15898](https://github.com/vector-im/element-web/pull/15898)
+ * Add gitter.im to room directory
+   [\#15894](https://github.com/vector-im/element-web/pull/15894)
+ * Extend Platform to support idpId for SSO flows
+   [\#15771](https://github.com/vector-im/element-web/pull/15771)
+ * Include KaTeX CSS as a dependency
+   [\#15843](https://github.com/vector-im/element-web/pull/15843)
+
 Changes in [1.7.15](https://github.com/vector-im/element-web/releases/tag/v1.7.15) (2020-12-07)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.15-rc.1...v1.7.15)
