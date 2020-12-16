@@ -41,8 +41,6 @@ export interface IIdentityProvider {
 
 export interface ISSOFlow {
     type: "m.login.sso" | "m.login.cas";
-    // eslint-disable-next-line camelcase
-    identity_providers: IIdentityProvider[];
     "org.matrix.msc2858.identity_providers": IIdentityProvider[]; // Unstable prefix for MSC2858
 }
 
