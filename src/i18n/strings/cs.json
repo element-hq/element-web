@@ -2744,5 +2744,12 @@
     "Namibia": "Namibie",
     "Security Phrase": "Bezpečnostní fráze",
     "Wrong Recovery Key": "Nesprávný klíč pro obnovení",
-    "Fetching keys from server...": "Načítání klíčů ze serveru ..."
+    "Fetching keys from server...": "Načítání klíčů ze serveru ...",
+    "Use Command + Enter to send a message": "K odeslání zprávy použijte Command + Enter",
+    "Use Ctrl + Enter to send a message": "K odeslání zprávy použijte Ctrl + Enter",
+    "Decide where your account is hosted": "Rozhodněte, kde je váš účet hostován",
+    "Unable to query secret storage status": "Nelze zjistit stav úložiště klíčů",
+    "Update %(brand)s": "Aktualizovat %(brand)s",
+    "You can also set up Secure Backup & manage your keys in Settings.": "Zabezpečené zálohování a správu klíčů můžete také nastavit v Nastavení.",
+    "Set a Security Phrase": "Nastavit bezpečnostní frázi"
 }
