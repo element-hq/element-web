@@ -152,7 +152,10 @@ export default class CallHandler {
         if (cli) {
             cli.removeListener('Call.incoming', this.onCallIncoming);
         }
-        if (this.dispatcherRef !== null) dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef !== null) {
+            dis.unregister(this.dispatcherRef);
+            this.dispatcherRef = null;
+        }
     }
 
     private onCallIncoming = (call) => {
