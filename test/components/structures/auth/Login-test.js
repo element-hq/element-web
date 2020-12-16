@@ -132,7 +132,7 @@ describe('Login', function() {
         // Set non-empty flows & matrixClient to get past the loading spinner
         root.setState({
             flows: [{
-                type: "m.login.sso",
+                "type": "m.login.sso",
                 "org.matrix.msc2858.identity_providers": [{
                     id: "a",
                     name: "Provider 1",
