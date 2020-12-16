@@ -79,7 +79,7 @@ interface IProps {
 }
 
 const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAfterLogin, primary}) => {
-    const providers = flow.identity_providers || flow["org.matrix.msc2858.identity_providers"] || [];
+    const providers = flow["org.matrix.msc2858.identity_providers"] || [];
     if (providers.length < 2) {
         return <div className="mx_SSOButtons">
             <SSOButton
