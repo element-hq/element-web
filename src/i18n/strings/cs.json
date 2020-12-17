@@ -2813,5 +2813,16 @@
     "Failed to save your profile": "Váš profil se nepodařilo uložit",
     "%(peerName)s held the call": "%(peerName)s podržel hovor",
     "You held the call <a>Resume</a>": "Podrželi jste hovor <a>Pokračovat</a>",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Můžete použít vlastní volbu serveru a přihlásit se k jiným Matrix serverům zadáním adresy URL domovského serveru. To vám umožní používat Element s existujícím Matrix účtem na jiném domovském serveru."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Můžete použít vlastní volbu serveru a přihlásit se k jiným Matrix serverům zadáním adresy URL domovského serveru. To vám umožní používat Element s existujícím Matrix účtem na jiném domovském serveru.",
+    "Unpin a widget to view it in this panel": "Odepněte widget, aby mohl být zobrazen v tomto panelu",
+    "You can only pin up to %(count)s widgets|other": "Můžete připnout až %(count)s widgetů",
+    "Edit widgets, bridges & bots": "Upravujte widgety, mosty a boty",
+    "a device cross-signing signature": "zařízení používající cross-signing podpis",
+    "This widget would like to:": "Tento widget by chtěl:",
+    "Modal Widget": "Modální widget",
+    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Toto můžete deaktivovat, pokud bude místnost použita pro spolupráci s externími týmy, které mají svůj vlastní domovský server. Toto nelze později změnit.",
+    "Join the conference from the room information card on the right": "Připojte se ke konferenci z informační karty místnosti napravo",
+    "Join the conference at the top of this room": "Připojte se ke konferenci v horní části této místnosti",
+    "There are advanced notifications which are not shown here.": "Existují pokročilá oznámení, která se zde nezobrazují.",
+    "Enable advanced debugging for the room list": "Povolit pokročilé ladění pro seznam místností"
 }
