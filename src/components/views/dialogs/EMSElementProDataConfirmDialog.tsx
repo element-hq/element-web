@@ -34,9 +34,9 @@ export default class EMSElementProDataConfirmDialog extends React.PureComponent<
             <QuestionDialog
                 onFinished={this.props.onFinished}
                 title={_t("Confirm Account Data Transfer")}
-                description={
-                    "Please accept transfer of data to the Element Pro setup wizard to continue. The setup wizard" +
-                    "will be able to access your account for the duration of the setup process."
+                description={_t(
+                    "Please accept transfer of data to the Element Pro setup wizard to continue. The setup wizard " +
+                    "will be able to access your account for the duration of the setup process.")
                 }
                 button={_t("Accept")}
             />

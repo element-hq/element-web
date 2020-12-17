@@ -2483,6 +2483,8 @@
     "Abort": "Abort",
     "Failed to connect to your homeserver. Please close this dialog and try again.": "Failed to connect to your homeserver. Please close this dialog and try again.",
     "Set up your own personal Element host": "Set up your own personal Element host",
+    "Please accept transfer of data to the Element Pro setup wizard to continue. The setup wizard will be able to access your account for the duration of the setup process.": "Please accept transfer of data to the Element Pro setup wizard to continue. The setup wizard will be able to access your account for the duration of the setup process.",
+    "Confirm Account Data Transfer": "Confirm Account Data Transfer",
     "Security & privacy": "Security & privacy",
     "All settings": "All settings",
     "Community settings": "Community settings",
