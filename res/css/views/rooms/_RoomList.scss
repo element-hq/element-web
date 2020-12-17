@@ -41,6 +41,8 @@ limitations under the License.
         padding: 0 0 0 24px;
         font-size: inherit;
         margin-top: 8px;
+        display: block;
+        text-align: start;
 
         &::before {
             content: '';
