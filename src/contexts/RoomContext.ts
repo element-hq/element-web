@@ -42,6 +42,7 @@ const RoomContext = createContext<IState>({
     canReply: false,
     useIRCLayout: false,
     matrixClientIsReady: false,
+    dragCounter: 0,
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;
