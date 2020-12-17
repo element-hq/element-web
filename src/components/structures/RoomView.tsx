@@ -572,8 +572,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             const roomView = this.roomView.current;
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
-            roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
+            roomView.removeEventListener('dragenter', this.onDragEnter);
+            roomView.removeEventListener('dragleave', this.onDragLeave);
         }
         dis.unregister(this.dispatcherRef);
         if (this.context) {
