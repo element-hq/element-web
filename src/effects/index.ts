@@ -64,6 +64,11 @@ type ConfettiOptions = {
      * use gradient instead of solid particle color
      */
     gradient: boolean,
+};
+type FireworksOptions = {
+    maxCount: number,
+    gravity: number,
+    probability: number,
 }
 
 /**
@@ -84,6 +89,18 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
             gradient: false,
         },
     } as Effect<ConfettiOptions>,
+    {
+        emojis: ['🎆'],
+        msgType: 'nic.custom.fireworks',
+        command: 'fireworks',
+        description: () => _td("Sends the given message with fireworks"),
+        fallbackMessage: () => _t("sends fireworks") + "🎆",
+        options: {
+            maxCount: 500,
+            gravity: 0.05,
+            probability: 0.04,
+        },
+    } as Effect<FireworksOptions>,
 ];
 
 
