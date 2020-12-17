@@ -187,6 +187,7 @@ export interface IState {
     rejecting?: boolean;
     rejectError?: Error;
     hasPinnedWidgets?: boolean;
+    dragCounter: number;
 }
 
 export default class RoomView extends React.Component<IProps, IState> {
@@ -237,6 +238,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReply: false,
             useIRCLayout: SettingsStore.getValue("useIRCLayout"),
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
+            dragCounter: 0,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -525,8 +527,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
-                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragenter', this.onDragEnter);
+                roomView.addEventListener('dragleave', this.onDragLeave);
             }
         }
 
@@ -1108,6 +1110,31 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.updateTopUnreadMessagesBar();
     };
 
+    private onDragEnter = ev => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        this.setState({
+            dragCounter: this.state.dragCounter + 1,
+            draggingFile: true,
+        });
+    };
+
+    private onDragLeave = ev => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        this.setState({
+            dragCounter: this.state.dragCounter - 1,
+        });
+
+        if (this.state.dragCounter == 0) {
+            this.setState({
+                draggingFile: false,
+            });
+        }
+    };
+
     private onDragOver = ev => {
         ev.stopPropagation();
         ev.preventDefault();
@@ -1115,7 +1142,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         ev.dataTransfer.dropEffect = 'none';
 
         if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
-            this.setState({ draggingFile: true });
             ev.dataTransfer.dropEffect = 'copy';
         }
     };
@@ -1126,14 +1152,12 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        this.setState({ draggingFile: false });
         dis.fire(Action.FocusComposer);
-    };
 
-    private onDragLeaveOrEnd = ev => {
-        ev.stopPropagation();
-        ev.preventDefault();
-        this.setState({ draggingFile: false });
+        this.setState({
+            draggingFile: false,
+            dragCounter: this.state.dragCounter - 1,
+        });
     };
 
     private injectSticker(url, info, text) {
