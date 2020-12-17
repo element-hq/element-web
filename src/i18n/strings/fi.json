@@ -2733,5 +2733,10 @@
     "Send text messages as you in your active room": "Lähetä aktiiviseen huoneeseesi tekstiviestejä itsenäsi",
     "Send text messages as you in this room": "Lähetä tähän huoneeseen tekstiviestejä itsenäsi",
     "Send messages as you in your active room": "Lähetä aktiiviseen huoneeseesi viestejä itsenäsi",
-    "Send messages as you in this room": "Lähetä tähän huoneeseen viestejä itsenäsi"
+    "Send messages as you in this room": "Lähetä tähän huoneeseen viestejä itsenäsi",
+    "Show message previews for reactions in DMs": "Näytä reaktioille esikatselu yksityisviesteissä",
+    "Show message previews for reactions in all rooms": "Näytä reaktioille esikatselu kaikissa huoneissa",
+    "New spinner design": "Uusi kehrääjä tyyli",
+    "Render LaTeX maths in messages": "Suorita LaTeX-matematiikkaa viesteissä",
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
 }
