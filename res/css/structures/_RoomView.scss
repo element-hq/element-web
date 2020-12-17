@@ -25,9 +25,6 @@ limitations under the License.
     width: 100%;
     height: 100%;
 
-    // This is an ugly fix for centering this element
-    margin-left: 6.25px;
-
     font-size: $font-18px;
     text-align: center;
 
@@ -120,8 +117,13 @@ limitations under the License.
     height: 50px;
 }
 
-.mx_RoomView_body {
+.mx_RoomView_container {
     position: relative; //for .mx_RoomView_auxPanel_fullHeight
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_RoomView_body {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -130,6 +132,8 @@ limitations under the License.
     .mx_RoomView_messagePanel, .mx_RoomView_messagePanelSpinner, .mx_RoomView_messagePanelSearchSpinner {
         order: 2;
     }
+
+    margin-right: 10px;
 }
 
 .mx_RoomView_body .mx_RoomView_timeline {

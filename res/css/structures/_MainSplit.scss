@@ -22,22 +22,30 @@ limitations under the License.
 }
 
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
-    padding: 0 5px 5px 5px;
-    // margin left to not allow the handle to not encroach on the space for the scrollbar
-    margin-left: 8px;
+    padding: 0 5px 5px 0px;
     height: calc(100vh - 51px); // height of .mx_RoomHeader.light-panel
+    
+    .mx_RightPanel_ResizeHandle {
+        width: 9px;
+    }
 
     &:hover .mx_RightPanel_ResizeHandle {
-        // Need to use important to override element style attributes
-        // set by re-resizable
-        top: 50% !important;
-        transform: translate(0, -50%);
+        &::before {
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translate(0, -50%);
 
-        height: 64px !important; // to match width of the ones on roomlist
-        width: 4px !important;
-        border-radius: 4px !important;
+            height: 64px;
+            width: 4px;
+            border-radius: 4px;
 
-        background-color: $primary-fg-color;
-        opacity: 0.8;
+            content: ' ';
+
+            background-color: $primary-fg-color;
+            opacity: 0.8;
+
+            margin-left: -10px;
+        }
     }
 }

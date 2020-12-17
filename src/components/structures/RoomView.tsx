@@ -2003,22 +2003,24 @@ export default class RoomView extends React.Component<IProps, IState> {
                             appsShown={this.state.showApps}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
-                            <div className="mx_RoomView_body">
+                            <div className={"mx_RoomView_container"}>
                                 {auxPanel}
-                                <div className={timelineClasses}>
-                                    {topUnreadMessagesBar}
-                                    {jumpToBottom}
-                                    {messagePanel}
-                                    {searchResultsPanel}
-                                </div>
-                                <div className={statusBarAreaClass}>
-                                    <div className="mx_RoomView_statusAreaBox">
-                                        <div className="mx_RoomView_statusAreaBox_line" />
-                                        {statusBar}
+                                <div className="mx_RoomView_body">
+                                    <div className={timelineClasses}>
+                                        {topUnreadMessagesBar}
+                                        {jumpToBottom}
+                                        {messagePanel}
+                                        {searchResultsPanel}
                                     </div>
+                                    <div className={statusBarAreaClass}>
+                                        <div className="mx_RoomView_statusAreaBox">
+                                            <div className="mx_RoomView_statusAreaBox_line" />
+                                            {statusBar}
+                                        </div>
+                                    </div>
+                                    {previewBar}
+                                    {messageComposer}
                                 </div>
-                                {previewBar}
-                                {messageComposer}
                             </div>
                         </MainSplit>
                     </ErrorBoundary>
