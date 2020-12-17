@@ -2738,5 +2738,9 @@
     "Show message previews for reactions in all rooms": "Näytä reaktioille esikatselu kaikissa huoneissa",
     "New spinner design": "Uusi kehrääjä tyyli",
     "Render LaTeX maths in messages": "Suorita LaTeX-matematiikkaa viesteissä",
-    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
+    "Downloading logs": "Ladataan lokeja",
+    "Uploading logs": "Lähetetään lokeja",
+    "Show chat effects": "Näytä keskustelutehosteet",
+    "Enable advanced debugging for the room list": "Ota huoneluettelon edistynyt virheenkorjaus käyttöön"
 }
