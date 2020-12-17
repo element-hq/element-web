@@ -2392,7 +2392,7 @@
     "Set up Secure Backup": "Nastavení zabezpečené zálohy",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Chraňte se před ztrátou přístupu k šifrovaným zprávám a datům zálohováním šifrovacích klíčů na serveru.",
     "Safeguard against losing access to encrypted messages & data": "Zabezpečení proti ztrátě přístupu k šifrovaným zprávám a datům",
-    "This is the beginning of your direct message history with <displayName/>.": "Toto je začátek historie vašich přímých zpráv s <displayName />.",
+    "This is the beginning of your direct message history with <displayName/>.": "Toto je začátek historie vašich přímých zpráv s uživatelem <displayName />.",
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "V této konverzaci jste pouze vy dva, dokud někdo z vás nepozve někoho dalšího.",
     "You created this room.": "Vytvořili jste tuto místnost.",
     "<a>Add a topic</a> to help people know what it is about.": "<a>Přidejte téma</a>, aby lidé věděli, o co jde.",
