@@ -45,7 +45,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     };
 
     let icon;
-    if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://") || idp.icon.startsWith("https://")) {
+    if (typeof idp?.icon === "string" && (idp.icon.startsWith("mxc://") || idp.icon.startsWith("https://"))) {
         icon = <img
             src={matrixClient.mxcUrlToHttp(idp.icon, 24, 24, "crop", true)}
             height="24"
