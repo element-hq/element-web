@@ -196,5 +196,19 @@
     "Thank you!": "רב תודות!",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "באמצעות הדפדפן הנוכחי שלך המראה של היישום יכול להיות שגוי לחלוטין וחלק מהאפשרויות לא תתפקדנה. אם תרצה לנסות בכל זאת תוכל אבל אז כל האחריות עליך!",
     "Checking for an update...": "בודק עדכונים...",
-    "Your %(brand)s is misconfigured": "ה %(brand)s שלך מוגדר באופן שגוי"
+    "Your %(brand)s is misconfigured": "ה %(brand)s שלך מוגדר באופן שגוי",
+    "Which officially provided instance you are using, if any": "איזה אינסטנס רשמי אתם משתמשים אם בכללאיזה אינסטנס רשמי אתם משתמשים אם בכלל",
+    "Your language of choice": "בחירת שפה",
+    "Whether or not you're logged in (we don't record your username)": "אם הנכם מחוברים או לא (אנחנו לא שומרים מידע על המשתמש שלכם)",
+    "The version of %(brand)s": "גירסאת מוצר %(brand)s",
+    "The platform you're on": "הפלטפורמה שהינכם משתמשים בה",
+    "Add Phone Number": "הוסף מספר טלפון",
+    "Click the button below to confirm adding this phone number.": "לחצו על הכפתור לאישור הוספת מספר הטלפון הזה.",
+    "Confirm adding phone number": "אישור הוספת מספר טלפון",
+    "Confirm adding this phone number by using Single Sign On to prove your identity.": "אשר הוספת מספר טלפון על ידי כניסה חד שלבית לאימות חשבונכם.",
+    "Add Email Address": "הוספת כתובת מייל",
+    "Confirm": "אישור",
+    "Click the button below to confirm adding this email address.": "לחץ על הכפתור בכדי לאשר הוספה של כתובת מייל הזו.",
+    "Confirm adding email": "אשר הוספת כתובת מייל",
+    "Single Sign On": "כניסה חד שלבית"
 }
