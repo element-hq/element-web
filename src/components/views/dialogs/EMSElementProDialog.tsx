@@ -20,9 +20,10 @@ import EMSElementProConfirmCloseDialog from './EMSElementProConfirmCloseDialog';
 import EMSElementProDataConfirmDialog from './EMSElementProDataConfirmDialog';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-import { _t } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { OwnProfileStore } from "../../../stores/OwnProfileStore";
+import {_t} from "../../../languageHandler";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./EMSElementProDialogTypes";
 
 interface IProps {
     requestClose(): void;
@@ -34,8 +35,8 @@ interface IState {
 }
 
 export default class EMSElementProDialog extends React.PureComponent<IProps, IState> {
-    iframeRef;
-    elementProSetupUrl: string;
+    private iframeRef: React.RefObject<HTMLIFrameElement> = React.createRef();
+    private readonly elementProSetupUrl: string;
 
     constructor(props: IProps) {
         super(props);
@@ -45,16 +46,15 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
             error: null,
         };
 
-        this.iframeRef = React.createRef();
         this.elementProSetupUrl = SdkConfig.get().ems_element_pro.url;
     }
 
-    private messageHandler = (message) => {
+    private messageHandler = (message: IPostmessage) => {
         if (!this.elementProSetupUrl.startsWith(message.origin)) {
             return;
         }
         switch (message.data.action) {
-            case 'element_pro_account_details_request':
+            case PostmessageAction.ElementProAccountDetailsRequest:
                 Modal.createDialog(
                     EMSElementProDataConfirmDialog,
                     {
@@ -66,14 +66,14 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
                     },
                 );
                 break;
-            case 'setup_complete':
+            case PostmessageAction.SetupComplete:
                 // Set as completed but let the user close the modal themselves
                 // so they have time to finish reading any information
                 this.setState({
                     completed: true,
                 });
                 break;
-            case 'close_dialog':
+            case PostmessageAction.CloseDialog:
                 this.onFinished(true);
                 break;
         }
@@ -97,11 +97,8 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
         }
     }
 
-    private sendMessage = (message) => {
-        this.iframeRef.contentWindow.postMessage(
-            message,
-            this.elementProSetupUrl,
-        )
+    private sendMessage = (message: IPostmessageResponseData) => {
+        this.iframeRef.current.contentWindow.postMessage(message, this.elementProSetupUrl);
     }
 
     private async sendAccountDetails() {
@@ -114,7 +111,7 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
             return;
         }
         this.sendMessage({
-            action: 'element_pro_account_details',
+            action: PostmessageAction.ElementProAccountDetails,
             account: {
                 accessToken: await MatrixClientPeg.get().getAccessToken(),
                 name: OwnProfileStore.instance.displayName,
@@ -145,7 +142,8 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
                 <div className="mx_EMSElementProDialog_container">
                     <iframe
                         src={this.elementProSetupUrl}
-                        ref={ref => this.iframeRef = ref}
+                        ref={this.iframeRef}
+                        sandbox="allow-forms allow-scripts allow-same-origin"
                     />
                     {this.state.error &&
                         <div>

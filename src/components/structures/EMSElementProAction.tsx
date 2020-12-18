@@ -16,7 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import EMSElementProDialog from "../views/dialogs/EMSElementProDialog";
-import Modal from "../../Modal";
+import Modal, {IHandle} from "../../Modal";
 import {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
@@ -28,8 +28,8 @@ interface IProps {}
 interface IState {}
 
 export default class EMSElementProAction extends React.PureComponent<IProps, IState> {
-    closingAllowed = false;
-    modalRef: any;
+    private closingAllowed = false;
+    private modalRef: IHandle<void[]>;
 
     private openDialog = () => {
         this.modalRef = Modal.createTrackedDialog(
@@ -52,7 +52,7 @@ export default class EMSElementProAction extends React.PureComponent<IProps, ISt
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconHosting"
                     label={_t("Get your own Element!")}
-                    onClick={(e) => this.openDialog()}
+                    onClick={this.openDialog}
                 />
             </IconizedContextMenuOptionList>
         );

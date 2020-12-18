@@ -319,12 +319,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 "<a>Upgrade</a> to your own domain", {},
                                 {
                                     a: sub => (
-                                        <a
-                                            href={signupLink}
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                            tabIndex={-1}
-                                        >{sub}</a>
+                                        <a href={signupLink} target="_blank" rel="noreferrer noopener" tabIndex={-1}>
+                                            {sub}
+                                        </a>
                                     ),
                                 },
                             )}
