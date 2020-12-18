@@ -145,7 +145,6 @@ export default class Fireworks implements ICanvasEffect {
     public stop = async () => {
         this.isRunning = false;
         this.particles = [];
-        this.context.canvas.style.opacity = "1";
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     }
 
