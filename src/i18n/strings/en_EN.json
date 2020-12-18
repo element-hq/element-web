@@ -847,6 +847,7 @@
     "This is your list of users/servers you have blocked - don't leave the room!": "This is your list of users/servers you have blocked - don't leave the room!",
     "Sends the given message with confetti": "Sends the given message with confetti",
     "sends confetti": "sends confetti",
+    "You held the call <a>Switch</a>": "You held the call <a>Switch</a>",
     "You held the call <a>Resume</a>": "You held the call <a>Resume</a>",
     "%(peerName)s held the call": "%(peerName)s held the call",
     "Video Call": "Video Call",
