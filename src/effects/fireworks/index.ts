@@ -26,7 +26,6 @@ export type FireworksOptions = {
      * gravity value that firework adds to shift from it's start position
      */
     gravity: number,
-    probability: number,
 }
 
 type FireworksParticle = {
@@ -58,7 +57,6 @@ type FireworksParticle = {
 export const DefaultOptions: FireworksOptions = {
     maxCount: 500,
     gravity: 0.05,
-    probability: 0.04,
 };
 
 export default class Fireworks implements ICanvasEffect {
@@ -95,7 +93,7 @@ export default class Fireworks implements ICanvasEffect {
         this.supportsAnimationFrame.call(window, this.updateWorld);
     }
     private update = () => {
-        if (this.particles.length < this.options.maxCount && Math.random() < this.options.probability) {
+        if (this.particles.length < this.options.maxCount) {
             this.createFirework();
         }
         const alive = [];
@@ -109,9 +107,8 @@ export default class Fireworks implements ICanvasEffect {
 
     private paint = () => {
         if (!this.context || !this.context.canvas) return;
-        this.context.globalCompositeOperation = 'source-over';
-        this.context.fillStyle = "rgba(0,0,0,0.2)";
-        this.context.canvas.style.opacity = "0.8";
+        this.context.globalCompositeOperation = 'destination-out';
+        this.context.fillStyle = "rgba(0,0,0,0.5)";
         this.context.fillRect(0, 0, this.context.canvas.width, this.context.canvas.height);
         this.context.globalCompositeOperation = 'lighter';
         for (let i=0; i<this.particles.length; i++) {
