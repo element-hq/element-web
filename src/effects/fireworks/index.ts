@@ -19,23 +19,38 @@ import ICanvasEffect from '../ICanvasEffect';
 
 export type FireworksOptions = {
     /**
-     * the maximum number of the fireworks
+     * max fireworks count
      */
     maxCount: number,
     /**
-     * the alpha opacity of the fireworks (between 0 and 1, where 1 is opaque and 0 is invisible)
+     * gravity value that firework adds to shift from it's start position
      */
     gravity: number,
     probability: number,
 }
 
 type FireworksParticle = {
+    /**
+     * color
+     */
     color: string,
+    /**
+     * x,y are the point where the particle starts to position on canvas
+     */
     x: number,
     y: number,
+    /**
+     * vx,vy shift values from x and y
+     */
     vx: number,
     vy: number,
+    /**
+     * the alpha opacity of the firework particle (between 0 and 1, where 1 is opaque and 0 is invisible)
+     */
     alpha: number,
+    /**
+     * w,h width and height
+     */
     w: number,
     h: number
 }
