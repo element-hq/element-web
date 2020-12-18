@@ -15,13 +15,12 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {RoomMember} from "matrix-js-sdk/src/matrix";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import SdkConfig from "../../../SdkConfig";
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
@@ -132,12 +131,12 @@ class ThreepidMember extends Member {
     }
 }
 
-class DMUserTile extends React.PureComponent {
-    static propTypes = {
-        member: PropTypes.object.isRequired, // Should be a Member (see interface above)
-        onRemove: PropTypes.func, // takes 1 argument, the member being removed
-    };
+interface IDMUserTileProps {
+    member: RoomMember;
+    onRemove: (RoomMember) => any;
+}
 
+class DMUserTile extends React.PureComponent<IDMUserTileProps> {
     _onRemove = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
@@ -173,7 +172,9 @@ class DMUserTile extends React.PureComponent {
                     className='mx_InviteDialog_userTile_remove'
                     onClick={this._onRemove}
                 >
-                    <img src={require("../../../../res/img/icon-pill-remove.svg")} alt={_t('Remove')} width={8} height={8} />
+                    <img src={require("../../../../res/img/icon-pill-remove.svg")}
+                        alt={_t('Remove')} width={8} height={8}
+                    />
                 </AccessibleButton>
             );
         }
@@ -190,15 +191,15 @@ class DMUserTile extends React.PureComponent {
     }
 }
 
-class DMRoomTile extends React.PureComponent {
-    static propTypes = {
-        member: PropTypes.object.isRequired, // Should be a Member (see interface above)
-        lastActiveTs: PropTypes.number,
-        onToggle: PropTypes.func.isRequired, // takes 1 argument, the member being toggled
-        highlightWord: PropTypes.string,
-        isSelected: PropTypes.bool,
-    };
+interface IDMRoomTileProps {
+    member: RoomMember;
+    lastActiveTs: number;
+    onToggle: (RoomMember) => any;
+    highlightWord: string;
+    isSelected: boolean;
+}
 
+class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     _onClick = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
@@ -298,28 +299,45 @@ class DMRoomTile extends React.PureComponent {
     }
 }
 
-export default class InviteDialog extends React.PureComponent {
-    static propTypes = {
-        // Takes an array of user IDs/emails to invite.
-        onFinished: PropTypes.func.isRequired,
+interface IInviteDialogProps {
+    // Takes an array of user IDs/emails to invite.
+    onFinished: (toInvite?: string[]) => any;
 
-        // The kind of invite being performed. Assumed to be KIND_DM if
-        // not provided.
-        kind: PropTypes.string,
+    // The kind of invite being performed. Assumed to be KIND_DM if
+    // not provided.
+    kind: string,
 
-        // The room ID this dialog is for. Only required for KIND_INVITE.
-        roomId: PropTypes.string,
+    // The room ID this dialog is for. Only required for KIND_INVITE.
+    roomId: string,
 
-        // Initial value to populate the filter with
-        initialText: PropTypes.string,
-    };
+    // Initial value to populate the filter with
+    initialText: string,
+}
 
+interface IInviteDialogState {
+    targets: RoomMember[]; // array of Member objects (see interface above)
+    filterText: string;
+    recents: { user: Member, userId: string }[];
+    numRecentsShown: number;
+    suggestions: { user: Member, userId: string }[];
+    numSuggestionsShown: number;
+    serverResultsMixin: { user: Member, userId: string }[];
+    threepidResultsMixin: { user: Member, userId: string}[];
+    canUseIdentityServer: boolean;
+    tryingIdentityServer: boolean;
+
+    // These two flags are used for the 'Go' button to communicate what is going on.
+    busy: boolean,
+    errorText: string,
+}
+
+export default class InviteDialog extends React.PureComponent<IInviteDialogProps, IInviteDialogState> {
     static defaultProps = {
         kind: KIND_DM,
         initialText: "",
     };
 
-    _debounceTimer: number = null;
+    _debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
     _editorRef: any = null;
 
     constructor(props) {
@@ -348,8 +366,8 @@ export default class InviteDialog extends React.PureComponent {
             numRecentsShown: INITIAL_ROOMS_SHOWN,
             suggestions: this._buildSuggestions(alreadyInvited),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
-            serverResultsMixin: [], // { user: DirectoryMember, userId: string }[], like recents and suggestions
-            threepidResultsMixin: [], // { user: ThreepidMember, userId: string}[], like recents and suggestions
+            serverResultsMixin: [],
+            threepidResultsMixin: [],
             canUseIdentityServer: !!MatrixClientPeg.get().getIdentityServerUrl(),
             tryingIdentityServer: false,
 
@@ -367,7 +385,7 @@ export default class InviteDialog extends React.PureComponent {
         }
     }
 
-    static buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
+    static buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number}[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -430,7 +448,7 @@ export default class InviteDialog extends React.PureComponent {
         return recents;
     }
 
-    _buildSuggestions(excludedTargetIds: Set<string>): {userId: string, user: RoomMember} {
+    _buildSuggestions(excludedTargetIds: Set<string>): {userId: string, user: RoomMember}[] {
         const maxConsideredMembers = 200;
         const joinedRooms = MatrixClientPeg.get().getRooms()
             .filter(r => r.getMyMembership() === 'join' && r.getJoinedMemberCount() <= maxConsideredMembers);
@@ -470,7 +488,7 @@ export default class InviteDialog extends React.PureComponent {
         }, {});
 
         // Generates { userId: {member, numRooms, score} }
-        const memberScores = Object.values(memberRooms).reduce((scores, entry) => {
+        const memberScores = Object.values(memberRooms).reduce((scores, entry: {member: RoomMember, rooms: Room[]}) => {
             const numMembersTotal = entry.rooms.reduce((c, r) => c + r.getJoinedMemberCount(), 0);
             const maxRange = maxConsideredMembers * entry.rooms.length;
             scores[entry.member.userId] = {
@@ -603,7 +621,7 @@ export default class InviteDialog extends React.PureComponent {
             return;
         }
 
-        const createRoomOptions = {inlineErrors: true};
+        const createRoomOptions = {inlineErrors: true} as any; // XXX: Type out `createRoomOptions`
 
         if (privateShouldBeEncrypted()) {
             // Check whether all users have uploaded device keys before.
@@ -620,7 +638,7 @@ export default class InviteDialog extends React.PureComponent {
 
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
-        let createRoomPromise = Promise.resolve();
+        let createRoomPromise = Promise.resolve(null) as Promise<string | null | boolean>;
         const isSelf = targetIds.length === 1 && targetIds[0] === MatrixClientPeg.get().getUserId();
         if (targetIds.length === 1 && !isSelf) {
             createRoomOptions.dmUserId = targetIds[0];
@@ -990,7 +1008,8 @@ export default class InviteDialog extends React.PureComponent {
         const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
         if (this.state.filterText && hasMixins && kind === 'suggestions') {
             // We don't want to duplicate members though, so just exclude anyone we've already seen.
-            const notAlreadyExists = (u: Member): boolean => {
+            // The type of u is a pain to define but members of both mixins have the 'userId' property
+            const notAlreadyExists = (u: any): boolean => {
                 return !sourceMembers.some(m => m.userId === u.userId)
                     && !priorityAdditionalMembers.some(m => m.userId === u.userId)
                     && !otherAdditionalMembers.some(m => m.userId === u.userId);
@@ -1169,7 +1188,8 @@ export default class InviteDialog extends React.PureComponent {
 
             if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
                 const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-                const inviteText = _t("This won't invite them to %(communityName)s. " +
+                const inviteText = _t(
+                    "This won't invite them to %(communityName)s. " +
                     "To invite someone to %(communityName)s, click <a>here</a>",
                     {communityName}, {
                         userId: () => {
@@ -1209,7 +1229,9 @@ export default class InviteDialog extends React.PureComponent {
                         userId: () =>
                             <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
                         a: (sub) =>
-                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">
+                                {sub}
+                            </a>,
                     },
                 );
             } else {
@@ -1220,7 +1242,9 @@ export default class InviteDialog extends React.PureComponent {
                         userId: () =>
                             <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
                         a: (sub) =>
-                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">
+                                {sub}
+                            </a>,
                     },
                 );
             }

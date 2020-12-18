@@ -24,7 +24,7 @@ import { ActionPayload } from '../../../dispatcher/payloads';
 import CallHandler from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
 import FormButton from '../elements/FormButton';
-import { CallState } from 'matrix-js-sdk/lib/webrtc/call';
+import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 
 interface IProps {
 }

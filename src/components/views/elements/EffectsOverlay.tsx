@@ -16,7 +16,7 @@
  */
 import React, { FunctionComponent, useEffect, useRef } from 'react';
 import dis from '../../../dispatcher/dispatcher';
-import ICanvasEffect  from '../../../effects/ICanvasEffect';
+import ICanvasEffect from '../../../effects/ICanvasEffect';
 import {CHAT_EFFECTS} from '../../../effects'
 
 interface IProps {

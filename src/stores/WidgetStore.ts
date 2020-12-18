@@ -134,6 +134,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         // first clean out old widgets from the map which originate from this room
         // otherwise we are out of sync with the rest of the app with stale widget events during removal
         Array.from(this.widgetMap.values()).forEach(app => {
+            if (app.roomId !== room.roomId) return; // skip - wrong room
             this.widgetMap.delete(widgetUid(app));
         });
 
@@ -233,7 +234,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
         // Clean up the pinned record
         Object.keys(roomInfo).forEach(wId => {
-            if (!roomInfo.widgets.some(w => w.id === wId)) {
+            if (!roomInfo.widgets.some(w => w.id === wId) || !roomInfo.pinned[wId]) {
                 delete roomInfo.pinned[wId];
             }
         });

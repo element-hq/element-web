@@ -21,6 +21,7 @@ limitations under the License.
 import Matrix from 'matrix-js-sdk';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import {decryptAES, encryptAES} from "matrix-js-sdk/src/crypto/aes";
 
 import {IMatrixClientCreds, MatrixClientPeg} from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
@@ -147,20 +148,13 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
  * Gets the user ID of the persisted session, if one exists. This does not validate
  * that the user's credentials still work, just that they exist and that a user ID
  * is associated with them. The session is not loaded.
- * @returns {String} The persisted session's owner, if an owner exists. Null otherwise.
+ * @returns {[String, bool]} The persisted session's owner and whether the stored
+ *     session is for a guest user, if an owner exists. If there is no stored session,
+ *     return [null, null].
  */
-export function getStoredSessionOwner(): string {
-    const {hsUrl, userId, accessToken} = getLocalStorageSessionVars();
-    return hsUrl && userId && accessToken ? userId : null;
-}
-
-/**
- * @returns {bool} True if the stored session is for a guest user or false if it is
- *     for a real user. If there is no stored session, return null.
- */
-export function getStoredSessionIsGuest(): boolean {
-    const sessVars = getLocalStorageSessionVars();
-    return sessVars.hsUrl && sessVars.userId && sessVars.accessToken ? sessVars.isGuest : null;
+export async function getStoredSessionOwner(): Promise<[string, boolean]> {
+    const {hsUrl, userId, hasAccessToken, isGuest} = await getStoredSessionVars();
+    return hsUrl && userId && hasAccessToken ? [userId, isGuest] : [null, null];
 }
 
 /**
@@ -197,8 +191,8 @@ export function attemptTokenLogin(
         },
     ).then(function(creds) {
         console.log("Logged in with token");
-        return clearStorage().then(() => {
-            persistCredentialsToLocalStorage(creds);
+        return clearStorage().then(async () => {
+            await persistCredentials(creds);
             // remember that we just logged in
             sessionStorage.setItem("mx_fresh_login", String(true));
             return true;
@@ -276,24 +270,42 @@ function registerAsGuest(
     });
 }
 
-export interface ILocalStorageSession {
+export interface IStoredSession {
     hsUrl: string;
     isUrl: string;
-    accessToken: string;
+    hasAccessToken: boolean;
+    accessToken: string | object;
     userId: string;
     deviceId: string;
     isGuest: boolean;
 }
 
 /**
- * Retrieves information about the stored session in localstorage. The session
+ * Retrieves information about the stored session from the browser's storage. The session
  * may not be valid, as it is not tested for consistency here.
  * @returns {Object} Information about the session - see implementation for variables.
  */
-export function getLocalStorageSessionVars(): ILocalStorageSession {
+export async function getStoredSessionVars(): Promise<IStoredSession> {
     const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
     const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
-    const accessToken = localStorage.getItem("mx_access_token");
+    let accessToken;
+    try {
+        accessToken = await StorageManager.idbLoad("account", "mx_access_token");
+    } catch (e) {}
+    if (!accessToken) {
+        accessToken = localStorage.getItem("mx_access_token");
+        if (accessToken) {
+            try {
+                // try to migrate access token to IndexedDB if we can
+                await StorageManager.idbSave("account", "mx_access_token", accessToken);
+                localStorage.removeItem("mx_access_token");
+            } catch (e) {}
+        }
+    }
+    // if we pre-date storing "mx_has_access_token", but we retrieved an access
+    // token, then we should say we have an access token
+    const hasAccessToken =
+        (localStorage.getItem("mx_has_access_token") === "true") || !!accessToken;
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
 
@@ -305,7 +317,43 @@ export function getLocalStorageSessionVars(): ILocalStorageSession {
         isGuest = localStorage.getItem("matrix-is-guest") === "true";
     }
 
-    return {hsUrl, isUrl, accessToken, userId, deviceId, isGuest};
+    return {hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest};
+}
+
+// The pickle key is a string of unspecified length and format.  For AES, we
+// need a 256-bit Uint8Array.  So we HKDF the pickle key to generate the AES
+// key.  The AES key should be zeroed after it is used.
+async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array> {
+    const pickleKeyBuffer = new Uint8Array(pickleKey.length);
+    for (let i = 0; i < pickleKey.length; i++) {
+        pickleKeyBuffer[i] = pickleKey.charCodeAt(i);
+    }
+    const hkdfKey = await window.crypto.subtle.importKey(
+        "raw", pickleKeyBuffer, "HKDF", false, ["deriveBits"],
+    );
+    pickleKeyBuffer.fill(0);
+    return new Uint8Array(await window.crypto.subtle.deriveBits(
+        {
+            name: "HKDF", hash: "SHA-256",
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore: https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/879
+            salt: new Uint8Array(32), info: new Uint8Array(0),
+        },
+        hkdfKey,
+        256,
+    ));
+}
+
+async function abortLogin() {
+    const signOut = await showStorageEvictedDialog();
+    if (signOut) {
+        await clearStorage();
+        // This error feels a bit clunky, but we want to make sure we don't go any
+        // further and instead head back to sign in.
+        throw new AbortLoginAndRebuildStorage(
+            "Aborting login in progress because of storage inconsistency",
+        );
+    }
 }
 
 // returns a promise which resolves to true if a session is found in
@@ -325,7 +373,11 @@ async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promis
         return false;
     }
 
-    const {hsUrl, isUrl, accessToken, userId, deviceId, isGuest} = getLocalStorageSessionVars();
+    const {hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest} = await getStoredSessionVars();
+
+    if (hasAccessToken && !accessToken) {
+        abortLogin();
+    }
 
     if (accessToken && userId && hsUrl) {
         if (ignoreGuest && isGuest) {
@@ -333,9 +385,15 @@ async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promis
             return false;
         }
 
+        let decryptedAccessToken = accessToken;
         const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
         if (pickleKey) {
             console.log("Got pickle key");
+            if (typeof accessToken !== "string") {
+                const encrKey = await pickleKeyToAesKey(pickleKey);
+                decryptedAccessToken = await decryptAES(accessToken, encrKey, "access_token");
+                encrKey.fill(0);
+            }
         } else {
             console.log("No pickle key available");
         }
@@ -347,7 +405,7 @@ async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promis
         await doSetLoggedIn({
             userId: userId,
             deviceId: deviceId,
-            accessToken: accessToken,
+            accessToken: decryptedAccessToken as string,
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: isGuest,
@@ -486,15 +544,7 @@ async function doSetLoggedIn(
     // crypto store, we'll be generally confused when handling encrypted data.
     // Show a modal recommending a full reset of storage.
     if (results.dataInLocalStorage && results.cryptoInited && !results.dataInCryptoStore) {
-        const signOut = await showStorageEvictedDialog();
-        if (signOut) {
-            await clearStorage();
-            // This error feels a bit clunky, but we want to make sure we don't go any
-            // further and instead head back to sign in.
-            throw new AbortLoginAndRebuildStorage(
-                "Aborting login in progress because of storage inconsistency",
-            );
-        }
+        await abortLogin();
     }
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
@@ -516,7 +566,7 @@ async function doSetLoggedIn(
 
     if (localStorage) {
         try {
-            persistCredentialsToLocalStorage(credentials);
+            await persistCredentials(credentials);
             // make sure we don't think that it's a fresh login any more
             sessionStorage.removeItem("mx_fresh_login");
         } catch (e) {
@@ -545,18 +595,55 @@ function showStorageEvictedDialog(): Promise<boolean> {
 // `instanceof`. Babel 7 supports this natively in their class handling.
 class AbortLoginAndRebuildStorage extends Error { }
 
-function persistCredentialsToLocalStorage(credentials: IMatrixClientCreds): void {
+async function persistCredentials(credentials: IMatrixClientCreds): Promise<void> {
     localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
         localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
     }
     localStorage.setItem("mx_user_id", credentials.userId);
-    localStorage.setItem("mx_access_token", credentials.accessToken);
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
 
+    // store whether we expect to find an access token, to detect the case
+    // where IndexedDB is blown away
+    if (credentials.accessToken) {
+        localStorage.setItem("mx_has_access_token", "true");
+    } else {
+        localStorage.deleteItem("mx_has_access_token");
+    }
+
     if (credentials.pickleKey) {
+        let encryptedAccessToken;
+        try {
+            // try to encrypt the access token using the pickle key
+            const encrKey = await pickleKeyToAesKey(credentials.pickleKey);
+            encryptedAccessToken = await encryptAES(credentials.accessToken, encrKey, "access_token");
+            encrKey.fill(0);
+        } catch (e) {
+            console.warn("Could not encrypt access token", e);
+        }
+        try {
+            // save either the encrypted access token, or the plain access
+            // token if we were unable to encrypt (e.g. if the browser doesn't
+            // have WebCrypto).
+            await StorageManager.idbSave(
+                "account", "mx_access_token",
+                encryptedAccessToken || credentials.accessToken,
+            );
+        } catch (e) {
+            // if we couldn't save to indexedDB, fall back to localStorage.  We
+            // store the access token unencrypted since localStorage only saves
+            // strings.
+            localStorage.setItem("mx_access_token", credentials.accessToken);
+        }
         localStorage.setItem("mx_has_pickle_key", String(true));
     } else {
+        try {
+            await StorageManager.idbSave(
+                "account", "mx_access_token", credentials.accessToken,
+            );
+        } catch (e) {
+            localStorage.setItem("mx_access_token", credentials.accessToken);
+        }
         if (localStorage.getItem("mx_has_pickle_key")) {
             console.error("Expected a pickle key, but none provided.  Encryption may not work.");
         }
@@ -732,6 +819,10 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         const pendingInvites = ThreepidInviteStore.instance.getWireInvites();
 
         window.localStorage.clear();
+
+        try {
+            await StorageManager.idbDelete("account", "mx_access_token");
+        } catch (e) {}
 
         // now restore those invites
         if (!opts?.deleteEverything) {

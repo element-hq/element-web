@@ -40,6 +40,9 @@ import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermi
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { CHAT_EFFECTS } from "../../effects";
+import { containsEmoji } from "../../effects/utils";
+import dis from "../../dispatcher/dispatcher";
 
 // TODO: Purge this from the universe
 
@@ -123,6 +126,14 @@ export class StopGapWidgetDriver extends WidgetDriver {
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
+
+            if (eventType === EventType.RoomMessage) {
+                CHAT_EFFECTS.forEach((effect) => {
+                    if (containsEmoji(content, effect.emojis)) {
+                        dis.dispatch({action: `effects.${effect.command}`});
+                    }
+                });
+            }
         }
 
         return {roomId, eventId: r.event_id};
