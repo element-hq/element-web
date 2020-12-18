@@ -74,7 +74,6 @@ type FireworksOptions = {
      * gravity value that firework adds to shift from it's start position
      */
     gravity: number,
-    probability: number,
 }
 
 /**
@@ -104,7 +103,6 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
         options: {
             maxCount: 500,
             gravity: 0.05,
-            probability: 0.04,
         },
     } as Effect<FireworksOptions>,
 ];
