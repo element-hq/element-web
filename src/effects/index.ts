@@ -66,7 +66,13 @@ type ConfettiOptions = {
     gradient: boolean,
 };
 type FireworksOptions = {
+    /**
+     * max fireworks count
+     */
     maxCount: number,
+    /**
+     * gravity value that firework adds to shift from it's start position
+     */
     gravity: number,
     probability: number,
 }
