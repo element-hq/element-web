@@ -35,6 +35,10 @@ limitations under the License.
 
 .mx_CallView_pip {
     width: 320px;
+    padding-bottom: 8px;
+    margin-top: 10px;
+    box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
 
     .mx_CallView_voice {
         height: 180px;
@@ -84,6 +88,7 @@ limitations under the License.
         border-radius: 2000px;
         overflow: hidden;
         position: relative;
+        /* Blurred avatar images & pause icon for on-hold removed for now
         &::after {
             position: absolute;
             content: '';
@@ -101,17 +106,21 @@ limitations under the License.
         .mx_CallView_pip &::after {
             background-size: 30px;
         }
+        */
     }
+    /*
     .mx_BaseAvatar {
         filter: blur(20px);
         overflow: hidden;
     }
+    */
 }
 
 .mx_CallView_voice_secondaryAvatarContainer {
     border-radius: 2000px;
     overflow: hidden;
     position: relative;
+    /*
     &::after {
         position: absolute;
         content: '';
@@ -129,6 +138,7 @@ limitations under the License.
     .mx_CallView_pip &::after {
         background-size: 24px;
     }
+    */
 }
 
 .mx_CallView_voice_holdText {
