@@ -341,7 +341,8 @@ export default class CallHandler {
                             title: _t("Answered Elsewhere"),
                             description: _t("The call was answered on another device."),
                         });
-                    } else {
+                    } else if (oldState !== CallState.Fledgling) {
+                        // don't play the end-call sound for calls that never got off the ground
                         this.play(AudioID.CallEnd);
                     }
             }
