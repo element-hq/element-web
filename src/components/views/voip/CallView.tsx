@@ -19,7 +19,7 @@ import React, { createRef, CSSProperties, ReactNode } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import VideoFeed, { VideoFeedType } from "./VideoFeed";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
@@ -423,7 +423,9 @@ export default class CallView extends React.Component<IProps, IState> {
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
         let onHoldText = null;
         if (this.state.isRemoteOnHold) {
-            onHoldText = _t("You held the call <a>Resume</a>", {}, {
+            const holdString = CallHandler.sharedInstance().hasAnyUnheldCall() ?
+                _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
+            onHoldText = _t(holdString, {}, {
                 a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
                     {sub}
                 </AccessibleButton>,
