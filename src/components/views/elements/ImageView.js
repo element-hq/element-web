@@ -46,7 +46,10 @@ export default class ImageView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { rotationDegrees: 0 };
+        this.state = {
+            rotationDegrees: 0,
+            zoom: 100,
+        };
     }
 
     onKeyDown = (ev) => {
@@ -56,6 +59,16 @@ export default class ImageView extends React.Component {
             this.props.onFinished();
         }
     };
+
+    onWheel = (ev) => {
+        if (ev.ctrlKey) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            this.setState({
+                zoom: this.state.zoom - ev.deltaY,
+            });
+        }
+    }
 
     onRedactClick = () => {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
@@ -98,6 +111,18 @@ export default class ImageView extends React.Component {
         this.setState({ rotationDegrees });
     };
 
+    zoomIn = () => {
+        this.setState({
+            zoom: this.state.zoom + 10,
+        });
+    };
+
+    zoomOut = () => {
+        this.setState({
+            zoom: this.state.zoom - 10,
+        });
+    }
+
     render() {
 /*
         // In theory max-width: 80%, max-height: 80% on the CSS should work
@@ -130,12 +155,13 @@ export default class ImageView extends React.Component {
         let style = {};
         let res;
 
+        style = {
+            width: this.state.zoom + "%",
+            height: this.state.zoom + "%",
+        };
+
         if (this.props.width && this.props.height) {
-            style = {
-                width: this.props.width,
-                height: this.props.height,
-            };
-            res = style.width + "x" + style.height + "px";
+            res = this.props.width + "x" + this.props.height + "px";
         }
 
         let size;
@@ -190,6 +216,7 @@ export default class ImageView extends React.Component {
                 returnFocus={true}
                 lockProps={{
                     onKeyDown: this.onKeyDown,
+                    onWheel: this.onWheel,
                     role: "dialog",
                 }}
                 className="mx_ImageView"
@@ -204,6 +231,12 @@ export default class ImageView extends React.Component {
                             <span className="mx_ImageView_size">{ sizeRes }</span>
                         </div>
                         <div className="mx_ImageView_toolbar">
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.zoomIn }>
+                                <img src={require("../../../../res/img/plus.svg")} alt={ _t('Zoom in') } width="18" height="18" />
+                            </AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Zoom out")} onClick={ this.zoomOut }>
+                                <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Zoom out') } width="18" height="18" />
+                            </AccessibleButton>
                             <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.rotateCounterClockwise }>
                                 <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
                             </AccessibleButton>
