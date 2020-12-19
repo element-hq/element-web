@@ -153,7 +153,7 @@ export default class ImageView extends React.Component {
         let mayRedact = false;
         const showEventMeta = !!this.props.mxEvent;
 
-        let eventMeta;
+        let metadata;
         if (showEventMeta) {
             // Figure out the sender, defaulting to mxid
             let sender = this.props.mxEvent.getSender();
@@ -165,7 +165,7 @@ export default class ImageView extends React.Component {
                 if (member) sender = member.name;
             }
 
-            eventMeta = (<div className="mx_ImageView_metadata">
+            metadata = (<div className="mx_ImageView_metadata">
                 { _t('Uploaded on %(date)s by %(user)s', {
                     date: formatDate(new Date(this.props.mxEvent.getTs())),
                     user: sender,
@@ -173,11 +173,13 @@ export default class ImageView extends React.Component {
             </div>);
         }
 
-        let eventRedact;
+        let redactButton;
         if (mayRedact) {
-            eventRedact = (<div className="mx_ImageView_button" onClick={this.onRedactClick}>
-                { _t('Remove') }
-            </div>);
+            redactButton = (
+                <AccessibleButton className="mx_ImageView_button" title={_t("Remove")} onClick={ this.onRedactClick }>
+                    <img src={require("../../../../res/img/cancel-white.svg")} alt={ _t('Remove') } width="18" height="18" />
+                </AccessibleButton>
+            );
         }
 
         const rotationDegrees = this.state.rotationDegrees;
@@ -192,40 +194,34 @@ export default class ImageView extends React.Component {
                 }}
                 className="mx_ImageView"
             >
-                <div className="mx_ImageView_lhs">
-                </div>
                 <div className="mx_ImageView_content">
-                    <img src={this.props.src} title={this.props.name} style={effectiveStyle} className="mainImage" />
-                    <div className="mx_ImageView_labelWrapper">
+                    <div className="mx_ImageView_panel">
                         <div className="mx_ImageView_label">
-                            <AccessibleButton className="mx_ImageView_rotateCounterClockwise" title={_t("Rotate Left")} onClick={ this.rotateCounterClockwise }>
-                                <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
-                            </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_rotateClockwise" title={_t("Rotate Right")} onClick={ this.rotateClockwise }>
-                                <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
-                            </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_cancel" title={_t("Close")} onClick={ this.props.onFinished }>
-                              <img src={require("../../../../res/img/cancel-white.svg")} width="18" height="18" alt={ _t('Close') } />
-                            </AccessibleButton>
-                            <div className="mx_ImageView_shim">
-                            </div>
                             <div className="mx_ImageView_name">
                                 { this.getName() }
                             </div>
-                            { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
-                                <div className="mx_ImageView_download">
-                                        { _t('Download this file') }<br />
-                                         <span className="mx_ImageView_size">{ sizeRes }</span>
-                                </div>
+                            { metadata }
+                            <span className="mx_ImageView_size">{ sizeRes }</span>
+                        </div>
+                        <div className="mx_ImageView_toolbar">
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.rotateCounterClockwise }>
+                                <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
+                            </AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Right")} onClick={ this.rotateClockwise }>
+                                <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
+                            </AccessibleButton>
+                            <a className="mx_ImageView_button" href={ this.props.src } download={ this.props.name } title={_t("Download")} target="_blank" rel="noopener">
+                                <img src={require("../../../../res/img/download.svg")} width="18" height="18" alt={ _t('Download') } />
                             </a>
-                            { eventRedact }
-                            <div className="mx_ImageView_shim">
-                            </div>
+                            { redactButton }
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Close")} onClick={ this.props.onFinished }>
+                                <img src={require("../../../../res/img/cancel-white.svg")} width="18" height="18" alt={ _t('Close') } />
+                            </AccessibleButton>
                         </div>
                     </div>
-                </div>
-                <div className="mx_ImageView_rhs">
+                    <div className="mx_ImageView_imageBox">
+                        <img src={this.props.src} title={this.props.name} style={effectiveStyle} className="mainImage" />
+                    </div>
                 </div>
             </FocusLock>
         );
