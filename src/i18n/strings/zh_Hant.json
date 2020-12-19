@@ -2976,5 +2976,7 @@
     "You've reached the maximum number of simultaneous calls.": "您已達到同時通話的最大數量。",
     "Too Many Calls": "太多通話",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "在純文字訊息前加入 ┬──┬ ノ( ゜-゜ノ)",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "在純文字訊息前加入 (╯°□°）╯︵ ┻━┻"
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "在純文字訊息前加入 (╯°□°）╯︵ ┻━┻",
+    "sends fireworks": "傳送煙火",
+    "Sends the given message with fireworks": "與煙火一同傳送指定訊息"
 }
