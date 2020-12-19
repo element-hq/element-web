@@ -2965,5 +2965,7 @@
     "You've reached the maximum number of simultaneous calls.": "Вы достигли максимального количества одновременных звонков.",
     "Too Many Calls": "Слишком много звонков",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Добавляет ┬──┬ ノ( ゜-゜ノ) в начало сообщения",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Добавляет (╯°□°）╯︵ ┻━┻ в начало сообщения"
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Добавляет (╯°□°）╯︵ ┻━┻ в начало сообщения",
+    "sends fireworks": "отправляет фейерверк",
+    "Sends the given message with fireworks": "Отправляет сообщение с фейерверком"
 }
