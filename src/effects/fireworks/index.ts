@@ -84,14 +84,14 @@ export default class Fireworks implements ICanvasEffect {
     }
 
     private updateWorld = () => {
-        if (!this.isRunning) return;
+        if (!this.isRunning && this.particles.length === 0) return;
         this.update();
         this.paint();
         this.supportsAnimationFrame.call(window, this.updateWorld);
     }
 
     private update = () => {
-        if (this.particles.length < this.options.maxCount) {
+        if (this.particles.length < this.options.maxCount && this.isRunning) {
             this.createFirework();
         }
         const alive = [];
@@ -142,8 +142,6 @@ export default class Fireworks implements ICanvasEffect {
 
     public stop = async () => {
         this.isRunning = false;
-        this.particles = [];
-        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     }
 
     private drawParticle = (particle: FireworksParticle): void => {
