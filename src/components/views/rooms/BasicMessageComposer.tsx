@@ -418,6 +418,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private onKeyDown = (event: React.KeyboardEvent) => {
+        const selectionRange = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
+        // trim the range as we want it to exclude leading/trailing spaces
+        selectionRange.trim();
+
         const model = this.props.model;
         const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
         let handled = false;
@@ -471,6 +475,43 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             });
             handled = true;
         // autocomplete or enter to send below shouldn't have any modifier keys pressed.
+        } else if (document.getSelection().type != "Caret") {
+            if (event.key === '(') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "(", ")");
+                handled = true;
+            } else if (event.key === '[') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "[", "]");
+                handled = true;
+            } else if (event.key === '{') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "{", "}");
+                handled = true;
+            } else if (event.key === '<') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "<", ">");
+                handled = true;
+            } else if (event.key === '"') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "\"");
+                handled = true;
+            } else if (event.key === '`') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "`");
+                handled = true;
+            } else if (event.key === '\'') {
+                this.historyManager.ensureLastChangesPushed(this.props.model);
+                this.modifiedFlag = true;
+                toggleInlineFormat(selectionRange, "'");
+                handled = true;
+            }
         } else {
             const metaOrAltPressed = event.metaKey || event.altKey;
             const modifierPressed = metaOrAltPressed || event.shiftKey;
