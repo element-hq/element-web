@@ -47,23 +47,33 @@ type ConfettiOptions = {
     /**
      * max confetti count
      */
-    maxCount: number,
+    maxCount: number;
     /**
      * particle animation speed
      */
-    speed: number,
+    speed: number;
     /**
      * the confetti animation frame interval in milliseconds
      */
-    frameInterval: number,
+    frameInterval: number;
     /**
      * the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
      */
-    alpha: number,
+    alpha: number;
     /**
      * use gradient instead of solid particle color
      */
-    gradient: boolean,
+    gradient: boolean;
+};
+type FireworksOptions = {
+    /**
+     * max fireworks count
+     */
+    maxCount: number;
+    /**
+     * gravity value that firework adds to shift from it's start position
+     */
+    gravity: number;
 }
 
 /**
@@ -84,6 +94,17 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
             gradient: false,
         },
     } as Effect<ConfettiOptions>,
+    {
+        emojis: ['🎆'],
+        msgType: 'nic.custom.fireworks',
+        command: 'fireworks',
+        description: () => _td("Sends the given message with fireworks"),
+        fallbackMessage: () => _t("sends fireworks") + "🎆",
+        options: {
+            maxCount: 500,
+            gravity: 0.05,
+        },
+    } as Effect<FireworksOptions>,
 ];
 
 
