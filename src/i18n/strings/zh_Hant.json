@@ -2974,5 +2974,7 @@
     "You held the call <a>Resume</a>": "您已保留通話 <a>繼續</a>",
     "%(name)s paused": "%(name)s 已暫停",
     "You've reached the maximum number of simultaneous calls.": "您已達到同時通話的最大數量。",
-    "Too Many Calls": "太多通話"
+    "Too Many Calls": "太多通話",
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "在純文字訊息前加入 ┬──┬ ノ( ゜-゜ノ)",
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "在純文字訊息前加入 (╯°□°）╯︵ ┻━┻"
 }
