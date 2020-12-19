@@ -21,37 +21,37 @@ export type FireworksOptions = {
     /**
      * max fireworks count
      */
-    maxCount: number,
+    maxCount: number;
     /**
      * gravity value that firework adds to shift from it's start position
      */
-    gravity: number,
+    gravity: number;
 }
 
 type FireworksParticle = {
     /**
      * color
      */
-    color: string,
+    color: string;
     /**
      * x,y are the point where the particle starts to position on canvas
      */
-    x: number,
-    y: number,
+    x: number;
+    y: number;
     /**
      * vx,vy shift values from x and y
      */
-    vx: number,
-    vy: number,
+    vx: number;
+    vy: number;
     /**
      * the alpha opacity of the firework particle (between 0 and 1, where 1 is opaque and 0 is invisible)
      */
-    alpha: number,
+    alpha: number;
     /**
      * w,h width and height
      */
-    w: number,
-    h: number
+    w: number;
+    h: number;
 }
 
 export const DefaultOptions: FireworksOptions = {
@@ -92,6 +92,7 @@ export default class Fireworks implements ICanvasEffect {
         this.paint();
         this.supportsAnimationFrame.call(window, this.updateWorld);
     }
+
     private update = () => {
         if (this.particles.length < this.options.maxCount) {
             this.createFirework();
