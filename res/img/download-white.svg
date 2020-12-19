@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="18"
+   height="18"
+   viewBox="-1 -1 18 18"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="download-white.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Fill 75</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1914"
+     inkscape:window-height="1048"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="32.283595"
+     inkscape:cx="4.829485"
+     inkscape:cy="6.7819403"
+     inkscape:window-x="1920"
+     inkscape:window-y="146"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg14" />
+  <!-- Generator: Sketch 3.4.4 (17249) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">Fill 75</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <g
+     id="02-Chat"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd"
+     sketch:type="MSPage"
+     transform="matrix(1.2103961,0,0,1.3332813,1.9999996,1.566422e-4)"
+     style="stroke:none;stroke-opacity:1;stroke-width:0.99972159;stroke-miterlimit:4;stroke-dasharray:none;fill:#ffffff;fill-opacity:1">
+    <g
+       id="02_x-Chat-MAX"
+       sketch:type="MSArtboardGroup"
+       transform="translate(-280,-546)"
+       fill="#76cfa6"
+       style="stroke:none;stroke-opacity:1;stroke-width:0.99972159;stroke-miterlimit:4;stroke-dasharray:none;fill:#ffffff;fill-opacity:1">
+      <g
+         id="Group"
+         sketch:type="MSLayerGroup"
+         transform="translate(243,58)"
+         style="stroke:none;stroke-opacity:1;stroke-width:0.99972159;stroke-miterlimit:4;stroke-dasharray:none;fill:#ffffff;fill-opacity:1">
+        <g
+           id="Group-Copy-13-+-Matrix-HQ-Copy-17-+-Bitmap"
+           transform="translate(1,181)"
+           sketch:type="MSShapeGroup"
+           style="stroke:none;stroke-opacity:1;stroke-width:0.99972159;stroke-miterlimit:4;stroke-dasharray:none;fill:#ffffff;fill-opacity:1">
+          <g
+             id="Group-Copy-13"
+             style="stroke:none;stroke-opacity:1;stroke-width:0.99972159;stroke-miterlimit:4;stroke-dasharray:none;fill:#ffffff;fill-opacity:1">
+            <path
+               d="m 45.340043,312.52677 c 0.146962,0 0.293924,-0.0559 0.406442,-0.16839 0.223505,-0.22427 0.223505,-0.58708 0,-0.81135 l -4.380545,-4.37902 c -0.223506,-0.22427 -0.587084,-0.2235 -0.811354,-7.6e-4 l -4.385904,4.37289 c -0.22427,0.22427 -0.225036,0.58785 -0.0015,0.81212 0.223504,0.22503 0.587083,0.22503 0.811353,0.002 l 3.413045,-3.4031 0.0015,9.47524 c 0,0.31689 0.25795,0.57407 0.574071,0.57407 0.317653,0 0.574072,-0.25718 0.574072,-0.57407 l -0.0015,-9.46069 3.394674,3.39314 c 0.111752,0.11252 0.258714,0.16839 0.405677,0.16839 z"
+               id="Fill-75"
+               transform="rotate(180,40.957057,313)"
+               style="stroke:none;stroke-opacity:1;stroke-width:0.99972159;stroke-miterlimit:4;stroke-dasharray:none;fill:#ffffff;fill-opacity:1" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
