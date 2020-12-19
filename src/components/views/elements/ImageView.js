@@ -160,13 +160,7 @@ export default class ImageView extends React.Component {
             height: displayHeight
         };
 */
-        let style = {};
         let res;
-
-        style = {
-            width: this.state.zoom + "%",
-            height: this.state.zoom + "%",
-        };
 
         if (this.props.width && this.props.height) {
             res = this.props.width + "x" + this.props.height + "px";
@@ -217,7 +211,8 @@ export default class ImageView extends React.Component {
         }
 
         const rotationDegrees = this.state.rotationDegrees;
-        const effectiveStyle = {transform: `rotate(${rotationDegrees}deg)`, ...style};
+        const zoom = this.state.zoom/100;
+        const effectiveStyle = {transform: `rotate(${rotationDegrees}deg) scale(${zoom})`};
 
         return (
             <FocusLock

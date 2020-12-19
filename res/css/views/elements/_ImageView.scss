@@ -36,13 +36,14 @@ limitations under the License.
     overflow: auto;
     margin: 0 50px 50px 50px;
     display: flex;
+    height: 100%;
 }
 
 .mx_ImageView_content img {
-    flex: 1;
     object-fit: contain;
     pointer-events: all;
-    margin: auto;
+    //margin: auto;
+    //margin: 0 auto 0 auto;
 }
 
 .mx_ImageView_panel {
