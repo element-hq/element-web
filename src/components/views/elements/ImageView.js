@@ -52,6 +52,14 @@ export default class ImageView extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.focusLock.addEventListener('wheel', this.onWheel, { passive: false });
+    }
+
+    componentWillUnmount() {
+        this.focusLock.removeEventListener('wheel', this.onWheel);
+    }
+
     onKeyDown = (ev) => {
         if (ev.key === Key.ESCAPE) {
             ev.stopPropagation();
@@ -216,10 +224,10 @@ export default class ImageView extends React.Component {
                 returnFocus={true}
                 lockProps={{
                     onKeyDown: this.onKeyDown,
-                    onWheel: this.onWheel,
                     role: "dialog",
                 }}
                 className="mx_ImageView"
+                ref={ref => this.focusLock = ref}
             >
                 <div className="mx_ImageView_content">
                     <div className="mx_ImageView_panel">
