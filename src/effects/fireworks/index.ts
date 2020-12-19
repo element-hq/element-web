@@ -74,7 +74,7 @@ export default class Fireworks implements ICanvasEffect {
     private particles: Array<FireworksParticle> = [];
     public isRunning: boolean;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 4000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
         if (!canvas) {
             return;
         }
