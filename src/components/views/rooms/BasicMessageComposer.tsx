@@ -512,6 +512,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 toggleInlineFormat(selectionRange, "'");
                 handled = true;
             }
+        // Surround selected text with a character
         } else {
             const metaOrAltPressed = event.metaKey || event.altKey;
             const modifierPressed = metaOrAltPressed || event.shiftKey;
