@@ -241,7 +241,7 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Nelze se připojit k domovskému serveru přes HTTP, pokud je v adresním řádku HTTPS. Buď použijte HTTPS, nebo <a>povolte nezabezpečené skripty</a>.",
     "Click here to fix": "Pro opravu klepněte zde",
     "Click to mute video": "Klepněte pro zakázání videa",
-    "click to reveal": "pro odhlení klepněte",
+    "click to reveal": "klepněte pro odhalení",
     "Click to unmute video": "Klepněte pro povolení videa",
     "Click to unmute audio": "Klepněte pro povolení zvuku",
     "Displays action": "Zobrazí akci",
@@ -1801,7 +1801,7 @@
     "Session key:": "Klíč relace:",
     "Message search": "Vyhledávání ve zprávách",
     "Cross-signing": "Cross-signing",
-    "A session's public name is visible to people you communicate with": "Lidé, se kterými komunikujete, mohou veřejný název zobrazit",
+    "A session's public name is visible to people you communicate with": "Lidé, se kterými komunikujete, mohou zobrazit veřejný název",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Tato místnost je propojena s následujícími platformami. <a>Více informací</a>",
     "This room isn’t bridging messages to any platforms. <a>Learn more.</a>": "Tato místnost není propojená s žádnými dalšími platformami. <a>Více informací.</a>",
     "Bridges": "Propojení",
@@ -2756,7 +2756,7 @@
     "Please go into as much detail as you like, so we can track down the problem.": "Udejte prosím co nejvíce podrobností, abychom mohli problém vystopovat.",
     "Start a conversation with someone using their name or username (like <userId/>).": "Začněte konverzaci s někým pomocí jeho jména nebo uživatelského jména (například <userId />).",
     "Tell us below how you feel about %(brand)s so far.": "Níže se podělte s vašimi zkušenostmi s %(brand)s.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s nastavil seznam přístupů serveru pro tuto místnost.",
     "What's the name of your community or team?": "Jak se jmenuje vaše skupina nebo tým?",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Pozvěte někoho pomocí svého jména, uživatelského jména (například <userId />) nebo <a>sdílejte tuto místnost</a>.",
     "Confirm by comparing the following with the User Settings in your other session:": "Potvrďte porovnáním následujícího s uživatelským nastavením v jiné relaci:",
@@ -2876,5 +2876,8 @@
     "User signing private key:": "Podpisový klíč uživatele:",
     "Self signing private key:": "Vlastní podpisový klíč:",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Vloží ┬──┬ ノ( ゜-゜ノ) na začátek zprávy",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Vloží (╯°□°）╯︵ ┻━┻ na začátek zprávy"
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Vloží (╯°□°）╯︵ ┻━┻ na začátek zprávy",
+    "Remain on your screen while running": "Při běhu zůstává na obrazovce",
+    "Remain on your screen when viewing another room, when running": "Při prohlížení jiné místnosti zůstává při běhu na obrazovce",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s změnil seznam přístupů serveru pro tuto místnost."
 }
