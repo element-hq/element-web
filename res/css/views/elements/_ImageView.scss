@@ -40,13 +40,9 @@ limitations under the License.
 
 .mx_ImageView_content img {
     flex: 1;
-    //max-width: 100%;
-    /* XXX: max-height interacts badly with flex on Chrome and doesn't relayout properly until you refresh */
-    //max-height: 100%;
-    /* object-fit hack needed for Chrome due to Chrome not re-laying-out until you refresh */
     object-fit: contain;
-    /* background-image: url('$(res)/img/trans.png'); */
     pointer-events: all;
+    margin: auto;
 }
 
 .mx_ImageView_panel {
