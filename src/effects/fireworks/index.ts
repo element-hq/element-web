@@ -67,10 +67,7 @@ export default class Fireworks implements ICanvasEffect {
     }
 
     private context: CanvasRenderingContext2D | null = null;
-    private supportsAnimationFrame = window.requestAnimationFrame ||
-        function(callback) {
-            window.setTimeout(callback, 1000/60);
-        };
+    private supportsAnimationFrame = window.requestAnimationFrame;
     private particles: Array<FireworksParticle> = [];
     public isRunning: boolean;
 
