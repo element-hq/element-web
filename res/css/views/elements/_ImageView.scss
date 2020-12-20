@@ -28,48 +28,53 @@ limitations under the License.
     width: 100%;
 
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     overflow: hidden;
 }
 
 .mainImage {
-    //margin: auto;
+    object-fit: contain;
+    pointer-events: all;
+
+    max-width: 100vw;
+    max-height: 90vh;
+    min-width: 100px;
+    min-height: 100px;
 
     &:hover {
         cursor: grab;
     }
 }
 
-.mx_ImageView_content img {
-    object-fit: contain;
+.mx_ImageView_panel {
+    position: absolute;
+    z-index: 1000;
+    align-self: flex-start;
     pointer-events: all;
 }
 
-.mx_ImageView_panel {
-    display: flex;
-    justify-content: space-between;
-    padding: 50px;
-    position: absolute;
-    width: 100%;
-}
-
 .mx_ImageView_toolbar {
+    right: 0;
+    padding: 50px 50px 0 0;
     display: flex;
-}
-
-.mx_ImageView_button {
-    padding: 5px;
+    
 }
 
 .mx_ImageView_label {
+    left: 0;
+    padding: 50px 0 0 50px;
     text-align: left;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    min-height: 100%;
     max-width: 240px;
     color: $lightbox-fg-color;
+}
+
+.mx_ImageView_button {
+    padding: 5px;
 }
 
 .mx_ImageView_name {
