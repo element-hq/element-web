@@ -26,21 +26,15 @@ limitations under the License.
 
 .mx_ImageView_content {
     width: 100%;
-    height: 100%;
 
     display: flex;
     flex-direction: column;
-}
 
-.mx_ImageView_imageBox {
     overflow: hidden;
-    display: flex;
-    padding: 0 50px 50px 50px;
-    flex-grow: 1;
 }
 
 .mainImage {
-    margin: auto;
+    //margin: auto;
 
     &:hover {
         cursor: grab;
@@ -56,6 +50,8 @@ limitations under the License.
     display: flex;
     justify-content: space-between;
     padding: 50px;
+    position: absolute;
+    width: 100%;
 }
 
 .mx_ImageView_toolbar {
