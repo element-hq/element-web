@@ -47,10 +47,18 @@ export default class ImageView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rotationDegrees: 0,
+            rotation: 0,
             zoom: 100,
+            translationX: 0,
+            translationY: 0,
+            moving: false,
         };
     }
+
+    initX = 0;
+    initY = 0;
+    lastX = 0;
+    lastY = 0;
 
     componentDidMount() {
         // We have to use addEventListener() because the listener
@@ -74,8 +82,18 @@ export default class ImageView extends React.Component {
         if (ev.ctrlKey) {
             ev.stopPropagation();
             ev.preventDefault();
+            const newZoom =this.state.zoom - ev.deltaY;
+
+            if (newZoom <= 100) {
+                this.setState({
+                    zoom: 100,
+                    translationX: 0,
+                    translationY: 0,
+                });
+                return;
+            }
             this.setState({
-                zoom: this.state.zoom - ev.deltaY,
+                zoom: newZoom,
             });
         }
     }
@@ -109,65 +127,72 @@ export default class ImageView extends React.Component {
         return name;
     }
 
-    rotateCounterClockwise = () => {
-        const cur = this.state.rotationDegrees;
+    onRotateCounterClockwiseClick = () => {
+        const cur = this.state.rotation;
         const rotationDegrees = (cur - 90) % 360;
-        this.setState({ rotationDegrees });
+        this.setState({ rotation: rotationDegrees });
     };
 
-    rotateClockwise = () => {
-        const cur = this.state.rotationDegrees;
+    onRotateClockwiseClick = () => {
+        const cur = this.state.rotation;
         const rotationDegrees = (cur + 90) % 360;
-        this.setState({ rotationDegrees });
+        this.setState({ rotation: rotationDegrees });
     };
 
-    zoomIn = () => {
+    onZoomInClick = () => {
         this.setState({
             zoom: this.state.zoom + 10,
         });
     };
 
-    zoomOut = () => {
+    onZoomOutClick = () => {
+        if (this.state.zoom <= 100) {
+            this.setState({
+                zoom: 100,
+                translationX: 0,
+                translationY: 0,
+            });
+            return;
+        }
         this.setState({
             zoom: this.state.zoom - 10,
         });
     }
 
+    onStartMoving = ev => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        if (this.state.zoom <= 100) return false;
+
+        this.setState({moving: true});
+        this.initX = ev.pageX - this.lastX;
+        this.initY = ev.pageY - this.lastY;
+    }
+
+    onMoving = ev => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        if (!this.state.moving) return false;
+
+        this.lastX = ev.pageX - this.initX;
+        this.lastY = ev.pageY - this.initY;
+        this.setState({
+            translationX: this.lastX,
+            translationY: this.lastY,
+        });
+    }
+
+    onEndMoving = ev => {
+        this.setState({moving: false});
+    }
+
     render() {
-/*
-        // In theory max-width: 80%, max-height: 80% on the CSS should work
-        // but in practice, it doesn't, so do it manually:
+        let mayRedact = false;
+        const showEventMeta = !!this.props.mxEvent;
 
-        var width = this.props.width || 500;
-        var height = this.props.height || 500;
-
-        var maxWidth = document.documentElement.clientWidth * 0.8;
-        var maxHeight = document.documentElement.clientHeight * 0.8;
-
-        var widthFrac = width / maxWidth;
-        var heightFrac = height / maxHeight;
-
-        var displayWidth;
-        var displayHeight;
-        if (widthFrac > heightFrac) {
-            displayWidth = Math.min(width, maxWidth);
-            displayHeight = (displayWidth / width) * height;
-        } else {
-            displayHeight = Math.min(height, maxHeight);
-            displayWidth = (displayHeight / height) * width;
-        }
-
-        var style = {
-            width: displayWidth,
-            height: displayHeight
-        };
-*/
         let res;
-        const style = {
-            height: this.state.zoom + "%",
-            width: this.state.zoom + "%",
-        };
-
         if (this.props.width && this.props.height) {
             res = this.props.width + "x" + this.props.height + "px";
         }
@@ -183,9 +208,6 @@ export default class ImageView extends React.Component {
         } else {
             sizeRes = size || res;
         }
-
-        let mayRedact = false;
-        const showEventMeta = !!this.props.mxEvent;
 
         let metadata;
         if (showEventMeta) {
@@ -216,8 +238,16 @@ export default class ImageView extends React.Component {
             );
         }
 
-        const rotationDegrees = this.state.rotationDegrees;
-        const effectiveStyle = {transform: `rotate(${rotationDegrees}deg)`, ...style};
+        const rotationDegrees = this.state.rotation + "deg";
+        const zoomPercentage = this.state.zoom/100;
+        const translatePixelsX = this.state.translationX + "px";
+        const translatePixelsY = this.state.translationY + "px";
+        const style = {
+            transform: `rotate(${rotationDegrees})
+                        scale(${zoomPercentage})
+                        translateX(${translatePixelsX})
+                        translateY(${translatePixelsY})`,
+        };
 
         return (
             <FocusLock
@@ -239,16 +269,16 @@ export default class ImageView extends React.Component {
                             <span className="mx_ImageView_size">{ sizeRes }</span>
                         </div>
                         <div className="mx_ImageView_toolbar">
-                            <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.zoomIn }>
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.onZoomInClick }>
                                 <img src={require("../../../../res/img/plus-white.svg")} alt={ _t('Zoom in') } width="18" height="18" />
                             </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_button" title={_t("Zoom out")} onClick={ this.zoomOut }>
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Zoom out")} onClick={ this.onZoomOutClick }>
                                 <img src={require("../../../../res/img/minus-white.svg")} alt={ _t('Zoom out') } width="18" height="18" />
                             </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.rotateCounterClockwise }>
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.onRotateCounterClockwiseClick }>
                                 <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
                             </AccessibleButton>
-                            <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Right")} onClick={ this.rotateClockwise }>
+                            <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Right")} onClick={ this.onRotateClockwiseClick }>
                                 <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
                             </AccessibleButton>
                             <a className="mx_ImageView_button" href={ this.props.src } download={ this.props.name } title={_t("Download")} target="_blank" rel="noopener">
@@ -261,7 +291,17 @@ export default class ImageView extends React.Component {
                         </div>
                     </div>
                     <div className="mx_ImageView_imageBox">
-                        <img src={this.props.src} title={this.props.name} style={effectiveStyle} className="mainImage" />
+                        <img
+                            src={this.props.src}
+                            title={this.props.name}
+                            style={style}
+                            className="mainImage"
+                            draggable={true}
+                            onMouseDown={this.onStartMoving}
+                            onMouseMove={this.onMoving}
+                            onMouseUp={this.onEndMoving}
+                            onMouseLeave={this.onEndMoving}
+                        />
                     </div>
                 </div>
             </FocusLock>

@@ -33,7 +33,7 @@ limitations under the License.
 }
 
 .mx_ImageView_imageBox {
-    overflow: scroll;
+    overflow: hidden;
     display: flex;
     padding: 0 50px 50px 50px;
     flex-grow: 1;
@@ -41,6 +41,10 @@ limitations under the License.
 
 .mainImage {
     margin: auto;
+
+    &:hover {
+        cursor: grab;
+    }
 }
 
 .mx_ImageView_content img {
