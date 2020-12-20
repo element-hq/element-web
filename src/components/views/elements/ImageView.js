@@ -79,23 +79,21 @@ export default class ImageView extends React.Component {
     };
 
     onWheel = (ev) => {
-        if (ev.ctrlKey) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            const newZoom =this.state.zoom - ev.deltaY;
+        ev.stopPropagation();
+        ev.preventDefault();
+        const newZoom =this.state.zoom - ev.deltaY;
 
-            if (newZoom <= 100) {
-                this.setState({
-                    zoom: 100,
-                    translationX: 0,
-                    translationY: 0,
-                });
-                return;
-            }
+        if (newZoom <= 100) {
             this.setState({
-                zoom: newZoom,
+                zoom: 100,
+                translationX: 0,
+                translationY: 0,
             });
+            return;
         }
+        this.setState({
+            zoom: newZoom,
+        });
     }
 
     onRedactClick = () => {
