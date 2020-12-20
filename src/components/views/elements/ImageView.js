@@ -59,6 +59,8 @@ export default class ImageView extends React.Component {
     initY = 0;
     lastX = 0;
     lastY = 0;
+    minZoom = 100;
+    maxZoom = 300;
 
     componentDidMount() {
         /* We have to use addEventListener() because the listener
@@ -83,16 +85,16 @@ export default class ImageView extends React.Component {
         ev.preventDefault();
         const newZoom =this.state.zoom - ev.deltaY;
 
-        if (newZoom <= 100) {
+        if (newZoom <= this.minZoom) {
             this.setState({
-                zoom: 100,
+                zoom: this.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
             return;
         }
-        if (newZoom >= 300) {
-            this.setState({zoom: 300});
+        if (newZoom >= this.maxZoom) {
+            this.setState({zoom: this.maxZoom});
             return;
         }
 
@@ -143,8 +145,8 @@ export default class ImageView extends React.Component {
     };
 
     onZoomInClick = () => {
-        if (this.state.zoom >= 300) {
-            this.setState({zoom: 300});
+        if (this.state.zoom >= this.maxZoom) {
+            this.setState({zoom: this.maxZoom});
             return;
         }
 
@@ -154,9 +156,9 @@ export default class ImageView extends React.Component {
     };
 
     onZoomOutClick = () => {
-        if (this.state.zoom <= 100) {
+        if (this.state.zoom <= this.minZoom) {
             this.setState({
-                zoom: 100,
+                zoom: this.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
@@ -165,6 +167,18 @@ export default class ImageView extends React.Component {
         this.setState({
             zoom: this.state.zoom - 10,
         });
+    }
+
+    onZoomClick = () => {
+        if (this.state.zoom <= this.minZoom) {
+            this.setState({zoom: this.maxZoom});
+        } else {
+            this.setState({
+                zoom: this.minZoom,
+                translationX: 0,
+                translationY: 0,
+            });
+        }
     }
 
     onStartMoving = ev => {
@@ -278,6 +292,9 @@ export default class ImageView extends React.Component {
                         { metadata }
                     </div>
                     <div className="mx_ImageView_panel mx_ImageView_toolbar">
+                        <AccessibleButton className="mx_ImageView_button" title={_t("Zoom")} onClick={ this.onZoomClick }>
+                            <img src={require("../../../../res/img/zoom-white.svg")} alt={ _t('Zoom') } width="18" height="18" />
+                        </AccessibleButton>
                         <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.onZoomInClick }>
                             <img src={require("../../../../res/img/plus-white.svg")} alt={ _t('Zoom in') } width="18" height="18" />
                         </AccessibleButton>
