@@ -91,6 +91,11 @@ export default class ImageView extends React.Component {
             });
             return;
         }
+        if (newZoom >= 300) {
+            this.setState({zoom: 300});
+            return;
+        }
+
         this.setState({
             zoom: newZoom,
         });
@@ -138,6 +143,11 @@ export default class ImageView extends React.Component {
     };
 
     onZoomInClick = () => {
+        if (this.state.zoom >= 300) {
+            this.setState({zoom: 300});
+            return;
+        }
+
         this.setState({
             zoom: this.state.zoom + 10,
         });
