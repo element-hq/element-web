@@ -61,8 +61,8 @@ export default class ImageView extends React.Component {
     lastY = 0;
 
     componentDidMount() {
-        // We have to use addEventListener() because the listener
-        // needs to be passive in order to work with Chromium
+        /* We have to use addEventListener() because the listener
+         * needs to be passive in order to work with Chromium */
         this.focusLock.addEventListener('wheel', this.onWheel, { passive: false });
     }
 
