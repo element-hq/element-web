@@ -764,7 +764,7 @@
     "Demote": "Degradovat",
     "Share Link to User": "Sdílet odkaz na uživatele",
     "Send an encrypted reply…": "Odeslat šifrovanou odpověď …",
-    "Send an encrypted message…": "Odeslat šifrovanou zprávu …",
+    "Send an encrypted message…": "Odeslat šifrovanou zprávu…",
     "Seen by %(displayName)s (%(userName)s) at %(dateTime)s": "%(displayName)s (%(userName)s) viděl %(dateTime)s",
     "Replying": "Odpovídá",
     "Share room": "Sdílet místnost",
@@ -2879,5 +2879,15 @@
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Vloží (╯°□°）╯︵ ┻━┻ na začátek zprávy",
     "Remain on your screen while running": "Při běhu zůstává na obrazovce",
     "Remain on your screen when viewing another room, when running": "Při prohlížení jiné místnosti zůstává při běhu na obrazovce",
-    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s změnil seznam přístupů serveru pro tuto místnost."
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s změnil seznam přístupů serveru pro tuto místnost.",
+    "Offline encrypted messaging using dehydrated devices": "Offline šifrovaná komunikace pomocí dehydrovaných zařízení",
+    "See emotes posted to your active room": "Prohlédněte si emoji zveřejněné ve vaší aktivní místnosti",
+    "See emotes posted to this room": "Prohlédněte si emoji zveřejněné v této místnosti",
+    "Send emotes as you in your active room": "Poslat emoji jako vy ve své aktivní místnosti",
+    "Send emotes as you in this room": "Poslat emoji jako vy v této místnosti",
+    "See when anyone posts a sticker to your active room": "Podívejte se, kdy někdo zveřejní nálepku ve vaší aktivní místnosti",
+    "See when a sticker is posted in this room": "Podívejte se, kdy je zveřejněna nálepka v této místnosti",
+    "See when the name changes in this room": "Podívejte se, kdy se změní název v této místnosti",
+    "See when the topic changes in your active room": "Podívejte se, kdy se změní téma ve vaší aktivní místnosti",
+    "See when the topic changes in this room": "Podívejte se, kdy se změní téma v této místnosti"
 }
