@@ -48,6 +48,7 @@ import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
 import {CHAT_EFFECTS} from "./effects"
 import CallHandler from "./CallHandler";
+import {markdownSerializeIfNeeded} from './editor/serialize';
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -220,6 +221,23 @@ export const Commands = [
         description: _td('Sends a message as html, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
             return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'tex',
+        args: '<message>',
+        description: _td('Sends a message in TeX mode, using $ and $$ delimiters for maths'),
+        runFn: function(roomId, args) {
+            if (SettingsStore.getValue("feature_latex_maths")) {
+                if (args) {
+                    let html = markdownSerializeIfNeeded(args, {forceHTML: false}, {forceTEX: true});
+                    return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, html));
+                }
+                return reject(this.getUsage());
+            } else {
+                return reject("Render LaTeX maths in messages needs to be enabled in Labs");
+            }
         },
         category: CommandCategories.messages,
     }),

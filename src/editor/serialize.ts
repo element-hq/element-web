@@ -41,24 +41,57 @@ export function mdSerialize(model: EditorModel) {
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
-    let md = mdSerialize(model);
+export function markdownSerializeIfNeeded(md: string, {forceHTML = false} = {}, {forceTEX = false} = {}) {
+    // copy of raw input to remove unwanted math later
+    const orig = md;
 
     if (SettingsStore.getValue("feature_latex_maths")) {
-        const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
-            "\\$\\$(([^$]|\\\\\\$)*)\\$\\$";
-        const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
-            "\\$(([^$]|\\\\\\$)*)\\$";
+        if (forceTEX) {
+            // detect math with tex delimiters, inline: $...$, display $$...$$
+            // preferably use negative lookbehinds, not supported in all major browsers:
+            // const displayPattern = "^(?<!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
+            // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
 
-        md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
-            const p1e = AllHtmlEntities.encode(p1);
-            return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
-        });
+            // conditions for display math detection ($$...$$):
+            // - left delimiter ($$) is not escaped by a backslash
+            // - pattern starts at the beginning of a line
+            // - left delimiter is not followed by a space or tab character
+            // - pattern ends at the end of a line
+            const displayPattern = "^(?!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
 
-        md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1) {
-            const p1e = AllHtmlEntities.encode(p1);
-            return `<span data-mx-maths="${p1e}"></span>`;
-        });
+            // conditions for inline math detection ($...$):
+            // - left and right delimiters ($) are not escaped by backslashes
+            // - pattern starts at the beginning of a line or follows a whitespace character
+            // - left delimiter is not followed by a whitespace character
+            // - right delimiter is not preseeded by a whitespace character
+            const inlinePattern = "(^|\\s)(?!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)*[^\\\\\\s\\$](?:\\\\\\$)?)\\$";
+
+            md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
+                const p1e = AllHtmlEntities.encode(p1);
+                return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
+            });
+
+            md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1, p2) {
+                const p2e = AllHtmlEntities.encode(p2);
+                return `${p1}<span data-mx-maths="${p2e}"></span>`;
+            });
+        } else {
+            // detect math with latex delimiters, inline: \(...\), display \[...\]
+            const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
+                "^\\\\\\[(.*?)\\\\\\]$";
+            const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
+                "(^|\\s)\\\\\\((.*?)\\\\\\)";
+
+            md = md.replace(RegExp(displayPattern, "gms"), function(m, p1) {
+                const p1e = AllHtmlEntities.encode(p1);
+                return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
+            });
+
+            md = md.replace(RegExp(inlinePattern, "gms"), function(m, p1, p2) {
+                const p2e = AllHtmlEntities.encode(p2);
+                return `${p1}<span data-mx-maths="${p2e}"></span>`;
+            });
+        }
 
         // make sure div tags always start on a new line, otherwise it will confuse
         // the markdown parser
@@ -69,21 +102,42 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
         const phtml = cheerio.load(parser.toHTML(),
-            { _useHtmlParser2: true, decodeEntities: false })
+            { _useHtmlParser2: true, decodeEntities: false });
 
-        // add fallback output for latex math, which should not be interpreted as markdown
-        phtml('div, span').each(function(i, e) {
-            const tex = phtml(e).attr('data-mx-maths')
-            if (tex) {
-                phtml(e).html(`<code>${tex}</code>`)
-            }
-        });
+        if (SettingsStore.getValue("feature_latex_maths")) {
+            // original Markdown without LaTeX replacements
+            const parserOrig = new Markdown(orig);
+            const phtmlOrig = cheerio.load(parserOrig.toHTML(),
+                { _useHtmlParser2: true, decodeEntities: false });
+
+            // since maths delimiters are handled before Markdown,
+            // code blocks could contain mangled content.
+            // replace code blocks with original content
+            phtml('code').contents('div, span').each(function(i) {
+                const origData = phtmlOrig('code').contents('div, span')[i].data;
+                phtml('code').contents('div, span')[i].data = origData;
+            });
+
+            // add fallback output for latex math, which should not be interpreted as markdown
+            phtml('div, span').each(function(i, e) {
+                const tex = phtml(e).attr('data-mx-maths')
+                if (tex) {
+                    phtml(e).html(`<code>${tex}</code>`)
+                }
+            });
+        }
         return phtml.html();
     }
     // ensure removal of escape backslashes in non-Markdown messages
     if (md.indexOf("\\") > -1) {
         return parser.toPlaintext();
     }
+}
+
+export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
+    let md = mdSerialize(model);
+
+    return markdownSerializeIfNeeded(md, {forceHTML: forceHTML});
 }
 
 export function textSerialize(model: EditorModel) {
