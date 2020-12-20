@@ -266,8 +266,8 @@ export default class ImageView extends React.Component {
                         <div className="mx_ImageView_name">
                             { this.getName() }
                         </div>
-                        { metadata }
                         <span className="mx_ImageView_size">{ sizeRes }</span>
+                        { metadata }
                     </div>
                     <div className="mx_ImageView_panel mx_ImageView_toolbar">
                         <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.onZoomInClick }>
