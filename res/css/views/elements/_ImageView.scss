@@ -33,17 +33,18 @@ limitations under the License.
 }
 
 .mx_ImageView_imageBox {
-    overflow: auto;
-    margin: 0 50px 50px 50px;
+    overflow: scroll;
     display: flex;
-    height: 100%;
+    flex-grow: 1;
+}
+
+.mainImage {
+    margin: auto;
 }
 
 .mx_ImageView_content img {
     object-fit: contain;
     pointer-events: all;
-    //margin: auto;
-    //margin: 0 auto 0 auto;
 }
 
 .mx_ImageView_panel {
