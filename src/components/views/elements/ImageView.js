@@ -161,8 +161,6 @@ export default class ImageView extends React.Component {
         ev.stopPropagation();
         ev.preventDefault();
 
-        if (this.state.zoom <= 100) return false;
-
         this.setState({moving: true});
         this.initX = ev.pageX - this.lastX;
         this.initY = ev.pageY - this.lastY;
