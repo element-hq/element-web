@@ -75,6 +75,20 @@ type FireworksOptions = {
      */
     gravity: number;
 }
+type SnowfallOptions = {
+    /**
+     * The maximum number of snowflakes to render at a given time
+     */
+    maxCount: number;
+    /**
+     * The amount of gravity to apply to the snowflakes
+     */
+    gravity: number;
+    /**
+     * The amount of drift (horizontal sway) to apply to the snowflakes. Each snowflake varies.
+     */
+    maxDrift: number;
+}
 
 /**
  * This configuration defines room effects that can be triggered by custom message types and emojis
@@ -99,12 +113,24 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
         msgType: 'nic.custom.fireworks',
         command: 'fireworks',
         description: () => _td("Sends the given message with fireworks"),
-        fallbackMessage: () => _t("sends fireworks") + "🎆",
+        fallbackMessage: () => _t("sends fireworks") + " 🎆",
         options: {
             maxCount: 500,
             gravity: 0.05,
         },
     } as Effect<FireworksOptions>,
+    {
+        emojis: ['❄', '🌨'],
+        msgType: 'io.element.effect.snowfall',
+        command: 'snowfall',
+        description: () => _td("Sends the given message with snowfall"),
+        fallbackMessage: () => _t("sends snowfall") + " ❄",
+        options: {
+            maxCount: 200,
+            gravity: 0.05,
+            maxDrift: 5,
+        },
+    } as Effect<SnowfallOptions>,
 ];
 
 
