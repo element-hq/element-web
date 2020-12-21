@@ -851,6 +851,8 @@
     "sends confetti": "sends confetti",
     "Sends the given message with fireworks": "Sends the given message with fireworks",
     "sends fireworks": "sends fireworks",
+    "Sends the given message with snowfall": "Sends the given message with snowfall",
+    "sends snowfall": "sends snowfall",
     "You held the call <a>Resume</a>": "You held the call <a>Resume</a>",
     "%(peerName)s held the call": "%(peerName)s held the call",
     "Video Call": "Video Call",
