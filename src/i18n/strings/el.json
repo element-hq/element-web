@@ -604,5 +604,9 @@
     "Sets the room name": "Θέτει το θέμα του δωματίου",
     "Use an identity server": "Χρησιμοποιήστε ένα διακομιστή ταυτοτήτων",
     "Your %(brand)s is misconfigured": "Οι παράμετροι του %(brand)s σας είναι λανθασμένα ρυθμισμένοι",
-    "Explore rooms": "Εξερευνήστε δωμάτια"
+    "Explore rooms": "Εξερευνήστε δωμάτια",
+    "Whether you're using %(brand)s as an installed Progressive Web App": "Εάν χρησιμοπιείται %(brand)s σαν εγκατεστημένο Progressive Web App",
+    "Whether you're using %(brand)s on a device where touch is the primary input mechanism": "Ενα χρησιμοποιείται το %(brand)s σε συσκευή αφής",
+    "Click the button below to confirm adding this phone number.": "Πιέστε το κουμπί από κάτω για να επιβεβαίωσετε την προσθήκη του τηλεφωνικού αριθμού.",
+    "Confirm": "Επιβεβαίωση"
 }
