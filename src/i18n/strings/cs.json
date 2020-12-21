@@ -2866,7 +2866,7 @@
     "Sends the given message with confetti": "Pošle zprávu s konfetami",
     "sends confetti": "pošle konfety",
     "Sends the given message with fireworks": "Pošle zprávu s ohňostrojem",
-    "sends fireworks": "odešle ohňostroj",
+    "sends fireworks": "pošle ohňostroj",
     "The <b>%(capability)s</b> capability": "Schopnost <b>%(capability)s</b>",
     "See <b>%(eventType)s</b> events posted to your active room": "Zobrazit události <b>%(eventType)s</b> odeslané do vaší aktivní místnosti",
     "Send <b>%(eventType)s</b> events as you in your active room": "Poslat události <b>%(eventType)s</b> jako vy ve vaší aktivní místnosti",
@@ -2889,5 +2889,9 @@
     "See when a sticker is posted in this room": "Podívejte se, kdy je zveřejněna nálepka v této místnosti",
     "See when the name changes in this room": "Podívejte se, kdy se změní název v této místnosti",
     "See when the topic changes in your active room": "Podívejte se, kdy se změní téma ve vaší aktivní místnosti",
-    "See when the topic changes in this room": "Podívejte se, kdy se změní téma v této místnosti"
+    "See when the topic changes in this room": "Podívejte se, kdy se změní téma v této místnosti",
+    "%(name)s on hold": "%(name)s podržen",
+    "You held the call <a>Switch</a>": "Podrželi jste hovor <a>Přepnout</a>",
+    "sends snowfall": "pošle sněžení",
+    "Sends the given message with snowfall": "Pošle zprávu se sněžením"
 }
