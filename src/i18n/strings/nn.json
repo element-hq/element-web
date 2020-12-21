@@ -1360,5 +1360,9 @@
     "Appearance Settings only affect this %(brand)s session.": "Innstillingane gjeld berre for denne %(brand)s-økta.",
     "Customise your appearance": "Tilpass utsjånad",
     "Change notification settings": "Endra varslingsinnstillingar",
-    "Enable desktop notifications": "Aktiver skrivebordsvarsel"
+    "Enable desktop notifications": "Aktiver skrivebordsvarsel",
+    "Toggle video on/off": "Slå video på/av",
+    "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
+    "Video conference updated by %(senderName)s": "Videokonferanse oppdatert av %(senderName)s",
+    "Video conference ended by %(senderName)s": "Videokonferanse avslutta av %(senderName)s"
 }
