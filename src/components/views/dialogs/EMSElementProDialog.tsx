@@ -143,7 +143,7 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
                     <iframe
                         src={this.elementProSetupUrl}
                         ref={this.iframeRef}
-                        sandbox="allow-forms allow-scripts"
+                        sandbox="allow-forms allow-scripts allow-same-origin"
                     />
                     {this.state.error &&
                         <div>
