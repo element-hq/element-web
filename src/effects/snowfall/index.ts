@@ -117,9 +117,6 @@ export default class Snowfall implements ICanvasEffect {
         }
         const height = this.context.canvas.height;
         for (const particle of arrayFastClone(this.particles)) {
-            const leftMax = particle.xCol - particle.maximumDrift;
-            const rightMax = particle.xCol + particle.maximumDrift;
-
             particle.y += particle.gravity;
 
             // We treat the drift as a sine function to have a more fluid-like movement instead
