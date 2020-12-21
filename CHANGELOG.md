@@ -1,3 +1,19 @@
+Changes in [3.11.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.11.0) (2020-12-21)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.11.0-rc.2...v3.11.0)
+
+ * Upgrade JS SDK to 9.4.0
+ * [Release] Look for emoji in the body that will be displayed
+   [\#5519](https://github.com/matrix-org/matrix-react-sdk/pull/5519)
+ * [Release] Recognise `*.element.io` links as Element permalinks
+   [\#5516](https://github.com/matrix-org/matrix-react-sdk/pull/5516)
+ * [Release] Fixes for call UI
+   [\#5513](https://github.com/matrix-org/matrix-react-sdk/pull/5513)
+ * [RELEASE] Add a snowfall chat effect (with /snowfall command)
+   [\#5512](https://github.com/matrix-org/matrix-react-sdk/pull/5512)
+ * [Release] Fix padding in confirmation email registration prompt
+   [\#5502](https://github.com/matrix-org/matrix-react-sdk/pull/5502)
+
 Changes in [3.11.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.11.0-rc.2) (2020-12-16)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.11.0-rc.1...v3.11.0-rc.2)
