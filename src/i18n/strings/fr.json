@@ -2545,5 +2545,6 @@
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Vous devriez l'activer si le salon n'est utilisé que pour collaborer avec des équipes internes sur votre serveur d'accueil. Ce ne peut pas être changé plus tard.",
     "Your server requires encryption to be enabled in private rooms.": "Votre serveur requiert d'activer le chiffrement dans les salons privés.",
     "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "Les salons privés ne peuvent être trouvés et rejoints seulement par invitation. Les salons publics peut être trouvés et rejoints par n'importe qui dans cette communauté.",
-    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "Les salons privés ne peuvent être trouvés et rejoints seulement par invitation. Les salons publics peut être trouvés et rejoints par n'importe qui."
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "Les salons privés ne peuvent être trouvés et rejoints seulement par invitation. Les salons publics peut être trouvés et rejoints par n'importe qui.",
+    "Start a new chat": "Commencer une nouvelle discussion"
 }
