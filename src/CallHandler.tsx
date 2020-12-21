@@ -617,6 +617,18 @@ export default class CallHandler {
         }
     }
 
+    /**
+     * @returns true if we are currently in any call where we haven't put the remote party on hold
+     */
+    hasAnyUnheldCall() {
+        for (const call of this.calls.values()) {
+            if (call.state === CallState.Ended) continue;
+            if (!call.isRemoteOnHold()) return true;
+        }
+
+        return false;
+    }
+
     private async startCallApp(roomId: string, type: string) {
         dis.dispatch({
             action: 'appsDrawer',

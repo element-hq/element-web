@@ -19,7 +19,7 @@ import React, { createRef, CSSProperties, ReactNode } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import VideoFeed, { VideoFeedType } from "./VideoFeed";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
@@ -423,7 +423,9 @@ export default class CallView extends React.Component<IProps, IState> {
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
         let onHoldText = null;
         if (this.state.isRemoteOnHold) {
-            onHoldText = _t("You held the call <a>Resume</a>", {}, {
+            const holdString = CallHandler.sharedInstance().hasAnyUnheldCall() ?
+                _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
+            onHoldText = _t(holdString, {}, {
                 a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
                     {sub}
                 </AccessibleButton>,
@@ -478,20 +480,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_voice: true,
                 mx_CallView_voice_hold: isOnHold,
             });
-            let secondaryCallAvatar: ReactNode;
-
-            if (this.props.secondaryCall) {
-                const secAvatarSize = this.props.pipMode ? 40 : 100;
-                secondaryCallAvatar = <div className="mx_CallView_voice_secondaryAvatarContainer"
-                    style={{width: secAvatarSize, height: secAvatarSize}}
-                >
-                    <RoomAvatar
-                        room={secCallRoom}
-                        height={secAvatarSize}
-                        width={secAvatarSize}
-                    />
-                </div>;
-            }
 
             contentView = <div className={classes} onMouseMove={this.onMouseMove}>
                 <div className="mx_CallView_voice_avatarsContainer">
@@ -502,7 +490,6 @@ export default class CallView extends React.Component<IProps, IState> {
                             width={avatarSize}
                         />
                     </div>
-                    {secondaryCallAvatar}
                 </div>
                 <div className="mx_CallView_voice_holdText">{onHoldText}</div>
                 {callControls}
@@ -546,7 +533,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     <AccessibleButton element='span' onClick={this.onSecondaryRoomAvatarClick}>
                         <RoomAvatar room={secCallRoom} height={16} width={16} />
                         <span className="mx_CallView_secondaryCall_roomName">
-                            {_t("%(name)s paused", { name: secCallRoom.name })}
+                            {_t("%(name)s on hold", { name: secCallRoom.name })}
                         </span>
                     </AccessibleButton>
                 </span>;
