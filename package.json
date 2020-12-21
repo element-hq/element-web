@@ -80,7 +80,7 @@
     "katex": "^0.12.0",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.19",
-    "matrix-js-sdk": "9.4.0",
+    "matrix-js-sdk": "9.4.1",
     "matrix-widget-api": "^0.1.0-beta.10",
     "minimist": "^1.2.5",
     "pako": "^1.0.11",
