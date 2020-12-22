@@ -200,7 +200,7 @@ export default class RoomProfileSettings extends React.Component {
                         <Field label={_t("Room Name")}
                                type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} disabled={!this.state.canSetName} />
-                        <Field id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}
+                        <Field className="mx_ProfileSettings_controls_topic" id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}
                                type="text" value={this.state.topic} autoComplete="off"
                                onChange={this._onTopicChanged} element="textarea" />
                     </div>
