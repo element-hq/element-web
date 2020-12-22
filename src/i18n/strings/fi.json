@@ -2784,5 +2784,6 @@
     "Navigation": "Navigointi",
     "Manage": "Hallitse",
     "Remain on your screen when viewing another room, when running": "Pysy ruudulla katsellessasi huonetta, kun se on käynnissä",
-    "Remain on your screen while running": "Pysy ruudulla käynnissä olon ajan"
+    "Remain on your screen while running": "Pysy ruudulla käynnissä olon ajan",
+    "Move autocomplete selection up/down": "Siirrä automaattisen täydennyksen valintaa ylös/alas"
 }
