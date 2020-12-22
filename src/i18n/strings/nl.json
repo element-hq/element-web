@@ -2027,5 +2027,11 @@
     "Restart": "Herstarten",
     "People": "Tweegesprekken",
     "Set a room address to easily share your room with other people.": "Geef het gesprek een adres om het gemakkelijk met anderen te kunnen delen.",
-    "Invite people to join %(communityName)s": "Stuur uitnodigingen voor %(communityName)s"
+    "Invite people to join %(communityName)s": "Stuur uitnodigingen voor %(communityName)s",
+    "Unable to access microphone": "Je microfoon lijkt niet beschikbaar",
+    "The call was answered on another device.": "De oproep werd op een ander toestel beantwoord.",
+    "Answered Elsewhere": "Ergens anders beantwoord",
+    "The call could not be established": "De oproep kon niet worden volbracht",
+    "The other party declined the call.": "De tegenpartij heeft je oproep afgewezen.",
+    "Call Declined": "Oproep Afgewezen"
 }
