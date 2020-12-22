@@ -2975,5 +2975,9 @@
     "sends fireworks": "envía fogos de artificio",
     "Sends the given message with fireworks": "Envia a mensaxe dada con fogos de artificio",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Antecede con ┬──┬ ノ( ゜-゜ノ) a unha mensaxe de texto plano",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Antecede con (╯°□°）╯︵ ┻━┻  a unha mensaxe de texto plano"
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Antecede con (╯°□°）╯︵ ┻━┻  a unha mensaxe de texto plano",
+    "%(name)s on hold": "%(name)s agardando",
+    "You held the call <a>Switch</a>": "Pausaches a chamada <a>Cambiar</a>",
+    "sends snowfall": "envía neve",
+    "Sends the given message with snowfall": "Engade neve caendo á mensaxe"
 }
