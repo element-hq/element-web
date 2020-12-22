@@ -8,7 +8,7 @@
     "Sign In": "Prijava",
     "Create Account": "Registracija",
     "Explore rooms": "Raziščite sobe",
-    "Missing indexeddb worker script!": "Manjka skript za IndexDB!",
+    "Missing indexeddb worker script!": "Manjka skripta za IndexDB!",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Neveljavna konfiguracija: lahko izberete samo eno izmed default_server_config, default_server_name ali default_hs_url.",
     "Invalid configuration: no default server specified.": "Neveljavna konfiguracija: privzeti strežnik ni nastavljen.",
     "Your Element is misconfigured": "Vaš Element je napačno nastavljen",
