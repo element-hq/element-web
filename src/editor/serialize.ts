@@ -144,7 +144,7 @@ export function markdownSerializeIfNeeded(md: string, {forceHTML = false} = {}, 
 }
 
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
-    let md = mdSerialize(model);
+    const md = mdSerialize(model);
 
     return markdownSerializeIfNeeded(md, {forceHTML: forceHTML});
 }
