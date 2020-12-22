@@ -118,15 +118,23 @@ export default class EditableItemList extends React.Component {
     };
 
     _renderNewItemField() {
+        let addButton;
+        console.log(this.props.newItem);
+        if (this.props.newItem) {
+            addButton = (
+                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit">
+                    {_t("Add")}
+                </AccessibleButton>
+            );
+        }
+
         return (
             <form onSubmit={this._onItemAdded} autoComplete="off"
                   noValidate={true} className="mx_EditableItemList_newItem">
                 <Field label={this.props.placeholder} type="text"
                        autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
                        list={this.props.suggestionsListId} />
-                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit">
-                    {_t("Add")}
-                </AccessibleButton>
+                { addButton }
             </form>
         );
     }
