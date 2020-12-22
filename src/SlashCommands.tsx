@@ -231,7 +231,7 @@ export const Commands = [
         runFn: function(roomId, args) {
             if (SettingsStore.getValue("feature_latex_maths")) {
                 if (args) {
-                    let html = markdownSerializeIfNeeded(args, {forceHTML: false}, {forceTEX: true});
+                    const html = markdownSerializeIfNeeded(args, {forceHTML: false}, {forceTEX: true});
                     return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, html));
                 }
                 return reject(this.getUsage());

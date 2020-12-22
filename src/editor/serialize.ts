@@ -52,18 +52,18 @@ export function markdownSerializeIfNeeded(md: string, {forceHTML = false} = {}, 
             // const displayPattern = "^(?<!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
             // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
 
-            // conditions for display math detection ($$...$$):
-            // - left delimiter ($$) is not escaped by a backslash
-            // - pattern starts at the beginning of a line
-            // - left delimiter is not followed by a space or tab character
-            // - pattern ends at the end of a line
+            // conditions for display math detection $$...$$:
+            // - pattern starts at beginning of line
+            // - left delimiter ($$) is not escaped by backslash
+            // - left delimiter is not followed by space or tab
+            // - pattern ends at end of line
             const displayPattern = "^(?!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
 
-            // conditions for inline math detection ($...$):
+            // conditions for inline math detection $...$:
+            // - pattern starts at beginning of line or follows whitespace character
             // - left and right delimiters ($) are not escaped by backslashes
-            // - pattern starts at the beginning of a line or follows a whitespace character
-            // - left delimiter is not followed by a whitespace character
-            // - right delimiter is not preseeded by a whitespace character
+            // - left delimiter is not followed by whitespace character
+            // - right delimiter is not prefixed with whitespace character
             const inlinePattern = "(^|\\s)(?!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)*[^\\\\\\s\\$](?:\\\\\\$)?)\\$";
 
             md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
@@ -77,10 +77,19 @@ export function markdownSerializeIfNeeded(md: string, {forceHTML = false} = {}, 
             });
         } else {
             // detect math with latex delimiters, inline: \(...\), display \[...\]
+
+            // conditions for display math detection \[...\]:
+            // - pattern starts at beginning of line
+            // - pattern ends at end of line
             const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
                 "^\\\\\\[(.*?)\\\\\\]$";
+
+            // conditions for inline math detection \(...\):
+            // - pattern starts at beginning of line or is not prefixed with backslash
+            // (this allows escaping and requires that multiple consecutive
+            // patterns are separated by at least one character)
             const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
-                "(^|\\s)\\\\\\((.*?)\\\\\\)";
+                "(^|[^\\\\])\\\\\\((.*?)\\\\\\)";
 
             md = md.replace(RegExp(displayPattern, "gms"), function(m, p1) {
                 const p1e = AllHtmlEntities.encode(p1);
