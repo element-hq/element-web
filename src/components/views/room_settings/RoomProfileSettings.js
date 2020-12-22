@@ -62,7 +62,6 @@ export default class RoomProfileSettings extends React.Component {
     }
 
     _uploadAvatar = () => {
-        if (!this.state.canSetAvatar) return;
         this._avatarUpload.current.click();
     };
 
