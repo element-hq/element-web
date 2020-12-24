@@ -89,6 +89,8 @@ export default class WebPlatform extends VectorBasePlatform {
             window.focus();
             notification.close();
         };
+
+        return notification;
     }
 
     _getVersion(): Promise<string> {
