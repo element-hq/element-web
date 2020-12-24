@@ -2971,5 +2971,13 @@
     "%(peerName)s held the call": "%(peerName)s ha sospeso la chiamata",
     "You held the call <a>Resume</a>": "Hai sospeso la chiamata <a>Riprendi</a>",
     "You've reached the maximum number of simultaneous calls.": "Hai raggiungo il numero massimo di chiamate simultanee.",
-    "Too Many Calls": "Troppe chiamate"
+    "Too Many Calls": "Troppe chiamate",
+    "%(name)s on hold": "%(name)s in sospeso",
+    "You held the call <a>Switch</a>": "Hai sospeso la chiamata <a>Cambia</a>",
+    "sends snowfall": "invia nevicata",
+    "Sends the given message with snowfall": "Invia il messaggio con una nevicata",
+    "sends fireworks": "invia fuochi d'artificio",
+    "Sends the given message with fireworks": "Invia il messaggio con fuochi d'artificio",
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Antepone ┬──┬ ノ( ゜-゜ノ) ad un messaggio di testo",
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Antepone (╯°□°）╯︵ ┻━┻ ad un messaggio di testo"
 }
