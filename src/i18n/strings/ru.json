@@ -2967,5 +2967,9 @@
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Добавляет ┬──┬ ノ( ゜-゜ノ) в начало сообщения",
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Добавляет (╯°□°）╯︵ ┻━┻ в начало сообщения",
     "sends fireworks": "отправляет фейерверк",
-    "Sends the given message with fireworks": "Отправляет сообщение с фейерверком"
+    "Sends the given message with fireworks": "Отправляет сообщение с фейерверком",
+    "%(name)s on hold": "%(name)s на удержании",
+    "You held the call <a>Switch</a>": "Вы удерживаете звонок <a>Переключить</a>",
+    "sends snowfall": "отправляет снегопад",
+    "Sends the given message with snowfall": "Отправляет сообщение со снегопадом"
 }
