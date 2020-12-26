@@ -1693,7 +1693,7 @@
     "in secret storage": "biztonsági tárolóban",
     "Secret storage public key:": "Biztonsági tároló nyilvános kulcs:",
     "in account data": "fiók adatokban",
-    "Cross-signing": "Eszközök közti aláírás",
+    "Cross-signing": "Eszközök közti hitelesítés",
     "<b>Warning</b>: You should only set up key backup from a trusted computer.": "<b>Figyelmeztetés</b>: Csak biztonságos számítógépről állíts be kulcs mentést.",
     "If you've forgotten your recovery key you can <button>set up new recovery options</button>": "Ha elfelejtetted a visszaállítási kulcsot <button>állíts be új visszaállítási lehetőséget</button>",
     "Set up with a recovery key": "Beállítás visszaállítási kulccsal",
