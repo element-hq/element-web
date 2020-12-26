@@ -82,6 +82,13 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import {UIFeature} from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
+import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker"
+
+export interface ElectronDesktopCapturerSource {
+    display_id: string;
+    id: string;
+    name: string;
+}
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -474,7 +481,23 @@ export default class CallHandler {
                 });
                 return;
             }
-            call.placeScreenSharingCall(remoteElement, localElement);
+
+            const selectDesktopCapturerSource = async (
+                sources: Array<ElectronDesktopCapturerSource>,
+            ): Promise<ElectronDesktopCapturerSource> => {
+                console.log(DesktopCapturerSourcePicker);
+                const params = {
+                    sources: sources,
+                };
+
+                const {finished} = Modal.createDialog(DesktopCapturerSourcePicker, params);
+
+                const [source] = await finished;
+                console.log("Dialog closed with", source);
+                return source;
+            };
+
+            call.placeScreenSharingCall(remoteElement, localElement, selectDesktopCapturerSource);
         } else {
             console.error("Unknown conf call type: %s", type);
         }
