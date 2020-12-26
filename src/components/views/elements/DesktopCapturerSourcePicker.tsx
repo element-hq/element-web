@@ -24,19 +24,13 @@ export enum Tabs {
     Screens = "screens",
     Windows = "windows",
 }
-export interface ElectronDesktopCapturerSource {
-    display_id: string;
-    id: string;
-    name: string;
-    thumbnail,
-    appIcon,
-}
+
 export interface DesktopCapturerSourceIProps {
-    source: ElectronDesktopCapturerSource,
-    onSelect(source: ElectronDesktopCapturerSource): void,
+    source: DesktopCapturerSource,
+    onSelect(source: DesktopCapturerSource): void,
 }
 
-export class DesktopCapturerSource extends React.Component<DesktopCapturerSourceIProps> {
+export class ExistingSource extends React.Component<DesktopCapturerSourceIProps> {
     constructor(props) {
         super(props);
     }
@@ -63,13 +57,12 @@ export class DesktopCapturerSource extends React.Component<DesktopCapturerSource
     }
 }
 
-
 export interface DesktopCapturerSourcePickerIState {
     selectedTab: Tabs;
 }
 export interface DesktopCapturerSourcePickerIProps {
-    sources: Array<ElectronDesktopCapturerSource>;
-    onFinished(source: ElectronDesktopCapturerSource): void,
+    sources: Array<DesktopCapturerSource>;
+    onFinished(source: DesktopCapturerSource): void,
 }
 
 // TODO: Figure out a way to update sources for live preview
@@ -110,7 +103,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                     return source.id.startsWith("screen");
                 })
                 .map((source) => {
-                    return <DesktopCapturerSource source={source} onSelect={this.onSelect} key={source.id} />;
+                    return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
                 });
         } else {
             sources = this.props.sources
@@ -118,7 +111,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                     return source.id.startsWith("window");
                 })
                 .map((source) => {
-                    return <DesktopCapturerSource source={source} onSelect={this.onSelect} key={source.id} />;
+                    return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
                 });
         }
         const buttonStyle = "mx_streamSelectorDialog_tabLabel";

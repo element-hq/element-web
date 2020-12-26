@@ -84,12 +84,6 @@ import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
 import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker"
 
-export interface ElectronDesktopCapturerSource {
-    display_id: string;
-    id: string;
-    name: string;
-}
-
 enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
@@ -485,7 +479,7 @@ export default class CallHandler {
             call.placeScreenSharingCall(
                 remoteElement,
                 localElement,
-                async (sources: Array<ElectronDesktopCapturerSource>) : Promise<ElectronDesktopCapturerSource> => {
+                async (sources: Array<DesktopCapturerSource>) : Promise<DesktopCapturerSource> => {
                     const {finished} = Modal.createDialog(DesktopCapturerSourcePicker, {sources});
                     const [source] = await finished;
                     return source;
