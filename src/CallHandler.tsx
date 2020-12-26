@@ -482,22 +482,14 @@ export default class CallHandler {
                 return;
             }
 
-            const selectDesktopCapturerSource = async (
-                sources: Array<ElectronDesktopCapturerSource>,
-            ): Promise<ElectronDesktopCapturerSource> => {
-                console.log(DesktopCapturerSourcePicker);
-                const params = {
-                    sources: sources,
-                };
-
-                const {finished} = Modal.createDialog(DesktopCapturerSourcePicker, params);
-
-                const [source] = await finished;
-                console.log("Dialog closed with", source);
-                return source;
-            };
-
-            call.placeScreenSharingCall(remoteElement, localElement, selectDesktopCapturerSource);
+            call.placeScreenSharingCall(
+                remoteElement,
+                localElement,
+                async (sources: Array<ElectronDesktopCapturerSource>) : Promise<ElectronDesktopCapturerSource> => {
+                    const {finished} = Modal.createDialog(DesktopCapturerSourcePicker, {sources});
+                    const [source] = await finished;
+                    return source;
+                });
         } else {
             console.error("Unknown conf call type: %s", type);
         }
