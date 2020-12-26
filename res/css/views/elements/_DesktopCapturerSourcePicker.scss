@@ -29,13 +29,11 @@ limitations under the License.
 }
 
 .mx_streamSelectorDialog_tabLabel,
-.mx_streamSelectorDialog_tabLabel_selected
-{
+.mx_streamSelectorDialog_tabLabel_selected {
     width: 100%;
     text-align: center;
     border-radius: 8px;
     padding: 8px 0;
-    border-radius: 8px;
     font-size: $font-13px;
     position: relative;
 }
