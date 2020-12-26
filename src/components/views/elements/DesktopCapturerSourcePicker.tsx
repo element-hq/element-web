@@ -124,7 +124,6 @@ export default class DesktopCapturerSourcePicker extends React.Component<
         const buttonStyle = "mx_streamSelectorDialog_tabLabel";
         const screensButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Screens) ? "_selected" : "");
         const windowsButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Windows) ? "_selected" : "");
-        console.log(screensButtonStyle, windowsButtonStyle);
 
         return (
             <BaseDialog
