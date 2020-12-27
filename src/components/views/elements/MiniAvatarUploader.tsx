@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, {useContext, useRef, useState} from 'react';
+import {EventType} from 'matrix-js-sdk/src/@types/event';
 import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
@@ -23,6 +24,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useTimeout} from "../../../hooks/useTimeout";
 import Analytics from "../../../Analytics";
 import CountlyAnalytics from '../../../CountlyAnalytics';
+import RoomContext from "../../../contexts/RoomContext";
 
 export const AVATAR_SIZE = 52;
 
@@ -49,6 +51,10 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
     const uploadRef = useRef<HTMLInputElement>();
 
     const label = (hasAvatar || busy) ? hasAvatarLabel : noAvatarLabel;
+
+    const {room} = useContext(RoomContext);
+    const canSetAvatar = room?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId());
+    if (!canSetAvatar) return children;
 
     return <React.Fragment>
         <input
