@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useRef, useState} from 'react';
+import React, {ReactChildren, ReactNode, useContext, useRef, useState} from 'react';
 import {EventType} from 'matrix-js-sdk/src/@types/event';
 import classNames from 'classnames';
 
@@ -53,7 +53,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
 
     const {room} = useContext(RoomContext);
     const canSetAvatar = room?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId());
-    if (!canSetAvatar) return children;
+    if (!canSetAvatar) return <React.Fragment>{ children }</React.Fragment>;
 
     const visible = !!label && (hover || show);
     return <React.Fragment>
