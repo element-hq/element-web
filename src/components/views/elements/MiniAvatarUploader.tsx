@@ -19,7 +19,6 @@ import {EventType} from 'matrix-js-sdk/src/@types/event';
 import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
-import Tooltip from './Tooltip';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useTimeout} from "../../../hooks/useTimeout";
 import Analytics from "../../../Analytics";
@@ -56,6 +55,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
     const canSetAvatar = room?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId());
     if (!canSetAvatar) return children;
 
+    const visible = !!label && (hover || show);
     return <React.Fragment>
         <input
             type="file"
@@ -88,11 +88,13 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
         >
             { children }
 
-            <Tooltip
-                label={label}
-                visible={!!label && (hover || show)}
-                forceOnRight
-            />
+            <div className={classNames("mx_Tooltip", {
+                "mx_Tooltip_visible": visible,
+                "mx_Tooltip_invisible": !visible,
+            })}>
+                <div className="mx_Tooltip_chevron" />
+                { label }
+            </div>
         </AccessibleButton>
     </React.Fragment>;
 };
