@@ -617,5 +617,6 @@
     "Unable to access webcam / microphone": "Kan ikke tilgå webcam / mikrofon",
     "Unable to access microphone": "Kan ikke tilgå mikrofonen",
     "The call could not be established": "Opkaldet kunne ikke etableres",
-    "Call Declined": "Opkald afvist"
+    "Call Declined": "Opkald afvist",
+    "Folder": "Mappe"
 }
