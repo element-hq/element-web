@@ -16,11 +16,7 @@ limitations under the License.
 */
 
 .mx_streamSelectorDialog {
-    -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
-    margin: 0 auto;
 }
 
 .mx_streamSelectorDialog_tabLabels {
@@ -35,7 +31,6 @@ limitations under the License.
     border-radius: 8px;
     padding: 8px 0;
     font-size: $font-13px;
-    position: relative;
 }
 
 .mx_streamSelectorDialog_tabLabel_selected {
