@@ -26,8 +26,8 @@ export enum Tabs {
 }
 
 export interface DesktopCapturerSourceIProps {
-    source: DesktopCapturerSource,
-    onSelect(source: DesktopCapturerSource): void,
+    source: DesktopCapturerSource;
+    onSelect(source: DesktopCapturerSource): void;
 }
 
 export class ExistingSource extends React.Component<DesktopCapturerSourceIProps> {
@@ -62,7 +62,7 @@ export interface DesktopCapturerSourcePickerIState {
 }
 export interface DesktopCapturerSourcePickerIProps {
     sources: Array<DesktopCapturerSource>;
-    onFinished(source: DesktopCapturerSource): void,
+    onFinished(source: DesktopCapturerSource): void;
 }
 
 // TODO: Figure out a way to update sources for live preview
