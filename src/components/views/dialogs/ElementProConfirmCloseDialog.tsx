@@ -28,7 +28,7 @@ interface IState {}
 /*
  * A dialog for confirming closing the Element Pro setup dialog.
  */
-export default class EMSElementProConfirmCloseDialog extends React.PureComponent<IProps, IState> {
+export default class ElementProConfirmCloseDialog extends React.PureComponent<IProps, IState> {
     public render() {
         return (
             <QuestionDialog

@@ -51,7 +51,7 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
 import {UIFeature} from "../../settings/UIFeature";
-import EMSElementProAction from "./EMSElementProAction";
+import ElementProAction from "./ElementProAction";
 
 interface IProps {
     isMinimized: boolean;
@@ -274,7 +274,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         let topSection;
         const signupLink = getHostingLink("user-context-menu");
-        const elementProConfig = SdkConfig.get().ems_element_pro;
+        const elementProConfig = SdkConfig.get().element_pro;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -297,7 +297,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         } else if (signupLink || elementProConfig) {
             let elementProIFrame;
             if (elementProConfig && elementProConfig.url) {
-                // If ems_element_pro.domains is set to a non-empty array, only show
+                // If element_pro.domains is set to a non-empty array, only show
                 // dialog if the user is on the domain or a subdomain.
                 const elementProDomains = elementProConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
@@ -307,7 +307,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         className=""
                         onClick={this.onCloseMenu}
                     >
-                        <EMSElementProAction />
+                        <ElementProAction />
                     </div>;
                 }
             }

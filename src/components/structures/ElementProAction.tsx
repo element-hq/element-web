@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import EMSElementProDialog from "../views/dialogs/EMSElementProDialog";
+import ElementProDialog from "../views/dialogs/ElementProDialog";
 import Modal, {IHandle} from "../../Modal";
 import {
     IconizedContextMenuOption,
@@ -27,15 +27,15 @@ interface IProps {}
 
 interface IState {}
 
-export default class EMSElementProAction extends React.PureComponent<IProps, IState> {
+export default class ElementProAction extends React.PureComponent<IProps, IState> {
     private closingAllowed = false;
     private modalRef: IHandle<void[]>;
 
     private openDialog = () => {
         this.modalRef = Modal.createTrackedDialog(
-            'Element Pro Open', '', EMSElementProDialog, {
+            'Element Pro Open', '', ElementProDialog, {
                 requestClose: this.requestClose,
-            }, "mx_EMSElementProDialog", false, true, {
+            }, "mx_ElementProDialog", false, true, {
                 onBeforeClose: async () => this.closingAllowed,
             },
         );

@@ -16,14 +16,14 @@ limitations under the License.
 
 import * as React from "react";
 import BaseDialog from '../../views/dialogs/BaseDialog';
-import EMSElementProConfirmCloseDialog from './EMSElementProConfirmCloseDialog';
-import EMSElementProDataConfirmDialog from './EMSElementProDataConfirmDialog';
+import ElementProConfirmCloseDialog from './ElementProConfirmCloseDialog';
+import ElementProDataConfirmDialog from './ElementProDataConfirmDialog';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
-import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./EMSElementProDialogTypes";
+import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./ElementProDialogTypes";
 
 interface IProps {
     requestClose(): void;
@@ -34,7 +34,7 @@ interface IState {
     error: string;
 }
 
-export default class EMSElementProDialog extends React.PureComponent<IProps, IState> {
+export default class ElementProDialog extends React.PureComponent<IProps, IState> {
     private iframeRef: React.RefObject<HTMLIFrameElement> = React.createRef();
     private readonly elementProSetupUrl: string;
 
@@ -46,7 +46,7 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
             error: null,
         };
 
-        this.elementProSetupUrl = SdkConfig.get().ems_element_pro.url;
+        this.elementProSetupUrl = SdkConfig.get().element_pro.url;
     }
 
     private messageHandler = (message: IPostmessage) => {
@@ -56,7 +56,7 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
         switch (message.data.action) {
             case PostmessageAction.ElementProAccountDetailsRequest:
                 Modal.createDialog(
-                    EMSElementProDataConfirmDialog,
+                    ElementProDataConfirmDialog,
                     {
                         onFinished: result => {
                             if (result) {
@@ -85,7 +85,7 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
             this.props.requestClose();
         } else {
             Modal.createDialog(
-                EMSElementProConfirmCloseDialog,
+                ElementProConfirmCloseDialog,
                 {
                     onFinished: result => {
                         if (result) {
@@ -133,13 +133,13 @@ export default class EMSElementProDialog extends React.PureComponent<IProps, ISt
     public render(): React.ReactNode {
         return (
             <BaseDialog
-                className="mx_EMSElementProBaseDialog"
+                className="mx_ElementProBaseDialog"
                 onFinished={this.onFinished}
                 title={_t("Set up your own personal Element host")}
                 hasCancel={true}
                 fixedWidth={false}
             >
-                <div className="mx_EMSElementProDialog_container">
+                <div className="mx_ElementProDialog_container">
                     <iframe
                         src={this.elementProSetupUrl}
                         ref={this.iframeRef}

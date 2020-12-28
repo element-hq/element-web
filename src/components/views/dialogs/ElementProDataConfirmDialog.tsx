@@ -28,7 +28,7 @@ interface IState {}
 /*
  * A dialog for confirming transfer of data to the Element Pro iframe.
  */
-export default class EMSElementProDataConfirmDialog extends React.PureComponent<IProps, IState> {
+export default class ElementProDataConfirmDialog extends React.PureComponent<IProps, IState> {
     public render() {
         return (
             <QuestionDialog
