@@ -341,7 +341,8 @@ export default class CallHandler {
                             title: _t("Answered Elsewhere"),
                             description: _t("The call was answered on another device."),
                         });
-                    } else {
+                    } else if (oldState !== CallState.Fledgling) {
+                        // don't play the end-call sound for calls that never got off the ground
                         this.play(AudioID.CallEnd);
                     }
             }
@@ -614,6 +615,18 @@ export default class CallHandler {
                 call.setRemoteOnHold(true);
             }
         }
+    }
+
+    /**
+     * @returns true if we are currently in any call where we haven't put the remote party on hold
+     */
+    hasAnyUnheldCall() {
+        for (const call of this.calls.values()) {
+            if (call.state === CallState.Ended) continue;
+            if (!call.isRemoteOnHold()) return true;
+        }
+
+        return false;
     }
 
     private async startCallApp(roomId: string, type: string) {

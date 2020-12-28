@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.10.0",
+  "version": "3.11.1",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -27,11 +27,12 @@
     "matrix-gen-i18n": "scripts/gen-i18n.js",
     "matrix-prune-i18n": "scripts/prune-i18n.js"
   },
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./src/index.js",
   "matrix_src_main": "./src/index.js",
+  "matrix_lib_main": "./lib/index.js",
+  "matrix_lib_typings": "./lib/index.d.ts",
   "scripts": {
-    "prepare": "yarn build",
+    "prepublishOnly": "yarn build",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && ./scripts/gen-i18n.js && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
