@@ -2893,5 +2893,6 @@
     "%(name)s on hold": "%(name)s podržen",
     "You held the call <a>Switch</a>": "Podrželi jste hovor <a>Přepnout</a>",
     "sends snowfall": "pošle sněžení",
-    "Sends the given message with snowfall": "Pošle zprávu se sněžením"
+    "Sends the given message with snowfall": "Pošle zprávu se sněžením",
+    "You have no visible notifications.": "Nejsou dostupná žádná oznámení."
 }
