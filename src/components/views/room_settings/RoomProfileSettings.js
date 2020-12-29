@@ -164,7 +164,7 @@ export default class RoomProfileSettings extends React.Component {
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
 
         let profileSettingsButtons;
-        if (this.state.enableProfileSave) {
+        if (this.state.canSetTopic && this.state.canSetName) {
             profileSettingsButtons = (
                 <div className="mx_ProfileSettings_buttons">
                     <AccessibleButton
