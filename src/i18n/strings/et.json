@@ -2980,5 +2980,6 @@
     "You held the call <a>Switch</a>": "Sa panid kõne ootele <a>Lülita tagasi</a>",
     "%(name)s on hold": "%(name)s on ootel",
     "sends snowfall": "saadab lumesaju",
-    "Sends the given message with snowfall": "Saadab antud sõnumi koos lumesajuga"
+    "Sends the given message with snowfall": "Saadab antud sõnumi koos lumesajuga",
+    "You have no visible notifications.": "Sul pole nähtavaid teavitusi."
 }
