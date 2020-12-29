@@ -779,11 +779,11 @@ class WidgetExplorer extends React.Component {
             <div className="mx_Dialog_content">
                 <FilteredList query={this.state.query} onChange={this.onQueryChange}>
                     {widgets.map(w =>
-                        <button
+                        (<button
                             className='mx_DevTools_RoomStateExplorer_button'
                             key={w.url + w.eventId}
                             onClick={() => this.onEditWidget(w)}
-                        >{w.url}</button>
+                        >{w.url}</button>)
                     )}
                 </FilteredList>
             </div>
