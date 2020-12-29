@@ -60,6 +60,9 @@ export class CapabilityText {
         [ElementWidgetCapabilities.CanChangeViewedRoom]: {
             [GENERIC_WIDGET_KIND]: _td("Change which room you're viewing"),
         },
+        [MatrixCapabilities.MSC2931Navigate]: {
+            [GENERIC_WIDGET_KIND]: _td("Change which room you're viewing and use permalinks"),
+        },
     };
 
     private static stateSendRecvCaps: ISendRecvStaticCapText = {
