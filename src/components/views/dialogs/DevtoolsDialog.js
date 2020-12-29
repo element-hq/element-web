@@ -778,13 +778,13 @@ class WidgetExplorer extends React.Component {
         return (<div>
             <div className="mx_Dialog_content">
                 <FilteredList query={this.state.query} onChange={this.onQueryChange}>
-                    {widgets.map(w =>
-                        (<button
+                    {widgets.map(w => {
+                        return <button
                             className='mx_DevTools_RoomStateExplorer_button'
                             key={w.url + w.eventId}
                             onClick={() => this.onEditWidget(w)}
-                        >{w.url}</button>)
-                    )}
+                        >{w.url}</button>;
+                    })}
                 </FilteredList>
             </div>
             <div className="mx_Dialog_buttons">
