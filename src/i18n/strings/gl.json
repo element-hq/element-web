@@ -2979,5 +2979,6 @@
     "%(name)s on hold": "%(name)s agardando",
     "You held the call <a>Switch</a>": "Pausaches a chamada <a>Cambiar</a>",
     "sends snowfall": "envía neve",
-    "Sends the given message with snowfall": "Engade neve caendo á mensaxe"
+    "Sends the given message with snowfall": "Engade neve caendo á mensaxe",
+    "You have no visible notifications.": "Non tes notificacións visibles."
 }
