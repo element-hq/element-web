@@ -2979,5 +2979,6 @@
     "sends fireworks": "invia fuochi d'artificio",
     "Sends the given message with fireworks": "Invia il messaggio con fuochi d'artificio",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Antepone ┬──┬ ノ( ゜-゜ノ) ad un messaggio di testo",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Antepone (╯°□°）╯︵ ┻━┻ ad un messaggio di testo"
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Antepone (╯°□°）╯︵ ┻━┻ ad un messaggio di testo",
+    "You have no visible notifications.": "Non hai notifiche visibili."
 }
