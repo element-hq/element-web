@@ -790,7 +790,7 @@
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s yekkes tansa-nni tayeḍ %(addresses)s i texxamt-a.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ibeddel tansa-nni tayeḍ n texxamt-a.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ibeddel tansa tagejdant d tansa-nni tayeḍ i texxamt-a.",
-    "Sends a message as html, without interpreting it as markdown": "Yuzen izen d html war ma isegza-t s tukksa n tecreḍt",
+    "Sends a message as html, without interpreting it as markdown": "Yuzen izen d html war ma isegza-t belli d tukksa n tecreḍt",
     "Deops user with given id": "Aseqdac Deops s usulay i d-yettunefken",
     "Sends the given message coloured as a rainbow": "Yuzen iznan i d-yettunefken yeɣman s yiniten am teslit n Unẓar",
     "Sends the given emote coloured as a rainbow": "Yuzen tanfalit i d-yettunefken yeɣman s yiniten am teslit n Unẓar",
