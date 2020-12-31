@@ -2911,5 +2911,6 @@
     "sends fireworks": "envia fogos de artifício",
     "Sends the given message with fireworks": "Envia a mensagem com fogos de artifício",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Adiciona ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Adiciona (╯°□°）╯︵ ┻━┻ a uma mensagem de texto"
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Adiciona (╯°□°）╯︵ ┻━┻ a uma mensagem de texto",
+    "You have no visible notifications.": "Não há notificações."
 }
