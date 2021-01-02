@@ -2971,5 +2971,10 @@
     "You've reached the maximum number of simultaneous calls.": "Du hast die maximale Anzahl gleichzeitiger Anrufe erreicht.",
     "Too Many Calls": "Zu viele Anrufe",
     "Call failed because webcam or microphone could not be accessed. Check that:": "Der Anruf ist fehlgeschlagen, weil nicht auf die Webcam oder der das Mikrofon zugegriffen werden konnte. Prüfe nach, ob:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Der Anruf ist fehlgeschlagen, weil nicht auf das Mikrofon zugegriffen werden konnte. Prüfe noch einmal nach, ob das Mikrofon eingesteckt und richtig eingestellt ist."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Der Anruf ist fehlgeschlagen, weil nicht auf das Mikrofon zugegriffen werden konnte. Prüfe noch einmal nach, ob das Mikrofon eingesteckt und richtig eingestellt ist.",
+    "You have no visible notifications.": "Du hast keine sichtbaren Benachrichtigungen.",
+    "%(name)s on hold": "%(name)s wird gehalten",
+    "You held the call <a>Switch</a>": "Du hältst den Anruf <a>Wechseln</a>",
+    "sends snowfall": "sendet Schneeflocken",
+    "Sends the given message with snowfall": "Sendet die gewählte Nachricht mit Schneeflocken"
 }
