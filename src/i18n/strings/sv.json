@@ -2910,5 +2910,6 @@
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Lägger till ┬──┬ ノ( ゜-゜ノ) till början av ett textmeddelande",
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Lägger till (╯°□°）╯︵ ┻━┻ till början av ett textmeddelande",
     "You've reached the maximum number of simultaneous calls.": "Du har nått det maximala antalet samtidiga samtal.",
-    "Too Many Calls": "För många samtal"
+    "Too Many Calls": "För många samtal",
+    "You have no visible notifications.": "Du har inga synliga aviseringar."
 }
