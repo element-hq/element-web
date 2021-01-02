@@ -1199,5 +1199,8 @@
     "Avoid repeated words and characters": "המנעו ממילים ואותיות נשנות",
     "Use a longer keyboard pattern with more turns": "השתמשו בדפוס ארוך שמכיל אותיות מכל שורה במקלדת",
     "No need for symbols, digits, or uppercase letters": "אין צורך בסמלים, מספרים או אותיות גדולות",
-    "Use a few words, avoid common phrases": "השתמשו במילים ספורות, המנעו מביטויים מוכרים"
+    "Use a few words, avoid common phrases": "השתמשו במילים ספורות, המנעו מביטויים מוכרים",
+    "Verification Requests": "בקשות אימות",
+    "View Servers in Room": "צפה בשרתים בחדר",
+    "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "אנא שכח את כל ההודעות ששלחתי כאשר חשבוני מושבת (<b> אזהרה: </b> זה יגרום למשתמשים עתידיים לראות תצוגה חלקית של שיחות)"
 }
