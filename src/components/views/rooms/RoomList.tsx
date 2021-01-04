@@ -223,7 +223,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         };
 
         // shallow-copy from the template as we need to make modifications to it
-        this.tagAesthetics = Object.assign({}, TAG_AESTHETICS);
+        this.tagAesthetics = objectShallowClone(TAG_AESTHETICS);
         this.updateDmAddRoomAction();
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -242,7 +242,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private updateDmAddRoomAction() {
-        const dmTagAesthetics = Object.assign({}, TAG_AESTHETICS[DefaultTagID.DM]);
+        const dmTagAesthetics = objectShallowClone(TAG_AESTHETICS[DefaultTagID.DM]);
         if (CallHandler.sharedInstance().getSupportsPstnProtocol()) {
             dmTagAesthetics.addRoomContextMenu = dmAddRoomContextMenu;
         } else {
