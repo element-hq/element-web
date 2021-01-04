@@ -23,7 +23,7 @@ import SdkConfig from "../../../SdkConfig";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
-import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./ElementProDialogTypes";
+import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./HostSignupDialogTypes";
 
 interface IProps {
     requestClose(): void;
@@ -34,9 +34,9 @@ interface IState {
     error: string;
 }
 
-export default class ElementProDialog extends React.PureComponent<IProps, IState> {
+export default class HostSignupDialog extends React.PureComponent<IProps, IState> {
     private iframeRef: React.RefObject<HTMLIFrameElement> = React.createRef();
-    private readonly elementProSetupUrl: string;
+    private readonly hostSignupSetupUrl: string;
 
     constructor(props: IProps) {
         super(props);
@@ -46,15 +46,15 @@ export default class ElementProDialog extends React.PureComponent<IProps, IState
             error: null,
         };
 
-        this.elementProSetupUrl = SdkConfig.get().element_pro.url;
+        this.hostSignupSetupUrl = SdkConfig.get().host_signup.url;
     }
 
     private messageHandler = (message: IPostmessage) => {
-        if (!this.elementProSetupUrl.startsWith(message.origin)) {
+        if (!this.hostSignupSetupUrl.startsWith(message.origin)) {
             return;
         }
         switch (message.data.action) {
-            case PostmessageAction.ElementProAccountDetailsRequest:
+            case PostmessageAction.HostSignupAccountDetailsRequest:
                 Modal.createDialog(
                     ElementProDataConfirmDialog,
                     {
@@ -98,7 +98,7 @@ export default class ElementProDialog extends React.PureComponent<IProps, IState
     }
 
     private sendMessage = (message: IPostmessageResponseData) => {
-        this.iframeRef.current.contentWindow.postMessage(message, this.elementProSetupUrl);
+        this.iframeRef.current.contentWindow.postMessage(message, this.hostSignupSetupUrl);
     }
 
     private async sendAccountDetails() {
@@ -111,7 +111,7 @@ export default class ElementProDialog extends React.PureComponent<IProps, IState
             return;
         }
         this.sendMessage({
-            action: PostmessageAction.ElementProAccountDetails,
+            action: PostmessageAction.HostSignupAccountDetails,
             account: {
                 accessToken: await MatrixClientPeg.get().getAccessToken(),
                 name: OwnProfileStore.instance.displayName,
@@ -133,15 +133,15 @@ export default class ElementProDialog extends React.PureComponent<IProps, IState
     public render(): React.ReactNode {
         return (
             <BaseDialog
-                className="mx_ElementProBaseDialog"
+                className="mx_HostSignupBaseDialog"
                 onFinished={this.onFinished}
                 title={_t("Set up your own personal Element host")}
                 hasCancel={true}
                 fixedWidth={false}
             >
-                <div className="mx_ElementProDialog_container">
+                <div className="mx_HostSignupDialog_container">
                     <iframe
-                        src={this.elementProSetupUrl}
+                        src={this.hostSignupSetupUrl}
                         ref={this.iframeRef}
                         sandbox="allow-forms allow-scripts allow-same-origin"
                     />

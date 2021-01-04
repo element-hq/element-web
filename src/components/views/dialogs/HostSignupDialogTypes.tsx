@@ -1,7 +1,7 @@
 export enum PostmessageAction {
     CloseDialog = "close_dialog",
-    ElementProAccountDetails = "element_pro_account_details",
-    ElementProAccountDetailsRequest = "element_pro_account_details_request",
+    HostSignupAccountDetails = "host_signup_account_details",
+    HostSignupAccountDetailsRequest = "host_signup_account_details_request",
     SetupComplete = "setup_complete",
 }
 

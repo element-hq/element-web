@@ -51,7 +51,7 @@ import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
 import {UIFeature} from "../../settings/UIFeature";
-import ElementProAction from "./ElementProAction";
+import HostSignupAction from "./HostSignupAction";
 
 interface IProps {
     isMinimized: boolean;
@@ -274,7 +274,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         let topSection;
         const signupLink = getHostingLink("user-context-menu");
-        const elementProConfig = SdkConfig.get().element_pro;
+        const hostSignupConfig = SdkConfig.get().host_signup;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -294,20 +294,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     })}
                 </div>
             )
-        } else if (signupLink || elementProConfig) {
-            let elementProIFrame;
-            if (elementProConfig && elementProConfig.url) {
-                // If element_pro.domains is set to a non-empty array, only show
+        } else if (signupLink || hostSignupConfig) {
+            let hostSignupAction;
+            if (hostSignupConfig && hostSignupConfig.url) {
+                // If host_signup.domains is set to a non-empty array, only show
                 // dialog if the user is on the domain or a subdomain.
-                const elementProDomains = elementProConfig.domains || [];
+                const hostSignupDomains = hostSignupConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
-                const validDomains = elementProDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
-                if (!elementProDomains || validDomains.length > 0) {
-                    elementProIFrame = <div
+                const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
+                if (!hostSignupDomains || validDomains.length > 0) {
+                    hostSignupAction = <div
                         className=""
                         onClick={this.onCloseMenu}
                     >
-                        <ElementProAction />
+                        <HostSignupAction />
                     </div>;
                 }
             }
@@ -327,7 +327,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             )}
                         </div>
                     }
-                    {elementProIFrame}
+                    {hostSignupAction}
                 </>
             );
         }

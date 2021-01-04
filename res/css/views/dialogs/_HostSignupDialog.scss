@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ElementProDialog .mx_Dialog {
+.mx_HostSignupDialog .mx_Dialog {
     height: 66%;
     min-width: 50%;
 }
 
-.mx_ElementProBaseDialog {
+.mx_HostSignupBaseDialog {
     height: 100%;
 }
 
-.mx_ElementProDialog_container {
+.mx_HostSignupDialog_container {
     height: 90%;
 
     iframe {
