@@ -2975,5 +2975,8 @@
     "Sends the given message with snowfall": "Az üzenet elküldése hóeséssel",
     "See emotes posted to your active room": "Az aktív szobájába küldött emodzsik megjelenítése",
     "See emotes posted to this room": "Ebbe a szobába küldött emodzsik megjelenítése",
-    "You have no visible notifications.": "Nincsenek látható értesítések."
+    "You have no visible notifications.": "Nincsenek látható értesítések.",
+    "Transfer": "Átadás",
+    "Failed to transfer call": "A hívás átadása nem sikerült",
+    "A call can only be transferred to a single user.": "Csak egy felhasználónak lehet átadni a hívást."
 }
