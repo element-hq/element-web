@@ -16,9 +16,8 @@ limitations under the License.
 
 import * as React from "react";
 import BaseDialog from '../../views/dialogs/BaseDialog';
-import ElementProConfirmCloseDialog from './ElementProConfirmCloseDialog';
-import ElementProDataConfirmDialog from './ElementProDataConfirmDialog';
 import Modal from "../../../Modal";
+import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -56,8 +55,14 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         switch (message.data.action) {
             case PostmessageAction.HostSignupAccountDetailsRequest:
                 Modal.createDialog(
-                    ElementProDataConfirmDialog,
+                    QuestionDialog,
                     {
+                        title: _t("Confirm Account Data Transfer"),
+                        description: _t(
+                            "Please accept transfer of data to the host signup wizard to continue. " +
+                            "The setup wizard will be able to access your account for the duration of the " +
+                            "setup process."),
+                        button: _t("Accept"),
                         onFinished: result => {
                             if (result) {
                                 return this.sendAccountDetails();
@@ -85,8 +90,13 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             this.props.requestClose();
         } else {
             Modal.createDialog(
-                ElementProConfirmCloseDialog,
+                QuestionDialog,
                 {
+                    title: _t("Confirm Abort Of Host Creation"),
+                    description: _t(
+                        "Are you sure you wish to abort creation of the host? The process cannot be continued.",
+                    ),
+                    button: _t("Abort"),
                     onFinished: result => {
                         if (result) {
                             this.props.requestClose();
