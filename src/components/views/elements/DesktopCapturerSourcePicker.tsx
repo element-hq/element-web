@@ -111,6 +111,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                     return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
                 });
         }
+
         const buttonStyle = "mx_desktopCapturerSourcePicker_tabLabel";
         const screensButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Screens) ? "_selected" : "");
         const windowsButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Windows) ? "_selected" : "");
