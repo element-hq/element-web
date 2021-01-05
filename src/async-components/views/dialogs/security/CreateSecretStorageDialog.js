@@ -593,10 +593,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onValidate={this._onPassPhraseValidate}
                     fieldRef={this._passphraseField}
                     autoFocus={true}
-                    label={_td("Enter a recovery passphrase")}
-                    labelEnterPassword={_td("Enter a recovery passphrase")}
-                    labelStrongPassword={_td("Great! This recovery passphrase looks strong enough.")}
-                    labelAllowedButUnsafe={_td("Great! This recovery passphrase looks strong enough.")}
+                    label={_td("Enter a Security Phrase")}
+                    labelEnterPassword={_td("Enter a Security Phrase")}
+                    labelStrongPassword={_td("Great! This Security Phrase looks strong enough.")}
+                    labelAllowedButUnsafe={_td("Great! This Security Phrase looks strong enough.")}
                 />
             </div>
 

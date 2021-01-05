@@ -58,7 +58,7 @@ describe("AccessSecretStorageDialog", function() {
         expect(recoveryKeyValid).toBe(true);
     });
 
-    it("Notifies the user if they input an invalid recovery key", async function(done) {
+    it("Notifies the user if they input an invalid Security Key", async function(done) {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
               checkPrivateKey={async () => false}
@@ -80,7 +80,7 @@ describe("AccessSecretStorageDialog", function() {
             className: "mx_AccessSecretStorageDialog_recoveryKeyFeedback " +
                 "mx_AccessSecretStorageDialog_recoveryKeyFeedback_invalid",
         });
-        expect(notification.props.children).toEqual("Invalid Recovery Key");
+        expect(notification.props.children).toEqual("Invalid Security Key");
         done();
     });
 
@@ -105,7 +105,7 @@ describe("AccessSecretStorageDialog", function() {
         });
         expect(notification.props.children).toEqual(
             ["\uD83D\uDC4E ", "Unable to access secret storage. Please verify that you " +
-                     "entered the correct recovery passphrase."]);
+                     "entered the correct Security Phrase."]);
         done();
     });
 });
