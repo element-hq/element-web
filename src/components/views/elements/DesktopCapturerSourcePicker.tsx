@@ -42,15 +42,15 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
     render() {
         return (
             <AccessibleButton
-                className="mx_streamSelectorDialog_stream_button"
+                className="mx_desktopCapturerSourcePicker_stream_button"
                 data-id={this.props.source.id}
                 title={this.props.source.name}
                 onClick={this.onClick} >
                 <img
-                    className="mx_streamSelectorDialog_stream_thumbnail"
+                    className="mx_desktopCapturerSourcePicker_stream_thumbnail"
                     src={this.props.source.thumbnail.toDataURL()}
                 />
-                <span className="mx_streamSelectorDialog_stream_name">{this.props.source.name}</span>
+                <span className="mx_desktopCapturerSourcePicker_stream_name">{this.props.source.name}</span>
             </AccessibleButton>
         );
     }
@@ -113,17 +113,17 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                     return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
                 });
         }
-        const buttonStyle = "mx_streamSelectorDialog_tabLabel";
+        const buttonStyle = "mx_desktopCapturerSourcePicker_tabLabel";
         const screensButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Screens) ? "_selected" : "");
         const windowsButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Windows) ? "_selected" : "");
 
         return (
             <BaseDialog
-                className="mx_streamSelectorDialog"
+                className="mx_desktopCapturerSourcePicker"
                 onFinished={this.onCloseClick}
                 title={_td("Share your screen")}
             >
-                <div className="mx_streamSelectorDialog_tabLabels">
+                <div className="mx_desktopCapturerSourcePicker_tabLabels">
                     <AccessibleButton
                         className={screensButtonStyle}
                         onClick={this.onScreensClick}
@@ -137,7 +137,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                         {_td("Windows")}
                     </AccessibleButton>
                 </div>
-                <div className="mx_streamSelectorDialog_panel">
+                <div className="mx_desktopCapturerSourcePicker_panel">
                     { sources }
                 </div>
             </BaseDialog>

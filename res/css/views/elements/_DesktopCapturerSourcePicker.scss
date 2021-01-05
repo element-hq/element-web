@@ -15,17 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_streamSelectorDialog {
+.mx_desktopCapturerSourcePicker {
     overflow: hidden;
 }
 
-.mx_streamSelectorDialog_tabLabels {
+.mx_desktopCapturerSourcePicker_tabLabels {
     display: flex;
     padding: 0 0 8px 0;
 }
 
-.mx_streamSelectorDialog_tabLabel,
-.mx_streamSelectorDialog_tabLabel_selected {
+.mx_desktopCapturerSourcePicker_tabLabel,
+.mx_desktopCapturerSourcePicker_tabLabel_selected {
     width: 100%;
     text-align: center;
     border-radius: 8px;
@@ -33,12 +33,12 @@ limitations under the License.
     font-size: $font-13px;
 }
 
-.mx_streamSelectorDialog_tabLabel_selected {
+.mx_desktopCapturerSourcePicker_tabLabel_selected {
     background-color: $tab-label-active-bg-color;
     color: $tab-label-active-fg-color;
 }
 
-.mx_streamSelectorDialog_panel {
+.mx_desktopCapturerSourcePicker_panel {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -47,24 +47,24 @@ limitations under the License.
     overflow: overlay;
 }
 
-.mx_streamSelectorDialog_stream_button {
+.mx_desktopCapturerSourcePicker_stream_button {
     display: flex;
     flex-direction: column;
     margin: 8px;
     border-radius: 4px;
 }
 
-.mx_streamSelectorDialog_stream_button:hover,
-.mx_streamSelectorDialog_stream_button:focus {
+.mx_desktopCapturerSourcePicker_stream_button:hover,
+.mx_desktopCapturerSourcePicker_stream_button:focus {
     background: $roomtile-selected-bg-color;
 }
 
-.mx_streamSelectorDialog_stream_thumbnail {
+.mx_desktopCapturerSourcePicker_stream_thumbnail {
     margin: 4px;
     width: 312px;
 }
 
-.mx_streamSelectorDialog_stream_name {
+.mx_desktopCapturerSourcePicker_stream_name {
     margin: 0 4px;
     white-space: nowrap;
     text-overflow: ellipsis;
