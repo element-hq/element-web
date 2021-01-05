@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog"
 import AccessibleButton from './AccessibleButton';
 
@@ -120,20 +120,20 @@ export default class DesktopCapturerSourcePicker extends React.Component<
             <BaseDialog
                 className="mx_desktopCapturerSourcePicker"
                 onFinished={this.onCloseClick}
-                title={_td("Share your screen")}
+                title={_t("Share your screen")}
             >
                 <div className="mx_desktopCapturerSourcePicker_tabLabels">
                     <AccessibleButton
                         className={screensButtonStyle}
                         onClick={this.onScreensClick}
                     >
-                        {_td("Screens")}
+                        {_t("Screens")}
                     </AccessibleButton>
                     <AccessibleButton
                         className={windowsButtonStyle}
                         onClick={this.onWindowsClick}
                     >
-                        {_td("Windows")}
+                        {_t("Windows")}
                     </AccessibleButton>
                 </div>
                 <div className="mx_desktopCapturerSourcePicker_panel">
