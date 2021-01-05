@@ -2970,5 +2970,9 @@
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "E paraprin një mesazh tekst i thjeshtë me (╯°□°）╯︵ ┻━┻",
     "%(name)s on hold": "%(name)s e mbajtur",
     "sends snowfall": "dërgon rënie bore",
-    "Sends the given message with snowfall": "E dërgon mesazhin e dhënë të stolisur me rënie bore"
+    "Sends the given message with snowfall": "E dërgon mesazhin e dhënë të stolisur me rënie bore",
+    "You have no visible notifications.": "S’keni njoftime të dukshme.",
+    "Transfer": "Shpërngule",
+    "Failed to transfer call": "S’u arrit të shpërngulej thirrje",
+    "A call can only be transferred to a single user.": "Një thirrje mund të shpërngulet vetëm te një përdorues."
 }
