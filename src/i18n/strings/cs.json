@@ -2894,5 +2894,8 @@
     "You held the call <a>Switch</a>": "Podrželi jste hovor <a>Přepnout</a>",
     "sends snowfall": "pošle sněžení",
     "Sends the given message with snowfall": "Pošle zprávu se sněžením",
-    "You have no visible notifications.": "Nejsou dostupná žádná oznámení."
+    "You have no visible notifications.": "Nejsou dostupná žádná oznámení.",
+    "Transfer": "Přepojit",
+    "Failed to transfer call": "Hovor se nepodařilo přepojit",
+    "A call can only be transferred to a single user.": "Hovor lze přepojit pouze jednomu uživateli."
 }
