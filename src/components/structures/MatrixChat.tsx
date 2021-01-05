@@ -80,6 +80,7 @@ import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityProt
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
+import DialPadModal from "../views/voip/DialPadModal";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -702,6 +703,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }, () => {
                     this.state.resizeNotifier.notifyLeftHandleResized();
                 });
+                break;
+            case Action.OpenDialPad:
+                Modal.createTrackedDialog('Dial pad', '', DialPadModal, {}, "mx_Dialog_dialPadWrapper");
                 break;
             case 'on_logged_in':
                 if (
