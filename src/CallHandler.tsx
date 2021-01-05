@@ -82,6 +82,9 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import {UIFeature} from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
+import { Action } from './dispatcher/actions';
+
+const CHECK_PSTN_SUPPORT_ATTEMPTS = 3;
 
 enum AudioID {
     Ring = 'ringAudio',
@@ -119,6 +122,8 @@ export default class CallHandler {
     private calls = new Map<string, MatrixCall>(); // roomId -> call
     private audioPromises = new Map<AudioID, Promise<void>>();
     private dispatcherRef: string = null;
+    private supportsPstnProtocol = null;
+    private pstnSupportCheckTimer: NodeJS.Timeout; // number actually because we're in the browser
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -145,6 +150,8 @@ export default class CallHandler {
         if (SettingsStore.getValue(UIFeature.Voip)) {
             MatrixClientPeg.get().on('Call.incoming', this.onCallIncoming);
         }
+
+        this.checkForPstnSupport(CHECK_PSTN_SUPPORT_ATTEMPTS);
     }
 
     stop() {
@@ -156,6 +163,33 @@ export default class CallHandler {
             dis.unregister(this.dispatcherRef);
             this.dispatcherRef = null;
         }
+    }
+
+    private async checkForPstnSupport(maxTries) {
+        try {
+            const protocols = await MatrixClientPeg.get().getThirdpartyProtocols();
+            if (protocols['im.vector.protocol.pstn'] !== undefined) {
+                this.supportsPstnProtocol = protocols['im.vector.protocol.pstn'];
+            } else if (protocols['m.protocol.pstn'] !== undefined) {
+                this.supportsPstnProtocol = protocols['m.protocol.pstn'];
+            } else {
+                this.supportsPstnProtocol = null;
+            }
+            dis.dispatch({action: Action.PstnSupportUpdated});
+        } catch (e) {
+            if (maxTries === 1) {
+                console.log("Failed to check for pstn protocol support and no retries remain: assuming no support", e);
+            } else {
+                console.log("Failed to check for pstn protocol support: will retry", e);
+                this.pstnSupportCheckTimer = setTimeout(() => {
+                    this.checkForPstnSupport(maxTries - 1);
+                }, 10000);
+            }
+        }
+    }
+
+    getSupportsPstnProtocol() {
+        return this.supportsPstnProtocol;
     }
 
     private onCallIncoming = (call) => {
