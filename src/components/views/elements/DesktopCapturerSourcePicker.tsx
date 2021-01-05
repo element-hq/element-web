@@ -36,7 +36,6 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
     }
 
     onClick = (ev) => {
-        //ev.stopPropagation();
         this.props.onSelect(this.props.source);
     }
 
