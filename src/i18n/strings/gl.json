@@ -2980,5 +2980,8 @@
     "You held the call <a>Switch</a>": "Pausaches a chamada <a>Cambiar</a>",
     "sends snowfall": "envía neve",
     "Sends the given message with snowfall": "Engade neve caendo á mensaxe",
-    "You have no visible notifications.": "Non tes notificacións visibles."
+    "You have no visible notifications.": "Non tes notificacións visibles.",
+    "Transfer": "Transferir",
+    "Failed to transfer call": "Fallou a transferencia da chamada",
+    "A call can only be transferred to a single user.": "Unha chamada só se pode transferir a unha única usuaria."
 }
