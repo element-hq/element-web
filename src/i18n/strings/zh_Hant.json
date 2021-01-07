@@ -2983,5 +2983,8 @@
     "You held the call <a>Switch</a>": "您已保留通話 <a>切換</a>",
     "sends snowfall": "傳送雪球",
     "Sends the given message with snowfall": "與雪球一同傳送指定訊息",
-    "You have no visible notifications.": "您沒有可見的通知。"
+    "You have no visible notifications.": "您沒有可見的通知。",
+    "Transfer": "傳輸",
+    "Failed to transfer call": "傳輸通話失敗",
+    "A call can only be transferred to a single user.": "一個通話只能傳輸給ㄧ個使用者。"
 }
