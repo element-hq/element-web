@@ -1720,7 +1720,7 @@
     "They don't match": "Ili ne akordas",
     "To be secure, do this in person or use a trusted way to communicate.": "Por plia sekureco, faru tion persone, aŭ uzu alian fidatan komunikilon.",
     "Verify yourself & others to keep your chats safe": "Kontrolu vin mem kaj aliajn por sekurigi viajn babilojn",
-    "Channel: <channelLink/>": "Kanalo: %(channelName)s",
+    "Channel: <channelLink/>": "Kanalo: <channelLink/>",
     "Show less": "Montri malpli",
     "Show more": "Montri pli",
     "Help": "Helpo",

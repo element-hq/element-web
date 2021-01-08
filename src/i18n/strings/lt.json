@@ -1953,7 +1953,7 @@
     "not found in storage": "saugykloje nerasta",
     "Cross-signing is not set up.": "Kryžminis pasirašymas nenustatytas.",
     "Cross-signing is ready for use.": "Kryžminis pasirašymas yra paruoštas naudoti.",
-    "Channel: <channelLink/>": "Kanalas: %(channelName)s",
+    "Channel: <channelLink/>": "Kanalas: <channelLink/>",
     "Workspace: <networkLink/>": "Darbo sritis: <networkLink/>",
     "This bridge is managed by <user />.": "Šis tiltas yra tvarkomas <user />.",
     "This bridge was provisioned by <user />.": "Šis tiltas buvo parūpintas <user />.",

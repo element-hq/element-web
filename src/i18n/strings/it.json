@@ -1798,7 +1798,7 @@
     "Review": "Controlla",
     "This bridge was provisioned by <user />.": "Questo bridge è stato fornito da <user />.",
     "Workspace: <networkLink/>": "Spazio di lavoro: <networkLink/>",
-    "Channel: <channelLink/>": "Canale: %(channelName)s",
+    "Channel: <channelLink/>": "Canale: <channelLink/>",
     "Show less": "Mostra meno",
     "Securely cache encrypted messages locally for them to appear in search results, using ": "Tieni in cache localmente i messaggi cifrati in modo sicuro affinché appaiano nei risultati di ricerca, usando ",
     " to store messages from ": " per conservare i messaggi da ",

@@ -1810,7 +1810,7 @@
     "They don't match": "Ils ne correspondent pas",
     "This bridge was provisioned by <user />.": "Cette passerelle a été fournie par <user />.",
     "Workspace: <networkLink/>": "Espace de travail : <networkLink/>",
-    "Channel: <channelLink/>": "Canal : %(channelName)s",
+    "Channel: <channelLink/>": "Canal : <channelLink/>",
     "Show less": "En voir moins",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Ce salon transmet les messages vers les plateformes suivantes. <a>En savoir plus.</a>",
     "This room isn’t bridging messages to any platforms. <a>Learn more.</a>": "Ce salon ne transmet les messages à aucune plateforme. <a>En savoir plus.</a>",

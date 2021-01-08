@@ -1794,7 +1794,7 @@
     "Review": "Átnéz",
     "This bridge was provisioned by <user />.": "Ezt a hidat az alábbi felhasználó készítette: <user />.",
     "Workspace: <networkLink/>": "Munkahely: <networkLink/>",
-    "Channel: <channelLink/>": "Csatorna: %(channelName)s",
+    "Channel: <channelLink/>": "Csatorna: <channelLink/>",
     "Show less": "Kevesebbet mutat",
     "Securely cache encrypted messages locally for them to appear in search results, using ": "A titkosított üzenetek kereséséhez azokat biztonságos módon helyileg kell tárolnod, felhasználva: ",
     " to store messages from ": " üzenetek tárolásához ",

@@ -1806,7 +1806,7 @@
     "Review": "Berrikusi",
     "This bridge was provisioned by <user />.": "Zubi hau <user /> erabiltzaileak hornitu du.",
     "Workspace: <networkLink/>": "Lan eremua: <networkLink/>",
-    "Channel: <channelLink/>": "Kanala: %(channelName)s",
+    "Channel: <channelLink/>": "Kanala: <channelLink/>",
     "Show less": "Erakutsi gutxiago",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Pasahitza aldatzean oraingo muturretik muturrerako zifratze gako guztiak ezeztatuko ditu saio guztietan, zifratutako txaten historiala ezin izango da irakurri ez badituzu aurretik zure geletako gakoak esportatzen eta gero berriro inportatzen. Etorkizunean hau hobetuko da.",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Zure kontuak zeharkako sinatze identitate bat du biltegi sekretuan, baina saio honek ez du oraindik fidagarritzat.",

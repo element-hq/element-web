@@ -2321,7 +2321,7 @@
     "Downloading logs": "正在下载日志",
     "This bridge was provisioned by <user />.": "桥接由 <user /> 准备。",
     "Workspace: <networkLink/>": "工作区：<networkLink/>",
-    "Channel: <channelLink/>": "频道：%(channelName)s",
+    "Channel: <channelLink/>": "频道：<channelLink/>",
     "well formed": "格式正确",
     "Master private key:": "主私钥：",
     "Self signing private key:": "自签名私钥：",

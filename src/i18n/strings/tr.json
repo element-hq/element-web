@@ -1411,7 +1411,7 @@
     "Later": "Sonra",
     "Review": "Gözden Geçirme",
     "Workspace: <networkLink/>": "Çalışma alanı: <networkLink/>",
-    "Channel: <channelLink/>": "Kanal: %(channelName)s",
+    "Channel: <channelLink/>": "Kanal: <channelLink/>",
     "Show less": "Daha az göster",
     "Show more": "Daha fazla göster",
     "in memory": "hafızada",

@@ -1537,7 +1537,7 @@
     "Unrecognised room address:": "Nerozpoznaná adresa miestnosti:",
     "This bridge is managed by <user />.": "Tento most spravuje <user />.",
     "Workspace: <networkLink/>": "Pracovisko: <networkLink/>",
-    "Channel: <channelLink/>": "Kanál: %(channelName)s",
+    "Channel: <channelLink/>": "Kanál: <channelLink/>",
     "Show less": "Zobraziť menej",
     "Show more": "Zobraziť viac",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Zmena hesla reštartuje všetky šifrovacie kľúče pre všetky vaše relácie. Šifrované správy sa stanú nečitateľnými, pokiaľ najprv nevyexportujete vaše kľúče a po zmene ich nenaimportujete. V budúcnosti sa tento proces zjednoduší.",

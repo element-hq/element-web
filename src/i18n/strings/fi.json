@@ -1877,7 +1877,7 @@
     "This bridge was provisioned by <user />.": "Tämän sillan tarjoaa käyttäjä <user />.",
     "This bridge is managed by <user />.": "Tätä siltaa hallinnoi käyttäjä <user />.",
     "Workspace: <networkLink/>": "Työtila: <networkLink/>",
-    "Channel: <channelLink/>": "Kanava: %(channelName)s",
+    "Channel: <channelLink/>": "Kanava: <channelLink/>",
     "Delete %(count)s sessions|other": "Poista %(count)s istuntoa",
     "Enable": "Ota käyttöön",
     "Backup is not signed by any of your sessions": "Mikään istuntosi ei ole allekirjoittanut varmuuskopiota",

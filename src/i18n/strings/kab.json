@@ -848,7 +848,7 @@
     "This bridge was provisioned by <user />.": "Tileggit-a tella-d sɣur <user />.",
     "This bridge is managed by <user />.": "Tileggit-a tettusefrak sɣur <user />.",
     "Workspace: <networkLink/>": "Tallunt n uxeddim: <networkLink/>",
-    "Channel: <channelLink/>": "Abadu: %(channelName)s",
+    "Channel: <channelLink/>": "Abadu: <channelLink/>",
     "Upload new:": "Asali amaynut:",
     "New passwords don't match": "Awalen uffiren imaynuten ur mṣadan ara",
     "Passwords can't be empty": "Awalen uffiren ur ilaq ara ad ilin d ilmawen",
