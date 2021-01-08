@@ -2976,5 +2976,8 @@
     "%(name)s on hold": "%(name)s wird gehalten",
     "You held the call <a>Switch</a>": "Du hältst den Anruf <a>Wechseln</a>",
     "sends snowfall": "sendet Schneeflocken",
-    "Sends the given message with snowfall": "Sendet die gewählte Nachricht mit Schneeflocken"
+    "Sends the given message with snowfall": "Sendet die gewählte Nachricht mit Schneeflocken",
+    "Transfer": "Übertragen",
+    "Failed to transfer call": "Anruf-Übertragung fehlgeschlagen",
+    "A call can only be transferred to a single user.": "Ein Anruf kann nur auf einen einzelnen Nutzer übertragen werden."
 }
