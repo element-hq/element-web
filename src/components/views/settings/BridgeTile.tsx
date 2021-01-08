@@ -22,7 +22,6 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Pill from "../elements/Pill";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
-import {replaceableComponentTs} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -65,7 +64,6 @@ interface IBridgeStateEvent {
     };
 }
 
-@replaceableComponentTs("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,
