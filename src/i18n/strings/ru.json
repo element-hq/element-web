@@ -2971,5 +2971,9 @@
     "%(name)s on hold": "%(name)s на удержании",
     "You held the call <a>Switch</a>": "Вы удерживаете звонок <a>Переключить</a>",
     "sends snowfall": "отправляет снегопад",
-    "Sends the given message with snowfall": "Отправляет сообщение со снегопадом"
+    "Sends the given message with snowfall": "Отправляет сообщение со снегопадом",
+    "You have no visible notifications.": "У вас нет видимых уведомлений.",
+    "Transfer": "Перевод",
+    "Failed to transfer call": "Не удалось перевести звонок",
+    "A call can only be transferred to a single user.": "Вызов может быть передан только одному пользователю."
 }
