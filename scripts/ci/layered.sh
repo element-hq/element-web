@@ -20,6 +20,7 @@ popd
 yarn link matrix-js-sdk
 yarn link
 yarn install
+yarn reskindex
 
 # Finally, set up element-web
 scripts/fetchdep.sh vector-im element-web

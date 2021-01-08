@@ -24,6 +24,9 @@ limitations under the License.
 .mx_RoomList_iconExplore::before {
     mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
 }
+.mx_RoomList_iconDialpad::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/dialpad.svg');
+}
 
 .mx_RoomList_explorePrompt {
     margin: 4px 12px 4px;
@@ -41,6 +44,8 @@ limitations under the License.
         padding: 0 0 0 24px;
         font-size: inherit;
         margin-top: 8px;
+        display: block;
+        text-align: start;
 
         &::before {
             content: '';

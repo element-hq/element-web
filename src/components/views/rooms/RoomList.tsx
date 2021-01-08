@@ -46,6 +46,7 @@ import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
+import CallHandler from "../../../CallHandler";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -89,10 +90,44 @@ interface ITagAesthetics {
     defaultHidden: boolean;
 }
 
-const TAG_AESTHETICS: {
+interface ITagAestheticsMap {
     // @ts-ignore - TS wants this to be a string but we know better
     [tagId: TagID]: ITagAesthetics;
-} = {
+}
+
+// If we have no dialer support, we just show the create chat dialog
+const dmOnAddRoom = (dispatcher?: Dispatcher<ActionPayload>) => {
+    (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
+};
+
+// If we have dialer support, show a context menu so the user can pick between
+// the dialer and the create chat dialog
+const dmAddRoomContextMenu = (onFinished: () => void) => {
+    return <IconizedContextMenuOptionList first>
+        <IconizedContextMenuOption
+            label={_t("Start a Conversation")}
+            iconClassName="mx_RoomList_iconPlus"
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onFinished();
+                defaultDispatcher.dispatch({action: "view_create_chat"});
+            }}
+        />
+        <IconizedContextMenuOption
+            label={_t("Open dial pad")}
+            iconClassName="mx_RoomList_iconDialpad"
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onFinished();
+                defaultDispatcher.fire(Action.OpenDialPad);
+            }}
+        />
+    </IconizedContextMenuOptionList>;
+};
+
+const TAG_AESTHETICS: ITagAestheticsMap = {
     [DefaultTagID.Invite]: {
         sectionLabel: _td("Invites"),
         isInvite: true,
@@ -108,9 +143,8 @@ const TAG_AESTHETICS: {
         isInvite: false,
         defaultHidden: false,
         addRoomLabel: _td("Start chat"),
-        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
-            (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
-        },
+        // Either onAddRoom or addRoomContextMenu are set depending on whether we
+        // have dialer support.
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
@@ -178,6 +212,7 @@ function customTagAesthetics(tagId: TagID): ITagAesthetics {
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private customTagStoreRef;
+    private tagAesthetics: ITagAestheticsMap;
 
     constructor(props: IProps) {
         super(props);
@@ -186,6 +221,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             sublists: {},
             isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
         };
+
+        // shallow-copy from the template as we need to make modifications to it
+        this.tagAesthetics = objectShallowClone(TAG_AESTHETICS);
+        this.updateDmAddRoomAction();
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
     }
@@ -202,6 +241,17 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         if (this.customTagStoreRef) this.customTagStoreRef.remove();
     }
 
+    private updateDmAddRoomAction() {
+        const dmTagAesthetics = objectShallowClone(TAG_AESTHETICS[DefaultTagID.DM]);
+        if (CallHandler.sharedInstance().getSupportsPstnProtocol()) {
+            dmTagAesthetics.addRoomContextMenu = dmAddRoomContextMenu;
+        } else {
+            dmTagAesthetics.onAddRoom = dmOnAddRoom;
+        }
+
+        this.tagAesthetics[DefaultTagID.DM] = dmTagAesthetics;
+    }
+
     private onAction = (payload: ActionPayload) => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
@@ -214,6 +264,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     show_room_tile: true, // to make sure the room gets scrolled into view
                 });
             }
+        } else if (payload.action === Action.PstnSupportUpdated) {
+            this.updateDmAddRoomAction();
+            this.updateLists();
         }
     };
 
@@ -355,7 +408,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
             const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)
                 ? customTagAesthetics(orderedTagId)
-                : TAG_AESTHETICS[orderedTagId];
+                : this.tagAesthetics[orderedTagId];
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             components.push(<RoomSublist
