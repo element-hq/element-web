@@ -1902,7 +1902,7 @@
     "Show %(count)s more|other": "Visa %(count)s till",
     "Show %(count)s more|one": "Visa %(count)s till",
     "Use default": "Använd förval",
-    "Mentions & Keywords": "Benämningar & nyckelord",
+    "Mentions & Keywords": "Omnämnanden & nyckelord",
     "Notification options": "Aviseringsinställningar",
     "Forget Room": "Glöm rum",
     "Favourited": "Favoritmarkerade",
@@ -2911,5 +2911,8 @@
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Lägger till (╯°□°）╯︵ ┻━┻ till början av ett textmeddelande",
     "You've reached the maximum number of simultaneous calls.": "Du har nått det maximala antalet samtidiga samtal.",
     "Too Many Calls": "För många samtal",
-    "You have no visible notifications.": "Du har inga synliga aviseringar."
+    "You have no visible notifications.": "Du har inga synliga aviseringar.",
+    "Transfer": "Överlåt",
+    "Failed to transfer call": "Misslyckades att överlåta samtal",
+    "A call can only be transferred to a single user.": "Ett samtal kan bara överlåtas till en enskild användare."
 }
