@@ -393,6 +393,10 @@ export default class MessageComposer extends React.Component {
         });
     }
 
+    sendMessage = () => {
+        this.messageComposerInput._sendMessage();
+    }
+
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
@@ -449,6 +453,16 @@ export default class MessageComposer extends React.Component {
                         <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
                     );
                 }
+            }
+
+            if (true) {
+                controls.push((
+                    <AccessibleTooltipButton
+                        className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
+                        onClick={this.sendMessage}
+                        title={_t('Send message')}
+                    />
+                ));
             }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
