@@ -455,7 +455,7 @@ export default class MessageComposer extends React.Component {
                 }
             }
 
-            if (true) {
+            if (SettingsStore.getValue("MessageComposerInput.sendButton")) {
                 controls.push((
                     <AccessibleTooltipButton
                         className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
