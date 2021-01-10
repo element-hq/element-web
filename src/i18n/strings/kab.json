@@ -2283,7 +2283,7 @@
     "Server did not require any authentication": "Aqeddac ur isuter ara akk asesteb",
     "Server did not return valid authentication information.": "Aqeddac ur d-yerri ara talɣut n usesteb tameɣtut.",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Ttxil-k·m ttu akk iznan i yuzneɣ mi ara senseɣ amiḍan-iw (<b>Ɣur-k·m:</b> iseqdacen ara d-yernun ad walin idiwenniyen ur nemmid ara)",
-    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Senqed aseqdac-a i wakken ad tcerḍeḍ fell-as d uttkil. Iseqdac uttkilen ad ak·am-d-awin lehna meqqren meqqren i uqerru  mi ara tesseqdaceḍ iznan yettwawgelhen seg yixef ɣer yixef.",
+    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Senqed aseqdac-a i wakken ad tcerḍeḍ fell-as d uttkil. Iseqdac uttkilen ad ak·am-d-awin lehna meqqren meqqren i uqerru mi ara tesseqdaceḍ iznan yettwawgelhen seg yixef ɣer yixef.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Asenqed n useqdac-a ad yecreḍ ɣef tɣimit-is tettwattkal, yerna ad yecreḍ ula ɣef tɣimit-ik·im tettwattkal i netta·nettat.",
     "Enable 'Manage Integrations' in Settings to do this.": "Rmed 'imsidaf n usefrek' deg yiɣewwaren i tigin n waya.",
     "Your %(brand)s doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "%(brand)s-ik·im ur ak·am yefki ara tisirag i useqdec n umsefrak n umsidef i wakken ad tgeḍ aya. Ttxil-k·m nermes anedbal.",
@@ -2720,5 +2720,16 @@
     "Palau": "Palaos",
     "Grenada": "Grenade",
     "United States": "Iwanaken-Yeddukklen-N-Temrikt",
-    "New Caledonia": "Kaliduni amaynut"
+    "New Caledonia": "Kaliduni amaynut",
+    "You've reached the maximum number of simultaneous calls.": "Tessawḍeḍ amḍan n yisawalen afellay yemseḍfaren.",
+    "Too Many Calls": "Ddeqs n yisawalen",
+    "No other application is using the webcam": "Ulac asnas-nniḍen i iseqdacen takamiṛat",
+    "Permission is granted to use the webcam": "Tettynefk tsiregt i useqdec takamiṛat",
+    "A microphone and webcam are plugged in and set up correctly": "Asawaḍ d tkamiṛat qqnen yerna ttusewlen akken iwata",
+    "Call failed because webcam or microphone could not be accessed. Check that:": "Asiwel ur yeddi ara aku takamiṛat neɣ asawaḍ ulac anekum ɣur-s. Senqed aya:",
+    "Unable to access webcam / microphone": "Anekcum ɣer tkamiṛat / usawaḍ d awezɣi",
+    "The call was answered on another device.": "Tiririt ɣef usiwel tella-d ɣef yibenk-nniḍen.",
+    "Answered Elsewhere": "Yerra-d seg wadeg-nniḍen",
+    "The call could not be established": "Asiwel ur yeqεid ara",
+    "The other party declined the call.": "Amdan-nniḍen yugi asiwel."
 }
