@@ -2984,5 +2984,12 @@
     "You have no visible notifications.": "Sul pole nähtavaid teavitusi.",
     "Transfer": "Suuna kõne edasi",
     "Failed to transfer call": "Kõne edasisuunamine ei õnnestunud",
-    "A call can only be transferred to a single user.": "Kõnet on võimalik edasi suunata vaid ühele kasutajale."
+    "A call can only be transferred to a single user.": "Kõnet on võimalik edasi suunata vaid ühele kasutajale.",
+    "There was an error finding this widget.": "Selle vidina leidmisel tekkis viga.",
+    "Active Widgets": "Kasutusel vidinad",
+    "Open dial pad": "Ava numbriklahvistik",
+    "Start a Conversation": "Alusta vestlust",
+    "Dial pad": "Numbriklahvistik",
+    "There was an error looking up the phone number": "Telefoninumbri otsimisel tekkis viga",
+    "Unable to look up phone number": "Telefoninumbrit ei õnnestu leida"
 }
