@@ -31,6 +31,7 @@ interface IProps {
 interface IState {
     completed: boolean;
     error: string;
+    loadIframe: boolean;
 }
 
 export default class HostSignupDialog extends React.PureComponent<IProps, IState> {
@@ -43,33 +44,19 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         this.state = {
             completed: false,
             error: null,
+            loadIframe: false,
         };
 
         this.hostSignupSetupUrl = SdkConfig.get().host_signup.url;
     }
 
-    private messageHandler = (message: IPostmessage) => {
+    private messageHandler = async (message: IPostmessage) => {
         if (!this.hostSignupSetupUrl.startsWith(message.origin)) {
             return;
         }
         switch (message.data.action) {
             case PostmessageAction.HostSignupAccountDetailsRequest:
-                Modal.createDialog(
-                    QuestionDialog,
-                    {
-                        title: _t("Confirm Account Data Transfer"),
-                        description: _t(
-                            "Please accept transfer of data to the host signup wizard to continue. " +
-                            "The setup wizard will be able to access your account for the duration of the " +
-                            "setup process."),
-                        button: _t("Accept"),
-                        onFinished: result => {
-                            if (result) {
-                                return this.sendAccountDetails();
-                            }
-                        },
-                    },
-                );
+                await this.sendAccountDetails();
                 break;
             case PostmessageAction.SetupComplete:
                 // Set as completed but let the user close the modal themselves
@@ -132,8 +119,11 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         });
     }
 
-    public componentDidMount() {
+    private loadIframe = () => {
         window.addEventListener("message", this.messageHandler);
+        this.setState({
+            loadIframe: true,
+        });
     }
 
     public componentWillUnmount() {
@@ -145,16 +135,39 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             <BaseDialog
                 className="mx_HostSignupBaseDialog"
                 onFinished={this.onFinished}
-                title={_t("Set up your own personal Element host")}
+                title=""
                 hasCancel={true}
-                fixedWidth={false}
             >
                 <div className="mx_HostSignupDialog_container">
-                    <iframe
-                        src={this.hostSignupSetupUrl}
-                        ref={this.iframeRef}
-                        sandbox="allow-forms allow-scripts allow-same-origin"
-                    />
+                    {this.state.loadIframe &&
+                        <iframe
+                            src={this.hostSignupSetupUrl}
+                            ref={this.iframeRef}
+                            sandbox="allow-forms allow-scripts allow-same-origin"
+                        />
+                    }
+                    {!this.state.loadIframe &&
+                        <div className="mx_HostSignupDialog_info">
+                            <img
+                                alt="image of planet"
+                                src={require("../../../../res/img/host_signup.png")}
+                            />
+                            <div className="mx_HostSignupDialog_content">
+                                <h1>Unlock the power of Element</h1>
+                                <p>
+                                    Congratulations! You taken your first steps into unlocking the full power of&nbsp;
+                                    the Element app. In a few minutes, you'll be able to see how powerful our&nbsp;
+                                    Matrix services are and take control of your conversation data.
+                                </p>
+                            </div>
+                            <div>
+                                <button onClick={this.props.requestClose}>Maybe later</button>
+                                <button onClick={this.loadIframe} className="mx_Dialog_primary">
+                                    Lets get started
+                                </button>
+                            </div>
+                        </div>
+                    }
                     {this.state.error &&
                         <div>
                             {this.state.error}
