@@ -16,9 +16,11 @@ limitations under the License.
 
 import * as React from "react";
 import BaseDialog from '../../views/dialogs/BaseDialog';
+import GenericToast from "../toasts/GenericToast";
 import Modal from "../../../Modal";
 import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
+import ToastStore from "../../../stores/ToastStore";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
@@ -32,6 +34,7 @@ interface IState {
     completed: boolean;
     error: string;
     loadIframe: boolean;
+    minimized: boolean;
 }
 
 export default class HostSignupDialog extends React.PureComponent<IProps, IState> {
@@ -45,6 +48,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             completed: false,
             error: null,
             loadIframe: false,
+            minimized: false,
         };
 
         this.hostSignupSetupUrl = SdkConfig.get().host_signup.url;
@@ -58,6 +62,9 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             case PostmessageAction.HostSignupAccountDetailsRequest:
                 await this.sendAccountDetails();
                 break;
+            case PostmessageAction.Minimize:
+                this.minimizeDialog();
+                break;
             case PostmessageAction.SetupComplete:
                 // Set as completed but let the user close the modal themselves
                 // so they have time to finish reading any information
@@ -69,6 +76,30 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 this.onFinished(true);
                 break;
         }
+    }
+
+    private maximizeDialog = () => {
+        this.setState({
+            minimized: false,
+        });
+    }
+
+    private minimizeDialog = () => {
+        ToastStore.sharedInstance().addOrReplaceToast({
+            priority: 0,
+            key: 'host_signup_dialog',
+            title: "Building your home",
+            icon: "verification",
+            props: {
+                description: "",
+                onAccept: this.maximizeDialog,
+                acceptLabel: "Return",
+            },
+            component: GenericToast,
+        });
+        this.setState({
+            minimized: true,
+        });
     }
 
     private onFinished = (result: boolean) => {
@@ -132,49 +163,52 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
 
     public render(): React.ReactNode {
         return (
-            <BaseDialog
-                className="mx_HostSignupBaseDialog"
-                onFinished={this.onFinished}
-                title=""
-                hasCancel={true}
-            >
-                <div className="mx_HostSignupDialog_container">
-                    {this.state.loadIframe &&
-                        <iframe
-                            src={this.hostSignupSetupUrl}
-                            ref={this.iframeRef}
-                            sandbox="allow-forms allow-scripts allow-same-origin"
-                        />
-                    }
-                    {!this.state.loadIframe &&
-                        <div className="mx_HostSignupDialog_info">
-                            <img
-                                alt="image of planet"
-                                src={require("../../../../res/img/host_signup.png")}
+            <div className={this.state.minimized ? "mx_HostSignupBaseDialog_minimized" : ""}>
+                <BaseDialog
+                    className="mx_HostSignupBaseDialog"
+                    onFinished={this.onFinished}
+                    title=""
+                    hasCancel={true}
+                >
+                    <div className="mx_HostSignupDialog_container">
+                        {this.state.loadIframe &&
+                            <iframe
+                                src={this.hostSignupSetupUrl}
+                                ref={this.iframeRef}
+                                sandbox="allow-forms allow-scripts allow-same-origin"
                             />
-                            <div className="mx_HostSignupDialog_content">
-                                <h1>Unlock the power of Element</h1>
-                                <p>
-                                    Congratulations! You taken your first steps into unlocking the full power of&nbsp;
-                                    the Element app. In a few minutes, you'll be able to see how powerful our&nbsp;
-                                    Matrix services are and take control of your conversation data.
-                                </p>
+                        }
+                        {!this.state.loadIframe &&
+                            <div className="mx_HostSignupDialog_info">
+                                <img
+                                    alt="image of planet"
+                                    src={require("../../../../res/img/host_signup.png")}
+                                />
+                                <div className="mx_HostSignupDialog_content">
+                                    <h1>Unlock the power of Element</h1>
+                                    <p>
+                                        Congratulations! You taken your first steps into unlocking the full power of&nbsp;
+                                        the Element app. In a few minutes, you'll be able to see how powerful our&nbsp;
+                                        Matrix services are and take control of your conversation data.
+                                    </p>
+                                </div>
+                                <div>
+                                    <button onClick={this.props.requestClose}>Maybe later</button>
+                                    <button onClick={this.loadIframe} className="mx_Dialog_primary">
+                                        Lets get started
+                                    </button>
+                                    <button onClick={this.minimizeDialog}>Minimize</button>
+                                </div>
                             </div>
+                        }
+                        {this.state.error &&
                             <div>
-                                <button onClick={this.props.requestClose}>Maybe later</button>
-                                <button onClick={this.loadIframe} className="mx_Dialog_primary">
-                                    Lets get started
-                                </button>
+                                {this.state.error}
                             </div>
-                        </div>
-                    }
-                    {this.state.error &&
-                        <div>
-                            {this.state.error}
-                        </div>
-                    }
-                </div>
-            </BaseDialog>
+                        }
+                    </div>
+                </BaseDialog>
+            </div>
         );
     }
 }

@@ -18,6 +18,8 @@ export enum PostmessageAction {
     CloseDialog = "close_dialog",
     HostSignupAccountDetails = "host_signup_account_details",
     HostSignupAccountDetailsRequest = "host_signup_account_details_request",
+    Minimize = "host_signup_minimize",
+    Maximize = "host_signup_maximize",
     SetupComplete = "setup_complete",
 }
 
