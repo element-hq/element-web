@@ -120,7 +120,7 @@ export default class SetupEncryptionBody extends React.Component {
             const store = SetupEncryptionStore.sharedInstance();
             let recoveryKeyPrompt;
             if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
-                recoveryKeyPrompt = _t("Use Security Key or Passphrase");
+                recoveryKeyPrompt = _t("Use Security Key or Phrase");
             } else if (store.keyInfo) {
                 recoveryKeyPrompt = _t("Use Security Key");
             }
