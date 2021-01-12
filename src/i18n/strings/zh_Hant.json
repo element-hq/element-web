@@ -2986,5 +2986,12 @@
     "You have no visible notifications.": "您沒有可見的通知。",
     "Transfer": "傳輸",
     "Failed to transfer call": "傳輸通話失敗",
-    "A call can only be transferred to a single user.": "一個通話只能傳輸給ㄧ個使用者。"
+    "A call can only be transferred to a single user.": "一個通話只能傳輸給ㄧ個使用者。",
+    "There was an error finding this widget.": "尋找此小工具時發生錯誤。",
+    "Active Widgets": "作用中的小工具",
+    "Open dial pad": "開啟撥號鍵盤",
+    "Start a Conversation": "開始對話",
+    "Dial pad": "撥號鍵盤",
+    "There was an error looking up the phone number": "尋找電話號碼時發生錯誤",
+    "Unable to look up phone number": "無法查詢電話號碼"
 }
