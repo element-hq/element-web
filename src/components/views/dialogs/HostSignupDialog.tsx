@@ -18,6 +18,7 @@ import * as React from "react";
 import BaseDialog from '../../views/dialogs/BaseDialog';
 import GenericToast from "../toasts/GenericToast";
 import Modal from "../../../Modal";
+import PersistedElement from "../elements/PersistedElement";
 import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
 import ToastStore from "../../../stores/ToastStore";
@@ -100,6 +101,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         this.setState({
             minimized: true,
         });
+        this.props.requestClose();
     }
 
     private onFinished = (result: boolean) => {
@@ -163,51 +165,54 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
 
     public render(): React.ReactNode {
         return (
-            <div className={this.state.minimized ? "mx_HostSignupBaseDialog_minimized" : ""}>
-                <BaseDialog
-                    className="mx_HostSignupBaseDialog"
-                    onFinished={this.onFinished}
-                    title=""
-                    hasCancel={true}
-                >
-                    <div className="mx_HostSignupDialog_container">
-                        {this.state.loadIframe &&
-                            <iframe
-                                src={this.hostSignupSetupUrl}
-                                ref={this.iframeRef}
-                                sandbox="allow-forms allow-scripts allow-same-origin"
-                            />
-                        }
-                        {!this.state.loadIframe &&
-                            <div className="mx_HostSignupDialog_info">
-                                <img
-                                    alt="image of planet"
-                                    src={require("../../../../res/img/host_signup.png")}
+            <div className="mx_HostSignupDialog_persisted">
+                <PersistedElement key="host_signup" persistKey="host_signup">
+                    <BaseDialog
+                        className="mx_HostSignupBaseDialog"
+                        onFinished={this.onFinished}
+                        title=""
+                        hasCancel={true}
+                    >
+                        <div className="mx_HostSignupDialog_container">
+                            {this.state.loadIframe &&
+                                <iframe
+                                    src={this.hostSignupSetupUrl}
+                                    ref={this.iframeRef}
+                                    sandbox="allow-forms allow-scripts allow-same-origin"
                                 />
-                                <div className="mx_HostSignupDialog_content">
-                                    <h1>Unlock the power of Element</h1>
-                                    <p>
-                                        Congratulations! You taken your first steps into unlocking the full power of&nbsp;
-                                        the Element app. In a few minutes, you'll be able to see how powerful our&nbsp;
-                                        Matrix services are and take control of your conversation data.
-                                    </p>
+                            }
+                            {!this.state.loadIframe &&
+                                <div className="mx_HostSignupDialog_info">
+                                    <img
+                                        alt="image of planet"
+                                        src={require("../../../../res/img/host_signup.png")}
+                                    />
+                                    <div className="mx_HostSignupDialog_content">
+                                        <h1>Unlock the power of Element</h1>
+                                        <p>
+                                            Congratulations! You taken your first steps into unlocking the full&nbsp;
+                                            power of the Element app. In a few minutes, you'll be able to&nbsp;
+                                            see how powerful our&nbsp;
+                                            Matrix services are and take control of your conversation data.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <button onClick={this.props.requestClose}>Maybe later</button>
+                                        <button onClick={this.loadIframe} className="mx_Dialog_primary">
+                                            Lets get started
+                                        </button>
+                                        <button onClick={this.minimizeDialog}>Minimize</button>
+                                    </div>
                                 </div>
+                            }
+                            {this.state.error &&
                                 <div>
-                                    <button onClick={this.props.requestClose}>Maybe later</button>
-                                    <button onClick={this.loadIframe} className="mx_Dialog_primary">
-                                        Lets get started
-                                    </button>
-                                    <button onClick={this.minimizeDialog}>Minimize</button>
+                                    {this.state.error}
                                 </div>
-                            </div>
-                        }
-                        {this.state.error &&
-                            <div>
-                                {this.state.error}
-                            </div>
-                        }
-                    </div>
-                </BaseDialog>
+                            }
+                        </div>
+                    </BaseDialog>
+                </PersistedElement>
             </div>
         );
     }

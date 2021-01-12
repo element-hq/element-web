@@ -14,9 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_HostSignupDialog {
+    z-index: unset;
+}
+
 .mx_HostSignupBaseDialog {
     max-height: 600px;
     width: 580px;
+    position: inherit;
 
     .mx_HostSignupDialog_container {
         height: 90%;
@@ -41,4 +46,9 @@ limitations under the License.
 
 .mx_HostSignupBaseDialog_minimized {
     display: none;
+}
+
+.mx_HostSignupDialog_persisted {
+    width: 580px;
+    height: 600px;
 }
