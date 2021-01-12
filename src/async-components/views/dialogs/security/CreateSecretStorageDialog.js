@@ -235,7 +235,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const blob = new Blob([this._recoveryKey.encodedPrivateKey], {
             type: 'text/plain;charset=us-ascii',
         });
-        FileSaver.saveAs(blob, 'recovery-key.txt');
+        FileSaver.saveAs(blob, 'security-key.txt');
 
         this.setState({
             downloaded: true,

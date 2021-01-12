@@ -95,7 +95,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         const blob = new Blob([this._keyBackupInfo.recovery_key], {
             type: 'text/plain;charset=us-ascii',
         });
-        FileSaver.saveAs(blob, 'recovery-key.txt');
+        FileSaver.saveAs(blob, 'security-key.txt');
 
         this.setState({
             downloaded: true,
