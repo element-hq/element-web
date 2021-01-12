@@ -2897,5 +2897,12 @@
     "You have no visible notifications.": "Nejsou dostupná žádná oznámení.",
     "Transfer": "Přepojit",
     "Failed to transfer call": "Hovor se nepodařilo přepojit",
-    "A call can only be transferred to a single user.": "Hovor lze přepojit pouze jednomu uživateli."
+    "A call can only be transferred to a single user.": "Hovor lze přepojit pouze jednomu uživateli.",
+    "There was an error finding this widget.": "Při hledání tohoto widgetu došlo k chybě.",
+    "Active Widgets": "Aktivní widgety",
+    "Open dial pad": "Otevřít číselník",
+    "Start a Conversation": "Zahájit konverzaci",
+    "Dial pad": "Číselník",
+    "There was an error looking up the phone number": "Při vyhledávání telefonního čísla došlo k chybě",
+    "Unable to look up phone number": "Nelze nalézt telefonní číslo"
 }
