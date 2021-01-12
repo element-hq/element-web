@@ -2455,7 +2455,7 @@
     "User settings": "Пользовательские настройки",
     "Community and user menu": "Сообщество и меню пользователя",
     "Privacy": "Конфиденциальность",
-    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Добавляет ( ͡° ͜ʖ ͡°) к текстовому сообщению",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Добавляет ( ͡° ͜ʖ ͡°) в начало сообщения",
     "Unknown App": "Неизвестное приложение",
     "%(count)s results|one": "%(count)s результат",
     "Room Info": "Информация о комнате",
@@ -2963,5 +2963,17 @@
     "You held the call <a>Resume</a>": "Вы удерживаете звонок <a>Возобновить</a>",
     "%(name)s paused": "%(name)s приостановлен",
     "You've reached the maximum number of simultaneous calls.": "Вы достигли максимального количества одновременных звонков.",
-    "Too Many Calls": "Слишком много звонков"
+    "Too Many Calls": "Слишком много звонков",
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Добавляет ┬──┬ ノ( ゜-゜ノ) в начало сообщения",
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Добавляет (╯°□°）╯︵ ┻━┻ в начало сообщения",
+    "sends fireworks": "отправляет фейерверк",
+    "Sends the given message with fireworks": "Отправляет сообщение с фейерверком",
+    "%(name)s on hold": "%(name)s на удержании",
+    "You held the call <a>Switch</a>": "Вы удерживаете звонок <a>Переключить</a>",
+    "sends snowfall": "отправляет снегопад",
+    "Sends the given message with snowfall": "Отправляет сообщение со снегопадом",
+    "You have no visible notifications.": "У вас нет видимых уведомлений.",
+    "Transfer": "Перевод",
+    "Failed to transfer call": "Не удалось перевести звонок",
+    "A call can only be transferred to a single user.": "Вызов может быть передан только одному пользователю."
 }
