@@ -2914,5 +2914,12 @@
     "You have no visible notifications.": "Du har inga synliga aviseringar.",
     "Transfer": "Överlåt",
     "Failed to transfer call": "Misslyckades att överlåta samtal",
-    "A call can only be transferred to a single user.": "Ett samtal kan bara överlåtas till en enskild användare."
+    "A call can only be transferred to a single user.": "Ett samtal kan bara överlåtas till en enskild användare.",
+    "There was an error finding this widget.": "Ett fel inträffade vid sökning efter widgeten.",
+    "Active Widgets": "Aktiva widgets",
+    "Open dial pad": "Öppna knappsats",
+    "Start a Conversation": "Starta en konversation",
+    "Dial pad": "Knappsats",
+    "There was an error looking up the phone number": "Ett fel inträffade vid uppslagning av telefonnumret",
+    "Unable to look up phone number": "Kunde inte slå upp telefonnumret"
 }
