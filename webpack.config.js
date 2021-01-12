@@ -40,6 +40,7 @@ module.exports = (env, argv) => {
             "mobileguide": "./src/vector/mobile_guide/index.js",
             "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
+            "thinwidget": "./src/vector/thin_widget/index.ts",
 
             // CSS themes
             "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
@@ -312,7 +313,7 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
+                excludeChunks: ['mobileguide', 'usercontent', 'jitsi', 'thinwidget'],
                 minify: argv.mode === 'production',
                 vars: {
                     og_image_url: og_image_url,
@@ -325,6 +326,14 @@ module.exports = (env, argv) => {
                 filename: 'jitsi.html',
                 minify: argv.mode === 'production',
                 chunks: ['jitsi'],
+            }),
+
+            // This is a small thin wrapper for widgets (popout; isolated stack)
+            new HtmlWebpackPlugin({
+                template: './src/vector/thin_widget/index.html',
+                filename: 'thin_widget.html',
+                minify: argv.mode === 'production',
+                chunks: ['thinwidget'],
             }),
 
             // This is the mobile guide's entry point (separate for faster mobile loading)
