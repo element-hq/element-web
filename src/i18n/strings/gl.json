@@ -2983,5 +2983,12 @@
     "You have no visible notifications.": "Non tes notificacións visibles.",
     "Transfer": "Transferir",
     "Failed to transfer call": "Fallou a transferencia da chamada",
-    "A call can only be transferred to a single user.": "Unha chamada só se pode transferir a unha única usuaria."
+    "A call can only be transferred to a single user.": "Unha chamada só se pode transferir a unha única usuaria.",
+    "There was an error finding this widget.": "Houbo un fallo ao buscar o widget.",
+    "Active Widgets": "Widgets activos",
+    "Open dial pad": "Abrir marcador",
+    "Start a Conversation": "Iniciar unha Conversa",
+    "Dial pad": "Marcador",
+    "There was an error looking up the phone number": "Houbo un erro buscando o número de teléfono",
+    "Unable to look up phone number": "Non atopamos o número de teléfono"
 }
