@@ -2262,5 +2262,20 @@
     "Send messages as you in your active room": "Widget aktif odanıza sizin adınıza mesaj göndersin",
     "Send <b>%(eventType)s</b> events as you in your active room": "Widget aktif odanıza sizin adınıza <b>%(eventType)s</b> türü etkinlik göndersin",
     "Send <b>%(eventType)s</b> events as you in this room": "Widget bu odaya sizin adınıza <b>%(eventType)s</b> türü etkinlik göndersin",
-    "Send images as you in your active room": "Widget aktif odanıza sizin adınıza resim göndersin"
+    "Send images as you in your active room": "Widget aktif odanıza sizin adınıza resim göndersin",
+    "with an empty state key": "boş durum anahtarı ile",
+    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Emin misiniz? Eğer anahtarlarınız doğru bir şekilde yedeklemediyse, şifrelenmiş iletilerinizi kaybedeceksiniz.",
+    "The operation could not be completed": "Eylem tamamlanamadı",
+    "Failed to save your profile": "Profiliniz kaydedilemedi",
+    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "Onları %(brand)s dışında bir sunucuda yapılandırmış olabilirsin. Onları %(brand)s içinde ayarlayamazsın ama yine de geçerlidir.",
+    "Securely cache encrypted messages locally for them to appear in search results.": "Arama sonuçlarında gozükmeleri için iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
+    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Çapraz imzalı cihazlara güvenmeden, güvenilir olarak işaretlemek için, bir kullanıcı tarafından kullanılan her bir oturumu ayrı ayrı doğrulayın.",
+    "There are advanced notifications which are not shown here.": "Burada gösterilmeyen gelişmiş bildirimler var.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "İletilerin arama sonuçlarında gözükmeleri için %(rooms)s odasından %(size)s  yardımıyla depolayarak, şifrelenmiş iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "İletilerin arama sonuçlarında gözükmeleri için %(rooms)s odalardan %(size)s  yardımıyla depolayarak, şifrelenmiş iletileri güvenli bir şekilde yerel olarak önbelleğe al.",
+    "not found in storage": "Cihazda bulunamadı",
+    "This bridge was provisioned by <user />.": "Bu köprü <user /> tarafından sağlandı.",
+    "Render LaTeX maths in messages": "Mesajlarda LaTex maths işleyin",
+    "See <b>%(eventType)s</b> events posted to this room": "Bu odaya gönderilen <b>%(eventType)s</b> türü etkinlikleri gör",
+    "with state key %(stateKey)s": "%(stateKey)s durum anahtarı ile"
 }
