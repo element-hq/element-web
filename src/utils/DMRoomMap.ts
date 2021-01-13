@@ -185,7 +185,7 @@ export default class DMRoomMap {
             const myUserId = this.matrixClient.getUserId();
             const selfDMs = userToRooms[myUserId];
             if (selfDMs && selfDMs.length) {
-                const neededPatching = this._patchUpSelfDMs(userToRooms);
+                const neededPatching = this.patchUpSelfDMs(userToRooms);
                 // to avoid multiple devices fighting to correct
                 // the account data, only try to send the corrected
                 // version once.
@@ -203,7 +203,7 @@ export default class DMRoomMap {
 
     private populateRoomToUser() {
         this.roomToUser = {};
-        for (const user of Object.keys(this._getUserToRooms())) {
+        for (const user of Object.keys(this.getUserToRooms())) {
             for (const roomId of this.userToRooms[user]) {
                 this.roomToUser[roomId] = user;
             }
