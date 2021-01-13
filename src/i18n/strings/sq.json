@@ -807,7 +807,7 @@
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Nëse më herët keni përdorur një version më të freskët të %(brand)s-it, sesioni juaj mund të jetë i papërputhshëm me këtë version. Mbylleni këtë dritare dhe kthehuni te versioni më i ri.",
     "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Spastrimi i gjërave të depozituara në shfletuesin tuaj mund ta ndreqë problemin, por kjo do të sjellë nxjerrjen tuaj nga llogari dhe do ta bëjë të palexueshëm çfarëdo historiku të fshehtëzuar të bisedës.",
     "If you already have a Matrix account you can <a>log in</a> instead.": "Nëse keni tashmë një llogari Matrix, mund <a>të bëni hyrjen</a>.",
-    "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Krijoni një bashkësi që bëni tok përdorues dhe dhoma! Krijoni një faqe hyrëse vetjake, që të ravijëzoni hapësirën tuaj në universin Matrix.",
+    "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Krijoni një bashkësi që të bëni tok përdorues dhe dhoma! Krijoni një faqe hyrëse vetjake, që të ravijëzoni hapësirën tuaj në universin Matrix.",
     "Sent messages will be stored until your connection has returned.": "Mesazhet e dërguar do të depozitohen deri sa lidhja juaj të jetë rikthyer.",
     "Server may be unavailable, overloaded, or search timed out :(": "Shërbyesi mund të jetë i pakapshëm, i mbingarkuar, ose kërkimit i mbaroi koha :(",
     "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Nëse parashtruat një të metë përmes GitHub-it, regjistrat e diagnostikimit mund të na ndihmojnë të ndjekim problemin. Regjistrat e diagnostikimit përmbajnë të dhëna përdorimi, përfshi emrin tuaj të përdoruesit, ID-të ose aliaset e dhomave apo grupeve që keni vizituar dhe emrat e përdoruesve të përdoruesve të tjerë. Në to nuk përmbahen mesazhet.",
@@ -2963,5 +2963,16 @@
     "You've reached the maximum number of simultaneous calls.": "Keni mbërritur në numrin maksimum të thirrjeve të njëkohshme.",
     "Too Many Calls": "Shumë Thirrje",
     "Call failed because webcam or microphone could not be accessed. Check that:": "Thirrja dështoi, ngaqë s’u hy dot kamera ose mikrofoni. Kontrolloni që:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Thirrja dështoi, ngaqë s’u hy dot te mikrofoni. Kontrolloni që të jetë futur një mikrofon dhe të jetë ujdisur saktësisht."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Thirrja dështoi, ngaqë s’u hy dot te mikrofoni. Kontrolloni që të jetë futur një mikrofon dhe të jetë ujdisur saktësisht.",
+    "sends fireworks": "dërgon fishekzjarrë",
+    "Sends the given message with fireworks": "E dërgon me fishekzjarrë mesazhin e dhënë",
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "E paraprin një mesazh tekst i thjeshtë me ┬──┬ ノ( ゜-゜ノ)",
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "E paraprin një mesazh tekst i thjeshtë me (╯°□°）╯︵ ┻━┻",
+    "%(name)s on hold": "%(name)s e mbajtur",
+    "sends snowfall": "dërgon rënie bore",
+    "Sends the given message with snowfall": "E dërgon mesazhin e dhënë të stolisur me rënie bore",
+    "You have no visible notifications.": "S’keni njoftime të dukshme.",
+    "Transfer": "Shpërngule",
+    "Failed to transfer call": "S’u arrit të shpërngulej thirrje",
+    "A call can only be transferred to a single user.": "Një thirrje mund të shpërngulet vetëm te një përdorues."
 }
