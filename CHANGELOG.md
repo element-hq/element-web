@@ -2,6 +2,7 @@ Changes in [3.12.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.11.1...v3.12.0-rc.1)
 
+ * Upgrade to JS SDK 9.5.0-rc.1
  * Fix soft crash on soft logout page
    [\#5539](https://github.com/matrix-org/matrix-react-sdk/pull/5539)
  * Translations update from Weblate
