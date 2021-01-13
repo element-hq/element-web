@@ -27,5 +27,10 @@
     "Unable to load config file: please refresh the page to try again.": "Kan ikke laste inn konfigurasjonsfil: oppdater siden for å prøve igjen.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Ditt Element konfigurasjonen inneholder ugyldig JSON. Løs problemet og last siden på nytt.",
     "Your Element is misconfigured": "Ditt Element er feilkonfigurert",
-    "Missing indexeddb worker script!": "Mangler indexeddb arbeiderskript!"
+    "Missing indexeddb worker script!": "Mangler indexeddb arbeiderskript!",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Vennligst installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eller <safariLink>Safari</safariLink> for den beste opplevelsen.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s bruker avanserte nettleserfunksjoner som ikke støttes av din nåværende nettleser.",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Skrivebord (%(platformName)s)",
+    "Open": "Åpne"
 }

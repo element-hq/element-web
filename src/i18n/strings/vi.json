@@ -12,5 +12,19 @@
     "Invalid configuration: no default server specified.": "Cấu hình không hợp lệ: máy chủ mặc định không được thiết lập.",
     "Sign In": "Đăng nhập",
     "Create Account": "Tạo tài khoản",
-    "Explore rooms": "Khám phá phòng chat"
+    "Explore rooms": "Khám phá phòng chat",
+    "Download Completed": "Đã hoàn thành tải xuống",
+    "Go to element.io": "Đi đến element.io",
+    "I understand the risks and wish to continue": "Tôi hiểu các rủi ro và muốn tiếp tục",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Bạn có thể tiếp tục sử dụng trình duyệt hiện tại của bạn, nhưng một số tính năng có thể không hoạt động và trải nghiệm ứng dụng sẽ không được chính xác.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Vui lòng cài đặt <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, hoặc <safariLink>Safari</safariLink> để có trải nghiệm tốt nhất.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s dùng tính năng cao cấp của trình duyệt không được hỗ trợ bởi trình duyệt của bạn.",
+    "Your browser can't run %(brand)s": "Trình duyệt của bạn không thể chạy %(brand)s",
+    "Unsupported browser": "Trình duyệt không được hỗ trợ",
+    "Go to your browser to complete Sign In": "Mở trình duyệt web để hoàn thành đăng nhập",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Máy tính để bàn (%(platformName)s)",
+    "Previous/next recently visited room or community": "Phòng chat hoặc cộng đồng gần đây trước/tiếp theo",
+    "Open user settings": "Mở cài đặt người dùng",
+    "Open": "Mở",
+    "Unable to load config file: please refresh the page to try again.": "Không thể tải tệp cấu hình: hãy làm mới trang để thử lại."
 }
