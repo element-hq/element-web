@@ -474,6 +474,8 @@
     "Sends a message to the given user": "Sends a message to the given user",
     "Places the call in the current room on hold": "Places the call in the current room on hold",
     "Takes the call in the current room off hold": "Takes the call in the current room off hold",
+    "Converts the room to a DM": "Converts the room to a DM",
+    "Converts the DM to a room": "Converts the DM to a room",
     "Displays action": "Displays action",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",
