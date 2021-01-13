@@ -398,6 +398,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: null,
     },
+    "voip_mxid_translate_pattern": {
+        supportedLevels: LEVELS_UI_FEATURE, // not a UI feature, but same level (config only, maybe .well-known in future)
+        default: null,
+    },
     "language": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "en",
