@@ -2033,5 +2033,7 @@
     "Call failed because webcam or microphone could not be accessed. Check that:": "Połączenie nieudane z powodu braku dostępu do kamery bądź mikrofonu. Sprawdź czy:",
     "Unable to access webcam / microphone": "Nie można uzyskać dostępu do kamery / mikrofonu",
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Nie udało się zestawić połączenia z powodu braku dostępu do mikrofonu. Sprawdź czy mikrofon jest podłączony i poprawnie skonfigurowany.",
-    "Unable to access microphone": "Nie można uzyskać dostępu do mikrofonu"
+    "Unable to access microphone": "Nie można uzyskać dostępu do mikrofonu",
+    "Forgot password?": "Nie pamiętasz hasła?",
+    "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Użyj serwera tożsamości, aby zapraszać przez e-mail. Zarządzaj w <settings>Ustawieniach</settings>."
 }
