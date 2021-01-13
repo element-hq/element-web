@@ -101,7 +101,8 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
             </div>
             <div className="mx_DialPadModal_horizSep" />
             <div className="mx_DialPadModal_dialPad">
-                <DialPad onDigitPress={this.onDigitPress}
+                <DialPad hasDialAndDelete={true}
+                    onDigitPress={this.onDigitPress}
                     onDeletePress={this.onDeletePress}
                     onDialPress={this.onDialPress}
                 />

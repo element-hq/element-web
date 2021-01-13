@@ -9,8 +9,8 @@ import sdk from '../../../skinned-sdk';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import dis from '../../../../src/dispatcher/dispatcher';
-import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
-import GroupStore from '../../../../src/stores/GroupStore.js';
+import DMRoomMap from '../../../../src/utils/DMRoomMap';
+import GroupStore from '../../../../src/stores/GroupStore';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
