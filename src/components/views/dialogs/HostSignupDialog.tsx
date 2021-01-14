@@ -15,21 +15,16 @@ limitations under the License.
 */
 
 import * as React from "react";
-import BaseDialog from '../../views/dialogs/BaseDialog';
-import GenericToast from "../toasts/GenericToast";
 import Modal from "../../../Modal";
 import PersistedElement from "../elements/PersistedElement";
 import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
-import ToastStore from "../../../stores/ToastStore";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./HostSignupDialogTypes";
 
-interface IProps {
-    requestClose(): void;
-}
+interface IProps {}
 
 interface IState {
     completed: boolean;
@@ -63,6 +58,9 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             case PostmessageAction.HostSignupAccountDetailsRequest:
                 await this.sendAccountDetails();
                 break;
+            case PostmessageAction.Maximize:
+                this.maximizeDialog();
+                break;
             case PostmessageAction.Minimize:
                 this.minimizeDialog();
                 break;
@@ -86,28 +84,23 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     }
 
     private minimizeDialog = () => {
-        ToastStore.sharedInstance().addOrReplaceToast({
-            priority: 0,
-            key: 'host_signup_dialog',
-            title: "Building your home",
-            icon: "verification",
-            props: {
-                description: "",
-                onAccept: this.maximizeDialog,
-                acceptLabel: "Return",
-            },
-            component: GenericToast,
-        });
         this.setState({
             minimized: true,
         });
-        this.props.requestClose();
+    }
+
+    private closeDialog = async () => {
+        window.removeEventListener("message", this.messageHandler);
+        // Ensure we destroy the host signup persisted element
+        PersistedElement.destroyElement("host_signup");
+        // Finally clear the flag in
+        return OwnProfileStore.instance.setHostSignupActive(false);
     }
 
     private onFinished = (result: boolean) => {
         if (result || this.state.completed) {
             // We're done, close
-            this.props.requestClose();
+            return this.closeDialog();
         } else {
             Modal.createDialog(
                 QuestionDialog,
@@ -119,7 +112,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                     button: _t("Abort"),
                     onFinished: result => {
                         if (result) {
-                            this.props.requestClose();
+                            return this.closeDialog();
                         }
                     },
                 },
@@ -160,20 +153,20 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     }
 
     public componentWillUnmount() {
-        window.removeEventListener("message", this.messageHandler);
+        if (OwnProfileStore.instance.isHostSignupActive) {
+            // Run the close dialog actions if we're still active, otherwise good to go
+            return this.closeDialog();
+        }
     }
 
     public render(): React.ReactNode {
         return (
-            <div className="mx_HostSignupDialog_persisted">
+            <div className="mx_HostSignup_persisted">
                 <PersistedElement key="host_signup" persistKey="host_signup">
-                    <BaseDialog
-                        className="mx_HostSignupBaseDialog"
-                        onFinished={this.onFinished}
-                        title=""
-                        hasCancel={true}
-                    >
-                        <div className="mx_HostSignupDialog_container">
+                    <div className={this.state.minimized ? "" : "mx_Dialog_wrapper"}>
+                        <div className={
+                            this.state.minimized ? "mx_HostSignupDialog_minimized" : "mx_HostSignupDialog mx_Dialog"
+                        }>
                             {this.state.loadIframe &&
                                 <iframe
                                     src={this.hostSignupSetupUrl}
@@ -183,6 +176,9 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                             }
                             {!this.state.loadIframe &&
                                 <div className="mx_HostSignupDialog_info">
+                                    {this.state.minimized &&
+                                        <button onClick={this.maximizeDialog}>Maximize</button>
+                                    }
                                     <img
                                         alt="image of planet"
                                         src={require("../../../../res/img/host_signup.png")}
@@ -197,7 +193,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                         </p>
                                     </div>
                                     <div>
-                                        <button onClick={this.props.requestClose}>Maybe later</button>
+                                        <button onClick={this.closeDialog}>Maybe later</button>
                                         <button onClick={this.loadIframe} className="mx_Dialog_primary">
                                             Lets get started
                                         </button>
@@ -211,7 +207,10 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                 </div>
                             }
                         </div>
-                    </BaseDialog>
+                        {!this.state.minimized &&
+                            <div className="mx_Dialog_background" />
+                        }
+                    </div>
                 </PersistedElement>
             </div>
         );

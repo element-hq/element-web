@@ -15,35 +15,20 @@ limitations under the License.
 */
 
 import * as React from "react";
-import HostSignupDialog from "../views/dialogs/HostSignupDialog";
-import Modal, {IHandle} from "../../Modal";
 import {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import { _t } from "../../languageHandler";
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
 
 interface IProps {}
 
 interface IState {}
 
 export default class HostSignupAction extends React.PureComponent<IProps, IState> {
-    private closingAllowed = false;
-    private modalRef: IHandle<void[]>;
-
-    private openDialog = () => {
-        this.modalRef = Modal.createTrackedDialog(
-            'Host Signup Open', '', HostSignupDialog, {
-                requestClose: this.requestClose,
-            }, "mx_HostSignupDialog", false, true, {
-                onBeforeClose: async () => this.closingAllowed,
-            },
-        );
-    }
-
-    private requestClose = () => {
-        this.closingAllowed = true;
-        this.modalRef.close();
+    private openDialog = async () => {
+        await OwnProfileStore.instance.setHostSignupActive(true);
     }
 
     public render(): React.ReactNode {

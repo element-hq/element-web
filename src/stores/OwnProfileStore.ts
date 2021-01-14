@@ -26,6 +26,7 @@ import { _t } from "../languageHandler";
 interface IState {
     displayName?: string;
     avatarUrl?: string;
+    hostSignupActive?: boolean;
 }
 
 export class OwnProfileStore extends AsyncStoreWithClient<IState> {
@@ -39,6 +40,16 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
 
     public static get instance(): OwnProfileStore {
         return OwnProfileStore.internalInstance;
+    }
+
+    public get isHostSignupActive(): boolean {
+        return this.state.hostSignupActive;
+    }
+
+    public async setHostSignupActive(status: boolean) {
+        await this.updateState({
+            hostSignupActive: status,
+        });
     }
 
     /**

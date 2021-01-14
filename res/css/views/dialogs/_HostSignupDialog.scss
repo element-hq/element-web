@@ -15,40 +15,40 @@ limitations under the License.
 */
 
 .mx_HostSignupDialog {
-    z-index: unset;
-}
-
-.mx_HostSignupBaseDialog {
     max-height: 600px;
     width: 580px;
-    position: inherit;
 
-    .mx_HostSignupDialog_container {
-        height: 90%;
+    .mx_HostSignupDialog_info {
+        text-align: center;
 
-        .mx_HostSignupDialog_info {
-            text-align: center;
-
-            .mx_HostSignupDialog_content {
-                margin-top: 64px;
-                margin-bottom: 45px;
-            }
+        .mx_HostSignupDialog_content {
+            margin-top: 64px;
+            margin-bottom: 45px;
         }
+    }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: #fff;
-        }
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background-color: #fff;
     }
 }
 
-.mx_HostSignupBaseDialog_minimized {
-    display: none;
-}
-
-.mx_HostSignupDialog_persisted {
+.mx_HostSignup_persisted {
     width: 580px;
     height: 600px;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+.mx_HostSignupDialog_minimized {
+    position: fixed;
+    bottom: 100px;
+    right: 100px;
+    width: 200px;
+    height: 120px;
+    overflow: hidden;
+    z-index: 6000;
 }
