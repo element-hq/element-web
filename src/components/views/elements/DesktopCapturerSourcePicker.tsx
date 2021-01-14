@@ -18,6 +18,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog"
 import AccessibleButton from './AccessibleButton';
+import {getDesktopCapturerSources} from "matrix-js-sdk/src/webrtc/call";
 
 export enum Tabs {
     Screens = "screens",
@@ -56,24 +57,37 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
 
 export interface DesktopCapturerSourcePickerIState {
     selectedTab: Tabs;
+    sources: Array<DesktopCapturerSource>;
 }
 export interface DesktopCapturerSourcePickerIProps {
-    sources: Array<DesktopCapturerSource>;
     onFinished(source: DesktopCapturerSource): void;
 }
-
-// TODO: Figure out a way to update sources for live preview
 
 export default class DesktopCapturerSourcePicker extends React.Component<
     DesktopCapturerSourcePickerIProps,
     DesktopCapturerSourcePickerIState
     > {
+    interval;
+
     constructor(props) {
         super(props);
 
         this.state = {
             selectedTab: Tabs.Screens,
-        }
+            sources: [],
+        };
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(async () => {
+            this.setState({
+                sources: await getDesktopCapturerSources(),
+            });
+        }, 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     onSelect = (source) => {
@@ -95,7 +109,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
     render() {
         let sources;
         if (this.state.selectedTab === Tabs.Screens) {
-            sources = this.props.sources
+            sources = this.state.sources
                 .filter((source) => {
                     return source.id.startsWith("screen");
                 })
@@ -103,7 +117,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                     return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
                 });
         } else {
-            sources = this.props.sources
+            sources = this.state.sources
                 .filter((source) => {
                     return source.id.startsWith("window");
                 })
