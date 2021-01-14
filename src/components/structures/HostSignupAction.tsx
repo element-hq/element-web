@@ -20,7 +20,7 @@ import {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import { _t } from "../../languageHandler";
-import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { HostSignupStore } from "../../stores/HostSignupStore";
 
 interface IProps {}
 
@@ -28,7 +28,7 @@ interface IState {}
 
 export default class HostSignupAction extends React.PureComponent<IProps, IState> {
     private openDialog = async () => {
-        await OwnProfileStore.instance.setHostSignupActive(true);
+        await HostSignupStore.instance.setHostSignupActive(true);
     }
 
     public render(): React.ReactNode {

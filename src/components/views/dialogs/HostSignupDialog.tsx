@@ -21,6 +21,7 @@ import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {HostSignupStore} from "../../../stores/HostSignupStore";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import {IPostmessage, IPostmessageResponseData, PostmessageAction} from "./HostSignupDialogTypes";
 
@@ -72,8 +73,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 });
                 break;
             case PostmessageAction.CloseDialog:
-                this.onFinished(true);
-                break;
+                return this.onFinished(true);
         }
     }
 
@@ -94,10 +94,10 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         // Ensure we destroy the host signup persisted element
         PersistedElement.destroyElement("host_signup");
         // Finally clear the flag in
-        return OwnProfileStore.instance.setHostSignupActive(false);
+        return HostSignupStore.instance.setHostSignupActive(false);
     }
 
-    private onFinished = (result: boolean) => {
+    private onFinished = async (result: boolean) => {
         if (result || this.state.completed) {
             // We're done, close
             return this.closeDialog();
@@ -153,7 +153,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     }
 
     public componentWillUnmount() {
-        if (OwnProfileStore.instance.isHostSignupActive) {
+        if (HostSignupStore.instance.isHostSignupActive) {
             // Run the close dialog actions if we're still active, otherwise good to go
             return this.closeDialog();
         }
