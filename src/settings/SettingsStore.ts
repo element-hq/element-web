@@ -490,6 +490,7 @@ export default class SettingsStore {
             if (!handler) continue;
             return level;
         }
+        return null;
     }
 
     /**
