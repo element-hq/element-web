@@ -468,6 +468,32 @@ export default class SettingsStore {
     }
 
     /**
+     * Determines the first supported level out of all the levels that can be used for a
+     * specific setting.
+     * @param {string} settingName The setting name.
+     * @return {SettingLevel}
+     */
+    public static firstSupportedLevel(settingName: string): SettingLevel {
+        // Verify that the setting is actually a setting
+        const setting = SETTINGS[settingName];
+        if (!setting) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
+
+        const handlers = SettingsStore.getHandlers(settingName);
+
+        for (const level of levelOrder) {
+            const handler = handlers[level];
+            if (!handler) continue;
+            return level;
+        }
+        return null;
+    }
+
+    /**
      * Debugging function for reading explicit setting values without going through the
      * complicated/biased functions in the SettingsStore. This will print information to
      * the console for analysis. Not intended to be used within the application.
