@@ -33,7 +33,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement, {getPersistKey} from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
-import {SettingLevel} from "../../../settings/SettingLevel";
 import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
 import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
 import {MatrixCapabilities} from "matrix-widget-api";

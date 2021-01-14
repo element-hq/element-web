@@ -26,7 +26,6 @@ import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore
 import RoomContext from "../../../contexts/RoomContext";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
-import {SettingLevel} from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
