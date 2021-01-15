@@ -30,7 +30,7 @@ import {parseQsFromFragment} from "./url_utils";
 import './modernizr';
 
 // load service worker if available on this platform
-if ('serviceWorker' in navigator) {
+if (!window.electron && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
