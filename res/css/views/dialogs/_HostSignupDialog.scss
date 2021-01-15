@@ -34,9 +34,12 @@ limitations under the License.
 
         .mx_HostSignupDialog_buttons {
             margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
 
             button {
                 padding: 12px;
+                margin: 0 16px;
             }
         }
     }

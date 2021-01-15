@@ -245,25 +245,36 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                                         {para}
                                                     </p>;
                                                 })}
+                                                {this.config.info.additionalInfoLink &&
+                                                    <p><small>
+                                                        <a href={this.config.info.additionalInfoLink.href}
+                                                            target="_blank" rel="noopener noreferrer"
+                                                            title={this.config.info.additionalInfoLink.text}
+                                                        >
+                                                            {this.config.info.additionalInfoLink.text}
+                                                        </a>
+                                                    </small></p>
+                                                }
                                             </div>
-                                        }
-                                        {this.config.info.additionalInfoLink &&
-                                            <p><small>
-                                                <a href={this.config.info.additionalInfoLink.href} target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    title={this.config.info.additionalInfoLink.text}
-                                                >
-                                                    {this.config.info.additionalInfoLink.text}
-                                                </a>
-                                            </small></p>
                                         }
                                     </div>
                                     <div className="mx_HostSignupDialog_buttons">
-                                        {/*TODO: what about accessibility? the signup flow is possibly not reader optimized*/}
-                                        <button onClick={this.closeDialog}>{this.config.info.cancelText}</button>
-                                        <button onClick={this.onStartClick} className="mx_Dialog_primary">
-                                            {this.config.info.continueText}
-                                        </button>
+                                        <AccessibleButton
+                                            onClick={this.closeDialog}
+                                            aria-label={this.config.info.cancelText}
+                                        >
+                                            <button>
+                                                {this.config.info.cancelText}
+                                            </button>
+                                        </AccessibleButton>
+                                        <AccessibleButton
+                                            onClick={this.onStartClick}
+                                            aria-label={this.config.info.continueText}
+                                        >
+                                            <button className="mx_Dialog_primary">
+                                                {this.config.info.continueText}
+                                            </button>
+                                        </AccessibleButton>
                                     </div>
                                     {this.config.info.footer &&
                                         <div className="mx_HostSignupDialog_text_light">
