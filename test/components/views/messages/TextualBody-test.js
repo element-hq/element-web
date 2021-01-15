@@ -222,6 +222,7 @@ describe("<TextualBody />", () => {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
             getUrlPreview: (url) => new Promise(() => {}),
+            isGuest: () => false,
         };
 
         const ev = mkEvent({

@@ -27,9 +27,10 @@ import { CallEvent } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
 import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
-import {aboveLeftOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
+import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 
 interface IProps {
         // The call for us to display
@@ -60,6 +61,7 @@ interface IState {
     callState: CallState,
     controlsVisible: boolean,
     showMoreMenu: boolean,
+    showDialpad: boolean,
 }
 
 function getFullScreenElement() {
@@ -102,6 +104,7 @@ export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();
     private controlsHideTimer: number = null;
+    private dialpadButton = createRef<HTMLDivElement>();
     private contextMenuButton = createRef<HTMLDivElement>();
 
     constructor(props: IProps) {
@@ -115,6 +118,7 @@ export default class CallView extends React.Component<IProps, IState> {
             callState: this.props.call.state,
             controlsVisible: true,
             showMoreMenu: false,
+            showDialpad: false,
         }
 
         this.updateCallListeners(null, this.props.call);
@@ -226,7 +230,7 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private showControls() {
-        if (this.state.showMoreMenu) return;
+        if (this.state.showMoreMenu || this.state.showDialpad) return;
 
         if (!this.state.controlsVisible) {
             this.setState({
@@ -237,6 +241,29 @@ export default class CallView extends React.Component<IProps, IState> {
             clearTimeout(this.controlsHideTimer);
         }
         this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+    }
+
+    private onDialpadClick = () => {
+        if (!this.state.showDialpad) {
+            if (this.controlsHideTimer) {
+                clearTimeout(this.controlsHideTimer);
+                this.controlsHideTimer = null;
+            }
+
+            this.setState({
+                showDialpad: true,
+                controlsVisible: true,
+            });
+        } else {
+            if (this.controlsHideTimer !== null) {
+                clearTimeout(this.controlsHideTimer);
+            }
+            this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
+
+            this.setState({
+                showDialpad: false,
+            });
+        }
     }
 
     private onMicMuteClick = () => {
@@ -263,6 +290,13 @@ export default class CallView extends React.Component<IProps, IState> {
             showMoreMenu: true,
             controlsVisible: true,
         });
+    }
+
+    private closeDialpad = () => {
+        this.setState({
+            showDialpad: false,
+        });
+        this.controlsHideTimer = window.setTimeout(this.onControlsHideTimer, CONTROLS_HIDE_DELAY);
     }
 
     private closeContextMenu = () => {
@@ -323,20 +357,29 @@ export default class CallView extends React.Component<IProps, IState> {
         CallHandler.sharedInstance().setActiveCallRoomId(this.props.call.roomId);
     }
 
-    private onSecondaryCallResumeClick = () => {
-        CallHandler.sharedInstance().setActiveCallRoomId(this.props.secondaryCall.roomId);
-    }
-
     public render() {
         const client = MatrixClientPeg.get();
         const callRoom = client.getRoom(this.props.call.roomId);
         const secCallRoom = this.props.secondaryCall ? client.getRoom(this.props.secondaryCall.roomId) : null;
 
+        let dialPad;
         let contextMenu;
+
+        if (this.state.showDialpad) {
+            dialPad = <DialpadContextMenu
+                {...alwaysAboveRightOf(
+                    this.dialpadButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                onFinished={this.closeDialpad}
+                call={this.props.call}
+            />;
+        }
 
         if (this.state.showMoreMenu) {
             contextMenu = <CallContextMenu
-                {...aboveLeftOf(
+                {...alwaysAboveLeftOf(
                     this.contextMenuButton.current.getBoundingClientRect(),
                     ChevronFace.None,
                     CONTEXT_MENU_VPADDING,
@@ -384,8 +427,15 @@ export default class CallView extends React.Component<IProps, IState> {
             onClick={this.onVidMuteClick}
         /> : null;
 
-        // The 'more' button actions are only relevant in a connected call
+        // The dial pad & 'more' button actions are only relevant in a connected call
         // When not connected, we have to put something there to make the flexbox alignment correct
+        const dialpadButton = this.state.callState === CallState.Connected ? <ContextMenuButton
+            className="mx_CallView_callControls_button mx_CallView_callControls_dialpad"
+            inputRef={this.dialpadButton}
+            onClick={this.onDialpadClick}
+            isExpanded={this.state.showDialpad}
+        /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_dialpad_hidden" />;
+
         const contextMenuButton = this.state.callState === CallState.Connected ? <ContextMenuButton
             className="mx_CallView_callControls_button mx_CallView_callControls_button_more"
             onClick={this.onMoreClick}
@@ -396,7 +446,7 @@ export default class CallView extends React.Component<IProps, IState> {
         // in the near future, the dial pad button will go on the left. For now, it's the nothing button
         // because something needs to have margin-right: auto to make the alignment correct.
         const callControls = <div className={callControlsClasses}>
-            <div className="mx_CallView_callControls_button mx_CallView_callControls_nothing" />
+            {dialpadButton}
             <AccessibleButton
                 className={micClasses}
                 onClick={this.onMicMuteClick}
@@ -558,6 +608,7 @@ export default class CallView extends React.Component<IProps, IState> {
         return <div className={"mx_CallView " + myClassName}>
             {header}
             {contentView}
+            {dialPad}
             {contextMenu}
         </div>;
     }
