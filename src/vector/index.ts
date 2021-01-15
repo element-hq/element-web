@@ -29,11 +29,6 @@ require('katex/dist/katex.css');
 import {parseQsFromFragment} from "./url_utils";
 import './modernizr';
 
-// load service worker if available on this platform
-if (!window.electron && 'serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-}
-
 async function settled(...promises: Array<Promise<any>>) {
     for (const prom of promises) {
         try {

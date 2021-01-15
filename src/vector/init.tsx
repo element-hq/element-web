@@ -49,6 +49,8 @@ export function preparePlatform() {
         console.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
     }
+    // Register service worker if available on this platform
+    PlatformPeg.get().registerServiceWorker();
 }
 
 export async function loadConfig() {

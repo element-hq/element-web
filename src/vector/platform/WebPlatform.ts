@@ -38,6 +38,12 @@ export default class WebPlatform extends VectorBasePlatform {
         return 'Web Platform'; // no translation required: only used for analytics
     }
 
+    registerServiceWorker(): void {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    }
+
     /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
