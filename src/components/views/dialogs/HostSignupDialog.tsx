@@ -231,7 +231,9 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                     {this.config.info.image &&
                                         <img
                                             alt={this.config.info.image.alt}
+                                            height={this.config.info.image.height}
                                             src={this.config.info.image.src}
+                                            width={this.config.info.image.width}
                                         />
                                     }
                                     <div className="mx_HostSignupDialog_content_top">
@@ -279,11 +281,13 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                     {this.config.info.footer &&
                                         <div className="mx_HostSignupDialog_text_light">
                                             <small>
-                                                <p>
+                                                <p className="mx_HostSignupDialog_footer">
                                                     {this.config.info.footer.image &&
                                                         <img
                                                             alt={this.config.info.footer.image.alt}
+                                                            height={this.config.info.footer.image.height}
                                                             src={this.config.info.footer.image.src}
+                                                            width={this.config.info.footer.image.width}
                                                         />
                                                     }
                                                     {this.config.info.footer.text}

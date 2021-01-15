@@ -42,6 +42,16 @@ limitations under the License.
                 margin: 0 16px;
             }
         }
+
+        .mx_HostSignupDialog_footer {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+
+            img {
+                padding-right: 5px;
+            }
+        }
     }
 
     iframe {

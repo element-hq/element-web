@@ -48,7 +48,9 @@ export interface IPostmessage {
 
 interface IImage {
     alt: string;
+    height: number;
     src: string;
+    width: number;
 }
 
 interface ILink {
