@@ -34,6 +34,14 @@ const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 export default class WebPlatform extends VectorBasePlatform {
     private runningVersion: string = null;
 
+    constructor() {
+        super();
+        // Register service worker if available on this platform
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    }
+
     getHumanReadableName(): string {
         return 'Web Platform'; // no translation required: only used for analytics
     }
