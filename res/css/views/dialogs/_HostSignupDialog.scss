@@ -15,15 +15,29 @@ limitations under the License.
 */
 
 .mx_HostSignupDialog {
+    min-height: 531px;
     max-height: 600px;
     width: 580px;
 
     .mx_HostSignupDialog_info {
         text-align: center;
 
-        .mx_HostSignupDialog_content {
-            margin-top: 64px;
-            margin-bottom: 45px;
+        .mx_HostSignupDialog_content_top {
+            margin-bottom: 24px;
+        }
+
+        .mx_HostSignupDialog_paragraphs {
+            text-align: left;
+            padding-left: 25%;
+            padding-right: 25%;
+        }
+
+        .mx_HostSignupDialog_buttons {
+            margin-bottom: 24px;
+
+            button {
+                padding: 12px;
+            }
         }
     }
 
@@ -32,7 +46,30 @@ limitations under the License.
         height: 100%;
         border: none;
         background-color: #fff;
+        min-height: 500px;
     }
+}
+
+.mx_HostSignupDialog_text_dark {
+    color: $primary-fg-color;
+}
+
+.mx_HostSignupDialog_text_light {
+    color: $secondary-fg-color;
+}
+
+.mx_HostSignup_maximize_button {
+    mask: url('$(res)/img/feather-customised/widget/maximise.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: cover;
+    width: 14px;
+    height: 14px;
+    background-color: $dialog-close-fg-color;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .mx_HostSignup_persisted {
@@ -41,14 +78,31 @@ limitations under the License.
     top: 0;
     left: 0;
     position: fixed;
+    display: none;
 }
 
 .mx_HostSignupDialog_minimized {
     position: fixed;
-    bottom: 100px;
-    right: 100px;
-    width: 200px;
-    height: 120px;
+    bottom: 80px;
+    right: 26px;
+    width: 314px;
+    height: 217px;
     overflow: hidden;
-    z-index: 6000;
+
+    &.mx_Dialog {
+        padding: 12px;
+    }
+
+    .mx_Dialog_title {
+        text-align: left !important;
+        padding-left: 20px;
+        font-size: $font-15px;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background-color: #fff;
+    }
 }

@@ -29,6 +29,7 @@ interface IAccountData {
     openIdToken: string;
     serverName: string;
     userLocalpart: string;
+    termsAccepted: boolean;
 }
 
 export interface IPostmessageRequestData {
@@ -43,4 +44,44 @@ export interface IPostmessageResponseData {
 export interface IPostmessage {
     data: IPostmessageRequestData;
     origin: string;
+}
+
+interface IImage {
+    alt: string;
+    src: string;
+}
+
+interface ILink {
+    href: string;
+    text: string;
+}
+
+interface IInfoFooter {
+    image: IImage;
+    text: string;
+}
+
+interface IHostSignupInfoConfig {
+    additionalInfoLink?: ILink;
+    additionalParagraphs?: Array<string>;
+    cancelText: string;
+    continueText: string;
+    footer?: IInfoFooter;
+    image?: IImage;
+    title: string;
+}
+
+interface IHostSignupTermsDialogConfig {
+    acceptText: string;
+    termsDocuments: Array<ILink>;
+    text: string;
+    title: string;
+}
+
+export interface IHostSignupConfig {
+    domains: Array<string>;
+    info: IHostSignupInfoConfig;
+    minimizedDialogTitle: string;
+    termsDialog: IHostSignupTermsDialogConfig;
+    url: string;
 }

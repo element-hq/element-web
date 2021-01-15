@@ -52,6 +52,7 @@ import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
 import {UIFeature} from "../../settings/UIFeature";
 import HostSignupAction from "./HostSignupAction";
+import {IHostSignupConfig} from "../views/dialogs/HostSignupDialogTypes";
 
 interface IProps {
     isMinimized: boolean;
@@ -274,7 +275,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         let topSection;
         const signupLink = getHostingLink("user-context-menu");
-        const hostSignupConfig = SdkConfig.get().host_signup;
+        const hostSignupConfig: IHostSignupConfig = SdkConfig.get().hostSignup;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -297,7 +298,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         } else if (signupLink || hostSignupConfig) {
             let hostSignupAction;
             if (hostSignupConfig && hostSignupConfig.url) {
-                // If host_signup.domains is set to a non-empty array, only show
+                // If hostSignup.domains is set to a non-empty array, only show
                 // dialog if the user is on the domain or a subdomain.
                 const hostSignupDomains = hostSignupConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
