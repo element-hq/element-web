@@ -107,7 +107,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps = EchoChamber.forRoom(this.props.room);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        CommunityPrototypeStore.instance.on(UPDATE_EVENT, this.onCommunityUpdate);
+        CommunityPrototypeStore.instance.on(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
     }
 
     private onNotificationUpdate = () => {
@@ -140,6 +143,14 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 MessagePreviewStore.getPreviewChangedEventName(this.props.room),
                 this.onRoomPreviewChanged,
             );
+            CommunityPrototypeStore.instance.off(
+                CommunityPrototypeStore.getUpdateEventName(prevProps.room?.roomId),
+                this.onCommunityUpdate,
+            );
+            CommunityPrototypeStore.instance.on(
+                CommunityPrototypeStore.getUpdateEventName(this.props.room?.roomId),
+                this.onCommunityUpdate,
+            );
         }
     }
 
@@ -157,10 +168,13 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 MessagePreviewStore.getPreviewChangedEventName(this.props.room),
                 this.onRoomPreviewChanged,
             );
+            CommunityPrototypeStore.instance.off(
+                CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+                this.onCommunityUpdate,
+            );
         }
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
-        CommunityPrototypeStore.instance.off(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
     private onAction = (payload: ActionPayload) => {
