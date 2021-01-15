@@ -51,7 +51,6 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     room: Room;
