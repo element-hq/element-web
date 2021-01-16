@@ -281,7 +281,7 @@ export default class MessageComposer extends React.Component {
         }
     };
 
-    onSendButtonChanged = () => {
+    onShowSendButtonChanged = () => {
         this.setState({
             showSendButton: SettingsStore.getValue("MessageComposerInput.showSendButton"),
         });
@@ -300,7 +300,7 @@ export default class MessageComposer extends React.Component {
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._waitForOwnMember();
         this.showSendButtonRef = SettingsStore.watchSetting(
-            "MessageComposerInput.showSendButton", null, this.onSendButtonChanged);
+            "MessageComposerInput.showSendButton", null, this.onShowSendButtonChanged);
     }
 
     _waitForOwnMember() {
