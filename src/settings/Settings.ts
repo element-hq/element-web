@@ -336,7 +336,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
         default: false,
     },
-    "MessageComposerInput.sendButton": {
+    "MessageComposerInput.showSendButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show send message button"),
         default: false,

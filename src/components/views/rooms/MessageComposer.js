@@ -263,7 +263,7 @@ export default class MessageComposer extends React.Component {
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
             showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
-            showSendButton: SettingsStore.getValue("MessageComposerInput.sendButton"),
+            showSendButton: SettingsStore.getValue("MessageComposerInput.showSendButton"),
             hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
             joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
         };
@@ -283,7 +283,7 @@ export default class MessageComposer extends React.Component {
 
     onSendButtonChanged = () => {
         this.setState({
-            showSendButton: SettingsStore.getValue("MessageComposerInput.sendButton"),
+            showSendButton: SettingsStore.getValue("MessageComposerInput.showSendButton"),
         });
     }
 
@@ -300,7 +300,7 @@ export default class MessageComposer extends React.Component {
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._waitForOwnMember();
         this.showSendButtonRef = SettingsStore.watchSetting(
-            "MessageComposerInput.sendButton", null, this.onSendButtonChanged);
+            "MessageComposerInput.showSendButton", null, this.onSendButtonChanged);
     }
 
     _waitForOwnMember() {
