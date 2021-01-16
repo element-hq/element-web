@@ -263,6 +263,7 @@ export default class MessageComposer extends React.Component {
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
             showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
+            showSendButton: SettingsStore.getValue("MessageComposerInput.sendButton"),
             hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
             joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
         };
@@ -280,6 +281,12 @@ export default class MessageComposer extends React.Component {
         }
     };
 
+    onSendButtonChanged = () => {
+        this.setState({
+            showSendButton: SettingsStore.getValue("MessageComposerInput.sendButton"),
+        });
+    }
+
     _onWidgetUpdate = () => {
         this.setState({hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room)});
     };
@@ -292,6 +299,8 @@ export default class MessageComposer extends React.Component {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._waitForOwnMember();
+        this.showSendButtonRef = SettingsStore.watchSetting(
+            "MessageComposerInput.sendButton", null, this.onSendButtonChanged);
     }
 
     _waitForOwnMember() {
@@ -317,6 +326,7 @@ export default class MessageComposer extends React.Component {
         WidgetStore.instance.removeListener(UPDATE_EVENT, this._onWidgetUpdate);
         ActiveWidgetStore.removeListener('update', this._onActiveWidgetUpdate);
         dis.unregister(this.dispatcherRef);
+        SettingsStore.unwatchSetting(this.showSendButtonRef);
     }
 
     _onRoomStateEvents(ev, state) {
@@ -455,7 +465,7 @@ export default class MessageComposer extends React.Component {
                 }
             }
 
-            if (SettingsStore.getValue("MessageComposerInput.sendButton")) {
+            if (this.state.showSendButton) {
                 controls.push((
                     <AccessibleTooltipButton
                         className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
