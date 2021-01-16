@@ -99,7 +99,7 @@ function makeRegistrationUrl(params: object) {
             window.location.protocol + '//' +
             window.location.host +
             window.location.pathname +
-            '#/register'
+            '#/login'
         );
     }
 
