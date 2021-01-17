@@ -419,6 +419,14 @@ class LoggedInView extends React.Component<IProps, IState> {
                     handled = true;
                 }
                 break;
+            case Key.F:
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'focus_search',
+                    });
+                    handled = true;
+                }
+                break;
             case Key.BACKTICK:
                 // Ideally this would be CTRL+P for "Profile", but that's
                 // taken by the print dialog. CTRL+I for "Information"
