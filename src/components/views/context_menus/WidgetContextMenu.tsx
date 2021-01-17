@@ -26,7 +26,6 @@ import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore
 import RoomContext from "../../../contexts/RoomContext";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
-import {SettingLevel} from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
@@ -127,7 +126,8 @@ const WidgetContextMenu: React.FC<IProps> = ({
             console.info("Revoking permission for widget to load: " + app.eventId);
             const current = SettingsStore.getValue("allowedWidgets", roomId);
             current[app.eventId] = false;
-            SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).catch(err => {
+            const level = SettingsStore.firstSupportedLevel("allowedWidgets");
+            SettingsStore.setValue("allowedWidgets", roomId, level, current).catch(err => {
                 console.error(err);
                 // We don't really need to do anything about this - the user will just hit the button again.
             });

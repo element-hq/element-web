@@ -33,7 +33,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement, {getPersistKey} from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
-import {SettingLevel} from "../../../settings/SettingLevel";
 import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
 import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
 import {MatrixCapabilities} from "matrix-widget-api";
@@ -240,7 +239,8 @@ export default class AppTile extends React.Component {
         console.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
         current[this.props.app.eventId] = true;
-        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
+        const level = SettingsStore.firstSupportedLevel("allowedWidgets");
+        SettingsStore.setValue("allowedWidgets", roomId, level, current).then(() => {
             this.setState({hasPermissionToLoad: true});
 
             // Fetch a token for the integration manager, now that we're allowed to
