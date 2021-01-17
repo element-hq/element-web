@@ -24,7 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 
 function languageMatchesSearchQuery(query, language) {
-    if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
+    if (language.label.toUpperCase().startsWith(query.toUpperCase())) return true;
     if (language.value.toUpperCase() === query.toUpperCase()) return true;
     return false;
 }
