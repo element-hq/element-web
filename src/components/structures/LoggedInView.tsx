@@ -420,7 +420,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 }
                 break;
             case Key.F:
-                if (ctrlCmdOnly) {
+                if (ctrlCmdOnly && SettingsStore.getValue("ctrlFForSearch")) {
                     dis.dispatch({
                         action: 'focus_search',
                     });
