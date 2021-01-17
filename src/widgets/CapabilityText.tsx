@@ -61,7 +61,7 @@ export class CapabilityText {
             [GENERIC_WIDGET_KIND]: _td("Change which room you're viewing"),
         },
         [MatrixCapabilities.MSC2931Navigate]: {
-            [GENERIC_WIDGET_KIND]: _td("Change which room you're viewing and use permalinks"),
+            [GENERIC_WIDGET_KIND]: _td("Change which room, message, or user you're viewing"),
         },
     };
 
