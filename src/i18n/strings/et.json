@@ -2991,5 +2991,7 @@
     "Start a Conversation": "Alusta vestlust",
     "Dial pad": "Numbriklahvistik",
     "There was an error looking up the phone number": "Telefoninumbri otsimisel tekkis viga",
-    "Unable to look up phone number": "Telefoninumbrit ei õnnestu leida"
+    "Unable to look up phone number": "Telefoninumbrit ei õnnestu leida",
+    "Channel: <channelLink/>": "Kanal: <channelLink/>",
+    "Workspace: <networkLink/>": "Tööruum: <networkLink/>"
 }
