@@ -2985,5 +2985,8 @@
     "Start a Conversation": "Beszélgetés megkezdése",
     "Dial pad": "Tárcsázó számlap",
     "There was an error looking up the phone number": "A telefonszám megkeresésekor hiba történt",
-    "Unable to look up phone number": "A telefonszámot nem sikerült megtalálni"
+    "Unable to look up phone number": "A telefonszámot nem sikerült megtalálni",
+    "Workspace: <networkLink/>": "Munkaterület: <networkLink/>",
+    "Change which room, message, or user you're viewing": "Azon szoba, üzenet vagy felhasználó megváltoztatása amit éppen néz",
+    "Channel: <channelLink/>": "Csatorna: <channelLink/>"
 }
