@@ -29,7 +29,7 @@ import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -51,7 +51,6 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     room: Room;
@@ -99,12 +98,18 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        MessagePreviewStore.instance.on(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+        MessagePreviewStore.instance.on(
+            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+            this.onRoomPreviewChanged,
+        );
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps = EchoChamber.forRoom(this.props.room);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        CommunityPrototypeStore.instance.on(UPDATE_EVENT, this.onCommunityUpdate);
+        CommunityPrototypeStore.instance.on(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
     }
 
     private onNotificationUpdate = () => {
@@ -128,6 +133,24 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
             this.setState({messagePreview: this.generatePreview()});
         }
+        if (prevProps.room?.roomId !== this.props.room?.roomId) {
+            MessagePreviewStore.instance.off(
+                MessagePreviewStore.getPreviewChangedEventName(prevProps.room),
+                this.onRoomPreviewChanged,
+            );
+            MessagePreviewStore.instance.on(
+                MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+                this.onRoomPreviewChanged,
+            );
+            CommunityPrototypeStore.instance.off(
+                CommunityPrototypeStore.getUpdateEventName(prevProps.room?.roomId),
+                this.onCommunityUpdate,
+            );
+            CommunityPrototypeStore.instance.on(
+                CommunityPrototypeStore.getUpdateEventName(this.props.room?.roomId),
+                this.onCommunityUpdate,
+            );
+        }
     }
 
     public componentDidMount() {
@@ -140,11 +163,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     public componentWillUnmount() {
         if (this.props.room) {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
+            MessagePreviewStore.instance.off(
+                MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+                this.onRoomPreviewChanged,
+            );
+            CommunityPrototypeStore.instance.off(
+                CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+                this.onCommunityUpdate,
+            );
         }
         defaultDispatcher.unregister(this.dispatcherRef);
-        MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
-        CommunityPrototypeStore.instance.off(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
     private onAction = (payload: ActionPayload) => {

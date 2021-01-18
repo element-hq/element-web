@@ -426,7 +426,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
     },
     "allowedWidgets": {
-        supportedLevels: [SettingLevel.ROOM_ACCOUNT],
+        supportedLevels: [SettingLevel.ROOM_ACCOUNT, SettingLevel.ROOM_DEVICE],
+        supportedLevelsAreOrdered: true,
         default: {}, // none allowed
     },
     "analyticsOptIn": {

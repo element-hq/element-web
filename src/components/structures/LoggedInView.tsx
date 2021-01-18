@@ -140,7 +140,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
-    protected readonly _compactLayoutWatcherRef: string;
+    protected compactLayoutWatcherRef: string;
     protected resizer: Resizer;
 
     constructor(props, context) {
@@ -157,18 +157,6 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         CallMediaHandler.loadDevices();
 
-        document.addEventListener('keydown', this._onNativeKeyDown, false);
-
-        this._updateServerNoticeEvents();
-
-        this._matrixClient.on("accountData", this.onAccountData);
-        this._matrixClient.on("sync", this.onSync);
-        this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
-
-        this._compactLayoutWatcherRef = SettingsStore.watchSetting(
-            "useCompactLayout", null, this.onCompactLayoutChanged,
-        );
-
         fixupColorFonts();
 
         this._roomView = React.createRef();
@@ -176,6 +164,24 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
+        document.addEventListener('keydown', this._onNativeKeyDown, false);
+
+        this._updateServerNoticeEvents();
+
+        this._matrixClient.on("accountData", this.onAccountData);
+        this._matrixClient.on("sync", this.onSync);
+        // Call `onSync` with the current state as well
+        this.onSync(
+            this._matrixClient.getSyncState(),
+            null,
+            this._matrixClient.getSyncStateData(),
+        );
+        this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+
+        this.compactLayoutWatcherRef = SettingsStore.watchSetting(
+            "useCompactLayout", null, this.onCompactLayoutChanged,
+        );
+
         this.resizer = this._createResizer();
         this.resizer.attach();
         this._loadResizerPreferences();
@@ -186,7 +192,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
-        SettingsStore.unwatchSetting(this._compactLayoutWatcherRef);
+        SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         this.resizer.detach();
     }
 
