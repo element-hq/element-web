@@ -72,9 +72,12 @@ export default class SoftLogout extends React.Component {
 
         this._initLogin();
 
-        MatrixClientPeg.get().countSessionsNeedingBackup().then(remaining => {
-            this.setState({keyBackupNeeded: remaining > 0});
-        });
+        const cli = MatrixClientPeg.get();
+        if (cli.isCryptoEnabled()) {
+            cli.countSessionsNeedingBackup().then(remaining => {
+                this.setState({ keyBackupNeeded: remaining > 0 });
+            });
+        }
     }
 
     onClearAll = () => {

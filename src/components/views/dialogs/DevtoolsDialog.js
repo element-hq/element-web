@@ -32,6 +32,8 @@ import {
     PHASE_STARTED,
     PHASE_CANCELLED,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import WidgetStore from "../../../stores/WidgetStore";
+import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
@@ -701,6 +703,97 @@ class VerificationExplorer extends React.Component {
     }
 }
 
+class WidgetExplorer extends React.Component {
+    static getLabel() {
+        return _t("Active Widgets");
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            query: '',
+            editWidget: null, // set to an IApp when editing
+        };
+    }
+
+    onWidgetStoreUpdate = () => {
+        this.forceUpdate();
+    };
+
+    onQueryChange = (query) => {
+        this.setState({query});
+    };
+
+    onEditWidget = (widget) => {
+        this.setState({editWidget: widget});
+    };
+
+    onBack = () => {
+        const widgets = WidgetStore.instance.getApps(this.props.room.roomId);
+        if (this.state.editWidget && widgets.includes(this.state.editWidget)) {
+            this.setState({editWidget: null});
+        } else {
+            this.props.onBack();
+        }
+    };
+
+    componentDidMount() {
+        WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
+    }
+
+    componentWillUnmount() {
+        WidgetStore.instance.off(UPDATE_EVENT, this.onWidgetStoreUpdate);
+    }
+
+    render() {
+        const room = this.props.room;
+
+        const editWidget = this.state.editWidget;
+        const widgets = WidgetStore.instance.getApps(room.roomId);
+        if (editWidget && widgets.includes(editWidget)) {
+            const allState = Array.from(Array.from(room.currentState.events.values()).map(e => e.values()))
+                .reduce((p, c) => {p.push(...c); return p;}, []);
+            const stateEv = allState.find(ev => ev.getId() === editWidget.eventId);
+            if (!stateEv) { // "should never happen"
+                return <div>
+                    {_t("There was an error finding this widget.")}
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={this.onBack}>{_t("Back")}</button>
+                    </div>
+                </div>;
+            }
+            return <SendCustomEvent
+                onBack={this.onBack}
+                room={room}
+                forceStateEvent={true}
+                inputs={{
+                    eventType: stateEv.getType(),
+                    evContent: JSON.stringify(stateEv.getContent(), null, '\t'),
+                    stateKey: stateEv.getStateKey(),
+                }}
+            />;
+        }
+
+        return (<div>
+            <div className="mx_Dialog_content">
+                <FilteredList query={this.state.query} onChange={this.onQueryChange}>
+                    {widgets.map(w => {
+                        return <button
+                            className='mx_DevTools_RoomStateExplorer_button'
+                            key={w.url + w.eventId}
+                            onClick={() => this.onEditWidget(w)}
+                        >{w.url}</button>;
+                    })}
+                </FilteredList>
+            </div>
+            <div className="mx_Dialog_buttons">
+                <button onClick={this.onBack}>{_t("Back")}</button>
+            </div>
+        </div>);
+    }
+}
+
 const Entries = [
     SendCustomEvent,
     RoomStateExplorer,
@@ -708,6 +801,7 @@ const Entries = [
     AccountDataExplorer,
     ServersInRoomList,
     VerificationExplorer,
+    WidgetExplorer,
 ];
 
 export default class DevtoolsDialog extends React.PureComponent {

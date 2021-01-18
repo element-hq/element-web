@@ -30,7 +30,7 @@ import { UPDATE_EVENT } from "../AsyncStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
-export const ROOM_PREVIEW_CHANGED = "room_preview_changed";
+const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 
 const PREVIEWS = {
     'm.room.message': {
@@ -82,6 +82,10 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
     public static get instance(): MessagePreviewStore {
         return MessagePreviewStore.internalInstance;
+    }
+
+    public static getPreviewChangedEventName(room: Room): string {
+        return `${ROOM_PREVIEW_CHANGED}:${room?.roomId}`;
     }
 
     /**
@@ -150,7 +154,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
                 // We've muted the underlying Map, so just emit that we've changed.
                 this.previews.set(room.roomId, map);
                 this.emit(UPDATE_EVENT, this);
-                this.emit(ROOM_PREVIEW_CHANGED, room);
+                this.emit(MessagePreviewStore.getPreviewChangedEventName(room), room);
             }
             return; // we're done
         }
@@ -158,7 +162,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         // At this point, we didn't generate a preview so clear it
         this.previews.set(room.roomId, new Map<TagID|TAG_ANY, string|null>());
         this.emit(UPDATE_EVENT, this);
-        this.emit(ROOM_PREVIEW_CHANGED, room);
+        this.emit(MessagePreviewStore.getPreviewChangedEventName(room), room);
     }
 
     protected async onAction(payload: ActionPayload) {
