@@ -1,3 +1,11 @@
+Changes in [3.12.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.12.0) (2021-01-18)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.12.0-rc.1...v3.12.0)
+
+ * Upgrade to JS SDK 9.5.0
+ * Fix incoming call box on dark theme
+   [\#5543](https://github.com/matrix-org/matrix-react-sdk/pull/5543)
+
 Changes in [3.12.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.12.0-rc.1) (2021-01-13)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.11.1...v3.12.0-rc.1)
