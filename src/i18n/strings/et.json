@@ -2993,5 +2993,6 @@
     "There was an error looking up the phone number": "Telefoninumbri otsimisel tekkis viga",
     "Unable to look up phone number": "Telefoninumbrit ei õnnestu leida",
     "Channel: <channelLink/>": "Kanal: <channelLink/>",
-    "Workspace: <networkLink/>": "Tööruum: <networkLink/>"
+    "Workspace: <networkLink/>": "Tööruum: <networkLink/>",
+    "Change which room, message, or user you're viewing": "Muuda jututuba, sõnumit või kasutajat, mida hetkel vaatad"
 }
