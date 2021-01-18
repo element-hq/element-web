@@ -1,3 +1,21 @@
+Changes in [1.7.17](https://github.com/vector-im/element-web/releases/tag/v1.7.17) (2021-01-18)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.17-rc.1...v1.7.17)
+
+ * Upgrade to React SDK 3.12.0 and JS SDK 9.5.0
+
+Changes in [1.7.17-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.17-rc.1) (2021-01-13)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.16...v1.7.17-rc.1)
+
+ * Upgrade to React SDK 3.12.0-rc.1 and JS SDK 9.5.0-rc.1
+ * Translations update from Weblate
+   [\#16131](https://github.com/vector-im/element-web/pull/16131)
+ * webplatform: Fix notification closing
+   [\#16028](https://github.com/vector-im/element-web/pull/16028)
+ * Stop building code and types for Element layer
+   [\#15999](https://github.com/vector-im/element-web/pull/15999)
+
 Changes in [1.7.16](https://github.com/vector-im/element-web/releases/tag/v1.7.16) (2020-12-21)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.16-rc.1...v1.7.16)
