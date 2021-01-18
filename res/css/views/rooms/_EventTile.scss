@@ -493,12 +493,17 @@ $left-gutter: 64px;
         // https://github.com/vector-im/vector-web/issues/754
         overflow-x: overlay;
         overflow-y: visible;
-        max-height: 30vh;
     }
 
     code {
         // deliberate constants as we're behind an invert filter
         background-color: #f8f8f8;
+    }
+}
+
+.mx_EventTile_content_collapsedCode {
+    pre {
+        max-height: 30vh;
     }
 }
 

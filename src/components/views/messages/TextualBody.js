@@ -35,6 +35,7 @@ import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import classNames from "classnames";
 
 export default class TextualBody extends React.Component {
     static propTypes = {
@@ -69,6 +70,7 @@ export default class TextualBody extends React.Component {
 
             // track whether the preview widget is hidden
             widgetHidden: false,
+            codeBlockExpanded: SettingsStore.getValue("expandCodeByDefault"),
         };
     }
 
@@ -434,6 +436,12 @@ export default class TextualBody extends React.Component {
             });
         }
 
+        const defaultCaseClasses = classNames({
+            mx_MTextBody: true,
+            mx_EventTile_content: true,
+            mx_EventTile_content_collapsedCode: !this.state.codeBlockExpanded,
+        });
+
         switch (content.msgtype) {
             case "m.emote":
                 return (
@@ -459,7 +467,7 @@ export default class TextualBody extends React.Component {
                 );
             default: // including "m.text"
                 return (
-                    <span className="mx_MTextBody mx_EventTile_content">
+                    <span className={defaultCaseClasses}>
                         { body }
                         { widgets }
                     </span>
