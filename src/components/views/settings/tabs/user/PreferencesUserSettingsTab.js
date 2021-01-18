@@ -46,6 +46,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'alwaysShowTimestamps',
         'showRedactions',
         'enableSyntaxHighlightLanguageDetection',
+        'expandCodeByDefault',
         'showJoinLeaves',
         'showAvatarChanges',
         'showDisplaynameChanges',
