@@ -2978,5 +2978,12 @@
     "You have no visible notifications.": "Nincsenek látható értesítések.",
     "Transfer": "Átadás",
     "Failed to transfer call": "A hívás átadása nem sikerült",
-    "A call can only be transferred to a single user.": "Csak egy felhasználónak lehet átadni a hívást."
+    "A call can only be transferred to a single user.": "Csak egy felhasználónak lehet átadni a hívást.",
+    "There was an error finding this widget.": "A kisalkalmazás keresésekor hiba történt.",
+    "Active Widgets": "Aktív kisalkalmazások",
+    "Open dial pad": "Számlap megnyitása",
+    "Start a Conversation": "Beszélgetés megkezdése",
+    "Dial pad": "Tárcsázó számlap",
+    "There was an error looking up the phone number": "A telefonszám megkeresésekor hiba történt",
+    "Unable to look up phone number": "A telefonszámot nem sikerült megtalálni"
 }
