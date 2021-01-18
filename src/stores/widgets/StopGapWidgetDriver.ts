@@ -43,6 +43,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
+import {tryTransformPermalinkToLocalHref} from "../../utils/permalinks/Permalinks";
 
 // TODO: Purge this from the universe
 
@@ -170,5 +171,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
             },
         });
+    }
+
+    public async navigate(uri: string): Promise<void> {
+        const localUri = tryTransformPermalinkToLocalHref(uri);
+        if (!localUri || localUri === uri) { // parse failure can lead to an unmodified URL
+            throw new Error("Failed to transform URI");
+        }
+        window.location.hash = localUri; // it'll just be a fragment
     }
 }
