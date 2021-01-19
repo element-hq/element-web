@@ -27,7 +27,7 @@ and interpret the other options differently.
 
 This is the "App Drawer" or any pinned widgets in a room. This is by far the most versatile container
 though does introduce potential usability issues upon members of the room (widgets take up space and
-therefore less messages can be shown).
+therefore fewer messages can be shown).
 
 The `index` for a widget determines which order the widgets show up in from left to right. Widgets
 without an `index` will show up as the rightmost widgets. Tiebreaks (same `index` or multiple defined
@@ -58,4 +58,3 @@ container will be put in this container instead. Putting a widget in the right c
 automatically show it - it only mentions that widgets should not be in another container.
 
 The behaviour of this container may change in the future.
-
