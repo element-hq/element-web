@@ -94,8 +94,11 @@ export default class TextualBody extends React.Component {
             const blocks = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
             if (blocks.length > 0) {
                 for (let i = 0; i < blocks.length; i++) {
-                    this._handleCodeBlockExpansion(blocks[i]);
-                    this._addCodeCopyButton(blocks[i]);
+                    // Wrap a div around <pre> so that the copy button can be correctly positioned
+                    // when the <pre> overflows and is scrolled horizontally.
+                    const div = this._wrapInDiv(blocks[i]);
+                    this._handleCodeBlockExpansion(div);
+                    this._addCodeCopyButton(div);
                 }
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
@@ -125,17 +128,19 @@ export default class TextualBody extends React.Component {
             button.onmouseleave = close;
         };
 
-        // Wrap a div around <pre> so that the copy button can be correctly positioned
-        // when the <pre> overflows and is scrolled horizontally.
+        codeBlock.appendChild(button);
+    }
+
+    _wrapInDiv(codeBlock) {
         const div = document.createElement("div");
         div.className = "mx_EventTile_pre_container";
 
         // Insert containing div in place of <pre> block
         codeBlock.parentNode.replaceChild(div, codeBlock);
-
         // Append <pre> block and copy button to container
         div.appendChild(codeBlock);
-        div.appendChild(button);
+
+        return div;
     }
 
     _handleCodeBlockExpansion(codeBlock) {
