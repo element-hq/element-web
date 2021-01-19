@@ -444,7 +444,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         SettingsStore.setValue("Widgets.layout", room.roomId, SettingLevel.ROOM_ACCOUNT, {
             overrides: layoutEv?.getId(),
             widgets: newLayout,
-        });
+        }).catch(() => this.recalculateRoom(room));
+        this.recalculateRoom(room); // call to try local echo on changes (the catch above undoes any errors)
     }
 }
 
