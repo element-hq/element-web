@@ -63,13 +63,15 @@ interface IStoredLayout {
     // TODO: [Deferred] Maximizing (fullscreen) widgets by default.
 }
 
+interface IWidgetLayouts {
+    [widgetId: string]: IStoredLayout;
+}
+
 interface ILayoutStateEvent {
     // TODO: [Deferred] Forced layout (fixed with no changes)
 
     // The widget layouts.
-    widgets: {
-        [widgetId: string]: IStoredLayout;
-    };
+    widgets: IWidgetLayouts;
 }
 
 interface ILayoutSettings extends ILayoutStateEvent {
@@ -79,8 +81,11 @@ interface ILayoutSettings extends ILayoutStateEvent {
 // Dev note: "Pinned" widgets are ones in the top container.
 const MAX_PINNED = 3;
 
-const MIN_WIDGET_WIDTH_PCT = 10; // Don't make anything smaller than 10% width
-const MIN_WIDGET_HEIGHT_PCT = 20;
+// These two are whole percentages and don't really mean anything. Later values will decide
+// minimum, but these help determine proportions during our calculations here. In fact, these
+// values should be *smaller* than the actual minimums imposed by later components.
+const MIN_WIDGET_WIDTH_PCT = 10; // 10%
+const MIN_WIDGET_HEIGHT_PCT = 2; // 2%
 
 export class WidgetLayoutStore extends ReadyWatchingStore {
     private static internalInstance: WidgetLayoutStore;
@@ -230,7 +235,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         // Determine width distribution and height of the top container now (the only relevant one)
         const widths: number[] = [];
-        let maxHeight = 0;
+        let maxHeight = null; // null == default
         let doAutobalance = true;
         for (let i = 0; i < topWidgets.length; i++) {
             const widget = topWidgets[i];
@@ -246,9 +251,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 widths.push(100); // we'll figure this out later
             }
 
-            const defRoomHeight = defaultNumber(widgetLayout?.height, MIN_WIDGET_HEIGHT_PCT);
-            const h = defaultNumber(userWidgetLayout?.height, defRoomHeight);
-            maxHeight = Math.max(maxHeight, clamp(h, MIN_WIDGET_HEIGHT_PCT, 100));
+            if (widgetLayout?.height || userWidgetLayout?.height) {
+                const defRoomHeight = defaultNumber(widgetLayout?.height, MIN_WIDGET_HEIGHT_PCT);
+                const h = defaultNumber(userWidgetLayout?.height, defRoomHeight);
+                maxHeight = Math.max(maxHeight, clamp(h, MIN_WIDGET_HEIGHT_PCT, 100));
+            }
         }
         let remainingWidth = 100;
         for (const width of widths) {
@@ -330,12 +337,35 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             localLayout[w.id] = {
                 width: numbers[i],
                 index: i,
+                height: this.byRoom[room.roomId]?.[container]?.height || MIN_WIDGET_HEIGHT_PCT,
             };
         });
+        this.updateUserLayout(room, localLayout);
+    }
+
+    public getContainerHeight(room: Room, container: Container): number {
+        return this.byRoom[room.roomId]?.[container]?.height; // let the default get returned if needed
+    }
+
+    public setContainerHeight(room: Room, container: Container, height: number) {
+        const widgets = this.getContainerWidgets(room, container);
+        const widths = this.byRoom[room.roomId]?.[container]?.distributions;
+        const localLayout = {};
+        widgets.forEach((w, i) => {
+            localLayout[w.id] = {
+                width: widths[i],
+                index: i,
+                height: height,
+            };
+        });
+        this.updateUserLayout(room, localLayout);
+    }
+
+    private updateUserLayout(room: Room, newLayout: IWidgetLayouts) {
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
         SettingsStore.setValue("Widgets.layout", room.roomId, SettingLevel.ROOM_ACCOUNT, {
             overrides: layoutEv?.getId(),
-            widgets: localLayout,
+            widgets: newLayout,
         });
     }
 }

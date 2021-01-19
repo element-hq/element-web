@@ -28,12 +28,13 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
-import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import ResizeHandle from "../elements/ResizeHandle";
 import Resizer from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
 import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayoutStore";
+import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
+import {useStateCallback} from "../../../hooks/useStateCallback";
 
 export default class AppsDrawer extends React.Component {
     static propTypes = {
@@ -237,7 +238,7 @@ export default class AppsDrawer extends React.Component {
         return (
             <div className={classes}>
                 <PersistentVResizer
-                    id={"apps-drawer_" + this.props.room.roomId}
+                    room={this.props.room}
                     minHeight={100}
                     maxHeight={this.props.maxHeight ? this.props.maxHeight - 50 : undefined}
                     handleClass="mx_AppsContainer_resizerHandle"
@@ -261,7 +262,7 @@ export default class AppsDrawer extends React.Component {
 }
 
 const PersistentVResizer = ({
-    id,
+    room,
     minHeight,
     maxHeight,
     className,
@@ -270,7 +271,24 @@ const PersistentVResizer = ({
     resizeNotifier,
     children,
 }) => {
-    const [height, setHeight] = useLocalStorageState("pvr_" + id, 280); // old fixed height was 273px
+    let defaultHeight = WidgetLayoutStore.instance.getContainerHeight(room, Container.Top);
+
+    // Arbitrary defaults to avoid NaN problems. 100 px or 3/4 of the visible window.
+    if (!minHeight) minHeight = 100;
+    if (!maxHeight) maxHeight = (window.innerHeight / 4) * 3;
+
+    // Convert from percentage to height. Note that the default height is 280px.
+    if (defaultHeight) {
+        defaultHeight = clamp(defaultHeight, 0, 100);
+        defaultHeight = percentageWithin(defaultHeight / 100, minHeight, maxHeight);
+    } else {
+        defaultHeight = 280;
+    }
+
+    const [height, setHeight] = useStateCallback(defaultHeight, newHeight => {
+        newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
+        WidgetLayoutStore.instance.setContainerHeight(room, Container.Top, newHeight)
+    });
 
     return <Resizable
         size={{height: Math.min(height, maxHeight)}}
