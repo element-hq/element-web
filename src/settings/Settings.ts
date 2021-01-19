@@ -633,7 +633,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show chat effects"),
         default: true,
     },
-    "Widgets.pinned": {
+    "Widgets.pinned": { // deprecated
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: {},
+    },
+    "Widgets.layout": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
     },
