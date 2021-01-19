@@ -23,6 +23,8 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { arrayFastClone } from "../../utils/arrays";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 export const WIDGET_LAYOUT_EVENT_TYPE = "io.element.widgets.layout";
 
@@ -79,7 +81,7 @@ interface ILayoutSettings extends ILayoutStateEvent {
 }
 
 // Dev note: "Pinned" widgets are ones in the top container.
-const MAX_PINNED = 3;
+export const MAX_PINNED = 3;
 
 // These two are whole percentages and don't really mean anything. Later values will decide
 // minimum, but these help determine proportions during our calculations here. In fact, these
@@ -126,19 +128,19 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.matrixClient.on("RoomState.events", this.updateRoomFromState);
         SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
         SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
-        // TODO: Register WidgetStore listener
+        WidgetStore.instance.on(UPDATE_EVENT, this.updateAllRooms);
     }
 
     protected async onNotReady(): Promise<any> {
         this.byRoom = {};
     }
 
-    private updateAllRooms() {
+    private updateAllRooms = () => {
         this.byRoom = {};
         for (const room of this.matrixClient.getVisibleRooms()) {
             this.recalculateRoom(room);
         }
-    }
+    };
 
     private updateRoomFromState = (ev: MatrixEvent) => {
         if (ev.getType() !== WIDGET_LAYOUT_EVENT_TYPE) return;
@@ -222,8 +224,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             const defaultA = WidgetType.JITSI.matches(a.type) ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER;
             const defaultB = WidgetType.JITSI.matches(b.type) ? Number.MIN_SAFE_INTEGER : Number.MAX_SAFE_INTEGER;
 
-            const orderA = defaultNumber(userLayoutA, defaultNumber(layoutA?.index, defaultA));
-            const orderB = defaultNumber(userLayoutB, defaultNumber(layoutB?.index, defaultB));
+            const orderA = defaultNumber(userLayoutA?.index, defaultNumber(layoutA?.index, defaultA));
+            const orderB = defaultNumber(userLayoutB?.index, defaultNumber(layoutB?.index, defaultB));
 
             if (orderA === orderB) {
                 // We just need a tiebreak
@@ -308,6 +310,14 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return this.byRoom[room.roomId]?.[container]?.ordered || [];
     }
 
+    public isInContainer(room: Room, widget: IApp, container: Container): boolean {
+        return this.getContainerWidgets(room, container).some(w => w.id === widget.id);
+    }
+
+    public canAddToContainer(room: Room, container: Container): boolean {
+        return this.getContainerWidgets(room, container).length < MAX_PINNED;
+    }
+
     public getResizerDistributions(room: Room, container: Container): string[] { // yes, string.
         let distributions = this.byRoom[room.roomId]?.[container]?.distributions;
         if (!distributions || distributions.length < 2) return [];
@@ -335,6 +345,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const localLayout = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
+                container: container,
                 width: numbers[i],
                 index: i,
                 height: this.byRoom[room.roomId]?.[container]?.height || MIN_WIDGET_HEIGHT_PCT,
@@ -353,6 +364,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const localLayout = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
+                container: container,
                 width: widths[i],
                 index: i,
                 height: height,
@@ -361,7 +373,66 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
+    public moveWithinContainer(room: Room, container: Container, widget: IApp, delta: number) {
+        const widgets = arrayFastClone(this.getContainerWidgets(room, container));
+        const currentIdx = widgets.findIndex(w => w.id === widget.id);
+        if (currentIdx < 0) return; // no change needed
+
+        widgets.splice(currentIdx, 1); // remove existing widget
+        const newIdx = clamp(currentIdx + delta, 0, widgets.length);
+        widgets.splice(newIdx, 0, widget);
+
+        const widths = this.byRoom[room.roomId]?.[container]?.distributions;
+        const height = this.byRoom[room.roomId]?.[container]?.height;
+        const localLayout = {};
+        widgets.forEach((w, i) => {
+            localLayout[w.id] = {
+                container: container,
+                width: widths[i],
+                index: i,
+                height: height,
+            };
+        });
+        this.updateUserLayout(room, localLayout);
+    }
+
+    public moveToContainer(room: Room, widget: IApp, toContainer: Container) {
+        const allWidgets = this.getAllWidgets(room);
+        if (!allWidgets.some(([w])=> w.id === widget.id)) return; // invalid
+        this.updateUserLayout(room, {[widget.id]:{container: toContainer}});
+    }
+
+    private getAllWidgets(room: Room): [IApp, Container][] {
+        const containers = this.byRoom[room.roomId];
+        if (!containers) return [];
+
+        const ret = [];
+        for (const container of Object.keys(containers)) {
+            const widgets = containers[container].ordered;
+            for (const widget of widgets) {
+                ret.push([widget, container]);
+            }
+        }
+        return ret;
+    }
+
     private updateUserLayout(room: Room, newLayout: IWidgetLayouts) {
+        // Polyfill any missing widgets
+        const allWidgets = this.getAllWidgets(room);
+        for (const [widget, container] of allWidgets) {
+            const containerWidgets = this.getContainerWidgets(room, container);
+            const idx = containerWidgets.findIndex(w => w.id === widget.id);
+            const widths = this.byRoom[room.roomId]?.[container]?.distributions;
+            if (!newLayout[widget.id]) {
+                newLayout[widget.id] = {
+                    container: container,
+                    index: idx,
+                    height: this.byRoom[room.roomId]?.[container]?.height,
+                    width: widths?.[idx],
+                };
+            }
+        }
+
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
         SettingsStore.setValue("Widgets.layout", room.roomId, SettingLevel.ROOM_ACCOUNT, {
             overrides: layoutEv?.getId(),

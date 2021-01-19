@@ -37,13 +37,14 @@ import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import WidgetStore, {IApp, MAX_PINNED} from "../../../stores/WidgetStore";
+import WidgetStore, {IApp} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
 import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
+import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 
 interface IProps {
     room: Room;
@@ -78,6 +79,7 @@ export const useWidgets = (room: Room) => {
 
     useEffect(updateApps, [room]);
     useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
+    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
 
     return apps;
 };
@@ -102,10 +104,10 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         });
     };
 
-    const isPinned = WidgetStore.instance.isPinned(room.roomId, app.id);
+    const isPinned = WidgetLayoutStore.instance.isInContainer(room, app, Container.Top);
     const togglePin = isPinned
-        ? () => { WidgetStore.instance.unpinWidget(room.roomId, app.id); }
-        : () => { WidgetStore.instance.pinWidget(room.roomId, app.id); };
+        ? () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right); }
+        : () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Top); };
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     let contextMenu;
@@ -120,7 +122,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         />;
     }
 
-    const cannotPin = !isPinned && !WidgetStore.instance.canPin(room.roomId, app.id);
+    const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, Container.Top);
 
     let pinTitle: string;
     if (cannotPin) {

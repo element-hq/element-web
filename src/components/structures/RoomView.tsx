@@ -78,6 +78,7 @@ import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
+import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -280,8 +281,8 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private checkWidgets = (room) => {
         this.setState({
-            hasPinnedWidgets: WidgetStore.instance.getPinnedApps(room.roomId).length > 0,
-        })
+            hasPinnedWidgets: WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top).length > 0,
+        });
     };
 
     private onReadReceiptsChange = () => {
