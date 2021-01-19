@@ -28,7 +28,7 @@ import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
 import {_t} from "../languageHandler";
 import {Capability, IWidgetData, MatrixCapabilities} from "matrix-widget-api";
-import {IApp} from "../stores/WidgetStore"; // TODO @@
+import {IApp} from "../stores/WidgetStore";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise

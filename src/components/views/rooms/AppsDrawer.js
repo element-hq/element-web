@@ -102,11 +102,10 @@ export default class AppsDrawer extends React.Component {
             },
             onResizeStop: () => {
                 this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
-                // persist to localStorage
-                localStorage.setItem(this._getStorageKey(), JSON.stringify([
-                    this.state.apps.map(app => app.id),
-                    ...this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
-                ]));
+                WidgetLayoutStore.instance.setResizerDistributions(
+                    this.props.room, Container.Top,
+                    this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
+                );
             },
         };
         // pass a truthy container for now, we won't call attach until we update it
@@ -128,8 +127,6 @@ export default class AppsDrawer extends React.Component {
         this._loadResizerPreferences();
     };
 
-    _getStorageKey = () => `mx_apps_drawer-${this.props.room.roomId}`;
-
     _getAppsHash = (apps) => apps.map(app => app.id).join("~");
 
     componentDidUpdate(prevProps, prevState) {
@@ -147,24 +144,16 @@ export default class AppsDrawer extends React.Component {
     };
 
     _loadResizerPreferences = () => {
-        try {
-            const [[...lastIds], ...sizes] = JSON.parse(localStorage.getItem(this._getStorageKey()));
-            // Every app was included in the last split, reuse the last sizes
-            if (this.state.apps.length <= lastIds.length && this.state.apps.every((app, i) => lastIds[i] === app.id)) {
-                sizes.forEach((size, i) => {
-                    const distributor = this.resizer.forHandleAt(i);
-                    if (distributor) {
-                        distributor.size = size;
-                        distributor.finish();
-                    }
-                });
-                return;
-            }
-        } catch (e) {
-            // this is expected
-        }
-
-        if (this.state.apps) {
+        const distributions = WidgetLayoutStore.instance.getResizerDistributions(this.props.room, Container.Top);
+        if (this.state.apps && (this.state.apps.length - 1) === distributions.length) {
+            distributions.forEach((size, i) => {
+                const distributor = this.resizer.forHandleAt(i);
+                if (distributor) {
+                    distributor.size = size;
+                    distributor.finish();
+                }
+            });
+        } else if (this.state.apps) {
             const distributors = this.resizer.getDistributors();
             distributors.forEach(d => d.item.clearSize());
             distributors.forEach(d => d.start());

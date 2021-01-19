@@ -28,3 +28,7 @@ export function defaultNumber(i: unknown, def: number): number {
 export function clamp(i: number, min: number, max: number): number {
     return Math.min(Math.max(i, min), max);
 }
+
+export function sum(...i: number[]): number {
+    return [...i].reduce((p, c) => c + p, 0);
+}

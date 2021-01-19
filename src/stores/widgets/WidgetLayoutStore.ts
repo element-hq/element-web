@@ -18,12 +18,11 @@ import SettingsStore from "../../settings/SettingsStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import WidgetStore, { IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import { clamp, defaultNumber } from "../../utils/numbers";
-import { EventEmitter } from "events";
-import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import { clamp, defaultNumber, sum } from "../../utils/numbers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 export const WIDGET_LAYOUT_EVENT_TYPE = "io.element.widgets.layout";
 
@@ -117,13 +116,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     }
 
     protected async onReady(): Promise<any> {
-        this.byRoom = {};
-        for (const room of this.matrixClient.getVisibleRooms()) {
-            this.recalculateRoom(room);
-        }
+        this.updateAllRooms();
 
         this.matrixClient.on("RoomState.events", this.updateRoomFromState);
-        // TODO: Register settings listeners
+        SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
+        SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
         // TODO: Register WidgetStore listener
     }
 
@@ -131,10 +128,26 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.byRoom = {};
     }
 
+    private updateAllRooms() {
+        this.byRoom = {};
+        for (const room of this.matrixClient.getVisibleRooms()) {
+            this.recalculateRoom(room);
+        }
+    }
+
     private updateRoomFromState = (ev: MatrixEvent) => {
         if (ev.getType() !== WIDGET_LAYOUT_EVENT_TYPE) return;
         const room = this.matrixClient.getRoom(ev.getRoomId());
-        this.recalculateRoom(room);
+        if (room) this.recalculateRoom(room);
+    };
+
+    private updateFromSettings = (settingName: string, roomId: string, /* and other stuff */) => {
+        if (roomId) {
+            const room = this.matrixClient.getRoom(roomId);
+            if (room) this.recalculateRoom(room);
+        } else {
+            this.updateAllRooms();
+        }
     };
 
     private recalculateRoom(room: Room) {
@@ -144,6 +157,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             this.emitFor(room);
             return;
         }
+
+        const beforeChanges = JSON.stringify(this.byRoom[room.roomId]);
 
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
         const legacyPinned = SettingsStore.getValue("Widgets.pinned", room.roomId);
@@ -239,35 +254,89 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         for (const width of widths) {
             remainingWidth -= width;
         }
-        if (topWidgets.length > 1 && remainingWidth < MIN_WIDGET_WIDTH_PCT) {
-            const toReclaim = MIN_WIDGET_WIDTH_PCT - remainingWidth;
-            for (let i = 0; i < widths.length - 1; i++) {
-                widths[i] = widths[i] - (toReclaim / (widths.length - 1));
-            }
-            widths[widths.length - 1] = MIN_WIDGET_WIDTH_PCT;
-        }
         if (doAutobalance) {
             for (let i = 0; i < widths.length; i++) {
                 widths[i] = 100 / widths.length;
             }
         }
 
+        // TODO: There is probably a more efficient way to do this.
+        // All we're doing is making sure that our widths sum up to 100 and take
+        // any excess width off all widgets equally to keep the proportions.
+        let toReclaim = sum(...widths) - 100;
+        while (toReclaim > 0 && topWidgets.length > 0) {
+            for (let i = 0; i < widths.length; i++) {
+                if (toReclaim <= 0) break;
+                const w = widths[i];
+                const adjusted = clamp(w - 1, MIN_WIDGET_WIDTH_PCT, 100);
+                if (adjusted !== w) {
+                    toReclaim -= 1;
+                    widths[i] = adjusted;
+                }
+            }
+        }
+
         // Finally, fill in our cache and update
-        this.byRoom[room.roomId] = {
-            [Container.Top]: {
+        this.byRoom[room.roomId] = {};
+        if (topWidgets.length) {
+            this.byRoom[room.roomId][Container.Top] = {
                 ordered: topWidgets,
                 distributions: widths,
                 height: maxHeight,
-            },
-            [Container.Right]: {
+            };
+        }
+        if (rightWidgets.length) {
+            this.byRoom[room.roomId][Container.Right] = {
                 ordered: rightWidgets,
-            },
-        };
-        this.emitFor(room);
+            };
+        }
+
+        const afterChanges = JSON.stringify(this.byRoom[room.roomId]);
+        if (afterChanges !== beforeChanges) {
+            this.emitFor(room);
+        }
     }
 
     public getContainerWidgets(room: Room, container: Container): IApp[] {
         return this.byRoom[room.roomId]?.[container]?.ordered || [];
+    }
+
+    public getResizerDistributions(room: Room, container: Container): string[] { // yes, string.
+        let distributions = this.byRoom[room.roomId]?.[container]?.distributions;
+        if (!distributions || distributions.length < 2) return [];
+
+        // The distributor actually expects to be fed N-1 sizes and expands the middle section
+        // instead of the edges. Therefore, we need to return [0] when there's two widgets or
+        // [0, 2] when there's three (skipping [1] because it's irrelevant).
+
+        if (distributions.length === 2) distributions = [distributions[0]];
+        if (distributions.length === 3) distributions = [distributions[0], distributions[2]];
+        return distributions.map(d => `${d.toFixed(1)}%`); // actual percents - these are decoded later
+    }
+
+    public setResizerDistributions(room: Room, container: Container, distributions: string[]) {
+        if (container !== Container.Top) return; // ignore - not relevant
+
+        const numbers = distributions.map(d => Number(Number(d.substring(0, d.length - 1)).toFixed(1)));
+        const widgets = this.getContainerWidgets(room, container);
+
+        // From getResizerDistributions, we need to fill in the middle size if applicable.
+        const remaining = 100 - sum(...numbers);
+        if (numbers.length === 2) numbers.splice(1, 0, remaining);
+        if (numbers.length === 1) numbers.push(remaining);
+
+        const localLayout = {};
+        widgets.forEach((w, i) => {
+            localLayout[w.id] = {
+                width: numbers[i],
+                index: i,
+            };
+        });
+        const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
+        SettingsStore.setValue("Widgets.layout", room.roomId, SettingLevel.ROOM_ACCOUNT, {
+            overrides: layoutEv?.getId(),
+            widgets: localLayout,
+        });
     }
 }
 
