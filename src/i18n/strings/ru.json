@@ -2982,5 +2982,8 @@
     "Dial pad": "Панель набора номера",
     "Start a Conversation": "Начать разговор",
     "There was an error looking up the phone number": "При поиске номера телефона произошла ошибка",
-    "Unable to look up phone number": "Невозможно найти номер телефона"
+    "Unable to look up phone number": "Невозможно найти номер телефона",
+    "Change which room, message, or user you're viewing": "Измените комнату, сообщение или пользователя, которого вы просматриваете",
+    "Channel: <channelLink/>": "Канал: <channelLink/>",
+    "Workspace: <networkLink/>": "Рабочая область: <networkLink/>"
 }
