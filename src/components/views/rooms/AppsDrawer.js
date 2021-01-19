@@ -30,10 +30,10 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import WidgetStore from "../../../stores/WidgetStore";
 import ResizeHandle from "../elements/ResizeHandle";
 import Resizer from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
+import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayoutStore";
 
 export default class AppsDrawer extends React.Component {
     static propTypes = {
@@ -62,13 +62,13 @@ export default class AppsDrawer extends React.Component {
 
     componentDidMount() {
         ScalarMessaging.startListening();
-        WidgetStore.instance.on(this.props.room.roomId, this._updateApps);
+        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this._updateApps);
         this.dispatcherRef = dis.register(this.onAction);
     }
 
     componentWillUnmount() {
         ScalarMessaging.stopListening();
-        WidgetStore.instance.off(this.props.room.roomId, this._updateApps);
+        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this._updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
         if (this._resizeContainer) {
             this.resizer.detach();
@@ -190,7 +190,7 @@ export default class AppsDrawer extends React.Component {
         }
     };
 
-    _getApps = () => WidgetStore.instance.getPinnedApps(this.props.room.roomId);
+    _getApps = () => WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
 
     _updateApps = () => {
         this.setState({
