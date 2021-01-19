@@ -501,10 +501,12 @@ $left-gutter: 64px;
     }
 }
 
-.mx_EventTile_content_collapsedCode {
-    pre {
-        max-height: 30vh;
-    }
+.mx_EventTile_expandedCodeBlock {
+    max-height: 100vh;
+}
+
+.mx_EventTile_collapsedCodeBlock {
+    max-height: 30vh;
 }
 
 .mx_EventTile:hover .mx_EventTile_body pre,
@@ -519,6 +521,35 @@ $left-gutter: 64px;
 
 // Inserted adjacent to <pre> blocks, (See TextualBody)
 .mx_EventTile_copyButton {
+    position: absolute;
+    display: inline-block;
+    visibility: hidden;
+    cursor: pointer;
+    top: 6px;
+    right: 6px;
+    width: 19px;
+    height: 19px;
+    mask-image: url($copy-button-url);
+    background-color: $message-action-bar-fg-color;
+}
+
+
+// Inserted adjacent to <pre> blocks, (See TextualBody)
+.mx_EventTile_expandButton {
+    position: absolute;
+    display: inline-block;
+    visibility: hidden;
+    cursor: pointer;
+    top: 6px;
+    right: 6px;
+    width: 19px;
+    height: 19px;
+    mask-image: url($copy-button-url);
+    background-color: $message-action-bar-fg-color;
+}
+
+// Inserted adjacent to <pre> blocks, (See TextualBody)
+.mx_EventTile_collapseButton {
     position: absolute;
     display: inline-block;
     visibility: hidden;

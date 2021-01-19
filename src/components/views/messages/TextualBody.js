@@ -35,7 +35,6 @@ import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import classNames from "classnames";
 
 export default class TextualBody extends React.Component {
     static propTypes = {
@@ -70,7 +69,6 @@ export default class TextualBody extends React.Component {
 
             // track whether the preview widget is hidden
             widgetHidden: false,
-            codeBlockExpanded: SettingsStore.getValue("expandCodeByDefault"),
         };
     }
 
@@ -93,29 +91,70 @@ export default class TextualBody extends React.Component {
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
-            const blocks = ReactDOM.findDOMNode(this).getElementsByTagName("code");
+            const blocks = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
             if (blocks.length > 0) {
+                for (let i = 0; i < blocks.length; i++) {
+                    this._handleCodeBlockExpansion(blocks[i]);
+                    this._addCodeCopyButton(blocks[i]);
+                }
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
-                            highlight.highlightBlock(blocks[i]);
-                        } else {
-                            // Only syntax highlight if there's a class starting with language-
-                            const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
-                                return cl.startsWith('language-') && !cl.startsWith('language-_');
-                            });
-
-                            if (classes.length != 0) {
-                                highlight.highlightBlock(blocks[i]);
-                            }
-                        }
+                        this._highlightCode(blocks[i].firstChild);
                     }
                 }, 10);
             }
-            this._addCodeCopyButton();
+        }
+    }
+
+    _addCodeCopyButton(codeBlock) {
+        const button = document.createElement("span");
+        button.className = "mx_EventTile_copyButton";
+        button.onclick = async () => {
+            const copyCode = button.parentNode.getElementsByTagName("pre")[0];
+            const successful = await copyPlaintext(copyCode.textContent);
+
+            const buttonRect = button.getBoundingClientRect();
+            const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+            const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+                ...toRightOf(buttonRect, 2),
+                message: successful ? _t('Copied!') : _t('Failed to copy'),
+            });
+            button.onmouseleave = close;
+        };
+
+        // Wrap a div around <pre> so that the copy button can be correctly positioned
+        // when the <pre> overflows and is scrolled horizontally.
+        const div = document.createElement("div");
+        div.className = "mx_EventTile_pre_container";
+
+        // Insert containing div in place of <pre> block
+        codeBlock.parentNode.replaceChild(div, codeBlock);
+
+        // Append <pre> block and copy button to container
+        div.appendChild(codeBlock);
+        div.appendChild(button);
+    }
+
+    _handleCodeBlockExpansion(codeBlock) {
+        const expandCodeBlock = SettingsStore.getValue("expandCodeByDefault");
+        codeBlock.className = expandCodeBlock ? "mx_EventTile_expandedCodeBlock" : "mx_EventTile_collapsedCodeBlock";
+    }
+
+    _highlightCode(codeBlock) {
+        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
+            highlight.highlightBlock(codeBlock);
+        } else {
+            // Only syntax highlight if there's a class starting with language-
+            const classes = codeBlock.className.split(/\s+/).filter(function(cl) {
+                return cl.startsWith('language-') && !cl.startsWith('language-_');
+            });
+
+            if (classes.length != 0) {
+                highlight.highlightBlock(codeBlock);
+            }
         }
     }
 
@@ -254,38 +293,6 @@ export default class TextualBody extends React.Component {
                 return true;
             }
         }
-    }
-
-    _addCodeCopyButton() {
-        // Add 'copy' buttons to pre blocks
-        Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
-            const button = document.createElement("span");
-            button.className = "mx_EventTile_copyButton";
-            button.onclick = async () => {
-                const copyCode = button.parentNode.getElementsByTagName("pre")[0];
-                const successful = await copyPlaintext(copyCode.textContent);
-
-                const buttonRect = button.getBoundingClientRect();
-                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-                const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
-                    ...toRightOf(buttonRect, 2),
-                    message: successful ? _t('Copied!') : _t('Failed to copy'),
-                });
-                button.onmouseleave = close;
-            };
-
-            // Wrap a div around <pre> so that the copy button can be correctly positioned
-            // when the <pre> overflows and is scrolled horizontally.
-            const div = document.createElement("div");
-            div.className = "mx_EventTile_pre_container";
-
-            // Insert containing div in place of <pre> block
-            p.parentNode.replaceChild(div, p);
-
-            // Append <pre> block and copy button to container
-            div.appendChild(p);
-            div.appendChild(button);
-        });
     }
 
     onCancelClick = event => {
@@ -439,12 +446,6 @@ export default class TextualBody extends React.Component {
             });
         }
 
-        const defaultCaseClasses = classNames({
-            mx_MTextBody: true,
-            mx_EventTile_content: true,
-            mx_EventTile_content_collapsedCode: !this.state.codeBlockExpanded,
-        });
-
         switch (content.msgtype) {
             case "m.emote":
                 return (
@@ -470,7 +471,7 @@ export default class TextualBody extends React.Component {
                 );
             default: // including "m.text"
                 return (
-                    <span className={defaultCaseClasses}>
+                    <span className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>
