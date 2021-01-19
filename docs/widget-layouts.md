@@ -32,13 +32,13 @@ therefore fewer messages can be shown).
 The `index` for a widget determines which order the widgets show up in from left to right. Widgets
 without an `index` will show up as the rightmost widgets. Tiebreaks (same `index` or multiple defined
 without an `index`) are resolved by comparing widget IDs. A maximum of 3 widgets can be in the top
-container - any which exceed this will be ignored. Smaller numbers represent leftmost widgets.
+container - any which exceed this will be ignored (placed into the `right` container). Smaller numbers 
+represent leftmost widgets.
 
 The `width` is relative width within the container in percentage points. This will be clamped to a
-range of 0-100 (inclusive). The rightmost widget will have its percentage adjusted to fill the 
-container appropriately, shrinking and growing if required. For example, if three widgets are in the
-top container at 40% width each then the 3rd widget will be shrunk to 20% because 120% > 100%.
-Similarly, if all three widgets were set to 10% width each then the 3rd widget would grow to be 80%.
+range of 0-100 (inclusive). The widgets will attempt to scale to relative proportions when more than
+100% space is allocated. For example, if 3 widgets are defined at 40% width each then the client will
+attempt to show them at 33% width each.
 
 Note that the client may impose minimum widths on the widgets, such as a 10% minimum to avoid pinning
 hidden widgets. In general, widgets defined in the 30-70% range each will be free of these restrictions.
