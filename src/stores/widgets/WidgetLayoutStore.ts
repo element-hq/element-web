@@ -409,6 +409,32 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, {[widget.id]:{container: toContainer}});
     }
 
+    public canCopyLayoutToRoom(room: Room): boolean {
+        if (!this.matrixClient) return false; // not ready yet
+        return room.currentState.maySendStateEvent(WIDGET_LAYOUT_EVENT_TYPE, this.matrixClient.getUserId());
+    }
+
+    public copyLayoutToRoom(room: Room) {
+        const allWidgets = this.getAllWidgets(room);
+        const evContent: ILayoutStateEvent = {widgets: {}};
+        for (const [widget, container] of allWidgets) {
+            evContent.widgets[widget.id] = {container};
+            if (container === Container.Top) {
+                const containerWidgets = this.getContainerWidgets(room, container);
+                const idx = containerWidgets.findIndex(w => w.id === widget.id);
+                const widths = this.byRoom[room.roomId]?.[container]?.distributions;
+                const height = this.byRoom[room.roomId]?.[container]?.height;
+                evContent.widgets[widget.id] = {
+                    ...evContent.widgets[widget.id],
+                    height: height ? Math.round(height) : null,
+                    width: widths[idx] ? Math.round(widths[idx]) : null,
+                    index: idx,
+                };
+            }
+        }
+        this.matrixClient.sendStateEvent(room.roomId, WIDGET_LAYOUT_EVENT_TYPE, evContent, "");
+    }
+
     private getAllWidgets(room: Room): [IApp, Container][] {
         const containers = this.byRoom[room.roomId];
         if (!containers) return [];

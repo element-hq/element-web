@@ -186,9 +186,18 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         }
     };
 
+    let copyLayoutBtn = null;
+    if (apps.length > 0 && WidgetLayoutStore.instance.canCopyLayoutToRoom(room)) {
+        copyLayoutBtn = (
+            <AccessibleButton kind="link" onClick={() => WidgetLayoutStore.instance.copyLayoutToRoom(room)}>
+                { _t("Set my room layout for everyone") }
+            </AccessibleButton>
+        );
+    }
+
     return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
         { apps.map(app => <AppRow key={app.id} app={app} room={room} />) }
-
+        { copyLayoutBtn }
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
             { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
         </AccessibleButton>
