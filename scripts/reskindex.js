@@ -53,7 +53,7 @@ function reskindex() {
     strm.write("export {components};\n");
     strm.end();
     fs.rename(componentIndexTmp, componentIndex, function(err) {
-        if(err) {
+        if (err) {
             console.error("Error moving new index into place: " + err);
         } else {
             console.log('Reskindex: completed');
