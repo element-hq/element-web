@@ -2904,5 +2904,7 @@
     "Start a Conversation": "Zahájit konverzaci",
     "Dial pad": "Číselník",
     "There was an error looking up the phone number": "Při vyhledávání telefonního čísla došlo k chybě",
-    "Unable to look up phone number": "Nelze nalézt telefonní číslo"
+    "Unable to look up phone number": "Nelze nalézt telefonní číslo",
+    "Channel: <channelLink/>": "Kanál: <channelLink/>",
+    "Change which room, message, or user you're viewing": "Změňte, kterou místnost, zprávu nebo uživatele si prohlížíte"
 }

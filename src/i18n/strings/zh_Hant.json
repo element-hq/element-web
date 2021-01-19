@@ -2993,5 +2993,8 @@
     "Start a Conversation": "開始對話",
     "Dial pad": "撥號鍵盤",
     "There was an error looking up the phone number": "尋找電話號碼時發生錯誤",
-    "Unable to look up phone number": "無法查詢電話號碼"
+    "Unable to look up phone number": "無法查詢電話號碼",
+    "Channel: <channelLink/>": "頻道：<channelLink/>",
+    "Workspace: <networkLink/>": "工作空間：<networkLink/>",
+    "Change which room, message, or user you're viewing": "變更您正在檢視的聊天室、訊息或使用者"
 }
