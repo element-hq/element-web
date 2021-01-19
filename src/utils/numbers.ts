@@ -38,5 +38,5 @@ export function percentageWithin(pct: number, min: number, max: number): number 
 }
 
 export function percentageOf(val: number, min: number, max: number): number {
-    return (val - min) / max;
+    return (val - min) / (max - min);
 }
