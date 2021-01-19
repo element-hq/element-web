@@ -487,7 +487,11 @@ export default class RoomDirectory extends React.Component {
         let previewButton;
         let joinOrViewButton;
 
-        if (room.world_readable && !hasJoinedRoom) {
+        // Element Web currently does not allow guests to join rooms, so we
+        // instead show them preview buttons for all rooms. If the room is not
+        // world readable, a modal will appear asking you to register first. If
+        // it is readable, the preview appears as normal.
+        if (!hasJoinedRoom && (room.world_readable || isGuest)) {
             previewButton = (
                 <AccessibleButton kind="secondary" onClick={(ev) => this.onPreviewClick(ev, room)}>{_t("Preview")}</AccessibleButton>
             );
@@ -496,7 +500,7 @@ export default class RoomDirectory extends React.Component {
             joinOrViewButton = (
                 <AccessibleButton kind="secondary" onClick={(ev) => this.onViewClick(ev, room)}>{_t("View")}</AccessibleButton>
             );
-        } else if (!isGuest || room.guest_can_join) {
+        } else if (!isGuest) {
             joinOrViewButton = (
                 <AccessibleButton kind="primary" onClick={(ev) => this.onJoinClick(ev, room)}>{_t("Join")}</AccessibleButton>
             );
