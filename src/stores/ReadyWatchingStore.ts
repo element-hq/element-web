@@ -42,6 +42,10 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
         return this.matrixClient; // for external readonly access
     }
 
+    public useUnitTestClient(cli: MatrixClient) {
+        this.matrixClient = cli;
+    }
+
     public destroy() {
         this.dispatcher.unregister(this.dispatcherRef);
     }
