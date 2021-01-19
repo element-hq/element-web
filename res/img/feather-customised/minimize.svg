@@ -1,0 +1,24 @@
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+  <polyline
+     points="4 14 10 14 10 20"
+     id="polyline2"
+     transform="matrix(0.60000002,0,0,0.6,1.8000002,1.8000004)" />
+  <polyline
+     points="20 10 14 10 14 4"
+     id="polyline4"
+     transform="matrix(0.60000002,0,0,0.6,1.8000002,1.8000004)" />
+  <line
+     x1="10.200001"
+     y1="7.8000002"
+     x2="14.4"
+     y2="3.6000004"
+     id="line6"
+     style="stroke-width:1.2" />
+  <line
+     x1="3.6000001"
+     y1="14.4"
+     x2="7.8000007"
+     y2="10.2"
+     id="line8"
+     style="stroke-width:1.2" />
+</svg>

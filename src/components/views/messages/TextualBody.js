@@ -97,8 +97,9 @@ export default class TextualBody extends React.Component {
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
                     // when the <pre> overflows and is scrolled horizontally.
                     const div = this._wrapInDiv(blocks[i]);
-                    this._handleCodeBlockExpansion(div);
+                    this._handleCodeBlockExpansion(div.firstChild);
                     this._addCodeCopyButton(div);
+                    this._addCodeExpansionButton(div);
                 }
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
@@ -110,6 +111,30 @@ export default class TextualBody extends React.Component {
                 }, 10);
             }
         }
+    }
+
+    _addCodeExpansionButton(codeBlock) {
+        // TODO: What if the block is small and the we don't need the icon?
+
+        const pre = codeBlock.getElementsByTagName("pre")[0];
+        const button = document.createElement("span");
+        if (pre.className == "mx_EventTile_collapsedCodeBlock") {
+            button.className = "mx_EventTile_expandButton";
+        } else {
+            button.className = "mx_EventTile_collapseButton";
+        }
+
+        button.onclick = async () => {
+            if (pre.className == "mx_EventTile_collapsedCodeBlock") {
+                pre.className = "";
+                button.className = "mx_EventTile_expandButton";
+            } else {
+                pre.className = "mx_EventTile_collapsedCodeBlock";
+                button.className = "mx_EventTile_collapseButton";
+            }
+        };
+
+        codeBlock.appendChild(button);
     }
 
     _addCodeCopyButton(codeBlock) {
