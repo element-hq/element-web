@@ -69,7 +69,7 @@ function filesHaveChanged(files, prevFiles) {
         return true;
     }
     // Check for name changes
-    for (const i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         if (prevFiles[i] !== files[i]) {
             return true;
         }
