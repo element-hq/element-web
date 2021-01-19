@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
+const util = require('util');
 const args = require('minimist')(process.argv);
 const chokidar = require('chokidar');
 
@@ -12,7 +13,7 @@ const componentJsGlob = '**/*.js';
 const componentTsGlob = '**/*.tsx';
 let prevFiles = [];
 
-function reskindex() {
+async function reskindex() {
     const jsFiles = glob.sync(componentJsGlob, {cwd: componentsDir}).sort();
     const tsFiles = glob.sync(componentTsGlob, {cwd: componentsDir}).sort();
     const files = [...tsFiles, ...jsFiles];
@@ -51,7 +52,8 @@ function reskindex() {
     }
 
     strm.write("export {components};\n");
-    strm.end();
+    // Ensure the file has been fully written to disk before proceeding
+    await util.promisify(strm.end);
     fs.rename(componentIndexTmp, componentIndex, function(err) {
         if (err) {
             console.error("Error moving new index into place: " + err);
