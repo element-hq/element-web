@@ -287,7 +287,7 @@ const PersistentVResizer = ({
 
     const [height, setHeight] = useStateCallback(defaultHeight, newHeight => {
         newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
-        WidgetLayoutStore.instance.setContainerHeight(room, Container.Top, newHeight)
+        WidgetLayoutStore.instance.setContainerHeight(room, Container.Top, newHeight);
     });
 
     return <Resizable

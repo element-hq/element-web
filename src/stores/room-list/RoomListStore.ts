@@ -114,7 +114,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     // Public for test usage. Do not call this.
     public async makeReady(forcedClient?: MatrixClient) {
         if (forcedClient) {
-            super.matrixClient = forcedClient;
+            super.readyStore.matrixClient = forcedClient;
         }
 
         this.checkLoggingEnabled();

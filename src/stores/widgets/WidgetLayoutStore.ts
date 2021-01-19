@@ -155,7 +155,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         if (room) this.recalculateRoom(room);
     };
 
-    private updateFromSettings = (settingName: string, roomId: string, /* and other stuff */) => {
+    private updateFromSettings = (settingName: string, roomId: string /* and other stuff */) => {
         if (roomId) {
             const room = this.matrixClient.getRoom(roomId);
             if (room) this.recalculateRoom(room);
@@ -265,10 +265,6 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 const h = defaultNumber(userWidgetLayout?.height, defRoomHeight);
                 maxHeight = Math.max(maxHeight, clamp(h, MIN_WIDGET_HEIGHT_PCT, 100));
             }
-        }
-        let remainingWidth = 100;
-        for (const width of widths) {
-            remainingWidth -= width;
         }
         if (doAutobalance) {
             for (let i = 0; i < widths.length; i++) {
@@ -406,7 +402,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     public moveToContainer(room: Room, widget: IApp, toContainer: Container) {
         const allWidgets = this.getAllWidgets(room);
         if (!allWidgets.some(([w])=> w.id === widget.id)) return; // invalid
-        this.updateUserLayout(room, {[widget.id]:{container: toContainer}});
+        this.updateUserLayout(room, {
+            [widget.id]: {container: toContainer},
+        });
     }
 
     public canCopyLayoutToRoom(room: Room): boolean {

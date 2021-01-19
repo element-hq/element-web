@@ -21,13 +21,13 @@ import { Dispatcher } from "flux";
 import { ReadyWatchingStore } from "./ReadyWatchingStore";
 
 export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<T> {
-    private readyStore: ReadyWatchingStore;
+    protected readyStore: ReadyWatchingStore;
 
     protected constructor(dispatcher: Dispatcher<ActionPayload>, initialState: T = <T>{}) {
         super(dispatcher, initialState);
 
         // Create an anonymous class to avoid code duplication
-        const asyncStore = this;
+        const asyncStore = this; // eslint-disable-line @typescript-eslint/no-this-alias
         this.readyStore = new (class extends ReadyWatchingStore {
             public get mxClient(): MatrixClient {
                 return this.matrixClient;
