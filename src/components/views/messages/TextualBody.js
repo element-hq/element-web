@@ -139,8 +139,9 @@ export default class TextualBody extends React.Component {
     }
 
     _handleCodeBlockExpansion(codeBlock) {
-        const expandCodeBlock = SettingsStore.getValue("expandCodeByDefault");
-        codeBlock.className = expandCodeBlock ? "mx_EventTile_expandedCodeBlock" : "mx_EventTile_collapsedCodeBlock";
+        if (!SettingsStore.getValue("expandCodeByDefault")) {
+            codeBlock.className = "mx_EventTile_collapsedCodeBlock";
+        }
     }
 
     _highlightCode(codeBlock) {
