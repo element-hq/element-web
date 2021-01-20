@@ -270,20 +270,37 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
             for (let i = 0; i < widths.length; i++) {
                 widths[i] = 100 / widths.length;
             }
-        }
+        } else {
+            // If we're not autobalancing then it means that we're trying to make
+            // sure that widgets make up exactly 100% of space (not over, not under)
+            const difference = sum(...widths) - 100; // positive = over, negative = under
+            if (difference < 0) {
+                // For a deficit we just fill everything in equally
+                for (let i = 0; i < widths.length; i++) {
+                    widths[i] += Math.abs(difference) / widths.length;
+                }
+            } else if (difference > 0) {
+                // When we're over, we try to scale all the widgets within range first.
+                // We clamp values to try and keep ourselves sane and within range.
+                for (let i = 0; i < widths.length; i++) {
+                    widths[i] = clamp(widths[i] - (difference / widths.length), MIN_WIDGET_WIDTH_PCT, 100);
+                }
 
-        // TODO: There is probably a more efficient way to do this.
-        // All we're doing is making sure that our widths sum up to 100 and take
-        // any excess width off all widgets equally to keep the proportions.
-        let toReclaim = sum(...widths) - 100;
-        while (toReclaim > 0 && topWidgets.length > 0) {
-            for (let i = 0; i < widths.length; i++) {
-                if (toReclaim <= 0) break;
-                const w = widths[i];
-                const adjusted = clamp(w - 1, MIN_WIDGET_WIDTH_PCT, 100);
-                if (adjusted !== w) {
-                    toReclaim -= 1;
-                    widths[i] = adjusted;
+                // If we're still over, find the widgets which have more width than the minimum
+                // and balance them out until we're at 100%. This should keep us as close as possible
+                // to the intended distributions.
+                //
+                // Note: if we ever decide to set a minimum which is larger than 100%/MAX_WIDGETS then
+                // we probably have other issues - this code assumes we don't do that.
+                const toReclaim = sum(...widths) - 100;
+                if (toReclaim > 0) {
+                    const largeIndices = widths
+                        .map((v, i) => ([i, v]))
+                        .filter(p => p[1] > MIN_WIDGET_WIDTH_PCT)
+                        .map(p => p[0]);
+                    for (const idx of largeIndices) {
+                        widths[idx] -= toReclaim / largeIndices.length;
+                    }
                 }
             }
         }
