@@ -100,7 +100,7 @@ export default class TextualBody extends React.Component {
                     const div = this._wrapInDiv(pres[i]);
                     this._handleCodeBlockExpansion(pres[i]);
                     this._addCodeCopyButton(div);
-                    this._addCodeExpansionButton(div);
+                    this._addCodeExpansionButton(div, pres[i]);
                 }
             }
             // Highlight code
@@ -120,10 +120,9 @@ export default class TextualBody extends React.Component {
         }
     }
 
-    _addCodeExpansionButton(div) {
+    _addCodeExpansionButton(div, pre) {
         // TODO: What if the block is small and the we don't need the icon?
 
-        const pre = div.getElementsByTagName("pre")[0];
         const button = document.createElement("span");
         if (pre.className == "mx_EventTile_collapsedCodeBlock") {
             button.className = "mx_EventTile_expandButton";
