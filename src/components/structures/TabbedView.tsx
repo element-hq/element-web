@@ -20,7 +20,6 @@ import * as React from "react";
 import {_t} from '../../languageHandler';
 import * as sdk from "../../index";
 import AutoHideScrollbar from './AutoHideScrollbar';
-import { ReactNode } from "react";
 
 /**
  * Represents a tab for the TabbedView.

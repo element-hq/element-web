@@ -56,7 +56,7 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
 
     const [height, setHeight] = useLocalStorageState("left-panel-widget-height", INITIAL_HEIGHT);
     const [expanded, setExpanded] = useLocalStorageState("left-panel-widget-expanded", true);
-    useEffect(onResize, [expanded]);
+    useEffect(onResize, [expanded, onResize]);
 
     const [onFocus, isActive, ref] = useRovingTabIndex();
     const tabIndex = isActive ? 0 : -1;
