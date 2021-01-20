@@ -91,32 +91,39 @@ export default class TextualBody extends React.Component {
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
-            const blocks = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
-            if (blocks.length > 0) {
-                for (let i = 0; i < blocks.length; i++) {
-                    // Wrap a div around <pre> so that the copy button can be correctly positioned
-                    // when the <pre> overflows and is scrolled horizontally.
-                    const div = this._wrapInDiv(blocks[i]);
-                    this._handleCodeBlockExpansion(div.firstChild);
+            // Handle expansion and add buttons
+            const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
+            if (pres.length > 0) {
+                for (let i = 0; i < pres.length; i++) {
+                    /* Wrap a div around <pre> so that the copy button can be correctly positioned
+                     * when the <pre> overflows and is scrolled horizontally. */
+                    const div = this._wrapInDiv(pres[i]);
+                    this._handleCodeBlockExpansion(pres[i]);
                     this._addCodeCopyButton(div);
                     this._addCodeExpansionButton(div);
                 }
-                // Do this asynchronously: parsing code takes time and we don't
-                // need to block the DOM update on it.
-                setTimeout(() => {
-                    if (this._unmounted) return;
-                    for (let i = 0; i < blocks.length; i++) {
-                        this._highlightCode(blocks[i].firstChild);
-                    }
-                }, 10);
+            }
+            // Highlight code
+            const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
+            if (codes.length >0) {
+                for (let i = 0; i < codes.length; i++) {
+                    /* Do this asynchronously: parsing code takes time and we don't
+                     * need to block the DOM update on it. */
+                    setTimeout(() => {
+                        if (this._unmounted) return;
+                            for (let i = 0; i < pres.length; i++) {
+                                this._highlightCode(codes[i]);
+                            }
+                    }, 10);
+                }
             }
         }
     }
 
-    _addCodeExpansionButton(codeBlock) {
+    _addCodeExpansionButton(div) {
         // TODO: What if the block is small and the we don't need the icon?
 
-        const pre = codeBlock.getElementsByTagName("pre")[0];
+        const pre = div.getElementsByTagName("pre")[0];
         const button = document.createElement("span");
         if (pre.className == "mx_EventTile_collapsedCodeBlock") {
             button.className = "mx_EventTile_expandButton";
@@ -134,10 +141,10 @@ export default class TextualBody extends React.Component {
             }
         };
 
-        codeBlock.appendChild(button);
+        div.appendChild(button);
     }
 
-    _addCodeCopyButton(codeBlock) {
+    _addCodeCopyButton(div) {
         const button = document.createElement("span");
         button.className = "mx_EventTile_copyButton";
         button.onclick = async () => {
@@ -153,38 +160,38 @@ export default class TextualBody extends React.Component {
             button.onmouseleave = close;
         };
 
-        codeBlock.appendChild(button);
+        div.appendChild(button);
     }
 
-    _wrapInDiv(codeBlock) {
+    _wrapInDiv(pre) {
         const div = document.createElement("div");
         div.className = "mx_EventTile_pre_container";
 
         // Insert containing div in place of <pre> block
-        codeBlock.parentNode.replaceChild(div, codeBlock);
+        pre.parentNode.replaceChild(div, pre);
         // Append <pre> block and copy button to container
-        div.appendChild(codeBlock);
+        div.appendChild(pre);
 
         return div;
     }
 
-    _handleCodeBlockExpansion(codeBlock) {
+    _handleCodeBlockExpansion(pre) {
         if (!SettingsStore.getValue("expandCodeByDefault")) {
-            codeBlock.className = "mx_EventTile_collapsedCodeBlock";
+            pre.className = "mx_EventTile_collapsedCodeBlock";
         }
     }
 
-    _highlightCode(codeBlock) {
+    _highlightCode(code) {
         if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
-            highlight.highlightBlock(codeBlock);
+            highlight.highlightBlock(code);
         } else {
             // Only syntax highlight if there's a class starting with language-
-            const classes = codeBlock.className.split(/\s+/).filter(function(cl) {
+            const classes = code.className.split(/\s+/).filter(function(cl) {
                 return cl.startsWith('language-') && !cl.startsWith('language-_');
             });
 
             if (classes.length != 0) {
-                highlight.highlightBlock(codeBlock);
+                highlight.highlightBlock(code);
             }
         }
     }
