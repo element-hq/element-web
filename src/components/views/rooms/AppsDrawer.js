@@ -252,6 +252,7 @@ export default class AppsDrawer extends React.Component {
                     minHeight={100}
                     maxHeight={this.props.maxHeight ? this.props.maxHeight - 50 : undefined}
                     handleClass="mx_AppsContainer_resizerHandle"
+                    handleWrapperClass="mx_AppsContainer_resizerHandleContainer"
                     className="mx_AppsContainer_resizer"
                     resizeNotifier={this.props.resizeNotifier}
                 >
