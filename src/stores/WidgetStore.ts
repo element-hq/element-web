@@ -76,7 +76,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.matrixClient.getRooms().forEach((room: Room) => {
             this.loadRoomWidgets(room);
         });
-        this.emit(UPDATE_EVENT);
+        this.emit(UPDATE_EVENT, null); // emit for all rooms
     }
 
     protected async onNotReady(): Promise<any> {
@@ -94,7 +94,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private onWidgetEchoStoreUpdate = (roomId: string, widgetId: string) => {
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
-        this.emit(UPDATE_EVENT);
+        this.emit(UPDATE_EVENT, roomId);
     };
 
     private generateApps(room: Room): IApp[] {
@@ -143,7 +143,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         const roomId = ev.getRoomId();
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
-        this.emit(UPDATE_EVENT);
+        this.emit(UPDATE_EVENT, roomId);
     };
 
     public getRoom = (roomId: string) => {

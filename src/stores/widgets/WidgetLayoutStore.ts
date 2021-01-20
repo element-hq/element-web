@@ -131,7 +131,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.matrixClient.on("RoomState.events", this.updateRoomFromState);
         this.pinnedRef = SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
         this.layoutRef = SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
-        WidgetStore.instance.on(UPDATE_EVENT, this.updateAllRooms);
+        WidgetStore.instance.on(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
     protected async onNotReady(): Promise<any> {
@@ -139,13 +139,22 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         SettingsStore.unwatchSetting(this.pinnedRef);
         SettingsStore.unwatchSetting(this.layoutRef);
-        WidgetStore.instance.off(UPDATE_EVENT, this.updateAllRooms);
+        WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
     private updateAllRooms = () => {
         this.byRoom = {};
         for (const room of this.matrixClient.getVisibleRooms()) {
             this.recalculateRoom(room);
+        }
+    };
+
+    private updateFromWidgetStore = (roomId?:string) => {
+        if (roomId) {
+            const room = this.matrixClient.getRoom(roomId);
+            if (room) this.recalculateRoom(room);
+        } else {
+            this.updateAllRooms();
         }
     };
 
