@@ -89,10 +89,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         return this.algorithm.getOrderedRooms();
     }
 
-    public get matrixClient(): MatrixClient {
-        return super.matrixClient;
-    }
-
     // Intended for test usage
     public async resetStore() {
         await this.reset();
