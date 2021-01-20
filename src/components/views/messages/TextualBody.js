@@ -133,10 +133,10 @@ export default class TextualBody extends React.Component {
         button.onclick = async () => {
             if (pre.className == "mx_EventTile_collapsedCodeBlock") {
                 pre.className = "";
-                button.className = "mx_EventTile_expandButton";
+                button.className = "mx_EventTile_collapseButton";
             } else {
                 pre.className = "mx_EventTile_collapsedCodeBlock";
-                button.className = "mx_EventTile_collapseButton";
+                button.className = "mx_EventTile_expandButton";
             }
         };
 
