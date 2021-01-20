@@ -516,41 +516,28 @@ $left-gutter: 64px;
 }
 
 // Inserted adjacent to <pre> blocks, (See TextualBody)
-.mx_EventTile_copyButton {
+.mx_EventTile_button {
     position: absolute;
     display: inline-block;
     visibility: hidden;
     cursor: pointer;
-    top: 31px;
+    top: 6px;
     right: 6px;
     width: 19px;
     height: 19px;
-    mask-image: url($copy-button-url);
     background-color: $message-action-bar-fg-color;
+}
+.mx_EventTile_buttonBottom {
+    top: 31px;
+}
+.mx_EventTile_copyButton {
+    mask-image: url($copy-button-url);
 }
 .mx_EventTile_collapseButton {
-    position: absolute;
-    display: inline-block;
-    visibility: hidden;
-    cursor: pointer;
-    top: 6px;
-    right: 6px;
-    width: 19px;
-    height: 19px;
     mask-image: url($collapse-button-url);
-    background-color: $message-action-bar-fg-color;
 }
 .mx_EventTile_expandButton {
-    position: absolute;
-    display: inline-block;
-    visibility: hidden;
-    cursor: pointer;
-    top: 6px;
-    right: 6px;
-    width: 19px;
-    height: 19px;
     mask-image: url($expand-button-url);
-    background-color: $message-action-bar-fg-color;
 }
 
 .mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,

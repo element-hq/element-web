@@ -99,8 +99,8 @@ export default class TextualBody extends React.Component {
                      * when the <pre> overflows and is scrolled horizontally. */
                     const div = this._wrapInDiv(pres[i]);
                     this._handleCodeBlockExpansion(pres[i]);
-                    this._addCodeCopyButton(div);
                     this._addCodeExpansionButton(div, pres[i]);
+                    this._addCodeCopyButton(div);
                 }
             }
             // Highlight code
@@ -121,22 +121,28 @@ export default class TextualBody extends React.Component {
     }
 
     _addCodeExpansionButton(div, pre) {
-        // TODO: What if the block is small and the we don't need the icon?
+        /* Calculate how many percent does the pre element take up.
+         * If it's less than 30% we don't add the expansion button. */
+        const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
+        console.log("expansionButtonExists", percentageOfViewport);
+        if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");
+        button.className = "mx_EventTile_button ";
         if (pre.className == "mx_EventTile_collapsedCodeBlock") {
-            button.className = "mx_EventTile_expandButton";
+            button.className += "mx_EventTile_expandButton";
         } else {
-            button.className = "mx_EventTile_collapseButton";
+            button.className += "mx_EventTile_collapseButton";
         }
 
         button.onclick = async () => {
+            button.className = "mx_EventTile_button ";
             if (pre.className == "mx_EventTile_collapsedCodeBlock") {
                 pre.className = "";
-                button.className = "mx_EventTile_collapseButton";
+                button.className += "mx_EventTile_collapseButton";
             } else {
                 pre.className = "mx_EventTile_collapsedCodeBlock";
-                button.className = "mx_EventTile_expandButton";
+                button.className += "mx_EventTile_expandButton";
             }
         };
 
@@ -145,7 +151,13 @@ export default class TextualBody extends React.Component {
 
     _addCodeCopyButton(div) {
         const button = document.createElement("span");
-        button.className = "mx_EventTile_copyButton";
+        button.className = "mx_EventTile_button mx_EventTile_copyButton ";
+
+        /* Check if expansion button exists. If so
+         * we put the copy button to the bottom */
+        const expansionButtonExists = div.getElementsByClassName("mx_EventTile_button");
+        if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
+
         button.onclick = async () => {
             const copyCode = button.parentNode.getElementsByTagName("pre")[0];
             const successful = await copyPlaintext(copyCode.textContent);
