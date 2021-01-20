@@ -111,9 +111,9 @@ export default class TextualBody extends React.Component {
                      * need to block the DOM update on it. */
                     setTimeout(() => {
                         if (this._unmounted) return;
-                            for (let i = 0; i < pres.length; i++) {
-                                this._highlightCode(codes[i]);
-                            }
+                        for (let i = 0; i < pres.length; i++) {
+                            this._highlightCode(codes[i]);
+                        }
                     }, 10);
                 }
             }
