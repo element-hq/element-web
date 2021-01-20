@@ -170,6 +170,9 @@
     "typescript": "^3.9.7",
     "walk": "^2.3.14"
   },
+  "resolutions": {
+    "**/@types/react": "^16.14"
+  },
   "jest": {
     "testEnvironment": "./__test-utils__/environment.js",
     "testMatch": [
