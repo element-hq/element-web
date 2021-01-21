@@ -2940,5 +2940,7 @@
     "Enter Security Phrase": "Zadejte bezpečnostní frázi",
     "Incorrect Security Phrase": "Nesprávná bezpečnostní fráze",
     "Security Key mismatch": "Neshoda bezpečnostního klíče",
-    "Wrong Security Key": "Špatný bezpečnostní klíč"
+    "Wrong Security Key": "Špatný bezpečnostní klíč",
+    "Set my room layout for everyone": "Nastavit všem rozložení mé místnosti",
+    "%(senderName)s has updated the widget layout": "%(senderName)s aktualizoval rozložení widgetu"
 }
