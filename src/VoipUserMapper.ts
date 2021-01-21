@@ -26,13 +26,15 @@ export function voipUserMapperEnabled(): boolean {
     return SdkConfig.get()['voip_mxid_translate_pattern'] !== undefined;
 }
 
-function userToVirtualUser(userId: string, templateString?: string): string {
+// only exported for tests
+export function userToVirtualUser(userId: string, templateString?: string): string {
     if (templateString === undefined) templateString = SdkConfig.get()['voip_mxid_translate_pattern'];
     if (!templateString) return null;
     return templateString.replace('${mxid}', encodeURIComponent(userId).replace(/%/g, '=').toLowerCase());
 }
 
-function virtualUserToUser(userId: string, templateString?: string): string {
+// only exported for tests
+export function virtualUserToUser(userId: string, templateString?: string): string {
     if (templateString === undefined) templateString = SdkConfig.get()['voip_mxid_translate_pattern'];
     if (!templateString) return null;
 

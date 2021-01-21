@@ -18,7 +18,7 @@ import { userToVirtualUser, virtualUserToUser } from '../src/VoipUserMapper';
 
 const templateString = '@_greatappservice_${mxid}:frooble.example';
 const realUser = '@alice:boop.example';
-const virtualUser = "@_greatappservice_%40alice%3Aboop.example:frooble.example";
+const virtualUser = "@_greatappservice_=40alice=3aboop.example:frooble.example";
 
 describe('VoipUserMapper', function() {
     it('translates users to virtual users', function() {
