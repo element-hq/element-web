@@ -109,9 +109,12 @@ function HangupButton(props) {
 
         dis.dispatch({
             action,
-            // hangup the call for this room, which may not be the room in props
-            // (e.g. conferences which will hangup the 1:1 room instead)
-            room_id: call.roomId,
+            // hangup the call for this room. NB. We use the room in props as the room ID
+            // as call.roomId may be the 'virtual room', and the dispatch actions always
+            // use the user-facing room (there was a time when we deliberately used
+            // call.roomId and *not* props.roomId, but that was for the old
+            // style Freeswitch conference calls and those times are gone.)
+            room_id: props.roomId,
         });
     };
 
