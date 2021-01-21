@@ -37,6 +37,7 @@ import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
 import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
+import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -65,6 +66,7 @@ const stateEventTileTypes = {
     'm.room.server_acl': 'messages.TextualEvent',
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': 'messages.TextualEvent',
+    [WIDGET_LAYOUT_EVENT_TYPE]: 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
     'm.room.guest_access': 'messages.TextualEvent',
