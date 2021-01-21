@@ -3021,5 +3021,7 @@
     "Invalid Security Key": "Érvénytelen Biztonsági Kulcs",
     "Wrong Security Key": "Hibás Biztonsági Kulcs",
     "We recommend you change your password and Security Key in Settings immediately": "Javasoljuk, hogy a jelszavát és a Biztonsági kulcsát mihamarabb változtassa meg a Beállításokban",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Mentse el a titkosítási kulcsokat a fiókadatokkal arra az esetre ha elvesztené a hozzáférést a munkameneteihez. A kulcsok egy egyedi Biztonsági Kulccsal lesznek védve."
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Mentse el a titkosítási kulcsokat a fiókadatokkal arra az esetre ha elvesztené a hozzáférést a munkameneteihez. A kulcsok egy egyedi Biztonsági Kulccsal lesznek védve.",
+    "Set my room layout for everyone": "A szoba megjelenésének beállítása mindenki számára",
+    "%(senderName)s has updated the widget layout": "%(senderName)s megváltoztatta a kisalkalmazás megjelenését"
 }
