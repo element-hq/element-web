@@ -149,7 +149,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
     };
 
-    private updateFromWidgetStore = (roomId?:string) => {
+    private updateFromWidgetStore = (roomId?: string) => {
         if (roomId) {
             const room = this.matrixClient.getRoom(roomId);
             if (room) this.recalculateRoom(room);
