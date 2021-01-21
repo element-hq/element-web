@@ -2854,5 +2854,22 @@
     "See emotes posted to your active room": "Voir les émoticônes envoyées dans le salon actuel",
     "See emotes posted to this room": "Voir les émoticônes envoyées dans ce salon",
     "Send emotes as you in your active room": "Envoyer des émoticônes sous votre nom dans le salon actuel",
-    "Send emotes as you in this room": "Envoyer des émoticônes sous votre nom dans ce salon"
+    "Send emotes as you in this room": "Envoyer des émoticônes sous votre nom dans ce salon",
+    "See videos posted to your active room": "Voir les vidéos publiées dans votre salon actuel",
+    "See videos posted to this room": "Voir les vidéos publiées dans ce salon",
+    "Send videos as you in your active room": "Envoie des vidéos en tant que vous dans votre salon actuel",
+    "Send videos as you in this room": "Envoie des vidéos en tant que vous dans ce salon",
+    "See images posted to this room": "Voir les images publiées dans ce salon",
+    "See images posted to your active room": "Voir les images publiées dans votre salon actuel",
+    "See messages posted to your active room": "Voir les messages publiés dans votre salon actuel",
+    "See messages posted to this room": "Voir les messages publiés dans ce salon",
+    "Send messages as you in your active room": "Envoie des messages en tant que vous dans votre salon actuel",
+    "Send messages as you in this room": "Envoie des messages en tant que vous dans ce salon",
+    "The <b>%(capability)s</b> capability": "La capacité <b>%(capability)s</b>",
+    "See <b>%(eventType)s</b> events posted to your active room": "Voir les événements <b>%(eventType)s</b> publiés dans votre salon actuel",
+    "Send <b>%(eventType)s</b> events as you in your active room": "Envoie des événements <b>%(eventType)s</b> en tant que vous dans votre salon actuel",
+    "See <b>%(eventType)s</b> events posted to this room": "Voir les événements <b>%(eventType)s</b> publiés dans ce salon",
+    "Send <b>%(eventType)s</b> events as you in this room": "Envoie des événements <b>%(eventType)s</b> en tant que vous dans ce salon",
+    "Send stickers to your active room as you": "Envoie des stickers en tant que vous dans le salon actuel",
+    "Continue with %(ssoButtons)s": "Continuer avec %(ssoButtons)s"
 }
