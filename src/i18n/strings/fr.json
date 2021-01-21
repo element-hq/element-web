@@ -2821,7 +2821,7 @@
     "Brazil": "Brésil",
     "Bouvet Island": "Île Bouvet",
     "Botswana": "",
-    "Bosnia": "",
+    "Bosnia": "Bosnie-Herzegovine",
     "Bolivia": "",
     "Bhutan": "",
     "Bermuda": "",
@@ -2848,5 +2848,11 @@
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Ajoute \"(╯°□°）╯︵ ┻━┻\" en préfixe du message",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Ajoute \"┬──┬ ノ( ゜-゜ノ)\" en préfixe du message",
     "Effects": "Effets",
-    "Zimbabwe": "Zimbabwe"
+    "Zimbabwe": "Zimbabwe",
+    "Send images as you in your active room": "Envoie des images sous votre nom dans le salon actuel",
+    "Send images as you in this room": "Envoie des images sous votre nom dans ce salon",
+    "See emotes posted to your active room": "Voir les émoticônes envoyées dans le salon actuel",
+    "See emotes posted to this room": "Voir les émoticônes envoyées dans ce salon",
+    "Send emotes as you in your active room": "Envoyer des émoticônes sous votre nom dans le salon actuel",
+    "Send emotes as you in this room": "Envoyer des émoticônes sous votre nom dans ce salon"
 }
