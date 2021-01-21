@@ -128,7 +128,6 @@ export default class TextualBody extends React.Component {
         /* Calculate how many percent does the pre element take up.
          * If it's less than 30% we don't add the expansion button. */
         const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
-        console.log("expansionButtonExists", percentageOfViewport);
         if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");
