@@ -81,6 +81,7 @@ export default class TextualBody extends React.Component {
     }
 
     _applyFormatting() {
+        const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
         this.activateSpoilers([this._content.current]);
 
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
@@ -101,8 +102,9 @@ export default class TextualBody extends React.Component {
                     this._handleCodeBlockExpansion(pres[i]);
                     this._addCodeExpansionButton(div, pres[i]);
                     this._addCodeCopyButton(div);
-                    // TODO: Add option to disable this
-                    this._addLineNumbers(pres[i]);
+                    if (showLineNumbers) {
+                        this._addLineNumbers(pres[i]);
+                    }
                 }
             }
             // Highlight code

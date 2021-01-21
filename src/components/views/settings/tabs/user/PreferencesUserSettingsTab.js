@@ -47,6 +47,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showRedactions',
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
+        'showCodeLineNumbers',
         'showJoinLeaves',
         'showAvatarChanges',
         'showDisplaynameChanges',

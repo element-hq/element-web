@@ -305,6 +305,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Expand code blocks by default'),
         default: false,
     },
+    "showCodeLineNumbers": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show line numbers in code blocks'),
+        default: true,
+    },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show avatars in user and room mentions'),
