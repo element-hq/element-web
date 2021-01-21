@@ -2974,5 +2974,12 @@
     "You have no visible notifications.": "S’keni njoftime të dukshme.",
     "Transfer": "Shpërngule",
     "Failed to transfer call": "S’u arrit të shpërngulej thirrje",
-    "A call can only be transferred to a single user.": "Një thirrje mund të shpërngulet vetëm te një përdorues."
+    "A call can only be transferred to a single user.": "Një thirrje mund të shpërngulet vetëm te një përdorues.",
+    "There was an error finding this widget.": "Pati një gabim në gjetjen e këtij widget-i.",
+    "Active Widgets": "Widget-e Aktivë",
+    "Open dial pad": "Hap butonat e numrave",
+    "Start a Conversation": "Filloni një Bisedë",
+    "Dial pad": "Butona numrash",
+    "There was an error looking up the phone number": "Pati një gabim gjatë kërkimit të numrit të telefonit",
+    "Unable to look up phone number": "S’arrihet të kërkohet numër telefoni"
 }
