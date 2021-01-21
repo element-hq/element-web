@@ -195,9 +195,7 @@ export default class TextualBody extends React.Component {
     }
 
     _addLineNumbers(pre) {
-        //const lineNumbers = document.createElement("span");
-        //lineNumbers.className = "mx_EventTile_lineNumbers";
-        pre.innerHTML = '<span class="mx_EventTile_lineNumbers"></span>' + pre.innerHTML + '<span class="cl"></span>';
+        pre.innerHTML = '<span class="mx_EventTile_lineNumbers"></span>' + pre.innerHTML + '<span></span>';
         const lineNumbers = pre.getElementsByClassName("mx_EventTile_lineNumbers")[0];
         // Calculate number of lines in pre
         const number = pre.innerHTML.split(/\n/).length;
