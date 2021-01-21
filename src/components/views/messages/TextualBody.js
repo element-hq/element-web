@@ -147,6 +147,10 @@ export default class TextualBody extends React.Component {
                 pre.className = "mx_EventTile_collapsedCodeBlock";
                 button.className += "mx_EventTile_expandButton";
             }
+            /* Now we need to rerender the MessagePanel because the
+             * content's size has changed. Otherwise scrolling could
+             * get broken */
+            dis.dispatch({action: "rerender_MessagePanel"});
         };
 
         div.appendChild(button);

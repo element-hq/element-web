@@ -32,6 +32,7 @@ import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
+import dis from "../../dispatcher/dispatcher";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -203,6 +204,16 @@ export default class MessagePanel extends React.Component {
 
         this._showTypingNotificationsWatcherRef =
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
+
+        dis.register(this.onAction);
+    }
+
+    onAction = payload => {
+        switch (payload.action) {
+            case "rerender_MessagePanel":
+                this.forceUpdate();
+                break;
+        }
     }
 
     componentDidMount() {
