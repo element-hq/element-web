@@ -501,6 +501,18 @@ $left-gutter: 64px;
     }
 }
 
+.mx_EventTile_lineNumbers {
+    float: left;
+    margin: 0 0.5em 0 -1.5em;
+    color: gray;
+}
+
+.mx_EventTile_lineNumber {
+    text-align: right;
+    display: block;
+    padding-left: 1em;
+}
+
 .mx_EventTile_collapsedCodeBlock {
     max-height: 30vh;
 }

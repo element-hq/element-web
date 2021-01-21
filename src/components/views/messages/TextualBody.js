@@ -101,6 +101,8 @@ export default class TextualBody extends React.Component {
                     this._handleCodeBlockExpansion(pres[i]);
                     this._addCodeExpansionButton(div, pres[i]);
                     this._addCodeCopyButton(div);
+                    // TODO: Add option to disable this
+                    this._addLineNumbers(pres[i]);
                 }
             }
             // Highlight code
@@ -159,7 +161,7 @@ export default class TextualBody extends React.Component {
         if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
         button.onclick = async () => {
-            const copyCode = button.parentNode.getElementsByTagName("pre")[0];
+            const copyCode = button.parentNode.getElementsByTagName("code")[0];
             const successful = await copyPlaintext(copyCode.textContent);
 
             const buttonRect = button.getBoundingClientRect();
@@ -189,6 +191,19 @@ export default class TextualBody extends React.Component {
     _handleCodeBlockExpansion(pre) {
         if (!SettingsStore.getValue("expandCodeByDefault")) {
             pre.className = "mx_EventTile_collapsedCodeBlock";
+        }
+    }
+
+    _addLineNumbers(pre) {
+        //const lineNumbers = document.createElement("span");
+        //lineNumbers.className = "mx_EventTile_lineNumbers";
+        pre.innerHTML = '<span class="mx_EventTile_lineNumbers"></span>' + pre.innerHTML + '<span class="cl"></span>';
+        const lineNumbers = pre.getElementsByClassName("mx_EventTile_lineNumbers")[0];
+        // Calculate number of lines in pre
+        const number = pre.innerHTML.split(/\n/).length;
+        // Iterate through lines starting with 1 (number of the first line is 1)
+        for (let i = 1; i < number; i++) {
+            lineNumbers.innerHTML += '<span class="mx_EventTile_lineNumber">' + i + '</span>';
         }
     }
 
