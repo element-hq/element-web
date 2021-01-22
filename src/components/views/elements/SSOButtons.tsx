@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
+import { chunk } from "lodash";
+import classNames from "classnames";
 import {MatrixClient} from "matrix-js-sdk/src/client";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
 import {_t} from "../../../languageHandler";
 import {IIdentityProvider, ISSOFlow} from "../../../Login";
-import classNames from "classnames";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -83,6 +84,8 @@ interface IProps {
     primary?: boolean;
 }
 
+const MAX_PER_ROW = 6;
+
 const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAfterLogin, primary}) => {
     const providers = flow["org.matrix.msc2858.identity_providers"] || [];
     if (providers.length < 2) {
@@ -97,17 +100,24 @@ const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAf
         </div>;
     }
 
+    const rows = Math.ceil(providers.length / MAX_PER_ROW);
+    const size = Math.ceil(providers.length / rows);
+
     return <div className="mx_SSOButtons">
-        { providers.map(idp => (
-            <SSOButton
-                key={idp.id}
-                matrixClient={matrixClient}
-                loginType={loginType}
-                fragmentAfterLogin={fragmentAfterLogin}
-                idp={idp}
-                mini={true}
-                primary={primary}
-            />
+        { chunk(providers, size).map(chunk => (
+            <div key={chunk[0].id} className="mx_SSOButtons_row">
+                { chunk.map(idp => (
+                    <SSOButton
+                        key={idp.id}
+                        matrixClient={matrixClient}
+                        loginType={loginType}
+                        fragmentAfterLogin={fragmentAfterLogin}
+                        idp={idp}
+                        mini={true}
+                        primary={primary}
+                    />
+                )) }
+            </div>
         )) }
     </div>;
 };
