@@ -28,13 +28,13 @@ import { FontWatcher } from "../../../../../settings/watchers/FontWatcher";
 import { RecheckThemePayload } from '../../../../../dispatcher/payloads/RecheckThemePayload';
 import { Action } from '../../../../../dispatcher/actions';
 import { IValidationResult, IFieldState } from '../../../elements/Validation';
-import StyledRadioButton from '../../../elements/StyledRadioButton';
+//import StyledRadioButton from '../../../elements/StyledRadioButton';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
-import classNames from 'classnames';
+//import classNames from 'classnames';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import {UIFeature} from "../../../../../settings/UIFeature";
 
@@ -213,7 +213,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({customThemeUrl: e.target.value});
     };
 
-    private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    /*private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const val = e.target.value === "true";
 
         this.setState({
@@ -221,7 +221,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         });
 
         SettingsStore.setValue("useIRCLayout", null, SettingLevel.DEVICE, val);
-    };
+    };*/
 
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
@@ -342,7 +342,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     }
 
-    private renderLayoutSection = () => {
+    /*private renderLayoutSection = () => {
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
             <span className="mx_SettingsTab_subheading">{_t("Message layout")}</span>
 
@@ -384,7 +384,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 </div>
             </div>
         </div>;
-    };
+    };*/
 
     private renderAdvancedSection() {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
