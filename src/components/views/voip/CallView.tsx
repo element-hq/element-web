@@ -212,9 +212,10 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onExpandClick = () => {
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.call.roomId,
+            room_id: userFacingRoomId,
         });
     };
 
@@ -340,27 +341,33 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onRoomAvatarClick = () => {
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.call.roomId,
+            room_id: userFacingRoomId,
         });
     }
 
     private onSecondaryRoomAvatarClick = () => {
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.secondaryCall.roomId,
+            room_id: userFacingRoomId,
         });
     }
 
     private onCallResumeClick = () => {
-        CallHandler.sharedInstance().setActiveCallRoomId(this.props.call.roomId);
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
     }
 
     public render() {
         const client = MatrixClientPeg.get();
-        const callRoom = client.getRoom(this.props.call.roomId);
-        const secCallRoom = this.props.secondaryCall ? client.getRoom(this.props.secondaryCall.roomId) : null;
+        const callRoomId = CallHandler.roomIdForCall(this.props.call);
+        const secondaryCallRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+        const callRoom = client.getRoom(callRoomId);
+        const secCallRoom = this.props.secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
 
         let dialPad;
         let contextMenu;
@@ -456,7 +463,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 onClick={() => {
                     dis.dispatch({
                         action: 'hangup',
-                        room_id: this.props.call.roomId,
+                        room_id: callRoomId,
                     });
                 }}
             />
