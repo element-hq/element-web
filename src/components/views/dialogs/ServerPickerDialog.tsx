@@ -157,7 +157,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             return;
         }
 
-        this.props.onFinished(this.validatedConf);
+        this.props.onFinished(this.state.defaultChosen ? this.defaultServer : this.validatedConf);
     };
 
     public render() {
