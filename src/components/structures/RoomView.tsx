@@ -48,6 +48,7 @@ import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
+import {Layout} from "../../settings/Layout";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -180,7 +181,7 @@ export interface IState {
     };
     canReact: boolean;
     canReply: boolean;
-    useIRCLayout: boolean;
+    layout: Layout;
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
@@ -235,7 +236,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             statusBarVisible: false,
             canReact: false,
             canReply: false,
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
         };
 
@@ -263,7 +264,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         this.showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
             this.onReadReceiptsChange);
-        this.layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
+        this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, this.onLayoutChange);
     }
 
     // TODO: [REACT-WARNING] Move into constructor
@@ -624,7 +625,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onLayoutChange = () => {
         this.setState({
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
         });
     };
 
@@ -1915,8 +1916,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         const messagePanelClassNames = classNames(
             "mx_RoomView_messagePanel",
             {
-                "mx_IRCLayout": this.state.useIRCLayout,
-                "mx_GroupLayout": !this.state.useIRCLayout,
+                "mx_IRCLayout": this.state.layout == Layout.IRC,
+                "mx_GroupLayout": this.state.layout == Layout.Group,
             });
 
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
@@ -1939,7 +1940,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
                 showReactions={true}
-                useIRCLayout={this.state.useIRCLayout}
+                layout={this.state.layout}
             />);
 
         let topUnreadMessagesBar = null;

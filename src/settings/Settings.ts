@@ -36,6 +36,7 @@ import { isMac } from '../Keyboard';
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { OrderedMultiController } from "./controllers/OrderedMultiController";
+import {Layout} from "./Layout";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -623,10 +624,9 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("IRC display name width"),
         default: 80,
     },
-    "useIRCLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Enable experimental, compact IRC style layout"),
-        default: false,
+    "layout": {
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        default: Layout.Group,
     },
     "showChatEffects": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

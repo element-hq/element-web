@@ -37,6 +37,7 @@ import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 //import classNames from 'classnames';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import {UIFeature} from "../../../../../settings/UIFeature";
+import {Layout} from "../../../../../settings/Layout";
 
 interface IProps {
 }
@@ -62,7 +63,7 @@ interface IState extends IThemeState {
     useSystemFont: boolean;
     systemFont: string;
     showAdvanced: boolean;
-    useIRCLayout: boolean;
+    layout: Layout;
 }
 
 
@@ -83,7 +84,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             systemFont: SettingsStore.getValue("systemFont"),
             showAdvanced: false,
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
         };
     }
 
@@ -223,6 +224,16 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         SettingsStore.setValue("useIRCLayout", null, SettingLevel.DEVICE, val);
     };*/
 
+    private onIRCLayoutChange = (enabled: boolean) => {
+        if (enabled) {
+            this.setState({layout: Layout.IRC});
+            SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+        } else {
+            this.setState({layout: Layout.Group});
+            SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+        }
+    }
+
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection: JSX.Element;
@@ -306,7 +317,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
                 message={this.MESSAGE_PREVIEW_TEXT}
-                useIRCLayout={this.state.useIRCLayout}
+                layout={this.state.layout}
             />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
@@ -409,14 +420,15 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     name="useCompactLayout"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
-                    disabled={this.state.useIRCLayout}
+                    disabled={this.state.layout == Layout.IRC}
                 />
-                <SettingsFlag
-                    name="useIRCLayout"
-                    level={SettingLevel.DEVICE}
-                    useCheckbox={true}
-                    onChange={(checked) => this.setState({useIRCLayout: checked})}
-                />
+                <StyledCheckbox
+                    checked={this.state.layout == Layout.IRC}
+                    onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
+                >
+                    {_t("Enable experimental, compact IRC style layout")}
+                </StyledCheckbox>
+
                 <SettingsFlag
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}

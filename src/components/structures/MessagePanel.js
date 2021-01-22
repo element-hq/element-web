@@ -26,6 +26,7 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import {Layout} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
@@ -135,14 +136,13 @@ export default class MessagePanel extends React.Component {
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
 
-        // whether to use the irc layout
-        useIRCLayout: PropTypes.bool,
+        // which layout to use
+        layout: Layout,
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
     };
 
-    // Force props to be loaded for useIRCLayout
     constructor(props) {
         super(props);
 
@@ -612,7 +612,7 @@ export default class MessagePanel extends React.Component {
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
-                        useIRCLayout={this.props.useIRCLayout}
+                        layout={this.props.layout}
                         enableFlair={this.props.enableFlair}
                     />
                 </TileErrorBoundary>
@@ -810,7 +810,7 @@ export default class MessagePanel extends React.Component {
         }
 
         let ircResizer = null;
-        if (this.props.useIRCLayout) {
+        if (this.props.layout == Layout.IRC) {
             ircResizer = <IRCTimelineProfileResizer
                 minWidth={20}
                 maxWidth={600}
