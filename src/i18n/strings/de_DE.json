@@ -1908,7 +1908,7 @@
     "Your theme": "Dein Design",
     "%(brand)s URL": "%(brand)s URL",
     "Room ID": "Raum-ID",
-    "Widget ID": "Widget ID",
+    "Widget ID": "Widget-ID",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your Integration Manager.": "Wenn du dieses Widget verwendest, können Daten <helpIcon /> zu %(widgetDomain)s und deinem Integrationsserver übertragen werden.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Wenn du dieses Widget verwendest, können Daten <helpIcon /> zu %(widgetDomain)s übertragen werden.",
     "Widgets do not use message encryption.": "Widgets verwenden keine Nachrichtenverschlüsselung.",
