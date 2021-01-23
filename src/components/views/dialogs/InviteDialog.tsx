@@ -41,12 +41,14 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {Room} from "matrix-js-sdk/src/models/room";
+import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
+export const KIND_CALL_TRANSFER = "call_transfer";
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
@@ -310,6 +312,9 @@ interface IInviteDialogProps {
     // The room ID this dialog is for. Only required for KIND_INVITE.
     roomId: string,
 
+    // The call to transfer. Only required for KIND_CALL_TRANSFER.
+    call: MatrixCall,
+
     // Initial value to populate the filter with
     initialText: string,
 }
@@ -345,6 +350,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         if (props.kind === KIND_INVITE && !props.roomId) {
             throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
+        } else if (props.kind === KIND_CALL_TRANSFER && !props.call) {
+            throw new Error("When using KIND_CALL_TRANSFER a call is required for an InviteDialog");
         }
 
         const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get()['welcomeUserId']]);
@@ -700,6 +707,29 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 ),
             });
         });
+    };
+
+    _transferCall = async () => {
+        this._convertFilter();
+        const targets = this._convertFilter();
+        const targetIds = targets.map(t => t.userId);
+        if (targetIds.length > 1) {
+            this.setState({
+                errorText: _t("A call can only be transferred to a single user."),
+            });
+        }
+
+        this.setState({busy: true});
+        try {
+            await this.props.call.transfer(targetIds[0]);
+            this.setState({busy: false});
+            this.props.onFinished();
+        } catch (e) {
+            this.setState({
+                busy: false,
+                errorText: _t("Failed to transfer call"),
+            });
+        }
     };
 
     _onKeyDown = (e) => {
@@ -1217,7 +1247,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
-        } else { // KIND_INVITE
+        } else if (this.props.kind === KIND_INVITE) {
             title = _t("Invite to this room");
 
             if (identityServersEnabled) {
@@ -1251,6 +1281,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
+        } else if (this.props.kind === KIND_CALL_TRANSFER) {
+            title = _t("Transfer");
+            buttonText = _t("Transfer");
+            goButtonFn = this._transferCall;
+        } else {
+            console.error("Unknown kind of InviteDialog: " + this.props.kind);
         }
 
         const hasSelection = this.state.targets.length > 0

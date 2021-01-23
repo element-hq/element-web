@@ -47,7 +47,7 @@ export default class NewSessionReviewDialog extends React.PureComponent {
                     <li>{_t("The internet connection either session is using")}</li>
                 </ul>
                 <div>
-                    {_t("We recommend you change your password and recovery key in Settings immediately")}
+                    {_t("We recommend you change your password and Security Key in Settings immediately")}
                 </div>
             </div>,
             onFinished: () => this.props.onFinished(false),

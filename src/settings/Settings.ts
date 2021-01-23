@@ -421,7 +421,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
     },
     "allowedWidgets": {
-        supportedLevels: [SettingLevel.ROOM_ACCOUNT],
+        supportedLevels: [SettingLevel.ROOM_ACCOUNT, SettingLevel.ROOM_DEVICE],
+        supportedLevelsAreOrdered: true,
         default: {}, // none allowed
     },
     "analyticsOptIn": {
@@ -632,7 +633,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show chat effects"),
         default: true,
     },
-    "Widgets.pinned": {
+    "Widgets.pinned": { // deprecated
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: {},
+    },
+    "Widgets.layout": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
     },

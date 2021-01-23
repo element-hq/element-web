@@ -2903,5 +2903,14 @@
     "You held the call <a>Resume</a>": "Você pausou a chamada <a>Retomar</a>",
     "You've reached the maximum number of simultaneous calls.": "Você atingiu o número máximo de chamadas simultâneas.",
     "Too Many Calls": "Muitas chamadas",
-    "%(name)s paused": "%(name)s pausou"
+    "%(name)s paused": "%(name)s pausou",
+    "You held the call <a>Switch</a>": "Você pausou a chamada <a>Retomar</a>",
+    "%(name)s on hold": "%(name)s em espera",
+    "sends snowfall": "envia neve caindo",
+    "Sends the given message with snowfall": "Envia a mensagem com neve caindo",
+    "sends fireworks": "envia fogos de artifício",
+    "Sends the given message with fireworks": "Envia a mensagem com fogos de artifício",
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Adiciona ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
+    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Adiciona (╯°□°）╯︵ ┻━┻ a uma mensagem de texto",
+    "You have no visible notifications.": "Não há notificações."
 }

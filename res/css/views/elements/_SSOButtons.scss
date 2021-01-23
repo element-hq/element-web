@@ -16,7 +16,14 @@ limitations under the License.
 
 .mx_SSOButtons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+
+    .mx_SSOButtons_row {
+        & + .mx_SSOButtons_row {
+            margin-top: 16px;
+        }
+    }
 
     .mx_SSOButton {
         position: relative;
@@ -36,6 +43,8 @@ limitations under the License.
         box-sizing: border-box;
         width: 50px; // 48px + 1px border on all sides
         height: 50px; // 48px + 1px border on all sides
+        min-width: 50px; // prevent crushing by the flexbox
+        padding: 12px;
 
         > img {
             left: 12px;
@@ -43,7 +52,7 @@ limitations under the License.
         }
 
         & + .mx_SSOButton_mini {
-            margin-left: 24px;
+            margin-left: 16px;
         }
     }
 }

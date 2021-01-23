@@ -151,13 +151,13 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
 
         const valid = await this.fieldRef.current.validate({ allowEmpty: false });
 
-        if (!valid) {
+        if (!valid && !this.state.defaultChosen) {
             this.fieldRef.current.focus();
             this.fieldRef.current.validate({ allowEmpty: false, focused: true });
             return;
         }
 
-        this.props.onFinished(this.validatedConf);
+        this.props.onFinished(this.state.defaultChosen ? this.defaultServer : this.validatedConf);
     };
 
     public render() {

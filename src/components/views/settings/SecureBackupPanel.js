@@ -424,7 +424,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 <p>{_t(
                     "Back up your encryption keys with your account data in case you " +
                     "lose access to your sessions. Your keys will be secured with a " +
-                    "unique Recovery Key.",
+                    "unique Security Key.",
                 )}</p>
                 {statusDescription}
                 <details>
