@@ -620,7 +620,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         WidgetStore.instance.removeListener(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
         if (this.state.room) {
-            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.state.room), this.onWidgetLayoutChange);
+            WidgetLayoutStore.instance.off(
+                WidgetLayoutStore.emissionForRoom(this.state.room),
+                this.onWidgetLayoutChange,
+            );
         }
 
         if (this.showReadReceiptsWatchRef) {
@@ -919,7 +922,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         // Detach the listener if the room is changing for some reason
         if (this.state.room) {
-            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.state.room), this.onWidgetLayoutChange);
+            WidgetLayoutStore.instance.off(
+                WidgetLayoutStore.emissionForRoom(this.state.room),
+                this.onWidgetLayoutChange,
+            );
         }
 
         this.setState({
