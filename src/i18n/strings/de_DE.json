@@ -1122,7 +1122,7 @@
     "Waiting for partner to confirm...": "Warte auf Bestätigung des Gesprächspartners...",
     "Incoming Verification Request": "Eingehende Verifikationsanfrage",
     "Allow Peer-to-Peer for 1:1 calls": "Peer-to-Peer-Verbindungen für 1:1-Anrufe erlauben",
-    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Bist du sicher? Du wirst deine verschlüsselten Nachrichten verlieren, wenn deine Schlüssel nicht gesichert sind.",
+    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Bist du sicher? Du wirst deine verschlüsselten Nachrichten verlieren, wenn deine Schlüssel nicht gut gesichert sind.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Verschlüsselte Nachrichten sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.",
     "Restore from Backup": "Von Sicherung wiederherstellen",
     "Back up your keys before signing out to avoid losing them.": "Sichere deine Schlüssel bevor du dich abmeldest, damit du sie nicht verlierst.",
