@@ -1832,7 +1832,7 @@
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Hinweis: Beginne deine Nachricht mit <code>//</code> um sie mit einem Querstrich zu beginnen.",
     "Send as message": "Als Nachricht senden",
     "Failed to connect to integration manager": "Fehler beim Verbinden mit dem Integrationsserver",
-    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Konnte die Einladung nicht zurückziehen. Der Server hat ein vorübergehendes Problem oder du besitzt nicht die nötigen Rechte um die Einladung zurückzuziehen.",
+    "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Die Einladung konnte nicht zurückgezogen werden. Der Server hat möglicherweise ein vorübergehendes Problem oder Du hast nicht ausreichende Berechtigungen, um die Einladung zurückzuziehen.",
     "Mark all as read": "Alle als gelesen markieren",
     "Local address": "Lokale Adresse",
     "Published Addresses": "Öffentliche Adresse",
