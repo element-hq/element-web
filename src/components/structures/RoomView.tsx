@@ -508,7 +508,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         const isManuallyShown = hideWidgetDrawer === "false";
 
         const widgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
-        console.log('@@', {widgets, isManuallyShown});
         return widgets.length > 0 || isManuallyShown;
     }
 
