@@ -1594,7 +1594,7 @@
     "This backup is trusted because it has been restored on this session": "Dieser Sicherung wird vertraut, da sie während dieser Sitzung wiederhergestellt wurde",
     "Enable desktop notifications for this session": "Desktop-Benachrichtigungen für diese Sitzung aktivieren",
     "Enable audible notifications for this session": "Aktiviere die akustischen Benachrichtigungen für diese Sitzung",
-    "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrationsserver können für dich Widgets einstellen, Raum-Einladungen verschicken oder deine Berechtigungen setzen.",
+    "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrationsmanaager erhalten Konfigurationsdaten und können Widgets modifizieren, Raumeinladungen verschicken und in deinem Namen Einflusslevel setzen.",
     "Read Marker lifetime (ms)": "Gültigkeitsdauer der Gelesen-Markierung (ms)",
     "Read Marker off-screen lifetime (ms)": "Gültigkeitsdauer der Gelesen-Markierung außerhalb des Bildschirms (ms)",
     "Session key:": "Sitzungsschlüssel:",
