@@ -72,6 +72,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady(): Promise<any> {
+        this.matrixClient.on("Room", this.onRoom);
         this.matrixClient.on("RoomState.events", this.onRoomStateEvents);
         this.matrixClient.getRooms().forEach((room: Room) => {
             this.loadRoomWidgets(room);
@@ -80,6 +81,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady(): Promise<any> {
+        this.matrixClient.off("Room", this.onRoom);
         this.matrixClient.off("RoomState.events", this.onRoomStateEvents);
         this.widgetMap = new Map();
         this.roomMap = new Map();
@@ -137,6 +139,12 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         }
         this.emit(room.roomId);
     }
+
+    private onRoom = (room: Room) => {
+        this.initRoom(room.roomId);
+        this.loadRoomWidgets(room);
+        this.emit(UPDATE_EVENT, room.roomId);
+    };
 
     private onRoomStateEvents = (ev: MatrixEvent) => {
         if (ev.getType() !== "im.vector.modular.widgets") return; // TODO: Support m.widget too
