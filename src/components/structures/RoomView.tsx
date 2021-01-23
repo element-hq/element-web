@@ -282,6 +282,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     private checkWidgets = (room) => {
         this.setState({
             hasPinnedWidgets: WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top).length > 0,
+            showApps: this.shouldShowApps(room),
         });
     };
 
@@ -419,9 +420,15 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     private onWidgetEchoStoreUpdate = () => {
+        if (!this.state.room) return;
         this.setState({
+            hasPinnedWidgets: WidgetLayoutStore.instance.getContainerWidgets(this.state.room, Container.Top).length > 0,
             showApps: this.shouldShowApps(this.state.room),
         });
+    };
+
+    private onWidgetLayoutChange = () => {
+        this.onWidgetEchoStoreUpdate(); // we cheat here by calling the thing that matters
     };
 
     private setupRoom(room: Room, roomId: string, joining: boolean, shouldPeek: boolean) {
@@ -489,7 +496,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     private shouldShowApps(room: Room) {
-        if (!BROWSER_SUPPORTS_SANDBOX) return false;
+        if (!BROWSER_SUPPORTS_SANDBOX || !room) return false;
 
         // Check if user has previously chosen to hide the app drawer for this
         // room. If so, do not show apps
@@ -498,7 +505,11 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         // This is confusing, but it means to say that we default to the tray being
         // hidden unless the user clicked to open it.
-        return hideWidgetDrawer === "false";
+        const isManuallyShown = hideWidgetDrawer === "false";
+
+        const widgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
+        console.log('@@', {widgets, isManuallyShown});
+        return widgets.length > 0 || isManuallyShown;
     }
 
     componentDidMount() {
@@ -608,6 +619,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         WidgetEchoStore.removeListener(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         WidgetStore.instance.removeListener(UPDATE_EVENT, this.onWidgetStoreUpdate);
+
+        if (this.state.room) {
+            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.state.room), this.onWidgetLayoutChange);
+        }
 
         if (this.showReadReceiptsWatchRef) {
             SettingsStore.unwatchSetting(this.showReadReceiptsWatchRef);
@@ -836,6 +851,10 @@ export default class RoomView extends React.Component<IProps, IState> {
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room) => {
+        // Attach a widget store listener only when we get a room
+        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
+        this.onWidgetLayoutChange(); // provoke an update
+
         this.calculatePeekRules(room);
         this.updatePreviewUrlVisibility(room);
         this.loadMembersIfJoined(room);
@@ -898,6 +917,12 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (!room || room.roomId !== this.state.roomId) {
             return;
         }
+
+        // Detach the listener if the room is changing for some reason
+        if (this.state.room) {
+            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.state.room), this.onWidgetLayoutChange);
+        }
+
         this.setState({
             room: room,
         }, () => {
