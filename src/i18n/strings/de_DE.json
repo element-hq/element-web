@@ -979,7 +979,7 @@
     "Render simple counters in room header": "Einfache Zähler in Raum-Kopfzeile anzeigen",
     "Enable Emoji suggestions while typing": "Emoji-Vorschläge während der Eingabe aktivieren",
     "Show a placeholder for removed messages": "Zeigt einen Platzhalter für gelöschte Nachrichten an",
-    "Show join/leave messages (invites/kicks/bans unaffected)": "Zeige Betreten-/Verlassen-Nachrichten (Einladungen/Kicks/Bans sind dadurch nicht betroffen)",
+    "Show join/leave messages (invites/kicks/bans unaffected)": "Zeige Betreten-/Verlassen-Nachrichten (betrifft nicht Einladungen/Kicks/Bans)",
     "Show avatar changes": "Avatar-Änderungen anzeigen",
     "Show display name changes": "Anzeigenamen-Änderungen anzeigen",
     "Send typing notifications": "Tipp-Benachrichtigungen senden",
