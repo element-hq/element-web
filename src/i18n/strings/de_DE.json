@@ -451,7 +451,7 @@
     "Pinned Messages": "Angeheftete Nachrichten",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s hat die angehefteten Nachrichten für diesen Raum geändert.",
     "Jump to read receipt": "Zur Lesebestätigung springen",
-    "Message Pinning": "Anheften von Nachrichten",
+    "Message Pinning": "Nachrichten-Anheftung",
     "Long Description (HTML)": "Lange Beschreibung (HTML)",
     "Jump to message": "Zur Nachricht springen",
     "No pinned messages.": "Keine angehefteten Nachrichten vorhanden.",
