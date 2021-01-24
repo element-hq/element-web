@@ -490,7 +490,7 @@
     "Leave Community": "Community verlassen",
     "Add rooms to this community": "Räume zu dieser Community hinzufügen",
     "%(inviter)s has invited you to join this community": "%(inviter)s hat dich in diese Community eingeladen",
-    "You are a member of this community": "Du bist ein Mitglied dieser Community",
+    "You are a member of this community": "Du bist Mitglied in dieser Community",
     "You are an administrator of this community": "Du bist ein Administrator dieser Community",
     "Community %(groupId)s not found": "Community '%(groupId)s' nicht gefunden",
     "Failed to load %(groupId)s": "'%(groupId)s' konnte nicht geladen werden",
