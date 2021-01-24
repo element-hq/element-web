@@ -950,9 +950,6 @@ export default class EventTile extends React.Component {
                 return (
                     <div className={classes} tabIndex={-1} aria-live={ariaLive} aria-atomic="true">
                         { ircTimestamp }
-                        <div className="mx_EventTile_msgOption">
-                            { readAvatars }
-                        </div>
                         { sender }
                         { ircPadlock }
                         <div className="mx_EventTile_line">
@@ -970,6 +967,9 @@ export default class EventTile extends React.Component {
                             { keyRequestInfo }
                             { reactionsRow }
                             { actionBar }
+                        </div>
+                        <div className="mx_EventTile_msgOption">
+                            { readAvatars }
                         </div>
                         {
                             // The avatar goes after the event tile as it's absolutely positioned to be over the

@@ -258,15 +258,9 @@ $left-gutter: 64px;
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: 29px;
+    top: -20px;
     user-select: none;
     z-index: 1;
-}
-
-.mx_EventTile_continuation .mx_EventTile_readAvatars,
-.mx_EventTile_info .mx_EventTile_readAvatars,
-.mx_EventTile_emote .mx_EventTile_readAvatars {
-    top: 7px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {
