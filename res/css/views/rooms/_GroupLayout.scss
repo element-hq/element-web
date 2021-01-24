@@ -20,7 +20,7 @@ $left-gutter: 64px;
 .mx_GroupLayout {
     .mx_EventTile {
         > .mx_SenderProfile {
-            line-height: $font-17px;
+            line-height: $font-20px;
             padding-left: $left-gutter;
         }
 
@@ -38,7 +38,7 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_line, .mx_EventTile_reply {
-            padding-top: 3px;
+            padding-top: 1px;
             padding-bottom: 3px;
             line-height: $font-22px;
         }
