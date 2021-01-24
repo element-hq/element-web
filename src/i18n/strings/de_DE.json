@@ -1742,7 +1742,7 @@
     "Cross-signing public keys:": "Öffentliche Cross-Signing-Schlüssel:",
     "in memory": "im Speicher",
     "Cross-signing private keys:": "Private Cross-Signing-Schlüssel:",
-    "in secret storage": "im sicheren Speicher",
+    "in secret storage": "im Schlüsselspeicher",
     "Self signing private key:": "Selbst signierter privater Schlüssel:",
     "cached locally": "lokal zwischengespeichert",
     "not found locally": "lokal nicht gefunden",
