@@ -948,5 +948,7 @@
     "Confirm adding phone number": "Confirma l'addició del número de telèfon",
     "Add Email Address": "Afegeix una adreça de correu electrònic",
     "Confirm": "Confirma",
-    "Click the button below to confirm adding this email address.": "Fes clic al botó de sota per confirmar l'addició d'aquesta adreça de correu electrònic."
+    "Click the button below to confirm adding this email address.": "Fes clic al botó de sota per confirmar l'addició d'aquesta adreça de correu electrònic.",
+    "Unable to access webcam / microphone": "No s'ha pogut accedir a la càmera web / micròfon",
+    "Unable to access microphone": "No s'ha pogut accedir al micròfon"
 }
