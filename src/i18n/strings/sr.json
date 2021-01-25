@@ -1392,5 +1392,16 @@
     "Joins room with given address": "Придружује се соби са датом адресом",
     "Use an identity server to invite by email. Manage in Settings.": "Користите сервер идентитета за позивнице е-поштом. Управљајте у поставкама.",
     "Use an identity server": "Користи сервер идентитета",
-    "Failed to set topic": "Нисам успео да поставим тему"
+    "Failed to set topic": "Нисам успео да поставим тему",
+    "Removing…": "Уклањам…",
+    "Clear all data in this session?": "Да очистим све податке у овој сесији?",
+    "Reason (optional)": "Разлог (опционо)",
+    "An image will help people identify your community.": "Слика помаже да људи препознају вашу заједницу.",
+    "Add image (optional)": "Додај слику (опционо)",
+    "Disable": "Искључи",
+    "If disabled, messages from encrypted rooms won't appear in search results.": "Ако је искључено, поруке из шифрованих соба неће се приказивати у резултатима.",
+    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах.",
+    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
+    "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
+    "Cancel autocomplete": "Откажи ауто-довршавање"
 }
