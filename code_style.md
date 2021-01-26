@@ -161,7 +161,7 @@ ECMAScript
 TypeScript
 ----------
 - TypeScript is preferred over the use of JavaScript
-- Its desirable to convert existing JavaScript files to TypeScript. TypeScript conversions should be done in small
+- It's desirable to convert existing JavaScript files to TypeScript. TypeScript conversions should be done in small
   chunks without functional changes to ease the review process.
 - Use full type definitions for function parameters and return values.
 - Avoid `any` types and `any` casts
