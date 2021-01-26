@@ -2746,7 +2746,7 @@
     "A connection error occurred while trying to contact the server.": "Yhteysvirhe yritettäessä ottaa yhteyttä palvelimeen.",
     "The <b>%(capability)s</b> capability": "<b>%(capability)s</b>-ominaisuus",
     "See when the avatar changes in this room": "Näe, milloin kuva vaihtuu tässä huoneessa",
-    "See when the name changes in your active room": "Näe milloin nimi muuttuu aktiivisessa huoneessasi",
+    "See when the name changes in your active room": "Näe milloin käyttäjän nimi muuttuu aktiivisessa huoneessa",
     "If disabled, messages from encrypted rooms won't appear in search results.": "Jos ei ole käytössä, salattujen huoneiden viestejä ei näytetä hakutuloksissa.",
     "Jump to start/end of the composer": "Siirry kirjoittimen alkuun/loppuun",
     "Dismiss read marker and jump to bottom": "Hylkää lukumerkki ja hyppää pohjaan",
