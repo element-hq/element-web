@@ -156,7 +156,6 @@ ECMAScript
   - Be careful mixing arrow functions and regular functions, eg. if one function in a promise chain is an
     arrow function, they probably all should be.
 - Apart from that, newer ES features should be used whenever the author deems them to be appropriate.
-- While flow annotations are welcome and encouraged consider to migrate the JS file to TypeScript (see next section).
 
 TypeScript
 ----------
