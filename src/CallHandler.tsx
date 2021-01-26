@@ -426,15 +426,17 @@ export default class CallHandler {
         );
         logger.debug("Local candidates:");
         for (const cand of stats.filter(item => item.type === 'local-candidate')) {
+            const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
             logger.debug(
-                `${cand.id} - type: ${cand.candidateType}, ip: ${cand.ip}, port: ${cand.port}, ` +
+                `${cand.id} - type: ${cand.candidateType}, address: ${address}, port: ${cand.port}, ` +
                 `protocol: ${cand.protocol}, relay protocol: ${cand.relayProtocol}, network type: ${cand.networkType}`,
             );
         }
         logger.debug("Remote candidates:");
         for (const cand of stats.filter(item => item.type === 'remote-candidate')) {
+            const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
             logger.debug(
-                `${cand.id} - type: ${cand.candidateType}, ip: ${cand.ip}, port: ${cand.port}, ` +
+                `${cand.id} - type: ${cand.candidateType}, address: ${address}, port: ${cand.port}, ` +
                 `protocol: ${cand.protocol}`,
             );
         }
