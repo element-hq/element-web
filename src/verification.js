@@ -74,6 +74,10 @@ function UntrustedDeviceDialog(props) {
 
 export async function verifyDevice(user, device) {
     const cli = MatrixClientPeg.get();
+    if (cli.isGuest()) {
+        dis.dispatch({action: 'require_registration'});
+        return;
+    }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
     if (cli.getCryptoTrustCrossSignedDevices()) {
         if (!await enable4SIfNeeded()) {
@@ -113,6 +117,10 @@ export async function verifyDevice(user, device) {
 
 export async function legacyVerifyUser(user) {
     const cli = MatrixClientPeg.get();
+    if (cli.isGuest()) {
+        dis.dispatch({action: 'require_registration'});
+        return;
+    }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
     if (cli.getCryptoTrustCrossSignedDevices()) {
         if (!await enable4SIfNeeded()) {
@@ -128,6 +136,11 @@ export async function legacyVerifyUser(user) {
 }
 
 export async function verifyUser(user) {
+    const cli = MatrixClientPeg.get();
+    if (cli.isGuest()) {
+        dis.dispatch({action: 'require_registration'});
+        return;
+    }
     if (!await enable4SIfNeeded()) {
         return;
     }
