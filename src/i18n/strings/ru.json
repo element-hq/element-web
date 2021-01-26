@@ -2975,5 +2975,15 @@
     "You have no visible notifications.": "У вас нет видимых уведомлений.",
     "Transfer": "Перевод",
     "Failed to transfer call": "Не удалось перевести звонок",
-    "A call can only be transferred to a single user.": "Вызов может быть передан только одному пользователю."
+    "A call can only be transferred to a single user.": "Вызов может быть передан только одному пользователю.",
+    "There was an error finding this widget.": "При обнаружении этого виджета произошла ошибка.",
+    "Active Widgets": "Активные виджеты",
+    "Open dial pad": "Открыть панель набора номера",
+    "Dial pad": "Панель набора номера",
+    "Start a Conversation": "Начать разговор",
+    "There was an error looking up the phone number": "При поиске номера телефона произошла ошибка",
+    "Unable to look up phone number": "Невозможно найти номер телефона",
+    "Change which room, message, or user you're viewing": "Измените комнату, сообщение или пользователя, которого вы просматриваете",
+    "Channel: <channelLink/>": "Канал: <channelLink/>",
+    "Workspace: <networkLink/>": "Рабочая область: <networkLink/>"
 }
