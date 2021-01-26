@@ -32,10 +32,6 @@ import {Action} from "../../../dispatcher/actions";
 const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+]).*?)(?=\/|\?|$)/;
 
 class Pill extends React.Component {
-    static isPillUrl(url) {
-        return !!getPrimaryPermalinkEntity(url);
-    }
-
     static isMessagePillUrl(url) {
         return !!REGEX_LOCAL_PERMALINK.exec(url);
     }
@@ -56,7 +52,7 @@ class Pill extends React.Component {
     static propTypes = {
         // The Type of this Pill. If url is given, this is auto-detected.
         type: PropTypes.string,
-        // The URL to pillify (no validation is done, see isPillUrl and isMessagePillUrl)
+        // The URL to pillify (no validation is done)
         url: PropTypes.string,
         // Whether the pill is in a message
         inMessage: PropTypes.bool,
