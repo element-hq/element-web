@@ -58,7 +58,7 @@
     "highlight.js": "^10.4.1",
     "jsrsasign": "^9.1.5",
     "katex": "^0.12.0",
-    "matrix-js-sdk": "9.5.0",
+    "matrix-js-sdk": "9.5.1",
     "matrix-react-sdk": "3.12.0",
     "matrix-widget-api": "^0.1.0-beta.10",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
