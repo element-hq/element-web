@@ -56,7 +56,7 @@ export default abstract class BasePlatform {
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    abstract async getConfig(): Promise<{}>;
+    abstract getConfig(): Promise<{}>;
 
     abstract getDefaultDeviceDisplayName(): string;
 

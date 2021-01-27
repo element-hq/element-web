@@ -43,7 +43,7 @@ export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<
         })(dispatcher);
     }
 
-    protected get matrixClient(): MatrixClient {
+    get matrixClient(): MatrixClient {
         return this.readyStore.mxClient;
     }
 
@@ -55,7 +55,7 @@ export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<
         // Default implementation is to do nothing.
     }
 
-    protected abstract async onAction(payload: ActionPayload);
+    protected abstract onAction(payload: ActionPayload): Promise<void>;
 
     protected async onDispatch(payload: ActionPayload) {
         await this.onAction(payload);
