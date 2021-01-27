@@ -1505,5 +1505,8 @@
     "Backup version:": "バックアップバージョン:",
     "Secret storage:": "機密ストレージ:",
     "Master private key:": "マスター秘密鍵:",
-    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "セッションにアクセスできなくなる場合に備えて、アカウントデータとともに暗号鍵をバックアップします。あなたの鍵は一意のリカバリーキーで保護されます。"
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "セッションにアクセスできなくなる場合に備えて、アカウントデータとともに暗号鍵をバックアップします。あなたの鍵は一意のリカバリーキーで保護されます。",
+    "Add a photo, so people can easily spot your room.": "写真を追加して、あなたの部屋を目立たせましょう。",
+    "Add a photo so people know it's you.": "写真を追加して、あなただとわかるようにしましょう。",
+    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "あなたか宛先が誰かを招待しない限りは、この会話は2人だけのものです。"
 }
