@@ -2747,5 +2747,10 @@
     "Dial pad": "לוח חיוג",
     "There was an error looking up the phone number": "אירעה שגיאה בחיפוש מספר הטלפון",
     "Unable to look up phone number": "לא ניתן לחפש את מספר הטלפון",
-    "%(senderName)s has updated the widget layout": "%(senderName)s עדכן את פריסת היישומון"
+    "%(senderName)s has updated the widget layout": "%(senderName)s עדכן את פריסת היישומון",
+    "There was an error finding this widget.": "אירעה שגיאה במציאת היישומון הזה.",
+    "Active Widgets": "יישומונים פעילים",
+    "Set my room layout for everyone": "הגדר את פריסת החדר שלי עבור כולם",
+    "Open dial pad": "פתח לוח חיוג",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "גבה את מפתחות ההצפנה שלך עם נתוני חשבונך במקרה שתאבד את הגישה להפעלות שלך. המפתחות שלך מאובטחים באמצעות מפתח אבטחה ייחודי."
 }
