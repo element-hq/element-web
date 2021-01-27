@@ -366,7 +366,7 @@ async function abortLogin() {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. isGuest etc.)
-async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
     const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {
