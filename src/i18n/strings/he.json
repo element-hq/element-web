@@ -2742,5 +2742,10 @@
     "Review terms and conditions": "עיין בתנאים ובהגבלות",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "כדי להמשיך להשתמש בשרת הבית (%(homeserverDomain)s), עליך לבדוק ולהסכים לתנאים ולהגבלות שלנו.",
     "For security, this session has been signed out. Please sign in again.": "למען ביטחון, הפגישה הזו נותקה. אנא היכנסו שוב.",
-    "Signed Out": "יציאה"
+    "Signed Out": "יציאה",
+    "Channel: <channelLink/>": "ערוץ: <channelLink/>",
+    "Dial pad": "לוח חיוג",
+    "There was an error looking up the phone number": "אירעה שגיאה בחיפוש מספר הטלפון",
+    "Unable to look up phone number": "לא ניתן לחפש את מספר הטלפון",
+    "%(senderName)s has updated the widget layout": "%(senderName)s עדכן את פריסת היישומון"
 }
