@@ -201,11 +201,6 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const topWidgets: IApp[] = [];
         const rightWidgets: IApp[] = [];
         for (const widget of widgets) {
-            if (WidgetType.JITSI.matches(widget.type)) {
-                topWidgets.push(widget);
-                continue;
-            }
-
             const stateContainer = roomLayout?.widgets?.[widget.id]?.container;
             const manualContainer = userLayout?.widgets?.[widget.id]?.container;
             const isLegacyPinned = !!legacyPinned?.[widget.id];
