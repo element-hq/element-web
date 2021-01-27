@@ -30,6 +30,8 @@ limitations under the License.
         width: 100%;
         padding-left: 32px;
         padding-right: 32px;
+        border-color: $input-border-color;
+        color: $primary-fg-color;
 
         > img {
             object-fit: contain;
@@ -55,4 +57,20 @@ limitations under the License.
             margin-left: 16px;
         }
     }
+}
+
+.mx_SSOButton.mx_SSOButton_brand_facebook {
+    background-color: #3c5a99;
+    border-color: #3c5a99;
+    color: #ffffff;
+}
+.mx_SSOButton.mx_SSOButton_brand_google {
+    background-color: #eb4335;
+    border-color: #eb4335;
+    color: #ffffff;
+}
+.mx_SSOButton.mx_SSOButton_brand_twitter {
+    background-color: #47acdf;
+    border-color: #47acdf;
+    color: #ffffff;
 }
