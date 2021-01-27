@@ -154,7 +154,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT, roomId);
     };
 
-    public getRoom = (roomId: string) => {
+    public getRoom = (roomId: string, initIfNeeded = false) => {
+        if (initIfNeeded) this.initRoom(roomId); // internally handles "if needed"
         return this.roomMap.get(roomId);
     };
 
