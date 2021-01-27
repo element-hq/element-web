@@ -195,6 +195,10 @@ export default class RoomStatusBar extends React.Component {
                     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
                     "Please <a>contact your service administrator</a> to continue using the service.",
                 ),
+                'hs_disabled': _td(
+                    "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
+                    "Please <a>contact your service administrator</a> to continue using the service.",
+                ),
                 '': _td(
                     "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
                     "Please <a>contact your service administrator</a> to continue using the service.",

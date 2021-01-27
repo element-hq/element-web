@@ -94,7 +94,7 @@ interface IProps {
 
 interface IUsageLimit {
     // eslint-disable-next-line camelcase
-    limit_type: "monthly_active_user" | string;
+    limit_type: "monthly_active_user" | "hs_disabled" | string;
     // eslint-disable-next-line camelcase
     admin_contact?: string;
 }
