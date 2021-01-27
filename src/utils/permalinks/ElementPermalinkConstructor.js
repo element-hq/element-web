@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -76,6 +76,10 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
         }
 
         const parts = fullUrl.substring(`${this._elementUrl}/#/`.length).split("/");
+        return ElementPermalinkConstructor.parseLinkParts(parts);
+    }
+
+    static parseLinkParts(parts: string[]): PermalinkParts {
         if (parts.length < 2) { // we're expecting an entity and an ID of some kind at least
             throw new Error("URL is missing parts");
         }
