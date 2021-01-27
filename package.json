@@ -88,7 +88,7 @@
     "@types/flux": "^3.1.9",
     "@types/modernizr": "^3.5.3",
     "@types/node": "^12.19.15",
-    "@types/react": "16.9",
+    "@types/react": "^16.9",
     "@types/react-dom": "^16.9.10",
     "@types/sanitize-html": "^1.27.1",
     "autoprefixer": "^9.8.6",
@@ -143,6 +143,9 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2"
+  },
+  "resolutions": {
+    "**/@types/react": "^16.14"
   },
   "jest": {
     "testEnvironment": "jest-environment-jsdom-sixteen",
