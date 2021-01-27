@@ -396,6 +396,7 @@ export default class CallHandler {
                     }
 
                     this.logCallStats(call, mappedRoomId);
+                    break;
                 }
             }
         });
