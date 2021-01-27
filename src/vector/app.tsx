@@ -124,7 +124,7 @@ function onTokenLoginCompleted() {
     parsedUrl.search = "";
     const formatted = url.format(parsedUrl);
     console.log(`Redirecting to ${formatted} to drop loginToken from queryparams`);
-    window.location.href = formatted;
+    window.history.replaceState(null, "", formatted);
 }
 
 export async function loadApp(fragParams: {}) {
