@@ -48,6 +48,7 @@ import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
 import {CHAT_EFFECTS} from "./effects"
 import CallHandler from "./CallHandler";
+import {guessAndSetDMRoom} from "./Rooms";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -1110,6 +1111,24 @@ export const Commands = [
             }
             call.setRemoteOnHold(false);
             return success();
+        },
+    }),
+    new Command({
+        command: "converttodm",
+        description: _td("Converts the room to a DM"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, true));
+        },
+    }),
+    new Command({
+        command: "converttoroom",
+        description: _td("Converts the DM to a room"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, false));
         },
     }),
 
