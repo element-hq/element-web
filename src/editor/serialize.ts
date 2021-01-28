@@ -47,28 +47,12 @@ export function markdownSerializeIfNeeded(md: string, {forceHTML = false} = {}, 
 
     if (SettingsStore.getValue("feature_latex_maths")) {
         if (forceTEX) {
-            // detect math with tex delimiters, inline: $...$, display $$...$$
-            // preferably use negative lookbehinds, not supported in all major browsers:
-            // const displayPattern = "^(?<!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
-            // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
+            const displayPattern = "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$";
+            const inlinePattern = "(^|[^\\\\$])\\$(([^$]|\\\\\\$)*([^\\\\\\$]|\\\\\\$))\\$";
 
-            // conditions for display math detection $$...$$:
-            // - pattern starts at beginning of line
-            // - left delimiter ($$) is not escaped by backslash
-            // - left delimiter is not followed by space or tab
-            // - pattern ends at end of line
-            const displayPattern = "^(?!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
-
-            // conditions for inline math detection $...$:
-            // - pattern starts at beginning of line or follows whitespace character
-            // - left and right delimiters ($) are not escaped by backslashes
-            // - left delimiter is not followed by whitespace character
-            // - right delimiter is not prefixed with whitespace character
-            const inlinePattern = "(^|\\s)(?!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)*[^\\\\\\s\\$](?:\\\\\\$)?)\\$";
-
-            md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
-                const p1e = AllHtmlEntities.encode(p1);
-                return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
+            md = md.replace(RegExp(displayPattern, "gm"), function(m, p1, p2) {
+                const p2e = AllHtmlEntities.encode(p2);
+                return `${p1}<div data-mx-maths="${p2e}">\n\n</div>\n\n`;
             });
 
             md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1, p2) {
@@ -76,24 +60,51 @@ export function markdownSerializeIfNeeded(md: string, {forceHTML = false} = {}, 
                 return `${p1}<span data-mx-maths="${p2e}"></span>`;
             });
         } else {
+            // detect math with tex delimiters, inline: $...$, display $$...$$
+            // preferably use negative lookbehinds, not supported in all major browsers:
+            // const displayPattern = "^(?<!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
+            // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
+
+            // conditions for display math detection $$...$$:
+            // - pattern starts at beginning of line or is not prefixed with backslash or dollar
+            // - left delimiter ($$) is not escaped by backslash
+            const displayPatternDollar = "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$";
+
+            // conditions for inline math detection $...$:
+            // - pattern starts at beginning of line, follows whitespace character or punctuation
+            // - pattern is on a single line
+            // - left and right delimiters ($) are not escaped by backslashes
+            // - left delimiter is not followed by whitespace character
+            // - right delimiter is not prefixed with whitespace character
+            const inlinePatternDollar = "(^|\\s|[.,!?:;])(?!\\\\)\\$(?!\\s)(([^$\\n]|\\\\\\$)*([^\\\\\\s\\$]|\\\\\\$)(?:\\\\\\$)?)\\$";
+
+            md = md.replace(RegExp(displayPatternDollar, "gm"), function(m, p1, p2) {
+                const p2e = AllHtmlEntities.encode(p2);
+                return `${p1}<div data-mx-maths="${p2e}">\n\n</div>\n\n`;
+            });
+
+            md = md.replace(RegExp(inlinePatternDollar, "gm"), function(m, p1, p2) {
+                const p2e = AllHtmlEntities.encode(p2);
+                return `${p1}<span data-mx-maths="${p2e}"></span>`;
+            });
+
             // detect math with latex delimiters, inline: \(...\), display \[...\]
 
             // conditions for display math detection \[...\]:
-            // - pattern starts at beginning of line
-            // - pattern ends at end of line
+            // - pattern starts at beginning of line or is not prefixed with backslash
+            // - pattern is not empty
             const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
-                "^\\\\\\[(.*?)\\\\\\]$";
+                "(^|[^\\\\])\\\\\\[(?!\\\\\\])(.*?)\\\\\\]";
 
             // conditions for inline math detection \(...\):
             // - pattern starts at beginning of line or is not prefixed with backslash
-            // (this allows escaping and requires that multiple consecutive
-            // patterns are separated by at least one character)
+            // - pattern is not empty
             const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
-                "(^|[^\\\\])\\\\\\((.*?)\\\\\\)";
+                "(^|[^\\\\])\\\\\\((?!\\\\\\))(.*?)\\\\\\)";
 
-            md = md.replace(RegExp(displayPattern, "gms"), function(m, p1) {
-                const p1e = AllHtmlEntities.encode(p1);
-                return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
+            md = md.replace(RegExp(displayPattern, "gms"), function(m, p1, p2) {
+                const p2e = AllHtmlEntities.encode(p2);
+                return `${p1}<div data-mx-maths="${p2e}">\n\n</div>\n\n`;
             });
 
             md = md.replace(RegExp(inlinePattern, "gms"), function(m, p1, p2) {

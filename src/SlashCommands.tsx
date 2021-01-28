@@ -227,7 +227,7 @@ export const Commands = [
     new Command({
         command: 'tex',
         args: '<message>',
-        description: _td('Sends a message in TeX mode, using $ and $$ delimiters for maths'),
+        description: _td('Sends a message in TeX mode, without restrictions'),
         runFn: function(roomId, args) {
             if (SettingsStore.getValue("feature_latex_maths")) {
                 if (args) {
