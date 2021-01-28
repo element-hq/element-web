@@ -325,9 +325,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.props.realQueryParams,
                 this.props.defaultDeviceDisplayName,
             ).then(async (loggedIn) => {
+                if (this.props.realQueryParams?.loginToken) {
+                    // remove the loginToken from the URL regardless
+                    this.props.onTokenLoginCompleted();
+                }
+
                 if (loggedIn) {
                     this.tokenLogin = true;
-                    this.props.onTokenLoginCompleted();
 
                     // Create and start the client
                     await Lifecycle.restoreFromLocalStorage({
