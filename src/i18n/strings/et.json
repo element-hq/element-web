@@ -3029,5 +3029,13 @@
     "Great! This Security Phrase looks strong enough.": "Suurepärane! Turvafraas on piisavalt kange.",
     "We'll store an encrypted copy of your keys on our server. Secure your backup with a Security Phrase.": "Me salvestame krüptitud koopia sinu krüptovõtmetest oma serveris. Selle koopia krüptimisel kasutame sinu turvafraasi.",
     "Set my room layout for everyone": "Kasuta minu jututoa paigutust kõigi jaoks",
-    "%(senderName)s has updated the widget layout": "%(senderName)s on uuendanud vidinate paigutust"
+    "%(senderName)s has updated the widget layout": "%(senderName)s on uuendanud vidinate paigutust",
+    "Search (must be enabled)": "Otsing (peab olema lubatud)",
+    "Remember this": "Jäta see meelde",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "See vidin verifitseerib sinu kasutajatunnuse, kuid ta ei saa sinu nimel toiminguid teha:",
+    "Allow this widget to verify your identity": "Luba sellel vidinal sinu isikut verifitseerida",
+    "Use Ctrl + F to search": "Otsimiseks vajuta Ctrl + F klahve",
+    "Use Command + F to search": "Otsimiseks vajuta Cmd + F klahve",
+    "Converts the DM to a room": "Muuda otsevestlus jututoaks",
+    "Converts the room to a DM": "Muuda jututuba otsevestluseks"
 }
