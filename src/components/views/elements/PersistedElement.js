@@ -165,6 +165,7 @@ export default class PersistedElement extends React.Component {
 
         const parentRect = parent.getBoundingClientRect();
         Object.assign(child.style, {
+            zIndex: 9,
             position: 'absolute',
             top: parentRect.top + 'px',
             left: parentRect.left + 'px',
