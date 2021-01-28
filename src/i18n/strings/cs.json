@@ -2942,5 +2942,13 @@
     "Security Key mismatch": "Neshoda bezpečnostního klíče",
     "Wrong Security Key": "Špatný bezpečnostní klíč",
     "Set my room layout for everyone": "Nastavit všem rozložení mé místnosti",
-    "%(senderName)s has updated the widget layout": "%(senderName)s aktualizoval rozložení widgetu"
+    "%(senderName)s has updated the widget layout": "%(senderName)s aktualizoval rozložení widgetu",
+    "Search (must be enabled)": "Hledat (musí být povoleno)",
+    "Remember this": "Zapamatujte si toto",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "Widget ověří vaše uživatelské ID, ale nebude za vás moci provádět akce:",
+    "Allow this widget to verify your identity": "Povolte tomuto widgetu ověřit vaši identitu",
+    "Use Ctrl + F to search": "Hledejte pomocí Ctrl + F",
+    "Use Command + F to search": "Hledejte pomocí Command + F",
+    "Converts the DM to a room": "Převede přímou zprávu na místnost",
+    "Converts the room to a DM": "Převede místnost na přímou zprávu"
 }
