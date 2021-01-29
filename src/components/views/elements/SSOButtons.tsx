@@ -22,11 +22,31 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
 import {_t} from "../../../languageHandler";
-import {IIdentityProvider, ISSOFlow} from "../../../Login";
+import {IdentityProviderBrand, IIdentityProvider, ISSOFlow} from "../../../Login";
+import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
     mini?: boolean;
+}
+
+const getIcon = (brand: IdentityProviderBrand | string) => {
+    switch (brand) {
+        case IdentityProviderBrand.Apple:
+            return require(`../../../../res/img/element-icons/brands/apple.svg`);
+        case IdentityProviderBrand.Facebook:
+            return require(`../../../../res/img/element-icons/brands/facebook.svg`);
+        case IdentityProviderBrand.Github:
+            return require(`../../../../res/img/element-icons/brands/github.svg`);
+        case IdentityProviderBrand.Gitlab:
+            return require(`../../../../res/img/element-icons/brands/gitlab.svg`);
+        case IdentityProviderBrand.Google:
+            return require(`../../../../res/img/element-icons/brands/google.svg`);
+        case IdentityProviderBrand.Twitter:
+            return require(`../../../../res/img/element-icons/brands/twitter.svg`);
+        default:
+            return null;
+    }
 }
 
 const SSOButton: React.FC<ISSOButtonProps> = ({
@@ -38,7 +58,6 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     mini,
     ...props
 }) => {
-    const kind = primary ? "primary" : "primary_outline";
     const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
 
     const onClick = () => {
@@ -46,30 +65,35 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     };
 
     let icon;
-    if (typeof idp?.icon === "string" && (idp.icon.startsWith("mxc://") || idp.icon.startsWith("https://"))) {
-        icon = <img
-            src={matrixClient.mxcUrlToHttp(idp.icon, 24, 24, "crop", true)}
-            height="24"
-            width="24"
-            alt={label}
-        />;
+    let brandClass;
+    const brandIcon = idp ? getIcon(idp.brand) : null;
+    if (brandIcon) {
+        const brandName = idp.brand.split(".").pop();
+        brandClass = `mx_SSOButton_brand_${brandName}`;
+        icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
+    } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
+        const src = matrixClient.mxcUrlToHttp(idp.icon, 24, 24, "crop", true);
+        icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 
     const classes = classNames("mx_SSOButton", {
+        [brandClass]: brandClass,
         mx_SSOButton_mini: mini,
+        mx_SSOButton_default: !idp,
+        mx_SSOButton_primary: primary,
     });
 
     if (mini) {
         // TODO fallback icon
         return (
-            <AccessibleButton {...props} className={classes} kind={kind} onClick={onClick}>
+            <AccessibleTooltipButton {...props} title={label} className={classes} onClick={onClick}>
                 { icon }
-            </AccessibleButton>
+            </AccessibleTooltipButton>
         );
     }
 
     return (
-        <AccessibleButton {...props} className={classes} kind={kind} onClick={onClick}>
+        <AccessibleButton {...props} className={classes} onClick={onClick}>
             { icon }
             { label }
         </AccessibleButton>

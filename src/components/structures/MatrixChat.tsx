@@ -219,6 +219,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private screenAfterLogin?: IScreen;
     private windowWidth: number;
     private pageChanging: boolean;
+    private tokenLogin?: boolean;
     private accountPassword?: string;
     private accountPasswordTimer?: NodeJS.Timeout;
     private focusComposer: boolean;
@@ -324,13 +325,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Lifecycle.attemptTokenLogin(
                 this.props.realQueryParams,
                 this.props.defaultDeviceDisplayName,
-            ).then((loggedIn) => {
-                if (loggedIn) {
+            ).then(async (loggedIn) => {
+                if (this.props.realQueryParams?.loginToken) {
+                    // remove the loginToken from the URL regardless
                     this.props.onTokenLoginCompleted();
+                }
 
-                    // don't do anything else until the page reloads - just stay in
-                    // the 'loading' state.
-                    return;
+                if (loggedIn) {
+                    this.tokenLogin = true;
+
+                    // Create and start the client
+                    await Lifecycle.restoreFromLocalStorage({
+                        ignoreGuest: true,
+                    });
+                    return this.postLoginSetup();
                 }
 
                 // if the user has followed a login or register link, don't reanimate
@@ -352,6 +360,42 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Analytics.enable();
         }
         CountlyAnalytics.instance.enable(/* anonymous = */ true);
+    }
+
+    private async postLoginSetup() {
+        const cli = MatrixClientPeg.get();
+        const cryptoEnabled = cli.isCryptoEnabled();
+        if (!cryptoEnabled) {
+            this.onLoggedIn();
+        }
+
+        const promisesList = [this.firstSyncPromise.promise];
+        if (cryptoEnabled) {
+            // wait for the client to finish downloading cross-signing keys for us so we
+            // know whether or not we have keys set up on this account
+            promisesList.push(cli.downloadKeys([cli.getUserId()]));
+        }
+
+        // Now update the state to say we're waiting for the first sync to complete rather
+        // than for the login to finish.
+        this.setState({ pendingInitialSync: true });
+
+        await Promise.all(promisesList);
+
+        if (!cryptoEnabled) {
+            this.setState({ pendingInitialSync: false });
+            return;
+        }
+
+        const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
+        if (crossSigningIsSetUp) {
+            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
+            this.setStateForNewView({ view: Views.E2E_SETUP });
+        } else {
+            this.onLoggedIn();
+        }
+        this.setState({ pendingInitialSync: false });
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
@@ -1839,40 +1883,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
-
-        const cli = MatrixClientPeg.get();
-        const cryptoEnabled = cli.isCryptoEnabled();
-        if (!cryptoEnabled) {
-            this.onLoggedIn();
-        }
-
-        const promisesList = [this.firstSyncPromise.promise];
-        if (cryptoEnabled) {
-            // wait for the client to finish downloading cross-signing keys for us so we
-            // know whether or not we have keys set up on this account
-            promisesList.push(cli.downloadKeys([cli.getUserId()]));
-        }
-
-        // Now update the state to say we're waiting for the first sync to complete rather
-        // than for the login to finish.
-        this.setState({ pendingInitialSync: true });
-
-        await Promise.all(promisesList);
-
-        if (!cryptoEnabled) {
-            this.setState({ pendingInitialSync: false });
-            return;
-        }
-
-        const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
-        if (crossSigningIsSetUp) {
-            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
-            this.setStateForNewView({ view: Views.E2E_SETUP });
-        } else {
-            this.onLoggedIn();
-        }
-        this.setState({ pendingInitialSync: false });
+        await this.postLoginSetup();
     };
 
     // complete security / e2e setup has finished
@@ -1916,6 +1927,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 <E2eSetup
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
                     accountPassword={this.accountPassword}
+                    tokenLogin={!!this.tokenLogin}
                 />
             );
         } else if (this.state.view === Views.LOGGED_IN) {

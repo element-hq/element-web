@@ -28,8 +28,14 @@ limitations under the License.
     .mx_SSOButton {
         position: relative;
         width: 100%;
-        padding-left: 32px;
-        padding-right: 32px;
+        padding: 7px 32px;
+        text-align: center;
+        border-radius: 8px;
+        display: inline-block;
+        font-size: $font-14px;
+        font-weight: $font-semi-bold;
+        border: 1px solid $input-border-color;
+        color: $primary-fg-color;
 
         > img {
             object-fit: contain;
@@ -37,6 +43,16 @@ limitations under the License.
             left: 8px;
             top: 4px;
         }
+    }
+
+    .mx_SSOButton_default {
+        color: $button-primary-bg-color;
+        background-color: $button-secondary-bg-color;
+        border-color: $button-primary-bg-color;
+    }
+    .mx_SSOButton_default.mx_SSOButton_primary {
+        color: $button-primary-fg-color;
+        background-color: $button-primary-bg-color;
     }
 
     .mx_SSOButton_mini {
@@ -55,4 +71,15 @@ limitations under the License.
             margin-left: 16px;
         }
     }
+}
+
+.mx_SSOButton.mx_SSOButton_brand_facebook {
+    background-color: #3c5a99;
+    border-color: #3c5a99;
+    color: #ffffff;
+}
+.mx_SSOButton.mx_SSOButton_brand_twitter {
+    background-color: #47acdf;
+    border-color: #47acdf;
+    color: #ffffff;
 }
