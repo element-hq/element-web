@@ -84,6 +84,7 @@ import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { Action } from './dispatcher/actions';
 import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
+import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 
 const CHECK_PSTN_SUPPORT_ATTEMPTS = 3;
 
@@ -581,6 +582,12 @@ export default class CallHandler {
         switch (payload.action) {
             case 'place_call':
                 {
+                    // We might be using managed hybrid widgets
+                    if (isManagedHybridWidgetEnabled()) {
+                        addManagedHybridWidget(payload.room_id);
+                        return;
+                    }
+
                     // if the runtime env doesn't do VoIP, whine.
                     if (!MatrixClientPeg.get().supportsVoip()) {
                         Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {

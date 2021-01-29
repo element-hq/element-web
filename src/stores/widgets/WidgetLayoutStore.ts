@@ -41,7 +41,7 @@ export enum Container {
     // are only two containers, and that only the top container is special.
 }
 
-interface IStoredLayout {
+export interface IStoredLayout {
     // Where to store the widget. Required.
     container: Container;
 
