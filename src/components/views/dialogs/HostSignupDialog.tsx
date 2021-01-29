@@ -36,9 +36,7 @@ interface IProps {}
 interface IState {
     completed: boolean;
     error: string;
-    loadIframe: boolean;
     minimized: boolean;
-    termsAccepted: boolean;
 }
 
 export default class HostSignupDialog extends React.PureComponent<IProps, IState> {
@@ -51,9 +49,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         this.state = {
             completed: false,
             error: null,
-            loadIframe: false,
             minimized: false,
-            termsAccepted: false,
         };
 
         this.config = SdkConfig.get().hostSignup;
@@ -65,7 +61,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         }
         switch (message.data.action) {
             case PostmessageAction.HostSignupAccountDetailsRequest:
-                await this.sendAccountDetails();
+                this.onAccountDetailsRequest();
                 break;
             case PostmessageAction.Maximize:
                 this.maximizeDialog();
@@ -151,35 +147,32 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 openIdToken: openIdToken.access_token,
                 serverName: await MatrixClientPeg.get().getDomain(),
                 userLocalpart: await MatrixClientPeg.get().getUserIdLocalpart(),
-                termsAccepted: this.state.termsAccepted,
+                termsAccepted: true,
             },
         });
     }
 
-    private loadIframe = () => {
-        window.addEventListener("message", this.messageHandler);
-        this.setState({
-            loadIframe: true,
-        });
+    private onAccountDetailsDialogFinished = async (result) => {
+        if (result) {
+            return this.sendAccountDetails();
+        }
+        return this.closeDialog();
     }
 
-    private onStartClick = () => {
+    private onAccountDetailsRequest = () => {
         Modal.createDialog(
             QuestionDialog,
             {
                 title: this.config.termsDialog.title,
                 description: this.config.termsDialog.text,
                 button: this.config.termsDialog.acceptText,
-                onFinished: result => {
-                    if (result) {
-                        this.setState({
-                            termsAccepted: true,
-                        });
-                        this.loadIframe();
-                    }
-                },
+                onFinished: this.onAccountDetailsDialogFinished,
             },
         );
+    }
+
+    public componentDidMount() {
+        window.addEventListener("message", this.messageHandler);
     }
 
     public componentWillUnmount() {
@@ -197,104 +190,24 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                         <div className={["mx_Dialog",
                             this.state.minimized ? "mx_HostSignupDialog_minimized" : "mx_HostSignupDialog"].join(" ")
                         }>
-                            {this.state.loadIframe &&
-                                <>
-                                    {this.state.minimized &&
-                                        <div className="mx_Dialog_header mx_Dialog_headerWithButton">
-                                            <div className="mx_Dialog_title">
-                                                {this.config.minimizedDialogTitle}
-                                            </div>
-                                            <AccessibleButton
-                                                className="mx_HostSignup_maximize_button"
-                                                onClick={this.maximizeDialog}
-                                                aria-label={_t("Maximize dialog")}
-                                            />
-                                        </div>
-                                    }
-                                    {!this.state.minimized &&
-                                        <div className="mx_Dialog_header mx_Dialog_headerWithCancel">
-                                            <AccessibleButton
-                                                onClick={this.onCloseClick} className="mx_Dialog_cancelButton"
-                                                aria-label={_t("Close dialog")}
-                                            />
-                                        </div>
-                                    }
-                                    <iframe
-                                        src={this.config.url}
-                                        ref={this.iframeRef}
-                                        sandbox="allow-forms allow-scripts allow-same-origin"
+                            {this.state.minimized &&
+                                <div className="mx_Dialog_header mx_Dialog_headerWithButton">
+                                    <div className="mx_Dialog_title">
+                                        {this.config.minimizedDialogTitle}
+                                    </div>
+                                    <AccessibleButton
+                                        className="mx_HostSignup_maximize_button"
+                                        onClick={this.maximizeDialog}
+                                        aria-label={_t("Maximize dialog")}
                                     />
-                                </>
+                                </div>
                             }
-                            {!this.state.loadIframe &&
-                                <div className="mx_HostSignupDialog_info">
-                                    {this.config.info.image &&
-                                        <img
-                                            alt={this.config.info.image.alt}
-                                            height={this.config.info.image.height}
-                                            src={this.config.info.image.src}
-                                            width={this.config.info.image.width}
-                                        />
-                                    }
-                                    <div className="mx_HostSignupDialog_content_top">
-                                        <h1 className="mx_HostSignupDialog_text_dark">
-                                            {this.config.info.title}
-                                        </h1>
-                                        {this.config.info.additionalParagraphs &&
-                                            <div className="mx_HostSignupDialog_paragraphs">
-                                                {this.config.info.additionalParagraphs.map((para, index) => {
-                                                    return <p className="mx_HostSignupDialog_text_light" key={index}>
-                                                        {para}
-                                                    </p>;
-                                                })}
-                                                {this.config.info.additionalInfoLink &&
-                                                    <p><small>
-                                                        <a href={this.config.info.additionalInfoLink.href}
-                                                            target="_blank" rel="noopener noreferrer"
-                                                            title={this.config.info.additionalInfoLink.text}
-                                                        >
-                                                            {this.config.info.additionalInfoLink.text}
-                                                        </a>
-                                                    </small></p>
-                                                }
-                                            </div>
-                                        }
-                                    </div>
-                                    <div className="mx_HostSignupDialog_buttons">
-                                        <AccessibleButton
-                                            onClick={this.closeDialog}
-                                            aria-label={this.config.info.cancelText}
-                                        >
-                                            <button>
-                                                {this.config.info.cancelText}
-                                            </button>
-                                        </AccessibleButton>
-                                        <AccessibleButton
-                                            onClick={this.onStartClick}
-                                            aria-label={this.config.info.continueText}
-                                        >
-                                            <button className="mx_Dialog_primary">
-                                                {this.config.info.continueText}
-                                            </button>
-                                        </AccessibleButton>
-                                    </div>
-                                    {this.config.info.footer &&
-                                        <div className="mx_HostSignupDialog_text_light">
-                                            <small>
-                                                <p className="mx_HostSignupDialog_footer">
-                                                    {this.config.info.footer.image &&
-                                                        <img
-                                                            alt={this.config.info.footer.image.alt}
-                                                            height={this.config.info.footer.image.height}
-                                                            src={this.config.info.footer.image.src}
-                                                            width={this.config.info.footer.image.width}
-                                                        />
-                                                    }
-                                                    {this.config.info.footer.text}
-                                                </p>
-                                            </small>
-                                        </div>
-                                    }
+                            {!this.state.minimized &&
+                                <div className="mx_Dialog_header mx_Dialog_headerWithCancel">
+                                    <AccessibleButton
+                                        onClick={this.onCloseClick} className="mx_Dialog_cancelButton"
+                                        aria-label={_t("Close dialog")}
+                                    />
                                 </div>
                             }
                             {this.state.error &&
@@ -302,10 +215,14 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                     {this.state.error}
                                 </div>
                             }
+                            {!this.state.error &&
+                                <iframe
+                                    src={this.config.url}
+                                    ref={this.iframeRef}
+                                    sandbox="allow-forms allow-scripts allow-same-origin"
+                                />
+                            }
                         </div>
-                        {!this.state.minimized &&
-                            <div className="mx_Dialog_background mx_HostSignupDialog_background" />
-                        }
                     </div>
                 </PersistedElement>
             </div>
