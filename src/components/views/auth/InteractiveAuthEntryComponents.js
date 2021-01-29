@@ -626,6 +626,7 @@ export class SSOAuthEntry extends React.Component {
         window.removeEventListener("message", this._onReceiveMessage);
         if (this._popupWindow) {
             this._popupWindow.close();
+            this._popupWindow = null;
         }
     }
 
@@ -639,6 +640,7 @@ export class SSOAuthEntry extends React.Component {
         if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
             if (this._popupWindow) {
                 this._popupWindow.close();
+                this._popupWindow = null;
             }
         }
     };

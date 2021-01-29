@@ -179,7 +179,8 @@ export default class InteractiveAuthComponent extends React.Component {
         }, () => {
             if (oldStage !== stageType) {
                 this._setFocus();
-            } else if (!stageState.error && this._stageComponent.current &&
+            } else if (
+                !stageState.error && this._stageComponent.current &&
                 this._stageComponent.current.attemptFailed
             ) {
                 this._stageComponent.current.attemptFailed();
