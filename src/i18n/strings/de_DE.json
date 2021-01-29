@@ -3033,5 +3033,9 @@
     "Use Ctrl + F to search": "Nutze Strg + F zum Suchen",
     "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web ist derzeit experimentell auf mobilen Endgeräten. Die nativen Apps werden empfohlen.",
     "Converts the DM to a room": "Wandelt die Direktnachricht zu Raum um",
-    "Converts the room to a DM": "Wandelt den Raum zu Direktnachricht um"
+    "Converts the room to a DM": "Wandelt den Raum zu Direktnachricht um",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Bei der Bestätigung deiner Identität ist ein Fehler aufgetreten. Abbrechen und erneut versuchen.",
+    "Use app": "App verwenden",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web ist experimentell auf mobilen Endgeräten. Für eine bessere Erfahrung und die neuesten Erweiterungen, nutze unsere freie, native App.",
+    "Use app for a better experience": "Nutze die App für eine bessere Erfahrung"
 }
