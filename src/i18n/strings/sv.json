@@ -2921,5 +2921,21 @@
     "Start a Conversation": "Starta en konversation",
     "Dial pad": "Knappsats",
     "There was an error looking up the phone number": "Ett fel inträffade vid uppslagning av telefonnumret",
-    "Unable to look up phone number": "Kunde inte slå upp telefonnumret"
+    "Unable to look up phone number": "Kunde inte slå upp telefonnumret",
+    "Invalid Security Key": "Ogiltig säkerhetsnyckel",
+    "Wrong Security Key": "Fel säkerhetsnyckel",
+    "Remember this": "Kom ihåg det här",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "Den här widgeten kommer att verifiera ditt användar-ID, men kommer inte kunna utföra handlingar som dig:",
+    "Allow this widget to verify your identity": "Tillåt att den här widgeten verifierar din identitet",
+    "We recommend you change your password and Security Key in Settings immediately": "Vi rekommenderar att du ändrar ditt lösenord och din säkerhetsnyckel i inställningarna omedelbart",
+    "Set my room layout for everyone": "Sätt mitt rumsarrangemang för alla",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Säkerhetskopiera dina krypteringsnycklar med din kontodata ifall du skulle förlora åtkomst till dina sessioner. Dina nycklar kommer att säkras med en unik säkerhetsnyckel.",
+    "Channel: <channelLink/>": "Kanal: <channelLink/>",
+    "Workspace: <networkLink/>": "Arbetsyta: <networkLink/>",
+    "Use Ctrl + F to search": "Använd Ctrl + F för att söka",
+    "Use Command + F to search": "Använd kommando (⌘) + F för att söka",
+    "Change which room, message, or user you're viewing": "Ändra vilket rum, vilket meddelande eller vilken användare du ser",
+    "%(senderName)s has updated the widget layout": "%(senderName)s har uppdaterat widgetarrangemanget",
+    "Converts the DM to a room": "Konverterar DMet till ett rum",
+    "Converts the room to a DM": "Konverterar rummet till ett DM"
 }
