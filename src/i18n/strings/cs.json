@@ -2950,5 +2950,7 @@
     "Use Ctrl + F to search": "Hledejte pomocí Ctrl + F",
     "Use Command + F to search": "Hledejte pomocí Command + F",
     "Converts the DM to a room": "Převede přímou zprávu na místnost",
-    "Converts the room to a DM": "Převede místnost na přímou zprávu"
+    "Converts the room to a DM": "Převede místnost na přímou zprávu",
+    "Mobile experience": "Zážitek na mobilních zařízeních",
+    "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web je v současné době experimentální na mobilních zařízeních. Nativní aplikace se doporučují pro většinu lidí."
 }
