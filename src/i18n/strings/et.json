@@ -3037,5 +3037,9 @@
     "Use Ctrl + F to search": "Otsimiseks vajuta Ctrl + F klahve",
     "Use Command + F to search": "Otsimiseks vajuta Cmd + F klahve",
     "Converts the DM to a room": "Muuda otsevestlus jututoaks",
-    "Converts the room to a DM": "Muuda jututuba otsevestluseks"
+    "Converts the room to a DM": "Muuda jututuba otsevestluseks",
+    "Use app for a better experience": "Rakendusega saad Matrix'is suhelda parimal viisil",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Midagi läks sinu isiku tuvastamisel viltu. Tühista viimane toiming ja proovi uuesti.",
+    "Use app": "Kasuta rakendust",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Brauseripõhine Element toimib mobiiltelefonis mööndustega. Meie rakendusega saad parema kasutajakogemuse ja uusimad funktsionaalsused."
 }
