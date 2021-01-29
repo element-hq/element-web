@@ -23,6 +23,7 @@ import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
 import {_t} from "../../../languageHandler";
 import {IdentityProviderBrand, IIdentityProvider, ISSOFlow} from "../../../Login";
+import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -84,9 +85,9 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     if (mini) {
         // TODO fallback icon
         return (
-            <AccessibleButton {...props} className={classes} kind={kind} onClick={onClick}>
+            <AccessibleTooltipButton {...props} title={label} className={classes} kind={kind} onClick={onClick}>
                 { icon }
-            </AccessibleButton>
+            </AccessibleTooltipButton>
         );
     }
 
