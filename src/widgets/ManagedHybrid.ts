@@ -21,6 +21,7 @@ import WidgetUtils from "../utils/WidgetUtils";
 import { IStoredLayout, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import WidgetStore from "../stores/WidgetStore";
+import SdkConfig from "../SdkConfig";
 
 /* eslint-disable camelcase */
 interface IManagedHybridWidgetData {
@@ -30,10 +31,16 @@ interface IManagedHybridWidgetData {
 }
 /* eslint-enable camelcase */
 
-export function isManagedHybridWidgetEnabled(): boolean {
-    const callBehaviour = getCallBehaviourWellKnown();
+function getWidgetBuildUrl(): string {
+    if (SdkConfig.get().widget_build_url) {
+        return SdkConfig.get().widget_build_url;
+    }
     /* eslint-disable-next-line camelcase */
-    return !!callBehaviour?.widget_build_url;
+    return getCallBehaviourWellKnown()?.widget_build_url
+}
+
+export function isManagedHybridWidgetEnabled(): boolean {
+    return !!getWidgetBuildUrl();
 }
 
 export async function addManagedHybridWidget(roomId: string) {
@@ -51,7 +58,7 @@ export async function addManagedHybridWidget(roomId: string) {
 
     // Get widget data
     /* eslint-disable-next-line camelcase */
-    const widgetBuildUrl = getCallBehaviourWellKnown()?.widget_build_url;
+    const widgetBuildUrl = getWidgetBuildUrl();
     if (!widgetBuildUrl) {
         return;
     }
