@@ -155,8 +155,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 CommunityPrototypeStore.getUpdateEventName(this.props.room?.roomId),
                 this.onCommunityUpdate,
             );
-            prevProps.room.off("Room.name", this.onRoomNameUpdate);
-            this.props.room.on("Room.name", this.onRoomNameUpdate);
+            prevProps.room?.off("Room.name", this.onRoomNameUpdate);
+            this.props.room?.on("Room.name", this.onRoomNameUpdate);
         }
     }
 
