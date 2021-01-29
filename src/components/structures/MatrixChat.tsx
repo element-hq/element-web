@@ -81,6 +81,7 @@ import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from 
 import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
+import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1185,6 +1186,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             (Analytics.canEnable() || CountlyAnalytics.instance.canEnable())
         ) {
             showAnalyticsToast(this.props.config.piwik?.policyUrl);
+        }
+        if (SdkConfig.get().mobileGuideToast) {
+            // The toast contains further logic to detect mobile platforms,
+            // check if it has been dismissed before, etc.
+            showMobileGuideToast();
         }
     }
 
