@@ -126,6 +126,7 @@
     "modernizr": "^3.6.0",
     "node-fetch": "^2.6.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-calc": "^7.0.5",
     "postcss-easings": "^2.0.0",
     "postcss-extend": "^1.0.5",
     "postcss-hexrgba": "^2.0.0",
