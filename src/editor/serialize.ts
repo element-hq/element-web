@@ -55,7 +55,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
         // conditions for display math detection $$...$$:
         // - pattern starts at beginning of line or is not prefixed with backslash or dollar
         // - left delimiter ($$) is not escaped by backslash
-        const displayPatternDollar = "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$";
+        const displayPatternAlternative = (SdkConfig.get()['latex_maths_delims'] ||
+            {})['display_pattern_alternative'] ||
+            "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$";
 
         // conditions for inline math detection $...$:
         // - pattern starts at beginning of line, follows whitespace character or punctuation
@@ -63,14 +65,16 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
         // - left and right delimiters ($) are not escaped by backslashes
         // - left delimiter is not followed by whitespace character
         // - right delimiter is not prefixed with whitespace character
-        const inlinePatternDollar = "(^|\\s|[.,!?:;])(?!\\\\)\\$(?!\\s)(([^$\\n]|\\\\\\$)*([^\\\\\\s\\$]|\\\\\\$)(?:\\\\\\$)?)\\$";
+        const inlinePatternAlternative = (SdkConfig.get()['latex_maths_delims'] ||
+            {})['inline_pattern_alternative'] ||
+            "(^|\\s|[.,!?:;])(?!\\\\)\\$(?!\\s)(([^$\\n]|\\\\\\$)*([^\\\\\\s\\$]|\\\\\\$)(?:\\\\\\$)?)\\$";
 
-        md = md.replace(RegExp(displayPatternDollar, "gm"), function(m, p1, p2) {
+        md = md.replace(RegExp(displayPatternAlternative, "gm"), function(m, p1, p2) {
             const p2e = AllHtmlEntities.encode(p2);
             return `${p1}<div data-mx-maths="${p2e}">\n\n</div>\n\n`;
         });
 
-        md = md.replace(RegExp(inlinePatternDollar, "gm"), function(m, p1, p2) {
+        md = md.replace(RegExp(inlinePatternAlternative, "gm"), function(m, p1, p2) {
             const p2e = AllHtmlEntities.encode(p2);
             return `${p1}<span data-mx-maths="${p2e}"></span>`;
         });
