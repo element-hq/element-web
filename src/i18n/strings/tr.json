@@ -20,11 +20,17 @@
     "Unable to load config file: please refresh the page to try again.": "Yapılandırma (config) dosyası yüklenemedi: lütfen yeniden denemek için sayfayı yenileyin.",
     "Download Completed": "İndirme Tamamlandı",
     "Unsupported browser": "Desteklenmeyen tarayıcı",
-    "Your browser can't run %(brand)s": "",
+    "Your browser can't run %(brand)s": "Tarayıcınız %(brand)s uygulamasını çalıştıramıyor",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s, kullandığınız tarayıcı tarafından desteklenmeyen, gelişmiş tarayıcı özellikleri kullanıyor.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Daha iyi bir deneyim için lütfen <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ya da <safariLink>Safari</safariLink> tarayıcılarından birini yükleyin.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Şu anda kullanmış olduğunuz tarayıcınızı kullanmaya devam edebilirsiniz ancak uygulamanın sunduğu bazı ya da bütün özellikler çalışmayabilir ve deneyiminizi kötü yönde etkileyebilir.",
     "I understand the risks and wish to continue": "Riskleri anlıyorum ve devam etmek istiyorum",
     "Go to element.io": "element.io adresine git",
-    "Failed to start": "Başlatılamadı"
+    "Failed to start": "Başlatılamadı",
+    "Previous/next recently visited room or community": "Yakında ziyaret edilen önceki/sonraki oda veya topluluk",
+    "Powered by Matrix": "Matrix tarafından güçlendirildi",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Masaüstü (%(platformName)s)",
+    "Open": "Aç",
+    "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!"
 }

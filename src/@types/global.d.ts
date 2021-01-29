@@ -1,5 +1,5 @@
 /*
-Copyright 2020 New Vector Ltd
+Copyright 2020, 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,13 +17,32 @@ limitations under the License.
 import "matrix-react-sdk/src/@types/global"; // load matrix-react-sdk's type extensions first
 import type {Renderer} from "react-dom";
 
+type ElectronChannel =
+    "app_onAction" |
+    "before-quit" |
+    "check_updates" |
+    "install_update" |
+    "ipcCall" |
+    "ipcReply" |
+    "loudNotification" |
+    "preferences" |
+    "seshat" |
+    "seshatReply" |
+    "setBadgeCount" |
+    "update-downloaded" |
+    "userDownloadCompleted" |
+    "userDownloadOpen";
+
 declare global {
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixChat: ReturnType<Renderer>;
 
         // electron-only
-        ipcRenderer: any;
+        electron: {
+            on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
+            send(channel: ElectronChannel, ...args: any[]): void;
+        }
 
         // opera-only
         opera: any;
