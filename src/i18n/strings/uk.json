@@ -729,7 +729,7 @@
     "%(num)s days from now": "%(num)s днів по тому",
     "Unrecognised address": "Нерозпізнана адреса",
     "You do not have permission to invite people to this room.": "У вас немає прав запрошувати людей у цю кімнату.",
-    "User %(userId)s is already in the room": "Користувач %(userId)s вже знаходиться серед вас",
+    "User %(userId)s is already in the room": "Користувач %(userId)s вже перебуває в кімнаті",
     "User %(user_id)s does not exist": "Користувача %(user_id)s не існує",
     "The user must be unbanned before they can be invited.": "Користувач має бути розблокованим(ою), перед тим як може бути запрошений(ая).",
     "The user's homeserver does not support the version of the room.": "Домашній сервер користувача не підтримує версію кімнати.",
@@ -1575,5 +1575,7 @@
     "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sприєднується %(count)s разів",
     "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sприєдналися",
     "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sприєдналися %(count)s разів",
-    "Members only (since they joined)": "Лише учасники (від часу приєднання)"
+    "Members only (since they joined)": "Лише учасники (від часу приєднання)",
+    "This room is not accessible by remote Matrix servers": "Ця кімната недоступна для віддалених серверів Matrix",
+    "Manually verify all remote sessions": "Перевірити всі сеанси власноруч"
 }
