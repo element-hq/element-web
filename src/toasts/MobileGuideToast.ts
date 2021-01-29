@@ -40,13 +40,13 @@ export const showToast = () => {
     }
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Mobile experience"),
+        title: _t("Use app for a better experience"),
         props: {
             description: _t(
-                "Element Web is currently experimental on mobile. " +
-                "The native apps are recommended for most people.",
+                "Element Web is experimental on mobile. " +
+                "For a better experience and the latest features, use our free native app.",
             ),
-            acceptLabel: _t("Learn more"),
+            acceptLabel: _t("Use app"),
             onAccept,
             rejectLabel: _t("Dismiss"),
             onReject,
