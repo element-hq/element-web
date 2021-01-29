@@ -3024,5 +3024,14 @@
     "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>": "Wenn du deine Sicherheitsphrase vergessen hast, kannst du <button1>deinen Sicherheitsschlüssel nutzen</button1> oder <button2>neue Wiederherstellungsoptionen einrichten</button2>",
     "Security Key mismatch": "Nicht übereinstimmende Sicherheitsschlüssel",
     "Set my room layout for everyone": "Setze mein Raum-Layout für alle",
-    "%(senderName)s has updated the widget layout": "%(senderName)s hat das Widget-Layout aktualisiert"
+    "%(senderName)s has updated the widget layout": "%(senderName)s hat das Widget-Layout aktualisiert",
+    "Search (must be enabled)": "Suche (muss aktiviert sein)",
+    "Remember this": "Dies merken",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "Das Widget überprüft deine Nutzer-ID, kann jedoch keine Aktionen für dich ausführen:",
+    "Allow this widget to verify your identity": "Erlaube diesem Widget deine Identität zu überprüfen",
+    "Use Command + F to search": "Nutze Befehlstaste (⌘) + F zum Suchen",
+    "Use Ctrl + F to search": "Nutze Strg + F zum Suchen",
+    "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web ist derzeit experimentell auf mobilen Endgeräten. Die nativen Apps werden empfohlen.",
+    "Converts the DM to a room": "Wandelt die Direktnachricht zu Raum um",
+    "Converts the room to a DM": "Wandelt den Raum zu Direktnachricht um"
 }
