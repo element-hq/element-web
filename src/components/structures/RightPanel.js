@@ -186,7 +186,7 @@ export default class RightPanel extends React.Component {
         }
     }
 
-    onCloseUserInfo = () => {
+    onClose = () => {
         // XXX: There are three different ways of 'closing' this panel depending on what state
         // things are in... this knows far more than it should do about the state of the rest
         // of the app and is generally a bit silly.
@@ -198,29 +198,19 @@ export default class RightPanel extends React.Component {
             dis.dispatch({
                 action: "view_home_page",
             });
-        } else if (this.state.phase === RightPanelPhases.EncryptionPanel &&
+        } else if (
+            this.state.phase === RightPanelPhases.EncryptionPanel &&
             this.state.verificationRequest && this.state.verificationRequest.pending
         ) {
             // When the user clicks close on the encryption panel cancel the pending request first if any
             this.state.verificationRequest.cancel();
         } else {
-            // Otherwise we have got our user from RoomViewStore which means we're being shown
-            // within a room/group, so go back to the member panel if we were in the encryption panel,
-            // or the member list if we were in the member panel... phew.
-            const isEncryptionPhase = this.state.phase === RightPanelPhases.EncryptionPanel;
-            dis.dispatch({
-                action: Action.ViewUser,
-                member: isEncryptionPhase ? this.state.member : null,
+            // the RightPanelStore has no way of knowing which mode room/group it is in, so we handle closing here
+            defaultDispatcher.dispatch({
+                action: Action.ToggleRightPanel,
+                type: this.props.groupId ? "group" : "room",
             });
         }
-    };
-
-    onClose = () => {
-        // the RightPanelStore has no way of knowing which mode room/group it is in, so we handle closing here
-        defaultDispatcher.dispatch({
-            action: Action.ToggleRightPanel,
-            type: this.props.groupId ? "group" : "room",
-        });
     };
 
     render() {
