@@ -1560,9 +1560,13 @@ const UserInfo: React.FC<Props> = ({
             break;
     }
 
+    let refireParams;
     let previousPhase: RightPanelPhases;
     // We have no previousPhase for when viewing a UserInfo from a Group or without a Room at this time
-    if (room) {
+    if (room && phase === RightPanelPhases.EncryptionPanel) {
+        previousPhase = RightPanelPhases.RoomMemberInfo;
+        refireParams = {member: member};
+    } else if (room) {
         previousPhase = RightPanelPhases.RoomMemberList;
     }
 
@@ -1581,6 +1585,7 @@ const UserInfo: React.FC<Props> = ({
         onClose={onClose}
         closeLabel={closeLabel}
         previousPhase={previousPhase}
+        refireParams={refireParams}
     >
         { content }
     </BaseCard>;
