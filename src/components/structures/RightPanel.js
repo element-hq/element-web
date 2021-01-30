@@ -260,7 +260,7 @@ export default class RightPanel extends React.Component {
                     user={this.state.member}
                     room={this.props.room}
                     key={roomId || this.state.member.userId}
-                    onClose={this.onCloseUserInfo}
+                    onClose={this.onClose}
                     phase={this.state.phase}
                     verificationRequest={this.state.verificationRequest}
                     verificationRequestPromise={this.state.verificationRequestPromise}
@@ -276,7 +276,7 @@ export default class RightPanel extends React.Component {
                     user={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.userId}
-                    onClose={this.onCloseUserInfo} />;
+                    onClose={this.onClose} />;
                 break;
 
             case RightPanelPhases.GroupRoomInfo:
