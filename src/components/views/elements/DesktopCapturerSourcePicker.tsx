@@ -85,6 +85,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
     }
 
     componentDidMount() {
+        // We update the sources every 500ms to get newer thumbnails
         this.interval = setInterval(async () => {
             this.setState({
                 sources: await getDesktopCapturerSources(),
