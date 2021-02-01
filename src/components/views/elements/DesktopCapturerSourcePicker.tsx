@@ -20,6 +20,12 @@ import BaseDialog from "..//dialogs/BaseDialog"
 import AccessibleButton from './AccessibleButton';
 import {getDesktopCapturerSources} from "matrix-js-sdk/src/webrtc/call";
 
+export interface DesktopCapturerSource {
+    id: string;
+    name: string;
+    thumbnailURL;
+}
+
 export enum Tabs {
     Screens = "screens",
     Windows = "windows",
