@@ -213,6 +213,35 @@ describe("<TextualBody />", () => {
                 'style="width: 16px; height: 16px;" title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
                 '</span></span>');
         });
+
+        it("pills do not appear for event permalinks", () => {
+            const ev = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    body:
+                        "An [event link](https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
+                        "$16085560162aNpaH:example.com?via=example.com) with text",
+                    msgtype: "m.text",
+                    format: "org.matrix.custom.html",
+                    formatted_body:
+                        "An <a href=\"https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
+                        "$16085560162aNpaH:example.com?via=example.com\">event link</a> with text",
+                },
+                event: true,
+            });
+
+            const wrapper = mount(<TextualBody mxEvent={ev} />);
+            expect(wrapper.text()).toBe("An event link with text");
+            const content = wrapper.find(".mx_EventTile_body");
+            expect(content.html()).toBe(
+                '<span class="mx_EventTile_body markdown-body" dir="auto">' +
+                'An <a href="#/room/!ZxbRYPQXDXKGmDnJNg:example.com/' +
+                '$16085560162aNpaH:example.com?via=example.com" ' +
+                'rel="noreferrer noopener">event link</a> with text</span>',
+            );
+        });
     });
 
     it("renders url previews correctly", () => {
