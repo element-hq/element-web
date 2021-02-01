@@ -267,12 +267,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
     }
 
-    // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillMount() {
-        this.onRoomViewStoreUpdate(true);
-    }
-
     private onWidgetStoreUpdate = () => {
         if (this.state.room) {
             this.checkWidgets(this.state.room);
@@ -512,6 +506,8 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
+        this.onRoomViewStoreUpdate(true);
+
         const call = this.getCallForRoom();
         const callState = call ? call.state : null;
         this.setState({
