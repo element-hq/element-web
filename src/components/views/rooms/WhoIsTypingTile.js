@@ -81,7 +81,7 @@ export default class WhoIsTypingTile extends React.Component {
     };
 
     onRoomTimeline = (event, room) => {
-        if (room && room.roomId === this.props.room.roomId) {
+        if (room?.roomId === this.props.room?.roomId) {
             const userId = event.getSender();
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
