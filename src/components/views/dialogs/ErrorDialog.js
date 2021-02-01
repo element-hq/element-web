@@ -50,6 +50,10 @@ export default class ErrorDialog extends React.Component {
         button: null,
     };
 
+    onClick = () => {
+        this.props.onFinished(true);
+    };
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
@@ -64,7 +68,7 @@ export default class ErrorDialog extends React.Component {
                     { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                    <button className="mx_Dialog_primary" onClick={this.onClick} autoFocus={this.props.focus}>
                         { this.props.button || _t('OK') }
                     </button>
                 </div>
