@@ -340,8 +340,8 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     };
 
     onTryRegisterClick = ev => {
-        const hasPasswordFlow = this.state.flows.find(flow => flow.type === "m.login.password");
-        const ssoFlow = this.state.flows.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
+        const hasPasswordFlow = this.state.flows?.find(flow => flow.type === "m.login.password");
+        const ssoFlow = this.state.flows?.find(flow => flow.type === "m.login.sso" || flow.type === "m.login.cas");
         // If has no password flow but an SSO flow guess that the user wants to register with SSO.
         // TODO: instead hide the Register button if registration is disabled by checking with the server,
         // has no specific errCode currently and uses M_FORBIDDEN.
