@@ -185,8 +185,8 @@ export function attemptTokenLogin(
         console.warn("Cannot log in with token: can't determine HS URL to use");
         Modal.createTrackedDialog("SSO", "Unknown HS", ErrorDialog, {
             title: _t("We couldn't log you in"),
-            description: _t("We asked the browser to remember which homeserver you use, to let you sign in. " +
-                "Unfortunately your browser has forgotten in. Go to the sign in page and try again."),
+            description: _t("We asked the browser to remember which homeserver you use to let you sign in, " +
+                "but unfortunately your browser has forgotten it. Go to the sign in page and try again."),
             button: _t("Try again"),
         });
         return Promise.resolve(false);
