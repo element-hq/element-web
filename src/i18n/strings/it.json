@@ -3028,5 +3028,17 @@
     "Channel: <channelLink/>": "Canale: <channelLink/>",
     "Workspace: <networkLink/>": "Spazio di lavoro: <networkLink/>",
     "Change which room, message, or user you're viewing": "Cambia quale stanza, messaggio o utente stai vedendo",
-    "%(senderName)s has updated the widget layout": "%(senderName)s ha aggiornato la disposizione del widget"
+    "%(senderName)s has updated the widget layout": "%(senderName)s ha aggiornato la disposizione del widget",
+    "Converts the room to a DM": "Converte la stanza in un MD",
+    "Converts the DM to a room": "Converte il MD in una stanza",
+    "Use Command + F to search": "Usa Command + F per cercare",
+    "Use Ctrl + F to search": "Usa Ctrl + F per cercare",
+    "Use app for a better experience": "Usa l'app per un'esperienza migliore",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web è sperimentale su mobile. Per un'esperienza migliore e le ultime funzionalità, usa la nostra app nativa gratuita.",
+    "Use app": "Usa l'app",
+    "Search (must be enabled)": "Cerca (deve essere attivato)",
+    "Allow this widget to verify your identity": "Permetti a questo widget di verificare la tua identità",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "Il widget verificherà il tuo ID utente, ma non sarà un grado di eseguire azioni per te:",
+    "Remember this": "Ricordalo",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Qualcosa è andato storto confermando la tua identità. Annulla e riprova."
 }

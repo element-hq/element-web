@@ -2952,5 +2952,9 @@
     "Converts the DM to a room": "Převede přímou zprávu na místnost",
     "Converts the room to a DM": "Převede místnost na přímou zprávu",
     "Mobile experience": "Zážitek na mobilních zařízeních",
-    "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web je v současné době experimentální na mobilních zařízeních. Nativní aplikace se doporučují pro většinu lidí."
+    "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web je v současné době experimentální na mobilních zařízeních. Nativní aplikace se doporučují pro většinu lidí.",
+    "Use app for a better experience": "Pro lepší zážitek použijte aplikaci",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web je experimentální na mobilních zařízeních. Pro lepší zážitek a nejnovější funkce použijte naši bezplatnou nativní aplikaci.",
+    "Use app": "Použijte aplikaci",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Při ověřování vaší identity se něco pokazilo. Zrušte to a zkuste to znovu."
 }
