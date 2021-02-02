@@ -7535,7 +7535,7 @@ matrix-mock-request@^1.2.3:
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.12.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/241955f7c27d7649525fac1bf750a532ea34ff46"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/ecc3dbbd80d9ce23a569f923809e6a269a117531"
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
@@ -7564,7 +7564,7 @@ matrix-mock-request@^1.2.3:
     linkifyjs "^2.1.9"
     lodash "^4.17.20"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
-    matrix-widget-api "^0.1.0-beta.12"
+    matrix-widget-api "^0.1.0-beta.13"
     minimist "^1.2.5"
     pako "^2.0.3"
     parse5 "^6.0.1"
@@ -7594,10 +7594,10 @@ matrix-react-test-utils@^0.2.2:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
-matrix-widget-api@^0.1.0-beta.12:
-  version "0.1.0-beta.12"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.12.tgz#6cadeabde14f02949b7c3177434a4755942559b8"
-  integrity sha512-43xVAzLYzddYF73r6NK7NZ3geDLshQqCNAAcv0t5LFyFkKYGWDQG/cg8Vn8d37wm9WVBqYZUOXy9vBD4JcWVPA==
+matrix-widget-api@^0.1.0-beta.13:
+  version "0.1.0-beta.13"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.13.tgz#ebddc83eaef39bbb87b621a02a35902e1a29b9ef"
+  integrity sha512-DJAvuX2E7gxc/a9rtJPDh17ba9xGIOAoBHcWirNTN3KGodzsrZ+Ns+M/BREFWMwGS5yEBZko5eq7uhXStEbnyQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
