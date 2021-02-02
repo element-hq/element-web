@@ -3035,5 +3035,10 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "A Matrix szerver elérhetetlen és nem tudta bejelentkeztetni. Próbálja újra. Ha továbbra is fennáll a probléma, kérjük vegye fel a kapcsolatot a Matrix szerver üzemeltetőjével.",
     "Try again": "Próbálja újra",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "A böngészőt utasítottuk, hogy jegyezze meg, melyik matrix szervert használta a bejelentkezéshez, de elfelejtette. Navigáljon újra a bejelentkezési oldalra.",
-    "We couldn't log you in": "Sajnos nem tudjuk bejelentkeztetni"
+    "We couldn't log you in": "Sajnos nem tudjuk bejelentkeztetni",
+    "Search (must be enabled)": "Keresés (engedélyezve kell lennie)",
+    "Something went wrong in confirming your identity. Cancel and try again.": "A személyazonosság ellenőrzésénél valami hiba történt. Megszakítás és próbálja újra.",
+    "Remember this": "Emlékezzen erre",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "A kisalkalmazás ellenőrizni fogja a felhasználói azonosítóját, de az alábbi tevékenységeket nem tudja végrehajtani:",
+    "Allow this widget to verify your identity": "A kisalkalmazás ellenőrizheti a személyazonosságot"
 }
