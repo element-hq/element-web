@@ -119,7 +119,7 @@
     "Only continue if you trust the owner of the server.": "Only continue if you trust the owner of the server.",
     "Trust": "Trust",
     "We couldn't log you in": "We couldn't log you in",
-    "We asked the browser to remember which homeserver you use, to let you sign in. Unfortunately your browser has forgotten in. Go to the sign in page and try again.": "We asked the browser to remember which homeserver you use, to let you sign in. Unfortunately your browser has forgotten in. Go to the sign in page and try again.",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
     "Try again": "Try again",
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.",
     "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.",
