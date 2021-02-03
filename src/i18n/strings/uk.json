@@ -1577,5 +1577,6 @@
     "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sприєдналися %(count)s разів",
     "Members only (since they joined)": "Лише учасники (від часу приєднання)",
     "This room is not accessible by remote Matrix servers": "Ця кімната недоступна для віддалених серверів Matrix",
-    "Manually verify all remote sessions": "Перевірити всі сеанси власноруч"
+    "Manually verify all remote sessions": "Перевірити всі сеанси власноруч",
+    "Explore rooms": "Каталог кімнат"
 }
