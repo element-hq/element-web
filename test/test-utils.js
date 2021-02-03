@@ -243,6 +243,7 @@ export function mkStubRoom(roomId = null) {
         on: jest.fn(),
         removeListener: jest.fn(),
         getDMInviter: jest.fn(),
+        getAvatarUrl: () => 'mxc://avatar.url/room.png',
     };
 }
 

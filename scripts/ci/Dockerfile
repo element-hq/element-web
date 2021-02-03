@@ -1,8 +1,7 @@
 # Update on docker hub with the following commands in the directory of this file:
 # docker build -t vectorim/element-web-ci-e2etests-env:latest .
-# docker log
 # docker push vectorim/element-web-ci-e2etests-env:latest
-FROM node:10
+FROM node:14-buster
 RUN apt-get update
 RUN apt-get -y install build-essential python3-dev libffi-dev python-pip python-setuptools sqlite3 libssl-dev python-virtualenv libjpeg-dev libxslt1-dev uuid-runtime
 # dependencies for chrome (installed by puppeteer)

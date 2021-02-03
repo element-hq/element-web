@@ -331,6 +331,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show typing notifications"),
         default: true,
     },
+    "ctrlFForSearch": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: isMac ? _td("Use Command + F to search") : _td("Use Ctrl + F to search"),
+        default: false,
+    },
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
@@ -633,7 +638,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show chat effects"),
         default: true,
     },
-    "Widgets.pinned": {
+    "Widgets.pinned": { // deprecated
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: {},
+    },
+    "Widgets.layout": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
     },

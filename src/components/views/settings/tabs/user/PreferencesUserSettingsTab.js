@@ -52,6 +52,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showImages',
         'showChatEffects',
         'Pill.shouldShowPillAvatar',
+        'ctrlFForSearch',
     ];
 
     static GENERAL_SETTINGS = [

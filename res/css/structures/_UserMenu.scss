@@ -119,14 +119,10 @@ limitations under the License.
     }
 
     &.mx_UserMenu_minimized {
-        .mx_UserMenu_userHeader {
-            .mx_UserMenu_row {
-                justify-content: center;
-            }
+        padding-right: 0px;
 
-            .mx_UserMenu_userAvatarContainer {
-                margin-right: 0;
-            }
+        .mx_UserMenu_userAvatarContainer {
+            margin-right: 0px;
         }
     }
 }

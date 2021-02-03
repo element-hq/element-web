@@ -83,6 +83,8 @@ import {UIFeature} from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { Action } from './dispatcher/actions';
+import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
+import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 
 const CHECK_PSTN_SUPPORT_ATTEMPTS = 3;
 
@@ -131,6 +133,15 @@ export default class CallHandler {
         }
 
         return window.mxCallHandler;
+    }
+
+    /*
+     * Gets the user-facing room associated with a call (call.roomId may be the call "virtual room"
+     * if a voip_mxid_translate_pattern is set in the config)
+     */
+    public static roomIdForCall(call: MatrixCall) {
+        if (!call) return null;
+        return roomForVirtualRoom(call.roomId) || call.roomId;
     }
 
     start() {
@@ -284,11 +295,15 @@ export default class CallHandler {
         // We don't allow placing more than one call per room, but that doesn't mean there
         // can't be more than one, eg. in a glare situation. This checks that the given call
         // is the call we consider 'the' call for its room.
-        const callForThisRoom = this.getCallForRoom(call.roomId);
+        const mappedRoomId = CallHandler.roomIdForCall(call);
+
+        const callForThisRoom = this.getCallForRoom(mappedRoomId);
         return callForThisRoom && call.callId === callForThisRoom.callId;
     }
 
     private setCallListeners(call: MatrixCall) {
+        const mappedRoomId = CallHandler.roomIdForCall(call);
+
         call.on(CallEvent.Error, (err: CallError) => {
             if (!this.matchesCallForThisRoom(call)) return;
 
@@ -318,7 +333,7 @@ export default class CallHandler {
 
             Analytics.trackEvent('voip', 'callHangup');
 
-            this.removeCallForRoom(call.roomId);
+            this.removeCallForRoom(mappedRoomId);
         });
         call.on(CallEvent.State, (newState: CallState, oldState: CallState) => {
             if (!this.matchesCallForThisRoom(call)) return;
@@ -342,8 +357,9 @@ export default class CallHandler {
                     this.play(AudioID.Ringback);
                     break;
                 case CallState.Ended:
+                {
                     Analytics.trackEvent('voip', 'callEnded', 'hangupReason', call.hangupReason);
-                    this.removeCallForRoom(call.roomId);
+                    this.removeCallForRoom(mappedRoomId);
                     if (oldState === CallState.InviteSent && (
                         call.hangupParty === CallParty.Remote ||
                         (call.hangupParty === CallParty.Local && call.hangupReason === CallErrorCode.InviteTimeout)
@@ -375,10 +391,14 @@ export default class CallHandler {
                             title: _t("Answered Elsewhere"),
                             description: _t("The call was answered on another device."),
                         });
-                    } else if (oldState !== CallState.Fledgling) {
+                    } else if (oldState !== CallState.Fledgling && oldState !== CallState.Ringing) {
                         // don't play the end-call sound for calls that never got off the ground
                         this.play(AudioID.CallEnd);
                     }
+
+                    this.logCallStats(call, mappedRoomId);
+                    break;
+                }
             }
         });
         call.on(CallEvent.Replaced, (newCall: MatrixCall) => {
@@ -392,10 +412,46 @@ export default class CallHandler {
                 this.pause(AudioID.Ringback);
             }
 
-            this.calls.set(newCall.roomId, newCall);
+            this.calls.set(mappedRoomId, newCall);
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
+    }
+
+    private async logCallStats(call: MatrixCall, mappedRoomId: string) {
+        const stats = await call.getCurrentCallStats();
+        logger.debug(
+            `Call completed. Call ID: ${call.callId}, virtual room ID: ${call.roomId}, ` +
+            `user-facing room ID: ${mappedRoomId}, direction: ${call.direction}, ` +
+            `our Party ID: ${call.ourPartyId}, hangup party: ${call.hangupParty}, ` +
+            `hangup reason: ${call.hangupReason}`,
+        );
+        logger.debug("Local candidates:");
+        for (const cand of stats.filter(item => item.type === 'local-candidate')) {
+            const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
+            logger.debug(
+                `${cand.id} - type: ${cand.candidateType}, address: ${address}, port: ${cand.port}, ` +
+                `protocol: ${cand.protocol}, relay protocol: ${cand.relayProtocol}, network type: ${cand.networkType}`,
+            );
+        }
+        logger.debug("Remote candidates:");
+        for (const cand of stats.filter(item => item.type === 'remote-candidate')) {
+            const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
+            logger.debug(
+                `${cand.id} - type: ${cand.candidateType}, address: ${address}, port: ${cand.port}, ` +
+                `protocol: ${cand.protocol}`,
+            );
+        }
+        logger.debug("Candidate pairs:");
+        for (const pair of stats.filter(item => item.type === 'candidate-pair')) {
+            logger.debug(
+                `${pair.localCandidateId} / ${pair.remoteCandidateId} - state: ${pair.state}, ` +
+                `nominated: ${pair.nominated}, ` +
+                `requests sent ${pair.requestsSent}, requests received  ${pair.requestsReceived},  ` +
+                `responses received: ${pair.responsesReceived}, responses sent: ${pair.responsesSent}, ` +
+                `bytes received: ${pair.bytesReceived}, bytes sent: ${pair.bytesSent}, `,
+            );
+        }
     }
 
     private setCallAudioElement(call: MatrixCall) {
@@ -404,13 +460,15 @@ export default class CallHandler {
     }
 
     private setCallState(call: MatrixCall, status: CallState) {
+        const mappedRoomId = CallHandler.roomIdForCall(call);
+
         console.log(
-            `Call state in ${call.roomId} changed to ${status}`,
+            `Call state in ${mappedRoomId} changed to ${status}`,
         );
 
         dis.dispatch({
             action: 'call_state',
-            room_id: call.roomId,
+            room_id: mappedRoomId,
             state: status,
         });
     }
@@ -477,14 +535,20 @@ export default class CallHandler {
         }, null, true);
     }
 
-    private placeCall(
+    private async placeCall(
         roomId: string, type: PlaceCallType,
         localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
     ) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
         CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
-        const call = createNewMatrixCall(MatrixClientPeg.get(), roomId);
+
+        const mappedRoomId = (await getOrCreateVirtualRoomForRoom(roomId)) || roomId;
+        logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
+
+        const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
+
         this.calls.set(roomId, call);
+
         this.setCallListeners(call);
         this.setCallAudioElement(call);
 
@@ -518,6 +582,12 @@ export default class CallHandler {
         switch (payload.action) {
             case 'place_call':
                 {
+                    // We might be using managed hybrid widgets
+                    if (isManagedHybridWidgetEnabled()) {
+                        addManagedHybridWidget(payload.room_id);
+                        return;
+                    }
+
                     // if the runtime env doesn't do VoIP, whine.
                     if (!MatrixClientPeg.get().supportsVoip()) {
                         Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
@@ -586,13 +656,14 @@ export default class CallHandler {
 
                     const call = payload.call as MatrixCall;
 
-                    if (this.getCallForRoom(call.roomId)) {
+                    const mappedRoomId = CallHandler.roomIdForCall(call);
+                    if (this.getCallForRoom(mappedRoomId)) {
                         // ignore multiple incoming calls to the same room
                         return;
                     }
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
-                    this.calls.set(call.roomId, call)
+                    this.calls.set(mappedRoomId, call)
                     this.setCallListeners(call);
                 }
                 break;
