@@ -2952,5 +2952,14 @@
     "Converts the DM to a room": "Převede přímou zprávu na místnost",
     "Converts the room to a DM": "Převede místnost na přímou zprávu",
     "Mobile experience": "Zážitek na mobilních zařízeních",
-    "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web je v současné době experimentální na mobilních zařízeních. Nativní aplikace se doporučují pro většinu lidí."
+    "Element Web is currently experimental on mobile. The native apps are recommended for most people.": "Element Web je v současné době experimentální na mobilních zařízeních. Nativní aplikace se doporučují pro většinu lidí.",
+    "Use app for a better experience": "Pro lepší zážitek použijte aplikaci",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web je experimentální na mobilních zařízeních. Pro lepší zážitek a nejnovější funkce použijte naši bezplatnou nativní aplikaci.",
+    "Use app": "Použijte aplikaci",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Při ověřování vaší identity se něco pokazilo. Zrušte to a zkuste to znovu.",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Váš domovský server odmítl váš pokus o přihlášení. Může to být způsobeno tím, že věci trvají příliš dlouho. Prosím zkuste to znovu. Pokud to bude pokračovat, obraťte se na správce domovského serveru.",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Váš domovský server nebyl dosažitelný a nemohl vás přihlásit. Zkuste to prosím znovu. Pokud to bude pokračovat, obraťte se na správce domovského serveru.",
+    "Try again": "Zkuste to znovu",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Požádali jsme prohlížeč, aby si pamatoval, který domovský server používáte k přihlášení, ale váš prohlížeč to bohužel zapomněl. Přejděte na přihlašovací stránku a zkuste to znovu.",
+    "We couldn't log you in": "Nemohli jsme vás přihlásit"
 }
