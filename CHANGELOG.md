@@ -1,3 +1,47 @@
+Changes in [1.7.19](https://github.com/vector-im/element-web/releases/tag/v1.7.19) (2021-02-03)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.19-rc.1...v1.7.19)
+
+ * Upgrade to React SDK 3.13.0 and JS SDK 9.6.0
+ * [Release] Upgrade matrix-widget-api
+   [\#16348](https://github.com/vector-im/element-web/pull/16348)
+
+Changes in [1.7.19-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.19-rc.1) (2021-01-29)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.18...v1.7.19-rc.1)
+
+ * Upgrade to React SDK 3.13.0-rc.1 and JS SDK 9.6.0-rc.1
+ * Translations update from Weblate
+   [\#16314](https://github.com/vector-im/element-web/pull/16314)
+ * Use history replaceState instead of redirect for SSO flow
+   [\#16292](https://github.com/vector-im/element-web/pull/16292)
+ * Document the mobile guide toast option
+   [\#16301](https://github.com/vector-im/element-web/pull/16301)
+ * Update widget-api to beta.12
+   [\#16303](https://github.com/vector-im/element-web/pull/16303)
+ * Upgrade deps 2021-01
+   [\#16294](https://github.com/vector-im/element-web/pull/16294)
+ * Move to newer base image for Docker builds
+   [\#16275](https://github.com/vector-im/element-web/pull/16275)
+ * Docs for the VoIP translate pattern option
+   [\#16236](https://github.com/vector-im/element-web/pull/16236)
+ * Fix Riot->Element in permalinkPrefix docs
+   [\#16227](https://github.com/vector-im/element-web/pull/16227)
+ * Supply server_name for optional federation-capable Jitsi auth
+   [\#16215](https://github.com/vector-im/element-web/pull/16215)
+ * Fix Widget API version confusion
+   [\#16212](https://github.com/vector-im/element-web/pull/16212)
+ * Add Hebrew language
+   [\#16210](https://github.com/vector-im/element-web/pull/16210)
+ * Update widget-api to beta 11
+   [\#16177](https://github.com/vector-im/element-web/pull/16177)
+ * Fix develop Docker builds
+   [\#16192](https://github.com/vector-im/element-web/pull/16192)
+ * Skip the service worker for Electron
+   [\#16157](https://github.com/vector-im/element-web/pull/16157)
+ * Use isolated IPC API
+   [\#16137](https://github.com/vector-im/element-web/pull/16137)
+
 Changes in [1.7.18](https://github.com/vector-im/element-web/releases/tag/v1.7.18) (2021-01-26)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.17...v1.7.18)
