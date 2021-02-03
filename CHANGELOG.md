@@ -1,3 +1,19 @@
+Changes in [3.13.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.13.0) (2021-02-03)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.13.0-rc.1...v3.13.0)
+
+ * Upgrade to JS SDK 9.6.0
+ * [Release] Fix flair height after accent changes
+   [\#5612](https://github.com/matrix-org/matrix-react-sdk/pull/5612)
+ * [Release] Iterate Social Logins work around edge cases and branding
+   [\#5610](https://github.com/matrix-org/matrix-react-sdk/pull/5610)
+ * [Release] Lock widget room ID when added
+   [\#5608](https://github.com/matrix-org/matrix-react-sdk/pull/5608)
+ * [Release] Better errors for SSO failures
+   [\#5606](https://github.com/matrix-org/matrix-react-sdk/pull/5606)
+ * [Release] Fix RoomView re-mounting breaking peeking
+   [\#5603](https://github.com/matrix-org/matrix-react-sdk/pull/5603)
+
 Changes in [3.13.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.13.0-rc.1) (2021-01-29)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.12.1...v3.13.0-rc.1)
