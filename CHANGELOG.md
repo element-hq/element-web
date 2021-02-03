@@ -1,3 +1,11 @@
+Changes in [1.7.19](https://github.com/vector-im/element-web/releases/tag/v1.7.19) (2021-02-03)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.19-rc.1...v1.7.19)
+
+ * Upgrade to React SDK 3.13.0 and JS SDK 9.6.0
+ * [Release] Upgrade matrix-widget-api
+   [\#16348](https://github.com/vector-im/element-web/pull/16348)
+
 Changes in [1.7.19-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.19-rc.1) (2021-01-29)
 =========================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.18...v1.7.19-rc.1)
