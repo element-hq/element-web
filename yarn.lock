@@ -7526,21 +7526,6 @@ matrix-js-sdk@9.6.0:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
-matrix-js-sdk@9.6.0-rc.1:
-  version "9.6.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-9.6.0-rc.1.tgz#f5dd325b9b5c5b3fdf5199351ab51ecab1b2113c"
-  integrity sha512-Da5C4uTm7LRfjyb9pM7dbmkwFVVYH8HdjRa7rpaRP9elHwptJmAeoKEzPU5HcPkFFNQbBy11Kq+58IgKcVpwKA==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -7549,10 +7534,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.13.0-rc.1:
-  version "3.13.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.13.0-rc.1.tgz#8f4d47926e5eb339843ee6e32405006649a00ecd"
-  integrity sha512-/TDsGODmZG22WkimLwIS7nHqt5n2VVPgw/oZwhUbWJpg9vBcZHKQsH6vUngbqQcZP6F6o8pOX0L+WkNfkpd8gg==
+matrix-react-sdk@3.13.0:
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.13.0.tgz#6c34adc190338434849f946480e323d6d0c6f02d"
+  integrity sha512-G+9uLf07qIrpkLgtdhHkKhbNRvg6lX2xzXNwoi0pIn5L4MZmCrEmuixyCF0BVd8o8sYN2QMPeVTVSvLAl3BQHg==
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
@@ -7580,8 +7565,8 @@ matrix-react-sdk@3.13.0-rc.1:
     katex "^0.12.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.20"
-    matrix-js-sdk "9.6.0-rc.1"
-    matrix-widget-api "^0.1.0-beta.12"
+    matrix-js-sdk "9.6.0"
+    matrix-widget-api "^0.1.0-beta.13"
     minimist "^1.2.5"
     pako "^2.0.3"
     parse5 "^6.0.1"
@@ -7611,7 +7596,7 @@ matrix-react-test-utils@^0.2.2:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
-matrix-widget-api@^0.1.0-beta.12, matrix-widget-api@^0.1.0-beta.13:
+matrix-widget-api@^0.1.0-beta.13:
   version "0.1.0-beta.13"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.13.tgz#ebddc83eaef39bbb87b621a02a35902e1a29b9ef"
   integrity sha512-DJAvuX2E7gxc/a9rtJPDh17ba9xGIOAoBHcWirNTN3KGodzsrZ+Ns+M/BREFWMwGS5yEBZko5eq7uhXStEbnyQ==
