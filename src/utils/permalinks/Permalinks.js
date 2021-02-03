@@ -414,8 +414,8 @@ export function parsePermalink(fullUrl: string): PermalinkParts {
  */
 export function parseAppLocalLink(localLink: string): PermalinkParts {
     try {
-        const segments = localLink.replace("#/", "").split("/");
-        return ElementPermalinkConstructor.parseLinkParts(segments);
+        const segments = localLink.replace("#/", "");
+        return ElementPermalinkConstructor.parseAppRoute(segments);
     } catch (e) {
         // Ignore failures
     }
