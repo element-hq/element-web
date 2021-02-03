@@ -92,6 +92,11 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
             throw new Error("URL is missing parts");
         }
 
+        // Split optional query out of last part
+        const [lastPartMaybeWithQuery] = parts.splice(-1, 1);
+        const [lastPart, query = ""] = lastPartMaybeWithQuery.split("?");
+        parts.push(lastPart);
+
         const entityType = parts[0];
         const entity = parts[1];
         if (entityType === 'user') {
@@ -101,16 +106,9 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
             // Probably a group, no further parsing needed.
             return PermalinkParts.forGroup(entity);
         } else if (entityType === 'room') {
-            // rejoin the rest because v3 events can have slashes (annoyingly)
-            const eventIdAndQuery = parts.length > 2 ? parts.slice(2).join('/') : "";
-            const secondaryParts = eventIdAndQuery.split("?");
-
-            const eventId = secondaryParts[0];
-            const query = secondaryParts.length > 1 ? secondaryParts[1] : "";
-
-            // TODO: Verify Element works with via args
-            const via = query.split("via=").filter(p => !!p);
-
+            // Rejoin the rest because v3 events can have slashes (annoyingly)
+            const eventId = parts.length > 2 ? parts.slice(2).join('/') : "";
+            const via = query.split(/&?via=/).filter(p => !!p);
             return PermalinkParts.forEvent(entity, eventId, via);
         } else {
             throw new Error("Unknown entity type in permalink");
