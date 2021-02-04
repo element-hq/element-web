@@ -1519,5 +1519,8 @@
     "Show avatars in user and room mentions": "ユーザーと部屋でのメンションにアバターを表示する",
     "Use Ctrl + F to search": "Ctrl + F で検索する",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "セッションにアクセスできなくなる場合に備えて、アカウントデータと暗号鍵をバックアップします。鍵は一意のセキュリティキーで保護されます。",
-    "New version available. <a>Update now.</a>": "新しいバージョンが利用可能です。<a>今すぐ更新</a>"
+    "New version available. <a>Update now.</a>": "新しいバージョンが利用可能です。<a>今すぐ更新</a>",
+    "Sign In": "サインイン",
+    "Create Account": "アカウントの作成",
+    "Explore rooms": "部屋を探す"
 }
