@@ -2315,5 +2315,6 @@
     "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Uw thuisserver wees uw aanmeldingspoging af. Dit kan zijn doordat het te lang heeft geduurd. Probeer het opnieuw. Als dit probleem zich blijft voordoen, neem contact op met de beheerder van uw thuisserver.",
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Uw thuisserver was onbereikbaar en kon u niet aanmelden, probeer het opnieuw. Wanneer dit probleem zich blijft voordoen, neem contact op met de beheerder van uw thuisserver.",
     "Try again": "Probeer opnieuw",
-    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "De browser is verzocht uw thuisserver te onthouden die u gebruikt om zich aan te melden, maar is deze vergeten. Ga naar de aanmeldpagina en probeer het opnieuw."
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "De browser is verzocht uw thuisserver te onthouden die u gebruikt om zich aan te melden, maar is deze vergeten. Ga naar de aanmeldpagina en probeer het opnieuw.",
+    "We couldn't log you in": "We konden u niet aanmelden"
 }
