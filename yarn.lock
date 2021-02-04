@@ -7533,10 +7533,9 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.13.1:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.13.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.13.1.tgz#40256dda0d9b0e091ce01d1e48565f6aa93ad35d"
-  integrity sha512-VFcZSAO6P+afjKKJylgsp9PwjBf36xjaWN3l+8WaGqyZDKyJdYOjoU4UZE3O9s/W9YTIcb5UUYyq1y0sunJjog==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/e9740f5a693861fb993bf9b85560d6c25784bca9"
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
