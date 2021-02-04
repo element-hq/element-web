@@ -58,8 +58,11 @@ and thus allowed.
 To install Element as a desktop application, see [Running as a desktop
 app](#running-as-a-desktop-app) below.
 
-Important Security Note
-=======================
+Important Security Notes
+========================
+
+Separate domains
+----------------
 
 We do not recommend running Element from the same domain name as your Matrix
 homeserver.  The reason is the risk of XSS (cross-site-scripting)
@@ -70,6 +73,45 @@ access to Element (or other apps) due to sharing the same domain.
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
 https://github.com/vector-im/element-web/issues/1977 for more details.
+
+Configuration best practices
+----------------------------
+
+Unless you have special requirements, you will want to add the following to
+your web server configuration when hosting Element Web:
+
+- The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+  framed and protect from [clickjacking][owasp-clickjacking].
+- The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
+  header, as the modern replacement for `X-Frame-Options` (though both should be
+  included since not all browsers support it yet, see
+  [this][owasp-clickjacking-csp]).
+- The `X-Content-Type-Options: nosniff` header, to [disable MIME
+  sniffing][mime-sniffing].
+- The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
+  legacy browsers.
+
+[mime-sniffing]:
+<https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing>
+
+[owasp-clickjacking-csp]:
+<https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples>
+
+[owasp-clickjacking]:
+<https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html>
+
+If you are using nginx, this would look something like the following:
+
+```
+add_header X-Frame-Options SAMEORIGIN;
+add_header X-Content-Type-Options nosniff;
+add_header X-XSS-Protection "1; mode=block";
+add_header Content-Security-Policy "frame-ancestors 'none'";
+```
+
+Note: In case you are already setting a `Content-Security-Policy` header
+elsewhere, you should modify it to include the `frame-ancestors` directive
+instead of adding that last line.
 
 Building From Source
 ====================
@@ -99,7 +141,8 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
 Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
 which will build all the necessary files into the `webapp` directory. The version of Element
 will not appear in Settings without using the dist script. You can then mount the
-`webapp` directory on your webserver to actually serve up the app, which is entirely static content.
+`webapp` directory on your web server to actually serve up the app, which is
+entirely static content.
 
 Running as a Desktop app
 ========================
