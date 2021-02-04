@@ -26,7 +26,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile.mx_EventTile_info {
-    padding-top: 0px;
+    padding-top: 1px;
 }
 
 .mx_EventTile_avatar {
@@ -37,7 +37,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
-    top: $font-8px;
+    top: $font-6px;
     left: $left-gutter;
 }
 
