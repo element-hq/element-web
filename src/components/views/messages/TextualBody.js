@@ -109,7 +109,7 @@ export default class TextualBody extends React.Component {
             }
             // Highlight code
             const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
-            if (codes.length >0) {
+            if (codes.length > 0) {
                 for (let i = 0; i < codes.length; i++) {
                     /* Do this asynchronously: parsing code takes time and we don't
                      * need to block the DOM update on it. */
