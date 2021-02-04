@@ -1378,14 +1378,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Lifecycle.softLogout();
                 return;
             }
-            
+
             Modal.closeCurrentModal("User has been logged out.");
 
             Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
             });
-            
+
             dis.dispatch({
                 action: 'logout',
             });
