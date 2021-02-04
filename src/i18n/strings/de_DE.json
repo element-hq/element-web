@@ -7,7 +7,7 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dezentrale, verschlüsselte Chat- &amp; Kollaborationslösung mittels [matrix]",
     "Sign In": "Anmelden",
     "Create Account": "Account erstellen",
-    "Explore rooms": "Erkunde Räume",
+    "Explore rooms": "Räume erkunden",
     "Unexpected error preparing the app. See console for details.": "Unerwarteter Fehler bei der Vorbereitung der App. Siehe Konsole für Details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ungültige Konfiguration: Es kann nur eine der Optionen default_server_config, default_server_name oder default_hs_url angegeben werden.",
     "Invalid configuration: no default server specified.": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
