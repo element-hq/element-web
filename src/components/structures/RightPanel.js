@@ -30,7 +30,6 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {Action} from "../../dispatcher/actions";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -206,7 +205,7 @@ export default class RightPanel extends React.Component {
             this.state.verificationRequest.cancel();
         } else {
             // the RightPanelStore has no way of knowing which mode room/group it is in, so we handle closing here
-            defaultDispatcher.dispatch({
+            dis.dispatch({
                 action: Action.ToggleRightPanel,
                 type: this.props.groupId ? "group" : "room",
             });
