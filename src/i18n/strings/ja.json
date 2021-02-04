@@ -8,8 +8,8 @@
     "Unexpected error preparing the app. See console for details.": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
     "Invalid configuration: no default server specified.": "不正な設定です：デフォルトのサーバーが設定されていません。",
     "Sign In": "サインイン",
-    "Create Account": "アカウント作成",
-    "Explore rooms": "部屋を探索する",
+    "Create Account": "アカウントの作成",
+    "Explore rooms": "部屋を探す",
     "The message from the parser is: %(message)s": "パーザーのメッセージ: %(message)s",
     "Invalid JSON": "妥当でないJSON",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "無効な設定: default_server_config、default_server_name、または default_hs_urlのいずれか一つのみが指定できます。",
@@ -31,5 +31,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読込してください。",
     "Your browser can't run %(brand)s": "このブラウザでは%(brand)sが動きません",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)sはブラウザの高度な機能を使う必要がありますが、このブラウザではその機能がサポートされていないようです。",
-    "Powered by Matrix": "Powered by Matrix"
+    "Powered by Matrix": "Powered by Matrix",
+    "Previous/next recently visited room or community": "最近利用したルームまたはコミュニティ"
 }
