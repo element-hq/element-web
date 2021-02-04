@@ -64,10 +64,14 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 this.onAccountDetailsRequest();
                 break;
             case PostmessageAction.Maximize:
-                this.maximizeDialog();
+                this.setState({
+                    minimized: false,
+                });
                 break;
             case PostmessageAction.Minimize:
-                this.minimizeDialog();
+                this.setState({
+                    minimized: true,
+                });
                 break;
             case PostmessageAction.SetupComplete:
                 // Set as completed but let the user close the modal themselves
@@ -82,16 +86,22 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     }
 
     private maximizeDialog = () => {
-        if (this.state.minimized) {
-            this.setState({
-                minimized: false,
-            });
-        }
+        this.setState({
+            minimized: false,
+        });
+        // Send this action to the iframe so it can act accordingly
+        this.sendMessage({
+            action: PostmessageAction.Maximize,
+        });
     }
 
     private minimizeDialog = () => {
         this.setState({
             minimized: true,
+        });
+        // Send this action to the iframe so it can act accordingly
+        this.sendMessage({
+            action: PostmessageAction.Minimize,
         });
     }
 

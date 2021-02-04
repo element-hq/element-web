@@ -38,7 +38,7 @@ export interface IPostmessageRequestData {
 
 export interface IPostmessageResponseData {
     action: PostmessageAction;
-    account: IAccountData;
+    account?: IAccountData;
 }
 
 export interface IPostmessage {
