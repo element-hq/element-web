@@ -74,8 +74,6 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                 });
                 break;
             case PostmessageAction.SetupComplete:
-                // Set as completed but let the user close the modal themselves
-                // so they have time to finish reading any information
                 this.setState({
                     completed: true,
                 });
