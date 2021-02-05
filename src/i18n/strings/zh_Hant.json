@@ -3048,5 +3048,6 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "您的家伺服器無法存取，所以無法讓您登入。請重試。如果此情況持續，請聯絡您的家伺服器管理員。",
     "Try again": "重試",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "我們要求瀏覽器記住它讓您登入時使用的家伺服器，但不幸的是，您的瀏覽器忘了它。到登入頁面然後重試。",
-    "We couldn't log you in": "我們無法讓您登入"
+    "We couldn't log you in": "我們無法讓您登入",
+    "Show stickers button": "顯示貼圖案按鈕"
 }
