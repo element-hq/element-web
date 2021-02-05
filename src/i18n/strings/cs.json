@@ -2961,5 +2961,6 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Váš domovský server nebyl dosažitelný a nemohl vás přihlásit. Zkuste to prosím znovu. Pokud to bude pokračovat, obraťte se na správce domovského serveru.",
     "Try again": "Zkuste to znovu",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Požádali jsme prohlížeč, aby si pamatoval, který domovský server používáte k přihlášení, ale váš prohlížeč to bohužel zapomněl. Přejděte na přihlašovací stránku a zkuste to znovu.",
-    "We couldn't log you in": "Nemohli jsme vás přihlásit"
+    "We couldn't log you in": "Nemohli jsme vás přihlásit",
+    "Show stickers button": "Tlačítko Zobrazit nálepky"
 }
