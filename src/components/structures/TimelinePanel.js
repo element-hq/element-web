@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import SettingsStore from "../../settings/SettingsStore";
-import {Layout} from "../../settings/Layout";
+import {LayoutPropType} from "../../settings/Layout";
 import React, {createRef} from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
@@ -113,7 +113,7 @@ class TimelinePanel extends React.Component {
         showReactions: PropTypes.bool,
 
         // which layout to use
-        layout: Layout,
+        layout: LayoutPropType,
     }
 
     // a map from room id to read marker event timestamp

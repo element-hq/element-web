@@ -27,7 +27,7 @@ import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
+import {Layout, LayoutPropType} from "../../../settings/Layout";
 import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -227,7 +227,7 @@ export default class EventTile extends React.Component {
         showReactions: PropTypes.bool,
 
         // which layout to use
-        layout: Layout,
+        layout: LayoutPropType,
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,

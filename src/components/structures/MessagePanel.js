@@ -26,7 +26,7 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
-import {Layout} from "../../settings/Layout";
+import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
@@ -137,7 +137,7 @@ export default class MessagePanel extends React.Component {
         showReactions: PropTypes.bool,
 
         // which layout to use
-        layout: Layout,
+        layout: LayoutPropType,
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,

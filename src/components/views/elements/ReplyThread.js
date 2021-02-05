@@ -24,7 +24,7 @@ import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
+import {LayoutPropType} from "../../../settings/Layout";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
@@ -43,7 +43,7 @@ export default class ReplyThread extends React.Component {
         onHeightChanged: PropTypes.func.isRequired,
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
         // Specifies which layout to use.
-        layout: Layout,
+        layout: LayoutPropType,
     };
 
     static contextType = MatrixClientContext;
