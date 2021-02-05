@@ -31,7 +31,7 @@ Getting Started
 ===============
 
 The easiest way to test Element is to just use the hosted copy at https://app.element.io.
-The `develop` branch is continuously deployed by Jenkins at https://develop.element.io
+The `develop` branch is continuously deployed to https://develop.element.io
 for those who like living dangerously.
 
 To host your own copy of Element, the quickest bet is to use a pre-built
