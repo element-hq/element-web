@@ -111,8 +111,8 @@ export default class TextualBody extends React.Component {
             const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
             if (codes.length > 0) {
                 for (let i = 0; i < codes.length; i++) {
-                    /* Do this asynchronously: parsing code takes time and we don't
-                     * need to block the DOM update on it. */
+                    // Do this asynchronously: parsing code takes time and we don't
+                    // need to block the DOM update on it.
                     setTimeout(() => {
                         if (this._unmounted) return;
                         for (let i = 0; i < pres.length; i++) {
@@ -125,8 +125,8 @@ export default class TextualBody extends React.Component {
     }
 
     _addCodeExpansionButton(div, pre) {
-        /* Calculate how many percent does the pre element take up.
-         * If it's less than 30% we don't add the expansion button. */
+        // Calculate how many percent does the pre element take up.
+        // If it's less than 30% we don't add the expansion button.
         const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
         if (percentageOfViewport < 30) return;
 
@@ -160,8 +160,8 @@ export default class TextualBody extends React.Component {
         const button = document.createElement("span");
         button.className = "mx_EventTile_button mx_EventTile_copyButton ";
 
-        /* Check if expansion button exists. If so
-         * we put the copy button to the bottom */
+        // Check if expansion button exists. If so
+        // we put the copy button to the bottom
         const expansionButtonExists = div.getElementsByClassName("mx_EventTile_button");
         if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
