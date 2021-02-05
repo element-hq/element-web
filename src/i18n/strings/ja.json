@@ -124,7 +124,7 @@
     "Advanced notification settings": "通知の詳細設定",
     "Notification targets": "通知先",
     "You are not receiving desktop notifications": "デスクトップ通知を受け取っていません",
-    "Update": "アップデート",
+    "Update": "更新",
     "Unable to fetch notification target list": "通知先リストを取得できませんでした",
     "Uploaded on %(date)s by %(user)s": "このファイルは %(date)s に %(user)s によりアップロードされました",
     "Send Custom Event": "カスタムイベントを送信する",
@@ -1522,5 +1522,9 @@
     "New version available. <a>Update now.</a>": "新しいバージョンが利用可能です。<a>今すぐ更新</a>",
     "Sign In": "サインイン",
     "Create Account": "アカウントの作成",
-    "Explore rooms": "部屋を探す"
+    "Explore rooms": "部屋を探す",
+    "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "まず、<existingIssuesLink>Github で既知のバグ</existingIssuesLink>を確認してください。また掲載されていない新しいバグを発見した場合は<newIssueLink>報告してください</newIssueLink>。",
+    "Report a bug": "バグの報告",
+    "Update %(brand)s": "%(brand)s の更新",
+    "New version of %(brand)s is available": "%(brand)s の新バージョンが利用可能です"
 }
