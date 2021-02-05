@@ -3028,5 +3028,22 @@
     "Channel: <channelLink/>": "Canale: <channelLink/>",
     "Workspace: <networkLink/>": "Spazio di lavoro: <networkLink/>",
     "Change which room, message, or user you're viewing": "Cambia quale stanza, messaggio o utente stai vedendo",
-    "%(senderName)s has updated the widget layout": "%(senderName)s ha aggiornato la disposizione del widget"
+    "%(senderName)s has updated the widget layout": "%(senderName)s ha aggiornato la disposizione del widget",
+    "Converts the room to a DM": "Converte la stanza in un MD",
+    "Converts the DM to a room": "Converte il MD in una stanza",
+    "Use Command + F to search": "Usa Command + F per cercare",
+    "Use Ctrl + F to search": "Usa Ctrl + F per cercare",
+    "Use app for a better experience": "Usa l'app per un'esperienza migliore",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web è sperimentale su mobile. Per un'esperienza migliore e le ultime funzionalità, usa la nostra app nativa gratuita.",
+    "Use app": "Usa l'app",
+    "Search (must be enabled)": "Cerca (deve essere attivato)",
+    "Allow this widget to verify your identity": "Permetti a questo widget di verificare la tua identità",
+    "The widget will verify your user ID, but won't be able to perform actions for you:": "Il widget verificherà il tuo ID utente, ma non sarà un grado di eseguire azioni per te:",
+    "Remember this": "Ricordalo",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Qualcosa è andato storto confermando la tua identità. Annulla e riprova.",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Il tuo homeserver ha rifiutato il tuo tentativo di accesso. Potrebbe essere causato da tempi troppo lunghi. Riprova. Se il problema persiste, contatta l'amministratore dell'homeserver.",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Il tuo homeserver è irraggiungibile e non ha potuto farti accedere. Riprova. Se il problema persiste, contatta l'amministratore dell'homeserver.",
+    "Try again": "Riprova",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova.",
+    "We couldn't log you in": "Non abbiamo potuto farti accedere"
 }
