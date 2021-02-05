@@ -403,6 +403,7 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
+        dis.dispatch({action: "scroll_to_bottom"});
     }
 
     componentWillUnmount() {
