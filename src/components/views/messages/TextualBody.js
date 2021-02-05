@@ -147,6 +147,10 @@ export default class TextualBody extends React.Component {
                 pre.className = "mx_EventTile_collapsedCodeBlock";
                 button.className += "mx_EventTile_expandButton";
             }
+
+            // By expanding/collapsing we changed
+            // the height, therefore we call this
+            this.props.onHeightChanged();
         };
 
         div.appendChild(button);
