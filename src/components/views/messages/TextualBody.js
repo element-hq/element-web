@@ -96,8 +96,8 @@ export default class TextualBody extends React.Component {
             const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
             if (pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
-                    /* Wrap a div around <pre> so that the copy button can be correctly positioned
-                     * when the <pre> overflows and is scrolled horizontally. */
+                    // Wrap a div around <pre> so that the copy button can be correctly positioned
+                    // when the <pre> overflows and is scrolled horizontally.
                     const div = this._wrapInDiv(pres[i]);
                     this._handleCodeBlockExpansion(pres[i]);
                     this._addCodeExpansionButton(div, pres[i]);
