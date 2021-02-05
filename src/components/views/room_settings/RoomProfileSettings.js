@@ -81,7 +81,11 @@ export default class RoomProfileSettings extends React.Component {
 
         if (!this.state.enableProfileSave) return;
         this._removeAvatar();
-        this.setState({enableProfileSave: false, displayName: this.state.originalDisplayName});
+        this.setState({
+            enableProfileSave: false,
+            displayName: this.state.originalDisplayName,
+            topic: this.state.originalTopic,
+        });
     };
 
     _saveProfile = async (e) => {
@@ -164,7 +168,7 @@ export default class RoomProfileSettings extends React.Component {
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
 
         let profileSettingsButtons;
-        if (this.state.canSetTopic && this.state.canSetName) {
+        if (this.state.canSetTopic || this.state.canSetName) {
             profileSettingsButtons = (
                 <div className="mx_ProfileSettings_buttons">
                     <AccessibleButton
