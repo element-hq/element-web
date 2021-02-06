@@ -23,6 +23,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {isNullOrUndefined} from "matrix-js-sdk/src/utils";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -61,6 +62,9 @@ export default class PersistedElement extends React.Component {
         // Any PersistedElements with the same persistKey will use
         // the same DOM container.
         persistKey: PropTypes.string.isRequired,
+
+        // z-index for the element. Defaults to 9.
+        zIndex: PropTypes.number,
     };
 
     constructor() {
@@ -165,7 +169,7 @@ export default class PersistedElement extends React.Component {
 
         const parentRect = parent.getBoundingClientRect();
         Object.assign(child.style, {
-            zIndex: 9,
+            zIndex: isNullOrUndefined(this.props.zIndex) ? 9 : this.props.zIndex,
             position: 'absolute',
             top: parentRect.top + 'px',
             left: parentRect.left + 'px',

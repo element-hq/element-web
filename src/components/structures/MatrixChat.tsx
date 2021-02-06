@@ -755,6 +755,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'on_logged_in':
                 if (
+                    // Skip this handling for token login as that always calls onLoggedIn itself
+                    !this.tokenLogin &&
                     !Lifecycle.isSoftLogout() &&
                     this.state.view !== Views.LOGIN &&
                     this.state.view !== Views.REGISTER &&
@@ -1652,9 +1654,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
             let threepidInvite: IThreepidInvite;
+            // if we landed here from a 3PID invite, persist it
             if (params.signurl && params.email) {
                 threepidInvite = ThreepidInviteStore.instance
                     .storeInvite(roomString, params as IThreepidInviteWireFormat);
+            }
+            // otherwise check that this room doesn't already have a known invite
+            if (!threepidInvite) {
+                const invites = ThreepidInviteStore.instance.getInvites();
+                threepidInvite = invites.find(invite => invite.roomId === roomString);
             }
 
             // on our URLs there might be a ?via=matrix.org or similar to help

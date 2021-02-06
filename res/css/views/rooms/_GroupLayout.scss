@@ -34,7 +34,7 @@ $left-gutter: 64px;
 
         .mx_MessageTimestamp {
             position: absolute;
-            width: 46px; /* 8 + 30 (avatar) + 8 */
+            width: $MessageTimestamp_width;
         }
 
         .mx_EventTile_line, .mx_EventTile_reply {
