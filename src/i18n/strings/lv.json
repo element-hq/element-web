@@ -30,5 +30,6 @@
     "Open": "Atvērt",
     "Download Completed": "Lejupielāde pabeigta",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsu Element konfigurācija satur kļūdainu JSON. Lūdzu, salabojiet problēmu un pārlādējiet lapu.",
-    "Your Element is misconfigured": "Jūsu Element ir nokonfigurēts kļūdaini"
+    "Your Element is misconfigured": "Jūsu Element ir nokonfigurēts kļūdaini",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)"
 }
