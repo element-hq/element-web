@@ -3045,5 +3045,6 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Non temos acceso ao teu servidor de inicio e non puidemos conectarte. Inténtao outra vez. Se persiste o problema, contacta coa administración do servidor.",
     "Try again": "Intentar outra vez",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Pedíramoslle ao teu navegador que lembrase o teu servidor de inicio para conectarte, pero o navegador esqueceuno. Vaite á páxina de conexión e inténtao outra vez.",
-    "We couldn't log you in": "Non puidemos conectarte"
+    "We couldn't log you in": "Non puidemos conectarte",
+    "Show stickers button": "Mostrar botón dos adhesivos"
 }
