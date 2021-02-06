@@ -226,7 +226,7 @@ class Pill extends React.Component {
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
-                    linkText = room.name;
+                    linkText = room.name || resource;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
