@@ -215,10 +215,12 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     _createResizer() {
         let size;
+        let collapsed;
         const collapseConfig: ICollapseConfig = {
             toggleSize: 260 - 50,
-            onCollapsed: (collapsed) => {
-                if (collapsed) {
+            onCollapsed: (_collapsed) => {
+                collapsed = _collapsed;
+                if (_collapsed) {
                     dis.dispatch({action: "hide_left_panel"}, true);
                     window.localStorage.setItem("mx_lhs_size", '0');
                 } else {
@@ -233,7 +235,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 this.props.resizeNotifier.startResizing();
             },
             onResizeStop: () => {
-                window.localStorage.setItem("mx_lhs_size", '' + size);
+                if (!collapsed) window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.stopResizing();
             },
         };
@@ -421,6 +423,14 @@ class LoggedInView extends React.Component<IProps, IState> {
                 if (ctrlCmdOnly) {
                     dis.dispatch({
                         action: 'focus_room_filter',
+                    });
+                    handled = true;
+                }
+                break;
+            case Key.F:
+                if (ctrlCmdOnly && SettingsStore.getValue("ctrlFForSearch")) {
+                    dis.dispatch({
+                        action: 'focus_search',
                     });
                     handled = true;
                 }

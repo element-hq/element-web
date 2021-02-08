@@ -194,7 +194,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
-        await new Promise(resolve => this.setState({}, resolve));
+        await new Promise<void>(resolve => this.setState({}, resolve));
 
         if (this.allFieldsValid()) {
             return true;

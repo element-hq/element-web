@@ -58,7 +58,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
         </span>;
 
         const newMethodDetected = <p>{_t(
-            "A new recovery passphrase and key for Secure Messages have been detected.",
+            "A new Security Phrase and key for Secure Messages have been detected.",
         )}</p>;
 
         const hackWarning = <p className="warning">{_t(

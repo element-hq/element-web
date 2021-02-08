@@ -235,7 +235,7 @@ export async function downloadBugReport(opts: IOpts = {}) {
     let i = 0;
     for (const [key, value] of body.entries()) {
         if (key === 'compressed-log') {
-            await new Promise((resolve => {
+            await new Promise<void>((resolve => {
                 const reader = new FileReader();
                 reader.addEventListener('loadend', ev => {
                     tape.append(`log-${i++}.log`, new TextDecoder().decode(ev.target.result as ArrayBuffer));
@@ -269,7 +269,7 @@ function uint8ToString(buf: Buffer) {
 }
 
 function _submitReport(endpoint: string, body: FormData, progressCallback: (string) => void) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         const req = new XMLHttpRequest();
         req.open("POST", endpoint);
         req.timeout = 5 * 60 * 1000;

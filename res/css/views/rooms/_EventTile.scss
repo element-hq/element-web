@@ -26,7 +26,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile.mx_EventTile_info {
-    padding-top: 0px;
+    padding-top: 1px;
 }
 
 .mx_EventTile_avatar {
@@ -37,7 +37,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
-    top: $font-8px;
+    top: $font-6px;
     left: $left-gutter;
 }
 
@@ -74,7 +74,6 @@ $left-gutter: 64px;
     margin-left: 5px;
     display: inline-block;
     vertical-align: top;
-    height: 16px;
     overflow: hidden;
     user-select: none;
 
@@ -421,15 +420,15 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
-    border-left: $e2e-verified-color 4px solid;
+    border-left: $e2e-verified-color $EventTile_e2e_state_indicator_width solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
-    border-left: $e2e-unverified-color 4px solid;
+    border-left: $e2e-unverified-color $EventTile_e2e_state_indicator_width solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
-    border-left: $e2e-unknown-color 4px solid;
+    border-left: $e2e-unknown-color $EventTile_e2e_state_indicator_width solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
@@ -447,8 +446,7 @@ $left-gutter: 64px;
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
-    left: 3px;
-    width: auto;
+    width: $MessageTimestamp_width_hover;
 }
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
