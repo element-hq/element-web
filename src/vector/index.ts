@@ -45,14 +45,20 @@ function checkBrowserFeatures() {
         return false;
     }
 
-    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on,
-    // Modernizr requires rules to be lowercase with no punctuation:
-    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
+    // Custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks
+    // in it for some features we depend on.
+    // Modernizr requires rules to be lowercase with no punctuation.
+    // ES2018: http://262.ecma-international.org/9.0/#sec-promise.prototype.finally
     window.Modernizr.addTest("promiseprototypefinally", () =>
-        window.Promise && window.Promise.prototype && typeof window.Promise.prototype.finally === "function");
-    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
+        typeof window.Promise?.prototype?.finally === "function");
+    // ES2018: https://262.ecma-international.org/9.0/#sec-get-regexp.prototype.dotAll
+    window.Modernizr.addTest("regexpdotall", () => (
+        window.RegExp?.prototype &&
+        !!Object.getOwnPropertyDescriptor(window.RegExp.prototype, "dotAll")?.get
+    ));
+    // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () =>
-        window.Object && typeof window.Object.fromEntries === "function");
+        typeof window.Object?.fromEntries === "function");
 
     const featureList = Object.keys(window.Modernizr);
 
