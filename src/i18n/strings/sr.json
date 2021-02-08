@@ -1358,7 +1358,7 @@
     "This homeserver has exceeded one of its resource limits.": "Овај сервер је достигао ограничење неког свог ресурса.",
     "Unexpected error resolving homeserver configuration": "Неочекивана грешка при откривању подешавања сервера",
     "No homeserver URL provided": "Није наведен УРЛ сервера",
-    "Cannot reach homeserver": "Сервер ми је недоступан",
+    "Cannot reach homeserver": "Сервер недоступан",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s додаде алтернативну адресу %(addresses)s за ову собу.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s уклони главну адресу за ову собу.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s постави главну адресу собе на %(address)s.",
@@ -1437,5 +1437,6 @@
     "Changes the avatar of the current room": "Мења аватар тренутне собе",
     "Changes your display nickname in the current room only": "Мења ваше приказно име само у тренутној соби",
     "Try again": "Покушај поново",
-    "We couldn't log you in": "Не могу да вас пријавим"
+    "We couldn't log you in": "Не могу да вас пријавим",
+    "Double check that your server supports the room version chosen and try again.": "Добро проверите да ли сервер подржава изабрану верзију собе и пробајте поново."
 }
