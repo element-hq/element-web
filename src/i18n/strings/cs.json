@@ -2962,5 +2962,8 @@
     "Try again": "Zkuste to znovu",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Požádali jsme prohlížeč, aby si pamatoval, který domovský server používáte k přihlášení, ale váš prohlížeč to bohužel zapomněl. Přejděte na přihlašovací stránku a zkuste to znovu.",
     "We couldn't log you in": "Nemohli jsme vás přihlásit",
-    "Show stickers button": "Tlačítko Zobrazit nálepky"
+    "Show stickers button": "Tlačítko Zobrazit nálepky",
+    "Windows": "Okna",
+    "Screens": "Obrazovky",
+    "Share your screen": "Sdílejte svou obrazovku"
 }
