@@ -2971,5 +2971,17 @@
     "Something went wrong in confirming your identity. Cancel and try again.": "Något gick fel vid bekräftelse av din identitet. Avbryt och försök igen.",
     "Use Security Key or Phrase": "Använd säkerhetsnyckel eller -fras",
     "Use Security Key": "Använd säkerhetsnyckel",
-    "We'll store an encrypted copy of your keys on our server. Secure your backup with a Security Phrase.": "Vi kommer att lagra en krypterad kopia av dina nycklar på våran server. Säkra din säkerhetskopia med en säkerhetsfras."
+    "We'll store an encrypted copy of your keys on our server. Secure your backup with a Security Phrase.": "Vi kommer att lagra en krypterad kopia av dina nycklar på våran server. Säkra din säkerhetskopia med en säkerhetsfras.",
+    "Windows": "Fönster",
+    "Screens": "Skärmar",
+    "Share your screen": "Dela din skärm",
+    "Recently visited rooms": "Nyligen besökta rum",
+    "Show line numbers in code blocks": "Visa radnummer i kodblock",
+    "Expand code blocks by default": "Expandera kodblock för förval",
+    "Show stickers button": "Visa dekalknapp",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Din hemserver avslog ditt inloggningsförsök. Detta kan ha hänt för att det tog för lång tid. Vänligen försök igen. Om det här fortsätter, vänligen kontakta administratören för din hemserver.",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Din hemserver kunde inte nås så du kunde inte loggas in. Vänligen försök igen. Om det här fortsätter, vänligen kontakta administratören för din hemserver.",
+    "Try again": "Försök igen",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Vi bad webbläsaren att komma ihåg vilken hemserver du använder för att logga in, men tyvärr har din webbläsare glömt det. Gå till inloggningssidan och försök igen.",
+    "We couldn't log you in": "Vi kunde inte logga in dig"
 }
