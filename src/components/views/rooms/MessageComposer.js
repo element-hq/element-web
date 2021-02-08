@@ -426,7 +426,8 @@ export default class MessageComposer extends React.Component {
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
             );
 
-            if (SettingsStore.getValue(UIFeature.Widgets)) {
+            if (SettingsStore.getValue(UIFeature.Widgets) &&
+                SettingsStore.getValue("MessageComposerInput.showStickersButton")) {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
             }
 

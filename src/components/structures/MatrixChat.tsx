@@ -755,6 +755,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'on_logged_in':
                 if (
+                    // Skip this handling for token login as that always calls onLoggedIn itself
+                    !this.tokenLogin &&
                     !Lifecycle.isSoftLogout() &&
                     this.state.view !== Views.LOGIN &&
                     this.state.view !== Views.REGISTER &&
@@ -1373,6 +1375,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on('Session.logged_out', function(errObj) {
             if (Lifecycle.isLoggingOut()) return;
 
+            // A modal might have been open when we were logged out by the server
+            Modal.closeCurrentModal('Session.logged_out');
+
             if (errObj.httpStatus === 401 && errObj.data && errObj.data['soft_logout']) {
                 console.warn("Soft logout issued by server - avoiding data deletion");
                 Lifecycle.softLogout();
@@ -1383,6 +1388,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
             });
+
             dis.dispatch({
                 action: 'logout',
             });
@@ -1652,9 +1658,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
             let threepidInvite: IThreepidInvite;
+            // if we landed here from a 3PID invite, persist it
             if (params.signurl && params.email) {
                 threepidInvite = ThreepidInviteStore.instance
                     .storeInvite(roomString, params as IThreepidInviteWireFormat);
+            }
+            // otherwise check that this room doesn't already have a known invite
+            if (!threepidInvite) {
+                const invites = ThreepidInviteStore.instance.getInvites();
+                threepidInvite = invites.find(invite => invite.roomId === roomString);
             }
 
             // on our URLs there might be a ?via=matrix.org or similar to help
