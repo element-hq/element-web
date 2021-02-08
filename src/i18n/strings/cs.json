@@ -2965,5 +2965,7 @@
     "Show stickers button": "Tlačítko Zobrazit nálepky",
     "Windows": "Okna",
     "Screens": "Obrazovky",
-    "Share your screen": "Sdílejte svou obrazovku"
+    "Share your screen": "Sdílejte svou obrazovku",
+    "Expand code blocks by default": "Ve výchozím nastavení rozbalit bloky kódu",
+    "Show line numbers in code blocks": "Zobrazit čísla řádků v blocích kódu"
 }
