@@ -546,9 +546,15 @@ $left-gutter: 64px;
     mask-image: url($copy-button-url);
 }
 .mx_EventTile_collapseButton {
+    mask-size: 75%;
+    mask-position: center;
+    mask-repeat: no-repeat;
     mask-image: url($collapse-button-url);
 }
 .mx_EventTile_expandButton {
+    mask-size: 75%;
+    mask-position: center;
+    mask-repeat: no-repeat;
     mask-image: url($expand-button-url);
 }
 
