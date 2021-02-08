@@ -3041,5 +3041,8 @@
     "Remember this": "Emlékezzen erre",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "A kisalkalmazás ellenőrizni fogja a felhasználói azonosítóját, de az alábbi tevékenységeket nem tudja végrehajtani:",
     "Allow this widget to verify your identity": "A kisalkalmazás ellenőrizheti a személyazonosságot",
-    "Show stickers button": "Matrica gomb megjelenítése"
+    "Show stickers button": "Matrica gomb megjelenítése",
+    "Windows": "Ablakok",
+    "Screens": "Képernyők",
+    "Share your screen": "Képernyő megosztása"
 }
