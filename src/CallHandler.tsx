@@ -82,6 +82,7 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import {UIFeature} from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
+import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker"
 import { Action } from './dispatcher/actions';
 import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
@@ -572,7 +573,15 @@ export default class CallHandler {
                 });
                 return;
             }
-            call.placeScreenSharingCall(remoteElement, localElement);
+
+            call.placeScreenSharingCall(
+                remoteElement,
+                localElement,
+                async () : Promise<DesktopCapturerSource> => {
+                    const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
+                    const [source] = await finished;
+                    return source;
+                });
         } else {
             console.error("Unknown conf call type: %s", type);
         }
