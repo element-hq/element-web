@@ -39,16 +39,18 @@ declare global {
         matrixChat: ReturnType<Renderer>;
 
         // electron-only
-        electron: {
-            on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
-            send(channel: ElectronChannel, ...args: any[]): void;
-        }
+        electron?: Electron;
 
         // opera-only
-        opera: any;
+        opera?: any;
 
         // https://developer.mozilla.org/en-US/docs/Web/API/InstallTrigger
         InstallTrigger: any;
+    }
+
+    interface Electron {
+        on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
+        send(channel: ElectronChannel, ...args: any[]): void;
     }
 
     interface Navigator {
