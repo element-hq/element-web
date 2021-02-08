@@ -3037,5 +3037,10 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Shërbyesi juaj Home s’u kap dot dhe s’qe në gjendje të bëhej futja juaj në llogarinë tuaj. Ju lutemi, riprovoni. Nëse kjo vazhdon, ju lutemi, lidhuni me përgjegjësin e shërbyesit tuaj Home.",
     "Try again": "Riprovoni",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "I kërkuam shfletuesit të mbajë mend cilin shërbyes Home përdorni, për t’ju lënë të bëni hyrje, por për fat të keq, shfletuesi juaj e ka harruar këtë. Kaloni te faqja e hyrjeve dhe riprovoni.",
-    "We couldn't log you in": "S’ju nxorëm dot nga llogaria juaj"
+    "We couldn't log you in": "S’ju nxorëm dot nga llogaria juaj",
+    "Screens": "Ekrane",
+    "Share your screen": "Tregojuni ekranin tuaj të tjerëve",
+    "Show line numbers in code blocks": "Shfaq numra rreshtat në blloqe kodi",
+    "Expand code blocks by default": "Zgjeroji blloqet e kodit, si parazgjedhje",
+    "Show stickers button": "Shfaq buton ngjitësish"
 }
