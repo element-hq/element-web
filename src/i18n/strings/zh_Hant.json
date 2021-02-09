@@ -3049,5 +3049,11 @@
     "Try again": "重試",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "我們要求瀏覽器記住它讓您登入時使用的家伺服器，但不幸的是，您的瀏覽器忘了它。到登入頁面然後重試。",
     "We couldn't log you in": "我們無法讓您登入",
-    "Show stickers button": "顯示貼圖案按鈕"
+    "Show stickers button": "顯示貼圖案按鈕",
+    "Windows": "Windows",
+    "Screens": "畫面",
+    "Share your screen": "分享您的畫面",
+    "Recently visited rooms": "最近造訪過的聊天室",
+    "Show line numbers in code blocks": "在程式碼區塊中顯示行號",
+    "Expand code blocks by default": "預設展開程式碼區塊"
 }
