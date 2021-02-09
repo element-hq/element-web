@@ -3037,5 +3037,17 @@
     "Something went wrong in confirming your identity. Cancel and try again.": "Bei der Bestätigung deiner Identität ist ein Fehler aufgetreten. Abbrechen und erneut versuchen.",
     "Use app": "App verwenden",
     "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web ist experimentell auf mobilen Endgeräten. Für eine bessere Erfahrung und die neuesten Erweiterungen, nutze unsere freie, native App.",
-    "Use app for a better experience": "Nutze die App für eine bessere Erfahrung"
+    "Use app for a better experience": "Nutze die App für eine bessere Erfahrung",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Wir haben deinen Browser gebeten, sich zu merken, bei welchem Homeserver du dich anmeldest, aber dein Browser hat dies leider vergessen. Gehe zur Anmeldeseite und versuche es erneut.",
+    "Show stickers button": "Sticker-Schaltfläche anzeigen",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Dein Homeserver hat deinen Anmeldeversuch abgelehnt. Dies könnte daran liegen, dass der Prozess einfach zu lange dauert. Bitte versuche es erneut. Wenn dies so weitergeht, wende dich bitte an deine Homeserver-Administration.",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Dein Homeserver war nicht erreichbar und konnte dich nicht anmelden. Bitte versuche es erneut. Wenn dies so weitergeht, wende dich bitte an deine Homeserver-Administration.",
+    "We couldn't log you in": "Wir konnten dich nicht anmelden",
+    "Windows": "Fenster",
+    "Screens": "Bildschirme",
+    "Share your screen": "Deinen Bildschirm teilen",
+    "Recently visited rooms": "Kürzlich besuchte Räume",
+    "Show line numbers in code blocks": "Zeilennummern in Code-Blöcken anzeigen",
+    "Expand code blocks by default": "Code-Blöcke standardmäßig erweitern",
+    "Try again": "Erneut versuchen"
 }
