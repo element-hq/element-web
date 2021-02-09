@@ -168,12 +168,32 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     }
 
     private onAccountDetailsRequest = () => {
+        const termsDialog = this.config.termsDialog;
+        const textComponent = (
+            <>
+                <p>
+                    {termsDialog.text}
+                </p>
+                <p>
+                    {_t("Learn more in our")}&nbsp;
+                    <a href={termsDialog.privacyPolicy.href} target="_blank" rel="noreferrer noopener">
+                        {termsDialog.privacyPolicy.text}
+                    </a>,&nbsp;
+                    <a href={termsDialog.termsOfService.href} target="_blank" rel="noreferrer noopener">
+                        {termsDialog.termsOfService.text}
+                    </a> {_t("and")}&nbsp;
+                    <a href={termsDialog.cookiePolicy.href} target="_blank" rel="noreferrer noopener">
+                        {termsDialog.cookiePolicy.text}
+                    </a>.
+                </p>
+            </>
+        );
         Modal.createDialog(
             QuestionDialog,
             {
-                title: this.config.termsDialog.title,
-                description: this.config.termsDialog.text,
-                button: this.config.termsDialog.acceptText,
+                title: termsDialog.title,
+                description: textComponent,
+                button: termsDialog.acceptText,
                 onFinished: this.onAccountDetailsDialogFinished,
             },
         );

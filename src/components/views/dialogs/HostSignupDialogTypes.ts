@@ -53,7 +53,9 @@ interface ILink {
 
 interface IHostSignupTermsDialogConfig {
     acceptText: string;
-    termsDocuments: Array<ILink>;
+    cookiePolicy: ILink;
+    privacyPolicy: ILink;
+    termsOfService: ILink;
     text: string;
     title: string;
 }
