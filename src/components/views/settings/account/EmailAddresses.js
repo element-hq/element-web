@@ -178,19 +178,21 @@ export default class EmailAddresses extends React.Component {
         e.preventDefault();
 
         this.setState({continueDisabled: true});
-        this.state.addTask.checkEmailLinkClicked().then(() => {
-            const email = this.state.newEmailAddress;
+        this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
+            if (finished) {
+                const email = this.state.newEmailAddress;
+                const emails = [
+                    ...this.props.emails,
+                    { address: email, medium: "email" },
+                ];
+                this.props.onEmailsChange(emails);
+            }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
                 newEmailAddress: "",
             });
-            const emails = [
-                ...this.props.emails,
-                { address: email, medium: "email" },
-            ];
-            this.props.onEmailsChange(emails);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
