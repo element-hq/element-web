@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
+import React from "react";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import PersistedElement from "../elements/PersistedElement";
@@ -119,7 +119,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             Modal.createDialog(
                 QuestionDialog,
                 {
-                    title: _t("Confirm Abort Of Host Creation"),
+                    title: _t("Confirm abort of host creation"),
                     description: _t(
                         "Are you sure you wish to abort creation of the host? The process cannot be continued.",
                     ),
@@ -234,12 +234,14 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                             {!this.state.minimized &&
                                 <div className="mx_Dialog_header mx_Dialog_headerWithCancel">
                                     <AccessibleButton
-                                        onClick={this.minimizeDialog} className="mx_HostSignup_minimize_button"
+                                        onClick={this.minimizeDialog}
+                                        className="mx_HostSignup_minimize_button"
                                         aria-label={_t("Minimize dialog")}
                                         title={_t("Minimize dialog")}
                                     />
                                     <AccessibleButton
-                                        onClick={this.onCloseClick} className="mx_Dialog_cancelButton"
+                                        onClick={this.onCloseClick}
+                                        className="mx_Dialog_cancelButton"
                                         aria-label={_t("Close dialog")}
                                         title={_t("Close dialog")}
                                     />

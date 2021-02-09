@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
+import React from "react";
 import {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
@@ -36,7 +36,7 @@ export default class HostSignupAction extends React.PureComponent<IProps, IState
             <IconizedContextMenuOptionList>
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconHosting"
-                    label={_t("Get your own Element!")}
+                    label={_t("Get your own %(brand)s!")}
                     onClick={this.openDialog}
                 />
             </IconizedContextMenuOptionList>
