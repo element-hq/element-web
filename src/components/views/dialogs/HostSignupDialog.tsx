@@ -227,6 +227,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                         className="mx_HostSignup_maximize_button"
                                         onClick={this.maximizeDialog}
                                         aria-label={_t("Maximize dialog")}
+                                        title={_t("Maximize dialog")}
                                     />
                                 </div>
                             }
@@ -235,10 +236,12 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                     <AccessibleButton
                                         onClick={this.minimizeDialog} className="mx_HostSignup_minimize_button"
                                         aria-label={_t("Minimize dialog")}
+                                        title={_t("Minimize dialog")}
                                     />
                                     <AccessibleButton
                                         onClick={this.onCloseClick} className="mx_Dialog_cancelButton"
                                         aria-label={_t("Close dialog")}
+                                        title={_t("Close dialog")}
                                     />
                                 </div>
                             }
