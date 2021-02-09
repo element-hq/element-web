@@ -28,7 +28,6 @@ import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
-import {getHostingLink} from "../../utils/HostingLink";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
@@ -274,7 +273,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
 
         let topSection;
-        const signupLink = getHostingLink("user-context-menu");
         const hostSignupConfig: IHostSignupConfig = SdkConfig.get().hostSignup;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
@@ -295,8 +293,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     })}
                 </div>
             )
-        } else if (signupLink || hostSignupConfig) {
-            let hostSignupAction;
+        } else if (hostSignupConfig) {
             if (hostSignupConfig && hostSignupConfig.url) {
                 // If hostSignup.domains is set to a non-empty array, only show
                 // dialog if the user is on the domain or a subdomain.
@@ -304,33 +301,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 const mxDomain = MatrixClientPeg.get().getDomain();
                 const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
                 if (!hostSignupDomains || validDomains.length > 0) {
-                    hostSignupAction = <div
-                        className=""
-                        onClick={this.onCloseMenu}
-                    >
+                    topSection = <div onClick={this.onCloseMenu}>
                         <HostSignupAction />
                     </div>;
                 }
             }
-            topSection = (
-                <>
-                    {signupLink &&
-                        <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
-                            {_t(
-                                "<a>Upgrade</a> to your own domain", {},
-                                {
-                                    a: sub => (
-                                        <a href={signupLink} target="_blank" rel="noreferrer noopener" tabIndex={-1}>
-                                            {sub}
-                                        </a>
-                                    ),
-                                },
-                            )}
-                        </div>
-                    }
-                    {hostSignupAction}
-                </>
-            );
         }
 
         let homeButton = null;
