@@ -427,6 +427,13 @@ export default class CallHandler {
             `our Party ID: ${call.ourPartyId}, hangup party: ${call.hangupParty}, ` +
             `hangup reason: ${call.hangupReason}`,
         );
+        if (!stats) {
+            logger.debug(
+                "Call statistics are undefined. The call has " +
+                "probably failed before a peerConn was established",
+            );
+            return;
+        }
         logger.debug("Local candidates:");
         for (const cand of stats.filter(item => item.type === 'local-candidate')) {
             const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
