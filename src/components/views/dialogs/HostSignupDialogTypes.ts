@@ -46,31 +46,9 @@ export interface IPostmessage {
     origin: string;
 }
 
-interface IImage {
-    alt: string;
-    height: number;
-    src: string;
-    width: number;
-}
-
 interface ILink {
     href: string;
     text: string;
-}
-
-interface IInfoFooter {
-    image: IImage;
-    text: string;
-}
-
-interface IHostSignupInfoConfig {
-    additionalInfoLink?: ILink;
-    additionalParagraphs?: Array<string>;
-    cancelText: string;
-    continueText: string;
-    footer?: IInfoFooter;
-    image?: IImage;
-    title: string;
 }
 
 interface IHostSignupTermsDialogConfig {
@@ -82,7 +60,6 @@ interface IHostSignupTermsDialogConfig {
 
 export interface IHostSignupConfig {
     domains: Array<string>;
-    info: IHostSignupInfoConfig;
     minimizedDialogTitle: string;
     termsDialog: IHostSignupTermsDialogConfig;
     url: string;
