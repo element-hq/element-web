@@ -35,13 +35,13 @@ limitations under the License.
         mask-size: auto 12px;
         visibility: hidden;
         background-color: $accent-color;
-        mask-image: url('$(res)/img/feather-customised/widget/maximise.svg');
+        mask-image: url('$(res)/img/feather-customised/maximise.svg');
     }
 
     &.mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle {
         mask-position: 0 bottom;
         margin-bottom: 7px;
-        mask-image: url('$(res)/img/feather-customised/widget/minimise.svg');
+        mask-image: url('$(res)/img/feather-customised/minimise.svg');
     }
 
     &:hover .mx_ViewSourceEvent_toggle {

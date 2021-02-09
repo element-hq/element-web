@@ -240,6 +240,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
+    "MessageComposerInput.showStickersButton": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show stickers button'),
+        default: true,
+    },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
@@ -299,6 +304,16 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable automatic language detection for syntax highlighting'),
         default: false,
+    },
+    "expandCodeByDefault": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Expand code blocks by default'),
+        default: false,
+    },
+    "showCodeLineNumbers": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show line numbers in code blocks'),
+        default: true,
     },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

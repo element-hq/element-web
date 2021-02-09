@@ -229,7 +229,7 @@ export default class MessagePanel extends React.Component {
 
     onAction = (payload) => {
         switch (payload.action) {
-            case "message_sent":
+            case "scroll_to_bottom":
                 this.scrollToBottom();
                 break;
         }
