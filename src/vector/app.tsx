@@ -120,8 +120,11 @@ function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    const parsedUrl = url.parse(window.location.href);
-    parsedUrl.search = "";
+    const parsedUrl = url.parse(window.location.href, true);
+
+    parsedUrl.search = null; // to make `url.format` ignores `search` property and uses `query` instead
+    delete parsedUrl.query['loginToken'];
+
     const formatted = url.format(parsedUrl);
     console.log(`Redirecting to ${formatted} to drop loginToken from queryparams`);
     window.history.replaceState(null, "", formatted);
