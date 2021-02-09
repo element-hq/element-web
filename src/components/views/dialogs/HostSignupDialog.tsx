@@ -20,16 +20,19 @@ import Modal from "../../../Modal";
 import PersistedElement from "../elements/PersistedElement";
 import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
-import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {HostSignupStore} from "../../../stores/HostSignupStore";
-import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import classNames from "classnames";
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { HostSignupStore } from "../../../stores/HostSignupStore";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import {
     IHostSignupConfig,
     IPostmessage,
     IPostmessageResponseData,
     PostmessageAction,
 } from "./HostSignupDialogTypes";
+
+const HOST_SIGNUP_KEY = "host_signup";
 
 interface IProps {}
 
@@ -141,6 +144,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     private async sendAccountDetails() {
         const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
         if (!openIdToken || !openIdToken.access_token) {
+            console.warn("Failed to connect to homeserver for OpenID token.")
             this.setState({
                 completed: true,
                 error: _t("Failed to connect to your homeserver. Please close this dialog and try again."),
@@ -213,11 +217,16 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     public render(): React.ReactNode {
         return (
             <div className="mx_HostSignup_persisted">
-                <PersistedElement key="host_signup" persistKey="host_signup">
-                    <div className={this.state.minimized ? "" : "mx_Dialog_wrapper"}>
-                        <div className={["mx_Dialog",
-                            this.state.minimized ? "mx_HostSignupDialog_minimized" : "mx_HostSignupDialog"].join(" ")
-                        }>
+                <PersistedElement key={HOST_SIGNUP_KEY} persistKey={HOST_SIGNUP_KEY}>
+                    <div className={classNames({ "mx_Dialog_wrapper": !this.state.minimized })}>
+                        <div
+                            className={classNames("mx_Dialog",
+                                {
+                                    "mx_HostSignupDialog_minimized": this.state.minimized,
+                                    "mx_HostSignupDialog": !this.state.minimized,
+                                },
+                            )}
+                        >
                             {this.state.minimized &&
                                 <div className="mx_Dialog_header mx_Dialog_headerWithButton">
                                     <div className="mx_Dialog_title">
