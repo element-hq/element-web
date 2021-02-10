@@ -3041,5 +3041,17 @@
     "Use app for a better experience": "Rakendusega saad Matrix'is suhelda parimal viisil",
     "Something went wrong in confirming your identity. Cancel and try again.": "Midagi läks sinu isiku tuvastamisel viltu. Tühista viimane toiming ja proovi uuesti.",
     "Use app": "Kasuta rakendust",
-    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Brauseripõhine Element toimib mobiiltelefonis mööndustega. Meie rakendusega saad parema kasutajakogemuse ja uusimad funktsionaalsused."
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Brauseripõhine Element toimib mobiiltelefonis mööndustega. Meie rakendusega saad parema kasutajakogemuse ja uusimad funktsionaalsused.",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Sinu koduserver ei võimaldanud sul sisse logida. Võib-olla juhtus nii, kuna sisselogimine kestis liiga kaua. Palun proovi mõne hetke pärast uuesti. Kui olukord ikkagi ei muutu, siis palun küsi lisateavet oma koduserveri haldajalt.",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Sinu koduserver ei olnud kättesaadav ning me ei saanud sind sisse logida. Palun proovi mõne hetke pärast uuesti. Kui olukord ikkagi ei muutu, siis palun küsi lisateavet oma koduserveri haldajalt.",
+    "Try again": "Proovi uuesti",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Me sättisime nii, et sinu veebibrauser jätaks järgmiseks sisselogimiseks meelde sinu koduserveri, kuid kahjuks on ta selle unustanud. Palun mine sisselogimise lehele ja proovi uuesti.",
+    "We couldn't log you in": "Meil ei õnnestunud sind sisse logida",
+    "Show stickers button": "Näita kleepsude nuppu",
+    "Windows": "Aknad",
+    "Screens": "Ekraanid",
+    "Share your screen": "Jaga oma ekraani",
+    "Show line numbers in code blocks": "Näita koodiblokkides reanumbreid",
+    "Expand code blocks by default": "Vaikimisi kuva koodiblokid tervikuna",
+    "Recently visited rooms": "Hiljuti külastatud jututoad"
 }
