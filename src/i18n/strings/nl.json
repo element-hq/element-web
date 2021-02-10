@@ -2545,5 +2545,6 @@
     "Tell us below how you feel about %(brand)s so far.": "Vertel ons hoe %(brand)s u tot dusver bevalt.",
     "Rate %(brand)s": "%(brand)s beoordelen",
     "Update community": "Gemeenschap bijwerken",
-    "Active Widgets": "Ingeschakelde widgets"
+    "Active Widgets": "Ingeschakelde widgets",
+    "Manually verify all remote sessions": "Handmatig alle sessies op afstand verifiëren"
 }
