@@ -1,3 +1,23 @@
+Changes in [1.7.21-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.21-rc.1) (2021-02-10)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.20...v1.7.21-rc.1)
+
+ * Upgrade to React SDK 3.14.0-rc.1 and JS SDK 9.7.0-rc.1
+ * Translations update from Weblate
+   [\#16427](https://github.com/vector-im/element-web/pull/16427)
+ * Add RegExp dotAll feature test
+   [\#16408](https://github.com/vector-im/element-web/pull/16408)
+ * Fix Electron type merging
+   [\#16405](https://github.com/vector-im/element-web/pull/16405)
+ * README: remove Jenkins reference
+   [\#16381](https://github.com/vector-im/element-web/pull/16381)
+ * Enable PostCSS Calc in webpack builds
+   [\#16307](https://github.com/vector-im/element-web/pull/16307)
+ * Add configuration security best practices to the README.
+   [\#16367](https://github.com/vector-im/element-web/pull/16367)
+ * Upgrade matrix-widget-api
+   [\#16347](https://github.com/vector-im/element-web/pull/16347)
+
 Changes in [1.7.20](https://github.com/vector-im/element-web/releases/tag/v1.7.20) (2021-02-04)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.19...v1.7.20)
