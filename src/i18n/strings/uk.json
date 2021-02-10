@@ -1596,5 +1596,6 @@
     "<requestLink>Re-request encryption keys</requestLink> from your other sessions.": "<requestLink>Повторно запитати ключі шифрування</requestLink> з інших сеансів.",
     "Enable encryption?": "Увімкнути шифрування?",
     "Enable room encryption": "Увімкнути шифрування кімнати",
-    "Encryption": "Шифрування"
+    "Encryption": "Шифрування",
+    "Try again": "Спробувати ще раз"
 }
