@@ -2546,7 +2546,7 @@
     "Rate %(brand)s": "%(brand)s beoordelen",
     "Update community": "Gemeenschap bijwerken",
     "Active Widgets": "Ingeschakelde widgets",
-    "Manually verify all remote sessions": "Handmatig alle sessies op afstand verifiëren",
+    "Manually verify all remote sessions": "Handmatig alle externe sessies verifiëren",
     "System font name": "Systeemlettertype",
     "Use a system font": "Gebruik een systeemlettertype",
     "Show line numbers in code blocks": "Toon regelnummers in codeblokken",
