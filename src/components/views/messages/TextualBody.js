@@ -113,16 +113,12 @@ export default class TextualBody extends React.Component {
             // Highlight code
             const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
             if (codes.length > 0) {
-                for (let i = 0; i < codes.length; i++) {
-                    // Do this asynchronously: parsing code takes time and we don't
-                    // need to block the DOM update on it.
-                    setTimeout(() => {
-                        if (this._unmounted) return;
-                        for (let i = 0; i < pres.length; i++) {
-                            this._highlightCode(codes[i]);
-                        }
-                    }, 10);
-                }
+                setTimeout(() => {
+                    if (this._unmounted) return;
+                    for (let i = 0; i < codes.length; i++) {
+                        this._highlightCode(codes[i]);
+                    }
+                }, 10);
             }
         }
     }
