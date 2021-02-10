@@ -2642,7 +2642,7 @@
     "There are two ways you can provide feedback and help us improve %(brand)s.": "U kunt op twee manieren feedback geven en ons helpen %(brand)s te verbeteren.",
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Bekijk eerst de <existingIssuesLink>bestaande problemen op Github</existingIssuesLink>. <newIssueLink>Maak een nieuwe aan</newIssueLink> wanneer u uw probleem niet heeft gevonden.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Nodig iemand uit door gebruik te maken van hun naam, e-mailadres, gebruikersnaam (zoals <userId/>) of <a>deel dit gesprek</a>.",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Nodig iemand uit door gebruik te maken van zijn/ haar naam, gebruikersnaam (zoals <userId/>) of <a>deel dit gesprek</a>.",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Nodig iemand uit door gebruik te maken van hun naam, gebruikersnaam (zoals <userId/>) of <a>deel dit gesprek</a>.",
     "Send feedback": "Feedback versturen",
     "Feedback": "Feedback",
     "Feedback sent": "Feedback verstuurd",
