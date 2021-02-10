@@ -2066,7 +2066,7 @@
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Oproep mislukt omdat er geen toegang is tot de microfoon. Kijk na dat de microfoon juist is aangesloten en ingesteld.",
     "Video conference started by %(senderName)s": "Videovergadering gestart door %(senderName)s",
     "Video conference updated by %(senderName)s": "Videovergadering geüpdatet door %(senderName)s",
-    "Video conference ended by %(senderName)s": "Videovergadering beëindigt door %(senderName)s",
+    "Video conference ended by %(senderName)s": "Videovergadering beëindigd door %(senderName)s",
     "Join the conference from the room information card on the right": "Neem deel aan de vergadering via de informatiekaart rechts",
     "List options": "Lijstopties",
     "A-Z": "A-Z",
