@@ -118,6 +118,9 @@ export default class TextualBody extends React.Component {
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < codes.length; i++) {
+                        // If the code already has the hljs class we want to skip this.
+                        // This happens after the codeblock was edited.
+                        if (codes[i].className.includes("hljs")) continue;
                         this._highlightCode(codes[i]);
                     }
                 }, 10);
