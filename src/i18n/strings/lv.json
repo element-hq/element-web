@@ -17,7 +17,7 @@
     "Open user settings": "Atvērt lietotāja iestatījumus",
     "Go to your browser to complete Sign In": "Pārejiet uz pārlūku, lai pabeigtu pierakstīšanos",
     "Unsupported browser": "Neatbalstīts pārlūks",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Labākajai izmantošanas pieredzei, lūdzu, instalē <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> vai <safariLink>Safari</safariLink> pārlūku.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Labākajai izmantošanas pieredzei, lūdzu, instalējiet <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> vai <safariLink>Safari</safariLink> pārlūku.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Jūs varat turpināt lietot savu pašreizējo pārlūku, bet dažas vai visas funkcijas nestrādās, un lietotnes izskats var būt nepareizs.",
     "I understand the risks and wish to continue": "Es pieņemu riskus un vēlos turpināt",
     "Go to element.io": "Ej uz element.io",
@@ -30,5 +30,7 @@
     "Open": "Atvērt",
     "Download Completed": "Lejupielāde pabeigta",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsu Element konfigurācija satur kļūdainu JSON. Lūdzu, salabojiet problēmu un pārlādējiet lapu.",
-    "Your Element is misconfigured": "Jūsu Element ir nokonfigurēts kļūdaini"
+    "Your Element is misconfigured": "Jūsu Element ir nokonfigurēts kļūdaini",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)"
 }
