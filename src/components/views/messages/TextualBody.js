@@ -96,6 +96,9 @@ export default class TextualBody extends React.Component {
             const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
             if (pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
+                    // If there already is a div wrapping the codeblock we want to skip this.
+                    // This happens after the codeblock was edited.
+                    if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
                     // when the <pre> overflows and is scrolled horizontally.
                     const div = this._wrapInDiv(pres[i]);
@@ -110,16 +113,17 @@ export default class TextualBody extends React.Component {
             // Highlight code
             const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
             if (codes.length > 0) {
-                for (let i = 0; i < codes.length; i++) {
-                    // Do this asynchronously: parsing code takes time and we don't
-                    // need to block the DOM update on it.
-                    setTimeout(() => {
-                        if (this._unmounted) return;
-                        for (let i = 0; i < pres.length; i++) {
-                            this._highlightCode(codes[i]);
-                        }
-                    }, 10);
-                }
+                // Do this asynchronously: parsing code takes time and we don't
+                // need to block the DOM update on it.
+                setTimeout(() => {
+                    if (this._unmounted) return;
+                    for (let i = 0; i < codes.length; i++) {
+                        // If the code already has the hljs class we want to skip this.
+                        // This happens after the codeblock was edited.
+                        if (codes[i].className.includes("hljs")) continue;
+                        this._highlightCode(codes[i]);
+                    }
+                }, 10);
             }
         }
     }
