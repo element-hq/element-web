@@ -46,23 +46,11 @@ export interface IPostmessage {
     origin: string;
 }
 
-interface ILink {
-    href: string;
-    text: string;
-}
-
-interface IHostSignupTermsDialogConfig {
-    acceptText: string;
-    cookiePolicy: ILink;
-    privacyPolicy: ILink;
-    termsOfService: ILink;
-    text: string;
-    title: string;
-}
-
 export interface IHostSignupConfig {
+    brand: string;
+    cookiePolicyUrl: string;
     domains: Array<string>;
-    minimizedDialogTitle: string;
-    termsDialog: IHostSignupTermsDialogConfig;
+    privacyPolicyUrl: string;
+    termsOfServiceUrl: string;
     url: string;
 }

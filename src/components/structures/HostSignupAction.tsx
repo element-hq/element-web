@@ -36,7 +36,7 @@ export default class HostSignupAction extends React.PureComponent<IProps, IState
             <IconizedContextMenuOptionList>
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconHosting"
-                    label={_t("Get your own %(brand)s!")}
+                    label={_t("Upgrade to pro")}
                     onClick={this.openDialog}
                 />
             </IconizedContextMenuOptionList>

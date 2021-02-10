@@ -172,32 +172,44 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     }
 
     private onAccountDetailsRequest = () => {
-        const termsDialog = this.config.termsDialog;
         const textComponent = (
             <>
                 <p>
-                    {termsDialog.text}
+                    {_t("Continuing temporarily allows the %(hostSignupBrand)s setup process to access your " +
+                        "account to fetch verified email addresses. This data is not stored.", {
+                        hostSignupBrand: this.config.brand,
+                    })}
                 </p>
                 <p>
-                    {_t("Learn more in our")}&nbsp;
-                    <a href={termsDialog.privacyPolicy.href} target="_blank" rel="noreferrer noopener">
-                        {termsDialog.privacyPolicy.text}
-                    </a>,&nbsp;
-                    <a href={termsDialog.termsOfService.href} target="_blank" rel="noreferrer noopener">
-                        {termsDialog.termsOfService.text}
-                    </a> {_t("and")}&nbsp;
-                    <a href={termsDialog.cookiePolicy.href} target="_blank" rel="noreferrer noopener">
-                        {termsDialog.cookiePolicy.text}
-                    </a>.
+                    {_t("Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.",
+                        {},
+                        {
+                            cookiePolicyLink: () => (
+                                <a href={this.config.cookiePolicyUrl} target="_blank" rel="noreferrer noopener">
+                                    {_t("Cookie Policy")}
+                                </a>
+                            ),
+                            privacyPolicyLink: () => (
+                                <a href={this.config.privacyPolicyUrl} target="_blank" rel="noreferrer noopener">
+                                    {_t("Privacy Policy")}
+                                </a>
+                            ),
+                            termsOfServiceLink: () => (
+                                <a href={this.config.termsOfServiceUrl} target="_blank" rel="noreferrer noopener">
+                                    {_t("Terms of Service")}
+                                </a>
+                            ),
+                        },
+                    )}
                 </p>
             </>
         );
         Modal.createDialog(
             QuestionDialog,
             {
-                title: termsDialog.title,
+                title: _t("You should know"),
                 description: textComponent,
-                button: termsDialog.acceptText,
+                button: _t("Continue"),
                 onFinished: this.onAccountDetailsDialogFinished,
             },
         );
@@ -230,7 +242,9 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                             {this.state.minimized &&
                                 <div className="mx_Dialog_header mx_Dialog_headerWithButton">
                                     <div className="mx_Dialog_title">
-                                        {this.config.minimizedDialogTitle}
+                                        {_t("%(hostSignupBrand)s Setup", {
+                                            hostSignupBrand: this.config.brand,
+                                        })}
                                     </div>
                                     <AccessibleButton
                                         className="mx_HostSignup_maximize_button"
