@@ -3043,5 +3043,18 @@
     "Show line numbers in code blocks": "Shfaq numra rreshtat në blloqe kodi",
     "Expand code blocks by default": "Zgjeroji blloqet e kodit, si parazgjedhje",
     "Show stickers button": "Shfaq buton ngjitësish",
-    "Recently visited rooms": "Dhoma të vizituara së fundi"
+    "Recently visited rooms": "Dhoma të vizituara së fundi",
+    "Upgrade to pro": "Përmirësojeni me pro",
+    "Minimize dialog": "Minimizoje dialogun",
+    "Maximize dialog": "Zmadhoje plotësisht dialogun",
+    "%(hostSignupBrand)s Setup": "Ujdisje %(hostSignupBrand)s",
+    "You should know": "Duhet të dini",
+    "Privacy Policy": "Rregulla Privatësie",
+    "Cookie Policy": "Rregulla Cookie-sh",
+    "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Mësoni më tepër te <privacyPolicyLink />, <termsOfServiceLink /> dhe <cookiePolicyLink /> tonat.",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Vazhdimi lejon përkohësisht procesin e ujdisjes së %(hostSignupBrand)s të hyjë në llogarinë tuaj dhe të sjellë adresa email të verifikuara. Këto të dhëna nuk depozitohen.",
+    "Failed to connect to your homeserver. Please close this dialog and try again.": "S’u arrit të lidhej me shërbyesin tuaj Home. Ju lutemi, mbylleni këtë dialog dhe riprovoni.",
+    "Abort": "Ndërprite",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Jeni i sigurt se doni të ndërpritet krijimi i strehës? Procesi s’mund të vazhdohet.",
+    "Confirm abort of host creation": "Ripohoni ndërprerjen e krijimit të strehës"
 }
