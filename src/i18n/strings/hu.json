@@ -3047,5 +3047,16 @@
     "Share your screen": "Képernyő megosztása",
     "Show line numbers in code blocks": "Sorszámok megmutatása a kód blokkban",
     "Expand code blocks by default": "Kód blokk kibontása alapesetben",
-    "Recently visited rooms": "Nemrég meglátogatott szobák"
+    "Recently visited rooms": "Nemrég meglátogatott szobák",
+    "Upgrade to pro": "Pro verzióra való áttérés",
+    "Minimize dialog": "Dialógus ablak kicsinyítés",
+    "Maximize dialog": "Dialógus ablak nagyítás",
+    "%(hostSignupBrand)s Setup": "%(hostSignupBrand)s Beállítás",
+    "You should know": "Tudnia kell",
+    "Privacy Policy": "Adatvédelmi szabályok",
+    "Cookie Policy": "Süti szabályzat",
+    "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Tudjon meg többet innen: <privacyPolicyLink />, <termsOfServiceLink /> és <cookiePolicyLink />.",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Folytatva %(hostSignupBrand)s beállítási folyamat ideiglenes hozzáférést kap a fiókadatok elérésére az ellenőrzött e-mail cím megszerzésének érdekében. Ezt az adat nincs elmenetve.",
+    "Failed to connect to your homeserver. Please close this dialog and try again.": "A matrix szerverhez való csatlakozás nem sikerült. Zárja be ezt az ablakot és próbálja újra.",
+    "Abort": "Megszakítás"
 }
