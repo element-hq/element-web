@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 .mx_HostSignupDialog {
-    min-height: 531px;
+    width: 90vw;
+    max-width: 580px;
+    height: 80vh;
     max-height: 600px;
-    width: 580px;
 
     .mx_HostSignupDialog_info {
         text-align: center;
@@ -100,8 +101,10 @@ limitations under the License.
 }
 
 .mx_HostSignup_persisted {
-    width: 580px;
-    height: 600px;
+    width: 90vw;
+    max-width: 580px;
+    height: 80vh;
+    max-height: 600px;
     top: 0;
     left: 0;
     position: fixed;
