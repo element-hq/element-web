@@ -114,6 +114,7 @@ export default class TextualBody extends React.Component {
             const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
             if (codes.length > 0) {
                 // Do this asynchronously: parsing code takes time and we don't
+                // need to block the DOM update on it.
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < codes.length; i++) {
