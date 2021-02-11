@@ -189,7 +189,7 @@ export default class WebPlatform extends VectorBasePlatform {
         const appName = [
             url.host,
             url.pathname.replace(/\/$/, ""), // Remove trailing slash if present
-        ].join('');
+        ].join("");
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
