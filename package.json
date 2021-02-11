@@ -66,8 +66,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "sanitize-html": "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db",
-    "ua-parser-js": "^0.7.23",
-    "url": "^0.11.0"
+    "ua-parser-js": "^0.7.23"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
