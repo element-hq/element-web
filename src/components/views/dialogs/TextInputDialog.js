@@ -30,7 +30,7 @@ export default class TextInputDialog extends React.Component {
         value: PropTypes.string,
         placeholder: PropTypes.string,
         button: PropTypes.string,
-        busyMessage: PropTypes.string,
+        busyMessage: PropTypes.string, // pass _td string
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
         hasCancel: PropTypes.bool,
