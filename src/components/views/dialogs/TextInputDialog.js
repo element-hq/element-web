@@ -18,7 +18,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import Field from "../elements/Field";
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 
 export default class TextInputDialog extends React.Component {
     static propTypes = {
