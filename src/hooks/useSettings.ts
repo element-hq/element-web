@@ -18,12 +18,12 @@ import {useEffect, useState} from "react";
 import SettingsStore from '../settings/SettingsStore';
 
 // Hook to fetch the value of a setting and dynamically update when it changes
-export const useSettingValue = (settingName: string, roomId: string = null, excludeDefault = false) => {
-    const [value, setValue] = useState(SettingsStore.getValue(settingName, roomId, excludeDefault));
+export const useSettingValue = <T>(settingName: string, roomId: string = null, excludeDefault = false) => {
+    const [value, setValue] = useState(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
 
     useEffect(() => {
         const ref = SettingsStore.watchSetting(settingName, roomId, () => {
-            setValue(SettingsStore.getValue(settingName, roomId, excludeDefault));
+            setValue(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
         });
         // clean-up
         return () => {

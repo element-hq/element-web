@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, CSSProperties, ReactNode } from 'react';
+import React, { createRef, CSSProperties } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -212,9 +212,10 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onExpandClick = () => {
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.call.roomId,
+            room_id: userFacingRoomId,
         });
     };
 
@@ -340,27 +341,33 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onRoomAvatarClick = () => {
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.call.roomId,
+            room_id: userFacingRoomId,
         });
     }
 
     private onSecondaryRoomAvatarClick = () => {
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.secondaryCall.roomId,
+            room_id: userFacingRoomId,
         });
     }
 
     private onCallResumeClick = () => {
-        CallHandler.sharedInstance().setActiveCallRoomId(this.props.call.roomId);
+        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
     }
 
     public render() {
         const client = MatrixClientPeg.get();
-        const callRoom = client.getRoom(this.props.call.roomId);
-        const secCallRoom = this.props.secondaryCall ? client.getRoom(this.props.secondaryCall.roomId) : null;
+        const callRoomId = CallHandler.roomIdForCall(this.props.call);
+        const secondaryCallRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+        const callRoom = client.getRoom(callRoomId);
+        const secCallRoom = this.props.secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
 
         let dialPad;
         let contextMenu;
@@ -456,7 +463,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 onClick={() => {
                     dis.dispatch({
                         action: 'hangup',
-                        room_id: this.props.call.roomId,
+                        room_id: callRoomId,
                     });
                 }}
             />
@@ -487,6 +494,7 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         if (this.props.call.type === CallType.Video) {
+            let localVideoFeed = null;
             let onHoldContent = null;
             let onHoldBackground = null;
             const backgroundStyle: CSSProperties = {};
@@ -505,6 +513,9 @@ export default class CallView extends React.Component<IProps, IState> {
                 backgroundStyle.backgroundImage = 'url(' + backgroundAvatarUrl + ')';
                 onHoldBackground = <div className="mx_CallView_video_holdBackground" style={backgroundStyle} />;
             }
+            if (!this.state.vidMuted) {
+                localVideoFeed = <VideoFeed type={VideoFeedType.Local} call={this.props.call} />;
+            }
 
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
             const maxVideoHeight = getFullScreenElement() ? null : (
@@ -520,7 +531,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize}
                     maxHeight={maxVideoHeight}
                 />
-                <VideoFeed type={VideoFeedType.Local} call={this.props.call} />
+                {localVideoFeed}
                 {onHoldContent}
                 {callControls}
             </div>;

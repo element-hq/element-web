@@ -34,6 +34,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
         'MessageComposerInput.ctrlEnterToSend',
+        'MessageComposerInput.showStickersButton',
     ];
 
     static TIMELINE_SETTINGS = [
@@ -46,12 +47,15 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'alwaysShowTimestamps',
         'showRedactions',
         'enableSyntaxHighlightLanguageDetection',
+        'expandCodeByDefault',
+        'showCodeLineNumbers',
         'showJoinLeaves',
         'showAvatarChanges',
         'showDisplaynameChanges',
         'showImages',
         'showChatEffects',
         'Pill.shouldShowPillAvatar',
+        'ctrlFForSearch',
     ];
 
     static GENERAL_SETTINGS = [

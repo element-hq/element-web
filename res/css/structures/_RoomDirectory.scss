@@ -64,28 +64,23 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_table {
-    font-size: $font-12px;
     color: $primary-fg-color;
-    width: 100%;
+    display: grid;
+    font-size: $font-12px;
+    grid-template-columns: max-content auto max-content max-content max-content;
+    row-gap: 24px;
     text-align: left;
-    table-layout: fixed;
+    width: 100%;
 }
 
 .mx_RoomDirectory_roomAvatar {
-    width: 32px;
-    padding-right: 14px;
-    vertical-align: top;
-}
-
-.mx_RoomDirectory_roomDescription {
-    padding-bottom: 16px;
+    padding: 2px 14px 0 0;
 }
 
 .mx_RoomDirectory_roomMemberCount {
+    align-self: center;
     color: $light-fg-color;
-    width: 60px;
-    padding: 0 10px;
-    text-align: center;
+    padding: 3px 10px 0;
 
     &::before {
         background-color: $light-fg-color;
@@ -105,8 +100,7 @@ limitations under the License.
 }
 
 .mx_RoomDirectory_join, .mx_RoomDirectory_preview {
-    width: 80px;
-    text-align: center;
+    align-self: center;
     white-space: nowrap;
 }
 

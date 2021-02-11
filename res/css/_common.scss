@@ -21,6 +21,11 @@ limitations under the License.
 
 $hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
 
+$EventTile_e2e_state_indicator_width: 4px;
+
+$MessageTimestamp_width: 46px; /* 8 + 30 (avatar) + 8 */
+$MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $EventTile_e2e_state_indicator_width);
+
 :root {
     font-size: 10px;
 }

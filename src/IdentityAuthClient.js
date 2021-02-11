@@ -165,6 +165,7 @@ export default class IdentityAuthClient {
             });
             const [confirmed] = await finished;
             if (confirmed) {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
                 useDefaultIdentityServer();
             } else {
                 throw new AbortedIdentityActionError(

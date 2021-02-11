@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -75,10 +75,27 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
             throw new Error("Does not appear to be a permalink");
         }
 
-        const parts = fullUrl.substring(`${this._elementUrl}/#/`.length).split("/");
+        const parts = fullUrl.substring(`${this._elementUrl}/#/`.length);
+        return ElementPermalinkConstructor.parseAppRoute(parts);
+    }
+
+    /**
+     * Parses an app route (`(user|room|group)/identifer`) to a Matrix entity
+     * (room, user, group).
+     * @param {string} route The app route
+     * @returns {PermalinkParts}
+     */
+    static parseAppRoute(route: string): PermalinkParts {
+        const parts = route.split("/");
+
         if (parts.length < 2) { // we're expecting an entity and an ID of some kind at least
             throw new Error("URL is missing parts");
         }
+
+        // Split optional query out of last part
+        const [lastPartMaybeWithQuery] = parts.splice(-1, 1);
+        const [lastPart, query = ""] = lastPartMaybeWithQuery.split("?");
+        parts.push(lastPart);
 
         const entityType = parts[0];
         const entity = parts[1];
@@ -89,20 +106,9 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
             // Probably a group, no further parsing needed.
             return PermalinkParts.forGroup(entity);
         } else if (entityType === 'room') {
-            if (parts.length === 2) {
-                return PermalinkParts.forRoom(entity, []);
-            }
-
-            // rejoin the rest because v3 events can have slashes (annoyingly)
-            const eventIdAndQuery = parts.length > 2 ? parts.slice(2).join('/') : "";
-            const secondaryParts = eventIdAndQuery.split("?");
-
-            const eventId = secondaryParts[0];
-            const query = secondaryParts.length > 1 ? secondaryParts[1] : "";
-
-            // TODO: Verify Element works with via args
-            const via = query.split("via=").filter(p => !!p);
-
+            // Rejoin the rest because v3 events can have slashes (annoyingly)
+            const eventId = parts.length > 2 ? parts.slice(2).join('/') : "";
+            const via = query.split(/&?via=/).filter(p => !!p);
             return PermalinkParts.forEvent(entity, eventId, via);
         } else {
             throw new Error("Unknown entity type in permalink");
