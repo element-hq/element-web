@@ -121,7 +121,7 @@ function onTokenLoginCompleted() {
     // clear them.
     const url = new URL(window.location.href);
 
-    url.searchParams.delete('loginToken');
+    url.searchParams.delete("loginToken");
 
     console.log(`Redirecting to ${url.href} to drop loginToken from queryparams`);
     window.history.replaceState(null, "", url.href);
