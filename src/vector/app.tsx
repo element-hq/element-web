@@ -23,7 +23,6 @@ import React from 'react';
 // this incidentally means we can forget our React imports in JSX files without penalty.
 window.React = React;
 
-import url from 'url';
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import {_td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
@@ -120,14 +119,12 @@ function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    const parsedUrl = url.parse(window.location.href, true);
+    const url = new URL(window.location.href);
 
-    parsedUrl.search = null; // to make `url.format` ignores `search` property and uses `query` instead
-    delete parsedUrl.query['loginToken'];
+    url.searchParams.delete('loginToken');
 
-    const formatted = url.format(parsedUrl);
-    console.log(`Redirecting to ${formatted} to drop loginToken from queryparams`);
-    window.history.replaceState(null, "", formatted);
+    console.log(`Redirecting to ${url.href} to drop loginToken from queryparams`);
+    window.history.replaceState(null, "", url.href);
 }
 
 export async function loadApp(fragParams: {}) {
