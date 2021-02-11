@@ -42,7 +42,7 @@ export default class TextInputDialog extends React.Component {
         title: "",
         value: "",
         description: "",
-        busyMessage: "Loading...",
+        busyMessage: _td("Loading..."),
         focus: true,
         hasCancel: true,
     };
