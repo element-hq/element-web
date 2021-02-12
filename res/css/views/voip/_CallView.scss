@@ -310,8 +310,14 @@ limitations under the License.
     }
 }
 
-// Makes the alignment correct
-.mx_CallView_callControls_nothing {
+.mx_CallView_callControls_dialpad {
+    margin-right: auto;
+    &::before {
+        background-image: url('$(res)/img/voip/dialpad.svg');
+    }
+}
+
+.mx_CallView_callControls_button_dialpad_hidden {
     margin-right: auto;
     cursor: initial;
 }

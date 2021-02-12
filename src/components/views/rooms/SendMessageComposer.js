@@ -157,13 +157,14 @@ export default class SendMessageComposer extends React.Component {
             this.onVerticalArrow(event, true);
         } else if (event.key === Key.ARROW_DOWN) {
             this.onVerticalArrow(event, false);
-        } else if (this._prepareToEncrypt) {
-            this._prepareToEncrypt();
         } else if (event.key === Key.ESCAPE) {
             dis.dispatch({
                 action: 'reply_to_event',
                 event: null,
             });
+        } else if (this._prepareToEncrypt) {
+            // This needs to be last!
+            this._prepareToEncrypt();
         }
     };
 
@@ -403,6 +404,7 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
+        dis.dispatch({action: "scroll_to_bottom"});
     }
 
     componentWillUnmount() {
