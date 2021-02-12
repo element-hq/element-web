@@ -282,7 +282,7 @@ export default class MessageComposer extends React.Component {
             showSendButton: SettingsStore.getValue("MessageComposerInput.showSendButton"),
             hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
             joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
-            composerEmpty: true,
+            isComposerEmpty: true,
         };
     }
 
@@ -426,7 +426,7 @@ export default class MessageComposer extends React.Component {
 
     onIsEmptyChanged = (isEmpty) => {
         this.setState({
-            composerEmpty: isEmpty,
+            isComposerEmpty: isEmpty,
         });
     }
 
