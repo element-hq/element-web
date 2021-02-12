@@ -489,7 +489,7 @@ export default class MessageComposer extends React.Component {
                 }
             }
 
-            if (this.state.showSendButton) {
+            if (!this.state.isComposerEmpty) {
                 controls.push(
                     <SendButton onClick={this.sendMessage} />,
                 );
