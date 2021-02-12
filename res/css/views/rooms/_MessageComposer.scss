@@ -256,7 +256,7 @@ limitations under the License.
     border-radius: 100%;
     background-color: $button-bg-color;
 
-    &:before {
+    &::before {
         position: absolute;
         height: 16px;
         width: 16px;
