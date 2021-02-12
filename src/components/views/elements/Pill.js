@@ -290,6 +290,7 @@ class Pill extends React.Component {
                     >
                         { avatar }
                         { linkText }
+                        { tip }
                     </a> :
                     <span
                         className={classes}
@@ -299,8 +300,8 @@ class Pill extends React.Component {
                     >
                         { avatar }
                         { linkText }
+                        { tip }
                     </span> }
-                {tip}
             </MatrixClientContext.Provider>;
         } else {
             // Deliberately render nothing if the URL isn't recognised
