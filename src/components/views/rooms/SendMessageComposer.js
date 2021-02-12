@@ -538,7 +538,9 @@ export default class SendMessageComposer extends React.Component {
     }
 
     onChange = () => {
-        this.props.onIsEmptyChanged(this.model.isEmpty);
+        if (this.props.onIsEmptyChanged) {
+            this.props.onIsEmptyChanged(this.model.isEmpty);
+        }
     }
 
     render() {
