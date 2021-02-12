@@ -274,7 +274,7 @@ class Pill extends React.Component {
             const {yOffset} = this.props;
 
             let tip;
-            if (this.state.hover) {
+            if (this.state.hover && resource) {
                 tip = <Tooltip label={resource} yOffset={yOffset} />;
             }
 
