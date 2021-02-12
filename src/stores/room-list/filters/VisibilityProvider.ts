@@ -15,8 +15,9 @@
  */
 
 import {Room} from "matrix-js-sdk/src/models/room";
+import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
-import { isVirtualRoom, voipUserMapperEnabled } from "../../../VoipUserMapper";
+import VoipUserMapper from "../../../VoipUserMapper";
 
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
@@ -35,7 +36,10 @@ export class VisibilityProvider {
         let isVisible = true; // Returned at the end of this function
         let forced = false; // When true, this function won't bother calling the customisation points
 
-        if (voipUserMapperEnabled() && isVirtualRoom(room.roomId)) {
+        if (
+            CallHandler.sharedInstance().getSupportsVirtualRooms() &&
+            VoipUserMapper.sharedInstance().isVirtualRoom(room.roomId)
+        ) {
             isVisible = false;
             forced = true;
         }

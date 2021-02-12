@@ -35,6 +35,7 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { NameFilterCondition } from "./filters/NameFilterCondition";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { VisibilityProvider } from "./filters/VisibilityProvider";
+import VoipUserMapper from "../../VoipUserMapper";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -63,6 +64,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         }
         this.emit(LISTS_UPDATE_EVENT);
     });
+    // When new rooms arrive, we may hold them here until we have enough info to know whether we should before display them.
+    private roomHoldingPen: Room[] = [];
+    private holdNewRooms = false;
 
     private readonly watchedSettings = [
         'feature_custom_tags',
@@ -124,6 +128,24 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
         this.updateFn.mark(); // we almost certainly want to trigger an update.
         this.updateFn.trigger();
+    }
+
+    // After calling this, any new rooms that appear are not displayed until stopHoldingNewRooms()
+    // is called. Be sure to always call this in a try/finally block to ensure stopHoldingNewRooms
+    // is called afterwards.
+    public startHoldingNewRooms() {
+        console.log("hold-new-rooms mode enabled.");
+        this.holdNewRooms = true;
+    }
+
+    public stopHoldingNewRooms() {
+        console.log("hold-new-rooms mode disabled: processing " + this.roomHoldingPen.length + " held rooms");
+        this.holdNewRooms = false;
+        for (const heldRoom of this.roomHoldingPen) {
+            console.log("Processing held room: " + heldRoom.roomId);
+            this.handleRoomUpdate(heldRoom, RoomUpdateCause.NewRoom);
+        }
+        this.roomHoldingPen = [];
     }
 
     private checkLoggingEnabled() {
@@ -398,6 +420,21 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
+        if (cause === RoomUpdateCause.NewRoom) {
+            if (this.holdNewRooms) {
+                console.log("Room updates are held: putting room " + room.roomId + " into the holding pen");
+                this.roomHoldingPen.push(room);
+                return;
+            } else {
+                // we call straight out to VoipUserMapper here which is a bit of a hack: probably this
+                // should be calling the visibility provider which in turn farms out to various visibility
+                // providers? Anyway, the point of this is that we delay doing anything about this room
+                // until the VoipUserMapper had had a chance to do the things it needs to do to decide
+                // if we should show this room or not.
+                await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
+            }
+        }
+
         if (!VisibilityProvider.instance.isRoomVisible(room)) {
             return; // don't do anything on rooms that aren't visible
         }
