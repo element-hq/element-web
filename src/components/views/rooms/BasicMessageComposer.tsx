@@ -562,7 +562,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private async tabCompleteName(event: React.KeyboardEvent) {
         try {
-            await new Promise(resolve => this.setState({showVisualBell: false}, resolve));
+            await new Promise<void>(resolve => this.setState({showVisualBell: false}, resolve));
             const {model} = this.props;
             const caret = this.getCaret();
             const position = model.positionForOffset(caret.offset, caret.atNodeEnd);

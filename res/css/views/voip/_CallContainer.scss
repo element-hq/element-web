@@ -18,10 +18,7 @@ limitations under the License.
     position: absolute;
     right: 20px;
     bottom: 72px;
-    border-radius: 8px;
-    overflow: hidden;
     z-index: 100;
-    box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
 
     // Disable pointer events for Jitsi widgets to function. Direct
     // calls have their own cursor and behaviour, but we need to make
@@ -49,8 +46,10 @@ limitations under the License.
 
     .mx_IncomingCallBox {
         min-width: 250px;
-        background-color: $primary-bg-color;
+        background-color: $voipcall-plinth-color;
         padding: 8px;
+        box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
 
         pointer-events: initial; // restore pointer events so the user can accept/decline
         cursor: pointer;

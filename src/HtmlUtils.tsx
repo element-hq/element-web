@@ -163,7 +163,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             attribs.target = '_blank'; // by default
 
             const transformed = tryTransformPermalinkToLocalHref(attribs.href);
-            if (transformed !== attribs.href || attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN)) {
+            if (transformed !== attribs.href || attribs.href.match(linkifyMatrix.ELEMENT_URL_PATTERN)) {
                 attribs.href = transformed;
                 delete attribs.target;
             }
@@ -422,6 +422,8 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             if (SettingsStore.getValue("feature_latex_maths")) {
                 const phtml = cheerio.load(safeBody,
                     { _useHtmlParser2: true, decodeEntities: false })
+                // @ts-ignore - The types for `replaceWith` wrongly expect
+                // Cheerio instance to be returned.
                 phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
                     return katex.renderToString(
                         AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
@@ -438,13 +440,14 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         delete sanitizeParams.textFilter;
     }
 
+    const contentBody = isDisplayedWithHtml ? safeBody : strippedBody;
     if (opts.returnString) {
-        return isDisplayedWithHtml ? safeBody : strippedBody;
+        return contentBody;
     }
 
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
-        let contentBodyTrimmed = strippedBody !== undefined ? strippedBody.trim() : '';
+        let contentBodyTrimmed = contentBody !== undefined ? contentBody.trim() : '';
 
         // Ignore spaces in body text. Emojis with spaces in between should
         // still be counted as purely emoji messages.

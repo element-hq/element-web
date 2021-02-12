@@ -12,7 +12,7 @@ fi
 has_custom_app=$(node has-custom-app.js $@)
 
 if [ ! -d "element/element-web" ] && [ $has_custom_app -ne "1" ]; then
-    echo "Please provide an instance of Element to test against by passing --element-url <url> or running $BASE_DIR/element/install.sh"
+    echo "Please provide an instance of Element to test against by passing --app-url <url> or running $BASE_DIR/element/install.sh"
     exit 1
 fi
 

@@ -111,7 +111,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
                     appear={true} in={this.state.doAnimation} timeout={640}
                     classNames='mx_RoomBreadcrumbs'
                 >
-                    <Toolbar className='mx_RoomBreadcrumbs'>
+                    <Toolbar className='mx_RoomBreadcrumbs' aria-label={_t("Recently visited rooms")}>
                         {tiles.slice(this.state.skipFirst ? 1 : 0)}
                     </Toolbar>
                 </CSSTransition>
