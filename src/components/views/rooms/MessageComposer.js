@@ -50,6 +50,22 @@ ComposerAvatar.propTypes = {
     me: PropTypes.object.isRequired,
 };
 
+function SendButton(props) {
+    return (
+        <div>
+            <AccessibleTooltipButton
+                className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
+                onClick={props.onClick}
+                title={_t('Send message')}
+            />
+        </div>
+    );
+}
+
+SendButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+};
+
 function CallButton(props) {
     const onVoiceCallClick = (ev) => {
         dis.dispatch({
@@ -466,13 +482,9 @@ export default class MessageComposer extends React.Component {
             }
 
             if (this.state.showSendButton) {
-                controls.push((
-                    <AccessibleTooltipButton
-                        className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
-                        onClick={this.sendMessage}
-                        title={_t('Send message')}
-                    />
-                ));
+                controls.push(
+                    <SendButton onClick={this.sendMessage} />,
+                );
             }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
