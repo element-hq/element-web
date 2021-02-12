@@ -52,13 +52,11 @@ ComposerAvatar.propTypes = {
 
 function SendButton(props) {
     return (
-        <div>
-            <AccessibleTooltipButton
-                className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
-                onClick={props.onClick}
-                title={_t('Send message')}
-            />
-        </div>
+        <AccessibleTooltipButton
+            className="mx_MessageComposer_button mx_MessageComposer_sendMessage"
+            onClick={props.onClick}
+            title={_t('Send message')}
+        />
     );
 }
 
