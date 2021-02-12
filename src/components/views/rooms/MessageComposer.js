@@ -282,6 +282,7 @@ export default class MessageComposer extends React.Component {
             showSendButton: SettingsStore.getValue("MessageComposerInput.showSendButton"),
             hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
             joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
+            composerEmpty: true,
         };
     }
 
@@ -423,6 +424,12 @@ export default class MessageComposer extends React.Component {
         this.messageComposerInput._sendMessage();
     }
 
+    onIsEmptyChanged = (isEmpty) => {
+        this.setState({
+            composerEmpty: isEmpty,
+        });
+    }
+
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
@@ -448,6 +455,7 @@ export default class MessageComposer extends React.Component {
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
+                    onIsEmptyChanged={this.onIsEmptyChanged}
                 />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
