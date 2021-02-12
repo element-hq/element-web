@@ -81,6 +81,7 @@ export default class TextualBody extends React.Component {
     }
 
     _applyFormatting() {
+        const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
         this.activateSpoilers([this._content.current]);
 
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
@@ -91,29 +92,140 @@ export default class TextualBody extends React.Component {
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
-            const blocks = ReactDOM.findDOMNode(this).getElementsByTagName("code");
-            if (blocks.length > 0) {
+            // Handle expansion and add buttons
+            const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
+            if (pres.length > 0) {
+                for (let i = 0; i < pres.length; i++) {
+                    // If there already is a div wrapping the codeblock we want to skip this.
+                    // This happens after the codeblock was edited.
+                    if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
+                    // Wrap a div around <pre> so that the copy button can be correctly positioned
+                    // when the <pre> overflows and is scrolled horizontally.
+                    const div = this._wrapInDiv(pres[i]);
+                    this._handleCodeBlockExpansion(pres[i]);
+                    this._addCodeExpansionButton(div, pres[i]);
+                    this._addCodeCopyButton(div);
+                    if (showLineNumbers) {
+                        this._addLineNumbers(pres[i]);
+                    }
+                }
+            }
+            // Highlight code
+            const codes = ReactDOM.findDOMNode(this).getElementsByTagName("code");
+            if (codes.length > 0) {
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
                 setTimeout(() => {
                     if (this._unmounted) return;
-                    for (let i = 0; i < blocks.length; i++) {
-                        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
-                            highlight.highlightBlock(blocks[i]);
-                        } else {
-                            // Only syntax highlight if there's a class starting with language-
-                            const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
-                                return cl.startsWith('language-') && !cl.startsWith('language-_');
-                            });
-
-                            if (classes.length != 0) {
-                                highlight.highlightBlock(blocks[i]);
-                            }
-                        }
+                    for (let i = 0; i < codes.length; i++) {
+                        // If the code already has the hljs class we want to skip this.
+                        // This happens after the codeblock was edited.
+                        if (codes[i].className.includes("hljs")) continue;
+                        this._highlightCode(codes[i]);
                     }
                 }, 10);
             }
-            this._addCodeCopyButton();
+        }
+    }
+
+    _addCodeExpansionButton(div, pre) {
+        // Calculate how many percent does the pre element take up.
+        // If it's less than 30% we don't add the expansion button.
+        const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
+        if (percentageOfViewport < 30) return;
+
+        const button = document.createElement("span");
+        button.className = "mx_EventTile_button ";
+        if (pre.className == "mx_EventTile_collapsedCodeBlock") {
+            button.className += "mx_EventTile_expandButton";
+        } else {
+            button.className += "mx_EventTile_collapseButton";
+        }
+
+        button.onclick = async () => {
+            button.className = "mx_EventTile_button ";
+            if (pre.className == "mx_EventTile_collapsedCodeBlock") {
+                pre.className = "";
+                button.className += "mx_EventTile_collapseButton";
+            } else {
+                pre.className = "mx_EventTile_collapsedCodeBlock";
+                button.className += "mx_EventTile_expandButton";
+            }
+
+            // By expanding/collapsing we changed
+            // the height, therefore we call this
+            this.props.onHeightChanged();
+        };
+
+        div.appendChild(button);
+    }
+
+    _addCodeCopyButton(div) {
+        const button = document.createElement("span");
+        button.className = "mx_EventTile_button mx_EventTile_copyButton ";
+
+        // Check if expansion button exists. If so
+        // we put the copy button to the bottom
+        const expansionButtonExists = div.getElementsByClassName("mx_EventTile_button");
+        if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
+
+        button.onclick = async () => {
+            const copyCode = button.parentNode.getElementsByTagName("code")[0];
+            const successful = await copyPlaintext(copyCode.textContent);
+
+            const buttonRect = button.getBoundingClientRect();
+            const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+            const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+                ...toRightOf(buttonRect, 2),
+                message: successful ? _t('Copied!') : _t('Failed to copy'),
+            });
+            button.onmouseleave = close;
+        };
+
+        div.appendChild(button);
+    }
+
+    _wrapInDiv(pre) {
+        const div = document.createElement("div");
+        div.className = "mx_EventTile_pre_container";
+
+        // Insert containing div in place of <pre> block
+        pre.parentNode.replaceChild(div, pre);
+        // Append <pre> block and copy button to container
+        div.appendChild(pre);
+
+        return div;
+    }
+
+    _handleCodeBlockExpansion(pre) {
+        if (!SettingsStore.getValue("expandCodeByDefault")) {
+            pre.className = "mx_EventTile_collapsedCodeBlock";
+        }
+    }
+
+    _addLineNumbers(pre) {
+        pre.innerHTML = '<span class="mx_EventTile_lineNumbers"></span>' + pre.innerHTML + '<span></span>';
+        const lineNumbers = pre.getElementsByClassName("mx_EventTile_lineNumbers")[0];
+        // Calculate number of lines in pre
+        const number = pre.innerHTML.split(/\n/).length;
+        // Iterate through lines starting with 1 (number of the first line is 1)
+        for (let i = 1; i < number; i++) {
+            lineNumbers.innerHTML += '<span class="mx_EventTile_lineNumber">' + i + '</span>';
+        }
+    }
+
+    _highlightCode(code) {
+        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
+            highlight.highlightBlock(code);
+        } else {
+            // Only syntax highlight if there's a class starting with language-
+            const classes = code.className.split(/\s+/).filter(function(cl) {
+                return cl.startsWith('language-') && !cl.startsWith('language-_');
+            });
+
+            if (classes.length != 0) {
+                highlight.highlightBlock(code);
+            }
         }
     }
 
@@ -252,38 +364,6 @@ export default class TextualBody extends React.Component {
                 return true;
             }
         }
-    }
-
-    _addCodeCopyButton() {
-        // Add 'copy' buttons to pre blocks
-        Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
-            const button = document.createElement("span");
-            button.className = "mx_EventTile_copyButton";
-            button.onclick = async () => {
-                const copyCode = button.parentNode.getElementsByTagName("pre")[0];
-                const successful = await copyPlaintext(copyCode.textContent);
-
-                const buttonRect = button.getBoundingClientRect();
-                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-                const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
-                    ...toRightOf(buttonRect, 2),
-                    message: successful ? _t('Copied!') : _t('Failed to copy'),
-                });
-                button.onmouseleave = close;
-            };
-
-            // Wrap a div around <pre> so that the copy button can be correctly positioned
-            // when the <pre> overflows and is scrolled horizontally.
-            const div = document.createElement("div");
-            div.className = "mx_EventTile_pre_container";
-
-            // Insert containing div in place of <pre> block
-            p.parentNode.replaceChild(div, p);
-
-            // Append <pre> block and copy button to container
-            div.appendChild(p);
-            div.appendChild(button);
-        });
     }
 
     onCancelClick = event => {

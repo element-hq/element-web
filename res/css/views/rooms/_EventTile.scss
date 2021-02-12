@@ -491,13 +491,28 @@ $left-gutter: 64px;
         // https://github.com/vector-im/vector-web/issues/754
         overflow-x: overlay;
         overflow-y: visible;
-        max-height: 30vh;
     }
 
     code {
         // deliberate constants as we're behind an invert filter
         background-color: #f8f8f8;
     }
+}
+
+.mx_EventTile_lineNumbers {
+    float: left;
+    margin: 0 0.5em 0 -1.5em;
+    color: gray;
+}
+
+.mx_EventTile_lineNumber {
+    text-align: right;
+    display: block;
+    padding-left: 1em;
+}
+
+.mx_EventTile_collapsedCodeBlock {
+    max-height: 30vh;
 }
 
 .mx_EventTile:hover .mx_EventTile_body pre,
@@ -511,21 +526,42 @@ $left-gutter: 64px;
 }
 
 // Inserted adjacent to <pre> blocks, (See TextualBody)
-.mx_EventTile_copyButton {
+.mx_EventTile_button {
     position: absolute;
     display: inline-block;
     visibility: hidden;
     cursor: pointer;
     top: 6px;
-    right: 6px;
+    right: 12px;
     width: 19px;
     height: 19px;
-    mask-image: url($copy-button-url);
     background-color: $message-action-bar-fg-color;
+}
+.mx_EventTile_buttonBottom {
+    top: 31px;
+}
+.mx_EventTile_copyButton {
+    mask-image: url($copy-button-url);
+}
+.mx_EventTile_collapseButton {
+    mask-size: 75%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-image: url($collapse-button-url);
+}
+.mx_EventTile_expandButton {
+    mask-size: 75%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-image: url($expand-button-url);
 }
 
 .mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,
-.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton {
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_copyButton,
+.mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_collapseButton,
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_collapseButton,
+.mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_expandButton,
+.mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_expandButton {
     visibility: visible;
 }
 

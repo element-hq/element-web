@@ -54,6 +54,7 @@ import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPa
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
+import HostSignupContainer from '../views/host_signup/HostSignupContainer';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -648,6 +649,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />
+                <HostSignupContainer />
             </MatrixClientContext.Provider>
         );
     }

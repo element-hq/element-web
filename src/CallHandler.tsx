@@ -82,6 +82,7 @@ import CountlyAnalytics from "./CountlyAnalytics";
 import {UIFeature} from "./settings/UIFeature";
 import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
+import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker"
 import { Action } from './dispatcher/actions';
 import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
@@ -426,6 +427,13 @@ export default class CallHandler {
             `our Party ID: ${call.ourPartyId}, hangup party: ${call.hangupParty}, ` +
             `hangup reason: ${call.hangupReason}`,
         );
+        if (!stats) {
+            logger.debug(
+                "Call statistics are undefined. The call has " +
+                "probably failed before a peerConn was established",
+            );
+            return;
+        }
         logger.debug("Local candidates:");
         for (const cand of stats.filter(item => item.type === 'local-candidate')) {
             const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
@@ -572,9 +580,17 @@ export default class CallHandler {
                 });
                 return;
             }
-            call.placeScreenSharingCall(remoteElement, localElement);
+
+            call.placeScreenSharingCall(
+                remoteElement,
+                localElement,
+                async () : Promise<DesktopCapturerSource> => {
+                    const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
+                    const [source] = await finished;
+                    return source;
+                });
         } else {
-            console.error("Unknown conf call type: %s", type);
+            console.error("Unknown conf call type: " + type);
         }
     }
 
@@ -608,7 +624,7 @@ export default class CallHandler {
 
                     const room = MatrixClientPeg.get().getRoom(payload.room_id);
                     if (!room) {
-                        console.error("Room %s does not exist.", payload.room_id);
+                        console.error(`Room ${payload.room_id} does not exist.`);
                         return;
                     }
 
@@ -619,7 +635,7 @@ export default class CallHandler {
                         });
                         return;
                     } else if (members.length === 2) {
-                        console.info("Place %s call in %s", payload.type, payload.room_id);
+                        console.info(`Place ${payload.type} call in ${payload.room_id}`);
 
                         this.placeCall(payload.room_id, payload.type, payload.local_element, payload.remote_element);
                     } else { // > 2
@@ -634,17 +650,17 @@ export default class CallHandler {
                 }
                 break;
             case 'place_conference_call':
-                console.info("Place conference call in %s", payload.room_id);
+                console.info("Place conference call in " + payload.room_id);
                 Analytics.trackEvent('voip', 'placeConferenceCall');
                 CountlyAnalytics.instance.trackStartCall(payload.room_id, payload.type === PlaceCallType.Video, true);
                 this.startCallApp(payload.room_id, payload.type);
                 break;
             case 'end_conference':
-                console.info("Terminating conference call in %s", payload.room_id);
+                console.info("Terminating conference call in " + payload.room_id);
                 this.terminateCallApp(payload.room_id);
                 break;
             case 'hangup_conference':
-                console.info("Leaving conference call in %s", payload.room_id);
+                console.info("Leaving conference call in "+ payload.room_id);
                 this.hangupCallApp(payload.room_id);
                 break;
             case 'incoming_call':
