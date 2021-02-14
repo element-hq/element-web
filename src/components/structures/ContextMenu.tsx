@@ -299,7 +299,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             // such that it does not leave the (padded) window.
             if (contextMenuRect) {
                 const padding = 10;
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height + padding);
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
             }
 
             position.top = adjusted;
