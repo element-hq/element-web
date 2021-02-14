@@ -179,6 +179,7 @@ export default class EmailAddresses extends React.Component {
 
         this.setState({continueDisabled: true});
         this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
+            let newEmailAddress = this.state.newEmailAddress;
             if (finished) {
                 const email = this.state.newEmailAddress;
                 const emails = [
@@ -186,12 +187,13 @@ export default class EmailAddresses extends React.Component {
                     { address: email, medium: "email" },
                 ];
                 this.props.onEmailsChange(emails);
+                newEmailAddress = "";
             }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
-                newEmailAddress: "",
+                newEmailAddress,
             });
         }).catch((err) => {
             this.setState({continueDisabled: false});
