@@ -1,17 +1,23 @@
-import { isMac } from "./Keyboard";
+import { isMac, Key } from './Keyboard';
+import SettingsStore from './settings/SettingsStore';
 
 export enum KeyBindingContext {
-
+    SendMessageComposer = 'SendMessageComposer',
 }
 
 export enum KeyAction {
     None = 'None',
+    // SendMessageComposer actions:
+    Send = 'Send',
+    SelectPrevSendHistory = 'SelectPrevSendHistory',
+    SelectNextSendHistory = 'SelectNextSendHistory',
+    EditLastMessage = 'EditLastMessage',
 }
 
 /**
  * Represent a key combination.
  * 
- * The combo is evaluated strictly, i.e. the KeyboardEvent must match the exactly what is specified in the KeyCombo.
+ * The combo is evaluated strictly, i.e. the KeyboardEvent must match exactly what is specified in the KeyCombo.
  */
 export type KeyCombo = {
     /** Currently only one `normal` key is supported */
@@ -27,8 +33,53 @@ export type KeyCombo = {
 }
 
 export type KeyBinding = {
-    keyCombo: KeyCombo;
     action: KeyAction;
+    keyCombo: KeyCombo;
+}
+
+const messageComposerBindings = (): KeyBinding[] => {
+    const bindings: KeyBinding[] = [
+        {
+            action: KeyAction.SelectPrevSendHistory,
+            keyCombo: {
+                keys: [Key.ARROW_UP],
+                altKey: true,
+                ctrlKey: true,
+            },
+        },
+        {
+            action: KeyAction.SelectNextSendHistory,
+            keyCombo: {
+                keys: [Key.ARROW_DOWN],
+                altKey: true,
+                ctrlKey: true,
+            },
+        },
+        {
+            action: KeyAction.EditLastMessage,
+            keyCombo: {
+                keys: [Key.ARROW_UP],
+            }
+        },
+    ];
+    if (SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend')) {
+        bindings.push({
+            action: KeyAction.Send,
+            keyCombo: {
+                keys: [Key.ENTER],
+                ctrlOrCmd: true,
+            },
+        });
+    } else {
+        bindings.push({
+            action: KeyAction.Send,
+            keyCombo: {
+                keys: [Key.ENTER],
+            },
+        });
+    }
+
+    return bindings;
 }
 
 /**
@@ -75,14 +126,24 @@ export function isKeyComboMatch(ev: KeyboardEvent, combo: KeyCombo, onMac: boole
     return true;
 }
 
+export type KeyBindingsGetter = () => KeyBinding[];
+
 export class KeyBindingsManager {
-    contextBindings: Record<KeyBindingContext, KeyBinding[]> = {};
+    /**
+     * Map of KeyBindingContext to a KeyBinding getter arrow function.
+     * 
+     * Returning a getter function allowed to have dynamic bindings, e.g. when settings change the bindings can be
+     * recalculated.
+     */
+    contextBindings: Record<KeyBindingContext, KeyBindingsGetter> = {
+        [KeyBindingContext.SendMessageComposer]: messageComposerBindings,
+    };
 
     /**
      * Finds a matching KeyAction for a given KeyboardEvent
      */
     getAction(context: KeyBindingContext, ev: KeyboardEvent): KeyAction {
-        const bindings = this.contextBindings[context];
+        const bindings = this.contextBindings[context]?.();
         if (!bindings) {
             return KeyAction.None;
         }

@@ -48,6 +48,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
+import { getKeyBindingsManager, KeyAction, KeyBindingContext } from '../../../KeyBindingsManager';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -144,59 +145,47 @@ export default class SendMessageComposer extends React.Component {
         if (this._editorRef.isComposing(event)) {
             return;
         }
-        const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
-        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
-        const send = ctrlEnterToSend
-            ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
-            : event.key === Key.ENTER && !hasModifier;
-        if (send) {
-            this._sendMessage();
-            event.preventDefault();
-        } else if (event.key === Key.ARROW_UP) {
-            this.onVerticalArrow(event, true);
-        } else if (event.key === Key.ARROW_DOWN) {
-            this.onVerticalArrow(event, false);
-        } else if (event.key === Key.ESCAPE) {
-            dis.dispatch({
-                action: 'reply_to_event',
-                event: null,
-            });
-        } else if (this._prepareToEncrypt) {
-            // This needs to be last!
-            this._prepareToEncrypt();
+        const action = getKeyBindingsManager().getAction(KeyBindingContext.MessageComposer, event);
+        switch (action) {
+            case KeyAction.Send:
+                this._sendMessage();
+                event.preventDefault();
+                break;
+            case KeyAction.SelectPrevSendHistory:
+            case KeyAction.SelectNextSendHistory:
+                // Try select composer history
+                const selected = this.selectSendHistory(action === KeyAction.SelectPrevSendHistory);
+                if (selected) {
+                    // We're selecting history, so prevent the key event from doing anything else
+                    event.preventDefault();
+                }
+                break;
+            case KeyAction.EditLastMessage:
+                // selection must be collapsed and caret at start
+                if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
+                    const editEvent = findEditableEvent(this.props.room, false);
+                    if (editEvent) {
+                        // We're selecting history, so prevent the key event from doing anything else
+                        event.preventDefault();
+                        dis.dispatch({
+                            action: 'edit_event',
+                            event: editEvent,
+                        });
+                    }
+                }
+                break;
+            default:
+                if (event.key === Key.ESCAPE) {
+                    dis.dispatch({
+                        action: 'reply_to_event',
+                        event: null,
+                    });
+                } else if (this._prepareToEncrypt) {
+                    // This needs to be last!
+                    this._prepareToEncrypt();
+                }
         }
     };
-
-    onVerticalArrow(e, up) {
-        // arrows from an initial-caret composer navigates recent messages to edit
-        // ctrl-alt-arrows navigate send history
-        if (e.shiftKey || e.metaKey) return;
-
-        const shouldSelectHistory = e.altKey && e.ctrlKey;
-        const shouldEditLastMessage = !e.altKey && !e.ctrlKey && up && !this.props.replyToEvent;
-
-        if (shouldSelectHistory) {
-            // Try select composer history
-            const selected = this.selectSendHistory(up);
-            if (selected) {
-                // We're selecting history, so prevent the key event from doing anything else
-                e.preventDefault();
-            }
-        } else if (shouldEditLastMessage) {
-            // selection must be collapsed and caret at start
-            if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
-                const editEvent = findEditableEvent(this.props.room, false);
-                if (editEvent) {
-                    // We're selecting history, so prevent the key event from doing anything else
-                    e.preventDefault();
-                    dis.dispatch({
-                        action: 'edit_event',
-                        event: editEvent,
-                    });
-                }
-            }
-        }
-    }
 
     // we keep sent messages/commands in a separate history (separate from undo history)
     // so you can alt+up/down in them
