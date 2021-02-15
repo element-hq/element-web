@@ -19,7 +19,7 @@ function mockKeyEvent(key: string, modifiers?: {
 describe('KeyBindingsManager', () => {
     it('should match basic key combo', () => {
         const combo1: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
         };
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k'), combo1, false), true);
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('n'), combo1, false), false);
@@ -28,7 +28,7 @@ describe('KeyBindingsManager', () => {
 
     it('should match key + modifier key combo', () => {
         const combo: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             ctrlKey: true,
         };
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, false), true);
@@ -38,7 +38,7 @@ describe('KeyBindingsManager', () => {
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true, metaKey: true }), combo, false), false);
 
         const combo2: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             metaKey: true,
         };
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo2, false), true);
@@ -47,7 +47,7 @@ describe('KeyBindingsManager', () => {
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { altKey: true, metaKey: true }), combo2, false), false);
 
         const combo3: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             altKey: true,
         };
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { altKey: true }), combo3, false), true);
@@ -56,7 +56,7 @@ describe('KeyBindingsManager', () => {
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo3, false), false);
 
         const combo4: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             shiftKey: true,
         };
         assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true }), combo4, false), true);
@@ -67,7 +67,7 @@ describe('KeyBindingsManager', () => {
 
     it('should match key + multiple modifiers key combo', () => {
         const combo: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             ctrlKey: true,
             altKey: true,
         };
@@ -78,7 +78,7 @@ describe('KeyBindingsManager', () => {
             false), false);
 
         const combo2: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             ctrlKey: true,
             shiftKey: true,
             altKey: true,
@@ -92,7 +92,7 @@ describe('KeyBindingsManager', () => {
             { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo2, false), false);
 
         const combo3: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             ctrlKey: true,
             shiftKey: true,
             altKey: true,
@@ -108,7 +108,7 @@ describe('KeyBindingsManager', () => {
 
     it('should match ctrlOrMeta key combo', () => {
         const combo: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             ctrlOrCmd: true,
         };
         // PC:
@@ -123,7 +123,7 @@ describe('KeyBindingsManager', () => {
 
     it('should match advanced ctrlOrMeta key combo', () => {
         const combo: KeyCombo = {
-            keys: ['k'],
+            key: 'k',
             ctrlOrCmd: true,
             altKey: true,
         };

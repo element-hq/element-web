@@ -20,8 +20,7 @@ export enum KeyAction {
  * The combo is evaluated strictly, i.e. the KeyboardEvent must match exactly what is specified in the KeyCombo.
  */
 export type KeyCombo = {
-    /** Currently only one `normal` key is supported */
-    keys: string[];
+    key?: string;
 
     /** On PC: ctrl is pressed; on Mac: meta is pressed */
     ctrlOrCmd?: boolean;
@@ -42,7 +41,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         {
             action: KeyAction.SelectPrevSendHistory,
             keyCombo: {
-                keys: [Key.ARROW_UP],
+                key: Key.ARROW_UP,
                 altKey: true,
                 ctrlKey: true,
             },
@@ -50,7 +49,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         {
             action: KeyAction.SelectNextSendHistory,
             keyCombo: {
-                keys: [Key.ARROW_DOWN],
+                key: Key.ARROW_DOWN,
                 altKey: true,
                 ctrlKey: true,
             },
@@ -58,7 +57,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         {
             action: KeyAction.EditLastMessage,
             keyCombo: {
-                keys: [Key.ARROW_UP],
+                key: Key.ARROW_UP,
             }
         },
     ];
@@ -66,7 +65,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         bindings.push({
             action: KeyAction.Send,
             keyCombo: {
-                keys: [Key.ENTER],
+                key: Key.ENTER,
                 ctrlOrCmd: true,
             },
         });
@@ -74,7 +73,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         bindings.push({
             action: KeyAction.Send,
             keyCombo: {
-                keys: [Key.ENTER],
+                key: Key.ENTER,
             },
         });
     }
@@ -88,7 +87,7 @@ const messageComposerBindings = (): KeyBinding[] => {
  * Note, this method is only exported for testing.
  */
 export function isKeyComboMatch(ev: KeyboardEvent, combo: KeyCombo, onMac: boolean): boolean {
-    if (combo.keys.length > 0 && ev.key !== combo.keys[0]) {
+    if (combo.key !== undefined && ev.key !== combo.key) {
         return false;
     }
 
