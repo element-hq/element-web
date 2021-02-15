@@ -46,7 +46,7 @@ export default class VoipUserMapper {
         if (!virtualUser) return null;
 
         // There's quite a bit of acrobatics here to prevent the virtual room being shown
-        // while it's being created: forstly, we have to stop the RoomListStore from showing
+        // while it's being created: firstly, we have to stop the RoomListStore from showing
         // new rooms for a bit, because we can't set the room account data to say it's a virtual
         // room until we have the room ID. Secondly, once we have the new room ID, we have to
         // temporarily cache the fact it's a virtual room because there's no local echo on
