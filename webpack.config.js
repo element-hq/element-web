@@ -31,6 +31,15 @@ module.exports = (env, argv) => {
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
+    const themeBundles = {
+        "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+        "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
+        "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
+        "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+        "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
+        "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+    };
+
     return {
         ...development,
 
@@ -43,12 +52,7 @@ module.exports = (env, argv) => {
             "thinwidget": "./src/vector/thin_widget/index.ts",
 
             // CSS themes
-            "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
-            "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
-            "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
-            "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
-            "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
-            "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+            ...themeBundles,
         },
 
         optimization: {
@@ -334,7 +338,7 @@ module.exports = (env, argv) => {
                 template: './src/vector/thin_widget/index.html',
                 filename: 'thin_widget.html',
                 minify: argv.mode === 'production',
-                chunks: ['thinwidget'],
+                chunks: ['thinwidget', ...Object.keys(themeBundles)],
             }),
 
             // This is the mobile guide's entry point (separate for faster mobile loading)
