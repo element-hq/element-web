@@ -19,6 +19,9 @@ require("./index.scss");
 import * as qs from 'querystring';
 import { settled } from "../promise_utils";
 import ReactDOM from 'react-dom';
+import { StopGapWidgetDriver, WidgetRenderMode } from "matrix-react-sdk/src/stores/widgets/StopGapWidgetDriver";
+import WidgetUtils from "matrix-react-sdk/src/utils/WidgetUtils";
+import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 
 // The widget's options are encoded into the fragment to avoid leaking info to the server. The widget
 // spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
@@ -31,13 +34,18 @@ const qsParam = (name: string, optional = false): string => {
 };
 
 const accessToken = qsParam("accessToken");
+const homeserverUrl = qsParam("hsUrl");
 const roomId = qsParam("roomId", true);
 const widgetId = qsParam("widgetId"); // state_key or account data key
+
+// TODO: clear href so people don't accidentally copy/paste it
+//window.location.hash = '';
 
 (async function() {
     const {
         rageshakePromise,
         preparePlatform,
+        loadSkin,
         loadOlm, // to handle timelines
         loadLanguage,
         loadTheme,
@@ -54,10 +62,29 @@ const widgetId = qsParam("widgetId"); // state_key or account data key
         await settled(rageshakePromise);
 
         console.log("Running startup...");
+        StopGapWidgetDriver.RENDER_MODE = WidgetRenderMode.ThinWrapper;
+        await loadSkin();
         await loadOlm();
         preparePlatform();
+        await MatrixClientPeg.shim(homeserverUrl, accessToken);
         await loadTheme();
         await loadLanguage();
+
+        console.log("Locating widget...");
+        const stateEvent = await MatrixClientPeg.get()._http.authedRequest(
+            undefined, "GET",
+            `/rooms/${encodeURIComponent(roomId)}/state/im.vector.modular.widgets/${encodeURIComponent(widgetId)}`,
+            undefined, undefined, {},
+        );
+        if (!stateEvent?.url) {
+            throw new Error("Invalid widget");
+        }
+        const app = WidgetUtils.makeAppConfig(
+            widgetId,
+            stateEvent,
+            MatrixClientPeg.get().getUserId(), // assume we are the sender
+            roomId,
+            widgetId);
 
         // Now we can start our custom code
         console.log("Loading app...");
@@ -65,7 +92,7 @@ const widgetId = qsParam("widgetId"); // state_key or account data key
             /* webpackChunkName: "thin-wrapper-app" */
             /* webpackPreload: true */
             "./app");
-        window.matrixChat = ReactDOM.render(await module.loadApp({accessToken, roomId, widgetId}),
+        window.matrixChat = ReactDOM.render(await module.loadApp(app),
             document.getElementById('matrixchat'));
     } catch (err) {
         console.error(err);

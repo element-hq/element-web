@@ -15,30 +15,31 @@ limitations under the License.
 */
 
 import React from 'react';
+import AppTile from "matrix-react-sdk/src/components/views/elements/AppTile";
+import { IWidget } from "matrix-widget-api";
+import MatrixClientContext from "matrix-react-sdk/src/contexts/MatrixClientContext";
+import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
+
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
 window.React = React;
 
-import AppTile from "matrix-react-sdk/src/components/views/elements/AppTile";
-
 export interface IStartOpts {
-    accessToken: string;
     widgetId: string;
     roomId?: string;
 }
 
-export async function loadApp(opts: IStartOpts) {
-    // TODO: Actually use `opts` to populate the widget
-    return <AppTile
-        app={{
-            id: "test1234",
-            url: "http://localhost:8082/index.html#/?widgetId=$matrix_widget_id",
-            name: "Test Widget",
-            type: "m.custom",
-            data: {},
-        }}
-        fullWidth={true}
-        userId={"@test:example.org"}
-        userWidget={true}
-    />;
+export async function loadApp(widget: IWidget) {
+    return (
+        <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
+            <div id="mx_ThinWrapper_container">
+                <AppTile
+                    app={widget}
+                    fullWidth={true}
+                    userId={MatrixClientPeg.get().getUserId()}
+                    userWidget={false}
+                />
+            </div>
+        </MatrixClientContext.Provider>
+    );
 }
