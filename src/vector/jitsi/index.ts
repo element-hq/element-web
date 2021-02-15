@@ -45,6 +45,7 @@ let userId: string;
 let jitsiAuth: string;
 let roomId: string;
 let openIdToken: IOpenIDCredentials;
+let roomName: string;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -104,6 +105,7 @@ let meetApi: any; // JitsiMeetExternalAPI
         userId = qsParam('userId');
         jitsiAuth = qsParam('auth', true);
         roomId = qsParam('roomId', true);
+        roomName = qsParam('roomName', true);
 
         if (widgetApi) {
             await readyPromise;
@@ -226,6 +228,7 @@ function joinConference() { // event handler bound in HTML
     if (displayName) meetApi.executeCommand("displayName", displayName);
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
+    if (roomName) meetApi.executeCommand("subject", roomName);
 
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
