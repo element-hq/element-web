@@ -64,7 +64,6 @@ import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
-import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
@@ -86,6 +85,7 @@ import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapt
 import { Action } from './dispatcher/actions';
 import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
+import { randomString } from "matrix-js-sdk/lib/randomstring";
 
 const CHECK_PSTN_SUPPORT_ATTEMPTS = 3;
 
@@ -780,7 +780,7 @@ export default class CallHandler {
             confId = base32.stringify(Buffer.from(roomId), { pad: false });
         } else {
             // Create a random human readable conference ID
-            confId = `JitsiConference${generateHumanReadableId()}`;
+            confId = `JitsiConference${randomString(32)}`;
         }
 
         let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});
@@ -796,6 +796,7 @@ export default class CallHandler {
             isAudioOnly: type === 'voice',
             domain: jitsiDomain,
             auth: jitsiAuth,
+            roomName: room.name,
         };
 
         const widgetId = (
