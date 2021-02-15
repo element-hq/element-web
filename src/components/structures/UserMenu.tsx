@@ -300,7 +300,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 const hostSignupDomains = hostSignupConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
                 const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
-                if (!hostSignupDomains || validDomains.length > 0) {
+                if (!hostSignupConfig.domains || validDomains.length > 0) {
                     topSection = <div onClick={this.onCloseMenu}>
                         <HostSignupAction />
                     </div>;
