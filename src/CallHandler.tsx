@@ -103,10 +103,27 @@ enum AudioID {
     Busy = 'busyAudio',
 }
 
+interface ThirdpartyLookupResponseFields {
+    /* eslint-disable camelcase */
+
+    // im.vector.sip_native
+    virtual_mxid: string;
+    is_virtual: boolean;
+
+    // im.vector.sip_virtual
+    native_mxid: string;
+    is_native: boolean;
+
+    // common
+    lookup_success: boolean;
+
+    /* eslint-enable camelcase */
+}
+
 interface ThirdpartyLookupResponse {
     userid: string,
     protocol: string,
-    fields: {[key: string]: any},
+    fields: ThirdpartyLookupResponseFields,
 }
 
 // Unlike 'CallType' in js-sdk, this one includes screen sharing
