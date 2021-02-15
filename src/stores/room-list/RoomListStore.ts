@@ -426,12 +426,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
                 this.roomHoldingPen.push(room);
                 return;
             } else {
-                // we call straight out to VoipUserMapper here which is a bit of a hack: probably this
-                // should be calling the visibility provider which in turn farms out to various visibility
-                // providers? Anyway, the point of this is that we delay doing anything about this room
-                // until the VoipUserMapper had had a chance to do the things it needs to do to decide
-                // if we should show this room or not.
-                await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
+                // Let the visibility provider know that there is a new invited room. It would be nice
+                // if this could just be an event that things listen for but the point of this is that
+                // we delay doing anything about this room until the VoipUserMapper had had a chance
+                // to do the things it needs to do to decide if we should show this room or not, so
+                // an even wouldn't et us do that.
+                await VisibilityProvider.instance.onNewInvitedRoom(room);
             }
         }
 

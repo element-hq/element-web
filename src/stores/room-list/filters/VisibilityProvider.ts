@@ -32,6 +32,10 @@ export class VisibilityProvider {
         return VisibilityProvider.internalInstance;
     }
 
+    public async onNewInvitedRoom(room: Room) {
+        await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
+    }
+
     public isRoomVisible(room: Room): boolean {
         let isVisible = true; // Returned at the end of this function
         let forced = false; // When true, this function won't bother calling the customisation points
