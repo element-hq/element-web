@@ -48,11 +48,16 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         return !this.modalInstance;
     };
 
-    public openModalWidget = (requestData: IModalWidgetOpenRequestData, sourceWidget: Widget) => {
+    public openModalWidget = (
+        requestData: IModalWidgetOpenRequestData,
+        sourceWidget: Widget,
+        widgetRoomId?: string,
+    ) => {
         if (this.modalInstance) return;
         this.openSourceWidgetId = sourceWidget.id;
         this.modalInstance = Modal.createTrackedDialog('Modal Widget', '', ModalWidgetDialog, {
             widgetDefinition: {...requestData},
+            widgetRoomId,
             sourceWidgetId: sourceWidget.id,
             onFinished: (success: boolean, data?: IModalWidgetReturnData) => {
                 if (!success) {

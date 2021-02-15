@@ -276,7 +276,7 @@ export default class SettingsStore {
      * @param {boolean} excludeDefault True to disable using the default value.
      * @return {*} The value, or null if not found
      */
-    public static getValue(settingName: string, roomId: string = null, excludeDefault = false): any {
+    public static getValue<T = any>(settingName: string, roomId: string = null, excludeDefault = false): T {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");

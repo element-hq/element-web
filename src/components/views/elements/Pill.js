@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,23 +23,11 @@ import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
-import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
+import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 
-// For URLs of matrix.to links in the timeline which have been reformatted by
-// HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+]).*?)(?=\/|\?|$)/;
-
 class Pill extends React.Component {
-    static isPillUrl(url) {
-        return !!getPrimaryPermalinkEntity(url);
-    }
-
-    static isMessagePillUrl(url) {
-        return !!REGEX_LOCAL_PERMALINK.exec(url);
-    }
-
     static roomNotifPos(text) {
         return text.indexOf("@room");
     }
@@ -56,7 +44,7 @@ class Pill extends React.Component {
     static propTypes = {
         // The Type of this Pill. If url is given, this is auto-detected.
         type: PropTypes.string,
-        // The URL to pillify (no validation is done, see isPillUrl and isMessagePillUrl)
+        // The URL to pillify (no validation is done)
         url: PropTypes.string,
         // Whether the pill is in a message
         inMessage: PropTypes.bool,
@@ -90,12 +78,9 @@ class Pill extends React.Component {
 
         if (nextProps.url) {
             if (nextProps.inMessage) {
-                // Default to the empty array if no match for simplicity
-                // resource and prefix will be undefined instead of throwing
-                const matrixToMatch = REGEX_LOCAL_PERMALINK.exec(nextProps.url) || [];
-
-                resourceId = matrixToMatch[1]; // The room/user ID
-                prefix = matrixToMatch[2]; // The first character of prefix
+                const parts = parseAppLocalLink(nextProps.url);
+                resourceId = parts.primaryEntityId; // The room/user ID
+                prefix = parts.sigil; // The first character of prefix
             } else {
                 resourceId = getPrimaryPermalinkEntity(nextProps.url);
                 prefix = resourceId ? resourceId[0] : undefined;

@@ -45,7 +45,7 @@ class FilePanel extends React.Component {
     };
 
     onRoomTimeline = (ev, room, toStartOfTimeline, removed, data) => {
-        if (room.roomId !== this.props.roomId) return;
+        if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
         if (ev.isBeingDecrypted()) {

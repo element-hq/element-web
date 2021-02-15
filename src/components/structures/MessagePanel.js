@@ -23,6 +23,7 @@ import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
 import * as sdk from '../../index';
+import dis from "../../dispatcher/dispatcher";
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
@@ -207,11 +208,13 @@ export default class MessagePanel extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     componentWillUnmount() {
         this._isMounted = false;
         SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -221,6 +224,14 @@ export default class MessagePanel extends React.Component {
             this.setState({
                 ghostReadMarkers,
             });
+        }
+    }
+
+    onAction = (payload) => {
+        switch (payload.action) {
+            case "scroll_to_bottom":
+                this.scrollToBottom();
+                break;
         }
     }
 

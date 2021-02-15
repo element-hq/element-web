@@ -35,12 +35,6 @@ General Style
 - lowerCamelCase for functions and variables.
 - Single line ternary operators are fine.
 - UPPER_SNAKE_CASE for constants
-- Single quotes for strings by default, for consistency with most JavaScript styles:
-
-  ```javascript
-  "bad" // Bad
-  'good' // Good
-  ```
 - Use parentheses or `` ` `` instead of `\` for line continuation where ever possible
 - Open braces on the same line (consistent with Node):
 
@@ -162,7 +156,14 @@ ECMAScript
   - Be careful mixing arrow functions and regular functions, eg. if one function in a promise chain is an
     arrow function, they probably all should be.
 - Apart from that, newer ES features should be used whenever the author deems them to be appropriate.
-- Flow annotations are welcome and encouraged.
+
+TypeScript
+----------
+- TypeScript is preferred over the use of JavaScript
+- It's desirable to convert existing JavaScript files to TypeScript. TypeScript conversions should be done in small
+  chunks without functional changes to ease the review process.
+- Use full type definitions for function parameters and return values.
+- Avoid `any` types and `any` casts
 
 React
 -----
@@ -201,6 +202,8 @@ React
     this.state = { counter: 0 };
   }
   ```
+- Prefer class components over function components and hooks (not a strict rule though)
+
 - Think about whether your component really needs state: are you duplicating
   information in component state that could be derived from the model?
 
