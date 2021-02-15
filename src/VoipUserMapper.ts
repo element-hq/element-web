@@ -45,7 +45,7 @@ export default class VoipUserMapper {
         const virtualUser = await this.userToVirtualUser(userId);
         if (!virtualUser) return null;
 
-        // There's quite a bit of acromatics here to prevent the virtual room being shown
+        // There's quite a bit of acrobatics here to prevent the virtual room being shown
         // while it's being created: forstly, we have to stop the RoomListStore from showing
         // new rooms for a bit, because we can't set the room account data to say it's a virtual
         // room until we have the room ID. Secondly, once we have the new room ID, we have to
