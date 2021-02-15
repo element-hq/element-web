@@ -26,13 +26,20 @@ import {hideToast as hideUpdateToast, showToast as showUpdateToast} from "matrix
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
 import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
 
-import url from 'url';
 import UAParser from 'ua-parser-js';
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
     private runningVersion: string = null;
+
+    constructor() {
+        super();
+        // Register service worker if available on this platform
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    }
 
     getHumanReadableName(): string {
         return 'Web Platform'; // no translation required: only used for analytics
@@ -176,17 +183,13 @@ export default class WebPlatform extends VectorBasePlatform {
 
     getDefaultDeviceDisplayName(): string {
         // strip query-string and fragment from uri
-        const u = url.parse(window.location.href);
-        u.protocol = "";
-        u.search = "";
-        u.hash = "";
-        // Remove trailing slash if present
-        u.pathname = u.pathname.replace(/\/$/, "");
+        const url = new URL(window.location.href);
 
-        let appName = u.format();
-        // Remove leading slashes if present
-        appName = appName.replace(/^\/\//, "");
-        // `appName` is now in the format `develop.element.io`.
+        // `appName` in the format `develop.element.io/abc/xyz`
+        const appName = [
+            url.host,
+            url.pathname.replace(/\/$/, ""), // Remove trailing slash if present
+        ].join("");
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
