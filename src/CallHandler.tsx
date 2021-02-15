@@ -103,7 +103,7 @@ enum AudioID {
     Busy = 'busyAudio',
 }
 
-interface ThirpartyLookupResponse {
+interface ThirdpartyLookupResponse {
     userid: string,
     protocol: string,
     fields: {[key: string]: any},
@@ -238,7 +238,7 @@ export default class CallHandler {
         return this.supportsPstnProtocol;
     }
 
-    public pstnLookup(phoneNumber: string): Promise<ThirpartyLookupResponse[]> {
+    public pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
         return MatrixClientPeg.get().getThirdpartyUser(
             this.pstnSupportPrefixed ? PROTOCOL_PSTN_PREFIXED : PROTOCOL_PSTN, {
                 'm.id.phone': phoneNumber,
@@ -246,7 +246,7 @@ export default class CallHandler {
         );
     }
 
-    public sipVirtualLookup(nativeMxid: string): Promise<ThirpartyLookupResponse[]> {
+    public sipVirtualLookup(nativeMxid: string): Promise<ThirdpartyLookupResponse[]> {
         return MatrixClientPeg.get().getThirdpartyUser(
             PROTOCOL_SIP_VIRTUAL, {
                 'native_mxid': nativeMxid,
@@ -254,7 +254,7 @@ export default class CallHandler {
         );
     }
 
-    public sipNativeLookup(virtualMxid: string): Promise<ThirpartyLookupResponse[]> {
+    public sipNativeLookup(virtualMxid: string): Promise<ThirdpartyLookupResponse[]> {
         return MatrixClientPeg.get().getThirdpartyUser(
             PROTOCOL_SIP_NATIVE, {
                 'virtual_mxid': virtualMxid,
