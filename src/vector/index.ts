@@ -30,16 +30,6 @@ import {parseQsFromFragment} from "./url_utils";
 import './modernizr';
 import {settled} from "./promise_utils";
 
-async function settled(...promises: Array<Promise<any>>) {
-    for (const prom of promises) {
-        try {
-            await prom;
-        } catch (e) {
-            console.error(e);
-        }
-    }
-}
-
 function checkBrowserFeatures() {
     if (!window.Modernizr) {
         console.error("Cannot check features - Modernizr global is missing.");
