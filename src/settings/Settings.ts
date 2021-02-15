@@ -625,7 +625,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: 80,
     },
     "layout": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: Layout.Group,
     },
     "showChatEffects": {
