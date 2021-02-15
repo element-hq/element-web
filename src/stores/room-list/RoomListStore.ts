@@ -35,7 +35,6 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { NameFilterCondition } from "./filters/NameFilterCondition";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { VisibilityProvider } from "./filters/VisibilityProvider";
-import VoipUserMapper from "../../VoipUserMapper";
 
 interface IState {
     tagsEnabled?: boolean;
