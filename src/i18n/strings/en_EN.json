@@ -2450,7 +2450,7 @@
     "Send a Direct Message": "Send a Direct Message",
     "Explore Public Rooms": "Explore Public Rooms",
     "Create a Group Chat": "Create a Group Chat",
-    "Upgrade to pro": "Upgrade to pro",
+    "Upgrade to %(hostSignupBrand)s": "Upgrade to %(hostSignupBrand)s",
     "Explore rooms": "Explore rooms",
     "Failed to reject invitation": "Failed to reject invitation",
     "Cannot create rooms in this community": "Cannot create rooms in this community",
