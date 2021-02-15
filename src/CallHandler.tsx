@@ -85,7 +85,7 @@ import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapt
 import { Action } from './dispatcher/actions';
 import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
-import { randomString } from "matrix-js-sdk/lib/randomstring";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 
 const CHECK_PSTN_SUPPORT_ATTEMPTS = 3;
 
