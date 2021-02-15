@@ -22,7 +22,7 @@ import ReactDOM from 'react-dom';
 
 // The widget's options are encoded into the fragment to avoid leaking info to the server. The widget
 // spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
-const widgetQuery = qs.parse(window.location.hash.substring(1));
+const widgetQuery = qs.parse(window.location.hash.substring(2));
 const qsParam = (name: string, optional = false): string => {
     if (!optional && (!widgetQuery[name] || typeof (widgetQuery[name]) !== 'string')) {
         throw new Error(`Expected singular ${name} in query string`);

@@ -32,7 +32,7 @@ export async function loadApp(opts: IStartOpts) {
     return <AppTile
         app={{
             id: "test1234",
-            url: "http://localhost:8081/index.html#/?widgetId=$matrix_widget_id",
+            url: "http://localhost:8082/index.html#/?widgetId=$matrix_widget_id",
             name: "Test Widget",
             type: "m.custom",
             data: {},
