@@ -331,6 +331,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({generalMenuPosition: null}); // hide the menu
     };
 
+    private onInviteClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.room.roomId,
+        });
+        this.setState({generalMenuPosition: null}); // hide the menu
+    };
+
     private async saveNotifState(ev: ButtonEvent, newState: Volume) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -470,7 +481,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         label={lowPriorityLabel}
                         iconClassName="mx_RoomTile_iconArrowDown"
                     />
-
+                    <IconizedContextMenuOption
+                        onClick={this.onInviteClick}
+                        label={_t("Invite to this room")}
+                        iconClassName="mx_RoomTile_iconInvite"
+                    />
                     <IconizedContextMenuOption
                         onClick={this.onOpenRoomSettings}
                         label={_t("Settings")}
