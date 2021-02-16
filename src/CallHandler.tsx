@@ -107,15 +107,15 @@ interface ThirdpartyLookupResponseFields {
     /* eslint-disable camelcase */
 
     // im.vector.sip_native
-    virtual_mxid: string;
-    is_virtual: boolean;
+    virtual_mxid?: string;
+    is_virtual?: boolean;
 
     // im.vector.sip_virtual
-    native_mxid: string;
-    is_native: boolean;
+    native_mxid?: string;
+    is_native?: boolean;
 
     // common
-    lookup_success: boolean;
+    lookup_success?: boolean;
 
     /* eslint-enable camelcase */
 }
