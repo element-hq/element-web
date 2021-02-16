@@ -681,6 +681,12 @@ export default class CallHandler {
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(mappedRoomId, call)
                     this.setCallListeners(call);
+
+                    // get ready to send encrypted events in the room, so if the user does answer
+                    // the call, we'll be ready to send. NB. This is the protocol-level room ID not
+                    // the mapped one: that's where we'll send the events.
+                    const cli = MatrixClientPeg.get();
+                    cli.prepareToEncrypt(cli.getRoom(call.roomId));
                 }
                 break;
             case 'hangup':
