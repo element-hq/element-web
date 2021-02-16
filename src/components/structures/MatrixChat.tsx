@@ -82,6 +82,7 @@ import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
+import { shouldUseLoginForWelcome } from "../../utils/pages";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1988,7 +1989,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     </div>
                 );
             }
-        } else if (this.state.view === Views.WELCOME) {
+        } else if (this.state.view === Views.WELCOME && !shouldUseLoginForWelcome(SdkConfig.get())) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
         } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
@@ -2020,7 +2021,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.LOGIN) {
+        } else if (this.state.view === Views.LOGIN
+            || (this.state.view === Views.WELCOME && shouldUseLoginForWelcome(SdkConfig.get()))) {
             const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
