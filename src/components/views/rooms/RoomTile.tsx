@@ -462,7 +462,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
             const lowPriorityLabel = _t("Low Priority");
 
-            const inRoom = this.props.room && this.props.room.getMyMembership() === "join";
+            const inRoom = this.props.room.getMyMembership() === "join";
             const userId = MatrixClientPeg.get().getUserId();
             let canInvite = inRoom;
             const powerLevels = this.props.room.currentState
