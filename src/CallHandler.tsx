@@ -64,7 +64,6 @@ import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
-import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
@@ -86,6 +85,7 @@ import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapt
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
+import { randomString } from "matrix-js-sdk/src/randomstring";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -502,6 +502,13 @@ export default class CallHandler {
             `our Party ID: ${call.ourPartyId}, hangup party: ${call.hangupParty}, ` +
             `hangup reason: ${call.hangupReason}`,
         );
+        if (!stats) {
+            logger.debug(
+                "Call statistics are undefined. The call has " +
+                "probably failed before a peerConn was established",
+            );
+            return;
+        }
         logger.debug("Local candidates:");
         for (const cand of stats.filter(item => item.type === 'local-candidate')) {
             const address = cand.address || cand.ip; // firefox uses 'address', chrome uses 'ip'
@@ -749,6 +756,12 @@ export default class CallHandler {
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(mappedRoomId, call)
                     this.setCallListeners(call);
+
+                    // get ready to send encrypted events in the room, so if the user does answer
+                    // the call, we'll be ready to send. NB. This is the protocol-level room ID not
+                    // the mapped one: that's where we'll send the events.
+                    const cli = MatrixClientPeg.get();
+                    cli.prepareToEncrypt(cli.getRoom(call.roomId));
                 }
                 break;
             case 'hangup':
@@ -848,7 +861,7 @@ export default class CallHandler {
             confId = base32.stringify(Buffer.from(roomId), { pad: false });
         } else {
             // Create a random human readable conference ID
-            confId = `JitsiConference${generateHumanReadableId()}`;
+            confId = `JitsiConference${randomString(32)}`;
         }
 
         let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});
@@ -864,6 +877,7 @@ export default class CallHandler {
             isAudioOnly: type === 'voice',
             domain: jitsiDomain,
             auth: jitsiAuth,
+            roomName: room.name,
         };
 
         const widgetId = (

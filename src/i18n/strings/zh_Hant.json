@@ -3039,5 +3039,21 @@
     "Use Ctrl + F to search": "使用 Ctrl + F 以進行搜尋",
     "Use Command + F to search": "使用 Command + F 以進行搜尋",
     "Converts the DM to a room": "將直接訊息轉換為聊天室",
-    "Converts the room to a DM": "將聊天室轉換為直接訊息"
+    "Converts the room to a DM": "將聊天室轉換為直接訊息",
+    "Use app for a better experience": "使用應用程式以取得更好的體驗",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element 網頁版在行動裝置上仍處於實驗階段。為了得到最好的體驗以及最新功能，請使用我們免費的原生應用程式。",
+    "Use app": "使用應用程式",
+    "Something went wrong in confirming your identity. Cancel and try again.": "確認您身份時出了一點問題。取消並再試一次。",
+    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "您的家伺服器拒絕了您的登入嘗試。這可能只是因為花太長的時間登入了。請重試。如果此情況持續，請聯絡您的家伺服器管理員。",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "您的家伺服器無法存取，所以無法讓您登入。請重試。如果此情況持續，請聯絡您的家伺服器管理員。",
+    "Try again": "重試",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "我們要求瀏覽器記住它讓您登入時使用的家伺服器，但不幸的是，您的瀏覽器忘了它。到登入頁面然後重試。",
+    "We couldn't log you in": "我們無法讓您登入",
+    "Show stickers button": "顯示貼圖案按鈕",
+    "Windows": "Windows",
+    "Screens": "畫面",
+    "Share your screen": "分享您的畫面",
+    "Recently visited rooms": "最近造訪過的聊天室",
+    "Show line numbers in code blocks": "在程式碼區塊中顯示行號",
+    "Expand code blocks by default": "預設展開程式碼區塊"
 }
