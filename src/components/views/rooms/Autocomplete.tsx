@@ -24,8 +24,6 @@ import {Room} from 'matrix-js-sdk/src/models/room';
 import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
 
-const COMPOSER_SELECTED = 0;
-
 export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
 
 interface IProps {
@@ -68,7 +66,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             completionList: [],
 
             // how far down the completion list we are (THIS IS 1-INDEXED!)
-            selectionOffset: COMPOSER_SELECTED,
+            selectionOffset: 1,
 
             // whether we should show completions if they're available
             shouldShowCompletions: true,
@@ -112,7 +110,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 completions: [],
                 completionList: [],
                 // Reset selected completion
-                selectionOffset: COMPOSER_SELECTED,
+                selectionOffset: 1,
                 // Hide the autocomplete box
                 hide: true,
             });
@@ -148,26 +146,31 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
-        let selectionOffset = COMPOSER_SELECTED;
+        let selectionOffset = 1;
         if (completionList.length > 0) {
             /* If the currently selected completion is still in the completion list,
              try to find it and jump to it. If not, select composer.
              */
-            const currentSelection = this.state.selectionOffset === 0 ? null :
+            const currentSelection = this.state.selectionOffset <= 1 ? null :
                 this.state.completionList[this.state.selectionOffset - 1].completion;
             selectionOffset = completionList.findIndex(
                 (completion) => completion.completion === currentSelection);
             if (selectionOffset === -1) {
-                selectionOffset = COMPOSER_SELECTED;
+                selectionOffset = 1;
             } else {
                 selectionOffset++; // selectionOffset is 1-indexed!
             }
         }
 
-        let hide = this.state.hide;
+        let hide = true;
         // If `completion.command.command` is truthy, then a provider has matched with the query
         const anyMatches = completions.some((completion) => !!completion.command.command);
-        hide = !anyMatches;
+        if (anyMatches) {
+            hide = false;
+            if (this.props.onSelectionChange) {
+                this.props.onSelectionChange(this.state.completionList[selectionOffset - 1], selectionOffset - 1);
+            }
+        }
 
         this.setState({
             completions,
@@ -193,8 +196,8 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         if (completionCount === 0) return; // there are no items to move the selection through
 
         // Note: selectionOffset 0 represents the unsubstituted text, while 1 means first pill selected
-        const index = (this.state.selectionOffset + delta + completionCount + 1) % (completionCount + 1);
-        this.setSelection(index);
+        const index = (this.state.selectionOffset + delta + completionCount - 1) % completionCount;
+        this.setSelection(1 + index);
     }
 
     onEscape(e: KeyboardEvent): boolean {
@@ -213,7 +216,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     hide = () => {
         this.setState({
             hide: true,
-            selectionOffset: 0,
+            selectionOffset: 1,
             completions: [],
             completionList: [],
         });
@@ -232,8 +235,13 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
+    onConfirmCompletion = () => {
+        this.onCompletionClicked(this.state.selectionOffset);
+    }
+
     onCompletionClicked = (selectionOffset: number): boolean => {
-        if (this.countCompletions() === 0 || selectionOffset === COMPOSER_SELECTED) {
+        const count = this.countCompletions();
+        if (count === 0 || selectionOffset < 1 || selectionOffset > count) {
             return false;
         }
 

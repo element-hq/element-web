@@ -126,6 +126,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         super(props);
         this.state = {
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+            showVisualBell: false,
         };
 
         this.emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
@@ -201,7 +202,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (isEmpty) {
             this.formatBarRef.current.hide();
         }
-        this.setState({autoComplete: this.props.model.autoComplete});
+        this.setState({
+            autoComplete: this.props.model.autoComplete,
+            // if a change is happening then clear the showVisualBell
+            showVisualBell: diff ? false : this.state.showVisualBell,
+        });
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
 
         let isTyping = !this.props.model.isEmpty;
@@ -490,6 +495,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                         }
                         break;
                     case Key.TAB:
+                    case Key.ENTER:
                         if (!metaOrAltPressed) {
                             autoComplete.onTab(event);
                             handled = true;
@@ -504,7 +510,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     default:
                         return; // don't preventDefault on anything else
                 }
-            } else if (event.key === Key.TAB) {
+            } else if (!this.props.model.isEmpty && !this.state.showVisualBell && event.key === Key.TAB) {
                 this.tabCompleteName(event);
                 handled = true;
             } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
@@ -545,6 +551,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     this.setState({showVisualBell: true});
                     model.autoComplete.close();
                 }
+            } else {
+                this.setState({showVisualBell: true});
             }
         } catch (err) {
             console.error(err);
@@ -562,7 +570,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
         this.modifiedFlag = true;
-        this.props.model.autoComplete.onComponentSelectionChange(completion);
+        // this.props.model.autoComplete.onComponentSelectionChange(completion);
         this.setState({completionIndex});
     };
 
@@ -679,6 +687,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         };
 
         const {completionIndex} = this.state;
+        const hasAutocomplete = Boolean(this.state.autoComplete);
+        let activeDescendant;
+        if (hasAutocomplete && completionIndex >= 0) {
+            activeDescendant = generateCompletionDomId(completionIndex);
+        }
 
         return (<div className={wrapperClasses}>
             { autoComplete }
@@ -697,10 +710,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 aria-label={this.props.label}
                 role="textbox"
                 aria-multiline="true"
-                aria-autocomplete="both"
+                aria-autocomplete="list"
                 aria-haspopup="listbox"
-                aria-expanded={Boolean(this.state.autoComplete)}
-                aria-activedescendant={completionIndex >= 0 ? generateCompletionDomId(completionIndex) : undefined}
+                aria-expanded={hasAutocomplete}
+                aria-owns="mx_Autocomplete"
+                aria-activedescendant={activeDescendant}
                 dir="auto"
             />
         </div>);

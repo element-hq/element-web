@@ -74,10 +74,9 @@ export default class AutocompleteWrapperModel {
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
-            // Select the first item by moving "down"
-            await acComponent.moveSelection(+1);
         } else {
-            await acComponent.moveSelection(e.shiftKey ? -1 : +1);
+            await acComponent.onConfirmCompletion();
+            this.updateCallback({close: true});
         }
     }
 
