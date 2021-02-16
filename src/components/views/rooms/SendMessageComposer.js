@@ -38,17 +38,16 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
+import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
 import {containsEmoji} from "../../../effects/utils";
 import {CHAT_EFFECTS} from '../../../effects';
-import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
-import { getKeyBindingsManager, KeyAction, KeyBindingContext } from '../../../KeyBindingsManager';
+import {getKeyBindingsManager, KeyAction, KeyBindingContext} from '../../../KeyBindingsManager';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -152,7 +151,7 @@ export default class SendMessageComposer extends React.Component {
                 event.preventDefault();
                 break;
             case KeyAction.SelectPrevSendHistory:
-            case KeyAction.SelectNextSendHistory:
+            case KeyAction.SelectNextSendHistory: {
                 // Try select composer history
                 const selected = this.selectSendHistory(action === KeyAction.SelectPrevSendHistory);
                 if (selected) {
@@ -160,7 +159,8 @@ export default class SendMessageComposer extends React.Component {
                     event.preventDefault();
                 }
                 break;
-            case KeyAction.EditLastMessage:
+            }
+            case KeyAction.EditPrevMessage:
                 // selection must be collapsed and caret at start
                 if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
                     const editEvent = findEditableEvent(this.props.room, false);
@@ -251,7 +251,7 @@ export default class SendMessageComposer extends React.Component {
                     const myReactionKeys = [...myReactionEvents]
                         .filter(event => !event.isRedacted())
                         .map(event => event.getRelation().key);
-                        shouldReact = !myReactionKeys.includes(reaction);
+                    shouldReact = !myReactionKeys.includes(reaction);
                 }
                 if (shouldReact) {
                     MatrixClientPeg.get().sendEvent(lastMessage.getRoomId(), "m.reaction", {
@@ -486,7 +486,7 @@ export default class SendMessageComposer extends React.Component {
     _insertQuotedMessage(event) {
         const {model} = this;
         const {partCreator} = model;
-        const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
+        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
         // add two newlines
         quoteParts.push(partCreator.newline());
         quoteParts.push(partCreator.newline());
