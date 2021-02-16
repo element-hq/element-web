@@ -29,11 +29,10 @@ import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
-import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
-import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
+import {getKeyBindingsManager, KeyAction, KeyBindingContext} from '../../../KeyBindingsManager';
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -134,38 +133,41 @@ export default class EditMessageComposer extends React.Component {
         if (this._editorRef.isComposing(event)) {
             return;
         }
-        if (event.metaKey || event.altKey || event.shiftKey) {
-            return;
-        }
-        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
-        const send = ctrlEnterToSend ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
-            : event.key === Key.ENTER;
-        if (send) {
-            this._sendEdit();
-            event.preventDefault();
-        } else if (event.key === Key.ESCAPE) {
-            this._cancelEdit();
-        } else if (event.key === Key.ARROW_UP) {
-            if (this._editorRef.isModified() || !this._editorRef.isCaretAtStart()) {
-                return;
-            }
-            const previousEvent = findEditableEvent(this._getRoom(), false, this.props.editState.getEvent().getId());
-            if (previousEvent) {
-                dis.dispatch({action: 'edit_event', event: previousEvent});
+        const action = getKeyBindingsManager().getAction(KeyBindingContext.MessageComposer, event);
+        switch (action) {
+            case KeyAction.Send:
+                this._sendEdit();
                 event.preventDefault();
+                break;
+            case KeyAction.CancelEditing:
+                this._cancelEdit();
+                break;
+            case KeyAction.EditPrevMessage: {
+                if (this._editorRef.isModified() || !this._editorRef.isCaretAtStart()) {
+                    return;
+                }
+                const previousEvent = findEditableEvent(this._getRoom(), false,
+                    this.props.editState.getEvent().getId());
+                if (previousEvent) {
+                    dis.dispatch({action: 'edit_event', event: previousEvent});
+                    event.preventDefault();
+                }
+                break;
             }
-        } else if (event.key === Key.ARROW_DOWN) {
-            if (this._editorRef.isModified() || !this._editorRef.isCaretAtEnd()) {
-                return;
+            case KeyAction.EditNextMessage: {
+                if (this._editorRef.isModified() || !this._editorRef.isCaretAtEnd()) {
+                    return;
+                }
+                const nextEvent = findEditableEvent(this._getRoom(), true, this.props.editState.getEvent().getId());
+                if (nextEvent) {
+                    dis.dispatch({action: 'edit_event', event: nextEvent});
+                } else {
+                    dis.dispatch({action: 'edit_event', event: null});
+                    dis.fire(Action.FocusComposer);
+                }
+                event.preventDefault();
+                break;
             }
-            const nextEvent = findEditableEvent(this._getRoom(), true, this.props.editState.getEvent().getId());
-            if (nextEvent) {
-                dis.dispatch({action: 'edit_event', event: nextEvent});
-            } else {
-                dis.dispatch({action: 'edit_event', event: null});
-                dis.fire(Action.FocusComposer);
-            }
-            event.preventDefault();
         }
     }
 

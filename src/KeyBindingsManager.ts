@@ -2,21 +2,33 @@ import { isMac, Key } from './Keyboard';
 import SettingsStore from './settings/SettingsStore';
 
 export enum KeyBindingContext {
-    SendMessageComposer = 'SendMessageComposer',
+    /** Key bindings for the chat message composer component */
+    MessageComposer = 'MessageComposer',
 }
 
 export enum KeyAction {
     None = 'None',
+
     // SendMessageComposer actions:
+
+    /** Send a message */
     Send = 'Send',
+    /** Go backwards through the send history and use the message in composer view */
     SelectPrevSendHistory = 'SelectPrevSendHistory',
+    /** Go forwards through the send history */
     SelectNextSendHistory = 'SelectNextSendHistory',
-    EditLastMessage = 'EditLastMessage',
+    /** Start editing the user's last sent message */
+    EditPrevMessage = 'EditPrevMessage',
+    /** Start editing the user's next sent message */
+    EditNextMessage = 'EditNextMessage',
+
+    /** Cancel editing a message */
+    CancelEditing = 'CancelEditing',
 }
 
 /**
  * Represent a key combination.
- * 
+ *
  * The combo is evaluated strictly, i.e. the KeyboardEvent must match exactly what is specified in the KeyCombo.
  */
 export type KeyCombo = {
@@ -55,10 +67,22 @@ const messageComposerBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.EditLastMessage,
+            action: KeyAction.EditPrevMessage,
             keyCombo: {
                 key: Key.ARROW_UP,
-            }
+            },
+        },
+        {
+            action: KeyAction.EditNextMessage,
+            keyCombo: {
+                key: Key.ARROW_DOWN,
+            },
+        },
+        {
+            action: KeyAction.CancelEditing,
+            keyCombo: {
+                key: Key.ESCAPE,
+            },
         },
     ];
     if (SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend')) {
@@ -83,7 +107,7 @@ const messageComposerBindings = (): KeyBinding[] => {
 
 /**
  * Helper method to check if a KeyboardEvent matches a KeyCombo
- * 
+ *
  * Note, this method is only exported for testing.
  */
 export function isKeyComboMatch(ev: KeyboardEvent, combo: KeyCombo, onMac: boolean): boolean {
@@ -130,12 +154,12 @@ export type KeyBindingsGetter = () => KeyBinding[];
 export class KeyBindingsManager {
     /**
      * Map of KeyBindingContext to a KeyBinding getter arrow function.
-     * 
+     *
      * Returning a getter function allowed to have dynamic bindings, e.g. when settings change the bindings can be
      * recalculated.
      */
     contextBindings: Record<KeyBindingContext, KeyBindingsGetter> = {
-        [KeyBindingContext.SendMessageComposer]: messageComposerBindings,
+        [KeyBindingContext.MessageComposer]: messageComposerBindings,
     };
 
     /**
