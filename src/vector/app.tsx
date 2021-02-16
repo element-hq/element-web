@@ -91,17 +91,7 @@ function onNewScreen(screen: string, replaceLast = false) {
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use app.element.io for now instead.
 function makeRegistrationUrl(params: object) {
-    let url;
-    if (window.location.protocol === "vector:") {
-        url = 'https://app.element.io/#/register';
-    } else {
-        url = (
-            window.location.protocol + '//' +
-            window.location.host +
-            window.location.pathname +
-            '#/register'
-        );
-    }
+    let url = params.hs_url + "/#/register";
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
@@ -168,6 +158,7 @@ export async function loadApp(fragParams: {}) {
 }
 
 async function verifyServerConfig() {
+/*
     let validatedConfig;
     try {
         console.log("Verifying homeserver configuration");
@@ -257,6 +248,7 @@ async function verifyServerConfig() {
     // Add the newly built config to the actual config for use by the app
     console.log("Updating SdkConfig with validated discovery information");
     SdkConfig.add({"validated_server_config": validatedConfig});
+*/
 
     return SdkConfig.get();
 }

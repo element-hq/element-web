@@ -83,7 +83,7 @@ export default class WebPlatform extends VectorBasePlatform {
     displayNotification(title: string, msg: string, avatarUrl: string, room: Room) {
         const notifBody = {
             body: msg,
-            tag: "vector",
+            tag: "tchap",
             silent: true, // we play our own sounds
         };
         if (avatarUrl) notifBody['icon'] = avatarUrl;

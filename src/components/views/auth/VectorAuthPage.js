@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from 'matrix-react-sdk/src/index';
-import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthPage extends React.PureComponent {
     static replaces = 'AuthPage'
@@ -27,25 +26,8 @@ export default class VectorAuthPage extends React.PureComponent {
     static getWelcomeBackgroundUrl() {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
-        const brandingConfig = SdkConfig.get().branding;
-        VectorAuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
-        if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
-            if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
-                const index = Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length);
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl[index];
-            } else {
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl;
-            }
-        }
-
-        return VectorAuthPage.welcomeBackgroundUrl;
-    }
-
-    render() {
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
-
         const pageStyle = {
-            background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
+            background: `#374c72`,
         };
 
         const modalStyle = {

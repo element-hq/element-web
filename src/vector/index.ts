@@ -130,6 +130,15 @@ async function start() {
             }
         }
 
+        if (window.localStorage && window.localStorage.getItem("mx_user_id")) {
+            let locationHash = window.location.hash;
+            if (locationHash.startsWith("#/welcome") ||
+                locationHash.startsWith("#/login") ||
+                locationHash.startsWith("#/register")) {
+                window.location.replace(window.location.origin);
+            }
+        }
+
         const loadOlmPromise = loadOlm();
         // set the platform for react sdk
         preparePlatform();
@@ -176,8 +185,8 @@ async function start() {
             // Now that we've loaded the theme (CSS), display the config syntax error if needed.
             if (error.err && error.err instanceof SyntaxError) {
                 // This uses the default brand since the app config is unavailable.
-                return showError(_t("Your Element is misconfigured"), [
-                    _t("Your Element configuration contains invalid JSON. " +
+                return showError(_t("Your Tchap is misconfigured"), [
+                    _t("Your Tchap configuration contains invalid JSON. " +
                         "Please correct the problem and reload the page."),
                     _t(
                         "The message from the parser is: %(message)s",
@@ -203,8 +212,7 @@ async function start() {
     } catch (err) {
         console.error(err);
         // Like the compatibility page, AWOOOOOGA at the user
-        // This uses the default brand since the app config is unavailable.
-        await showError(_t("Your Element is misconfigured"), [
+        await showError(_t("Your Tchap is misconfigured"), [
             err.translatedMessage || _t("Unexpected error preparing the app. See console for details."),
         ]);
     }

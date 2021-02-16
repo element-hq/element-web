@@ -1,12 +1,9 @@
 {
-  "name": "element-web",
-  "version": "1.7.21",
-  "description": "A feature-rich client for Matrix.org",
-  "author": "New Vector Ltd.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vector-im/element-web"
-  },
+  "name": "tchap-web",
+  "productName": "Tchap",
+  "version": "3.0.0",
+  "description": "A feature-rich client for Tchap",
+  "author": "MinArm based on the work of New Vector Ltd.",
   "license": "Apache-2.0",
   "files": [
     "lib",

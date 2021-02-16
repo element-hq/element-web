@@ -1,72 +1,72 @@
 {
-    "name": "Element",
-    "short_name": "Element",
+    "name": "Tchap",
+    "short_name": "Tchap",
     "display": "standalone",
-    "theme_color": "#76CFA6",
+    "theme_color": "#162D58",
     "start_url": "index.html",
     "icons": [
         {
-            "src": "/vector-icons/44.png",
+            "src": "/tchap-icons/44.png",
             "sizes": "44x44",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/1240x600.png",
+            "src": "/tchap-icons/1240x600.png",
             "sizes": "1240x600",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/300.png",
+            "src": "/tchap-icons/300.png",
             "sizes": "300x300",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/150.png",
+            "src": "/tchap-icons/150.png",
             "sizes": "150x150",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/88.png",
+            "src": "/tchap-icons/88.png",
             "sizes": "88x88",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/24.png",
+            "src": "/tchap-icons/24.png",
             "sizes": "24x24",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/50.png",
+            "src": "/tchap-icons/50.png",
             "sizes": "50x50",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/620x300.png",
+            "src": "/tchap-icons/620x300.png",
             "sizes": "620x300",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/1024.png",
+            "src": "/tchap-icons/1024.png",
             "sizes": "1024x1024",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/180.png",
+            "src": "/tchap-icons/180.png",
             "sizes": "180x180",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/152.png",
+            "src": "/tchap-icons/152.png",
             "sizes": "152x152",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/120.png",
+            "src": "/tchap-icons/120.png",
             "sizes": "120x120",
             "type": "image/png"
         },
         {
-            "src": "/vector-icons/76.png",
+            "src": "/tchap-icons/76.png",
             "sizes": "76x76",
             "type": "image/png"
         }
@@ -74,12 +74,12 @@
     "related_applications": [
         {
             "platform": "play",
-            "url": "https://play.google.com/store/apps/details?id=im.vector.app",
-            "id": "im.vector.app"
+            "url": "https://play.google.com/store/apps/details?id=fr.gouv.tchap.a",
+            "id": "fr.gouv.tchap.a"
         },
         {
             "platform": "itunes",
-            "url": "https://apps.apple.com/app/vector/id1083446067"
+            "url": "https://apps.apple.com/app/tchap/id1446253779"
         }
     ]
 }
