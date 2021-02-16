@@ -22,7 +22,7 @@ export enum KeyAction {
     /** Start editing the user's next sent message */
     EditNextMessage = 'EditNextMessage',
 
-    /** Cancel editing a message */
+    /** Cancel editing a message or cancel replying to a message */
     CancelEditing = 'CancelEditing',
 }
 

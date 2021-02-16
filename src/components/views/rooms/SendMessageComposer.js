@@ -38,7 +38,6 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
@@ -174,13 +173,14 @@ export default class SendMessageComposer extends React.Component {
                     }
                 }
                 break;
+            case KeyAction.CancelEditing:
+                dis.dispatch({
+                    action: 'reply_to_event',
+                    event: null,
+                });
+                break;
             default:
-                if (event.key === Key.ESCAPE) {
-                    dis.dispatch({
-                        action: 'reply_to_event',
-                        event: null,
-                    });
-                } else if (this._prepareToEncrypt) {
+                if (this._prepareToEncrypt) {
                     // This needs to be last!
                     this._prepareToEncrypt();
                 }
