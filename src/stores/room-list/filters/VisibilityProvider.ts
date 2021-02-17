@@ -42,7 +42,7 @@ export class VisibilityProvider {
 
         if (
             CallHandler.sharedInstance().getSupportsVirtualRooms() &&
-            VoipUserMapper.sharedInstance().isVirtualRoom(room.roomId)
+            VoipUserMapper.sharedInstance().isVirtualRoom(room)
         ) {
             isVisible = false;
             forced = true;

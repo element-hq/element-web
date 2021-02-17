@@ -14,19 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ensureDMExists, findDMForUser } from './createRoom';
+import { ensureVirtualRoomExists, findDMForUser } from './createRoom';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import DMRoomMap from "./utils/DMRoomMap";
 import CallHandler, { VIRTUAL_ROOM_EVENT_TYPE } from './CallHandler';
-import RoomListStore from './stores/room-list/RoomListStore';
 import { Room } from 'matrix-js-sdk/src/models/room';
 
 // Functions for mapping virtual users & rooms. Currently the only lookup
 // is sip virtual: there could be others in the future.
 
 export default class VoipUserMapper {
-    private virtualRoomIdCache = new Set<string>();
-
     public static sharedInstance(): VoipUserMapper {
         if (window.mxVoipUserMapper === undefined) window.mxVoipUserMapper = new VoipUserMapper();
         return window.mxVoipUserMapper;
@@ -45,25 +42,12 @@ export default class VoipUserMapper {
         const virtualUser = await this.userToVirtualUser(userId);
         if (!virtualUser) return null;
 
-        // There's quite a bit of acrobatics here to prevent the virtual room being shown
-        // while it's being created: firstly, we have to stop the RoomListStore from showing
-        // new rooms for a bit, because we can't set the room account data to say it's a virtual
-        // room until we have the room ID. Secondly, once we have the new room ID, we have to
-        // temporarily cache the fact it's a virtual room because there's no local echo on
-        // room account data so it won't show up in the room model until it comes down the
-        // sync stream again. Ick.
-        RoomListStore.instance.startHoldingNewRooms();
-        try {
-            const virtualRoomId = await ensureDMExists(MatrixClientPeg.get(), virtualUser);
-            MatrixClientPeg.get().setRoomAccountData(virtualRoomId, VIRTUAL_ROOM_EVENT_TYPE, {
-                native_room: roomId,
-            });
-            this.virtualRoomIdCache.add(virtualRoomId);
+        const virtualRoomId = await ensureVirtualRoomExists(MatrixClientPeg.get(), virtualUser, roomId);
+        MatrixClientPeg.get().setRoomAccountData(virtualRoomId, VIRTUAL_ROOM_EVENT_TYPE, {
+            native_room: roomId,
+        });
 
-            return virtualRoomId;
-        } finally {
-            RoomListStore.instance.stopHoldingNewRooms();
-        }
+        return virtualRoomId;
     }
 
     public nativeRoomForVirtualRoom(roomId: string):string {
@@ -74,10 +58,20 @@ export default class VoipUserMapper {
         return virtualRoomEvent.getContent()['native_room'] || null;
     }
 
-    public isVirtualRoom(roomId: string):boolean {
-        if (this.nativeRoomForVirtualRoom(roomId)) return true;
+    public isVirtualRoom(room: Room):boolean {
+        if (this.nativeRoomForVirtualRoom(room.roomId)) return true;
 
-        return this.virtualRoomIdCache.has(roomId);
+        // also look in the create event for the claimed native room ID, which is the only
+        // way we can recognise a virtual room we've created when it first arrives down
+        // our stream. We don't trust this in general though, as it could be faked by an
+        // inviter: our main source of truth is the DM state.
+        const roomCreateEvent = room.currentState.getStateEvents("m.room.create", "");
+        if (!roomCreateEvent || !roomCreateEvent.getContent()) return false;
+        // we only look at this for rooms we created (so inviters can't just cause rooms
+        // to be invisible)
+        if (roomCreateEvent.getSender() !== MatrixClientPeg.get().getUserId()) return false;
+        const claimedNativeRoomId = roomCreateEvent.getContent()[VIRTUAL_ROOM_EVENT_TYPE];
+        return Boolean(claimedNativeRoomId);
     }
 
     public async onNewInvitedRoom(invitedRoom: Room) {
