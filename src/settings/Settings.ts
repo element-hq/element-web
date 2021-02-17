@@ -650,7 +650,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "showChatEffects": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show chat effects"),
+        displayName: _td("Show chat effects (animations when receiving e.g. confetti)"),
         default: true,
     },
     "Widgets.pinned": { // deprecated
