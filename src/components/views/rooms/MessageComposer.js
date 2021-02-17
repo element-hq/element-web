@@ -415,9 +415,10 @@ export default class MessageComposer extends React.Component {
         this.messageComposerInput._sendMessage();
     }
 
-    onIsEmptyChanged = (isEmpty) => {
+    onChange = () => {
+        if (!this.messageComposerInput) return;
         this.setState({
-            isComposerEmpty: isEmpty,
+            isComposerEmpty: this.messageComposerInput.model.isEmpty,
         });
     }
 
@@ -446,7 +447,7 @@ export default class MessageComposer extends React.Component {
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
-                    onIsEmptyChanged={this.onIsEmptyChanged}
+                    onChange={this.onChange}
                 />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,

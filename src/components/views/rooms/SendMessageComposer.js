@@ -117,7 +117,7 @@ export default class SendMessageComposer extends React.Component {
         placeholder: PropTypes.string,
         permalinkCreator: PropTypes.object.isRequired,
         replyToEvent: PropTypes.object,
-        onIsEmptyChanged: PropTypes.func,
+        onChange: PropTypes.func,
     };
 
     static contextType = MatrixClientContext;
@@ -538,9 +538,7 @@ export default class SendMessageComposer extends React.Component {
     }
 
     onChange = () => {
-        if (this.props.onIsEmptyChanged) {
-            this.props.onIsEmptyChanged(this.model.isEmpty);
-        }
+        if (this.props.onChange) this.props.onChange();
     }
 
     render() {
