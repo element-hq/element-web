@@ -483,7 +483,7 @@ export default class MessageComposer extends React.Component {
 
             if (!this.state.isComposerEmpty) {
                 controls.push(
-                    <SendButton onClick={this.sendMessage} />,
+                    <SendButton key="controls_send" onClick={this.sendMessage} />,
                 );
             }
         } else if (this.state.tombstone) {
