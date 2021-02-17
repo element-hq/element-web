@@ -46,6 +46,7 @@ import {IDiff} from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import {ICompletion} from "../../../autocomplete/Autocompleter";
+import { getKeyBindingsManager, KeyBindingContext, KeyAction } from '../../../KeyBindingsManager';
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
@@ -419,98 +420,94 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onKeyDown = (event: React.KeyboardEvent) => {
         const model = this.props.model;
-        const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
         let handled = false;
-        // format bold
-        if (modKey && event.key === Key.B) {
-            this.onFormatAction(Formatting.Bold);
-            handled = true;
-        // format italics
-        } else if (modKey && event.key === Key.I) {
-            this.onFormatAction(Formatting.Italics);
-            handled = true;
-        // format quote
-        } else if (modKey && event.key === Key.GREATER_THAN) {
-            this.onFormatAction(Formatting.Quote);
-            handled = true;
-        // redo
-        } else if ((!IS_MAC && modKey && event.key === Key.Y) ||
-                  (IS_MAC && modKey && event.shiftKey && event.key === Key.Z)) {
-            if (this.historyManager.canRedo()) {
-                const {parts, caret} = this.historyManager.redo();
-                // pass matching inputType so historyManager doesn't push echo
-                // when invoked from rerender callback.
-                model.reset(parts, caret, "historyRedo");
-            }
-            handled = true;
-        // undo
-        } else if (modKey && event.key === Key.Z) {
-            if (this.historyManager.canUndo()) {
-                const {parts, caret} = this.historyManager.undo(this.props.model);
-                // pass matching inputType so historyManager doesn't push echo
-                // when invoked from rerender callback.
-                model.reset(parts, caret, "historyUndo");
-            }
-            handled = true;
-        // insert newline on Shift+Enter
-        } else if (event.key === Key.ENTER && (event.shiftKey || (IS_MAC && event.altKey))) {
-            this.insertText("\n");
-            handled = true;
-        // move selection to start of composer
-        } else if (modKey && event.key === Key.HOME && !event.shiftKey) {
-            setSelection(this.editorRef.current, model, {
-                index: 0,
-                offset: 0,
-            });
-            handled = true;
-        // move selection to end of composer
-        } else if (modKey && event.key === Key.END && !event.shiftKey) {
-            setSelection(this.editorRef.current, model, {
-                index: model.parts.length - 1,
-                offset: model.parts[model.parts.length - 1].text.length,
-            });
-            handled = true;
-        // autocomplete or enter to send below shouldn't have any modifier keys pressed.
-        } else {
-            const metaOrAltPressed = event.metaKey || event.altKey;
-            const modifierPressed = metaOrAltPressed || event.shiftKey;
-            if (model.autoComplete && model.autoComplete.hasCompletions()) {
-                const autoComplete = model.autoComplete;
-                switch (event.key) {
-                    case Key.ARROW_UP:
-                        if (!modifierPressed) {
-                            autoComplete.onUpArrow(event);
-                            handled = true;
-                        }
-                        break;
-                    case Key.ARROW_DOWN:
-                        if (!modifierPressed) {
-                            autoComplete.onDownArrow(event);
-                            handled = true;
-                        }
-                        break;
-                    case Key.TAB:
-                        if (!metaOrAltPressed) {
-                            autoComplete.onTab(event);
-                            handled = true;
-                        }
-                        break;
-                    case Key.ESCAPE:
-                        if (!modifierPressed) {
-                            autoComplete.onEscape(event);
-                            handled = true;
-                        }
-                        break;
-                    default:
-                        return; // don't preventDefault on anything else
-                }
-            } else if (event.key === Key.TAB) {
-                this.tabCompleteName(event);
+        const action = getKeyBindingsManager().getAction(KeyBindingContext.MessageComposer, event);
+        switch (action) {
+            case KeyAction.FormatBold:
+                this.onFormatAction(Formatting.Bold);
                 handled = true;
-            } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
-                this.formatBarRef.current.hide();
-            }
+                break;
+            case KeyAction.FormatItalics:
+                this.onFormatAction(Formatting.Italics);
+                handled = true;
+                break;
+            case KeyAction.FormatQuote:
+                this.onFormatAction(Formatting.Quote);
+                handled = true;
+                break;
+            case KeyAction.EditRedo:
+                if (this.historyManager.canRedo()) {
+                    const {parts, caret} = this.historyManager.redo();
+                    // pass matching inputType so historyManager doesn't push echo
+                    // when invoked from rerender callback.
+                    model.reset(parts, caret, "historyRedo");
+                }
+                handled = true;
+                break;
+            case KeyAction.EditUndo:
+                if (this.historyManager.canUndo()) {
+                    const {parts, caret} = this.historyManager.undo(this.props.model);
+                    // pass matching inputType so historyManager doesn't push echo
+                    // when invoked from rerender callback.
+                    model.reset(parts, caret, "historyUndo");
+                }
+                handled = true;
+                break;
+            case KeyAction.NewLine:
+                this.insertText("\n");
+                handled = true;
+                break;
+            case KeyAction.MoveCursorToStart:
+                setSelection(this.editorRef.current, model, {
+                    index: 0,
+                    offset: 0,
+                });
+                handled = true;
+                break;
+            case KeyAction.MoveCursorToEnd:
+                setSelection(this.editorRef.current, model, {
+                    index: model.parts.length - 1,
+                    offset: model.parts[model.parts.length - 1].text.length,
+                });
+                handled = true;
+                break;
         }
+        if (handled) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
+        const autocompleteAction = getKeyBindingsManager().getAction(KeyBindingContext.AutoComplete, event);
+        if (model.autoComplete && model.autoComplete.hasCompletions()) {
+            const autoComplete = model.autoComplete;
+            switch (autocompleteAction) {
+                case KeyAction.AutocompletePrevSelection:
+                    autoComplete.onUpArrow(event);
+                    handled = true;
+                    break;
+                case KeyAction.AutocompleteNextSelection:
+                    autoComplete.onDownArrow(event);
+                    handled = true;
+                    break;
+                case KeyAction.AutocompleteApply:
+                    autoComplete.onTab(event);
+                    handled = true;
+                    break;
+                case KeyAction.AutocompleteCancel:
+                    autoComplete.onEscape(event);
+                    handled = true;
+                    break;
+                default:
+                    return; // don't preventDefault on anything else
+            }
+        } else if (autocompleteAction === KeyAction.AutocompleteApply) {
+            this.tabCompleteName(event);
+            handled = true;
+        } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
+            this.formatBarRef.current.hide();
+        }
+
         if (handled) {
             event.preventDefault();
             event.stopPropagation();

@@ -4,6 +4,8 @@ import SettingsStore from './settings/SettingsStore';
 export enum KeyBindingContext {
     /** Key bindings for the chat message composer component */
     MessageComposer = 'MessageComposer',
+    /** Key bindings for text editing autocompletion */
+    AutoComplete = 'AutoComplete',
 }
 
 export enum KeyAction {
@@ -21,9 +23,34 @@ export enum KeyAction {
     EditPrevMessage = 'EditPrevMessage',
     /** Start editing the user's next sent message */
     EditNextMessage = 'EditNextMessage',
-
-    /** Cancel editing a message or cancel replying to a message */
+    /** Cancel editing a message or cancel replying to a message*/
     CancelEditing = 'CancelEditing',
+
+    /** Set bold format the current selection */
+    FormatBold = 'FormatBold',
+    /** Set italics format the current selection */
+    FormatItalics = 'FormatItalics',
+    /** Format the current selection as quote */
+    FormatQuote = 'FormatQuote',
+    /** Undo the last editing */
+    EditUndo = 'EditUndo',
+    /** Redo editing */
+    EditRedo = 'EditRedo',
+    /** Insert new line */
+    NewLine = 'NewLine',
+    MoveCursorToStart = 'MoveCursorToStart',
+    MoveCursorToEnd = 'MoveCursorToEnd',
+
+    // Autocomplete
+
+    /** Apply the current autocomplete selection */
+    AutocompleteApply = 'AutocompleteApply',
+    /** Cancel autocompletion */
+    AutocompleteCancel = 'AutocompleteCancel',
+    /** Move to the previous autocomplete selection */
+    AutocompletePrevSelection = 'AutocompletePrevSelection',
+    /** Move to the next autocomplete selection */
+    AutocompleteNextSelection = 'AutocompleteNextSelection',
 }
 
 /**
@@ -84,13 +111,81 @@ const messageComposerBindings = (): KeyBinding[] => {
                 key: Key.ESCAPE,
             },
         },
+        {
+            action: KeyAction.FormatBold,
+            keyCombo: {
+                key: Key.B,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.FormatItalics,
+            keyCombo: {
+                key: Key.I,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.FormatQuote,
+            keyCombo: {
+                key: Key.GREATER_THAN,
+                ctrlOrCmd: true,
+                shiftKey: true,
+            },
+        },
+        {
+            action: KeyAction.EditUndo,
+            keyCombo: {
+                key: Key.Z,
+                ctrlOrCmd: true,
+            },
+        },
+        // Note: the following two bindings also work with just HOME and END, add them here?
+        {
+            action: KeyAction.MoveCursorToStart,
+            keyCombo: {
+                key: Key.HOME,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.MoveCursorToEnd,
+            keyCombo: {
+                key: Key.END,
+                ctrlOrCmd: true,
+            },
+        },
     ];
+    if (isMac) {
+        bindings.push({
+            action: KeyAction.EditRedo,
+            keyCombo: {
+                key: Key.Z,
+                ctrlOrCmd: true,
+                shiftKey: true,
+            },
+        });
+    } else {
+        bindings.push({
+            action: KeyAction.EditRedo,
+            keyCombo: {
+                key: Key.Y,
+                ctrlOrCmd: true,
+            },
+        });
+    }
     if (SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend')) {
         bindings.push({
             action: KeyAction.Send,
             keyCombo: {
                 key: Key.ENTER,
                 ctrlOrCmd: true,
+            },
+        });
+        bindings.push({
+            action: KeyAction.NewLine,
+            keyCombo: {
+                key: Key.ENTER,
             },
         });
     } else {
@@ -100,9 +195,67 @@ const messageComposerBindings = (): KeyBinding[] => {
                 key: Key.ENTER,
             },
         });
+        bindings.push({
+            action: KeyAction.NewLine,
+            keyCombo: {
+                key: Key.ENTER,
+                shiftKey: true,
+            },
+        });
+        if (isMac) {
+            bindings.push({
+                action: KeyAction.NewLine,
+                keyCombo: {
+                    key: Key.ENTER,
+                    altKey: true,
+                },
+            });
+        }
     }
-
     return bindings;
+}
+
+const autocompleteBindings = (): KeyBinding[] => {
+    return [
+        {
+            action: KeyAction.AutocompleteApply,
+            keyCombo: {
+                key: Key.TAB,
+            },
+        },
+        {
+            action: KeyAction.AutocompleteApply,
+            keyCombo: {
+                key: Key.TAB,
+                ctrlKey: true,
+            },
+        },
+        {
+            action: KeyAction.AutocompleteApply,
+            keyCombo: {
+                key: Key.TAB,
+                shiftKey: true,
+            },
+        },
+        {
+            action: KeyAction.AutocompleteCancel,
+            keyCombo: {
+                key: Key.ESCAPE,
+            },
+        },
+        {
+            action: KeyAction.AutocompletePrevSelection,
+            keyCombo: {
+                key: Key.ARROW_UP,
+            },
+        },
+        {
+            action: KeyAction.AutocompleteNextSelection,
+            keyCombo: {
+                key: Key.ARROW_DOWN,
+            },
+        },
+    ]
 }
 
 /**
@@ -110,7 +263,7 @@ const messageComposerBindings = (): KeyBinding[] => {
  *
  * Note, this method is only exported for testing.
  */
-export function isKeyComboMatch(ev: KeyboardEvent, combo: KeyCombo, onMac: boolean): boolean {
+export function isKeyComboMatch(ev: KeyboardEvent | React.KeyboardEvent, combo: KeyCombo, onMac: boolean): boolean {
     if (combo.key !== undefined && ev.key !== combo.key) {
         return false;
     }
@@ -160,12 +313,13 @@ export class KeyBindingsManager {
      */
     contextBindings: Record<KeyBindingContext, KeyBindingsGetter> = {
         [KeyBindingContext.MessageComposer]: messageComposerBindings,
+        [KeyBindingContext.AutoComplete]: autocompleteBindings,
     };
 
     /**
      * Finds a matching KeyAction for a given KeyboardEvent
      */
-    getAction(context: KeyBindingContext, ev: KeyboardEvent): KeyAction {
+    getAction(context: KeyBindingContext, ev: KeyboardEvent | React.KeyboardEvent): KeyAction {
         const bindings = this.contextBindings[context]?.();
         if (!bindings) {
             return KeyAction.None;
