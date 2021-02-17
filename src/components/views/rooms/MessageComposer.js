@@ -415,10 +415,9 @@ export default class MessageComposer extends React.Component {
         this.messageComposerInput._sendMessage();
     }
 
-    onChange = () => {
-        if (!this.messageComposerInput) return;
+    onChange = (model) => {
         this.setState({
-            isComposerEmpty: this.messageComposerInput.model.isEmpty,
+            isComposerEmpty: model.isEmpty,
         });
     }
 

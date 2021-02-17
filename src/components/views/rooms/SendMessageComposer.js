@@ -538,7 +538,7 @@ export default class SendMessageComposer extends React.Component {
     }
 
     onChange = () => {
-        if (this.props.onChange) this.props.onChange();
+        if (this.props.onChange) this.props.onChange(this.model);
     }
 
     render() {
