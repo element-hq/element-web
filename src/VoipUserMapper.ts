@@ -24,6 +24,8 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 // is sip virtual: there could be others in the future.
 
 export default class VoipUserMapper {
+    private virtualRoomIdCache = new Set<string>();
+
     public static sharedInstance(): VoipUserMapper {
         if (window.mxVoipUserMapper === undefined) window.mxVoipUserMapper = new VoipUserMapper();
         return window.mxVoipUserMapper;
@@ -60,6 +62,8 @@ export default class VoipUserMapper {
 
     public isVirtualRoom(room: Room):boolean {
         if (this.nativeRoomForVirtualRoom(room.roomId)) return true;
+
+        if (this.virtualRoomIdCache.has(room.roomId)) return true;
 
         // also look in the create event for the claimed native room ID, which is the only
         // way we can recognise a virtual room we've created when it first arrives down
