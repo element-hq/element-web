@@ -30,6 +30,7 @@ import { getE2EEWellKnown } from "./utils/WellKnownUtils";
 import GroupStore from "./stores/GroupStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import { isJoinedOrNearlyJoined } from "./utils/membership";
+import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -300,6 +301,34 @@ export async function canEncryptToAllUsers(client: MatrixClient, userIds: string
     }
 }
 
+// Similar to ensureDMExists but also adds creation content
+// without polluting ensureDMExists with unrelated stuff (also
+// they're never encrypted).
+export async function ensureVirtualRoomExists(
+    client: MatrixClient, userId: string, nativeRoomId: string,
+): Promise<string> {
+    const existingDMRoom = findDMForUser(client, userId);
+    let roomId;
+    if (existingDMRoom) {
+        roomId = existingDMRoom.roomId;
+    } else {
+        roomId = await createRoom({
+            dmUserId: userId,
+            spinner: false,
+            andView: false,
+            createOpts: {
+                creation_content: {
+                    // This allows us to recognise that the room is a virtual room
+                    // when it comes down our sync stream (we also put the ID of the
+                    // respective native room in there because why not?)
+                    [VIRTUAL_ROOM_EVENT_TYPE]: nativeRoomId,
+                },
+            },
+        });
+    }
+    return roomId;
+}
+
 export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string> {
     const existingDMRoom = findDMForUser(client, userId);
     let roomId;
@@ -310,6 +339,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         if (privateShouldBeEncrypted()) {
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
+
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
         await _waitForMember(client, roomId, userId);
     }

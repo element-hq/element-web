@@ -1040,9 +1040,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-                        'm.id.phone': userId,
-                    });
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw new Error("Unable to find Matrix ID for phone number");
                     }
