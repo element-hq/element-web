@@ -250,6 +250,10 @@ export default abstract class BasePlatform {
 
     setSpellCheckLanguages(preferredLangs: string[]) {}
 
+    getSpellCheckLanguages(): Promise<string[]> | null {
+        return null;
+    }
+
     getAvailableSpellCheckLanguages(): Promise<string[]> | null {
         return null;
     }
