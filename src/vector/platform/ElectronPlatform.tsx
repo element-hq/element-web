@@ -504,6 +504,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
+    async getSpellCheckLanguages(): Promise<string[]> {
+        return this._ipcCall('getSpellCheckLanguages');
+    }
+
     async getAvailableSpellCheckLanguages(): Promise<string[]> {
         return this._ipcCall('getAvailableSpellCheckLanguages');
     }
