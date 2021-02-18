@@ -1,6 +1,5 @@
 /*
-Copyright 2017 Marcel Radzio (MTRNord)
-Copyright 2017 Vector Creations Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
