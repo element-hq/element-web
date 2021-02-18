@@ -328,6 +328,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
      * spell-checking, otherwise false.
      */
     supportsMultiLanguageSpellCheck(): boolean {
+        if (isMac) return false;
         return true;
     }
 
