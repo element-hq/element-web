@@ -188,7 +188,10 @@ export default class GeneralUserSettingsTab extends React.Component {
         SettingsStore.setValue("spell-check-languages", null, SettingLevel.DEVICE, languages);
         this.setState({spellCheckLanguages: languages});
 
-        languageHandler.setSpellCheckLanguages(languages);
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            plaf.setSpellCheckLanguages(languages);
+        }
     };
 
     _onPasswordChangeError = (err) => {
@@ -402,6 +405,7 @@ export default class GeneralUserSettingsTab extends React.Component {
     render() {
         const plaf = PlatformPeg.get();
         const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
+        console.log("LOG", supportsMultiLanguageSpellCheck);
 
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img className='mx_GeneralUserSettingsTab_warningIcon'

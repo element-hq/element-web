@@ -346,20 +346,6 @@ export function setLanguage(preferredLangs: string | string[]) {
     });
 }
 
-export function setSpellCheckLanguages(preferredLangs: string[]) {
-    const plaf = PlatformPeg.get();
-    if (plaf) {
-        plaf.setSpellCheckLanguages(preferredLangs);
-    }
-}
-
-export async function getAvailableSpellCheckLanguages(): Promise<string[]> {
-    const plaf = PlatformPeg.get();
-    if (plaf) {
-        return plaf.getAvailableSpellCheckLanguages();
-    }
-}
-
 export function getAllLanguagesFromJson() {
     return getLangsJson().then((langsObject) => {
         const langs = [];

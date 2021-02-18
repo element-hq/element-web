@@ -18,7 +18,7 @@ import React from 'react';
 
 import Dropdown from "../../views/elements/Dropdown"
 import * as sdk from '../../../index';
-import * as languageHandler from '../../../languageHandler';
+import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 
@@ -52,23 +52,26 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
     }
 
     componentDidMount() {
-        languageHandler.getAvailableSpellCheckLanguages().then((languages) => {
-            languages.sort(function(a, b) {
-                if (a < b) return -1;
-                if (a > b) return 1;
-                return 0;
-            });
-            const langs = [];
-            languages.forEach((language) => {
-                langs.push({
-                    label: language,
-                    value: language,
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            plaf.getAvailableSpellCheckLanguages().then((languages) => {
+                languages.sort(function(a, b) {
+                    if (a < b) return -1;
+                    if (a > b) return 1;
+                    return 0;
+                });
+                const langs = [];
+                languages.forEach((language) => {
+                    langs.push({
+                        label: language,
+                        value: language,
+                    })
                 })
-            })
-            this.setState({languages: langs});
-        }).catch((e) => {
-            this.setState({languages: ['en']});
-        });
+                this.setState({languages: langs});
+            }).catch((e) => {
+                this.setState({languages: ['en']});
+            });
+        }
     }
 
     _onSearchChange(search) {
