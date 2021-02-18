@@ -100,15 +100,8 @@ const NewRoomIntro = () => {
             });
         }
 
-        let canInvite = inRoom;
-        const powerLevels = room.currentState.getStateEvents(EventType.RoomPowerLevels, "")?.getContent();
-        const me = room.getMember(cli.getUserId());
-        if (powerLevels && me && powerLevels.invite > me.powerLevel) {
-            canInvite = false;
-        }
-
         let buttons;
-        if (canInvite) {
+        if (room.canInvite(cli.getUserId())) {
             const onInviteClick = () => {
                 dis.dispatch({ action: "view_invite", roomId });
             };
