@@ -61,7 +61,7 @@ for (const key of Object.keys(LEVEL_HANDLERS)) {
     LEVEL_HANDLERS[key] = new LocalEchoWrapper(LEVEL_HANDLERS[key]);
 }
 
-const LEVEL_ORDER = [
+export const LEVEL_ORDER = [
     SettingLevel.DEVICE,
     SettingLevel.ROOM_DEVICE,
     SettingLevel.ROOM_ACCOUNT,
