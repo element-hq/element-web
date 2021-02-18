@@ -82,8 +82,8 @@ For a good example, see https://develop.element.io/config.json.
    default homeserver when signing up or logging in.
 1. `permalinkPrefix`: Used to change the URL that Element generates permalinks with.
    By default, this is "https://matrix.to" to generate matrix.to (spec) permalinks.
-   Set this to your Riot instance URL if you run an unfederated server (eg:
-   "https://riot.example.org").
+   Set this to your Element instance URL if you run an unfederated server (eg:
+   "https://element.example.org").
 1. `jitsi`: Used to change the default conference options. Learn more about the
    Jitsi options at [jitsi.md](./jitsi.md).
     1. `preferredDomain`: The domain name of the preferred Jitsi instance. Defaults
@@ -110,6 +110,21 @@ For a good example, see https://develop.element.io/config.json.
    1. `logo`: An HTTP URL to the avatar for the desktop build. Should be 24x24, ideally
       an SVG.
    1. `url`: An HTTP URL for where to send the user to download the desktop build.
+1. `voip_mxid_translate_pattern`: Used to route VoIP calls to different Matrix IDs.
+   Any VoIP calls placed will instead be placed to the translated Matrix ID from the
+   pattern string but still appear to be with the original Matrix ID. Correspondingly,
+   incoming VoIP calls will be made to appear as if they came from a different Matrix ID.
+   The value is a template string with substitution `$(mxid)` which is the complete
+   URL-encoded native Matrix ID, using '=' instead of '%'. For example, a value of
+   `@_myappservice_$(mxid):example.org` would cause any VoIP call to `@bob:foo.example`
+   to be redirected to `@_myappservice_=40bob=3Afoo.example:example.org` and calls
+   from the latter to appear as if they were from the former.
+   This option is experimental and may be removed at any time without notice. It's
+   also strongly advised not to set this option unless you're absolutly certain you
+   know what you're doing.
+1. `mobileGuideToast`: Whether to show a toast a startup which nudges users on
+   iOS and Android towards the native mobile apps. The toast redirects to the
+   mobile guide if they accept. Defaults to false.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element

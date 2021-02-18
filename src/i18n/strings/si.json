@@ -1,4 +1,6 @@
 {
-    "Unknown device": "නොදන්නා උපකරණය",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)"
+    "Unknown device": "නොදන්නා උපාංගයකි",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Welcome to Element": "ඉලමන්ට් වෙත සාදරයෙන් පිළිගනිමු",
+    "Open": "විවෘත කරන්න"
 }

@@ -1,9 +1,8 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2021 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +48,7 @@ import {CheckUpdatesPayload} from "matrix-react-sdk/src/dispatcher/payloads/Chec
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 
-const ipcRenderer = window.ipcRenderer;
+const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
 
 function platformFriendlyName(): string {
@@ -74,7 +73,7 @@ function platformFriendlyName(): string {
 function _onAction(payload: ActionPayload) {
     // Whitelist payload actions, no point sending most across
     if (['call_state'].includes(payload.action)) {
-        ipcRenderer.send('app_onAction', payload);
+        electron.send('app_onAction', payload);
     }
 }
 
@@ -104,7 +103,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
     constructor() {
         super();
 
-        ipcRenderer.on('seshatReply', this._onIpcReply);
+        electron.on('seshatReply', this._onIpcReply);
     }
 
     async _ipcCall(name: string, ...args: any[]): Promise<any> {
@@ -112,7 +111,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
             this.pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.ipcRenderer.send('seshat', {id: ipcCallId, name, args});
+            window.electron.send('seshat', {id: ipcCallId, name, args});
         });
     }
 
@@ -230,7 +229,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             false if there is not
             or the error if one is encountered
          */
-        ipcRenderer.on('check_updates', (event, status) => {
+        electron.on('check_updates', (event, status) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...getUpdateCheckStatus(status),
@@ -238,21 +237,21 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         // try to flush the rageshake logs to indexeddb before quit.
-        ipcRenderer.on('before-quit', function() {
+        electron.on('before-quit', function() {
             console.log('element-desktop closing');
             rageshake.flush();
         });
 
-        ipcRenderer.on('ipcReply', this._onIpcReply);
-        ipcRenderer.on('update-downloaded', this.onUpdateDownloaded);
+        electron.on('ipcReply', this._onIpcReply);
+        electron.on('update-downloaded', this.onUpdateDownloaded);
 
-        ipcRenderer.on('preferences', () => {
+        electron.on('preferences', () => {
             dis.fire(Action.ViewUserSettings);
         });
 
-        ipcRenderer.on('userDownloadCompleted', (ev, {path, name}) => {
+        electron.on('userDownloadCompleted', (ev, {path, name}) => {
             const onAccept = () => {
-                ipcRenderer.send('userDownloadOpen', {path});
+                electron.send('userDownloadOpen', {path});
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -336,7 +335,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
 
-        ipcRenderer.send('setBadgeCount', count);
+        electron.send('setBadgeCount', count);
     }
 
     supportsNotifications(): boolean {
@@ -379,7 +378,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     loudNotification(ev: Event, room: Object) {
-        ipcRenderer.send('loudNotification');
+        electron.send('loudNotification');
     }
 
     async getAppVersion(): Promise<string> {
@@ -431,14 +430,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     startUpdateCheck() {
         super.startUpdateCheck();
-        ipcRenderer.send('check_updates');
+        electron.send('check_updates');
     }
 
     installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        ipcRenderer.send('install_update');
+        electron.send('install_update');
     }
 
     getDefaultDeviceDisplayName(): string {
@@ -468,7 +467,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
             this.pendingIpcCalls[ipcCallId] = {resolve, reject};
-            window.ipcRenderer.send('ipcCall', {id: ipcCallId, name, args});
+            window.electron.send('ipcCall', {id: ipcCallId, name, args});
             // Maybe add a timeout to these? Probably not necessary.
         });
     }

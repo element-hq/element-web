@@ -23,16 +23,11 @@ limitations under the License.
 // in webpack.config.js
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
-require('katex/dist/katex.css')
+require('katex/dist/katex.css');
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import {parseQsFromFragment} from "./url_utils";
 import './modernizr';
-
-// load service worker if available on this platform
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-}
 
 async function settled(...promises: Array<Promise<any>>) {
     for (const prom of promises) {
@@ -157,7 +152,7 @@ async function start() {
         // error handling begins here
         // ##########################
         if (!acceptBrowser) {
-            await new Promise(resolve => {
+            await new Promise<void>(resolve => {
                 console.error("Browser is missing required features.");
                 // take to a different landing page to AWOOOOOGA at the user
                 showIncompatibleBrowser(() => {

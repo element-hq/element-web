@@ -124,7 +124,7 @@ function onTokenLoginCompleted() {
     parsedUrl.search = "";
     const formatted = url.format(parsedUrl);
     console.log(`Redirecting to ${formatted} to drop loginToken from queryparams`);
-    window.location.href = formatted;
+    window.history.replaceState(null, "", formatted);
 }
 
 export async function loadApp(fragParams: {}) {
@@ -236,7 +236,7 @@ async function verifyServerConfig() {
 
         validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
     } catch (e) {
-        const {hsUrl, isUrl, userId} = Lifecycle.getLocalStorageSessionVars();
+        const {hsUrl, isUrl, userId} = await Lifecycle.getStoredSessionVars();
         if (hsUrl && userId) {
             console.error(e);
             console.warn("A session was found - suppressing config error and using the session's homeserver");
