@@ -27,11 +27,11 @@ export interface ICommand {
     };
 }
 
-export default class AutocompleteProvider {
+export default abstract class AutocompleteProvider {
     commandRegex: RegExp;
     forcedCommandRegex: RegExp;
 
-    constructor(commandRegex?: RegExp, forcedCommandRegex?: RegExp) {
+    protected constructor(commandRegex?: RegExp, forcedCommandRegex?: RegExp) {
         if (commandRegex) {
             if (!commandRegex.global) {
                 throw new Error('commandRegex must have global flag set');
@@ -93,18 +93,11 @@ export default class AutocompleteProvider {
         };
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
-        return [];
-    }
+    abstract getCompletions(query: string, selection: ISelectionRange, force: boolean): Promise<ICompletion[]>;
 
-    getName(): string {
-        return 'Default Provider';
-    }
+    abstract getName(): string;
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode | null {
-        console.error('stub; should be implemented in subclasses');
-        return null;
-    }
+    abstract renderCompletions(completions: React.ReactNode[]): React.ReactNode | null;
 
     // Whether we should provide completions even if triggered forcefully, without a sigil.
     shouldForceComplete(): boolean {

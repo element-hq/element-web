@@ -298,7 +298,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
 
 
             return completions.length > 0 ? (
-                <div key={i} className="mx_Autocomplete_ProviderSection">
+                <div key={i} className="mx_Autocomplete_ProviderSection" role="presentation">
                     <div className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</div>
                     { completionResult.provider.renderCompletions(completions) }
                 </div>
@@ -306,7 +306,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }).filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
-            <div className="mx_Autocomplete" ref={this.containerRef}>
+            <div id="mx_Autocomplete" className="mx_Autocomplete" ref={this.containerRef} role="listbox">
                 { renderedCompletions }
             </div>
         ) : null;
