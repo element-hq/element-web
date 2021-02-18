@@ -424,10 +424,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "en",
     },
-    "spell-check-languages": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: ["en-US"],
-    },
     "breadcrumb_rooms": {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
