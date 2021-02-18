@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import SettingsStore from "../../settings/SettingsStore";
+import {LayoutPropType} from "../../settings/Layout";
 import React, {createRef} from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
@@ -111,8 +112,8 @@ class TimelinePanel extends React.Component {
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
 
-        // whether to use the irc layout
-        useIRCLayout: PropTypes.bool,
+        // which layout to use
+        layout: LayoutPropType,
     }
 
     // a map from room id to read marker event timestamp
@@ -715,26 +716,22 @@ class TimelinePanel extends React.Component {
             }
             this.lastRMSentEventId = this.state.readMarkerEventId;
 
-            const roomId = this.props.timelineSet.room.roomId;
-            const hiddenRR = !SettingsStore.getValue("sendReadReceipts", roomId);
-
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
-                ' hidden:' + hiddenRR,
             );
             MatrixClientPeg.get().setRoomReadMarkers(
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent, // Could be null, in which case no RR is sent
-                {hidden: hiddenRR},
+                {},
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
-                        {hidden: hiddenRR},
+                        {},
                     ).catch((e) => {
                         console.error(e);
                         this.lastRRSentEventId = undefined;
@@ -1446,7 +1443,7 @@ class TimelinePanel extends React.Component {
                 getRelationsForEvent={this.getRelationsForEvent}
                 editState={this.state.editState}
                 showReactions={this.props.showReactions}
-                useIRCLayout={this.props.useIRCLayout}
+                layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
             />
         );

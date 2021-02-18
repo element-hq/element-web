@@ -40,6 +40,10 @@ import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermi
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { CHAT_EFFECTS } from "../../effects";
+import { containsEmoji } from "../../effects/utils";
+import dis from "../../dispatcher/dispatcher";
+import {tryTransformPermalinkToLocalHref} from "../../utils/permalinks/Permalinks";
 
 // TODO: Purge this from the universe
 
@@ -67,6 +71,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
             const stickerSendingCap = WidgetEventCapability.forRoomEvent(EventDirection.Send, EventType.Sticker).raw;
             this.allowedCapabilities.add(MatrixCapabilities.StickerSending); // legacy as far as MSC2762 is concerned
             this.allowedCapabilities.add(stickerSendingCap);
+
+            // Auto-approve the legacy visibility capability. We send it regardless of capability.
+            // Widgets don't technically need to request this capability, but Scalar still does.
+            this.allowedCapabilities.add("visibility");
         }
     }
 
@@ -123,6 +131,14 @@ export class StopGapWidgetDriver extends WidgetDriver {
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
+
+            if (eventType === EventType.RoomMessage) {
+                CHAT_EFFECTS.forEach((effect) => {
+                    if (containsEmoji(content, effect.emojis)) {
+                        dis.dispatch({action: `effects.${effect.command}`});
+                    }
+                });
+            }
         }
 
         return {roomId, eventId: r.event_id};
@@ -159,5 +175,13 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 return observer.update({state: OpenIDRequestState.Allowed, token: await getToken()});
             },
         });
+    }
+
+    public async navigate(uri: string): Promise<void> {
+        const localUri = tryTransformPermalinkToLocalHref(uri);
+        if (!localUri || localUri === uri) { // parse failure can lead to an unmodified URL
+            throw new Error("Failed to transform URI");
+        }
+        window.location.hash = localUri; // it'll just be a fragment
     }
 }

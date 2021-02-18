@@ -1,11 +1,11 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// used from run.sh as getopts doesn't support long parameters
-const idx = process.argv.indexOf("--riot-url");
-let hasRiotUrl = false;
-if (idx !== -1) {
-    const value = process.argv[idx + 1];
-    hasRiotUrl = !!value;
+import PropTypes from 'prop-types';
+
+/* TODO: This should be later reworked into something more generic */
+export enum Layout {
+    IRC = "irc",
+    Group = "group"
 }
-process.stdout.write(hasRiotUrl ? "1" : "0" );
+
+/* We need this because multiple components are still using JavaScript */
+export const LayoutPropType = PropTypes.oneOf(Object.values(Layout));

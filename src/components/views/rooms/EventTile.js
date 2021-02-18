@@ -27,6 +27,7 @@ import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
+import {Layout, LayoutPropType} from "../../../settings/Layout";
 import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -37,6 +38,7 @@ import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
 import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
+import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -65,6 +67,7 @@ const stateEventTileTypes = {
     'm.room.server_acl': 'messages.TextualEvent',
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': 'messages.TextualEvent',
+    [WIDGET_LAYOUT_EVENT_TYPE]: 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
     'm.room.guest_access': 'messages.TextualEvent',
@@ -225,8 +228,8 @@ export default class EventTile extends React.Component {
         // whether to show reactions for this event
         showReactions: PropTypes.bool,
 
-        // whether to use the irc layout
-        useIRCLayout: PropTypes.bool,
+        // which layout to use
+        layout: LayoutPropType,
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
@@ -732,7 +735,7 @@ export default class EventTile extends React.Component {
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
-        } else if (this.props.useIRCLayout) {
+        } else if (this.props.layout == Layout.IRC) {
             avatarSize = 14;
             needsSenderProfile = true;
         } else if (this.props.continuation && this.props.tileShape !== "file_grid") {
@@ -843,10 +846,11 @@ export default class EventTile extends React.Component {
                 { timestamp }
             </a>;
 
-        const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
-        const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
-        const groupPadlock = !this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
-        const ircPadlock = this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const useIRCLayout = this.props.layout == Layout.IRC;
+        const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
+        const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
+        const groupPadlock = !useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const ircPadlock = useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
         switch (this.props.tileShape) {
             case 'notif': {
@@ -941,7 +945,7 @@ export default class EventTile extends React.Component {
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
                     this._replyThread,
-                    this.props.useIRCLayout,
+                    this.props.layout,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers

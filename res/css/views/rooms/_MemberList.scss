@@ -46,6 +46,11 @@ limitations under the License.
     }
 }
 
+.mx_GroupMemberList_query,
+.mx_GroupRoomList_query {
+    flex: 0 0 auto;
+}
+
 .mx_MemberList_chevron {
     position: absolute;
     right: 35px;
@@ -59,19 +64,13 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
-.mx_MemberList_query,
-.mx_GroupMemberList_query,
-.mx_GroupRoomList_query {
-    flex: 1 1 0;
+.mx_MemberList_query {
+    height: 16px;
 
     // stricter rule to override the one in _common.scss
     &[type="text"] {
         font-size: $font-12px;
     }
-}
-
-.mx_MemberList_query {
-    height: 16px;
 }
 
 .mx_MemberList_wrapper {
@@ -113,10 +112,10 @@ limitations under the License.
     }
 }
 
-.mx_MemberList_inviteCommunity span {
-    background-image: url('$(res)/img/icon-invite-people.svg');
+.mx_MemberList_inviteCommunity span::before {
+    mask-image: url('$(res)/img/icon-invite-people.svg');
 }
 
-.mx_MemberList_addRoomToCommunity span {
-    background-image: url('$(res)/img/icons-room-add.svg');
+.mx_MemberList_addRoomToCommunity span::before {
+    mask-image: url('$(res)/img/icons-room-add.svg');
 }

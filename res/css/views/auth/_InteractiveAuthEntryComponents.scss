@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_InteractiveAuthEntryComponents_emailWrapper {
-    padding-right: 60px;
+    padding-right: 100px;
     position: relative;
     margin-top: 32px;
     margin-bottom: 32px;
@@ -83,7 +83,10 @@ limitations under the License.
 }
 
 .mx_InteractiveAuthEntryComponents_termsPolicy {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
 }
 
 .mx_InteractiveAuthEntryComponents_passwordSection {

@@ -33,16 +33,24 @@ interface IPasswordFlow {
     type: "m.login.password";
 }
 
+export enum IdentityProviderBrand {
+    Gitlab = "org.matrix.gitlab",
+    Github = "org.matrix.github",
+    Apple = "org.matrix.apple",
+    Google = "org.matrix.google",
+    Facebook = "org.matrix.facebook",
+    Twitter = "org.matrix.twitter",
+}
+
 export interface IIdentityProvider {
     id: string;
     name: string;
     icon?: string;
+    brand?: IdentityProviderBrand | string;
 }
 
 export interface ISSOFlow {
     type: "m.login.sso" | "m.login.cas";
-    // eslint-disable-next-line camelcase
-    identity_providers: IIdentityProvider[];
     "org.matrix.msc2858.identity_providers": IIdentityProvider[]; // Unstable prefix for MSC2858
 }
 

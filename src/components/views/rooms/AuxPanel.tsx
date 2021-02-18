@@ -26,9 +26,9 @@ import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import CallView from "../voip/CallView";
 import {UIFeature} from "../../../settings/UIFeature";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
+import CallViewForRoom from '../voip/CallViewForRoom';
 
 interface IProps {
     // js-sdk room object
@@ -166,8 +166,8 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
 
         const callView = (
-            <CallView
-                room={this.props.room}
+            <CallViewForRoom
+                roomId={this.props.room.roomId}
                 onResize={this.props.onResize}
                 maxVideoHeight={this.props.maxHeight}
             />

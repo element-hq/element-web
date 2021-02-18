@@ -24,7 +24,7 @@ import { ActionPayload } from '../../../dispatcher/payloads';
 import CallHandler from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
 import FormButton from '../elements/FormButton';
-import { CallState } from 'matrix-js-sdk/lib/webrtc/call';
+import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 
 interface IProps {
 }
@@ -70,7 +70,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         e.stopPropagation();
         dis.dispatch({
             action: 'answer',
-            room_id: this.state.incomingCall.roomId,
+            room_id: CallHandler.roomIdForCall(this.state.incomingCall),
         });
     };
 
@@ -78,7 +78,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         e.stopPropagation();
         dis.dispatch({
             action: 'reject',
-            room_id: this.state.incomingCall.roomId,
+            room_id: CallHandler.roomIdForCall(this.state.incomingCall),
         });
     };
 
@@ -89,7 +89,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
         let room = null;
         if (this.state.incomingCall) {
-            room = MatrixClientPeg.get().getRoom(this.state.incomingCall.roomId);
+            room = MatrixClientPeg.get().getRoom(CallHandler.roomIdForCall(this.state.incomingCall));
         }
 
         const caller = room ? room.name : _t("Unknown caller");

@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import {MatrixClient} from "matrix-js-sdk/src/client";
+import {encodeUnpaddedBase64} from "matrix-js-sdk/src/crypto/olmlib";
 import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 import {ActionPayload} from "./dispatcher/payloads";
@@ -25,9 +26,11 @@ import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
 import {Action} from "./dispatcher/actions";
 import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
 import {MatrixClientPeg} from "./MatrixClientPeg";
+import {idbLoad, idbSave, idbDelete} from "./utils/StorageManager";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
+export const SSO_IDP_ID_KEY = "mx_sso_idp_id";
 
 export enum UpdateCheckStatus {
     Checking = "CHECKING",
@@ -54,7 +57,7 @@ export default abstract class BasePlatform {
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    abstract async getConfig(): Promise<{}>;
+    abstract getConfig(): Promise<{}>;
 
     abstract getDefaultDeviceDisplayName(): string;
 
@@ -270,6 +273,9 @@ export default abstract class BasePlatform {
         if (mxClient.getIdentityServerUrl()) {
             localStorage.setItem(SSO_ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
         }
+        if (idpId) {
+            localStorage.setItem(SSO_IDP_ID_KEY, idpId);
+        }
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType, idpId); // redirect to SSO
     }
@@ -287,7 +293,40 @@ export default abstract class BasePlatform {
      *     pickle key has been stored.
      */
     async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        return null;
+        if (!window.crypto || !window.crypto.subtle) {
+            return null;
+        }
+        let data;
+        try {
+            data = await idbLoad("pickleKey", [userId, deviceId]);
+        } catch (e) {}
+        if (!data) {
+            return null;
+        }
+        if (!data.encrypted || !data.iv || !data.cryptoKey) {
+            console.error("Badly formatted pickle key");
+            return null;
+        }
+
+        const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
+        for (let i = 0; i < userId.length; i++) {
+            additionalData[i] = userId.charCodeAt(i);
+        }
+        additionalData[userId.length] = 124; // "|"
+        for (let i = 0; i < deviceId.length; i++) {
+            additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
+        }
+
+        try {
+            const key = await crypto.subtle.decrypt(
+                {name: "AES-GCM", iv: data.iv, additionalData}, data.cryptoKey,
+                data.encrypted,
+            );
+            return encodeUnpaddedBase64(key);
+        } catch (e) {
+            console.error("Error decrypting pickle key");
+            return null;
+        }
     }
 
     /**
@@ -298,7 +337,37 @@ export default abstract class BasePlatform {
      *     support storing pickle keys.
      */
     async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
-        return null;
+        if (!window.crypto || !window.crypto.subtle) {
+            return null;
+        }
+        const crypto = window.crypto;
+        const randomArray = new Uint8Array(32);
+        crypto.getRandomValues(randomArray);
+        const cryptoKey = await crypto.subtle.generateKey(
+            {name: "AES-GCM", length: 256}, false, ["encrypt", "decrypt"],
+        );
+        const iv = new Uint8Array(32);
+        crypto.getRandomValues(iv);
+
+        const additionalData = new Uint8Array(userId.length + deviceId.length + 1);
+        for (let i = 0; i < userId.length; i++) {
+            additionalData[i] = userId.charCodeAt(i);
+        }
+        additionalData[userId.length] = 124; // "|"
+        for (let i = 0; i < deviceId.length; i++) {
+            additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
+        }
+
+        const encrypted = await crypto.subtle.encrypt(
+            {name: "AES-GCM", iv, additionalData}, cryptoKey, randomArray,
+        );
+
+        try {
+            await idbSave("pickleKey", [userId, deviceId], {encrypted, iv, cryptoKey});
+        } catch (e) {
+            return null;
+        }
+        return encodeUnpaddedBase64(randomArray);
     }
 
     /**
@@ -307,5 +376,8 @@ export default abstract class BasePlatform {
      * @param {string} userId the device ID that the pickle key is for.
      */
     async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
+        try {
+            await idbDelete("pickleKey", [userId, deviceId]);
+        } catch (e) {}
     }
 }

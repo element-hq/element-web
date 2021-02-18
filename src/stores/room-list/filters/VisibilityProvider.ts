@@ -15,7 +15,9 @@
  */
 
 import {Room} from "matrix-js-sdk/src/models/room";
+import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
+import VoipUserMapper from "../../../VoipUserMapper";
 
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
@@ -30,19 +32,21 @@ export class VisibilityProvider {
         return VisibilityProvider.internalInstance;
     }
 
+    public async onNewInvitedRoom(room: Room) {
+        await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
+    }
+
     public isRoomVisible(room: Room): boolean {
-        /* eslint-disable prefer-const */
         let isVisible = true; // Returned at the end of this function
         let forced = false; // When true, this function won't bother calling the customisation points
-        /* eslint-enable prefer-const */
 
-        // ------
-        // TODO: The `if` statements to control visibility of custom room types
-        // would go here. The remainder of this function assumes that the statements
-        // will be here.
-        //
-        // When removing this comment block, please remove the lint disable lines in the area.
-        // ------
+        if (
+            CallHandler.sharedInstance().getSupportsVirtualRooms() &&
+            VoipUserMapper.sharedInstance().isVirtualRoom(room)
+        ) {
+            isVisible = false;
+            forced = true;
+        }
 
         const isVisibleFn = RoomListCustomisations.isRoomVisible;
         if (!forced && isVisibleFn) {

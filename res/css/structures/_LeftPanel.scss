@@ -180,6 +180,11 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
         .mx_LeftPanel_roomListContainer {
             width: 68px;
 
+            .mx_LeftPanel_userHeader {
+                flex-direction: row;
+                justify-content: center;
+            }
+
             .mx_LeftPanel_filterContainer {
                 // Organize the flexbox into a centered column layout
                 flex-direction: column;

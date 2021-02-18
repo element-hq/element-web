@@ -14,16 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as projectNameGenerator from "project-name-generator";
+.mx_DialPadContextMenu_header {
+    margin-top: 12px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
 
-/**
- * Generates a human readable identifier. This should not be used for anything
- * which needs secure/cryptographic random: just a level uniquness that is offered
- * by something like Date.now().
- * @returns {string} The randomly generated ID
- */
-export function generateHumanReadableId(): string {
-    return projectNameGenerator({words: 3}).raw.map(w => {
-        return w[0].toUpperCase() + w.substring(1).toLowerCase();
-    }).join('');
+.mx_DialPadContextMenu_title {
+    color: $muted-fg-color;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mx_DialPadContextMenu_dialled {
+    height: 1em;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mx_DialPadContextMenu_dialPad {
+    margin: 16px;
+}
+
+.mx_DialPadContextMenu_horizSep {
+    position: relative;
+    &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        border-bottom: 1px solid $input-darker-bg-color;
+    }
 }

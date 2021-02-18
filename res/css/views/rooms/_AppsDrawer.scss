@@ -24,26 +24,45 @@ $MiniAppTileHeight: 200px;
     flex-direction: column;
     overflow: hidden;
 
+    .mx_AppsContainer_resizerHandleContainer {
+        width: 100%;
+        height: 10px;
+        margin-top: -3px; // move it up so the interactions are slightly more comfortable
+        display: block;
+        position: relative;
+    }
+
     .mx_AppsContainer_resizerHandle {
         cursor: ns-resize;
-        border-radius: 3px;
 
-        // Override styles from library
-        width: unset !important;
-        height: 4px !important;
+        // Override styles from library, making the whole area the target area
+        width: 100% !important;
+        height: 100% !important;
 
         // This is positioned directly below frame
         position: absolute;
-        bottom: -8px !important; // override from library
+        bottom: 0 !important; // override from library
 
-        // Together, these make the bar 64px wide
-        // These are also overridden from the library
-        left: calc(50% - 32px) !important;
-        right: calc(50% - 32px) !important;
+        // We then render the pill handle in an ::after to keep it in the handle's
+        // area without being a massive line across the screen
+        &::after {
+            content: '';
+            position: absolute;
+            border-radius: 3px;
+
+            // The combination of these two should make the pill 4px high
+            top: 6px;
+            bottom: 0;
+
+            // Together, these make the bar 64px wide
+            // These are also overridden from the library
+            left: calc(50% - 32px);
+            right: calc(50% - 32px);
+        }
     }
 
     &:hover {
-        .mx_AppsContainer_resizerHandle {
+        .mx_AppsContainer_resizerHandle::after {
             opacity: 0.8;
             background: $primary-fg-color;
         }

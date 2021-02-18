@@ -16,13 +16,26 @@ limitations under the License.
 
 .mx_SSOButtons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+
+    .mx_SSOButtons_row {
+        & + .mx_SSOButtons_row {
+            margin-top: 16px;
+        }
+    }
 
     .mx_SSOButton {
         position: relative;
         width: 100%;
-        padding-left: 32px;
-        padding-right: 32px;
+        padding: 7px 32px;
+        text-align: center;
+        border-radius: 8px;
+        display: inline-block;
+        font-size: $font-14px;
+        font-weight: $font-semi-bold;
+        border: 1px solid $input-border-color;
+        color: $primary-fg-color;
 
         > img {
             object-fit: contain;
@@ -32,10 +45,22 @@ limitations under the License.
         }
     }
 
+    .mx_SSOButton_default {
+        color: $button-primary-bg-color;
+        background-color: $button-secondary-bg-color;
+        border-color: $button-primary-bg-color;
+    }
+    .mx_SSOButton_default.mx_SSOButton_primary {
+        color: $button-primary-fg-color;
+        background-color: $button-primary-bg-color;
+    }
+
     .mx_SSOButton_mini {
         box-sizing: border-box;
         width: 50px; // 48px + 1px border on all sides
         height: 50px; // 48px + 1px border on all sides
+        min-width: 50px; // prevent crushing by the flexbox
+        padding: 12px;
 
         > img {
             left: 12px;
@@ -43,7 +68,7 @@ limitations under the License.
         }
 
         & + .mx_SSOButton_mini {
-            margin-left: 24px;
+            margin-left: 16px;
         }
     }
 }

@@ -288,7 +288,7 @@ export default class MFileBody extends React.Component {
                             <a ref={this._dummyLink} />
                         </div>
                         <iframe
-                            src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
+                            src={url}
                             onLoad={onIframeLoad}
                             ref={this._iframe}
                             sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />

@@ -95,7 +95,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         const blob = new Blob([this._keyBackupInfo.recovery_key], {
             type: 'text/plain;charset=us-ascii',
         });
-        FileSaver.saveAs(blob, 'recovery-key.txt');
+        FileSaver.saveAs(blob, 'security-key.txt');
 
         this.setState({
             downloaded: true,
@@ -238,7 +238,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             )}</p>
             <p>{_t(
                 "We'll store an encrypted copy of your keys on our server. " +
-                "Secure your backup with a recovery passphrase.",
+                "Secure your backup with a Security Phrase.",
             )}</p>
             <p>{_t("For maximum security, this should be different from your account password.")}</p>
 
@@ -252,10 +252,10 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                         onValidate={this._onPassPhraseValidate}
                         fieldRef={this._passphraseField}
                         autoFocus={true}
-                        label={_td("Enter a recovery passphrase")}
-                        labelEnterPassword={_td("Enter a recovery passphrase")}
-                        labelStrongPassword={_td("Great! This recovery passphrase looks strong enough.")}
-                        labelAllowedButUnsafe={_td("Great! This recovery passphrase looks strong enough.")}
+                        label={_td("Enter a Security Phrase")}
+                        labelEnterPassword={_td("Enter a Security Phrase")}
+                        labelStrongPassword={_td("Great! This Security Phrase looks strong enough.")}
+                        labelAllowedButUnsafe={_td("Great! This Security Phrase looks strong enough.")}
                     />
                 </div>
             </div>
@@ -270,7 +270,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             <details>
                 <summary>{_t("Advanced")}</summary>
                 <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
-                    {_t("Set up with a recovery key")}
+                    {_t("Set up with a Security Key")}
                 </AccessibleButton>
             </details>
         </form>;
@@ -310,7 +310,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
-                "Please enter your recovery passphrase a second time to confirm.",
+                "Please enter your Security Phrase a second time to confirm.",
             )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
@@ -319,7 +319,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                             onChange={this._onPassPhraseConfirmChange}
                             value={this.state.passPhraseConfirm}
                             className="mx_CreateKeyBackupDialog_passPhraseInput"
-                            placeholder={_t("Repeat your recovery passphrase...")}
+                            placeholder={_t("Repeat your Security Phrase...")}
                             autoFocus={true}
                         />
                     </div>
@@ -338,15 +338,15 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
     _renderPhaseShowKey() {
         return <div>
             <p>{_t(
-                "Your recovery key is a safety net - you can use it to restore " +
-                "access to your encrypted messages if you forget your recovery passphrase.",
+                "Your Security Key is a safety net - you can use it to restore " +
+                "access to your encrypted messages if you forget your Security Phrase.",
             )}</p>
             <p>{_t(
                 "Keep a copy of it somewhere secure, like a password manager or even a safe.",
             )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyHeader">
-                    {_t("Your recovery key")}
+                    {_t("Your Security Key")}
                 </div>
                 <div className="mx_CreateKeyBackupDialog_recoveryKeyContainer">
                     <div className="mx_CreateKeyBackupDialog_recoveryKey">
@@ -369,12 +369,12 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         let introText;
         if (this.state.copied) {
             introText = _t(
-                "Your recovery key has been <b>copied to your clipboard</b>, paste it to:",
+                "Your Security Key has been <b>copied to your clipboard</b>, paste it to:",
                 {}, {b: s => <b>{s}</b>},
             );
         } else if (this.state.downloaded) {
             introText = _t(
-                "Your recovery key is in your <b>Downloads</b> folder.",
+                "Your Security Key is in your <b>Downloads</b> folder.",
                 {}, {b: s => <b>{s}</b>},
             );
         }
@@ -433,14 +433,14 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
     _titleForPhase(phase) {
         switch (phase) {
             case PHASE_PASSPHRASE:
-                return _t('Secure your backup with a recovery passphrase');
+                return _t('Secure your backup with a Security Phrase');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm your recovery passphrase');
+                return _t('Confirm your Security Phrase');
             case PHASE_OPTOUT_CONFIRM:
                 return _t('Warning!');
             case PHASE_SHOWKEY:
             case PHASE_KEEPITSAFE:
-                return _t('Make a copy of your recovery key');
+                return _t('Make a copy of your Security Key');
             case PHASE_BACKINGUP:
                 return _t('Starting backup...');
             case PHASE_DONE:
