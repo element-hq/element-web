@@ -91,7 +91,6 @@ async function start() {
         loadConfig,
         loadSkin,
         loadLanguage,
-        loadSpellCheckLanguages,
         loadTheme,
         loadApp,
         showError,
@@ -135,13 +134,12 @@ async function start() {
 
         // Load language after loading config.json so that settingsDefaults.language can be applied
         const loadLanguagePromise = loadLanguage();
-        const loadSpellCheckLanguagesPromise = loadSpellCheckLanguages();
         // as quickly as we possibly can, set a default theme...
         const loadThemePromise = loadTheme();
         const loadSkinPromise = loadSkin();
 
         // await things settling so that any errors we have to render have features like i18n running
-        await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise, loadSpellCheckLanguagesPromise);
+        await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise);
 
         let acceptBrowser = supportedBrowser;
         if (!acceptBrowser && window.localStorage) {
@@ -192,7 +190,6 @@ async function start() {
         await loadSkinPromise;
         await loadThemePromise;
         await loadLanguagePromise;
-        await loadSpellCheckLanguagesPromise;
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
