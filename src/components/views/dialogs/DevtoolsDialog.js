@@ -914,7 +914,7 @@ class SettingsExplorer extends React.Component {
     }
 
     renderCanEditLevel(roomId, level) {
-        let canEdit = SettingsStore.canSetValue(this.state.editSetting, roomId, level);
+        const canEdit = SettingsStore.canSetValue(this.state.editSetting, roomId, level);
         const className = canEdit ? 'mx_DevTools_SettingsExplorer_mutable' : 'mx_DevTools_SettingsExplorer_immutable';
         return <td className={className}><code>{canEdit.toString()}</code></td>;
     }
