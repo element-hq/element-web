@@ -22,6 +22,7 @@ import * as Avatar from '../../../Avatar';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
+import {Layout} from "../../../settings/Layout";
 import {UIFeature} from "../../../settings/UIFeature";
 
 interface IProps {
@@ -33,7 +34,7 @@ interface IProps {
     /**
      * Whether to use the irc layout or not
      */
-    useIRCLayout: boolean;
+    layout: Layout;
 
     /**
      * classnames to apply to the wrapper of the preview
@@ -80,27 +81,30 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
     private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
         // Fake it till we make it
-        const event = new MatrixEvent(JSON.parse(`{
-                "type": "m.room.message",
-                "sender": "${userId}",
-                "content": {
-                  "m.new_content": {
-                    "msgtype": "m.text",
-                    "body": "${this.props.message}",
-                    "displayname": "${displayname}",
-                    "avatar_url": "${avatarUrl}"
-                  },
-                  "msgtype": "m.text",
-                  "body": "${this.props.message}",
-                  "displayname": "${displayname}",
-                  "avatar_url": "${avatarUrl}"
+        /* eslint-disable quote-props */
+        const rawEvent = {
+            type: "m.room.message",
+            sender: userId,
+            content: {
+                "m.new_content": {
+                    msgtype: "m.text",
+                    body: this.props.message,
+                    displayname: displayname,
+                    avatar_url: avatarUrl,
                 },
-                "unsigned": {
-                  "age": 97
-                },
-                "event_id": "$9999999999999999999999999999999999999999999",
-                "room_id": "!999999999999999999:matrix.org"
-              }`));
+                msgtype: "m.text",
+                body: this.props.message,
+                displayname: displayname,
+                avatar_url: avatarUrl,
+            },
+            unsigned: {
+                age: 97,
+            },
+            event_id: "$9999999999999999999999999999999999999999999",
+            room_id: "!999999999999999999:example.org",
+        };
+        const event = new MatrixEvent(rawEvent);
+        /* eslint-enable quote-props */
 
         // Fake it more
         event.sender = {
@@ -118,14 +122,14 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const event = this.fakeEvent(this.state);
 
         const className = classnames(this.props.className, {
-            "mx_IRCLayout": this.props.useIRCLayout,
-            "mx_GroupLayout": !this.props.useIRCLayout,
+            "mx_IRCLayout": this.props.layout == Layout.IRC,
+            "mx_GroupLayout": this.props.layout == Layout.Group,
         });
 
         return <div className={className}>
             <EventTile
                 mxEvent={event}
-                useIRCLayout={this.props.useIRCLayout}
+                layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
             />
         </div>;

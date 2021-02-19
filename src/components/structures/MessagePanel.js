@@ -23,13 +23,17 @@ import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
 import * as sdk from '../../index';
+import dis from "../../dispatcher/dispatcher";
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
+import DMRoomMap from "../../utils/DMRoomMap";
+import NewRoomIntro from "../views/rooms/NewRoomIntro";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -133,14 +137,13 @@ export default class MessagePanel extends React.Component {
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
 
-        // whether to use the irc layout
-        useIRCLayout: PropTypes.bool,
+        // which layout to use
+        layout: LayoutPropType,
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
     };
 
-    // Force props to be loaded for useIRCLayout
     constructor(props) {
         super(props);
 
@@ -205,11 +208,13 @@ export default class MessagePanel extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     componentWillUnmount() {
         this._isMounted = false;
         SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -219,6 +224,14 @@ export default class MessagePanel extends React.Component {
             this.setState({
                 ghostReadMarkers,
             });
+        }
+    }
+
+    onAction = (payload) => {
+        switch (payload.action) {
+            case "scroll_to_bottom":
+                this.scrollToBottom();
+                break;
         }
     }
 
@@ -610,7 +623,7 @@ export default class MessagePanel extends React.Component {
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
-                        useIRCLayout={this.props.useIRCLayout}
+                        layout={this.props.layout}
                         enableFlair={this.props.enableFlair}
                     />
                 </TileErrorBoundary>
@@ -808,7 +821,7 @@ export default class MessagePanel extends React.Component {
         }
 
         let ircResizer = null;
-        if (this.props.useIRCLayout) {
+        if (this.props.layout == Layout.IRC) {
             ircResizer = <IRCTimelineProfileResizer
                 minWidth={20}
                 maxWidth={600}
@@ -952,15 +965,25 @@ class CreationGrouper {
         }).reduce((a, b) => a.concat(b), []);
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1];
+
+        let summaryText;
+        const roomId = ev.getRoomId();
+        const creator = ev.sender ? ev.sender.name : ev.getSender();
+        if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
+            summaryText = _t("%(creator)s created this DM.", { creator });
+        } else {
+            summaryText = _t("%(creator)s created and configured the room.", { creator });
+        }
+
+        ret.push(<NewRoomIntro key="newroomintro" />);
+
         ret.push(
             <EventListSummary
                  key="roomcreationsummary"
                  events={this.events}
                  onToggle={panel._onHeightChanged} // Update scroll state
                  summaryMembers={[ev.sender]}
-                 summaryText={_t("%(creator)s created and configured the room.", {
-                     creator: ev.sender ? ev.sender.name : ev.getSender(),
-                 })}
+                 summaryText={summaryText}
             >
                  { eventTiles }
             </EventListSummary>,

@@ -18,30 +18,23 @@ import React, {createRef} from 'react';
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import {User} from "matrix-js-sdk";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
+import {OwnProfileStore} from "../../../stores/OwnProfileStore";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();
 
         const client = MatrixClientPeg.get();
-        let user = client.getUser(client.getUserId());
-        if (!user) {
-            // XXX: We shouldn't have to do this.
-            // There seems to be a condition where the User object won't exist until a room
-            // exists on the account. To work around this, we'll just create a temporary User
-            // and use that.
-            console.warn("User object not found - creating one for ProfileSettings");
-            user = new User(client.getUserId());
-        }
-        let avatarUrl = user.avatarUrl;
+        let avatarUrl = OwnProfileStore.instance.avatarMxc;
         if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
         this.state = {
-            userId: user.userId,
-            originalDisplayName: user.rawDisplayName,
-            displayName: user.rawDisplayName,
+            userId: client.getUserId(),
+            originalDisplayName: OwnProfileStore.instance.displayName,
+            displayName: OwnProfileStore.instance.displayName,
             originalAvatarUrl: avatarUrl,
             avatarUrl: avatarUrl,
             avatarFile: null,
@@ -59,19 +52,23 @@ export default class ProfileSettings extends React.Component {
         // clear file upload field so same file can be selected
         this._avatarUpload.current.value = "";
         this.setState({
-            avatarUrl: undefined,
-            avatarFile: undefined,
+            avatarUrl: null,
+            avatarFile: null,
             enableProfileSave: true,
         });
     };
 
-    _clearProfile = async (e) => {
+    _cancelProfileChanges = async (e) => {
         e.stopPropagation();
         e.preventDefault();
 
         if (!this.state.enableProfileSave) return;
-        this._removeAvatar();
-        this.setState({enableProfileSave: false, displayName: this.state.originalDisplayName});
+        this.setState({
+            enableProfileSave: false,
+            displayName: this.state.originalDisplayName,
+            avatarUrl: this.state.originalAvatarUrl,
+            avatarFile: null,
+        });
     };
 
     _saveProfile = async (e) => {
@@ -84,21 +81,30 @@ export default class ProfileSettings extends React.Component {
         const client = MatrixClientPeg.get();
         const newState = {};
 
-        // TODO: What do we do about errors?
+        try {
+            if (this.state.originalDisplayName !== this.state.displayName) {
+                await client.setDisplayName(this.state.displayName);
+                newState.originalDisplayName = this.state.displayName;
+            }
 
-        if (this.state.originalDisplayName !== this.state.displayName) {
-            await client.setDisplayName(this.state.displayName);
-            newState.originalDisplayName = this.state.displayName;
-        }
-
-        if (this.state.avatarFile) {
-            const uri = await client.uploadContent(this.state.avatarFile);
-            await client.setAvatarUrl(uri);
-            newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
-            newState.originalAvatarUrl = newState.avatarUrl;
-            newState.avatarFile = null;
-        } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
-            await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
+            if (this.state.avatarFile) {
+                console.log(
+                    `Uploading new avatar, ${this.state.avatarFile.name} of type ${this.state.avatarFile.type},` +
+                    ` (${this.state.avatarFile.size}) bytes`);
+                const uri = await client.uploadContent(this.state.avatarFile);
+                await client.setAvatarUrl(uri);
+                newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
+                newState.originalAvatarUrl = newState.avatarUrl;
+                newState.avatarFile = null;
+            } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
+                await client.setAvatarUrl(""); // use empty string as Synapse 500s on undefined
+            }
+        } catch (err) {
+            console.log("Failed to save profile", err);
+            Modal.createTrackedDialog('Failed to save profile', '', ErrorDialog, {
+                title: _t("Failed to save your profile"),
+                description: ((err && err.message) ? err.message : _t("The operation could not be completed")),
+            });
         }
 
         this.setState(newState);
@@ -184,7 +190,7 @@ export default class ProfileSettings extends React.Component {
                 </div>
                 <div className="mx_ProfileSettings_buttons">
                     <AccessibleButton
-                        onClick={this._clearProfile}
+                        onClick={this._cancelProfileChanges}
                         kind="link"
                         disabled={!this.state.enableProfileSave}
                     >

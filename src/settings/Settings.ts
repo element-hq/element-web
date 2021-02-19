@@ -32,9 +32,12 @@ import UseSystemFontController from './controllers/UseSystemFontController';
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
 import { RightPanelPhases } from "../stores/RightPanelStorePhases";
+import { isMac } from '../Keyboard';
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { OrderedMultiController } from "./controllers/OrderedMultiController";
+import {Layout} from "./Layout";
+import ReducedMotionController from './controllers/ReducedMotionController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -116,6 +119,12 @@ export interface ISetting {
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
+    "feature_latex_maths": {
+        isFeature: true,
+        displayName: _td("Render LaTeX maths in messages"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_communities_v2_prototypes": {
         isFeature: true,
         displayName: _td(
@@ -186,6 +195,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_dehydration": {
+        isFeature: true,
+        displayName: _td("Offline encrypted messaging using dehydrated devices"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
@@ -226,6 +241,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Enable Emoji suggestions while typing'),
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
+    },
+    "MessageComposerInput.showStickersButton": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show stickers button'),
+        default: true,
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
@@ -287,6 +307,16 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Enable automatic language detection for syntax highlighting'),
         default: false,
     },
+    "expandCodeByDefault": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Expand code blocks by default'),
+        default: false,
+    },
+    "showCodeLineNumbers": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show line numbers in code blocks'),
+        default: true,
+    },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show avatars in user and room mentions'),
@@ -317,6 +347,16 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show typing notifications"),
         default: true,
+    },
+    "ctrlFForSearch": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: isMac ? _td("Use Command + F to search") : _td("Use Ctrl + F to search"),
+        default: false,
+    },
+    "MessageComposerInput.ctrlEnterToSend": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
+        default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -403,7 +443,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
     },
     "allowedWidgets": {
-        supportedLevels: [SettingLevel.ROOM_ACCOUNT],
+        supportedLevels: [SettingLevel.ROOM_ACCOUNT, SettingLevel.ROOM_DEVICE],
+        supportedLevelsAreOrdered: true,
         default: {}, // none allowed
     },
     "analyticsOptIn": {
@@ -546,13 +587,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
     },
-    "sendReadReceipts": {
-        supportedLevels: LEVELS_ROOM_SETTINGS,
-        displayName: _td(
-            "Send read receipts for messages (requires compatible homeserver to disable)",
-        ),
-        default: true,
-    },
     "showImages": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show previews/thumbnails for images"),
@@ -611,14 +645,31 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("IRC display name width"),
         default: 80,
     },
-    "useIRCLayout": {
+    "layout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Enable experimental, compact IRC style layout"),
-        default: false,
+        default: Layout.Group,
     },
-    "Widgets.pinned": {
+    "showChatEffects": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show chat effects (animations when receiving e.g. confetti)"),
+        default: true,
+        controller: new ReducedMotionController(),
+    },
+    "Widgets.pinned": { // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
+    },
+    "Widgets.layout": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: {},
+    },
+    "Widgets.leftPanel": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: null,
+    },
+    [UIFeature.RoomHistorySettings]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
     },
     [UIFeature.AdvancedEncryption]: {
         supportedLevels: LEVELS_UI_FEATURE,

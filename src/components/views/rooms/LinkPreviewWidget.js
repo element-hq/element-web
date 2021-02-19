@@ -107,14 +107,17 @@ export default class LinkPreviewWidget extends React.Component {
         if (!SettingsStore.getValue("showImages")) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
-        const imageMaxWidth = 100; const imageMaxHeight = 100;
+        const imageMaxWidth = 320; const imageMaxHeight = 240;
         if (image && image.startsWith("mxc://")) {
             image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
         }
 
         let thumbHeight = imageMaxHeight;
         if (p["og:image:width"] && p["og:image:height"]) {
-            thumbHeight = ImageUtils.thumbHeight(p["og:image:width"], p["og:image:height"], imageMaxWidth, imageMaxHeight);
+            thumbHeight = ImageUtils.thumbHeight(
+                p["og:image:width"], p["og:image:height"],
+                imageMaxWidth, imageMaxHeight,
+            );
         }
 
         let img;
@@ -131,6 +134,10 @@ export default class LinkPreviewWidget extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_LinkPreviewWidget">
+                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
+                    <img className="mx_filterFlipColor" alt="" role="presentation"
+                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
+                </AccessibleButton>
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a></div>
@@ -139,10 +146,6 @@ export default class LinkPreviewWidget extends React.Component {
                         { description }
                     </div>
                 </div>
-                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
-                    <img className="mx_filterFlipColor" alt="" role="presentation"
-                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
-                </AccessibleButton>
             </div>
         );
     }

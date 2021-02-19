@@ -21,9 +21,9 @@ import zxcvbn from "zxcvbn";
 import SdkConfig from "../../../SdkConfig";
 import withValidation, {IFieldState, IValidationResult} from "../elements/Validation";
 import {_t, _td} from "../../../languageHandler";
-import Field from "../elements/Field";
+import Field, {IInputProps} from "../elements/Field";
 
-interface IProps {
+interface IProps extends Omit<IInputProps, "onValidate"> {
     autoFocus?: boolean;
     id?: string;
     className?: string;

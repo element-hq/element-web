@@ -29,9 +29,11 @@ import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
-import {Key} from "../../../Keyboard";
+import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -135,7 +137,10 @@ export default class EditMessageComposer extends React.Component {
         if (event.metaKey || event.altKey || event.shiftKey) {
             return;
         }
-        if (event.key === Key.ENTER) {
+        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+        const send = ctrlEnterToSend ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
+            : event.key === Key.ENTER;
+        if (send) {
             this._sendEdit();
             event.preventDefault();
         } else if (event.key === Key.ESCAPE) {
@@ -182,6 +187,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _sendEdit = () => {
+        const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
@@ -190,8 +196,9 @@ export default class EditMessageComposer extends React.Component {
         if (this._isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId();
             this._cancelPreviousPendingEdit();
-            this.context.sendMessage(roomId, editContent);
+            const prom = this.context.sendMessage(roomId, editContent);
             dis.dispatch({action: "message_sent"});
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
         }
 
         // close the event editing and focus composer

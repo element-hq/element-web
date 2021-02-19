@@ -34,6 +34,8 @@ export class ValidatedServerConfig {
     isUrl: string;
 
     isDefault: boolean;
+    // when the server config is based on static URLs the hsName is not resolvable and things may wish to use hsUrl
+    isNameResolvable: boolean;
 
     warning: string;
 }
@@ -161,7 +163,7 @@ export default class AutoDiscoveryUtils {
         const url = new URL(homeserverUrl);
         const serverName = url.hostname;
 
-        return AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result, syntaxOnly);
+        return AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result, syntaxOnly, true);
     }
 
     /**
@@ -179,12 +181,12 @@ export default class AutoDiscoveryUtils {
      * input.
      * @param {string} serverName The domain name the AutoDiscovery result is for.
      * @param {*} discoveryResult The AutoDiscovery result.
-     * @param {boolean} syntaxOnly If true, errors relating to liveliness of the servers will
-     * not be raised.
+     * @param {boolean} syntaxOnly If true, errors relating to liveliness of the servers will not be raised.
+     * @param {boolean} isSynthetic If true, then the discoveryResult was synthesised locally.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
     static buildValidatedConfigFromDiscovery(
-        serverName: string, discoveryResult, syntaxOnly=false): ValidatedServerConfig {
+        serverName: string, discoveryResult, syntaxOnly=false, isSynthetic=false): ValidatedServerConfig {
         if (!discoveryResult || !discoveryResult["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
             // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
@@ -252,6 +254,7 @@ export default class AutoDiscoveryUtils {
             isUrl: preferredIdentityUrl,
             isDefault: false,
             warning: hsResult.error,
+            isNameResolvable: !isSynthetic,
         });
     }
 }

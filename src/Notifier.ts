@@ -34,6 +34,8 @@ import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import {SettingLevel} from "./settings/SettingLevel";
 import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
+import RoomViewStore from "./stores/RoomViewStore";
+import UserActivity from "./UserActivity";
 
 /*
  * Dispatches:
@@ -218,7 +220,7 @@ export const Notifier = {
         // calculated value. It is determined based upon whether or not the master rule is enabled
         // and other flags. Setting it here would cause a circular reference.
 
-        Analytics.trackEvent('Notifier', 'Set Enabled', enable);
+        Analytics.trackEvent('Notifier', 'Set Enabled', String(enable));
 
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
@@ -287,7 +289,7 @@ export const Notifier = {
     setPromptHidden: function(hidden: boolean, persistent = true) {
         this.toolbarHidden = hidden;
 
-        Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
+        Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', String(hidden));
 
         hideNotificationsToast();
 
@@ -376,6 +378,11 @@ export const Notifier = {
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
+            if (RoomViewStore.getRoomId() === room.roomId && UserActivity.sharedInstance().userActiveRecently()) {
+                // don't bother notifying as user was recently active in this room
+                return;
+            }
+
             if (this.isEnabled()) {
                 this._displayPopupNotification(ev, room);
             }

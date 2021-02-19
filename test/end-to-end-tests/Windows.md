@@ -5,14 +5,14 @@ and start following these steps to get going:
 
 1. Navigate to your working directory (`cd /mnt/c/users/travisr/whatever/matrix-react-sdk` for example).
 2. Run `sudo apt-get install unzip python3 virtualenv dos2unix`
-3. Run `dos2unix ./test/end-to-end-tests/*.sh ./test/end-to-end-tests/synapse/*.sh ./test/end-to-end-tests/riot/*.sh`
+3. Run `dos2unix ./test/end-to-end-tests/*.sh ./test/end-to-end-tests/synapse/*.sh ./test/end-to-end-tests/element/*.sh`
 4. Install NodeJS for ubuntu: 
    ```bash
    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
    sudo apt-get update
    sudo apt-get install nodejs
    ```
-5. Start Riot on Windows through `yarn start`
+5. Start Element on Windows through `yarn start`
 6. While that builds... Run:
    ```bash
    sudo apt-get install x11-apps
@@ -25,11 +25,11 @@ and start following these steps to get going:
    cd ./test/end-to-end-tests
    ./synapse/install.sh
    ./install.sh
-   ./run.sh --riot-url http://localhost:8080 --no-sandbox
+   ./run.sh --app-url http://localhost:8080 --no-sandbox
    ```
 
 Note that using `yarn test:e2e` probably won't work for you. You might also have to use the config.json from the
-`riot/config-template` directory in order to actually succeed at the tests.
+`element/config-template` directory in order to actually succeed at the tests.
 
 Also note that you'll have to use `--no-sandbox` otherwise Chrome will complain that there's no sandbox available. You
 could probably fix this with enough effort, or you could run a headless Chrome in the WSL container without a sandbox.

@@ -704,7 +704,7 @@ export default class ScrollPanel extends React.Component {
             if (itemlist.style.height !== newHeight) {
                 itemlist.style.height = newHeight;
             }
-            if (sn.scrollTop !== sn.scrollHeight){
+            if (sn.scrollTop !== sn.scrollHeight) {
                 sn.scrollTop = sn.scrollHeight;
             }
             debuglog("updateHeight to", newHeight);

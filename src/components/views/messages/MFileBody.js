@@ -144,7 +144,7 @@ export default class MFileBody extends React.Component {
      * Extracts a human readable label for the file attachment to use as
      * link text.
      *
-     * @params {Object} content The "content" key of the matrix event.
+     * @param {Object} content The "content" key of the matrix event.
      * @return {string} the human readable link text for the attachment.
      */
     presentableTextForFile(content) {
@@ -288,7 +288,7 @@ export default class MFileBody extends React.Component {
                             <a ref={this._dummyLink} />
                         </div>
                         <iframe
-                            src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
+                            src={url}
                             onLoad={onIframeLoad}
                             ref={this._iframe}
                             sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />

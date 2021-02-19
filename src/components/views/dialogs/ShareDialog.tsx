@@ -146,7 +146,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
                 const events = this.props.target.getLiveTimeline().getEvents();
                 matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
             } else {
-                matrixToUrl = this.state.permalinkCreator.forRoom();
+                matrixToUrl = this.state.permalinkCreator.forShareableRoom();
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             matrixToUrl = makeUserPermalink(this.props.target.userId);

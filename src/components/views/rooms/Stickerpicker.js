@@ -264,7 +264,7 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} style={{zIndex: STICKERPICKER_Z_INDEX}}>
+                    <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
                         <AppTile
                             app={stickerApp}
                             room={this.props.room}
@@ -272,18 +272,14 @@ export default class Stickerpicker extends React.Component {
                             userId={MatrixClientPeg.get().credentials.userId}
                             creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
                             waitForIframeLoad={true}
-                            show={true}
                             showMenubar={true}
                             onEditClick={this._launchManageIntegrations}
                             onDeleteClick={this._removeStickerpickerWidgets}
                             showTitle={false}
-                            showMinimise={true}
-                            showDelete={false}
                             showCancel={false}
                             showPopout={false}
                             onMinimiseClick={this._onHideStickersClick}
                             handleMinimisePointerEvents={true}
-                            whitelistCapabilities={['m.sticker', 'visibility']}
                             userWidget={true}
                         />
                     </PersistedElement>

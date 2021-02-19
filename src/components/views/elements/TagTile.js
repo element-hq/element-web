@@ -26,12 +26,12 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
-import TagOrderStore from '../../../stores/TagOrderStore';
+import GroupFilterOrderStore from '../../../stores/GroupFilterOrderStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 
-// A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
+// A class for a child of GroupFilterPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
 //  - Rooms that are part of the group
 //  - Direct messages with members of the group
@@ -142,7 +142,7 @@ export default class TagTile extends React.Component {
             mx_TagTile_selected_prototype: this.props.selected && isPrototype,
         });
 
-        const badge = TagOrderStore.getGroupBadge(this.props.tag);
+        const badge = GroupFilterOrderStore.getGroupBadge(this.props.tag);
         let badgeElement;
         if (badge && !this.state.hover && !this.props.menuDisplayed) {
             const badgeClasses = classNames({

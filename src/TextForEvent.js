@@ -19,6 +19,7 @@ import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
 import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
+import {WIDGET_LAYOUT_EVENT_TYPE} from "./stores/widgets/WidgetLayoutStore";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -198,59 +199,30 @@ function textForRelatedGroupsEvent(ev) {
 function textForServerACLEvent(ev) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
-    const changes = [];
     const current = ev.getContent();
     const prev = {
         deny: Array.isArray(prevContent.deny) ? prevContent.deny : [],
         allow: Array.isArray(prevContent.allow) ? prevContent.allow : [],
         allow_ip_literals: !(prevContent.allow_ip_literals === false),
     };
+
     let text = "";
     if (prev.deny.length === 0 && prev.allow.length === 0) {
-        text = `${senderDisplayName} set server ACLs for this room: `;
+        text = _t("%(senderDisplayName)s set the server ACLs for this room.", {senderDisplayName});
     } else {
-        text = `${senderDisplayName} changed the server ACLs for this room: `;
+        text = _t("%(senderDisplayName)s changed the server ACLs for this room.", {senderDisplayName});
     }
 
     if (!Array.isArray(current.allow)) {
         current.allow = [];
     }
-    /* If we know for sure everyone is banned, don't bother showing the diff view */
+
+    // If we know for sure everyone is banned, mark the room as obliterated
     if (current.allow.length === 0) {
-        return text + "🎉 All servers are banned from participating! This room can no longer be used.";
+        return text + " " + _t("🎉 All servers are banned from participating! This room can no longer be used.");
     }
 
-    if (!Array.isArray(current.deny)) {
-        current.deny = [];
-    }
-
-    const bannedServers = current.deny.filter((srv) => typeof(srv) === 'string' && !prev.deny.includes(srv));
-    const unbannedServers = prev.deny.filter((srv) => typeof(srv) === 'string' && !current.deny.includes(srv));
-    const allowedServers = current.allow.filter((srv) => typeof(srv) === 'string' && !prev.allow.includes(srv));
-    const unallowedServers = prev.allow.filter((srv) => typeof(srv) === 'string' && !current.allow.includes(srv));
-
-    if (bannedServers.length > 0) {
-        changes.push(`Servers matching ${bannedServers.join(", ")} are now banned.`);
-    }
-
-    if (unbannedServers.length > 0) {
-        changes.push(`Servers matching ${unbannedServers.join(", ")} were removed from the ban list.`);
-    }
-
-    if (allowedServers.length > 0) {
-        changes.push(`Servers matching ${allowedServers.join(", ")} are now allowed.`);
-    }
-
-    if (unallowedServers.length > 0) {
-        changes.push(`Servers matching ${unallowedServers.join(", ")} were removed from the allowed list.`);
-    }
-
-    if (prev.allow_ip_literals !== current.allow_ip_literals) {
-        const allowban = current.allow_ip_literals ? "allowed" : "banned";
-        changes.push(`Participating from a server using an IP literal hostname is now ${allowban}.`);
-    }
-
-    return text + changes.join(" ");
+    return text;
 }
 
 function textForMessageEvent(ev) {
@@ -329,20 +301,38 @@ function textForCallHangupEvent(event) {
         reason = _t('(not supported by this browser)');
     } else if (eventContent.reason) {
         if (eventContent.reason === "ice_failed") {
+            // We couldn't establish a connection at all
             reason = _t('(could not connect media)');
+        } else if (eventContent.reason === "ice_timeout") {
+            // We established a connection but it died
+            reason = _t('(connection failed)');
+        } else if (eventContent.reason === "user_media_failed") {
+            // The other side couldn't open capture devices
+            reason = _t("(their device couldn't start the camera / microphone)");
+        } else if (eventContent.reason === "unknown_error") {
+            // An error code the other side doesn't have a way to express
+            // (as opposed to an error code they gave but we don't know about,
+            // in which case we show the error code)
+            reason = _t("(an error occurred)");
         } else if (eventContent.reason === "invite_timeout") {
             reason = _t('(no answer)');
-        } else if (eventContent.reason === "user hangup") {
+        } else if (eventContent.reason === "user hangup" || eventContent.reason === "user_hangup") {
             // workaround for https://github.com/vector-im/element-web/issues/5178
             // it seems Android randomly sets a reason of "user hangup" which is
             // interpreted as an error code :(
             // https://github.com/vector-im/riot-android/issues/2623
+            // Also the correct hangup code as of VoIP v1 (with underscore)
             reason = '';
         } else {
             reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
         }
     }
     return _t('%(senderName)s ended the call.', {senderName}) + ' ' + reason;
+}
+
+function textForCallRejectEvent(event) {
+    const senderName = event.sender ? event.sender.name : _t('Someone');
+    return _t('%(senderName)s declined the call.', {senderName});
 }
 
 function textForCallInviteEvent(event) {
@@ -466,7 +456,7 @@ function textForWidgetEvent(event) {
     let widgetName = name || prevName || type || prevType || '';
     // Apply sentence case to widget name
     if (widgetName && widgetName.length > 0) {
-        widgetName = widgetName[0].toUpperCase() + widgetName.slice(1) + ' ';
+        widgetName = widgetName[0].toUpperCase() + widgetName.slice(1);
     }
 
     // If the widget was removed, its content should be {}, but this is sufficiently
@@ -486,6 +476,11 @@ function textForWidgetEvent(event) {
             widgetName, senderName,
         });
     }
+}
+
+function textForWidgetLayoutEvent(event) {
+    const senderName = event.sender?.name || event.getSender();
+    return _t("%(senderName)s has updated the widget layout", {senderName});
 }
 
 function textForMjolnirEvent(event) {
@@ -574,6 +569,7 @@ const handlers = {
     'm.call.invite': textForCallInviteEvent,
     'm.call.answer': textForCallAnswerEvent,
     'm.call.hangup': textForCallHangupEvent,
+    'm.call.reject': textForCallRejectEvent,
 };
 
 const stateHandlers = {
@@ -593,6 +589,7 @@ const stateHandlers = {
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': textForWidgetEvent,
+    [WIDGET_LAYOUT_EVENT_TYPE]: textForWidgetLayoutEvent,
 };
 
 // Add all the Mjolnir stuff to the renderer

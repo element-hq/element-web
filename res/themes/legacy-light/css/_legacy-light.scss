@@ -67,8 +67,8 @@ $preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #f2f5f8;
 $tertiary-accent-color: #d3efe1;
 
-$tagpanel-bg-color: #27303a;
-$inverted-bg-color: $tagpanel-bg-color;
+$groupFilterPanel-bg-color: #27303a;
+$inverted-bg-color: $groupFilterPanel-bg-color;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -162,7 +162,7 @@ $roomheader-color: #45474a;
 $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
-$tagpanel-button-color: #91a1c0;
+$groupFilterPanel-button-color: #91a1c0;
 $groupheader-button-color: #91a1c0;
 $rightpanel-button-color: #91a1c0;
 $icon-button-color: #91a1c0;
@@ -171,6 +171,9 @@ $eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
+
+// this probably shouldn't have it's own colour
+$voipcall-plinth-color: #f2f5f8;
 
 // ********************
 
@@ -181,8 +184,9 @@ $roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
 $roomlist-header-color: $primary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
-$tagpanel-divider-color: $roomlist-header-color;
+$groupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -208,6 +212,7 @@ $panel-divider-color: #dee1f3;
 // ********************
 
 $widget-menu-bar-bg-color: $secondary-accent-color;
+$widget-body-bg-color: #fff;
 
 // ********************
 
@@ -232,7 +237,8 @@ $event-redacted-border-color: #cccccc;
 $event-timestamp-color: #acacac;
 
 $copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
-
+$collapse-button-url: "$(res)/img/feather-customised/minimise.svg";
+$expand-button-url: "$(res)/img/feather-customised/maximise.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -305,7 +311,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: $reaction-row-button-border-color;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: #27303a;
@@ -326,7 +332,7 @@ $composer-shadow-color: tranparent;
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;

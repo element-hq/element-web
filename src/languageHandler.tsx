@@ -96,12 +96,14 @@ function safeCounterpartTranslate(text: string, options?: object) {
     return translated;
 }
 
-interface IVariables {
+export interface IVariables {
     count?: number;
     [key: string]: number | string;
 }
 
 type Tags = Record<string, (sub: string) => React.ReactNode>;
+
+export type TranslatedString = string | React.ReactNode;
 
 /*
  * Translates text and optionally also replaces XML-ish elements in the text with e.g. React components
@@ -121,7 +123,7 @@ type Tags = Record<string, (sub: string) => React.ReactNode>;
  */
 export function _t(text: string, variables?: IVariables): string;
 export function _t(text: string, variables: IVariables, tags: Tags): React.ReactNode;
-export function _t(text: string, variables?: IVariables, tags?: Tags): string | React.ReactNode {
+export function _t(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
     // Don't do substitutions in counterpart. We handle it ourselves so we can replace with React components
     // However, still pass the variables to counterpart so that it can choose the correct plural if count is given
     // It is enough to pass the count variable, but in the future counterpart might make use of other information too

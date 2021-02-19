@@ -23,7 +23,7 @@ import SettingsStore from "../settings/SettingsStore";
 import * as utils from "matrix-js-sdk/src/utils";
 import { UPDATE_EVENT } from "./AsyncStore";
 import FlairStore from "./FlairStore";
-import TagOrderStore from "./TagOrderStore";
+import GroupFilterOrderStore from "./GroupFilterOrderStore";
 import GroupStore from "./GroupStore";
 import dis from "../dispatcher/dispatcher";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
@@ -48,9 +48,13 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
         return CommunityPrototypeStore.internalInstance;
     }
 
+    public static getUpdateEventName(roomId: string): string {
+        return `${UPDATE_EVENT}:${roomId}`;
+    }
+
     public getSelectedCommunityId(): string {
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
-            return TagOrderStore.getSelectedTags()[0];
+            return GroupFilterOrderStore.getSelectedTags()[0];
         }
         return null; // no selection as far as this function is concerned
     }
@@ -134,7 +138,8 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             }
         } else if (payload.action === "MatrixActions.accountData") {
             if (payload.event_type.startsWith("im.vector.group_info.")) {
-                this.emit(UPDATE_EVENT, payload.event_type.substring("im.vector.group_info.".length));
+                const roomId = payload.event_type.substring("im.vector.group_info.".length);
+                this.emit(CommunityPrototypeStore.getUpdateEventName(roomId), roomId);
             }
         } else if (payload.action === "select_tag") {
             // Automatically select the general chat when switching communities
@@ -167,7 +172,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             if (getEffectiveMembership(myMember.membership) === EffectiveMembership.Invite) {
                 // Fake an update for anything that might have started listening before the invite
                 // data was available (eg: RoomPreviewBar after a refresh)
-                this.emit(UPDATE_EVENT, room.roomId);
+                this.emit(CommunityPrototypeStore.getUpdateEventName(room.roomId), room.roomId);
             }
         }
     }

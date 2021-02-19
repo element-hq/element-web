@@ -59,10 +59,6 @@ limitations under the License.
                 width: calc(100% - 22px);
             }
 
-            &.mx_RoomSublist_headerContainer_stickyBottom {
-                bottom: 0;
-            }
-
             // We don't have a top style because the top is dependent on the room list header's
             // height, and is therefore calculated in JS.
             // The class, mx_RoomSublist_headerContainer_stickyTop, is applied though.
@@ -201,6 +197,9 @@ limitations under the License.
 
         .mx_RoomSublist_resizerHandles {
             flex: 0 0 4px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
         }
 
         // Class name comes from the ResizableBox component
@@ -211,17 +210,12 @@ limitations under the License.
             border-radius: 3px;
 
             // Override styles from library
-            width: unset !important;
+            max-width: 64px;
             height: 4px !important; // Update RESIZE_HANDLE_HEIGHT if this changes
 
             // This is positioned directly below the 'show more' button.
-            position: absolute;
+            position: relative !important;
             bottom: 0 !important; // override from library
-
-            // Together, these make the bar 64px wide
-            // These are also overridden from the library
-            left: calc(50% - 32px) !important;
-            right: calc(50% - 32px) !important;
         }
 
         &:hover, &.mx_RoomSublist_hasMenuOpen {
@@ -386,4 +380,23 @@ limitations under the License.
 
 .mx_RoomSublist_addRoomTooltip {
     margin-top: -3px;
+}
+
+.mx_RoomSublist_skeletonUI {
+    position: relative;
+    margin-left: 4px;
+    height: 288px;
+
+    &::before {
+        background: $roomsublist-skeleton-ui-bg;
+
+        width: 100%;
+        height: 100%;
+
+        content: '';
+        position: absolute;
+        mask-repeat: repeat-y;
+        mask-size: auto 48px;
+        mask-image: url('$(res)/img/element-icons/roomlist/skeleton-ui.svg');
+    }
 }

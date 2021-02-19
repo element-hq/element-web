@@ -19,13 +19,20 @@ import Field from "../elements/Field";
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
+import Spinner from '../elements/Spinner';
+import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
+import PassphraseField from "../auth/PassphraseField";
+import CountlyAnalytics from "../../../CountlyAnalytics";
 
-import sessionStore from '../../../stores/SessionStore';
+const FIELD_OLD_PASSWORD = 'field_old_password';
+const FIELD_NEW_PASSWORD = 'field_new_password';
+const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
+
+const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 export default class ChangePassword extends React.Component {
     static propTypes = {
@@ -65,32 +72,11 @@ export default class ChangePassword extends React.Component {
     }
 
     state = {
+        fieldValid: {},
         phase: ChangePassword.Phases.Edit,
-        cachedPassword: null,
         oldPassword: "",
         newPassword: "",
         newPasswordConfirm: "",
-    };
-
-    componentDidMount() {
-        this._sessionStore = sessionStore;
-        this._sessionStoreToken = this._sessionStore.addListener(
-            this._setStateFromSessionStore,
-        );
-
-        this._setStateFromSessionStore();
-    }
-
-    componentWillUnmount() {
-        if (this._sessionStoreToken) {
-            this._sessionStoreToken.remove();
-        }
-    }
-
-    _setStateFromSessionStore = () => {
-        this.setState({
-            cachedPassword: this._sessionStore.getCachedPassword(),
-        });
     };
 
     changePassword(oldPassword, newPassword) {
@@ -119,8 +105,11 @@ export default class ChangePassword extends React.Component {
                 </div>,
             button: _t("Continue"),
             extraButtons: [
-                <button className="mx_Dialog_primary"
-                        onClick={this._onExportE2eKeysClicked}>
+                <button
+                    key="exportRoomKeys"
+                    className="mx_Dialog_primary"
+                    onClick={this._onExportE2eKeysClicked}
+                >
                     { _t('Export E2E room keys') }
                 </button>,
             ],
@@ -150,9 +139,6 @@ export default class ChangePassword extends React.Component {
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
-            // Notify SessionStore that the user's password was changed
-            dis.dispatch({action: 'password_changed'});
-
             if (this.props.shouldAskForEmail) {
                 return this._optionallySetEmail().then((confirmed) => {
                     this.props.onFinished({
@@ -192,16 +178,44 @@ export default class ChangePassword extends React.Component {
         );
     };
 
+    markFieldValid(fieldID, valid) {
+        const { fieldValid } = this.state;
+        fieldValid[fieldID] = valid;
+        this.setState({
+            fieldValid,
+        });
+    }
+
     onChangeOldPassword = (ev) => {
         this.setState({
             oldPassword: ev.target.value,
         });
     };
 
+    onOldPasswordValidate = async fieldState => {
+        const result = await this.validateOldPasswordRules(fieldState);
+        this.markFieldValid(FIELD_OLD_PASSWORD, result.valid);
+        return result;
+    };
+
+    validateOldPasswordRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Passwords can't be empty"),
+            },
+         ],
+    });
+
     onChangeNewPassword = (ev) => {
         this.setState({
             newPassword: ev.target.value,
         });
+    };
+
+    onNewPasswordValidate = result => {
+        this.markFieldValid(FIELD_NEW_PASSWORD, result.valid);
     };
 
     onChangeNewPasswordConfirm = (ev) => {
@@ -210,9 +224,39 @@ export default class ChangePassword extends React.Component {
         });
     };
 
-    onClickChange = (ev) => {
+    onNewPasswordConfirmValidate = async fieldState => {
+        const result = await this.validatePasswordConfirmRules(fieldState);
+        this.markFieldValid(FIELD_NEW_PASSWORD_CONFIRM, result.valid);
+        return result;
+    };
+
+    validatePasswordConfirmRules = withValidation({
+        rules: [
+            {
+                key: "required",
+                test: ({ value, allowEmpty }) => allowEmpty || !!value,
+                invalid: () => _t("Confirm password"),
+            },
+            {
+                key: "match",
+                test({ value }) {
+                    return !value || value === this.state.newPassword;
+                },
+                invalid: () => _t("Passwords don't match"),
+            },
+         ],
+    });
+
+    onClickChange = async (ev) => {
         ev.preventDefault();
-        const oldPassword = this.state.cachedPassword || this.state.oldPassword;
+
+        const allFieldsValid = await this.verifyFieldsBeforeSubmit();
+        if (!allFieldsValid) {
+            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
+            return;
+        }
+
+        const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
         const err = this.props.onCheckPassword(
@@ -225,49 +269,113 @@ export default class ChangePassword extends React.Component {
         }
     };
 
-    render() {
-        // TODO: Live validation on `new pw == confirm pw`
+    async verifyFieldsBeforeSubmit() {
+        // Blur the active element if any, so we first run its blur validation,
+        // which is less strict than the pass we're about to do below for all fields.
+        const activeElement = document.activeElement;
+        if (activeElement) {
+            activeElement.blur();
+        }
 
+        const fieldIDsInDisplayOrder = [
+            FIELD_OLD_PASSWORD,
+            FIELD_NEW_PASSWORD,
+            FIELD_NEW_PASSWORD_CONFIRM,
+        ];
+
+        // Run all fields with stricter validation that no longer allows empty
+        // values for required fields.
+        for (const fieldID of fieldIDsInDisplayOrder) {
+            const field = this[fieldID];
+            if (!field) {
+                continue;
+            }
+            // We must wait for these validations to finish before queueing
+            // up the setState below so our setState goes in the queue after
+            // all the setStates from these validate calls (that's how we
+            // know they've finished).
+            await field.validate({ allowEmpty: false });
+        }
+
+        // Validation and state updates are async, so we need to wait for them to complete
+        // first. Queue a `setState` callback and wait for it to resolve.
+        await new Promise(resolve => this.setState({}, resolve));
+
+        if (this.allFieldsValid()) {
+            return true;
+        }
+
+        const invalidField = this.findFirstInvalidField(fieldIDsInDisplayOrder);
+
+        if (!invalidField) {
+            return true;
+        }
+
+        // Focus the first invalid field and show feedback in the stricter mode
+        // that no longer allows empty values for required fields.
+        invalidField.focus();
+        invalidField.validate({ allowEmpty: false, focused: true });
+        return false;
+    }
+
+    allFieldsValid() {
+        const keys = Object.keys(this.state.fieldValid);
+        for (let i = 0; i < keys.length; ++i) {
+            if (!this.state.fieldValid[keys[i]]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    findFirstInvalidField(fieldIDs) {
+        for (const fieldID of fieldIDs) {
+            if (!this.state.fieldValid[fieldID] && this[fieldID]) {
+                return this[fieldID];
+            }
+        }
+        return null;
+    }
+
+    render() {
         const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 
-        let currentPassword = null;
-        if (!this.state.cachedPassword) {
-            currentPassword = (
-                <div className={rowClassName}>
-                    <Field
-                        type="password"
-                        label={_t('Current password')}
-                        value={this.state.oldPassword}
-                        onChange={this.onChangeOldPassword}
-                    />
-                </div>
-            );
-        }
-
         switch (this.state.phase) {
             case ChangePassword.Phases.Edit:
-                const passwordLabel = this.state.cachedPassword ?
-                    _t('Password') : _t('New Password');
                 return (
                     <form className={this.props.className} onSubmit={this.onClickChange}>
-                        { currentPassword }
                         <div className={rowClassName}>
                             <Field
+                                ref={field => this[FIELD_OLD_PASSWORD] = field}
                                 type="password"
-                                label={passwordLabel}
+                                label={_t('Current password')}
+                                value={this.state.oldPassword}
+                                onChange={this.onChangeOldPassword}
+                                onValidate={this.onOldPasswordValidate}
+                            />
+                        </div>
+                        <div className={rowClassName}>
+                            <PassphraseField
+                                fieldRef={field => this[FIELD_NEW_PASSWORD] = field}
+                                type="password"
+                                label='New Password'
+                                minScore={PASSWORD_MIN_SCORE}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
+                                onValidate={this.onNewPasswordValidate}
                                 autoComplete="new-password"
                             />
                         </div>
                         <div className={rowClassName}>
                             <Field
+                                ref={field => this[FIELD_NEW_PASSWORD_CONFIRM] = field}
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}
                                 onChange={this.onChangeNewPasswordConfirm}
+                                onValidate={this.onNewPasswordConfirmValidate}
                                 autoComplete="new-password"
                             />
                         </div>
@@ -277,10 +385,9 @@ export default class ChangePassword extends React.Component {
                     </form>
                 );
             case ChangePassword.Phases.Uploading:
-                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <div className="mx_Dialog_content">
-                        <Loader />
+                        <Spinner />
                     </div>
                 );
         }

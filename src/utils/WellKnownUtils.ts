@@ -16,16 +16,26 @@ limitations under the License.
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
 
+const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 
 /* eslint-disable camelcase */
+export interface ICallBehaviourWellKnown {
+    widget_build_url?: string;
+}
+
 export interface IE2EEWellKnown {
     default?: boolean;
     secure_backup_required?: boolean;
     secure_backup_setup_methods?: SecureBackupSetupMethod[];
 }
 /* eslint-enable camelcase */
+
+export function getCallBehaviourWellKnown(): ICallBehaviourWellKnown {
+    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
+    return clientWellKnown?.[CALL_BEHAVIOUR_WK_KEY];
+}
 
 export function getE2EEWellKnown(): IE2EEWellKnown {
     const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();

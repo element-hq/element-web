@@ -56,7 +56,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
             >
                 <div>
                     <p>{_t(
-                        "This session has detected that your recovery passphrase and key " +
+                        "This session has detected that your Security Phrase and key " +
                         "for Secure Messages have been removed.",
                     )}</p>
                     <p>{_t(

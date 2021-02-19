@@ -25,7 +25,7 @@ import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixClient} from 'matrix-js-sdk';
 
-import * as ObjectUtils from '../../../ObjectUtils';
+import { objectHasDiff } from '../../../utils/objects';
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -90,7 +90,7 @@ class ReplyTile extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+        if (objectHasDiff(this.state, nextState)) {
             return true;
         }
 

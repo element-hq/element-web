@@ -24,6 +24,7 @@ export default class E2eSetup extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
         accountPassword: PropTypes.string,
+        tokenLogin: PropTypes.bool,
     };
 
     render() {
@@ -33,6 +34,7 @@ export default class E2eSetup extends React.Component {
                     <CreateCrossSigningDialog
                         onFinished={this.props.onFinished}
                         accountPassword={this.props.accountPassword}
+                        tokenLogin={this.props.tokenLogin}
                     />
                 </CompleteSecurityBody>
             </AuthPage>

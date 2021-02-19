@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015-2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
-import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
@@ -42,14 +39,6 @@ export default class RoomStatusBar extends React.Component {
     static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
-        // This is true when the user is alone in the room, but has also sent a message.
-        // Used to suggest to the user to invite someone
-        sentMessageAndIsAlone: PropTypes.bool,
-
-        // true if there is an active call in this room (means we show
-        // the 'Active Call' text in the status bar if there is nothing
-        // more interesting)
-        hasActiveCall: PropTypes.bool,
 
         // true if the room is being peeked at. This affects components that shouldn't
         // logically be shown when peeking, such as a prompt to invite people to a room.
@@ -66,10 +55,6 @@ export default class RoomStatusBar extends React.Component {
         // callback for when the user clicks on the 'invite others' button in the
         // 'you are alone' bar
         onInviteClick: PropTypes.func,
-
-        // callback for when the user clicks on the 'stop warning me' button in the
-        // 'you are alone' bar
-        onStopWarningClick: PropTypes.func,
 
         // callback for when we do something that changes the size of the
         // status bar. This is used to trigger a re-layout in the parent
@@ -152,31 +137,12 @@ export default class RoomStatusBar extends React.Component {
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
     _getSize() {
-        if (this._shouldShowConnectionError() ||
-            this.props.hasActiveCall ||
-            this.props.sentMessageAndIsAlone
-        ) {
+        if (this._shouldShowConnectionError()) {
             return STATUS_BAR_EXPANDED;
         } else if (this.state.unsentMessages.length > 0) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
-    }
-
-    // return suitable content for the image on the left of the status bar.
-    _getIndicator() {
-        if (this.props.hasActiveCall) {
-            const TintableSvg = sdk.getComponent("elements.TintableSvg");
-            return (
-                <TintableSvg src={require("../../../res/img/element-icons/room/in-call.svg")} width="23" height="20" />
-            );
-        }
-
-        if (this._shouldShowConnectionError()) {
-            return null;
-        }
-
-        return null;
     }
 
     _shouldShowConnectionError() {
@@ -291,44 +257,14 @@ export default class RoomStatusBar extends React.Component {
             return this._getUnsentMessageContent();
         }
 
-        if (this.props.hasActiveCall) {
-            return (
-                <div className="mx_RoomStatusBar_callBar">
-                    <b>{ _t('Active call') }</b>
-                </div>
-            );
-        }
-
-        // If you're alone in the room, and have sent a message, suggest to invite someone
-        if (this.props.sentMessageAndIsAlone && !this.props.isPeeking) {
-            return (
-                <div className="mx_RoomStatusBar_isAlone">
-                    { _t("There's no one else here! Would you like to <inviteText>invite others</inviteText> " +
-                            "or <nowarnText>stop warning about the empty room</nowarnText>?",
-                        {},
-                        {
-                            'inviteText': (sub) =>
-                                <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
-                            'nowarnText': (sub) =>
-                                <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
-                        },
-                    ) }
-                </div>
-            );
-        }
-
         return null;
     }
 
     render() {
         const content = this._getContent();
-        const indicator = this._getIndicator();
 
         return (
             <div className="mx_RoomStatusBar">
-                <div className="mx_RoomStatusBar_indicator">
-                    { indicator }
-                </div>
                 <div role="alert">
                     { content }
                 </div>

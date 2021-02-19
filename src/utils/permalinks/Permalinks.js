@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import isIp from "is-ip";
 import * as utils from 'matrix-js-sdk/src/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
-import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
+import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
 import SdkConfig from "../../SdkConfig";
 
@@ -127,6 +127,17 @@ export class RoomPermalinkCreator {
 
     forEvent(eventId) {
         return getPermalinkConstructor().forEvent(this._roomId, eventId, this._serverCandidates);
+    }
+
+    forShareableRoom() {
+        if (this._room) {
+            // Prefer to use canonical alias for permalink if possible
+            const alias = this._room.getCanonicalAlias();
+            if (alias) {
+                return getPermalinkConstructor().forRoom(alias, this._serverCandidates);
+            }
+        }
+        return getPermalinkConstructor().forRoom(this._roomId, this._serverCandidates);
     }
 
     forRoom() {
@@ -320,12 +331,12 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         return permalink;
     }
 
-    const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+    const m = permalink.match(matrixLinkify.ELEMENT_URL_PATTERN);
     if (m) {
         return m[1];
     }
 
-    // A bit of a hack to convert permalinks of unknown origin to Riot links
+    // A bit of a hack to convert permalinks of unknown origin to Element links
     try {
         const permalinkParts = parsePermalink(permalink);
         if (permalinkParts) {
@@ -354,10 +365,10 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 
         // If not a permalink, try the vector patterns.
         if (!permalinkParts) {
-            const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+            const m = permalink.match(matrixLinkify.ELEMENT_URL_PATTERN);
             if (m) {
                 // A bit of a hack, but it gets the job done
-                const handler = new RiotPermalinkConstructor("http://localhost");
+                const handler = new ElementPermalinkConstructor("http://localhost");
                 const entityInfo = m[1].split('#').slice(1).join('#');
                 permalinkParts = handler.parsePermalink(`http://localhost/#${entityInfo}`);
             }
@@ -375,23 +386,40 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {
-    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
-    if (riotPrefix && riotPrefix !== matrixtoBaseUrl) {
-        return new RiotPermalinkConstructor(riotPrefix);
+    const elementPrefix = SdkConfig.get()['permalinkPrefix'];
+    if (elementPrefix && elementPrefix !== matrixtoBaseUrl) {
+        return new ElementPermalinkConstructor(elementPrefix);
     }
 
     return new SpecPermalinkConstructor();
 }
 
 export function parsePermalink(fullUrl: string): PermalinkParts {
-    const riotPrefix = SdkConfig.get()['permalinkPrefix'];
+    const elementPrefix = SdkConfig.get()['permalinkPrefix'];
     if (fullUrl.startsWith(matrixtoBaseUrl)) {
         return new SpecPermalinkConstructor().parsePermalink(fullUrl);
-    } else if (riotPrefix && fullUrl.startsWith(riotPrefix)) {
-        return new RiotPermalinkConstructor(riotPrefix).parsePermalink(fullUrl);
+    } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
+        return new ElementPermalinkConstructor(elementPrefix).parsePermalink(fullUrl);
     }
 
     return null; // not a permalink we can handle
+}
+
+/**
+ * Parses an app local link (`#/(user|room|group)/identifer`) to a Matrix entity
+ * (room, user, group). Such links are produced by `HtmlUtils` when encountering
+ * links, which calls `tryTransformPermalinkToLocalHref` in this module.
+ * @param {string} localLink The app local link
+ * @returns {PermalinkParts}
+ */
+export function parseAppLocalLink(localLink: string): PermalinkParts {
+    try {
+        const segments = localLink.replace("#/", "");
+        return ElementPermalinkConstructor.parseAppRoute(segments);
+    } catch (e) {
+        // Ignore failures
+    }
+    return null;
 }
 
 function getServerName(userId) {

@@ -24,8 +24,8 @@ import Modal from '../../../Modal';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
-import SSOButton from "../../views/elements/SSOButton";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "../../../BasePlatform";
+import SSOButtons from "../../views/elements/SSOButtons";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -72,9 +72,12 @@ export default class SoftLogout extends React.Component {
 
         this._initLogin();
 
-        MatrixClientPeg.get().countSessionsNeedingBackup().then(remaining => {
-            this.setState({keyBackupNeeded: remaining > 0});
-        });
+        const cli = MatrixClientPeg.get();
+        if (cli.isCryptoEnabled()) {
+            cli.countSessionsNeedingBackup().then(remaining => {
+                this.setState({ keyBackupNeeded: remaining > 0 });
+            });
+        }
     }
 
     onClearAll = () => {
@@ -101,10 +104,11 @@ export default class SoftLogout extends React.Component {
         // Note: we don't use the existing Login class because it is heavily flow-based. We don't
         // care about login flows here, unless it is the single flow we support.
         const client = MatrixClientPeg.get();
-        const loginViews = (await client.loginFlows()).flows.map(f => FLOWS_TO_VIEWS[f.type]);
+        const flows = (await client.loginFlows()).flows;
+        const loginViews = flows.map(f => FLOWS_TO_VIEWS[f.type]);
 
         const chosenView = loginViews.filter(f => !!f)[0] || LOGIN_VIEW.UNSUPPORTED;
-        this.setState({loginView: chosenView});
+        this.setState({ flows, loginView: chosenView });
     }
 
     onPasswordChange = (ev) => {
@@ -240,13 +244,18 @@ export default class SoftLogout extends React.Component {
                 introText = _t("Sign in and regain access to your account.");
             } // else we already have a message and should use it (key backup warning)
 
+            const loginType = this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso";
+            const flow = this.state.flows.find(flow => flow.type === "m.login." + loginType);
+
             return (
                 <div>
                     <p>{introText}</p>
-                    <SSOButton
+                    <SSOButtons
                         matrixClient={MatrixClientPeg.get()}
-                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"}
+                        flow={flow}
+                        loginType={loginType}
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
+                        primary={!this.state.flows.find(flow => flow.type === "m.login.password")}
                     />
                 </div>
             );

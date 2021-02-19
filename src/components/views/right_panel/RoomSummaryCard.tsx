@@ -17,7 +17,6 @@ limitations under the License.
 import React, {useCallback, useState, useEffect, useContext} from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from '../../../hooks/useIsEncrypted';
@@ -32,17 +31,20 @@ import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPa
 import Modal from "../../../Modal";
 import ShareDialog from '../dialogs/ShareDialog';
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import BaseAvatar from "../avatars/BaseAvatar";
+import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, {IApp} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
+import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
+import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
+import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 
 interface IProps {
     room: Room;
@@ -68,22 +70,107 @@ const Button: React.FC<IButtonProps> = ({ children, className, onClick }) => {
 };
 
 export const useWidgets = (room: Room) => {
-    const [apps, setApps] = useState<IApp[]>(WidgetStore.instance.getApps(room));
+    const [apps, setApps] = useState<IApp[]>(WidgetStore.instance.getApps(room.roomId));
 
     const updateApps = useCallback(() => {
         // Copy the array so that we always trigger a re-render, as some updates mutate the array of apps/settings
-        setApps([...WidgetStore.instance.getApps(room)]);
+        setApps([...WidgetStore.instance.getApps(room.roomId)]);
     }, [room]);
 
-    useEffect(updateApps, [room]);
-    useEventEmitter(WidgetEchoStore, "update", updateApps);
+    useEffect(updateApps, [room, updateApps]);
     useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
+    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
 
     return apps;
 };
 
+interface IAppRowProps {
+    app: IApp;
+    room: Room;
+}
+
+const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
+    const name = WidgetUtils.getWidgetName(app);
+    const dataTitle = WidgetUtils.getWidgetDataTitle(app);
+    const subtitle = dataTitle && " - " + dataTitle;
+
+    const onOpenWidgetClick = () => {
+        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.Widget,
+            refireParams: {
+                widgetId: app.id,
+            },
+        });
+    };
+
+    const isPinned = WidgetLayoutStore.instance.isInContainer(room, app, Container.Top);
+    const togglePin = isPinned
+        ? () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right); }
+        : () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Top); };
+
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+    let contextMenu;
+    if (menuDisplayed) {
+        const rect = handle.current.getBoundingClientRect();
+        contextMenu = <WidgetContextMenu
+            chevronFace={ChevronFace.None}
+            right={window.innerWidth - rect.right}
+            bottom={window.innerHeight - rect.top}
+            onFinished={closeMenu}
+            app={app}
+        />;
+    }
+
+    const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, Container.Top);
+
+    let pinTitle: string;
+    if (cannotPin) {
+        pinTitle = _t("You can only pin up to %(count)s widgets", { count: MAX_PINNED });
+    } else {
+        pinTitle = isPinned ? _t("Unpin") : _t("Pin");
+    }
+
+    const classes = classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", {
+        mx_RoomSummaryCard_Button_pinned: isPinned,
+    });
+
+    return <div className={classes} ref={handle}>
+        <AccessibleTooltipButton
+            className="mx_RoomSummaryCard_icon_app"
+            onClick={onOpenWidgetClick}
+            // only show a tooltip if the widget is pinned
+            title={isPinned ? _t("Unpin a widget to view it in this panel") : ""}
+            forceHide={!isPinned}
+            disabled={isPinned}
+            yOffset={-48}
+        >
+            <WidgetAvatar app={app} />
+            <span>{name}</span>
+            { subtitle }
+        </AccessibleTooltipButton>
+
+        <ContextMenuTooltipButton
+            className="mx_RoomSummaryCard_app_options"
+            isExpanded={menuDisplayed}
+            onClick={openMenu}
+            title={_t("Options")}
+            yOffset={-24}
+        />
+
+        <AccessibleTooltipButton
+            className="mx_RoomSummaryCard_app_pinToggle"
+            onClick={togglePin}
+            title={pinTitle}
+            disabled={cannotPin}
+            yOffset={-24}
+        />
+
+        { contextMenu }
+    </div>;
+};
+
 const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
-    const cli = useContext(MatrixClientContext);
     const apps = useWidgets(room);
 
     const onManageIntegrations = () => {
@@ -99,67 +186,18 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         }
     };
 
+    let copyLayoutBtn = null;
+    if (apps.length > 0 && WidgetLayoutStore.instance.canCopyLayoutToRoom(room)) {
+        copyLayoutBtn = (
+            <AccessibleButton kind="link" onClick={() => WidgetLayoutStore.instance.copyLayoutToRoom(room)}>
+                { _t("Set my room layout for everyone") }
+            </AccessibleButton>
+        );
+    }
+
     return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
-        { apps.map(app => {
-            const name = WidgetUtils.getWidgetName(app);
-            const dataTitle = WidgetUtils.getWidgetDataTitle(app);
-            const subtitle = dataTitle && " - " + dataTitle;
-
-            let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg")];
-            // heuristics for some better icons until Widgets support their own icons
-            if (app.type.includes("meeting") || app.type.includes("calendar")) {
-                iconUrls = [require("../../../../res/img/element-icons/room/default_cal.svg")];
-            } else if (app.type.includes("pad") || app.type.includes("doc") || app.type.includes("calc")) {
-                iconUrls = [require("../../../../res/img/element-icons/room/default_doc.svg")];
-            } else if (app.type.includes("clock")) {
-                iconUrls = [require("../../../../res/img/element-icons/room/default_clock.svg")];
-            }
-
-            if (app.avatar_url) { // MSC2765
-                iconUrls.unshift(getHttpUriForMxc(cli.getHomeserverUrl(), app.avatar_url, 20, 20, "crop"));
-            }
-
-            const isPinned = WidgetStore.instance.isPinned(app.id);
-            const classes = classNames("mx_RoomSummaryCard_icon_app", {
-                mx_RoomSummaryCard_icon_app_pinned: isPinned,
-            });
-
-            if (isPinned) {
-                const onClick = () => {
-                    WidgetStore.instance.unpinWidget(app.id);
-                };
-
-                return <AccessibleTooltipButton
-                    key={app.id}
-                    className={classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", classes)}
-                    onClick={onClick}
-                    title={_t("Unpin app")}
-                >
-                    <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
-                    <span>{name}</span>
-                    { subtitle }
-                </AccessibleTooltipButton>
-            }
-
-            const onOpenWidgetClick = () => {
-                defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                    action: Action.SetRightPanelPhase,
-                    phase: RightPanelPhases.Widget,
-                    refireParams: {
-                        widgetId: app.id,
-                    },
-                });
-            };
-
-            return (
-                <Button key={app.id} className={classes} onClick={onOpenWidgetClick}>
-                    <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
-                    <span>{name}</span>
-                    { subtitle }
-                </Button>
-            );
-        }) }
-
+        { apps.map(app => <AppRow key={app.id} app={app} room={room} />) }
+        { copyLayoutBtn }
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
             { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
         </AccessibleButton>
@@ -182,14 +220,6 @@ const onRoomFilesClick = () => {
 
 const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
-};
-
-const useMemberCount = (room: Room) => {
-    const [count, setCount] = useState(room.getJoinedMembers().length);
-    useEventEmitter(room.currentState, "RoomState.members", () => {
-        setCount(room.getJoinedMembers().length);
-    });
-    return count;
 };
 
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
@@ -225,7 +255,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         </div>
     </React.Fragment>;
 
-    const memberCount = useMemberCount(room);
+    const memberCount = useRoomMemberCount(room);
 
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
