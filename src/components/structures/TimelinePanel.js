@@ -26,7 +26,6 @@ import {EventTimeline} from "matrix-js-sdk";
 import * as Matrix from "matrix-js-sdk";
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
-import * as ObjectUtils from "../../ObjectUtils";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
@@ -37,6 +36,7 @@ import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {UIFeature} from "../../settings/UIFeature";
+import {objectHasDiff} from "../../utils/objects";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -261,7 +261,7 @@ class TimelinePanel extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!ObjectUtils.shallowEqual(this.props, nextProps)) {
+        if (objectHasDiff(this.props, nextProps)) {
             if (DEBUG) {
                 console.group("Timeline.shouldComponentUpdate: props change");
                 console.log("props before:", this.props);
@@ -271,7 +271,7 @@ class TimelinePanel extends React.Component {
             return true;
         }
 
-        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+        if (objectHasDiff(this.state, nextState)) {
             if (DEBUG) {
                 console.group("Timeline.shouldComponentUpdate: state change");
                 console.log("state before:", this.state);

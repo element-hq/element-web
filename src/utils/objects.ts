@@ -86,6 +86,7 @@ export function objectShallowClone<O extends {}>(a: O, propertyCloner?: (k: keyo
  * @returns True if there's a difference between the objects, false otherwise
  */
 export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
+    if (a === b) return false;
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
     if (arrayHasDiff(aKeys, bKeys)) return true;
