@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { arrayDiff, arrayHasDiff, arrayMerge, arrayUnion } from "./arrays";
+import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
 
 type ObjectExcluding<O extends {}, P extends (keyof O)[]> = {[k in Exclude<keyof O, P[number]>]: O[k]};
 
