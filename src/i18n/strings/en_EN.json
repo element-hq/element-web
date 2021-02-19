@@ -1933,7 +1933,6 @@
     "Please provide a room address": "Please provide a room address",
     "This address is available to use": "This address is available to use",
     "This address is already in use": "This address is already in use",
-    "Room directory": "Room directory",
     "Server Options": "Server Options",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.",
     "Join millions for free on the largest public server": "Join millions for free on the largest public server",

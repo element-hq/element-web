@@ -211,7 +211,7 @@ export class Algorithm extends EventEmitter {
         }
 
         // When we do have a room though, we expect to be able to find it
-        let tag = this.roomIdsToTags[val.roomId][0];
+        let tag = this.roomIdsToTags[val.roomId]?.[0];
         if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
 
         // We specifically do NOT use the ordered rooms set as it contains the sticky room, which

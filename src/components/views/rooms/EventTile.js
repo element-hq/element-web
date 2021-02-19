@@ -32,13 +32,13 @@ import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
-import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
 import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
 import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
+import {objectHasDiff} from "../../../utils/objects";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -294,7 +294,7 @@ export default class EventTile extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+        if (objectHasDiff(this.state, nextState)) {
             return true;
         }
 
