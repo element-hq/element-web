@@ -161,6 +161,9 @@ export default class TextualBody extends React.Component {
     }
 
     _addCodeCopyButton(div) {
+        const copyCode = div.getElementsByTagName("code")[0];
+        // If there isn't any code element don't show the copy button
+        if (!copyCode) return;
         const button = document.createElement("span");
         button.className = "mx_EventTile_button mx_EventTile_copyButton ";
 
@@ -170,7 +173,6 @@ export default class TextualBody extends React.Component {
         if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
         button.onclick = async () => {
-            const copyCode = button.parentNode.getElementsByTagName("code")[0];
             const successful = await copyPlaintext(copyCode.textContent);
 
             const buttonRect = button.getBoundingClientRect();
