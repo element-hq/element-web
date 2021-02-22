@@ -96,6 +96,14 @@ export default class TextualBody extends React.Component {
             const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
             if (pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
+                    let code = pres[i].getElementsByTagName("code")[0];
+                    // Add code element if it's missing
+                    if (!code) {
+                        code = document.createElement("code");
+                        code.innerHTML = pres[i].innerHTML;
+                        pres[i].innerHTML = "";
+                        pres[i].appendChild(code);
+                    }
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
                     if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
