@@ -107,6 +107,7 @@ interface IState {
             errcode: string;
         };
     };
+    usageLimitDismissed: boolean;
     usageLimitEventContent?: IUsageLimit;
     usageLimitEventTs?: number;
     useCompactLayout: boolean;
@@ -152,6 +153,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             syncErrorData: undefined,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
+            usageLimitDismissed: false,
         };
 
         // stash the MatrixClient in case we log out before we are unmounted
@@ -303,14 +305,27 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
+    _onHideToast = () => {
+        this.setState({
+            usageLimitDismissed: true,
+        });
+    }
+
     _calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
         const error = syncError && syncError.error && syncError.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
             usageLimitEventContent = syncError.error.data;
         }
 
-        if (usageLimitEventContent) {
-            showServerLimitToast(usageLimitEventContent.limit_type, usageLimitEventContent.admin_contact, error);
+        // usageLimitDismissed is true when the user has explicitly hidden the toast
+        // and it will be reset to false if a *new* usage alert comes in.
+        if (usageLimitEventContent && this.state.usageLimitDismissed) {
+            showServerLimitToast(
+                usageLimitEventContent.limit_type,
+                this._onHideToast,
+                usageLimitEventContent.admin_contact,
+                error,
+            );
         } else {
             hideServerLimitToast();
         }
