@@ -1,0 +1,71 @@
+.mx_MessageContextMenu {
+
+    .mx_IconizedContextMenu_icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            display: block;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+        }
+    }
+
+    .mx_MessageContextMenu_iconCollapse::before {
+        mask-image: url('$(res)/img/element-icons/message/chevron-up.svg');
+    }
+
+    .mx_MessageContextMenu_iconReport::before {
+        mask-image: url('$(res)/img/feather-customised/warning-triangle.svg');
+    }
+
+    .mx_MessageContextMenu_iconLink::before {
+        mask-image: url('$(res)/img/element-icons/message/link.svg');
+    }
+
+    .mx_MessageContextMenu_iconPermalink::before {
+        mask-image: url('$(res)/img/element-icons/message/share.svg');
+    }
+
+    .mx_MessageContextMenu_iconUnhidePreview::before {
+        mask-image: url('$(res)/img/feather-customised/eye.svg');
+    }
+
+    .mx_MessageContextMenu_iconForward::before {
+        mask-image: url('$(res)/img/element-icons/message/corner-up-right.svg');
+    }
+
+    .mx_MessageContextMenu_iconCancel::before {
+        mask-image: url('$(res)/img/cancel.svg');
+    }
+
+    .mx_MessageContextMenu_iconRedact::before {
+        mask-image: url('$(res)/img/feather-customised/trash.custom.svg');
+    }
+
+    .mx_MessageContextMenu_iconResend::before {
+        mask-image: url('$(res)/img/element-icons/message/repeat.svg');
+    }
+
+    .mx_MessageContextMenu_iconSource::before {
+        mask-image: url('$(res)/img/element-icons/room/format-bar/code.svg');
+    }
+
+    .mx_MessageContextMenu_iconQuote::before {
+        mask-image: url('$(res)/img/format/quote.svg');
+    }
+
+    .mx_MessageContextMenu_iconPin::before {
+        mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+    }
+
+    .mx_MessageContextMenu_iconUnpin::before {
+        mask-image: url('$(res)/img/element-icons/room/pin.svg');
+    }
+}
