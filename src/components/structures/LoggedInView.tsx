@@ -336,10 +336,12 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (!serverNoticeList) return [];
 
         const events = [];
+        let pinnedEventTs = 0;
         for (const room of serverNoticeList) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
+            pinnedEventTs = pinStateEvent.getTs();
 
             const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
             for (const eventId of pinnedEventIds) {
@@ -349,21 +351,22 @@ class LoggedInView extends React.Component<IProps, IState> {
             }
         }
 
+        if (pinnedEventTs && this.state.usageLimitEventTs > pinnedEventTs) {
+            // We've processed a newer event than this one, so ignore it.
+            return;
+        }
+
         const usageLimitEvent = events.find((e) => {
             return (
                 e && e.getType() === 'm.room.message' &&
                 e.getContent()['server_notice_type'] === 'm.server_notice.usage_limit_reached'
             );
         });
-        if (this.state.usageLimitEventTs > usageLimitEvent.getTs()) {
-            // We've processed a newer event than this one, so ignore it.
-            return;
-        }
         const usageLimitEventContent = usageLimitEvent && usageLimitEvent.getContent();
         this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEventContent);
         this.setState({
             usageLimitEventContent,
-            usageLimitEventTs: usageLimitEvent.getTs(),
+            usageLimitEventTs: pinnedEventTs,
             // This is a fresh toast, we can show toasts again
             usageLimitDismissed: false,
         });
