@@ -37,5 +37,15 @@
             "url": "https://element.io/cookie-policy",
             "text": "Cookie Policy"
         }
-    ]
+    ],
+    "hostSignup": {
+      "brand": "Element Home",
+      "cookiePolicyUrl": "https://element.io/cookie-policy",
+      "domains": [
+          "matrix.org"
+      ],
+      "privacyPolicyUrl": "https://element.io/privacy",
+      "termsOfServiceUrl": "https://element.io/terms-of-service",
+      "url": "https://ems.element.io/element-home/in-app-loader"
+    }
 }
