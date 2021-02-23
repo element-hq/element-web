@@ -293,17 +293,17 @@ export default class ImageView extends React.Component {
                     </div>
                     <div className="mx_ImageView_panel mx_ImageView_toolbar">
                         { redactButton }
+                        <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Right")} onClick={ this.onRotateClockwiseClick }>
+                            <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
+                        </AccessibleButton>
+                        <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.onRotateCounterClockwiseClick }>
+                            <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
+                        </AccessibleButton>
                         <AccessibleButton className="mx_ImageView_button" title={_t("Zoom out")} onClick={ this.onZoomOutClick }>
                             <img src={require("../../../../res/img/minus-white.svg")} alt={ _t('Zoom out') } width="18" height="18" />
                         </AccessibleButton>
                         <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.onZoomInClick }>
                             <img src={require("../../../../res/img/plus-white.svg")} alt={ _t('Zoom in') } width="18" height="18" />
-                        </AccessibleButton>
-                        <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.onRotateCounterClockwiseClick }>
-                            <img src={require("../../../../res/img/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="18" height="18" />
-                        </AccessibleButton>
-                        <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Right")} onClick={ this.onRotateClockwiseClick }>
-                            <img src={require("../../../../res/img/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="18" height="18" />
                         </AccessibleButton>
                         <a className="mx_ImageView_button" href={ this.props.src } download={ this.props.name } title={_t("Download")} target="_blank" rel="noopener">
                             <img src={require("../../../../res/img/download-white.svg")} width="18" height="18" alt={ _t('Download') } />
