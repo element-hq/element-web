@@ -257,7 +257,9 @@ $left-gutter: 64px;
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: -20px;
+    // This aligns the avatar with the last line of the 
+    // message. We want to move it one line up - 2.2rem
+    top: -2.2rem;
     user-select: none;
     z-index: 1;
 }
