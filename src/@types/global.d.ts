@@ -37,6 +37,7 @@ import CountlyAnalytics from "../CountlyAnalytics";
 import UserActivity from "../UserActivity";
 import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import VoipUserMapper from "../VoipUserMapper";
 
 declare global {
     interface Window {
@@ -66,6 +67,7 @@ declare global {
         mxCountlyAnalytics: typeof CountlyAnalytics;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
+        mxVoipUserMapper: VoipUserMapper;
     }
 
     interface Document {

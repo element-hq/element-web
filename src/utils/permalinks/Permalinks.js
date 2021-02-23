@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -403,6 +403,23 @@ export function parsePermalink(fullUrl: string): PermalinkParts {
     }
 
     return null; // not a permalink we can handle
+}
+
+/**
+ * Parses an app local link (`#/(user|room|group)/identifer`) to a Matrix entity
+ * (room, user, group). Such links are produced by `HtmlUtils` when encountering
+ * links, which calls `tryTransformPermalinkToLocalHref` in this module.
+ * @param {string} localLink The app local link
+ * @returns {PermalinkParts}
+ */
+export function parseAppLocalLink(localLink: string): PermalinkParts {
+    try {
+        const segments = localLink.replace("#/", "");
+        return ElementPermalinkConstructor.parseAppRoute(segments);
+    } catch (e) {
+        // Ignore failures
+    }
+    return null;
 }
 
 function getServerName(userId) {
