@@ -96,11 +96,13 @@ export default class TextualBody extends React.Component {
             const pres = ReactDOM.findDOMNode(this).getElementsByTagName("pre");
             if (pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
-                    // Add code element if it's missing
-                    if (!pres[i].getElementsByTagName("code")[0]) this._addCodeElement(pres[i]);
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
                     if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
+                    // Add code element if it's missing
+                    if (!pres[i].getElementsByTagName("code")[0]) {
+                        this._addCodeElement(pres[i]);
+                    }
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
                     // when the <pre> overflows and is scrolled horizontally.
                     const div = this._wrapInDiv(pres[i]);
