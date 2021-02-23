@@ -100,7 +100,7 @@ export default class TextualBody extends React.Component {
                     // This happens after the codeblock was edited.
                     if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
                     // Add code element if it's missing
-                    if (!pres[i].getElementsByTagName("code")[0]) {
+                    if (pres[i].getElementsByTagName("code").length == 0) {
                         this._addCodeElement(pres[i]);
                     }
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
