@@ -293,9 +293,6 @@ export default class ImageView extends React.Component {
                     </div>
                     <div className="mx_ImageView_panel mx_ImageView_toolbar">
                         { redactButton }
-                        <AccessibleButton className="mx_ImageView_button" title={_t("Zoom")} onClick={ this.onZoomClick }>
-                            <img src={require("../../../../res/img/zoom-white.svg")} alt={ _t('Zoom') } width="18" height="18" />
-                        </AccessibleButton>
                         <AccessibleButton className="mx_ImageView_button" title={_t("Zoom out")} onClick={ this.onZoomOutClick }>
                             <img src={require("../../../../res/img/minus-white.svg")} alt={ _t('Zoom out') } width="18" height="18" />
                         </AccessibleButton>
