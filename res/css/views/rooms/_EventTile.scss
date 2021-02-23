@@ -531,14 +531,14 @@ $left-gutter: 64px;
     display: inline-block;
     visibility: hidden;
     cursor: pointer;
-    top: 6px;
-    right: 12px;
+    top: 8px;
+    right: 8px;
     width: 19px;
     height: 19px;
     background-color: $message-action-bar-fg-color;
 }
 .mx_EventTile_buttonBottom {
-    top: 31px;
+    top: 33px;
 }
 .mx_EventTile_copyButton {
     mask-image: url($copy-button-url);
