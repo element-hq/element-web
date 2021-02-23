@@ -108,6 +108,7 @@ interface IState {
         };
     };
     usageLimitEventContent?: IUsageLimit;
+    usageLimitEventTs?: number;
     useCompactLayout: boolean;
 }
 
@@ -339,9 +340,18 @@ class LoggedInView extends React.Component<IProps, IState> {
                 e.getContent()['server_notice_type'] === 'm.server_notice.usage_limit_reached'
             );
         });
+        if (this.state.usageLimitEventTs > usageLimitEvent.getTs()) {
+            // We've processed a newer event than this one, so ignore it.
+            return;
+        }
         const usageLimitEventContent = usageLimitEvent && usageLimitEvent.getContent();
         this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEventContent);
-        this.setState({ usageLimitEventContent });
+        this.setState({
+            usageLimitEventContent,
+            usageLimitEventTs: usageLimitEvent.getTs(),
+            // This is a fresh toast, we can show toasts again
+            usageLimitDismissed: false,
+        });
     };
 
     _onPaste = (ev) => {
