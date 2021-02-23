@@ -19,6 +19,8 @@ limitations under the License.
     margin-right: 15px;
     margin-bottom: 15px;
     display: flex;
+    flex-direction: column;
+    max-width: 360px;
     border-left: 4px solid $preview-widget-bar-color;
     color: $preview-widget-fg-color;
 }
@@ -55,6 +57,9 @@ limitations under the License.
     cursor: pointer;
     width: 18px;
     height: 18px;
+    padding: 0px 5px 5px 5px;
+    margin-left: auto;
+    margin-right: 0px;
 
     img {
         flex: 0 0 40px;

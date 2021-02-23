@@ -18,6 +18,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import Field from "../elements/Field";
+import { _t, _td } from '../../../languageHandler';
 
 export default class TextInputDialog extends React.Component {
     static propTypes = {
@@ -29,6 +30,7 @@ export default class TextInputDialog extends React.Component {
         value: PropTypes.string,
         placeholder: PropTypes.string,
         button: PropTypes.string,
+        busyMessage: PropTypes.string, // pass _td string
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
         hasCancel: PropTypes.bool,
@@ -40,6 +42,7 @@ export default class TextInputDialog extends React.Component {
         title: "",
         value: "",
         description: "",
+        busyMessage: _td("Loading..."),
         focus: true,
         hasCancel: true,
     };
@@ -51,6 +54,7 @@ export default class TextInputDialog extends React.Component {
 
         this.state = {
             value: this.props.value,
+            busy: false,
             valid: false,
         };
     }
@@ -66,11 +70,13 @@ export default class TextInputDialog extends React.Component {
     onOk = async ev => {
         ev.preventDefault();
         if (this.props.validator) {
+            this.setState({ busy: true });
             await this._field.current.validate({ allowEmpty: false });
 
             if (!this._field.current.state.valid) {
                 this._field.current.focus();
                 this._field.current.validate({ allowEmpty: false, focused: true });
+                this.setState({ busy: false });
                 return;
             }
         }
@@ -125,7 +131,8 @@ export default class TextInputDialog extends React.Component {
                     </div>
                 </form>
                 <DialogButtons
-                    primaryButton={this.props.button}
+                    primaryButton={this.state.busy ? _t(this.props.busyMessage) : this.props.button}
+                    disabled={this.state.busy}
                     onPrimaryButtonClick={this.onOk}
                     onCancel={this.onCancel}
                     hasCancel={this.props.hasCancel}

@@ -70,26 +70,26 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
         return (
             <BaseDialog className='mx_WidgetOpenIDPermissionsDialog' hasCancel={true}
                         onFinished={this.props.onFinished}
-                        title={_t("A widget would like to verify your identity")}>
+                        title={_t("Allow this widget to verify your identity")}>
                 <div className='mx_WidgetOpenIDPermissionsDialog_content'>
                     <p>
-                        {_t(
-                            "A widget located at %(widgetUrl)s would like to verify your identity. " +
-                            "By allowing this, the widget will be able to verify your user ID, but not " +
-                            "perform actions as you.", {
-                                widgetUrl: this.props.widget.templateUrl.split("?")[0],
-                            },
-                        )}
+                        {_t("The widget will verify your user ID, but won't be able to perform actions for you:")}
                     </p>
-                    <LabelledToggleSwitch value={this.state.rememberSelection} toggleInFront={true}
-                                          onChange={this._onRememberSelectionChange}
-                                          label={_t("Remember my selection for this widget")} />
+                    <p className="text-muted">
+                        {/* cheap trim to just get the path */}
+                        {this.props.widget.templateUrl.split("?")[0].split("#")[0]}
+                    </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Allow")}
+                    primaryButton={_t("Continue")}
                     onPrimaryButtonClick={this._onAllow}
-                    cancelButton={_t("Deny")}
                     onCancel={this._onDeny}
+                    additive={
+                        <LabelledToggleSwitch
+                            value={this.state.rememberSelection}
+                            toggleInFront={true}
+                            onChange={this._onRememberSelectionChange}
+                            label={_t("Remember this")} />}
                 />
             </BaseDialog>
         );

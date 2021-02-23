@@ -22,6 +22,7 @@ import * as Avatar from '../../../Avatar';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
+import {Layout} from "../../../settings/Layout";
 import {UIFeature} from "../../../settings/UIFeature";
 
 interface IProps {
@@ -33,7 +34,7 @@ interface IProps {
     /**
      * Whether to use the irc layout or not
      */
-    useIRCLayout: boolean;
+    layout: Layout;
 
     /**
      * classnames to apply to the wrapper of the preview
@@ -121,14 +122,14 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const event = this.fakeEvent(this.state);
 
         const className = classnames(this.props.className, {
-            "mx_IRCLayout": this.props.useIRCLayout,
-            "mx_GroupLayout": !this.props.useIRCLayout,
+            "mx_IRCLayout": this.props.layout == Layout.IRC,
+            "mx_GroupLayout": this.props.layout == Layout.Group,
         });
 
         return <div className={className}>
             <EventTile
                 mxEvent={event}
-                useIRCLayout={this.props.useIRCLayout}
+                layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
             />
         </div>;

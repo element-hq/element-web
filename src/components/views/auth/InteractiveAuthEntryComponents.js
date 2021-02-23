@@ -609,8 +609,12 @@ export class SSOAuthEntry extends React.Component {
             this.props.authSessionId,
         );
 
+        this._popupWindow = null;
+        window.addEventListener("message", this._onReceiveMessage);
+
         this.state = {
             phase: SSOAuthEntry.PHASE_PREAUTH,
+            attemptFailed: false,
         };
     }
 
@@ -618,12 +622,35 @@ export class SSOAuthEntry extends React.Component {
         this.props.onPhaseChange(SSOAuthEntry.PHASE_PREAUTH);
     }
 
+    componentWillUnmount() {
+        window.removeEventListener("message", this._onReceiveMessage);
+        if (this._popupWindow) {
+            this._popupWindow.close();
+            this._popupWindow = null;
+        }
+    }
+
+    attemptFailed = () => {
+        this.setState({
+            attemptFailed: true,
+        });
+    };
+
+    _onReceiveMessage = event => {
+        if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
+            if (this._popupWindow) {
+                this._popupWindow.close();
+                this._popupWindow = null;
+            }
+        }
+    };
+
     onStartAuthClick = () => {
         // Note: We don't use PlatformPeg's startSsoAuth functions because we almost
         // certainly will need to open the thing in a new tab to avoid losing application
         // context.
 
-        window.open(this._ssoUrl, '_blank');
+        this._popupWindow = window.open(this._ssoUrl, "_blank");
         this.setState({phase: SSOAuthEntry.PHASE_POSTAUTH});
         this.props.onPhaseChange(SSOAuthEntry.PHASE_POSTAUTH);
     };
@@ -656,10 +683,28 @@ export class SSOAuthEntry extends React.Component {
             );
         }
 
-        return <div className='mx_InteractiveAuthEntryComponents_sso_buttons'>
-            {cancelButton}
-            {continueButton}
-        </div>;
+        let errorSection;
+        if (this.props.errorText) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { this.props.errorText }
+                </div>
+            );
+        } else if (this.state.attemptFailed) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { _t("Something went wrong in confirming your identity. Cancel and try again.") }
+                </div>
+            );
+        }
+
+        return <React.Fragment>
+            { errorSection }
+            <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
+                {cancelButton}
+                {continueButton}
+            </div>
+        </React.Fragment>;
     }
 }
 
@@ -710,8 +755,7 @@ export class FallbackAuthEntry extends React.Component {
             this.props.loginType,
             this.props.authSessionId,
         );
-        this._popupWindow = window.open(url);
-        this._popupWindow.opener = null;
+        this._popupWindow = window.open(url, "_blank");
     };
 
     _onReceiveMessage = event => {
