@@ -245,6 +245,30 @@ export default class ImageView extends React.Component {
 
         const event = this.props.mxEvent;
 
+        let info;
+        if (event) {
+            info = (
+                <div className="mx_ImageView_info_wrapper">
+                    <MemberAvatar
+                        member={event.sender}
+                        width={32} height={32}
+                        viewUserOnClick={true}
+                    />
+                    <div className="mx_ImageView_info">
+                        { event.sender ? event.sender.name : event.getSender() }
+                        { metadata }
+                    </div>
+                </div>
+            );
+        } else {
+            // If there is no event - we're viewing an avatar, we set
+            // an empty div here, since the panel uses space-between
+            // and we want the same placement of elements
+            info = (
+                <div></div>
+            );
+        }
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -257,17 +281,7 @@ export default class ImageView extends React.Component {
             >
                 <div className="mx_ImageView_content">
                     <div className="mx_ImageView_panel" onClick={this.onPanelClick}>
-                        <div className="mx_ImageView_info_wrapper">
-                            <MemberAvatar
-                                member={event.sender}
-                                width={32} height={32}
-                                viewUserOnClick={true}
-                            />
-                            <div className="mx_ImageView_info">
-                                { event.sender ? event.sender.name : event.getSender() }
-                                { metadata }
-                            </div>
-                        </div>
+                        {info}
                         <div className="mx_ImageView_toolbar">
                             <div className="mx_ImageView_toolbar_buttons">
                                 <AccessibleTooltipButton
