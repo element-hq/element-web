@@ -44,6 +44,8 @@ export default class MessageEvent extends React.Component {
 
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
+
+        permalinkCreator: PropTypes.object,
     };
 
     constructor(props) {
@@ -120,6 +122,7 @@ export default class MessageEvent extends React.Component {
             editState={this.props.editState}
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
+            permalinkCreator={this.props.permalinkCreator}
         />;
     }
 }

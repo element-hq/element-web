@@ -42,6 +42,7 @@ export default class ImageView extends React.Component {
         // properties above, which let us use lightboxes to display images which aren't associated
         // with events.
         mxEvent: PropTypes.object,
+        permalinkCreator: PropTypes.object,
     };
 
     constructor(props) {

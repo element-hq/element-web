@@ -38,6 +38,8 @@ export default class MImageBody extends React.Component {
 
         /* the maximum image height to use */
         maxImageHeight: PropTypes.number,
+
+        permalinkCreator: PropTypes.object,
     };
 
     static contextType = MatrixClientContext;
@@ -103,6 +105,7 @@ export default class MImageBody extends React.Component {
                 src: httpUrl,
                 name: content.body && content.body.length > 0 ? content.body : _t('Attachment'),
                 mxEvent: this.props.mxEvent,
+                permalinkCreator: this.props.permalinkCreator,
             };
 
             if (content.info) {
