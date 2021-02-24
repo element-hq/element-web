@@ -200,7 +200,6 @@ export default class ImageView extends React.Component {
     }
 
     render() {
-        let mayRedact = false;
         const showEventMeta = !!this.props.mxEvent;
 
         let metadata;
@@ -210,7 +209,6 @@ export default class ImageView extends React.Component {
             const cli = MatrixClientPeg.get();
             const room = cli.getRoom(this.props.mxEvent.getRoomId());
             if (room) {
-                mayRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
                 const member = room.getMember(sender);
                 if (member) sender = member.name;
             }
@@ -221,15 +219,6 @@ export default class ImageView extends React.Component {
                     user: sender,
                 }) }
             </div>);
-        }
-
-        let redactButton;
-        if (mayRedact) {
-            redactButton = (
-                <AccessibleButton className="mx_ImageView_button" title={_t("Remove")} onClick={ this.onRedactClick }>
-                    <img src={require("../../../../res/img/trash-red.svg")} alt={ _t('Remove') } width="24" height="24" />
-                </AccessibleButton>
-            );
         }
 
         const rotationDegrees = this.state.rotation + "deg";
@@ -264,14 +253,7 @@ export default class ImageView extends React.Component {
                         </div>
                         <div className="mx_ImageView_toolbar">
                             <div className="mx_ImageView_toolbar_buttons">
-                                { redactButton }
-                                <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Right")} onClick={ this.onRotateClockwiseClick }>
-                                    <img src={require("../../../../res/img/image-view/rotate-cw.svg")} alt={ _t('Rotate clockwise') } width="24" height="24" />
-                                </AccessibleButton>
-                                <AccessibleButton className="mx_ImageView_button" title={_t("Rotate Left")} onClick={ this.onRotateCounterClockwiseClick }>
-                                    <img src={require("../../../../res/img/image-view/rotate-ccw.svg")} alt={ _t('Rotate counter-clockwise') } width="24" height="24" />
-                                </AccessibleButton>
-                                <AccessibleButton className="mx_ImageView_button" title={_t("Zoom out")} onClick={ this.onZoomOutClick }>
+                                
                                     <img src={require("../../../../res/img/image-view/zoom-out.svg")} alt={ _t('Zoom out') } width="24" height="24" />
                                 </AccessibleButton>
                                 <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.onZoomInClick }>
