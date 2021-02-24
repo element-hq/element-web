@@ -169,6 +169,15 @@ export default class ImageView extends React.Component {
         });
     }
 
+    onDownloadClick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const a = document.createElement("a");
+        a.href = this.props.src;
+        a.download = this.props.name;
+        a.click();
+    }
+
     onPanelClick = (ev) => {
         this.props.onFinished();
     }
@@ -281,13 +290,11 @@ export default class ImageView extends React.Component {
                                     title={_t("Zoom in")}
                                     onClick={ this.onZoomInClick }>
                                 </AccessibleTooltipButton>
-                                <a
+                                <AccessibleTooltipButton
                                     className="mx_ImageView_button mx_ImageView_button_download"
-                                    href={ this.props.src }
-                                    download={ this.props.name }
                                     title={_t("Download")}
-                                    target="_blank" rel="noopener">
-                                </a>
+                                    onClick={ this.onDownloadClick }>
+                                </AccessibleTooltipButton>
                                 <AccessibleTooltipButton
                                     className="mx_ImageView_button mx_ImageView_button_close"
                                     title={_t("Close")}
