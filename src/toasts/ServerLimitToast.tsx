@@ -40,7 +40,7 @@ export const showToast = (limitType: string, onHideToast: () => void, adminConta
             acceptLabel: _t("Ok"),
             onAccept: () => {
                 hideToast()
-                if (onHideToast) { onHideToast() }
+                if (onHideToast) onHideToast();
             },
         },
         component: GenericToast,
