@@ -1,3 +1,21 @@
+Changes in [1.7.22-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.22-rc.1) (2021-02-24)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.21...v1.7.22-rc.1)
+
+ * Upgrade to React SDK 3.15.0-rc.1 and JS SDK 9.8.0-rc.1
+ * Translations update from Weblate
+   [\#16529](https://github.com/vector-im/element-web/pull/16529)
+ * Add hostSignup config for element.io clients
+   [\#16515](https://github.com/vector-im/element-web/pull/16515)
+ * VoIP virtual rooms, mkII
+   [\#16442](https://github.com/vector-im/element-web/pull/16442)
+ * Jitsi widget: Read room name from query parameters
+   [\#16456](https://github.com/vector-im/element-web/pull/16456)
+ * fix / sso: make sure to delete only loginToken after redirect
+   [\#16415](https://github.com/vector-im/element-web/pull/16415)
+ * Disable Countly
+   [\#16433](https://github.com/vector-im/element-web/pull/16433)
+
 Changes in [1.7.21](https://github.com/vector-im/element-web/releases/tag/v1.7.21) (2021-02-16)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.21-rc.1...v1.7.21)
