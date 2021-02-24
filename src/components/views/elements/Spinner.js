@@ -21,23 +21,31 @@ import {_t} from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 
 const Spinner = ({w = 32, h = 32, imgClassName, message}) => {
-    let imageSource;
+    let icon;
     if (SettingsStore.getValue('feature_new_spinner')) {
-        imageSource = require("../../../../res/img/spinner.svg");
-    } else {
-        imageSource = require("../../../../res/img/spinner.gif");
-    }
-
-    return (
-        <div className="mx_Spinner">
-            { message && <React.Fragment><div className="mx_Spinner_Msg">{ message}</div>&nbsp;</React.Fragment> }
+        icon = (
             <img
-                src={imageSource}
+                src={require("../../../../res/img/logo-spinner.svg")}
                 width={w}
                 height={h}
                 className={imgClassName}
                 aria-label={_t("Loading...")}
             />
+        );
+    } else {
+        icon = (
+            <div
+                className="mx_Spinner_icon"
+                style={{width: w, height: h}}
+                aria-label={_t("Loading...")}
+            ></div>
+        );
+    }
+
+    return (
+        <div className="mx_Spinner">
+            { message && <React.Fragment><div className="mx_Spinner_Msg">{ message }</div>&nbsp;</React.Fragment> }
+            { icon }
         </div>
     );
 };
