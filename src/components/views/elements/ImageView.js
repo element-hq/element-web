@@ -124,14 +124,6 @@ export default class ImageView extends React.Component {
         });
     };
 
-    getName() {
-        let name = this.props.name;
-        if (name && this.props.link) {
-            name = <a href={ this.props.link } target="_blank" rel="noreferrer noopener">{ name }</a>;
-        }
-        return name;
-    }
-
     onRotateCounterClockwiseClick = () => {
         const cur = this.state.rotation;
         const rotationDegrees = (cur - 90) % 360;
@@ -286,11 +278,8 @@ export default class ImageView extends React.Component {
                 <div className="mx_ImageView_content">
                     <div className="mx_ImageView_panel">
                         <div className="mx_ImageView_label">
-                        <div className="mx_ImageView_name">
-                            { this.getName() }
-                        </div>
-                        <span>{ sizeRes }</span>
-                        { metadata }
+                            <span>{ sizeRes }</span>
+                            { metadata }
                         </div>
                         <div className="mx_ImageView_toolbar">
                             { redactButton }
