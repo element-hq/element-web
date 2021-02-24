@@ -123,19 +123,25 @@ export default class ImageView extends React.Component {
         });
     };
 
-    onRotateCounterClockwiseClick = () => {
+    onRotateCounterClockwiseClick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
         const cur = this.state.rotation;
         const rotationDegrees = (cur - 90) % 360;
         this.setState({ rotation: rotationDegrees });
     };
 
-    onRotateClockwiseClick = () => {
+    onRotateClockwiseClick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
         const cur = this.state.rotation;
         const rotationDegrees = (cur + 90) % 360;
         this.setState({ rotation: rotationDegrees });
     };
 
-    onZoomInClick = () => {
+    onZoomInClick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
         if (this.state.zoom >= this.maxZoom) {
             this.setState({zoom: this.maxZoom});
             return;
@@ -146,7 +152,9 @@ export default class ImageView extends React.Component {
         });
     };
 
-    onZoomOutClick = () => {
+    onZoomOutClick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
         if (this.state.zoom <= this.minZoom) {
             this.setState({
                 zoom: this.minZoom,
@@ -158,6 +166,10 @@ export default class ImageView extends React.Component {
         this.setState({
             zoom: this.state.zoom - 10,
         });
+    }
+
+    onPanelClick = (ev) => {
+        this.props.onFinished();
     }
 
     onStartMoving = ev => {
@@ -235,10 +247,7 @@ export default class ImageView extends React.Component {
                 ref={ref => this.focusLock = ref}
             >
                 <div className="mx_ImageView_content">
-                    <div className="mx_ImageView_panel">
-                        <div className="mx_ImageView_label">
-                            { metadata }
-                        </div>
+                    <div className="mx_ImageView_panel" onClick={this.onPanelClick}>
                         <div className="mx_ImageView_toolbar">
                             <div className="mx_ImageView_toolbar_buttons">
                                 
