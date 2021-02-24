@@ -49,24 +49,32 @@ limitations under the License.
 }
 
 .mx_ImageView_panel {
+    width: 100%;
+    height: 68px;
     position: absolute;
     z-index: 1000;
     align-self: flex-start;
     pointer-events: all;
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    align-items: center;
 }
 
 .mx_ImageView_toolbar {
     right: 0;
-    padding: 50px 50px 0 0;
+    padding-right: 18px;
     display: flex;
+    align-items: center;
+}
+
+.mx_ImageView_toolbar_buttons {
+    display: flex;
+    align-items: center;
 }
 
 .mx_ImageView_label {
     left: 0;
-    padding: 50px 0 0 50px;
+    padding-left: 18px;
     text-align: left;
     display: flex;
     justify-content: center;
