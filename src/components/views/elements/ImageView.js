@@ -30,6 +30,8 @@ import MessageContextMenu from "../context_menus/MessageContextMenu";
 import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
+import {formatTime} from "../../../DateUtils";
+import dis from '../../../dispatcher/dispatcher';
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -187,6 +189,18 @@ export default class ImageView extends React.Component {
         });
     }
 
+    onPermalinkClicked = e => {
+        // This allows the permalink to be opened in a new tab/window or copied as
+        // matrix.to, but also for it to enable routing within Element when clicked.
+        e.preventDefault();
+        dis.dispatch({
+            action: 'view_room',
+            event_id: this.props.mxEvent.getId(),
+            highlighted: true,
+            room_id: this.props.mxEvent.getRoomId(),
+        });
+    };
+
     onStartMoving = ev => {
         ev.stopPropagation();
         ev.preventDefault();
@@ -260,10 +274,21 @@ export default class ImageView extends React.Component {
         if (showEventMeta) {
             const mxEvent = this.props.mxEvent;
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
+            let permalink = "#";
+            if (this.props.permalinkCreator) {
+                permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
+            }
 
             const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
             const messageTimestamp = (
-                <MessageTimestamp showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} />
+                <a
+                    href={permalink}
+                    onClick={this.onPermalinkClicked}
+                    aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+                >
+                    <MessageTimestamp showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} />
+                </a>
+
             );
             const avatar = (
                 <MemberAvatar
