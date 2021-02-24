@@ -134,7 +134,7 @@ export default class TextualBody extends React.Component {
 
     _addCodeElement(pre) {
         const code = document.createElement("code");
-        code.innerHTML = pre.innerHTML;
+        code.append(...pre.childNodes);
         pre.innerHTML = "";
         pre.appendChild(code);
     }
