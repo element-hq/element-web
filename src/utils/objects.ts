@@ -89,6 +89,7 @@ export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
     if (a === b) return false;
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
+    if (aKeys.length !== bKeys.length) return true;
     const possibleChanges = arrayUnion(aKeys, bKeys);
     // if the amalgamation of both sets of keys has the a different length to the inputs then there must be a change
     if (possibleChanges.length !== aKeys.length) return true;
