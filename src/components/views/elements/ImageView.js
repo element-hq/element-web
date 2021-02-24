@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
-import filesize from "filesize";
 import AccessibleButton from "./AccessibleButton";
 import Modal from "../../../Modal";
 import * as sdk from "../../../index";
@@ -204,23 +203,6 @@ export default class ImageView extends React.Component {
         let mayRedact = false;
         const showEventMeta = !!this.props.mxEvent;
 
-        let res;
-        if (this.props.width && this.props.height) {
-            res = this.props.width + "x" + this.props.height + "px";
-        }
-
-        let size;
-        if (this.props.fileSize) {
-            size = filesize(this.props.fileSize);
-        }
-
-        let sizeRes;
-        if (size && res) {
-            sizeRes = size + ", " + res;
-        } else {
-            sizeRes = size || res;
-        }
-
         let metadata;
         if (showEventMeta) {
             // Figure out the sender, defaulting to mxid
@@ -278,7 +260,6 @@ export default class ImageView extends React.Component {
                 <div className="mx_ImageView_content">
                     <div className="mx_ImageView_panel">
                         <div className="mx_ImageView_label">
-                            <span>{ sizeRes }</span>
                             { metadata }
                         </div>
                         <div className="mx_ImageView_toolbar">
