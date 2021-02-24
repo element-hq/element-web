@@ -131,24 +131,18 @@ export default class ImageView extends React.Component {
     };
 
     onRotateCounterClockwiseClick = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
         const cur = this.state.rotation;
         const rotationDegrees = (cur - 90) % 360;
         this.setState({ rotation: rotationDegrees });
     };
 
     onRotateClockwiseClick = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
         const cur = this.state.rotation;
         const rotationDegrees = (cur + 90) % 360;
         this.setState({ rotation: rotationDegrees });
     };
 
     onZoomInClick = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
         if (this.state.zoom >= this.maxZoom) {
             this.setState({zoom: this.maxZoom});
             return;
@@ -160,8 +154,6 @@ export default class ImageView extends React.Component {
     };
 
     onZoomOutClick = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
         if (this.state.zoom <= this.minZoom) {
             this.setState({
                 zoom: this.minZoom,
@@ -176,8 +168,6 @@ export default class ImageView extends React.Component {
     }
 
     onDownloadClick = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
         const a = document.createElement("a");
         a.href = this.props.src;
         a.download = this.props.name;
@@ -185,8 +175,6 @@ export default class ImageView extends React.Component {
     }
 
     onOpenContextMenu = (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
         this.setState({
             contextMenuDisplay: true,
         });
@@ -196,10 +184,6 @@ export default class ImageView extends React.Component {
         this.setState({
             contextMenuDisplay: false,
         });
-    }
-
-    onPanelClick = (ev) => {
-        this.props.onFinished();
     }
 
     onStartMoving = ev => {
@@ -324,7 +308,7 @@ export default class ImageView extends React.Component {
                 ref={ref => this.focusLock = ref}
             >
                 <div className="mx_ImageView_content">
-                    <div className="mx_ImageView_panel" onClick={this.onPanelClick}>
+                    <div className="mx_ImageView_panel">
                         {info}
                         <div className="mx_ImageView_toolbar">
                             <div className="mx_ImageView_toolbar_buttons">
