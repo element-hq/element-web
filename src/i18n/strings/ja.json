@@ -393,7 +393,7 @@
     "%(senderName)s sent a video": "%(senderName)s が動画を送信しました",
     "%(senderName)s uploaded a file": "%(senderName)s がファイルをアップロードしました",
     "Options": "オプション",
-    "Key request sent.": "キーリクエストが送信されました。",
+    "Key request sent.": "鍵リクエストが送信されました。",
     "Please select the destination room for this message": "このメッセージを送り先部屋を選択してください",
     "Disinvite": "招待拒否",
     "Kick": "追放する",
@@ -825,8 +825,8 @@
     "Account": "アカウント",
     "Access Token:": "アクセストークン:",
     "click to reveal": "クリックすると表示されます",
-    "Homeserver is": "ホームサーバーは",
-    "Identity Server is": "アイデンティティ・サーバー",
+    "Homeserver is": "ホームサーバー:",
+    "Identity Server is": "ID サーバー:",
     "%(brand)s version:": "%(brand)s のバージョン:",
     "olm version:": "olm のバージョン:",
     "Failed to send email": "メールを送信できませんでした",
@@ -1526,5 +1526,12 @@
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "まず、<existingIssuesLink>Github で既知のバグ</existingIssuesLink>を確認してください。また掲載されていない新しいバグを発見した場合は<newIssueLink>報告してください</newIssueLink>。",
     "Report a bug": "バグの報告",
     "Update %(brand)s": "%(brand)s の更新",
-    "New version of %(brand)s is available": "%(brand)s の新バージョンが利用可能です"
+    "New version of %(brand)s is available": "%(brand)s の新バージョンが利用可能です",
+    "If your other sessions do not have the key for this message you will not be able to decrypt them.": "あなたの他のセッションがこのメッセージの鍵を持っていない場合、このメッセージを復号することはできません。",
+    "Key share requests are sent to your other sessions automatically. If you rejected or dismissed the key share request on your other sessions, click here to request the keys for this session again.": "鍵共有リクエストは自動的にあなたの他のセッションに送信されます。他のセッションで鍵共有リクエストを拒否または却下した場合は、ここをクリックしてこのセッションの鍵を再度リクエストしてください。",
+    "Your key share request has been sent - please check your other sessions for key share requests.": "鍵共有リクエストが送信されました。あなたの他のセッションで鍵共有リクエストをご確認ください。",
+    "<requestLink>Re-request encryption keys</requestLink> from your other sessions.": "あなたの他のセッションに<requestLink>暗号鍵を再リクエストする</requestLink>。",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "%(serverName)s 以外からの参加をブロック",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "プライベートな部屋は招待者のみが参加できます。公開された部屋は誰でも検索・参加できます。",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix 関連のセキュリティ問題を報告するには、Matrix.org の <a>Security Disclosure Policy</a> をご覧ください。"
 }

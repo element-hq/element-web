@@ -3053,5 +3053,18 @@
     "Share your screen": "Jaga oma ekraani",
     "Show line numbers in code blocks": "Näita koodiblokkides reanumbreid",
     "Expand code blocks by default": "Vaikimisi kuva koodiblokid tervikuna",
-    "Recently visited rooms": "Hiljuti külastatud jututoad"
+    "Recently visited rooms": "Hiljuti külastatud jututoad",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Jätkates ajutistel alustel, on sul võimalik %(hostSignupBrand)s seadistamisega edasi minna ning kontole ligipääsuka laadida verifitseeritud e-posti aadress. Seda teavet ei salvestata.",
+    "Abort": "Katkesta",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Kas sa oled kindel, et soovid katkestada seoste loomise? Sel juhul me edasi ei jätka.",
+    "Confirm abort of host creation": "Kinnita seoste loomise katkestamine",
+    "Upgrade to pro": "Võta kasutusele tasuline teenus",
+    "Minimize dialog": "Tee aken väikeseks",
+    "Maximize dialog": "Tee aken suureks",
+    "%(hostSignupBrand)s Setup": "%(hostSignupBrand)s seadistus",
+    "You should know": "Sa peaksid teadma",
+    "Privacy Policy": "Privaatsuspoliitika",
+    "Cookie Policy": "Küpsiste kasutamine",
+    "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Lisateavet leiad <privacyPolicyLink />, <termsOfServiceLink /> ja <cookiePolicyLink /> lehtedelt.",
+    "Failed to connect to your homeserver. Please close this dialog and try again.": "Ei õnnestunud ühendada koduserveriga. Palun sulge see aken ja proovi uuesti."
 }
