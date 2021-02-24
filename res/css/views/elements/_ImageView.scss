@@ -129,6 +129,10 @@ limitations under the License.
     mask-image: url('$(res)/img/image-view/download.svg');
 }
 
+.mx_ImageView_button_more::before {
+    mask-image: url('$(res)/img/image-view/more.svg');
+}
+
 .mx_ImageView_button_close {
     padding-left: 32px;
     &::before {

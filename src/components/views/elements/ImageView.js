@@ -295,6 +295,10 @@ export default class ImageView extends React.Component {
                                     title={_t("Download")}
                                     onClick={ this.onDownloadClick }>
                                 </AccessibleTooltipButton>
+                                <ContextMenuTooltipButton
+                                    className="mx_ImageView_button mx_ImageView_button_more"
+                                    title={_t("Options")}
+                                />
                                 <AccessibleTooltipButton
                                     className="mx_ImageView_button mx_ImageView_button_close"
                                     title={_t("Close")}
