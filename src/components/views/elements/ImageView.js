@@ -29,7 +29,7 @@ import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/Cont
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
-import SenderProfile from '../messages/SenderProfile';
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -259,10 +259,11 @@ export default class ImageView extends React.Component {
         let info;
         if (showEventMeta) {
             const mxEvent = this.props.mxEvent;
+            const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
 
             const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
             const messageTimestamp = (
-                <MessageTimestamp showTwelveHour={false} ts={mxEvent.getTs()} />
+                <MessageTimestamp showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} />
             );
             const avatar = (
                 <MemberAvatar
