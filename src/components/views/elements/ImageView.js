@@ -20,11 +20,12 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
-import AccessibleButton from "./AccessibleButton";
+import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import Modal from "../../../Modal";
 import * as sdk from "../../../index";
 import {Key} from "../../../Keyboard";
 import FocusLock from "react-focus-lock";
+import MemberAvatar from "../avatars/MemberAvatar";
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -214,10 +215,7 @@ export default class ImageView extends React.Component {
             }
 
             metadata = (<div className="mx_ImageView_metadata">
-                { _t('Uploaded on %(date)s by %(user)s', {
-                    date: formatDate(new Date(this.props.mxEvent.getTs())),
-                    user: sender,
-                }) }
+                { formatDate(new Date(this.props.mxEvent.getTs())) }
             </div>);
         }
 
@@ -236,6 +234,8 @@ export default class ImageView extends React.Component {
                         rotate(${rotationDegrees})`,
         };
 
+        const event = this.props.mxEvent;
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -248,21 +248,52 @@ export default class ImageView extends React.Component {
             >
                 <div className="mx_ImageView_content">
                     <div className="mx_ImageView_panel" onClick={this.onPanelClick}>
+                        <div className="mx_ImageView_info_wrapper">
+                            <MemberAvatar
+                                member={event.sender}
+                                width={32} height={32}
+                                viewUserOnClick={true}
+                            />
+                            <div className="mx_ImageView_info">
+                                { event.sender ? event.sender.name : event.getSender() }
+                                { metadata }
+                            </div>
+                        </div>
                         <div className="mx_ImageView_toolbar">
                             <div className="mx_ImageView_toolbar_buttons">
-                                
-                                    <img src={require("../../../../res/img/image-view/zoom-out.svg")} alt={ _t('Zoom out') } width="24" height="24" />
-                                </AccessibleButton>
-                                <AccessibleButton className="mx_ImageView_button" title={_t("Zoom in")} onClick={ this.onZoomInClick }>
-                                    <img src={require("../../../../res/img/image-view/zoom-in.svg")} alt={ _t('Zoom in') } width="24" height="24" />
-                                </AccessibleButton>
-                                <a className="mx_ImageView_button" href={ this.props.src } download={ this.props.name } title={_t("Download")} target="_blank" rel="noopener">
-                                    <img src={require("../../../../res/img/image-view/download.svg")} width="24" height="24" alt={ _t('Download') } />
+                                <AccessibleTooltipButton
+                                    className="mx_ImageView_button mx_ImageView_button_rotateCW"
+                                    title={_t("Rotate Right")}
+                                    onClick={this.onRotateClockwiseClick}>
+                                </AccessibleTooltipButton>
+                                <AccessibleTooltipButton
+                                    className="mx_ImageView_button mx_ImageView_button_rotateCCW"
+                                    title={_t("Rotate Left")}
+                                    onClick={ this.onRotateCounterClockwiseClick }>
+                                </AccessibleTooltipButton>
+                                <AccessibleTooltipButton
+                                    className="mx_ImageView_button mx_ImageView_button_zoomOut"
+                                    title={_t("Zoom out")}
+                                    onClick={ this.onZoomOutClick }>
+                                </AccessibleTooltipButton>
+                                <AccessibleTooltipButton
+                                    className="mx_ImageView_button mx_ImageView_button_zoomIn"
+                                    title={_t("Zoom in")}
+                                    onClick={ this.onZoomInClick }>
+                                </AccessibleTooltipButton>
+                                <a
+                                    className="mx_ImageView_button mx_ImageView_button_download"
+                                    href={ this.props.src }
+                                    download={ this.props.name }
+                                    title={_t("Download")}
+                                    target="_blank" rel="noopener">
                                 </a>
+                                <AccessibleTooltipButton
+                                    className="mx_ImageView_button mx_ImageView_button_close"
+                                    title={_t("Close")}
+                                    onClick={ this.props.onFinished }>
+                                </AccessibleTooltipButton>
                             </div>
-                            <AccessibleButton className="mx_ImageView_button" title={_t("Close")} onClick={ this.props.onFinished }>
-                                <img src={require("../../../../res/img/image-view/close.svg")} width="32" height="32" alt={ _t('Close') } />
-                            </AccessibleButton>
                         </div>
                     </div>
                     <div className="mx_ImageView_image_wrapper">

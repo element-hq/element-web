@@ -64,10 +64,10 @@ limitations under the License.
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px 0 32px;
 }
 
 .mx_ImageView_toolbar {
+    padding-right: 16px;
     right: 0;
     display: flex;
     align-items: center;
@@ -78,18 +78,65 @@ limitations under the License.
     align-items: center;
 }
 
-.mx_ImageView_label {
+.mx_ImageView_info_wrapper {
+    padding-left: 32px;
     left: 0;
     text-align: left;
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    max-width: 240px;
+    flex-direction: row;
     color: $lightbox-fg-color;
+    align-items: center;
+}
+
+.mx_ImageView_info {
+    padding-left: 12px;
 }
 
 .mx_ImageView_button {
-    padding-left: 28px;
+    padding-left: 24px;
+    display: block;
+
+    &::before {
+        content: '';
+        height: 22px;
+        width: 22px;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        display: block;
+        background-color: $icon-button-color;
+    }
+}
+
+.mx_ImageView_button_rotateCW::before {
+    mask-image: url('$(res)/img/image-view/rotate-cw.svg');
+}
+
+.mx_ImageView_button_rotateCCW::before {
+    mask-image: url('$(res)/img/image-view/rotate-ccw.svg');
+}
+
+.mx_ImageView_button_zoomOut::before {
+    mask-image: url('$(res)/img/image-view/zoom-out.svg');
+}
+
+.mx_ImageView_button_zoomIn::before {
+    mask-image: url('$(res)/img/image-view/zoom-in.svg');
+}
+
+.mx_ImageView_button_download::before {
+    mask-image: url('$(res)/img/image-view/download.svg');
+}
+
+.mx_ImageView_button_close {
+    padding-left: 32px;
+    &::before {
+        width: 32px;
+        height: 32px;
+        mask-image: url('$(res)/img/image-view/close.svg');
+        background-color: none;
+    }
 }
 
 .mx_ImageView_metadata {
