@@ -305,7 +305,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    _onHideToast = () => {
+    private onUsageLimitDismissed = () => {
         this.setState({
             usageLimitDismissed: true,
         });
@@ -322,7 +322,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (usageLimitEventContent && this.state.usageLimitDismissed) {
             showServerLimitToast(
                 usageLimitEventContent.limit_type,
-                this._onHideToast,
+                this.onUsageLimitDismissed,
                 usageLimitEventContent.admin_contact,
                 error,
             );
