@@ -18,7 +18,6 @@ limitations under the License.
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {formatDate} from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import Modal from "../../../Modal";
@@ -29,6 +28,8 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
+import MessageTimestamp from "../messages/MessageTimestamp";
+import SenderProfile from '../messages/SenderProfile';
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -240,22 +241,6 @@ export default class ImageView extends React.Component {
     render() {
         const showEventMeta = !!this.props.mxEvent;
 
-        let metadata;
-        if (showEventMeta) {
-            // Figure out the sender, defaulting to mxid
-            let sender = this.props.mxEvent.getSender();
-            const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(this.props.mxEvent.getRoomId());
-            if (room) {
-                const member = room.getMember(sender);
-                if (member) sender = member.name;
-            }
-
-            metadata = (<div className="mx_ImageView_metadata">
-                { formatDate(new Date(this.props.mxEvent.getTs())) }
-            </div>);
-        }
-
         const rotationDegrees = this.state.rotation + "deg";
         const zoomPercentage = this.state.zoom/100;
         const translatePixelsX = this.state.translationX + "px";
@@ -271,20 +256,28 @@ export default class ImageView extends React.Component {
                         rotate(${rotationDegrees})`,
         };
 
-        const event = this.props.mxEvent;
-
         let info;
-        if (event) {
+        if (showEventMeta) {
+            const mxEvent = this.props.mxEvent;
+
+            const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+            const messageTimestamp = (
+                <MessageTimestamp showTwelveHour={false} ts={mxEvent.getTs()} />
+            );
+            const avatar = (
+                <MemberAvatar
+                    member={mxEvent.sender}
+                    width={32} height={32}
+                    viewUserOnClick={true}
+                />
+            );
+
             info = (
                 <div className="mx_ImageView_info_wrapper">
-                    <MemberAvatar
-                        member={event.sender}
-                        width={32} height={32}
-                        viewUserOnClick={true}
-                    />
+                    {avatar}
                     <div className="mx_ImageView_info">
-                        { event.sender ? event.sender.name : event.getSender() }
-                        { metadata }
+                        {senderName}
+                        {messageTimestamp}
                     </div>
                 </div>
             );

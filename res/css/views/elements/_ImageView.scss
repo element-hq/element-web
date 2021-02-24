@@ -91,6 +91,8 @@ limitations under the License.
 .mx_ImageView_info {
     padding-left: 12px;
     pointer-events: all;
+    display: flex;
+    flex-direction: column;
 }
 
 .mx_ImageView_button {
@@ -141,9 +143,4 @@ limitations under the License.
         mask-image: url('$(res)/img/image-view/close.svg');
         background-color: none;
     }
-}
-
-.mx_ImageView_metadata {
-    font-size: $font-15px;
-    opacity: 0.5;
 }
