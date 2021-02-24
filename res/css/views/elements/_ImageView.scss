@@ -53,6 +53,9 @@ limitations under the License.
     z-index: 1000;
     align-self: flex-start;
     pointer-events: all;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .mx_ImageView_toolbar {
@@ -76,17 +79,7 @@ limitations under the License.
     padding: 5px;
 }
 
-.mx_ImageView_name {
-    font-size: $font-18px;
-    margin-bottom: 6px;
-    word-wrap: break-word;
-}
-
 .mx_ImageView_metadata {
     font-size: $font-15px;
     opacity: 0.5;
-}
-
-.mx_ImageView_size {
-    font-size: $font-11px;
 }
