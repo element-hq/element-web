@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {formatDate} from '../../../DateUtils';
@@ -26,6 +26,9 @@ import * as sdk from "../../../index";
 import {Key} from "../../../Keyboard";
 import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
+import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import MessageContextMenu from "../context_menus/MessageContextMenu";
+import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -53,9 +56,11 @@ export default class ImageView extends React.Component {
             translationX: 0,
             translationY: 0,
             moving: false,
+            contextMenuDisplay: false,
         };
     }
 
+    contextMenuButton = createRef();
     initX = 0;
     initY = 0;
     lastX = 0;
@@ -179,6 +184,20 @@ export default class ImageView extends React.Component {
         a.click();
     }
 
+    onOpenContextMenu = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            contextMenuDisplay: true,
+        });
+    }
+
+    onCloseContextMenu = () => {
+        this.setState({
+            contextMenuDisplay: false,
+        });
+    }
+
     onPanelClick = (ev) => {
         this.props.onFinished();
     }
@@ -208,6 +227,30 @@ export default class ImageView extends React.Component {
 
     onEndMoving = ev => {
         this.setState({moving: false});
+    }
+
+    renderContextMenu() {
+        let contextMenu = null;
+        if (this.state.contextMenuDisplay) {
+            contextMenu = (
+                <ContextMenu
+                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
+                    onFinished={this.onCloseContextMenu}
+                >
+                    <MessageContextMenu
+                        mxEvent={this.props.mxEvent}
+                        permalinkCreator={this.props.permalinkCreator}
+                        onFinished={this.onCloseContextMenu}
+                    />
+                </ContextMenu>
+            );
+        }
+
+        return (
+            <React.Fragment>
+                { contextMenu }
+            </React.Fragment>
+        );
     }
 
     render() {
@@ -313,12 +356,15 @@ export default class ImageView extends React.Component {
                                 <ContextMenuTooltipButton
                                     className="mx_ImageView_button mx_ImageView_button_more"
                                     title={_t("Options")}
+                                    onClick={this.onOpenContextMenu}
+                                    inputRef={this.contextMenuButton}
                                 />
                                 <AccessibleTooltipButton
                                     className="mx_ImageView_button mx_ImageView_button_close"
                                     title={_t("Close")}
                                     onClick={ this.props.onFinished }>
                                 </AccessibleTooltipButton>
+                                {this.renderContextMenu()}
                             </div>
                         </div>
                     </div>
