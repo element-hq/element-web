@@ -1,5 +1,5 @@
 {
-    "Dismiss": "שחרר",
+    "Dismiss": "התעלם",
     "powered by Matrix": "מופעל ע\"י Matrix",
     "Unknown device": "מכשיר לא ידוע",
     "You need to be using HTTPS to place a screen-sharing call.": "עליך להשתמש ב HTTPS בכדי לבצע שיחת ווידאו משותפת.",
@@ -8,13 +8,13 @@
     "Invalid JSON": "JSON לא חוקי",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "תצורה שגויה: ניתן לציין רק אחד מהבאים, default_server_config, default_server_name, או default_hs_url.",
     "Invalid configuration: no default server specified.": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
-    "Open user settings": "פתיחת הגדרות משתמש",
+    "Open user settings": "פתח הגדרות משתמש",
     "Go to your browser to complete Sign In": "עבור לדפדפן להמשך ההתחברות",
     "Explore rooms": "שיטוט בחדרים",
     "Create Account": "יצירת חשבון",
     "Sign In": "כניסה",
     "Previous/next recently visited room or community": "הבא\\קודם חדרים וקהילות שביקרתם לאחרונה",
-    "Open": "פתיחה",
+    "Open": "פתח",
     "Download Completed": "ההורדה הושלמה",
     "Unexpected error preparing the app. See console for details.": "שגיאה לא צפויה במהלך הכנת האפליקציה. ראו קונסול לפרטים נוספים.",
     "Unable to load config file: please refresh the page to try again.": "לא יכול לקרוא את קובץ ההגדרות: אנא אתחלו את הדף לנסות שנית.",
@@ -32,5 +32,5 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s שולחן עבודה %(platformName)s",
     "The message from the parser is: %(message)s": "ההודעה מהניתוח היא: %(message)s",
-    "Missing indexeddb worker script!": "חסר סקריפט עובד indexeddb!"
+    "Missing indexeddb worker script!": "סקריפט indexeddb worker חסר!"
 }

@@ -9,7 +9,7 @@
     "Create Account": "Créer un compte",
     "Explore rooms": "Explorer les salons",
     "Unexpected error preparing the app. See console for details.": "Une erreur inattendue est survenue pendant la préparation de l’application. Consultez la console pour avoir des détails.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuration invalide : il ne faut spécifier qu’un des trois champs entre default_server_config, default_server_name et default_hs_url.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuration invalide : il ne faut spécifier qu’un des trois champs parmis default_server_config, default_server_name et default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuration invalide : aucun serveur par défaut spécifié.",
     "The message from the parser is: %(message)s": "Le message de l’analyseur est : %(message)s",
     "Invalid JSON": "JSON non valide",
@@ -21,7 +21,7 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Navigateur non pris en charge",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Veuillez installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ou <safariLink>Safari</safariLink> pour une expérience optimale.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Vous pouvez continuer à utiliser votre navigateur actuel, mais vous risquez de trouver que certaines fonctionnalités et/ou l'apparence de l'application sont incorrectes.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Vous pouvez continuer à utiliser votre navigateur actuel, mais vous risquez de trouver que certaines fonctionnalités et/ou l’apparence de l’application sont incorrectes.",
     "I understand the risks and wish to continue": "Je comprends les risques et souhaite continuer",
     "Go to element.io": "Aller vers element.io",
     "Failed to start": "Échec au démarrage",
@@ -31,6 +31,6 @@
     "Your Element is misconfigured": "Votre Element est mal configuré",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "La configuration de votre Element contient du JSON invalide. Veuillez corriger le problème et recharger la page.",
     "Your browser can't run %(brand)s": "Votre navigateur ne peut pas exécuter %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s nécessite des fonctionnalités avancées que votre navigateur actuel ne supporte pas.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s nécessite des fonctionnalités avancées que votre navigateur actuel ne pas en charge.",
     "Powered by Matrix": "Propulsé par Matrix"
 }
