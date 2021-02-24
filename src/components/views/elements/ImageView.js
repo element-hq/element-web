@@ -160,18 +160,6 @@ export default class ImageView extends React.Component {
         });
     }
 
-    onZoomClick = () => {
-        if (this.state.zoom <= this.minZoom) {
-            this.setState({zoom: this.maxZoom});
-        } else {
-            this.setState({
-                zoom: this.minZoom,
-                translationX: 0,
-                translationY: 0,
-            });
-        }
-    }
-
     onStartMoving = ev => {
         ev.stopPropagation();
         ev.preventDefault();
