@@ -58,9 +58,7 @@ limitations under the License.
 .mx_ImageView_panel {
     width: 100%;
     height: 68px;
-    z-index: 1000;
     align-self: flex-start;
-    pointer-events: all;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -76,6 +74,7 @@ limitations under the License.
 .mx_ImageView_toolbar_buttons {
     display: flex;
     align-items: center;
+    pointer-events: all;
 }
 
 .mx_ImageView_info_wrapper {
@@ -91,6 +90,7 @@ limitations under the License.
 
 .mx_ImageView_info {
     padding-left: 12px;
+    pointer-events: all;
 }
 
 .mx_ImageView_button {
