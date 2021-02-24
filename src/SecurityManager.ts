@@ -105,9 +105,12 @@ async function getSecretStorageKey(
         // use the default SSSS key if set
         keyInfo = keyInfos[keyId];
         if (!keyInfo) {
-            throw new Error("Unable to use default SSSS key");
+            // if the default key is not available, pretend the default key
+            // isn't set
+            keyId = undefined;
         }
-    } else {
+    }
+    if (!keyId) {
         // if no default SSSS key is set, fall back to a heuristic of using the
         // only available key, if only one key is set
         const keyInfoEntries = Object.entries(keyInfos);
