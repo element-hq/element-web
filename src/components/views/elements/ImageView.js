@@ -286,17 +286,19 @@ export default class ImageView extends React.Component {
                             </AccessibleButton>
                         </div>
                     </div>
-                    <img
-                        src={this.props.src}
-                        title={this.props.name}
-                        style={style}
-                        className="mainImage"
-                        draggable={true}
-                        onMouseDown={this.onStartMoving}
-                        onMouseMove={this.onMoving}
-                        onMouseUp={this.onEndMoving}
-                        onMouseLeave={this.onEndMoving}
-                    />
+                    <div className="mx_ImageView_image_wrapper">
+                        <img
+                            src={this.props.src}
+                            title={this.props.name}
+                            style={style}
+                            className="mx_ImageView_image"
+                            draggable={true}
+                            onMouseDown={this.onStartMoving}
+                            onMouseMove={this.onMoving}
+                            onMouseUp={this.onEndMoving}
+                            onMouseLeave={this.onEndMoving}
+                        />
+                    </div>
                 </div>
             </FocusLock>
         );
