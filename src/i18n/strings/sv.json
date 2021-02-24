@@ -2983,5 +2983,18 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Din hemserver kunde inte nås så du kunde inte loggas in. Vänligen försök igen. Om det här fortsätter, vänligen kontakta administratören för din hemserver.",
     "Try again": "Försök igen",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Vi bad webbläsaren att komma ihåg vilken hemserver du använder för att logga in, men tyvärr har din webbläsare glömt det. Gå till inloggningssidan och försök igen.",
-    "We couldn't log you in": "Vi kunde inte logga in dig"
+    "We couldn't log you in": "Vi kunde inte logga in dig",
+    "Upgrade to pro": "Uppgradera till pro",
+    "Minimize dialog": "Minimera dialog",
+    "Maximize dialog": "Maximera dialog",
+    "%(hostSignupBrand)s Setup": "inställning av %(hostSignupBrand)s",
+    "You should know": "Du behöver veta",
+    "Privacy Policy": "sekretesspolicy",
+    "Cookie Policy": "kakpolicy",
+    "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Läs mer i våran <privacyPolicyLink />, <termsOfServiceLink /> och <cookiePolicyLink />.",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Om du fortsätter så tillåts inställningsprocessen för %(hostSignupBrand)s att temporärt komma åt din konto för att hämta verifierade e-postadresser. Den här datan lagras inte.",
+    "Failed to connect to your homeserver. Please close this dialog and try again.": "Misslyckades att ansluta till din hemserver. Vänligen stäng den här dialogrutan och försök igen.",
+    "Abort": "Avbryt",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Är du säker på att du vill avbryta skapande av värden? Processen kan inte fortsättas.",
+    "Confirm abort of host creation": "Bekräfta avbrytning av värdskapande"
 }
