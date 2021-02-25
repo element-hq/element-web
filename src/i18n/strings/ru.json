@@ -3057,5 +3057,20 @@
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Ваш домашний сервер был недоступен, и мы не смогли войти в систему. Пожалуйста, попробуйте снова через пару минут. Если ситуация по-прежнему не меняется, обратитесь к администратору домашнего сервера за дополнительной информацией.",
     "Try again": "Попробовать ещё раз",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Мы попросили браузер запомнить, какой домашний сервер вы используете для входа в систему, но, к сожалению, ваш браузер забыл об этом. Перейдите на страницу входа и попробуйте ещё раз.",
-    "We couldn't log you in": "Нам не удалось войти в систему"
+    "We couldn't log you in": "Нам не удалось войти в систему",
+    "Upgrade to %(hostSignupBrand)s": "Перейти на %(hostSignupBrand)s",
+    "Edit Values": "Изменить значения",
+    "Value in this room:": "Значение в этой комнате:",
+    "Value:": "Значение:",
+    "Setting:": "Настройки:",
+    "Setting ID": "ID настроек",
+    "Save setting values": "Сохранить значения настроек",
+    "Settable at room": "Устанавливается для комнаты",
+    "Settable at global": "Устанавливается на глобальном уровне",
+    "Level": "Уровень",
+    "This UI does NOT check the types of the values. Use at your own risk.": "Этот пользовательский интерфейс НЕ проверяет типы значений. Используйте на свой риск.",
+    "Value in this room": "Значение в этой комнате",
+    "Value": "Значение",
+    "Failed to save settings": "Не удалось сохранить настройки",
+    "Show chat effects (animations when receiving e.g. confetti)": "Показать эффекты чата (анимация при получении, например, конфетти)"
 }
