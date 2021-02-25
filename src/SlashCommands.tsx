@@ -155,6 +155,18 @@ function success(promise?: Promise<any>) {
 
 export const Commands = [
     new Command({
+        command: 'spoiler',
+        args: '<message>',
+        description: _td('Sends the given message as a spoiler'),
+        runFn: function(roomId, message) {
+            return success(MatrixClientPeg.get().sendHtmlMessage(
+                roomId, message,
+                `<span data-mx-spoiler>${message}</span>`,
+            ));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
         command: 'shrug',
         args: '<message>',
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
