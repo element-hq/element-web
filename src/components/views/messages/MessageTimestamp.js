@@ -23,13 +23,18 @@ export default class MessageTimestamp extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,
         showTwelveHour: PropTypes.bool,
+        showFullDate: PropTypes.bool,
     };
 
     render() {
         const date = new Date(this.props.ts);
         return (
             <span className="mx_MessageTimestamp" title={formatFullDate(date, this.props.showTwelveHour)} aria-hidden={true}>
-                { formatTime(date, this.props.showTwelveHour) }
+                {
+                    this.props.showFullDate ?
+                    formatFullDate(date, this.props.showTwelveHour) :
+                    formatTime(date, this.props.showTwelveHour)
+                }
             </span>
         );
     }

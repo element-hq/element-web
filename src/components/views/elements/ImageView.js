@@ -30,7 +30,7 @@ import MessageContextMenu from "../context_menus/MessageContextMenu";
 import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
-import {formatTime} from "../../../DateUtils";
+import {formatFullDate} from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 
 export default class ImageView extends React.Component {
@@ -286,9 +286,9 @@ export default class ImageView extends React.Component {
                 <a
                     href={permalink}
                     onClick={this.onPermalinkClicked}
-                    aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+                    aria-label={formatFullDate(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
                 >
-                    <MessageTimestamp showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} />
+                    <MessageTimestamp showFullDate={true} showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} />
                 </a>
 
             );
