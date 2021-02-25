@@ -59,7 +59,7 @@ export default class ImageView extends React.Component {
             translationX: 0,
             translationY: 0,
             moving: false,
-            contextMenuDisplay: false,
+            contextMenuDisplayed: false,
         };
     }
 
@@ -179,13 +179,13 @@ export default class ImageView extends React.Component {
 
     onOpenContextMenu = (ev) => {
         this.setState({
-            contextMenuDisplay: true,
+            contextMenuDisplayed: true,
         });
     }
 
     onCloseContextMenu = () => {
         this.setState({
-            contextMenuDisplay: false,
+            contextMenuDisplayed: false,
         });
     }
 
@@ -231,7 +231,7 @@ export default class ImageView extends React.Component {
 
     renderContextMenu() {
         let contextMenu = null;
-        if (this.state.contextMenuDisplay) {
+        if (this.state.contextMenuDisplayed) {
             contextMenu = (
                 <ContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
