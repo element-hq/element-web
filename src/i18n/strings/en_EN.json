@@ -1860,7 +1860,6 @@
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
     "collapse": "collapse",
     "expand": "expand",
-    "You cannot delete this image. (%(code)s)": "You cannot delete this image. (%(code)s)",
     "Rotate Right": "Rotate Right",
     "Rotate Left": "Rotate Left",
     "Zoom out": "Zoom out",
