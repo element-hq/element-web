@@ -113,27 +113,6 @@ export default class ImageView extends React.Component {
         });
     }
 
-    onRedactClick = () => {
-        const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
-        Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
-            onFinished: (proceed) => {
-                if (!proceed) return;
-                this.props.onFinished();
-                MatrixClientPeg.get().redactEvent(
-                    this.props.mxEvent.getRoomId(), this.props.mxEvent.getId(),
-                ).catch(function(e) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    // display error message stating you couldn't delete this.
-                    const code = e.errcode || e.statusCode;
-                    Modal.createTrackedDialog('You cannot delete this image.', '', ErrorDialog, {
-                        title: _t('Error'),
-                        description: _t('You cannot delete this image. (%(code)s)', {code: code}),
-                    });
-                });
-            },
-        });
-    };
-
     onRotateCounterClockwiseClick = (ev) => {
         const cur = this.state.rotation;
         const rotationDegrees = (cur - 90) % 360;
