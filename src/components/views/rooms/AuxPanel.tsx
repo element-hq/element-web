@@ -150,14 +150,12 @@ export default class AuxPanel extends React.Component<IProps, IState> {
     }
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
         let fileDropTarget = null;
         if (this.props.draggingFile) {
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
                     <div title={_t("Drop File Here")}>
-                        <TintableSvg src={require("../../../../res/img/upload-big.svg")} width="45" height="59" />
+                        <img src={require( "../../../../res/img/upload-big.svg")}> </img>
                         <br />
                         { _t("Drop file here to upload") }
                     </div>
