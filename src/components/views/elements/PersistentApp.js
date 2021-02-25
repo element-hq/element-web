@@ -57,9 +57,9 @@ export default class PersistentApp extends React.Component {
         });
     };
 
-    _onMyMembership = async (room) => {
+    _onMyMembership = async (room, membership) => {
         const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
-        if (room.getMyMembership() !== "join") {
+        if (membership !== "join") {
             // we're not in the room anymore - delete
             if (room.roomId === persistentWidgetInRoomId) {
                 ActiveWidgetStore.destroyPersistentWidget(this.state.persistentWidgetId);
