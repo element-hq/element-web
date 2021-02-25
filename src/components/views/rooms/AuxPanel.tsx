@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { Room } from 'matrix-js-sdk/src/models/room'
-import * as sdk from '../../../index';
 import dis from "../../../dispatcher/dispatcher";
 import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
