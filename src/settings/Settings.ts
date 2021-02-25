@@ -122,7 +122,8 @@ export interface ISetting {
 export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_spaces": {
         isFeature: true,
-        displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags"),
+        displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. " +
+            "Requires compatible homeserver for some features."),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
