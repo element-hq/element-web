@@ -33,6 +33,9 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {formatFullDate} from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 
+const MIN_ZOOM = 100;
+const MAX_ZOOM = 300;
+
 export default class ImageView extends React.Component {
     static propTypes = {
         src: PropTypes.string.isRequired, // the source of the image being displayed
@@ -68,8 +71,6 @@ export default class ImageView extends React.Component {
     initY = 0;
     lastX = 0;
     lastY = 0;
-    minZoom = 100;
-    maxZoom = 300;
 
     componentDidMount() {
         // We have to use addEventListener() because the listener
@@ -94,16 +95,16 @@ export default class ImageView extends React.Component {
         ev.preventDefault();
         const newZoom =this.state.zoom - ev.deltaY;
 
-        if (newZoom <= this.minZoom) {
+        if (newZoom <= MIN_ZOOM) {
             this.setState({
-                zoom: this.minZoom,
+                zoom: MIN_ZOOM,
                 translationX: 0,
                 translationY: 0,
             });
             return;
         }
-        if (newZoom >= this.maxZoom) {
-            this.setState({zoom: this.maxZoom});
+        if (newZoom >= MAX_ZOOM) {
+            this.setState({zoom: MAX_ZOOM});
             return;
         }
 
@@ -146,8 +147,8 @@ export default class ImageView extends React.Component {
     };
 
     onZoomInClick = (ev) => {
-        if (this.state.zoom >= this.maxZoom) {
-            this.setState({zoom: this.maxZoom});
+        if (this.state.zoom >= MAX_ZOOM) {
+            this.setState({zoom: MAX_ZOOM});
             return;
         }
 
@@ -157,9 +158,9 @@ export default class ImageView extends React.Component {
     };
 
     onZoomOutClick = (ev) => {
-        if (this.state.zoom <= this.minZoom) {
+        if (this.state.zoom <= MIN_ZOOM) {
             this.setState({
-                zoom: this.minZoom,
+                zoom: MIN_ZOOM,
                 translationX: 0,
                 translationY: 0,
             });
