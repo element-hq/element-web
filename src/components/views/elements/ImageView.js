@@ -264,6 +264,7 @@ export default class ImageView extends React.Component {
          * we would apply the translation to an already rotated
          * image causing it translate in the wrong direction. */
         const style = {
+            cursor: this.state.moving ? "grabbing" : "grab",
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoomPercentage})
