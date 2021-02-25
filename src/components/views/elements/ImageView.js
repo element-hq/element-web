@@ -113,19 +113,19 @@ export default class ImageView extends React.Component {
         });
     }
 
-    onRotateCounterClockwiseClick = (ev) => {
+    onRotateCounterClockwiseClick = () => {
         const cur = this.state.rotation;
         const rotationDegrees = (cur - 90) % 360;
         this.setState({ rotation: rotationDegrees });
     };
 
-    onRotateClockwiseClick = (ev) => {
+    onRotateClockwiseClick = () => {
         const cur = this.state.rotation;
         const rotationDegrees = (cur + 90) % 360;
         this.setState({ rotation: rotationDegrees });
     };
 
-    onZoomInClick = (ev) => {
+    onZoomInClick = () => {
         if (this.state.zoom >= MAX_ZOOM) {
             this.setState({zoom: MAX_ZOOM});
             return;
@@ -136,7 +136,7 @@ export default class ImageView extends React.Component {
         });
     };
 
-    onZoomOutClick = (ev) => {
+    onZoomOutClick = () => {
         if (this.state.zoom <= MIN_ZOOM) {
             this.setState({
                 zoom: MIN_ZOOM,
@@ -150,14 +150,14 @@ export default class ImageView extends React.Component {
         });
     }
 
-    onDownloadClick = (ev) => {
+    onDownloadClick = () => {
         const a = document.createElement("a");
         a.href = this.props.src;
         a.download = this.props.name;
         a.click();
     }
 
-    onOpenContextMenu = (ev) => {
+    onOpenContextMenu = () => {
         this.setState({
             contextMenuDisplayed: true,
         });
@@ -169,10 +169,10 @@ export default class ImageView extends React.Component {
         });
     }
 
-    onPermalinkClicked = e => {
+    onPermalinkClicked = (ev) => {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
-        e.preventDefault();
+        ev.preventDefault();
         dis.dispatch({
             action: 'view_room',
             event_id: this.props.mxEvent.getId(),
@@ -182,7 +182,7 @@ export default class ImageView extends React.Component {
         this.props.onFinished();
     };
 
-    onStartMoving = ev => {
+    onStartMoving = (ev) => {
         ev.stopPropagation();
         ev.preventDefault();
 
@@ -191,7 +191,7 @@ export default class ImageView extends React.Component {
         this.initY = ev.pageY - this.lastY;
     }
 
-    onMoving = ev => {
+    onMoving = (ev) => {
         ev.stopPropagation();
         ev.preventDefault();
 
@@ -205,7 +205,7 @@ export default class ImageView extends React.Component {
         });
     }
 
-    onEndMoving = ev => {
+    onEndMoving = () => {
         this.setState({moving: false});
     }
 
