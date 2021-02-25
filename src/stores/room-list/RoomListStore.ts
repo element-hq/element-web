@@ -58,8 +58,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
     private updateFn = new MarkedExecution(() => {
-        for (const tagId of Object.keys(this.unfilteredLists)) {
-            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.unfilteredLists[tagId]);
+        for (const tagId of Object.keys(this.orderedLists)) {
+            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.orderedLists[tagId]);
         }
         this.emit(LISTS_UPDATE_EVENT);
     });
