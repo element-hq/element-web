@@ -85,7 +85,7 @@ import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapt
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -861,8 +861,9 @@ export default class CallHandler {
             // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             confId = base32.stringify(Buffer.from(roomId), { pad: false });
         } else {
-            // Create a random human readable conference ID
-            confId = `JitsiConference${randomString(32)}`;
+            // Create a random conference ID
+            const random = randomUppercaseString(1) + randomLowercaseString(23);
+            confId = 'Jitsi' + random;
         }
 
         let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});

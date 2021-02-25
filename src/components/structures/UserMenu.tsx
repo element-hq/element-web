@@ -103,11 +103,15 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private isUserOnDarkTheme(): boolean {
-        const theme = SettingsStore.getValue("theme");
-        if (theme.startsWith("custom-")) {
-            return getCustomTheme(theme.substring("custom-".length)).is_dark;
+        if (SettingsStore.getValue("use_system_theme")) {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        } else {
+            const theme = SettingsStore.getValue("theme");
+            if (theme.startsWith("custom-")) {
+                return getCustomTheme(theme.substring("custom-".length)).is_dark;
+            }
+            return theme === "dark";
         }
-        return theme === "dark";
     }
 
     private onProfileUpdate = async () => {

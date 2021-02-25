@@ -2828,7 +2828,7 @@
     "United States": "美國",
     "United Kingdom": "英國",
     "%(creator)s created this DM.": "%(creator)s 建立了此直接訊息。",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "此聊天適中的訊息為端到端加密。當人們加入，您可以在他們的個人檔案中驗證他們，只要點擊他們的大頭照就可以了。",
+    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "此聊天室中的訊息為端到端加密。當人們加入，您可以在他們的個人檔案中驗證他們，只要點擊他們的大頭照就可以了。",
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "此處的訊息為端到端加密。請在他們的個人檔案中驗證 %(displayName)s，只要點擊他們的大頭照就可以了。",
     "This is the start of <roomName/>.": "這是 <roomName/> 的開頭。",
     "Add a photo, so people can easily spot your room.": "新增圖片，這樣人們就可以輕鬆發現您的聊天室。",
@@ -3055,5 +3055,18 @@
     "Share your screen": "分享您的畫面",
     "Recently visited rooms": "最近造訪過的聊天室",
     "Show line numbers in code blocks": "在程式碼區塊中顯示行號",
-    "Expand code blocks by default": "預設展開程式碼區塊"
+    "Expand code blocks by default": "預設展開程式碼區塊",
+    "Upgrade to pro": "升級到專業版",
+    "Minimize dialog": "最小化對話框",
+    "Maximize dialog": "最大化對話框",
+    "%(hostSignupBrand)s Setup": "%(hostSignupBrand)s 設定",
+    "You should know": "您應該知道",
+    "Privacy Policy": "隱私權政策",
+    "Cookie Policy": "Cookie 政策",
+    "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "在我們的 <privacyPolicyLink />、<termsOfServiceLink /> 與 <cookiePolicyLink /> 取得更多資訊。",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "暫時繼續進行讓 %(hostSignupBrand)s 設定流程可以存取您的帳號來擷取已驗證的電子郵件地址。此資料未儲存。",
+    "Failed to connect to your homeserver. Please close this dialog and try again.": "無法連線到您的家伺服器。請關閉對話框並再試一次。",
+    "Abort": "中止",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "您確定您想要中止主機建立嗎？流程將無法繼續。",
+    "Confirm abort of host creation": "確認中止主機建立"
 }
