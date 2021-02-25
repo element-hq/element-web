@@ -72,8 +72,8 @@ export default class ImageView extends React.Component {
     maxZoom = 300;
 
     componentDidMount() {
-        /* We have to use addEventListener() because the listener
-         * needs to be passive in order to work with Chromium */
+        // We have to use addEventListener() because the listener
+        // needs to be passive in order to work with Chromium
         this.focusLock.addEventListener('wheel', this.onWheel, { passive: false });
     }
 
@@ -259,10 +259,10 @@ export default class ImageView extends React.Component {
         const zoomPercentage = this.state.zoom/100;
         const translatePixelsX = this.state.translationX + "px";
         const translatePixelsY = this.state.translationY + "px";
-        /* The order of the values is important!
-         * First, we translate and only then we rotate, otherwise
-         * we would apply the translation to an already rotated
-         * image causing it translate in the wrong direction. */
+        // The order of the values is important!
+        // First, we translate and only then we rotate, otherwise
+        // we would apply the translation to an already rotated
+        // image causing it translate in the wrong direction.
         const style = {
             cursor: this.state.moving ? "grabbing" : "grab",
             transform: `translateX(${translatePixelsX})
