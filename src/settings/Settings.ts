@@ -36,8 +36,9 @@ import { isMac } from '../Keyboard';
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { OrderedMultiController } from "./controllers/OrderedMultiController";
-import {Layout} from "./Layout";
+import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
+import IncompatibleController from "./controllers/IncompatibleController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -188,6 +189,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show message previews for reactions in DMs"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        // this option is a subset of `feature_roomlist_preview_reactions_all` so disable it when that one is enabled
+        controller: new IncompatibleController("feature_roomlist_preview_reactions_all"),
     },
     "feature_roomlist_preview_reactions_all": {
         isFeature: true,
