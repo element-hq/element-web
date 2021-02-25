@@ -308,45 +308,43 @@ export default class ImageView extends React.Component {
                     <div className="mx_ImageView_panel">
                         {info}
                         <div className="mx_ImageView_toolbar">
-                            <div className="mx_ImageView_toolbar_buttons">
-                                <AccessibleTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_rotateCW"
-                                    title={_t("Rotate Right")}
-                                    onClick={this.onRotateClockwiseClick}>
-                                </AccessibleTooltipButton>
-                                <AccessibleTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_rotateCCW"
-                                    title={_t("Rotate Left")}
-                                    onClick={ this.onRotateCounterClockwiseClick }>
-                                </AccessibleTooltipButton>
-                                <AccessibleTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_zoomOut"
-                                    title={_t("Zoom out")}
-                                    onClick={ this.onZoomOutClick }>
-                                </AccessibleTooltipButton>
-                                <AccessibleTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_zoomIn"
-                                    title={_t("Zoom in")}
-                                    onClick={ this.onZoomInClick }>
-                                </AccessibleTooltipButton>
-                                <AccessibleTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_download"
-                                    title={_t("Download")}
-                                    onClick={ this.onDownloadClick }>
-                                </AccessibleTooltipButton>
-                                <ContextMenuTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_more"
-                                    title={_t("Options")}
-                                    onClick={this.onOpenContextMenu}
-                                    inputRef={this.contextMenuButton}
-                                />
-                                <AccessibleTooltipButton
-                                    className="mx_ImageView_button mx_ImageView_button_close"
-                                    title={_t("Close")}
-                                    onClick={ this.props.onFinished }>
-                                </AccessibleTooltipButton>
-                                {this.renderContextMenu()}
-                            </div>
+                            <AccessibleTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_rotateCW"
+                                title={_t("Rotate Right")}
+                                onClick={this.onRotateClockwiseClick}>
+                            </AccessibleTooltipButton>
+                            <AccessibleTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_rotateCCW"
+                                title={_t("Rotate Left")}
+                                onClick={ this.onRotateCounterClockwiseClick }>
+                            </AccessibleTooltipButton>
+                            <AccessibleTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_zoomOut"
+                                title={_t("Zoom out")}
+                                onClick={ this.onZoomOutClick }>
+                            </AccessibleTooltipButton>
+                            <AccessibleTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_zoomIn"
+                                title={_t("Zoom in")}
+                                onClick={ this.onZoomInClick }>
+                            </AccessibleTooltipButton>
+                            <AccessibleTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_download"
+                                title={_t("Download")}
+                                onClick={ this.onDownloadClick }>
+                            </AccessibleTooltipButton>
+                            <ContextMenuTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_more"
+                                title={_t("Options")}
+                                onClick={this.onOpenContextMenu}
+                                inputRef={this.contextMenuButton}
+                            />
+                            <AccessibleTooltipButton
+                                className="mx_ImageView_button mx_ImageView_button_close"
+                                title={_t("Close")}
+                                onClick={ this.props.onFinished }>
+                            </AccessibleTooltipButton>
+                            {this.renderContextMenu()}
                         </div>
                     </div>
                     <div className="mx_ImageView_image_wrapper">

@@ -34,10 +34,9 @@ limitations under the License.
 }
 
 .mx_ImageView_image {
-    object-fit: contain;
     pointer-events: all;
 
-    max-width: 100vw;
+    max-width: 70vw;
     max-height: 70vh;
     min-width: 100px;
     min-height: 100px;
@@ -46,41 +45,31 @@ limitations under the License.
 .mx_ImageView_panel {
     width: 100%;
     height: 68px;
-    align-self: flex-start;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.mx_ImageView_toolbar {
-    padding-right: 16px;
-    right: 0;
-    display: flex;
-    align-items: center;
-}
-
-.mx_ImageView_toolbar_buttons {
-    display: flex;
-    align-items: center;
-    pointer-events: all;
-}
-
 .mx_ImageView_info_wrapper {
+    pointer-events: all;
     padding-left: 32px;
-    left: 0;
-    text-align: left;
     display: flex;
-    justify-content: center;
     flex-direction: row;
-    color: $lightbox-fg-color;
     align-items: center;
+    color: $lightbox-fg-color;
 }
 
 .mx_ImageView_info {
     padding-left: 12px;
-    pointer-events: all;
     display: flex;
     flex-direction: column;
+}
+
+.mx_ImageView_toolbar {
+    padding-right: 16px;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
 }
 
 .mx_ImageView_button {
