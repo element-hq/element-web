@@ -90,7 +90,7 @@ limitations under the License.
 }
 
 .mx_ImageView_button {
-    padding-left: 24px;
+    margin-left: 24px;
     display: block;
 
     &::before {
@@ -130,11 +130,12 @@ limitations under the License.
 }
 
 .mx_ImageView_button_close {
-    padding-left: 32px;
+    border-radius: 100%;
+    background: #21262C;
     &::before {
         width: 32px;
         height: 32px;
         mask-image: url('$(res)/img/image-view/close.svg');
-        background-color: none;
+        mask-size: 40%;
     }
 }
