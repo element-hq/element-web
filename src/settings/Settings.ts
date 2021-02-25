@@ -120,6 +120,14 @@ export interface ISetting {
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
+    "feature_spaces": {
+        isFeature: true,
+        displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. " +
+            "Requires compatible homeserver for some features."),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
     "feature_latex_maths": {
         isFeature: true,
         displayName: _td("Render LaTeX maths in messages"),
@@ -134,6 +142,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         ),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new IncompatibleController("feature_spaces"),
     },
     "feature_new_spinner": {
         isFeature: true,
@@ -159,6 +168,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new IncompatibleController("feature_spaces"),
     },
     "feature_state_counters": {
         isFeature: true,
@@ -733,6 +743,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     [UIFeature.Communities]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
+        controller: new IncompatibleController("feature_spaces"),
     },
     [UIFeature.AdvancedSettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
