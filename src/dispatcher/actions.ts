@@ -94,4 +94,23 @@ export enum Action {
      * Trigged after the phase of the right panel is set. Should be used with AfterRightPanelPhaseChangePayload.
      */
     AfterRightPanelPhaseChange = "after_right_panel_phase_change",
+
+    /**
+     * Opens the modal dial pad
+     */
+    OpenDialPad = "open_dial_pad",
+
+    /**
+     * Fired when CallHandler has checked for PSTN protocol support
+     * payload: none
+     * XXX: Is an action the right thing for this?
+     */
+    PstnSupportUpdated = "pstn_support_updated",
+
+    /**
+     * Similar to PstnSupportUpdated, fired when CallHandler has checked for virtual room support
+     * payload: none
+     * XXX: Ditto
+     */
+    VirtualRoomSupportUpdated = "virtual_room_support_updated",
 }

@@ -124,7 +124,7 @@ export default class EditableItemList extends React.Component {
                 <Field label={this.props.placeholder} type="text"
                        autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
                        list={this.props.suggestionsListId} />
-                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit">
+                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit" disabled={!this.props.newItem}>
                     {_t("Add")}
                 </AccessibleButton>
             </form>

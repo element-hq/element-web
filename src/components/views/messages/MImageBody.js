@@ -362,7 +362,7 @@ export default class MImageBody extends React.Component {
         }
 
         // The maximum height of the thumbnail as it is rendered as an <img>
-        const maxHeight = Math.min(this.props.maxImageHeight || 600, infoHeight);
+        const maxHeight = Math.min(this.props.maxImageHeight || 240, infoHeight);
         // The maximum width of the thumbnail, as dictated by its natural
         // maximum height.
         const maxWidth = infoWidth * maxHeight / infoHeight;

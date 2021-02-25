@@ -276,7 +276,7 @@ export default class SettingsStore {
      * @param {boolean} excludeDefault True to disable using the default value.
      * @return {*} The value, or null if not found
      */
-    public static getValue(settingName: string, roomId: string = null, excludeDefault = false): any {
+    public static getValue<T = any>(settingName: string, roomId: string = null, excludeDefault = false): T {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
@@ -465,6 +465,32 @@ export default class SettingsStore {
     public static isLevelSupported(level: SettingLevel): boolean {
         if (!LEVEL_HANDLERS[level]) return false;
         return LEVEL_HANDLERS[level].isSupported();
+    }
+
+    /**
+     * Determines the first supported level out of all the levels that can be used for a
+     * specific setting.
+     * @param {string} settingName The setting name.
+     * @return {SettingLevel}
+     */
+    public static firstSupportedLevel(settingName: string): SettingLevel {
+        // Verify that the setting is actually a setting
+        const setting = SETTINGS[settingName];
+        if (!setting) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
+
+        const handlers = SettingsStore.getHandlers(settingName);
+
+        for (const level of levelOrder) {
+            const handler = handlers[level];
+            if (!handler) continue;
+            return level;
+        }
+        return null;
     }
 
     /**

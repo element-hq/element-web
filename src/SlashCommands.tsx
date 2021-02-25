@@ -48,6 +48,7 @@ import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
 import {CHAT_EFFECTS} from "./effects"
 import CallHandler from "./CallHandler";
+import {guessAndSetDMRoom} from "./Rooms";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -159,6 +160,32 @@ export const Commands = [
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
         runFn: function(roomId, args) {
             let message = '¯\\_(ツ)_/¯';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'tableflip',
+        args: '<message>',
+        description: _td('Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '(╯°□°）╯︵ ┻━┻';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'unflip',
+        args: '<message>',
+        description: _td('Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '┬──┬ ノ( ゜-゜ノ)';
             if (args) {
                 message = message + ' ' + args;
             }
@@ -1013,9 +1040,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-                        'm.id.phone': userId,
-                    });
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw new Error("Unable to find Matrix ID for phone number");
                     }
@@ -1086,6 +1111,24 @@ export const Commands = [
             return success();
         },
     }),
+    new Command({
+        command: "converttodm",
+        description: _td("Converts the room to a DM"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, true));
+        },
+    }),
+    new Command({
+        command: "converttoroom",
+        description: _td("Converts the DM to a room"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, false));
+        },
+    }),
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
@@ -1137,7 +1180,7 @@ export function parseCommandString(input: string) {
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {

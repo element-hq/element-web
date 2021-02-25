@@ -258,6 +258,12 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 // markdown overrides:
 .mx_EventTile_content .markdown-body pre:hover {
     border-color: #808080 !important; // inverted due to rules below
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; // copied from light theme due to inversion below
+    // the code above works only in Firefox, this is for other browsers
+    // see https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2); // copied from light theme due to inversion below
+    }
 }
 .mx_EventTile_content .markdown-body {
     pre, code {

@@ -36,6 +36,8 @@ import { isMac } from '../Keyboard';
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { OrderedMultiController } from "./controllers/OrderedMultiController";
+import {Layout} from "./Layout";
+import ReducedMotionController from './controllers/ReducedMotionController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -240,6 +242,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
+    "MessageComposerInput.showStickersButton": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show stickers button'),
+        default: true,
+    },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
@@ -300,6 +307,16 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Enable automatic language detection for syntax highlighting'),
         default: false,
     },
+    "expandCodeByDefault": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Expand code blocks by default'),
+        default: false,
+    },
+    "showCodeLineNumbers": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Show line numbers in code blocks'),
+        default: true,
+    },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show avatars in user and room mentions'),
@@ -330,6 +347,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show typing notifications"),
         default: true,
+    },
+    "ctrlFForSearch": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: isMac ? _td("Use Command + F to search") : _td("Use Ctrl + F to search"),
+        default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -421,7 +443,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
     },
     "allowedWidgets": {
-        supportedLevels: [SettingLevel.ROOM_ACCOUNT],
+        supportedLevels: [SettingLevel.ROOM_ACCOUNT, SettingLevel.ROOM_DEVICE],
+        supportedLevelsAreOrdered: true,
         default: {}, // none allowed
     },
     "analyticsOptIn": {
@@ -622,17 +645,21 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("IRC display name width"),
         default: 80,
     },
-    "useIRCLayout": {
+    "layout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Enable experimental, compact IRC style layout"),
-        default: false,
+        default: Layout.Group,
     },
     "showChatEffects": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show chat effects"),
+        displayName: _td("Show chat effects (animations when receiving e.g. confetti)"),
         default: true,
+        controller: new ReducedMotionController(),
     },
-    "Widgets.pinned": {
+    "Widgets.pinned": { // deprecated
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: {},
+    },
+    "Widgets.layout": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
     },

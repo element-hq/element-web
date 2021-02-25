@@ -1,10 +1,3 @@
-const params = window.location.search.substring(1).split('&');
-let lockOrigin;
-for (let i = 0; i < params.length; ++i) {
-    const parts = params[i].split('=');
-    if (parts[0] === 'origin') lockOrigin = decodeURIComponent(parts[1]);
-}
-
 function remoteRender(event) {
     const data = event.data;
 
@@ -45,7 +38,7 @@ function remoteSetTint(event) {
 }
 
 window.onmessage = function(e) {
-    if (e.origin === lockOrigin) {
+    if (e.origin === window.location.origin) {
         if (e.data.blob) remoteRender(e);
         else remoteSetTint(e);
     }
