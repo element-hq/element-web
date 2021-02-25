@@ -199,6 +199,7 @@ export default class ImageView extends React.Component {
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
         });
+        this.props.onFinished();
     };
 
     onStartMoving = ev => {
