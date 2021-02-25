@@ -121,6 +121,7 @@ limitations under the License.
     position: relative; //for .mx_RoomView_auxPanel_fullHeight
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .mx_RoomView_body {

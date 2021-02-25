@@ -19,6 +19,7 @@ limitations under the License.
     flex-direction: row;
     min-width: 0;
     height: 100%;
+    justify-content: space-between;
 }
 
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
