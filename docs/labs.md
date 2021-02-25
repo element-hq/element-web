@@ -7,7 +7,7 @@ to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
-## Matrix Spaces [MSC1772](https://github.com/matrix-org/matrix-doc/blob/matthew/msc1772/proposals/1772-groups-as-rooms.md) support (`feature_spaces`)
+## Matrix Spaces [MSC1772](https://github.com/matrix-org/matrix-doc/pull/1772) support (`feature_spaces`)
 
 Enables showing, using, creating, and managing spaces. Create Spaces from the all new Space Panel (to left of Room List).
 
