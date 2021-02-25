@@ -305,7 +305,6 @@ export default class ImageView extends React.Component {
                 className="mx_ImageView"
                 ref={ref => this.focusLock = ref}
             >
-                <div className="mx_ImageView_content">
                     <div className="mx_ImageView_panel">
                         {info}
                         <div className="mx_ImageView_toolbar">
@@ -363,7 +362,6 @@ export default class ImageView extends React.Component {
                             onMouseLeave={this.onEndMoving}
                         />
                     </div>
-                </div>
             </FocusLock>
         );
     }
