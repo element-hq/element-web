@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2018, 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +17,6 @@ import React, {createRef} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -33,11 +30,8 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
 import {UIFeature} from "../../../settings/UIFeature";
 import WidgetStore from "../../../stores/WidgetStore";
-import WidgetUtils from "../../../utils/WidgetUtils";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
-import { PlaceCallType } from "../../../CallHandler";
-import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
