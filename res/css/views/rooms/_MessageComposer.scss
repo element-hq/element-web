@@ -227,18 +227,6 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
 }
 
-.mx_MessageComposer_hangup::before {
-    mask-image: url('$(res)/img/element-icons/call/hangup.svg');
-}
-
-.mx_MessageComposer_voicecall::before {
-    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
-}
-
-.mx_MessageComposer_videocall::before {
-    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
-}
-
 .mx_MessageComposer_emoji::before {
     mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
 }

@@ -632,6 +632,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: 3000,
     },
     "showCallButtonsInComposer": {
+        // Dev note: This is no longer "in composer" but is instead "in room header".
+        // TODO: Rename with settings v3
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: true,
         controller: new UIFeatureController(UIFeature.Voip),
