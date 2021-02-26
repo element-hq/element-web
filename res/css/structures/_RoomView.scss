@@ -20,6 +20,12 @@ limitations under the License.
     flex-direction: column;
 }
 
+
+@keyframes mx_RoomView_fileDropTarget_animation {
+    from {opacity: 0;}
+    to {opacity: 0.95;}
+}
+
 .mx_RoomView_fileDropTarget {
     min-width: 0px;
     width: 100%;
@@ -30,7 +36,8 @@ limitations under the License.
 
     pointer-events: none;
 
-    background-color: $droptarget-bg-color;
+    background-color: $primary-bg-color;
+    opacity: 0.95;
 
     position: absolute;
     z-index: 3000;
@@ -39,6 +46,9 @@ limitations under the License.
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    animation: mx_RoomView_fileDropTarget_animation;
+    animation-duration: 0.5s;
 }
 
 @keyframes mx_RoomView_fileDropTarget_image_animation {
