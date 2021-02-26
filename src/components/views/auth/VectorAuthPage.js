@@ -16,18 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from 'matrix-react-sdk/src/index';
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthPage extends React.PureComponent {
     static replaces = 'AuthPage'
 
-    static welcomeBackgroundUrl;
-
-    // cache the url as a static to prevent it changing without refreshing
-    static getWelcomeBackgroundUrl() {
-        if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
+    render() {
+        const AuthFooter = sdk.getComponent('auth.AuthFooter');
 
         const pageStyle = {
-            background: `#374c72`,
+            background: '#374c72',
         };
 
         const modalStyle = {
@@ -53,15 +51,15 @@ export default class VectorAuthPage extends React.PureComponent {
         };
 
         return (
-            <div className="mx_AuthPage" style={pageStyle}>
-                <div className="mx_AuthPage_modal" style={modalStyle}>
-                    <div className="mx_AuthPage_modalBlur" style={blurStyle} />
-                    <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
-                        { this.props.children }
-                    </div>
-                </div>
-                <AuthFooter />
-            </div>
+          <div className="mx_AuthPage" style={pageStyle}>
+              <div className="mx_AuthPage_modal" style={modalStyle}>
+                  <div className="mx_AuthPage_modalBlur" style={blurStyle} />
+                  <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
+                      { this.props.children }
+                  </div>
+              </div>
+              <AuthFooter />
+          </div>
         );
     }
 }
