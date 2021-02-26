@@ -3052,5 +3052,18 @@
     "Share your screen": "Compartir a túa pantalla",
     "Recently visited rooms": "Salas visitadas recentemente",
     "Show line numbers in code blocks": "Mostrar números de liña nos bloques de código",
-    "Expand code blocks by default": "Por omsión despregar bloques de código"
+    "Expand code blocks by default": "Por omsión despregar bloques de código",
+    "Upgrade to pro": "Mellorar a pro",
+    "Minimize dialog": "Minimizar ventá",
+    "Maximize dialog": "Maximizar ventá",
+    "%(hostSignupBrand)s Setup": "Configurar %(hostSignupBrand)s",
+    "You should know": "Deberías saber",
+    "Privacy Policy": "Política de Privacidade",
+    "Cookie Policy": "Política de Cookies",
+    "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Aprende máis na nosa <privacyPolicyLink />, <termsOfServiceLink /> e <cookiePolicyLink />.",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Ao continuar de xeito temporal permitirás que %(hostSignupBrand)s complete o acceso á túa conta para obter os enderezos de email verificados. Os datos non se almacenan.",
+    "Failed to connect to your homeserver. Please close this dialog and try again.": "Fallou a conexión co teu servidor de inicio. Pecha esta información e inténtao outra vez.",
+    "Abort": "Abortar",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Tes a certeza de querer cancelar a creación do servidor? O proceso non pode ser completado.",
+    "Confirm abort of host creation": "Corfirma que cancelas a creación do servidor"
 }

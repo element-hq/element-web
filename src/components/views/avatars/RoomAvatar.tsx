@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, {ComponentProps} from 'react';
 import Room from 'matrix-js-sdk/src/models/room';
 import {getHttpUriForMxc} from 'matrix-js-sdk/src/content-repo';
 
@@ -24,7 +24,7 @@ import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
 import {ResizeMethod} from "../../../Avatar";
 
-interface IProps {
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick">{
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)

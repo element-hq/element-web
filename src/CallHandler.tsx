@@ -64,7 +64,6 @@ import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore from './settings/SettingsStore';
-import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
@@ -84,16 +83,48 @@ import { CallError } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from 'matrix-js-sdk/src/logger';
 import DesktopCapturerSourcePicker from "./components/views/elements/DesktopCapturerSourcePicker"
 import { Action } from './dispatcher/actions';
-import { roomForVirtualRoom, getOrCreateVirtualRoomForRoom } from './VoipUserMapper';
+import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
+import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
 
-const CHECK_PSTN_SUPPORT_ATTEMPTS = 3;
+export const PROTOCOL_PSTN = 'm.protocol.pstn';
+export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
+export const PROTOCOL_SIP_NATIVE = 'im.vector.protocol.sip_native';
+export const PROTOCOL_SIP_VIRTUAL = 'im.vector.protocol.sip_virtual';
+
+const CHECK_PROTOCOLS_ATTEMPTS = 3;
+// Event type for room account data and room creation content used to mark rooms as virtual rooms
+// (and store the ID of their native room)
+export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
 
 enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
     Busy = 'busyAudio',
+}
+
+interface ThirdpartyLookupResponseFields {
+    /* eslint-disable camelcase */
+
+    // im.vector.sip_native
+    virtual_mxid?: string;
+    is_virtual?: boolean;
+
+    // im.vector.sip_virtual
+    native_mxid?: string;
+    is_native?: boolean;
+
+    // common
+    lookup_success?: boolean;
+
+    /* eslint-enable camelcase */
+}
+
+interface ThirdpartyLookupResponse {
+    userid: string,
+    protocol: string,
+    fields: ThirdpartyLookupResponseFields,
 }
 
 // Unlike 'CallType' in js-sdk, this one includes screen sharing
@@ -126,7 +157,12 @@ export default class CallHandler {
     private audioPromises = new Map<AudioID, Promise<void>>();
     private dispatcherRef: string = null;
     private supportsPstnProtocol = null;
+    private pstnSupportPrefixed = null; // True if the server only support the prefixed pstn protocol
+    private supportsSipNativeVirtual = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
     private pstnSupportCheckTimer: NodeJS.Timeout; // number actually because we're in the browser
+    // For rooms we've been invited to, true if they're from virtual user, false if we've checked and they aren't.
+    private invitedRoomsAreVirtual = new Map<string, boolean>();
+    private invitedRoomCheckInProgress = false;
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -140,9 +176,9 @@ export default class CallHandler {
      * Gets the user-facing room associated with a call (call.roomId may be the call "virtual room"
      * if a voip_mxid_translate_pattern is set in the config)
      */
-    public static roomIdForCall(call: MatrixCall) {
+    public static roomIdForCall(call: MatrixCall): string {
         if (!call) return null;
-        return roomForVirtualRoom(call.roomId) || call.roomId;
+        return VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(call.roomId) || call.roomId;
     }
 
     start() {
@@ -163,7 +199,7 @@ export default class CallHandler {
             MatrixClientPeg.get().on('Call.incoming', this.onCallIncoming);
         }
 
-        this.checkForPstnSupport(CHECK_PSTN_SUPPORT_ATTEMPTS);
+        this.checkProtocols(CHECK_PROTOCOLS_ATTEMPTS);
     }
 
     stop() {
@@ -177,31 +213,71 @@ export default class CallHandler {
         }
     }
 
-    private async checkForPstnSupport(maxTries) {
+    private async checkProtocols(maxTries) {
         try {
             const protocols = await MatrixClientPeg.get().getThirdpartyProtocols();
-            if (protocols['im.vector.protocol.pstn'] !== undefined) {
-                this.supportsPstnProtocol = protocols['im.vector.protocol.pstn'];
-            } else if (protocols['m.protocol.pstn'] !== undefined) {
-                this.supportsPstnProtocol = protocols['m.protocol.pstn'];
+
+            if (protocols[PROTOCOL_PSTN] !== undefined) {
+                this.supportsPstnProtocol = Boolean(protocols[PROTOCOL_PSTN]);
+                if (this.supportsPstnProtocol) this.pstnSupportPrefixed = false;
+            } else if (protocols[PROTOCOL_PSTN_PREFIXED] !== undefined) {
+                this.supportsPstnProtocol = Boolean(protocols[PROTOCOL_PSTN_PREFIXED]);
+                if (this.supportsPstnProtocol) this.pstnSupportPrefixed = true;
             } else {
                 this.supportsPstnProtocol = null;
             }
+
             dis.dispatch({action: Action.PstnSupportUpdated});
+
+            if (protocols[PROTOCOL_SIP_NATIVE] !== undefined && protocols[PROTOCOL_SIP_VIRTUAL] !== undefined) {
+                this.supportsSipNativeVirtual = Boolean(
+                    protocols[PROTOCOL_SIP_NATIVE] && protocols[PROTOCOL_SIP_VIRTUAL],
+                );
+            }
+
+            dis.dispatch({action: Action.VirtualRoomSupportUpdated});
         } catch (e) {
             if (maxTries === 1) {
-                console.log("Failed to check for pstn protocol support and no retries remain: assuming no support", e);
+                console.log("Failed to check for protocol support and no retries remain: assuming no support", e);
             } else {
-                console.log("Failed to check for pstn protocol support: will retry", e);
+                console.log("Failed to check for protocol support: will retry", e);
                 this.pstnSupportCheckTimer = setTimeout(() => {
-                    this.checkForPstnSupport(maxTries - 1);
+                    this.checkProtocols(maxTries - 1);
                 }, 10000);
             }
         }
     }
 
-    getSupportsPstnProtocol() {
+    public getSupportsPstnProtocol() {
         return this.supportsPstnProtocol;
+    }
+
+    public getSupportsVirtualRooms() {
+        return this.supportsPstnProtocol;
+    }
+
+    public pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
+        return MatrixClientPeg.get().getThirdpartyUser(
+            this.pstnSupportPrefixed ? PROTOCOL_PSTN_PREFIXED : PROTOCOL_PSTN, {
+                'm.id.phone': phoneNumber,
+            },
+        );
+    }
+
+    public sipVirtualLookup(nativeMxid: string): Promise<ThirdpartyLookupResponse[]> {
+        return MatrixClientPeg.get().getThirdpartyUser(
+            PROTOCOL_SIP_VIRTUAL, {
+                'native_mxid': nativeMxid,
+            },
+        );
+    }
+
+    public sipNativeLookup(virtualMxid: string): Promise<ThirdpartyLookupResponse[]> {
+        return MatrixClientPeg.get().getThirdpartyUser(
+            PROTOCOL_SIP_NATIVE, {
+                'virtual_mxid': virtualMxid,
+            },
+        );
     }
 
     private onCallIncoming = (call) => {
@@ -550,7 +626,7 @@ export default class CallHandler {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
         CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
 
-        const mappedRoomId = (await getOrCreateVirtualRoomForRoom(roomId)) || roomId;
+        const mappedRoomId = (await VoipUserMapper.sharedInstance().getOrCreateVirtualRoomForRoom(roomId)) || roomId;
         logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
 
         const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
@@ -681,6 +757,12 @@ export default class CallHandler {
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(mappedRoomId, call)
                     this.setCallListeners(call);
+
+                    // get ready to send encrypted events in the room, so if the user does answer
+                    // the call, we'll be ready to send. NB. This is the protocol-level room ID not
+                    // the mapped one: that's where we'll send the events.
+                    const cli = MatrixClientPeg.get();
+                    cli.prepareToEncrypt(cli.getRoom(call.roomId));
                 }
                 break;
             case 'hangup':
@@ -779,8 +861,9 @@ export default class CallHandler {
             // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             confId = base32.stringify(Buffer.from(roomId), { pad: false });
         } else {
-            // Create a random human readable conference ID
-            confId = `JitsiConference${generateHumanReadableId()}`;
+            // Create a random conference ID
+            const random = randomUppercaseString(1) + randomLowercaseString(23);
+            confId = 'Jitsi' + random;
         }
 
         let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});
@@ -796,6 +879,7 @@ export default class CallHandler {
             isAudioOnly: type === 'voice',
             domain: jitsiDomain,
             auth: jitsiAuth,
+            roomName: room.name,
         };
 
         const widgetId = (

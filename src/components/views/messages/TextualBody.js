@@ -99,6 +99,10 @@ export default class TextualBody extends React.Component {
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
                     if (pres[i].parentNode.className == "mx_EventTile_pre_container") continue;
+                    // Add code element if it's missing since we depend on it
+                    if (pres[i].getElementsByTagName("code").length == 0) {
+                        this._addCodeElement(pres[i]);
+                    }
                     // Wrap a div around <pre> so that the copy button can be correctly positioned
                     // when the <pre> overflows and is scrolled horizontally.
                     const div = this._wrapInDiv(pres[i]);
@@ -126,6 +130,12 @@ export default class TextualBody extends React.Component {
                 }, 10);
             }
         }
+    }
+
+    _addCodeElement(pre) {
+        const code = document.createElement("code");
+        code.append(...pre.childNodes);
+        pre.appendChild(code);
     }
 
     _addCodeExpansionButton(div, pre) {

@@ -177,21 +177,25 @@ export default class PhoneNumbers extends React.Component {
         this.setState({continueDisabled: true});
         const token = this.state.newPhoneNumberCode;
         const address = this.state.verifyMsisdn;
-        this.state.addTask.haveMsisdnToken(token).then(() => {
+        this.state.addTask.haveMsisdnToken(token).then(([finished]) => {
+            let newPhoneNumber = this.state.newPhoneNumber;
+            if (finished) {
+                const msisdns = [
+                    ...this.props.msisdns,
+                    { address, medium: "msisdn" },
+                ];
+                this.props.onMsisdnsChange(msisdns);
+                newPhoneNumber = "";
+            }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
                 verifyMsisdn: "",
                 verifyError: null,
-                newPhoneNumber: "",
+                newPhoneNumber,
                 newPhoneNumberCode: "",
             });
-            const msisdns = [
-                ...this.props.msisdns,
-                { address, medium: "msisdn" },
-            ];
-            this.props.onMsisdnsChange(msisdns);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
