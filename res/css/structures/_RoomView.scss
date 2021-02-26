@@ -36,8 +36,20 @@ limitations under the License.
     z-index: 3000;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+@keyframes mx_RoomView_fileDropTarget_image_animation {
+  from {width: 0px;}
+  to {width: 32px;}
+}
+
+.mx_RoomView_fileDropTarget_image {
+    animation: mx_RoomView_fileDropTarget_image_animation;
+    animation-duration: 0.5s;
+    margin-bottom: 16px;
 }
 
 .mx_RoomView_auxPanel {
