@@ -50,97 +50,6 @@ ComposerAvatar.propTypes = {
     me: PropTypes.object.isRequired,
 };
 
-function CallButton(props) {
-    const onVoiceCallClick = (ev) => {
-        dis.dispatch({
-            action: 'place_call',
-            type: PlaceCallType.Voice,
-            room_id: props.roomId,
-        });
-    };
-
-    return (<AccessibleTooltipButton
-        className="mx_MessageComposer_button mx_MessageComposer_voicecall"
-        onClick={onVoiceCallClick}
-        title={_t('Voice call')}
-    />);
-}
-
-CallButton.propTypes = {
-    roomId: PropTypes.string.isRequired,
-};
-
-function VideoCallButton(props) {
-    const onCallClick = (ev) => {
-        dis.dispatch({
-            action: 'place_call',
-            type: ev.shiftKey ? PlaceCallType.ScreenSharing : PlaceCallType.Video,
-            room_id: props.roomId,
-        });
-    };
-
-    return <AccessibleTooltipButton
-        className="mx_MessageComposer_button mx_MessageComposer_videocall"
-        onClick={onCallClick}
-        title={_t('Video call')}
-    />;
-}
-
-VideoCallButton.propTypes = {
-    roomId: PropTypes.string.isRequired,
-};
-
-function HangupButton(props) {
-    const onHangupClick = () => {
-        if (props.isConference) {
-            dis.dispatch({
-                action: props.canEndConference ? 'end_conference' : 'hangup_conference',
-                room_id: props.roomId,
-            });
-            return;
-        }
-
-        const call = CallHandler.sharedInstance().getCallForRoom(props.roomId);
-        if (!call) {
-            return;
-        }
-
-        const action = call.state === CallState.Ringing ? 'reject' : 'hangup';
-
-        dis.dispatch({
-            action,
-            // hangup the call for this room. NB. We use the room in props as the room ID
-            // as call.roomId may be the 'virtual room', and the dispatch actions always
-            // use the user-facing room (there was a time when we deliberately used
-            // call.roomId and *not* props.roomId, but that was for the old
-            // style Freeswitch conference calls and those times are gone.)
-            room_id: props.roomId,
-        });
-    };
-
-    let tooltip = _t("Hangup");
-    if (props.isConference && props.canEndConference) {
-        tooltip = _t("End conference");
-    }
-
-    const canLeaveConference = !props.isConference ? true : props.isInConference;
-    return (
-        <AccessibleTooltipButton
-            className="mx_MessageComposer_button mx_MessageComposer_hangup"
-            onClick={onHangupClick}
-            title={tooltip}
-            disabled={!canLeaveConference}
-        />
-    );
-}
-
-HangupButton.propTypes = {
-    roomId: PropTypes.string.isRequired,
-    isConference: PropTypes.bool.isRequired,
-    canEndConference: PropTypes.bool,
-    isInConference: PropTypes.bool,
-};
-
 const EmojiButton = ({addEmoji}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -265,7 +174,6 @@ export default class MessageComposer extends React.Component {
         this.state = {
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
-            showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
             hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
             joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
         };
@@ -405,12 +313,7 @@ export default class MessageComposer extends React.Component {
         ];
 
         if (!this.state.tombstone && this.state.canSendMessages) {
-            // This also currently includes the call buttons. Really we should
-            // check separately for whether we can call, but this is slightly
-            // complex because of conference calls.
-
             const SendMessageComposer = sdk.getComponent("rooms.SendMessageComposer");
-            const callInProgress = this.props.callState && this.props.callState !== 'ended';
 
             controls.push(
                 <SendMessageComposer
@@ -429,30 +332,6 @@ export default class MessageComposer extends React.Component {
             if (SettingsStore.getValue(UIFeature.Widgets) &&
                 SettingsStore.getValue("MessageComposerInput.showStickersButton")) {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
-            }
-
-            if (this.state.showCallButtons) {
-                if (this.state.hasConference) {
-                    const canEndConf = WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-                    controls.push(
-                        <HangupButton
-                            key="controls_hangup"
-                            roomId={this.props.room.roomId}
-                            isConference={true}
-                            canEndConference={canEndConf}
-                            isInConference={this.state.joinedConference}
-                        />,
-                    );
-                } else if (callInProgress) {
-                    controls.push(
-                        <HangupButton key="controls_hangup" roomId={this.props.room.roomId} isConference={false} />,
-                    );
-                } else {
-                    controls.push(
-                        <CallButton key="controls_call" roomId={this.props.room.roomId} />,
-                        <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
-                    );
-                }
             }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];

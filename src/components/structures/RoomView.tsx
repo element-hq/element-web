@@ -34,7 +34,7 @@ import ResizeNotifier from '../../utils/ResizeNotifier';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import * as sdk from '../../index';
-import CallHandler from '../../CallHandler';
+import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
 import Tinter from '../../Tinter';
 import rateLimitedFunc from '../../ratelimitedfunc';
@@ -1352,6 +1352,14 @@ export default class RoomView extends React.Component<IProps, IState> {
         SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
     };
 
+    private onCallPlaced = (type: PlaceCallType) => {
+        dis.dispatch({
+            action: 'place_call',
+            type: type,
+            room_id: this.state.room.roomId,
+        });
+    };
+
     private onSettingsClick = () => {
         dis.dispatch({ action: "open_room_settings" });
     };
@@ -2031,6 +2039,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? this.onAppsClick : null}
                             appsShown={this.state.showApps}
+                            onCallPlaced={this.onCallPlaced}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
