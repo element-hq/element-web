@@ -1525,6 +1525,7 @@
     "Start chatting": "Start chatting",
     "Do you want to join %(roomName)s?": "Do you want to join %(roomName)s?",
     "<userName/> invited you": "<userName/> invited you",
+    "Invite messages are hidden by default. Click to show the message.": "Invite messages are hidden by default. Click to show the message.",
     "Reject": "Reject",
     "Reject & Ignore user": "Reject & Ignore user",
     "You're previewing %(roomName)s. Want to join it?": "You're previewing %(roomName)s. Want to join it?",
