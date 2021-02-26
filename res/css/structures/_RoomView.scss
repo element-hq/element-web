@@ -22,8 +22,12 @@ limitations under the License.
 
 
 @keyframes mx_RoomView_fileDropTarget_animation {
-    from {opacity: 0;}
-    to {opacity: 0.95;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.95;
+    }
 }
 
 .mx_RoomView_fileDropTarget {
@@ -52,8 +56,12 @@ limitations under the License.
 }
 
 @keyframes mx_RoomView_fileDropTarget_image_animation {
-    from {width: 0px;}
-    to {width: 32px;}
+    from {
+        width: 0px;
+    }
+    to {
+        width: 32px;
+    }
 }
 
 .mx_RoomView_fileDropTarget_image {
