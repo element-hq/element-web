@@ -2059,8 +2059,8 @@ export default class RoomView extends React.Component<IProps, IState> {
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
-                                {auxPanel}
                                 <div className={timelineClasses}>
+                                    {auxPanel}
                                     {topUnreadMessagesBar}
                                     {jumpToBottom}
                                     {messagePanel}
