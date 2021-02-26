@@ -44,6 +44,20 @@ ComposerAvatar.propTypes = {
     me: PropTypes.object.isRequired,
 };
 
+function SendButton(props) {
+    return (
+        <AccessibleTooltipButton
+            className="mx_MessageComposer_sendMessage"
+            onClick={props.onClick}
+            title={_t('Send message')}
+        />
+    );
+}
+
+SendButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+};
+
 const EmojiButton = ({addEmoji}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -170,6 +184,7 @@ export default class MessageComposer extends React.Component {
             canSendMessages: this.props.room.maySendMessage(),
             hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
             joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
+            isComposerEmpty: true,
         };
     }
 
@@ -298,6 +313,16 @@ export default class MessageComposer extends React.Component {
         });
     }
 
+    sendMessage = () => {
+        this.messageComposerInput._sendMessage();
+    }
+
+    onChange = (model) => {
+        this.setState({
+            isComposerEmpty: model.isEmpty,
+        });
+    }
+
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
@@ -318,6 +343,7 @@ export default class MessageComposer extends React.Component {
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
+                    onChange={this.onChange}
                 />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
@@ -326,6 +352,12 @@ export default class MessageComposer extends React.Component {
             if (SettingsStore.getValue(UIFeature.Widgets) &&
                 SettingsStore.getValue("MessageComposerInput.showStickersButton")) {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
+            }
+
+            if (!this.state.isComposerEmpty) {
+                controls.push(
+                    <SendButton key="controls_send" onClick={this.sendMessage} />,
+                );
             }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];

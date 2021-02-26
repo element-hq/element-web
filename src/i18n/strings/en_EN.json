@@ -1416,6 +1416,7 @@
     "Invited": "Invited",
     "Filter room members": "Filter room members",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
+    "Send message": "Send message",
     "Emoji picker": "Emoji picker",
     "Upload file": "Upload file",
     "Send an encrypted reply…": "Send an encrypted reply…",
