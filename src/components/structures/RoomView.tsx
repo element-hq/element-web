@@ -2058,7 +2058,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                             appsShown={this.state.showApps}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
-                            <div className={"mx_RoomView_container"}>
+                            <div className="mx_RoomView_container">
                                 {auxPanel}
                                 <div className="mx_RoomView_body">
                                     <div className={timelineClasses}>
