@@ -32,7 +32,7 @@ try {
 } catch (e) {
 }
 
-export default class ReadReceiptMarker extends React.Component {
+export default class ReadReceiptMarker extends React.PureComponent {
     static propTypes = {
         // the RoomMember to show the RR for
         member: PropTypes.object,
