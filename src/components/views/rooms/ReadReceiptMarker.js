@@ -155,7 +155,13 @@ export default class ReadReceiptMarker extends React.Component {
 
         // then shift to the rightmost column,
         // and then it will drop down to its resting position
-        startStyles.push({ top: startTopOffset+'px', left: '0px' });
+        //
+        // XXX: We use a `left: 1px` to trick velocity-animate into actually animating. This
+        // is a very annoying bug where if it thinks there's no change to `left` then it'll
+        // skip applying it, thus making our read receipt at +14px instead of +0px like it
+        // should be. This does cause 1px of drift for read receipts, however nobody should
+        // notice this while it's also falling.
+        startStyles.push({ top: startTopOffset+'px', left: '1px' });
         enterTransitionOpts.push({
             duration: bounce ? Math.min(Math.log(Math.abs(startTopOffset)) * 200, 3000) : 300,
             easing: bounce ? 'easeOutBounce' : 'easeOutCubic',
