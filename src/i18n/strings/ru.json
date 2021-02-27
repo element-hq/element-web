@@ -1591,7 +1591,7 @@
     "Error upgrading room": "Ошибка обновления комнаты",
     "Match system theme": "Тема системы",
     "Show tray icon and minimize window to it on close": "Показать иконку в трее и сворачивать окно при закрытии",
-    "Show typing notifications": "Показывать уведомления о наборе",
+    "Show typing notifications": "Показывать уведомления о наборе текста",
     "Delete %(count)s sessions|other": "Удалить %(count)s сессий",
     "Enable desktop notifications for this session": "Включить уведомления для рабочего стола для этой сессии",
     "Enable audible notifications for this session": "Включить звуковые уведомления для этой сессии",
@@ -3031,7 +3031,7 @@
     "Privacy Policy": "Политика конфиденциальности",
     "Cookie Policy": "Политика использования файлов cookie",
     "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Дополнительную информацию можно найти на страницах <privacyPolicyLink />,<termsOfServiceLink /> и <cookiePolicyLink />.",
-    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Продолжая процесс настройки %(hostSignupBrand)s, вы предоставите доступ к вашей учётной записи для получения проверенных адресов электронной почты. Эти данные не сохраняются.",
+    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Продолжая процесс настройки %(hostSignupBrand)s, вы предоставите временный доступ к вашей учётной записи для получения проверенных адресов электронной почты. Эти данные не сохраняются.",
     "Failed to connect to your homeserver. Please close this dialog and try again.": "Не удалось подключиться к домашнему серверу. Закройте это диалоговое окно и попробуйте ещё раз.",
     "Abort": "Отмена",
     "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Вы уверены, что хотите прервать создание хоста? Процесс не может быть продолжен.",
@@ -3072,5 +3072,7 @@
     "Value in this room": "Значение в этой комнате",
     "Value": "Значение",
     "Failed to save settings": "Не удалось сохранить настройки",
-    "Show chat effects (animations when receiving e.g. confetti)": "Показать эффекты чата (анимация при получении, например, конфетти)"
+    "Show chat effects (animations when receiving e.g. confetti)": "Показать эффекты чата (анимация при получении, например, конфетти)",
+    "Caution:": "Предупреждение:",
+    "Settings Explorer": "Обзор настроек"
 }
