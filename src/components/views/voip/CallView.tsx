@@ -518,7 +518,7 @@ export default class CallView extends React.Component<IProps, IState> {
             }
 
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() ? null : (
+            const maxVideoHeight = getFullScreenElement() || !this.props.maxVideoHeight ? null : (
                 this.props.maxVideoHeight - (HEADER_HEIGHT + BOTTOM_PADDING + BOTTOM_MARGIN_TOP_BOTTOM)
             );
             contentView = <div className={containerClasses}
