@@ -147,7 +147,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         });
     };
 
-    _onRoomAccessRadioToggle = (roomAccess) => {
+    _setRoomAccess = (roomAccess) => {
         //                         join_rule
         //                      INVITE  |  PUBLIC
         //        ----------------------+----------------
@@ -191,6 +191,29 @@ export default class SecurityRoomSettingsTab extends React.Component {
             console.error(e);
             this.setState({guestAccess: beforeGuestAccess});
         });
+    }
+
+    _onRoomAccessRadioToggle = async (roomAccess) => {
+        if (
+            this.state.encrypted &&
+            this.state.joinRule != "public" &&
+            roomAccess != "invite_only"
+        ) {
+            Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
+                title: _t('Confirm making this room public?'),
+                description: _t(
+                    "Making end-to-end encrypted rooms public renders the " +
+                    "encryption pointless, wastes processing power, and can cause " +
+                    "performance problems. Please consider creating a separate " +
+                    "unencrypted public room.",
+                ),
+                onFinished: (confirm) => {
+                    if (confirm) this._setRoomAccess(roomAccess);
+                },
+            });
+        } else {
+            this._setRoomAccess(roomAccess);
+        }
     };
 
     _onHistoryRadioToggle = (history) => {
