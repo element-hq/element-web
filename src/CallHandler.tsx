@@ -629,6 +629,8 @@ export default class CallHandler {
         const mappedRoomId = (await VoipUserMapper.sharedInstance().getOrCreateVirtualRoomForRoom(roomId)) || roomId;
         logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
 
+        const timeUntilTurnCresExpire = MatrixClientPeg.get().getTurnServersExpiry() - Date.now();
+        console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " seconds");
         const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
 
         this.calls.set(roomId, call);
