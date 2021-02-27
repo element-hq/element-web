@@ -1337,6 +1337,8 @@
     "Select the roles required to change various parts of the room": "Select the roles required to change various parts of the room",
     "Enable encryption?": "Enable encryption?",
     "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
+    "Confirm making this room public?": "Confirm making this room public?",
+    "Making end-to-end encrypted rooms public renders the encryption pointless, wastes processing power, and can cause performance problems. Please consider creating a separate unencrypted public room.": "Making end-to-end encrypted rooms public renders the encryption pointless, wastes processing power, and can cause performance problems. Please consider creating a separate unencrypted public room.",
     "Guests cannot join this room even if explicitly invited.": "Guests cannot join this room even if explicitly invited.",
     "Click here to fix": "Click here to fix",
     "To link to this room, please add an address.": "To link to this room, please add an address.",
