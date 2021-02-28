@@ -1,6 +1,6 @@
 {
-    "default_server_name": "matrix.org",
-    "brand": "Element",
+    "default_server_name": "perapera-matrix.org",
+    "brand": "PeraPera Element",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
@@ -37,15 +37,5 @@
             "url": "https://element.io/cookie-policy",
             "text": "Cookie Policy"
         }
-    ],
-    "hostSignup": {
-      "brand": "Element Home",
-      "cookiePolicyUrl": "https://element.io/cookie-policy",
-      "domains": [
-          "matrix.org"
-      ],
-      "privacyPolicyUrl": "https://element.io/privacy",
-      "termsOfServiceUrl": "https://element.io/terms-of-service",
-      "url": "https://ems.element.io/element-home/in-app-loader"
-    }
+    ]
 }

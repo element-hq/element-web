@@ -1,0 +1,12 @@
+on: [push]
+
+env:
+  CI: true
+  TZ: Asia/Hong_Kong
+  IS_FORCE_HTTPS_ASSET: true
+jobs:
+  test:
+    steps:
+    - name: yarn test
+      if: "!contains(github.event.commits[0].message, '[skip test]')"
+      run: yarn run test
