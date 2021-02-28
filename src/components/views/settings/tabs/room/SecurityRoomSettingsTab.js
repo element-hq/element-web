@@ -91,7 +91,24 @@ export default class SecurityRoomSettingsTab extends React.Component {
         if (refreshWhenTypes.includes(e.getType())) this.forceUpdate();
     };
 
-    _onEncryptionChange = (e) => {
+    _onEncryptionChange = async (e) => {
+        if (this.state.joinRule == "public") {
+            const {finished} = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
+                title: _t('Enable encryption in a public room?'),
+                description: _t(
+                    "Note that enabling encryption in public rooms renders the " +
+                    "encryption pointless, wastes processing power, and can cause " +
+                    "performance problems. Please consider creating a separate " +
+                    "encrypted room.",
+                ),
+            });
+            const [confirm] = await finished;
+            if (!confirm) {
+                this.setState({encrypted: false});
+                return;
+            }
+        }
+
         Modal.createTrackedDialog('Enable encryption', '', QuestionDialog, {
             title: _t('Enable encryption?'),
             description: _t(
