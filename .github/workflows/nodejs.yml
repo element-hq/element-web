@@ -7,6 +7,30 @@ env:
 jobs:
   test:
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        always-auth: true
+        registry-url: https://registry.npmjs.org/
+        scope: "@wordquest"
+    - name: Set node auth token
+      run: echo "NODE_AUTH_TOKEN=${{secrets.NPM_TOKEN}}" >> $GITHUB_ENV
+    - name: Cache Node.js modules
+      uses: actions/cache@v2
+      with:
+        path: |-
+          ~/.yarn-cache
+          **/node_modules
+        key: ${{ runner.OS }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |-
+          ${{ runner.OS }}-yarn-
+          ${{ runner.OS }}-
+    - name: yarn install
+      run: yarn install --cache-folder ~/.yarn-cache --ignore-optional
     - name: yarn test
       if: "!contains(github.event.commits[0].message, '[skip test]')"
       run: yarn run test
