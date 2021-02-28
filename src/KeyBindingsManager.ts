@@ -264,8 +264,17 @@ const autocompleteBindings = (): KeyBinding[] => {
  * Note, this method is only exported for testing.
  */
 export function isKeyComboMatch(ev: KeyboardEvent | React.KeyboardEvent, combo: KeyCombo, onMac: boolean): boolean {
-    if (combo.key !== undefined && ev.key !== combo.key) {
-        return false;
+    if (combo.key !== undefined) {
+        // When shift is pressed, letters are returned as upper case chars. In this case do a lower case comparison.
+        // This works for letter combos such as shift + U as well for none letter combos such as shift + Escape.
+        // If shift is not pressed, the toLowerCase conversion can be avoided.
+        if (ev.shiftKey) {
+            if (ev.key.toLowerCase() !== combo.key.toLowerCase()) {
+                return false;
+            }
+        } else if (ev.key !== combo.key) {
+            return false;
+        }
     }
 
     const comboCtrl = combo.ctrlKey ?? false;
