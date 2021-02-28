@@ -71,6 +71,7 @@ limitations under the License.
     row-gap: 24px;
     text-align: left;
     width: 100%;
+    min-width: 400px;
 }
 
 .mx_RoomDirectory_roomAvatar {
@@ -153,42 +154,5 @@ limitations under the License.
 
     .mx_AccessibleButton {
         padding: 0;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .mx_RoomDirectory_table tr {
-        margin-bottom: 15px !important;
-    }
-
-    .mx_RoomDirectory_roomMemberCount {
-        padding: 0px;
-    }
-
-    .mx_AccessibleButton_kind_secondary {
-        padding: 0px !important;
-    }
-
-    .mx_RoomDirectory_join {
-        margin-left: 0px;
-    }
-
-    .mx_RoomDirectory_alias {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .mx_RoomDirectory_roomDescription {
-        padding-bottom: 0px;
-    }
-
-    .mx_RoomDirectory_name {
-        margin-bottom: 5px;
-    }
-
-    .mx_RoomDirectory_table tr td {
-        margin-top: 5px !important;
-        display: block;
-        text-align: left;
     }
 }
