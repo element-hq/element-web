@@ -20,11 +20,11 @@ import classNames from "classnames";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { Key } from "../../Keyboard";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
+import { getKeyBindingsManager, KeyAction, KeyBindingContext } from "../../KeyBindingsManager";
 
 interface IProps {
     isMinimized: boolean;
@@ -106,18 +106,25 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
-        if (ev.key === Key.ESCAPE) {
-            this.clearInput();
-            defaultDispatcher.fire(Action.FocusComposer);
-        } else if (ev.key === Key.ARROW_UP || ev.key === Key.ARROW_DOWN) {
-            this.props.onVerticalArrow(ev);
-        } else if (ev.key === Key.ENTER) {
-            const shouldClear = this.props.onEnter(ev);
-            if (shouldClear) {
-                // wrap in set immediate to delay it so that we don't clear the filter & then change room
-                setImmediate(() => {
-                    this.clearInput();
-                });
+        const action = getKeyBindingsManager().getAction(KeyBindingContext.RoomList, ev);
+        switch (action) {
+            case KeyAction.RoomListClearSearch:
+                this.clearInput();
+                defaultDispatcher.fire(Action.FocusComposer);
+                break;
+            case KeyAction.RoomListNextRoom:
+            case KeyAction.RoomListPrevRoom:
+                this.props.onVerticalArrow(ev);
+                break;
+            case KeyAction.RoomListSelectRoom: {
+                const shouldClear = this.props.onEnter(ev);
+                if (shouldClear) {
+                    // wrap in set immediate to delay it so that we don't clear the filter & then change room
+                    setImmediate(() => {
+                        this.clearInput();
+                    });
+                }
+                break;
             }
         }
     };

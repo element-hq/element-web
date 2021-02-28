@@ -6,6 +6,12 @@ export enum KeyBindingContext {
     MessageComposer = 'MessageComposer',
     /** Key bindings for text editing autocompletion */
     AutoComplete = 'AutoComplete',
+    /** Left room list sidebar */
+    RoomList = 'RoomList',
+    /** Current room view */
+    Room = 'Room',
+    /** Shortcuts to navigate do various menus / dialogs / screens */
+    Navigation = 'Navigation',
 }
 
 export enum KeyAction {
@@ -51,6 +57,59 @@ export enum KeyAction {
     AutocompletePrevSelection = 'AutocompletePrevSelection',
     /** Move to the next autocomplete selection */
     AutocompleteNextSelection = 'AutocompleteNextSelection',
+
+    // Room list
+
+    /** Clear room list filter field */
+    RoomListClearSearch = 'RoomListClearSearch',
+    /** Navigate up/down in the room list */
+    RoomListPrevRoom = 'RoomListPrevRoom',
+    /** Navigate down in the room list */
+    RoomListNextRoom = 'RoomListNextRoom',
+    /** Select room from the room list */
+    RoomListSelectRoom = 'RoomListSelectRoom',
+    /** Collapse room list section */
+    RoomListCollapseSection = 'RoomListCollapseSection',
+    /** Expand room list section, if already expanded, jump to first room in the selection */
+    RoomListExpandSection = 'RoomListExpandSection',
+
+    // Room
+
+    /** Jump to room search */
+    RoomFocusRoomSearch = 'RoomFocusRoomSearch',
+    /** Scroll up in the timeline */
+    RoomScrollUp = 'RoomScrollUp',
+    /** Scroll down in the timeline */
+    RoomScrollDown = 'RoomScrollDown',
+    /** Dismiss read marker and jump to bottom */
+    RoomDismissReadMarker = 'RoomDismissReadMarker',
+    /* Upload a file */
+    RoomUploadFile = 'RoomUploadFile',
+    /* Search (must be enabled) */
+    RoomSearch = 'RoomSearch',
+    /* Jump to the first (downloaded) message in the room */
+    RoomJumpToFirstMessage = 'RoomJumpToFirstMessage',
+    /* Jump to the latest message in the room */
+    RoomJumpToLatestMessage = 'RoomJumpToLatestMessage',
+
+    // Navigation
+
+    /** Toggle the room side panel */
+    NavToggleRoomSidePanel = 'NavToggleRoomSidePanel',
+    /** Toggle the user menu */
+    NavToggleUserMenu = 'NavToggleUserMenu',
+    /* Toggle the short cut help dialog */
+    NavToggleShortCutDialog = 'NavToggleShortCutDialog',
+    /* Got to the Element home screen */
+    NavGoToHome = 'NavGoToHome',
+    /* Select prev room */
+    NavSelectPrevRoom = 'NavSelectPrevRoom',
+    /* Select next room */
+    NavSelectNextRoom = 'NavSelectNextRoom',
+    /* Select prev room with unread messages*/
+    NavSelectPrevUnreadRoom = 'NavSelectPrevUnreadRoom',
+    /* Select next room with unread messages*/
+    NavSelectNextUnreadRoom = 'NavSelectNextUnreadRoom',
 }
 
 /**
@@ -255,6 +314,188 @@ const autocompleteBindings = (): KeyBinding[] => {
                 key: Key.ARROW_DOWN,
             },
         },
+    ];
+}
+
+const roomListBindings = (): KeyBinding[] => {
+    return [
+        {
+            action: KeyAction.RoomListClearSearch,
+            keyCombo: {
+                key: Key.ESCAPE,
+            },
+        },
+        {
+            action: KeyAction.RoomListPrevRoom,
+            keyCombo: {
+                key: Key.ARROW_UP,
+            },
+        },
+        {
+            action: KeyAction.RoomListNextRoom,
+            keyCombo: {
+                key: Key.ARROW_DOWN,
+            },
+        },
+        {
+            action: KeyAction.RoomListSelectRoom,
+            keyCombo: {
+                key: Key.ENTER,
+            },
+        },
+        {
+            action: KeyAction.RoomListCollapseSection,
+            keyCombo: {
+                key: Key.ARROW_LEFT,
+            },
+        },
+        {
+            action: KeyAction.RoomListExpandSection,
+            keyCombo: {
+                key: Key.ARROW_RIGHT,
+            },
+        },
+    ];
+}
+
+const roomBindings = (): KeyBinding[] => {
+    const bindings = [
+        {
+            action: KeyAction.RoomFocusRoomSearch,
+            keyCombo: {
+                key: Key.K,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.RoomScrollUp,
+            keyCombo: {
+                key: Key.PAGE_UP,
+            },
+        },
+        {
+            action: KeyAction.RoomScrollDown,
+            keyCombo: {
+                key: Key.PAGE_DOWN,
+            },
+        },
+        {
+            action: KeyAction.RoomDismissReadMarker,
+            keyCombo: {
+                key: Key.ESCAPE,
+            },
+        },
+        {
+            action: KeyAction.RoomUploadFile,
+            keyCombo: {
+                key: Key.U,
+                ctrlOrCmd: true,
+                shiftKey: true,
+            },
+        },
+        {
+            action: KeyAction.RoomJumpToFirstMessage,
+            keyCombo: {
+                key: Key.HOME,
+                ctrlKey: true,
+            },
+        },
+        {
+            action: KeyAction.RoomJumpToLatestMessage,
+            keyCombo: {
+                key: Key.END,
+                ctrlKey: true,
+            },
+        },
+    ];
+
+    if (SettingsStore.getValue('ctrlFForSearch')) {
+        bindings.push({
+            action: KeyAction.RoomSearch,
+            keyCombo: {
+                key: Key.F,
+                ctrlOrCmd: true,
+            },
+        });
+    }
+
+    return bindings;
+}
+
+const navigationBindings = (): KeyBinding[] => {
+    return [
+        {
+            action: KeyAction.NavToggleRoomSidePanel,
+            keyCombo: {
+                key: Key.PERIOD,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.NavToggleUserMenu,
+            // Ideally this would be CTRL+P for "Profile", but that's
+            // taken by the print dialog. CTRL+I for "Information"
+            // was previously chosen but conflicted with italics in
+            // composer, so CTRL+` it is
+            keyCombo: {
+                key: Key.BACKTICK,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.NavToggleShortCutDialog,
+            keyCombo: {
+                key: Key.SLASH,
+                ctrlOrCmd: true,
+            },
+        },
+        {
+            action: KeyAction.NavToggleShortCutDialog,
+            keyCombo: {
+                key: Key.SLASH,
+                ctrlOrCmd: true,
+                shiftKey: true,
+            },
+        },
+        {
+            action: KeyAction.NavGoToHome,
+            keyCombo: {
+                key: Key.H,
+                ctrlOrCmd: true,
+                altKey: true,
+            },
+        },
+
+        {
+            action: KeyAction.NavSelectPrevRoom,
+            keyCombo: {
+                key: Key.ARROW_UP,
+                altKey: true,
+            },
+        },
+        {
+            action: KeyAction.NavSelectNextRoom,
+            keyCombo: {
+                key: Key.ARROW_DOWN,
+                altKey: true,
+            },
+        },
+        {
+            action: KeyAction.NavSelectPrevUnreadRoom,
+            keyCombo: {
+                key: Key.ARROW_UP,
+                altKey: true,
+                shiftKey: true,
+            },
+        },
+        {
+            action: KeyAction.NavSelectNextUnreadRoom,
+            keyCombo: {
+                key: Key.ARROW_DOWN,
+                altKey: true,
+                shiftKey: true,
+            },
+        },
     ]
 }
 
@@ -323,6 +564,9 @@ export class KeyBindingsManager {
     contextBindings: Record<KeyBindingContext, KeyBindingsGetter> = {
         [KeyBindingContext.MessageComposer]: messageComposerBindings,
         [KeyBindingContext.AutoComplete]: autocompleteBindings,
+        [KeyBindingContext.RoomList]: roomListBindings,
+        [KeyBindingContext.Room]: roomBindings,
+        [KeyBindingContext.Navigation]: navigationBindings,
     };
 
     /**

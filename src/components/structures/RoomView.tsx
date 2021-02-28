@@ -41,7 +41,6 @@ import rateLimitedFunc from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
-import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent, Key } from '../../Keyboard';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
@@ -79,6 +78,7 @@ import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { getKeyBindingsManager, KeyAction, KeyBindingContext } from '../../KeyBindingsManager';
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -661,26 +661,20 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onReactKeyDown = ev => {
         let handled = false;
 
-        switch (ev.key) {
-            case Key.ESCAPE:
-                if (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey) {
-                    this.messagePanel.forgetReadMarker();
-                    this.jumpToLiveTimeline();
-                    handled = true;
-                }
+        const action = getKeyBindingsManager().getAction(KeyBindingContext.Room, ev);
+        switch (action) {
+            case KeyAction.RoomDismissReadMarker:
+                this.messagePanel.forgetReadMarker();
+                this.jumpToLiveTimeline();
+                handled = true;
                 break;
-            case Key.PAGE_UP:
-                if (!ev.altKey && !ev.ctrlKey && ev.shiftKey && !ev.metaKey) {
-                    this.jumpToReadMarker();
-                    handled = true;
-                }
+            case KeyAction.RoomScrollUp:
+                this.jumpToReadMarker();
+                handled = true;
                 break;
-            case Key.U: // Mac returns lowercase
-            case Key.U.toUpperCase():
-                if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
-                    dis.dispatch({ action: "upload_file" }, true);
-                    handled = true;
-                }
+            case KeyAction.RoomUploadFile:
+                dis.dispatch({ action: "upload_file" }, true);
+                handled = true;
                 break;
         }
 
