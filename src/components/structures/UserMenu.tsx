@@ -103,11 +103,15 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private isUserOnDarkTheme(): boolean {
-        const theme = SettingsStore.getValue("theme");
-        if (theme.startsWith("custom-")) {
-            return getCustomTheme(theme.substring("custom-".length)).is_dark;
+        if (SettingsStore.getValue("use_system_theme")) {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        } else {
+            const theme = SettingsStore.getValue("theme");
+            if (theme.startsWith("custom-")) {
+                return getCustomTheme(theme.substring("custom-".length)).is_dark;
+            }
+            return theme === "dark";
         }
-        return theme === "dark";
     }
 
     private onProfileUpdate = async () => {
@@ -300,7 +304,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 const hostSignupDomains = hostSignupConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
                 const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
-                if (!hostSignupDomains || validDomains.length > 0) {
+                if (!hostSignupConfig.domains || validDomains.length > 0) {
                     topSection = <div onClick={this.onCloseMenu}>
                         <HostSignupAction />
                     </div>;

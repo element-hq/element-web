@@ -15,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
-import { linkifyElement } from '../../../HtmlUtils';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
@@ -30,6 +29,9 @@ import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import RoomTopic from "../elements/RoomTopic";
+import RoomName from "../elements/RoomName";
+import {PlaceCallType} from "../../../CallHandler";
 
 export default class RoomHeader extends React.Component {
     static propTypes = {
@@ -44,6 +46,7 @@ export default class RoomHeader extends React.Component {
         e2eStatus: PropTypes.string,
         onAppsClick: PropTypes.func,
         appsShown: PropTypes.bool,
+        onCallPlaced: PropTypes.func, // (PlaceCallType) => void;
     };
 
     static defaultProps = {
@@ -52,35 +55,13 @@ export default class RoomHeader extends React.Component {
         onCancelClick: null,
     };
 
-    constructor(props) {
-        super(props);
-
-        this._topic = createRef();
-    }
-
     componentDidMount() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
         cli.on("Room.accountData", this._onRoomAccountData);
-
-        // When a room name occurs, RoomState.events is fired *before*
-        // room.name is updated. So we have to listen to Room.name as well as
-        // RoomState.events.
-        if (this.props.room) {
-            this.props.room.on("Room.name", this._onRoomNameChange);
-        }
-    }
-
-    componentDidUpdate() {
-        if (this._topic.current) {
-            linkifyElement(this._topic.current);
-        }
     }
 
     componentWillUnmount() {
-        if (this.props.room) {
-            this.props.room.removeListener("Room.name", this._onRoomNameChange);
-        }
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.events", this._onRoomStateEvents);
@@ -108,10 +89,6 @@ export default class RoomHeader extends React.Component {
         /* eslint-disable babel/no-invalid-this */
         this.forceUpdate();
     }, 500);
-
-    _onRoomNameChange = (room) => {
-        this.forceUpdate();
-    };
 
     _hasUnreadPins() {
         const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
@@ -170,29 +147,28 @@ export default class RoomHeader extends React.Component {
             }
         }
 
-        let roomName = _t("Join Room");
+        let oobName = _t("Join Room");
         if (this.props.oobData && this.props.oobData.name) {
-            roomName = this.props.oobData.name;
-        } else if (this.props.room) {
-            roomName = this.props.room.name;
+            oobName = this.props.oobData.name;
         }
 
         const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
         const name =
             <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>
+                <RoomName room={this.props.room}>
+                    {(name) => {
+                        const roomName = name || oobName;
+                        return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
+                    }}
+                </RoomName>
                 { searchStatus }
             </div>;
 
-        let topic;
-        if (this.props.room) {
-            const ev = this.props.room.currentState.getStateEvents('m.room.topic', '');
-            if (ev) {
-                topic = ev.getContent().topic;
-            }
-        }
-        const topicElement =
-            <div className="mx_RoomHeader_topic" ref={this._topic} title={topic} dir="auto">{ topic }</div>;
+        const topicElement = <RoomTopic room={this.props.room}>
+            {(topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
+                { topic }
+            </div>}
+        </RoomTopic>;
 
         let roomAvatar;
         if (this.props.room) {
@@ -252,8 +228,26 @@ export default class RoomHeader extends React.Component {
                     title={_t("Search")} />;
         }
 
+        let voiceCallButton;
+        let videoCallButton;
+        if (this.props.inRoom && SettingsStore.getValue("showCallButtonsInComposer")) {
+            voiceCallButton =
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
+                    onClick={() => this.props.onCallPlaced(PlaceCallType.Voice)}
+                    title={_t("Voice call")} />;
+            videoCallButton =
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
+                    onClick={(ev) => this.props.onCallPlaced(
+                        ev.shiftKey ? PlaceCallType.ScreenSharing : PlaceCallType.Video)}
+                    title={_t("Video call")} />;
+        }
+
         const rightRow =
             <div className="mx_RoomHeader_buttons">
+                { videoCallButton }
+                { voiceCallButton }
                 { pinnedEventsButton }
                 { forgetButton }
                 { appsButton }

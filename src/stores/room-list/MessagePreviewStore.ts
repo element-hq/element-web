@@ -124,7 +124,10 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         let changed = false;
         for (let i = events.length - 1; i >= 0; i--) {
-            if (i === events.length - MAX_EVENTS_BACKWARDS) return; // limit reached
+            if (i === events.length - MAX_EVENTS_BACKWARDS) {
+                // limit reached - clear the preview by breaking out of the loop
+                break;
+            }
 
             const event = events[i];
             const previewDef = PREVIEWS[event.getType()];

@@ -34,11 +34,10 @@ import ResizeNotifier from '../../utils/ResizeNotifier';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import * as sdk from '../../index';
-import CallHandler from '../../CallHandler';
+import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
 import Tinter from '../../Tinter';
 import rateLimitedFunc from '../../ratelimitedfunc';
-import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
 import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent, Key } from '../../Keyboard';
@@ -48,6 +47,7 @@ import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
+import {Layout} from "../../settings/Layout";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import { haveTileForEvent } from "../views/rooms/EventTile";
@@ -79,6 +79,7 @@ import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { objectHasDiff } from "../../utils/objects";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -181,7 +182,7 @@ export interface IState {
     };
     canReact: boolean;
     canReply: boolean;
-    useIRCLayout: boolean;
+    layout: Layout;
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
@@ -236,7 +237,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             statusBarVisible: false,
             canReact: false,
             canReply: false,
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
         };
 
@@ -264,7 +265,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         this.showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
             this.onReadReceiptsChange);
-        this.layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
+        this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, this.onLayoutChange);
     }
 
     private onWidgetStoreUpdate = () => {
@@ -522,8 +523,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
-                !ObjectUtils.shallowEqual(this.state, nextState));
+        return (objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState));
     }
 
     componentDidUpdate() {
@@ -638,7 +638,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onLayoutChange = () => {
         this.setState({
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
         });
     };
 
@@ -1352,6 +1352,14 @@ export default class RoomView extends React.Component<IProps, IState> {
         SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
     };
 
+    private onCallPlaced = (type: PlaceCallType) => {
+        dis.dispatch({
+            action: 'place_call',
+            type: type,
+            room_id: this.state.room.roomId,
+        });
+    };
+
     private onSettingsClick = () => {
         dis.dispatch({ action: "open_room_settings" });
     };
@@ -1945,8 +1953,8 @@ export default class RoomView extends React.Component<IProps, IState> {
         const messagePanelClassNames = classNames(
             "mx_RoomView_messagePanel",
             {
-                "mx_IRCLayout": this.state.useIRCLayout,
-                "mx_GroupLayout": !this.state.useIRCLayout,
+                "mx_IRCLayout": this.state.layout == Layout.IRC,
+                "mx_GroupLayout": this.state.layout == Layout.Group,
             });
 
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
@@ -1969,7 +1977,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
                 showReactions={true}
-                useIRCLayout={this.state.useIRCLayout}
+                layout={this.state.layout}
             />);
 
         let topUnreadMessagesBar = null;
@@ -2031,6 +2039,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? this.onAppsClick : null}
                             appsShown={this.state.showApps}
+                            onCallPlaced={this.onCallPlaced}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">

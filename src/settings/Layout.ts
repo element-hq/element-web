@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_VideoFeed_remote {
-    width: 100%;
-    max-height: 100%;
-    background-color: #000;
-    z-index: 50;
+import PropTypes from 'prop-types';
+
+/* TODO: This should be later reworked into something more generic */
+export enum Layout {
+    IRC = "irc",
+    Group = "group"
 }
 
-.mx_VideoFeed_local {
-    width: 25%;
-    height: 25%;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 100;
-    border-radius: 4px;
-}
-
-.mx_VideoFeed_mirror {
-    transform: scale(-1, 1);
-}
+/* We need this because multiple components are still using JavaScript */
+export const LayoutPropType = PropTypes.oneOf(Object.values(Layout));

@@ -58,8 +58,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
     private updateFn = new MarkedExecution(() => {
-        for (const tagId of Object.keys(this.unfilteredLists)) {
-            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.unfilteredLists[tagId]);
+        for (const tagId of Object.keys(this.orderedLists)) {
+            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.orderedLists[tagId]);
         }
         this.emit(LISTS_UPDATE_EVENT);
     });
@@ -398,6 +398,15 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
+        if (cause === RoomUpdateCause.NewRoom) {
+            // Let the visibility provider know that there is a new invited room. It would be nice
+            // if this could just be an event that things listen for but the point of this is that
+            // we delay doing anything about this room until the VoipUserMapper had had a chance
+            // to do the things it needs to do to decide if we should show this room or not, so
+            // an even wouldn't et us do that.
+            await VisibilityProvider.instance.onNewInvitedRoom(room);
+        }
+
         if (!VisibilityProvider.instance.isRoomVisible(room)) {
             return; // don't do anything on rooms that aren't visible
         }

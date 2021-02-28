@@ -1040,9 +1040,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-                        'm.id.phone': userId,
-                    });
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw new Error("Unable to find Matrix ID for phone number");
                     }
@@ -1182,7 +1180,7 @@ export function parseCommandString(input: string) {
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {

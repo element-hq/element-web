@@ -3058,5 +3058,7 @@
     "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.": "Tudjon meg többet innen: <privacyPolicyLink />, <termsOfServiceLink /> és <cookiePolicyLink />.",
     "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "Folytatva %(hostSignupBrand)s beállítási folyamat ideiglenes hozzáférést kap a fiókadatok elérésére az ellenőrzött e-mail cím megszerzésének érdekében. Ezt az adat nincs elmenetve.",
     "Failed to connect to your homeserver. Please close this dialog and try again.": "A matrix szerverhez való csatlakozás nem sikerült. Zárja be ezt az ablakot és próbálja újra.",
-    "Abort": "Megszakítás"
+    "Abort": "Megszakítás",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Biztos benne, hogy meg kívánja szakítani a gazdagép létrehozásának a folyamatát? A folyamat nem folytatható.",
+    "Confirm abort of host creation": "Erősítse meg a gazdagép készítés megszakítását"
 }
