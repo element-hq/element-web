@@ -454,8 +454,26 @@ export default class EventTile extends React.Component {
     };
 
     getReadAvatars() {
-        // return early if there are no read receipts
+        // return early if there are no read receipts, with our message state if applicable
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
+            const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+            const myUserId = MatrixClientPeg.get().getUserId();
+            if (this.props.mxEvent.getSender() === myUserId && room) {
+                // We only search for the most recent 50 events because surely someone will have
+                // sent *something* in that time, even if it is a membership event or something.
+                const readUsers = room.getUsersWhoHaveRead(this.props.mxEvent, 50);
+                const hasBeenRead = readUsers.length === 0 || readUsers.some(u => u !== myUserId);
+                console.log(room.getUsersReadUpTo(this.props.mxEvent));
+                let receipt = null;
+                if (!this.props.eventSendStatus || this.props.eventSendStatus === 'sent') {
+                    if (!hasBeenRead) {
+                        receipt = <span className='mx_EventTile_receiptSent' />;
+                    }
+                } else {
+                    receipt = <span className='mx_EventTile_receiptSending' />;
+                }
+                return <span className="mx_EventTile_readAvatars">{receipt}</span>;
+            }
             return (<span className="mx_EventTile_readAvatars" />);
         }
 
@@ -692,6 +710,7 @@ export default class EventTile extends React.Component {
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
+            // Note: we keep these sending state classes for tests, not for our styles
             mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
             mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',

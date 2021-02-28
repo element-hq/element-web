@@ -158,6 +158,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
             "mx_EventTile": true,
+            // Note: we keep these sending state classes for tests, not for our styles
             "mx_EventTile_sending": isSending,
             "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });
