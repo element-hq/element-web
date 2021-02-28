@@ -34,3 +34,15 @@ jobs:
     - name: yarn test
       if: "!contains(github.event.commits[0].message, '[skip test]')"
       run: yarn run test
+  build:
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Build, tag, and push site-deploy to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: element-web
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -f ~/docker/Dockerfile ./ -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
