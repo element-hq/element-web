@@ -210,7 +210,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         });
     }
 
-    _onRoomAccessRadioToggle = async (roomAccess) => {
+    _onRoomAccessRadioToggle = (roomAccess) => {
         if (
             this.state.encrypted &&
             this.state.joinRule != "public" &&
