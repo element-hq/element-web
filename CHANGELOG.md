@@ -1,3 +1,20 @@
+Changes in [1.7.22](https://github.com/vector-im/element-web/releases/tag/v1.7.22) (2021-03-01)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.22-rc.1...v1.7.22)
+
+## Security notice
+
+Element Web 1.7.22 fixes (by upgrading to matrix-react-sdk 3.15.0) a low
+severity issue (CVE-2021-21320) where the user content sandbox can be abused to
+trick users into opening unexpected documents. The content is opened with a
+`blob` origin that cannot access Matrix user data, so messages and secrets are
+not at risk.  Thanks to @keerok for responsibly disclosing this via Matrix's
+Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.15.0 and JS SDK 9.8.0
+
 Changes in [1.7.22-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.22-rc.1) (2021-02-24)
 =========================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.21...v1.7.22-rc.1)
