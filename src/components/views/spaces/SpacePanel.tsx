@@ -56,9 +56,10 @@ const SpaceButton: React.FC<IButtonProps> = ({
 }) => {
     const classes = classNames("mx_SpaceButton", className, {
         mx_SpaceButton_active: selected,
+        mx_SpaceButton_narrow: isNarrow,
     });
 
-    let avatar = <div className="mx_SpaceButton_avatarPlaceholder" />;
+    let avatar = <div className="mx_SpaceButton_avatarPlaceholder"><div className="mx_SpaceButton_icon" /></div>;
     if (space) {
         avatar = <RoomAvatar width={32} height={32} room={space} />;
     }
@@ -74,18 +75,22 @@ const SpaceButton: React.FC<IButtonProps> = ({
     if (isNarrow) {
         button = (
             <RovingAccessibleTooltipButton className={classes} title={tooltip} onClick={onClick} role="treeitem">
-                { avatar }
-                { notifBadge }
-                { children }
+                <div className="mx_SpaceButton_selectionWrapper">
+                    { avatar }
+                    { notifBadge }
+                    { children }
+                </div>
             </RovingAccessibleTooltipButton>
         );
     } else {
         button = (
             <RovingAccessibleButton className={classes} onClick={onClick} role="treeitem">
-                { avatar }
-                <span className="mx_SpaceButton_name">{ tooltip }</span>
-                { notifBadge }
-                { children }
+                <div className="mx_SpaceButton_selectionWrapper">
+                    { avatar }
+                    <span className="mx_SpaceButton_name">{ tooltip }</span>
+                    { notifBadge }
+                    { children }
+                </div>
             </RovingAccessibleButton>
         );
     }
