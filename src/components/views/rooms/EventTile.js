@@ -264,6 +264,79 @@ export default class EventTile extends React.Component {
 
         this._tile = createRef();
         this._replyThread = createRef();
+
+        // Throughout the component we manage a read receipt listener to see if our tile still
+        // qualifies for a "sent" or "sending" state (based on their relevant conditions). We
+        // don't want to over-subscribe to the read receipt events being fired, so we use a flag
+        // to determine if we've already subscribed and use a combination of other flags to find
+        // out if we should even be subscribed at all.
+        this._isListeningForReceipts = false;
+    }
+
+    /**
+     * When true, the tile qualifies for some sort of special read receipt. This could be a 'sending'
+     * or 'sent' receipt, for example.
+     * @returns {boolean}
+     * @private
+     */
+    get _isEligibleForSpecialReceipt() {
+        // First, if there are other read receipts then just short-circuit this.
+        if (this.props.readReceipts && this.props.readReceipts.length > 0) return false;
+        if (!this.props.mxEvent) return false;
+
+        // Sanity check (should never happen, but we shouldn't explode if it does)
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        if (!room) return false;
+
+        // Quickly check to see if the event was sent by us. If it wasn't, it won't qualify for
+        // special read receipts.
+        const myUserId = MatrixClientPeg.get().getUserId();
+        if (this.props.mxEvent.getSender() !== myUserId) return false;
+
+        // Finally, determine if the type is relevant to the user. This notably excludes state
+        // events and pretty much anything that can't be sent by the composer as a message. For
+        // those we rely on local echo giving the impression of things changing, and expect them
+        // to be quick.
+        const simpleSendableEvents = [EventType.Sticker, EventType.RoomMessage, EventType.RoomMessageEncrypted];
+        if (!simpleSendableEvents.includes(this.props.mxEvent.getType())) return false;
+
+        // Default case
+        return true;
+    }
+
+    get _shouldShowSentReceipt() {
+        // If we're not even eligible, don't show the receipt.
+        if (!this._isEligibleForSpecialReceipt) return false;
+
+        // Check to make sure the sending state is appropriate. A null/undefined send status means
+        // that the message is 'sent', so we're just double checking that it's explicitly not sent.
+        if (this.props.eventSendStatus && this.props.eventSendStatus !== 'sent') return false;
+
+        // No point in doing the complex math if we're not going to even show this special receipt.
+        if (this._shouldShowSendingReceipt) return false;
+
+        // Next we check to see if any newer events have read receipts. If they do then we don't
+        // show our special state - the user already has feedback about their message. We only
+        // search for the most recent 50 events because surely someone will have sent *something*
+        // in that time, even if it is a membership event or something.
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        const myUserId = MatrixClientPeg.get().getUserId();
+        const readUsers = room.getUsersWhoHaveRead(this.props.mxEvent, 50);
+        const hasBeenRead = readUsers.length === 0 || readUsers.some(u => u !== myUserId);
+        return !hasBeenRead;
+    }
+
+    get _shouldShowSendingReceipt() {
+        // If we're not even eligible, don't show the receipt.
+        if (!this._isEligibleForSpecialReceipt) return false;
+
+        // Check the event send status to see if we are pending. Null/undefined status means the
+        // message was sent, so check for that and 'sent' explicitly.
+        if (!this.props.eventSendStatus || this.props.eventSendStatus === 'sent') return false;
+
+        // Default to showing - there's no other event properties/behaviours we care about at
+        // this point.
+        return true;
     }
 
     // TODO: [REACT-WARNING] Move into constructor
@@ -280,6 +353,11 @@ export default class EventTile extends React.Component {
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
+        }
+
+        if (this._shouldShowSentReceipt || this._shouldShowSendingReceipt) {
+            client.on("Room.receipt", this._onRoomReceipt);
+            this._isListeningForReceipts = true;
         }
     }
 
@@ -305,11 +383,39 @@ export default class EventTile extends React.Component {
         const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         client.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+        client.removeListener("Room.receipt", this._onRoomReceipt);
+        this._isListeningForReceipts = false;
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
         }
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // If we're not listening for receipts and expect to be, register a listener.
+        if (!this._isListeningForReceipts && (this._shouldShowSentReceipt || this._shouldShowSendingReceipt)) {
+            this.context.on("Room.receipt", this._onRoomReceipt);
+            this._isListeningForReceipts = true;
+        }
+    }
+
+    _onRoomReceipt = (ev, room) => {
+        // ignore events for other rooms
+        const tileRoom = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        if (room !== tileRoom) return;
+
+        if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt && !this._isListeningForReceipts) {
+            return;
+        }
+
+        this.forceUpdate(() => {
+            // Per elsewhere in this file, we can remove the listener once we will have no further purpose for it.
+            if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt) {
+                this.context.removeListener("Room.receipt", this._onRoomReceipt);
+                this._isListeningForReceipts = false;
+            }
+        });
+    };
 
     /** called when the event is decrypted after we show it.
      */
@@ -454,26 +560,15 @@ export default class EventTile extends React.Component {
     };
 
     getReadAvatars() {
-        // return early if there are no read receipts, with our message state if applicable
+        if (this._shouldShowSentReceipt) {
+            return <span className="mx_EventTile_readAvatars"><span className='mx_EventTile_receiptSent' /></span>;
+        }
+        if (this._shouldShowSendingReceipt) {
+            return <span className="mx_EventTile_readAvatars"><span className='mx_EventTile_receiptSending' /></span>;
+        }
+
+        // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            const room = this.context.getRoom(this.props.mxEvent.getRoomId());
-            const myUserId = MatrixClientPeg.get().getUserId();
-            if (this.props.mxEvent.getSender() === myUserId && room) {
-                // We only search for the most recent 50 events because surely someone will have
-                // sent *something* in that time, even if it is a membership event or something.
-                const readUsers = room.getUsersWhoHaveRead(this.props.mxEvent, 50);
-                const hasBeenRead = readUsers.length === 0 || readUsers.some(u => u !== myUserId);
-                console.log(room.getUsersReadUpTo(this.props.mxEvent));
-                let receipt = null;
-                if (!this.props.eventSendStatus || this.props.eventSendStatus === 'sent') {
-                    if (!hasBeenRead) {
-                        receipt = <span className='mx_EventTile_receiptSent' />;
-                    }
-                } else {
-                    receipt = <span className='mx_EventTile_receiptSending' />;
-                }
-                return <span className="mx_EventTile_readAvatars">{receipt}</span>;
-            }
             return (<span className="mx_EventTile_readAvatars" />);
         }
 
