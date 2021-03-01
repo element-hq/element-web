@@ -668,7 +668,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 this.jumpToLiveTimeline();
                 handled = true;
                 break;
-            case RoomAction.ScrollUp:
+            case RoomAction.JumpToOldestUnread:
                 this.jumpToReadMarker();
                 handled = true;
                 break;

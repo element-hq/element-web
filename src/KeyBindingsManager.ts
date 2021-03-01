@@ -70,6 +70,8 @@ export enum RoomAction {
     RoomScrollDown = 'RoomScrollDown',
     /** Dismiss read marker and jump to bottom */
     DismissReadMarker = 'DismissReadMarker',
+    /** Jump to oldest unread message */
+    JumpToOldestUnread = 'JumpToOldestUnread',
     /* Upload a file */
     UploadFile = 'UploadFile',
     /* Focus search message in a room (must be enabled) */
