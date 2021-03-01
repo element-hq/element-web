@@ -78,7 +78,7 @@ import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
-import { getKeyBindingsManager, KeyAction, KeyBindingContext } from '../../KeyBindingsManager';
+import { getKeyBindingsManager, RoomAction } from '../../KeyBindingsManager';
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -661,18 +661,18 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onReactKeyDown = ev => {
         let handled = false;
 
-        const action = getKeyBindingsManager().getAction(KeyBindingContext.Room, ev);
+        const action = getKeyBindingsManager().getRoomAction(ev);
         switch (action) {
-            case KeyAction.RoomDismissReadMarker:
+            case RoomAction.DismissReadMarker:
                 this.messagePanel.forgetReadMarker();
                 this.jumpToLiveTimeline();
                 handled = true;
                 break;
-            case KeyAction.RoomScrollUp:
+            case RoomAction.ScrollUp:
                 this.jumpToReadMarker();
                 handled = true;
                 break;
-            case KeyAction.RoomUploadFile:
+            case RoomAction.UploadFile:
                 dis.dispatch({ action: "upload_file" }, true);
                 handled = true;
                 break;

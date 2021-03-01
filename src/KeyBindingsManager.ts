@@ -1,24 +1,8 @@
 import { isMac, Key } from './Keyboard';
 import SettingsStore from './settings/SettingsStore';
 
-export enum KeyBindingContext {
-    /** Key bindings for the chat message composer component */
-    MessageComposer = 'MessageComposer',
-    /** Key bindings for text editing autocompletion */
-    AutoComplete = 'AutoComplete',
-    /** Left room list sidebar */
-    RoomList = 'RoomList',
-    /** Current room view */
-    Room = 'Room',
-    /** Shortcuts to navigate do various menus / dialogs / screens */
-    Navigation = 'Navigation',
-}
-
-export enum KeyAction {
-    None = 'None',
-
-    // SendMessageComposer actions:
-
+/** Actions for the chat message composer component */
+export enum MessageComposerAction {
     /** Send a message */
     Send = 'Send',
     /** Go backwards through the send history and use the message in composer view */
@@ -46,70 +30,74 @@ export enum KeyAction {
     NewLine = 'NewLine',
     MoveCursorToStart = 'MoveCursorToStart',
     MoveCursorToEnd = 'MoveCursorToEnd',
+}
 
-    // Autocomplete
-
+/** Actions for text editing autocompletion */
+export enum AutocompleteAction {
     /** Apply the current autocomplete selection */
-    AutocompleteApply = 'AutocompleteApply',
+    ApplySelection = 'ApplySelection',
     /** Cancel autocompletion */
-    AutocompleteCancel = 'AutocompleteCancel',
+    Cancel = 'Cancel',
     /** Move to the previous autocomplete selection */
-    AutocompletePrevSelection = 'AutocompletePrevSelection',
+    PrevSelection = 'PrevSelection',
     /** Move to the next autocomplete selection */
-    AutocompleteNextSelection = 'AutocompleteNextSelection',
+    NextSelection = 'NextSelection',
+}
 
-    // Room list
-
+/** Actions for the left room list sidebar */
+export enum RoomListAction {
     /** Clear room list filter field */
-    RoomListClearSearch = 'RoomListClearSearch',
+    ClearSearch = 'ClearSearch',
     /** Navigate up/down in the room list */
-    RoomListPrevRoom = 'RoomListPrevRoom',
+    PrevRoom = 'PrevRoom',
     /** Navigate down in the room list */
-    RoomListNextRoom = 'RoomListNextRoom',
+    NextRoom = 'NextRoom',
     /** Select room from the room list */
-    RoomListSelectRoom = 'RoomListSelectRoom',
+    SelectRoom = 'SelectRoom',
     /** Collapse room list section */
-    RoomListCollapseSection = 'RoomListCollapseSection',
+    CollapseSection = 'CollapseSection',
     /** Expand room list section, if already expanded, jump to first room in the selection */
-    RoomListExpandSection = 'RoomListExpandSection',
+    ExpandSection = 'ExpandSection',
+}
 
-    // Room
-
-    /** Jump to room search */
-    RoomFocusRoomSearch = 'RoomFocusRoomSearch',
+/** Actions for the current room view */
+export enum RoomAction {
+    /** Jump to room search (search for a room)*/
+    FocusRoomSearch = 'FocusRoomSearch', // TODO: move to NavigationAction?
     /** Scroll up in the timeline */
-    RoomScrollUp = 'RoomScrollUp',
+    ScrollUp = 'ScrollUp',
     /** Scroll down in the timeline */
     RoomScrollDown = 'RoomScrollDown',
     /** Dismiss read marker and jump to bottom */
-    RoomDismissReadMarker = 'RoomDismissReadMarker',
+    DismissReadMarker = 'DismissReadMarker',
     /* Upload a file */
-    RoomUploadFile = 'RoomUploadFile',
-    /* Search (must be enabled) */
-    RoomSearch = 'RoomSearch',
+    UploadFile = 'UploadFile',
+    /* Focus search message in a room (must be enabled) */
+    FocusSearch = 'FocusSearch',
     /* Jump to the first (downloaded) message in the room */
-    RoomJumpToFirstMessage = 'RoomJumpToFirstMessage',
+    JumpToFirstMessage = 'JumpToFirstMessage',
     /* Jump to the latest message in the room */
-    RoomJumpToLatestMessage = 'RoomJumpToLatestMessage',
+    JumpToLatestMessage = 'JumpToLatestMessage',
+}
 
-    // Navigation
-
+/** Actions for navigating do various menus / dialogs / screens */
+export enum NavigationAction {
     /** Toggle the room side panel */
-    NavToggleRoomSidePanel = 'NavToggleRoomSidePanel',
+    ToggleRoomSidePanel = 'ToggleRoomSidePanel',
     /** Toggle the user menu */
-    NavToggleUserMenu = 'NavToggleUserMenu',
+    ToggleUserMenu = 'ToggleUserMenu',
     /* Toggle the short cut help dialog */
-    NavToggleShortCutDialog = 'NavToggleShortCutDialog',
+    ToggleShortCutDialog = 'ToggleShortCutDialog',
     /* Got to the Element home screen */
-    NavGoToHome = 'NavGoToHome',
+    GoToHome = 'GoToHome',
     /* Select prev room */
-    NavSelectPrevRoom = 'NavSelectPrevRoom',
+    SelectPrevRoom = 'SelectPrevRoom',
     /* Select next room */
-    NavSelectNextRoom = 'NavSelectNextRoom',
+    SelectNextRoom = 'SelectNextRoom',
     /* Select prev room with unread messages*/
-    NavSelectPrevUnreadRoom = 'NavSelectPrevUnreadRoom',
+    SelectPrevUnreadRoom = 'SelectPrevUnreadRoom',
     /* Select next room with unread messages*/
-    NavSelectNextUnreadRoom = 'NavSelectNextUnreadRoom',
+    SelectNextUnreadRoom = 'SelectNextUnreadRoom',
 }
 
 /**
@@ -129,15 +117,15 @@ export type KeyCombo = {
     shiftKey?: boolean;
 }
 
-export type KeyBinding = {
-    action: KeyAction;
+export type KeyBinding<T extends string> = {
+    action: T;
     keyCombo: KeyCombo;
 }
 
-const messageComposerBindings = (): KeyBinding[] => {
-    const bindings: KeyBinding[] = [
+const messageComposerBindings = (): KeyBinding<MessageComposerAction>[] => {
+    const bindings: KeyBinding<MessageComposerAction>[] = [
         {
-            action: KeyAction.SelectPrevSendHistory,
+            action: MessageComposerAction.SelectPrevSendHistory,
             keyCombo: {
                 key: Key.ARROW_UP,
                 altKey: true,
@@ -145,7 +133,7 @@ const messageComposerBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.SelectNextSendHistory,
+            action: MessageComposerAction.SelectNextSendHistory,
             keyCombo: {
                 key: Key.ARROW_DOWN,
                 altKey: true,
@@ -153,39 +141,39 @@ const messageComposerBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.EditPrevMessage,
+            action: MessageComposerAction.EditPrevMessage,
             keyCombo: {
                 key: Key.ARROW_UP,
             },
         },
         {
-            action: KeyAction.EditNextMessage,
+            action: MessageComposerAction.EditNextMessage,
             keyCombo: {
                 key: Key.ARROW_DOWN,
             },
         },
         {
-            action: KeyAction.CancelEditing,
+            action: MessageComposerAction.CancelEditing,
             keyCombo: {
                 key: Key.ESCAPE,
             },
         },
         {
-            action: KeyAction.FormatBold,
+            action: MessageComposerAction.FormatBold,
             keyCombo: {
                 key: Key.B,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: KeyAction.FormatItalics,
+            action: MessageComposerAction.FormatItalics,
             keyCombo: {
                 key: Key.I,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: KeyAction.FormatQuote,
+            action: MessageComposerAction.FormatQuote,
             keyCombo: {
                 key: Key.GREATER_THAN,
                 ctrlOrCmd: true,
@@ -193,7 +181,7 @@ const messageComposerBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.EditUndo,
+            action: MessageComposerAction.EditUndo,
             keyCombo: {
                 key: Key.Z,
                 ctrlOrCmd: true,
@@ -201,14 +189,14 @@ const messageComposerBindings = (): KeyBinding[] => {
         },
         // Note: the following two bindings also work with just HOME and END, add them here?
         {
-            action: KeyAction.MoveCursorToStart,
+            action: MessageComposerAction.MoveCursorToStart,
             keyCombo: {
                 key: Key.HOME,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: KeyAction.MoveCursorToEnd,
+            action: MessageComposerAction.MoveCursorToEnd,
             keyCombo: {
                 key: Key.END,
                 ctrlOrCmd: true,
@@ -217,7 +205,7 @@ const messageComposerBindings = (): KeyBinding[] => {
     ];
     if (isMac) {
         bindings.push({
-            action: KeyAction.EditRedo,
+            action: MessageComposerAction.EditRedo,
             keyCombo: {
                 key: Key.Z,
                 ctrlOrCmd: true,
@@ -226,7 +214,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         });
     } else {
         bindings.push({
-            action: KeyAction.EditRedo,
+            action: MessageComposerAction.EditRedo,
             keyCombo: {
                 key: Key.Y,
                 ctrlOrCmd: true,
@@ -235,27 +223,27 @@ const messageComposerBindings = (): KeyBinding[] => {
     }
     if (SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend')) {
         bindings.push({
-            action: KeyAction.Send,
+            action: MessageComposerAction.Send,
             keyCombo: {
                 key: Key.ENTER,
                 ctrlOrCmd: true,
             },
         });
         bindings.push({
-            action: KeyAction.NewLine,
+            action: MessageComposerAction.NewLine,
             keyCombo: {
                 key: Key.ENTER,
             },
         });
     } else {
         bindings.push({
-            action: KeyAction.Send,
+            action: MessageComposerAction.Send,
             keyCombo: {
                 key: Key.ENTER,
             },
         });
         bindings.push({
-            action: KeyAction.NewLine,
+            action: MessageComposerAction.NewLine,
             keyCombo: {
                 key: Key.ENTER,
                 shiftKey: true,
@@ -263,7 +251,7 @@ const messageComposerBindings = (): KeyBinding[] => {
         });
         if (isMac) {
             bindings.push({
-                action: KeyAction.NewLine,
+                action: MessageComposerAction.NewLine,
                 keyCombo: {
                     key: Key.ENTER,
                     altKey: true,
@@ -274,42 +262,42 @@ const messageComposerBindings = (): KeyBinding[] => {
     return bindings;
 }
 
-const autocompleteBindings = (): KeyBinding[] => {
+const autocompleteBindings = (): KeyBinding<AutocompleteAction>[] => {
     return [
         {
-            action: KeyAction.AutocompleteApply,
+            action: AutocompleteAction.ApplySelection,
             keyCombo: {
                 key: Key.TAB,
             },
         },
         {
-            action: KeyAction.AutocompleteApply,
+            action: AutocompleteAction.ApplySelection,
             keyCombo: {
                 key: Key.TAB,
                 ctrlKey: true,
             },
         },
         {
-            action: KeyAction.AutocompleteApply,
+            action: AutocompleteAction.ApplySelection,
             keyCombo: {
                 key: Key.TAB,
                 shiftKey: true,
             },
         },
         {
-            action: KeyAction.AutocompleteCancel,
+            action: AutocompleteAction.Cancel,
             keyCombo: {
                 key: Key.ESCAPE,
             },
         },
         {
-            action: KeyAction.AutocompletePrevSelection,
+            action: AutocompleteAction.PrevSelection,
             keyCombo: {
                 key: Key.ARROW_UP,
             },
         },
         {
-            action: KeyAction.AutocompleteNextSelection,
+            action: AutocompleteAction.NextSelection,
             keyCombo: {
                 key: Key.ARROW_DOWN,
             },
@@ -317,40 +305,40 @@ const autocompleteBindings = (): KeyBinding[] => {
     ];
 }
 
-const roomListBindings = (): KeyBinding[] => {
+const roomListBindings = (): KeyBinding<RoomListAction>[] => {
     return [
         {
-            action: KeyAction.RoomListClearSearch,
+            action: RoomListAction.ClearSearch,
             keyCombo: {
                 key: Key.ESCAPE,
             },
         },
         {
-            action: KeyAction.RoomListPrevRoom,
+            action: RoomListAction.PrevRoom,
             keyCombo: {
                 key: Key.ARROW_UP,
             },
         },
         {
-            action: KeyAction.RoomListNextRoom,
+            action: RoomListAction.NextRoom,
             keyCombo: {
                 key: Key.ARROW_DOWN,
             },
         },
         {
-            action: KeyAction.RoomListSelectRoom,
+            action: RoomListAction.SelectRoom,
             keyCombo: {
                 key: Key.ENTER,
             },
         },
         {
-            action: KeyAction.RoomListCollapseSection,
+            action: RoomListAction.CollapseSection,
             keyCombo: {
                 key: Key.ARROW_LEFT,
             },
         },
         {
-            action: KeyAction.RoomListExpandSection,
+            action: RoomListAction.ExpandSection,
             keyCombo: {
                 key: Key.ARROW_RIGHT,
             },
@@ -358,35 +346,35 @@ const roomListBindings = (): KeyBinding[] => {
     ];
 }
 
-const roomBindings = (): KeyBinding[] => {
+const roomBindings = (): KeyBinding<RoomAction>[] => {
     const bindings = [
         {
-            action: KeyAction.RoomFocusRoomSearch,
+            action: RoomAction.FocusRoomSearch,
             keyCombo: {
                 key: Key.K,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: KeyAction.RoomScrollUp,
+            action: RoomAction.ScrollUp,
             keyCombo: {
                 key: Key.PAGE_UP,
             },
         },
         {
-            action: KeyAction.RoomScrollDown,
+            action: RoomAction.RoomScrollDown,
             keyCombo: {
                 key: Key.PAGE_DOWN,
             },
         },
         {
-            action: KeyAction.RoomDismissReadMarker,
+            action: RoomAction.DismissReadMarker,
             keyCombo: {
                 key: Key.ESCAPE,
             },
         },
         {
-            action: KeyAction.RoomUploadFile,
+            action: RoomAction.UploadFile,
             keyCombo: {
                 key: Key.U,
                 ctrlOrCmd: true,
@@ -394,14 +382,14 @@ const roomBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.RoomJumpToFirstMessage,
+            action: RoomAction.JumpToFirstMessage,
             keyCombo: {
                 key: Key.HOME,
                 ctrlKey: true,
             },
         },
         {
-            action: KeyAction.RoomJumpToLatestMessage,
+            action: RoomAction.JumpToLatestMessage,
             keyCombo: {
                 key: Key.END,
                 ctrlKey: true,
@@ -411,7 +399,7 @@ const roomBindings = (): KeyBinding[] => {
 
     if (SettingsStore.getValue('ctrlFForSearch')) {
         bindings.push({
-            action: KeyAction.RoomSearch,
+            action: RoomAction.FocusSearch,
             keyCombo: {
                 key: Key.F,
                 ctrlOrCmd: true,
@@ -422,17 +410,17 @@ const roomBindings = (): KeyBinding[] => {
     return bindings;
 }
 
-const navigationBindings = (): KeyBinding[] => {
+const navigationBindings = (): KeyBinding<NavigationAction>[] => {
     return [
         {
-            action: KeyAction.NavToggleRoomSidePanel,
+            action: NavigationAction.ToggleRoomSidePanel,
             keyCombo: {
                 key: Key.PERIOD,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: KeyAction.NavToggleUserMenu,
+            action: NavigationAction.ToggleUserMenu,
             // Ideally this would be CTRL+P for "Profile", but that's
             // taken by the print dialog. CTRL+I for "Information"
             // was previously chosen but conflicted with italics in
@@ -443,14 +431,14 @@ const navigationBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.NavToggleShortCutDialog,
+            action: NavigationAction.ToggleShortCutDialog,
             keyCombo: {
                 key: Key.SLASH,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: KeyAction.NavToggleShortCutDialog,
+            action: NavigationAction.ToggleShortCutDialog,
             keyCombo: {
                 key: Key.SLASH,
                 ctrlOrCmd: true,
@@ -458,7 +446,7 @@ const navigationBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.NavGoToHome,
+            action: NavigationAction.GoToHome,
             keyCombo: {
                 key: Key.H,
                 ctrlOrCmd: true,
@@ -467,21 +455,21 @@ const navigationBindings = (): KeyBinding[] => {
         },
 
         {
-            action: KeyAction.NavSelectPrevRoom,
+            action: NavigationAction.SelectPrevRoom,
             keyCombo: {
                 key: Key.ARROW_UP,
                 altKey: true,
             },
         },
         {
-            action: KeyAction.NavSelectNextRoom,
+            action: NavigationAction.SelectNextRoom,
             keyCombo: {
                 key: Key.ARROW_DOWN,
                 altKey: true,
             },
         },
         {
-            action: KeyAction.NavSelectPrevUnreadRoom,
+            action: NavigationAction.SelectPrevUnreadRoom,
             keyCombo: {
                 key: Key.ARROW_UP,
                 altKey: true,
@@ -489,7 +477,7 @@ const navigationBindings = (): KeyBinding[] => {
             },
         },
         {
-            action: KeyAction.NavSelectNextUnreadRoom,
+            action: NavigationAction.SelectNextUnreadRoom,
             keyCombo: {
                 key: Key.ARROW_DOWN,
                 altKey: true,
@@ -551,38 +539,42 @@ export function isKeyComboMatch(ev: KeyboardEvent | React.KeyboardEvent, combo: 
 
     return true;
 }
-
-export type KeyBindingsGetter = () => KeyBinding[];
-
 export class KeyBindingsManager {
-    /**
-     * Map of KeyBindingContext to a KeyBinding getter arrow function.
-     *
-     * Returning a getter function allowed to have dynamic bindings, e.g. when settings change the bindings can be
-     * recalculated.
-     */
-    contextBindings: Record<KeyBindingContext, KeyBindingsGetter> = {
-        [KeyBindingContext.MessageComposer]: messageComposerBindings,
-        [KeyBindingContext.AutoComplete]: autocompleteBindings,
-        [KeyBindingContext.RoomList]: roomListBindings,
-        [KeyBindingContext.Room]: roomBindings,
-        [KeyBindingContext.Navigation]: navigationBindings,
-    };
-
     /**
      * Finds a matching KeyAction for a given KeyboardEvent
      */
-    getAction(context: KeyBindingContext, ev: KeyboardEvent | React.KeyboardEvent): KeyAction {
-        const bindings = this.contextBindings[context]?.();
-        if (!bindings) {
-            return KeyAction.None;
-        }
+    private getAction<T extends string>(bindings: KeyBinding<T>[], ev: KeyboardEvent | React.KeyboardEvent)
+        : T | undefined {
         const binding = bindings.find(it => isKeyComboMatch(ev, it.keyCombo, isMac));
         if (binding) {
             return binding.action;
         }
+        return undefined;
+    }
 
-        return KeyAction.None;
+    getMessageComposerAction(ev: KeyboardEvent | React.KeyboardEvent): MessageComposerAction | undefined {
+        const bindings = messageComposerBindings();
+        return this.getAction(bindings, ev);
+    }
+
+    getAutocompleteAction(ev: KeyboardEvent | React.KeyboardEvent): AutocompleteAction | undefined {
+        const bindings = autocompleteBindings();
+        return this.getAction(bindings, ev);
+    }
+
+    getRoomListAction(ev: KeyboardEvent | React.KeyboardEvent): RoomListAction | undefined {
+        const bindings = roomListBindings();
+        return this.getAction(bindings, ev);
+    }
+
+    getRoomAction(ev: KeyboardEvent | React.KeyboardEvent): RoomAction | undefined {
+        const bindings = roomBindings();
+        return this.getAction(bindings, ev);
+    }
+
+    getNavigationAction(ev: KeyboardEvent | React.KeyboardEvent): NavigationAction | undefined {
+        const bindings = navigationBindings();
+        return this.getAction(bindings, ev);
     }
 }
 

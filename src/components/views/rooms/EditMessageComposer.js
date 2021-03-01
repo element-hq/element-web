@@ -32,7 +32,7 @@ import BasicMessageComposer from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {getKeyBindingsManager, KeyAction, KeyBindingContext} from '../../../KeyBindingsManager';
+import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -133,16 +133,16 @@ export default class EditMessageComposer extends React.Component {
         if (this._editorRef.isComposing(event)) {
             return;
         }
-        const action = getKeyBindingsManager().getAction(KeyBindingContext.MessageComposer, event);
+        const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case KeyAction.Send:
+            case MessageComposerAction.Send:
                 this._sendEdit();
                 event.preventDefault();
                 break;
-            case KeyAction.CancelEditing:
+            case MessageComposerAction.CancelEditing:
                 this._cancelEdit();
                 break;
-            case KeyAction.EditPrevMessage: {
+            case MessageComposerAction.EditPrevMessage: {
                 if (this._editorRef.isModified() || !this._editorRef.isCaretAtStart()) {
                     return;
                 }
@@ -154,7 +154,7 @@ export default class EditMessageComposer extends React.Component {
                 }
                 break;
             }
-            case KeyAction.EditNextMessage: {
+            case MessageComposerAction.EditNextMessage: {
                 if (this._editorRef.isModified() || !this._editorRef.isCaretAtEnd()) {
                     return;
                 }

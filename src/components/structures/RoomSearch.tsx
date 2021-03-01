@@ -24,7 +24,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
-import { getKeyBindingsManager, KeyAction, KeyBindingContext } from "../../KeyBindingsManager";
+import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 
 interface IProps {
     isMinimized: boolean;
@@ -106,17 +106,17 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
-        const action = getKeyBindingsManager().getAction(KeyBindingContext.RoomList, ev);
+        const action = getKeyBindingsManager().getRoomListAction(ev);
         switch (action) {
-            case KeyAction.RoomListClearSearch:
+            case RoomListAction.ClearSearch:
                 this.clearInput();
                 defaultDispatcher.fire(Action.FocusComposer);
                 break;
-            case KeyAction.RoomListNextRoom:
-            case KeyAction.RoomListPrevRoom:
+            case RoomListAction.NextRoom:
+            case RoomListAction.PrevRoom:
                 this.props.onVerticalArrow(ev);
                 break;
-            case KeyAction.RoomListSelectRoom: {
+            case RoomListAction.SelectRoom: {
                 const shouldClear = this.props.onEnter(ev);
                 if (shouldClear) {
                     // wrap in set immediate to delay it so that we don't clear the filter & then change room

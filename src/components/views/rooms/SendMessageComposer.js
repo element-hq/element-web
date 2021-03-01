@@ -46,7 +46,7 @@ import {CHAT_EFFECTS} from '../../../effects';
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
-import {getKeyBindingsManager, KeyAction, KeyBindingContext} from '../../../KeyBindingsManager';
+import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -143,23 +143,23 @@ export default class SendMessageComposer extends React.Component {
         if (this._editorRef.isComposing(event)) {
             return;
         }
-        const action = getKeyBindingsManager().getAction(KeyBindingContext.MessageComposer, event);
+        const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case KeyAction.Send:
+            case MessageComposerAction.Send:
                 this._sendMessage();
                 event.preventDefault();
                 break;
-            case KeyAction.SelectPrevSendHistory:
-            case KeyAction.SelectNextSendHistory: {
+            case MessageComposerAction.SelectPrevSendHistory:
+            case MessageComposerAction.SelectNextSendHistory: {
                 // Try select composer history
-                const selected = this.selectSendHistory(action === KeyAction.SelectPrevSendHistory);
+                const selected = this.selectSendHistory(action === MessageComposerAction.SelectPrevSendHistory);
                 if (selected) {
                     // We're selecting history, so prevent the key event from doing anything else
                     event.preventDefault();
                 }
                 break;
             }
-            case KeyAction.EditPrevMessage:
+            case MessageComposerAction.EditPrevMessage:
                 // selection must be collapsed and caret at start
                 if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
                     const editEvent = findEditableEvent(this.props.room, false);
@@ -173,7 +173,7 @@ export default class SendMessageComposer extends React.Component {
                     }
                 }
                 break;
-            case KeyAction.CancelEditing:
+            case MessageComposerAction.CancelEditing:
                 dis.dispatch({
                     action: 'reply_to_event',
                     event: null,

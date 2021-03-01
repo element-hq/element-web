@@ -55,7 +55,7 @@ import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
-import { getKeyBindingsManager, KeyAction, KeyBindingContext } from '../../KeyBindingsManager';
+import { getKeyBindingsManager, NavigationAction, RoomAction } from '../../KeyBindingsManager';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -401,22 +401,22 @@ class LoggedInView extends React.Component<IProps, IState> {
     _onKeyDown = (ev) => {
         let handled = false;
 
-        const roomAction = getKeyBindingsManager().getAction(KeyBindingContext.Room, ev);
+        const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
-            case KeyAction.RoomFocusRoomSearch:
+            case RoomAction.FocusRoomSearch:
                 dis.dispatch({
                     action: 'focus_room_filter',
                 });
                 handled = true;
                 break;
-            case KeyAction.RoomScrollUp:
-            case KeyAction.RoomScrollDown:
-            case KeyAction.RoomJumpToFirstMessage:
-            case KeyAction.RoomJumpToLatestMessage:
+            case RoomAction.ScrollUp:
+            case RoomAction.RoomScrollDown:
+            case RoomAction.JumpToFirstMessage:
+            case RoomAction.JumpToLatestMessage:
                 this._onScrollKeyPressed(ev);
                 handled = true;
                 break;
-            case KeyAction.RoomSearch:
+            case RoomAction.FocusSearch:
                 dis.dispatch({
                     action: 'focus_search',
                 });
@@ -429,24 +429,24 @@ class LoggedInView extends React.Component<IProps, IState> {
             return;
         }
 
-        const navAction = getKeyBindingsManager().getAction(KeyBindingContext.Navigation, ev);
+        const navAction = getKeyBindingsManager().getNavigationAction(ev);
         switch (navAction) {
-            case KeyAction.NavToggleUserMenu:
+            case NavigationAction.ToggleUserMenu:
                 dis.fire(Action.ToggleUserMenu);
                 handled = true;
                 break;
-            case KeyAction.NavToggleShortCutDialog:
+            case NavigationAction.ToggleShortCutDialog:
                 KeyboardShortcuts.toggleDialog();
                 handled = true;
                 break;
-            case KeyAction.NavGoToHome:
+            case NavigationAction.GoToHome:
                 dis.dispatch({
                     action: 'view_home_page',
                 });
                 Modal.closeCurrentModal("homeKeyboardShortcut");
                 handled = true;
                 break;
-            case KeyAction.NavToggleRoomSidePanel:
+            case NavigationAction.ToggleRoomSidePanel:
                 if (this.props.page_type === "room_view" || this.props.page_type === "group_view") {
                     dis.dispatch<ToggleRightPanelPayload>({
                         action: Action.ToggleRightPanel,
@@ -455,7 +455,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     handled = true;
                 }
                 break;
-            case KeyAction.NavSelectPrevRoom:
+            case NavigationAction.SelectPrevRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: -1,
@@ -463,7 +463,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 });
                 handled = true;
                 break;
-            case KeyAction.NavSelectNextRoom:
+            case NavigationAction.SelectNextRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: 1,
@@ -471,14 +471,14 @@ class LoggedInView extends React.Component<IProps, IState> {
                 });
                 handled = true;
                 break;
-            case KeyAction.NavSelectPrevUnreadRoom:
+            case NavigationAction.SelectPrevUnreadRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: -1,
                     unread: true,
                 });
                 break;
-            case KeyAction.NavSelectNextUnreadRoom:
+            case NavigationAction.SelectNextUnreadRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: 1,

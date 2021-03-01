@@ -46,7 +46,7 @@ import {IDiff} from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import {ICompletion} from "../../../autocomplete/Autocompleter";
-import { getKeyBindingsManager, KeyBindingContext, KeyAction } from '../../../KeyBindingsManager';
+import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
@@ -421,21 +421,21 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private onKeyDown = (event: React.KeyboardEvent) => {
         const model = this.props.model;
         let handled = false;
-        const action = getKeyBindingsManager().getAction(KeyBindingContext.MessageComposer, event);
+        const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case KeyAction.FormatBold:
+            case MessageComposerAction.FormatBold:
                 this.onFormatAction(Formatting.Bold);
                 handled = true;
                 break;
-            case KeyAction.FormatItalics:
+            case MessageComposerAction.FormatItalics:
                 this.onFormatAction(Formatting.Italics);
                 handled = true;
                 break;
-            case KeyAction.FormatQuote:
+            case MessageComposerAction.FormatQuote:
                 this.onFormatAction(Formatting.Quote);
                 handled = true;
                 break;
-            case KeyAction.EditRedo:
+            case MessageComposerAction.EditRedo:
                 if (this.historyManager.canRedo()) {
                     const {parts, caret} = this.historyManager.redo();
                     // pass matching inputType so historyManager doesn't push echo
@@ -444,7 +444,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 }
                 handled = true;
                 break;
-            case KeyAction.EditUndo:
+            case MessageComposerAction.EditUndo:
                 if (this.historyManager.canUndo()) {
                     const {parts, caret} = this.historyManager.undo(this.props.model);
                     // pass matching inputType so historyManager doesn't push echo
@@ -453,18 +453,18 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 }
                 handled = true;
                 break;
-            case KeyAction.NewLine:
+            case MessageComposerAction.NewLine:
                 this.insertText("\n");
                 handled = true;
                 break;
-            case KeyAction.MoveCursorToStart:
+            case MessageComposerAction.MoveCursorToStart:
                 setSelection(this.editorRef.current, model, {
                     index: 0,
                     offset: 0,
                 });
                 handled = true;
                 break;
-            case KeyAction.MoveCursorToEnd:
+            case MessageComposerAction.MoveCursorToEnd:
                 setSelection(this.editorRef.current, model, {
                     index: model.parts.length - 1,
                     offset: model.parts[model.parts.length - 1].text.length,
@@ -478,30 +478,30 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             return;
         }
 
-        const autocompleteAction = getKeyBindingsManager().getAction(KeyBindingContext.AutoComplete, event);
+        const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);
         if (model.autoComplete && model.autoComplete.hasCompletions()) {
             const autoComplete = model.autoComplete;
             switch (autocompleteAction) {
-                case KeyAction.AutocompletePrevSelection:
+                case AutocompleteAction.PrevSelection:
                     autoComplete.onUpArrow(event);
                     handled = true;
                     break;
-                case KeyAction.AutocompleteNextSelection:
+                case AutocompleteAction.NextSelection:
                     autoComplete.onDownArrow(event);
                     handled = true;
                     break;
-                case KeyAction.AutocompleteApply:
+                case AutocompleteAction.ApplySelection:
                     autoComplete.onTab(event);
                     handled = true;
                     break;
-                case KeyAction.AutocompleteCancel:
+                case AutocompleteAction.Cancel:
                     autoComplete.onEscape(event);
                     handled = true;
                     break;
                 default:
                     return; // don't preventDefault on anything else
             }
-        } else if (autocompleteAction === KeyAction.AutocompleteApply) {
+        } else if (autocompleteAction === AutocompleteAction.ApplySelection) {
             this.tabCompleteName(event);
             handled = true;
         } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {

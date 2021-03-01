@@ -51,7 +51,7 @@ import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
-import { getKeyBindingsManager, KeyAction, KeyBindingContext } from "../../../KeyBindingsManager";
+import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -471,16 +471,16 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
-        const action = getKeyBindingsManager().getAction(KeyBindingContext.RoomList, ev);
+        const action = getKeyBindingsManager().getRoomListAction(ev);
         switch (action) {
-            case KeyAction.RoomListCollapseSection:
+            case RoomListAction.CollapseSection:
                 ev.stopPropagation();
                 if (this.state.isExpanded) {
                     // Collapse the room sublist if it isn't already
                     this.toggleCollapsed();
                 }
                 break;
-            case KeyAction.RoomListExpandSection: {
+            case RoomListAction.ExpandSection: {
                 ev.stopPropagation();
                 if (!this.state.isExpanded) {
                     // Expand the room sublist if it isn't already
