@@ -118,25 +118,10 @@ export default class Velociraptor extends React.Component {
                     domNode.style.visibility = restingStyle.visibility;
                 });
 
-            /*
-            console.log("enter:",
-                        JSON.stringify(transitionOpts[i-1]),
-                        "->",
-                        JSON.stringify(restingStyle));
-            */
-        } else if (node === null) {
-            // Velocity stores data on elements using the jQuery .data()
-            // method, and assumes you'll be using jQuery's .remove() to
-            // remove the element, but we don't use jQuery, so we need to
-            // blow away the element's data explicitly otherwise it will leak.
-            // This uses Velocity's internal jQuery compatible wrapper.
-            // See the bug at
-            // https://github.com/julianshapiro/velocity/issues/300
-            // and the FAQ entry, "Preventing memory leaks when
-            // creating/destroying large numbers of elements"
-            // (https://github.com/julianshapiro/velocity/issues/47)
-            const domNode = ReactDom.findDOMNode(this.nodes[k]);
-            if (domNode) Velocity.Utilities.removeData(domNode);
+            // console.log("enter:",
+            //             JSON.stringify(transitionOpts[i-1]),
+            //             "->",
+            //             JSON.stringify(restingStyle));
         }
         this.nodes[k] = node;
     }
