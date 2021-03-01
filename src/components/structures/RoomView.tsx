@@ -80,6 +80,8 @@ import { showToast as showNotificationsToast } from "../../toasts/DesktopNotific
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { objectHasDiff } from "../../utils/objects";
+import SpaceRoomView from "./SpaceRoomView";
+import { IOpts } from "../../createRoom";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -114,6 +116,7 @@ interface IProps {
 
     autoJoin?: boolean;
     resizeNotifier: ResizeNotifier;
+    justCreatedOpts?: IOpts;
 
     // Called with the credentials of a registered user (if they were a ROU that transitioned to PWLU)
     onRegistered?(credentials: IMatrixClientCreds): void;
