@@ -22,7 +22,7 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE, KIND_SPACE_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
@@ -74,6 +74,13 @@ export function showCommunityInviteDialog(communityId) {
         throw new Error("Failed to locate appropriate room to start an invite in");
     }
 }
+
+export const showSpaceInviteDialog = (roomId) => {
+    Modal.createTrackedDialog("Invite Users", "Space", InviteDialog, {
+        kind: KIND_SPACE_INVITE,
+        roomId,
+    }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+};
 
 /**
  * Checks if the given MatrixEvent is a valid 3rd party user invite.
