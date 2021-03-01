@@ -41,7 +41,7 @@ enum Visibility {
     Private = "private",
 }
 
-enum Preset {
+export enum Preset {
     PrivateChat = "private_chat",
     TrustedPrivateChat = "trusted_private_chat",
     PublicChat = "public_chat",
@@ -54,7 +54,7 @@ interface Invite3PID {
     address: string;
 }
 
-interface IStateEvent {
+export interface IStateEvent {
     type: string;
     state_key?: string; // defaults to an empty string
     content: object;
