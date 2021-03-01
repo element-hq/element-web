@@ -17,7 +17,7 @@ limitations under the License.
 
 .mx_CallView {
     border-radius: 8px;
-    background-color: $voipcall-plinth-color;
+    background-color: $dark-panel-bg-color;
     padding-left: 8px;
     padding-right: 8px;
     // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
@@ -37,6 +37,7 @@ limitations under the License.
     width: 320px;
     padding-bottom: 8px;
     margin-top: 10px;
+    background-color: $voipcall-plinth-color;
     box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
     border-radius: 8px;
 
