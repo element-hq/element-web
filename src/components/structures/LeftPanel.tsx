@@ -39,6 +39,7 @@ import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
+import SpacePanel from "../views/spaces/SpacePanel";
 
 interface IProps {
     isMinimized: boolean;
@@ -388,12 +389,19 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const groupFilterPanel = !this.state.showGroupFilterPanel ? null : (
-            <div className="mx_LeftPanel_GroupFilterPanelContainer">
-                <GroupFilterPanel />
-                {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
-            </div>
-        );
+        let leftLeftPanel;
+        // Currently TagPanel.enableTagPanel is disabled when Legacy Communities are disabled so for now
+        // ignore it and force the rendering of SpacePanel if that Labs flag is enabled.
+        if (SettingsStore.getValue("feature_spaces")) {
+            leftLeftPanel = <SpacePanel />;
+        } else if (this.state.showGroupFilterPanel) {
+            leftLeftPanel = (
+                <div className="mx_LeftPanel_GroupFilterPanelContainer">
+                    <GroupFilterPanel />
+                    {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
+                </div>
+            );
+        }
 
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
@@ -406,7 +414,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         const containerClasses = classNames({
             "mx_LeftPanel": true,
-            "mx_LeftPanel_hasGroupFilterPanel": !!groupFilterPanel,
             "mx_LeftPanel_minimized": this.props.isMinimized,
         });
 
@@ -417,7 +424,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses}>
-                {groupFilterPanel}
+                {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
