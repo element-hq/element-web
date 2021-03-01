@@ -2,8 +2,6 @@
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
-
-
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
@@ -18,8 +16,12 @@ limitations under the License.
 
 $topLevelHeight: 32px;
 $nestedHeight: 24px;
-$gutterSize: 21px;
+$gutterSize: 17px;
 $activeStripeSize: 4px;
+$activeBorderTransparentGap: 2px;
+
+$activeBackgroundColor: $roomtile-selected-bg-color;
+$activeBorderColor: $secondary-fg-color;
 
 .mx_SpacePanel {
     flex: 0 0 auto;
@@ -68,11 +70,14 @@ $activeStripeSize: 4px;
         cursor: pointer;
     }
 
-    .mx_SpaceItem {
-        position: relative;
-    }
-
     .mx_SpaceItem.collapsed {
+        .mx_SpaceButton {
+            .mx_NotificationBadge {
+                right: -4px;
+                top: -4px;
+            }
+        }
+
         & > .mx_SpaceButton > .mx_SpaceButton_toggleCollapse {
             transform: rotate(-90deg);
         }
@@ -84,20 +89,35 @@ $activeStripeSize: 4px;
 
     .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
         margin-left: $gutterSize;
-
-        &.mx_SpaceButton_active {
-            &::before {
-                left: -$gutterSize;
-            }
-        }
     }
 
     .mx_SpaceButton {
         border-radius: 8px;
         position: relative;
-        margin-bottom: 16px;
+        margin-bottom: 2px;
         display: flex;
         align-items: center;
+        padding: 4px;
+
+        &.mx_SpaceButton_active {
+            &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
+                background-color: $activeBackgroundColor;
+                border-radius: 8px;
+            }
+
+            &.mx_SpaceButton_narrow {
+                .mx_BaseAvatar, .mx_SpaceButton_avatarPlaceholder {
+                    border: 2px $activeBorderColor solid;
+                    border-radius: 11px;
+                }
+            }
+        }
+
+        .mx_SpaceButton_selectionWrapper {
+            display: flex;
+            flex: 1;
+            align-items: center;
+        }
 
         .mx_SpaceButton_name {
             flex: 1;
@@ -107,7 +127,7 @@ $activeStripeSize: 4px;
             max-width: 150px;
             text-overflow: ellipsis;
             overflow: hidden;
-
+            padding-right: 8px;
             font-size: $font-14px;
             line-height: $font-18px;
         }
@@ -123,24 +143,12 @@ $activeStripeSize: 4px;
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
 
-        &.mx_SpaceButton_active {
-            &::before {
-                position: absolute;
-                content: '';
-                width: $activeStripeSize;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                background-color: $accent-color;
-                border-radius: 0 4px 4px 0;
-            }
-        }
-
-        .mx_SpaceButton_avatarPlaceholder {
+        .mx_SpaceButton_icon {
             width: $topLevelHeight;
             min-width: $topLevelHeight;
             height: $topLevelHeight;
             border-radius: 8px;
+            position: relative;
 
             &::before {
                 position: absolute;
@@ -155,7 +163,7 @@ $activeStripeSize: 4px;
             }
         }
 
-        &.mx_SpaceButton_home .mx_SpaceButton_avatarPlaceholder {
+        &.mx_SpaceButton_home .mx_SpaceButton_icon {
             background-color: #ffffff;
 
             &::before {
@@ -164,18 +172,27 @@ $activeStripeSize: 4px;
             }
         }
 
-        &.mx_SpaceButton_newCancel .mx_SpaceButton_avatarPlaceholder {
-            background-color: $icon-button-color;
+        .mx_SpaceButton_avatarPlaceholder {
+            border: $activeBorderTransparentGap transparent solid;
+            padding: $activeBorderTransparentGap;
+        }
 
-            &::before {
-                transform: rotate(45deg);
+        .mx_BaseAvatar {
+            /* moving the border-radius to this element from _image
+            element so we can add a border to it without the initials being displaced */
+            overflow: hidden;
+            border: 2px transparent solid;
+            padding: $activeBorderTransparentGap;
+
+            .mx_BaseAvatar_initial {
+                top: $activeBorderTransparentGap;
+                left: $activeBorderTransparentGap;
+            }
+
+            .mx_BaseAvatar_image {
+                border-radius: 8px;
             }
         }
-
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
-    }
 
     .mx_SpacePanel_badgeContainer {
         height: 16px;
@@ -201,8 +218,8 @@ $activeStripeSize: 4px;
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
                 position: absolute;
-                right: -8px;
-                top: -4px;
+                right: 0px;
+                top: 2px;
             }
         }
     }

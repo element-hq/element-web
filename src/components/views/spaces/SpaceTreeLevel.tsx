@@ -95,6 +95,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const classes = classNames("mx_SpaceButton", {
             mx_SpaceButton_active: isActive,
             mx_SpaceButton_hasMenuOpen: !!this.state.contextMenuPosition,
+            mx_SpaceButton_narrow: isNarrow,
         });
         const notificationState = SpaceStore.instance.getNotificationState(space.roomId);
         const childItems = childSpaces && !collapsed ? <SpaceTreeLevel
@@ -129,8 +130,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     role="treeitem"
                 >
                     { toggleCollapseButton }
-                    <RoomAvatar width={avatarSize} height={avatarSize} room={space} />
-                    { notifBadge }
+                    <div className="mx_SpaceButton_selectionWrapper">
+                        <RoomAvatar width={avatarSize} height={avatarSize} room={space} />
+                        { notifBadge }
+                    </div>
                 </RovingAccessibleTooltipButton>
             );
         } else {
@@ -142,9 +145,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     role="treeitem"
                 >
                     { toggleCollapseButton }
-                    <RoomAvatar width={avatarSize} height={avatarSize} room={space} />
-                    <span className="mx_SpaceButton_name">{ space.name }</span>
-                    { notifBadge }
+                    <div className="mx_SpaceButton_selectionWrapper">
+                        <RoomAvatar width={avatarSize} height={avatarSize} room={space} />
+                        <span className="mx_SpaceButton_name">{ space.name }</span>
+                        { notifBadge }
+                    </div>
                 </RovingAccessibleButton>
             );
         }
