@@ -1533,5 +1533,7 @@
     "<requestLink>Re-request encryption keys</requestLink> from your other sessions.": "あなたの他のセッションに<requestLink>暗号鍵を再リクエストする</requestLink>。",
     "Block anyone not part of %(serverName)s from ever joining this room.": "%(serverName)s 以外からの参加をブロック",
     "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "プライベートな部屋は招待者のみが参加できます。公開された部屋は誰でも検索・参加できます。",
-    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix 関連のセキュリティ問題を報告するには、Matrix.org の <a>Security Disclosure Policy</a> をご覧ください。"
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Matrix 関連のセキュリティ問題を報告するには、Matrix.org の <a>Security Disclosure Policy</a> をご覧ください。",
+    "Confirm adding email": "メールアドレスの追加を確認する",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "シングルサインオンを使用して本人確認を行い、メールアドレスの追加を承認してください。"
 }
