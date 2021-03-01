@@ -18,6 +18,8 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import {EventType} from "matrix-js-sdk/src/@types/event";
 
+import {calculateRoomVia} from "../utils/permalinks/Permalinks";
+
 export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
     const userId = cli.getUserId();
     return space.getMyMembership() === "join"
@@ -26,3 +28,12 @@ export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
             || space.currentState.maySendStateEvent(EventType.RoomTopic, userId)
             || space.currentState.maySendStateEvent(EventType.RoomJoinRules, userId));
 };
+
+export const makeSpaceParentEvent = (room: Room, canonical = false) => ({
+    type: EventType.SpaceParent,
+    content: {
+        "via": calculateRoomVia(room),
+        "canonical": canonical,
+    },
+    state_key: room.roomId,
+});
