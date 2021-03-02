@@ -46,7 +46,7 @@ import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
-import {shouldShowSpaceSettings} from "../../utils/space";
+import {shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 
 interface IProps {
@@ -119,6 +119,15 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         );
     }
 
+    let settingsButton;
+    if (shouldShowSpaceSettings(cli, space)) {
+        settingsButton = <AccessibleButton className="mx_SpaceRoomView_landing_settingsButton" onClick={() => {
+            showSpaceSettings(cli, space);
+        }}>
+            { _t("Settings") }
+        </AccessibleButton>;
+    }
+
     return <div className="mx_SpaceRoomView_landing">
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
@@ -180,6 +189,7 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         { joinButtons }
         <div className="mx_SpaceRoomView_landing_adminButtons">
             { inviteButton }
+            { settingsButton }
         </div>
     </div>;
 };

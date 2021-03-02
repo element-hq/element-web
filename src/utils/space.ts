@@ -19,6 +19,8 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import {EventType} from "matrix-js-sdk/src/@types/event";
 
 import {calculateRoomVia} from "../utils/permalinks/Permalinks";
+import Modal from "../Modal";
+import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 
 export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
     const userId = cli.getUserId();
@@ -37,3 +39,10 @@ export const makeSpaceParentEvent = (room: Room, canonical = false) => ({
     },
     state_key: room.roomId,
 });
+
+export const showSpaceSettings = (cli: MatrixClient, space: Room) => {
+    Modal.createTrackedDialog("Space Settings", "", SpaceSettingsDialog, {
+        matrixClient: cli,
+        space,
+    }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+};

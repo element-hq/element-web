@@ -1118,6 +1118,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
                     d.finally(() => modal.close());
+                    dis.dispatch({
+                        action: "after_leave_room",
+                        room_id: roomId,
+                    });
                 }
             },
         });
