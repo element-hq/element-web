@@ -31,6 +31,7 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
@@ -53,6 +54,17 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
+
+    let streamAudioStreamButton;
+    if (getConfigLivestreamUrl() && (app.type === "m.jitsi" || app.type === "jitsi")) {
+        const onStreamAudioClick = () => {
+            startJitsiAudioLivestream(widgetMessaging, roomId);
+            onFinished();
+        };
+        streamAudioStreamButton = <IconizedContextMenuOption
+            onClick={onStreamAudioClick} label={_t("Start audio stream")}
+        />;
+    }
 
     let unpinButton;
     if (showUnpin) {
@@ -163,6 +175,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
+            { streamAudioStreamButton }
             { editButton }
             { revokeButton }
             { deleteButton }
