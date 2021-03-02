@@ -408,6 +408,8 @@ export default class EventTile extends React.Component {
             return;
         }
 
+        // We force update because we have no state or prop changes to queue up, instead relying on
+        // the getters we use here to determine what needs rendering.
         this.forceUpdate(() => {
             // Per elsewhere in this file, we can remove the listener once we will have no further purpose for it.
             if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt) {
@@ -805,8 +807,7 @@ export default class EventTile extends React.Component {
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
-            // Note: we keep these sending state classes for tests, not for our styles
-            mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
+            // Note: we keep the `sending` state class for tests, not for our styles
             mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',
             mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
