@@ -19,6 +19,7 @@ import React from 'react';
 import CallHandler from '../../../CallHandler';
 import CallView from './CallView';
 import dis from '../../../dispatcher/dispatcher';
+import {Resizable} from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 
 interface IProps {
@@ -80,11 +81,51 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
         return call;
     }
 
+    onResizeStart = () => {
+        this.props.resizeNotifier.startResizing();
+    }
+
+    onResize = () => {
+        this.props.resizeNotifier.notifyTimelineHeightChanged();
+    }
+
+    onResizeStop = () => {
+        this.props.resizeNotifier.stopResizing();
+    }
+
     public render() {
         if (!this.state.call) return null;
+        // We subtract 8 as it the margin-bottom of the mx_CallViewForRoom_ResizeWrapper
+        const maxHeight = this.props.maxVideoHeight - 8;
 
-        return <CallView call={this.state.call} pipMode={false}
-            onResize={this.props.onResize} maxVideoHeight={this.props.maxVideoHeight}
-        />;
+        return (
+            <div className="mx_CallViewForRoom">
+                <Resizable
+                    minHeight={300}
+                    maxHeight={maxHeight}
+                    enable={{
+                        top: false,
+                        right: false,
+                        bottom: true,
+                        left: false,
+                        topRight: false,
+                        bottomRight: false,
+                        bottomLeft: false,
+                        topLeft: false,
+                    }}
+                    onResizeStart={this.onResizeStart}
+                    onResize={this.onResize}
+                    onResizeStop={this.onResizeStop}
+                    className="mx_CallViewForRoom_ResizeWrapper"
+                    handleClasses={{bottom: "mx_CallViewForRoom_ResizeHandle"}}
+                >
+                    <CallView
+                        call={this.state.call}
+                        pipMode={false}
+                        onResize={this.props.onResize}
+                    />
+                </Resizable>
+            </div>
+        );
     }
 }
