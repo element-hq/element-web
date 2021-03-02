@@ -1,6 +1,5 @@
 /*
-Copyright 2017 Marcel Radzio (MTRNord)
-Copyright 2017 Vector Creations Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
+import Dropdown from "../../views/elements/Dropdown"
 import * as sdk from '../../../index';
-import * as languageHandler from '../../../languageHandler';
+import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 
@@ -29,40 +28,49 @@ function languageMatchesSearchQuery(query, language) {
     return false;
 }
 
-export default class LanguageDropdown extends React.Component {
+interface SpellCheckLanguagesDropdownIProps {
+    className: string,
+    value: string,
+    onOptionChange(language: string),
+}
+
+interface SpellCheckLanguagesDropdownIState {
+    searchQuery: string,
+    languages: any,
+}
+
+export default class SpellCheckLanguagesDropdown extends React.Component<SpellCheckLanguagesDropdownIProps,
+                                                                         SpellCheckLanguagesDropdownIState> {
     constructor(props) {
         super(props);
         this._onSearchChange = this._onSearchChange.bind(this);
 
         this.state = {
             searchQuery: '',
-            langs: null,
+            languages: null,
         };
     }
 
     componentDidMount() {
-        languageHandler.getAllLanguagesFromJson().then((langs) => {
-            langs.sort(function(a, b) {
-                if (a.label < b.label) return -1;
-                if (a.label > b.label) return 1;
-                return 0;
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            plaf.getAvailableSpellCheckLanguages().then((languages) => {
+                languages.sort(function(a, b) {
+                    if (a < b) return -1;
+                    if (a > b) return 1;
+                    return 0;
+                });
+                const langs = [];
+                languages.forEach((language) => {
+                    langs.push({
+                        label: language,
+                        value: language,
+                    })
+                })
+                this.setState({languages: langs});
+            }).catch((e) => {
+                this.setState({languages: ['en']});
             });
-            this.setState({langs});
-        }).catch(() => {
-            this.setState({langs: ['en']});
-        });
-
-        if (!this.props.value) {
-            // If no value is given, we start with the first
-            // country selected, but our parent component
-            // doesn't know this, therefore we do this.
-            const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
-            if (language) {
-              this.props.onOptionChange(language);
-            } else {
-              const language = languageHandler.normalizeLanguageKey(languageHandler.getLanguageFromBrowser());
-              this.props.onOptionChange(language);
-            }
         }
     }
 
@@ -73,20 +81,18 @@ export default class LanguageDropdown extends React.Component {
     }
 
     render() {
-        if (this.state.langs === null) {
+        if (this.state.languages === null) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return <Spinner />;
         }
 
-        const Dropdown = sdk.getComponent('elements.Dropdown');
-
         let displayedLanguages;
         if (this.state.searchQuery) {
-            displayedLanguages = this.state.langs.filter((lang) => {
+            displayedLanguages = this.state.languages.filter((lang) => {
                 return languageMatchesSearchQuery(this.state.searchQuery, lang);
             });
         } else {
-            displayedLanguages = this.state.langs;
+            displayedLanguages = this.state.languages;
         }
 
         const options = displayedLanguages.map((language) => {
@@ -95,7 +101,7 @@ export default class LanguageDropdown extends React.Component {
             </div>;
         });
 
-        // default value here too, otherwise we need to handle null / undefined
+        // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propgating
         let language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
         let value = null;
@@ -113,16 +119,8 @@ export default class LanguageDropdown extends React.Component {
             onSearchChange={this._onSearchChange}
             searchEnabled={true}
             value={value}
-            label={_t("Language Dropdown")}
-            disabled={this.props.disabled}
-        >
+            label={_t("Language Dropdown")}>
             { options }
         </Dropdown>;
     }
 }
-
-LanguageDropdown.propTypes = {
-    className: PropTypes.string,
-    onOptionChange: PropTypes.func.isRequired,
-    value: PropTypes.string,
-};
