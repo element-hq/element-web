@@ -25,7 +25,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomName from "../views/elements/RoomName";
 import RoomTopic from "../views/elements/RoomTopic";
 import FormButton from "../views/elements/FormButton";
-import {inviteMultipleToRoom, showSpaceInviteDialog} from "../../RoomInvite";
+import {inviteMultipleToRoom, showRoomInviteDialog} from "../../RoomInvite";
 import {useRoomMembers} from "../../hooks/useRoomMembers";
 import createRoom, {IOpts, Preset} from "../../createRoom";
 import Field from "../views/elements/Field";
@@ -108,6 +108,17 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         </div>;
     }
 
+    let inviteButton;
+    if (myMembership === "join" && space.canInvite(userId)) {
+        inviteButton = (
+            <AccessibleButton className="mx_SpaceRoomView_landing_inviteButton" onClick={() => {
+                showRoomInviteDialog(space.roomId);
+            }}>
+                { _t("Invite people") }
+            </AccessibleButton>
+        );
+    }
+
     return <div className="mx_SpaceRoomView_landing">
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
@@ -167,6 +178,9 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
             <RoomTopic room={space} />
         </div>
         { joinButtons }
+        <div className="mx_SpaceRoomView_landing_adminButtons">
+            { inviteButton }
+        </div>
     </div>;
 };
 
@@ -361,7 +375,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         <div className="mx_SpaceRoomView_inviteTeammates_buttons">
             <AccessibleButton
                 className="mx_SpaceRoomView_inviteTeammates_inviteDialogButton"
-                onClick={() => showSpaceInviteDialog(space.roomId)}
+                onClick={() => showRoomInviteDialog(space.roomId)}
             >
                 { _t("Invite by username") }
             </AccessibleButton>

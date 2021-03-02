@@ -50,10 +50,13 @@ export function showStartChatInviteDialog(initialText) {
 }
 
 export function showRoomInviteDialog(roomId) {
+    const isSpace = MatrixClientPeg.get()?.getRoom(roomId)?.isSpaceRoom();
     // This dialog handles the room creation internally - we don't need to worry about it.
-    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+        "Invite Users", isSpace ? "Space" : "Room", InviteDialog, {
+            kind: isSpace ? KIND_SPACE_INVITE : KIND_INVITE,
+            roomId,
+        },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }
@@ -74,13 +77,6 @@ export function showCommunityInviteDialog(communityId) {
         throw new Error("Failed to locate appropriate room to start an invite in");
     }
 }
-
-export const showSpaceInviteDialog = (roomId) => {
-    Modal.createTrackedDialog("Invite Users", "Space", InviteDialog, {
-        kind: KIND_SPACE_INVITE,
-        roomId,
-    }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
-};
 
 /**
  * Checks if the given MatrixEvent is a valid 3rd party user invite.
