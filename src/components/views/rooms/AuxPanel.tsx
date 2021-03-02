@@ -35,9 +35,6 @@ interface IProps {
     userId: string,
     showApps: boolean, // Render apps
 
-    // set to true to show the file drop target
-    draggingFile: boolean,
-
     // maxHeight attribute for the aux panel and the video
     // therein
     maxHeight: number,
@@ -149,19 +146,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
     }
 
     render() {
-        let fileDropTarget = null;
-        if (this.props.draggingFile) {
-            fileDropTarget = (
-                <div className="mx_RoomView_fileDropTarget">
-                    <img
-                        src={require("../../../../res/img/upload-big.svg")}
-                        className="mx_RoomView_fileDropTarget_image"
-                    />
-                    { _t("Drop file here to upload") }
-                </div>
-            );
-        }
-
         const callView = (
             <CallViewForRoom
                 roomId={this.props.room.roomId}
@@ -244,7 +228,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             <AutoHideScrollbar className={classes} style={style} >
                 { stateViews }
                 { appsDrawer }
-                { fileDropTarget }
                 { callView }
                 { this.props.children }
             </AutoHideScrollbar>

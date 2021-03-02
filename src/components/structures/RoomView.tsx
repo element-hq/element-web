@@ -1782,6 +1782,19 @@ export default class RoomView extends React.Component<IProps, IState> {
             }
         }
 
+        let fileDropTarget = null;
+        if (this.state.draggingFile) {
+            fileDropTarget = (
+                <div className="mx_RoomView_fileDropTarget">
+                    <img
+                        src={require("../../../res/img/upload-big.svg")}
+                        className="mx_RoomView_fileDropTarget_image"
+                    />
+                    { _t("Drop file here to upload") }
+                </div>
+            );
+        }
+
         // We have successfully loaded this room, and are not previewing.
         // Display the "normal" room view.
 
@@ -1893,7 +1906,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 room={this.state.room}
                 fullHeight={false}
                 userId={this.context.credentials.userId}
-                draggingFile={this.state.draggingFile}
                 maxHeight={this.state.auxPanelMaxHeight}
                 showApps={this.state.showApps}
                 onResize={this.onResize}
@@ -2059,8 +2071,9 @@ export default class RoomView extends React.Component<IProps, IState> {
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
+                                {auxPanel}
                                 <div className={timelineClasses}>
-                                    {auxPanel}
+                                    {fileDropTarget}
                                     {topUnreadMessagesBar}
                                     {jumpToBottom}
                                     {messagePanel}
