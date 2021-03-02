@@ -1072,6 +1072,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
+        const isSpace = roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
         const warnings = [];
@@ -1081,7 +1082,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 warnings.push((
                     <span className="warning" key="non_public_warning">
                         {' '/* Whitespace, otherwise the sentences get smashed together */ }
-                        { _t("This room is not public. You will not be able to rejoin without an invite.") }
+                        { isSpace
+                            ? _t("This space is not public. You will not be able to rejoin without an invite.")
+                            : _t("This room is not public. You will not be able to rejoin without an invite.") }
                     </span>
                 ));
             }
@@ -1094,11 +1097,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        Modal.createTrackedDialog('Leave room', '', QuestionDialog, {
-            title: _t("Leave room"),
+        const isSpace = roomToLeave?.isSpaceRoom();
+        Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
+            title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
                 <span>
-                    { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
+                    { isSpace
+                        ? _t("Are you sure you want to leave the space '%(spaceName)s'?", {spaceName: roomToLeave.name})
+                        : _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                     { warnings }
                 </span>
             ),
