@@ -154,7 +154,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
                     <img
-                        src={require( "../../../../res/img/upload-big.svg")}
+                        src={require("../../../../res/img/upload-big.svg")}
                         className="mx_RoomView_fileDropTarget_image"
                     />
                     { _t("Drop file here to upload") }
