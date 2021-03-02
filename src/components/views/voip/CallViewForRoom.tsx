@@ -19,6 +19,7 @@ import React from 'react';
 import CallHandler from '../../../CallHandler';
 import CallView from './CallView';
 import dis from '../../../dispatcher/dispatcher';
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 
 interface IProps {
     // What room we should display the call for
@@ -30,6 +31,8 @@ interface IProps {
     // a callback which is called when the content in the callview changes
     // in a way that is likely to cause a resize.
     onResize?: any;
+
+    resizeNotifier: ResizeNotifier,
 }
 
 interface IState {

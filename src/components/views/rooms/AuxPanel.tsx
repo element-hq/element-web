@@ -169,6 +169,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
                 roomId={this.props.room.roomId}
                 onResize={this.props.onResize}
                 maxVideoHeight={this.props.maxHeight}
+                resizeNotifier={this.props.resizeNotifier}
             />
         );
 
