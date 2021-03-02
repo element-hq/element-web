@@ -408,6 +408,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     protected async onAction(payload: ActionPayload) {
+        if (!SettingsStore.getValue("feature_spaces")) return;
         switch (payload.action) {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);
