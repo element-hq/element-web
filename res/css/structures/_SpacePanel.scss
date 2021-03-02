@@ -177,6 +177,25 @@ $activeBorderColor: $secondary-fg-color;
             padding: $activeBorderTransparentGap;
         }
 
+        &.mx_SpaceButton_new .mx_SpaceButton_icon {
+            background-color: $accent-color;
+            transition: all .1s ease-in-out; // TODO transition
+
+            &::before {
+                background-color: #ffffff;
+                mask-image: url('$(res)/img/element-icons/plus.svg');
+                transition: all .2s ease-in-out; // TODO transition
+            }
+        }
+
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon {
+            background-color: $icon-button-color;
+
+            &::before {
+                transform: rotate(45deg);
+            }
+        }
+
         .mx_BaseAvatar {
             /* moving the border-radius to this element from _image
             element so we can add a border to it without the initials being displaced */
