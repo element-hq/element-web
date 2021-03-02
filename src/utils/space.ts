@@ -21,6 +21,8 @@ import {EventType} from "matrix-js-sdk/src/@types/event";
 import {calculateRoomVia} from "../utils/permalinks/Permalinks";
 import Modal from "../Modal";
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
+import CreateRoomDialog from "../components/views/dialogs/CreateRoomDialog";
+import createRoom, {IOpts} from "../createRoom";
 
 export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
     const userId = cli.getUserId();
@@ -45,4 +47,20 @@ export const showSpaceSettings = (cli: MatrixClient, space: Room) => {
         matrixClient: cli,
         space,
     }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+};
+
+export const showCreateNewRoom = async (cli: MatrixClient, space: Room) => {
+    const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
+        "Space Landing",
+        "Create Room",
+        CreateRoomDialog,
+        {
+            defaultPublic: space.getJoinRule() === "public",
+            parentSpace: space,
+        },
+    );
+    const [shouldCreate, opts] = await modal.finished;
+    if (shouldCreate) {
+        await createRoom(opts);
+    }
 };

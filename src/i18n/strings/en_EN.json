@@ -2570,6 +2570,7 @@
     "You have %(count)s unread notifications in a prior version of this room.|one": "You have %(count)s unread notification in a prior version of this room.",
     "Accept Invite": "Accept Invite",
     "Invite people": "Invite people",
+    "Create a new room": "Create a new room",
     "%(count)s members|other": "%(count)s members",
     "%(count)s members|one": "%(count)s member",
     "<inviter/> invited you to <name/>": "<inviter/> invited you to <name/>",

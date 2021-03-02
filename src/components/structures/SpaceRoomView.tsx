@@ -46,7 +46,7 @@ import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
-import {shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
+import {showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 
 interface IProps {
@@ -119,6 +119,19 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         );
     }
 
+    const canAddRooms = myMembership === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
+
+    let addRoomButtons;
+    if (canAddRooms) {
+        addRoomButtons = <React.Fragment>
+            <AccessibleButton className="mx_SpaceRoomView_landing_createButton" onClick={() => {
+                showCreateNewRoom(cli, space);
+            }}>
+                { _t("Create a new room") }
+            </AccessibleButton>
+        </React.Fragment>;
+    }
+
     let settingsButton;
     if (shouldShowSpaceSettings(cli, space)) {
         settingsButton = <AccessibleButton className="mx_SpaceRoomView_landing_settingsButton" onClick={() => {
@@ -189,6 +202,7 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         { joinButtons }
         <div className="mx_SpaceRoomView_landing_adminButtons">
             { inviteButton }
+            { addRoomButtons }
             { settingsButton }
         </div>
     </div>;
