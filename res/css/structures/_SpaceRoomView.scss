@@ -188,6 +188,16 @@ $SpaceRoomViewInnerWidth: 428px;
                     }
                 }
 
+                &.mx_SpaceRoomView_landing_addButton {
+                    &::before {
+                        background-color: #ac3ba8;
+                    }
+
+                    &::after {
+                        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+                    }
+                }
+
                 &.mx_SpaceRoomView_landing_createButton {
                     &::before {
                         background-color: #368bd6;

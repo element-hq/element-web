@@ -46,7 +46,7 @@ import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
-import {showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
+import {showAddExistingRooms, showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 
 interface IProps {
@@ -124,6 +124,14 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     let addRoomButtons;
     if (canAddRooms) {
         addRoomButtons = <React.Fragment>
+            <AccessibleButton className="mx_SpaceRoomView_landing_addButton" onClick={async () => {
+                const [added] = await showAddExistingRooms(cli, space);
+                if (added) {
+                    // TODO update rooms shown once we show hierarchy here
+                }
+            }}>
+                { _t("Add existing rooms & spaces") }
+            </AccessibleButton>
             <AccessibleButton className="mx_SpaceRoomView_landing_createButton" onClick={() => {
                 showCreateNewRoom(cli, space);
             }}>
