@@ -219,6 +219,14 @@ $SpaceRoomViewInnerWidth: 428px;
                 }
             }
         }
+
+        .mx_SpaceRoomDirectory_list {
+            max-width: 600px;
+
+            .mx_SpaceRoomDirectory_roomTile_actions {
+                display: none;
+            }
+        }
     }
 
     .mx_SpaceRoomView_privateScope {

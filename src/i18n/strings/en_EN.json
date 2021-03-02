@@ -2599,6 +2599,8 @@
     "Find a room...": "Find a room...",
     "Accept Invite": "Accept Invite",
     "Add existing rooms & spaces": "Add existing rooms & spaces",
+    "Default Rooms": "Default Rooms",
+    "Your server does not support showing space hierarchies.": "Your server does not support showing space hierarchies.",
     "%(count)s members|other": "%(count)s members",
     "%(count)s members|one": "%(count)s member",
     "<inviter/> invited you to <name/>": "<inviter/> invited you to <name/>",
