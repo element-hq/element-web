@@ -72,6 +72,7 @@ limitations under the License.
             position: relative; // to make default avatars work
             margin-right: 8px;
             height: 32px; // to remove the unknown 4px gap the browser puts below it
+            padding: 3px 0; // to align with and without using doubleName
 
             .mx_UserMenu_userAvatar {
                 border-radius: 32px; // should match avatar size

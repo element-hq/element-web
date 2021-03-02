@@ -55,6 +55,7 @@ import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
+import { IOpts } from "../../createRoom";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -91,6 +92,7 @@ interface IProps {
     currentGroupId?: string;
     currentGroupIsNew?: boolean;
     justRegistered?: boolean;
+    roomJustCreatedOpts?: IOpts;
 }
 
 interface IUsageLimit {
@@ -619,6 +621,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     resizeNotifier={this.props.resizeNotifier}
+                    justCreatedOpts={this.props.roomJustCreatedOpts}
                 />;
                 break;
 
