@@ -160,3 +160,20 @@ limitations under the License.
         mask-position: center;
     }
 }
+
+.mx_RightPanel_scopeHeader {
+    margin: 24px;
+    text-align: center;
+    font-weight: $font-semi-bold;
+    font-size: $font-18px;
+    line-height: $font-22px;
+
+    .mx_BaseAvatar {
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .mx_BaseAvatar_image {
+        border-radius: 8px;
+    }
+}
