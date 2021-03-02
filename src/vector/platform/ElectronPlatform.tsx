@@ -323,6 +323,16 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return 'Electron Platform'; // no translation required: only used for analytics
     }
 
+    /**
+     * Return true if platform supports multi-language
+     * spell-checking, otherwise false.
+     */
+    supportsMultiLanguageSpellCheck(): boolean {
+        // Electron uses OS spell checking on macOS, so no need for in-app options
+        if (isMac) return false;
+        return true;
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
@@ -488,11 +498,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.eventIndexManager;
     }
 
-    setLanguage(preferredLangs: string[]) {
-        this._ipcCall('setLanguage', preferredLangs).catch(error => {
-            console.log("Failed to send setLanguage IPC to Electron");
+    setSpellCheckLanguages(preferredLangs: string[]) {
+        this._ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
+            console.log("Failed to send setSpellCheckLanguages IPC to Electron");
             console.error(error);
         });
+    }
+
+    async getSpellCheckLanguages(): Promise<string[]> {
+        return this._ipcCall('getSpellCheckLanguages');
+    }
+
+    async getAvailableSpellCheckLanguages(): Promise<string[]> {
+        return this._ipcCall('getAvailableSpellCheckLanguages');
     }
 
     getSSOCallbackUrl(fragmentAfterLogin: string): URL {
