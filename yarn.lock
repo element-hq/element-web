@@ -8114,10 +8114,10 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-velocity-animate@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-1.5.2.tgz#5a351d75fca2a92756f5c3867548b873f6c32105"
-  integrity sha512-m6EXlCAMetKztO1ppBhGU1/1MR3IiEevO6ESq6rcrSQ3Q77xYSW13jkfXW88o4xMrkXJhy/U7j4wFR/twMB0Eg==
+velocity-animate@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-2.0.6.tgz#1811ca14df7fbbef05740256f6cec0fd1b76575f"
+  integrity sha512-tU+/UtSo3GkIjEfk2KM4e24DvpgX0+FzfLr7XqNwm9BCvZUtbCHPq/AFutx/Mkp2bXlUS9EcX8yxu8XmzAv2Kw==
 
 verror@1.10.0:
   version "1.10.0"
