@@ -1159,7 +1159,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             dragCounter: this.state.dragCounter - 1,
         });
 
-        if (this.state.dragCounter == 0) {
+        if (this.state.dragCounter === 0) {
             this.setState({
                 draggingFile: false,
             });
