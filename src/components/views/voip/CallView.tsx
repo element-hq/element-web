@@ -39,9 +39,6 @@ interface IProps {
         // Another ongoing call to display information about
         secondaryCall?: MatrixCall,
 
-        // maxHeight style attribute for the video panel
-        maxVideoHeight?: number;
-
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
         onResize?: any;
@@ -517,20 +514,9 @@ export default class CallView extends React.Component<IProps, IState> {
                 localVideoFeed = <VideoFeed type={VideoFeedType.Local} call={this.props.call} />;
             }
 
-            // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() || !this.props.maxVideoHeight ? null : (
-                this.props.maxVideoHeight - (HEADER_HEIGHT + BOTTOM_PADDING + BOTTOM_MARGIN_TOP_BOTTOM)
-            );
-            contentView = <div className={containerClasses}
-                ref={this.contentRef} onMouseMove={this.onMouseMove}
-                // Put the max height on here too because this div is ended up 4px larger than the content
-                // and is causing it to scroll, and I am genuinely baffled as to why.
-                style={{maxHeight: maxVideoHeight}}
-            >
+            contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
                 {onHoldBackground}
-                <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize}
-                    maxHeight={maxVideoHeight}
-                />
+                <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize} />
                 {localVideoFeed}
                 {onHoldContent}
                 {callControls}
