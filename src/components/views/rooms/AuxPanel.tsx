@@ -20,7 +20,6 @@ import { Room } from 'matrix-js-sdk/src/models/room'
 import dis from "../../../dispatcher/dispatcher";
 import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
-import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
