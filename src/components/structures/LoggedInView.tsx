@@ -485,9 +485,10 @@ class LoggedInView extends React.Component<IProps, IState> {
                     unread: true,
                 });
                 break;
+            default:
+                // if we do not have a handler for it, pass it to the platform which might
+                handled = PlatformPeg.get().onKeyDown(ev);
         }
-        // if we do not have a handler for it, pass it to the platform which might
-        handled = PlatformPeg.get().onKeyDown(ev);
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();
