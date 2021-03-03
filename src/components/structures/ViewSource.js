@@ -19,7 +19,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import SyntaxHighlight from '../views/elements/SyntaxHighlight';
-import {_t, _td} from "../../languageHandler";
+import {_t} from "../../languageHandler";
 import * as sdk from "../../index";
 
 
