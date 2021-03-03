@@ -92,9 +92,6 @@ function exitFullscreen() {
 const CONTROLS_HIDE_DELAY = 1000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
-const HEADER_HEIGHT = 44;
-const BOTTOM_PADDING = 10;
-const BOTTOM_MARGIN_TOP_BOTTOM = 10; // top margin plus bottom margin
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
 export default class CallView extends React.Component<IProps, IState> {
