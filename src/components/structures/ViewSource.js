@@ -19,7 +19,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import SyntaxHighlight from '../views/elements/SyntaxHighlight';
-import {_t} from "../../languageHandler";
+import {_t, _td} from "../../languageHandler";
 import * as sdk from "../../index";
 
 
@@ -29,20 +29,36 @@ export default class ViewSource extends React.Component {
         onFinished: PropTypes.func.isRequired,
         roomId: PropTypes.string.isRequired,
         eventId: PropTypes.string.isRequired,
+        isEncrypted: PropTypes.bool.isRequired,
+        decryptedContent: PropTypes.object,
     };
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+
+        const DecryptedSection = <>
+            <div className="mx_ViewSource_separator" />
+            <div className="mx_ViewSource_heading">{_t("Decrypted event source")}</div>
+            <SyntaxHighlight className="json">
+                { JSON.stringify(this.props.decryptedContent, null, 2) }
+            </SyntaxHighlight>
+        </>;
+
+        const OriginalSection = <>
+            <div className="mx_ViewSource_separator" />
+            <div className="mx_ViewSource_heading">{_t("Original event source")}</div>
+            <SyntaxHighlight className="json">
+                { JSON.stringify(this.props.content, null, 2) }
+            </SyntaxHighlight>
+        </>;
+
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t('View Source')}>
-                <div className="mx_ViewSource_label_left">Room ID: { this.props.roomId }</div>
-                <div className="mx_ViewSource_label_right">Event ID: { this.props.eventId }</div>
-                <div className="mx_ViewSource_label_bottom" />
-
                 <div className="mx_Dialog_content">
-                    <SyntaxHighlight className="json">
-                        { JSON.stringify(this.props.content, null, 2) }
-                    </SyntaxHighlight>
+                    <div className="mx_ViewSource_label_left">Room ID: { this.props.roomId }</div>
+                    <div className="mx_ViewSource_label_left">Event ID: { this.props.eventId }</div>
+                    { this.props.isEncrypted && DecryptedSection }
+                    { OriginalSection }
                 </div>
             </BaseDialog>
         );

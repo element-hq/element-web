@@ -2875,5 +2875,7 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Space",
-    "End": "End"
+    "End": "End",
+    "Decrypted event source": "Decrypted event source",
+    "Original event source": "Original event source"
 }

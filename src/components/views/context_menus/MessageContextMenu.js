@@ -130,6 +130,8 @@ export default class MessageContextMenu extends React.Component {
             roomId: ev.getRoomId(),
             eventId: ev.getId(),
             content: ev.event,
+            isEncrypted: this.props.mxEvent.getType() !== this.props.mxEvent.getWireType(),
+            decryptedContent: ev._clearEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     };
@@ -309,7 +311,6 @@ export default class MessageContextMenu extends React.Component {
         let cancelButton;
         let forwardButton;
         let pinButton;
-        let viewClearSourceButton;
         let unhidePreviewButton;
         let externalURLButton;
         let quoteButton;
@@ -388,14 +389,6 @@ export default class MessageContextMenu extends React.Component {
                 { _t('View Source') }
             </MenuItem>
         );
-
-        if (mxEvent.getType() !== mxEvent.getWireType()) {
-            viewClearSourceButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
-                    { _t('View Decrypted Source') }
-                </MenuItem>
-            );
-        }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
@@ -481,7 +474,6 @@ export default class MessageContextMenu extends React.Component {
                 { forwardButton }
                 { pinButton }
                 { viewSourceButton }
-                { viewClearSourceButton }
                 { unhidePreviewButton }
                 { permalinkButton }
                 { quoteButton }
