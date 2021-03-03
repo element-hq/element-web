@@ -82,6 +82,8 @@ import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
+import SpaceStore from "../../stores/SpaceStore";
+import SpaceRoomDirectory from "./SpaceRoomDirectory";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -691,10 +693,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewRoomDirectory: {
-                const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
-                    initialText: payload.initialText,
-                }, 'mx_RoomDirectory_dialogWrapper', false, true);
+                if (SpaceStore.instance.activeSpace) {
+                    Modal.createTrackedDialog("Space room directory", "", SpaceRoomDirectory, {
+                        space: SpaceStore.instance.activeSpace,
+                        initialText: payload.initialText,
+                    }, "mx_SpaceRoomDirectory_dialogWrapper", false, true);
+                } else {
+                    const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
+                    Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                        initialText: payload.initialText,
+                    }, 'mx_RoomDirectory_dialogWrapper', false, true);
+                }
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
