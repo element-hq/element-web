@@ -2396,7 +2396,6 @@
     "Cancel Sending": "Cancel Sending",
     "Forward Message": "Forward Message",
     "Pin Message": "Pin Message",
-    "View Decrypted Source": "View Decrypted Source",
     "Unhide Preview": "Unhide Preview",
     "Share Permalink": "Share Permalink",
     "Share Message": "Share Message",
@@ -2652,6 +2651,8 @@
     "User menu": "User menu",
     "Community and user menu": "Community and user menu",
     "Could not load user profile": "Could not load user profile",
+    "Decrypted event source": "Decrypted event source",
+    "Original event source": "Original event source",
     "Verify this login": "Verify this login",
     "Session verified": "Session verified",
     "Failed to send email": "Failed to send email",
@@ -2875,7 +2876,5 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Space",
-    "End": "End",
-    "Decrypted event source": "Decrypted event source",
-    "Original event source": "Original event source"
+    "End": "End"
 }
