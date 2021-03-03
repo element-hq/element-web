@@ -29,10 +29,6 @@ interface IProps {
     // maxHeight style attribute for the video panel
     maxVideoHeight?: number;
 
-    // a callback which is called when the content in the callview changes
-    // in a way that is likely to cause a resize.
-    onResize?: any;
-
     resizeNotifier: ResizeNotifier,
 }
 
@@ -122,7 +118,6 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
                     <CallView
                         call={this.state.call}
                         pipMode={false}
-                        onResize={this.props.onResize}
                     />
                 </Resizable>
             </div>
