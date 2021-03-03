@@ -58,6 +58,8 @@
     "You cannot place VoIP calls in this browser.": "You cannot place VoIP calls in this browser.",
     "Too Many Calls": "Too Many Calls",
     "You've reached the maximum number of simultaneous calls.": "You've reached the maximum number of simultaneous calls.",
+    "Already in call": "Already in call",
+    "You're already in a call with this person.": "You're already in a call with this person.",
     "You cannot place a call with yourself.": "You cannot place a call with yourself.",
     "Call in Progress": "Call in Progress",
     "A call is currently being placed!": "A call is currently being placed!",

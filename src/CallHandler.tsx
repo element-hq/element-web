@@ -706,6 +706,14 @@ export default class CallHandler {
                         return;
                     }
 
+                    if (this.getCallForRoom(room.roomId)) {
+                        Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
+                            title: _t('Already in call'),
+                            description: _t("You're already in a call with this person."),
+                        });
+                        return;
+                    }
+
                     const members = room.getJoinedMembers();
                     if (members.length <= 1) {
                         Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
