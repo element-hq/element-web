@@ -68,7 +68,6 @@ const messageComposerBindings = (): KeyBinding<MessageComposerAction>[] => {
                 ctrlOrCmd: true,
             },
         },
-        // Note: the following two bindings also work with just HOME and END, add them here?
         {
             action: MessageComposerAction.MoveCursorToStart,
             keyCombo: {
@@ -162,6 +161,14 @@ const autocompleteBindings = (): KeyBinding<AutocompleteAction>[] => {
             action: AutocompleteAction.ApplySelection,
             keyCombo: {
                 key: Key.TAB,
+                shiftKey: true,
+            },
+        },
+        {
+            action: AutocompleteAction.ApplySelection,
+            keyCombo: {
+                key: Key.TAB,
+                ctrlKey: true,
                 shiftKey: true,
             },
         },
