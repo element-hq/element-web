@@ -157,10 +157,12 @@ const SubSpace: React.FC<ISubspaceProps> = ({
 
     let url: string;
     if (space.avatar_url) {
-        url = MatrixClientPeg.get().mxcUrlToHttp(space.avatar_url,
+        url = MatrixClientPeg.get().mxcUrlToHttp(
+            space.avatar_url,
             Math.floor(24 * window.devicePixelRatio),
             Math.floor(24 * window.devicePixelRatio),
-            "crop");
+            "crop",
+        );
     }
 
     return <div className="mx_SpaceRoomDirectory_subspace">
@@ -262,10 +264,12 @@ const RoomTile = ({ room, event, editing, queueAction, onPreviewClick, onJoinCli
 
     let url: string;
     if (room.avatar_url) {
-        url = cli.mxcUrlToHttp(room.avatar_url,
+        url = cli.mxcUrlToHttp(
+            room.avatar_url,
             Math.floor(32 * window.devicePixelRatio),
             Math.floor(32 * window.devicePixelRatio),
-            "crop");
+            "crop",
+        );
     }
 
     const content = <React.Fragment>
