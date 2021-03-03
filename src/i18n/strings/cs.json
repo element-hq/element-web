@@ -490,7 +490,7 @@
     "were invited %(count)s times|other": "byli %(count)s krát pozváni",
     "were invited %(count)s times|one": "byli pozváni",
     "was invited %(count)s times|other": "byl %(count)s krát pozván",
-    "was invited %(count)s times|one": "byl pozván",
+    "was invited %(count)s times|one": "byl(a) pozván(a)",
     "were banned %(count)s times|other": "mělid %(count)s krát zakázaný vstup",
     "were banned %(count)s times|one": "měli zakázaný vstup",
     "was banned %(count)s times|other": "měl %(count)s krát zakázaný vstup",
