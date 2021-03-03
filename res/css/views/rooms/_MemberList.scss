@@ -46,6 +46,8 @@ limitations under the License.
     }
 
     .mx_RightPanel_scopeHeader {
+        // vertically align with position on other right panel cards
+        // to prevent it bouncing as user navigates right panel
         margin-top: -8px;
     }
 }
