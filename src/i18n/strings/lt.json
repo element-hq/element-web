@@ -429,7 +429,7 @@
     "Unban this user?": "Atblokuoti šį vartotoją?",
     "Ban this user?": "Užblokuoti šį vartotoją?",
     "Failed to ban user": "Nepavyko užblokuoti vartotojo",
-    "Invited": "Pakviestas",
+    "Invited": "Pakviesta",
     "Filter room members": "Filtruoti kambario dalyvius",
     "Server unavailable, overloaded, or something else went wrong.": "Serveris neprieinamas, perkrautas arba nutiko kažkas kito.",
     "%(duration)ss": "%(duration)s sek",
