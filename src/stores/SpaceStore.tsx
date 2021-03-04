@@ -108,9 +108,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     }
 
-    public addRoomToSpace(space: Room, roomId: string, via: string[], autoJoin = false) {
+    public addRoomToSpace(space: Room, roomId: string, via: string[], suggested = false, autoJoin = false) {
         return this.matrixClient.sendStateEvent(space.roomId, EventType.SpaceChild, {
             via,
+            suggested,
             auto_join: autoJoin,
         }, roomId);
     }
