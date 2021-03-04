@@ -16,6 +16,7 @@
 
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import {IMediaEventContent, IPreparedMedia, prepEventContentAsMedia} from "./models/IMediaEventContent";
+import {ResizeMode} from "./models/ResizeMode";
 
 // Populate this class with the details of your customisations when copying it.
 
@@ -31,6 +32,13 @@ import {IMediaEventContent, IPreparedMedia, prepEventContentAsMedia} from "./mod
 export class Media {
     // Per above, this constructor signature can be whatever is helpful for you.
     constructor(private prepared: IPreparedMedia) {
+    }
+
+    /**
+     * True if the media appears to be encrypted. Actual file contents may vary.
+     */
+    public get isEncrypted(): boolean {
+        return !!this.prepared.file;
     }
 
     /**
@@ -63,6 +71,15 @@ export class Media {
     }
 
     /**
+     * The HTTP URL for the thumbnail media (without any specified width, height, etc). Null/undefined
+     * if no thumbnail media recorded.
+     */
+    public get thumbnailHttp(): string | undefined | null {
+        if (!this.hasThumbnail) return null;
+        return MatrixClientPeg.get().mxcUrlToHttp(this.thumbnailMxc);
+    }
+
+    /**
      * Gets the HTTP URL for the thumbnail media with the requested characteristics, if a thumbnail
      * is recorded for this media. Returns null/undefined otherwise.
      * @param {number} width The desired width of the thumbnail.
@@ -70,7 +87,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailHttp(width: number, height: number, mode: 'scale' | 'crop' = "scale"): string | null | undefined {
+    public getThumbnailHttp(width: number, height: number, mode: ResizeMode = "scale"): string | null | undefined {
         if (!this.hasThumbnail) return null;
         return MatrixClientPeg.get().mxcUrlToHttp(this.thumbnailMxc, width, height, mode);
     }
@@ -82,8 +99,21 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailOfSourceHttp(width: number, height: number, mode: 'scale' | 'crop' = "scale"): string {
+    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMode = "scale"): string {
         return MatrixClientPeg.get().mxcUrlToHttp(this.srcMxc, width, height, mode);
+    }
+
+    /**
+     * Creates a square thumbnail of the media. If the media has a thumbnail recorded, that MXC will
+     * be used, otherwise the source media will be used.
+     * @param {number} dim The desired width and height.
+     * @returns {string} An HTTP URL for the thumbnail.
+     */
+    public getSquareThumbnailHttp(dim: number): string {
+        if (this.hasThumbnail) {
+            return this.getThumbnailHttp(dim, dim, 'crop');
+        }
+        return this.getThumbnailOfSourceHttp(dim, dim, 'crop');
     }
 
     /**
@@ -102,7 +132,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
-    public downloadThumbnail(width: number, height: number, mode: 'scale' | 'crop' = "scale"): Promise<Response> {
+    public downloadThumbnail(width: number, height: number, mode: ResizeMode = "scale"): Promise<Response> {
         if (!this.hasThumbnail) throw new Error("Cannot download non-existent thumbnail");
         return fetch(this.getThumbnailHttp(width, height, mode));
     }
@@ -114,7 +144,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
-    public downloadThumbnailOfSource(width: number, height: number, mode: 'scale' | 'crop' = "scale"): Promise<Response> {
+    public downloadThumbnailOfSource(width: number, height: number, mode: ResizeMode = "scale"): Promise<Response> {
         return fetch(this.getThumbnailOfSourceHttp(width, height, mode));
     }
 }

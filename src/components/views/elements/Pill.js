@@ -26,6 +26,7 @@ import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import {mediaFromMxc} from "../../../customisations/Media";
 import Tooltip from './Tooltip';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
@@ -259,7 +260,7 @@ class Pill extends React.Component {
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
-                                             url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
+                                             url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
                 }

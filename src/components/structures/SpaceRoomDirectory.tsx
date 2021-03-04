@@ -34,6 +34,7 @@ import {EnhancedMap} from "../../utils/maps";
 import StyledCheckbox from "../views/elements/StyledCheckbox";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import BaseAvatar from "../views/avatars/BaseAvatar";
+import {mediaFromMxc} from "../../customisations/Media";
 
 interface IProps {
     space: Room;
@@ -158,12 +159,7 @@ const SubSpace: React.FC<ISubspaceProps> = ({
 
     let url: string;
     if (space.avatar_url) {
-        url = MatrixClientPeg.get().mxcUrlToHttp(
-            space.avatar_url,
-            Math.floor(24 * window.devicePixelRatio),
-            Math.floor(24 * window.devicePixelRatio),
-            "crop",
-        );
+        url = mediaFromMxc(space.avatar_url).getSquareThumbnailHttp(Math.floor(24 * window.devicePixelRatio));
     }
 
     return <div className="mx_SpaceRoomDirectory_subspace">
@@ -265,12 +261,7 @@ const RoomTile = ({ room, event, editing, queueAction, onPreviewClick, onJoinCli
 
     let url: string;
     if (room.avatar_url) {
-        url = cli.mxcUrlToHttp(
-            room.avatar_url,
-            Math.floor(32 * window.devicePixelRatio),
-            Math.floor(32 * window.devicePixelRatio),
-            "crop",
-        );
+        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(Math.floor(32 * window.devicePixelRatio));
     }
 
     const content = <React.Fragment>
