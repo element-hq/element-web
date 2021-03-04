@@ -126,6 +126,22 @@ let meetApi: any; // JitsiMeetExternalAPI
                     widgetApi.transport.reply(ev.detail, {}); // ack
                 },
             );
+            widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    if (meetApi) {
+                        meetApi.executeCommand('startRecording', {
+                            mode: 'stream',
+                            // this looks like it should be rtmpStreamKey but we may be on too old
+                            // a version of jitsi meet
+                            //rtmpStreamKey: ev.detail.data.rtmpStreamKey,
+                            youtubeStreamKey: ev.detail.data.rtmpStreamKey,
+                        });
+                        widgetApi.transport.reply(ev.detail, {}); // ack
+                    } else {
+                        widgetApi.transport.reply(ev.detail, {error: {message: "Conference not joined"}});
+                    }
+                },
+            );
         }
 
         enableJoinButton(); // always enable the button
