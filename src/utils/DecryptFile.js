@@ -19,6 +19,7 @@ limitations under the License.
 import encrypt from 'browser-encrypt-attachment';
 // Grab the client so that we can turn mxc:// URLs into https:// URLS.
 import {MatrixClientPeg} from '../MatrixClientPeg';
+import {mediaFromContent} from "../customisations/Media";
 
 // WARNING: We have to be very careful about what mime-types we allow into blobs,
 // as for performance reasons these are now rendered via URL.createObjectURL()
@@ -87,9 +88,9 @@ const ALLOWED_BLOB_MIMETYPES = {
  * @returns {Promise}
  */
 export function decryptFile(file) {
-    const url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
+    const media = mediaFromContent({file});
     // Download the encrypted file as an array buffer.
-    return Promise.resolve(fetch(url)).then(function(response) {
+    return media.downloadSource().then(function(response) {
         return response.arrayBuffer();
     }).then(function(responseData) {
         // Decrypt the array buffer using the information taken from
