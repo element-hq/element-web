@@ -18,6 +18,7 @@
 
 export interface IEncryptedFile {
     url: string;
+    mimetype?: string;
     key: {
         alg: string;
         key_ops: string[];
