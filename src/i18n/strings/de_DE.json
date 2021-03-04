@@ -3070,5 +3070,6 @@
     "Value": "Wert",
     "Setting ID": "Einstellungs-ID",
     "Failed to save settings": "Einstellungen konnten nicht gespeichert werden",
-    "Show chat effects (animations when receiving e.g. confetti)": "Animierte Chateffekte zeigen, wenn z.B. Konfetti-Emojis erhalten werden"
+    "Show chat effects (animations when receiving e.g. confetti)": "Animierte Chateffekte zeigen, wenn z.B. Konfetti-Emojis erhalten werden",
+    "Save setting values": "Einstellungswerte speichern"
 }
