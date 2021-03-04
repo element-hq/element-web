@@ -47,6 +47,7 @@ import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import {ICompletion} from "../../../autocomplete/Autocompleter";
 
+// matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
@@ -518,13 +519,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private async tabCompleteName(event: React.KeyboardEvent) {
         try {
-            await new Promise(resolve => this.setState({showVisualBell: false}, resolve));
+            await new Promise<void>(resolve => this.setState({showVisualBell: false}, resolve));
             const {model} = this.props;
             const caret = this.getCaret();
             const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
             const range = model.startRange(position);
             range.expandBackwardsWhile((index, offset, part) => {
-                return part.text[offset] !== " " && (
+                return part.text[offset] !== " " && part.text[offset] !== "+" && (
                     part.type === "plain" ||
                     part.type === "pill-candidate" ||
                     part.type === "command"

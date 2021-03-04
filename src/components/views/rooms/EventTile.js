@@ -21,21 +21,24 @@ import ReplyThread from "../elements/ReplyThread";
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
+import {Layout, LayoutPropType} from "../../../settings/Layout";
 import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
-import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
 import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
+import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
+import {objectHasDiff} from "../../../utils/objects";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -46,6 +49,7 @@ const eventTileTypes = {
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
+    'm.call.reject': 'messages.TextualEvent',
 };
 
 const stateEventTileTypes = {
@@ -63,6 +67,7 @@ const stateEventTileTypes = {
     'm.room.server_acl': 'messages.TextualEvent',
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': 'messages.TextualEvent',
+    [WIDGET_LAYOUT_EVENT_TYPE]: 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
     'm.room.guest_access': 'messages.TextualEvent',
@@ -223,8 +228,8 @@ export default class EventTile extends React.Component {
         // whether to show reactions for this event
         showReactions: PropTypes.bool,
 
-        // whether to use the irc layout
-        useIRCLayout: PropTypes.bool,
+        // which layout to use
+        layout: LayoutPropType,
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
@@ -289,7 +294,7 @@ export default class EventTile extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+        if (objectHasDiff(this.state, nextState)) {
             return true;
         }
 
@@ -645,12 +650,13 @@ export default class EventTile extends React.Component {
 
         // Info messages are basically information about commands processed on a room
         const isBubbleMessage = eventType.startsWith("m.key.verification") ||
-            (eventType === "m.room.message" && msgtype && msgtype.startsWith("m.key.verification")) ||
-            (eventType === "m.room.encryption") ||
+            (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+            (eventType === EventType.RoomCreate) ||
+            (eventType === EventType.RoomEncryption) ||
             (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (
-            !isBubbleMessage && eventType !== 'm.room.message' &&
-            eventType !== 'm.sticker' && eventType !== 'm.room.create'
+            !isBubbleMessage && eventType !== EventType.RoomMessage &&
+            eventType !== EventType.Sticker && eventType !== EventType.RoomCreate
         );
 
         // If we're showing hidden events in the timeline, we should use the
@@ -729,7 +735,7 @@ export default class EventTile extends React.Component {
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
-        } else if (this.props.useIRCLayout) {
+        } else if (this.props.layout == Layout.IRC) {
             avatarSize = 14;
             needsSenderProfile = true;
         } else if (this.props.continuation && this.props.tileShape !== "file_grid") {
@@ -742,13 +748,22 @@ export default class EventTile extends React.Component {
         }
 
         if (this.props.mxEvent.sender && avatarSize) {
+            let member;
+            // set member to receiver (target) if it is a 3PID invite
+            // so that the correct avatar is shown as the text is
+            // `$target accepted the invitation for $email`
+            if (this.props.mxEvent.getContent().third_party_invite) {
+               member = this.props.mxEvent.target;
+            } else {
+                member = this.props.mxEvent.sender;
+            }
             avatar = (
-                    <div className="mx_EventTile_avatar">
-                        <MemberAvatar member={this.props.mxEvent.sender}
-                            width={avatarSize} height={avatarSize}
-                            viewUserOnClick={true}
-                        />
-                    </div>
+                <div className="mx_EventTile_avatar">
+                    <MemberAvatar member={member}
+                        width={avatarSize} height={avatarSize}
+                        viewUserOnClick={true}
+                    />
+                </div>
             );
         }
 
@@ -831,10 +846,11 @@ export default class EventTile extends React.Component {
                 { timestamp }
             </a>;
 
-        const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
-        const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
-        const groupPadlock = !this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
-        const ircPadlock = this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const useIRCLayout = this.props.layout == Layout.IRC;
+        const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
+        const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
+        const groupPadlock = !useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const ircPadlock = useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
         switch (this.props.tileShape) {
             case 'notif': {
@@ -929,16 +945,13 @@ export default class EventTile extends React.Component {
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
                     this._replyThread,
-                    this.props.useIRCLayout,
+                    this.props.layout,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     <div className={classes} tabIndex={-1} aria-live={ariaLive} aria-atomic="true">
                         { ircTimestamp }
-                        <div className="mx_EventTile_msgOption">
-                            { readAvatars }
-                        </div>
                         { sender }
                         { ircPadlock }
                         <div className="mx_EventTile_line">
@@ -956,6 +969,9 @@ export default class EventTile extends React.Component {
                             { keyRequestInfo }
                             { reactionsRow }
                             { actionBar }
+                        </div>
+                        <div className="mx_EventTile_msgOption">
+                            { readAvatars }
                         </div>
                         {
                             // The avatar goes after the event tile as it's absolutely positioned to be over the

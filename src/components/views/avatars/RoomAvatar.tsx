@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, {ComponentProps} from 'react';
 import Room from 'matrix-js-sdk/src/models/room';
 import {getHttpUriForMxc} from 'matrix-js-sdk/src/content-repo';
 
@@ -24,7 +24,7 @@ import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
 import {ResizeMethod} from "../../../Avatar";
 
-interface IProps {
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
@@ -35,6 +35,7 @@ interface IProps {
     height?: number;
     resizeMethod?: ResizeMethod;
     viewAvatarOnClick?: boolean;
+    onClick?(): void;
 }
 
 interface IState {
@@ -130,7 +131,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const {room, oobData, viewAvatarOnClick, ...otherProps} = this.props;
+        const {room, oobData, viewAvatarOnClick, onClick, ...otherProps} = this.props;
 
         const roomName = room ? room.name : oobData.name;
 
@@ -139,7 +140,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
                 name={roomName}
                 idName={room ? room.roomId : null}
                 urls={this.state.urls}
-                onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : null}
+                onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />
         );
     }

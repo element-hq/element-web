@@ -46,6 +46,9 @@ import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from 
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import {UIFeature} from "./settings/UIFeature";
+import {CHAT_EFFECTS} from "./effects"
+import CallHandler from "./CallHandler";
+import {guessAndSetDMRoom} from "./Rooms";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -77,6 +80,7 @@ export const CommandCategories = {
     "actions": _td("Actions"),
     "admin": _td("Admin"),
     "advanced": _td("Advanced"),
+    "effects": _td("Effects"),
     "other": _td("Other"),
 };
 
@@ -156,6 +160,32 @@ export const Commands = [
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
         runFn: function(roomId, args) {
             let message = '¯\\_(ツ)_/¯';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'tableflip',
+        args: '<message>',
+        description: _td('Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '(╯°□°）╯︵ ┻━┻';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'unflip',
+        args: '<message>',
+        description: _td('Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '┬──┬ ノ( ゜-゜ノ)';
             if (args) {
                 message = message + ' ' + args;
             }
@@ -517,6 +547,7 @@ export const Commands = [
                         action: 'view_room',
                         room_alias: roomAlias,
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     });
                     return success();
                 } else if (params[0][0] === '!') {
@@ -531,6 +562,7 @@ export const Commands = [
                         },
                         via_servers: viaServers, // for the rejoin button
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     });
                     return success();
                 } else if (isPermalink) {
@@ -555,6 +587,7 @@ export const Commands = [
                     const dispatch = {
                         action: 'view_room',
                         auto_join: true,
+                        _type: "slash_command", // instrumentation
                     };
 
                     if (entity[0] === '!') dispatch["room_id"] = entity;
@@ -998,14 +1031,27 @@ export const Commands = [
         description: _td("Opens chat with the given user"),
         args: "<user-id>",
         runFn: function(roomId, userId) {
-            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+            // easter-egg for now: look up phone numbers through the thirdparty API
+            // (very dumb phone number detection...)
+            const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
+            if (!userId || (!userId.startsWith("@") || !userId.includes(":")) && !isPhoneNumber) {
                 return reject(this.getUsage());
             }
 
             return success((async () => {
+                if (isPhoneNumber) {
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
+                    if (!results || results.length === 0 || !results[0].userid) {
+                        throw new Error("Unable to find Matrix ID for phone number");
+                    }
+                    userId = results[0].userid;
+                }
+
+                const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
+
                 dis.dispatch({
                     action: 'view_room',
-                    room_id: await ensureDMExists(MatrixClientPeg.get(), userId),
+                    room_id: roomId,
                 });
             })());
         },
@@ -1039,6 +1085,50 @@ export const Commands = [
         },
         category: CommandCategories.actions,
     }),
+    new Command({
+        command: "holdcall",
+        description: _td("Places the call in the current room on hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(true);
+            return success();
+        },
+    }),
+    new Command({
+        command: "unholdcall",
+        description: _td("Takes the call in the current room off hold"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const call = CallHandler.sharedInstance().getCallForRoom(roomId);
+            if (!call) {
+                return reject("No active call in this room");
+            }
+            call.setRemoteOnHold(false);
+            return success();
+        },
+    }),
+    new Command({
+        command: "converttodm",
+        description: _td("Converts the room to a DM"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, true));
+        },
+    }),
+    new Command({
+        command: "converttoroom",
+        description: _td("Converts the DM to a room"),
+        category: CommandCategories.other,
+        runFn: function(roomId, args) {
+            const room = MatrixClientPeg.get().getRoom(roomId);
+            return success(guessAndSetDMRoom(room, false));
+        },
+    }),
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
@@ -1048,6 +1138,30 @@ export const Commands = [
         description: _td('Displays action'),
         category: CommandCategories.messages,
         hideCompletionAfterSpace: true,
+    }),
+
+    ...CHAT_EFFECTS.map((effect) => {
+        return new Command({
+            command: effect.command,
+            description: effect.description(),
+            args: '<message>',
+            runFn: function(roomId, args) {
+                return success((async () => {
+                    if (!args) {
+                        args = effect.fallbackMessage();
+                        MatrixClientPeg.get().sendEmoteMessage(roomId, args);
+                    } else {
+                        const content = {
+                            msgtype: effect.msgType,
+                            body: args,
+                        };
+                        MatrixClientPeg.get().sendMessage(roomId, content);
+                    }
+                    dis.dispatch({action: `effects.${effect.command}`});
+                })());
+            },
+            category: CommandCategories.effects,
+        })
     }),
 ];
 
@@ -1066,7 +1180,7 @@ export function parseCommandString(input: string) {
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {

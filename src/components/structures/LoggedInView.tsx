@@ -21,7 +21,7 @@ import * as PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent} from '../../Keyboard';
+import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isMac} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
@@ -52,6 +52,10 @@ import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import Modal from "../../Modal";
+import { ICollapseConfig } from "../../resizer/distributors/collapse";
+import HostSignupContainer from '../views/host_signup/HostSignupContainer';
+import { IOpts } from "../../createRoom";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -87,6 +91,8 @@ interface IProps {
     currentUserId?: string;
     currentGroupId?: string;
     currentGroupIsNew?: boolean;
+    justRegistered?: boolean;
+    roomJustCreatedOpts?: IOpts;
 }
 
 interface IUsageLimit {
@@ -103,7 +109,9 @@ interface IState {
             errcode: string;
         };
     };
+    usageLimitDismissed: boolean;
     usageLimitEventContent?: IUsageLimit;
+    usageLimitEventTs?: number;
     useCompactLayout: boolean;
 }
 
@@ -137,7 +145,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
-    protected readonly _compactLayoutWatcherRef: string;
+    protected compactLayoutWatcherRef: string;
     protected resizer: Resizer;
 
     constructor(props, context) {
@@ -147,24 +155,13 @@ class LoggedInView extends React.Component<IProps, IState> {
             syncErrorData: undefined,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
+            usageLimitDismissed: false,
         };
 
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
         CallMediaHandler.loadDevices();
-
-        document.addEventListener('keydown', this._onNativeKeyDown, false);
-
-        this._updateServerNoticeEvents();
-
-        this._matrixClient.on("accountData", this.onAccountData);
-        this._matrixClient.on("sync", this.onSync);
-        this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
-
-        this._compactLayoutWatcherRef = SettingsStore.watchSetting(
-            "useCompactLayout", null, this.onCompactLayoutChanged,
-        );
 
         fixupColorFonts();
 
@@ -173,6 +170,24 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
+        document.addEventListener('keydown', this._onNativeKeyDown, false);
+
+        this._updateServerNoticeEvents();
+
+        this._matrixClient.on("accountData", this.onAccountData);
+        this._matrixClient.on("sync", this.onSync);
+        // Call `onSync` with the current state as well
+        this.onSync(
+            this._matrixClient.getSyncState(),
+            null,
+            this._matrixClient.getSyncStateData(),
+        );
+        this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+
+        this.compactLayoutWatcherRef = SettingsStore.watchSetting(
+            "useCompactLayout", null, this.onCompactLayoutChanged,
+        );
+
         this.resizer = this._createResizer();
         this.resizer.attach();
         this._loadResizerPreferences();
@@ -183,7 +198,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
-        SettingsStore.unwatchSetting(this._compactLayoutWatcherRef);
+        SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         this.resizer.detach();
     }
 
@@ -205,16 +220,20 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     _createResizer() {
-        const classNames = {
-            handle: "mx_ResizeHandle",
-            vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse",
-        };
         let size;
-        const collapseConfig = {
-            toggleSize: 260 - 50,
-            onCollapsed: (collapsed) => {
-                if (collapsed) {
+        let collapsed;
+        const collapseConfig: ICollapseConfig = {
+            // TODO: the space panel currently does not have a fixed width,
+            // just the headers at each level have a max-width of 150px
+            // Taking 222px for the space panel for now,
+            // so this will look slightly off for now,
+            // depending on the depth of your space tree.
+            // To fix this, we'll need to turn toggleSize
+            // into a callback so it can be measured when starting the resize operation
+            toggleSize: 222 + 68,
+            onCollapsed: (_collapsed) => {
+                collapsed = _collapsed;
+                if (_collapsed) {
                     dis.dispatch({action: "hide_left_panel"}, true);
                     window.localStorage.setItem("mx_lhs_size", '0');
                 } else {
@@ -229,12 +248,19 @@ class LoggedInView extends React.Component<IProps, IState> {
                 this.props.resizeNotifier.startResizing();
             },
             onResizeStop: () => {
-                window.localStorage.setItem("mx_lhs_size", '' + size);
+                if (!collapsed) window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.stopResizing();
+            },
+            isItemCollapsed: domNode => {
+                return domNode.classList.contains("mx_LeftPanel_minimized");
             },
         };
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
-        resizer.setClassNames(classNames);
+        resizer.setClassNames({
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            reverse: "mx_ResizeHandle_reverse",
+        });
         return resizer;
     }
 
@@ -291,14 +317,27 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
+    private onUsageLimitDismissed = () => {
+        this.setState({
+            usageLimitDismissed: true,
+        });
+    }
+
     _calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
         const error = syncError && syncError.error && syncError.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
             usageLimitEventContent = syncError.error.data;
         }
 
-        if (usageLimitEventContent) {
-            showServerLimitToast(usageLimitEventContent.limit_type, usageLimitEventContent.admin_contact, error);
+        // usageLimitDismissed is true when the user has explicitly hidden the toast
+        // and it will be reset to false if a *new* usage alert comes in.
+        if (usageLimitEventContent && this.state.usageLimitDismissed) {
+            showServerLimitToast(
+                usageLimitEventContent.limit_type,
+                this.onUsageLimitDismissed,
+                usageLimitEventContent.admin_contact,
+                error,
+            );
         } else {
             hideServerLimitToast();
         }
@@ -309,10 +348,12 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (!serverNoticeList) return [];
 
         const events = [];
+        let pinnedEventTs = 0;
         for (const room of serverNoticeList) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
+            pinnedEventTs = pinStateEvent.getTs();
 
             const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
             for (const eventId of pinnedEventIds) {
@@ -320,6 +361,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                 const event = timeline.getEvents().find(ev => ev.getId() === eventId);
                 if (event) events.push(event);
             }
+        }
+
+        if (pinnedEventTs && this.state.usageLimitEventTs > pinnedEventTs) {
+            // We've processed a newer event than this one, so ignore it.
+            return;
         }
 
         const usageLimitEvent = events.find((e) => {
@@ -330,7 +376,12 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
         const usageLimitEventContent = usageLimitEvent && usageLimitEvent.getContent();
         this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEventContent);
-        this.setState({ usageLimitEventContent });
+        this.setState({
+            usageLimitEventContent,
+            usageLimitEventTs: pinnedEventTs,
+            // This is a fresh toast, we can show toasts again
+            usageLimitDismissed: false,
+        });
     };
 
     _onPaste = (ev) => {
@@ -391,6 +442,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
         const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
         const isModifier = ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
+        const modKey = isMac ? ev.metaKey : ev.ctrlKey;
 
         switch (ev.key) {
             case Key.PAGE_UP:
@@ -416,6 +468,14 @@ class LoggedInView extends React.Component<IProps, IState> {
                     handled = true;
                 }
                 break;
+            case Key.F:
+                if (ctrlCmdOnly && SettingsStore.getValue("ctrlFForSearch")) {
+                    dis.dispatch({
+                        action: 'focus_search',
+                    });
+                    handled = true;
+                }
+                break;
             case Key.BACKTICK:
                 // Ideally this would be CTRL+P for "Profile", but that's
                 // taken by the print dialog. CTRL+I for "Information"
@@ -431,6 +491,16 @@ class LoggedInView extends React.Component<IProps, IState> {
             case Key.SLASH:
                 if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev)) {
                     KeyboardShortcuts.toggleDialog();
+                    handled = true;
+                }
+                break;
+
+            case Key.H:
+                if (ev.altKey && modKey) {
+                    dis.dispatch({
+                        action: 'view_home_page',
+                    });
+                    Modal.closeCurrentModal("homeKeyboardShortcut");
                     handled = true;
                 }
                 break;
@@ -561,6 +631,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     resizeNotifier={this.props.resizeNotifier}
+                    justCreatedOpts={this.props.roomJustCreatedOpts}
                 />;
                 break;
 
@@ -573,7 +644,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.HomePage:
-                pageElement = <HomePage />;
+                pageElement = <HomePage justRegistered={this.props.justRegistered} />;
                 break;
 
             case PageTypes.UserView:
@@ -619,6 +690,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />
+                <HostSignupContainer />
             </MatrixClientContext.Provider>
         );
     }

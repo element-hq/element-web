@@ -108,6 +108,9 @@ $eventtile-meta-color: $roomtopic-color;
 $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
+// this probably shouldn't have it's own colour
+$voipcall-plinth-color: #21262c;
+
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
@@ -117,8 +120,10 @@ $roomlist-filter-active-bg-color: $bg-color;
 $roomlist-bg-color: rgba(33, 38, 44, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
+$space-button-outline-color: rgba(141, 151, 165, 0.2);
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -131,6 +136,7 @@ $notice-secondary-color: $roomlist-header-color;
 $panel-divider-color: transparent;
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
+$widget-body-bg-color: rgba(141, 151, 165, 0.2);
 
 // event tile lifecycle
 $event-sending-color: $text-secondary-color;
@@ -212,7 +218,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;
@@ -253,6 +259,12 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 // markdown overrides:
 .mx_EventTile_content .markdown-body pre:hover {
     border-color: #808080 !important; // inverted due to rules below
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; // copied from light theme due to inversion below
+    // the code above works only in Firefox, this is for other browsers
+    // see https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2); // copied from light theme due to inversion below
+    }
 }
 .mx_EventTile_content .markdown-body {
     pre, code {
@@ -271,6 +283,10 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
         tr:nth-child(2n) {
             background-color: #080808;
         }
+    }
+
+    blockquote {
+        color: #919191;
     }
 }
 

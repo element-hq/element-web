@@ -31,6 +31,7 @@ import Spinner from "./components/views/elements/Spinner";
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 import "blueimp-canvas-to-blob";
 import { Action } from "./dispatcher/actions";
+import CountlyAnalytics from "./CountlyAnalytics";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -368,10 +369,13 @@ export default class ContentMessages {
     private mediaConfig: IMediaConfig = null;
 
     sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
-        return MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
+        const startTime = CountlyAnalytics.getTimestamp();
+        const prom = MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
+        CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, {msgtype: "m.sticker"});
+        return prom;
     }
 
     getUploadLimit() {
@@ -479,6 +483,7 @@ export default class ContentMessages {
     }
 
     private sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
+        const startTime = CountlyAnalytics.getTimestamp();
         const content: IContent = {
             body: file.name || 'Attachment',
             info: {
@@ -492,7 +497,7 @@ export default class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const prom = new Promise((resolve) => {
+        const prom = new Promise<void>((resolve) => {
             if (file.type.indexOf('image/') === 0) {
                 content.msgtype = 'm.image';
                 infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
@@ -563,7 +568,9 @@ export default class ContentMessages {
             return promBefore;
         }).then(function() {
             if (upload.canceled) throw new UploadCanceledError();
-            return matrixClient.sendMessage(roomId, content);
+            const prom = matrixClient.sendMessage(roomId, content);
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, content);
+            return prom;
         }, function(err) {
             error = err;
             if (!upload.canceled) {

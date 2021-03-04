@@ -96,12 +96,21 @@ export enum Action {
     AfterRightPanelPhaseChange = "after_right_panel_phase_change",
 
     /**
-     * Requests that the AppTile deletes the widget. Should be used with the AppTileActionPayload.
+     * Opens the modal dial pad
      */
-    AppTileDelete = "appTile_delete",
+    OpenDialPad = "open_dial_pad",
 
     /**
-     * Requests that the AppTile revokes the widget. Should be used with the AppTileActionPayload.
+     * Fired when CallHandler has checked for PSTN protocol support
+     * payload: none
+     * XXX: Is an action the right thing for this?
      */
-    AppTileRevoke = "appTile_revoke",
+    PstnSupportUpdated = "pstn_support_updated",
+
+    /**
+     * Similar to PstnSupportUpdated, fired when CallHandler has checked for virtual room support
+     * payload: none
+     * XXX: Ditto
+     */
+    VirtualRoomSupportUpdated = "virtual_room_support_updated",
 }

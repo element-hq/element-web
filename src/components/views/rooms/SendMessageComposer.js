@@ -38,10 +38,16 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {Key} from "../../../Keyboard";
+import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
+import {containsEmoji} from "../../../effects/utils";
+import {CHAT_EFFECTS} from '../../../effects';
+import SettingsStore from "../../../settings/SettingsStore";
+import CountlyAnalytics from "../../../CountlyAnalytics";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import EMOJI_REGEX from 'emojibase-regex';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -87,12 +93,31 @@ export function createMessageContent(model, permalinkCreator, replyToEvent) {
     return content;
 }
 
+// exported for tests
+export function isQuickReaction(model) {
+    const parts = model.parts;
+    if (parts.length == 0) return false;
+    const text = textSerialize(model);
+    // shortcut takes the form "+:emoji:" or "+ :emoji:""
+    // can be in 1 or 2 parts
+    if (parts.length <= 2) {
+        const hasShortcut = text.startsWith("+") || text.startsWith("+ ");
+        const emojiMatch = text.match(EMOJI_REGEX);
+        if (hasShortcut && emojiMatch && emojiMatch.length == 1) {
+            return emojiMatch[0] === text.substring(1) ||
+                emojiMatch[0] === text.substring(2);
+        }
+    }
+    return false;
+}
+
 export default class SendMessageComposer extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,
         placeholder: PropTypes.string,
         permalinkCreator: PropTypes.object.isRequired,
         replyToEvent: PropTypes.object,
+        onChange: PropTypes.func,
     };
 
     static contextType = MatrixClientContext;
@@ -121,20 +146,25 @@ export default class SendMessageComposer extends React.Component {
             return;
         }
         const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
-        if (event.key === Key.ENTER && !hasModifier) {
+        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+        const send = ctrlEnterToSend
+            ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
+            : event.key === Key.ENTER && !hasModifier;
+        if (send) {
             this._sendMessage();
             event.preventDefault();
         } else if (event.key === Key.ARROW_UP) {
             this.onVerticalArrow(event, true);
         } else if (event.key === Key.ARROW_DOWN) {
             this.onVerticalArrow(event, false);
-        } else if (this._prepareToEncrypt) {
-            this._prepareToEncrypt();
         } else if (event.key === Key.ESCAPE) {
             dis.dispatch({
                 action: 'reply_to_event',
                 event: null,
             });
+        } else if (this._prepareToEncrypt) {
+            // This needs to be last!
+            this._prepareToEncrypt();
         }
     };
 
@@ -213,6 +243,41 @@ export default class SendMessageComposer extends React.Component {
             }
         }
         return false;
+    }
+
+    _sendQuickReaction() {
+        const timeline = this.props.room.getLiveTimeline();
+        const events = timeline.getEvents();
+        const reaction = this.model.parts[1].text;
+        for (let i = events.length - 1; i >= 0; i--) {
+            if (events[i].getType() === "m.room.message") {
+                let shouldReact = true;
+                const lastMessage = events[i];
+                const userId = MatrixClientPeg.get().getUserId();
+                const messageReactions = this.props.room.getUnfilteredTimelineSet()
+                    .getRelationsForEvent(lastMessage.getId(), "m.annotation", "m.reaction");
+
+                // if we have already sent this reaction, don't redact but don't re-send
+                if (messageReactions) {
+                    const myReactionEvents = messageReactions.getAnnotationsBySender()[userId] || [];
+                    const myReactionKeys = [...myReactionEvents]
+                        .filter(event => !event.isRedacted())
+                        .map(event => event.getRelation().key);
+                        shouldReact = !myReactionKeys.includes(reaction);
+                }
+                if (shouldReact) {
+                    MatrixClientPeg.get().sendEvent(lastMessage.getRoomId(), "m.reaction", {
+                        "m.relates_to": {
+                            "rel_type": "m.annotation",
+                            "event_id": lastMessage.getId(),
+                            "key": reaction,
+                        },
+                    });
+                    dis.dispatch({action: "message_sent"});
+                }
+                break;
+            }
+        }
     }
 
     _getSlashCommand() {
@@ -302,11 +367,20 @@ export default class SendMessageComposer extends React.Component {
             }
         }
 
+        if (isQuickReaction(this.model)) {
+            shouldSend = false;
+            this._sendQuickReaction();
+        }
+
         const replyToEvent = this.props.replyToEvent;
         if (shouldSend) {
+            const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
             const content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
-            this.context.sendMessage(roomId, content);
+            // don't bother sending an empty message
+            if (!content.body.trim()) return;
+
+            const prom = this.context.sendMessage(roomId, content);
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
@@ -316,6 +390,12 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
+            CHAT_EFFECTS.forEach((effect) => {
+                if (containsEmoji(content, effect.emojis)) {
+                    dis.dispatch({action: `effects.${effect.command}`});
+                }
+            });
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
         this.sendHistoryManager.save(this.model, replyToEvent);
@@ -324,6 +404,9 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
+        if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+            dis.dispatch({action: "scroll_to_bottom"});
+        }
     }
 
     componentWillUnmount() {
@@ -456,10 +539,15 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    onChange = () => {
+        if (this.props.onChange) this.props.onChange(this.model);
+    }
+
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
                 <BasicMessageComposer
+                    onChange={this.onChange}
                     ref={this._setEditorRef}
                     model={this.model}
                     room={this.props.room}

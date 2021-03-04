@@ -100,10 +100,10 @@ export default class LanguageDropdown extends React.Component {
         let language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
         let value = null;
         if (language) {
-          value = this.props.value || language;
+            value = this.props.value || language;
         } else {
-          language = navigator.language || navigator.userLanguage;
-          value = this.props.value || language;
+            language = navigator.language || navigator.userLanguage;
+            value = this.props.value || language;
         }
 
         return <Dropdown

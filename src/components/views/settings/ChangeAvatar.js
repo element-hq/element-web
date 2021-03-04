@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import Spinner from '../elements/Spinner';
 
 export default class ChangeAvatar extends React.Component {
     static propTypes = {
@@ -58,7 +59,7 @@ export default class ChangeAvatar extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
         if (this.avatarSet) {
             // don't clobber what the user has just set
             return;
@@ -143,7 +144,9 @@ export default class ChangeAvatar extends React.Component {
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
             const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
-            avatarImg = <RoomAvatar room={this.props.room} width={this.props.width} height={this.props.height} resizeMethod='crop' />;
+            avatarImg = <RoomAvatar
+                room={this.props.room} width={this.props.width} height={this.props.height} resizeMethod='crop'
+            />;
         } else {
             const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
@@ -174,9 +177,8 @@ export default class ChangeAvatar extends React.Component {
                     </div>
                 );
             case ChangeAvatar.Phases.Uploading:
-                var Loader = sdk.getComponent("elements.Spinner");
                 return (
-                    <Loader />
+                    <Spinner />
                 );
         }
     }

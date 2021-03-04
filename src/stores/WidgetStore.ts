@@ -16,34 +16,33 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IWidget } from "matrix-widget-api";
 
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import SettingsStore from "../settings/SettingsStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
-import {SettingLevel} from "../settings/SettingLevel";
 import {WidgetType} from "../widgets/WidgetType";
 import {UPDATE_EVENT} from "./AsyncStore";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 interface IState {}
 
-export interface IApp {
-    id: string;
-    type: string;
+export interface IApp extends IWidget {
     roomId: string;
     eventId: string;
-    creatorUserId: string;
-    waitForIframeLoad?: boolean;
     // eslint-disable-next-line camelcase
     avatar_url: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }
 
 interface IRoomWidgets {
     widgets: IApp[];
-    pinned: Record<string, boolean>;
+}
+
+function widgetUid(app: IApp): string {
+    return `${app.roomId ?? MatrixClientPeg.get().getUserId()}::${app.id}`;
 }
 
 // TODO consolidate WidgetEchoStore into this
@@ -51,13 +50,12 @@ interface IRoomWidgets {
 export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new WidgetStore();
 
-    private widgetMap = new Map<string, IApp>();
-    private roomMap = new Map<string, IRoomWidgets>();
+    private widgetMap = new Map<string, IApp>(); // Key is widget Unique ID (UID)
+    private roomMap = new Map<string, IRoomWidgets>(); // Key is room ID
 
     private constructor() {
         super(defaultDispatcher, {});
 
-        SettingsStore.watchSetting("Widgets.pinned", null, this.onPinnedWidgetsChange);
         WidgetEchoStore.on("update", this.onWidgetEchoStoreUpdate);
     }
 
@@ -68,31 +66,22 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private initRoom(roomId: string) {
         if (!this.roomMap.has(roomId)) {
             this.roomMap.set(roomId, {
-                pinned: {},
                 widgets: [],
             });
         }
     }
 
     protected async onReady(): Promise<any> {
+        this.matrixClient.on("Room", this.onRoom);
         this.matrixClient.on("RoomState.events", this.onRoomStateEvents);
         this.matrixClient.getRooms().forEach((room: Room) => {
-            const pinned = SettingsStore.getValue("Widgets.pinned", room.roomId);
-
-            if (pinned || WidgetUtils.getRoomWidgets(room).length) {
-                this.initRoom(room.roomId);
-            }
-
-            if (pinned) {
-                this.getRoom(room.roomId).pinned = pinned;
-            }
-
             this.loadRoomWidgets(room);
         });
-        this.emit(UPDATE_EVENT);
+        this.emit(UPDATE_EVENT, null); // emit for all rooms
     }
 
     protected async onNotReady(): Promise<any> {
+        this.matrixClient.off("Room", this.onRoom);
         this.matrixClient.off("RoomState.events", this.onRoomStateEvents);
         this.widgetMap = new Map();
         this.roomMap = new Map();
@@ -107,7 +96,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private onWidgetEchoStoreUpdate = (roomId: string, widgetId: string) => {
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
-        this.emit(UPDATE_EVENT);
+        this.emit(UPDATE_EVENT, roomId);
     };
 
     private generateApps(room: Room): IApp[] {
@@ -120,94 +109,59 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
     private loadRoomWidgets(room: Room) {
         if (!room) return;
-        const roomInfo = this.roomMap.get(room.roomId);
+        const roomInfo = this.roomMap.get(room.roomId) || <IRoomWidgets>{};
         roomInfo.widgets = [];
-        this.generateApps(room).forEach(app => {
-            this.widgetMap.set(app.id, app);
-            roomInfo.widgets.push(app);
+
+        // first clean out old widgets from the map which originate from this room
+        // otherwise we are out of sync with the rest of the app with stale widget events during removal
+        Array.from(this.widgetMap.values()).forEach(app => {
+            if (app.roomId !== room.roomId) return; // skip - wrong room
+            this.widgetMap.delete(widgetUid(app));
         });
+
+        let edited = false;
+        this.generateApps(room).forEach(app => {
+            // Sanity check for https://github.com/vector-im/element-web/issues/15705
+            const existingApp = this.widgetMap.get(widgetUid(app));
+            if (existingApp) {
+                console.warn(
+                    `Possible widget ID conflict for ${app.id} - wants to store in room ${app.roomId} ` +
+                    `but is currently stored as ${existingApp.roomId} - letting the want win`,
+                );
+            }
+
+            this.widgetMap.set(widgetUid(app), app);
+            roomInfo.widgets.push(app);
+            edited = true;
+        });
+        if (edited && !this.roomMap.has(room.roomId)) {
+            this.roomMap.set(room.roomId, roomInfo);
+        }
         this.emit(room.roomId);
     }
 
+    private onRoom = (room: Room) => {
+        this.initRoom(room.roomId);
+        this.loadRoomWidgets(room);
+        this.emit(UPDATE_EVENT, room.roomId);
+    };
+
     private onRoomStateEvents = (ev: MatrixEvent) => {
-        if (ev.getType() !== "im.vector.modular.widgets") return;
+        if (ev.getType() !== "im.vector.modular.widgets") return; // TODO: Support m.widget too
         const roomId = ev.getRoomId();
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
-        this.emit(UPDATE_EVENT);
+        this.emit(UPDATE_EVENT, roomId);
     };
 
-    public getRoomId = (widgetId: string) => {
-        const app = this.widgetMap.get(widgetId);
-        if (!app) return null;
-        return app.roomId;
-    }
-
-    public getRoom = (roomId: string) => {
+    public getRoom = (roomId: string, initIfNeeded = false) => {
+        if (initIfNeeded) this.initRoom(roomId); // internally handles "if needed"
         return this.roomMap.get(roomId);
     };
 
-    private onPinnedWidgetsChange = (settingName: string, roomId: string) => {
-        this.initRoom(roomId);
-        this.getRoom(roomId).pinned = SettingsStore.getValue(settingName, roomId);
-        this.emit(roomId);
-        this.emit(UPDATE_EVENT);
-    };
-
-    public isPinned(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
+    public getApps(roomId: string): IApp[] {
         const roomInfo = this.getRoom(roomId);
-
-        let pinned = roomInfo && roomInfo.pinned[widgetId];
-        // Jitsi widgets should be pinned by default
-        const widget = this.widgetMap.get(widgetId);
-        if (pinned === undefined && WidgetType.JITSI.matches(widget?.type)) pinned = true;
-        return pinned;
-    }
-
-    public canPin(widgetId: string) {
-        // only allow pinning up to a max of two as we do not yet have grid splits
-        // the only case it will go to three is if you have two and then a Jitsi gets added
-        const roomId = this.getRoomId(widgetId);
-        const roomInfo = this.getRoom(roomId);
-        return roomInfo && Object.keys(roomInfo.pinned).filter(k => {
-            return roomInfo.pinned[k] && roomInfo.widgets.some(app => app.id === k);
-        }).length < 2;
-    }
-
-    public pinWidget(widgetId: string) {
-        this.setPinned(widgetId, true);
-    }
-
-    public unpinWidget(widgetId: string) {
-        this.setPinned(widgetId, false);
-    }
-
-    private setPinned(widgetId: string, value: boolean) {
-        const roomId = this.getRoomId(widgetId);
-        const roomInfo = this.getRoom(roomId);
-        if (!roomInfo) return;
-        roomInfo.pinned[widgetId] = value;
-
-        // Clean up the pinned record
-        Object.keys(roomInfo).forEach(wId => {
-            if (!roomInfo.widgets.some(w => w.id === wId)) {
-                delete roomInfo.pinned[wId];
-            }
-        });
-
-        SettingsStore.setValue("Widgets.pinned", roomId, SettingLevel.ROOM_ACCOUNT, roomInfo.pinned);
-        this.emit(roomId);
-        this.emit(UPDATE_EVENT);
-    }
-
-    public getApps(room: Room, pinned?: boolean): IApp[] {
-        const roomInfo = this.getRoom(room.roomId);
-        if (!roomInfo) return [];
-        if (pinned) {
-            return roomInfo.widgets.filter(app => this.isPinned(app.id));
-        }
-        return roomInfo.widgets;
+        return roomInfo?.widgets || [];
     }
 
     public doesRoomHaveConference(room: Room): boolean {

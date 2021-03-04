@@ -38,6 +38,8 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
+import LeftPanelWidget from "./LeftPanelWidget";
+import SpacePanel from "../views/spaces/SpacePanel";
 
 interface IProps {
     isMinimized: boolean;
@@ -142,7 +144,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist");
 
-        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
         const headerStickyWidth = list.clientWidth - headerRightMargin;
 
         // We track which styles we want on a target before making the changes to avoid
@@ -213,9 +215,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
+
+                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const newBottom = `${offset}px`;
+                if (header.style.bottom !== newBottom) {
+                    header.style.bottom = newBottom;
+                }
             } else {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
+                }
+                if (header.style.bottom) {
+                    header.style.removeProperty('bottom');
                 }
             }
 
@@ -378,17 +389,23 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const groupFilterPanel = !this.state.showGroupFilterPanel ? null : (
-            <div className="mx_LeftPanel_GroupFilterPanelContainer">
-                <GroupFilterPanel />
-                {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
-            </div>
-        );
+        let leftLeftPanel;
+        // Currently TagPanel.enableTagPanel is disabled when Legacy Communities are disabled so for now
+        // ignore it and force the rendering of SpacePanel if that Labs flag is enabled.
+        if (SettingsStore.getValue("feature_spaces")) {
+            leftLeftPanel = <SpacePanel />;
+        } else if (this.state.showGroupFilterPanel) {
+            leftLeftPanel = (
+                <div className="mx_LeftPanel_GroupFilterPanelContainer">
+                    <GroupFilterPanel />
+                    {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
+                </div>
+            );
+        }
 
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
             resizeNotifier={null}
-            collapsed={false}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
@@ -397,7 +414,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         const containerClasses = classNames({
             "mx_LeftPanel": true,
-            "mx_LeftPanel_hasGroupFilterPanel": !!groupFilterPanel,
             "mx_LeftPanel_minimized": this.props.isMinimized,
         });
 
@@ -408,7 +424,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses}>
-                {groupFilterPanel}
+                {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
@@ -426,6 +442,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
+                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
                 </aside>
             </div>
         );

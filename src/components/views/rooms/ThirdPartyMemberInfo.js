@@ -23,6 +23,8 @@ import dis from "../../../dispatcher/dispatcher";
 import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import {isValid3pidInvite} from "../../../RoomInvite";
+import RoomAvatar from "../avatars/RoomAvatar";
+import RoomName from "../elements/RoomName";
 
 export default class ThirdPartyMemberInfo extends React.Component {
     static propTypes = {
@@ -32,14 +34,14 @@ export default class ThirdPartyMemberInfo extends React.Component {
     constructor(props) {
         super(props);
 
-        const room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
-        const me = room.getMember(MatrixClientPeg.get().getUserId());
-        const powerLevels = room.currentState.getStateEvents("m.room.power_levels", "");
+        this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
+        const me = this.room.getMember(MatrixClientPeg.get().getUserId());
+        const powerLevels = this.room.currentState.getStateEvents("m.room.power_levels", "");
 
         let kickLevel = powerLevels ? powerLevels.getContent().kick : 50;
         if (typeof(kickLevel) !== 'number') kickLevel = 50;
 
-        const sender = room.getMember(this.props.event.getSender());
+        const sender = this.room.getMember(this.props.event.getSender());
 
         this.state = {
             stateKey: this.props.event.getStateKey(),
@@ -119,9 +121,18 @@ export default class ThirdPartyMemberInfo extends React.Component {
             );
         }
 
+        let scopeHeader;
+        if (this.room.isSpaceRoom()) {
+            scopeHeader = <div className="mx_RightPanel_scopeHeader">
+                <RoomAvatar room={this.room} height={32} width={32} />
+                <RoomName room={this.room} />
+            </div>;
+        }
+
         // We shamelessly rip off the MemberInfo styles here.
         return (
             <div className="mx_MemberInfo" role="tabpanel">
+                { scopeHeader }
                 <div className="mx_MemberInfo_name">
                     <AccessibleButton className="mx_MemberInfo_cancel"
                         onClick={this.onCancel}

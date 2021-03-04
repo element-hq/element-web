@@ -166,6 +166,9 @@ $eventtile-meta-color: $roomtopic-color;
 $composer-e2e-icon-color: #91A1C0;
 $header-divider-color: #91A1C0;
 
+// this probably shouldn't have it's own colour
+$voipcall-plinth-color: #f2f5f8;
+
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
@@ -175,8 +178,10 @@ $roomlist-filter-active-bg-color: #ffffff;
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
 $roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
+$space-button-outline-color: #E3E8F0;
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -208,6 +213,7 @@ $pinned-color: $notice-secondary-color;
 // ********************
 
 $widget-menu-bar-bg-color: $secondary-accent-color;
+$widget-body-bg-color: #FFF;
 
 // ********************
 
@@ -232,6 +238,8 @@ $event-redacted-border-color: #cccccc;
 $event-timestamp-color: #acacac;
 
 $copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
+$collapse-button-url: "$(res)/img/feather-customised/minimise.svg";
+$expand-button-url: "$(res)/img/feather-customised/maximise.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -330,7 +338,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.04);
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;

@@ -18,8 +18,10 @@ import Adapter from "enzyme-adapter-react-16";
 import { configure, mount } from "enzyme";
 import React from "react";
 import {act} from "react-dom/test-utils";
-
-import SendMessageComposer, {createMessageContent} from "../../../../src/components/views/rooms/SendMessageComposer";
+import SendMessageComposer, {
+    createMessageContent,
+    isQuickReaction,
+} from "../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import EditorModel from "../../../../src/editor/model";
 import {createPartCreator, createRenderer} from "../../../editor/mock";
@@ -225,6 +227,42 @@ describe('<SendMessageComposer/>', () => {
                 parts: [{"type": "plain", "text": "This is a message"}],
                 replyEventId: mockEvent.getId(),
             });
+        });
+    });
+
+    describe("isQuickReaction", () => {
+        it("correctly detects quick reaction", () => {
+            const model = new EditorModel([], createPartCreator(), createRenderer());
+            model.update("+😊", "insertText", {offset: 3, atNodeEnd: true});
+
+            const isReaction = isQuickReaction(model);
+
+            expect(isReaction).toBeTruthy();
+        });
+
+        it("correctly detects quick reaction with space", () => {
+            const model = new EditorModel([], createPartCreator(), createRenderer());
+            model.update("+ 😊", "insertText", {offset: 4, atNodeEnd: true});
+
+            const isReaction = isQuickReaction(model);
+
+            expect(isReaction).toBeTruthy();
+        });
+
+        it("correctly rejects quick reaction with extra text", () => {
+            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model2 = new EditorModel([], createPartCreator(), createRenderer());
+            const model3 = new EditorModel([], createPartCreator(), createRenderer());
+            const model4 = new EditorModel([], createPartCreator(), createRenderer());
+            model.update("+😊hello", "insertText", {offset: 8, atNodeEnd: true});
+            model2.update(" +😊", "insertText", {offset: 4, atNodeEnd: true});
+            model3.update("+ 😊😊", "insertText", {offset: 6, atNodeEnd: true});
+            model4.update("+smiley", "insertText", {offset: 7, atNodeEnd: true});
+
+            expect(isQuickReaction(model)).toBeFalsy();
+            expect(isQuickReaction(model2)).toBeFalsy();
+            expect(isQuickReaction(model3)).toBeFalsy();
+            expect(isQuickReaction(model4)).toBeFalsy();
         });
     });
 });

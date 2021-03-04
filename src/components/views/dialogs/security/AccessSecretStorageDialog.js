@@ -199,11 +199,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         } else if (this.state.recoveryKeyCorrect) {
             return _t("Looks good!");
         } else if (this.state.recoveryKeyValid) {
-            return _t("Wrong Recovery Key");
+            return _t("Wrong Security Key");
         } else if (this.state.recoveryKeyValid === null) {
             return '';
         } else {
-            return _t("Invalid Recovery Key");
+            return _t("Invalid Security Key");
         }
     }
 
@@ -231,7 +231,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
                     {"\uD83D\uDC4E "}{_t(
                         "Unable to access secret storage. " +
-                        "Please verify that you entered the correct recovery passphrase.",
+                        "Please verify that you entered the correct Security Phrase.",
                     )}
                 </div>;
             } else {
@@ -298,7 +298,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry">
                         <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry_textInput">
                             <Field
-                                type="text"
+                                type="password"
                                 label={_t('Security Key')}
                                 value={this.state.recoveryKey}
                                 onChange={this._onRecoveryKeyChange}
