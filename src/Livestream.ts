@@ -39,14 +39,14 @@ async function createLiveStream(roomId: string) {
         }),
     });
 
-    const respBody = response.json();
+    const respBody = await response.json();
     return respBody['stream_id'];
 }
 
 export async function startJitsiAudioLivestream(widgetMessaging: ClientWidgetApi, roomId: string) {
     const streamId = await createLiveStream(roomId);
 
-    widgetMessaging.transport.send(ElementWidgetActions.StartLiveStream, {
-        rtmpStreamKey: 'audioStream:' + streamId,
+    await widgetMessaging.transport.send(ElementWidgetActions.StartLiveStream, {
+        rtmpStreamKey: 'rtmp://audiostream.dummy/' + streamId,
     });
 }

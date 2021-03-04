@@ -28,6 +28,7 @@ import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import ErrorDialog from "../dialogs/ErrorDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
@@ -57,8 +58,18 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let streamAudioStreamButton;
     if (getConfigLivestreamUrl() && (app.type === "m.jitsi" || app.type === "jitsi")) {
-        const onStreamAudioClick = () => {
-            startJitsiAudioLivestream(widgetMessaging, roomId);
+        const onStreamAudioClick = async () => {
+            try {
+                await startJitsiAudioLivestream(widgetMessaging, roomId);
+            } catch (err) {
+                console.log("Failed to start livestream", err);
+                // XXX: won't i18n well, but looks like widget api only support 'message'?
+                const message = err.message || _t("Unable to start audio streaming.");
+                Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
+                    title: _t('Failed to start livestream'),
+                    description: message,
+                });
+            }
             onFinished();
         };
         streamAudioStreamButton = <IconizedContextMenuOption
