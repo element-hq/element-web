@@ -142,7 +142,7 @@ export class SendCustomEvent extends GenericEditor {
         }
 
         const showTglFlip = !this.state.message && !this.props.forceStateEvent && !this.props.forceGeneralEvent;
-        
+
         return <div>
             <div className="mx_DevTools_content">
                 <div className="mx_DevTools_eventTypeStateKeyGroup">

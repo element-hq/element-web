@@ -61,11 +61,7 @@ export default class ViewSource extends React.Component {
                                 onBack={() => this.onBack()}
                                 inputs={{
                                     eventType: this.props.event.getType(),
-                                    evContent: JSON.stringify(
-                                        this.props.event.getContent(),
-                                        null,
-                                        "\t"
-                                    ),
+                                    evContent: JSON.stringify(this.props.event.getContent(), null, "\t"),
                                     stateKey: this.props.event.getStateKey(),
                                 }}
                             />
@@ -97,11 +93,7 @@ export default class ViewSource extends React.Component {
                                 onBack={() => this.onBack()}
                                 inputs={{
                                     eventType: this.props.event.getType(),
-                                    evContent: JSON.stringify(
-                                        content,
-                                        null,
-                                        "\t"
-                                    ),
+                                    evContent: JSON.stringify(content, null, "\t"),
                                 }}
                             />
                         )}
@@ -120,39 +112,23 @@ export default class ViewSource extends React.Component {
                 <>
                     <details open className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">
-                                {_t("Decrypted event source")}
-                            </span>
+                            <span className="mx_ViewSource_heading">{_t("Decrypted event source")}</span>
                         </summary>
-                        <SyntaxHighlight className="json">
-                            {JSON.stringify(
-                                this.props.decryptedContent,
-                                null,
-                                2
-                            )}
-                        </SyntaxHighlight>
+                        <SyntaxHighlight className="json">{JSON.stringify(this.props.decryptedContent, null, 2)}</SyntaxHighlight>
                     </details>
                     <details className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">
-                                {_t("Original event source")}
-                            </span>
+                            <span className="mx_ViewSource_heading">{_t("Original event source")}</span>
                         </summary>
-                        <SyntaxHighlight className="json">
-                            {JSON.stringify(this.props.content, null, 2)}
-                        </SyntaxHighlight>
+                        <SyntaxHighlight className="json">{JSON.stringify(this.props.content, null, 2)}</SyntaxHighlight>
                     </details>
                 </>
             );
         } else {
             content = (
                 <>
-                    <div className="mx_ViewSource_heading">
-                        {_t("Original event source")}
-                    </div>
-                    <SyntaxHighlight className="json">
-                        {JSON.stringify(this.props.content, null, 2)}
-                    </SyntaxHighlight>
+                    <div className="mx_ViewSource_heading">{_t("Original event source")}</div>
+                    <SyntaxHighlight className="json">{JSON.stringify(this.props.content, null, 2)}</SyntaxHighlight>
                 </>
             );
         }
@@ -161,26 +137,16 @@ export default class ViewSource extends React.Component {
         console.log(isEditing);
 
         return (
-            <BaseDialog
-                className="mx_ViewSource"
-                onFinished={this.props.onFinished}
-                title={_t("View Source")}
-            >
+            <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
-                    <div className="mx_ViewSource_label_left">
-                        Room ID: {this.props.roomId}
-                    </div>
-                    <div className="mx_ViewSource_label_left">
-                        Event ID: {this.props.eventId}
-                    </div>
+                    <div className="mx_ViewSource_label_left">Room ID: {this.props.roomId}</div>
+                    <div className="mx_ViewSource_label_left">Event ID: {this.props.eventId}</div>
                     <div className="mx_ViewSource_separator" />
                     {isEditing ? this.state.editComponent : content}
                 </div>
                 {!isEditing && (
                     <div className="mx_Dialog_buttons">
-                        <button onClick={() => this.editEvent()}>
-                            {_t("Edit")}
-                        </button>
+                        <button onClick={() => this.editEvent()}>{_t("Edit")}</button>
                     </div>
                 )}
             </BaseDialog>
