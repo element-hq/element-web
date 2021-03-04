@@ -27,6 +27,9 @@
 @import "./structures/_RoomView.scss";
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
+@import "./structures/_SpacePanel.scss";
+@import "./structures/_SpaceRoomDirectory.scss";
+@import "./structures/_SpaceRoomView.scss";
 @import "./structures/_TabbedView.scss";
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_UploadBar.scss";
@@ -56,6 +59,7 @@
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
+@import "./views/dialogs/_AddExistingToSpaceDialog.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
@@ -89,6 +93,7 @@
 @import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_SlashCommandHelpDialog.scss";
+@import "./views/dialogs/_SpaceSettingsDialog.scss";
 @import "./views/dialogs/_TabbedIntegrationManagerDialog.scss";
 @import "./views/dialogs/_TermsDialog.scss";
 @import "./views/dialogs/_UploadConfirmDialog.scss";
@@ -212,6 +217,7 @@
 @import "./views/settings/_DevicesPanel.scss";
 @import "./views/settings/_E2eAdvancedPanel.scss";
 @import "./views/settings/_EmailAddresses.scss";
+@import "./views/settings/_SpellCheckLanguages.scss";
 @import "./views/settings/_IntegrationManager.scss";
 @import "./views/settings/_Notifications.scss";
 @import "./views/settings/_PhoneNumbers.scss";
@@ -232,6 +238,9 @@
 @import "./views/settings/tabs/user/_PreferencesUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_SecurityUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_VoiceUserSettingsTab.scss";
+@import "./views/spaces/_SpaceBasicSettings.scss";
+@import "./views/spaces/_SpaceCreateMenu.scss";
+@import "./views/spaces/_SpacePublicShare.scss";
 @import "./views/terms/_InlineTermsAgreement.scss";
 @import "./views/toasts/_AnalyticsToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";

@@ -48,7 +48,7 @@ import * as Lifecycle from '../../Lifecycle';
 import '../../stores/LifecycleStore';
 import PageTypes from '../../PageTypes';
 
-import createRoom from "../../createRoom";
+import createRoom, {IOpts} from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
@@ -82,6 +82,8 @@ import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
+import SpaceStore from "../../stores/SpaceStore";
+import SpaceRoomDirectory from "./SpaceRoomDirectory";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -144,6 +146,8 @@ interface IRoomInfo {
     oob_data?: object;
     via_servers?: string[];
     threepid_invite?: IThreepidInvite;
+
+    justCreatedOpts?: IOpts;
 }
 /* eslint-enable camelcase */
 
@@ -201,6 +205,7 @@ interface IState {
     viaServers?: string[];
     pendingInitialSync?: boolean;
     justRegistered?: boolean;
+    roomJustCreatedOpts?: IOpts;
 }
 
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
@@ -688,10 +693,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewRoomDirectory: {
-                const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
-                    initialText: payload.initialText,
-                }, 'mx_RoomDirectory_dialogWrapper', false, true);
+                if (SpaceStore.instance.activeSpace) {
+                    Modal.createTrackedDialog("Space room directory", "", SpaceRoomDirectory, {
+                        space: SpaceStore.instance.activeSpace,
+                        initialText: payload.initialText,
+                    }, "mx_SpaceRoomDirectory_dialogWrapper", false, true);
+                } else {
+                    const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
+                    Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                        initialText: payload.initialText,
+                    }, 'mx_RoomDirectory_dialogWrapper', false, true);
+                }
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -922,6 +934,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 roomOobData: roomInfo.oob_data,
                 viaServers: roomInfo.via_servers,
                 ready: true,
+                roomJustCreatedOpts: roomInfo.justCreatedOpts,
             }, () => {
                 this.notifyNewScreen('room/' + presentedId, replaceLast);
             });
@@ -1068,6 +1081,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
+        const isSpace = roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
         const warnings = [];
@@ -1077,7 +1091,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 warnings.push((
                     <span className="warning" key="non_public_warning">
                         {' '/* Whitespace, otherwise the sentences get smashed together */ }
-                        { _t("This room is not public. You will not be able to rejoin without an invite.") }
+                        { isSpace
+                            ? _t("This space is not public. You will not be able to rejoin without an invite.")
+                            : _t("This room is not public. You will not be able to rejoin without an invite.") }
                     </span>
                 ));
             }
@@ -1090,11 +1106,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        Modal.createTrackedDialog('Leave room', '', QuestionDialog, {
-            title: _t("Leave room"),
+        const isSpace = roomToLeave?.isSpaceRoom();
+        Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
+            title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
                 <span>
-                    { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
+                    { isSpace
+                        ? _t("Are you sure you want to leave the space '%(spaceName)s'?", {spaceName: roomToLeave.name})
+                        : _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                     { warnings }
                 </span>
             ),
@@ -1108,6 +1127,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
                     d.finally(() => modal.close());
+                    dis.dispatch({
+                        action: "after_leave_room",
+                        room_id: roomId,
+                    });
                 }
             },
         });

@@ -35,6 +35,7 @@ import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import { NameFilterCondition } from "./filters/NameFilterCondition";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { VisibilityProvider } from "./filters/VisibilityProvider";
+import { SpaceWatcher } from "./SpaceWatcher";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -56,10 +57,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private initialListsGenerated = false;
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
-    private tagWatcher = new TagWatcher(this);
+    private tagWatcher: TagWatcher;
+    private spaceWatcher: SpaceWatcher;
     private updateFn = new MarkedExecution(() => {
-        for (const tagId of Object.keys(this.unfilteredLists)) {
-            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.unfilteredLists[tagId]);
+        for (const tagId of Object.keys(this.orderedLists)) {
+            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.orderedLists[tagId]);
         }
         this.emit(LISTS_UPDATE_EVENT);
     });
@@ -77,6 +79,15 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         RoomViewStore.addListener(() => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
+        this.setupWatchers();
+    }
+
+    private setupWatchers() {
+        if (SettingsStore.getValue("feature_spaces")) {
+            this.spaceWatcher = new SpaceWatcher(this);
+        } else {
+            this.tagWatcher = new TagWatcher(this);
+        }
     }
 
     public get unfilteredLists(): ITagMap {
@@ -92,9 +103,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     // Intended for test usage
     public async resetStore() {
         await this.reset();
-        this.tagWatcher = new TagWatcher(this);
         this.filterConditions = [];
         this.initialListsGenerated = false;
+        this.setupWatchers();
 
         this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
@@ -398,6 +409,15 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
+        if (cause === RoomUpdateCause.NewRoom) {
+            // Let the visibility provider know that there is a new invited room. It would be nice
+            // if this could just be an event that things listen for but the point of this is that
+            // we delay doing anything about this room until the VoipUserMapper had had a chance
+            // to do the things it needs to do to decide if we should show this room or not, so
+            // an even wouldn't et us do that.
+            await VisibilityProvider.instance.onNewInvitedRoom(room);
+        }
+
         if (!VisibilityProvider.instance.isRoomVisible(room)) {
             return; // don't do anything on rooms that aren't visible
         }
@@ -545,8 +565,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
-        const rooms = this.matrixClient.getVisibleRooms()
-            .filter(r => VisibilityProvider.instance.isRoomVisible(r));
+        const rooms = [
+            ...this.matrixClient.getVisibleRooms(),
+            // also show space invites in the room list
+            ...this.matrixClient.getRooms().filter(r => r.isSpaceRoom() && r.getMyMembership() === "invite"),
+        ].filter(r => VisibilityProvider.instance.isRoomVisible(r));
+
         const customTags = new Set<TagID>();
         if (this.state.tagsEnabled) {
             for (const room of rooms) {

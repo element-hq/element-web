@@ -22,6 +22,7 @@ import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
+import SpellCheckSettings from "../../SpellCheckSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
@@ -49,6 +50,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
+            spellCheckLanguages: [],
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
@@ -83,6 +85,15 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.setState({serverSupportsSeparateAddAndBind, canChangePassword});
 
         this._getThreepidState();
+    }
+
+    async componentDidMount() {
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            this.setState({
+                spellCheckLanguages: await plaf.getSpellCheckLanguages(),
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -180,6 +191,15 @@ export default class GeneralUserSettingsTab extends React.Component {
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
         this.setState({language: newLanguage});
         PlatformPeg.get().reload();
+    };
+
+    _onSpellCheckLanguagesChange = (languages) => {
+        this.setState({spellCheckLanguages: languages});
+
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            plaf.setSpellCheckLanguages(languages);
+        }
     };
 
     _onPasswordChangeError = (err) => {
@@ -303,6 +323,16 @@ export default class GeneralUserSettingsTab extends React.Component {
         );
     }
 
+    _renderSpellCheckSection() {
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Spell check dictionaries")}</span>
+                <SpellCheckSettings languages={this.state.spellCheckLanguages}
+                                    onLanguagesChange={this._onSpellCheckLanguagesChange} />
+            </div>
+        );
+    }
+
     _renderDiscoverySection() {
         const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
@@ -381,6 +411,9 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     render() {
+        const plaf = PlatformPeg.get();
+        const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
+
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img className='mx_GeneralUserSettingsTab_warningIcon'
                 src={require("../../../../../../res/img/feather-customised/warning-triangle.svg")}
@@ -409,6 +442,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderProfileSection()}
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
+                {supportsMultiLanguageSpellCheck ? this._renderSpellCheckSection() : null}
                 { discoverySection }
                 {this._renderIntegrationManagerSection() /* Has its own title */}
                 { accountManagementSection }

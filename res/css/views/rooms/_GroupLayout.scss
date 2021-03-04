@@ -105,16 +105,9 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_readAvatars {
-            top: 27px;
-        }
-
-        &.mx_EventTile_continuation .mx_EventTile_readAvatars,
-        &.mx_EventTile_emote .mx_EventTile_readAvatars {
-            top: 5px;
-        }
-
-        &.mx_EventTile_info .mx_EventTile_readAvatars {
-            top: 4px;
+            // This aligns the avatar with the last line of the
+            // message. We want to move it one line up - 2rem
+            top: -2rem;
         }
 
         .mx_EventTile_content .markdown-body {

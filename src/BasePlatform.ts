@@ -132,6 +132,14 @@ export default abstract class BasePlatform {
     }
 
     /**
+     * Return true if platform supports multi-language
+     * spell-checking, otherwise false.
+     */
+    supportsMultiLanguageSpellCheck(): boolean {
+        return false;
+    }
+
+    /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      * @returns {boolean} whether the platform supports displaying notifications
@@ -239,6 +247,16 @@ export default abstract class BasePlatform {
     }
 
     setLanguage(preferredLangs: string[]) {}
+
+    setSpellCheckLanguages(preferredLangs: string[]) {}
+
+    getSpellCheckLanguages(): Promise<string[]> | null {
+        return null;
+    }
+
+    getAvailableSpellCheckLanguages(): Promise<string[]> | null {
+        return null;
+    }
 
     protected getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = new URL(window.location.href);

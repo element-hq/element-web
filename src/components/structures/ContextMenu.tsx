@@ -76,6 +76,7 @@ export interface IProps extends IPosition {
     hasBackground?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
+    wrapperClassName?: string;
 
     // Function to be called on menu close
     onFinished();
@@ -299,7 +300,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             // such that it does not leave the (padded) window.
             if (contextMenuRect) {
                 const padding = 10;
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height + padding);
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
             }
 
             position.top = adjusted;
@@ -365,7 +366,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         return (
             <div
-                className="mx_ContextualMenu_wrapper"
+                className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
                 style={{...position, ...wrapperStyle}}
                 onKeyDown={this.onKeyDown}
                 onContextMenu={this.onContextMenuPreventBubbling}
@@ -390,7 +391,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 }
 
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
-export const toRightOf = (elementRect: DOMRect, chevronOffset = 12) => {
+export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">, chevronOffset = 12) => {
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
