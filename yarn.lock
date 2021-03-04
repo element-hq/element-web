@@ -7530,7 +7530,7 @@ matrix-mock-request@^1.2.3:
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.15.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/588e94e8137025b1fcd31a2ac401bfd18b823e9a"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/c73ad9e59413537f5815ad5f78e30ce8d180a5cd"
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
@@ -7579,7 +7579,7 @@ matrix-mock-request@^1.2.3:
     tar-js "^0.3.0"
     text-encoding-utf-8 "^1.0.2"
     url "^0.11.0"
-    velocity-animate "^1.5.2"
+    velocity-animate "^2.0.6"
     what-input "^5.2.10"
     zxcvbn "^4.4.2"
 
@@ -12095,10 +12095,10 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-velocity-animate@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-1.5.2.tgz#5a351d75fca2a92756f5c3867548b873f6c32105"
-  integrity sha512-m6EXlCAMetKztO1ppBhGU1/1MR3IiEevO6ESq6rcrSQ3Q77xYSW13jkfXW88o4xMrkXJhy/U7j4wFR/twMB0Eg==
+velocity-animate@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-2.0.6.tgz#1811ca14df7fbbef05740256f6cec0fd1b76575f"
+  integrity sha512-tU+/UtSo3GkIjEfk2KM4e24DvpgX0+FzfLr7XqNwm9BCvZUtbCHPq/AFutx/Mkp2bXlUS9EcX8yxu8XmzAv2Kw==
 
 vendors@^1.0.0:
   version "1.0.4"
