@@ -768,15 +768,10 @@ export default class EventTile extends React.Component {
         }
 
         if (needsSenderProfile) {
-            let text = null;
             if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
-                if (msgtype === 'm.image') text = _td('%(senderName)s sent an image');
-                else if (msgtype === 'm.video') text = _td('%(senderName)s sent a video');
-                else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                                         mxEvent={this.props.mxEvent}
-                                        enableFlair={this.props.enableFlair && !text}
-                                        text={text} />;
+                                        enableFlair={this.props.enableFlair} />;
             } else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={this.props.enableFlair} />;
             }

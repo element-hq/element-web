@@ -243,7 +243,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                     onPlay={this.videoOnPlay}
                 >
                 </video>
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );
     }
