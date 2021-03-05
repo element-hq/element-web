@@ -597,7 +597,7 @@ export default class MessagePanel extends React.Component {
 
         let isLastSuccessful = false;
         const isSentState = s => !s || s === 'sent';
-        const isSent = isSentState(mxEv.getAssociatedStatus())
+        const isSent = isSentState(mxEv.getAssociatedStatus());
         if (!nextEvent && isSent) {
             isLastSuccessful = true;
         } else if (nextEvent && isSent && !isSentState(nextEvent.getAssociatedStatus())) {
