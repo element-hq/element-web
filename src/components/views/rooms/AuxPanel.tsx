@@ -17,10 +17,8 @@ limitations under the License.
 import React from 'react';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { Room } from 'matrix-js-sdk/src/models/room'
-import * as sdk from '../../../index';
 import dis from "../../../dispatcher/dispatcher";
 import AppsDrawer from './AppsDrawer';
-import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -35,9 +33,6 @@ interface IProps {
     room: Room,
     userId: string,
     showApps: boolean, // Render apps
-
-    // set to true to show the file drop target
-    draggingFile: boolean,
 
     // maxHeight attribute for the aux panel and the video
     // therein
@@ -149,21 +144,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
     }
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        let fileDropTarget = null;
-        if (this.props.draggingFile) {
-            fileDropTarget = (
-                <div className="mx_RoomView_fileDropTarget">
-                    <div className="mx_RoomView_fileDropTargetLabel" title={_t("Drop File Here")}>
-                        <TintableSvg src={require("../../../../res/img/upload-big.svg")} width="45" height="59" />
-                        <br />
-                        { _t("Drop file here to upload") }
-                    </div>
-                </div>
-            );
-        }
-
         const callView = (
             <CallViewForRoom
                 roomId={this.props.room.roomId}
@@ -246,7 +226,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             <AutoHideScrollbar className={classes} style={style} >
                 { stateViews }
                 { appsDrawer }
-                { fileDropTarget }
                 { callView }
                 { this.props.children }
             </AutoHideScrollbar>
