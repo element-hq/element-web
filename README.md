@@ -422,9 +422,9 @@ We strive to completely cover all applicable issues with these core labels:
    * __[P5](https://github.com/vector-im/element-web/labels/P5):__ Dubious —
      Will not schedule, would consider patches
 
-4. __Area__ — Most issues are assigned one or several code "areas" using one of
-   the many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area
-   label maps to a group of features or portion of the UI surface in the app.
+4. __Area__ — Most issues are assigned one or several "areas" using one of the
+   many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area label
+   maps to a group of features or portion of the UI surface in the app.
 
 ### Other common labels
 
