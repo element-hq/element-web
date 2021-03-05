@@ -47,6 +47,7 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
 import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
+import SettingsStore from '../../../settings/SettingsStore';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
