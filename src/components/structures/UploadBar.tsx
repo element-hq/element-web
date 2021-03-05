@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016, 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +15,22 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import ContentMessages from '../../ContentMessages';
 import dis from "../../dispatcher/dispatcher";
 import filesize from "filesize";
 import { _t } from '../../languageHandler';
+import {Room} from "matrix-js-sdk/src/models/room";
 
-export default class UploadBar extends React.Component {
-    static propTypes = {
-        room: PropTypes.object,
-    };
+interface IProps {
+    room: Room;
+}
+
+interface IState {
+}
+
+export default class UploadBar extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
+    private mounted: boolean;
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
@@ -37,7 +42,7 @@ export default class UploadBar extends React.Component {
         dis.unregister(this.dispatcherRef);
     }
 
-    onAction = payload => {
+    private onAction = (payload) => {
         switch (payload.action) {
             case 'upload_progress':
             case 'upload_finished':
