@@ -1,0 +1,69 @@
+on: [push]
+
+env:
+  CI: true
+  TZ: Asia/Hong_Kong
+  IS_FORCE_HTTPS_ASSET: true
+jobs:
+  # test:
+  #   runs-on: ubuntu-20.04
+  #   strategy:
+  #     matrix:
+  #       node-version:
+  #         - 12.x
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     with:
+  #       fetch-depth: 0
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       always-auth: true
+  #       registry-url: https://registry.npmjs.org/
+  #       scope: "@wordquest"
+  #   - name: Set node auth token
+  #     run: echo "NODE_AUTH_TOKEN=${{secrets.NPM_TOKEN}}" >> $GITHUB_ENV
+  #   - name: Cache Node.js modules
+  #     uses: actions/cache@v2
+  #     with:
+  #       path: |-
+  #         ~/.yarn-cache
+  #         **/node_modules
+  #       key: ${{ runner.OS }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #       restore-keys: |-
+  #         ${{ runner.OS }}-yarn-
+  #         ${{ runner.OS }}-
+  #   - name: yarn install
+  #     run: yarn install --cache-folder ~/.yarn-cache --ignore-optional
+  #   - name: yarn test
+  #     if: "!contains(github.event.commits[0].message, '[skip test]')"
+  #     run: yarn run test
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version:
+          - 14.x
+    # needs: test
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Build, tag, and push wq-element-web to ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: wq-element-web
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -f ~/docker/Dockerfile ./ -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
