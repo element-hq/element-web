@@ -41,7 +41,7 @@ export enum Container {
     // are only two containers, and that only the top container is special.
 }
 
-interface IStoredLayout {
+export interface IStoredLayout {
     // Where to store the widget. Required.
     container: Container;
 
@@ -201,11 +201,6 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const topWidgets: IApp[] = [];
         const rightWidgets: IApp[] = [];
         for (const widget of widgets) {
-            if (WidgetType.JITSI.matches(widget.type)) {
-                topWidgets.push(widget);
-                continue;
-            }
-
             const stateContainer = roomLayout?.widgets?.[widget.id]?.container;
             const manualContainer = userLayout?.widgets?.[widget.id]?.container;
             const isLegacyPinned = !!legacyPinned?.[widget.id];

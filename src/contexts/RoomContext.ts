@@ -17,6 +17,7 @@ limitations under the License.
 import { createContext } from "react";
 
 import {IState} from "../components/structures/RoomView";
+import {Layout} from "../settings/Layout";
 
 const RoomContext = createContext<IState>({
     roomLoading: true,
@@ -40,8 +41,9 @@ const RoomContext = createContext<IState>({
     statusBarVisible: false,
     canReact: false,
     canReply: false,
-    useIRCLayout: false,
+    layout: Layout.Group,
     matrixClientIsReady: false,
+    dragCounter: 0,
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;

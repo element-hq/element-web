@@ -22,7 +22,7 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE, KIND_SPACE_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
@@ -50,10 +50,13 @@ export function showStartChatInviteDialog(initialText) {
 }
 
 export function showRoomInviteDialog(roomId) {
+    const isSpace = MatrixClientPeg.get()?.getRoom(roomId)?.isSpaceRoom();
     // This dialog handles the room creation internally - we don't need to worry about it.
-    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+        "Invite Users", isSpace ? "Space" : "Room", InviteDialog, {
+            kind: isSpace ? KIND_SPACE_INVITE : KIND_INVITE,
+            roomId,
+        },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

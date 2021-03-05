@@ -27,6 +27,9 @@
 @import "./structures/_RoomView.scss";
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
+@import "./structures/_SpacePanel.scss";
+@import "./structures/_SpaceRoomDirectory.scss";
+@import "./structures/_SpaceRoomView.scss";
 @import "./structures/_TabbedView.scss";
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_UploadBar.scss";
@@ -56,6 +59,7 @@
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
+@import "./views/dialogs/_AddExistingToSpaceDialog.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
@@ -71,6 +75,7 @@
 @import "./views/dialogs/_EditCommunityPrototypeDialog.scss";
 @import "./views/dialogs/_FeedbackDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
+@import "./views/dialogs/_HostSignupDialog.scss";
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
 @import "./views/dialogs/_KeyboardShortcutsDialog.scss";
@@ -88,6 +93,7 @@
 @import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_SlashCommandHelpDialog.scss";
+@import "./views/dialogs/_SpaceSettingsDialog.scss";
 @import "./views/dialogs/_TabbedIntegrationManagerDialog.scss";
 @import "./views/dialogs/_TermsDialog.scss";
 @import "./views/dialogs/_UploadConfirmDialog.scss";
@@ -106,6 +112,7 @@
 @import "./views/elements/_AddressTile.scss";
 @import "./views/elements/_DesktopBuildsNotice.scss";
 @import "./views/elements/_DirectorySearchBox.scss";
+@import "./views/elements/_DesktopCapturerSourcePicker.scss";
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
 @import "./views/elements/_ErrorBoundary.scss";
@@ -210,6 +217,7 @@
 @import "./views/settings/_DevicesPanel.scss";
 @import "./views/settings/_E2eAdvancedPanel.scss";
 @import "./views/settings/_EmailAddresses.scss";
+@import "./views/settings/_SpellCheckLanguages.scss";
 @import "./views/settings/_IntegrationManager.scss";
 @import "./views/settings/_Notifications.scss";
 @import "./views/settings/_PhoneNumbers.scss";
@@ -230,6 +238,9 @@
 @import "./views/settings/tabs/user/_PreferencesUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_SecurityUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_VoiceUserSettingsTab.scss";
+@import "./views/spaces/_SpaceBasicSettings.scss";
+@import "./views/spaces/_SpaceCreateMenu.scss";
+@import "./views/spaces/_SpacePublicShare.scss";
 @import "./views/terms/_InlineTermsAgreement.scss";
 @import "./views/toasts/_AnalyticsToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";

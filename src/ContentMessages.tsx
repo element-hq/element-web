@@ -497,7 +497,7 @@ export default class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const prom = new Promise((resolve) => {
+        const prom = new Promise<void>((resolve) => {
             if (file.type.indexOf('image/') === 0) {
                 content.msgtype = 'm.image';
                 infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {

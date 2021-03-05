@@ -47,6 +47,9 @@ import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../con
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
+import SpaceStore from "../../../stores/SpaceStore";
+import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -152,6 +155,50 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         defaultHidden: false,
         addRoomLabel: _td("Add room"),
         addRoomContextMenu: (onFinished: () => void) => {
+            if (SpaceStore.instance.activeSpace) {
+                const canAddRooms = SpaceStore.instance.activeSpace.currentState.maySendStateEvent(EventType.SpaceChild,
+                    MatrixClientPeg.get().getUserId());
+
+                return <IconizedContextMenuOptionList first>
+                    <IconizedContextMenuOption
+                        label={_t("Create new room")}
+                        iconClassName="mx_RoomList_iconPlus"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onFinished();
+                            showCreateNewRoom(MatrixClientPeg.get(), SpaceStore.instance.activeSpace);
+                        }}
+                        disabled={!canAddRooms}
+                        tooltip={canAddRooms ? undefined
+                            : _t("You do not have permissions to create new rooms in this space")}
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("Add existing room")}
+                        iconClassName="mx_RoomList_iconHash"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onFinished();
+                            showAddExistingRooms(MatrixClientPeg.get(), SpaceStore.instance.activeSpace);
+                        }}
+                        disabled={!canAddRooms}
+                        tooltip={canAddRooms ? undefined
+                            : _t("You do not have permissions to add rooms to this space")}
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("Explore space rooms")}
+                        iconClassName="mx_RoomList_iconExplore"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onFinished();
+                            defaultDispatcher.fire(Action.ViewRoomDirectory);
+                        }}
+                    />
+                </IconizedContextMenuOptionList>;
+            }
+
             return <IconizedContextMenuOptionList first>
                 <IconizedContextMenuOption
                     label={_t("Create new room")}
@@ -455,8 +502,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 const unfilteredLists = RoomListStore.instance.unfilteredLists
                 const unfilteredRooms = unfilteredLists[DefaultTagID.Untagged] || [];
                 const unfilteredHistorical = unfilteredLists[DefaultTagID.Archived] || [];
+                const unfilteredFavourite = unfilteredLists[DefaultTagID.Favourite] || [];
                 // show a prompt to join/create rooms if the user is in 0 rooms and no historical
-                if (unfilteredRooms.length < 1 && unfilteredHistorical < 1) {
+                if (unfilteredRooms.length < 1 && unfilteredHistorical < 1 && unfilteredFavourite < 1) {
                     explorePrompt = <div className="mx_RoomList_explorePrompt">
                         <div>{_t("Use the + to make a new room or explore existing ones below")}</div>
                         <AccessibleButton

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, CSSProperties, ReactNode } from 'react';
+import React, { createRef, CSSProperties } from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -494,6 +494,7 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         if (this.props.call.type === CallType.Video) {
+            let localVideoFeed = null;
             let onHoldContent = null;
             let onHoldBackground = null;
             const backgroundStyle: CSSProperties = {};
@@ -512,9 +513,12 @@ export default class CallView extends React.Component<IProps, IState> {
                 backgroundStyle.backgroundImage = 'url(' + backgroundAvatarUrl + ')';
                 onHoldBackground = <div className="mx_CallView_video_holdBackground" style={backgroundStyle} />;
             }
+            if (!this.state.vidMuted) {
+                localVideoFeed = <VideoFeed type={VideoFeedType.Local} call={this.props.call} />;
+            }
 
             // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() ? null : (
+            const maxVideoHeight = getFullScreenElement() || !this.props.maxVideoHeight ? null : (
                 this.props.maxVideoHeight - (HEADER_HEIGHT + BOTTOM_PADDING + BOTTOM_MARGIN_TOP_BOTTOM)
             );
             contentView = <div className={containerClasses}
@@ -527,7 +531,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize}
                     maxHeight={maxVideoHeight}
                 />
-                <VideoFeed type={VideoFeedType.Local} call={this.props.call} />
+                {localVideoFeed}
                 {onHoldContent}
                 {callControls}
             </div>;

@@ -19,7 +19,10 @@ limitations under the License.
 }
 
 .mx_RoomList_iconPlus::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/plus.svg');
+    mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
+}
+.mx_RoomList_iconHash::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
 }
 .mx_RoomList_iconExplore::before {
     mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');

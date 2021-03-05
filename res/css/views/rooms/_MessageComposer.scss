@@ -227,24 +227,38 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
 }
 
-.mx_MessageComposer_hangup::before {
-    mask-image: url('$(res)/img/element-icons/call/hangup.svg');
-}
-
-.mx_MessageComposer_voicecall::before {
-    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
-}
-
-.mx_MessageComposer_videocall::before {
-    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
-}
-
 .mx_MessageComposer_emoji::before {
     mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
 }
 
 .mx_MessageComposer_stickers::before {
     mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
+}
+
+.mx_MessageComposer_sendMessage {
+    cursor: pointer;
+    position: relative;
+    margin-right: 6px;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    background-color: $button-bg-color;
+
+    &::before {
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        top: 8px;
+        left: 9px;
+
+        mask-image: url('$(res)/img/element-icons/send-message.svg');
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+
+        background-color: $button-fg-color;
+        content: '';
+    }
 }
 
 .mx_MessageComposer_formatting {

@@ -117,6 +117,7 @@ export default class SendMessageComposer extends React.Component {
         placeholder: PropTypes.string,
         permalinkCreator: PropTypes.object.isRequired,
         replyToEvent: PropTypes.object,
+        onChange: PropTypes.func,
     };
 
     static contextType = MatrixClientContext;
@@ -156,13 +157,14 @@ export default class SendMessageComposer extends React.Component {
             this.onVerticalArrow(event, true);
         } else if (event.key === Key.ARROW_DOWN) {
             this.onVerticalArrow(event, false);
-        } else if (this._prepareToEncrypt) {
-            this._prepareToEncrypt();
         } else if (event.key === Key.ESCAPE) {
             dis.dispatch({
                 action: 'reply_to_event',
                 event: null,
             });
+        } else if (this._prepareToEncrypt) {
+            // This needs to be last!
+            this._prepareToEncrypt();
         }
     };
 
@@ -402,6 +404,9 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
+        if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+            dis.dispatch({action: "scroll_to_bottom"});
+        }
     }
 
     componentWillUnmount() {
@@ -534,10 +539,15 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    onChange = () => {
+        if (this.props.onChange) this.props.onChange(this.model);
+    }
+
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
                 <BasicMessageComposer
+                    onChange={this.onChange}
                     ref={this._setEditorRef}
                     model={this.model}
                     room={this.props.room}

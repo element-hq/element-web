@@ -207,6 +207,17 @@ $irc-line-height: $font-18px;
             width: unset;
             max-width: var(--name-width);
         }
+
+        .mx_SenderProfile_hover {
+            background: transparent;
+
+            > span {
+                > .mx_SenderProfile_name,
+                > .mx_SenderProfile_aux {
+                    min-width: inherit;
+                }
+            }
+        }
     }
 
     .mx_ProfileResizer {

@@ -30,6 +30,7 @@ import {idbLoad, idbSave, idbDelete} from "./utils/StorageManager";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
+export const SSO_IDP_ID_KEY = "mx_sso_idp_id";
 
 export enum UpdateCheckStatus {
     Checking = "CHECKING",
@@ -56,7 +57,7 @@ export default abstract class BasePlatform {
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    abstract async getConfig(): Promise<{}>;
+    abstract getConfig(): Promise<{}>;
 
     abstract getDefaultDeviceDisplayName(): string;
 
@@ -128,6 +129,14 @@ export default abstract class BasePlatform {
         date.setHours(8, 0, 0, 0); // set to next 8am
         localStorage.setItem(UPDATE_DEFER_KEY, JSON.stringify([newVersion, date.getTime()]));
         hideUpdateToast();
+    }
+
+    /**
+     * Return true if platform supports multi-language
+     * spell-checking, otherwise false.
+     */
+    supportsMultiLanguageSpellCheck(): boolean {
+        return false;
     }
 
     /**
@@ -239,6 +248,16 @@ export default abstract class BasePlatform {
 
     setLanguage(preferredLangs: string[]) {}
 
+    setSpellCheckLanguages(preferredLangs: string[]) {}
+
+    getSpellCheckLanguages(): Promise<string[]> | null {
+        return null;
+    }
+
+    getAvailableSpellCheckLanguages(): Promise<string[]> | null {
+        return null;
+    }
+
     protected getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = new URL(window.location.href);
         url.hash = fragmentAfterLogin || "";
@@ -257,6 +276,9 @@ export default abstract class BasePlatform {
         localStorage.setItem(SSO_HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
         if (mxClient.getIdentityServerUrl()) {
             localStorage.setItem(SSO_ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
+        }
+        if (idpId) {
+            localStorage.setItem(SSO_IDP_ID_KEY, idpId);
         }
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType, idpId); // redirect to SSO
