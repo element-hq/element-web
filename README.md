@@ -11,7 +11,7 @@ Element has several tiers of support for different environments:
 
 * Supported
   * Definition: Issues **actively triaged**, regressions **block** the release
-  * Last 2 major versions of Chrome, Firefox, and Safari on desktop OSes
+  * Last 2 major versions of Chrome, Firefox, Safari, and Edge on desktop OSes
   * Latest release of official Element Desktop app on desktop OSes
   * Desktop OSes means macOS, Windows, and Linux versions for desktop devices
     that are actively supported by the OS vendor and receive security updates
