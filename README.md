@@ -388,51 +388,72 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-Issues will be triaged by the core team using the below set of tags.
+We strive to completely cover all applicable issues with these core labels:
 
-Tags are meant to be used in combination - e.g.:
- * P1 critical bug == really urgent stuff that should be next in the bugfixing todo list
- * "release blocker" == stuff which is blocking us from cutting the next release.
- * P1 feature type:voip == what VoIP features should we be working on next?
+1. __Type__ — Every issue is assigned a type:
+   - __[T-Defect](https://github.com/vector-im/element-web/labels/T-Defect):__
+     Bugs, crashes, hangs, vulnerabilities, or other reported problems
+   - __[T-Enhancement](https://github.com/vector-im/element-web/labels/T-Enhancement):__
+     New features, changes in functionality, performance boosts, user-facing
+     improvements
+   - __[T-Task](https://github.com/vector-im/element-web/labels/T-Task):__
+     Refactoring, enabling or disabling functionality, other engineering tasks
+   - __[T-Other](https://github.com/vector-im/element-web/labels/T-Other):__
+     Questions, user support, anything else
 
-priority: **compulsory**
+2. __Severity__ — All issues labeled `T-Defect` are also assigned a severity:
+   * __[S-Critical](https://github.com/vector-im/element-web/labels/S-Critical):__
+     Prevents work, causes data loss, affects many users, and/or has no
+     workaround
+   * __[S-Major](https://github.com/vector-im/element-web/labels/S-Major):__
+     Severely degrades major functionality or product features, with no
+     satisfactory workaround
+   * __[S-Minor](https://github.com/vector-im/element-web/labels/S-Minor):__
+     Impairs non-critical functionality, or suitable workarounds exist
+   * __[S-Tolerable](https://github.com/vector-im/element-web/labels/S-Tolerable):__
+     Purely cosmetic or low / no impact to users
 
-* P1: top priority - i.e. pool of stuff which we should be working on next
-* P2: still need to fix, but lower than P1
-* P3: non-urgent
-* P4: interesting idea - bluesky some day
-* P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
+3. __Priority__ — All issues which are not `T-Other` are assigned a priority:
+   * __[P1](https://github.com/vector-im/element-web/labels/P1):__ Next
+   * __[P2](https://github.com/vector-im/element-web/labels/P2):__ Later
+   * __[P3](https://github.com/vector-im/element-web/labels/P3):__ Eventually
+   * __[P4](https://github.com/vector-im/element-web/labels/P4):__ Interesting —
+     Not yet scheduled, will accept patches
+   * __[P5](https://github.com/vector-im/element-web/labels/P5):__ Dubious —
+     Will not schedule, would consider patches
 
-bug or feature: **compulsory**
+4. __Area__ — Most issues are assigned one or several code "areas" using one of
+   the many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area
+   label maps to a group of features or portion of the UI surface in the app.
 
-* bug
-* feature
+### Other common labels
 
-bug severity: **compulsory, if bug**
+We have a handful of other labels which are added on an as-needed basis, and not expected to be exhaustive:
 
-* critical - whole app doesn't work
-* major - entire feature doesn't work
-* minor - partially broken feature (but still usable)
-* cosmetic - feature works functionally but UI/UX is broken
+* __Exceptions__ — Special flags for issues and pull requests:
+  * __[X-Needs-Info](https://github.com/vector-im/element-web/labels/X-Needs-Info):__
+    This issue is blocked pending further information from the reporter
+  * __[X-Regression](https://github.com/vector-im/element-web/labels/X-Regression):__
+    Denotes things breaking which previously worked
+  * __[X-Release-Blocker](https://github.com/vector-im/element-web/labels/X-Release-Blocker):__
+    Issues which must be resolved before making a release
 
-types
-* type:* - refers to a particular part of the app; used to filter bugs
-  on a given topic - e.g. VOIP, signup, timeline, etc.
+* __[Easy](https://github.com/vector-im/element-web/labels/Easy)__ / __[Help
+  Wanted](https://github.com/vector-im/element-web/labels/Help%20Wanted)__ —
+  Well-defined issues which are suitable for folks new to the codebase
 
-additional categories (self-explanatory):
+* __[Privacy](https://github.com/vector-im/element-web/labels/Privacy)__ /
+  __[Security](https://github.com/vector-im/element-web/labels/Security)__ —
+  Issues which may present privacy / security concerns
 
-* release blocker
-* ui/ux (think of this as cosmetic)
-* network (specific to network conditions)
-* platform specific
-* accessibility
-* maintenance
-* performance
-* i18n
-* blocked - whether this issue currently can't be progressed due to outside factors
+* __[Sponsored](https://github.com/vector-im/element-web/labels/Sponsored)__ —
+  Used internally by Element to denote issues with external funding
 
-community engagement
-* easy
-* hacktoberfest
-* bounty? - proposal to be included in a bounty programme
-* bounty - included in Status Open Bounty
+### Ad hoc labels (`Z-`)
+
+We have reserved the `Z-` prefix for ad hoc labels.
+
+Any member of the core team is welcome to create labels beginning with `Z-` for
+any purpose, such as tracking personal areas of interest or providing a common
+way to label cross-repo initiatives. The prefix avoids interference with the
+project's main labels.

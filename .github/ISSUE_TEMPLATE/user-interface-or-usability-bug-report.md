@@ -2,7 +2,7 @@
 name: User Interface or Usability Bug report
 about: Please include screenshots in UI/UX bug reports
 title: ''
-labels: bug, ui/ux
+labels: T-Defect
 assignees: ''
 
 ---
@@ -48,7 +48,7 @@ Logs being sent: yes/no
 
 For the web app:
 
-- **Browser**: Chrome, Safari, Firefox? which version?
+- **Browser**: Chrome, Firefox, Safari, Edge? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
 - **URL**: develop.element.io / app.element.io / somewhere else? If a private server, what version of Element Web?
 

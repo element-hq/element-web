@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: bug
+labels: T-Defect
 assignees: ''
 
 ---
@@ -46,7 +46,7 @@ Logs being sent: yes/no
 
 For the web app:
 
-- **Browser**: Chrome, Safari, Firefox? which version?
+- **Browser**: Chrome, Firefox, Safari, Edge? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
 - **URL**: develop.element.io / app.element.io / somewhere else? If a private server, what version of Element Web?
 
