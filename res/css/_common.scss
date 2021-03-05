@@ -606,6 +606,13 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     }
 }
 
+@define-mixin ProgressBarBgColour $colour {
+    background-color: $colour;
+    &::-webkit-progress-bar {
+        background-color: $colour;
+    }
+}
+
 @define-mixin ProgressBarBorderRadius $radius {
     border-radius: $radius;
     &::-moz-progress-bar {

@@ -22,6 +22,7 @@ import { _t } from '../../languageHandler';
 import {Room} from "matrix-js-sdk/src/models/room";
 import {ActionPayload} from "../../dispatcher/payloads";
 import {Action} from "../../dispatcher/actions";
+import ProgressBar from "../views/elements/ProgressBar";
 
 interface IProps {
     room: Room;
@@ -68,48 +69,29 @@ export default class UploadBar extends React.Component<IProps, IState> {
         //     fileName: "testing_fooble.jpg",
         // }];
 
-        if (uploads.length == 0) {
-            return <div />;
+        const uploadsHere = uploads.filter(u => u.roomId === this.props.room.roomId);
+        if (uploadsHere.length == 0) {
+            return null;
         }
 
-        let upload;
-        for (let i = 0; i < uploads.length; ++i) {
-            if (uploads[i].roomId == this.props.room.roomId) {
-                upload = uploads[i];
-                break;
-            }
-        }
-        if (!upload) {
-            return <div />;
-        }
-
-        const innerProgressStyle = {
-            width: ((upload.loaded / (upload.total || 1)) * 100) + '%',
-        };
-        let uploadedSize = filesize(upload.loaded);
-        const totalSize = filesize(upload.total);
-        if (uploadedSize.replace(/^.* /, '') === totalSize.replace(/^.* /, '')) {
-            uploadedSize = uploadedSize.replace(/ .*/, '');
-        }
+        const currentUpload = uploadsHere[0];
+        const uploadSize = filesize(currentUpload.total);
 
         // MUST use var name 'count' for pluralization to kick in
         const uploadText = _t(
-            "Uploading %(filename)s and %(count)s others", {filename: upload.fileName, count: (uploads.length - 1)},
+            "Uploading %(filename)s and %(count)s others", {
+                filename: currentUpload.fileName,
+                count: uploadsHere.length - 1,
+            },
         );
 
         return (
             <div className="mx_UploadBar">
-                <div className="mx_UploadBar_uploadProgressOuter">
-                    <div className="mx_UploadBar_uploadProgressInner" style={innerProgressStyle}></div>
-                </div>
-                <img className="mx_UploadBar_uploadIcon mx_filterFlipColor" src={require("../../../res/img/fileicon.png")} width="17" height="22" />
                 <img className="mx_UploadBar_uploadCancel mx_filterFlipColor" src={require("../../../res/img/cancel.svg")} width="18" height="18"
-                    onClick={function() { ContentMessages.sharedInstance().cancelUpload(upload.promise); }}
+                    onClick={function() { ContentMessages.sharedInstance().cancelUpload(currentUpload.promise); }}
                 />
-                <div className="mx_UploadBar_uploadBytes">
-                    { uploadedSize } / { totalSize }
-                </div>
-                <div className="mx_UploadBar_uploadFilename">{ uploadText }</div>
+                <div className="mx_UploadBar_uploadFilename">{uploadText} ({uploadSize})</div>
+                <ProgressBar value={currentUpload.loaded} max={currentUpload.total} />
             </div>
         );
     }
