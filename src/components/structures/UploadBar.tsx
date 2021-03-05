@@ -23,17 +23,26 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import {ActionPayload} from "../../dispatcher/payloads";
 import {Action} from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
+import AccessibleButton from "../views/elements/AccessibleButton";
+import {IUpload} from "../../models/IUpload";
 
 interface IProps {
     room: Room;
 }
 
 interface IState {
+    currentUpload?: IUpload;
+    uploadsHere: IUpload[];
 }
 
 export default class UploadBar extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private mounted: boolean;
+
+    constructor(props) {
+        super(props);
+        this.state = {uploadsHere: []};
+    }
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
@@ -47,51 +56,44 @@ export default class UploadBar extends React.Component<IProps, IState> {
 
     private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
+            case Action.UploadStarted:
             case Action.UploadProgress:
             case Action.UploadFinished:
             case Action.UploadCanceled:
-            case Action.UploadFailed:
-                if (this.mounted) this.forceUpdate();
+            case Action.UploadFailed: {
+                if (!this.mounted) return;
+                const uploads = ContentMessages.sharedInstance().getCurrentUploads();
+                const uploadsHere = uploads.filter(u => u.roomId === this.props.room.roomId);
+                this.setState({currentUpload: uploadsHere[0], uploadsHere});
                 break;
+            }
         }
     };
 
+    private onCancelClick = (ev) => {
+        ev.preventDefault();
+        ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload.promise);
+    };
+
     render() {
-        const uploads = ContentMessages.sharedInstance().getCurrentUploads();
-
-        // for testing UI... - also fix up the ContentMessages.getCurrentUploads().length
-        // check in RoomView
-        //
-        // uploads = [{
-        //     roomId: this.props.room.roomId,
-        //     loaded: 123493,
-        //     total: 347534,
-        //     fileName: "testing_fooble.jpg",
-        // }];
-
-        const uploadsHere = uploads.filter(u => u.roomId === this.props.room.roomId);
-        if (uploadsHere.length == 0) {
+        if (!this.state.currentUpload) {
             return null;
         }
-
-        const currentUpload = uploadsHere[0];
-        const uploadSize = filesize(currentUpload.total);
 
         // MUST use var name 'count' for pluralization to kick in
         const uploadText = _t(
             "Uploading %(filename)s and %(count)s others", {
-                filename: currentUpload.fileName,
-                count: uploadsHere.length - 1,
+                filename: this.state.currentUpload.fileName,
+                count: this.state.uploadsHere.length - 1,
             },
         );
-
+        
+        const uploadSize = filesize(this.state.currentUpload.total);
         return (
             <div className="mx_UploadBar">
-                <img className="mx_UploadBar_uploadCancel mx_filterFlipColor" src={require("../../../res/img/cancel.svg")} width="18" height="18"
-                    onClick={function() { ContentMessages.sharedInstance().cancelUpload(currentUpload.promise); }}
-                />
+                <AccessibleButton onClick={this.onCancelClick} className='mx_UploadBar_cancel' />
                 <div className="mx_UploadBar_uploadFilename">{uploadText} ({uploadSize})</div>
-                <ProgressBar value={currentUpload.loaded} max={currentUpload.total} />
+                <ProgressBar value={this.state.currentUpload.loaded} max={this.state.currentUpload.total} />
             </div>
         );
     }
