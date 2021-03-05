@@ -22,7 +22,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
 import {EventType} from "matrix-js-sdk/src/@types/event";
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';

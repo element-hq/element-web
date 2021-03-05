@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
-import { _t } from '../../../languageHandler';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
