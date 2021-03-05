@@ -77,6 +77,8 @@ export default class EditHistoryMessage extends React.PureComponent {
             roomId: this.props.mxEvent.getRoomId(),
             eventId: this.props.mxEvent.getId(),
             content: this.props.mxEvent.event,
+            isEncrypted: this.props.mxEvent.getType() !== this.props.mxEvent.getWireType(),
+            decryptedContent: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
     };
 
