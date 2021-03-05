@@ -16,30 +16,44 @@ limitations under the License.
 
 .mx_UploadBar {
     padding-left: 65px; // line up with the shield area in the composer
+    position: relative;
 
     .mx_ProgressBar {
         width: calc(100% - 40px); // cheating at a right margin
     }
 }
 
-.mx_UploadBar_uploadFilename {
+.mx_UploadBar_filename {
     margin-top: 5px;
-    opacity: 0.5;
-    color: $primary-fg-color;
-}
-
-.mx_UploadBar_uploadIcon {
-    float: left;
-    margin-top: 5px;
-    margin-left: 14px;
-}
-
-.mx_UploadBar_uploadCancel {
-    float: right;
-    margin-top: 5px;
-    margin-right: 10px;
+    color: $muted-fg-color;
     position: relative;
-    opacity: 0.6;
-    cursor: pointer;
-    z-index: 1;
+    padding-left: 22px; // 18px for icon, 4px for padding
+    font-size: $font-15px;
+    vertical-align: middle;
+
+    &::before {
+        content: "";
+        height: 18px;
+        width: 18px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: $muted-fg-color;
+        mask-image: url('$(res)/img/element-icons/upload.svg');
+    }
+}
+
+.mx_UploadBar_cancel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 16px;
+    width: 16px;
+    margin-right: 16px; // align over rightmost button in composer
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: $muted-fg-color;
+    mask-image: url('$(res)/img/icons-close.svg');
 }
