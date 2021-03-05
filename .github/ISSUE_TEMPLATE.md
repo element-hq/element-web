@@ -1,3 +1,5 @@
+<!-- A picture's worth a thousand words: PLEASE INCLUDE A SCREENSHOT :P -->
+
 <!-- Please report security issues by email to security@matrix.org -->
 
 <!-- This is a bug report template. By following the instructions below and
