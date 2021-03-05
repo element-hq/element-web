@@ -20,6 +20,8 @@ import dis from "../../dispatcher/dispatcher";
 import filesize from "filesize";
 import { _t } from '../../languageHandler';
 import {Room} from "matrix-js-sdk/src/models/room";
+import {ActionPayload} from "../../dispatcher/payloads";
+import {Action} from "../../dispatcher/actions";
 
 interface IProps {
     room: Room;
@@ -42,12 +44,12 @@ export default class UploadBar extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
     }
 
-    private onAction = (payload) => {
+    private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
-            case 'upload_progress':
-            case 'upload_finished':
-            case 'upload_canceled':
-            case 'upload_failed':
+            case Action.UploadProgress:
+            case Action.UploadFinished:
+            case Action.UploadCanceled:
+            case Action.UploadFailed:
                 if (this.mounted) this.forceUpdate();
                 break;
         }
