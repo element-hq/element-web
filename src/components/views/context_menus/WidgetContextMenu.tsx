@@ -57,7 +57,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
 
     let streamAudioStreamButton;
-    if (getConfigLivestreamUrl() && (app.type === "m.jitsi" || app.type === "jitsi")) {
+    if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
         const onStreamAudioClick = async () => {
             try {
                 await startJitsiAudioLivestream(widgetMessaging, roomId);
@@ -199,4 +199,3 @@ const WidgetContextMenu: React.FC<IProps> = ({
 };
 
 export default WidgetContextMenu;
-
