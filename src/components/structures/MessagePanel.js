@@ -595,6 +595,15 @@ export default class MessagePanel extends React.Component {
 
         const readReceipts = this._readReceiptsByEvent[eventId];
 
+        let isLastSuccessful = false;
+        const isSentState = s => !s || s === 'sent';
+        const isSent = isSentState(mxEv.getAssociatedStatus())
+        if (!nextEvent && isSent) {
+            isLastSuccessful = true;
+        } else if (nextEvent && isSent && !isSentState(nextEvent.getAssociatedStatus())) {
+            isLastSuccessful = true;
+        }
+
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <li
@@ -620,6 +629,7 @@ export default class MessagePanel extends React.Component {
                         permalinkCreator={this.props.permalinkCreator}
                         last={last}
                         lastInSection={willWantDateSeparator}
+                        lastSuccessful={isLastSuccessful}
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}

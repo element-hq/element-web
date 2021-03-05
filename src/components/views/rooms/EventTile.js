@@ -171,6 +171,9 @@ export default class EventTile extends React.Component {
         // targeting)
         lastInSection: PropTypes.bool,
 
+        // True if the event is the last successful (sent) event.
+        isLastSuccessful: PropTypes.bool,
+
         /* true if this is search context (which has the effect of greying out
          * the text
          */
@@ -297,7 +300,11 @@ export default class EventTile extends React.Component {
         // events and pretty much anything that can't be sent by the composer as a message. For
         // those we rely on local echo giving the impression of things changing, and expect them
         // to be quick.
-        const simpleSendableEvents = [EventType.Sticker, EventType.RoomMessage, EventType.RoomMessageEncrypted];
+        const simpleSendableEvents = [
+            EventType.Sticker,
+            EventType.RoomMessage,
+            EventType.RoomMessageEncrypted,
+        ];
         if (!simpleSendableEvents.includes(this.props.mxEvent.getType())) return false;
 
         // Default case
@@ -308,22 +315,20 @@ export default class EventTile extends React.Component {
         // If we're not even eligible, don't show the receipt.
         if (!this._isEligibleForSpecialReceipt) return false;
 
+        // We only show the 'sent' receipt on the last successful event.
+        if (!this.props.lastSuccessful) return false;
+
         // Check to make sure the sending state is appropriate. A null/undefined send status means
         // that the message is 'sent', so we're just double checking that it's explicitly not sent.
         if (this.props.eventSendStatus && this.props.eventSendStatus !== 'sent') return false;
 
-        // No point in doing the complex math if we're not going to even show this special receipt.
-        if (this._shouldShowSendingReceipt) return false;
-
-        // Next we check to see if any newer events have read receipts. If they do then we don't
-        // show our special state - the user already has feedback about their message. We only
-        // search for the most recent 50 events because surely someone will have sent *something*
-        // in that time, even if it is a membership event or something.
-        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        // If anyone has read the event besides us, we don't want to show a sent receipt.
+        const receipts = this.props.readReceipts || [];
         const myUserId = MatrixClientPeg.get().getUserId();
-        const readUsers = room.getUsersWhoHaveRead(this.props.mxEvent, 50);
-        const hasBeenRead = readUsers.length === 0 || readUsers.some(u => u !== myUserId);
-        return !hasBeenRead;
+        if (receipts.some(r => r.userId !== myUserId)) return false;
+
+        // Finally, we should show a receipt.
+        return true;
     }
 
     get _shouldShowSendingReceipt() {
