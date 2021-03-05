@@ -382,7 +382,7 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
     ]
 }
 
-export const defaultBindingProvider: IKeyBindingsProvider = {
+export const defaultBindingsProvider: IKeyBindingsProvider = {
     getMessageComposerBindings: messageComposerBindings,
     getAutocompleteBindings: autocompleteBindings,
     getRoomListBindings: roomListBindings,

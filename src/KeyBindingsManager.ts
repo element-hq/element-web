@@ -1,4 +1,4 @@
-import { defaultBindingProvider } from './KeyBindingsDefaults';
+import { defaultBindingsProvider } from './KeyBindingsDefaults';
 import { isMac } from './Keyboard';
 
 /** Actions for the chat message composer component */
@@ -197,7 +197,7 @@ export class KeyBindingsManager {
      * customized key bindings.
      */
     bindingsProviders: IKeyBindingsProvider[] = [
-        defaultBindingProvider,
+        defaultBindingsProvider,
     ];
 
     /**
