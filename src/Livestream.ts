@@ -23,6 +23,9 @@ export function getConfigLivestreamUrl() {
     return SdkConfig.get()["audioStreamUrl"];
 }
 
+// Dummy rtmp URL used to signal that we want a special audio-only stream
+const AUDIOSTREAM_DUMMY_URL = 'rtmp://audiostream.dummy/';
+
 async function createLiveStream(roomId: string) {
     const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
 
@@ -47,6 +50,6 @@ export async function startJitsiAudioLivestream(widgetMessaging: ClientWidgetApi
     const streamId = await createLiveStream(roomId);
 
     await widgetMessaging.transport.send(ElementWidgetActions.StartLiveStream, {
-        rtmpStreamKey: 'rtmp://audiostream.dummy/' + streamId,
+        rtmpStreamKey: AUDIOSTREAM_DUMMY_URL + streamId,
     });
 }
