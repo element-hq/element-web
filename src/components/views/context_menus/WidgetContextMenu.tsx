@@ -62,7 +62,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
             try {
                 await startJitsiAudioLivestream(widgetMessaging, roomId);
             } catch (err) {
-                console.log("Failed to start livestream", err);
+                console.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
                 const message = err.message || _t("Unable to start audio streaming.");
                 Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
