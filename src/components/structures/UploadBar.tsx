@@ -15,16 +15,16 @@ limitations under the License.
 */
 
 import React from 'react';
+import { Room } from "matrix-js-sdk/src/models/room";
 import ContentMessages from '../../ContentMessages';
 import dis from "../../dispatcher/dispatcher";
 import filesize from "filesize";
 import { _t } from '../../languageHandler';
-import {Room} from "matrix-js-sdk/src/models/room";
-import {ActionPayload} from "../../dispatcher/payloads";
-import {Action} from "../../dispatcher/actions";
+import { ActionPayload } from "../../dispatcher/payloads";
+import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
 import AccessibleButton from "../views/elements/AccessibleButton";
-import {IUpload} from "../../models/IUpload";
+import { IUpload } from "../../models/IUpload";
 
 interface IProps {
     room: Room;
