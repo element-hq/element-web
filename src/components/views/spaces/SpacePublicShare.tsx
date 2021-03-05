@@ -22,7 +22,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import {copyPlaintext} from "../../../utils/strings";
 import {sleep} from "../../../utils/promise";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
-import {showSpaceInviteDialog} from "../../../RoomInvite";
+import {showRoomInviteDialog} from "../../../RoomInvite";
 
 interface IProps {
     space: Room;
@@ -53,7 +53,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
         <AccessibleButton
             className="mx_SpacePublicShare_inviteButton"
             onClick={() => {
-                showSpaceInviteDialog(space.roomId);
+                showRoomInviteDialog(space.roomId);
                 onFinished();
             }}
         >

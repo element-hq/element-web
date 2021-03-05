@@ -28,6 +28,7 @@
 @import "./structures/_ScrollPanel.scss";
 @import "./structures/_SearchBox.scss";
 @import "./structures/_SpacePanel.scss";
+@import "./structures/_SpaceRoomDirectory.scss";
 @import "./structures/_SpaceRoomView.scss";
 @import "./structures/_TabbedView.scss";
 @import "./structures/_ToastContainer.scss";
@@ -58,6 +59,7 @@
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
+@import "./views/dialogs/_AddExistingToSpaceDialog.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
@@ -91,6 +93,7 @@
 @import "./views/dialogs/_SettingsDialog.scss";
 @import "./views/dialogs/_ShareDialog.scss";
 @import "./views/dialogs/_SlashCommandHelpDialog.scss";
+@import "./views/dialogs/_SpaceSettingsDialog.scss";
 @import "./views/dialogs/_TabbedIntegrationManagerDialog.scss";
 @import "./views/dialogs/_TermsDialog.scss";
 @import "./views/dialogs/_UploadConfirmDialog.scss";
