@@ -16,11 +16,11 @@ limitations under the License.
 
 import React, {ComponentProps, useContext} from 'react';
 import classNames from 'classnames';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {IApp} from "../../../stores/WidgetStore";
 import BaseAvatar, {BaseAvatarType} from "./BaseAvatar";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface IProps extends Omit<ComponentProps<BaseAvatarType>, "name" | "url" | "urls"> {
     app: IApp;
@@ -47,7 +47,7 @@ const WidgetAvatar: React.FC<IProps> = ({ app, className, width = 20, height = 2
             name={app.id}
             className={classNames("mx_WidgetAvatar", className)}
             // MSC2765
-            url={app.avatar_url ? getHttpUriForMxc(cli.getHomeserverUrl(), app.avatar_url, 20, 20, "crop") : undefined}
+            url={app.avatar_url ? mediaFromMxc(app.avatar_url).getSquareThumbnailHttp(20) : undefined}
             urls={iconUrls}
             width={width}
             height={height}

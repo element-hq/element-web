@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import {User} from "matrix-js-sdk/src/models/user";
 import {Room} from "matrix-js-sdk/src/models/room";
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
+import {mediaFromMxc} from "./customisations/Media";
 
 export type ResizeMethod = "crop" | "scale";
 
@@ -47,16 +47,12 @@ export function avatarUrlForMember(member: RoomMember, width: number, height: nu
 }
 
 export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
-    const url = getHttpUriForMxc(
-        MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
+    if (!user.avatarUrl) return null;
+    return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(
         Math.floor(width * window.devicePixelRatio),
         Math.floor(height * window.devicePixelRatio),
         resizeMethod,
     );
-    if (!url || url.length === 0) {
-        return null;
-    }
-    return url;
 }
 
 function isValidHexColor(color: string): boolean {
