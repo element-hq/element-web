@@ -23,6 +23,7 @@ import { _t } from "../../languageHandler";
 import * as sdk from "../../index";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { SendCustomEvent } from "../views/dialogs/DevtoolsDialog";
+import { canEditContent } from "../../utils/EventUtils";
 
 export default class ViewSource extends React.Component {
     static propTypes = {
@@ -162,6 +163,7 @@ export default class ViewSource extends React.Component {
         const isEditing = this.state.isEditing;
         const roomId = mxEvent.getRoomId();
         const eventId = mxEvent.getId();
+        const canEdit = canEditContent(this.props.mxEvent);
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
@@ -170,7 +172,7 @@ export default class ViewSource extends React.Component {
                     <div className="mx_ViewSource_separator" />
                     {isEditing ? this.editSourceContent() : this.viewSourceContent()}
                 </div>
-                {!isEditing && (
+                {!isEditing && canEdit && (
                     <div className="mx_Dialog_buttons">
                         <button onClick={() => this.onEdit()}>{_t("Edit")}</button>
                     </div>
