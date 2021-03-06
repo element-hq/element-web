@@ -124,16 +124,9 @@ export default class MessageContextMenu extends React.Component {
     };
 
     onViewSourceClick = () => {
-        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
-            roomId: ev.getRoomId(),
-            eventId: ev.getId(),
-            content: ev.event,
-            event: ev,
-            isEncrypted: this.props.mxEvent.getType() !== this.props.mxEvent.getWireType(),
-            // FIXME: _clearEvent is private
-            decryptedContent: ev._clearEvent,
+            mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     };
