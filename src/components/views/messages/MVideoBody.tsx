@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import MFileBody from './MFileBody';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";

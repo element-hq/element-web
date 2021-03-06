@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ComponentProps, useContext} from 'react';
+import React, {ComponentProps} from 'react';
 import classNames from 'classnames';
 
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {IApp} from "../../../stores/WidgetStore";
 import BaseAvatar, {BaseAvatarType} from "./BaseAvatar";
 import {mediaFromMxc} from "../../../customisations/Media";
@@ -27,8 +26,6 @@ interface IProps extends Omit<ComponentProps<BaseAvatarType>, "name" | "url" | "
 }
 
 const WidgetAvatar: React.FC<IProps> = ({ app, className, width = 20, height = 20, ...props }) => {
-    const cli = useContext(MatrixClientContext);
-
     let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg")];
     // heuristics for some better icons until Widgets support their own icons
     if (app.type.includes("jitsi")) {

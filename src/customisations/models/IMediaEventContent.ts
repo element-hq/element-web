@@ -21,7 +21,7 @@ export interface IEncryptedFile {
     mimetype?: string;
     key: {
         alg: string;
-        key_ops: string[];
+        key_ops: string[]; // eslint-disable-line camelcase
         kty: string;
         k: string;
         ext: boolean;
@@ -35,8 +35,8 @@ export interface IMediaEventContent {
     url?: string; // required on unencrypted media
     file?: IEncryptedFile; // required for *encrypted* media
     info?: {
-        thumbnail_url?: string;
-        thumbnail_file?: IEncryptedFile;
+        thumbnail_url?: string; // eslint-disable-line camelcase
+        thumbnail_file?: IEncryptedFile; // eslint-disable-line camelcase
     };
 }
 

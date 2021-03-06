@@ -19,7 +19,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as sdk from "../../../index";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import { UserAddressType } from '../../../UserAddress.js';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
