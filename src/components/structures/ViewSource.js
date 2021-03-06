@@ -39,6 +39,7 @@ export default class ViewSource extends React.Component {
     }
 
     onBack() {
+        // TODO: refresh the "Event ID:" modal header
         this.setState({ isEditing: false });
     }
 
@@ -80,15 +81,28 @@ export default class ViewSource extends React.Component {
         }
     }
 
+    // returns the id of the initial message, not the id of the previous edit
+    getBaseEventId() {
+        const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
+        const isEncrypted = this.props.mxEvent.getType() !== this.props.mxEvent.getWireType();
+        const baseMxEvent = this.props.mxEvent;
+
+        if (isEncrypted) {
+            // `relates_to` field is inside the encrypted event
+            return mxEvent.event.content["m.relates_to"]?.event_id ?? baseMxEvent.getId();
+        } else {
+            return mxEvent.getContent()["m.relates_to"]?.event_id ?? baseMxEvent.getId();
+        }
+    }
+
     // returns the SendCustomEvent component prefilled with the correct details
     editSourceContent() {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
 
         const isStateEvent = mxEvent.isState();
-        console.log("isStateEvent", isStateEvent);
         const roomId = mxEvent.getRoomId();
-        const eventId = mxEvent.getId();
         const originalContent = mxEvent.getContent();
+
         if (isStateEvent) {
             return (
                 <MatrixClientContext.Consumer>
@@ -107,14 +121,19 @@ export default class ViewSource extends React.Component {
                 </MatrixClientContext.Consumer>
             );
         } else {
-            // send an edit-message event
-            // prefill the "m.new_content" field
+            // prefill an edit-message event
+            // keep only the `body` and `msgtype` fields of originalContent
+            const bodyToStartFrom = originalContent["m.new_content"]?.body ?? originalContent.body; // prefill the last edit body, to start editing from there
             const newContent = {
-                ...originalContent,
-                "m.new_content": originalContent,
+                "body": ` * ${bodyToStartFrom}`,
+                "msgtype": originalContent.msgtype,
+                "m.new_content": {
+                    body: bodyToStartFrom,
+                    msgtype: originalContent.msgtype,
+                },
                 "m.relates_to": {
                     rel_type: "m.replace",
-                    event_id: eventId,
+                    event_id: this.getBaseEventId(),
                 },
             };
             return (
