@@ -147,30 +147,35 @@ export function isKeyComboMatch(ev: KeyboardEvent | React.KeyboardEvent, combo: 
     const comboAlt = combo.altKey ?? false;
     const comboShift = combo.shiftKey ?? false;
     const comboMeta = combo.metaKey ?? false;
+    // Tests mock events may keep the modifiers undefined; convert them to booleans
+    const evCtrl = ev.ctrlKey ?? false;
+    const evAlt = ev.altKey ?? false;
+    const evShift = ev.shiftKey ?? false;
+    const evMeta = ev.metaKey ?? false;
     // When ctrlOrCmd is set, the keys need do evaluated differently on PC and Mac
     if (combo.ctrlOrCmd) {
         if (onMac) {
-            if (!ev.metaKey
-                || ev.ctrlKey !== comboCtrl
-                || ev.altKey !== comboAlt
-                || ev.shiftKey !== comboShift) {
+            if (!evMeta
+                || evCtrl !== comboCtrl
+                || evAlt !== comboAlt
+                || evShift !== comboShift) {
                 return false;
             }
         } else {
-            if (!ev.ctrlKey
-                || ev.metaKey !== comboMeta
-                || ev.altKey !== comboAlt
-                || ev.shiftKey !== comboShift) {
+            if (!evCtrl
+                || evMeta !== comboMeta
+                || evAlt !== comboAlt
+                || evShift !== comboShift) {
                 return false;
             }
         }
         return true;
     }
 
-    if (ev.metaKey !== comboMeta
-        || ev.ctrlKey !== comboCtrl
-        || ev.altKey !== comboAlt
-        || ev.shiftKey !== comboShift) {
+    if (evMeta !== comboMeta
+        || evCtrl !== comboCtrl
+        || evAlt !== comboAlt
+        || evShift !== comboShift) {
         return false;
     }
 
