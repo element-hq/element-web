@@ -97,7 +97,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
         return (
             <div className="mx_CallViewForRoom">
                 <Resizable
-                    minHeight={300}
+                    minHeight={380}
                     maxHeight={maxHeight}
                     enable={{
                         top: false,
