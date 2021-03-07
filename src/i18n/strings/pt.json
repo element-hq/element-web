@@ -24,5 +24,8 @@
     "Go to element.io": "Visite element.io",
     "I understand the risks and wish to continue": "Compreendo os riscos e pretendo continuar",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Podes continuar a utilizar teu browser atual, mas algumas funcionalidades podem não funcionar ou aparecerem de forma incorrecta.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para uma melhor experiência."
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para uma melhor experiência.",
+    "Unsupported browser": "Browser não suportado",
+    "Previous/next recently visited room or community": "Anterior/seguinte comunidade ou sala recentemente visitado",
+    "Open user settings": "Abrir definições do utilizador"
 }
