@@ -621,7 +621,6 @@ export default class CallHandler {
 
     private async placeCall(
         roomId: string, type: PlaceCallType,
-        localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
     ) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
         CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
@@ -643,10 +642,7 @@ export default class CallHandler {
         if (type === PlaceCallType.Voice) {
             call.placeVoiceCall();
         } else if (type === 'video') {
-            call.placeVideoCall(
-                remoteElement,
-                localElement,
-            );
+            call.placeVideoCall();
         } else if (type === PlaceCallType.ScreenSharing) {
             const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
             if (screenCapErrorString) {
@@ -660,8 +656,6 @@ export default class CallHandler {
             }
 
             call.placeScreenSharingCall(
-                remoteElement,
-                localElement,
                 async () : Promise<DesktopCapturerSource> => {
                     const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
                     const [source] = await finished;
@@ -715,14 +709,12 @@ export default class CallHandler {
                     } else if (members.length === 2) {
                         console.info(`Place ${payload.type} call in ${payload.room_id}`);
 
-                        this.placeCall(payload.room_id, payload.type, payload.local_element, payload.remote_element);
+                        this.placeCall(payload.room_id, payload.type);
                     } else { // > 2
                         dis.dispatch({
                             action: "place_conference_call",
                             room_id: payload.room_id,
                             type: payload.type,
-                            remote_element: payload.remote_element,
-                            local_element: payload.local_element,
                         });
                     }
                 }
