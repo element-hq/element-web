@@ -25,11 +25,11 @@ export default class VerificationRequestDialog extends React.Component {
         verificationRequest: PropTypes.object,
         verificationRequestPromise: PropTypes.object,
         onFinished: PropTypes.func.isRequired,
+        member: PropTypes.string,
     };
 
     constructor(...args) {
         super(...args);
-        this.onFinished = this.onFinished.bind(this);
         this.state = {};
         if (this.props.verificationRequest) {
             this.state.verificationRequest = this.props.verificationRequest;
@@ -50,7 +50,7 @@ export default class VerificationRequestDialog extends React.Component {
         const title = request && request.isSelfVerification ?
             _t("Verify other session") : _t("Verification Request");
 
-        return <BaseDialog className="mx_InfoDialog" onFinished={this.onFinished}
+        return <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
                 contentId="mx_Dialog_content"
                 title={title}
                 hasCancel={true}
@@ -63,14 +63,5 @@ export default class VerificationRequestDialog extends React.Component {
                 member={member}
             />
         </BaseDialog>;
-    }
-
-    async onFinished() {
-        this.props.onFinished();
-        let request = this.props.verificationRequest;
-        if (!request && this.props.verificationRequestPromise) {
-            request = await this.props.verificationRequestPromise;
-        }
-        request.cancel();
     }
 }
