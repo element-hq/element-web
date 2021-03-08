@@ -28,7 +28,7 @@ interface IProps {
     isSelected: boolean;
     displayName: string;
     avatar: React.ReactElement;
-    notificationState: NotificationState;
+    notificationState?: NotificationState;
     onClick: () => void;
 }
 
@@ -63,12 +63,15 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
             'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
-        const badge = (
-            <NotificationBadge
-                notification={this.props.notificationState}
-                forceCount={false}
-            />
-        );
+        let badge;
+        if (this.props.notificationState) {
+            badge = (
+                <NotificationBadge
+                    notification={this.props.notificationState}
+                    forceCount={false}
+                />
+            );
+        }
 
         let name = this.props.displayName;
         if (typeof name !== 'string') name = '';
@@ -76,7 +79,7 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
 
         const nameClasses = classNames({
             "mx_RoomTile_name": true,
-            "mx_RoomTile_nameHasUnreadEvents": this.props.notificationState.isUnread,
+            "mx_RoomTile_nameHasUnreadEvents": this.props.notificationState?.isUnread,
         });
 
         let nameContainer = (
