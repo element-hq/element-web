@@ -1,0 +1,138 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: the space panel currently does not have a fixed width,
+// just the headers at each level have a max-width of 150px
+// so this will look slightly off for now. We should probably use css grid for the whole main layout...
+$spacePanelWidth: 200px;
+
+.mx_SpaceCreateMenu_wrapper {
+    // background blur everything except SpacePanel
+    .mx_ContextualMenu_background {
+        background-color: $dialog-backdrop-color;
+        opacity: 0.6;
+        left: $spacePanelWidth;
+    }
+
+    .mx_ContextualMenu {
+        padding: 24px;
+        width: 480px;
+        box-sizing: border-box;
+        background-color: $primary-bg-color;
+
+        > div {
+            > h2 {
+                font-weight: $font-semi-bold;
+                font-size: $font-18px;
+                margin-top: 4px;
+            }
+
+            > p {
+                font-size: $font-15px;
+                color: $secondary-fg-color;
+                margin: 0;
+            }
+        }
+
+        .mx_SpaceCreateMenuType {
+            position: relative;
+            padding: 16px 32px 16px 72px;
+            width: 432px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            border: 1px solid $input-darker-bg-color;
+            font-size: $font-15px;
+            margin: 20px 0;
+
+            > h3 {
+                font-weight: $font-semi-bold;
+                margin: 0 0 4px;
+            }
+
+            > span {
+                color: $secondary-fg-color;
+            }
+
+            &::before {
+                position: absolute;
+                content: '';
+                width: 32px;
+                height: 32px;
+                top: 24px;
+                left: 20px;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                mask-size: 32px;
+                background-color: $tertiary-fg-color;
+            }
+
+            &:hover {
+                border-color: $accent-color;
+
+                &::before {
+                    background-color: $accent-color;
+                }
+
+                > span {
+                    color: $primary-fg-color;
+                }
+            }
+        }
+
+        .mx_SpaceCreateMenuType_public::before {
+            mask-image: url('$(res)/img/globe.svg');
+            mask-size: 26px;
+        }
+        .mx_SpaceCreateMenuType_private::before {
+            mask-image: url('$(res)/img/element-icons/lock.svg');
+        }
+
+        .mx_SpaceCreateMenu_back {
+            width: 28px;
+            height: 28px;
+            position: relative;
+            background-color: $theme-button-bg-color;
+            border-radius: 14px;
+            margin-bottom: 12px;
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: 28px;
+                width: 28px;
+                top: 0;
+                left: 0;
+                background-color: $muted-fg-color;
+                transform: rotate(90deg);
+                mask-repeat: no-repeat;
+                mask-position: 2px 3px;
+                mask-size: 24px;
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            }
+        }
+
+        .mx_FormButton {
+            padding: 8px 22px;
+            margin-left: auto;
+            display: block;
+            width: min-content;
+        }
+
+        .mx_AccessibleButton_disabled {
+            cursor: not-allowed;
+        }
+    }
+}

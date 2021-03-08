@@ -76,6 +76,7 @@ export interface IProps extends IPosition {
     hasBackground?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
+    wrapperClassName?: string;
 
     // Function to be called on menu close
     onFinished();
@@ -365,7 +366,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         return (
             <div
-                className="mx_ContextualMenu_wrapper"
+                className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
                 style={{...position, ...wrapperStyle}}
                 onKeyDown={this.onKeyDown}
                 onContextMenu={this.onContextMenuPreventBubbling}

@@ -100,10 +100,11 @@ export default class RoomProfileSettings extends React.Component {
         const newState = {};
 
         // TODO: What do we do about errors?
-
+        const displayName = this.state.displayName.trim();
         if (this.state.originalDisplayName !== this.state.displayName) {
-            await client.setRoomName(this.props.roomId, this.state.displayName);
-            newState.originalDisplayName = this.state.displayName;
+            await client.setRoomName(this.props.roomId, displayName);
+            newState.originalDisplayName = displayName;
+            newState.displayName = displayName;
         }
 
         if (this.state.avatarFile) {

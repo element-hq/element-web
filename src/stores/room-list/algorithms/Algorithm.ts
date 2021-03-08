@@ -186,6 +186,9 @@ export class Algorithm extends EventEmitter {
     }
 
     private async doUpdateStickyRoom(val: Room) {
+        // no-op sticky rooms for spaces - they're effectively virtual rooms
+        if (val?.isSpaceRoom() && val.getMyMembership() !== "invite") val = null;
+
         // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
         // otherwise we risk duplicating rooms.
 

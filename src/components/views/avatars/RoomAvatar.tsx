@@ -24,7 +24,7 @@ import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
 import {ResizeMethod} from "../../../Avatar";
 
-interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick">{
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)

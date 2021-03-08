@@ -67,9 +67,6 @@ $groupFilterPanel-bg-color: rgba(232, 232, 232, 0.77);
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
 
-// used by RoomDropTarget
-$droptarget-bg-color: rgba(255,255,255,0.5);
-
 // used by AddressSelector
 $selected-color: $secondary-accent-color;
 
@@ -181,6 +178,7 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
+$space-button-outline-color: #E3E8F0;
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;

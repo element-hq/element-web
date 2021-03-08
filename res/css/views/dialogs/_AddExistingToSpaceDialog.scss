@@ -1,0 +1,185 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_AddExistingToSpaceDialog_wrapper {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.mx_AddExistingToSpaceDialog {
+    width: 480px;
+    color: $primary-fg-color;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 0;
+
+    .mx_Dialog_title {
+        display: flex;
+
+        .mx_BaseAvatar {
+            display: inline-flex;
+            margin: 5px 16px 5px 5px;
+            vertical-align: middle;
+        }
+
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+            margin: 0;
+            vertical-align: unset;
+        }
+
+        > div {
+            > h1 {
+                font-weight: $font-semi-bold;
+                font-size: $font-18px;
+                line-height: $font-22px;
+                margin: 0;
+            }
+
+            .mx_AddExistingToSpaceDialog_onlySpace {
+                color: $secondary-fg-color;
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+        }
+
+        .mx_Dropdown_input {
+            border: none;
+
+            > .mx_Dropdown_option {
+                padding-left: 0;
+                flex: unset;
+                height: unset;
+                color: $secondary-fg-color;
+                font-size: $font-15px;
+                line-height: $font-24px;
+
+                .mx_BaseAvatar {
+                    display: none;
+                }
+            }
+
+            .mx_Dropdown_menu {
+                .mx_AddExistingToSpaceDialog_dropdownOptionActive {
+                    color: $accent-color;
+                    padding-right: 32px;
+                    position: relative;
+
+                    &::before {
+                        content: '';
+                        width: 20px;
+                        height: 20px;
+                        top: 8px;
+                        right: 0;
+                        position: absolute;
+                        mask-position: center;
+                        mask-size: contain;
+                        mask-repeat: no-repeat;
+                        background-color: $accent-color;
+                        mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+                    }
+                }
+            }
+        }
+    }
+
+    .mx_SearchBox {
+        margin: 0;
+    }
+
+    .mx_AddExistingToSpaceDialog_errorText {
+        font-weight: $font-semi-bold;
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $notice-primary-color;
+        margin-bottom: 28px;
+    }
+
+    .mx_AddExistingToSpaceDialog_content {
+        .mx_AddExistingToSpaceDialog_noResults {
+            margin-top: 24px;
+        }
+    }
+
+    .mx_AddExistingToSpaceDialog_section {
+        margin-top: 24px;
+
+        > h3 {
+            margin: 0;
+            color: $secondary-fg-color;
+            font-size: $font-12px;
+            font-weight: $font-semi-bold;
+            line-height: $font-15px;
+        }
+
+        .mx_AddExistingToSpaceDialog_entry {
+            display: flex;
+            margin-top: 12px;
+
+            .mx_BaseAvatar {
+                margin-right: 12px;
+            }
+
+            .mx_AddExistingToSpaceDialog_entry_name {
+                font-size: $font-15px;
+                line-height: 30px;
+                flex-grow: 1;
+            }
+
+            .mx_FormButton {
+                min-width: 92px;
+                font-weight: normal;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    .mx_AddExistingToSpaceDialog_section_spaces {
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+    }
+
+    .mx_AddExistingToSpaceDialog_footer {
+        display: flex;
+        margin-top: 32px;
+
+        > span {
+            flex-grow: 1;
+            font-size: $font-12px;
+            line-height: $font-15px;
+
+            > * {
+                vertical-align: middle;
+            }
+        }
+
+        .mx_AccessibleButton {
+            display: inline-block;
+        }
+
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
+        }
+    }
+
+    .mx_FormButton {
+        padding: 8px 22px;
+    }
+}
