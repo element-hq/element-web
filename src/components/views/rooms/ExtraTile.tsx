@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,8 +36,7 @@ interface IState {
     hover: boolean;
 }
 
-// TODO: Remove with community invites in the room list: https://github.com/vector-im/element-web/issues/14456
-export default class TemporaryTile extends React.Component<IProps, IState> {
+export default class ExtraTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
@@ -57,8 +56,8 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         // XXX: We copy classes because it's easier
         const classes = classNames({
+            'mx_ExtraTile': true,
             'mx_RoomTile': true,
-            'mx_TemporaryTile': true,
             'mx_RoomTile_selected': this.props.isSelected,
             'mx_RoomTile_minimized': this.props.isMinimized,
         });

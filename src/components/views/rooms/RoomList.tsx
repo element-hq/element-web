@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
+import React, { ReactComponentElement } from "react";
 import { Dispatcher } from "flux";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as fbEmitter from "fbemitter";
@@ -34,7 +34,7 @@ import RoomSublist from "./RoomSublist";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
-import TemporaryTile from "./TemporaryTile";
+import ExtraTile from "./ExtraTile";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { Action } from "../../../dispatcher/actions";
@@ -422,7 +422,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         dis.dispatch({ action: Action.ViewRoomDirectory, initialText });
     };
 
-    private renderSuggestedRooms(): JSX.Element[] {
+    private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
         return this.state.suggestedRooms.map(room => {
             const name = room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room");
             const avatar = (
@@ -443,7 +443,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 });
             };
             return (
-                <TemporaryTile
+                <ExtraTile
                     isMinimized={this.props.isMinimized}
                     isSelected={this.state.currentRoomId === room.room_id}
                     displayName={name}
@@ -455,7 +455,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private renderCommunityInvites(): TemporaryTile[] {
+    private renderCommunityInvites(): ReactComponentElement<typeof ExtraTile>[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
@@ -476,7 +476,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 });
             };
             return (
-                <TemporaryTile
+                <ExtraTile
                     isMinimized={this.props.isMinimized}
                     isSelected={false}
                     displayName={g.name}
@@ -538,7 +538,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 isMinimized={this.props.isMinimized}
                 onResize={this.props.onResize}
                 showSkeleton={showSkeleton}
-                extraBadTilesThatShouldntExist={extraTiles}
+                extraTiles={extraTiles}
             />);
         }
 
