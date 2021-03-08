@@ -2714,7 +2714,7 @@
     "Decide where your account is hosted": "Decide where your account is hosted",
     "Use Security Key or Phrase": "Use Security Key or Phrase",
     "Use Security Key": "Use Security Key",
-    "Verify against another session": "Verify against another session",
+    "Verify with another session": "Verify with another session",
     "Verify this login to access your encrypted messages and prove to others that this login is really you.": "Verify this login to access your encrypted messages and prove to others that this login is really you.",
     "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.",
     "Your new session is now verified. Other users will see it as trusted.": "Your new session is now verified. Other users will see it as trusted.",

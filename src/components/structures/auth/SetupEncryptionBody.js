@@ -152,7 +152,7 @@ export default class SetupEncryptionBody extends React.Component {
             let verifyButton;
             if (store.hasDevicesToVerifyAgainst) {
                 verifyButton = <AccessibleButton kind="primary" onClick={this._onVerifyClick}>
-                    { _t("Verify against another session") }
+                    { _t("Verify with another session") }
                 </AccessibleButton>;
             }
 
