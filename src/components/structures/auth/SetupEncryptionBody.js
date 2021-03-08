@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
+import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
 import * as sdk from '../../../index';
 import {
     SetupEncryptionStore,
@@ -81,6 +83,22 @@ export default class SetupEncryptionBody extends React.Component {
         store.usePassPhrase();
     }
 
+    _onVerifyClick = () => {
+        const cli = MatrixClientPeg.get();
+        const userId = cli.getUserId();
+        const requestPromise = cli.requestVerification(userId);
+
+        this.props.onFinished(true);
+        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
+            verificationRequestPromise: requestPromise,
+            member: cli.getUser(userId),
+            onFinished: async () => {
+                const request = await requestPromise;
+                request.cancel();
+            },
+        });
+    }
+
     onSkipClick = () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skip();
@@ -132,32 +150,24 @@ export default class SetupEncryptionBody extends React.Component {
                 </AccessibleButton>;
             }
 
+            let verifyButton;
+            if (store.hasDevicesToVerifyAgainst) {
+                verifyButton = <AccessibleButton kind="primary" onClick={this._onVerifyClick}>
+                    { _t("Verify against another session") }
+                </AccessibleButton>;
+            }
+
             const brand = SdkConfig.get().brand;
 
             return (
                 <div>
                     <p>{_t(
-                        "Confirm your identity by verifying this login from one of your other sessions, " +
-                        "granting it access to encrypted messages.",
+                        "Verify this login to access your encrypted messages and " +
+                        "prove to others that this login is really you."
                     )}</p>
-                    <p>{_t(
-                        "This requires the latest %(brand)s on your other devices:",
-                        { brand },
-                    )}</p>
-
-                    <div className="mx_CompleteSecurity_clients">
-                        <div className="mx_CompleteSecurity_clients_desktop">
-                            <div>{_t("%(brand)s Web", { brand })}</div>
-                            <div>{_t("%(brand)s Desktop", { brand })}</div>
-                        </div>
-                        <div className="mx_CompleteSecurity_clients_mobile">
-                            <div>{_t("%(brand)s iOS", { brand })}</div>
-                            <div>{_t("%(brand)s Android", { brand })}</div>
-                        </div>
-                        <p>{_t("or another cross-signing capable Matrix client")}</p>
-                    </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
+                        {verifyButton}
                         {useRecoveryKeyButton}
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
