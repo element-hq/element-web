@@ -51,7 +51,7 @@ export default class ViewSource extends React.Component {
     // returns the dialog body for viewing the event source
     viewSourceContent() {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
-        const isEncrypted = this.props.mxEvent.getType() !== this.props.mxEvent.getWireType();
+        const isEncrypted = mxEvent.isEncrypted();
         const decryptedEventSource = mxEvent._clearEvent; // FIXME: _clearEvent is private
         const originalEventSource = mxEvent.event;
 
@@ -85,7 +85,7 @@ export default class ViewSource extends React.Component {
     // returns the id of the initial message, not the id of the previous edit
     getBaseEventId() {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
-        const isEncrypted = this.props.mxEvent.getType() !== this.props.mxEvent.getWireType();
+        const isEncrypted = mxEvent.isEncrypted();
         const baseMxEvent = this.props.mxEvent;
 
         if (isEncrypted) {
@@ -163,7 +163,7 @@ export default class ViewSource extends React.Component {
         const isEditing = this.state.isEditing;
         const roomId = mxEvent.getRoomId();
         const eventId = mxEvent.getId();
-        const canEdit = canEditContent(this.props.mxEvent);
+        const canEdit = canEditContent(this.props.mxEvent) || mxEvent.isState();
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
