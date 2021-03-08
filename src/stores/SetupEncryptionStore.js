@@ -19,11 +19,12 @@ import { MatrixClientPeg } from '../MatrixClientPeg';
 import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-export const PHASE_INTRO = 0;
-export const PHASE_BUSY = 1;
-export const PHASE_DONE = 2;    //final done stage, but still showing UX
-export const PHASE_CONFIRM_SKIP = 3;
-export const PHASE_FINISHED = 4; //UX can be closed
+export const PHASE_LOADING = 0;
+export const PHASE_INTRO = 1;
+export const PHASE_BUSY = 2;
+export const PHASE_DONE = 3;    //final done stage, but still showing UX
+export const PHASE_CONFIRM_SKIP = 4;
+export const PHASE_FINISHED = 5; //UX can be closed
 
 export class SetupEncryptionStore extends EventEmitter {
     static sharedInstance() {
@@ -36,7 +37,7 @@ export class SetupEncryptionStore extends EventEmitter {
             return;
         }
         this._started = true;
-        this.phase = PHASE_BUSY;
+        this.phase = PHASE_LOADING;
         this.verificationRequest = null;
         this.backupInfo = null;
 

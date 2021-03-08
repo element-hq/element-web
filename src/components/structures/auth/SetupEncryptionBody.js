@@ -23,6 +23,7 @@ import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDi
 import * as sdk from '../../../index';
 import {
     SetupEncryptionStore,
+    PHASE_LOADING,
     PHASE_INTRO,
     PHASE_BUSY,
     PHASE_DONE,
@@ -222,7 +223,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
                 </div>
             );
-        } else if (phase === PHASE_BUSY) {
+        } else if (phase === PHASE_BUSY || phase === PHASE_LOADING) {
             const Spinner = sdk.getComponent('views.elements.Spinner');
             return <Spinner />;
         } else {
