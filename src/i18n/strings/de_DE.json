@@ -3073,9 +3073,10 @@
     "Show chat effects (animations when receiving e.g. confetti)": "Animierte Chateffekte zeigen, wenn z.B. Konfetti-Emojis erhalten werden",
     "Save setting values": "Einstellungswerte speichern",
     "Caution:": "Vorsicht:",
-    "Settable at global": "Global festlegbar",
+    "Settable at global": "Global einstellbar",
     "Setting definition:": "Definition der Einstellung:",
     "Value in this room": "Wert in diesem Raum",
     "Settings Explorer": "Einstellungs-Explorer",
-    "Values at explicit levels": "Werte für explizite Levels"
+    "Values at explicit levels": "Werte für explizite Levels",
+    "Settable at room": "Für den Raum einstellbar"
 }
