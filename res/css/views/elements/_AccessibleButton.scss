@@ -26,7 +26,8 @@ limitations under the License.
     padding: 7px 18px;
     text-align: center;
     border-radius: 8px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     font-size: $font-14px;
 }
 
