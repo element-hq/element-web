@@ -630,7 +630,7 @@ export default class CallHandler {
         logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
 
         const timeUntilTurnCresExpire = MatrixClientPeg.get().getTurnServersExpiry() - Date.now();
-        console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " seconds");
+        console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
 
         this.calls.set(roomId, call);
