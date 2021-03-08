@@ -604,6 +604,10 @@ export default class MessagePanel extends React.Component {
             isLastSuccessful = true;
         }
 
+        // We only want to consider "last successful" if the event is sent by us, otherwise of course
+        // it's successful: we received it.
+        isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
+
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <li
