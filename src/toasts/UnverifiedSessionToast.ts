@@ -50,10 +50,10 @@ export const showToast = async (deviceId: string) => {
         icon: "verification_warning",
         props: {
             description: _t(
-                "A new login is accessing your account: %(name)s (%(deviceID)s) from %(IP)s", {
+                "A new login is accessing your account: %(name)s (%(deviceID)s) at %(ip)s", {
                     name: device.display_name,
                     deviceID: deviceId,
-                    IP: device.last_seen_ip,
+                    ip: device.last_seen_ip,
                 },
             ),
             acceptLabel: _t("Check your devices"),

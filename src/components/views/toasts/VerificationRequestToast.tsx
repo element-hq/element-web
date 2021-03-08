@@ -38,7 +38,7 @@ interface IProps {
 interface IState {
     counter: number;
     device?: DeviceInfo;
-    IP?: string;
+    ip?: string;
 }
 
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
@@ -71,10 +71,10 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         if (request.isSelfVerification) {
             const cli = MatrixClientPeg.get();
             const device = await cli.getDevice(request.channel.deviceId);
-            const IP = device.last_seen_ip;
+            const ip = device.last_seen_ip;
             this.setState({
                 device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId),
-                IP,
+                ip,
             });
         }
     }
@@ -141,10 +141,10 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         let nameLabel;
         if (request.isSelfVerification) {
             if (this.state.device) {
-                nameLabel = _t("From %(deviceName)s (%(deviceId)s) from %(IP)s", {
+                nameLabel = _t("From %(deviceName)s (%(deviceId)s) at %(ip)s", {
                     deviceName: this.state.device.getDisplayName(),
                     deviceId: this.state.device.deviceId,
-                    IP: this.state.IP,
+                    ip: this.state.ip,
                 });
             }
         } else {
