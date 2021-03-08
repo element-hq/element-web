@@ -49,6 +49,7 @@ export class SetupEncryptionStore extends EventEmitter {
         cli.on("crypto.verification.request", this.onVerificationRequest);
         cli.on('userTrustStatusChanged', this._onUserTrustStatusChanged);
 
+
         const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId());
         if (requestsInProgress.length) {
             // If there are multiple, we take the most recent. Equally if the user sends another request from
@@ -75,7 +76,8 @@ export class SetupEncryptionStore extends EventEmitter {
     }
 
     async fetchKeyInfo() {
-        const keys = await MatrixClientPeg.get().isSecretStored('m.cross_signing.master', false);
+        const cli = MatrixClientPeg.get();
+        const keys = await cli.isSecretStored('m.cross_signing.master', false);
         if (keys === null || Object.keys(keys).length === 0) {
             this.keyId = null;
             this.keyInfo = null;
@@ -85,7 +87,22 @@ export class SetupEncryptionStore extends EventEmitter {
             this.keyInfo = keys[this.keyId];
         }
 
-        this.phase = PHASE_INTRO;
+        // do we have any other devices which are E2EE which we can verify against?
+        const dehydratedDevice = await cli.getDehydratedDevice();
+        this.hasDevicesToVerifyAgainst = cli.getStoredDevicesForUser(cli.getUserId()).some(
+            device =>
+                device.getIdentityKey() &&
+                (!dehydratedDevice || (device.deviceId != dehydratedDevice.device_id))
+        );
+
+        if (!this.hasDevicesToVerifyAgainst && !this.keyInfo) {
+            // skip before we can even render anything.
+            // XXX: this causes a dialog box flash
+            this.phase = PHASE_FINISHED;
+        }
+        else {
+            this.phase = PHASE_INTRO;
+        }
         this.emit("update");
     }
 
