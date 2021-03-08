@@ -280,7 +280,8 @@ $togglesw-ball-color: #fff;
 $slider-selection-color: $accent-color;
 $slider-background-color: #c1c9d6;
 
-$progressbar-color: #000;
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: rgba(141, 151, 165, 0.2);
 
 $room-warning-bg-color: $yellow-background;
 
