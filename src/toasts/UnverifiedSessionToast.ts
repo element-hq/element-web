@@ -17,9 +17,7 @@ limitations under the License.
 import { _t } from '../languageHandler';
 import dis from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from '../MatrixClientPeg';
-import Modal from '../Modal';
 import DeviceListener from '../DeviceListener';
-import NewSessionReviewDialog from '../components/views/dialogs/NewSessionReviewDialog';
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { Action } from "../dispatcher/actions";
@@ -53,10 +51,10 @@ export const showToast = async (deviceId: string) => {
         props: {
             description: _t(
                 "A new login is accessing your account: %(name)s (%(deviceID)s) from %(IP)s", {
-                        name: device.display_name,
-                        deviceID: deviceId,
-                        IP: device.last_seen_ip,
-                    }
+                    name: device.display_name,
+                    deviceID: deviceId,
+                    IP: device.last_seen_ip,
+                },
             ),
             acceptLabel: _t("Check your devices"),
             onAccept,

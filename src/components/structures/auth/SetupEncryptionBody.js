@@ -157,13 +157,11 @@ export default class SetupEncryptionBody extends React.Component {
                 </AccessibleButton>;
             }
 
-            const brand = SdkConfig.get().brand;
-
             return (
                 <div>
                     <p>{_t(
                         "Verify this login to access your encrypted messages and " +
-                        "prove to others that this login is really you."
+                        "prove to others that this login is really you.",
                     )}</p>
 
                     <div className="mx_CompleteSecurity_actionRow">

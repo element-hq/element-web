@@ -92,15 +92,14 @@ export class SetupEncryptionStore extends EventEmitter {
         this.hasDevicesToVerifyAgainst = cli.getStoredDevicesForUser(cli.getUserId()).some(
             device =>
                 device.getIdentityKey() &&
-                (!dehydratedDevice || (device.deviceId != dehydratedDevice.device_id))
+                (!dehydratedDevice || (device.deviceId != dehydratedDevice.device_id)),
         );
 
         if (!this.hasDevicesToVerifyAgainst && !this.keyInfo) {
             // skip before we can even render anything.
             // XXX: this causes a dialog box flash
             this.phase = PHASE_FINISHED;
-        }
-        else {
+        } else {
             this.phase = PHASE_INTRO;
         }
         this.emit("update");
