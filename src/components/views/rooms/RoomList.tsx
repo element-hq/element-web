@@ -440,6 +440,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 defaultDispatcher.dispatch({
                     action: "view_room",
                     room_id: room.room_id,
+                    oobData: {
+                        avatarUrl: room.avatar_url,
+                        name,
+                    },
                 });
             };
             return (
