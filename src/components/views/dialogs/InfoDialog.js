@@ -27,7 +27,7 @@ export default class InfoDialog extends React.Component {
         className: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.node,
-        button: PropTypes.oneOfType(PropTypes.string, PropTypes.bool),
+        button: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
         onFinished: PropTypes.func,
         hasCloseButton: PropTypes.bool,
         onKeyDown: PropTypes.func,
