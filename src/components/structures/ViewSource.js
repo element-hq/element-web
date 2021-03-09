@@ -29,20 +29,49 @@ export default class ViewSource extends React.Component {
         onFinished: PropTypes.func.isRequired,
         roomId: PropTypes.string.isRequired,
         eventId: PropTypes.string.isRequired,
+        isEncrypted: PropTypes.bool.isRequired,
+        decryptedContent: PropTypes.object,
     };
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        return (
-            <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t('View Source')}>
-                <div className="mx_ViewSource_label_left">Room ID: { this.props.roomId }</div>
-                <div className="mx_ViewSource_label_right">Event ID: { this.props.eventId }</div>
-                <div className="mx_ViewSource_label_bottom" />
 
-                <div className="mx_Dialog_content">
+        let content;
+        if (this.props.isEncrypted) {
+            content = <>
+                <details open className="mx_ViewSource_details">
+                    <summary>
+                        <span className="mx_ViewSource_heading">{_t("Decrypted event source")}</span>
+                    </summary>
+                    <SyntaxHighlight className="json">
+                        { JSON.stringify(this.props.decryptedContent, null, 2) }
+                    </SyntaxHighlight>
+                </details>
+                <details className="mx_ViewSource_details">
+                    <summary>
+                        <span className="mx_ViewSource_heading">{_t("Original event source")}</span>
+                    </summary>
                     <SyntaxHighlight className="json">
                         { JSON.stringify(this.props.content, null, 2) }
                     </SyntaxHighlight>
+                </details>
+            </>;
+        } else {
+            content = <>
+                <div className="mx_ViewSource_heading">{_t("Original event source")}</div>
+                <SyntaxHighlight className="json">
+                    { JSON.stringify(this.props.content, null, 2) }
+                </SyntaxHighlight>
+            </>;
+        }
+
+        return (
+            <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t('View Source')}>
+                <div className="mx_Dialog_content">
+                    <div className="mx_ViewSource_label_left">Room ID: { this.props.roomId }</div>
+                    <div className="mx_ViewSource_label_left">Event ID: { this.props.eventId }</div>
+                    <div className="mx_ViewSource_separator" />
+                    { content }
                 </div>
             </BaseDialog>
         );
