@@ -23,7 +23,9 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import InlineSpinner from '../elements/InlineSpinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MAudioBody")
 export default class MAudioBody extends React.Component {
     constructor(props) {
         super(props);

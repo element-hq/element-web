@@ -26,8 +26,10 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ContextMenu, ContextMenuButton, toRightOf} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // XXX this class copies a lot from RoomTile.js
+@replaceableComponent("views.groups.GroupInviteTile")
 export default class GroupInviteTile extends React.Component {
     static propTypes: {
         group: PropTypes.object.isRequired,

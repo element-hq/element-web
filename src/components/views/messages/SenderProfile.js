@@ -20,7 +20,9 @@ import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.SenderProfile")
 export default class SenderProfile extends React.Component {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired, // event whose sender we're showing
