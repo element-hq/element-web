@@ -35,7 +35,7 @@ interface IState {
     value: string;
 }
 
-@replaceableComponent("views.voip.DialpadModal")
+@replaceableComponent("views.voip.DialPadModal")
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);

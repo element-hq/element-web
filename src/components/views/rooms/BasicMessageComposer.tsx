@@ -106,7 +106,7 @@ interface IState {
     completionIndex?: number;
 }
 
-@replaceableComponent("views.rooms.BasixMessageEditor")
+@replaceableComponent("views.rooms.BasicMessageEditor")
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
     private editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();

@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import {Key} from '../../../Keyboard';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.rooms.FowardMessage")
+@replaceableComponent("views.rooms.ForwardMessage")
 export default class ForwardMessage extends React.Component {
     static propTypes = {
         onCancelClick: PropTypes.func.isRequired,

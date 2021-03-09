@@ -60,7 +60,7 @@ interface IProps {
     onDialPress?: (string) => void;
 }
 
-@replaceableComponent("views.voip.Dialpad")
+@replaceableComponent("views.voip.DialPad")
 export default class Dialpad extends React.PureComponent<IProps> {
     render() {
         const buttonNodes = [];
