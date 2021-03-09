@@ -16,7 +16,7 @@
 
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import {IMediaEventContent, IPreparedMedia, prepEventContentAsMedia} from "./models/IMediaEventContent";
-import {ResizeMode} from "./models/ResizeMode";
+import {ResizeMethod} from "../Avatar";
 
 // Populate this class with the details of your customisations when copying it.
 
@@ -87,7 +87,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailHttp(width: number, height: number, mode: ResizeMode = "scale"): string | null | undefined {
+    public getThumbnailHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null | undefined {
         if (!this.hasThumbnail) return null;
         return MatrixClientPeg.get().mxcUrlToHttp(this.thumbnailMxc, width, height, mode);
     }
@@ -99,7 +99,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMode = "scale"): string {
+    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string {
         return MatrixClientPeg.get().mxcUrlToHttp(this.srcMxc, width, height, mode);
     }
 
@@ -132,7 +132,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
-    public downloadThumbnail(width: number, height: number, mode: ResizeMode = "scale"): Promise<Response> {
+    public downloadThumbnail(width: number, height: number, mode: ResizeMethod = "scale"): Promise<Response> {
         if (!this.hasThumbnail) throw new Error("Cannot download non-existent thumbnail");
         return fetch(this.getThumbnailHttp(width, height, mode));
     }
@@ -144,7 +144,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {Promise<Response>} Resolves to the server's response for chaining.
      */
-    public downloadThumbnailOfSource(width: number, height: number, mode: ResizeMode = "scale"): Promise<Response> {
+    public downloadThumbnailOfSource(width: number, height: number, mode: ResizeMethod = "scale"): Promise<Response> {
         return fetch(this.getThumbnailOfSourceHttp(width, height, mode));
     }
 }

@@ -23,13 +23,14 @@ import {Action} from "../../../dispatcher/actions";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import BaseAvatar from "./BaseAvatar";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {ResizeMethod} from "../../../Avatar";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;
     fallbackUserId?: string;
     width: number;
     height: number;
-    resizeMethod?: string;
+    resizeMethod?: ResizeMethod;
     // The onClick to give the avatar
     onClick?: React.MouseEventHandler;
     // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`

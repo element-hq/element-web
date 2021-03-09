@@ -18,7 +18,7 @@ import React from 'react';
 import BaseAvatar from './BaseAvatar';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../../customisations/Media";
-import {ResizeMode} from "../../../customisations/models/ResizeMode";
+import {ResizeMethod} from "../../../Avatar";
 
 export interface IProps {
         groupId?: string;
@@ -26,7 +26,7 @@ export interface IProps {
         groupAvatarUrl?: string;
         width?: number;
         height?: number;
-        resizeMethod?: ResizeMode;
+        resizeMethod?: ResizeMethod;
         onClick?: React.MouseEventHandler;
 }
 
