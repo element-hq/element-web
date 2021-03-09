@@ -39,6 +39,7 @@ export default class GroupAvatar extends React.Component<IProps> {
     };
 
     getGroupAvatarUrl() {
+        if (!this.props.groupAvatarUrl) return null;
         return mediaFromMxc(this.props.groupAvatarUrl).getThumbnailOfSourceHttp(
             this.props.width,
             this.props.height,
