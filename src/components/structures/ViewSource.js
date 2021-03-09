@@ -24,6 +24,7 @@ import * as sdk from "../../index";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { SendCustomEvent } from "../views/dialogs/DevtoolsDialog";
 import { canEditContent } from "../../utils/EventUtils";
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 
 export default class ViewSource extends React.Component {
     static propTypes = {
@@ -156,6 +157,12 @@ export default class ViewSource extends React.Component {
         }
     }
 
+    canSendStateEvent(mxEvent) {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(mxEvent.getRoomId());
+        return room.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
+    }
+
     render() {
         const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
@@ -163,7 +170,7 @@ export default class ViewSource extends React.Component {
         const isEditing = this.state.isEditing;
         const roomId = mxEvent.getRoomId();
         const eventId = mxEvent.getId();
-        const canEdit = canEditContent(this.props.mxEvent) || mxEvent.isState();
+        const canEdit = mxEvent.isState() ? this.canSendStateEvent(mxEvent) : canEditContent(this.props.mxEvent);
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
