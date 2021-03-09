@@ -32,11 +32,13 @@ import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import {MenuItem} from "../../structures/ContextMenu";
 import {EventType} from "matrix-js-sdk/src/@types/event";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
+@replaceableComponent("views.context_menus.MessageContextMenu")
 export default class MessageContextMenu extends React.Component {
     static propTypes = {
         /* the MatrixEvent associated with the context menu */

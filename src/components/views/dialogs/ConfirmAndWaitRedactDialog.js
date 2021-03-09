@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /*
  * A dialog for confirming a redaction.
@@ -30,6 +31,7 @@ import { _t } from '../../../languageHandler';
  *
  * To avoid this, we keep the dialog open as long as /redact is in progress.
  */
+@replaceableComponent("views.dialogs.ConfirmAndWaitRedactDialog")
 export default class ConfirmAndWaitRedactDialog extends React.PureComponent {
     constructor(props) {
         super(props);
