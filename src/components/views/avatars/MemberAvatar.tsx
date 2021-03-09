@@ -20,9 +20,9 @@ import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 
 import dis from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import BaseAvatar from "./BaseAvatar";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 import {ResizeMethod} from "../../../Avatar";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
@@ -65,17 +65,18 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
 
     private static getState(props: IProps): IState {
         if (props.member && props.member.name) {
-            return {
-                name: props.member.name,
-                title: props.title || props.member.userId,
-                imageUrl: props.member.getAvatarUrl(
-                    MatrixClientPeg.get().getHomeserverUrl(),
+            let imageUrl = null;
+            if (props.member.getMxcAvatarUrl()) {
+                imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
                     Math.floor(props.width * window.devicePixelRatio),
                     Math.floor(props.height * window.devicePixelRatio),
                     props.resizeMethod,
-                    false,
-                    false,
-                ),
+                );
+            }
+            return {
+                name: props.member.name,
+                title: props.title || props.member.userId,
+                imageUrl: imageUrl,
             };
         } else if (props.fallbackUserId) {
             return {
