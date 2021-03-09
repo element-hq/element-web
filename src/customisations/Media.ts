@@ -123,30 +123,6 @@ export class Media {
     public downloadSource(): Promise<Response> {
         return fetch(this.srcHttp);
     }
-
-    /**
-     * Downloads the thumbnail media with the requested characteristics. If no thumbnail media is present,
-     * this throws an exception.
-     * @param {number} width The desired width of the thumbnail.
-     * @param {number} height The desired height of the thumbnail.
-     * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
-     * @returns {Promise<Response>} Resolves to the server's response for chaining.
-     */
-    public downloadThumbnail(width: number, height: number, mode: ResizeMethod = "scale"): Promise<Response> {
-        if (!this.hasThumbnail) throw new Error("Cannot download non-existent thumbnail");
-        return fetch(this.getThumbnailHttp(width, height, mode));
-    }
-
-    /**
-     * Downloads a thumbnail of the source media with the requested characteristics.
-     * @param {number} width The desired width of the thumbnail.
-     * @param {number} height The desired height of the thumbnail.
-     * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
-     * @returns {Promise<Response>} Resolves to the server's response for chaining.
-     */
-    public downloadThumbnailOfSource(width: number, height: number, mode: ResizeMethod = "scale"): Promise<Response> {
-        return fetch(this.getThumbnailOfSourceHttp(width, height, mode));
-    }
 }
 
 /**
