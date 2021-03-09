@@ -23,7 +23,9 @@ import * as sdk from "../../../index";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();

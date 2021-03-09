@@ -29,6 +29,7 @@ import GenericToast from "./GenericToast";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {DeviceInfo} from "matrix-js-sdk/src/crypto/deviceinfo";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     toastKey: string;
@@ -40,6 +41,7 @@ interface IState {
     device?: DeviceInfo;
 }
 
+@replaceableComponent("views.toasts.VerificationRequestToast")
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
     private intervalHandle: NodeJS.Timeout;
 
