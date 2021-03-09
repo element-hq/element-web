@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2015, 2016, 2018, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,52 +17,24 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import filesize from 'filesize';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {decryptFile} from '../../../utils/DecryptFile';
-import Tinter from '../../../Tinter';
-import request from 'browser-request';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromContent} from "../../../customisations/Media";
+import ErrorDialog from "../dialogs/ErrorDialog";
 
+let downloadIconUrl; // cached copy of the download.svg asset for the sandboxed iframe later on
 
-// A cached tinted copy of require("../../../../res/img/download.svg")
-let tintedDownloadImageURL;
-// Track a list of mounted MFileBody instances so that we can update
-// the require("../../../../res/img/download.svg") when the tint changes.
-let nextMountId = 0;
-const mounts = {};
-
-/**
- * Updates the tinted copy of require("../../../../res/img/download.svg") when the tint changes.
- */
-function updateTintedDownloadImage() {
-    // Download the svg as an XML document.
-    // We could cache the XML response here, but since the tint rarely changes
-    // it's probably not worth it.
-    // Also note that we can't use fetch here because fetch doesn't support
-    // file URLs, which the download image will be if we're running from
-    // the filesystem (like in an Electron wrapper).
-    request({uri: require("../../../../res/img/download.svg")}, (err, response, body) => {
-        if (err) return;
-
-        const svg = new DOMParser().parseFromString(body, "image/svg+xml");
-        // Apply the fixups to the XML.
-        const fixups = Tinter.calcSvgFixups([{contentDocument: svg}]);
-        Tinter.applySvgFixups(fixups);
-        // Encoded the fixed up SVG as a data URL.
-        const svgString = new XMLSerializer().serializeToString(svg);
-        tintedDownloadImageURL = "data:image/svg+xml;base64," + window.btoa(svgString);
-        // Notify each mounted MFileBody that the URL has changed.
-        Object.keys(mounts).forEach(function(id) {
-            mounts[id].tint();
-        });
-    });
+async function cacheDownloadIcon() {
+    if (downloadIconUrl) return; // cached already
+    const svg = await fetch(require("../../../../res/img/download.svg")).then(r => r.text());
+    downloadIconUrl = "data:image/svg+xml;base64," + window.btoa(svg);
 }
 
-Tinter.registerTintable(updateTintedDownloadImage);
+// Cache the asset immediately
+cacheDownloadIcon();
 
 // User supplied content can contain scripts, we have to be careful that
 // we don't accidentally run those script within the same origin as the
@@ -106,6 +77,7 @@ function computedStyle(element) {
     }
     const style = window.getComputedStyle(element, null);
     let cssText = style.cssText;
+    // noinspection EqualityComparisonWithCoercionJS
     if (cssText == "") {
         // Firefox doesn't implement ".cssText" for computed styles.
         // https://bugzilla.mozilla.org/show_bug.cgi?id=137687
@@ -145,7 +117,6 @@ export default class MFileBody extends React.Component {
 
         this._iframe = createRef();
         this._dummyLink = createRef();
-        this._downloadImage = createRef();
     }
 
     /**
@@ -182,40 +153,11 @@ export default class MFileBody extends React.Component {
         return media.srcHttp;
     }
 
-    componentDidMount() {
-        // Add this to the list of mounted components to receive notifications
-        // when the tint changes.
-        this.id = nextMountId++;
-        mounts[this.id] = this;
-        this.tint();
-    }
-
     componentDidUpdate(prevProps, prevState) {
         if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
             this.props.onHeightChanged();
         }
     }
-
-    componentWillUnmount() {
-        // Remove this from the list of mounted components
-        delete mounts[this.id];
-    }
-
-    tint = () => {
-        // Update our tinted copy of require("../../../../res/img/download.svg")
-        if (this._downloadImage.current) {
-            this._downloadImage.current.src = tintedDownloadImageURL;
-        }
-        if (this._iframe.current) {
-            // If the attachment is encrypted then the download image
-            // will be inside the iframe so we wont be able to update
-            // it directly.
-            this._iframe.current.contentWindow.postMessage({
-                imgSrc: tintedDownloadImageURL,
-                style: computedStyle(this._dummyLink.current),
-            }, "*");
-        }
-    };
 
     render() {
         const content = this.props.mxEvent.getContent();
@@ -223,7 +165,6 @@ export default class MFileBody extends React.Component {
         const isEncrypted = content.file !== undefined;
         const fileName = content.body && content.body.length > 0 ? content.body : _t("Attachment");
         const contentUrl = this._getContentUrl();
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const fileSize = content.info ? content.info.size : null;
         const fileType = content.info ? content.info.mimetype : "application/octet-stream";
 
@@ -280,7 +221,7 @@ export default class MFileBody extends React.Component {
             // When the iframe loads we tell it to render a download link
             const onIframeLoad = (ev) => {
                 ev.target.contentWindow.postMessage({
-                    imgSrc: tintedDownloadImageURL,
+                    imgSrc: downloadIconUrl,
                     style: computedStyle(this._dummyLink.current),
                     blob: this.state.decryptedBlob,
                     // Set a download attribute for encrypted files so that the file
@@ -384,7 +325,7 @@ export default class MFileBody extends React.Component {
                         {placeholder}
                         <div className="mx_MFileBody_download">
                             <a {...downloadProps}>
-                                <img src={tintedDownloadImageURL} width="12" height="14" ref={this._downloadImage} />
+                                <span className="mx_MFileBody_download_icon" />
                                 { _t("Download %(text)s", { text: text }) }
                             </a>
                         </div>
