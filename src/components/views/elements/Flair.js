@@ -14,8 +14,6 @@
  limitations under the License.
  */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import FlairStore from '../../../stores/FlairStore';
