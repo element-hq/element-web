@@ -208,7 +208,7 @@ describe("<TextualBody />", () => {
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe('<span class="mx_EventTile_body markdown-body" dir="auto">' +
                 'Hey <span>' +
-                '<a class="mx_Pill mx_UserPill" title="@user:server">' +
+                '<a class="mx_Pill mx_UserPill">' +
                 '<img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" ' +
                 'style="width: 16px; height: 16px;" title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
                 '</span></span>');
@@ -267,8 +267,8 @@ describe("<TextualBody />", () => {
             expect(content.html()).toBe(
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
                 'A <span><a class="mx_Pill mx_RoomPill" href="#/room/!ZxbRYPQXDXKGmDnJNg:example.com' +
-                '?via=example.com&amp;via=bob.com" ' +
-                'title="!ZxbRYPQXDXKGmDnJNg:example.com"><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
+                '?via=example.com&amp;via=bob.com"' +
+                '><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
                 'src="mxc://avatar.url/room.png" ' +
                 'style="width: 16px; height: 16px;" alt="" aria-hidden="true">' +
                 '!ZxbRYPQXDXKGmDnJNg:example.com</a></span> with vias</span>',
