@@ -53,13 +53,15 @@ export default class MultiInviter {
      * instance of the class.
      *
      * @param {array} addrs Array of addresses to invite
+     * @param {string} reason Reason for inviting (optional)
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
-    invite(addrs) {
+    invite(addrs, reason) {
         if (this.addrs.length > 0) {
             throw new Error("Already inviting/invited");
         }
         this.addrs.push(...addrs);
+        this.reason = reason;
 
         for (const addr of this.addrs) {
             if (getAddressType(addr) === null) {
@@ -123,7 +125,7 @@ export default class MultiInviter {
                 }
             }
 
-            return MatrixClientPeg.get().invite(roomId, addr);
+            return MatrixClientPeg.get().invite(roomId, addr, undefined, this.reason);
         } else {
             throw new Error('Unsupported address');
         }

@@ -132,18 +132,9 @@ export default class MessageContextMenu extends React.Component {
             roomId: ev.getRoomId(),
             eventId: ev.getId(),
             content: ev.event,
-        }, 'mx_Dialog_viewsource');
-        this.closeMenu();
-    };
-
-    onViewClearSourceClick = () => {
-        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
-        const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
-            roomId: ev.getRoomId(),
-            eventId: ev.getId(),
+            isEncrypted: ev.isEncrypted(),
             // FIXME: _clearEvent is private
-            content: ev._clearEvent,
+            decryptedContent: ev._clearEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     };
@@ -311,7 +302,6 @@ export default class MessageContextMenu extends React.Component {
         let cancelButton;
         let forwardButton;
         let pinButton;
-        let viewClearSourceButton;
         let unhidePreviewButton;
         let externalURLButton;
         let quoteButton;
@@ -390,14 +380,6 @@ export default class MessageContextMenu extends React.Component {
                 { _t('View Source') }
             </MenuItem>
         );
-
-        if (mxEvent.getType() !== mxEvent.getWireType()) {
-            viewClearSourceButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
-                    { _t('View Decrypted Source') }
-                </MenuItem>
-            );
-        }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
@@ -483,7 +465,6 @@ export default class MessageContextMenu extends React.Component {
                 { forwardButton }
                 { pinButton }
                 { viewSourceButton }
-                { viewClearSourceButton }
                 { unhidePreviewButton }
                 { permalinkButton }
                 { quoteButton }
