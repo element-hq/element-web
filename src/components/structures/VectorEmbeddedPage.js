@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import EmbeddedPage from 'matrix-react-sdk/src/components/structures/EmbeddedPage';
 import sanitizeHtml from 'sanitize-html';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
