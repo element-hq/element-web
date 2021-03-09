@@ -64,7 +64,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     }
 
     private static getState(props: IProps): IState {
-        if (props.member && props.member.name) {
+        if (props.member?.name) {
             let imageUrl = null;
             if (props.member.getMxcAvatarUrl()) {
                 imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
