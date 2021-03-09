@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -26,6 +27,7 @@ const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
 const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
+@replaceableComponent("views.dialogs.IncomingSasDialog")
 export default class IncomingSasDialog extends React.Component {
     static propTypes = {
         verifier: PropTypes.object.isRequired,

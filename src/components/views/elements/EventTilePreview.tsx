@@ -24,6 +24,7 @@ import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Layout} from "../../../settings/Layout";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     /**
@@ -52,6 +53,7 @@ interface IState {
 
 const AVATAR_SIZE = 32;
 
+@replaceableComponent("views.elements.EventTilePreview")
 export default class EventTilePreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

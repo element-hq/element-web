@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 
 class FlairAvatar extends React.Component {
@@ -64,6 +65,7 @@ FlairAvatar.propTypes = {
 
 FlairAvatar.contextType = MatrixClientContext;
 
+@replaceableComponent("views.elements.Flair")
 export default class Flair extends React.Component {
     constructor() {
         super();

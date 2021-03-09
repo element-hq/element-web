@@ -21,7 +21,9 @@ import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import {wantsDateSeparator} from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.MessageEditHistoryDialog")
 export default class MessageEditHistoryDialog extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,

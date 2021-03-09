@@ -38,6 +38,7 @@ import {SETTINGS} from "../../../settings/Settings";
 import SettingsStore, {LEVEL_ORDER} from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
@@ -1089,6 +1090,7 @@ const Entries = [
     SettingsExplorer,
 ];
 
+@replaceableComponent("views.dialogs.DevtoolsDialog")
 export default class DevtoolsDialog extends React.PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

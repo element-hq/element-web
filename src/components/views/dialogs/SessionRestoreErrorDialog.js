@@ -22,8 +22,9 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-
+@replaceableComponent("views.dialogs.SessionRestoreErrorDialog")
 export default class SessionRestoreErrorDialog extends React.Component {
     static propTypes = {
         error: PropTypes.string.isRequired,

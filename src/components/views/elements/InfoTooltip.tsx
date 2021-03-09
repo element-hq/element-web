@@ -20,6 +20,7 @@ import classNames from 'classnames';
 
 import Tooltip from './Tooltip';
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface ITooltipProps {
     tooltip?: React.ReactNode;
@@ -30,6 +31,7 @@ interface IState {
     hover: boolean;
 }
 
+@replaceableComponent("views.elements.InfoTooltip")
 export default class InfoTooltip extends React.PureComponent<ITooltipProps, IState> {
     constructor(props: ITooltipProps) {
         super(props);

@@ -30,6 +30,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -38,6 +39,7 @@ export const ROOM_NOTIFICATIONS_TAB = "ROOM_NOTIFICATIONS_TAB";
 export const ROOM_BRIDGES_TAB = "ROOM_BRIDGES_TAB";
 export const ROOM_ADVANCED_TAB = "ROOM_ADVANCED_TAB";
 
+@replaceableComponent("views.dialogs.RoomSettingsDialog")
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

@@ -26,7 +26,9 @@ import Modal from "../../../Modal";
 import * as sdk from "../../../index";
 import {Key} from "../../../Keyboard";
 import FocusLock from "react-focus-lock";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.ImageView")
 export default class ImageView extends React.Component {
     static propTypes = {
         src: PropTypes.string.isRequired, // the source of the image being displayed
