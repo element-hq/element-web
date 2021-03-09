@@ -97,7 +97,6 @@ export class SetupEncryptionStore extends EventEmitter {
 
         if (!this.hasDevicesToVerifyAgainst && !this.keyInfo) {
             // skip before we can even render anything.
-            // XXX: this causes a dialog box flash
             this.phase = PHASE_FINISHED;
         } else {
             this.phase = PHASE_INTRO;
