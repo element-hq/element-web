@@ -355,6 +355,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             // this.onRoomUpdate(room);
             this.onRoomsUpdate();
         }
+
+        const numSuggestedRooms = this._suggestedRooms.length;
+        this._suggestedRooms = this._suggestedRooms.filter(r => r.room_id !== room.roomId);
+        if (numSuggestedRooms !== this._suggestedRooms.length) {
+            this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
+        }
     };
 
     private onRoomState = (ev: MatrixEvent) => {
