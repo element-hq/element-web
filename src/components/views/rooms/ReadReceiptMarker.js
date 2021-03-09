@@ -23,6 +23,7 @@ import {formatDate} from '../../../DateUtils';
 import Velociraptor from "../../../Velociraptor";
 import * as sdk from "../../../index";
 import {toPx} from "../../../utils/units";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 let bounce = false;
 try {
@@ -32,6 +33,7 @@ try {
 } catch (e) {
 }
 
+@replaceableComponent("views.rooms.ReadReceiptMarker")
 export default class ReadReceiptMarker extends React.PureComponent {
     static propTypes = {
         // the RoomMember to show the RR for

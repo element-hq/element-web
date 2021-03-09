@@ -39,6 +39,7 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
 import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
 import {objectHasDiff} from "../../../utils/objects";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -146,6 +147,7 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
+@replaceableComponent("views.rooms.EventTile")
 export default class EventTile extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */

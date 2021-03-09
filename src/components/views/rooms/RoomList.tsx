@@ -50,6 +50,7 @@ import CallHandler from "../../../CallHandler";
 import SpaceStore from "../../../stores/SpaceStore";
 import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -256,6 +257,7 @@ function customTagAesthetics(tagId: TagID): ITagAesthetics {
     };
 }
 
+@replaceableComponent("views.rooms.RoomList")
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private customTagStoreRef;

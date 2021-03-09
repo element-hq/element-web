@@ -51,6 +51,7 @@ import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -98,6 +99,7 @@ interface IState {
     filteredExtraTiles?: TemporaryTile[];
 }
 
+@replaceableComponent("views.rooms.RoomSublist")
 export default class RoomSublist extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
