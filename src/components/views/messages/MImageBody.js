@@ -71,7 +71,7 @@ export default class MImageBody extends React.Component {
         this._image = createRef();
     }
 
-    // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
+    // FIXME: factor this out and apply it to MVideoBody and MAudioBody too!
     onClientSync(syncState, prevState) {
         if (this.unmounted) return;
         // Consider the client reconnected if there is no error with syncing.
