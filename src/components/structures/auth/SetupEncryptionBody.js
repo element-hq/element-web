@@ -28,6 +28,7 @@ import {
     PHASE_CONFIRM_SKIP,
     PHASE_FINISHED,
 } from '../../../stores/SetupEncryptionStore';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function keyHasPassphrase(keyInfo) {
     return (
@@ -37,6 +38,7 @@ function keyHasPassphrase(keyInfo) {
     );
 }
 
+@replaceableComponent("structures.auth.SetupEncryptionBody")
 export default class SetupEncryptionBody extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

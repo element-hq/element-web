@@ -29,6 +29,7 @@ import BaseCard from "../right_panel/BaseCard";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -38,6 +39,7 @@ const SHOW_MORE_INCREMENT = 100;
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
+@replaceableComponent("views.rooms.MemberList")
 export default class MemberList extends React.Component {
     constructor(props) {
         super(props);

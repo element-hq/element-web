@@ -22,6 +22,7 @@ import dis from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import BaseAvatar from "./BaseAvatar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember;
@@ -42,6 +43,7 @@ interface IState {
     imageUrl?: string;
 }
 
+@replaceableComponent("views.avatars.MemberAvatar")
 export default class MemberAvatar extends React.Component<IProps, IState> {
     public static defaultProps = {
         width: 40,

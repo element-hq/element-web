@@ -22,6 +22,7 @@ import {
 } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     isMinimized: boolean;
@@ -37,6 +38,7 @@ interface IState {
 }
 
 // TODO: Remove with community invites in the room list: https://github.com/vector-im/element-web/issues/14456
+@replaceableComponent("views.rooms.TemporaryTile")
 export default class TemporaryTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

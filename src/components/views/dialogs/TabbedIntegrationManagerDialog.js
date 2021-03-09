@@ -22,7 +22,9 @@ import * as sdk from '../../../index';
 import {dialogTermsInteractionCallback, TermsNotSignedError} from "../../../Terms";
 import classNames from 'classnames';
 import * as ScalarMessaging from "../../../ScalarMessaging";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.TabbedIntegrationManagerDialog")
 export default class TabbedIntegrationManagerDialog extends React.Component {
     static propTypes = {
         /**

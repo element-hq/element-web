@@ -22,10 +22,12 @@ import {MatrixEvent} from "matrix-js-sdk";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import SdkConfig from '../../../SdkConfig';
 import Markdown from '../../../Markdown';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /*
  * A dialog for reporting an event.
  */
+@replaceableComponent("views.dialogs.ReportEventDialog")
 export default class ReportEventDialog extends PureComponent {
     static propTypes = {
         mxEvent: PropTypes.instanceOf(MatrixEvent).isRequired,

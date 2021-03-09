@@ -30,6 +30,7 @@ import Login, {ISSOFlow} from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from '../../views/elements/ServerPicker';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -109,6 +110,7 @@ interface IState {
     ssoFlow?: ISSOFlow;
 }
 
+@replaceableComponent("structures.auth.Registration")
 export default class Registration extends React.Component<IProps, IState> {
     loginLogic: Login;
 

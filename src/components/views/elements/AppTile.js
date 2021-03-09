@@ -38,7 +38,9 @@ import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions
 import {MatrixCapabilities} from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component {
     constructor(props) {
         super(props);

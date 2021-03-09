@@ -23,7 +23,9 @@ import classNames from 'classnames';
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
 import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.avatars.MemberStatusMessageAvatar")
 export default class MemberStatusMessageAvatar extends React.Component {
     static propTypes = {
         member: PropTypes.object.isRequired,

@@ -23,7 +23,9 @@ import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 import HomePage from "./HomePage";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.UserView")
 export default class UserView extends React.Component {
     static get propTypes() {
         return {

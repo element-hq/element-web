@@ -31,6 +31,7 @@ import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} f
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
@@ -100,6 +101,7 @@ const BOTTOM_PADDING = 10;
 const BOTTOM_MARGIN_TOP_BOTTOM = 10; // top margin plus bottom margin
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
+@replaceableComponent("views.voip.CallView")
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();

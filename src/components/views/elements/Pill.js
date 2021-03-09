@@ -27,7 +27,9 @@ import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/perma
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import Tooltip from './Tooltip';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.Pill")
 class Pill extends React.Component {
     static roomNotifPos(text) {
         return text.indexOf("@room");

@@ -25,6 +25,7 @@ import dis from '../../../dispatcher/dispatcher';
 import Modal from "../../../Modal";
 import ErrorDialog from "../../views/dialogs/ErrorDialog";
 import CallHandler from "../../../CallHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     onFinished: (boolean) => void;
@@ -34,6 +35,7 @@ interface IState {
     value: string;
 }
 
+@replaceableComponent("views.voip.DialPadModal")
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
