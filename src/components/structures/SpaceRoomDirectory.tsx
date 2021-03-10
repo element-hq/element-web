@@ -64,6 +64,7 @@ export interface ISpaceSummaryEvent {
     state_key: string;
     content: {
         order?: string;
+        suggested?: boolean;
         auto_join?: boolean;
         via?: string;
     };
@@ -91,7 +92,7 @@ const SubSpace: React.FC<ISubspaceProps> = ({
     const name = space.name || space.canonical_alias || space.aliases?.[0] || _t("Unnamed Space");
 
     const evContent = event?.getContent();
-    const [autoJoin, _setAutoJoin] = useState(evContent?.auto_join);
+    const [suggested, _setSuggested] = useState(evContent?.suggested);
     const [removed, _setRemoved] = useState(!evContent?.via);
 
     const cli = MatrixClientPeg.get();
@@ -102,12 +103,12 @@ const SubSpace: React.FC<ISubspaceProps> = ({
     let actions;
     if (editing && queueAction) {
         if (event && cli.getRoom(event.getRoomId())?.currentState.maySendStateEvent(event.getType(), cli.getUserId())) {
-            const setAutoJoin = () => {
-                _setAutoJoin(v => {
+            const setSuggested = () => {
+                _setSuggested(v => {
                     queueAction({
                         event,
                         removed,
-                        autoJoin: !v,
+                        suggested: !v,
                     });
                     return !v;
                 });
@@ -118,7 +119,7 @@ const SubSpace: React.FC<ISubspaceProps> = ({
                     queueAction({
                         event,
                         removed: !v,
-                        autoJoin,
+                        suggested,
                     });
                     return !v;
                 });
@@ -131,7 +132,7 @@ const SubSpace: React.FC<ISubspaceProps> = ({
             } else {
                 actions = <React.Fragment>
                     <FormButton kind="danger" onClick={setRemoved} label={_t("Remove from Space")} />
-                    <StyledCheckbox checked={autoJoin} onChange={setAutoJoin} />
+                    <StyledCheckbox checked={suggested} onChange={setSuggested} />
                 </React.Fragment>;
             }
         } else {
@@ -182,8 +183,8 @@ const SubSpace: React.FC<ISubspaceProps> = ({
 
 interface IAction {
     event: MatrixEvent;
+    suggested: boolean;
     removed: boolean;
-    autoJoin: boolean;
 }
 
 interface IRoomTileProps {
@@ -199,7 +200,7 @@ const RoomTile = ({ room, event, editing, queueAction, onPreviewClick, onJoinCli
     const name = room.name || room.canonical_alias || room.aliases?.[0] || _t("Unnamed Room");
 
     const evContent = event?.getContent();
-    const [autoJoin, _setAutoJoin] = useState(evContent?.auto_join);
+    const [suggested, _setSuggested] = useState(evContent?.suggested);
     const [removed, _setRemoved] = useState(!evContent?.via);
 
     const cli = MatrixClientPeg.get();
@@ -209,12 +210,12 @@ const RoomTile = ({ room, event, editing, queueAction, onPreviewClick, onJoinCli
     let actions;
     if (editing && queueAction) {
         if (event && cli.getRoom(event.getRoomId())?.currentState.maySendStateEvent(event.getType(), cli.getUserId())) {
-            const setAutoJoin = () => {
-                _setAutoJoin(v => {
+            const setSuggested = () => {
+                _setSuggested(v => {
                     queueAction({
                         event,
                         removed,
-                        autoJoin: !v,
+                        suggested: !v,
                     });
                     return !v;
                 });
@@ -225,7 +226,7 @@ const RoomTile = ({ room, event, editing, queueAction, onPreviewClick, onJoinCli
                     queueAction({
                         event,
                         removed: !v,
-                        autoJoin,
+                        suggested,
                     });
                     return !v;
                 });
@@ -238,7 +239,7 @@ const RoomTile = ({ room, event, editing, queueAction, onPreviewClick, onJoinCli
             } else {
                 actions = <React.Fragment>
                     <FormButton kind="danger" onClick={setRemoved} label={_t("Remove from Space")} />
-                    <StyledCheckbox checked={autoJoin} onChange={setAutoJoin} />
+                    <StyledCheckbox checked={suggested} onChange={setSuggested} />
                 </React.Fragment>;
             }
         } else {
@@ -445,10 +446,10 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
 
         const onSaveButtonClicked = () => {
             // TODO setBusy
-            pendingActions.current.forEach(({event, autoJoin, removed}) => {
+            pendingActions.current.forEach(({event, suggested, removed}) => {
                 const content = {
                     ...event.getContent(),
-                    auto_join: autoJoin,
+                    suggested,
                 };
 
                 if (removed) {
@@ -463,7 +464,7 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
         if (isEditing) {
             adminButton = <React.Fragment>
                 <FormButton label={_t("Save changes")} onClick={onSaveButtonClicked} />
-                <span>{ _t("All users join by default") }</span>
+                <span>{ _t("Promoted to users") }</span>
             </React.Fragment>;
         } else {
             adminButton = <FormButton label={_t("Manage rooms")} onClick={onManageButtonClicked} />;
