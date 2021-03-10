@@ -29,6 +29,10 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'breadcrumbs',
     ];
 
+    static KEYBINDINGS_SETTINGS = [
+        'ctrlFForSearch',
+    ];
+
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
@@ -37,26 +41,34 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'MessageComposerInput.showStickersButton',
     ];
 
-    static TIMELINE_SETTINGS = [
-        'showTypingNotifications',
-        'autoplayGifsAndVideos',
-        'urlPreviewsEnabled',
-        'TextualBody.enableBigEmoji',
-        'showReadReceipts',
+    static TIME_SETTINGS = [
         'showTwelveHourTimestamps',
         'alwaysShowTimestamps',
-        'showRedactions',
+    ];
+    static CODE_BLOCKS_SETTINGS = [
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
-        'scrollToBottomOnMessageSent',
         'showCodeLineNumbers',
-        'showJoinLeaves',
-        'showAvatarChanges',
-        'showDisplaynameChanges',
+    ];
+    static IMAGES_AND_VIDEOS_SETTINGS = [
+        'urlPreviewsEnabled',
+        'autoplayGifsAndVideos',
         'showImages',
+    ];
+    static THINGS_TO_HIDE_ON_TIMELINE_SETTINGS = [
+        'showTypingNotifications',
+        'showRedactions',
+        'showReadReceipts',
+        'showJoinLeaves',
+        'showDisplaynameChanges',
         'showChatEffects',
+        'showAvatarChanges',
+    ];
+
+    static TIMELINE_SETTINGS = [
+        'TextualBody.enableBigEmoji',
+        'scrollToBottomOnMessageSent',
         'Pill.shouldShowPillAvatar',
-        'ctrlFForSearch',
     ];
 
     static GENERAL_SETTINGS = [
@@ -185,8 +197,33 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 </div>
 
                 <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Keybindings")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Displaying time")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Code blocks")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Images, GIFs and videos")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Hide things on the timeline")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.THINGS_TO_HIDE_ON_TIMELINE_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
