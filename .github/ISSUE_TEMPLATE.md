@@ -1,3 +1,5 @@
+<!-- A picture's worth a thousand words: PLEASE INCLUDE A SCREENSHOT :P -->
+
 <!-- Please report security issues by email to security@matrix.org -->
 
 <!-- This is a bug report template. By following the instructions below and
@@ -36,7 +38,7 @@ file a bug here too! -->
 
 For the web app:
 
-- **Browser**: Chrome, Safari, Firefox? which version?
+- **Browser**: Chrome, Firefox, Safari, Edge? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
 - **URL**: develop.element.io / app.element.io / somewhere else? If a private server, what version of Element Web?
 
