@@ -302,6 +302,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         } else if (payload.action === 'MatrixActions.Event.decrypted') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
             const roomId = eventPayload.event.getRoomId();
+            if (!roomId) {
+                return;
+            }
             const room = this.matrixClient.getRoom(roomId);
             if (!room) {
                 console.warn(`Event ${eventPayload.event.getId()} was decrypted in an unknown room ${roomId}`);
