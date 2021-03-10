@@ -6,7 +6,7 @@
     "Welcome to Element": "欢迎来到 Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "去中心化、加密聊天&amp;与协作，由 [matrix] 驱动",
     "Sign In": "登入",
-    "Create Account": "创建帐号",
+    "Create Account": "创建账户",
     "Explore rooms": "探索聊天室",
     "The message from the parser is: %(message)s": "语法分析器的信息：%(message)s",
     "Invalid JSON": "无效的 JSON",
