@@ -534,10 +534,17 @@ export default class MessagePanel extends React.Component {
                     const nextEvent = i < this.props.events.length - 1
                         ? this.props.events[i + 1]
                         : null;
+
+                    // The next event with tile is used to to determine the 'last successful' flag
+                    // when rendering the tile. The shouldShowEvent function is pretty quick at what
+                    // it does, so this should have no significant cost even when a room is used for
+                    // not-chat purposes.
+                    const nextTile = this.props.events.slice(i + 1).find(e => this._shouldShowEvent(e));
+
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, nextEvent));
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, nextEvent, nextTile));
                     prevEvent = mxEv;
                 }
 
@@ -553,7 +560,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last, nextEvent) {
+    _getTilesForEvent(prevEvent, mxEv, last, nextEvent, nextEventWithTile) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -598,10 +605,19 @@ export default class MessagePanel extends React.Component {
         let isLastSuccessful = false;
         const isSentState = s => !s || s === 'sent';
         const isSent = isSentState(mxEv.getAssociatedStatus());
-        if (!nextEvent && isSent) {
+        const hasNextEvent = nextEvent && this._shouldShowEvent(nextEvent);
+        if (!hasNextEvent && isSent) {
             isLastSuccessful = true;
-        } else if (nextEvent && isSent && !isSentState(nextEvent.getAssociatedStatus())) {
+        } else if (hasNextEvent && isSent && !isSentState(nextEvent.getAssociatedStatus())) {
             isLastSuccessful = true;
+        }
+
+        // This is a bit nuanced, but if our next event is hidden but a future event is not
+        // hidden then we're not the last successful.
+        if (nextEventWithTile) { // avoid length limit by wrapping in an if
+            if (isSentState(nextEventWithTile.getAssociatedStatus()) && nextEventWithTile !== nextEvent) {
+                isLastSuccessful = false;
+            }
         }
 
         // We only want to consider "last successful" if the event is sent by us, otherwise of course
