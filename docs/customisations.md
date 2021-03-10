@@ -17,11 +17,11 @@ the React SDK, you can still override it from the Element Web layer:
 2. Edit customisations points and make sure export the ones you actually want to
    activate
 3. Tweak the Element build process to use the customised module instead of the
-   default by adding this to end of the `plugins` array in `webpack.config.js`:
+   default by adding this to the `additionalPlugins` array in `webpack.config.js`:
 
 ```js
 new webpack.NormalModuleReplacementPlugin(
-    /src\/customisations\/Security.ts/,
+    /src[\/\\]customisations[\/\\]Security\.ts/,
     path.resolve(__dirname, 'src/customisations/YourNameSecurity.ts'),
 ),
 ```

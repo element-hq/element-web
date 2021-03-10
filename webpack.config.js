@@ -8,6 +8,10 @@ const webpack = require("webpack");
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
+const additionalPlugins = [
+    // This is where you can put your customisation replacements.
+];
+
 module.exports = (env, argv) => {
     if (process.env.CI_PACKAGE) {
         // Don't run minification for CI builds (this is only set for runs on develop)
@@ -357,6 +361,8 @@ module.exports = (env, argv) => {
                 minify: argv.mode === 'production',
                 chunks: ['usercontent'],
             }),
+
+            ...additionalPlugins,
         ],
 
         output: {
