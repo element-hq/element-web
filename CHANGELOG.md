@@ -1,3 +1,31 @@
+Changes in [1.7.23-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.23-rc.1) (2021-03-10)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.22...v1.7.23-rc.1)
+
+ * Upgrade to React SDK 3.16.0-rc.2 and JS SDK 9.9.0-rc.1
+ * Translations update from Weblate
+   [\#16655](https://github.com/vector-im/element-web/pull/16655)
+ * Improve docs for customisations
+   [\#16652](https://github.com/vector-im/element-web/pull/16652)
+ * Update triage guide to match the new label scheme
+   [\#16612](https://github.com/vector-im/element-web/pull/16612)
+ * Remove a couple useless 'use strict' calls
+   [\#16650](https://github.com/vector-im/element-web/pull/16650)
+ * Remove old conferencing doc
+   [\#16648](https://github.com/vector-im/element-web/pull/16648)
+ * Bump elliptic from 6.5.3 to 6.5.4
+   [\#16644](https://github.com/vector-im/element-web/pull/16644)
+ * Add option for audio live streaming
+   [\#16604](https://github.com/vector-im/element-web/pull/16604)
+ * Update velocity-animate dependency
+   [\#16605](https://github.com/vector-im/element-web/pull/16605)
+ * Add Edge to the supported tier
+   [\#16611](https://github.com/vector-im/element-web/pull/16611)
+ * Add multi language spell check
+   [\#15851](https://github.com/vector-im/element-web/pull/15851)
+ * Document feature_spaces
+   [\#16538](https://github.com/vector-im/element-web/pull/16538)
+
 Changes in [1.7.22](https://github.com/vector-im/element-web/releases/tag/v1.7.22) (2021-03-01)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.22-rc.1...v1.7.22)
