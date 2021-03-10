@@ -614,10 +614,12 @@ export default class MessagePanel extends React.Component {
 
         // This is a bit nuanced, but if our next event is hidden but a future event is not
         // hidden then we're not the last successful.
-        if (nextEventWithTile) { // avoid length limit by wrapping in an if
-            if (isSentState(nextEventWithTile.getAssociatedStatus()) && nextEventWithTile !== nextEvent) {
-                isLastSuccessful = false;
-            }
+        if (
+            nextEventWithTile &&
+            nextEventWithTile !== nextEvent &&
+            isSentState(nextEventWithTile.getAssociatedStatus())
+        ) {
+            isLastSuccessful = false;
         }
 
         // We only want to consider "last successful" if the event is sent by us, otherwise of course
