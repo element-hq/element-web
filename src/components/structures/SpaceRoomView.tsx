@@ -557,7 +557,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
             case Phase.PublicCreateRooms:
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
-                    title={_t("What discussions do you want to have?")}
+                    title={_t("What are some things you want to discuss?")}
                     description={_t("We'll create rooms for each topic.")}
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;

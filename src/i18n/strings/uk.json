@@ -325,7 +325,7 @@
     "Displays action": "Відбиває дію",
     "Reason": "Причина",
     "%(senderName)s requested a VoIP conference.": "%(senderName)s бажає розпочати дзвінок-конференцію.",
-    "%(senderName)s invited %(targetName)s.": "%(senderName)s запросив/ла %(targetName)s.",
+    "%(senderName)s invited %(targetName)s.": "%(senderName)s запрошує %(targetName)s.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s змінює своє видиме ім'я на %(displayName)s.",
     "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s зазначив(-ла) своє видиме ім'я: %(displayName)s.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s видалив(-ла) своє видиме ім'я (%(oldDisplayName)s).",
@@ -1164,7 +1164,7 @@
     "Show hidden events in timeline": "Показувати приховані події у часоряді",
     "Show previews/thumbnails for images": "Показувати попередній перегляд зображень",
     "Compare a unique set of emoji if you don't have a camera on either device": "Порівняйте унікальну низку емодзі якщо ви не маєте камери на жодному пристрої",
-    "Confirm the emoji below are displayed on both sessions, in the same order:": "Підтвердьте, що нижчевказані емодзі відбиваються в обох сеансах в однаковому порядку:",
+    "Confirm the emoji below are displayed on both sessions, in the same order:": "Підтвердьте, що емодзі внизу показано в обох сеансах в однаковому порядку:",
     "Verify this user by confirming the following emoji appear on their screen.": "Звірте цього користувача підтвердженням того, що наступні емодзі з'являються на його екрані.",
     "Emoji picker": "Обирач емодзі",
     "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Сеанс, який ви намагаєтесь звірити, не підтримує сканування QR-коду або звіряння за допомогою емодзі, що є підтримувані %(brand)s. Спробуйте використати інший клієнт.",
@@ -1597,5 +1597,8 @@
     "Enable encryption?": "Увімкнути шифрування?",
     "Enable room encryption": "Увімкнути шифрування кімнати",
     "Encryption": "Шифрування",
-    "Try again": "Спробувати ще раз"
+    "Try again": "Спробувати ще раз",
+    "%(creator)s created this DM.": "%(creator)s створює цю приватну розмову.",
+    "Share Link to User": "Поділитися посиланням на користувача",
+    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Повідомлення тут захищено наскрізним шифруванням. Підтвердьте %(displayName)s у їхньому профілі — натиснувши на їх аватар."
 }
