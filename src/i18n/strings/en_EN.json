@@ -873,6 +873,7 @@
     "You held the call <a>Switch</a>": "You held the call <a>Switch</a>",
     "You held the call <a>Resume</a>": "You held the call <a>Resume</a>",
     "%(peerName)s held the call": "%(peerName)s held the call",
+    "Connecting": "Connecting",
     "Video Call": "Video Call",
     "Voice Call": "Voice Call",
     "Fill Screen": "Fill Screen",
