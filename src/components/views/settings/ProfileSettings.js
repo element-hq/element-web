@@ -81,10 +81,12 @@ export default class ProfileSettings extends React.Component {
         const client = MatrixClientPeg.get();
         const newState = {};
 
+        const displayName = this.state.displayName.trim();
         try {
             if (this.state.originalDisplayName !== this.state.displayName) {
-                await client.setDisplayName(this.state.displayName);
-                newState.originalDisplayName = this.state.displayName;
+                await client.setDisplayName(displayName);
+                newState.originalDisplayName = displayName;
+                newState.displayName = displayName;
             }
 
             if (this.state.avatarFile) {

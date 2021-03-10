@@ -14,8 +14,6 @@
  limitations under the License.
  */
 
-'use strict';
-
 import React from 'react';
 import MFileBody from './MFileBody';
 
@@ -105,7 +103,7 @@ export default class MAudioBody extends React.Component {
         return (
             <span className="mx_MAudioBody">
                 <audio src={contentUrl} controls />
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );
     }

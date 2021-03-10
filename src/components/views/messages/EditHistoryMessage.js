@@ -77,6 +77,9 @@ export default class EditHistoryMessage extends React.PureComponent {
             roomId: this.props.mxEvent.getRoomId(),
             eventId: this.props.mxEvent.getId(),
             content: this.props.mxEvent.event,
+            isEncrypted: this.props.mxEvent.isEncrypted(),
+            // FIXME: _clearEvent is private
+            decryptedContent: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
     };
 
@@ -158,6 +161,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
             "mx_EventTile": true,
+            // Note: we keep the `sending` state class for tests, not for our styles
             "mx_EventTile_sending": isSending,
             "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });

@@ -22,9 +22,18 @@ limitations under the License.
     float: right;
 }
 
-.mx_ViewSource_label_bottom {
+.mx_ViewSource_separator {
     clear: both;
     border-bottom: 1px solid #e5e5e5;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+}
+
+.mx_ViewSource_heading {
+    font-size: $font-17px;
+    font-weight: 400;
+    color: $primary-fg-color;
+    margin-top: 0.7em;
 }
 
 .mx_ViewSource pre {
@@ -33,4 +42,8 @@ limitations under the License.
     padding: 0.5em 1em 0.5em 1em;
     word-wrap: break-word;
     white-space: pre-wrap;
+}
+
+.mx_ViewSource_details {
+    margin-top: 0.8em;
 }

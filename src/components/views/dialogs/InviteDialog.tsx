@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import {_t} from "../../../languageHandler";
+import {_t, _td} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
@@ -48,6 +48,7 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
+export const KIND_SPACE_INVITE = "space_invite";
 export const KIND_CALL_TRANSFER = "call_transfer";
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
@@ -309,7 +310,7 @@ interface IInviteDialogProps {
     // not provided.
     kind: string,
 
-    // The room ID this dialog is for. Only required for KIND_INVITE.
+    // The room ID this dialog is for. Only required for KIND_INVITE and KIND_SPACE_INVITE.
     roomId: string,
 
     // The call to transfer. Only required for KIND_CALL_TRANSFER.
@@ -348,8 +349,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     constructor(props) {
         super(props);
 
-        if (props.kind === KIND_INVITE && !props.roomId) {
-            throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
+        if ((props.kind === KIND_INVITE || props.kind === KIND_SPACE_INVITE) && !props.roomId) {
+            throw new Error("When using KIND_INVITE or KIND_SPACE_INVITE a roomId is required for an InviteDialog");
         } else if (props.kind === KIND_CALL_TRANSFER && !props.call) {
             throw new Error("When using KIND_CALL_TRANSFER a call is required for an InviteDialog");
         }
@@ -1026,7 +1027,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sectionSubname = _t("May include members not in %(communityName)s", {communityName});
         }
 
-        if (this.props.kind === KIND_INVITE) {
+        if (this.props.kind === KIND_INVITE || this.props.kind === KIND_SPACE_INVITE) {
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
         }
 
@@ -1247,37 +1248,34 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
-        } else if (this.props.kind === KIND_INVITE) {
-            title = _t("Invite to this room");
+        } else if (this.props.kind === KIND_INVITE || this.props.kind === KIND_SPACE_INVITE) {
+            title = this.props.kind === KIND_INVITE ? _t("Invite to this room") : _t("Invite to this space");
 
-            if (identityServersEnabled) {
-                helpText = _t(
-                    "Invite someone using their name, email address, username (like <userId/>) or " +
-                        "<a>share this room</a>.",
-                    {},
-                    {
-                        userId: () =>
-                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
-                        a: (sub) =>
-                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">
-                                {sub}
-                            </a>,
-                    },
-                );
-            } else {
-                helpText = _t(
-                    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
-                    {},
-                    {
-                        userId: () =>
-                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
-                        a: (sub) =>
-                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">
-                                {sub}
-                            </a>,
-                    },
-                );
+            let helpTextUntranslated;
+            if (this.props.kind === KIND_INVITE) {
+                if (identityServersEnabled) {
+                    helpTextUntranslated = _td("Invite someone using their name, email address, username " +
+                        "(like <userId/>) or <a>share this room</a>.");
+                } else {
+                    helpTextUntranslated = _td("Invite someone using their name, username " +
+                        "(like <userId/>) or <a>share this room</a>.");
+                }
+            } else { // KIND_SPACE_INVITE
+                if (identityServersEnabled) {
+                    helpTextUntranslated = _td("Invite someone using their name, email address, username " +
+                        "(like <userId/>) or <a>share this space</a>.");
+                } else {
+                    helpTextUntranslated = _td("Invite someone using their name, username " +
+                        "(like <userId/>) or <a>share this space</a>.");
+                }
             }
+
+            helpText = _t(helpTextUntranslated, {}, {
+                userId: () =>
+                    <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                a: (sub) =>
+                    <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+            });
 
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
