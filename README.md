@@ -442,9 +442,13 @@ We have a handful of other labels which are added on an as-needed basis, and not
   Wanted](https://github.com/vector-im/element-web/labels/Help%20Wanted)__ —
   Well-defined issues which are suitable for folks new to the codebase
 
-* __[Privacy](https://github.com/vector-im/element-web/labels/Privacy)__ /
+* __[A11y](https://github.com/vector-im/element-web/labels/A11y)__ /
+  __[Meta](https://github.com/vector-im/element-web/labels/Meta)__ /
+  __[I18n](https://github.com/vector-im/element-web/labels/I18n)__ /
+  __[Privacy](https://github.com/vector-im/element-web/labels/Privacy)__ /
   __[Security](https://github.com/vector-im/element-web/labels/Security)__ —
-  Issues which may present privacy / security concerns
+  Issues which fall under these conceptual themes (which apply to many software
+  projects and are not specific to Element)
 
 * __[Sponsored](https://github.com/vector-im/element-web/labels/Sponsored)__ —
   Used internally by Element to denote issues with external funding
