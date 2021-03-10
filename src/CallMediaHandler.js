@@ -50,18 +50,15 @@ export default {
     },
 
     loadDevices: function() {
-        const audioOutDeviceId = SettingsStore.getValue("webrtc_audiooutput");
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
 
-        Matrix.setMatrixCallAudioOutput(audioOutDeviceId);
         Matrix.setMatrixCallAudioInput(audioDeviceId);
         Matrix.setMatrixCallVideoInput(videoDeviceId);
     },
 
     setAudioOutput: function(deviceId) {
         SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
-        Matrix.setMatrixCallAudioOutput(deviceId);
     },
 
     setAudioInput: function(deviceId) {

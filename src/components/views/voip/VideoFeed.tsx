@@ -23,6 +23,7 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar"
 import CallHandler from '../../../CallHandler';
+import CallMediaHandler from "../../../CallMediaHandler";
 
 interface IProps {
     call: MatrixCall,
@@ -45,7 +46,8 @@ interface IState {
 }
 
 export default class VideoFeed extends React.Component<IProps, IState> {
-    private vid = createRef<HTMLVideoElement>();
+    private video = createRef<HTMLVideoElement>();
+    private audio = createRef<HTMLAudioElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -57,38 +59,64 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
     componentDidMount() {
         this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
-        if (!this.vid.current) return;
-        // A note on calling methods on media elements:
-        // We used to have queues per media element to serialise all calls on those elements.
-        // The reason given for this was that load() and play() were racing. However, we now
-        // never call load() explicitly so this seems unnecessary. However, serialising every
-        // operation was causing bugs where video would not resume because some play command
-        // had got stuck and all media operations were queued up behind it. If necessary, we
-        // should serialise the ones that need to be serialised but then be able to interrupt
-        // them with another load() which will cancel the pending one, but since we don't call
-        // load() explicitly, it shouldn't be a problem. - Dave
-        this.vid.current.srcObject = this.props.feed.stream;
-        this.vid.current.autoplay = true;
-        this.vid.current.muted = true;
+
+        const audioOutput = CallMediaHandler.getAudioOutput();
+        const currentMedia = this.getCurrentMedia();
+
+        currentMedia.srcObject = this.props.feed.stream;
+        currentMedia.autoplay = true;
+        currentMedia.muted = false;
+
         try {
-            this.vid.current.play();
+            if (audioOutput) {
+                // This seems quite unreliable in Chrome, although I haven't yet managed to make a jsfiddle where
+                // it fails.
+                // It seems reliable if you set the sink ID after setting the srcObject and then set the sink ID
+                // back to the default after the call is over - Dave
+                currentMedia.setSinkId(audioOutput);
+            }
         } catch (e) {
-            logger.info("Failed to play video element with feed", this.props.feed, e);
+            console.error("Couldn't set requested audio output device: using default", e);
+            logger.warn("Couldn't set requested audio output device: using default", e);
+        }
+
+        try {
+            // A note on calling methods on media elements:
+            // We used to have queues per media element to serialise all calls on those elements.
+            // The reason given for this was that load() and play() were racing. However, we now
+            // never call load() explicitly so this seems unnecessary. However, serialising every
+            // operation was causing bugs where video would not resume because some play command
+            // had got stuck and all media operations were queued up behind it. If necessary, we
+            // should serialise the ones that need to be serialised but then be able to interrupt
+            // them with another load() which will cancel the pending one, but since we don't call
+            // load() explicitly, it shouldn't be a problem. - Dave
+            currentMedia.play()
+        } catch (e) {
+            logger.info("Failed to play media element with feed", this.props.feed, e);
         }
     }
 
     componentWillUnmount() {
         this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
-        if (!this.vid.current) return;
-        this.vid.current.removeEventListener('resize', this.onResize);
-        this.vid.current.pause();
-        this.vid.current.srcObject = null;
+        this.video.current?.removeEventListener('resize', this.onResize);
+
+        const currentMedia = this.getCurrentMedia();
+        currentMedia.pause();
+        currentMedia.srcObject = null;
+        // As per comment in componentDidMount, setting the sink ID back to the
+        // default once the call is over makes setSinkId work reliably. - Dave
+        // Since we are not using the same element anymore, the above doesn't
+        // seem to be necessary - Šimon
+    }
+
+    getCurrentMedia() {
+        return this.audio.current || this.video.current;
     }
 
     onNewStream = (newStream: MediaStream) => {
         this.setState({ audioOnly: this.props.feed.isAudioOnly()});
-        if (!this.vid.current) return;
-        this.vid.current.srcObject = newStream;
+        const currentMedia = this.getCurrentMedia();
+        currentMedia.srcObject = newStream;
     }
 
     onResize = (e) => {
@@ -123,11 +151,12 @@ export default class VideoFeed extends React.Component<IProps, IState> {
                         height={avatarSize}
                         width={avatarSize}
                     />
+                    <audio ref={this.audio}></audio>
                 </div>
             );
         } else {
             return (
-                <video className={classnames(videoClasses)} ref={this.vid} />
+                <video className={classnames(videoClasses)} ref={this.video} />
             );
         }
     }
