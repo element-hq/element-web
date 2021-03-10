@@ -498,6 +498,9 @@ export default class MessagePanel extends React.Component {
 
         let prevEvent = null; // the last event we showed
 
+        // Note: the EventTile might still render a "sent/sending receipt" independent of
+        // this information. When not providing read receipt information, the tile is likely
+        // to assume that sent receipts are to be shown more often.
         this._readReceiptsByEvent = {};
         if (this.props.showReadReceipts) {
             this._readReceiptsByEvent = this._getReadReceiptsByShownEvent();
