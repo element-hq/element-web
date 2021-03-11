@@ -16,7 +16,7 @@ function remoteRender(event) {
 
     // Apply image style after so we can steal the anchor's colour.
     // Style copied from a rendered version of mx_MFileBody_download_icon
-    img.style = "" +
+    img.style = (data.imgStyle || "" +
         "width: 12px; height: 12px;" +
         "-webkit-mask-size: 12px;" +
         "mask-size: 12px;" +
@@ -24,10 +24,12 @@ function remoteRender(event) {
         "mask-position: center;" +
         "-webkit-mask-repeat: no-repeat;" +
         "mask-repeat: no-repeat;" +
+        "display: inline-block;") + "" +
+
+        // Always add these styles
         `-webkit-mask-image: url('${data.imgSrc}');` +
         `mask-image: url('${data.imgSrc}');` +
-        `background-color: ${a.style.color};` +
-        "display: inline-block;";
+        `background-color: ${a.style.color};`;
 
     const body = document.body;
     // Don't display scrollbars if the link takes more than one line to display.

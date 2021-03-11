@@ -222,6 +222,7 @@ export default class MFileBody extends React.Component {
             const onIframeLoad = (ev) => {
                 ev.target.contentWindow.postMessage({
                     imgSrc: downloadIconUrl,
+                    imgStyle: null, // it handles this internally for us. Useful if a downstream changes the icon.
                     style: computedStyle(this._dummyLink.current),
                     blob: this.state.decryptedBlob,
                     // Set a download attribute for encrypted files so that the file
