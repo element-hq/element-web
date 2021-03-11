@@ -189,7 +189,13 @@ abstract class PlainBasePart extends BasePart {
             if (chr !== "@" && chr !== "#" && chr !== ":" && chr !== "+") {
                 return true;
             }
-            // only split if the previous character is a space
+
+            // split if we are at the beginning of the part text
+            if (offset === 0) {
+                return false;
+            }
+
+            // or split if the previous character is a space
             // or if it is a + and this is a :
             return this._text[offset - 1] !== " " &&
                 (this._text[offset - 1] !== "+" || chr !== ":");
