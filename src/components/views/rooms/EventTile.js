@@ -39,6 +39,8 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
 import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
 import {objectHasDiff} from "../../../utils/objects";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Tooltip from "../elements/Tooltip";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -146,6 +148,7 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
+@replaceableComponent("views.rooms.EventTile")
 export default class EventTile extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -567,11 +570,8 @@ export default class EventTile extends React.Component {
     };
 
     getReadAvatars() {
-        if (this._shouldShowSentReceipt) {
-            return <span className="mx_EventTile_readAvatars"><span className='mx_EventTile_receiptSent' /></span>;
-        }
-        if (this._shouldShowSendingReceipt) {
-            return <span className="mx_EventTile_readAvatars"><span className='mx_EventTile_receiptSending' /></span>;
+        if (this._shouldShowSentReceipt || this._shouldShowSendingReceipt) {
+            return <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
         }
 
         // return early if there are no read receipts
@@ -1180,7 +1180,6 @@ class E2ePadlock extends React.Component {
     render() {
         let tooltip = null;
         if (this.state.hover) {
-            const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} dir="auto" />;
         }
 
@@ -1193,5 +1192,58 @@ class E2ePadlock extends React.Component {
                 onMouseLeave={this.onHoverEnd}
             >{tooltip}</div>
         );
+    }
+}
+
+interface ISentReceiptProps {
+    messageState: string; // TODO: Types for message sending state
+}
+
+interface ISentReceiptState {
+    hover: boolean;
+}
+
+class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptState> {
+    constructor() {
+        super();
+
+        this.state = {
+            hover: false,
+        };
+    }
+
+    onHoverStart = () => {
+        this.setState({hover: true});
+    };
+
+    onHoverEnd = () => {
+        this.setState({hover: false});
+    };
+
+    render() {
+        const isSent = !this.props.messageState || this.props.messageState === 'sent';
+        const receiptClasses = classNames({
+            'mx_EventTile_receiptSent': isSent,
+            'mx_EventTile_receiptSending': !isSent,
+        });
+
+        let tooltip = null;
+        if (this.state.hover) {
+            let label = _t("Sending your message...");
+            if (this.props.messageState === 'encrypting') {
+                label = _t("Encrypting your message...");
+            } else if (isSent) {
+                label = _t("Your message was sent");
+            }
+            // The yOffset is somewhat arbitrary - it just brings the tooltip down to be more associated
+            // with the read receipt.
+            tooltip = <Tooltip className="mx_EventTile_readAvatars_receiptTooltip" label={label} yOffset={20} />;
+        }
+
+        return <span className="mx_EventTile_readAvatars">
+            <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
+                {tooltip}
+            </span>
+        </span>;
     }
 }

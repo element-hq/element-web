@@ -22,9 +22,11 @@ import PropTypes from 'prop-types';
 import getEntryComponentForLoginType from '../views/auth/InteractiveAuthEntryComponents';
 
 import * as sdk from '../../index';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
+@replaceableComponent("structures.InteractiveAuthComponent")
 export default class InteractiveAuthComponent extends React.Component {
     static propTypes = {
         // matrix client to use for UI auth requests

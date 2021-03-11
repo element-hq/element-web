@@ -25,6 +25,7 @@ import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -107,6 +108,7 @@ export class ExistingPhoneNumber extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.account.PhoneNumbers")
 export default class PhoneNumbers extends React.Component {
     static propTypes = {
         msisdns: PropTypes.array.isRequired,

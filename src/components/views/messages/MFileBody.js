@@ -26,6 +26,7 @@ import Tinter from '../../../Tinter';
 import request from 'browser-request';
 import Modal from '../../../Modal';
 import AccessibleButton from "../elements/AccessibleButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 
 // A cached tinted copy of require("../../../../res/img/download.svg")
@@ -116,6 +117,7 @@ function computedStyle(element) {
     return cssText;
 }
 
+@replaceableComponent("views.messages.MFileBody")
 export default class MFileBody extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */

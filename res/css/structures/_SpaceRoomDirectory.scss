@@ -203,8 +203,9 @@ limitations under the License.
         .mx_SpaceRoomDirectory_actions {
             width: 180px;
             text-align: right;
-            height: min-content;
-            margin: auto 0 auto 28px;
+            margin-left: 28px;
+            display: inline-flex;
+            align-items: center;
 
             .mx_AccessibleButton {
                 vertical-align: middle;
@@ -222,10 +223,6 @@ limitations under the License.
             font-size: $font-12px;
             line-height: $font-15px;
             color: $secondary-fg-color;
-        }
-
-        .mx_Checkbox {
-            display: inline-block;
         }
     }
 }

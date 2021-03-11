@@ -22,8 +22,9 @@ import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import { UserAddressType } from '../../../UserAddress.js';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-
+@replaceableComponent("views.elements.AddressTile")
 export default class AddressTile extends React.Component {
     static propTypes = {
         address: UserAddressType.isRequired,

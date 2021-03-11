@@ -24,7 +24,9 @@ import { _t } from '../../../languageHandler';
 import GroupStore from '../../../stores/GroupStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.groups.GroupRoomInfo")
 export default class GroupRoomInfo extends React.Component {
     static contextType = MatrixClientContext;
 

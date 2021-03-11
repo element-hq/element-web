@@ -26,6 +26,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isUrlPermitted } from '../../../HtmlUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     ev: MatrixEvent;
@@ -64,6 +65,7 @@ interface IBridgeStateEvent {
     };
 }
 
+@replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,

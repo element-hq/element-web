@@ -94,25 +94,94 @@ const useMyRoomMembership = (room: Room) => {
     return membership;
 };
 
-const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => {
+const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
-    const joinRule = space.getJoinRule();
-    const userId = cli.getUserId();
 
+    let inviterSection;
     let joinButtons;
     if (myMembership === "invite") {
-        joinButtons = <div className="mx_SpaceRoomView_landing_joinButtons">
-            <FormButton label={_t("Accept Invite")} onClick={onJoinButtonClicked} />
-            <AccessibleButton kind="link" onClick={onRejectButtonClicked}>
-                {_t("Decline")}
-            </AccessibleButton>
-        </div>;
-    } else if (myMembership !== "join" && joinRule === "public") {
-        joinButtons = <div className="mx_SpaceRoomView_landing_joinButtons">
-            <FormButton label={_t("Join")} onClick={onJoinButtonClicked} />
-        </div>;
+        const inviteSender = space.getMember(cli.getUserId())?.events.member?.getSender();
+        const inviter = inviteSender && space.getMember(inviteSender);
+
+        if (inviteSender) {
+            inviterSection = <div className="mx_SpaceRoomView_preview_inviter">
+                <MemberAvatar member={inviter} width={32} height={32} />
+                <div>
+                    <div className="mx_SpaceRoomView_preview_inviter_name">
+                        { _t("<inviter/> invites you", {}, {
+                            inviter: () => <b>{ inviter.name || inviteSender }</b>,
+                        }) }
+                    </div>
+                    { inviter ? <div className="mx_SpaceRoomView_preview_inviter_mxid">
+                        { inviteSender }
+                    </div> : null }
+                </div>
+            </div>;
+        }
+
+        joinButtons = <>
+            <FormButton label={_t("Reject")} kind="secondary" onClick={onRejectButtonClicked} />
+            <FormButton label={_t("Accept")} onClick={onJoinButtonClicked} />
+        </>;
+    } else {
+        joinButtons = <FormButton label={_t("Join")} onClick={onJoinButtonClicked} />
     }
+
+    let visibilitySection;
+    if (space.getJoinRule() === "public") {
+        visibilitySection = <span className="mx_SpaceRoomView_preview_info_public">
+            { _t("Public space") }
+        </span>;
+    } else {
+        visibilitySection = <span className="mx_SpaceRoomView_preview_info_private">
+            { _t("Private space") }
+        </span>;
+    }
+
+    return <div className="mx_SpaceRoomView_preview">
+        { inviterSection }
+        <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
+        <h1 className="mx_SpaceRoomView_preview_name">
+            <RoomName room={space} />
+        </h1>
+        <div className="mx_SpaceRoomView_preview_info">
+            { visibilitySection }
+            <RoomMemberCount room={space}>
+                {(count) => count > 0 ? (
+                    <AccessibleButton
+                        className="mx_SpaceRoomView_preview_memberCount"
+                        kind="link"
+                        onClick={() => {
+                            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+                                action: Action.SetRightPanelPhase,
+                                phase: RightPanelPhases.RoomMemberList,
+                                refireParams: { space },
+                            });
+                        }}
+                    >
+                        { _t("%(count)s members", { count }) }
+                    </AccessibleButton>
+                ) : null}
+            </RoomMemberCount>
+        </div>
+        <RoomTopic room={space}>
+            {(topic, ref) =>
+                <div className="mx_SpaceRoomView_preview_topic" ref={ref}>
+                    { topic }
+                </div>
+            }
+        </RoomTopic>
+        <div className="mx_SpaceRoomView_preview_joinButtons">
+            { joinButtons }
+        </div>
+    </div>;
+};
+
+const SpaceLanding = ({ space }) => {
+    const cli = useContext(MatrixClientContext);
+    const myMembership = useMyRoomMembership(space);
+    const userId = cli.getUserId();
 
     let inviteButton;
     if (myMembership === "join" && space.canInvite(userId)) {
@@ -227,26 +296,7 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                             ) : null}
                         </RoomMemberCount>
                     </div> };
-                    if (myMembership === "invite") {
-                        const inviteSender = space.getMember(userId)?.events.member?.getSender();
-                        const inviter = inviteSender && space.getMember(inviteSender);
-
-                        if (inviteSender) {
-                            return _t("<inviter/> invited you to <name/>", {}, {
-                                name: tags.name,
-                                inviter: () => inviter
-                                    ? <span className="mx_SpaceRoomView_landing_inviter">
-                                        <MemberAvatar member={inviter} width={26} height={26} viewUserOnClick={true} />
-                                        { inviter.name }
-                                    </span>
-                                    : <span className="mx_SpaceRoomView_landing_inviter">
-                                        { inviteSender }
-                                    </span>,
-                            }) as JSX.Element;
-                        } else {
-                            return _t("You have been invited to <name/>", {}, tags) as JSX.Element;
-                        }
-                    } else if (shouldShowSpaceSettings(cli, space)) {
+                    if (shouldShowSpaceSettings(cli, space)) {
                         if (space.getJoinRule() === "public") {
                             return _t("Your public space <name/>", {}, tags) as JSX.Element;
                         } else {
@@ -260,7 +310,6 @@ const SpaceLanding = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         <div className="mx_SpaceRoomView_landing_topic">
             <RoomTopic room={space} />
         </div>
-        { joinButtons }
         <div className="mx_SpaceRoomView_landing_adminButtons">
             { inviteButton }
             { addRoomButtons }
@@ -548,16 +597,19 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                return <SpaceLanding
-                    space={this.props.space}
-                    onJoinButtonClicked={this.props.onJoinButtonClicked}
-                    onRejectButtonClicked={this.props.onRejectButtonClicked}
-                />;
-
+                if (this.props.space.getMyMembership() === "join") {
+                    return <SpaceLanding space={this.props.space} />;
+                } else {
+                    return <SpacePreview
+                        space={this.props.space}
+                        onJoinButtonClicked={this.props.onJoinButtonClicked}
+                        onRejectButtonClicked={this.props.onRejectButtonClicked}
+                    />;
+                }
             case Phase.PublicCreateRooms:
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
-                    title={_t("What discussions do you want to have?")}
+                    title={_t("What are some things you want to discuss?")}
                     description={_t("We'll create rooms for each topic.")}
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;
