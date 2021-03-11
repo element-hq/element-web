@@ -21,12 +21,14 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /*
  * Tells the user about files we know cannot be uploaded before we even try uploading
  * them. This is named fairly generically but the only thing we check right now is
  * the size of the file.
  */
+@replaceableComponent("views.dialogs.UploadFailureDialog")
 export default class UploadFailureDialog extends React.Component {
     static propTypes = {
         badFiles: PropTypes.arrayOf(PropTypes.object).isRequired,

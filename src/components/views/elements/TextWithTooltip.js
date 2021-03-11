@@ -17,7 +17,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.TextWithTooltip")
 export default class TextWithTooltip extends React.Component {
     static propTypes = {
         class: PropTypes.string,

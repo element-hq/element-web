@@ -21,6 +21,7 @@ import { linkifyElement } from '../../../HtmlUtils';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -39,6 +40,7 @@ export const roomShape = PropTypes.shape({
     guestCanJoin: PropTypes.bool,
 });
 
+@replaceableComponent("views.rooms.RoomDetailRow")
 export default class RoomDetailRow extends React.Component {
     static propTypes = {
         room: roomShape,

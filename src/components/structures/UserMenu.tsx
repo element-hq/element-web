@@ -56,6 +56,7 @@ import HostSignupAction from "./HostSignupAction";
 import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import RoomName from "../views/elements/RoomName";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IProps {
     isMinimized: boolean;
@@ -69,6 +70,7 @@ interface IState {
     selectedSpace?: Room;
 }
 
+@replaceableComponent("structures.UserMenu")
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;

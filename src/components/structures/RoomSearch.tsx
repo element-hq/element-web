@@ -25,6 +25,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IProps {
     isMinimized: boolean;
@@ -37,6 +38,7 @@ interface IState {
     focused: boolean;
 }
 
+@replaceableComponent("structures.RoomSearch")
 export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private inputRef: React.RefObject<HTMLInputElement> = createRef();

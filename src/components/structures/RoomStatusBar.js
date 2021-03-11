@@ -23,6 +23,7 @@ import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 import {Action} from "../../dispatcher/actions";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -35,6 +36,7 @@ function getUnsentMessages(room) {
     });
 }
 
+@replaceableComponent("structures.RoomStatusBar")
 export default class RoomStatusBar extends React.Component {
     static propTypes = {
         // the room this statusbar is representing.

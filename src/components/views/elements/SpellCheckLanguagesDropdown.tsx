@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function languageMatchesSearchQuery(query, language) {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
@@ -39,6 +40,7 @@ interface SpellCheckLanguagesDropdownIState {
     languages: any,
 }
 
+@replaceableComponent("views.elements.SpellCheckLanguagesDropdown")
 export default class SpellCheckLanguagesDropdown extends React.Component<SpellCheckLanguagesDropdownIProps,
                                                                          SpellCheckLanguagesDropdownIState> {
     constructor(props) {

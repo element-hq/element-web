@@ -46,6 +46,7 @@ import EncryptionPanel from "./EncryptionPanel";
 import {useAsyncMemo} from '../../../hooks/useAsyncMemo';
 import {legacyVerifyUser, verifyDevice, verifyUser} from '../../../verification';
 import {Action} from "../../../dispatcher/actions";
+import { USER_SECURITY_TAB } from "../dialogs/UserSettingsDialog";
 import {useIsEncrypted} from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import {E2EStatus} from "../../../utils/ShieldUtils";
@@ -1367,6 +1368,20 @@ const BasicUserInfo: React.FC<{
         }
     }
 
+    let editDevices;
+    if (member.userId == cli.getUserId()) {
+        editDevices = (<p>
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
+                dis.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: USER_SECURITY_TAB,
+                });
+            }}>
+                { _t("Edit devices") }
+            </AccessibleButton>
+        </p>)
+    }
+
     const securitySection = (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
@@ -1376,6 +1391,7 @@ const BasicUserInfo: React.FC<{
                 loading={showDeviceListSpinner}
                 devices={devices}
                 userId={member.userId} /> }
+            { editDevices }
         </div>
     );
 

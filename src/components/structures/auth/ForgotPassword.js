@@ -28,6 +28,7 @@ import AuthPage from "../../views/auth/AuthPage";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import ServerPicker from "../../views/elements/ServerPicker";
 import PassphraseField from '../../views/auth/PassphraseField';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
@@ -41,6 +42,7 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
+@replaceableComponent("structures.auth.ForgotPassword")
 export default class ForgotPassword extends React.Component {
     static propTypes = {
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,

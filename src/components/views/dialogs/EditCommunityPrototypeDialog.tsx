@@ -23,6 +23,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import FlairStore from "../../../stores/FlairStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
     communityId: string;
@@ -38,6 +39,7 @@ interface IState {
 }
 
 // XXX: This is a lot of duplication from the create dialog, just in a different shape
+@replaceableComponent("views.dialogs.EditCommunityPrototypeDialog")
 export default class EditCommunityPrototypeDialog extends React.PureComponent<IProps, IState> {
     private avatarUploadRef: React.RefObject<HTMLInputElement> = React.createRef();
 
