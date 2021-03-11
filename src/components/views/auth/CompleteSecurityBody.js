@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.auth.CompleteSecurityBody")
 export default class CompleteSecurityBody extends React.PureComponent {
     render() {
         return <div className="mx_CompleteSecurityBody">

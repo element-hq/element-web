@@ -20,7 +20,9 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.context_menus.StatusMessageContextMenu")
 export default class StatusMessageContextMenu extends React.Component {
     static propTypes = {
         // js-sdk User object. Not required because it might not exist.

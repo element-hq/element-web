@@ -20,7 +20,9 @@ import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.IntegrationsDisabledDialog")
 export default class IntegrationsDisabledDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

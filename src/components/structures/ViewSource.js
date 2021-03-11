@@ -21,8 +21,10 @@ import PropTypes from 'prop-types';
 import SyntaxHighlight from '../views/elements/SyntaxHighlight';
 import {_t} from "../../languageHandler";
 import * as sdk from "../../index";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 
+@replaceableComponent("structures.ViewSource")
 export default class ViewSource extends React.Component {
     static propTypes = {
         content: PropTypes.object.isRequired,

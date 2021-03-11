@@ -23,7 +23,9 @@ import Modal from '../../../Modal';
 import Spinner from '../elements/Spinner';
 import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
 import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.CrossSigningPanel")
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
         super(props);

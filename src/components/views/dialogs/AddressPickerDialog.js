@@ -33,6 +33,7 @@ import { abbreviateUrl } from '../../../utils/UrlUtils';
 import {sleep} from "../../../utils/promise";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -43,7 +44,7 @@ const addressTypeName = {
     'email': _td("email address"),
 };
 
-
+@replaceableComponent("views.dialogs.AddressPickerDialog")
 export default class AddressPickerDialog extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,

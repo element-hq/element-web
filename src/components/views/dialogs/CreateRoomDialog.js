@@ -27,7 +27,9 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
 import {privateShouldBeEncrypted} from "../../../createRoom";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.CreateRoomDialog")
 export default class CreateRoomDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

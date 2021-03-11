@@ -82,6 +82,7 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -195,6 +196,7 @@ export interface IState {
     dragCounter: number;
 }
 
+@replaceableComponent("structures.RoomView")
 export default class RoomView extends React.Component<IProps, IState> {
     private readonly dispatcherRef: string;
     private readonly roomStoreToken: EventSubscription;

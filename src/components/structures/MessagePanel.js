@@ -34,6 +34,7 @@ import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -66,6 +67,7 @@ const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType()
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
+@replaceableComponent("structures.MessagePanel")
 export default class MessagePanel extends React.Component {
     static propTypes = {
         // true to give the component a 'display: none' style.

@@ -27,7 +27,9 @@ import {
     PHASE_CONFIRM_SKIP,
 } from '../../../stores/SetupEncryptionStore';
 import SetupEncryptionBody from "./SetupEncryptionBody";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("structures.auth.CompleteSecurity")
 export default class CompleteSecurity extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

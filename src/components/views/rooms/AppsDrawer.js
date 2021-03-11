@@ -35,7 +35,9 @@ import PercentageDistributor from "../../../resizer/distributors/percentage";
 import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayoutStore";
 import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
 import {useStateCallback} from "../../../hooks/useStateCallback";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.AppsDrawer")
 export default class AppsDrawer extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,

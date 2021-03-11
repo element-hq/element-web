@@ -30,12 +30,14 @@ import GroupFilterOrderStore from '../../../stores/GroupFilterOrderStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // A class for a child of GroupFilterPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
 //  - Rooms that are part of the group
 //  - Direct messages with members of the group
 // with the intention that this could be expanded to arbitrary tags in future.
+@replaceableComponent("views.elements.TagTile")
 export default class TagTile extends React.Component {
     static propTypes = {
         // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"

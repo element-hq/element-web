@@ -42,6 +42,7 @@ import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -336,6 +337,7 @@ interface IInviteDialogState {
     errorText: string,
 }
 
+@replaceableComponent("views.dialogs.InviteDialog")
 export default class InviteDialog extends React.PureComponent<IInviteDialogProps, IInviteDialogState> {
     static defaultProps = {
         kind: KIND_DM,

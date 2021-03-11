@@ -21,9 +21,11 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function nop() {}
 
+@replaceableComponent("views.groups.GroupTile")
 class GroupTile extends React.Component {
     static propTypes = {
         groupId: PropTypes.string.isRequired,

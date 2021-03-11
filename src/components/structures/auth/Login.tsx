@@ -35,6 +35,7 @@ import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -99,6 +100,7 @@ interface IState {
 /*
  * A wire component which glues together login UI components and Login logic
  */
+@replaceableComponent("structures.auth.LoginComponent")
 export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     private loginLogic: Login;
