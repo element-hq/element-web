@@ -34,6 +34,10 @@ export function mdSerialize(model: EditorModel) {
             case "at-room-pill":
                 return html + part.text;
             case "room-pill":
+                // Here we use the resourceId for compatibility with non-rich text clients
+                // See https://github.com/vector-im/element-web/issues/16660
+                return html +
+                    `[${part.resourceId.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
             case "user-pill":
                 return html +
                     `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
