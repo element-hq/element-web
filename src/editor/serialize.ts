@@ -101,6 +101,9 @@ export function textSerialize(model: EditorModel) {
             case "at-room-pill":
                 return text + part.text;
             case "room-pill":
+                // Here we use the resourceId for compatibility with non-rich text clients
+                // See https://github.com/vector-im/element-web/issues/16660
+                return text + `${part.resourceId}`;
             case "user-pill":
                 return text + `${part.text}`;
         }
