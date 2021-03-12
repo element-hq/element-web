@@ -22,7 +22,9 @@ import dis from '../../../dispatcher/dispatcher';
 import TagOrderActions from '../../../actions/TagOrderActions';
 import {MenuItem} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.context_menus.TagTileContextMenu")
 export default class TagTileContextMenu extends React.Component {
     static propTypes = {
         tag: PropTypes.string.isRequired,

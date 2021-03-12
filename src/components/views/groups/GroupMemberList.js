@@ -26,9 +26,11 @@ import AccessibleButton from '../elements/AccessibleButton';
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
+@replaceableComponent("views.groups.GroupMemberList")
 export default class GroupMemberList extends React.Component {
     static propTypes = {
         groupId: PropTypes.string.isRequired,

@@ -15,7 +15,9 @@
  */
 
 import React from 'react';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.Spoiler")
 export default class Spoiler extends React.Component {
     constructor(props) {
         super(props);

@@ -23,7 +23,9 @@ import Modal from '../../../Modal';
 import {Group} from 'matrix-js-sdk';
 import GroupStore from "../../../stores/GroupStore";
 import {MenuItem} from "../../structures/ContextMenu";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.context_menus.GroupInviteTileContextMenu")
 export default class GroupInviteTileContextMenu extends React.Component {
     static propTypes = {
         group: PropTypes.instanceOf(Group).isRequired,

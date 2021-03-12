@@ -1,3 +1,81 @@
+Changes in [3.15.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.15.0) (2021-03-01)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.15.0-rc.1...v3.15.0)
+
+## Security notice
+
+matrix-react-sdk 3.15.0 fixes a low severity issue (CVE-2021-21320) where the
+user content sandbox can be abused to trick users into opening unexpected
+documents. The content is opened with a `blob` origin that cannot access Matrix
+user data, so messages and secrets are not at risk. Thanks to @keerok for
+responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to JS SDK 9.8.0
+
+Changes in [3.15.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.15.0-rc.1) (2021-02-24)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.14.0...v3.15.0-rc.1)
+
+ * Upgrade to JS SDK 9.8.0-rc.1
+ * Translations update from Weblate
+   [\#5683](https://github.com/matrix-org/matrix-react-sdk/pull/5683)
+ * Fix object diffing when objects have different keys
+   [\#5681](https://github.com/matrix-org/matrix-react-sdk/pull/5681)
+ * Add <code> if it's missing
+   [\#5673](https://github.com/matrix-org/matrix-react-sdk/pull/5673)
+ * Add email only if the verification is complete
+   [\#5629](https://github.com/matrix-org/matrix-react-sdk/pull/5629)
+ * Fix portrait videocalls
+   [\#5676](https://github.com/matrix-org/matrix-react-sdk/pull/5676)
+ * Tweak code block icon positions
+   [\#5643](https://github.com/matrix-org/matrix-react-sdk/pull/5643)
+ * Revert "Improve URL preview formatting and image upload thumbnail size"
+   [\#5677](https://github.com/matrix-org/matrix-react-sdk/pull/5677)
+ * Fix context menu leaving visible area
+   [\#5644](https://github.com/matrix-org/matrix-react-sdk/pull/5644)
+ * Jitsi conferences names, take 3
+   [\#5675](https://github.com/matrix-org/matrix-react-sdk/pull/5675)
+ * Update isUserOnDarkTheme to take use_system_theme in account
+   [\#5670](https://github.com/matrix-org/matrix-react-sdk/pull/5670)
+ * Discard some dead code
+   [\#5665](https://github.com/matrix-org/matrix-react-sdk/pull/5665)
+ * Add developer tool to explore and edit settings
+   [\#5664](https://github.com/matrix-org/matrix-react-sdk/pull/5664)
+ * Use and create new room helpers
+   [\#5663](https://github.com/matrix-org/matrix-react-sdk/pull/5663)
+ * Clear message previews when the maximum limit is reached for history
+   [\#5661](https://github.com/matrix-org/matrix-react-sdk/pull/5661)
+ * VoIP virtual rooms, mk II
+   [\#5639](https://github.com/matrix-org/matrix-react-sdk/pull/5639)
+ * Disable chat effects when reduced motion preferred
+   [\#5660](https://github.com/matrix-org/matrix-react-sdk/pull/5660)
+ * Improve URL preview formatting and image upload thumbnail size
+   [\#5637](https://github.com/matrix-org/matrix-react-sdk/pull/5637)
+ * Fix border radius when the panel is collapsed
+   [\#5641](https://github.com/matrix-org/matrix-react-sdk/pull/5641)
+ * Use a more generic layout setting - useIRCLayout → layout
+   [\#5571](https://github.com/matrix-org/matrix-react-sdk/pull/5571)
+ * Remove redundant lockOrigin parameter from usercontent
+   [\#5657](https://github.com/matrix-org/matrix-react-sdk/pull/5657)
+ * Set ICE candidate pool size option
+   [\#5655](https://github.com/matrix-org/matrix-react-sdk/pull/5655)
+ * Prepare to encrypt when a call arrives
+   [\#5654](https://github.com/matrix-org/matrix-react-sdk/pull/5654)
+ * Use config for host signup branding
+   [\#5650](https://github.com/matrix-org/matrix-react-sdk/pull/5650)
+ * Use randomly generated conference names for Jitsi
+   [\#5649](https://github.com/matrix-org/matrix-react-sdk/pull/5649)
+ * Modified regex to account for an immediate new line after slash commands
+   [\#5647](https://github.com/matrix-org/matrix-react-sdk/pull/5647)
+ * Fix codeblock scrollbar color for non-Firefox
+   [\#5642](https://github.com/matrix-org/matrix-react-sdk/pull/5642)
+ * Fix codeblock scrollbar colors
+   [\#5630](https://github.com/matrix-org/matrix-react-sdk/pull/5630)
+ * Added loading and disabled the button while searching for server
+   [\#5634](https://github.com/matrix-org/matrix-react-sdk/pull/5634)
+
 Changes in [3.14.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.14.0) (2021-02-16)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.14.0-rc.1...v3.14.0)

@@ -21,6 +21,7 @@ import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import BridgeTile from "../../BridgeTile";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -33,6 +34,7 @@ interface IProps {
     roomId: string;
 }
 
+@replaceableComponent("views.settings.tabs.room.BridgeSettingsTab")
 export default class BridgeSettingsTab extends React.Component<IProps> {
     private renderBridgeCard(event: MatrixEvent, room: Room) {
         const content = event.getContent();

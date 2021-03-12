@@ -22,11 +22,13 @@ import {
 import { _t } from "../../languageHandler";
 import { HostSignupStore } from "../../stores/HostSignupStore";
 import SdkConfig from "../../SdkConfig";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IProps {}
 
 interface IState {}
 
+@replaceableComponent("structures.HostSignupAction")
 export default class HostSignupAction extends React.PureComponent<IProps, IState> {
     private openDialog = async () => {
         await HostSignupStore.instance.setHostSignupActive(true);

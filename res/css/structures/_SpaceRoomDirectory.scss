@@ -1,0 +1,228 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SpaceRoomDirectory_dialogWrapper > .mx_Dialog {
+    max-width: 960px;
+    height: 100%;
+}
+
+.mx_SpaceRoomDirectory {
+    height: 100%;
+    margin-bottom: 12px;
+    color: $primary-fg-color;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+
+    .mx_Dialog_title {
+        display: flex;
+
+        .mx_BaseAvatar {
+            margin-right: 16px;
+        }
+
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+
+        > div {
+            > h1 {
+                font-weight: $font-semi-bold;
+                font-size: $font-18px;
+                line-height: $font-22px;
+                margin: 0;
+            }
+
+            > div {
+                color: $secondary-fg-color;
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+        }
+    }
+
+    .mx_Dialog_content {
+        // TODO fix scrollbar
+        //display: flex;
+        //flex-direction: column;
+        //height: calc(100% - 80px);
+
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
+        }
+
+        .mx_SearchBox {
+            margin: 24px 0 28px;
+        }
+
+        .mx_SpaceRoomDirectory_listHeader {
+            display: flex;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-fg-color;
+
+            .mx_FormButton {
+                margin-bottom: 8px;
+            }
+
+            > span {
+                margin: auto 0 0 auto;
+            }
+        }
+    }
+}
+
+.mx_SpaceRoomDirectory_list {
+    margin-top: 8px;
+
+    .mx_SpaceRoomDirectory_roomCount {
+        > h3 {
+            display: inline;
+            font-weight: $font-semi-bold;
+            font-size: $font-18px;
+            line-height: $font-22px;
+            color: $primary-fg-color;
+        }
+
+        > span {
+            margin-left: 8px;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $secondary-fg-color;
+        }
+    }
+
+    .mx_SpaceRoomDirectory_subspace {
+        margin-top: 8px;
+
+        .mx_SpaceRoomDirectory_subspace_info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 8px;
+            color: $secondary-fg-color;
+            font-weight: $font-semi-bold;
+            font-size: $font-12px;
+            line-height: $font-15px;
+
+            .mx_BaseAvatar {
+                margin-right: 12px;
+                vertical-align: middle;
+            }
+
+            .mx_BaseAvatar_image {
+                border-radius: 8px;
+            }
+
+            .mx_SpaceRoomDirectory_actions {
+                text-align: right;
+                height: min-content;
+                margin-left: auto;
+                margin-right: 16px;
+            }
+        }
+
+        .mx_SpaceRoomDirectory_subspace_children {
+            margin-left: 12px;
+            border-left: 2px solid $space-button-outline-color;
+            padding-left: 24px;
+        }
+    }
+
+    .mx_SpaceRoomDirectory_roomTile {
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid $space-button-outline-color;
+        margin: 8px 0 16px;
+        display: flex;
+        min-height: 76px;
+        box-sizing: border-box;
+
+        &.mx_AccessibleButton:hover {
+            background-color: rgba(141, 151, 165, 0.1);
+        }
+
+        .mx_BaseAvatar {
+            margin-right: 16px;
+            margin-top: 6px;
+        }
+
+        .mx_SpaceRoomDirectory_roomTile_info {
+            display: inline-block;
+            font-size: $font-15px;
+            flex-grow: 1;
+            height: min-content;
+            margin: auto 0;
+
+            .mx_SpaceRoomDirectory_roomTile_name {
+                font-weight: $font-semi-bold;
+                line-height: $font-18px;
+            }
+            .mx_SpaceRoomDirectory_roomTile_topic {
+                line-height: $font-24px;
+                color: $secondary-fg-color;
+            }
+        }
+
+        .mx_SpaceRoomDirectory_roomTile_memberCount {
+            position: relative;
+            margin: auto 0 auto 24px;
+            padding: 0 0 0 28px;
+            line-height: $font-24px;
+            display: inline-block;
+            width: 32px;
+
+            &::before {
+                position: absolute;
+                content: '';
+                width: 24px;
+                height: 24px;
+                top: 0;
+                left: 0;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                background-color: $secondary-fg-color;
+                mask-image: url('$(res)/img/element-icons/community-members.svg');
+            }
+        }
+
+        .mx_SpaceRoomDirectory_actions {
+            width: 180px;
+            text-align: right;
+            margin-left: 28px;
+            display: inline-flex;
+            align-items: center;
+
+            .mx_AccessibleButton {
+                vertical-align: middle;
+
+                & + .mx_AccessibleButton {
+                    margin-left: 24px;
+                }
+            }
+        }
+    }
+
+    .mx_SpaceRoomDirectory_actions {
+        .mx_SpaceRoomDirectory_actionsText {
+            font-weight: normal;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-fg-color;
+        }
+    }
+}

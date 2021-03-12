@@ -18,7 +18,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tinter from "../../../Tinter";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.TintableSvg")
 class TintableSvg extends React.Component {
     static propTypes = {
         src: PropTypes.string.isRequired,
