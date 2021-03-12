@@ -34,6 +34,7 @@ import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
 import CountlyAnalytics from "../../CountlyAnalytics";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -42,6 +43,7 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
+@replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component {
     static propTypes = {
         initialText: PropTypes.string,

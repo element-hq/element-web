@@ -14,8 +14,6 @@
  limitations under the License.
  */
 
-'use strict';
-
 import React from 'react';
 import MFileBody from './MFileBody';
 
@@ -23,7 +21,9 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import InlineSpinner from '../elements/InlineSpinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MAudioBody")
 export default class MAudioBody extends React.Component {
     constructor(props) {
         super(props);
@@ -105,7 +105,7 @@ export default class MAudioBody extends React.Component {
         return (
             <span className="mx_MAudioBody">
                 <audio src={contentUrl} controls />
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );
     }

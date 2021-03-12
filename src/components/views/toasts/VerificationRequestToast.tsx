@@ -29,6 +29,7 @@ import GenericToast from "./GenericToast";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {DeviceInfo} from "matrix-js-sdk/src/crypto/deviceinfo";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     toastKey: string;
@@ -38,8 +39,10 @@ interface IProps {
 interface IState {
     counter: number;
     device?: DeviceInfo;
+    ip?: string;
 }
 
+@replaceableComponent("views.toasts.VerificationRequestToast")
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
     private intervalHandle: NodeJS.Timeout;
 
@@ -66,9 +69,15 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         // a toast hanging around after logging in if you did a verification as part of login).
         this._checkRequestIsPending();
 
+
         if (request.isSelfVerification) {
             const cli = MatrixClientPeg.get();
-            this.setState({device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
+            const device = await cli.getDevice(request.channel.deviceId);
+            const ip = device.last_seen_ip;
+            this.setState({
+                device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId),
+                ip,
+            });
         }
     }
 
@@ -118,6 +127,9 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
                     verificationRequest: request,
+                    onFinished: () => {
+                        request.cancel();
+                    },
                 }, null, /* priority = */ false, /* static = */ true);
             }
             await request.accept();
@@ -131,9 +143,10 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         let nameLabel;
         if (request.isSelfVerification) {
             if (this.state.device) {
-                nameLabel = _t("From %(deviceName)s (%(deviceId)s)", {
+                nameLabel = _t("From %(deviceName)s (%(deviceId)s) at %(ip)s", {
                     deviceName: this.state.device.getDisplayName(),
                     deviceId: this.state.device.deviceId,
+                    ip: this.state.ip,
                 });
             }
         } else {

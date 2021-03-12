@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import BaseAvatar from './BaseAvatar';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export interface IProps {
         groupId?: string;
@@ -28,6 +29,7 @@ export interface IProps {
         onClick?: React.MouseEventHandler;
 }
 
+@replaceableComponent("views.avatars.GroupAvatar")
 export default class GroupAvatar extends React.Component<IProps> {
     public static defaultProps = {
         width: 36,

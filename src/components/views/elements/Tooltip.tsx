@@ -21,6 +21,7 @@ limitations under the License.
 import React, {Component, CSSProperties} from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MIN_TOOLTIP_HEIGHT = 25;
 
@@ -39,6 +40,7 @@ interface IProps {
         yOffset?: number;
 }
 
+@replaceableComponent("views.elements.Tooltip")
 export default class Tooltip extends React.Component<IProps> {
     private tooltipContainer: HTMLElement;
     private tooltip: void | Element | Component<Element, any, any>;

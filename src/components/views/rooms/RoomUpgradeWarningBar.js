@@ -21,7 +21,9 @@ import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.RoomUpgradeWarningBar")
 export default class RoomUpgradeWarningBar extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,

@@ -45,3 +45,46 @@ limitations under the License.
      * big the content of the iframe is. */
     height: 1.5em;
 }
+
+.mx_MFileBody_info {
+    background-color: $message-body-panel-bg-color;
+    border-radius: 4px;
+    width: 270px;
+    padding: 8px;
+    color: $message-body-panel-fg-color;
+
+    .mx_MFileBody_info_icon {
+        background-color: $message-body-panel-icon-bg-color;
+        border-radius: 20px;
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        position: relative;
+        vertical-align: middle;
+        margin-right: 12px;
+
+        &::before {
+            content: '';
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: cover;
+            mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
+            background-color: $message-body-panel-fg-color;
+            width: 13px;
+            height: 15px;
+
+            position: absolute;
+            top: 8px;
+            left: 9px;
+        }
+    }
+
+    .mx_MFileBody_info_filename {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+        width: calc(100% - 32px - 12px); // 32px icon, 12px margin on the icon
+        vertical-align: middle;
+    }
+}

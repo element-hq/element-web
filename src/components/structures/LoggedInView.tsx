@@ -57,6 +57,7 @@ import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
 import { getKeyBindingsManager, NavigationAction, RoomAction } from '../../KeyBindingsManager';
 import { IOpts } from "../../createRoom";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -97,8 +98,10 @@ interface IProps {
 }
 
 interface IUsageLimit {
+    // "hs_disabled" is NOT a specced string, but is used in Synapse
+    // This is tracked over at https://github.com/matrix-org/synapse/issues/9237
     // eslint-disable-next-line camelcase
-    limit_type: "monthly_active_user" | string;
+    limit_type: "monthly_active_user" | "hs_disabled" | string;
     // eslint-disable-next-line camelcase
     admin_contact?: string;
 }
@@ -106,6 +109,8 @@ interface IUsageLimit {
 interface IState {
     syncErrorData?: {
         error: {
+            // This is not specced, but used in Synapse. See
+            // https://github.com/matrix-org/synapse/issues/9237#issuecomment-768238922
             data: IUsageLimit;
             errcode: string;
         };
@@ -125,6 +130,7 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
+@replaceableComponent("structures.LoggedInView")
 class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 

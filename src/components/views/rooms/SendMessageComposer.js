@@ -47,6 +47,7 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
 import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 import SettingsStore from '../../../settings/SettingsStore';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
@@ -111,6 +112,7 @@ export function isQuickReaction(model) {
     return false;
 }
 
+@replaceableComponent("views.rooms.SendMessageComposer")
 export default class SendMessageComposer extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,

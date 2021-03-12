@@ -20,6 +20,7 @@ import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
 import Tooltip from './Tooltip';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
@@ -33,6 +34,7 @@ interface IState {
     hover: boolean;
 }
 
+@replaceableComponent("views.elements.AccessibleTooltipButton")
 export default class AccessibleTooltipButton extends React.PureComponent<ITooltipProps, IState> {
     constructor(props: ITooltipProps) {
         super(props);

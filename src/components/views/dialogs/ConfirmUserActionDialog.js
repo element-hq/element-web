@@ -20,6 +20,7 @@ import { MatrixClient } from 'matrix-js-sdk';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /*
  * A dialog for confirming an operation on another user.
@@ -29,6 +30,7 @@ import { GroupMemberType } from '../../../groups';
  * to make it obvious what is going to happen.
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
  */
+@replaceableComponent("views.dialogs.ConfirmUserActionDialog")
 export default class ConfirmUserActionDialog extends React.Component {
     static propTypes = {
         // matrix-js-sdk (room) member object. Supply either this or 'groupMember'

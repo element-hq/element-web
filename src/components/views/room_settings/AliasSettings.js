@@ -26,6 +26,7 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import RoomPublishSetting from "./RoomPublishSetting";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 class EditableAliasesList extends EditableItemList {
     constructor(props) {
@@ -74,6 +75,7 @@ class EditableAliasesList extends EditableItemList {
     }
 }
 
+@replaceableComponent("views.room_settings.AliasSettings")
 export default class AliasSettings extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

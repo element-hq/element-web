@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {throttle, sortBy} from "lodash";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import {sortBy, throttle} from "lodash";
+import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
@@ -33,6 +33,7 @@ import {EnhancedMap, mapDiff} from "../utils/maps";
 import {setHasDiff} from "../utils/sets";
 import {objectDiff} from "../utils/objects";
 import {arrayHasDiff} from "../utils/arrays";
+import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
 
 type SpaceKey = string | symbol;
 
@@ -41,10 +42,13 @@ interface IState {}
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
 export const HOME_SPACE = Symbol("home-space");
+export const SUGGESTED_ROOMS = Symbol("suggested-rooms");
 
 export const UPDATE_TOP_LEVEL_SPACES = Symbol("top-level-spaces");
 export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 // Space Room ID/HOME_SPACE will be emitted when a Space's children change
+
+const MAX_SUGGESTED_ROOMS = 20;
 
 const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces, rooms]
     return arr.reduce((result, room: Room) => {
@@ -85,6 +89,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private spaceFilteredRooms = new Map<string | symbol, Set<string>>();
     // The space currently selected in the Space Panel - if null then `Home` is selected
     private _activeSpace?: Room = null;
+    private _suggestedRooms: ISpaceSummaryRoom[] = [];
 
     public get spacePanelSpaces(): Room[] {
         return this.rootSpaces;
@@ -94,11 +99,16 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._activeSpace || null;
     }
 
-    public setActiveSpace(space: Room | null) {
+    public get suggestedRooms(): ISpaceSummaryRoom[] {
+        return this._suggestedRooms;
+    }
+
+    public async setActiveSpace(space: Room | null) {
         if (space === this.activeSpace) return;
 
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
+        this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);
 
         // persist space selected
         if (space) {
@@ -106,11 +116,29 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         } else {
             window.localStorage.removeItem(ACTIVE_SPACE_LS_KEY);
         }
+
+        if (space) {
+            try {
+                const data: {
+                    rooms: ISpaceSummaryRoom[];
+                    events: ISpaceSummaryEvent[];
+                } = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, MAX_SUGGESTED_ROOMS);
+                if (this._activeSpace === space) {
+                    this._suggestedRooms = data.rooms.filter(roomInfo => {
+                        return roomInfo.room_type !== RoomType.Space && !this.matrixClient.getRoom(roomInfo.room_id);
+                    });
+                    this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
     }
 
-    public addRoomToSpace(space: Room, roomId: string, via: string[], autoJoin = false) {
+    public addRoomToSpace(space: Room, roomId: string, via: string[], suggested = false, autoJoin = false) {
         return this.matrixClient.sendStateEvent(space.roomId, EventType.SpaceChild, {
             via,
+            suggested,
             auto_join: autoJoin,
         }, roomId);
     }
@@ -327,6 +355,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             // this.onRoomUpdate(room);
             this.onRoomsUpdate();
         }
+
+        const numSuggestedRooms = this._suggestedRooms.length;
+        this._suggestedRooms = this._suggestedRooms.filter(r => r.room_id !== room.roomId);
+        if (numSuggestedRooms !== this._suggestedRooms.length) {
+            this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
+        }
     };
 
     private onRoomState = (ev: MatrixEvent) => {
@@ -408,6 +442,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     protected async onAction(payload: ActionPayload) {
+        if (!SettingsStore.getValue("feature_spaces")) return;
         switch (payload.action) {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);

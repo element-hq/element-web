@@ -40,6 +40,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
 import SpacePanel from "../views/spaces/SpacePanel";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IProps {
     isMinimized: boolean;
@@ -60,6 +61,7 @@ const cssClasses = [
     "mx_RoomSublist_showNButton",
 ];
 
+@replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;

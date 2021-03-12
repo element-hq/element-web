@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-"use strict";
-
 import {TextEncoder} from "util";
 import nodeCrypto from "crypto";
 import { Crypto } from "@peculiar/webcrypto";

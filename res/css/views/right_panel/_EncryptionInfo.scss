@@ -14,13 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_UserInfo {
-    .mx_EncryptionInfo_spinner {
-        .mx_Spinner {
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-
-        text-align: center;
+.mx_EncryptionInfo_spinner {
+    .mx_Spinner {
+        margin-top: 25px;
+        margin-bottom: 15px;
     }
+
+    text-align: center;
 }

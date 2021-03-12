@@ -25,7 +25,9 @@ import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.LinkPreviewWidget")
 export default class LinkPreviewWidget extends React.Component {
     static propTypes = {
         link: PropTypes.string.isRequired, // the URL being previewed
