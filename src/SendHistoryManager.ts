@@ -1,4 +1,3 @@
-//@flow
 /*
 Copyright 2017 Aviral Dasgupta
 
