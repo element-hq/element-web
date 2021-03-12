@@ -22,6 +22,7 @@ import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -38,6 +39,7 @@ interface IState {
     fetchingData: boolean,
 }
 
+@replaceableComponent("views.messages.MVideoBody")
 export default class MVideoBody extends React.PureComponent<IProps, IState> {
     private videoRef = React.createRef<HTMLVideoElement>();
 
@@ -243,7 +245,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                     onPlay={this.videoOnPlay}
                 >
                 </video>
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );
     }

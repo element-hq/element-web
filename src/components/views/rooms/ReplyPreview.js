@@ -21,6 +21,7 @@ import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import PropTypes from "prop-types";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -29,6 +30,7 @@ function cancelQuoting() {
     });
 }
 
+@replaceableComponent("views.rooms.ReplyPreview")
 export default class ReplyPreview extends React.Component {
     static propTypes = {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,

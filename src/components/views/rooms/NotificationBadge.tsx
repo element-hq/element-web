@@ -21,6 +21,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     notification: NotificationState;
@@ -48,6 +49,7 @@ interface IState {
     showCounts: boolean; // whether or not to show counts. Independent of props.forceCount
 }
 
+@replaceableComponent("views.rooms.NotificationBadge")
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
     private countWatcherRef: string;
 

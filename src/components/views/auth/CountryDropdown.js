@@ -22,6 +22,7 @@ import * as sdk from '../../../index';
 import {COUNTRIES, getEmojiFlag} from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const COUNTRIES_BY_ISO2 = {};
 for (const c of COUNTRIES) {
@@ -40,6 +41,7 @@ function countryMatchesSearchQuery(query, country) {
     return false;
 }
 
+@replaceableComponent("views.auth.CountryDropdown")
 export default class CountryDropdown extends React.Component {
     constructor(props) {
         super(props);

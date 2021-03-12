@@ -23,7 +23,9 @@ import * as sdk from "../../../index";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();
@@ -81,10 +83,12 @@ export default class ProfileSettings extends React.Component {
         const client = MatrixClientPeg.get();
         const newState = {};
 
+        const displayName = this.state.displayName.trim();
         try {
             if (this.state.originalDisplayName !== this.state.displayName) {
-                await client.setDisplayName(this.state.displayName);
-                newState.originalDisplayName = this.state.displayName;
+                await client.setDisplayName(displayName);
+                newState.originalDisplayName = displayName;
+                newState.displayName = displayName;
             }
 
             if (this.state.avatarFile) {

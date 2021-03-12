@@ -18,6 +18,7 @@ import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React, {createRef} from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export enum VideoFeedType {
     Local,
@@ -37,6 +38,7 @@ interface IProps {
     onResize?: (e: Event) => void,
 }
 
+@replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.Component<IProps> {
     private vid = createRef<HTMLVideoElement>();
 

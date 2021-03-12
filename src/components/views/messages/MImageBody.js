@@ -27,7 +27,9 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MImageBody")
 export default class MImageBody extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -362,7 +364,7 @@ export default class MImageBody extends React.Component {
         }
 
         // The maximum height of the thumbnail as it is rendered as an <img>
-        const maxHeight = Math.min(this.props.maxImageHeight || 240, infoHeight);
+        const maxHeight = Math.min(this.props.maxImageHeight || 600, infoHeight);
         // The maximum width of the thumbnail, as dictated by its natural
         // maximum height.
         const maxWidth = infoWidth * maxHeight / infoHeight;
@@ -452,7 +454,7 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     getFileBody() {
-        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />;
+        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
     render() {

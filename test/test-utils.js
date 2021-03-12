@@ -1,5 +1,3 @@
-"use strict";
-
 import React from 'react';
 import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';

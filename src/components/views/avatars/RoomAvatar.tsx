@@ -23,8 +23,9 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
 import {ResizeMethod} from "../../../Avatar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick">{
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
@@ -42,6 +43,7 @@ interface IState {
     urls: string[];
 }
 
+@replaceableComponent("views.avatars.RoomAvatar")
 export default class RoomAvatar extends React.Component<IProps, IState> {
     public static defaultProps = {
         width: 36,
