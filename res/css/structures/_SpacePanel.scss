@@ -16,9 +16,8 @@ limitations under the License.
 
 $topLevelHeight: 32px;
 $nestedHeight: 24px;
-$gutterSize: 17px;
-$activeStripeSize: 4px;
-$activeBorderTransparentGap: 2px;
+$gutterSize: 16px;
+$activeBorderTransparentGap: 1px;
 
 $activeBackgroundColor: $roomtile-selected-bg-color;
 $activeBorderColor: $secondary-fg-color;
@@ -102,14 +101,11 @@ $activeBorderColor: $secondary-fg-color;
         &.mx_SpaceButton_active {
             &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
                 background-color: $activeBackgroundColor;
-                border-radius: 8px;
             }
 
-            &.mx_SpaceButton_narrow {
-                .mx_BaseAvatar, .mx_SpaceButton_avatarPlaceholder {
-                    border: 2px $activeBorderColor solid;
-                    border-radius: 11px;
-                }
+            &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+                padding: $activeBorderTransparentGap;
+                border: 3px $activeBorderColor solid;
             }
         }
 
@@ -117,6 +113,8 @@ $activeBorderColor: $secondary-fg-color;
             display: flex;
             flex: 1;
             align-items: center;
+            border-radius: 12px;
+            padding: 4px;
         }
 
         .mx_SpaceButton_name {
@@ -133,8 +131,8 @@ $activeBorderColor: $secondary-fg-color;
         }
 
         .mx_SpaceButton_toggleCollapse {
-            width: calc($gutterSize - $activeStripeSize);
-            margin-left: 1px;
+            width: $gutterSize;
+            margin-right: -4px;
             height: 20px;
             mask-position: center;
             mask-size: 20px;
@@ -172,11 +170,6 @@ $activeBorderColor: $secondary-fg-color;
             }
         }
 
-        .mx_SpaceButton_avatarPlaceholder {
-            border: $activeBorderTransparentGap transparent solid;
-            padding: $activeBorderTransparentGap;
-        }
-
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
             background-color: $accent-color;
             transition: all .1s ease-in-out; // TODO transition
@@ -196,21 +189,8 @@ $activeBorderColor: $secondary-fg-color;
             }
         }
 
-        .mx_BaseAvatar {
-            /* moving the border-radius to this element from _image
-            element so we can add a border to it without the initials being displaced */
-            overflow: hidden;
-            border: 2px transparent solid;
-            padding: $activeBorderTransparentGap;
-
-            .mx_BaseAvatar_initial {
-                top: $activeBorderTransparentGap;
-                left: $activeBorderTransparentGap;
-            }
-
-            .mx_BaseAvatar_image {
-                border-radius: 8px;
-            }
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
         }
 
         .mx_SpaceButton_menuButton {
