@@ -783,6 +783,7 @@
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "Change notification settings": "Change notification settings",
     "Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. Requires compatible homeserver for some features.": "Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. Requires compatible homeserver for some features.",
+    "Send and receive voice messages": "Send and receive voice messages",
     "Render LaTeX maths in messages": "Render LaTeX maths in messages",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.",
     "New spinner design": "New spinner design",
