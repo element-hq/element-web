@@ -1,5 +1,3 @@
-"use strict";
-
 import React from 'react';
 import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
@@ -242,6 +240,8 @@ export function mkStubRoom(roomId = null) {
         setBlacklistUnverifiedDevices: jest.fn(),
         on: jest.fn(),
         removeListener: jest.fn(),
+        getDMInviter: jest.fn(),
+        getAvatarUrl: () => 'mxc://avatar.url/room.png',
     };
 }
 

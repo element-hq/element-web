@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { arrayDiff, arrayHasDiff, arrayMerge, arrayUnion } from "./arrays";
+import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
 
 type ObjectExcluding<O extends {}, P extends (keyof O)[]> = {[k in Exclude<keyof O, P[number]>]: O[k]};
 
@@ -86,11 +86,14 @@ export function objectShallowClone<O extends {}>(a: O, propertyCloner?: (k: keyo
  * @returns True if there's a difference between the objects, false otherwise
  */
 export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
+    if (a === b) return false;
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
-    if (arrayHasDiff(aKeys, bKeys)) return true;
-
+    if (aKeys.length !== bKeys.length) return true;
     const possibleChanges = arrayUnion(aKeys, bKeys);
+    // if the amalgamation of both sets of keys has the a different length to the inputs then there must be a change
+    if (possibleChanges.length !== aKeys.length) return true;
+
     return possibleChanges.some(k => a[k] !== b[k]);
 }
 

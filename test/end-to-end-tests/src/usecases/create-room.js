@@ -64,7 +64,7 @@ async function createDm(session, invitees) {
     const startChatButton = await dmsSublist.$(".mx_RoomSublist_auxButton");
     await startChatButton.click();
 
-    const inviteesEditor = await session.query('.mx_InviteDialog_editor textarea');
+    const inviteesEditor = await session.query('.mx_InviteDialog_editor input');
     for (const target of invitees) {
         await session.replaceInputText(inviteesEditor, target);
         await session.delay(1000); // give it a moment to figure out a suggestion

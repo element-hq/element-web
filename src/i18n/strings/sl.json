@@ -20,5 +20,12 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potrdite dodajanje te telefonske številke z enkratno prijavo, da dokažete svojo identiteto.",
     "Confirm adding phone number": "Potrdi dodajanje telefonske številke",
     "Click the button below to confirm adding this phone number.": "Pritisnite gumb spodaj da potrdite dodajanje te telefonske številke.",
-    "Add Phone Number": "Dodaj telefonsko številko"
+    "Add Phone Number": "Dodaj telefonsko številko",
+    "Analytics": "Analitika",
+    "Call Declined": "Klic zavrnjen",
+    "Call Failed": "Klic ni uspel",
+    "Your homeserver's URL": "URL domačega strežnika",
+    "End": "Konec",
+    "Use default": "Uporabi privzeto",
+    "Change": "Sprememba"
 }

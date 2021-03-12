@@ -26,7 +26,9 @@ import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -424,7 +426,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 <p>{_t(
                     "Back up your encryption keys with your account data in case you " +
                     "lose access to your sessions. Your keys will be secured with a " +
-                    "unique Recovery Key.",
+                    "unique Security Key.",
                 )}</p>
                 {statusDescription}
                 <details>

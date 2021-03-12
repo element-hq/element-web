@@ -25,7 +25,10 @@ import QuestionDialog from "../../../dialogs/QuestionDialog";
 import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 import {SettingLevel} from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
+import {UIFeature} from "../../../../../settings/UIFeature";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -350,6 +353,16 @@ export default class SecurityRoomSettingsTab extends React.Component {
             />;
         }
 
+        let historySection = (<>
+            <span className='mx_SettingsTab_subheading'>{_t("Who can read history?")}</span>
+            <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
+                {this._renderHistory()}
+            </div>
+        </>);
+        if (!SettingsStore.getValue(UIFeature.RoomHistorySettings)) {
+            historySection = null;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
@@ -371,10 +384,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                     {this._renderRoomAccess()}
                 </div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Who can read history?")}</span>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    {this._renderHistory()}
-                </div>
+                {historySection}
             </div>
         );
     }

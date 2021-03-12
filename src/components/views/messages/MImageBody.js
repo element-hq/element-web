@@ -27,7 +27,9 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MImageBody")
 export default class MImageBody extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -85,6 +87,7 @@ export default class MImageBody extends React.Component {
     showImage() {
         localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
         this.setState({showImage: true});
+        this._downloadImage();
     }
 
     onClick(ev) {
@@ -253,10 +256,7 @@ export default class MImageBody extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.unmounted = false;
-        this.context.on('sync', this.onClientSync);
-
+    _downloadImage() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -289,9 +289,18 @@ export default class MImageBody extends React.Component {
                 });
             });
         }
+    }
 
-        // Remember that the user wanted to show this particular image
-        if (!this.state.showImage && localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true") {
+    componentDidMount() {
+        this.unmounted = false;
+        this.context.on('sync', this.onClientSync);
+
+        const showImage = this.state.showImage ||
+            localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
+
+        if (showImage) {
+            // Don't download anything becaue we don't want to display anything.
+            this._downloadImage();
             this.setState({showImage: true});
         }
 
@@ -445,7 +454,7 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     getFileBody() {
-        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />;
+        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
     render() {

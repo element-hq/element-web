@@ -26,10 +26,12 @@ import { _t } from '../../languageHandler';
 import BaseCard from "../views/right_panel/BaseCard";
 import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import DesktopBuildsNotice, {WarningKind} from "../views/elements/DesktopBuildsNotice";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
+@replaceableComponent("structures.FilePanel")
 class FilePanel extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -45,7 +47,7 @@ class FilePanel extends React.Component {
     };
 
     onRoomTimeline = (ev, room, toStartOfTimeline, removed, data) => {
-        if (room.roomId !== this.props.roomId) return;
+        if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
         if (ev.isBeingDecrypted()) {

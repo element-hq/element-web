@@ -16,6 +16,7 @@ limitations under the License.
 
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function examineLoginResponse(
@@ -45,6 +46,13 @@ function getSecretStorageKey(): Uint8Array {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+function getDehydrationKey(
+    keyInfo: ISecretStorageKeyInfo,
+): Promise<Uint8Array> {
+    return Promise.resolve(null);
+}
+
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function catchAccessSecretStorageError(e: Error): void {
     // E.g. notify the user in some way
 }
@@ -59,21 +67,13 @@ function setupEncryptionNeeded(kind: SetupEncryptionKind): boolean {
 // them all as optional. This allows customisers to only define and export the
 // customisations they need while still maintaining type safety.
 export interface ISecurityCustomisations {
-    examineLoginResponse?: (
-        response: any,
-        credentials: IMatrixClientCreds,
-    ) => void;
-    persistCredentials?: (
-        credentials: IMatrixClientCreds,
-    ) => void;
-    createSecretStorageKey?: () => Uint8Array,
-    getSecretStorageKey?: () => Uint8Array,
-    catchAccessSecretStorageError?: (
-        e: Error,
-    ) => void,
-    setupEncryptionNeeded?: (
-        kind: SetupEncryptionKind,
-    ) => boolean,
+    examineLoginResponse?: typeof examineLoginResponse;
+    persistCredentials?: typeof persistCredentials;
+    createSecretStorageKey?: typeof createSecretStorageKey,
+    getSecretStorageKey?: typeof getSecretStorageKey,
+    catchAccessSecretStorageError?: typeof catchAccessSecretStorageError,
+    setupEncryptionNeeded?: typeof setupEncryptionNeeded,
+    getDehydrationKey?: typeof getDehydrationKey,
 }
 
 // A real customisation module will define and export one or more of the

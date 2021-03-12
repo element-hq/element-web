@@ -25,6 +25,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IProps {
     isMinimized: boolean;
@@ -37,6 +38,7 @@ interface IState {
     focused: boolean;
 }
 
+@replaceableComponent("structures.RoomSearch")
 export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private inputRef: React.RefObject<HTMLInputElement> = createRef();
@@ -148,7 +150,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 onBlur={this.onBlur}
                 onChange={this.onChange}
                 onKeyDown={this.onKeyDown}
-                placeholder={_t("Search")}
+                placeholder={_t("Filter")}
                 autoComplete="off"
             />
         );
@@ -164,7 +166,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (this.props.isMinimized) {
             icon = (
                 <AccessibleButton
-                    title={_t("Search rooms")}
+                    title={_t("Filter rooms and people")}
                     className="mx_RoomSearch_icon mx_RoomSearch_minimizedHandle"
                     onClick={this.openSearch}
                 />

@@ -24,30 +24,69 @@ $MiniAppTileHeight: 200px;
     flex-direction: column;
     overflow: hidden;
 
+    .mx_AppsContainer_resizerHandleContainer {
+        width: 100%;
+        height: 10px;
+        margin-top: -3px; // move it up so the interactions are slightly more comfortable
+        display: block;
+        position: relative;
+    }
+
     .mx_AppsContainer_resizerHandle {
         cursor: ns-resize;
-        border-radius: 3px;
 
-        // Override styles from library
-        width: unset !important;
-        height: 4px !important;
+        // Override styles from library, making the whole area the target area
+        width: 100% !important;
+        height: 100% !important;
 
         // This is positioned directly below frame
         position: absolute;
-        bottom: -8px !important; // override from library
+        bottom: 0 !important; // override from library
 
-        // Together, these make the bar 64px wide
-        // These are also overridden from the library
-        left: calc(50% - 32px) !important;
-        right: calc(50% - 32px) !important;
+        // We then render the pill handle in an ::after to keep it in the handle's
+        // area without being a massive line across the screen
+        &::after {
+            content: '';
+            position: absolute;
+            border-radius: 3px;
+
+            // The combination of these two should make the pill 4px high
+            top: 6px;
+            bottom: 0;
+
+            // Together, these make the bar 64px wide
+            // These are also overridden from the library
+            left: calc(50% - 32px);
+            right: calc(50% - 32px);
+        }
     }
 
     &:hover {
-        .mx_AppsContainer_resizerHandle {
+        .mx_AppsContainer_resizerHandle::after {
             opacity: 0.8;
             background: $primary-fg-color;
         }
+
+        .mx_ResizeHandle_horizontal::before {
+            position: absolute;
+            left: 3px;
+            top: 50%;
+            transform: translate(0, -50%);
+
+            height: 64px; // to match width of the ones on roomlist
+            width: 4px;
+            border-radius: 4px;
+
+            content: '';
+
+            background-color: $primary-fg-color;
+            opacity: 0.8;
+        }
     }
+}
+
+.mx_AppsContainer_resizer {
+    margin-bottom: 8px;
 }
 
 .mx_AppsContainer {
@@ -56,44 +95,71 @@ $MiniAppTileHeight: 200px;
     align-items: stretch;
     justify-content: center;
     height: 100%;
-    margin-bottom: 8px;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+
+    .mx_AppTile:first-of-type {
+        border-left-width: 8px;
+        border-radius: 10px 0 0 10px;
+    }
+    .mx_AppTile:last-of-type {
+        border-right-width: 8px;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .mx_ResizeHandle_horizontal {
+        position: relative;
+
+        > div {
+            width: 0;
+        }
+    }
 }
 
-.mx_AppsDrawer_minimised .mx_AppsContainer {
-    // override the re-resizable inline styles
-    height: inherit !important;
-    min-height: inherit !important;
-}
+// TODO this should be 300px but that's too large
+$MinWidth: 240px;
 
-.mx_AddWidget_button {
-    order: 2;
-    cursor: pointer;
-    padding: 0;
-    margin: -3px auto 5px 0;
-    color: $accent-color;
-    font-size: $font-12px;
+.mx_AppsDrawer_2apps .mx_AppTile {
+    width: 50%;
+
+    &:nth-child(3) {
+        flex-grow: 1;
+        width: 0 !important;
+        min-width: $MinWidth !important;
+    }
+}
+.mx_AppsDrawer_3apps .mx_AppTile {
+    width: 33%;
+
+    &:nth-child(3) {
+        flex-grow: 1;
+        width: 0 !important;
+        min-width: $MinWidth !important;
+    }
 }
 
 .mx_AppTile {
     width: 50%;
-    border: 5px solid $widget-menu-bar-bg-color;
-    border-radius: 4px;
+    min-width: $MinWidth;
+    border: 8px solid $widget-menu-bar-bg-color;
+    border-left-width: 5px;
+    border-right-width: 5px;
     display: flex;
     flex-direction: column;
-
-    & + .mx_AppTile {
-        margin-left: 5px;
-    }
+    box-sizing: border-box;
+    background-color: $widget-menu-bar-bg-color;
 }
 
 .mx_AppTileFullWidth {
-    width: 100%;
+    width: 100% !important; // to override the inline style set by the resizer
     margin: 0;
     padding: 0;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    background-color: $widget-menu-bar-bg-color;
 }
 
 .mx_AppTile_mini {
@@ -103,12 +169,6 @@ $MiniAppTileHeight: 200px;
     display: flex;
     flex-direction: column;
     height: $MiniAppTileHeight;
-}
-
-.mx_AppTile.mx_AppTile_minimised,
-.mx_AppTileFullWidth.mx_AppTile_minimised,
-.mx_AppTile_mini.mx_AppTile_minimised {
-    height: 14px;
 }
 
 .mx_AppTile .mx_AppTile_persistedWrapper,
@@ -130,19 +190,20 @@ $MiniAppTileHeight: 200px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
     width: 100%;
-}
-
-.mx_AppTileMenuBar_expanded {
-    padding-bottom: 5px;
+    padding-top: 2px;
+    padding-bottom: 8px;
 }
 
 .mx_AppTileMenuBarTitle {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    pointer-events: none;
+    line-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .mx_WidgetAvatar {
+        margin-right: 12px;
+    }
 }
 
 .mx_AppTileMenuBarTitle > :last-child {
@@ -166,37 +227,20 @@ $MiniAppTileHeight: 200px;
     margin: 0 3px;
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_minimise {
-    mask-image: url('$(res)/img/feather-customised/widget/minimise.svg');
-    background-color: $accent-color;
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_maximise {
-    mask-image: url('$(res)/img/feather-customised/widget/maximise.svg');
-    background-color: $accent-color;
-}
-
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
     mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
 }
 
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_menu {
-    mask-image: url('$(res)/img/icon_context.svg');
-}
-
-.mx_AppTileMenuBarWidgetDelete {
-    filter: none;
-}
-
-.mx_AppTileMenuBarWidget:hover {
-    border: 1px solid $primary-fg-color;
-    border-radius: 2px;
+    mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
 }
 
 .mx_AppTileBody {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    border-radius: 8px;
+    background-color: $widget-body-bg-color;
 }
 
 .mx_AppTileBody_mini {
@@ -231,7 +275,6 @@ $MiniAppTileHeight: 200px;
 
 .mx_AppPermissionWarning {
     text-align: center;
-    background-color: $widget-menu-bar-bg-color;
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -296,6 +339,10 @@ $MiniAppTileHeight: 200px;
     font-weight: bold;
     position: relative;
     height: 100%;
+
+    // match bg of border so that the cut corners have the right fill
+    background-color: $widget-body-bg-color !important;
+    border-radius: 8px;
 }
 
 .mx_AppLoading .mx_Spinner {
@@ -321,15 +368,6 @@ $MiniAppTileHeight: 200px;
 
 .mx_AppLoading iframe {
     display: none;
-}
-
-.mx_AppsDrawer_minimised .mx_AppsContainer_resizerHandle {
-    display: none;
-}
-
-/* Avoid apptile iframes capturing mouse event focus when resizing */
-.mx_AppsDrawer_resizing iframe {
-    pointer-events: none;
 }
 
 .mx_AppsDrawer_resizing .mx_AppTile_persistedWrapper {

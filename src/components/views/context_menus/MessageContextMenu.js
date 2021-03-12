@@ -31,11 +31,14 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import {MenuItem} from "../../structures/ContextMenu";
+import {EventType} from "matrix-js-sdk/src/@types/event";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
+@replaceableComponent("views.context_menus.MessageContextMenu")
 export default class MessageContextMenu extends React.Component {
     static propTypes = {
         /* the MatrixEvent associated with the context menu */
@@ -72,7 +75,10 @@ export default class MessageContextMenu extends React.Component {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
-        const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
+        // We explicitly decline to show the redact option on ACL events as it has a potential
+        // to obliterate the room - https://github.com/matrix-org/synapse/issues/4042
+        const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)
+            && this.props.mxEvent.getType() !== EventType.RoomServerAcl;
         let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
@@ -126,18 +132,9 @@ export default class MessageContextMenu extends React.Component {
             roomId: ev.getRoomId(),
             eventId: ev.getId(),
             content: ev.event,
-        }, 'mx_Dialog_viewsource');
-        this.closeMenu();
-    };
-
-    onViewClearSourceClick = () => {
-        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
-        const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
-            roomId: ev.getRoomId(),
-            eventId: ev.getId(),
+            isEncrypted: ev.isEncrypted(),
             // FIXME: _clearEvent is private
-            content: ev._clearEvent,
+            decryptedContent: ev._clearEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     };
@@ -145,7 +142,7 @@ export default class MessageContextMenu extends React.Component {
     onRedactClick = () => {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
         Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
-            onFinished: async (proceed) => {
+            onFinished: async (proceed, reason) => {
                 if (!proceed) return;
 
                 const cli = MatrixClientPeg.get();
@@ -153,6 +150,8 @@ export default class MessageContextMenu extends React.Component {
                     await cli.redactEvent(
                         this.props.mxEvent.getRoomId(),
                         this.props.mxEvent.getId(),
+                        undefined,
+                        reason ? { reason } : {},
                     );
                 } catch (e) {
                     const code = e.errcode || e.statusCode;
@@ -303,7 +302,6 @@ export default class MessageContextMenu extends React.Component {
         let cancelButton;
         let forwardButton;
         let pinButton;
-        let viewClearSourceButton;
         let unhidePreviewButton;
         let externalURLButton;
         let quoteButton;
@@ -382,14 +380,6 @@ export default class MessageContextMenu extends React.Component {
                 { _t('View Source') }
             </MenuItem>
         );
-
-        if (mxEvent.getType() !== mxEvent.getWireType()) {
-            viewClearSourceButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
-                    { _t('View Decrypted Source') }
-                </MenuItem>
-            );
-        }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
@@ -475,7 +465,6 @@ export default class MessageContextMenu extends React.Component {
                 { forwardButton }
                 { pinButton }
                 { viewSourceButton }
-                { viewClearSourceButton }
                 { unhidePreviewButton }
                 { permalinkButton }
                 { quoteButton }

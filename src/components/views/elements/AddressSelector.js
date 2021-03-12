@@ -20,7 +20,9 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import classNames from 'classnames';
 import { UserAddressType } from '../../../UserAddress';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.AddressSelector")
 export default class AddressSelector extends React.Component {
     static propTypes = {
         onSelected: PropTypes.func.isRequired,
@@ -46,7 +48,7 @@ export default class AddressSelector extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(props) {
+    UNSAFE_componentWillReceiveProps(props) { // eslint-disable-line camelcase
         // Make sure the selected item isn't outside the list bounds
         const selected = this.state.selected;
         const maxSelected = this._maxSelected(props.addressList);

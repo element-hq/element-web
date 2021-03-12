@@ -23,7 +23,9 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.RoomAvatarEvent")
 export default class RoomAvatarEvent extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */

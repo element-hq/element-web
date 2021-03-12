@@ -39,6 +39,7 @@ import {Group} from "matrix-js-sdk";
 import {allSettled, sleep} from "../../utils/promise";
 import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -47,7 +48,7 @@ const LONG_DESC_PLACEHOLDER = _td(
     some important <a href="foo">links</a>
 </p>
 <p>
-    You can even use 'img' tags
+    You can even add images with Matrix URLs <img src="mxc://url" />
 </p>
 `);
 
@@ -391,6 +392,7 @@ class FeaturedUser extends React.Component {
 const GROUP_JOINPOLICY_OPEN = "open";
 const GROUP_JOINPOLICY_INVITE = "invite";
 
+@replaceableComponent("structures.GroupView")
 export default class GroupView extends React.Component {
     static propTypes = {
         groupId: PropTypes.string.isRequired,

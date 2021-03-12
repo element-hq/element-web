@@ -27,6 +27,7 @@ import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -45,6 +46,7 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
+@replaceableComponent("views.rooms.RoomPreviewBar")
 export default class RoomPreviewBar extends React.Component {
     static propTypes = {
         onJoinClick: PropTypes.func,
@@ -284,7 +286,7 @@ export default class RoomPreviewBar extends React.Component {
                 room_name: this.props.oobData ? this.props.oobData.room_name : null,
                 room_avatar_url: this.props.oobData ? this.props.oobData.avatarUrl : null,
                 inviter_name: this.props.oobData ? this.props.oobData.inviterName : null,
-            }
+            },
         };
     }
 
@@ -337,7 +339,7 @@ export default class RoomPreviewBar extends React.Component {
                 if (this.props.previewLoading) {
                     footer = (
                         <div>
-                            <Spinner w={20} h={20}/>
+                            <Spinner w={20} h={20} />
                             {_t("Loading room preview")}
                         </div>
                     );

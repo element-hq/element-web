@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const DEBUG_SCROLL = false;
 
@@ -83,6 +84,7 @@ if (DEBUG_SCROLL) {
  * offset as normal.
  */
 
+@replaceableComponent("structures.ScrollPanel")
 export default class ScrollPanel extends React.Component {
     static propTypes = {
         /* stickyBottom: if set to true, then once the user hits the bottom of
@@ -704,7 +706,7 @@ export default class ScrollPanel extends React.Component {
             if (itemlist.style.height !== newHeight) {
                 itemlist.style.height = newHeight;
             }
-            if (sn.scrollTop !== sn.scrollHeight){
+            if (sn.scrollTop !== sn.scrollHeight) {
                 sn.scrollTop = sn.scrollHeight;
             }
             debuglog("updateHeight to", newHeight);

@@ -78,6 +78,11 @@ export function getEffectiveMembership(membership: string): EffectiveMembership 
     }
 }
 
+export function isJoinedOrNearlyJoined(membership: string): boolean {
+    const effective = getEffectiveMembership(membership);
+    return effective === EffectiveMembership.Join || effective === EffectiveMembership.Invite;
+}
+
 export async function leaveRoomBehaviour(roomId: string) {
     let leavingAllVersions = true;
     const history = await MatrixClientPeg.get().getRoomUpgradeHistory(roomId);
@@ -135,6 +140,6 @@ export async function leaveRoomBehaviour(roomId: string) {
     }
 
     if (RoomViewStore.getRoomId() === roomId) {
-        dis.dispatch({action: 'view_next_room'});
+        dis.dispatch({action: 'view_home_page'});
     }
 }

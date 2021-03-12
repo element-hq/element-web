@@ -19,10 +19,16 @@ limitations under the License.
 }
 
 .mx_RoomList_iconPlus::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/plus.svg');
+    mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
+}
+.mx_RoomList_iconHash::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
 }
 .mx_RoomList_iconExplore::before {
     mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+}
+.mx_RoomList_iconDialpad::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/dialpad.svg');
 }
 
 .mx_RoomList_explorePrompt {
@@ -33,7 +39,6 @@ limitations under the License.
 
     div:first-child {
         font-weight: $font-semi-bold;
-        margin-bottom: 8px;
     }
 
     .mx_AccessibleButton {
@@ -41,6 +46,9 @@ limitations under the License.
         position: relative;
         padding: 0 0 0 24px;
         font-size: inherit;
+        margin-top: 8px;
+        display: block;
+        text-align: start;
 
         &::before {
             content: '';
@@ -53,6 +61,13 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
+        }
+
+        &.mx_RoomList_explorePrompt_startChat::before {
+            mask-image: url('$(res)/img/element-icons/feedback.svg');
+        }
+
+        &.mx_RoomList_explorePrompt_explore::before {
             mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
         }
     }

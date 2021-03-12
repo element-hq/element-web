@@ -25,7 +25,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component {
     constructor() {
         super();
@@ -129,11 +131,16 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t( "Securely cache encrypted messages locally for them " +
-                             "to appear in search results, using ")
-                        } {formatBytes(this.state.eventIndexSize, 0)}
-                        {_t( " to store messages from ")}
-                        {formatCountLong(this.state.roomCount)} {_t("rooms.")}
+                        {_t("Securely cache encrypted messages locally for them " +
+                            "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
+                            {
+                                size: formatBytes(this.state.eventIndexSize, 0),
+                                // This drives the singular / plural string
+                                // selection for "room" / "rooms" only.
+                                count: this.state.roomCount,
+                                rooms: formatCountLong(this.state.roomCount),
+                            },
+                        )}
                     </div>
                     <div>
                         <AccessibleButton kind="primary" onClick={this._onManage}>

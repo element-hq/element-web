@@ -21,7 +21,10 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';
+import EventTileBubble from "./EventTileBubble";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MKeyVerificationConclusion")
 export default class MKeyVerificationConclusion extends React.Component {
     constructor(props) {
         super(props);
@@ -115,14 +118,14 @@ export default class MKeyVerificationConclusion extends React.Component {
         }
 
         if (title) {
-            const subtitle = userLabelForEventRoom(request.otherUserId, mxEvent.getRoomId());
-            const classes = classNames("mx_EventTile_bubble", "mx_cryptoEvent", "mx_cryptoEvent_icon", {
+            const classes = classNames("mx_cryptoEvent mx_cryptoEvent_icon", {
                 mx_cryptoEvent_icon_verified: request.done,
             });
-            return (<div className={classes}>
-                <div className="mx_cryptoEvent_title">{title}</div>
-                <div className="mx_cryptoEvent_subtitle">{subtitle}</div>
-            </div>);
+            return <EventTileBubble
+                className={classes}
+                title={title}
+                subtitle={userLabelForEventRoom(request.otherUserId, mxEvent.getRoomId())}
+            />;
         }
 
         return null;

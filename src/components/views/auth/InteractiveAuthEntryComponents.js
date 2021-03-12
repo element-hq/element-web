@@ -18,7 +18,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import url from 'url';
 import classnames from 'classnames';
 
 import * as sdk from '../../../index';
@@ -26,6 +25,8 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
+import CountlyAnalytics from "../../../CountlyAnalytics";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -75,6 +76,7 @@ import Spinner from "../elements/Spinner";
 
 export const DEFAULT_PHASE = 0;
 
+@replaceableComponent("views.auth.PasswordAuthEntry")
 export class PasswordAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.password";
 
@@ -173,6 +175,7 @@ export class PasswordAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.RecaptchaAuthEntry")
 export class RecaptchaAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.recaptcha";
 
@@ -189,6 +192,7 @@ export class RecaptchaAuthEntry extends React.Component {
     }
 
     _onCaptchaResponse = response => {
+        CountlyAnalytics.instance.track("onboarding_grecaptcha_submit");
         this.props.submitAuthDict({
             type: RecaptchaAuthEntry.LOGIN_TYPE,
             response: response,
@@ -234,6 +238,7 @@ export class RecaptchaAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.TermsAuthEntry")
 export class TermsAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.terms";
 
@@ -297,6 +302,8 @@ export class TermsAuthEntry extends React.Component {
             toggledPolicies: initToggles,
             policies: pickedPolicies,
         };
+
+        CountlyAnalytics.instance.track("onboarding_terms_begin");
     }
 
 
@@ -326,8 +333,12 @@ export class TermsAuthEntry extends React.Component {
             allChecked = allChecked && checked;
         }
 
-        if (allChecked) this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
-        else this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
+        if (allChecked) {
+            this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
+            CountlyAnalytics.instance.track("onboarding_terms_complete");
+        } else {
+            this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
+        }
     };
 
     render() {
@@ -378,6 +389,7 @@ export class TermsAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.EmailIdentityAuthEntry")
 export class EmailIdentityAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.email.identity";
 
@@ -413,18 +425,19 @@ export class EmailIdentityAuthEntry extends React.Component {
             return <Spinner />;
         } else {
             return (
-                <div>
-                    <p>{ _t("An email has been sent to %(emailAddress)s",
-                        { emailAddress: (sub) => <i>{ this.props.inputs.emailAddress }</i> },
+                <div className="mx_InteractiveAuthEntryComponents_emailWrapper">
+                    <p>{ _t("A confirmation email has been sent to %(emailAddress)s",
+                        { emailAddress: (sub) => <b>{ this.props.inputs.emailAddress }</b> },
                     ) }
                     </p>
-                    <p>{ _t("Please check your email to continue registration.") }</p>
+                    <p>{ _t("Open the link in the email to continue registration.") }</p>
                 </div>
             );
         }
     }
 }
 
+@replaceableComponent("views.auth.MsisdnAuthEntry")
 export class MsisdnAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.msisdn";
 
@@ -492,16 +505,10 @@ export class MsisdnAuthEntry extends React.Component {
         });
 
         try {
-            const requiresIdServerParam =
-                await this.props.matrixClient.doesServerRequireIdServerParam();
             let result;
             if (this._submitUrl) {
                 result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
                     this._submitUrl, this._sid, this.props.clientSecret, this.state.token,
-                );
-            } else if (requiresIdServerParam) {
-                result = await this.props.matrixClient.submitMsisdnToken(
-                    this._sid, this.props.clientSecret, this.state.token,
                 );
             } else {
                 throw new Error("The registration with MSISDN flow is misconfigured");
@@ -511,12 +518,6 @@ export class MsisdnAuthEntry extends React.Component {
                     sid: this._sid,
                     client_secret: this.props.clientSecret,
                 };
-                if (requiresIdServerParam) {
-                    const idServerParsedUrl = url.parse(
-                        this.props.matrixClient.getIdentityServerUrl(),
-                    );
-                    creds.id_server = idServerParsedUrl.host;
-                }
                 this.props.submitAuthDict({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
                     // TODO: Remove `threepid_creds` once servers support proper UIA
@@ -583,6 +584,7 @@ export class MsisdnAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.SSOAuthEntry")
 export class SSOAuthEntry extends React.Component {
     static propTypes = {
         matrixClient: PropTypes.object.isRequired,
@@ -614,8 +616,12 @@ export class SSOAuthEntry extends React.Component {
             this.props.authSessionId,
         );
 
+        this._popupWindow = null;
+        window.addEventListener("message", this._onReceiveMessage);
+
         this.state = {
             phase: SSOAuthEntry.PHASE_PREAUTH,
+            attemptFailed: false,
         };
     }
 
@@ -623,12 +629,35 @@ export class SSOAuthEntry extends React.Component {
         this.props.onPhaseChange(SSOAuthEntry.PHASE_PREAUTH);
     }
 
+    componentWillUnmount() {
+        window.removeEventListener("message", this._onReceiveMessage);
+        if (this._popupWindow) {
+            this._popupWindow.close();
+            this._popupWindow = null;
+        }
+    }
+
+    attemptFailed = () => {
+        this.setState({
+            attemptFailed: true,
+        });
+    };
+
+    _onReceiveMessage = event => {
+        if (event.data === "authDone" && event.origin === this.props.matrixClient.getHomeserverUrl()) {
+            if (this._popupWindow) {
+                this._popupWindow.close();
+                this._popupWindow = null;
+            }
+        }
+    };
+
     onStartAuthClick = () => {
         // Note: We don't use PlatformPeg's startSsoAuth functions because we almost
         // certainly will need to open the thing in a new tab to avoid losing application
         // context.
 
-        window.open(this._ssoUrl, '_blank');
+        this._popupWindow = window.open(this._ssoUrl, "_blank");
         this.setState({phase: SSOAuthEntry.PHASE_POSTAUTH});
         this.props.onPhaseChange(SSOAuthEntry.PHASE_POSTAUTH);
     };
@@ -661,13 +690,32 @@ export class SSOAuthEntry extends React.Component {
             );
         }
 
-        return <div className='mx_InteractiveAuthEntryComponents_sso_buttons'>
-            {cancelButton}
-            {continueButton}
-        </div>;
+        let errorSection;
+        if (this.props.errorText) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { this.props.errorText }
+                </div>
+            );
+        } else if (this.state.attemptFailed) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { _t("Something went wrong in confirming your identity. Cancel and try again.") }
+                </div>
+            );
+        }
+
+        return <React.Fragment>
+            { errorSection }
+            <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
+                {cancelButton}
+                {continueButton}
+            </div>
+        </React.Fragment>;
     }
 }
 
+@replaceableComponent("views.auth.FallbackAuthEntry")
 export class FallbackAuthEntry extends React.Component {
     static propTypes = {
         matrixClient: PropTypes.object.isRequired,
@@ -715,8 +763,7 @@ export class FallbackAuthEntry extends React.Component {
             this.props.loginType,
             this.props.authSessionId,
         );
-        this._popupWindow = window.open(url);
-        this._popupWindow.opener = null;
+        this._popupWindow = window.open(url, "_blank");
     };
 
     _onReceiveMessage = event => {

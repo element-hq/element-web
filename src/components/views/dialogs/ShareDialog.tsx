@@ -34,6 +34,7 @@ import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const socials = [
     {
@@ -73,6 +74,7 @@ interface IState {
     permalinkCreator: RoomPermalinkCreator;
 }
 
+@replaceableComponent("views.dialogs.ShareDialog")
 export default class ShareDialog extends React.PureComponent<IProps, IState> {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -146,7 +148,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
                 const events = this.props.target.getLiveTimeline().getEvents();
                 matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
             } else {
-                matrixToUrl = this.state.permalinkCreator.forRoom();
+                matrixToUrl = this.state.permalinkCreator.forShareableRoom();
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             matrixToUrl = makeUserPermalink(this.props.target.userId);

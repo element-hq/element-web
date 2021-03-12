@@ -21,6 +21,7 @@ import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -103,6 +104,7 @@ export class BannedUser extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
 export default class RolesRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

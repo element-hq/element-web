@@ -20,8 +20,10 @@ import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import * as sdk from "../../../index";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // TODO: Merge with ProfileSettings?
+@replaceableComponent("views.room_settings.RoomProfileSettings")
 export default class RoomProfileSettings extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -69,19 +71,24 @@ export default class RoomProfileSettings extends React.Component {
         // clear file upload field so same file can be selected
         this._avatarUpload.current.value = "";
         this.setState({
-            avatarUrl: undefined,
-            avatarFile: undefined,
+            avatarUrl: null,
+            avatarFile: null,
             enableProfileSave: true,
         });
     };
 
-    _clearProfile = async (e) => {
+    _cancelProfileChanges = async (e) => {
         e.stopPropagation();
         e.preventDefault();
 
         if (!this.state.enableProfileSave) return;
-        this._removeAvatar();
-        this.setState({enableProfileSave: false, displayName: this.state.originalDisplayName});
+        this.setState({
+            enableProfileSave: false,
+            displayName: this.state.originalDisplayName,
+            topic: this.state.originalTopic,
+            avatarUrl: this.state.originalAvatarUrl,
+            avatarFile: null,
+        });
     };
 
     _saveProfile = async (e) => {
@@ -95,10 +102,11 @@ export default class RoomProfileSettings extends React.Component {
         const newState = {};
 
         // TODO: What do we do about errors?
-
+        const displayName = this.state.displayName.trim();
         if (this.state.originalDisplayName !== this.state.displayName) {
-            await client.setRoomName(this.props.roomId, this.state.displayName);
-            newState.originalDisplayName = this.state.displayName;
+            await client.setRoomName(this.props.roomId, displayName);
+            newState.originalDisplayName = displayName;
+            newState.displayName = displayName;
         }
 
         if (this.state.avatarFile) {
@@ -108,7 +116,7 @@ export default class RoomProfileSettings extends React.Component {
             newState.originalAvatarUrl = newState.avatarUrl;
             newState.avatarFile = null;
         } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
-            await client.sendStateEvent(this.props.roomId, 'm.room.avatar', {url: undefined}, '');
+            await client.sendStateEvent(this.props.roomId, 'm.room.avatar', {}, '');
         }
 
         if (this.state.originalTopic !== this.state.topic) {
@@ -120,17 +128,21 @@ export default class RoomProfileSettings extends React.Component {
     };
 
     _onDisplayNameChanged = (e) => {
-        this.setState({
-            displayName: e.target.value,
-            enableProfileSave: true,
-        });
+        this.setState({displayName: e.target.value});
+        if (this.state.originalDisplayName === e.target.value) {
+            this.setState({enableProfileSave: false});
+        } else {
+            this.setState({enableProfileSave: true});
+        }
     };
 
     _onTopicChanged = (e) => {
-        this.setState({
-            topic: e.target.value,
-            enableProfileSave: true,
-        });
+        this.setState({topic: e.target.value});
+        if (this.state.originalTopic === e.target.value) {
+            this.setState({enableProfileSave: false});
+        } else {
+            this.setState({enableProfileSave: true});
+        }
     };
 
     _onAvatarChanged = (e) => {
@@ -158,6 +170,33 @@ export default class RoomProfileSettings extends React.Component {
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
+
+        let profileSettingsButtons;
+        if (
+            this.state.canSetName ||
+            this.state.canSetTopic ||
+            this.state.canSetAvatar
+        ) {
+            profileSettingsButtons = (
+                <div className="mx_ProfileSettings_buttons">
+                    <AccessibleButton
+                        onClick={this._cancelProfileChanges}
+                        kind="link"
+                        disabled={!this.state.enableProfileSave}
+                    >
+                        {_t("Cancel")}
+                    </AccessibleButton>
+                    <AccessibleButton
+                        onClick={this._saveProfile}
+                        kind="primary"
+                        disabled={!this.state.enableProfileSave}
+                    >
+                        {_t("Save")}
+                    </AccessibleButton>
+                </div>
+            );
+        }
+
         return (
             <form
                 onSubmit={this._saveProfile}
@@ -172,7 +211,7 @@ export default class RoomProfileSettings extends React.Component {
                         <Field label={_t("Room Name")}
                                type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} disabled={!this.state.canSetName} />
-                        <Field id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}
+                        <Field className="mx_ProfileSettings_controls_topic" id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}
                                type="text" value={this.state.topic} autoComplete="off"
                                onChange={this._onTopicChanged} element="textarea" />
                     </div>
@@ -183,22 +222,7 @@ export default class RoomProfileSettings extends React.Component {
                         uploadAvatar={this.state.canSetAvatar ? this._uploadAvatar : undefined}
                         removeAvatar={this.state.canSetAvatar ? this._removeAvatar : undefined} />
                 </div>
-                <div className="mx_ProfileSettings_buttons">
-                    <AccessibleButton
-                        onClick={this._clearProfile}
-                        kind="link"
-                        disabled={!this.state.enableProfileSave}
-                    >
-                        {_t("Cancel")}
-                    </AccessibleButton>
-                    <AccessibleButton
-                        onClick={this._saveProfile}
-                        kind="primary"
-                        disabled={!this.state.enableProfileSave}
-                    >
-                        {_t("Save")}
-                    </AccessibleButton>
-                </div>
+                { profileSettingsButtons }
             </form>
         );
     }

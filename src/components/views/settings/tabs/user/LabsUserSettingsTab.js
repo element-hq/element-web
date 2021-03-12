@@ -21,6 +21,7 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as sdk from "../../../../../index";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -40,6 +41,7 @@ export class LabsSettingToggle extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.tabs.user.LabsUserSettingsTab")
 export default class LabsUserSettingsTab extends React.Component {
     constructor() {
         super();
@@ -67,7 +69,6 @@ export default class LabsUserSettingsTab extends React.Component {
                     <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
-                    <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name={"advancedRoomListLogging"} level={SettingLevel.DEVICE} />
                 </div>
             </div>

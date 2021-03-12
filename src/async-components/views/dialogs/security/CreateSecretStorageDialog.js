@@ -235,7 +235,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const blob = new Blob([this._recoveryKey.encodedPrivateKey], {
             type: 'text/plain;charset=us-ascii',
         });
-        FileSaver.saveAs(blob, 'recovery-key.txt');
+        FileSaver.saveAs(blob, 'security-key.txt');
 
         this.setState({
             downloaded: true,
@@ -470,6 +470,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 value={CREATE_STORAGE_OPTION_KEY}
                 name="keyPassphrase"
                 checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
+                onChange={this._onKeyPassphraseChange}
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
@@ -488,6 +489,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 value={CREATE_STORAGE_OPTION_PASSPHRASE}
                 name="keyPassphrase"
                 checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
+                onChange={this._onKeyPassphraseChange}
                 outlined
             >
                 <div className="mx_CreateSecretStorageDialog_optionTitle">
@@ -509,7 +511,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "Safeguard against losing access to encrypted messages & data by " +
                 "backing up encryption keys on your server.",
             )}</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup" onChange={this._onKeyPassphraseChange}>
+            <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup">
                 {optionKey}
                 {optionPassphrase}
             </div>
@@ -591,10 +593,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onValidate={this._onPassPhraseValidate}
                     fieldRef={this._passphraseField}
                     autoFocus={true}
-                    label={_td("Enter a recovery passphrase")}
-                    labelEnterPassword={_td("Enter a recovery passphrase")}
-                    labelStrongPassword={_td("Great! This recovery passphrase looks strong enough.")}
-                    labelAllowedButUnsafe={_td("Great! This recovery passphrase looks strong enough.")}
+                    label={_td("Enter a Security Phrase")}
+                    labelEnterPassword={_td("Enter a Security Phrase")}
+                    labelStrongPassword={_td("Great! This Security Phrase looks strong enough.")}
+                    labelAllowedButUnsafe={_td("Great! This Security Phrase looks strong enough.")}
                 />
             </div>
 
