@@ -76,12 +76,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     _onViewSourceClick = () => {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', 'Edit history', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
-            content: this.props.mxEvent.event,
-            isEncrypted: this.props.mxEvent.isEncrypted(),
-            // FIXME: _clearEvent is private
-            decryptedContent: this.props.mxEvent._clearEvent,
+            mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
     };
 
