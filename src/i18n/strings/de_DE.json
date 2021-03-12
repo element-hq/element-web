@@ -2971,7 +2971,7 @@
     "You've reached the maximum number of simultaneous calls.": "Du hast die maximale Anzahl gleichzeitiger Anrufe erreicht.",
     "Too Many Calls": "Zu viele Anrufe",
     "Call failed because webcam or microphone could not be accessed. Check that:": "Der Anruf ist fehlgeschlagen, weil nicht auf die Webcam oder der das Mikrofon zugegriffen werden konnte. Prüfe nach, ob:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Der Anruf ist fehlgeschlagen, weil nicht auf das Mikrofon zugegriffen werden konnte. Prüfe noch einmal nach, ob das Mikrofon eingesteckt und richtig eingestellt ist.",
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Der Anruf hat fehlgeschlagen, weil nicht auf das Mikrofon zugegriffen werden konnte. Prüfe noch einmal nach, ob das Mikrofon angesteckt und richtig konfiguriert ist.",
     "You have no visible notifications.": "Du hast keine sichtbaren Benachrichtigungen.",
     "%(name)s on hold": "%(name)s wird gehalten",
     "You held the call <a>Switch</a>": "Du hältst den Anruf <a>Wechseln</a>",
@@ -3078,5 +3078,18 @@
     "Value in this room": "Wert in diesem Raum",
     "Settings Explorer": "Einstellungs-Explorer",
     "Values at explicit levels": "Werte für explizite Levels",
-    "Settable at room": "Für den Raum einstellbar"
+    "Settable at room": "Für den Raum einstellbar",
+    "Room name": "Raumname",
+    "%(count)s members|other": "%(count)s Mitglieder",
+    "Accept Invite": "Einladung akzeptieren",
+    "Save changes": "Änderungen speichern",
+    "Undo": "Rückgängig",
+    "Save Changes": "Änderungen Speichern",
+    "View dev tools": "Entwicklereinstellungen anzeigen",
+    "Apply": "Anwenden",
+    "Create a new room": "Neuen Raum erstellen",
+    "Suggested Rooms": "Vorgeschlagene Räume",
+    "Add existing room": "Bereits existierenden Raum hinzufügen",
+    "Send message": "Nachricht senden",
+    "New room": "Neuer Raum"
 }
