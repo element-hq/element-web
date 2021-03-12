@@ -604,12 +604,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 if (payload.screenAfterLogin) {
                     this.screenAfterLogin = payload.screenAfterLogin;
                 }
-                this.setStateForNewView({
-                    view: Views.LOGIN,
-                });
-                this.notifyNewScreen('login');
-                ThemeController.isLogin = true;
-                this.themeWatcher.recheck();
+                this.viewLogin();
                 break;
             case 'start_password_recovery':
                 this.setStateForNewView({
@@ -973,10 +968,23 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private viewWelcome() {
+        if (shouldUseLoginForWelcome(SdkConfig.get())) {
+            return this.viewLogin();
+        }
         this.setStateForNewView({
             view: Views.WELCOME,
         });
         this.notifyNewScreen('welcome');
+        ThemeController.isLogin = true;
+        this.themeWatcher.recheck();
+    }
+
+    private viewLogin(otherState?: any) {
+        this.setStateForNewView({
+            view: Views.LOGIN,
+            ...otherState,
+        });
+        this.notifyNewScreen('login');
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
     }
@@ -1296,17 +1304,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when the session is logged out
      */
     private onLoggedOut() {
-        this.notifyNewScreen('login');
-        this.setStateForNewView({
-            view: Views.LOGIN,
+        this.viewLogin({
             ready: false,
             collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = '';
         this.setPageSubtitle();
-        ThemeController.isLogin = true;
-        this.themeWatcher.recheck();
     }
 
     /**
@@ -2011,7 +2015,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     </div>
                 );
             }
-        } else if (this.state.view === Views.WELCOME && !shouldUseLoginForWelcome(SdkConfig.get())) {
+        } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
         } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
@@ -2043,8 +2047,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.LOGIN
-            || (this.state.view === Views.WELCOME && shouldUseLoginForWelcome(SdkConfig.get()))) {
+        } else if (this.state.view === Views.LOGIN) {
             const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
