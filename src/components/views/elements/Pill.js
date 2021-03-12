@@ -1,7 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2017 - 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +24,7 @@ import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import {mediaFromMxc} from "../../../customisations/Media";
 import Tooltip from './Tooltip';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
@@ -254,12 +253,12 @@ class Pill extends React.Component {
             case Pill.TYPE_GROUP_MENTION: {
                 if (this.state.group) {
                     const {avatarUrl, groupId, name} = this.state.group;
-                    const cli = MatrixClientPeg.get();
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
-                                             url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
+                        avatar = <BaseAvatar
+                            name={name || groupId} width={16} height={16} aria-hidden="true"
+                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
                 }

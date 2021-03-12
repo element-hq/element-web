@@ -21,6 +21,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { GroupRoomType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 @replaceableComponent("views.groups.GroupRoomTile")
 class GroupRoomTile extends React.Component {
@@ -42,10 +43,9 @@ class GroupRoomTile extends React.Component {
     render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const avatarUrl = this.context.mxcUrlToHttp(
-            this.props.groupRoom.avatarUrl,
-            36, 36, 'crop',
-        );
+        const avatarUrl = this.props.groupRoom.avatarUrl
+            ? mediaFromMxc(this.props.groupRoom.avatarUrl).getSquareThumbnailHttp(36)
+            : null;
 
         const av = (
             <BaseAvatar name={this.props.groupRoom.displayname}

@@ -36,6 +36,7 @@ import {SettingLevel} from "./settings/SettingLevel";
 import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
 import RoomViewStore from "./stores/RoomViewStore";
 import UserActivity from "./UserActivity";
+import {mediaFromMxc} from "./customisations/Media";
 
 /*
  * Dispatches:
@@ -150,7 +151,7 @@ export const Notifier = {
         // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
 
         return {
-            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            url: mediaFromMxc(content.url).srcHttp,
             name: content.name,
             type: content.type,
             size: content.size,
