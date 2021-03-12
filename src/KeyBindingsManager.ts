@@ -78,8 +78,6 @@ export enum RoomListAction {
 
 /** Actions for the current room view */
 export enum RoomAction {
-    /** Jump to room search (search for a room)*/
-    FocusRoomSearch = 'FocusRoomSearch', // TODO: move to NavigationAction?
     /** Scroll up in the timeline */
     ScrollUp = 'ScrollUp',
     /** Scroll down in the timeline */
@@ -100,6 +98,8 @@ export enum RoomAction {
 
 /** Actions for navigating do various menus / dialogs / screens */
 export enum NavigationAction {
+    /** Jump to room search (search for a room)*/
+    FocusRoomSearch = 'FocusRoomSearch',
     /** Toggle the room side panel */
     ToggleRoomSidePanel = 'ToggleRoomSidePanel',
     /** Toggle the user menu */

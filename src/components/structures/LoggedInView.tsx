@@ -449,12 +449,6 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
-            case RoomAction.FocusRoomSearch:
-                dis.dispatch({
-                    action: 'focus_room_filter',
-                });
-                handled = true;
-                break;
             case RoomAction.ScrollUp:
             case RoomAction.RoomScrollDown:
             case RoomAction.JumpToFirstMessage:
@@ -477,6 +471,12 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         const navAction = getKeyBindingsManager().getNavigationAction(ev);
         switch (navAction) {
+            case NavigationAction.FocusRoomSearch:
+                dis.dispatch({
+                    action: 'focus_room_filter',
+                });
+                handled = true;
+                break;
             case NavigationAction.ToggleUserMenu:
                 dis.fire(Action.ToggleUserMenu);
                 handled = true;

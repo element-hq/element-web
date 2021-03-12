@@ -251,14 +251,7 @@ const roomListBindings = (): KeyBinding<RoomListAction>[] => {
 }
 
 const roomBindings = (): KeyBinding<RoomAction>[] => {
-    const bindings = [
-        {
-            action: RoomAction.FocusRoomSearch,
-            keyCombo: {
-                key: Key.K,
-                ctrlOrCmd: true,
-            },
-        },
+    const bindings: KeyBinding<RoomAction>[] = [
         {
             action: RoomAction.ScrollUp,
             keyCombo: {
@@ -323,6 +316,13 @@ const roomBindings = (): KeyBinding<RoomAction>[] => {
 
 const navigationBindings = (): KeyBinding<NavigationAction>[] => {
     return [
+        {
+            action: NavigationAction.FocusRoomSearch,
+            keyCombo: {
+                key: Key.K,
+                ctrlOrCmd: true,
+            },
+        },
         {
             action: NavigationAction.ToggleRoomSidePanel,
             keyCombo: {
@@ -395,7 +395,7 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
                 shiftKey: true,
             },
         },
-    ]
+    ];
 }
 
 export const defaultBindingsProvider: IKeyBindingsProvider = {
