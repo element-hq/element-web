@@ -30,6 +30,9 @@ limitations under the License.
 
     .mx_CallView_voice {
         height: 360px;
+        @media only screen and (max-height: 768px) {
+            height: 300px;
+        }
     }
 }
 
