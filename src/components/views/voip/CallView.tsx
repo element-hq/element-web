@@ -538,7 +538,8 @@ export default class CallView extends React.Component<IProps, IState> {
                 {callControls}
             </div>;
         } else {
-            const avatarSize = this.props.pipMode ? 76 : 160;
+            const normalAvatarSize = window.innerHeight <= 768 ? 120 : 160;
+            const avatarSize = this.props.pipMode ? 76 : normalAvatarSize;
             const classes = classNames({
                 mx_CallView_voice: true,
                 mx_CallView_voice_hold: isOnHold,
