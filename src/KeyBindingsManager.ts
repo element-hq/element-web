@@ -29,7 +29,7 @@ export enum MessageComposerAction {
     EditPrevMessage = 'EditPrevMessage',
     /** Start editing the user's next sent message */
     EditNextMessage = 'EditNextMessage',
-    /** Cancel editing a message or cancel replying to a message*/
+    /** Cancel editing a message or cancel replying to a message */
     CancelEditing = 'CancelEditing',
 
     /** Set bold format the current selection */
@@ -44,7 +44,9 @@ export enum MessageComposerAction {
     EditRedo = 'EditRedo',
     /** Insert new line */
     NewLine = 'NewLine',
+    /** Move the cursor to the start of the message */
     MoveCursorToStart = 'MoveCursorToStart',
+    /** Move the cursor to the end of the message */
     MoveCursorToEnd = 'MoveCursorToEnd',
 }
 
@@ -60,7 +62,7 @@ export enum AutocompleteAction {
     NextSelection = 'NextSelection',
 }
 
-/** Actions for the left room list sidebar */
+/** Actions for the room list sidebar */
 export enum RoomListAction {
     /** Clear room list filter field */
     ClearSearch = 'ClearSearch',
@@ -86,35 +88,35 @@ export enum RoomAction {
     DismissReadMarker = 'DismissReadMarker',
     /** Jump to oldest unread message */
     JumpToOldestUnread = 'JumpToOldestUnread',
-    /* Upload a file */
+    /** Upload a file */
     UploadFile = 'UploadFile',
-    /* Focus search message in a room (must be enabled) */
+    /** Focus search message in a room (must be enabled) */
     FocusSearch = 'FocusSearch',
-    /* Jump to the first (downloaded) message in the room */
+    /** Jump to the first (downloaded) message in the room */
     JumpToFirstMessage = 'JumpToFirstMessage',
-    /* Jump to the latest message in the room */
+    /** Jump to the latest message in the room */
     JumpToLatestMessage = 'JumpToLatestMessage',
 }
 
-/** Actions for navigating do various menus / dialogs / screens */
+/** Actions for navigating do various menus, dialogs or screens */
 export enum NavigationAction {
-    /** Jump to room search (search for a room)*/
+    /** Jump to room search (search for a room) */
     FocusRoomSearch = 'FocusRoomSearch',
     /** Toggle the room side panel */
     ToggleRoomSidePanel = 'ToggleRoomSidePanel',
     /** Toggle the user menu */
     ToggleUserMenu = 'ToggleUserMenu',
-    /* Toggle the short cut help dialog */
+    /** Toggle the short cut help dialog */
     ToggleShortCutDialog = 'ToggleShortCutDialog',
-    /* Got to the Element home screen */
+    /** Got to the Element home screen */
     GoToHome = 'GoToHome',
-    /* Select prev room */
+    /** Select prev room */
     SelectPrevRoom = 'SelectPrevRoom',
-    /* Select next room */
+    /** Select next room */
     SelectNextRoom = 'SelectNextRoom',
-    /* Select prev room with unread messages*/
+    /** Select prev room with unread messages */
     SelectPrevUnreadRoom = 'SelectPrevUnreadRoom',
-    /* Select next room with unread messages*/
+    /** Select next room with unread messages */
     SelectNextUnreadRoom = 'SelectNextUnreadRoom',
 }
 
