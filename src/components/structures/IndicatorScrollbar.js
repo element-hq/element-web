@@ -17,7 +17,9 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.IndicatorScrollbar")
 export default class IndicatorScrollbar extends React.Component {
     static propTypes = {
         // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator

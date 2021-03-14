@@ -21,7 +21,9 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MessageEvent")
 export default class MessageEvent extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */

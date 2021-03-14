@@ -16,6 +16,10 @@
         backdrop-filter: blur($groupFilterPanel-background-blur-amount);
     }
 
+    .mx_SpacePanel {
+        backdrop-filter: blur($groupFilterPanel-background-blur-amount);
+    }
+
     .mx_LeftPanel .mx_LeftPanel_roomListContainer {
         backdrop-filter: blur($roomlist-background-blur-amount);
     }

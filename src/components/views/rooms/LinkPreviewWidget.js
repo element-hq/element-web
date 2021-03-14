@@ -25,7 +25,10 @@ import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
+@replaceableComponent("views.rooms.LinkPreviewWidget")
 export default class LinkPreviewWidget extends React.Component {
     static propTypes = {
         link: PropTypes.string.isRequired, // the URL being previewed
@@ -81,7 +84,7 @@ export default class LinkPreviewWidget extends React.Component {
 
         let src = p["og:image"];
         if (src && src.startsWith("mxc://")) {
-            src = MatrixClientPeg.get().mxcUrlToHttp(src);
+            src = mediaFromMxc(src).srcHttp;
         }
 
         const params = {
@@ -107,9 +110,11 @@ export default class LinkPreviewWidget extends React.Component {
         if (!SettingsStore.getValue("showImages")) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
-        const imageMaxWidth = 320; const imageMaxHeight = 240;
+        const imageMaxWidth = 100;
+        const imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
-            image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
+            // We deliberately don't want a square here, so use the source HTTP thumbnail function
+            image = mediaFromMxc(image).getThumbnailOfSourceHttp(imageMaxWidth, imageMaxHeight, 'scale');
         }
 
         let thumbHeight = imageMaxHeight;
@@ -134,10 +139,6 @@ export default class LinkPreviewWidget extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_LinkPreviewWidget">
-                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
-                    <img className="mx_filterFlipColor" alt="" role="presentation"
-                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
-                </AccessibleButton>
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a></div>
@@ -146,6 +147,10 @@ export default class LinkPreviewWidget extends React.Component {
                         { description }
                     </div>
                 </div>
+                <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>
+                    <img className="mx_filterFlipColor" alt="" role="presentation"
+                        src={require("../../../../res/img/cancel.svg")} width="18" height="18" />
+                </AccessibleButton>
             </div>
         );
     }

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 progress.mx_ProgressBar {
-    height: 4px;
+    height: 6px;
     width: 60px;
-    border-radius: 10px;
     overflow: hidden;
     appearance: none;
-    border: 0;
+    border: none;
 
-    @mixin ProgressBarBorderRadius "10px";
-    @mixin ProgressBarColour $accent-color;
+    @mixin ProgressBarBorderRadius "6px";
+    @mixin ProgressBarColour $progressbar-fg-color;
+    @mixin ProgressBarBgColour $progressbar-bg-color;
     ::-webkit-progress-value {
         transition: width 1s;
     }

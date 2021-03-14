@@ -1346,7 +1346,7 @@
     "This session is backing up your keys. ": "Denne økta har aktivert sikkerheitskopiering av nøklane dine ",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Lag sikkerheitskopiar av krypteringsnøklane saman med kontoinnstillingane, slik at du kan gjenopprette data viss det skulle skje at du å mister tilgang til øktene dine. Sikkerheitskopiane er beskytta med ein unik gjenopprettingsnøkkel (Recovery Key).",
     "Encryption": "Kryptografi",
-    "Use Ctrl + Enter to send a message": "Bruk tastekombinasjonen Ctrl + Enter for å sende meldingar",
+    "Use Ctrl + Enter to send a message": "Bruk Ctrl + Enter for å sende meldingar",
     "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Skriv  namnet på skrifttypen(fonten) og %(brand)s forsøka å henta den frå operativsystemet.",
     "Use a system font": "Bruk tilpassa skrifttype henta frå operativsystemet",
     "System font name": "Namn på skrifttype",
@@ -1371,5 +1371,10 @@
     "List options": "Sjå alternativ",
     "Explore Public Rooms": "Utforsk offentlege rom",
     "Explore all public rooms": "Utforsk alle offentlege rom",
-    "Explore public rooms": "Utforsk offentlege rom"
+    "Explore public rooms": "Utforsk offentlege rom",
+    "Use Ctrl + F to search": "Bruk Ctrl + F for søk",
+    "Identity Server": "Identitetstenar",
+    "Email Address": "E-postadresse",
+    "Go Back": "Gå attende",
+    "Notification settings": "Varslingsinnstillingar"
 }

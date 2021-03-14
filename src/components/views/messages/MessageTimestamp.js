@@ -18,7 +18,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {formatFullDate, formatTime} from '../../../DateUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MessageTimestamp")
 export default class MessageTimestamp extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,

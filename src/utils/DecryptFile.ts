@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2016, 2018, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +16,8 @@ limitations under the License.
 
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from 'browser-encrypt-attachment';
-// Grab the client so that we can turn mxc:// URLs into https:// URLS.
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import {mediaFromContent} from "../customisations/Media";
+import {IEncryptedFile} from "../customisations/models/IMediaEventContent";
 
 // WARNING: We have to be very careful about what mime-types we allow into blobs,
 // as for performance reasons these are now rendered via URL.createObjectURL()
@@ -54,48 +53,46 @@ import {MatrixClientPeg} from '../MatrixClientPeg';
 // For the record, mime-types which must NEVER enter this list below include:
 //   text/html, text/xhtml, image/svg, image/svg+xml, image/pdf, and similar.
 
-const ALLOWED_BLOB_MIMETYPES = {
-    'image/jpeg': true,
-    'image/gif': true,
-    'image/png': true,
+const ALLOWED_BLOB_MIMETYPES = [
+    'image/jpeg',
+    'image/gif',
+    'image/png',
 
-    'video/mp4': true,
-    'video/webm': true,
-    'video/ogg': true,
+    'video/mp4',
+    'video/webm',
+    'video/ogg',
 
-    'audio/mp4': true,
-    'audio/webm': true,
-    'audio/aac': true,
-    'audio/mpeg': true,
-    'audio/ogg': true,
-    'audio/wave': true,
-    'audio/wav': true,
-    'audio/x-wav': true,
-    'audio/x-pn-wav': true,
-    'audio/flac': true,
-    'audio/x-flac': true,
-};
+    'audio/mp4',
+    'audio/webm',
+    'audio/aac',
+    'audio/mpeg',
+    'audio/ogg',
+    'audio/wave',
+    'audio/wav',
+    'audio/x-wav',
+    'audio/x-pn-wav',
+    'audio/flac',
+    'audio/x-flac',
+];
 
 /**
  * Decrypt a file attached to a matrix event.
- * @param {Object} file The json taken from the matrix event.
+ * @param {IEncryptedFile} file The json taken from the matrix event.
  *   This passed to [link]{@link https://github.com/matrix-org/browser-encrypt-attachments}
  *   as the encryption info object, so will also have the those keys in addition to
  *   the keys below.
- * @param {string} file.url An mxc:// URL for the encrypted file.
- * @param {string} file.mimetype The MIME-type of the plaintext file.
- * @returns {Promise}
+ * @returns {Promise<Blob>} Resolves to a Blob of the file.
  */
-export function decryptFile(file) {
-    const url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
+export function decryptFile(file: IEncryptedFile): Promise<Blob> {
+    const media = mediaFromContent({file});
     // Download the encrypted file as an array buffer.
-    return Promise.resolve(fetch(url)).then(function(response) {
+    return media.downloadSource().then((response) => {
         return response.arrayBuffer();
-    }).then(function(responseData) {
+    }).then((responseData) => {
         // Decrypt the array buffer using the information taken from
         // the event content.
         return encrypt.decryptAttachment(responseData, file);
-    }).then(function(dataArray) {
+    }).then((dataArray) => {
         // Turn the array into a Blob and give it the correct MIME-type.
 
         // IMPORTANT: we must not allow scriptable mime-types into Blobs otherwise
@@ -103,11 +100,10 @@ export function decryptFile(file) {
         // browser (e.g. by copying the URI into a new tab or window.)
         // See warning at top of file.
         let mimetype = file.mimetype ? file.mimetype.split(";")[0].trim() : '';
-        if (!ALLOWED_BLOB_MIMETYPES[mimetype]) {
+        if (!ALLOWED_BLOB_MIMETYPES.includes(mimetype)) {
             mimetype = 'application/octet-stream';
         }
 
-        const blob = new Blob([dataArray], {type: mimetype});
-        return blob;
+        return new Blob([dataArray], {type: mimetype});
     });
 }

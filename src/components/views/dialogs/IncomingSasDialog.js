@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 const PHASE_START = 0;
 const PHASE_SHOW_SAS = 1;
@@ -26,6 +28,7 @@ const PHASE_WAIT_FOR_PARTNER_TO_CONFIRM = 2;
 const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
+@replaceableComponent("views.dialogs.IncomingSasDialog")
 export default class IncomingSasDialog extends React.Component {
     static propTypes = {
         verifier: PropTypes.object.isRequired,
@@ -121,22 +124,21 @@ export default class IncomingSasDialog extends React.Component {
         const Spinner = sdk.getComponent("views.elements.Spinner");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        const isSelf = this.props.verifier.userId == MatrixClientPeg.get().getUserId();
+        const isSelf = this.props.verifier.userId === MatrixClientPeg.get().getUserId();
 
         let profile;
-        if (this.state.opponentProfile) {
+        const oppProfile = this.state.opponentProfile;
+        if (oppProfile) {
+            const url = oppProfile.avatar_url
+                ? mediaFromMxc(oppProfile.avatar_url).getSquareThumbnailHttp(Math.floor(48 * window.devicePixelRatio))
+                : null;
             profile = <div className="mx_IncomingSasDialog_opponentProfile">
-                <BaseAvatar name={this.state.opponentProfile.displayname}
+                <BaseAvatar name={oppProfile.displayname}
                     idName={this.props.verifier.userId}
-                    url={MatrixClientPeg.get().mxcUrlToHttp(
-                        this.state.opponentProfile.avatar_url,
-                        Math.floor(48 * window.devicePixelRatio),
-                        Math.floor(48 * window.devicePixelRatio),
-                        'crop',
-                    )}
+                    url={url}
                     width={48} height={48} resizeMethod='crop'
                 />
-                <h2>{this.state.opponentProfile.displayname}</h2>
+                <h2>{oppProfile.displayname}</h2>
             </div>;
         } else if (this.state.opponentProfileError) {
             profile = <div>

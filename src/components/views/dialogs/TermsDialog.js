@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import Matrix from 'matrix-js-sdk';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 class TermsCheckbox extends React.PureComponent {
     static propTypes = {
@@ -41,6 +42,7 @@ class TermsCheckbox extends React.PureComponent {
     }
 }
 
+@replaceableComponent("views.dialogs.TermsDialog")
 export default class TermsDialog extends React.PureComponent {
     static propTypes = {
         /**

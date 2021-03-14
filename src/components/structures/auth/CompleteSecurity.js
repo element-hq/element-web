@@ -20,13 +20,16 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import {
     SetupEncryptionStore,
+    PHASE_LOADING,
     PHASE_INTRO,
     PHASE_BUSY,
     PHASE_DONE,
     PHASE_CONFIRM_SKIP,
 } from '../../../stores/SetupEncryptionStore';
 import SetupEncryptionBody from "./SetupEncryptionBody";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("structures.auth.CompleteSecurity")
 export default class CompleteSecurity extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -58,7 +61,9 @@ export default class CompleteSecurity extends React.Component {
         let icon;
         let title;
 
-        if (phase === PHASE_INTRO) {
+        if (phase === PHASE_LOADING) {
+            return null;
+        } else if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("Verify this login");
         } else if (phase === PHASE_DONE) {

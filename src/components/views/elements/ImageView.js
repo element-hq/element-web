@@ -29,10 +29,12 @@ import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
 import {formatFullDate} from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MIN_ZOOM = 100;
 const MAX_ZOOM = 300;
 
+@replaceableComponent("views.elements.ImageView")
 export default class ImageView extends React.Component {
     static propTypes = {
         src: PropTypes.string.isRequired, // the source of the image being displayed
