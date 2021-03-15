@@ -93,7 +93,7 @@ export default class ImageView extends React.Component {
     onWheel = (ev) => {
         ev.stopPropagation();
         ev.preventDefault();
-        const newZoom =this.state.zoom - ev.deltaY;
+        const newZoom = this.state.zoom - ev.deltaY;
 
         if (newZoom <= MIN_ZOOM) {
             this.setState({
