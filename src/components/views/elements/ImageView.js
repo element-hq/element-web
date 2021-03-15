@@ -33,7 +33,10 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MIN_ZOOM = 100;
 const MAX_ZOOM = 300;
+// This is used for the buttons
 const ZOOM_STEP = 10;
+// This is used for mouse wheel events
+const ZOOM_COEFFICIENT = 10;
 
 @replaceableComponent("views.elements.ImageView")
 export default class ImageView extends React.Component {
@@ -93,7 +96,7 @@ export default class ImageView extends React.Component {
     onWheel = (ev) => {
         ev.stopPropagation();
         ev.preventDefault();
-        const newZoom = this.state.zoom - ev.deltaY;
+        const newZoom = this.state.zoom - (ev.deltaY * ZOOM_COEFFICIENT);
 
         if (newZoom <= MIN_ZOOM) {
             this.setState({
