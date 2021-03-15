@@ -2,6 +2,7 @@ Changes in [3.16.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.16.0-rc.2...v3.16.0)
 
+ * Upgrade to JS SDK 9.9.0
  * [Release] Change read receipt drift to be non-fractional
    [\#5746](https://github.com/matrix-org/matrix-react-sdk/pull/5746)
  * [Release] Properly gate SpaceRoomView behind labs
