@@ -1,13 +1,13 @@
 {
-  "name": "Riot",
+  "name": "Element",
     "description": "A glossy Matrix collaboration client for the web.",
     "repository": {
-      "url": "https://github.com/vector-im/riot-web",
+      "url": "https://github.com/vector-im/element-web",
       "license": "Apache License 2.0"
     },
     "bugs": {
-      "list": "https://github.com/vector-im/riot-web/issues",
-      "report": "https://github.com/vector-im/riot-web/issues/new/choose"
+      "list": "https://github.com/vector-im/element-web/issues",
+      "report": "https://github.com/vector-im/element-web/issues/new/choose"
     },
     "keywords": [
       "chat",

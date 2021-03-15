@@ -1,0 +1,14 @@
+{
+    "The message from the parser is: %(message)s": "Lo messatge de l’analisaire es : %(message)s",
+    "Invalid JSON": "Invalid JSON",
+    "Unexpected error preparing the app. See console for details.": "Error inesperada en preparant l’aplicacion. Vejatz la consòla pels detalhs.",
+    "Go to your browser to complete Sign In": "Anatz al navegador per acabar la connexion",
+    "Unknown device": "Periferic desconegut",
+    "powered by Matrix": "propulsat per Matrix",
+    "Dismiss": "Refusar",
+    "Welcome to Element": "La benvenguda a Element",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Messatjariá chifrada, descentralizada e collaborativa propulsada per [matrix]",
+    "Sign In": "Se connectar",
+    "Create Account": "Crear un compte",
+    "Explore rooms": "Percórrer las salas"
+}

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to perform a release of riot-web.
+# Script to perform a release of element-web.
 #
 # Requires github-changelog-generator; to install, do
 #   pip install git+https://github.com/matrix-org/github-changelog-generator.git
@@ -38,12 +38,12 @@ do
             echo "Upgrading $i to $latestver..."
             yarn add -E $i@$latestver
             git add -u
-            # The `-e` flag opens the editor and gives you a chance to check
-            # the upgrade for correctness.
-            git commit -m "Upgrade $i to $latestver" -e
+            git commit -m "Upgrade $i to $latestver"
         fi
     fi
 done
+
+./node_modules/matrix-js-sdk/release.sh -n -z "$orig_args"
 
 release="${1#v}"
 tag="v${release}"
@@ -53,16 +53,6 @@ prerelease=0
 # but semver doesn't support postreleases so anything
 # with a hyphen is a prerelease.
 echo $release | grep -q '-' && prerelease=1
-
-# bump Electron's package.json first
-echo "electron yarn version"
-cd electron_app
-yarn version --no-git-tag-version --new-version "$release"
-git commit package.json -m "$tag"
-
-cd ..
-
-./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
 
 if [ $prerelease -eq 0 ]
 then

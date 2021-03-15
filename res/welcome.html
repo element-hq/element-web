@@ -96,17 +96,8 @@ h1::after {
     color: #2e2f32 !important;
 }
 
-.mx_ButtonHeadline {
-    margin-bottom: 14px;
-}
-
 .mx_ButtonLabel {
     margin-left: 20px;
-}
-
-.mx_ButtonWrapperText {
-    font-size: 13px;
-    margin-bottom: 10px;
 }
 
 .mx_Header_title {
@@ -127,7 +118,7 @@ h1::after {
 }
 
 .mx_ButtonCreateAccount {
-    background-color: #03B381;
+    background-color: #0DBD8B;
     color: white !important;
 }
 
@@ -158,13 +149,30 @@ we don't have an account and should hide them. No account == no guest account ei
     display: none;
 }
 
+.mx_ButtonRow.mx_WelcomePage_guestFunctions {
+    margin-top: 20px;
+}
+.mx_ButtonRow.mx_WelcomePage_guestFunctions > div {
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 480px) {
+    .mx_ButtonRow {
+        flex-direction: column;
+    }
+
+    .mx_ButtonRow > * {
+        margin: 0 0 10px 0;
+    }
+}
+
 </style>
 
 <div class="mx_Parent">
-    <a href="https://riot.im" target="_blank" rel="noopener">
+    <a href="https://element.io" target="_blank" rel="noopener">
         <img src="welcome/images/logo.svg" alt="" class="mx_Logo"/>
     </a>
-    <h1 class="mx_Header_title">_t("Welcome to Riot.im")</h1>
+    <h1 class="mx_Header_title">_t("Welcome to Element")</h1>
     <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
     <div class="mx_ButtonGroup">
         <div class="mx_ButtonRow">
@@ -177,20 +185,13 @@ we don't have an account and should hide them. No account == no guest account ei
         </div>
         <!-- The comments below are meant to be used by Ansible as a quick way
              to strip out the marked content when desired.
-             See https://github.com/vector-im/riot-web/issues/8622.
+             See https://github.com/vector-im/element-web/issues/8622.
              TODO: Strip out these comments and rely on the guest flag -->
         <!-- BEGIN Ansible: Remove these lines when guest access is disabled -->
         <div class="mx_ButtonRow mx_WelcomePage_guestFunctions">
             <div>
-                <div class="mx_ButtonWrapperText">_t("Need help?")</div>
-                <a href="#/user/@riot-bot:matrix.org?action=chat" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconHelp">
-                    <div class="mx_ButtonLabel">_t("Chat with Riot Bot")</div>
-                </a>
-            </div>
-            <div>
-                <div class="mx_ButtonWrapperText">_t("Explore rooms")</div>
                 <a href="#/directory" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconRoomDirectory">
-                    <div class="mx_ButtonLabel">_t("Room Directory")</div>
+                    <div class="mx_ButtonLabel">_t("Explore rooms")</div>
                 </a>
             </div>
         </div>

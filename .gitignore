@@ -4,9 +4,6 @@
 /key.pem
 /lib
 /node_modules
-/electron_app/node_modules
-/electron_app/dist
-/electron_app/pub
 /packages/
 /webapp
 /.npmrc
@@ -21,3 +18,4 @@ electron/pub
 /config.local*.json
 /src/component-index.js
 /.tmp
+/webpack-stats.json
