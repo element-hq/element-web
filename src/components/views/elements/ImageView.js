@@ -31,7 +31,7 @@ import {formatFullDate} from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-const MIN_ZOOM = 100;
+const MIN_ZOOM = 95;
 const MAX_ZOOM = 300;
 // This is used for the buttons
 const ZOOM_STEP = 10;
@@ -61,7 +61,7 @@ export default class ImageView extends React.Component {
         super(props);
         this.state = {
             rotation: 0,
-            zoom: 100,
+            zoom: 95,
             translationX: 0,
             translationY: 0,
             moving: false,
