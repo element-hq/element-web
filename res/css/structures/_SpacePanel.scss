@@ -35,6 +35,7 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpacePanel_spaceTreeWrapper {
         flex: 1;
+        overflow-y: scroll;
     }
 
     .mx_SpacePanel_toggleCollapse {
@@ -130,10 +131,6 @@ $activeBorderColor: $secondary-fg-color;
                 padding-right: 16px;
                 overflow: hidden;
             }
-        }
-
-        &.mx_SpaceButton_narrow {
-            margin-right: 10px;
         }
 
         .mx_SpaceButton_name {
