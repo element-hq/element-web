@@ -1,3 +1,125 @@
+Changes in [3.16.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.16.0) (2021-03-15)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.16.0-rc.2...v3.16.0)
+
+ * [Release] Change read receipt drift to be non-fractional
+   [\#5746](https://github.com/matrix-org/matrix-react-sdk/pull/5746)
+ * [Release] Properly gate SpaceRoomView behind labs
+   [\#5750](https://github.com/matrix-org/matrix-react-sdk/pull/5750)
+
+Changes in [3.16.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.16.0-rc.2) (2021-03-10)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.16.0-rc.1...v3.16.0-rc.2)
+
+ * Fixed incorrect build output in rc.1
+
+Changes in [3.16.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.16.0-rc.1) (2021-03-10)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.15.0...v3.16.0-rc.1)
+
+ * Upgrade to JS SDK 9.9.0-rc.1
+ * Translations update from Weblate
+   [\#5743](https://github.com/matrix-org/matrix-react-sdk/pull/5743)
+ * Document behaviour of showReadReceipts=false for sent receipts
+   [\#5739](https://github.com/matrix-org/matrix-react-sdk/pull/5739)
+ * Tweak sent marker code style
+   [\#5741](https://github.com/matrix-org/matrix-react-sdk/pull/5741)
+ * Fix sent markers disappearing for edits/reactions
+   [\#5737](https://github.com/matrix-org/matrix-react-sdk/pull/5737)
+ * Ignore to-device decryption in the room list store
+   [\#5740](https://github.com/matrix-org/matrix-react-sdk/pull/5740)
+ * Spaces suggested rooms support
+   [\#5736](https://github.com/matrix-org/matrix-react-sdk/pull/5736)
+ * Add tooltips to sent/sending receipts
+   [\#5738](https://github.com/matrix-org/matrix-react-sdk/pull/5738)
+ * Remove a bunch of useless 'use strict' definitions
+   [\#5735](https://github.com/matrix-org/matrix-react-sdk/pull/5735)
+ * [SK-1] Fix types for replaceableComponent
+   [\#5732](https://github.com/matrix-org/matrix-react-sdk/pull/5732)
+ * [SK-2] Make debugging skinning problems easier
+   [\#5733](https://github.com/matrix-org/matrix-react-sdk/pull/5733)
+ * Support sending invite reasons with /invite command
+   [\#5695](https://github.com/matrix-org/matrix-react-sdk/pull/5695)
+ * Fix clicking on the avatar for opening member info requires pixel-perfect
+   accuracy
+   [\#5717](https://github.com/matrix-org/matrix-react-sdk/pull/5717)
+ * Display decrypted and encrypted event source on the same dialog
+   [\#5713](https://github.com/matrix-org/matrix-react-sdk/pull/5713)
+ * Fix units of TURN server expiry time
+   [\#5730](https://github.com/matrix-org/matrix-react-sdk/pull/5730)
+ * Display room name in pills instead of address
+   [\#5624](https://github.com/matrix-org/matrix-react-sdk/pull/5624)
+ * Refresh UI for file uploads
+   [\#5723](https://github.com/matrix-org/matrix-react-sdk/pull/5723)
+ * UI refresh for uploaded files
+   [\#5719](https://github.com/matrix-org/matrix-react-sdk/pull/5719)
+ * Improve message sending states to match new designs
+   [\#5699](https://github.com/matrix-org/matrix-react-sdk/pull/5699)
+ * Add clipboard write permission for widgets
+   [\#5725](https://github.com/matrix-org/matrix-react-sdk/pull/5725)
+ * Fix widget resizing
+   [\#5722](https://github.com/matrix-org/matrix-react-sdk/pull/5722)
+ * Option for audio streaming
+   [\#5707](https://github.com/matrix-org/matrix-react-sdk/pull/5707)
+ * Show a specific error for hs_disabled
+   [\#5576](https://github.com/matrix-org/matrix-react-sdk/pull/5576)
+ * Add Edge to the targets list
+   [\#5721](https://github.com/matrix-org/matrix-react-sdk/pull/5721)
+ * File drop UI fixes and improvements
+   [\#5505](https://github.com/matrix-org/matrix-react-sdk/pull/5505)
+ * Fix Bottom border of state counters is white on the dark theme
+   [\#5715](https://github.com/matrix-org/matrix-react-sdk/pull/5715)
+ * Trim spurious whitespace of nicknames
+   [\#5332](https://github.com/matrix-org/matrix-react-sdk/pull/5332)
+ * Ensure HostSignupDialog border colour matches light theme
+   [\#5716](https://github.com/matrix-org/matrix-react-sdk/pull/5716)
+ * Don't place another call if there's already one ongoing
+   [\#5712](https://github.com/matrix-org/matrix-react-sdk/pull/5712)
+ * Space room hierarchies
+   [\#5706](https://github.com/matrix-org/matrix-react-sdk/pull/5706)
+ * Iterate Space view and right panel
+   [\#5705](https://github.com/matrix-org/matrix-react-sdk/pull/5705)
+ * Add a scroll to bottom on message sent setting
+   [\#5692](https://github.com/matrix-org/matrix-react-sdk/pull/5692)
+ * Add .tmp files to gitignore
+   [\#5708](https://github.com/matrix-org/matrix-react-sdk/pull/5708)
+ * Initial Space Room View and Creation UX
+   [\#5704](https://github.com/matrix-org/matrix-react-sdk/pull/5704)
+ * Add multi language spell check
+   [\#5452](https://github.com/matrix-org/matrix-react-sdk/pull/5452)
+ * Fix tetris effect (holes) in read receipts
+   [\#5697](https://github.com/matrix-org/matrix-react-sdk/pull/5697)
+ * Fixed edit for markdown images
+   [\#5703](https://github.com/matrix-org/matrix-react-sdk/pull/5703)
+ * Iterate Space Panel
+   [\#5702](https://github.com/matrix-org/matrix-react-sdk/pull/5702)
+ * Fix read receipts for compact layout
+   [\#5700](https://github.com/matrix-org/matrix-react-sdk/pull/5700)
+ * Space Store and Space Panel for Room List filtering
+   [\#5689](https://github.com/matrix-org/matrix-react-sdk/pull/5689)
+ * Log when turn creds expire
+   [\#5691](https://github.com/matrix-org/matrix-react-sdk/pull/5691)
+ * Null check for maxHeight in call view
+   [\#5690](https://github.com/matrix-org/matrix-react-sdk/pull/5690)
+ * Autocomplete invited users
+   [\#5687](https://github.com/matrix-org/matrix-react-sdk/pull/5687)
+ * Add send message button
+   [\#5535](https://github.com/matrix-org/matrix-react-sdk/pull/5535)
+ * Move call buttons to the room header
+   [\#5693](https://github.com/matrix-org/matrix-react-sdk/pull/5693)
+ * Use the default SSSS key if the default is set
+   [\#5638](https://github.com/matrix-org/matrix-react-sdk/pull/5638)
+ * Initial Spaces feature flag
+   [\#5668](https://github.com/matrix-org/matrix-react-sdk/pull/5668)
+ * Clean up code edge cases and add helpers
+   [\#5667](https://github.com/matrix-org/matrix-react-sdk/pull/5667)
+ * Clean up widgets when leaving the room
+   [\#5684](https://github.com/matrix-org/matrix-react-sdk/pull/5684)
+ * Fix read receipts?
+   [\#5567](https://github.com/matrix-org/matrix-react-sdk/pull/5567)
+ * Fix MAU usage alerts
+   [\#5678](https://github.com/matrix-org/matrix-react-sdk/pull/5678)
+
 Changes in [3.15.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.15.0) (2021-03-01)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.15.0-rc.1...v3.15.0)
