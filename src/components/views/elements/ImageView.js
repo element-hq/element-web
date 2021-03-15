@@ -33,6 +33,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MIN_ZOOM = 100;
 const MAX_ZOOM = 300;
+const ZOOM_STEP = 10;
 
 @replaceableComponent("views.elements.ImageView")
 export default class ImageView extends React.Component {
@@ -131,7 +132,7 @@ export default class ImageView extends React.Component {
         }
 
         this.setState({
-            zoom: this.state.zoom + 10,
+            zoom: this.state.zoom + ZOOM_STEP,
         });
     };
 
@@ -145,7 +146,7 @@ export default class ImageView extends React.Component {
             return;
         }
         this.setState({
-            zoom: this.state.zoom - 10,
+            zoom: this.state.zoom - ZOOM_STEP,
         });
     }
 
