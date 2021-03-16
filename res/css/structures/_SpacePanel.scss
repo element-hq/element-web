@@ -177,6 +177,25 @@ $activeBorderColor: $secondary-fg-color;
             padding: $activeBorderTransparentGap;
         }
 
+        &.mx_SpaceButton_new .mx_SpaceButton_icon {
+            background-color: $accent-color;
+            transition: all .1s ease-in-out; // TODO transition
+
+            &::before {
+                background-color: #ffffff;
+                mask-image: url('$(res)/img/element-icons/plus.svg');
+                transition: all .2s ease-in-out; // TODO transition
+            }
+        }
+
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon {
+            background-color: $icon-button-color;
+
+            &::before {
+                transform: rotate(45deg);
+            }
+        }
+
         .mx_BaseAvatar {
             /* moving the border-radius to this element from _image
             element so we can add a border to it without the initials being displaced */
@@ -191,6 +210,30 @@ $activeBorderColor: $secondary-fg-color;
 
             .mx_BaseAvatar_image {
                 border-radius: 8px;
+            }
+        }
+
+        .mx_SpaceButton_menuButton {
+            width: 20px;
+            min-width: 20px; // yay flex
+            height: 20px;
+            margin-top: auto;
+            margin-bottom: auto;
+            position: relative;
+            display: none;
+
+            &::before {
+                top: 2px;
+                left: 2px;
+                content: '';
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-image: url('$(res)/img/element-icons/context-menu.svg');
+                background: $primary-fg-color;
             }
         }
     }
@@ -235,6 +278,10 @@ $activeBorderColor: $secondary-fg-color;
                 height: 0;
                 display: none;
             }
+
+            .mx_SpaceButton_menuButton {
+                display: block;
+            }
         }
     }
 
@@ -252,4 +299,51 @@ $activeBorderColor: $secondary-fg-color;
             padding-left: 0;
         }
     }
+}
+
+.mx_SpacePanel_contextMenu {
+    .mx_SpacePanel_contextMenu_header {
+        margin: 12px 16px 12px;
+        font-weight: $font-semi-bold;
+        font-size: $font-15px;
+        line-height: $font-18px;
+    }
+
+    .mx_IconizedContextMenu_optionList .mx_AccessibleButton.mx_SpacePanel_contextMenu_inviteButton {
+        color: $accent-color;
+
+        .mx_SpacePanel_iconInvite::before {
+            background-color: $accent-color;
+            mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        }
+    }
+
+    .mx_SpacePanel_iconSettings::before {
+        mask-image: url('$(res)/img/element-icons/settings.svg');
+    }
+
+    .mx_SpacePanel_iconLeave::before {
+        mask-image: url('$(res)/img/element-icons/leave.svg');
+    }
+
+    .mx_SpacePanel_iconHome::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
+    }
+
+    .mx_SpacePanel_iconMembers::before {
+        mask-image: url('$(res)/img/element-icons/room/members.svg');
+    }
+
+    .mx_SpacePanel_iconPlus::before {
+        mask-image: url('$(res)/img/element-icons/plus.svg');
+    }
+
+    .mx_SpacePanel_iconExplore::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+    }
+}
+
+
+.mx_SpacePanel_sharePublicSpace {
+    margin: 0;
 }

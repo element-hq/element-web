@@ -1,3 +1,4 @@
+import '../../../skinned-sdk'; // Must be first for skinning to work
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 import { EventEmitter } from 'events';

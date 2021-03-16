@@ -17,7 +17,9 @@ limitations under the License.
 import React from "react";
 import {_t} from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.InlineSpinner")
 export default class InlineSpinner extends React.Component {
     render() {
         const w = this.props.w || 16;

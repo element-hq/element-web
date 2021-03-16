@@ -23,7 +23,9 @@ import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.PreferencesUserSettingsTab")
 export default class PreferencesUserSettingsTab extends React.Component {
     static ROOM_LIST_SETTINGS = [
         'breadcrumbs',
@@ -48,6 +50,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showRedactions',
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
+        'scrollToBottomOnMessageSent',
         'showCodeLineNumbers',
         'showJoinLeaves',
         'showAvatarChanges',

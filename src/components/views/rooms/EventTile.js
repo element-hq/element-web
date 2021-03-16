@@ -22,7 +22,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from "classnames";
 import {EventType} from "matrix-js-sdk/src/@types/event";
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
@@ -39,6 +39,8 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
 import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
 import {objectHasDiff} from "../../../utils/objects";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Tooltip from "../elements/Tooltip";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -146,6 +148,7 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
+@replaceableComponent("views.rooms.EventTile")
 export default class EventTile extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -170,6 +173,9 @@ export default class EventTile extends React.Component {
         // true if the event is the last event in a section (adds a css class for
         // targeting)
         lastInSection: PropTypes.bool,
+
+        // True if the event is the last successful (sent) event.
+        isLastSuccessful: PropTypes.bool,
 
         /* true if this is search context (which has the effect of greying out
          * the text
@@ -264,6 +270,81 @@ export default class EventTile extends React.Component {
 
         this._tile = createRef();
         this._replyThread = createRef();
+
+        // Throughout the component we manage a read receipt listener to see if our tile still
+        // qualifies for a "sent" or "sending" state (based on their relevant conditions). We
+        // don't want to over-subscribe to the read receipt events being fired, so we use a flag
+        // to determine if we've already subscribed and use a combination of other flags to find
+        // out if we should even be subscribed at all.
+        this._isListeningForReceipts = false;
+    }
+
+    /**
+     * When true, the tile qualifies for some sort of special read receipt. This could be a 'sending'
+     * or 'sent' receipt, for example.
+     * @returns {boolean}
+     * @private
+     */
+    get _isEligibleForSpecialReceipt() {
+        // First, if there are other read receipts then just short-circuit this.
+        if (this.props.readReceipts && this.props.readReceipts.length > 0) return false;
+        if (!this.props.mxEvent) return false;
+
+        // Sanity check (should never happen, but we shouldn't explode if it does)
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        if (!room) return false;
+
+        // Quickly check to see if the event was sent by us. If it wasn't, it won't qualify for
+        // special read receipts.
+        const myUserId = MatrixClientPeg.get().getUserId();
+        if (this.props.mxEvent.getSender() !== myUserId) return false;
+
+        // Finally, determine if the type is relevant to the user. This notably excludes state
+        // events and pretty much anything that can't be sent by the composer as a message. For
+        // those we rely on local echo giving the impression of things changing, and expect them
+        // to be quick.
+        const simpleSendableEvents = [
+            EventType.Sticker,
+            EventType.RoomMessage,
+            EventType.RoomMessageEncrypted,
+        ];
+        if (!simpleSendableEvents.includes(this.props.mxEvent.getType())) return false;
+
+        // Default case
+        return true;
+    }
+
+    get _shouldShowSentReceipt() {
+        // If we're not even eligible, don't show the receipt.
+        if (!this._isEligibleForSpecialReceipt) return false;
+
+        // We only show the 'sent' receipt on the last successful event.
+        if (!this.props.lastSuccessful) return false;
+
+        // Check to make sure the sending state is appropriate. A null/undefined send status means
+        // that the message is 'sent', so we're just double checking that it's explicitly not sent.
+        if (this.props.eventSendStatus && this.props.eventSendStatus !== 'sent') return false;
+
+        // If anyone has read the event besides us, we don't want to show a sent receipt.
+        const receipts = this.props.readReceipts || [];
+        const myUserId = MatrixClientPeg.get().getUserId();
+        if (receipts.some(r => r.userId !== myUserId)) return false;
+
+        // Finally, we should show a receipt.
+        return true;
+    }
+
+    get _shouldShowSendingReceipt() {
+        // If we're not even eligible, don't show the receipt.
+        if (!this._isEligibleForSpecialReceipt) return false;
+
+        // Check the event send status to see if we are pending. Null/undefined status means the
+        // message was sent, so check for that and 'sent' explicitly.
+        if (!this.props.eventSendStatus || this.props.eventSendStatus === 'sent') return false;
+
+        // Default to showing - there's no other event properties/behaviours we care about at
+        // this point.
+        return true;
     }
 
     // TODO: [REACT-WARNING] Move into constructor
@@ -280,6 +361,11 @@ export default class EventTile extends React.Component {
         this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
+        }
+
+        if (this._shouldShowSentReceipt || this._shouldShowSendingReceipt) {
+            client.on("Room.receipt", this._onRoomReceipt);
+            this._isListeningForReceipts = true;
         }
     }
 
@@ -305,11 +391,41 @@ export default class EventTile extends React.Component {
         const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         client.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+        client.removeListener("Room.receipt", this._onRoomReceipt);
+        this._isListeningForReceipts = false;
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
         }
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // If we're not listening for receipts and expect to be, register a listener.
+        if (!this._isListeningForReceipts && (this._shouldShowSentReceipt || this._shouldShowSendingReceipt)) {
+            this.context.on("Room.receipt", this._onRoomReceipt);
+            this._isListeningForReceipts = true;
+        }
+    }
+
+    _onRoomReceipt = (ev, room) => {
+        // ignore events for other rooms
+        const tileRoom = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        if (room !== tileRoom) return;
+
+        if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt && !this._isListeningForReceipts) {
+            return;
+        }
+
+        // We force update because we have no state or prop changes to queue up, instead relying on
+        // the getters we use here to determine what needs rendering.
+        this.forceUpdate(() => {
+            // Per elsewhere in this file, we can remove the listener once we will have no further purpose for it.
+            if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt) {
+                this.context.removeListener("Room.receipt", this._onRoomReceipt);
+                this._isListeningForReceipts = false;
+            }
+        });
+    };
 
     /** called when the event is decrypted after we show it.
      */
@@ -454,6 +570,10 @@ export default class EventTile extends React.Component {
     };
 
     getReadAvatars() {
+        if (this._shouldShowSentReceipt || this._shouldShowSendingReceipt) {
+            return <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+        }
+
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
             return (<span className="mx_EventTile_readAvatars" />);
@@ -692,7 +812,7 @@ export default class EventTile extends React.Component {
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
-            mx_EventTile_encrypting: this.props.eventSendStatus === 'encrypting',
+            // Note: we keep the `sending` state class for tests, not for our styles
             mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',
             mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
@@ -768,15 +888,10 @@ export default class EventTile extends React.Component {
         }
 
         if (needsSenderProfile) {
-            let text = null;
             if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
-                if (msgtype === 'm.image') text = _td('%(senderName)s sent an image');
-                else if (msgtype === 'm.video') text = _td('%(senderName)s sent a video');
-                else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                                         mxEvent={this.props.mxEvent}
-                                        enableFlair={this.props.enableFlair && !text}
-                                        text={text} />;
+                                        enableFlair={this.props.enableFlair} />;
             } else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={this.props.enableFlair} />;
             }
@@ -1065,7 +1180,6 @@ class E2ePadlock extends React.Component {
     render() {
         let tooltip = null;
         if (this.state.hover) {
-            const Tooltip = sdk.getComponent("elements.Tooltip");
             tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} dir="auto" />;
         }
 
@@ -1078,5 +1192,58 @@ class E2ePadlock extends React.Component {
                 onMouseLeave={this.onHoverEnd}
             >{tooltip}</div>
         );
+    }
+}
+
+interface ISentReceiptProps {
+    messageState: string; // TODO: Types for message sending state
+}
+
+interface ISentReceiptState {
+    hover: boolean;
+}
+
+class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptState> {
+    constructor() {
+        super();
+
+        this.state = {
+            hover: false,
+        };
+    }
+
+    onHoverStart = () => {
+        this.setState({hover: true});
+    };
+
+    onHoverEnd = () => {
+        this.setState({hover: false});
+    };
+
+    render() {
+        const isSent = !this.props.messageState || this.props.messageState === 'sent';
+        const receiptClasses = classNames({
+            'mx_EventTile_receiptSent': isSent,
+            'mx_EventTile_receiptSending': !isSent,
+        });
+
+        let tooltip = null;
+        if (this.state.hover) {
+            let label = _t("Sending your message...");
+            if (this.props.messageState === 'encrypting') {
+                label = _t("Encrypting your message...");
+            } else if (isSent) {
+                label = _t("Your message was sent");
+            }
+            // The yOffset is somewhat arbitrary - it just brings the tooltip down to be more associated
+            // with the read receipt.
+            tooltip = <Tooltip className="mx_EventTile_readAvatars_receiptTooltip" label={label} yOffset={20} />;
+        }
+
+        return <span className="mx_EventTile_readAvatars">
+            <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
+                {tooltip}
+            </span>
+        </span>;
     }
 }

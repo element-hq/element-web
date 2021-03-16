@@ -30,6 +30,7 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {Action} from "../../../dispatcher/actions";
 import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -38,6 +39,7 @@ const STICKERPICKER_Z_INDEX = 3500;
 // Key to store the widget's AppTile under in PersistedElement
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
+@replaceableComponent("views.rooms.Stickerpicker")
 export default class Stickerpicker extends React.Component {
     static currentWidget;
 

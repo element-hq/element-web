@@ -27,6 +27,9 @@ import * as sdk from "../../../index";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import RoomAvatar from "../avatars/RoomAvatar";
+import RoomName from "../elements/RoomName";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -36,6 +39,7 @@ const SHOW_MORE_INCREMENT = 100;
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
+@replaceableComponent("views.rooms.MemberList")
 export default class MemberList extends React.Component {
     constructor(props) {
         super(props);
@@ -456,6 +460,8 @@ export default class MemberList extends React.Component {
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
+            } else if (room.isSpaceRoom()) {
+                inviteButtonText = _t("Invite to this space");
             }
 
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
@@ -483,12 +489,26 @@ export default class MemberList extends React.Component {
                 onSearch={ this.onSearchQueryChanged } />
         );
 
+        let previousPhase = RightPanelPhases.RoomSummary;
+        // We have no previousPhase for when viewing a MemberList from a Space
+        let scopeHeader;
+        if (room?.isSpaceRoom()) {
+            previousPhase = undefined;
+            scopeHeader = <div className="mx_RightPanel_scopeHeader">
+                <RoomAvatar room={room} height={32} width={32} />
+                <RoomName room={room} />
+            </div>;
+        }
+
         return <BaseCard
             className="mx_MemberList"
-            header={inviteButton}
+            header={<React.Fragment>
+                { scopeHeader }
+                { inviteButton }
+            </React.Fragment>}
             footer={footer}
             onClose={this.props.onClose}
-            previousPhase={RightPanelPhases.RoomSummary}
+            previousPhase={previousPhase}
         >
             <div className="mx_MemberList_wrapper">
                 <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}

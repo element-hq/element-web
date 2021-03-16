@@ -17,7 +17,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from "prop-types";
 import ToggleSwitch from "./ToggleSwitch";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.LabelledToggleSwitch")
 export default class LabelledToggleSwitch extends React.Component {
     static propTypes = {
         // The value for the toggle switch

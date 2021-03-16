@@ -25,6 +25,7 @@ import CallHandler from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
 import FormButton from '../elements/FormButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -33,6 +34,7 @@ interface IState {
     incomingCall: any;
 }
 
+@replaceableComponent("views.voip.IncomingCallBox")
 export default class IncomingCallBox extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 

@@ -26,7 +26,9 @@ import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 import {SettingLevel} from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

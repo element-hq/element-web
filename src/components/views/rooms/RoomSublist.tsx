@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {createRef} from "react";
+import { createRef, ReactComponentElement } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -48,9 +48,10 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
-import TemporaryTile from "./TemporaryTile";
+import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -73,9 +74,7 @@ interface IProps {
     onResize: () => void;
     showSkeleton?: boolean;
 
-    // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
-    // You should feel bad if you use this.
-    extraBadTilesThatShouldntExist?: TemporaryTile[];
+    extraTiles?: ReactComponentElement<typeof ExtraTile>[];
 
     // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
@@ -95,9 +94,10 @@ interface IState {
     isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
     height: number;
     rooms: Room[];
-    filteredExtraTiles?: TemporaryTile[];
+    filteredExtraTiles?: ReactComponentElement<typeof ExtraTile>[];
 }
 
+@replaceableComponent("views.rooms.RoomSublist")
 export default class RoomSublist extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
@@ -153,12 +153,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return padding;
     }
 
-    private get extraTiles(): TemporaryTile[] | null {
+    private get extraTiles(): ReactComponentElement<typeof ExtraTile>[] | null {
         if (this.state.filteredExtraTiles) {
             return this.state.filteredExtraTiles;
         }
-        if (this.props.extraBadTilesThatShouldntExist) {
-            return this.props.extraBadTilesThatShouldntExist;
+        if (this.props.extraTiles) {
+            return this.props.extraTiles;
         }
         return null;
     }
@@ -177,7 +177,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
-        const prevExtraTiles = prevState.filteredExtraTiles || prevProps.extraBadTilesThatShouldntExist;
+        const prevExtraTiles = prevState.filteredExtraTiles || prevProps.extraTiles;
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
         if (RoomSublist.calcNumTiles(prevState.rooms, prevExtraTiles) !== this.numTiles) {
@@ -200,8 +200,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         // If we're supposed to handle extra tiles, take the performance hit and re-render all the
         // time so we don't have to consider them as part of the visible room optimization.
-        const prevExtraTiles = this.props.extraBadTilesThatShouldntExist || [];
-        const nextExtraTiles = (nextState.filteredExtraTiles || nextProps.extraBadTilesThatShouldntExist) || [];
+        const prevExtraTiles = this.props.extraTiles || [];
+        const nextExtraTiles = (nextState.filteredExtraTiles || nextProps.extraTiles) || [];
         if (prevExtraTiles.length > 0 || nextExtraTiles.length > 0) {
             return true;
         }
@@ -249,10 +249,10 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private onListsUpdated = () => {
         const stateUpdates: IState & any = {}; // &any is to avoid a cast on the initializer
 
-        if (this.props.extraBadTilesThatShouldntExist) {
+        if (this.props.extraTiles) {
             const nameCondition = RoomListStore.instance.getFirstNameFilterCondition();
             if (nameCondition) {
-                stateUpdates.filteredExtraTiles = this.props.extraBadTilesThatShouldntExist
+                stateUpdates.filteredExtraTiles = this.props.extraTiles
                     .filter(t => nameCondition.matches(t.props.displayName || ""));
             } else if (this.state.filteredExtraTiles) {
                 stateUpdates.filteredExtraTiles = null;

@@ -20,6 +20,8 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import {_t} from "../../../languageHandler";
 import RoomAvatar from "../avatars/RoomAvatar";
+import {useContextMenu} from "../../structures/ContextMenu";
+import SpaceCreateMenu from "./SpaceCreateMenu";
 import {SpaceItem} from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
@@ -112,8 +114,20 @@ const useSpaces = (): [Room[], Room | null] => {
 };
 
 const SpacePanel = () => {
+    // We don't need the handle as we position the menu in a constant location
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
     const [spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
+
+    const newClasses = classNames("mx_SpaceButton_new", {
+        mx_SpaceButton_newCancel: menuDisplayed,
+    });
+
+    let contextMenu = null;
+    if (menuDisplayed) {
+        contextMenu = <SpaceCreateMenu onFinished={closeMenu} />;
+    }
 
     const onKeyDown = (ev: React.KeyboardEvent) => {
         let handled = true;
@@ -203,12 +217,19 @@ const SpacePanel = () => {
                             onExpand={() => setPanelCollapsed(false)}
                         />) }
                     </div>
+                    <SpaceButton
+                        className={newClasses}
+                        tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
+                        onClick={menuDisplayed ? closeMenu : openMenu}
+                        isNarrow={isPanelCollapsed}
+                    />
                 </AutoHideScrollbar>
                 <AccessibleTooltipButton
                     className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
                     onClick={evt => setPanelCollapsed(!isPanelCollapsed)}
                     title={expandCollapseButtonTitle}
                 />
+                { contextMenu }
             </ul>
         )}
     </RovingTabIndexProvider>

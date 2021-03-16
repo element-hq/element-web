@@ -37,6 +37,7 @@ import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {UIFeature} from "../../settings/UIFeature";
 import {objectHasDiff} from "../../utils/objects";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -55,6 +56,7 @@ if (DEBUG) {
  *
  * Also responsible for handling and sending read receipts.
  */
+@replaceableComponent("structures.TimelinePanel")
 class TimelinePanel extends React.Component {
     static propTypes = {
         // The js-sdk EventTimelineSet object for the timeline sequence we are

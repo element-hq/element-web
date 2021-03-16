@@ -55,6 +55,8 @@ import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
+import { IOpts } from "../../createRoom";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -91,11 +93,14 @@ interface IProps {
     currentGroupId?: string;
     currentGroupIsNew?: boolean;
     justRegistered?: boolean;
+    roomJustCreatedOpts?: IOpts;
 }
 
 interface IUsageLimit {
+    // "hs_disabled" is NOT a specced string, but is used in Synapse
+    // This is tracked over at https://github.com/matrix-org/synapse/issues/9237
     // eslint-disable-next-line camelcase
-    limit_type: "monthly_active_user" | string;
+    limit_type: "monthly_active_user" | "hs_disabled" | string;
     // eslint-disable-next-line camelcase
     admin_contact?: string;
 }
@@ -103,6 +108,8 @@ interface IUsageLimit {
 interface IState {
     syncErrorData?: {
         error: {
+            // This is not specced, but used in Synapse. See
+            // https://github.com/matrix-org/synapse/issues/9237#issuecomment-768238922
             data: IUsageLimit;
             errcode: string;
         };
@@ -122,6 +129,7 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
+@replaceableComponent("structures.LoggedInView")
 class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
@@ -221,7 +229,14 @@ class LoggedInView extends React.Component<IProps, IState> {
         let size;
         let collapsed;
         const collapseConfig: ICollapseConfig = {
-            toggleSize: 260 - 50,
+            // TODO: the space panel currently does not have a fixed width,
+            // just the headers at each level have a max-width of 150px
+            // Taking 222px for the space panel for now,
+            // so this will look slightly off for now,
+            // depending on the depth of your space tree.
+            // To fix this, we'll need to turn toggleSize
+            // into a callback so it can be measured when starting the resize operation
+            toggleSize: 222 + 68,
             onCollapsed: (_collapsed) => {
                 collapsed = _collapsed;
                 if (_collapsed) {
@@ -241,6 +256,9 @@ class LoggedInView extends React.Component<IProps, IState> {
             onResizeStop: () => {
                 if (!collapsed) window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.stopResizing();
+            },
+            isItemCollapsed: domNode => {
+                return domNode.classList.contains("mx_LeftPanel_minimized");
             },
         };
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
@@ -619,6 +637,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     resizeNotifier={this.props.resizeNotifier}
+                    justCreatedOpts={this.props.roomJustCreatedOpts}
                 />;
                 break;
 
