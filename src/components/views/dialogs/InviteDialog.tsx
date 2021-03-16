@@ -42,6 +42,7 @@ import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import {getAddressType} from "../../../UserAddress";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -676,14 +677,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         });
     };
 
-    _inviteUsers = () => {
+    _inviteUsers = async () => {
         const startTime = CountlyAnalytics.getTimestamp();
         this.setState({busy: true});
         this._convertFilter();
         const targets = this._convertFilter();
         const targetIds = targets.map(t => t.userId);
 
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
         if (!room) {
             console.error("Failed to find the room to invite users to");
             this.setState({
@@ -693,12 +695,34 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             return;
         }
 
-        inviteMultipleToRoom(this.props.roomId, targetIds).then(result => {
+        try {
+            const result = await inviteMultipleToRoom(this.props.roomId, targetIds)
             CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
             if (!this._shouldAbortAfterInviteError(result)) { // handles setting error message too
                 this.props.onFinished();
             }
-        }).catch(err => {
+
+            if (cli.isRoomEncrypted(this.props.roomId) &&
+                SettingsStore.getValue("feature_room_history_key_sharing")) {
+                const visibilityEvent = room.currentState.getStateEvents(
+                    "m.room.history_visibility", "",
+                );
+                const visibility = visibilityEvent && visibilityEvent.getContent() &&
+                    visibilityEvent.getContent().history_visibility;
+                if (visibility == "world_readable" || visibility == "shared") {
+                    const invitedUsers = [];
+                    for (const [addr, state] of Object.entries(result.states)) {
+                        if (state === "invited" && getAddressType(addr) === "mx-user-id") {
+                            invitedUsers.push(addr);
+                        }
+                    }
+                    console.log("Sharing history with", invitedUsers);
+                    cli.sendSharedHistoryKeys(
+                        this.props.roomId, invitedUsers,
+                    );
+                }
+            }
+        } catch (err) {
             console.error(err);
             this.setState({
                 busy: false,
@@ -706,7 +730,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     "We couldn't invite those users. Please check the users you want to invite and try again.",
                 ),
             });
-        });
+        }
     };
 
     _transferCall = async () => {
@@ -1187,10 +1211,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let helpText;
         let buttonText;
         let goButtonFn;
+        let keySharingWarning = <span />;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
-        const userId = MatrixClientPeg.get().getUserId();
+        const cli = MatrixClientPeg.get();
+        const userId = cli.getUserId();
         if (this.props.kind === KIND_DM) {
             title = _t("Direct Messages");
 
@@ -1281,6 +1307,22 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
+
+            if (SettingsStore.getValue("feature_room_history_key_sharing") &&
+                cli.isRoomEncrypted(this.props.roomId)) {
+                const room = cli.getRoom(this.props.roomId);
+                const visibilityEvent = room.currentState.getStateEvents(
+                    "m.room.history_visibility", "",
+                );
+                const visibility = visibilityEvent && visibilityEvent.getContent() &&
+                    visibilityEvent.getContent().history_visibility;
+                if (visibility == "world_readable" || visibility == "shared") {
+                    keySharingWarning =
+                        <div>
+                            {_t("Note: Decryption keys for old messages will be shared with invited users.")}
+                        </div>;
+                }
+            }
         } else if (this.props.kind === KIND_CALL_TRANSFER) {
             title = _t("Transfer");
             buttonText = _t("Transfer");
@@ -1314,6 +1356,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             {spinner}
                         </div>
                     </div>
+                    {keySharingWarning}
                     {this._renderIdentityServerWarning()}
                     <div className='error'>{this.state.errorText}</div>
                     <div className='mx_InviteDialog_userSections'>
