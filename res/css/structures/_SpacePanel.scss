@@ -63,7 +63,7 @@ $activeBorderColor: $secondary-fg-color;
     }
 
     .mx_AutoHideScrollbar {
-        padding: 16px 0;
+        padding: 8px 0 16px;
     }
 
     .mx_SpaceButton_toggleCollapse {
@@ -99,7 +99,6 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpaceButton {
         border-radius: 8px;
-        margin-bottom: 2px;
         display: flex;
         align-items: center;
         padding: 4px 4px 4px 0;
