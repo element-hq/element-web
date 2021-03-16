@@ -31,7 +31,8 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
 export function initRageshake() {
-    const prom = rageshake.init();
+    // we manually check persistence for rageshakes ourselves
+    const prom = rageshake.init(/*setUpPersistence=*/false);
     prom.then(() => {
         console.log("Initialised rageshake.");
         console.log("To fix line numbers in Chrome: " +
@@ -48,6 +49,10 @@ export function initRageshake() {
         console.error("Failed to initialise rageshake: " + err);
     });
     return prom;
+}
+
+export function initRageshakeStore() {
+    return rageshake.tryInitStorage();
 }
 
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
