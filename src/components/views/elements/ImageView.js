@@ -31,7 +31,7 @@ import {formatFullDate} from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-const MIN_ZOOM = 95;
+const MIN_ZOOM = 100;
 const MAX_ZOOM = 300;
 // This is used for the buttons
 const ZOOM_STEP = 10;
