@@ -147,6 +147,8 @@ $activeBorderColor: $secondary-fg-color;
 
         .mx_SpaceButton_toggleCollapse {
             width: $gutterSize;
+            // negative margin to place it correctly even with the complex
+            // 4px selection border each space button has when active
             margin-right: -4px;
             height: 20px;
             mask-position: center;
