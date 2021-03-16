@@ -56,6 +56,7 @@ import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
 import { IOpts } from "../../createRoom";
+import SpacePanel from "../views/spaces/SpacePanel";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -227,14 +228,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         let size;
         let collapsed;
         const collapseConfig: ICollapseConfig = {
-            // TODO: the space panel currently does not have a fixed width,
-            // just the headers at each level have a max-width of 150px
-            // Taking 222px for the space panel for now,
-            // so this will look slightly off for now,
-            // depending on the depth of your space tree.
-            // To fix this, we'll need to turn toggleSize
-            // into a callback so it can be measured when starting the resize operation
-            toggleSize: 222 + 68,
+            toggleSize: 200,
             onCollapsed: (_collapsed) => {
                 collapsed = _collapsed;
                 if (_collapsed) {
@@ -668,13 +662,6 @@ class LoggedInView extends React.Component<IProps, IState> {
             bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
-        const leftPanel = (
-            <LeftPanel
-                isMinimized={this.props.collapseLhs || false}
-                resizeNotifier={this.props.resizeNotifier}
-            />
-        );
-
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <div
@@ -686,7 +673,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>
-                            { leftPanel }
+                            { SettingsStore.getValue("feature_spaces") ? <SpacePanel /> : null }
+                            <LeftPanel
+                                isMinimized={this.props.collapseLhs || false}
+                                resizeNotifier={this.props.resizeNotifier}
+                            />
                             <ResizeHandle />
                             { pageElement }
                         </div>

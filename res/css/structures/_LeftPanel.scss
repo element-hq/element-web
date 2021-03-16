@@ -19,7 +19,7 @@ $roomListCollapsedWidth: 68px;
 
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
-    min-width: 260px;
+    min-width: 200px;
     max-width: 50%;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
