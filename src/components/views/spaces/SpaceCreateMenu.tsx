@@ -140,9 +140,9 @@ const SpaceCreateMenu = ({ onFinished }) => {
             </h2>
             <p>
                 {
-                    _t("Give it a photo, name and description to help you identify it.")
+                    _t("Add some details to help people recognise it.")
                 } {
-                    _t("You can change these at any point.")
+                    _t("You can change these anytime.")
                 }
             </p>
 

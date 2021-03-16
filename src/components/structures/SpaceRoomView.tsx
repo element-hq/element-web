@@ -369,7 +369,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Creating rooms...") : _t("Next")
+        buttonLabel = busy ? _t("Creating rooms...") : _t("Continue")
     }
 
     return <div>
@@ -391,8 +391,14 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 
 const SpaceSetupPublicShare = ({ space, onFinished }) => {
     return <div className="mx_SpaceRoomView_publicShare">
-        <h1>{ _t("Share your public space") }</h1>
-        <div className="mx_SpacePublicShare_description">{ _t("At the moment only you can see it.") }</div>
+        <h1>{ _t("Invite people") }</h1>
+        <div className="mx_SpaceRoomView_description">
+            {
+                _t("It's just you at the moment.")
+            } {
+                _t("%(spaceName)s will be even better with others", { spaceName: space.name })
+            }
+        </div>
 
         <SpacePublicShare space={space} onFinished={onFinished} />
 
@@ -610,7 +616,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
                     title={_t("What are some things you want to discuss?")}
-                    description={_t("We'll create rooms for each topic.")}
+                    description={_t("We'll create a room for each of them. You can add more later too.")}
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;
             case Phase.PublicShare:
