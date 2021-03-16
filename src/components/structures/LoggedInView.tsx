@@ -228,7 +228,8 @@ class LoggedInView extends React.Component<IProps, IState> {
         let size;
         let collapsed;
         const collapseConfig: ICollapseConfig = {
-            toggleSize: 200,
+            // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
+            toggleSize: 206 - 50,
             onCollapsed: (_collapsed) => {
                 collapsed = _collapsed;
                 if (_collapsed) {
