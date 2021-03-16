@@ -240,10 +240,10 @@ class LoggedInView extends React.Component<IProps, IState> {
             onCollapsed: (_collapsed) => {
                 collapsed = _collapsed;
                 if (_collapsed) {
-                    dis.dispatch({action: "hide_left_panel"}, true);
+                    dis.dispatch({action: "hide_left_panel"});
                     window.localStorage.setItem("mx_lhs_size", '0');
                 } else {
-                    dis.dispatch({action: "show_left_panel"}, true);
+                    dis.dispatch({action: "show_left_panel"});
                 }
             },
             onResized: (_size) => {
