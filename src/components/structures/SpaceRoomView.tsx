@@ -17,6 +17,7 @@ limitations under the License.
 import React, {RefObject, useContext, useRef, useState} from "react";
 import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import {Room} from "matrix-js-sdk/src/models/room";
+import {EventSubscription} from "fbemitter";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomAvatar from "../views/avatars/RoomAvatar";
@@ -42,7 +43,6 @@ import ErrorBoundary from "../views/elements/ErrorBoundary";
 import {ActionPayload} from "../../dispatcher/payloads";
 import RightPanel from "./RightPanel";
 import RightPanelStore from "../../stores/RightPanelStore";
-import {EventSubscription} from "fbemitter";
 import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {useStateArray} from "../../hooks/useStateArray";
@@ -54,6 +54,7 @@ import {EnhancedMap} from "../../utils/maps";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
+import SpaceStore from "../../stores/SpaceStore";
 
 interface IProps {
     space: Room;
@@ -66,6 +67,7 @@ interface IProps {
 interface IState {
     phase: Phase;
     showRightPanel: boolean;
+    myMembership: string;
 }
 
 enum Phase {
@@ -98,6 +100,8 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
 
+    const [busy, setBusy] = useState(false);
+
     let inviterSection;
     let joinButtons;
     if (myMembership === "invite") {
@@ -121,11 +125,35 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         }
 
         joinButtons = <>
-            <FormButton label={_t("Reject")} kind="secondary" onClick={onRejectButtonClicked} />
-            <FormButton label={_t("Accept")} onClick={onJoinButtonClicked} />
+            <FormButton
+                label={_t("Reject")}
+                kind="secondary"
+                onClick={() => {
+                    setBusy(true);
+                    onRejectButtonClicked();
+                }} />
+            <FormButton
+                label={_t("Accept")}
+                onClick={() => {
+                    setBusy(true);
+                    onJoinButtonClicked();
+                }}
+            />
         </>;
     } else {
-        joinButtons = <FormButton label={_t("Join")} onClick={onJoinButtonClicked} />
+        joinButtons = (
+            <FormButton
+                label={_t("Join")}
+                onClick={() => {
+                    setBusy(true);
+                    onJoinButtonClicked();
+                }}
+            />
+        )
+    }
+
+    if (busy) {
+        joinButtons = <InlineSpinner />;
     }
 
     let visibilitySection;
@@ -403,7 +431,7 @@ const SpaceSetupPublicShare = ({ space, onFinished }) => {
         <SpacePublicShare space={space} onFinished={onFinished} />
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton label={_t("Finish")} onClick={onFinished} />
+            <FormButton label={_t("Go to my first room")} onClick={onFinished} />
         </div>
     </div>;
 };
@@ -553,16 +581,25 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         this.state = {
             phase,
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
+            myMembership: this.props.space.getMyMembership(),
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
+        this.context.on("Room.myMembership", this.onMyMembership);
     }
 
     componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
         this.rightPanelStoreToken.remove();
+        this.context.off("Room.myMembership", this.onMyMembership);
     }
+
+    private onMyMembership = (room: Room, myMembership: string) => {
+        if (room.roomId === this.props.space.roomId) {
+            this.setState({ myMembership });
+        }
+    };
 
     private onRightPanelStoreUpdate = () => {
         this.setState({
@@ -600,10 +637,43 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private goToFirstRoom = async () => {
+        const childRooms = SpaceStore.instance.getChildRooms(this.props.space.roomId);
+        if (childRooms.length) {
+            const room = childRooms[0];
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: room.roomId,
+            });
+            return;
+        }
+
+        let suggestedRooms = SpaceStore.instance.suggestedRooms;
+        if (SpaceStore.instance.activeSpace !== this.props.space) {
+            // the space store has the suggested rooms loaded for a different space, fetch the right ones
+            suggestedRooms = (await SpaceStore.instance.fetchSuggestedRooms(this.props.space, 1)).rooms;
+        }
+
+        if (suggestedRooms.length) {
+            const room = suggestedRooms[0];
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: room.room_id,
+                oobData: {
+                    avatarUrl: room.avatar_url,
+                    name: room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room"),
+                },
+            });
+            return;
+        }
+
+        this.setState({ phase: Phase.Landing });
+    };
+
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.props.space.getMyMembership() === "join") {
+                if (this.state.myMembership === "join") {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return <SpacePreview
@@ -620,10 +690,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;
             case Phase.PublicShare:
-                return <SpaceSetupPublicShare
-                    space={this.props.space}
-                    onFinished={() => this.setState({ phase: Phase.Landing })}
-                />;
+                return <SpaceSetupPublicShare space={this.props.space} onFinished={this.goToFirstRoom} />;
 
             case Phase.PrivateScope:
                 return <SpaceSetupPrivateScope

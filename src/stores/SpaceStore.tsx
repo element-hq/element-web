@@ -118,22 +118,31 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         if (space) {
-            try {
-                const data: {
-                    rooms: ISpaceSummaryRoom[];
-                    events: ISpaceSummaryEvent[];
-                } = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, MAX_SUGGESTED_ROOMS);
-                if (this._activeSpace === space) {
-                    this._suggestedRooms = data.rooms.filter(roomInfo => {
-                        return roomInfo.room_type !== RoomType.Space && !this.matrixClient.getRoom(roomInfo.room_id);
-                    });
-                    this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
-                }
-            } catch (e) {
-                console.error(e);
+            const data = await this.fetchSuggestedRooms(space);
+            if (this._activeSpace === space) {
+                this._suggestedRooms = data.rooms.filter(roomInfo => {
+                    return roomInfo.room_type !== RoomType.Space && !this.matrixClient.getRoom(roomInfo.room_id);
+                });
+                this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
             }
         }
     }
+
+    public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS) => {
+        try {
+            const data: {
+                rooms: ISpaceSummaryRoom[];
+                events: ISpaceSummaryEvent[];
+            } = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, limit);
+            return data;
+        } catch (e) {
+            console.error(e);
+        }
+        return {
+            rooms: [],
+            events: [],
+        };
+    };
 
     public addRoomToSpace(space: Room, roomId: string, via: string[], suggested = false, autoJoin = false) {
         return this.matrixClient.sendStateEvent(space.roomId, EventType.SpaceChild, {
