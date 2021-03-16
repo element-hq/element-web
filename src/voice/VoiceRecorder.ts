@@ -19,6 +19,7 @@ import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {sleep} from "../utils/promise";
+import {SimpleObservable} from "matrix-widget-api";
 
 export class VoiceRecorder {
     private recorder = new Recorder({
@@ -34,6 +35,7 @@ export class VoiceRecorder {
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
+    private observable: SimpleObservable<Uint8Array>;
 
     public constructor(private client: MatrixClient) {
         this.recorder.ondataavailable = (a: ArrayBuffer) => {
@@ -44,7 +46,13 @@ export class VoiceRecorder {
             newBuf.set(this.buffer, 0);
             newBuf.set(buf, this.buffer.length);
             this.buffer = newBuf;
+            this.observable.update(buf); // send the frame over the observable
         };
+    }
+
+    public get rawData(): SimpleObservable<Uint8Array> {
+        if (!this.recording) throw new Error("No observable when not recording");
+        return this.observable;
     }
 
     public get isSupported(): boolean {
@@ -69,6 +77,10 @@ export class VoiceRecorder {
         if (this.recording) {
             throw new Error("Recording already in progress");
         }
+        if (this.observable) {
+            this.observable.close();
+        }
+        this.observable = new SimpleObservable<Uint8Array>();
         return this.recorder.start().then(() => this.recording = true);
     }
 
