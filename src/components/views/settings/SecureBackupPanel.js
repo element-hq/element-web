@@ -26,7 +26,9 @@ import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);

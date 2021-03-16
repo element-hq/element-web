@@ -82,6 +82,7 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -195,6 +196,7 @@ export interface IState {
     dragCounter: number;
 }
 
+@replaceableComponent("structures.RoomView")
 export default class RoomView extends React.Component<IProps, IState> {
     private readonly dispatcherRef: string;
     private readonly roomStoreToken: EventSubscription;
@@ -711,9 +713,9 @@ export default class RoomView extends React.Component<IProps, IState> {
                     [payload.file], this.state.room.roomId, this.context);
                 break;
             case 'notifier_enabled':
-            case 'upload_started':
-            case 'upload_finished':
-            case 'upload_canceled':
+            case Action.UploadStarted:
+            case Action.UploadFinished:
+            case Action.UploadCanceled:
                 this.forceUpdate();
                 break;
             case 'call_state': {
@@ -1911,7 +1913,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
-        if (this.state.room?.isSpaceRoom()) {
+        if (SettingsStore.getValue("feature_spaces") && this.state.room?.isSpaceRoom()) {
             return <SpaceRoomView
                 space={this.state.room}
                 justCreatedOpts={this.props.justCreatedOpts}

@@ -50,6 +50,7 @@ describe('MemberEventListSummary', function() {
                 getAvatarUrl: () => {
                     return "avatar.jpeg";
                 },
+                getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
             },
         });
         // Override random event ID to allow for equality tests against tiles from

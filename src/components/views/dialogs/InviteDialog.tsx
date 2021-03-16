@@ -22,7 +22,6 @@ import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Pe
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import SdkConfig from "../../../SdkConfig";
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
 import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
 import {abbreviateUrl} from "../../../utils/UrlUtils";
@@ -42,13 +41,14 @@ import {UIFeature} from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
-export const KIND_SPACE_INVITE = "space_invite";
 export const KIND_CALL_TRANSFER = "call_transfer";
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
@@ -160,9 +160,9 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
                 className='mx_InviteDialog_userTile_avatar'
-                url={getHttpUriForMxc(
-                    MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
-                    avatarSize, avatarSize, "crop")}
+                url={this.props.member.getMxcAvatarUrl()
+                    ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(avatarSize)
+                    : null}
                 name={this.props.member.name}
                 idName={this.props.member.userId}
                 width={avatarSize}
@@ -262,9 +262,9 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
-                url={getHttpUriForMxc(
-                    MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
-                    avatarSize, avatarSize, "crop")}
+                url={this.props.member.getMxcAvatarUrl()
+                    ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(avatarSize)
+                    : null}
                 name={this.props.member.name}
                 idName={this.props.member.userId}
                 width={avatarSize}
@@ -310,7 +310,7 @@ interface IInviteDialogProps {
     // not provided.
     kind: string,
 
-    // The room ID this dialog is for. Only required for KIND_INVITE and KIND_SPACE_INVITE.
+    // The room ID this dialog is for. Only required for KIND_INVITE.
     roomId: string,
 
     // The call to transfer. Only required for KIND_CALL_TRANSFER.
@@ -337,6 +337,7 @@ interface IInviteDialogState {
     errorText: string,
 }
 
+@replaceableComponent("views.dialogs.InviteDialog")
 export default class InviteDialog extends React.PureComponent<IInviteDialogProps, IInviteDialogState> {
     static defaultProps = {
         kind: KIND_DM,
@@ -349,8 +350,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     constructor(props) {
         super(props);
 
-        if ((props.kind === KIND_INVITE || props.kind === KIND_SPACE_INVITE) && !props.roomId) {
-            throw new Error("When using KIND_INVITE or KIND_SPACE_INVITE a roomId is required for an InviteDialog");
+        if ((props.kind === KIND_INVITE) && !props.roomId) {
+            throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
         } else if (props.kind === KIND_CALL_TRANSFER && !props.call) {
             throw new Error("When using KIND_CALL_TRANSFER a call is required for an InviteDialog");
         }
@@ -1027,7 +1028,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             sectionSubname = _t("May include members not in %(communityName)s", {communityName});
         }
 
-        if (this.props.kind === KIND_INVITE || this.props.kind === KIND_SPACE_INVITE) {
+        if (this.props.kind === KIND_INVITE) {
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
         }
 
@@ -1248,25 +1249,31 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
-        } else if (this.props.kind === KIND_INVITE || this.props.kind === KIND_SPACE_INVITE) {
-            title = this.props.kind === KIND_INVITE ? _t("Invite to this room") : _t("Invite to this space");
+        } else if (this.props.kind === KIND_INVITE) {
+            const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
+            const isSpace = room?.isSpaceRoom();
+            title = isSpace
+                ? _t("Invite to %(spaceName)s", {
+                    spaceName: room.name || _t("Unnamed Space"),
+                })
+                : _t("Invite to this room");
 
             let helpTextUntranslated;
-            if (this.props.kind === KIND_INVITE) {
+            if (isSpace) {
                 if (identityServersEnabled) {
                     helpTextUntranslated = _td("Invite someone using their name, email address, username " +
-                        "(like <userId/>) or <a>share this room</a>.");
+                        "(like <userId/>) or <a>share this space</a>.");
                 } else {
                     helpTextUntranslated = _td("Invite someone using their name, username " +
-                        "(like <userId/>) or <a>share this room</a>.");
+                        "(like <userId/>) or <a>share this space</a>.");
                 }
-            } else { // KIND_SPACE_INVITE
+            } else {
                 if (identityServersEnabled) {
                     helpTextUntranslated = _td("Invite someone using their name, email address, username " +
-                        "(like <userId/>) or <a>share this space</a>.");
+                        "(like <userId/>) or <a>share this room</a>.");
                 } else {
                     helpTextUntranslated = _td("Invite someone using their name, username " +
-                        "(like <userId/>) or <a>share this space</a>.");
+                        "(like <userId/>) or <a>share this room</a>.");
                 }
             }
 

@@ -17,7 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../index';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.TooltipButton")
 export default class TooltipButton extends React.Component {
     state = {
         hover: false,

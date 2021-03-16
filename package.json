@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.15.0",
+  "version": "3.16.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -157,6 +157,7 @@
     "jest": "^26.6.3",
     "jest-canvas-mock": "^2.3.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-fetch-mock": "^3.0.3",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",

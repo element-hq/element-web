@@ -35,7 +35,9 @@ import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */

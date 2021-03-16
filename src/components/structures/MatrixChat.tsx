@@ -84,6 +84,7 @@ import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -208,6 +209,7 @@ interface IState {
     roomJustCreatedOpts?: IOpts;
 }
 
+@replaceableComponent("structures.MatrixChat")
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
     static displayName = "MatrixChat";
 
@@ -580,6 +582,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             case 'logout':
+                dis.dispatch({action: "hangup_all"});
                 Lifecycle.logout();
                 break;
             case 'require_registration':

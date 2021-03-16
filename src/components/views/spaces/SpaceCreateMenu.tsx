@@ -107,7 +107,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
     if (visibility === null) {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
-            <p>{ _t("Organise rooms into spaces, for just you or anyone") }</p>
+            <p>{ _t("Spaces are new ways to group rooms and people. " +
+                "To join an existing space you’ll need an invite") }</p>
 
             <SpaceCreateMenuType
                 title={_t("Public")}
@@ -117,12 +118,12 @@ const SpaceCreateMenu = ({ onFinished }) => {
             />
             <SpaceCreateMenuType
                 title={_t("Private")}
-                description={_t("Invite only space, best for yourself or teams")}
+                description={_t("Invite only, best for yourself or teams")}
                 className="mx_SpaceCreateMenuType_private"
                 onClick={() => setVisibility(Visibility.Private)}
             />
 
-            {/*<p>{ _t("Looking to join an existing space?") }</p>*/}
+            <p>{ _t("You can change this later") }</p>
         </React.Fragment>;
     } else {
         body = <React.Fragment>
@@ -134,9 +135,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
             <h2>
                 {
-                    visibility === Visibility.Public
-                        ? _t("Personalise your public space")
-                        : _t("Personalise your private space")
+                    visibility === Visibility.Public ? _t("Your public space") : _t("Your private space")
                 }
             </h2>
             <p>

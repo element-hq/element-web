@@ -23,6 +23,7 @@ import {formatDate} from '../../../DateUtils';
 import Velociraptor from "../../../Velociraptor";
 import * as sdk from "../../../index";
 import {toPx} from "../../../utils/units";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 let bounce = false;
 try {
@@ -32,6 +33,7 @@ try {
 } catch (e) {
 }
 
+@replaceableComponent("views.rooms.ReadReceiptMarker")
 export default class ReadReceiptMarker extends React.PureComponent {
     static propTypes = {
         // the RoomMember to show the RR for
@@ -156,14 +158,14 @@ export default class ReadReceiptMarker extends React.PureComponent {
         // then shift to the rightmost column,
         // and then it will drop down to its resting position
         //
-        // XXX: We use a fractional left value to trick velocity-animate into actually animating.
+        // XXX: We use a small left value to trick velocity-animate into actually animating.
         // This is a very annoying bug where if it thinks there's no change to `left` then it'll
         // skip applying it, thus making our read receipt at +14px instead of +0px like it
         // should be. This does cause a tiny amount of drift for read receipts, however with a
         // value so small it's not perceived by a user.
         // Note: Any smaller values (or trying to interchange units) might cause read receipts to
         // fail to fall down or cause gaps.
-        startStyles.push({ top: startTopOffset+'px', left: '0.001px' });
+        startStyles.push({ top: startTopOffset+'px', left: '1px' });
         enterTransitionOpts.push({
             duration: bounce ? Math.min(Math.log(Math.abs(startTopOffset)) * 200, 3000) : 300,
             easing: bounce ? 'easeOutBounce' : 'easeOutCubic',

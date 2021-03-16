@@ -138,9 +138,6 @@ $panel-divider-color: transparent;
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: rgba(141, 151, 165, 0.2);
 
-// event tile lifecycle
-$event-sending-color: $text-secondary-color;
-
 // event redaction
 $event-redacted-fg-color: #606060;
 $event-redacted-border-color: #000000;
@@ -173,6 +170,9 @@ $button-link-bg-color: transparent;
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
 
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: #21262c;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -202,6 +202,10 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-bg-color: #21262c82;
+$message-body-panel-icon-bg-color: #8e99a4;
+$message-body-panel-fg-color: $primary-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;

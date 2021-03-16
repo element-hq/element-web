@@ -37,7 +37,7 @@ export default class VoipUserMapper {
         return results[0].userid;
     }
 
-    public async getOrCreateVirtualRoomForRoom(roomId: string):Promise<string> {
+    public async getOrCreateVirtualRoomForRoom(roomId: string): Promise<string> {
         const userId = DMRoomMap.shared().getUserIdForRoomId(roomId);
         if (!userId) return null;
 
@@ -52,7 +52,7 @@ export default class VoipUserMapper {
         return virtualRoomId;
     }
 
-    public nativeRoomForVirtualRoom(roomId: string):string {
+    public nativeRoomForVirtualRoom(roomId: string): string {
         const virtualRoom = MatrixClientPeg.get().getRoom(roomId);
         if (!virtualRoom) return null;
         const virtualRoomEvent = virtualRoom.getAccountData(VIRTUAL_ROOM_EVENT_TYPE);
@@ -60,7 +60,7 @@ export default class VoipUserMapper {
         return virtualRoomEvent.getContent()['native_room'] || null;
     }
 
-    public isVirtualRoom(room: Room):boolean {
+    public isVirtualRoom(room: Room): boolean {
         if (this.nativeRoomForVirtualRoom(room.roomId)) return true;
 
         if (this.virtualRoomIdCache.has(room.roomId)) return true;
@@ -79,6 +79,8 @@ export default class VoipUserMapper {
     }
 
     public async onNewInvitedRoom(invitedRoom: Room) {
+        if (!CallHandler.sharedInstance().getSupportsVirtualRooms()) return;
+
         const inviterId = invitedRoom.getDMInviter();
         console.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
         const result = await CallHandler.sharedInstance().sipNativeLookup(inviterId);

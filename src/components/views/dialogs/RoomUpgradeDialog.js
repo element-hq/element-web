@@ -20,7 +20,9 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.RoomUpgradeDialog")
 export default class RoomUpgradeDialog extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,

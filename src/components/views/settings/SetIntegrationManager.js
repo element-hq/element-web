@@ -20,7 +20,9 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.SetIntegrationManager")
 export default class SetIntegrationManager extends React.Component {
     constructor() {
         super();

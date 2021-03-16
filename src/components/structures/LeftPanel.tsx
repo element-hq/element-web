@@ -36,9 +36,10 @@ import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
 
 interface IProps {
     isMinimized: boolean;
@@ -59,6 +60,7 @@ const cssClasses = [
     "mx_RoomSublist_showNButton",
 ];
 
+@replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
@@ -118,7 +120,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
         const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
         if (settingBgMxc) {
-            avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(settingBgMxc, avatarSize, avatarSize);
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
         }
 
         const avatarUrlProp = `url(${avatarUrl})`;
