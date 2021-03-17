@@ -82,7 +82,6 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
      */
     public getHttpAvatarUrl(size = 0): string {
         if (!this.avatarMxc) return null;
-
         const media = mediaFromMxc(this.avatarMxc);
         if (!size || size <= 0) {
             return media.srcHttp;
