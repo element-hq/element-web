@@ -47,7 +47,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             const mxc = await this.state.recorder.upload();
             MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
                 body: "Voice message",
-                msgtype: "m.audio", // TODO @@
+                msgtype: "org.matrix.msc2516.voice",
                 url: mxc,
             });
             this.setState({recorder: null});
