@@ -18,7 +18,6 @@ import * as Recorder from 'opus-recorder';
 import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
-import {sleep} from "../utils/promise";
 import {SimpleObservable} from "matrix-widget-api";
 
 export class VoiceRecorder {
@@ -109,19 +108,6 @@ export class VoiceRecorder {
             onlyContentUri: false, // to stop the warnings in the console
         }).then(r => r['content_uri']);
         return this.mxc;
-    }
-
-    // TODO: @@ TravisR: REMOVE
-    public async test() {
-        this.start()
-            .then(() => sleep(5000))
-            .then(() => this.stop())
-            .then(() => this.upload())
-            .then(() => this.client.sendMessage("!HKjSnKDluFnCCnjayl:localhost", {
-                body: "Voice message",
-                msgtype: "m.audio", // TODO @@
-                url: this.mxc,
-            }));
     }
 }
 
