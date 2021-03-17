@@ -22,7 +22,6 @@ import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Pe
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import SdkConfig from "../../../SdkConfig";
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
 import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
 import {abbreviateUrl} from "../../../utils/UrlUtils";
@@ -43,6 +42,7 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -160,9 +160,9 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
                 className='mx_InviteDialog_userTile_avatar'
-                url={getHttpUriForMxc(
-                    MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
-                    avatarSize, avatarSize, "crop")}
+                url={this.props.member.getMxcAvatarUrl()
+                    ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(avatarSize)
+                    : null}
                 name={this.props.member.name}
                 idName={this.props.member.userId}
                 width={avatarSize}
@@ -262,9 +262,9 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
             : <BaseAvatar
-                url={getHttpUriForMxc(
-                    MatrixClientPeg.get().getHomeserverUrl(), this.props.member.getMxcAvatarUrl(),
-                    avatarSize, avatarSize, "crop")}
+                url={this.props.member.getMxcAvatarUrl()
+                    ? mediaFromMxc(this.props.member.getMxcAvatarUrl()).getSquareThumbnailHttp(avatarSize)
+                    : null}
                 name={this.props.member.name}
                 idName={this.props.member.userId}
                 width={avatarSize}

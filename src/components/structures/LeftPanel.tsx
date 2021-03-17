@@ -36,11 +36,11 @@ import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
 import SpacePanel from "../views/spaces/SpacePanel";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
 
 interface IProps {
     isMinimized: boolean;
@@ -121,7 +121,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
         const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
         if (settingBgMxc) {
-            avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(settingBgMxc, avatarSize, avatarSize);
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
         }
 
         const avatarUrlProp = `url(${avatarUrl})`;

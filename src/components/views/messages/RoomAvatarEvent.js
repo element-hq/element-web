@@ -24,6 +24,7 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 @replaceableComponent("views.messages.RoomAvatarEvent")
 export default class RoomAvatarEvent extends React.Component {
@@ -35,7 +36,7 @@ export default class RoomAvatarEvent extends React.Component {
     onAvatarClick = () => {
         const cli = MatrixClientPeg.get();
         const ev = this.props.mxEvent;
-        const httpUrl = cli.mxcUrlToHttp(ev.getContent().url);
+        const httpUrl = mediaFromMxc(ev.getContent().url).srcHttp;
 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const text = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {

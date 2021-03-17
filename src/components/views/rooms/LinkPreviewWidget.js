@@ -26,6 +26,7 @@ import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { _t } from "../../../languageHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 @replaceableComponent("views.rooms.LinkPreviewWidget")
 export default class LinkPreviewWidget extends React.Component {
@@ -83,7 +84,7 @@ export default class LinkPreviewWidget extends React.Component {
 
         let src = p["og:image"];
         if (src && src.startsWith("mxc://")) {
-            src = MatrixClientPeg.get().mxcUrlToHttp(src);
+            src = mediaFromMxc(src).srcHttp;
         }
 
         const params = {
@@ -109,9 +110,11 @@ export default class LinkPreviewWidget extends React.Component {
         if (!SettingsStore.getValue("showImages")) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
-        const imageMaxWidth = 100; const imageMaxHeight = 100;
+        const imageMaxWidth = 100;
+        const imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
-            image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
+            // We deliberately don't want a square here, so use the source HTTP thumbnail function
+            image = mediaFromMxc(image).getThumbnailOfSourceHttp(imageMaxWidth, imageMaxHeight, 'scale');
         }
 
         let thumbHeight = imageMaxHeight;
