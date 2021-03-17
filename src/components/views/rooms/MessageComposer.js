@@ -354,7 +354,7 @@ export default class MessageComposer extends React.Component {
                     onChange={this.onChange}
                     // TODO: TravisR - Disabling the composer doesn't work
                     disabled={this.state.haveRecording}
-                />
+                />,
             );
 
             if (!this.state.haveRecording) {
