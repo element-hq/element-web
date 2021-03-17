@@ -32,6 +32,14 @@ import Spinner from "./components/views/elements/Spinner";
 import "blueimp-canvas-to-blob";
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
+import {
+    UploadCanceledPayload,
+    UploadErrorPayload,
+    UploadFinishedPayload,
+    UploadProgressPayload,
+    UploadStartedPayload,
+} from "./dispatcher/payloads/UploadPayload";
+import {IUpload} from "./models/IUpload";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -43,15 +51,6 @@ const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 export class UploadCanceledError extends Error {}
 
 type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
-
-interface IUpload {
-    fileName: string;
-    roomId: string;
-    total: number;
-    loaded: number;
-    promise: Promise<any>;
-    canceled?: boolean;
-}
 
 interface IMediaConfig {
     "m.upload.size"?: number;
@@ -478,7 +477,7 @@ export default class ContentMessages {
         if (upload) {
             upload.canceled = true;
             MatrixClientPeg.get().cancelUpload(upload.promise);
-            dis.dispatch({action: 'upload_canceled', upload});
+            dis.dispatch<UploadCanceledPayload>({action: Action.UploadCanceled, upload});
         }
     }
 
@@ -539,7 +538,7 @@ export default class ContentMessages {
             promise: prom,
         };
         this.inprogress.push(upload);
-        dis.dispatch({action: 'upload_started'});
+        dis.dispatch<UploadStartedPayload>({action: Action.UploadStarted, upload});
 
         // Focus the composer view
         dis.fire(Action.FocusComposer);
@@ -547,7 +546,7 @@ export default class ContentMessages {
         function onProgress(ev) {
             upload.total = ev.total;
             upload.loaded = ev.loaded;
-            dis.dispatch({action: 'upload_progress', upload: upload});
+            dis.dispatch<UploadProgressPayload>({action: Action.UploadProgress, upload});
         }
 
         let error;
@@ -601,9 +600,9 @@ export default class ContentMessages {
                 if (error && error.http_status === 413) {
                     this.mediaConfig = null;
                 }
-                dis.dispatch({action: 'upload_failed', upload, error});
+                dis.dispatch<UploadErrorPayload>({action: Action.UploadFailed, upload, error});
             } else {
-                dis.dispatch({action: 'upload_finished', upload});
+                dis.dispatch<UploadFinishedPayload>({action: Action.UploadFinished, upload});
                 dis.dispatch({action: 'message_sent'});
             }
         });

@@ -21,7 +21,9 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.PersistentApp")
 export default class PersistentApp extends React.Component {
     state = {
         roomId: RoomViewStore.getRoomId(),

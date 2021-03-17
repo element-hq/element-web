@@ -29,6 +29,7 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import DialogButtons from "../elements/DialogButtons";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
@@ -54,6 +55,7 @@ interface IState {
     rememberSelection: boolean;
 }
 
+@replaceableComponent("views.dialogs.WidgetCapabilitiesPromptDialog")
 export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<IProps, IState> {
     private eventPermissionsMap = new Map<Capability, WidgetEventCapability>();
 

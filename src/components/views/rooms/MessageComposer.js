@@ -32,6 +32,7 @@ import {UIFeature} from "../../../settings/UIFeature";
 import WidgetStore from "../../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -168,6 +169,7 @@ class UploadButton extends React.Component {
     }
 }
 
+@replaceableComponent("views.rooms.MessageComposer")
 export default class MessageComposer extends React.Component {
     constructor(props) {
         super(props);

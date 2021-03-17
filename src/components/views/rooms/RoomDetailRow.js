@@ -18,9 +18,9 @@ import * as sdk from '../../../index';
 import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -39,6 +39,7 @@ export const roomShape = PropTypes.shape({
     guestCanJoin: PropTypes.bool,
 });
 
+@replaceableComponent("views.rooms.RoomDetailRow")
 export default class RoomDetailRow extends React.Component {
     static propTypes = {
         room: roomShape,
@@ -98,13 +99,14 @@ export default class RoomDetailRow extends React.Component {
             { guestJoin }
         </div>) : <div />;
 
+        let avatarUrl = null;
+        if (room.avatarUrl) avatarUrl = mediaFromMxc(room.avatarUrl).getSquareThumbnailHttp(24);
+
         return <tr key={room.roomId} onClick={this.onClick} onMouseDown={this.props.onMouseDown}>
             <td className="mx_RoomDirectory_roomAvatar">
                 <BaseAvatar width={24} height={24} resizeMethod='crop'
                     name={name} idName={name}
-                    url={getHttpUriForMxc(
-                            MatrixClientPeg.get().getHomeserverUrl(),
-                            room.avatarUrl, 24, 24, "crop")} />
+                    url={avatarUrl} />
             </td>
             <td className="mx_RoomDirectory_roomDescription">
                 <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;

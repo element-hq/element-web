@@ -25,7 +25,9 @@ import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
 import Modal from "../../../../../Modal";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {
         super();

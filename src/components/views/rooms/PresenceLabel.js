@@ -18,8 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-
+@replaceableComponent("views.rooms.PresenceLabel")
 export default class PresenceLabel extends React.Component {
     static propTypes = {
         // number of milliseconds ago this user was last active.

@@ -302,6 +302,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         } else if (payload.action === 'MatrixActions.Event.decrypted') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
             const roomId = eventPayload.event.getRoomId();
+            if (!roomId) {
+                return;
+            }
             const room = this.matrixClient.getRoom(roomId);
             if (!room) {
                 console.warn(`Event ${eventPayload.event.getId()} was decrypted in an unknown room ${roomId}`);
@@ -409,7 +412,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
-        if (cause === RoomUpdateCause.NewRoom) {
+        if (cause === RoomUpdateCause.NewRoom && room.getMyMembership() === "invite") {
             // Let the visibility provider know that there is a new invited room. It would be nice
             // if this could just be an event that things listen for but the point of this is that
             // we delay doing anything about this room until the VoipUserMapper had had a chance

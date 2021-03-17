@@ -100,6 +100,20 @@ export default (props) => {
         );
     }
 
+    let bugReports = null;
+    if (SdkConfig.get().bug_report_endpoint_url) {
+        bugReports = (
+            <p>{
+                _t("PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> " +
+                    "to help us track down the problem.", {}, {
+                    debugLogsLink: sub => (
+                        <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{sub}</AccessibleButton>
+                    ),
+                })
+            }</p>
+        );
+    }
+
     return (<QuestionDialog
         className="mx_FeedbackDialog"
         hasCancelButton={!!hasFeedback}
@@ -120,14 +134,7 @@ export default (props) => {
                         },
                     })
                 }</p>
-                <p>{
-                    _t("PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> " +
-                        "to help us track down the problem.", {}, {
-                        debugLogsLink: sub => (
-                            <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{sub}</AccessibleButton>
-                        ),
-                    })
-                }</p>
+                {bugReports}
             </div>
             { countlyFeedbackSection }
         </React.Fragment>}
