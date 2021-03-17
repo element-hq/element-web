@@ -20,6 +20,7 @@ import React from "react";
 import {VoiceRecorder} from "../../../voice/VoiceRecorder";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import classNames from "classnames";
 
 interface IProps {
     room: Room;
@@ -40,12 +41,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     }
 
     private onStartVoiceMessage = async () => {
+        // TODO: @@ TravisR: We do not want to auto-send on stop.
         if (this.state.recorder) {
             await this.state.recorder.stop();
             const mxc = await this.state.recorder.upload();
             MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
                 body: "Voice message",
-                msgtype: "m.audio", // TODO
+                msgtype: "m.audio", // TODO @@
                 url: mxc,
             });
             this.setState({recorder: null});
@@ -63,11 +65,23 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     };
 
     public render() {
+        const classes = classNames({
+            'mx_MessageComposer_button': !this.state.recorder,
+            'mx_MessageComposer_voiceMessage': !this.state.recorder,
+            'mx_VoiceRecordComposerTile_stop': !!this.state.recorder,
+        });
+
+        let tooltip = _t("Record a voice message");
+        if (!!this.state.recorder) {
+            // TODO: @@ TravisR: Change to match behaviour
+            tooltip = _t("Stop & send recording");
+        }
+
         return (
             <AccessibleTooltipButton
-                className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
+                className={classes}
                 onClick={this.onStartVoiceMessage}
-                title={_t('Record a voice message')}
+                title={tooltip}
             />
         );
     }

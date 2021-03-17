@@ -119,7 +119,7 @@ export class VoiceRecorder {
             .then(() => this.upload())
             .then(() => this.client.sendMessage("!HKjSnKDluFnCCnjayl:localhost", {
                 body: "Voice message",
-                msgtype: "m.audio", // TODO
+                msgtype: "m.audio", // TODO @@
                 url: this.mxc,
             }));
     }
