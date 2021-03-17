@@ -89,6 +89,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         this.setState({ audioOnly: this.props.feed.isAudioOnly()});
         if (!this.vid.current) return;
         this.vid.current.srcObject = newStream;
+        this.vid.current.play();
     }
 
     onResize = (e) => {
