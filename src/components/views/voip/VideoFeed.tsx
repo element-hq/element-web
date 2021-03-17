@@ -24,6 +24,12 @@ import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar"
 import CallHandler from '../../../CallHandler';
 import CallMediaHandler from "../../../CallMediaHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+
+export enum VideoFeedType {
+    Local,
+    Remote,
+}
 
 interface IProps {
     call: MatrixCall,
@@ -45,6 +51,8 @@ interface IState {
     audioOnly: boolean;
 }
 
+
+@replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.Component<IProps, IState> {
     private video = createRef<HTMLVideoElement>();
     private audio = createRef<HTMLAudioElement>();

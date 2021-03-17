@@ -429,7 +429,7 @@
     "Unban this user?": "Atblokuoti šį vartotoją?",
     "Ban this user?": "Užblokuoti šį vartotoją?",
     "Failed to ban user": "Nepavyko užblokuoti vartotojo",
-    "Invited": "Pakviestas",
+    "Invited": "Pakviesta",
     "Filter room members": "Filtruoti kambario dalyvius",
     "Server unavailable, overloaded, or something else went wrong.": "Serveris neprieinamas, perkrautas arba nutiko kažkas kito.",
     "%(duration)ss": "%(duration)s sek",
@@ -2089,5 +2089,7 @@
     "If your other sessions do not have the key for this message you will not be able to decrypt them.": "Jei jūsų kiti seansai neturi šios žinutės rakto, jūs negalėsite jos iššifruoti.",
     "Missing session data": "Trūksta seanso duomenų",
     "Successfully restored %(sessionCount)s keys": "Sėkmingai atkurti %(sessionCount)s raktai",
-    "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Įspėjimas: Jūsų asmeniniai duomenys (įskaitant šifravimo raktus) vis dar yra saugomi šiame seanse. Išvalykite juos, jei baigėte naudoti šį seansą, arba norite prisijungti prie kitos paskyros."
+    "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Įspėjimas: Jūsų asmeniniai duomenys (įskaitant šifravimo raktus) vis dar yra saugomi šiame seanse. Išvalykite juos, jei baigėte naudoti šį seansą, arba norite prisijungti prie kitos paskyros.",
+    "Reason (optional)": "Priežastis (nebūtina)",
+    "Reason: %(reason)s": "Priežastis: %(reason)s"
 }

@@ -48,6 +48,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -111,6 +112,7 @@ export function isQuickReaction(model) {
     return false;
 }
 
+@replaceableComponent("views.rooms.SendMessageComposer")
 export default class SendMessageComposer extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,
@@ -404,7 +406,9 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
-        dis.dispatch({action: "scroll_to_bottom"});
+        if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+            dis.dispatch({action: "scroll_to_bottom"});
+        }
     }
 
     componentWillUnmount() {

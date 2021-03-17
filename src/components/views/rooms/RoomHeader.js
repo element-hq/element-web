@@ -32,7 +32,9 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import {PlaceCallType} from "../../../CallHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.RoomHeader")
 export default class RoomHeader extends React.Component {
     static propTypes = {
         room: PropTypes.object,

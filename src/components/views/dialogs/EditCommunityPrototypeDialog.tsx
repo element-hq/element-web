@@ -23,6 +23,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import FlairStore from "../../../stores/FlairStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface IProps extends IDialogProps {
     communityId: string;
@@ -38,6 +40,7 @@ interface IState {
 }
 
 // XXX: This is a lot of duplication from the create dialog, just in a different shape
+@replaceableComponent("views.dialogs.EditCommunityPrototypeDialog")
 export default class EditCommunityPrototypeDialog extends React.PureComponent<IProps, IState> {
     private avatarUploadRef: React.RefObject<HTMLInputElement> = React.createRef();
 
@@ -116,7 +119,7 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
         let preview = <img src={this.state.avatarPreview} className="mx_EditCommunityPrototypeDialog_avatar" />;
         if (!this.state.avatarPreview) {
             if (this.state.currentAvatarUrl) {
-                const url = MatrixClientPeg.get().mxcUrlToHttp(this.state.currentAvatarUrl);
+                const url = mediaFromMxc(this.state.currentAvatarUrl).srcHttp;
                 preview = <img src={url} className="mx_EditCommunityPrototypeDialog_avatar" />;
             } else {
                 preview = <div className="mx_EditCommunityPrototypeDialog_placeholderAvatar" />

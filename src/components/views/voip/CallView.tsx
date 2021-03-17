@@ -31,6 +31,7 @@ import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
@@ -95,6 +96,7 @@ const CONTROLS_HIDE_DELAY = 1000;
 // height to get the max height of the video
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
+@replaceableComponent("views.voip.CallView")
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();

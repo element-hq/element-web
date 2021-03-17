@@ -21,6 +21,7 @@ import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import EmojiPicker from "./EmojiPicker";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -32,6 +33,7 @@ interface IState {
     selectedEmojis: Set<string>;
 }
 
+@replaceableComponent("views.emojipicker.ReactionPicker")
 class ReactionPicker extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
