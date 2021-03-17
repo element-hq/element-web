@@ -55,10 +55,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const recorder = new VoiceRecorder(MatrixClientPeg.get());
         await recorder.start();
         this.props.onRecording(true);
-        // TODO: Run through EQ component
-        recorder.rawData.onUpdate((frame) => {
-            console.log('@@ FRAME', frame);
-        });
+        // TODO: @@ TravisR: Run through EQ component
+        // recorder.rawData.onUpdate((frame) => {
+        //     console.log('@@ FRAME', frame);
+        // });
         this.setState({recorder});
     };
 

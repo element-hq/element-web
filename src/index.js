@@ -28,5 +28,3 @@ export function resetSkin() {
 export function getComponent(componentName) {
     return Skinner.getComponent(componentName);
 }
-
-import "./voice/VoiceRecorder"; // TODO: @@ REMOVE

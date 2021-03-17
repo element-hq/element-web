@@ -39,7 +39,7 @@ export class VoiceRecorder {
 
     public constructor(private client: MatrixClient) {
         this.recorder.ondataavailable = (a: ArrayBuffer) => {
-            // TODO: @@ We'll have to decode each frame and convert it to an EQ to observe
+            // TODO: @@ TravisR: We'll have to decode each frame and convert it to an EQ to observe
             console.log(a);
             const buf = new Uint8Array(a);
             const newBuf = new Uint8Array(this.buffer.length + buf.length);
@@ -111,7 +111,7 @@ export class VoiceRecorder {
         return this.mxc;
     }
 
-    // TODO: @@ REMOVE
+    // TODO: @@ TravisR: REMOVE
     public async test() {
         this.start()
             .then(() => sleep(5000))
