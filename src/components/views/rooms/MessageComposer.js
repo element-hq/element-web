@@ -352,7 +352,7 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
-                    // TODO: TravisR - Disabling the composer doesn't work
+                    // TODO: @@ TravisR - Disabling the composer doesn't work
                     disabled={this.state.haveRecording}
                 />,
             );
