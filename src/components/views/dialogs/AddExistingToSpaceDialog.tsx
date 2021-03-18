@@ -69,6 +69,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
     const existingRoomsSet = new Set(existingRooms);
     const rooms = cli.getVisibleRooms().filter(room => {
         return !existingRoomsSet.has(room) // not already in space
+            && !room.isSpaceRoom() // not a space itself
             && room.name.toLowerCase().includes(lcQuery) // contains query
             && !DMRoomMap.shared().getUserIdForRoomId(room.roomId); // not a DM
     });
