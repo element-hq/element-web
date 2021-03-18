@@ -51,6 +51,7 @@ interface IItemProps {
     isNested?: boolean;
     isPanelCollapsed?: boolean;
     onExpand?: Function;
+    parents?: Set<string>;
 }
 
 interface IItemState {
@@ -299,7 +300,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const isNarrow = this.props.isPanelCollapsed;
         const collapsed = this.state.collapsed || forceCollapsed;
 
-        const childSpaces = SpaceStore.instance.getChildSpaces(space.roomId);
+        const childSpaces = SpaceStore.instance.getChildSpaces(space.roomId)
+            .filter(s => !this.props.parents?.has(s.roomId));
         const isActive = activeSpaces.includes(space);
         const itemClasses = classNames({
             "mx_SpaceItem": true,
@@ -312,11 +314,17 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             mx_SpaceButton_narrow: isNarrow,
         });
         const notificationState = SpaceStore.instance.getNotificationState(space.roomId);
-        const childItems = childSpaces && !collapsed ? <SpaceTreeLevel
-            spaces={childSpaces}
-            activeSpaces={activeSpaces}
-            isNested={true}
-        /> : null;
+
+        let childItems;
+        if (childSpaces && !collapsed) {
+            childItems = <SpaceTreeLevel
+                spaces={childSpaces}
+                activeSpaces={activeSpaces}
+                isNested={true}
+                parents={new Set(this.props.parents).add(this.props.space.roomId)}
+            />;
+        }
+
         let notifBadge;
         if (notificationState) {
             notifBadge = <div className="mx_SpacePanel_badgeContainer">
@@ -383,12 +391,14 @@ interface ITreeLevelProps {
     spaces: Room[];
     activeSpaces: Room[];
     isNested?: boolean;
+    parents: Set<string>;
 }
 
 const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
     spaces,
     activeSpaces,
     isNested,
+    parents,
 }) => {
     return <ul className="mx_SpaceTreeLevel">
         {spaces.map(s => {
@@ -397,6 +407,7 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
                 activeSpaces={activeSpaces}
                 space={s}
                 isNested={isNested}
+                parents={parents}
             />);
         })}
     </ul>;

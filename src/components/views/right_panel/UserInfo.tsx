@@ -64,6 +64,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface IDevice {
     deviceId: string;
@@ -1424,14 +1425,14 @@ const UserInfoHeader: React.FC<{
         const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
         if (!avatarUrl) return;
 
-        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
+        const httpUrl = mediaFromMxc(avatarUrl).srcHttp;
         const params = {
             src: httpUrl,
             name: member.name,
         };
 
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }, [cli, member]);
+    }, [member]);
 
     const avatarElement = (
         <div className="mx_UserInfo_avatar">

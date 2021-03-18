@@ -22,6 +22,7 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { throttle } from "lodash";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
+import {mediaFromMxc} from "../customisations/Media";
 
 interface IState {
     displayName?: string;
@@ -72,8 +73,12 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
      */
     public getHttpAvatarUrl(size = 0): string {
         if (!this.avatarMxc) return null;
-        const adjustedSize = size > 1 ? size : undefined; // don't let negatives or zero through
-        return this.matrixClient.mxcUrlToHttp(this.avatarMxc, adjustedSize, adjustedSize);
+        const media = mediaFromMxc(this.avatarMxc);
+        if (!size || size <= 0) {
+            return media.srcHttp;
+        } else {
+            return media.getSquareThumbnailHttp(size);
+        }
     }
 
     protected async onNotReady() {

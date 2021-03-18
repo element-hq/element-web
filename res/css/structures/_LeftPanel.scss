@@ -19,7 +19,8 @@ $roomListCollapsedWidth: 68px;
 
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
-    min-width: 260px;
+    // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
+    min-width: 206px;
     max-width: 50%;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
