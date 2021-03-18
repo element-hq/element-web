@@ -463,6 +463,9 @@ class TimelinePanel extends React.Component {
                 }
             });
         }
+        if (payload.action === "scroll_to_bottom") {
+            this.jumpToLiveTimeline();
+        }
     };
 
     onRoomTimeline = (ev, room, toStartOfTimeline, removed, data) => {
