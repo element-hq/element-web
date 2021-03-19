@@ -26,10 +26,15 @@ export class VoiceRecorder {
         mediaTrackConstraints: <MediaTrackConstraints>{
             deviceId: CallMediaHandler.getAudioInput(),
         },
-        encoderSampleRate: 16000, // we could go down to 12khz, but we lose quality
+        encoderSampleRate: 48000, // we could go down to 12khz, but we lose quality. 48khz is a webrtc default
         encoderApplication: 2048, // voice (default is "audio")
         streamPages: true, // so we can have a live EQ for the user
-        encoderFrameSize: 10, // we want updates fairly regularly for the UI
+        encoderFrameSize: 20, // ms, we want updates fairly regularly for the UI
+        numberOfChannels: 1, // stereo isn't important for us
+        //sourceNode: instanceof MediaStreamAudioSourceNode, // TODO: @@ Travis: Use this for EQ stuff.
+        encoderBitRate: 64000, // 64kbps is average for webrtc
+        encoderComplexity: 3, // 0-10, 0 is fast and low complexity
+        resampleQuality: 3, // 0-10, 10 is slow and high quality
     });
     private buffer = new Uint8Array(0);
     private mxc: string;
