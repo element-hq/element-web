@@ -14,10 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: the space panel currently does not have a fixed width,
-// just the headers at each level have a max-width of 150px
-// so this will look slightly off for now. We should probably use css grid for the whole main layout...
-$spacePanelWidth: 200px;
+$spacePanelWidth: 71px;
 
 .mx_SpaceCreateMenu_wrapper {
     // background blur everything except SpacePanel
