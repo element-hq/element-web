@@ -1316,7 +1316,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 );
                 const visibility = visibilityEvent && visibilityEvent.getContent() &&
                     visibilityEvent.getContent().history_visibility;
-                if (visibility == "world_readable" || visibility == "shared") {
+                if (visibility === "world_readable" || visibility === "shared") {
                     keySharingWarning =
                         <div>
                             {_t("Note: Decryption keys for old messages will be shared with invited users.")}
