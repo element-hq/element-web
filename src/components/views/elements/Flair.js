@@ -20,6 +20,7 @@ import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 
 class FlairAvatar extends React.Component {
@@ -39,8 +40,7 @@ class FlairAvatar extends React.Component {
     }
 
     render() {
-        const httpUrl = this.context.mxcUrlToHttp(
-            this.props.groupProfile.avatarUrl, 16, 16, 'scale', false);
+        const httpUrl = mediaFromMxc(this.props.groupProfile.avatarUrl).getSquareThumbnailHttp(16);
         const tooltip = this.props.groupProfile.name ?
             `${this.props.groupProfile.name} (${this.props.groupProfile.groupId})`:
             this.props.groupProfile.groupId;

@@ -36,11 +36,10 @@ import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
-import SpacePanel from "../views/spaces/SpacePanel";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
 
 interface IProps {
     isMinimized: boolean;
@@ -121,7 +120,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
         const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
         if (settingBgMxc) {
-            avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(settingBgMxc, avatarSize, avatarSize);
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
         }
 
         const avatarUrlProp = `url(${avatarUrl})`;
@@ -392,11 +391,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         let leftLeftPanel;
-        // Currently TagPanel.enableTagPanel is disabled when Legacy Communities are disabled so for now
-        // ignore it and force the rendering of SpacePanel if that Labs flag is enabled.
-        if (SettingsStore.getValue("feature_spaces")) {
-            leftLeftPanel = <SpacePanel />;
-        } else if (this.state.showGroupFilterPanel) {
+        if (this.state.showGroupFilterPanel) {
             leftLeftPanel = (
                 <div className="mx_LeftPanel_GroupFilterPanelContainer">
                     <GroupFilterPanel />

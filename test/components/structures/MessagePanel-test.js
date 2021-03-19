@@ -116,6 +116,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + i*1000,
                 mship: 'join',
@@ -148,6 +149,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + i*1000,
                 mship: 'join',
@@ -193,6 +195,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 1,
                 mship: 'join',
@@ -239,6 +242,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 5,
                 mship: 'invite',

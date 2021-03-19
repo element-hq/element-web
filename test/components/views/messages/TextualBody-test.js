@@ -37,6 +37,7 @@ describe("<TextualBody />", () => {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
             isGuest: () => false,
+            mxcUrlToHttp: (s) => s,
         };
 
         const ev = mkEvent({
@@ -61,6 +62,7 @@ describe("<TextualBody />", () => {
             getRoom: () => mkStubRoom("room_id"),
             getAccountData: () => undefined,
             isGuest: () => false,
+            mxcUrlToHttp: (s) => s,
         };
 
         const ev = mkEvent({
@@ -86,6 +88,7 @@ describe("<TextualBody />", () => {
                 getRoom: () => mkStubRoom("room_id"),
                 getAccountData: () => undefined,
                 isGuest: () => false,
+                mxcUrlToHttp: (s) => s,
             };
         });
 
@@ -139,6 +142,7 @@ describe("<TextualBody />", () => {
                 on: () => undefined,
                 removeListener: () => undefined,
                 isGuest: () => false,
+                mxcUrlToHttp: (s) => s,
             };
         });
 
@@ -284,6 +288,7 @@ describe("<TextualBody />", () => {
             getAccountData: () => undefined,
             getUrlPreview: (url) => new Promise(() => {}),
             isGuest: () => false,
+            mxcUrlToHttp: (s) => s,
         };
 
         const ev = mkEvent({

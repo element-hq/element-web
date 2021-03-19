@@ -84,6 +84,7 @@ export default class VoiceUserSettingsTab extends React.Component {
             }
         }
         if (error) {
+            console.log("Failed to list userMedia devices", error);
             const brand = SdkConfig.get().brand;
             const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {

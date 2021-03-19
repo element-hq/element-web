@@ -18,7 +18,7 @@ import React, {PureComponent} from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import PropTypes from "prop-types";
-import {MatrixEvent} from "matrix-js-sdk";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import SdkConfig from '../../../SdkConfig';
 import Markdown from '../../../Markdown';
