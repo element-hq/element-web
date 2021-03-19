@@ -394,7 +394,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEvent: MatrixEvent) => {
         if (ev.getType() === EventType.Tag && !room.isSpaceRoom()) {
             // If the room was in favourites and now isn't or the opposite then update its position in the trees
-            if (!!ev.getContent()[DefaultTagID.Favourite] !== !!lastEvent.getContent()[DefaultTagID.Favourite]) {
+            const oldTags = lastEvent.getContent()?.tags;
+            const newTags = ev.getContent()?.tags;
+            if (!!oldTags[DefaultTagID.Favourite] !== !!newTags[DefaultTagID.Favourite]) {
                 this.onRoomUpdate(room);
             }
         }
