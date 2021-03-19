@@ -2553,6 +2553,8 @@
     "Logout": "Logout",
     "%(creator)s created this DM.": "%(creator)s created this DM.",
     "%(creator)s created and configured the room.": "%(creator)s created and configured the room.",
+    "%(count)s messages deleted.|other": "%(count)s messages deleted.",
+    "%(count)s messages deleted.|one": "%(count)s message deleted.",
     "Your Communities": "Your Communities",
     "Did you know: you can use communities to filter your %(brand)s experience!": "Did you know: you can use communities to filter your %(brand)s experience!",
     "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.",
