@@ -47,7 +47,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
                 }
             }}
         >
-            { _t("Share invite link") }
+            <h3>{ _t("Share invite link") }</h3>
             <span>{ copiedText }</span>
         </AccessibleButton>
         <AccessibleButton
@@ -57,7 +57,8 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
                 onFinished();
             }}
         >
-            { _t("Invite by email or username") }
+            <h3>{ _t("Invite people") }</h3>
+            <span>{ _t("Invite with email or username") }</span>
         </AccessibleButton>
     </div>;
 };

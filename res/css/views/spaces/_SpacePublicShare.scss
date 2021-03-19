@@ -16,38 +16,7 @@ limitations under the License.
 
 .mx_SpacePublicShare {
     .mx_AccessibleButton {
-        border: 1px solid $space-button-outline-color;
-        box-sizing: border-box;
-        border-radius: 8px;
-        padding: 12px 24px 12px 52px;
-        margin-top: 16px;
-        width: $SpaceRoomViewInnerWidth;
-        font-size: $font-15px;
-        line-height: $font-24px;
-        position: relative;
-        display: flex;
-
-        > span {
-            color: #368bd6;
-            margin-left: auto;
-        }
-
-        &:hover {
-            background-color: rgba(141, 151, 165, 0.1);
-        }
-
-        &::before {
-            content: "";
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
-            background: $muted-fg-color;
-            left: 12px;
-            top: 9px;
-        }
+        @mixin SpacePillButton;
 
         &.mx_SpacePublicShare_shareButton::before {
             mask-image: url('$(res)/img/element-icons/link.svg');

@@ -32,7 +32,6 @@ import {useRoomMembers} from "../../hooks/useRoomMembers";
 import createRoom, {IOpts, Preset} from "../../createRoom";
 import Field from "../views/elements/Field";
 import {useEventEmitter} from "../../hooks/useEventEmitter";
-import StyledRadioGroup from "../views/elements/StyledRadioGroup";
 import withValidation from "../views/elements/Validation";
 import * as Email from "../../email";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -443,32 +442,20 @@ const SpaceSetupPrivateScope = ({ onFinished }) => {
         <h1>{ _t("Who are you working with?") }</h1>
         <div className="mx_SpaceRoomView_description">{ _t("Ensure the right people have access to the space.") }</div>
 
-        <StyledRadioGroup
-            name="privateSpaceScope"
-            value={option}
-            onChange={setOption}
-            definitions={[
-                {
-                    value: "justMe",
-                    className: "mx_SpaceRoomView_privateScope_justMeButton",
-                    label: <React.Fragment>
-                        <h3>{ _t("Just Me") }</h3>
-                        <div>{ _t("A private space just for you") }</div>
-                    </React.Fragment>,
-                }, {
-                    value: "meAndMyTeammates",
-                    className: "mx_SpaceRoomView_privateScope_meAndMyTeammatesButton",
-                    label: <React.Fragment>
-                        <h3>{ _t("Me and my teammates") }</h3>
-                        <div>{ _t("A private space for you and your teammates") }</div>
-                    </React.Fragment>,
-                },
-            ]}
-        />
-
-        <div className="mx_SpaceRoomView_buttons">
-            <FormButton label={_t("Next")} disabled={!option} onClick={() => onFinished(option !== "justMe")} />
-        </div>
+        <AccessibleButton
+            className="mx_SpaceRoomView_privateScope_justMeButton"
+            onClick={() => { onFinished(false) }}
+        >
+            <h3>{ _t("Just me") }</h3>
+            <div>{ _t("A private space to organise your rooms") }</div>
+        </AccessibleButton>
+        <AccessibleButton
+            className="mx_SpaceRoomView_privateScope_meAndMyTeammatesButton"
+            onClick={() => { onFinished(true) }}
+        >
+            <h3>{ _t("Me and my teammates") }</h3>
+            <div>{ _t("A private space for you and your teammates") }</div>
+        </AccessibleButton>
     </div>;
 };
 
