@@ -27,7 +27,7 @@ import {parseEvent} from '../../../editor/deserialize';
 import {PartCreator} from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk/src/models/event';
 import BasicMessageComposer from "./BasicMessageComposer";
 import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

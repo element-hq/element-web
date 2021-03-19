@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import { Room, MatrixEvent } from "matrix-js-sdk";
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
@@ -39,6 +38,8 @@ import SettingsStore, {LEVEL_ORDER} from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
