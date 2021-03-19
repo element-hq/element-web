@@ -20,8 +20,11 @@ import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
 import * as sdk from "../../../index";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 // TODO: Merge with ProfileSettings?
+@replaceableComponent("views.room_settings.RoomProfileSettings")
 export default class RoomProfileSettings extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -36,7 +39,7 @@ export default class RoomProfileSettings extends React.Component {
 
         const avatarEvent = room.currentState.getStateEvents("m.room.avatar", "");
         let avatarUrl = avatarEvent && avatarEvent.getContent() ? avatarEvent.getContent()["url"] : null;
-        if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
+        if (avatarUrl) avatarUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(96);
 
         const topicEvent = room.currentState.getStateEvents("m.room.topic", "");
         const topic = topicEvent && topicEvent.getContent() ? topicEvent.getContent()['topic'] : '';
@@ -100,16 +103,17 @@ export default class RoomProfileSettings extends React.Component {
         const newState = {};
 
         // TODO: What do we do about errors?
-
+        const displayName = this.state.displayName.trim();
         if (this.state.originalDisplayName !== this.state.displayName) {
-            await client.setRoomName(this.props.roomId, this.state.displayName);
-            newState.originalDisplayName = this.state.displayName;
+            await client.setRoomName(this.props.roomId, displayName);
+            newState.originalDisplayName = displayName;
+            newState.displayName = displayName;
         }
 
         if (this.state.avatarFile) {
             const uri = await client.uploadContent(this.state.avatarFile);
             await client.sendStateEvent(this.props.roomId, 'm.room.avatar', {url: uri}, '');
-            newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
+            newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
             newState.originalAvatarUrl = newState.avatarUrl;
             newState.avatarFile = null;
         } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {

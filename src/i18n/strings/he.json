@@ -46,7 +46,7 @@
     "Unpin Message": "שחרר צימוד הודעה",
     "Online": "מקוון",
     "Register": "רשום",
-    "Rooms": "חדרי שיחוח",
+    "Rooms": "חדרים",
     "Add rooms to this community": "הוסף חדר שיחוח לקהילה זו",
     "OK": "בסדר",
     "Operation failed": "פעולה נכשלה",
@@ -2774,5 +2774,16 @@
     "Workspace: <networkLink/>": "סביבת עבודה: <networkLink/>",
     "Use Ctrl + F to search": "השתמש ב- Ctrl + F כדי לחפש",
     "Use Command + F to search": "השתמש ב- Command + F כדי לחפש",
-    "Change which room, message, or user you're viewing": "שנה את החדר, ההודעה או המשתמש שאתה צופה בו"
+    "Change which room, message, or user you're viewing": "שנה את החדר, ההודעה או המשתמש שאתה צופה בו",
+    "Expand code blocks by default": "הרחב את בלוקי הקוד כברירת מחדל",
+    "Show stickers button": "הצג את לחצן הסטיקרים",
+    "Use app": "השתמש באפליקציה",
+    "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web הוא ניסיוני במובייל. לקבלת חוויה טובה יותר והתכונות העדכניות ביותר, השתמש באפליקציה המקורית החינמית שלנו.",
+    "Use app for a better experience": "השתמש באפליקציה לחוויה טובה יותר",
+    "Converts the DM to a room": "המר את ה- DM לחדר שיחוח",
+    "Converts the room to a DM": "המר את החדר ל- DM",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "לא ניתן היה להגיע לשרת הבית שלך ולא היה ניתן להתחבר. נסה שוב. אם זה נמשך, אנא פנה למנהל שרת הבית שלך.",
+    "Try again": "נסה שוב",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "ביקשנו מהדפדפן לזכור באיזה שרת בית אתה משתמש כדי לאפשר לך להיכנס, אך למרבה הצער הדפדפן שלך שכח אותו. עבור לדף הכניסה ונסה שוב.",
+    "We couldn't log you in": "לא הצלחנו להתחבר אליך"
 }

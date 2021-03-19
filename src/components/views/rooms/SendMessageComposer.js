@@ -48,6 +48,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -111,12 +112,14 @@ export function isQuickReaction(model) {
     return false;
 }
 
+@replaceableComponent("views.rooms.SendMessageComposer")
 export default class SendMessageComposer extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,
         placeholder: PropTypes.string,
         permalinkCreator: PropTypes.object.isRequired,
         replyToEvent: PropTypes.object,
+        onChange: PropTypes.func,
     };
 
     static contextType = MatrixClientContext;
@@ -403,7 +406,9 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
-        dis.dispatch({action: "scroll_to_bottom"});
+        if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+            dis.dispatch({action: "scroll_to_bottom"});
+        }
     }
 
     componentWillUnmount() {
@@ -536,10 +541,15 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    onChange = () => {
+        if (this.props.onChange) this.props.onChange(this.model);
+    }
+
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
                 <BasicMessageComposer
+                    onChange={this.onChange}
                     ref={this._setEditorRef}
                     model={this.model}
                     room={this.props.room}

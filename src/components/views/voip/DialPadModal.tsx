@@ -24,6 +24,8 @@ import DialPad from './DialPad';
 import dis from '../../../dispatcher/dispatcher';
 import Modal from "../../../Modal";
 import ErrorDialog from "../../views/dialogs/ErrorDialog";
+import CallHandler from "../../../CallHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     onFinished: (boolean) => void;
@@ -33,6 +35,7 @@ interface IState {
     value: string;
 }
 
+@replaceableComponent("views.voip.DialPadModal")
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
@@ -64,9 +67,7 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     }
 
     onDialPress = async () => {
-        const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-            'm.id.phone': this.state.value,
-        });
+        const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
         if (!results || results.length === 0 || !results[0].userid) {
             Modal.createTrackedDialog('', '', ErrorDialog, {
                 title: _t("Unable to look up phone number"),

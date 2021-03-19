@@ -477,6 +477,7 @@ export default class WidgetUtils {
             'userId=$matrix_user_id',
             'roomId=$matrix_room_id',
             'theme=$theme',
+            'roomName=$roomName',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);

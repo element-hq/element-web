@@ -15,10 +15,12 @@ limitations under the License.
 */
 
 $groupFilterPanelWidth: 56px; // only applies in this file, used for calculations
+$roomListCollapsedWidth: 68px;
 
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
-    min-width: 260px;
+    // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
+    min-width: 206px;
     max-width: 50%;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
@@ -37,18 +39,12 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
         // GroupFilterPanel handles its own CSS
     }
 
-    &:not(.mx_LeftPanel_hasGroupFilterPanel) {
-        .mx_LeftPanel_roomListContainer {
-            width: 100%;
-        }
-    }
-
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel_roomListContainer {
-        width: calc(100% - $groupFilterPanelWidth);
         background-color: $roomlist-bg-color;
-
+        flex: 1 0 0;
+        min-width: 0;
         // Create another flexbox (this time a column) for the room list components
         display: flex;
         flex-direction: column;
@@ -168,17 +164,10 @@ $groupFilterPanelWidth: 56px; // only applies in this file, used for calculation
     // These styles override the defaults for the minimized (66px) layout
     &.mx_LeftPanel_minimized {
         min-width: unset;
-
-        // We have to forcefully set the width to override the resizer's style attribute.
-        &.mx_LeftPanel_hasGroupFilterPanel {
-            width: calc(68px + $groupFilterPanelWidth) !important;
-        }
-        &:not(.mx_LeftPanel_hasGroupFilterPanel) {
-            width: 68px !important;
-        }
+        width: unset !important;
 
         .mx_LeftPanel_roomListContainer {
-            width: 68px;
+            width: $roomListCollapsedWidth;
 
             .mx_LeftPanel_userHeader {
                 flex-direction: row;

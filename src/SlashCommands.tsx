@@ -441,15 +441,14 @@ export const Commands = [
     }),
     new Command({
         command: 'invite',
-        args: '<user-id>',
+        args: '<user-id> [<reason>]',
         description: _td('Invites user with given id to current room'),
         runFn: function(roomId, args) {
             if (args) {
-                const matches = args.match(/^(\S+)$/);
-                if (matches) {
+                const [address, reason] = args.split(/\s+(.+)/);
+                if (address) {
                     // We use a MultiInviter to re-use the invite logic, even though
                     // we're only inviting one user.
-                    const address = matches[1];
                     // If we need an identity server but don't have one, things
                     // get a bit more complex here, but we try to show something
                     // meaningful.
@@ -490,7 +489,7 @@ export const Commands = [
                     }
                     const inviter = new MultiInviter(roomId);
                     return success(prom.then(() => {
-                        return inviter.invite([address]);
+                        return inviter.invite([address], reason);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
                             throw new Error(inviter.getErrorText(address));
@@ -1040,9 +1039,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-                        'm.id.phone': userId,
-                    });
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw new Error("Unable to find Matrix ID for phone number");
                     }
@@ -1182,7 +1179,7 @@ export function parseCommandString(input: string) {
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {

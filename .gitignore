@@ -13,3 +13,4 @@ package-lock.json
 /src/component-index.js
 
 .DS_Store
+*.tmp

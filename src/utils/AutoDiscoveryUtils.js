@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import {AutoDiscovery} from "matrix-js-sdk";
+import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 import {_t, _td, newTranslatableError} from "../languageHandler";
 import {makeType} from "./TypeUtils";
 import SdkConfig from '../SdkConfig';

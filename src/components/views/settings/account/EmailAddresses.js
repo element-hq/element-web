@@ -25,6 +25,7 @@ import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -112,6 +113,7 @@ export class ExistingEmailAddress extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.account.EmailAddresses")
 export default class EmailAddresses extends React.Component {
     static propTypes = {
         emails: PropTypes.array.isRequired,
@@ -178,19 +180,23 @@ export default class EmailAddresses extends React.Component {
         e.preventDefault();
 
         this.setState({continueDisabled: true});
-        this.state.addTask.checkEmailLinkClicked().then(() => {
-            const email = this.state.newEmailAddress;
+        this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
+            let newEmailAddress = this.state.newEmailAddress;
+            if (finished) {
+                const email = this.state.newEmailAddress;
+                const emails = [
+                    ...this.props.emails,
+                    { address: email, medium: "email" },
+                ];
+                this.props.onEmailsChange(emails);
+                newEmailAddress = "";
+            }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
-                newEmailAddress: "",
+                newEmailAddress,
             });
-            const emails = [
-                ...this.props.emails,
-                { address: email, medium: "email" },
-            ];
-            this.props.onEmailsChange(emails);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

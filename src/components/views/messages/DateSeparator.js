@@ -19,6 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import {formatFullDateNoTime} from '../../../DateUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function getdaysArray() {
     return [
@@ -32,6 +33,7 @@ function getdaysArray() {
     ];
 }
 
+@replaceableComponent("views.messages.DateSeparator")
 export default class DateSeparator extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,

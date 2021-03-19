@@ -36,9 +36,10 @@ import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
 
 interface IProps {
     isMinimized: boolean;
@@ -59,6 +60,7 @@ const cssClasses = [
     "mx_RoomSublist_showNButton",
 ];
 
+@replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
@@ -118,7 +120,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
         const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
         if (settingBgMxc) {
-            avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(settingBgMxc, avatarSize, avatarSize);
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
         }
 
         const avatarUrlProp = `url(${avatarUrl})`;
@@ -388,12 +390,15 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const groupFilterPanel = !this.state.showGroupFilterPanel ? null : (
-            <div className="mx_LeftPanel_GroupFilterPanelContainer">
-                <GroupFilterPanel />
-                {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
-            </div>
-        );
+        let leftLeftPanel;
+        if (this.state.showGroupFilterPanel) {
+            leftLeftPanel = (
+                <div className="mx_LeftPanel_GroupFilterPanelContainer">
+                    <GroupFilterPanel />
+                    {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
+                </div>
+            );
+        }
 
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
@@ -406,7 +411,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         const containerClasses = classNames({
             "mx_LeftPanel": true,
-            "mx_LeftPanel_hasGroupFilterPanel": !!groupFilterPanel,
             "mx_LeftPanel_minimized": this.props.isMinimized,
         });
 
@@ -417,7 +421,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses}>
-                {groupFilterPanel}
+                {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}

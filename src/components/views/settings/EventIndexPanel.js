@@ -25,7 +25,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component {
     constructor() {
         super();

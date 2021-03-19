@@ -1,7 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2017 - 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,14 +17,19 @@ import React from 'react';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
-import { Room, RoomMember } from 'matrix-js-sdk';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import {mediaFromMxc} from "../../../customisations/Media";
+import Tooltip from './Tooltip';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.Pill")
 class Pill extends React.Component {
     static roomNotifPos(text) {
         return text.indexOf("@room");
@@ -68,6 +71,8 @@ class Pill extends React.Component {
         group: null,
         // The room related to the room pill
         room: null,
+        // Is the user hovering the pill
+        hover: false,
     };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -154,6 +159,18 @@ class Pill extends React.Component {
         this._unmounted = true;
     }
 
+    onMouseOver = () => {
+        this.setState({
+            hover: true,
+        });
+    };
+
+    onMouseLeave = () => {
+        this.setState({
+            hover: false,
+        });
+    };
+
     doProfileLookup(userId, member) {
         MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
             if (this._unmounted) {
@@ -226,7 +243,7 @@ class Pill extends React.Component {
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
-                    linkText = resource;
+                    linkText = room.name || resource;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
@@ -237,12 +254,12 @@ class Pill extends React.Component {
             case Pill.TYPE_GROUP_MENTION: {
                 if (this.state.group) {
                     const {avatarUrl, groupId, name} = this.state.group;
-                    const cli = MatrixClientPeg.get();
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
-                                             url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
+                        avatar = <BaseAvatar
+                            name={name || groupId} width={16} height={16} aria-hidden="true"
+                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
                 }
@@ -256,15 +273,36 @@ class Pill extends React.Component {
         });
 
         if (this.state.pillType) {
+            const {yOffset} = this.props;
+
+            let tip;
+            if (this.state.hover && resource) {
+                tip = <Tooltip label={resource} yOffset={yOffset} />;
+            }
+
             return <MatrixClientContext.Provider value={this._matrixClient}>
                 { this.props.inMessage ?
-                    <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
+                    <a
+                        className={classes}
+                        href={href}
+                        onClick={onClick}
+                        data-offset-key={this.props.offsetKey}
+                        onMouseOver={this.onMouseOver}
+                        onMouseLeave={this.onMouseLeave}
+                    >
                         { avatar }
                         { linkText }
+                        { tip }
                     </a> :
-                    <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
+                    <span
+                        className={classes}
+                        data-offset-key={this.props.offsetKey}
+                        onMouseOver={this.onMouseOver}
+                        onMouseLeave={this.onMouseLeave}
+                    >
                         { avatar }
                         { linkText }
+                        { tip }
                     </span> }
             </MatrixClientContext.Provider>;
         } else {

@@ -22,7 +22,9 @@ import * as Avatar from '../../../Avatar';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
+import {Layout} from "../../../settings/Layout";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     /**
@@ -33,7 +35,7 @@ interface IProps {
     /**
      * Whether to use the irc layout or not
      */
-    useIRCLayout: boolean;
+    layout: Layout;
 
     /**
      * classnames to apply to the wrapper of the preview
@@ -51,6 +53,7 @@ interface IState {
 
 const AVATAR_SIZE = 32;
 
+@replaceableComponent("views.elements.EventTilePreview")
 export default class EventTilePreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -67,9 +70,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
-        const avatarUrl = Avatar.avatarUrlForUser(
-            {avatarUrl: profileInfo.avatar_url},
-            AVATAR_SIZE, AVATAR_SIZE, "crop");
+        const avatarUrl = profileInfo.avatar_url;
 
         this.setState({
             userId,
@@ -110,8 +111,9 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             name: displayname,
             userId: userId,
             getAvatarUrl: (..._) => {
-                return avatarUrl;
+                return Avatar.avatarUrlForUser({avatarUrl}, AVATAR_SIZE, AVATAR_SIZE, "crop");
             },
+            getMxcAvatarUrl: () => avatarUrl,
         };
 
         return event;
@@ -121,14 +123,14 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const event = this.fakeEvent(this.state);
 
         const className = classnames(this.props.className, {
-            "mx_IRCLayout": this.props.useIRCLayout,
-            "mx_GroupLayout": !this.props.useIRCLayout,
+            "mx_IRCLayout": this.props.layout == Layout.IRC,
+            "mx_GroupLayout": this.props.layout == Layout.Group,
         });
 
         return <div className={className}>
             <EventTile
                 mxEvent={event}
-                useIRCLayout={this.props.useIRCLayout}
+                layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
             />
         </div>;

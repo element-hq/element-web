@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
+import {createClient} from 'matrix-js-sdk/src/matrix';
 import React, {ReactNode} from 'react';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 
@@ -30,6 +30,7 @@ import Login, {ISSOFlow} from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from '../../views/elements/ServerPicker';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -109,6 +110,7 @@ interface IState {
     ssoFlow?: ISSOFlow;
 }
 
+@replaceableComponent("structures.auth.Registration")
 export default class Registration extends React.Component<IProps, IState> {
     loginLogic: Login;
 
@@ -179,7 +181,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
 
         const {hsUrl, isUrl} = serverConfig;
-        const cli = Matrix.createClient({
+        const cli = createClient({
             baseUrl: hsUrl,
             idBaseUrl: isUrl,
         });
@@ -276,6 +278,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     response.data.admin_contact,
                     {
                         'monthly_active_user': _td("This homeserver has hit its Monthly Active User limit."),
+                        'hs_blocked': _td("This homeserver has been blocked by it's administrator."),
                         '': _td("This homeserver has exceeded one of its resource limits."),
                     },
                 );
