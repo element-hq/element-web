@@ -72,6 +72,9 @@ For a good example, see https://develop.element.io/config.json.
     1. `homeUrl`: Content shown on the inside of the app when a specific room is
        not selected. By default, no home page is configured. If one is set, a
        button to access it will be shown in the top left menu.
+    1. `loginForWelcome`: Overrides `welcomeUrl` to make the welcome page be the
+       same page as the login page when `true`. This effectively disables the 
+       welcome page.
 1. `defaultCountryCode`: The ISO 3166 alpha2 country code to use when showing
    country selectors, like the phone number input on the registration page.
    Defaults to `GB` if the given code is unknown or not provided.
