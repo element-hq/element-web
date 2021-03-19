@@ -230,10 +230,10 @@ const SpaceLanding = ({ space }) => {
         try {
             const data = await cli.getSpaceSummary(space.roomId, undefined, myMembership !== "join");
 
-            const parentChildRelations = new EnhancedMap<string, string[]>();
+            const parentChildRelations = new EnhancedMap<string, Map<string, ISpaceSummaryEvent>>();
             data.events.map((ev: ISpaceSummaryEvent) => {
                 if (ev.type === EventType.SpaceChild) {
-                    parentChildRelations.getOrCreate(ev.room_id, []).push(ev.state_key);
+                    parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
                 }
             });
 
@@ -257,11 +257,10 @@ const SpaceLanding = ({ space }) => {
             <HierarchyLevel
                 spaceId={space.roomId}
                 rooms={roomsMap}
-                editing={false}
                 relations={relations}
                 parents={new Set()}
-                onPreviewClick={roomId => {
-                    showRoom(roomsMap.get(roomId), [], false); // TODO
+                onViewRoomClick={(roomId, autoJoin) => {
+                    showRoom(roomsMap.get(roomId), [], autoJoin);
                 }}
             />
         </AutoHideScrollbar>;
