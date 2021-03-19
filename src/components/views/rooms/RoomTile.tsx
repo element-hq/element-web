@@ -464,16 +464,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
             const lowPriorityLabel = _t("Low Priority");
 
-            const inRoom = this.props.room.getMyMembership() === "join";
             const userId = MatrixClientPeg.get().getUserId();
-            let canInvite = inRoom;
-            const powerLevels = this.props.room.currentState
-                .getStateEvents("m.room.power_levels", "")
-                ?.getContent();
-            const me = this.props.room.getMember(userId);
-            if (powerLevels && me && powerLevels.invite > me.powerLevel) {
-                canInvite = false;
-            }
+            const canInvite = this.props.room.canInvite(userId);
             contextMenu = <IconizedContextMenu
                 {...contextMenuBelow(this.state.generalMenuPosition)}
                 onFinished={this.onCloseGeneralMenu}
