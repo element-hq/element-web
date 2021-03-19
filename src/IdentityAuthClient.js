@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
-import { createClient } from 'matrix-js-sdk/src/matrix'
+import { createClient } from 'matrix-js-sdk/src/matrix';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import Modal from './Modal';

@@ -18,7 +18,7 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member'
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
