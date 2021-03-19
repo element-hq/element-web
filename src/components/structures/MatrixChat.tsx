@@ -85,6 +85,8 @@ import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import RoomListStore from "../../stores/room-list/RoomListStore";
+import {RoomUpdateCause} from "../../stores/room-list/models";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1140,11 +1142,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private forgetRoom(roomId: string) {
+        const room = MatrixClientPeg.get().getRoom(roomId);
         MatrixClientPeg.get().forget(roomId).then(() => {
             // Switch to home page if we're currently viewing the forgotten room
             if (this.state.currentRoomId === roomId) {
                 dis.dispatch({ action: "view_home_page" });
             }
+
+            // We have to manually update the room list because the forgotten room will not
+            // be notified to us, therefore the room list will have no other way of knowing
+            // the room is forgotten.
+            RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
         }).catch((err) => {
             const errCode = err.errcode || _td("unknown error code");
             Modal.createTrackedDialog("Failed to forget room", '', ErrorDialog, {
