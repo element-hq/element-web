@@ -364,6 +364,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             placeholder={placeholders[i]}
             value={roomNames[i]}
             onChange={ev => setRoomName(i, ev.target.value)}
+            autoFocus={i === 2}
         />;
     });
 
@@ -418,13 +419,9 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 
 const SpaceSetupPublicShare = ({ space, onFinished }) => {
     return <div className="mx_SpaceRoomView_publicShare">
-        <h1>{ _t("Invite people") }</h1>
-        <div className="mx_SpaceRoomView_description">
-            {
-                _t("It's just you at the moment.")
-            } {
-                _t("%(spaceName)s will be even better with others", { spaceName: space.name })
-            }
+        <h1>{ _t("Share %(name)s", { name: space.name }) }</h1>
+        <div className="mx_SpacePublicShare_description">
+            { _t("It's just you at the moment, it will be even better with others.") }
         </div>
 
         <SpacePublicShare space={space} onFinished={onFinished} />
@@ -435,12 +432,12 @@ const SpaceSetupPublicShare = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPrivateScope = ({ onFinished }) => {
-    const [option, setOption] = useState<string>(null);
-
+const SpaceSetupPrivateScope = ({ space, onFinished }) => {
     return <div className="mx_SpaceRoomView_privateScope">
         <h1>{ _t("Who are you working with?") }</h1>
-        <div className="mx_SpaceRoomView_description">{ _t("Ensure the right people have access to the space.") }</div>
+        <div className="mx_SpaceRoomView_description">
+            { _t("Make sure the right people have access to %(name)s", { name: space.name }) }
+        </div>
 
         <AccessibleButton
             className="mx_SpaceRoomView_privateScope_justMeButton"
@@ -485,6 +482,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
             onChange={ev => setEmailAddress(i, ev.target.value)}
             ref={fieldRefs[i]}
             onValidate={validateEmailRules}
+            autoFocus={i === 0}
         />;
     });
 
@@ -522,9 +520,18 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         setBusy(false);
     };
 
+    let onClick = onFinished;
+    let buttonLabel = _t("Skip for now");
+    if (emailAddresses.some(name => name.trim())) {
+        onClick = onNextClick;
+        buttonLabel = busy ? _t("Inviting...") : _t("Continue")
+    }
+
     return <div className="mx_SpaceRoomView_inviteTeammates">
         <h1>{ _t("Invite your teammates") }</h1>
-        <div className="mx_SpaceRoomView_description">{ _t("Ensure the right people have access to the space.") }</div>
+        <div className="mx_SpaceRoomView_description">
+            { _t("Make sure the right people have access. You can invite more later.") }
+        </div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
         { fields }
@@ -539,8 +546,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_buttons">
-            <AccessibleButton onClick={onFinished} kind="link">{_t("Skip for now")}</AccessibleButton>
-            <FormButton label={busy ? _t("Inviting...") : _t("Next")} disabled={busy} onClick={onNextClick} />
+            <FormButton label={buttonLabel} disabled={busy} onClick={onClick} />
         </div>
     </div>;
 };
@@ -673,7 +679,8 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
                     title={_t("What are some things you want to discuss?")}
-                    description={_t("We'll create a room for each of them. You can add more later too.")}
+                    description={_t("Let's create a room for each of them. " +
+                        "You can add more later too, including already existing ones.")}
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;
             case Phase.PublicShare:
@@ -681,6 +688,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
             case Phase.PrivateScope:
                 return <SpaceSetupPrivateScope
+                    space={this.props.space}
                     onFinished={(invite: boolean) => {
                         this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateCreateRooms });
                     }}
@@ -694,7 +702,8 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
                     title={_t("What projects are you working on?")}
-                    description={_t("We'll create rooms for each of them. You can add existing rooms after setup.")}
+                    description={_t("We'll create rooms for each of them. " +
+                        "You can add more later too, including already existing ones.")}
                     onFinished={() => this.setState({ phase: Phase.Landing })}
                 />;
         }

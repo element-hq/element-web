@@ -41,7 +41,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
                 const success = await copyPlaintext(permalinkCreator.forRoom());
                 const text = success ? _t("Copied!") : _t("Failed to copy");
                 setCopiedText(text);
-                await sleep(10);
+                await sleep(5000);
                 if (copiedText === text) { // if the text hasn't changed by another click then clear it after some time
                     setCopiedText(_t("Click to copy"));
                 }
