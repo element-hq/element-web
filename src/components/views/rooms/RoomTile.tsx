@@ -496,7 +496,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     {canInvite ? (
                         <IconizedContextMenuOption
                             onClick={this.onInviteClick}
-                            label={_t("Invite to this room")}
+                            label={_t("Invite People")}
                             iconClassName="mx_RoomTile_iconInvite"
                         />
                     ) : null}
