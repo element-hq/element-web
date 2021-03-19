@@ -19,7 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
-import { MatrixClient } from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../SecurityManager';
 

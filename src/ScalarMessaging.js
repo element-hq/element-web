@@ -237,7 +237,7 @@ Example:
 */
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import { MatrixEvent } from 'matrix-js-sdk';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
