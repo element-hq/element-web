@@ -395,6 +395,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 1px solid $accent-color;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
+    font-family: inherit;
 }
 
 .mx_Dialog button:last-child {
