@@ -50,7 +50,7 @@
     "unknown error code": "neznámý kód chyby",
     "OK": "OK",
     "Failed to forget room %(errCode)s": "Nepodařilo se zapomenout místnost %(errCode)s",
-    "Dismiss": "Zahodit",
+    "Dismiss": "Zavřít",
     "powered by Matrix": "používá protokol Matrix",
     "Custom Server Options": "Vlastní nastavení serveru",
     "Add a widget": "Přidat widget",
