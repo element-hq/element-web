@@ -655,6 +655,18 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         if (!algorithmTags) return [DefaultTagID.Untagged];
         return algorithmTags;
     }
+
+    /**
+     * Manually update a room with a given cause. This should only be used if the
+     * room list store would otherwise be incapable of doing the update itself. Note
+     * that this may race with the room list's regular operation.
+     * @param {Room} room The room to update.
+     * @param {RoomUpdateCause} cause The cause to update for.
+     */
+    public async manualRoomUpdate(room: Room, cause: RoomUpdateCause) {
+        await this.handleRoomUpdate(room, cause);
+        this.updateFn.trigger();
+    }
 }
 
 export default class RoomListStore {

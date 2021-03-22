@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function getHomePageUrl(appConfig) {
+import { ConfigOptions } from "../SdkConfig";
+
+export function getHomePageUrl(appConfig: ConfigOptions): string | null {
     const pagesConfig = appConfig.embeddedPages;
-    let pageUrl = null;
-    if (pagesConfig) {
-        pageUrl = pagesConfig.homeUrl;
-    }
+    let pageUrl = pagesConfig?.homeUrl;
+
     if (!pageUrl) {
         // This is a deprecated config option for the home page
         // (despite the name, given we also now have a welcome
@@ -28,4 +28,9 @@ export function getHomePageUrl(appConfig) {
     }
 
     return pageUrl;
+}
+
+export function shouldUseLoginForWelcome(appConfig: ConfigOptions): boolean {
+    const pagesConfig = appConfig.embeddedPages;
+    return pagesConfig?.loginForWelcome === true;
 }

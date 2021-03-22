@@ -19,7 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk/src/models/event';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';

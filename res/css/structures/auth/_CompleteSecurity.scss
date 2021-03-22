@@ -26,50 +26,6 @@ limitations under the License.
     position: relative;
 }
 
-.mx_CompleteSecurity_clients {
-    width: max-content;
-    margin: 36px auto 0;
-
-    .mx_CompleteSecurity_clients_desktop, .mx_CompleteSecurity_clients_mobile {
-        position: relative;
-        width: 160px;
-        text-align: center;
-        padding-top: 64px;
-        display: inline-block;
-
-        &::before {
-            content: '';
-            position: absolute;
-            height: 48px;
-            width: 48px;
-            left: 56px;
-            top: 0;
-            background-color: $muted-fg-color;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-        }
-    }
-
-    .mx_CompleteSecurity_clients_desktop {
-        margin-right: 56px;
-    }
-
-    .mx_CompleteSecurity_clients_desktop::before {
-        mask-image: url('$(res)/img/feather-customised/monitor.svg');
-    }
-
-    .mx_CompleteSecurity_clients_mobile::before {
-        mask-image: url('$(res)/img/feather-customised/smartphone.svg');
-    }
-
-    p {
-        margin-top: 16px;
-        font-size: $font-12px;
-        color: $muted-fg-color;
-        text-align: center;
-    }
-}
-
 .mx_CompleteSecurity_heroIcon {
     width: 128px;
     height: 128px;

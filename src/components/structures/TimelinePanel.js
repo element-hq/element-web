@@ -22,8 +22,8 @@ import {LayoutPropType} from "../../settings/Layout";
 import React, {createRef} from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import {EventTimeline} from "matrix-js-sdk";
-import * as Matrix from "matrix-js-sdk";
+import {EventTimeline} from "matrix-js-sdk/src/models/event-timeline";
+import {TimelineWindow} from "matrix-js-sdk/src/timeline-window";
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import UserActivity from "../../UserActivity";
@@ -462,6 +462,9 @@ class TimelinePanel extends React.Component {
                     );
                 }
             });
+        }
+        if (payload.action === "scroll_to_bottom") {
+            this.jumpToLiveTimeline();
         }
     };
 
@@ -1007,7 +1010,7 @@ class TimelinePanel extends React.Component {
      * returns a promise which will resolve when the load completes.
      */
     _loadTimeline(eventId, pixelOffset, offsetBase) {
-        this._timelineWindow = new Matrix.TimelineWindow(
+        this._timelineWindow = new TimelineWindow(
             MatrixClientPeg.get(), this.props.timelineSet,
             {windowLimit: this.props.timelineCap});
 

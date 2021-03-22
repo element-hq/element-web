@@ -1,8 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2017-2019 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-// @ts-ignore - XXX: no idea why this import fails
-import * as Matrix from "matrix-js-sdk";
+import { createClient } from "matrix-js-sdk/src/matrix";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -82,9 +78,12 @@ import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
+import { shouldUseLoginForWelcome } from "../../utils/pages";
 import SpaceStore from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import RoomListStore from "../../stores/room-list/RoomListStore";
+import {RoomUpdateCause} from "../../stores/room-list/models";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -582,6 +581,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             case 'logout':
+                dis.dispatch({action: "hangup_all"});
                 Lifecycle.logout();
                 break;
             case 'require_registration':
@@ -606,12 +606,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 if (payload.screenAfterLogin) {
                     this.screenAfterLogin = payload.screenAfterLogin;
                 }
-                this.setStateForNewView({
-                    view: Views.LOGIN,
-                });
-                this.notifyNewScreen('login');
-                ThemeController.isLogin = true;
-                this.themeWatcher.recheck();
+                this.viewLogin();
                 break;
             case 'start_password_recovery':
                 this.setStateForNewView({
@@ -975,10 +970,23 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private viewWelcome() {
+        if (shouldUseLoginForWelcome(SdkConfig.get())) {
+            return this.viewLogin();
+        }
         this.setStateForNewView({
             view: Views.WELCOME,
         });
         this.notifyNewScreen('welcome');
+        ThemeController.isLogin = true;
+        this.themeWatcher.recheck();
+    }
+
+    private viewLogin(otherState?: any) {
+        this.setStateForNewView({
+            view: Views.LOGIN,
+            ...otherState,
+        });
+        this.notifyNewScreen('login');
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
     }
@@ -1139,11 +1147,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private forgetRoom(roomId: string) {
+        const room = MatrixClientPeg.get().getRoom(roomId);
         MatrixClientPeg.get().forget(roomId).then(() => {
             // Switch to home page if we're currently viewing the forgotten room
             if (this.state.currentRoomId === roomId) {
                 dis.dispatch({ action: "view_home_page" });
             }
+
+            // We have to manually update the room list because the forgotten room will not
+            // be notified to us, therefore the room list will have no other way of knowing
+            // the room is forgotten.
+            RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
         }).catch((err) => {
             const errCode = err.errcode || _td("unknown error code");
             Modal.createTrackedDialog("Failed to forget room", '', ErrorDialog, {
@@ -1298,17 +1312,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when the session is logged out
      */
     private onLoggedOut() {
-        this.notifyNewScreen('login');
-        this.setStateForNewView({
-            view: Views.LOGIN,
+        this.viewLogin({
             ready: false,
             collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = '';
         this.setPageSubtitle();
-        ThemeController.isLogin = true;
-        this.themeWatcher.recheck();
     }
 
     /**
@@ -1648,7 +1658,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             let cli = MatrixClientPeg.get();
             if (!cli) {
                 const {hsUrl, isUrl} = this.props.serverConfig;
-                cli = Matrix.createClient({
+                cli = createClient({
                     baseUrl: hsUrl,
                     idBaseUrl: isUrl,
                 });

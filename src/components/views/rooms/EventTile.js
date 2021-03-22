@@ -28,7 +28,7 @@ import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Layout, LayoutPropType} from "../../../settings/Layout";
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk/src/models/event';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";

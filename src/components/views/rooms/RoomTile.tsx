@@ -333,6 +333,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({generalMenuPosition: null}); // hide the menu
     };
 
+    private onInviteClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.room.roomId,
+        });
+        this.setState({generalMenuPosition: null}); // hide the menu
+    };
+
     private async saveNotifState(ev: ButtonEvent, newState: Volume) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -453,6 +464,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
             const lowPriorityLabel = _t("Low Priority");
 
+            const userId = MatrixClientPeg.get().getUserId();
+            const canInvite = this.props.room.canInvite(userId);
             contextMenu = <IconizedContextMenu
                 {...contextMenuBelow(this.state.generalMenuPosition)}
                 onFinished={this.onCloseGeneralMenu}
@@ -472,7 +485,13 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         label={lowPriorityLabel}
                         iconClassName="mx_RoomTile_iconArrowDown"
                     />
-
+                    {canInvite ? (
+                        <IconizedContextMenuOption
+                            onClick={this.onInviteClick}
+                            label={_t("Invite People")}
+                            iconClassName="mx_RoomTile_iconInvite"
+                        />
+                    ) : null}
                     <IconizedContextMenuOption
                         onClick={this.onOpenRoomSettings}
                         label={_t("Settings")}
