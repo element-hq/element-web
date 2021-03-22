@@ -1044,6 +1044,10 @@ class RedactionGrouper {
     }
 
     shouldGroup(ev) {
+        // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
+        if (!this.panel._shouldShowEvent(ev)) {
+            return true;
+        }
         if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
@@ -1055,6 +1059,9 @@ class RedactionGrouper {
             ev.getId(),
             ev === this.lastShownEvent,
         );
+        if (!this.panel._shouldShowEvent(ev)) {
+            return;
+        }
         this.events.push(ev);
     }
 
@@ -1080,13 +1087,9 @@ class RedactionGrouper {
         );
 
         const senders = new Set();
-        let eventTiles = this.events.map((e) => {
+        let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
-            // In order to prevent DateSeparators from appearing in the expanded form,
-            // render each member event as if the previous one was itself.
-            // This way, the timestamp of the previous event === the
-            // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent);
+            return panel._getTilesForEvent(i === 0 ? this.prevEvent : this.events[i - 1], e, e === lastShownEvent);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
