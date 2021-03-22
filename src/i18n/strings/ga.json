@@ -3,7 +3,7 @@
     "Signing In...": "ag Síniú Isteach…",
     "Sign in": "Sínigh Isteach",
     "Already have an account? <a>Sign in here</a>": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
-    "Show less": "Taispeái níos lú",
+    "Show less": "Taispeáin níos lú",
     "Show more": "Taispeáin níos mó",
     "Show %(count)s more|one": "Taispeáin %(count)s níos mó",
     "Show %(count)s more|other": "Taispeáin %(count)s níos mó",
@@ -662,5 +662,14 @@
     "Dismiss": "Cuir uait",
     "Use Single Sign On to continue": "Lean ar aghaidh le SSO",
     "This phone number is already in use": "Úsáidtear an uimhir ghutháin seo chean féin",
-    "This email address is already in use": "Úsáidtear an seoladh ríomhphoist seo chean féin"
+    "This email address is already in use": "Úsáidtear an seoladh ríomhphoist seo chean féin",
+    "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
+    "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
+    "You're signed out": "Tá tú sínithe amach",
+    "Sign out": "Sínigh amach",
+    "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
+    "Signed Out": "Sínithe Amach",
+    "Unable to query for supported registration methods.": "Ní féidir iarratas a dhéanamh faoi modhanna cláraithe tacaithe.",
+    "Host account on": "Óstáil cuntas ar",
+    "Create account": "Déan cuntas a chruthú"
 }
