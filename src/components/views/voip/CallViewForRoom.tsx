@@ -79,15 +79,15 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
         return call;
     }
 
-    onResizeStart = () => {
+    private onResizeStart = () => {
         this.props.resizeNotifier.startResizing();
     }
 
-    onResize = () => {
+    private onResize = () => {
         this.props.resizeNotifier.notifyTimelineHeightChanged();
     }
 
-    onResizeStop = () => {
+    private onResizeStop = () => {
         this.props.resizeNotifier.stopResizing();
     }
 
