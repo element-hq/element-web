@@ -108,7 +108,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
             <p>{ _t("Spaces are new ways to group rooms and people. " +
-                "To join an existing space you’ll need an invite") }</p>
+                "To join an existing space you'll need an invite.") }</p>
 
             <SpaceCreateMenuType
                 title={_t("Public")}
@@ -140,9 +140,9 @@ const SpaceCreateMenu = ({ onFinished }) => {
             </h2>
             <p>
                 {
-                    _t("Give it a photo, name and description to help you identify it.")
+                    _t("Add some details to help people recognise it.")
                 } {
-                    _t("You can change these at any point.")
+                    _t("You can change these anytime.")
                 }
             </p>
 

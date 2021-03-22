@@ -41,13 +41,13 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
                 const success = await copyPlaintext(permalinkCreator.forRoom());
                 const text = success ? _t("Copied!") : _t("Failed to copy");
                 setCopiedText(text);
-                await sleep(10);
+                await sleep(5000);
                 if (copiedText === text) { // if the text hasn't changed by another click then clear it after some time
                     setCopiedText(_t("Click to copy"));
                 }
             }}
         >
-            { _t("Share invite link") }
+            <h3>{ _t("Share invite link") }</h3>
             <span>{ copiedText }</span>
         </AccessibleButton>
         <AccessibleButton
@@ -57,7 +57,8 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
                 onFinished();
             }}
         >
-            { _t("Invite by email or username") }
+            <h3>{ _t("Invite people") }</h3>
+            <span>{ _t("Invite with email or username") }</span>
         </AccessibleButton>
     </div>;
 };
