@@ -260,7 +260,7 @@ export const HierarchyLevel = ({
     const space = cli.getRoom(spaceId);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId())
 
-    const sortedChildren = sortBy([...relations.get(spaceId)?.values()], ev => ev.content.order || null);
+    const sortedChildren = sortBy([...(relations.get(spaceId)?.values() || [])], ev => ev.content.order || null);
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
         if (!rooms.has(roomId)) return result;
