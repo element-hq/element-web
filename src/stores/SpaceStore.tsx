@@ -196,13 +196,16 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     public rebuild = throttle(() => { // exported for tests
-        const visibleRooms = this.matrixClient.getVisibleRooms();
+        // get all most-upgraded rooms & spaces except spaces which have been left (historical)
+        const visibleRooms = this.matrixClient.getVisibleRooms().filter(r => {
+            return !r.isSpaceRoom() || r.getMyMembership() === "join";
+        });
+
+        const unseenChildren = new Set<Room>(visibleRooms);
+        const backrefs = new EnhancedMap<string, Set<string>>();
 
         // Sort spaces by room ID to force the loop breaking to be deterministic
-        const spaces = sortBy(this.getSpaces(), space => space.roomId);
-        const unseenChildren = new Set<Room>([...visibleRooms, ...spaces]);
-
-        const backrefs = new EnhancedMap<string, Set<string>>();
+        const spaces = sortBy(visibleRooms.filter(r => r.isSpaceRoom()), space => space.roomId);
 
         // TODO handle cleaning up links when a Space is removed
         spaces.forEach(space => {
