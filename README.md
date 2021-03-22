@@ -298,15 +298,10 @@ yarn start
 
 Wait a few seconds for the initial build to finish; you should see something like:
 ```
-Hash: b0af76309dd56d7275c8
-Version: webpack 1.12.14
-Time: 14533ms
-         Asset     Size  Chunks             Chunk Names
-     bundle.js   4.2 MB       0  [emitted]  main
-    bundle.css  91.5 kB       0  [emitted]  main
- bundle.js.map  5.29 MB       0  [emitted]  main
-bundle.css.map   116 kB       0  [emitted]  main
-    + 1013 hidden modules
+[element-js] <s> [webpack.Progress] 100% 
+[element-js] 
+[element-js] ℹ ｢wdm｣:    1840 modules
+[element-js] ℹ ｢wdm｣: Compiled successfully.
 ```
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
