@@ -22,7 +22,7 @@ limitations under the License.
     background: -moz-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
     background: -webkit-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
     background: linear-gradient(to bottom, #c5e0f7 0%, #ffffff 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c5e0f7', endColorstr='#ffffff',GradientType=0 );
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#c5e0f7', endColorstr='#ffffff', GradientType=0);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     width: 100%;
     min-height: 100%;
@@ -41,7 +41,7 @@ limitations under the License.
         margin-left: 4px;
         margin-right: 4px;
         min-width: 80px;
-        background-color: #03B381;
+        background-color: #03b381;
         color: #fff;
         cursor: pointer;
         padding: 12px 22px;
@@ -54,7 +54,7 @@ limitations under the License.
     }
 
     .mx_HomePage_header {
-        color: #2E2F32;
+        color: #2e2f32;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -95,7 +95,7 @@ limitations under the License.
     }
 
     .mx_FooterLink {
-        color: #368BD6;
+        color: #368bd6;
         text-decoration: none;
     }
 }
