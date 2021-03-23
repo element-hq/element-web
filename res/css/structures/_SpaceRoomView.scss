@@ -16,6 +16,51 @@ limitations under the License.
 
 $SpaceRoomViewInnerWidth: 428px;
 
+@define-mixin SpacePillButton {
+    position: relative;
+    padding: 16px 32px 16px 72px;
+    width: 432px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid $input-darker-bg-color;
+    font-size: $font-15px;
+    margin: 20px 0;
+
+    > h3 {
+        font-weight: $font-semi-bold;
+        margin: 0 0 4px;
+    }
+
+    > span {
+        color: $secondary-fg-color;
+    }
+
+    &::before {
+        position: absolute;
+        content: '';
+        width: 32px;
+        height: 32px;
+        top: 24px;
+        left: 20px;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 24px;
+        background-color: $tertiary-fg-color;
+    }
+
+    &:hover {
+        border-color: $accent-color;
+
+        &::before {
+            background-color: $accent-color;
+        }
+
+        > span {
+            color: $primary-fg-color;
+        }
+    }
+}
+
 .mx_SpaceRoomView {
     .mx_MainSplit > div:first-child {
         padding: 80px 60px;
@@ -331,64 +376,8 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     .mx_SpaceRoomView_privateScope {
-        .mx_RadioButton {
-            width: $SpaceRoomViewInnerWidth;
-            border-radius: 8px;
-            border: 1px solid $space-button-outline-color;
-            padding: 16px 16px 16px 72px;
-            margin-top: 36px;
-            cursor: pointer;
-            box-sizing: border-box;
-            position: relative;
-
-            > div:first-of-type {
-                // hide radio dot
-                display: none;
-            }
-
-            .mx_RadioButton_content {
-                margin: 0;
-
-                > h3 {
-                    margin: 0 0 4px;
-                    font-size: $font-15px;
-                    font-weight: $font-semi-bold;
-                    line-height: $font-18px;
-                }
-
-                > div {
-                    color: $secondary-fg-color;
-                    font-size: $font-15px;
-                    line-height: $font-24px;
-                }
-            }
-
-            &::before {
-                content: "";
-                position: absolute;
-                height: 32px;
-                width: 32px;
-                top: 24px;
-                left: 20px;
-                background-color: $secondary-fg-color;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
-            }
-        }
-
-        .mx_RadioButton_checked {
-            border-color: $accent-color;
-
-            .mx_RadioButton_content {
-                > div {
-                    color: $primary-fg-color;
-                }
-            }
-
-            &::before {
-                background-color: $accent-color;
-            }
+        .mx_AccessibleButton {
+            @mixin SpacePillButton;
         }
 
         .mx_SpaceRoomView_privateScope_justMeButton::before {

@@ -23,7 +23,6 @@ import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
 import * as sdk from '../../index';
-import dis from "../../dispatcher/dispatcher";
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
@@ -210,13 +209,11 @@ export default class MessagePanel extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        this.dispatcherRef = dis.register(this.onAction);
     }
 
     componentWillUnmount() {
         this._isMounted = false;
         SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
-        dis.unregister(this.dispatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -226,14 +223,6 @@ export default class MessagePanel extends React.Component {
             this.setState({
                 ghostReadMarkers,
             });
-        }
-    }
-
-    onAction = (payload) => {
-        switch (payload.action) {
-            case "scroll_to_bottom":
-                this.scrollToBottom();
-                break;
         }
     }
 
@@ -1038,6 +1027,100 @@ class CreationGrouper {
     }
 }
 
+class RedactionGrouper {
+    static canStartGroup = function(panel, ev) {
+        return panel._shouldShowEvent(ev) && ev.isRedacted();
+    }
+
+    constructor(panel, ev, prevEvent, lastShownEvent) {
+        this.panel = panel;
+        this.readMarker = panel._readMarkerForEvent(
+            ev.getId(),
+            ev === lastShownEvent,
+        );
+        this.events = [ev];
+        this.prevEvent = prevEvent;
+        this.lastShownEvent = lastShownEvent;
+    }
+
+    shouldGroup(ev) {
+        // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
+        if (!this.panel._shouldShowEvent(ev)) {
+            return true;
+        }
+        if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
+            return false;
+        }
+        return ev.isRedacted();
+    }
+
+    add(ev) {
+        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
+        if (!this.panel._shouldShowEvent(ev)) {
+            return;
+        }
+        this.events.push(ev);
+    }
+
+    getTiles() {
+        if (!this.events || !this.events.length) return [];
+
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
+
+        const panel = this.panel;
+        const ret = [];
+        const lastShownEvent = this.lastShownEvent;
+
+        if (panel._wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
+            const ts = this.events[0].getTs();
+            ret.push(
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+            );
+        }
+
+        const key = "redactioneventlistsummary-" + (
+            this.prevEvent ? this.events[0].getId() : "initial"
+        );
+
+        const senders = new Set();
+        let eventTiles = this.events.map((e, i) => {
+            senders.add(e.sender);
+            return panel._getTilesForEvent(i === 0 ? this.prevEvent : this.events[i - 1], e, e === lastShownEvent);
+        }).reduce((a, b) => a.concat(b), []);
+
+        if (eventTiles.length === 0) {
+            eventTiles = null;
+        }
+
+        ret.push(
+            <EventListSummary
+                key={key}
+                threshold={2}
+                events={this.events}
+                onToggle={panel._onHeightChanged} // Update scroll state
+                summaryMembers={Array.from(senders)}
+                summaryText={_t("%(count)s messages deleted.", { count: eventTiles.length })}
+            >
+                { eventTiles }
+            </EventListSummary>,
+        );
+
+        if (this.readMarker) {
+            ret.push(this.readMarker);
+        }
+
+        return ret;
+    }
+
+    getNewPrevEvent() {
+        return this.events[0];
+    }
+}
+
 // Wrap consecutive member events in a ListSummary, ignore if redacted
 class MemberGrouper {
     static canStartGroup = function(panel, ev) {
@@ -1148,4 +1231,4 @@ class MemberGrouper {
 }
 
 // all the grouper classes that we use
-const groupers = [CreationGrouper, MemberGrouper];
+const groupers = [CreationGrouper, MemberGrouper, RedactionGrouper];

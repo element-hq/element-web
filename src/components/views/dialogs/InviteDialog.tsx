@@ -1256,7 +1256,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 ? _t("Invite to %(spaceName)s", {
                     spaceName: room.name || _t("Unnamed Space"),
                 })
-                : _t("Invite to this room");
+                : _t("Invite to %(roomName)s", {
+                    roomName: room.name || _t("Unnamed Room"),
+                });
 
             let helpTextUntranslated;
             if (isSpace) {

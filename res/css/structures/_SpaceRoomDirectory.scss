@@ -31,7 +31,8 @@ limitations under the License.
         display: flex;
 
         .mx_BaseAvatar {
-            margin-right: 16px;
+            margin-right: 12px;
+            align-self: center;
         }
 
         .mx_BaseAvatar_image {
@@ -47,6 +48,7 @@ limitations under the License.
             }
 
             > div {
+                font-weight: 400;
                 color: $secondary-fg-color;
                 font-size: $font-15px;
                 line-height: $font-24px;
@@ -55,38 +57,71 @@ limitations under the License.
     }
 
     .mx_Dialog_content {
-        // TODO fix scrollbar
-        //display: flex;
-        //flex-direction: column;
-        //height: calc(100% - 80px);
-
         .mx_AccessibleButton_kind_link {
             padding: 0;
         }
 
         .mx_SearchBox {
-            margin: 24px 0 28px;
+            margin: 24px 0 16px;
+        }
+
+        .mx_SpaceRoomDirectory_noResults {
+            text-align: center;
+
+            > div {
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $secondary-fg-color;
+            }
         }
 
         .mx_SpaceRoomDirectory_listHeader {
             display: flex;
-            font-size: $font-12px;
-            line-height: $font-15px;
-            color: $secondary-fg-color;
+            min-height: 32px;
+            align-items: center;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $primary-fg-color;
 
-            .mx_FormButton {
-                margin-bottom: 8px;
+            .mx_AccessibleButton {
+                padding: 2px 8px;
+                font-weight: normal;
+
+                & + .mx_AccessibleButton {
+                    margin-left: 16px;
+                }
             }
 
             > span {
-                margin: auto 0 0 auto;
+                margin-left: auto;
+            }
+        }
+
+        .mx_SpaceRoomDirectory_error {
+            position: relative;
+            font-weight: $font-semi-bold;
+            color: $notice-primary-color;
+            font-size: $font-15px;
+            line-height: $font-18px;
+            margin: 20px auto 12px;
+            padding-left: 24px;
+            width: max-content;
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: 16px;
+                width: 16px;
+                left: 0;
+                background-image: url("$(res)/img/element-icons/warning-badge.svg");
             }
         }
     }
 }
 
 .mx_SpaceRoomDirectory_list {
-    margin-top: 8px;
+    margin-top: 16px;
+    padding-bottom: 40px;
 
     .mx_SpaceRoomDirectory_roomCount {
         > h3 {
@@ -106,114 +141,128 @@ limitations under the License.
     }
 
     .mx_SpaceRoomDirectory_subspace {
-        margin-top: 8px;
-
-        .mx_SpaceRoomDirectory_subspace_info {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin-bottom: 8px;
-            color: $secondary-fg-color;
-            font-weight: $font-semi-bold;
-            font-size: $font-12px;
-            line-height: $font-15px;
-
-            .mx_BaseAvatar {
-                margin-right: 12px;
-                vertical-align: middle;
-            }
-
-            .mx_BaseAvatar_image {
-                border-radius: 8px;
-            }
-
-            .mx_SpaceRoomDirectory_actions {
-                text-align: right;
-                height: min-content;
-                margin-left: auto;
-                margin-right: 16px;
-            }
-        }
-
-        .mx_SpaceRoomDirectory_subspace_children {
-            margin-left: 12px;
-            border-left: 2px solid $space-button-outline-color;
-            padding-left: 24px;
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
         }
     }
 
-    .mx_SpaceRoomDirectory_roomTile {
-        padding: 16px;
-        border-radius: 8px;
-        border: 1px solid $space-button-outline-color;
-        margin: 8px 0 16px;
-        display: flex;
-        min-height: 76px;
-        box-sizing: border-box;
+    .mx_SpaceRoomDirectory_subspace_toggle {
+        position: absolute;
+        left: -1px;
+        top: 10px;
+        height: 16px;
+        width: 16px;
+        border-radius: 4px;
+        background-color: $primary-bg-color;
 
-        &.mx_AccessibleButton:hover {
-            background-color: rgba(141, 151, 165, 0.1);
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 16px;
+            width: 16px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: $tertiary-fg-color;
+            mask-size: 16px;
+            transform: rotate(270deg);
+            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
 
+        &.mx_SpaceRoomDirectory_subspace_toggle_shown::before {
+            transform: rotate(0deg);
+        }
+    }
+
+    .mx_SpaceRoomDirectory_subspace_children {
+        position: relative;
+        padding-left: 12px;
+    }
+
+    .mx_SpaceRoomDirectory_roomTile {
+        position: relative;
+        padding: 6px 16px;
+        border-radius: 8px;
+        min-height: 56px;
+        box-sizing: border-box;
+
+        display: grid;
+        grid-template-columns: 20px auto max-content;
+        grid-column-gap: 8px;
+        align-items: center;
+
         .mx_BaseAvatar {
-            margin-right: 16px;
-            margin-top: 6px;
+            grid-row: 1;
+            grid-column: 1;
+        }
+
+        .mx_SpaceRoomDirectory_roomTile_name {
+            font-weight: $font-semi-bold;
+            font-size: $font-15px;
+            line-height: $font-18px;
+            grid-row: 1;
+            grid-column: 2;
+
+            .mx_InfoTooltip {
+                display: inline;
+                margin-left: 12px;
+                color: $tertiary-fg-color;
+                font-size: $font-12px;
+                line-height: $font-15px;
+
+                .mx_InfoTooltip_icon {
+                    margin-right: 4px;
+                }
+            }
         }
 
         .mx_SpaceRoomDirectory_roomTile_info {
-            display: inline-block;
-            font-size: $font-15px;
-            flex-grow: 1;
-            height: min-content;
-            margin: auto 0;
-
-            .mx_SpaceRoomDirectory_roomTile_name {
-                font-weight: $font-semi-bold;
-                line-height: $font-18px;
-            }
-            .mx_SpaceRoomDirectory_roomTile_topic {
-                line-height: $font-24px;
-                color: $secondary-fg-color;
-            }
-        }
-
-        .mx_SpaceRoomDirectory_roomTile_memberCount {
-            position: relative;
-            margin: auto 0 auto 24px;
-            padding: 0 0 0 28px;
-            line-height: $font-24px;
-            display: inline-block;
-            width: 32px;
-
-            &::before {
-                position: absolute;
-                content: '';
-                width: 24px;
-                height: 24px;
-                top: 0;
-                left: 0;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                mask-size: contain;
-                background-color: $secondary-fg-color;
-                mask-image: url('$(res)/img/element-icons/community-members.svg');
-            }
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $tertiary-fg-color;
+            grid-row: 2;
+            grid-column: 1/3;
         }
 
         .mx_SpaceRoomDirectory_actions {
-            width: 180px;
             text-align: right;
-            margin-left: 28px;
-            display: inline-flex;
-            align-items: center;
+            margin-left: 20px;
+            grid-column: 3;
+            grid-row: 1/3;
 
             .mx_AccessibleButton {
-                vertical-align: middle;
+                padding: 6px 18px;
 
-                & + .mx_AccessibleButton {
-                    margin-left: 24px;
-                }
+                display: none;
             }
+
+            .mx_Checkbox {
+                display: inline-flex;
+                vertical-align: middle;
+                margin-left: 12px;
+            }
+        }
+
+        &:hover {
+            background-color: $groupFilterPanel-bg-color;
+
+            .mx_AccessibleButton {
+                display: inline-block;
+            }
+        }
+    }
+
+    .mx_SpaceRoomDirectory_roomTile,
+    .mx_SpaceRoomDirectory_subspace_children {
+        &::before {
+            content: "";
+            position: absolute;
+            background-color: $groupFilterPanel-bg-color;
+            width: 1px;
+            height: 100%;
+            left: 6px;
+            top: 0;
         }
     }
 
@@ -224,5 +273,18 @@ limitations under the License.
             line-height: $font-15px;
             color: $secondary-fg-color;
         }
+    }
+
+    > hr {
+        border: none;
+        height: 1px;
+        background-color: rgba(141, 151, 165, 0.2);
+        margin: 20px 0;
+    }
+
+    .mx_SpaceRoomDirectory_createRoom {
+        display: block;
+        margin: 16px auto 0;
+        width: max-content;
     }
 }

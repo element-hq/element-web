@@ -14,10 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: the space panel currently does not have a fixed width,
-// just the headers at each level have a max-width of 150px
-// so this will look slightly off for now. We should probably use css grid for the whole main layout...
-$spacePanelWidth: 200px;
+$spacePanelWidth: 71px;
 
 .mx_SpaceCreateMenu_wrapper {
     // background blur everything except SpacePanel
@@ -48,53 +45,11 @@ $spacePanelWidth: 200px;
         }
 
         .mx_SpaceCreateMenuType {
-            position: relative;
-            padding: 16px 32px 16px 72px;
-            width: 432px;
-            box-sizing: border-box;
-            border-radius: 8px;
-            border: 1px solid $input-darker-bg-color;
-            font-size: $font-15px;
-            margin: 20px 0;
-
-            > h3 {
-                font-weight: $font-semi-bold;
-                margin: 0 0 4px;
-            }
-
-            > span {
-                color: $secondary-fg-color;
-            }
-
-            &::before {
-                position: absolute;
-                content: '';
-                width: 32px;
-                height: 32px;
-                top: 24px;
-                left: 20px;
-                mask-position: center;
-                mask-repeat: no-repeat;
-                mask-size: 32px;
-                background-color: $tertiary-fg-color;
-            }
-
-            &:hover {
-                border-color: $accent-color;
-
-                &::before {
-                    background-color: $accent-color;
-                }
-
-                > span {
-                    color: $primary-fg-color;
-                }
-            }
+            @mixin SpacePillButton;
         }
 
         .mx_SpaceCreateMenuType_public::before {
             mask-image: url('$(res)/img/globe.svg');
-            mask-size: 26px;
         }
         .mx_SpaceCreateMenuType_private::before {
             mask-image: url('$(res)/img/element-icons/lock.svg');

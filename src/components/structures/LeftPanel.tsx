@@ -38,7 +38,6 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
-import SpacePanel from "../views/spaces/SpacePanel";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../customisations/Media";
 
@@ -392,11 +391,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         let leftLeftPanel;
-        // Currently TagPanel.enableTagPanel is disabled when Legacy Communities are disabled so for now
-        // ignore it and force the rendering of SpacePanel if that Labs flag is enabled.
-        if (SettingsStore.getValue("feature_spaces")) {
-            leftLeftPanel = <SpacePanel />;
-        } else if (this.state.showGroupFilterPanel) {
+        if (this.state.showGroupFilterPanel) {
             leftLeftPanel = (
                 <div className="mx_LeftPanel_GroupFilterPanelContainer">
                     <GroupFilterPanel />

@@ -16,9 +16,8 @@ limitations under the License.
 
 $topLevelHeight: 32px;
 $nestedHeight: 24px;
-$gutterSize: 17px;
-$activeStripeSize: 4px;
-$activeBorderTransparentGap: 2px;
+$gutterSize: 16px;
+$activeBorderTransparentGap: 1px;
 
 $activeBackgroundColor: $roomtile-selected-bg-color;
 $activeBorderColor: $secondary-fg-color;
@@ -36,6 +35,7 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpacePanel_spaceTreeWrapper {
         flex: 1;
+        overflow-y: scroll;
     }
 
     .mx_SpacePanel_toggleCollapse {
@@ -63,21 +63,26 @@ $activeBorderColor: $secondary-fg-color;
     }
 
     .mx_AutoHideScrollbar {
-        padding: 16px 12px 16px 0;
+        padding: 8px 0 16px;
     }
 
     .mx_SpaceButton_toggleCollapse {
         cursor: pointer;
     }
 
-    .mx_SpaceItem.collapsed {
-        .mx_SpaceButton {
-            .mx_NotificationBadge {
-                right: -4px;
-                top: -4px;
-            }
-        }
+    .mx_SpaceTreeLevel {
+        display: flex;
+        flex-direction: column;
+        max-width: 250px;
+        flex-grow: 1;
+    }
 
+    .mx_SpaceItem {
+        display: inline-flex;
+        flex-flow: wrap;
+    }
+
+    .mx_SpaceItem.collapsed {
         & > .mx_SpaceButton > .mx_SpaceButton_toggleCollapse {
             transform: rotate(-90deg);
         }
@@ -89,34 +94,42 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
         margin-left: $gutterSize;
+        min-width: 40px;
     }
 
     .mx_SpaceButton {
         border-radius: 8px;
-        position: relative;
-        margin-bottom: 2px;
         display: flex;
         align-items: center;
-        padding: 4px;
+        padding: 4px 4px 4px 0;
+        width: 100%;
 
         &.mx_SpaceButton_active {
             &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
                 background-color: $activeBackgroundColor;
-                border-radius: 8px;
             }
 
-            &.mx_SpaceButton_narrow {
-                .mx_BaseAvatar, .mx_SpaceButton_avatarPlaceholder {
-                    border: 2px $activeBorderColor solid;
-                    border-radius: 11px;
-                }
+            &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+                padding: $activeBorderTransparentGap;
+                border: 3px $activeBorderColor solid;
             }
         }
 
         .mx_SpaceButton_selectionWrapper {
+            position: relative;
             display: flex;
             flex: 1;
             align-items: center;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        &:not(.mx_SpaceButton_narrow) {
+            .mx_SpaceButton_selectionWrapper {
+                width: 100%;
+                padding-right: 16px;
+                overflow: hidden;
+            }
         }
 
         .mx_SpaceButton_name {
@@ -124,7 +137,6 @@ $activeBorderColor: $secondary-fg-color;
             margin-left: 8px;
             white-space: nowrap;
             display: block;
-            max-width: 150px;
             text-overflow: ellipsis;
             overflow: hidden;
             padding-right: 8px;
@@ -133,8 +145,10 @@ $activeBorderColor: $secondary-fg-color;
         }
 
         .mx_SpaceButton_toggleCollapse {
-            width: calc($gutterSize - $activeStripeSize);
-            margin-left: 1px;
+            width: $gutterSize;
+            // negative margin to place it correctly even with the complex
+            // 4px selection border each space button has when active
+            margin-right: -4px;
             height: 20px;
             mask-position: center;
             mask-size: 20px;
@@ -172,11 +186,6 @@ $activeBorderColor: $secondary-fg-color;
             }
         }
 
-        .mx_SpaceButton_avatarPlaceholder {
-            border: $activeBorderTransparentGap transparent solid;
-            padding: $activeBorderTransparentGap;
-        }
-
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
             background-color: $accent-color;
             transition: all .1s ease-in-out; // TODO transition
@@ -196,21 +205,8 @@ $activeBorderColor: $secondary-fg-color;
             }
         }
 
-        .mx_BaseAvatar {
-            /* moving the border-radius to this element from _image
-            element so we can add a border to it without the initials being displaced */
-            overflow: hidden;
-            border: 2px transparent solid;
-            padding: $activeBorderTransparentGap;
-
-            .mx_BaseAvatar_initial {
-                top: $activeBorderTransparentGap;
-                left: $activeBorderTransparentGap;
-            }
-
-            .mx_BaseAvatar_image {
-                border-radius: 8px;
-            }
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
         }
 
         .mx_SpaceButton_menuButton {
@@ -219,8 +215,9 @@ $activeBorderColor: $secondary-fg-color;
             height: 20px;
             margin-top: auto;
             margin-bottom: auto;
-            position: relative;
             display: none;
+            position: absolute;
+            right: 4px;
 
             &::before {
                 top: 2px;
@@ -239,9 +236,8 @@ $activeBorderColor: $secondary-fg-color;
     }
 
     .mx_SpacePanel_badgeContainer {
+        position: absolute;
         height: 16px;
-        // don't set width so that it takes no space when there is no badge to show
-        margin: auto 0; // vertically align
 
         // Create a flexbox to make aligning dot badges easier
         display: flex;
@@ -261,14 +257,25 @@ $activeBorderColor: $secondary-fg-color;
     &.collapsed {
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
-                position: absolute;
-                right: 0px;
-                top: 2px;
+                right: -3px;
+                top: -3px;
+            }
+
+            &.mx_SpaceButton_active .mx_SpacePanel_badgeContainer {
+                // when we draw the selection border we move the relative bounds of our parent
+                // so update our position within the bounds of the parent to maintain position overall
+                right: -6px;
+                top: -6px;
             }
         }
     }
 
     &:not(.collapsed) {
+        .mx_SpacePanel_badgeContainer {
+            position: absolute;
+            right: 4px;
+        }
+
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {

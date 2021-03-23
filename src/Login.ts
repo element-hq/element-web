@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from "matrix-js-sdk";
+import {createClient} from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -115,7 +115,7 @@ export default class Login {
      */
     public createTemporaryClient(): MatrixClient {
         if (this.tempClient) return this.tempClient; // use memoization
-        return this.tempClient = Matrix.createClient({
+        return this.tempClient = createClient({
             baseUrl: this.hsUrl,
             idBaseUrl: this.isUrl,
         });
@@ -210,7 +210,7 @@ export async function sendLoginRequest(
     loginType: string,
     loginParams: ILoginParams,
 ): Promise<IMatrixClientCreds> {
-    const client = Matrix.createClient({
+    const client = createClient({
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
     });
