@@ -989,7 +989,7 @@ class CreationGrouper {
             ));
         }
 
-        const eventTiles = this.events.map((e, i) => {
+        const eventTiles = this.events.map((e) => {
             // In order to prevent DateSeparators from appearing in the expanded form
             // of EventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
@@ -1098,10 +1098,8 @@ class RedactionGrouper {
         const senders = new Set();
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
-            return panel._getTilesForEvent(
-                i === 0 ? this.prevEvent : this.events[i - 1],
-                e, e === lastShownEvent,
-                this.nextEvent, this.nextEventTile);
+            const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
+            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
