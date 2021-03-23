@@ -111,17 +111,10 @@ export default class MultiInviter {
             }
 
             if (!ignoreProfile && SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
-                try {
-                    const profile = await MatrixClientPeg.get().getProfileInfo(addr);
-                    if (!profile) {
-                        // noinspection ExceptionCaughtLocallyJS
-                        throw new Error("User has no profile");
-                    }
-                } catch (e) {
-                    throw {
-                        errcode: "RIOT.USER_NOT_FOUND",
-                        error: "User does not have a profile or does not exist."
-                    };
+                const profile = await MatrixClientPeg.get().getProfileInfo(addr);
+                if (!profile) {
+                    // noinspection ExceptionCaughtLocallyJS
+                    throw new Error("User has no profile");
                 }
             }
 
