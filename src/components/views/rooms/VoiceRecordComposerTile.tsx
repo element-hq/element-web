@@ -58,8 +58,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         await recorder.start();
         this.props.onRecording(true);
         // TODO: @@ TravisR: Run through EQ component
-        // recorder.rawData.onUpdate((frame) => {
-        //     console.log('@@ FRAME', frame);
+        // recorder.frequencyData.onUpdate((freq) => {
+        //     console.log('@@ UPDATE', freq);
         // });
         this.setState({recorder});
     };

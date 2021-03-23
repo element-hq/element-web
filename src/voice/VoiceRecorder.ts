@@ -20,40 +20,74 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
 
+const CHANNELS = 1; // stereo isn't important
+const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
+const BITRATE = 64000; // 64kbps is average for WebRTC, so we might as well use it too.
+const FREQ_SAMPLE_RATE = 4; // Target rate of frequency data. We don't need this super often.
+
+export interface IFrequencyPackage {
+    dbBars: Float32Array;
+    dbMin: number;
+    dbMax: number;
+
+    // TODO: @@ TravisR: Generalize this for a timing package?
+}
+
 export class VoiceRecorder {
-    private recorder = new Recorder({
-        encoderPath, // magic from webpack
-        mediaTrackConstraints: <MediaTrackConstraints>{
-            deviceId: CallMediaHandler.getAudioInput(),
-        },
-        encoderSampleRate: 48000, // we could go down to 12khz, but we lose quality. 48khz is a webrtc default
-        encoderApplication: 2048, // voice (default is "audio")
-        streamPages: true, // so we can have a live EQ for the user
-        encoderFrameSize: 20, // ms, we want updates fairly regularly for the UI
-        numberOfChannels: 1, // stereo isn't important for us
-        //sourceNode: instanceof MediaStreamAudioSourceNode, // TODO: @@ Travis: Use this for EQ stuff.
-        encoderBitRate: 64000, // 64kbps is average for webrtc
-        encoderComplexity: 3, // 0-10, 0 is fast and low complexity
-        resampleQuality: 3, // 0-10, 10 is slow and high quality
-    });
+    private recorder: Recorder;
+    private recorderContext: AudioContext;
+    private recorderSource: MediaStreamAudioSourceNode;
+    private recorderStream: MediaStream;
+    private recorderFreqNode: AnalyserNode;
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
-    private observable: SimpleObservable<Uint8Array>;
+    private observable: SimpleObservable<IFrequencyPackage>;
+    private freqTimerId: number;
 
     public constructor(private client: MatrixClient) {
+    }
+
+    private async makeRecorder() {
+        this.recorderStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                // specify some audio settings so we're feeding the recorder with the
+                // best possible values. The browser will handle resampling for us.
+                sampleRate: SAMPLE_RATE,
+                channelCount: CHANNELS,
+                noiseSuppression: true, // browsers ignore constraints they can't honour
+                deviceId: CallMediaHandler.getAudioInput(),
+            },
+        });
+        this.recorderContext = new AudioContext({
+            latencyHint: "interactive",
+            sampleRate: SAMPLE_RATE, // once again, the browser will resample for us
+        });
+        this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
+        this.recorderFreqNode = this.recorderContext.createAnalyser();
+        this.recorderSource.connect(this.recorderFreqNode);
+        this.recorder = new Recorder({
+            encoderPath, // magic from webpack
+            encoderSampleRate: SAMPLE_RATE,
+            encoderApplication: 2048, // voice (default is "audio")
+            streamPages: true, // this speeds up the encoding process by using CPU over time
+            encoderFrameSize: 20, // ms, arbitrary frame size we send to the encoder
+            numberOfChannels: CHANNELS,
+            sourceNode: this.recorderSource,
+            encoderBitRate: BITRATE,
+            encoderComplexity: 3, // 0-10, 0 is fast and low complexity
+            resampleQuality: 3, // 0-10, 10 is slow and high quality
+        });
         this.recorder.ondataavailable = (a: ArrayBuffer) => {
-            // TODO: @@ TravisR: We'll have to decode each frame and convert it to an EQ to observe
             const buf = new Uint8Array(a);
             const newBuf = new Uint8Array(this.buffer.length + buf.length);
             newBuf.set(this.buffer, 0);
             newBuf.set(buf, this.buffer.length);
             this.buffer = newBuf;
-            this.observable.update(buf); // send the frame over the observable
         };
     }
 
-    public get rawData(): SimpleObservable<Uint8Array> {
+    public get frequencyData(): SimpleObservable<IFrequencyPackage> {
         if (!this.recording) throw new Error("No observable when not recording");
         return this.observable;
     }
@@ -83,7 +117,18 @@ export class VoiceRecorder {
         if (this.observable) {
             this.observable.close();
         }
-        this.observable = new SimpleObservable<Uint8Array>();
+        this.observable = new SimpleObservable<IFrequencyPackage>();
+        await this.makeRecorder();
+        this.freqTimerId = setInterval(() => {
+            if (!this.recording) return;
+            const data = new Float32Array(this.recorderFreqNode.frequencyBinCount);
+            this.recorderFreqNode.getFloatFrequencyData(data);
+            this.observable.update({
+                dbBars: data,
+                dbMin: this.recorderFreqNode.minDecibels,
+                dbMax: this.recorderFreqNode.maxDecibels,
+            });
+        }, 1000 / FREQ_SAMPLE_RATE) as any as number; // XXX: Linter doesn't understand timer environment
         return this.recorder.start().then(() => this.recording = true);
     }
 
@@ -91,12 +136,20 @@ export class VoiceRecorder {
         if (!this.recording) {
             throw new Error("No recording to stop");
         }
-        return new Promise<Uint8Array>(resolve => {
-            this.recorder.stop().then(() => {
+        // Disconnect the source early to start shutting down resources
+        this.recorderSource.disconnect();
+        return this.recorder.stop()
+            // close the context after the recorder so the recorder doesn't try to
+            // connect anything to the context (this would generate a warning)
+            .then(() => this.recorderContext.close())
+            // Now stop all the media tracks so we can release them back to the user/OS
+            .then(() => this.recorderStream.getTracks().forEach(t => t.stop()))
+            // Finally do our post-processing and clean up
+            .then(() => {
+                clearInterval(<number>this.freqTimerId);
                 this.recording = false;
                 return this.recorder.close();
-            }).then(() => resolve(this.buffer));
-        });
+            }).then(() => this.buffer);
     }
 
     public async upload(): Promise<string> {
