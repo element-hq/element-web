@@ -23,7 +23,7 @@ import {SimpleObservable} from "matrix-widget-api";
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
-const FREQ_SAMPLE_RATE = 4; // Target rate of frequency data (samples / sec). We don't need this super often.
+const FREQ_SAMPLE_RATE = 10; // Target rate of frequency data (samples / sec). We don't need this super often.
 
 export interface IFrequencyPackage {
     dbBars: Float32Array;
@@ -60,7 +60,7 @@ export class VoiceRecorder {
             },
         });
         this.recorderContext = new AudioContext({
-            latencyHint: "interactive",
+            // latencyHint: "interactive", // we don't want a latency hint (this causes data smoothing)
             sampleRate: SAMPLE_RATE, // once again, the browser will resample for us
         });
         this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);

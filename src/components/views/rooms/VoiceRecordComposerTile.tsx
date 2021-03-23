@@ -21,6 +21,7 @@ import {VoiceRecorder} from "../../../voice/VoiceRecorder";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import classNames from "classnames";
+import FrequencyBars from "../voice_messages/FrequencyBars";
 
 interface IProps {
     room: Room;
@@ -57,10 +58,6 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const recorder = new VoiceRecorder(MatrixClientPeg.get());
         await recorder.start();
         this.props.onRecording(true);
-        // TODO: @@ TravisR: Run through EQ component
-        // recorder.frequencyData.onUpdate((freq) => {
-        //     console.log('@@ UPDATE', freq);
-        // });
         this.setState({recorder});
     };
 
@@ -71,18 +68,21 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             'mx_VoiceRecordComposerTile_stop': !!this.state.recorder,
         });
 
+        let bars = null;
         let tooltip = _t("Record a voice message");
         if (!!this.state.recorder) {
             // TODO: @@ TravisR: Change to match behaviour
             tooltip = _t("Stop & send recording");
+            bars = <FrequencyBars recorder={this.state.recorder} />;
         }
 
-        return (
+        return (<>
+            {bars}
             <AccessibleTooltipButton
                 className={classes}
                 onClick={this.onStartStopVoiceMessage}
                 title={tooltip}
             />
-        );
+        </>);
     }
 }
