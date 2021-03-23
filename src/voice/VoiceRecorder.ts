@@ -146,7 +146,7 @@ export class VoiceRecorder {
             .then(() => this.recorderStream.getTracks().forEach(t => t.stop()))
             // Finally do our post-processing and clean up
             .then(() => {
-                clearInterval(<number>this.freqTimerId);
+                clearInterval(this.freqTimerId);
                 this.recording = false;
                 return this.recorder.close();
             }).then(() => this.buffer);
