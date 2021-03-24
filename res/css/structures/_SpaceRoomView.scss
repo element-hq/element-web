@@ -89,7 +89,7 @@ $SpaceRoomViewInnerWidth: 428px;
             width: $SpaceRoomViewInnerWidth;
             text-align: right; // button alignment right
 
-            .mx_FormButton {
+            .mx_AccessibleButton_hasKind {
                 padding: 8px 22px;
                 margin-left: 16px;
             }

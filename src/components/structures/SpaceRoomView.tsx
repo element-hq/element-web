@@ -26,7 +26,6 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomName from "../views/elements/RoomName";
 import RoomTopic from "../views/elements/RoomTopic";
 import InlineSpinner from "../views/elements/InlineSpinner";
-import FormButton from "../views/elements/FormButton";
 import {inviteMultipleToRoom, showRoomInviteDialog} from "../../RoomInvite";
 import {useRoomMembers} from "../../hooks/useRoomMembers";
 import createRoom, {IOpts, Preset} from "../../createRoom";
@@ -124,30 +123,36 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         }
 
         joinButtons = <>
-            <FormButton
-                label={_t("Reject")}
+            <AccessibleButton
                 kind="secondary"
                 onClick={() => {
                     setBusy(true);
                     onRejectButtonClicked();
-                }} />
-            <FormButton
-                label={_t("Accept")}
+                }}
+            >
+                { _t("Reject") }
+            </AccessibleButton>
+            <AccessibleButton
+                kind="primary"
                 onClick={() => {
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
-            />
+            >
+                { _t("Accept") }
+            </AccessibleButton>
         </>;
     } else {
         joinButtons = (
-            <FormButton
-                label={_t("Join")}
+            <AccessibleButton
+                kind="primary"
                 onClick={() => {
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
-            />
+            >
+                { _t("Join") }
+            </AccessibleButton>
         )
     }
 
@@ -407,11 +412,13 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         { fields }
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton
-                label={buttonLabel}
+            <AccessibleButton
+                kind="primary"
                 disabled={busy}
                 onClick={onClick}
-            />
+            >
+                { buttonLabel }
+            </AccessibleButton>
         </div>
     </div>;
 };
@@ -426,7 +433,9 @@ const SpaceSetupPublicShare = ({ space, onFinished }) => {
         <SpacePublicShare space={space} onFinished={onFinished} />
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton label={_t("Go to my first room")} onClick={onFinished} />
+            <AccessibleButton kind="primary" onClick={onFinished}>
+                { _t("Go to my first room") }
+            </AccessibleButton>
         </div>
     </div>;
 };
@@ -545,7 +554,9 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton label={buttonLabel} disabled={busy} onClick={onClick} />
+            <AccessibleButton kind="primary" disabled={busy} onClick={onClick}>
+                { buttonLabel }
+            </AccessibleButton>
         </div>
     </div>;
 };

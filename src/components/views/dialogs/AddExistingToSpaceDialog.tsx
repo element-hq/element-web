@@ -22,7 +22,6 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import {_t} from '../../../languageHandler';
 import {IDialogProps} from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
-import FormButton from "../elements/FormButton";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/SpaceStore";
@@ -185,8 +184,8 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                 </AccessibleButton>
             </span>
 
-            <FormButton
-                label={busy ? _t("Applying...") : _t("Apply")}
+            <AccessibleButton
+                kind="primary"
                 disabled={busy || selectedToAdd.size < 1}
                 onClick={async () => {
                     setBusy(true);
@@ -200,7 +199,9 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                     }
                     setBusy(false);
                 }}
-            />
+            >
+                { busy ? _t("Adding...") : _t("Add") }
+            </AccessibleButton>
         </div>
     </BaseDialog>;
 };
