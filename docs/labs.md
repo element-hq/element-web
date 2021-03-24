@@ -123,3 +123,10 @@ or feedback for this functionality at this time.
 
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
+
+## Voice messages (`feature_voice_messages`) [In Development]
+
+An in-progress implementation of [MSC2516](https://github.com/matrix-org/matrix-doc/pull/2516) to add
+[voice messages](https://github.com/vector-im/element-web/issues/1358) to Element. Note that this feature
+is currently under active development and therefore is entirely incomplete and may not work at all - it
+is not recommended for general use at this time.

@@ -253,6 +253,18 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
+                    // Fix up the name of the opus-recorder worker (react-sdk dependency).
+                    // We more or less just want it to be clear it's for opus and not something else.
+                    test: /encoderWorker\.min\.js$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately override the name so it makes sense in debugging
+                        name: 'opus-encoderWorker.min.[hash:7].[ext]',
+                        outputPath: '.',
+                    },
+                },
+                {
                     // cache-bust languages.json file placed in
                     // element-web/webapp/i18n during build by copy-res.js
                     test: /\.*languages.json$/,
