@@ -190,7 +190,7 @@ export default class EventIndexPanel extends React.Component {
                     }
                 </div>
             );
-        } else {
+        } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     {
@@ -206,6 +206,23 @@ export default class EventIndexPanel extends React.Component {
                             },
                         )
                     }
+                </div>
+            );
+        } else {
+            eventIndexingSettings = (
+                <div className='mx_SettingsTab_subsectionText'>
+                    <p>
+                        {_t("Message search initilisation failed")}
+                    </p>
+                    {EventIndexPeg.error && (
+                    <details>
+                        <summary>{_t("Advanced")}</summary>
+                        <code>
+                            {EventIndexPeg.error.message}
+                        </code>
+                    </details>
+                    )}
+
                 </div>
             );
         }
