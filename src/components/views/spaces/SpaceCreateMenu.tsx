@@ -88,6 +88,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     power_level_content_override: {
                         // Only allow Admins to write to the timeline to prevent hidden sync spam
                         events_default: 100,
+                        ...Visibility.Public ? { invite: 0 } : {},
                     },
                 },
                 spinner: false,
