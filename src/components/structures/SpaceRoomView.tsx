@@ -426,7 +426,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 const SpaceSetupPublicShare = ({ space, onFinished }) => {
     return <div className="mx_SpaceRoomView_publicShare">
         <h1>{ _t("Share %(name)s", { name: space.name }) }</h1>
-        <div className="mx_SpacePublicShare_description">
+        <div className="mx_SpaceRoomView_description">
             { _t("It's just you at the moment, it will be even better with others.") }
         </div>
 
