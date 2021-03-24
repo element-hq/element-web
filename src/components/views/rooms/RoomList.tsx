@@ -66,13 +66,13 @@ interface IProps {
     onResize: () => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
+    activeSpace: Room;
 }
 
 interface IState {
     sublists: ITagMap;
     isNameFiltering: boolean;
     currentRoomId?: string;
-    activeSpace: Room;
     suggestedRooms: ISpaceSummaryRoom[];
 }
 
@@ -200,7 +200,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                     />
                     <IconizedContextMenuOption
                         label={_t("Explore rooms")}
-                        iconClassName="mx_RoomList_iconExplore"
+                        iconClassName="mx_RoomList_iconBrowse"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -287,7 +287,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         this.state = {
             sublists: {},
             isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
-            activeSpace: SpaceStore.instance.activeSpace,
             suggestedRooms: SpaceStore.instance.suggestedRooms,
         };
 
@@ -300,7 +299,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         SpaceStore.instance.on(SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
         this.customTagStoreRef = CustomRoomTagStore.addListener(this.updateLists);
@@ -308,7 +306,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         SpaceStore.instance.off(SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
@@ -374,10 +371,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         return room;
     };
 
-    private updateActiveSpace = (activeSpace: Room) => {
-        this.setState({ activeSpace });
-    };
-
     private updateSuggestedRooms = (suggestedRooms: ISpaceSummaryRoom[]) => {
         this.setState({ suggestedRooms });
     };
@@ -438,12 +431,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private onSpaceInviteClick = () => {
         const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-        if (this.state.activeSpace.getJoinRule() === "public") {
+        if (this.props.activeSpace.getJoinRule() === "public") {
             const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
-                title: _t("Invite to %(spaceName)s", { spaceName: this.state.activeSpace.name }),
+                title: _t("Invite to %(spaceName)s", { spaceName: this.props.activeSpace.name }),
                 description: <React.Fragment>
                     <span>{ _t("Share your public space") }</span>
-                    <SpacePublicShare space={this.state.activeSpace} onFinished={() => modal.close()} />
+                    <SpacePublicShare space={this.props.activeSpace} onFinished={() => modal.close()} />
                 </React.Fragment>,
                 fixedWidth: false,
                 button: false,
@@ -451,7 +444,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 hasCloseButton: true,
             });
         } else {
-            showRoomInviteDialog(this.state.activeSpace.roomId, initialText);
+            showRoomInviteDialog(this.props.activeSpace.roomId, initialText);
         }
     };
 
@@ -600,13 +593,13 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         kind="link"
                         onClick={this.onExplore}
                     >
-                        { this.state.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
+                        { this.props.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
                     </AccessibleButton>
                 </div>;
-            } else if (this.state.activeSpace) {
+            } else if (this.props.activeSpace) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{ _t("Quick actions") }</div>
-                    { this.state.activeSpace.canInvite(MatrixClientPeg.get().getUserId()) && <AccessibleButton
+                    { this.props.activeSpace.canInvite(MatrixClientPeg.get().getUserId()) && <AccessibleButton
                         className="mx_RoomList_explorePrompt_spaceInvite"
                         onClick={this.onSpaceInviteClick}
                     >
