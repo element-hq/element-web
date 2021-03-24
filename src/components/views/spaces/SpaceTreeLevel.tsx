@@ -30,7 +30,12 @@ import IconizedContextMenu, {
 import {_t} from "../../../languageHandler";
 import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import {toRightOf} from "../../structures/ContextMenu";
-import {shouldShowSpaceSettings, showCreateNewRoom, showSpaceSettings} from "../../../utils/space";
+import {
+    shouldShowSpaceSettings,
+    showAddExistingRooms,
+    showCreateNewRoom,
+    showSpaceSettings,
+} from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {ButtonEvent} from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -127,7 +132,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
         if (this.props.space.getJoinRule() === "public") {
             const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
-                title: _t("Invite members"),
+                title: _t("Invite to %(spaceName)s", { spaceName: this.props.space.name }),
                 description: <React.Fragment>
                     <span>{ _t("Share your public space") }</span>
                     <SpacePublicShare space={this.props.space} onFinished={() => modal.close()} />
@@ -167,6 +172,14 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.stopPropagation();
 
         showCreateNewRoom(this.context, this.props.space);
+        this.setState({contextMenuPosition: null}); // also close the menu
+    };
+
+    private onAddExistingRoomClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        showAddExistingRooms(this.context, this.props.space);
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
@@ -236,15 +249,20 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 </IconizedContextMenuOptionList>;
             }
 
-            let newRoomOption;
+            let newRoomSection;
             if (this.props.space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
-                newRoomOption = (
+                newRoomSection = <IconizedContextMenuOptionList first>
                     <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconPlus"
-                        label={_t("New room")}
+                        label={_t("Create new room")}
                         onClick={this.onNewRoomClick}
                     />
-                );
+                    <IconizedContextMenuOption
+                        iconClassName="mx_SpacePanel_iconPlus"
+                        label={_t("Add existing room")}
+                        onClick={this.onAddExistingRoomClick}
+                    />
+                </IconizedContextMenuOptionList>;
             }
 
             contextMenu = <IconizedContextMenu
@@ -274,8 +292,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                         label={_t("Explore rooms")}
                         onClick={this.onExploreRoomsClick}
                     />
-                    { newRoomOption }
                 </IconizedContextMenuOptionList>
+                { newRoomSection }
                 { leaveSection }
             </IconizedContextMenu>;
         }
