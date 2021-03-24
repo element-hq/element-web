@@ -202,7 +202,6 @@ interface IState {
     ready: boolean;
     threepidInvite?: IThreepidInvite,
     roomOobData?: object;
-    viaServers?: string[];
     pendingInitialSync?: boolean;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;
@@ -929,7 +928,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 page_type: PageTypes.RoomView,
                 threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
-                viaServers: roomInfo.via_servers,
                 ready: true,
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             }, () => {

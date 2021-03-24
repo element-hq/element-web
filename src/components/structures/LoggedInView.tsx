@@ -74,7 +74,6 @@ function canElementReceiveInput(el) {
 interface IProps {
     matrixClient: MatrixClient;
     onRegistered: (credentials: IMatrixClientCreds) => Promise<MatrixClient>;
-    viaServers?: string[];
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
     // eslint-disable-next-line camelcase
@@ -142,9 +141,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
         onRegistered: PropTypes.func,
-
-        // Used by the RoomView to handle joining rooms
-        viaServers: PropTypes.arrayOf(PropTypes.string),
 
         // and lots and lots of other stuff.
     };
@@ -625,11 +621,9 @@ class LoggedInView extends React.Component<IProps, IState> {
             case PageTypes.RoomView:
                 pageElement = <RoomView
                     ref={this._roomView}
-                    autoJoin={this.props.autoJoin}
                     onRegistered={this.props.onRegistered}
                     threepidInvite={this.props.threepidInvite}
                     oobData={this.props.roomOobData}
-                    viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     resizeNotifier={this.props.resizeNotifier}
                     justCreatedOpts={this.props.roomJustCreatedOpts}
