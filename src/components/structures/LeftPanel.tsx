@@ -392,7 +392,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     onEnter={this.onEnter}
                 />
                 <AccessibleTooltipButton
-                    className="mx_LeftPanel_exploreButton"
+                    className={classNames("mx_LeftPanel_exploreButton", {
+                        mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
+                    })}
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
                 />

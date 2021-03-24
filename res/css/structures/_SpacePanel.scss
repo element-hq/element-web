@@ -339,11 +339,15 @@ $activeBorderColor: $secondary-fg-color;
     }
 
     .mx_SpacePanel_iconPlus::before {
-        mask-image: url('$(res)/img/element-icons/plus.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
+    }
+
+    .mx_SpacePanel_iconHash::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
     }
 }
 

@@ -258,7 +258,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                         onClick={this.onNewRoomClick}
                     />
                     <IconizedContextMenuOption
-                        iconClassName="mx_SpacePanel_iconPlus"
+                        iconClassName="mx_SpacePanel_iconHash"
                         label={_t("Add existing room")}
                         onClick={this.onAddExistingRoomClick}
                     />
