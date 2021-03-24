@@ -37,7 +37,7 @@ import {
     showSpaceSettings,
 } from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {ButtonEvent} from "../elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
 import SpacePublicShare from "./SpacePublicShare";
@@ -353,7 +353,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const avatarSize = isNested ? 24 : 32;
 
         const toggleCollapseButton = childSpaces && childSpaces.length ?
-            <button
+            <AccessibleButton
                 className="mx_SpaceButton_toggleCollapse"
                 onClick={evt => this.toggleCollapse(evt)}
             /> : null;
