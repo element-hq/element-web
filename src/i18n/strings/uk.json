@@ -1600,5 +1600,6 @@
     "Try again": "Спробувати ще раз",
     "%(creator)s created this DM.": "%(creator)s створює цю приватну розмову.",
     "Share Link to User": "Поділитися посиланням на користувача",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Повідомлення тут захищено наскрізним шифруванням. Підтвердьте %(displayName)s у їхньому профілі — натиснувши на їх аватар."
+    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Повідомлення тут захищено наскрізним шифруванням. Підтвердьте %(displayName)s у їхньому профілі — натиснувши на їх аватар.",
+    "Open": "Відкрити"
 }
