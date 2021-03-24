@@ -20,6 +20,7 @@ import React, { ReactComponentElement } from "react";
 import { Dispatcher } from "flux";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as fbEmitter from "fbemitter";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
@@ -48,12 +49,15 @@ import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../con
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
-import SpaceStore, { SUGGESTED_ROOMS } from "../../../stores/SpaceStore";
+import SpaceStore, {SUGGESTED_ROOMS, UPDATE_SELECTED_SPACE} from "../../../stores/SpaceStore";
 import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
+import { showRoomInviteDialog } from "../../../RoomInvite";
+import Modal from "../../../Modal";
+import SpacePublicShare from "../spaces/SpacePublicShare";
+import InfoDialog from "../dialogs/InfoDialog";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -68,6 +72,7 @@ interface IState {
     sublists: ITagMap;
     isNameFiltering: boolean;
     currentRoomId?: string;
+    activeSpace: Room;
     suggestedRooms: ISpaceSummaryRoom[];
 }
 
@@ -194,7 +199,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                             : _t("You do not have permissions to add rooms to this space")}
                     />
                     <IconizedContextMenuOption
-                        label={_t("Explore space rooms")}
+                        label={_t("Explore rooms")}
                         iconClassName="mx_RoomList_iconExplore"
                         onClick={(e) => {
                             e.preventDefault();
@@ -282,6 +287,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         this.state = {
             sublists: {},
             isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
+            activeSpace: SpaceStore.instance.activeSpace,
             suggestedRooms: SpaceStore.instance.suggestedRooms,
         };
 
@@ -294,6 +300,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         SpaceStore.instance.on(SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
         this.customTagStoreRef = CustomRoomTagStore.addListener(this.updateLists);
@@ -301,6 +308,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public componentWillUnmount() {
+        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         SpaceStore.instance.off(SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
@@ -366,6 +374,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         return room;
     };
 
+    private updateActiveSpace = (activeSpace: Room) => {
+        this.setState({ activeSpace });
+    };
+
     private updateSuggestedRooms = (suggestedRooms: ISpaceSummaryRoom[]) => {
         this.setState({ suggestedRooms });
     };
@@ -422,6 +434,25 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private onExplore = () => {
         const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
         dis.dispatch({ action: Action.ViewRoomDirectory, initialText });
+    };
+
+    private onSpaceInviteClick = () => {
+        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
+        if (this.state.activeSpace.getJoinRule() === "public") {
+            const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
+                title: _t("Invite to %(spaceName)s", { spaceName: this.state.activeSpace.name }),
+                description: <React.Fragment>
+                    <span>{ _t("Share your public space") }</span>
+                    <SpacePublicShare space={this.state.activeSpace} onFinished={() => modal.close()} />
+                </React.Fragment>,
+                fixedWidth: false,
+                button: false,
+                className: "mx_SpacePanel_sharePublicSpace",
+                hasCloseButton: true,
+            });
+        } else {
+            showRoomInviteDialog(this.state.activeSpace.roomId, initialText);
+        }
     };
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
@@ -569,7 +600,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         kind="link"
                         onClick={this.onExplore}
                     >
-                        {_t("Explore all public rooms")}
+                        { this.state.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
+                    </AccessibleButton>
+                </div>;
+            } else if (this.state.activeSpace) {
+                explorePrompt = <div className="mx_RoomList_explorePrompt">
+                    <div>{ _t("Quick actions") }</div>
+                    { this.state.activeSpace.canInvite(MatrixClientPeg.get().getUserId()) && <AccessibleButton
+                        className="mx_RoomList_explorePrompt_spaceInvite"
+                        onClick={this.onSpaceInviteClick}
+                    >
+                        {_t("Invite people")}
+                    </AccessibleButton> }
+                    <AccessibleButton
+                        className="mx_RoomList_explorePrompt_spaceExplore"
+                        onClick={this.onExplore}
+                    >
+                        {_t("Explore rooms")}
                     </AccessibleButton>
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
