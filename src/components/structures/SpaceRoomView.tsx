@@ -258,20 +258,26 @@ const SpaceLanding = ({ space }) => {
         </AccessibleButton>;
     }
 
-    const [loading, roomsMap, relations, numRooms] = useAsyncMemo(async () => {
+    const [loading, roomsMap, relations, viaMap, numRooms] = useAsyncMemo(async () => {
         try {
             const data = await cli.getSpaceSummary(space.roomId, undefined, myMembership !== "join");
 
             const parentChildRelations = new EnhancedMap<string, Map<string, ISpaceSummaryEvent>>();
+            const viaMap = new EnhancedMap<string, Set<string>>();
             data.events.map((ev: ISpaceSummaryEvent) => {
                 if (ev.type === EventType.SpaceChild) {
                     parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
+                }
+
+                if (Array.isArray(ev.content["via"])) {
+                    const set = viaMap.getOrCreate(ev.state_key, new Set());
+                    ev.content["via"].forEach(via => set.add(via));
                 }
             });
 
             const roomsMap = new Map<string, ISpaceSummaryRoom>(data.rooms.map(r => [r.room_id, r]));
             const numRooms = data.rooms.filter(r => r.room_type !== RoomType.Space).length;
-            return [false, roomsMap, parentChildRelations, numRooms];
+            return [false, roomsMap, parentChildRelations, viaMap, numRooms];
         } catch (e) {
             console.error(e); // TODO
         }
@@ -292,7 +298,7 @@ const SpaceLanding = ({ space }) => {
                 relations={relations}
                 parents={new Set()}
                 onViewRoomClick={(roomId, autoJoin) => {
-                    showRoom(roomsMap.get(roomId), [], autoJoin);
+                    showRoom(roomsMap.get(roomId), Array.from(viaMap.get(roomId) || []), autoJoin);
                 }}
             />
         </AutoHideScrollbar>;
