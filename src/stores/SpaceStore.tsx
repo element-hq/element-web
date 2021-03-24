@@ -34,6 +34,7 @@ import {setHasDiff} from "../utils/sets";
 import {objectDiff} from "../utils/objects";
 import {arrayHasDiff} from "../utils/arrays";
 import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
+import RoomViewStore from "./RoomViewStore";
 
 type SpaceKey = string | symbol;
 
@@ -366,6 +367,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         } else {
             // this.onRoomUpdate(room);
             this.onRoomsUpdate();
+        }
+
+        // if the user was looking at the room and then joined select that space
+        if (room.getMyMembership() === "join" && room.roomId === RoomViewStore.getRoomId()) {
+            this.setActiveSpace(room);
         }
 
         const numSuggestedRooms = this._suggestedRooms.length;
