@@ -120,6 +120,7 @@ export default class SendMessageComposer extends React.Component {
         permalinkCreator: PropTypes.object.isRequired,
         replyToEvent: PropTypes.object,
         onChange: PropTypes.func,
+        disabled: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -556,6 +557,7 @@ export default class SendMessageComposer extends React.Component {
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onPaste={this._onPaste}
+                    disabled={this.props.disabled}
                 />
             </div>
         );

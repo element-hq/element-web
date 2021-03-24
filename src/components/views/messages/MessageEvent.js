@@ -71,6 +71,10 @@ export default class MessageEvent extends React.Component {
             'm.file': sdk.getComponent('messages.MFileBody'),
             'm.audio': sdk.getComponent('messages.MAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
+
+            // TODO: @@ TravisR: Use labs flag determination.
+            // MSC: https://github.com/matrix-org/matrix-doc/pull/2516
+            'org.matrix.msc2516.voice': sdk.getComponent('messages.MAudioBody'),
         };
         const evTypes = {
             'm.sticker': sdk.getComponent('messages.MStickerBody'),

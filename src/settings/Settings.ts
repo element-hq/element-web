@@ -128,6 +128,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_voice_messages": {
+        isFeature: true,
+        displayName: _td("Send and receive voice messages (in development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_latex_maths": {
         isFeature: true,
         displayName: _td("Render LaTeX maths in messages"),
