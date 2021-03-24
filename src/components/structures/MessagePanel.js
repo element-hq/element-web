@@ -452,6 +452,20 @@ export default class MessagePanel extends React.Component {
         });
     };
 
+    _getNextEventInfo(arr, i) {
+        const nextEvent = i < arr.length - 1
+            ? arr[i + 1]
+            : null;
+
+        // The next event with tile is used to to determine the 'last successful' flag
+        // when rendering the tile. The shouldShowEvent function is pretty quick at what
+        // it does, so this should have no significant cost even when a room is used for
+        // not-chat purposes.
+        const nextTile = arr.slice(i + 1).find(e => this._shouldShowEvent(e));
+
+        return {nextEvent, nextTile};
+    }
+
     _getEventTiles() {
         this.eventNodes = {};
 
@@ -503,6 +517,7 @@ export default class MessagePanel extends React.Component {
             const mxEv = this.props.events[i];
             const eventId = mxEv.getId();
             const last = (mxEv === lastShownEvent);
+            const {nextEvent, nextTile} = this._getNextEventInfo(this.props.events, i);
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
@@ -519,22 +534,12 @@ export default class MessagePanel extends React.Component {
 
             for (const Grouper of groupers) {
                 if (Grouper.canStartGroup(this, mxEv)) {
-                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent);
+                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent, nextEvent, nextTile);
                 }
             }
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
                 if (wantTile) {
-                    const nextEvent = i < this.props.events.length - 1
-                        ? this.props.events[i + 1]
-                        : null;
-
-                    // The next event with tile is used to to determine the 'last successful' flag
-                    // when rendering the tile. The shouldShowEvent function is pretty quick at what
-                    // it does, so this should have no significant cost even when a room is used for
-                    // not-chat purposes.
-                    const nextTile = this.props.events.slice(i + 1).find(e => this._shouldShowEvent(e));
-
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
@@ -1032,7 +1037,7 @@ class RedactionGrouper {
         return panel._shouldShowEvent(ev) && ev.isRedacted();
     }
 
-    constructor(panel, ev, prevEvent, lastShownEvent) {
+    constructor(panel, ev, prevEvent, lastShownEvent, nextEvent, nextEventTile) {
         this.panel = panel;
         this.readMarker = panel._readMarkerForEvent(
             ev.getId(),
@@ -1041,6 +1046,8 @@ class RedactionGrouper {
         this.events = [ev];
         this.prevEvent = prevEvent;
         this.lastShownEvent = lastShownEvent;
+        this.nextEvent = nextEvent;
+        this.nextEventTile = nextEventTile;
     }
 
     shouldGroup(ev) {
@@ -1089,7 +1096,8 @@ class RedactionGrouper {
         const senders = new Set();
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
-            return panel._getTilesForEvent(i === 0 ? this.prevEvent : this.events[i - 1], e, e === lastShownEvent);
+            const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
+            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
