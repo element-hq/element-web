@@ -1132,7 +1132,7 @@
     "Bridges": "Sõnumisillad",
     "Room Addresses": "Jututubade aadressid",
     "Browse": "Sirvi",
-    "Change room avatar": "Muuda jututoa profiilipilti ehk avatari",
+    "Change room avatar": "Muuda jututoa tunnuspilti ehk avatari",
     "Change main address for the room": "Muuda jututoa põhiaadressi",
     "Change history visibility": "Muuda vestlusajaloo nähtavust",
     "Change permissions": "Muuda õigusi",
@@ -3088,5 +3088,9 @@
     "Setting ID": "Seadistuse tunnus",
     "Failed to save settings": "Seadistuste salvestamine ei õnnestunud",
     "Settings Explorer": "Seadistuste haldur",
-    "Show chat effects (animations when receiving e.g. confetti)": "Näita vestluses edevat graafikat (näiteks kui keegi on saatnud serpentiine)"
+    "Show chat effects (animations when receiving e.g. confetti)": "Näita vestluses edevat graafikat (näiteks kui keegi on saatnud serpentiine)",
+    "This homeserver has been blocked by it's administrator.": "Ligipääs sellele koduserverile on sinu serveri haldaja poolt blokeeritud.",
+    "This homeserver has been blocked by its administrator.": "Ligipääs sellele koduserverile on sinu serveri haldaja poolt blokeeritud.",
+    "You're already in a call with this person.": "Sinul juba kõne käsil selle osapoolega.",
+    "Already in call": "Kõne on juba pooleli"
 }

@@ -2749,5 +2749,10 @@
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Yerna (╯°□°）╯︵ ┻━┻ ɣer tazwara n yizen",
     "This will end the conference for everyone. Continue?": "Aya ad yeḥbes asarag i yal yiwen. Kemmel?",
     "End conference": "Kfu asarag",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Tawuri tecceḍ acku asawaḍ ur yessaweḍ ara ad yekcem. Senqed ma yella usawaḍ yeqqnen yerna yettusbadu akken iwata."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Tawuri tecceḍ acku asawaḍ ur yessaweḍ ara ad yekcem. Senqed ma yella usawaḍ yeqqnen yerna yettusbadu akken iwata.",
+    "%(senderName)s declined the call.": "%(senderName)s yugi asiwel.",
+    "(an error occurred)": "(tella-d tuccḍa)",
+    "(connection failed)": "(tuqqna ur teddi ara)",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Iqeddcen akk ttwagedlen seg uttekki! Taxxamt-a dayen ur tettuseqdac ara.",
+    "Try again": "Ɛreḍ tikkelt-nniḍen"
 }
