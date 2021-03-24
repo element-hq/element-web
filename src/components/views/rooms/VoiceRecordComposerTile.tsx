@@ -40,7 +40,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         };
     }
 
-    private onStartVoiceMessage = async () => {
+    private onStartStopVoiceMessage = async () => {
         // TODO: @@ TravisR: We do not want to auto-send on stop.
         if (this.state.recorder) {
             await this.state.recorder.stop();
@@ -80,7 +80,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         return (
             <AccessibleTooltipButton
                 className={classes}
-                onClick={this.onStartVoiceMessage}
+                onClick={this.onStartStopVoiceMessage}
                 title={tooltip}
             />
         );
