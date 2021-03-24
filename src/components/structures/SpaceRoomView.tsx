@@ -430,7 +430,7 @@ const SpaceSetupPublicShare = ({ space, onFinished }) => {
             { _t("It's just you at the moment, it will be even better with others.") }
         </div>
 
-        <SpacePublicShare space={space} onFinished={onFinished} />
+        <SpacePublicShare space={space} />
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton kind="primary" onClick={onFinished}>
