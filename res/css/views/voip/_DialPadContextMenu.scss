@@ -27,9 +27,11 @@ limitations under the License.
 }
 
 .mx_DialPadContextMenu_dialled {
-    height: 1em;
+    height: 1.5em;
     font-size: 18px;
     font-weight: 600;
+    max-width: 150px;
+    overflow: auto;
 }
 
 .mx_DialPadContextMenu_dialPad {
