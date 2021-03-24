@@ -2064,7 +2064,7 @@
     "You changed your avatar": "Вы поменяли свой аватар",
     "%(targetName)s changed their avatar": "%(targetName)s поменял(а) свой аватар",
     "You changed the room name": "Вы поменяли имя комнаты",
-    "Enable experimental, compact IRC style layout": "Включите экспериментальный, компактный стиль IRC",
+    "Enable experimental, compact IRC style layout": "Включить экспериментальный, компактный стиль IRC",
     "Unknown caller": "Неизвестный абонент",
     "Incoming call": "Входящий звонок",
     "Waiting for your other session to verify…": "Ожидание вашей другой сессии для начала подтверждения…",
