@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {RefObject, useContext, useRef, useState} from "react";
+import React, {RefObject, useContext, useMemo, useRef, useState} from "react";
 import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {EventSubscription} from "fbemitter";
@@ -46,7 +46,7 @@ import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanel
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import {showAddExistingRooms, showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
-import {HierarchyLevel, ISpaceSummaryEvent, ISpaceSummaryRoom, showRoom} from "./SpaceRoomDirectory";
+import {HierarchyLevel, ISpaceSummaryEvent, ISpaceSummaryRoom, showRoom, useSpaceSummary} from "./SpaceRoomDirectory";
 import {useAsyncMemo} from "../../hooks/useAsyncMemo";
 import {EnhancedMap} from "../../utils/maps";
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -228,7 +228,7 @@ const SpaceLanding = ({ space }) => {
 
     const canAddRooms = myMembership === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
 
-    const [_, forceUpdate] = useStateToggle(false); // TODO
+    const [refreshToken, forceUpdate] = useStateToggle(false);
 
     let addRoomButtons;
     if (canAddRooms) {
@@ -258,32 +258,13 @@ const SpaceLanding = ({ space }) => {
         </AccessibleButton>;
     }
 
-    const [loading, roomsMap, relations, viaMap, numRooms] = useAsyncMemo(async () => {
-        try {
-            const data = await cli.getSpaceSummary(space.roomId, undefined, myMembership !== "join");
-
-            const parentChildRelations = new EnhancedMap<string, Map<string, ISpaceSummaryEvent>>();
-            const viaMap = new EnhancedMap<string, Set<string>>();
-            data.events.map((ev: ISpaceSummaryEvent) => {
-                if (ev.type === EventType.SpaceChild) {
-                    parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
-                }
-
-                if (Array.isArray(ev.content["via"])) {
-                    const set = viaMap.getOrCreate(ev.state_key, new Set());
-                    ev.content["via"].forEach(via => set.add(via));
-                }
-            });
-
-            const roomsMap = new Map<string, ISpaceSummaryRoom>(data.rooms.map(r => [r.room_id, r]));
-            const numRooms = data.rooms.filter(r => r.room_type !== RoomType.Space).length;
-            return [false, roomsMap, parentChildRelations, viaMap, numRooms];
-        } catch (e) {
-            console.error(e); // TODO
-        }
-
-        return [false];
-    }, [space, _], [true]);
+    const [rooms, relations, viaMap] = useSpaceSummary(cli, space, refreshToken);
+    const [roomsMap, numRooms] = useMemo(() => {
+        if (!rooms) return [];
+        const roomsMap = new Map<string, ISpaceSummaryRoom>(rooms.map(r => [r.room_id, r]));
+        const numRooms = rooms.filter(r => r.room_type !== RoomType.Space).length;
+        return [roomsMap, numRooms];
+    }, [rooms]);
 
     let previewRooms;
     if (roomsMap) {
@@ -302,7 +283,7 @@ const SpaceLanding = ({ space }) => {
                 }}
             />
         </AutoHideScrollbar>;
-    } else if (loading) {
+    } else if (!rooms) {
         previewRooms = <InlineSpinner />;
     } else {
         previewRooms = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
@@ -647,6 +628,8 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private goToFirstRoom = async () => {
+        // TODO actually go to the first room
+
         const childRooms = SpaceStore.instance.getChildRooms(this.props.space.roomId);
         if (childRooms.length) {
             const room = childRooms[0];
