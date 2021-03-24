@@ -33,7 +33,7 @@ import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import {getCommand} from '../../../SlashCommands';
+import {CommandCategories, getCommand} from '../../../SlashCommands';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
@@ -291,15 +291,22 @@ export default class SendMessageComposer extends React.Component {
             }
             return text + part.text;
         }, "");
-        return [getCommand(this.props.room.roomId, commandText), commandText];
+        const {cmd, args} = getCommand(commandText);
+        return [cmd, args, commandText];
     }
 
-    async _runSlashCommand(fn) {
-        const cmd = fn();
-        let error = cmd.error;
-        if (cmd.promise) {
+    async _runSlashCommand(cmd, args) {
+        const result = cmd.run(this.props.room.roomId, args);
+        let messageContent;
+        let error = result.error;
+        if (result.promise) {
             try {
-                await cmd.promise;
+                if (cmd.category === CommandCategories.messages) {
+                    // The command returns a modified message that we need to pass on
+                    messageContent = await result.promise;
+                } else {
+                    await result.promise;
+                }
             } catch (err) {
                 error = err;
             }
@@ -308,7 +315,7 @@ export default class SendMessageComposer extends React.Component {
             console.error("Command failure: %s", error);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             // assume the error is a server error when the command is async
-            const isServerError = !!cmd.promise;
+            const isServerError = !!result.promise;
             const title = isServerError ? _td("Server error") : _td("Command error");
 
             let errText;
@@ -326,6 +333,7 @@ export default class SendMessageComposer extends React.Component {
             });
         } else {
             console.log("Command success.");
+            if (messageContent) return messageContent;
         }
     }
 
@@ -334,13 +342,22 @@ export default class SendMessageComposer extends React.Component {
             return;
         }
 
+        const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
+        let content;
 
         if (!containsEmote(this.model) && this._isSlashCommand()) {
-            const [cmd, commandText] = this._getSlashCommand();
+            const [cmd, args, commandText] = this._getSlashCommand();
             if (cmd) {
-                shouldSend = false;
-                this._runSlashCommand(cmd);
+                if (cmd.category === CommandCategories.messages) {
+                    content = await this._runSlashCommand(cmd, args);
+                    if (replyToEvent) {
+                        addReplyToMessageContent(content, replyToEvent, this.props.permalinkCreator);
+                    }
+                } else {
+                    this._runSlashCommand(cmd, args);
+                    shouldSend = false;
+                }
             } else {
                 // ask the user if their unknown command should be sent as a message
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -375,11 +392,12 @@ export default class SendMessageComposer extends React.Component {
             this._sendQuickReaction();
         }
 
-        const replyToEvent = this.props.replyToEvent;
         if (shouldSend) {
             const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
-            const content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+            if (!content) {
+                content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+            }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
