@@ -570,6 +570,8 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
                     className="mx_textinput_icon mx_textinput_search"
                     placeholder={ _t("Search names and description") }
                     onSearch={setQuery}
+                    autoFocus={true}
+                    initialValue={initialText}
                 />
 
                 { content }
