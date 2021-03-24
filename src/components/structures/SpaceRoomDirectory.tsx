@@ -77,7 +77,6 @@ export interface ISpaceSummaryEvent {
 
 interface ITileProps {
     room: ISpaceSummaryRoom;
-    editing?: boolean;
     suggested?: boolean;
     selected?: boolean;
     numChildRooms?: number;
@@ -88,7 +87,6 @@ interface ITileProps {
 
 const Tile: React.FC<ITileProps> = ({
     room,
-    editing,
     suggested,
     selected,
     hasPermissions,
@@ -170,12 +168,6 @@ const Tile: React.FC<ITileProps> = ({
         </div>
     </React.Fragment>;
 
-    if (editing) {
-        return <div className="mx_SpaceRoomDirectory_roomTile">
-            { content }
-        </div>
-    }
-
     let childToggle;
     let childSection;
     if (children) {
@@ -201,7 +193,7 @@ const Tile: React.FC<ITileProps> = ({
             className={classNames("mx_SpaceRoomDirectory_roomTile", {
                 mx_SpaceRoomDirectory_subspace: room.room_type === RoomType.Space,
             })}
-            onClick={hasPermissions ? onToggleClick : onPreviewClick}
+            onClick={(hasPermissions && onToggleClick) ? onToggleClick : onPreviewClick}
         >
             { content }
             { childToggle }
