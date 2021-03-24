@@ -133,27 +133,32 @@ export class VoiceRecorder {
                 dbMax: this.recorderFreqNode.maxDecibels,
             });
         }, 1000 / FREQ_SAMPLE_RATE) as any as number; // XXX: Linter doesn't understand timer environment
-        return this.recorder.start().then(() => this.recording = true);
+        await this.recorder.start();
+        this.recording = true;
     }
 
     public async stop(): Promise<Uint8Array> {
         if (!this.recording) {
             throw new Error("No recording to stop");
         }
+
         // Disconnect the source early to start shutting down resources
         this.recorderSource.disconnect();
-        return this.recorder.stop()
-            // close the context after the recorder so the recorder doesn't try to
-            // connect anything to the context (this would generate a warning)
-            .then(() => this.recorderContext.close())
-            // Now stop all the media tracks so we can release them back to the user/OS
-            .then(() => this.recorderStream.getTracks().forEach(t => t.stop()))
-            // Finally do our post-processing and clean up
-            .then(() => {
-                clearInterval(this.freqTimerId);
-                this.recording = false;
-                return this.recorder.close();
-            }).then(() => this.buffer);
+        await this.recorder.stop();
+
+        // close the context after the recorder so the recorder doesn't try to
+        // connect anything to the context (this would generate a warning)
+        await this.recorderContext.close();
+
+        // Now stop all the media tracks so we can release them back to the user/OS
+        this.recorderStream.getTracks().forEach(t => t.stop());
+
+        // Finally do our post-processing and clean up
+        clearInterval(this.freqTimerId);
+        this.recording = false;
+        await this.recorder.close();
+
+        return this.buffer;
     }
 
     public async upload(): Promise<string> {
