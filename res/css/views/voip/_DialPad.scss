@@ -23,14 +23,13 @@ limitations under the License.
 .mx_DialPad_button {
     width: 40px;
     height: 40px;
-    background-color: $theme-button-bg-color;
+    background-color: $dialpad-button-bg-color;
     border-radius: 40px;
     font-size: 18px;
     font-weight: 600;
     text-align: center;
     vertical-align: middle;
     line-height: 40px;
-    color: #15191e;
 }
 
 .mx_DialPad_deleteButton, .mx_DialPad_dialButton {
