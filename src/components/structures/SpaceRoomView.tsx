@@ -46,9 +46,7 @@ import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanel
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import {showAddExistingRooms, showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
-import {HierarchyLevel, ISpaceSummaryEvent, ISpaceSummaryRoom, showRoom, useSpaceSummary} from "./SpaceRoomDirectory";
-import {useAsyncMemo} from "../../hooks/useAsyncMemo";
-import {EnhancedMap} from "../../utils/maps";
+import {HierarchyLevel, ISpaceSummaryRoom, showRoom, useSpaceSummary} from "./SpaceRoomDirectory";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
