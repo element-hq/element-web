@@ -195,7 +195,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this.spaceFilteredRooms.get(space?.roomId || HOME_SPACE) || new Set();
     };
 
-    public rebuild = throttle(() => { // exported for tests
+    private rebuild = throttle(() => {
         // get all most-upgraded rooms & spaces except spaces which have been left (historical)
         const visibleRooms = this.matrixClient.getVisibleRooms().filter(r => {
             return !r.isSpaceRoom() || r.getMyMembership() === "join";
@@ -204,7 +204,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         const unseenChildren = new Set<Room>(visibleRooms);
         const backrefs = new EnhancedMap<string, Set<string>>();
 
-        // Sort spaces by room ID to force the loop breaking to be deterministic
+        // Sort spaces by room ID to force the cycle breaking to be deterministic
         const spaces = sortBy(visibleRooms.filter(r => r.isSpaceRoom()), space => space.roomId);
 
         // TODO handle cleaning up links when a Space is removed
@@ -219,7 +219,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         const [rootSpaces, orphanedRooms] = partitionSpacesAndRooms(Array.from(unseenChildren));
 
-        // untested algorithm to handle full-cycles
+        // somewhat algorithm to handle full-cycles
         const detachedNodes = new Set<Room>(spaces);
 
         const markTreeChildren = (rootSpace: Room, unseen: Set<Room>) => {
