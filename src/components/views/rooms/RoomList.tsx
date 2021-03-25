@@ -49,7 +49,7 @@ import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../con
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
-import SpaceStore, {SUGGESTED_ROOMS, UPDATE_SELECTED_SPACE} from "../../../stores/SpaceStore";
+import SpaceStore, {SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
 import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
