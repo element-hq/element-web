@@ -111,7 +111,7 @@ const Tile: React.FC<ITileProps> = ({
     let button;
     if (myMembership === "join") {
         button = <AccessibleButton onClick={onPreviewClick} kind="primary_outline">
-            { _t("Open") }
+            { _t("View") }
         </AccessibleButton>;
     } else if (onJoinClick) {
         button = <AccessibleButton onClick={onJoinClick} kind="primary">
