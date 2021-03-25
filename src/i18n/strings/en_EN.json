@@ -1906,6 +1906,8 @@
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
     "collapse": "collapse",
     "expand": "expand",
+    "%(count)s people you know have already joined|other": "%(count)s people you know have already joined",
+    "%(count)s people you know have already joined|one": "%(count)s person you know has already joined",
     "You cannot delete this image. (%(code)s)": "You cannot delete this image. (%(code)s)",
     "Uploaded on %(date)s by %(user)s": "Uploaded on %(date)s by %(user)s",
     "Rotate Left": "Rotate Left",

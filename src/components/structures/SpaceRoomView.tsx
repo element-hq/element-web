@@ -51,6 +51,7 @@ import AutoHideScrollbar from "./AutoHideScrollbar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
+import FacePile from "../views/elements/FacePile";
 
 interface IProps {
     space: Room;
@@ -158,8 +159,10 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         joinButtons = <InlineSpinner />;
     }
 
+    const joinRule = space.getJoinRule();
+
     let visibilitySection;
-    if (space.getJoinRule() === "public") {
+    if (joinRule === "public") {
         visibilitySection = <span className="mx_SpaceRoomView_preview_info_public">
             { _t("Public space") }
         </span>;
@@ -177,7 +180,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         </h1>
         <div className="mx_SpaceRoomView_preview_info">
             { visibilitySection }
-            <RoomMemberCount room={space}>
+            { joinRule === "public" && <RoomMemberCount room={space}>
                 {(count) => count > 0 ? (
                     <AccessibleButton
                         className="mx_SpaceRoomView_preview_memberCount"
@@ -193,7 +196,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                         { _t("%(count)s members", { count }) }
                     </AccessibleButton>
                 ) : null}
-            </RoomMemberCount>
+            </RoomMemberCount> }
         </div>
         <RoomTopic room={space}>
             {(topic, ref) =>
@@ -202,6 +205,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                 </div>
             }
         </RoomTopic>
+        { joinRule === "public" && <FacePile room={space} /> }
         <div className="mx_SpaceRoomView_preview_joinButtons">
             { joinButtons }
         </div>
