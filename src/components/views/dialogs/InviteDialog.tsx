@@ -673,7 +673,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             console.error(err);
             this.setState({
                 busy: false,
-                errorText: _t("We couldn't create your DM. Please check the users you want to invite and try again."),
+                errorText: _t("We couldn't create your DM."),
             });
         });
     };
@@ -886,19 +886,21 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     };
 
     _toggleMember = (member: Member) => {
-        let filterText = this.state.filterText;
-        const targets = this.state.targets.map(t => t); // cheap clone for mutation
-        const idx = targets.indexOf(member);
-        if (idx >= 0) {
-            targets.splice(idx, 1);
-        } else {
-            targets.push(member);
-            filterText = ""; // clear the filter when the user accepts a suggestion
-        }
-        this.setState({targets, filterText});
+        if (!this.state.busy) {
+            let filterText = this.state.filterText;
+            const targets = this.state.targets.map(t => t); // cheap clone for mutation
+            const idx = targets.indexOf(member);
+            if (idx >= 0) {
+                targets.splice(idx, 1);
+            } else {
+                targets.push(member);
+                filterText = ""; // clear the filter when the user accepts a suggestion
+            }
+            this.setState({targets, filterText});
 
-        if (this._editorRef && this._editorRef.current) {
-            this._editorRef.current.focus();
+            if (this._editorRef && this._editorRef.current) {
+                this._editorRef.current.focus();
+            }
         }
     };
 
