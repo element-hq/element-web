@@ -294,6 +294,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
+    private onSpaceMembersChange = (space: Room, ev: MatrixEvent) => {
+        // skip this update if we do not have a DM with this user
+        if (DMRoomMap.shared().getDMRoomsForUserId(ev.getStateKey()).length < 1) return;
+        this.onRoomsUpdate();
+    };
+
     private onRoomsUpdate = throttle(() => {
         // TODO resolve some updates as deltas
         const visibleRooms = this.matrixClient.getVisibleRooms();
@@ -385,18 +391,30 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         const room = this.matrixClient.getRoom(ev.getRoomId());
         if (!room) return;
 
-        if (ev.getType() === EventType.SpaceChild && room.isSpaceRoom()) {
-            this.onSpaceUpdate();
-            this.emit(room.roomId);
-        } else if (ev.getType() === EventType.SpaceParent) {
-            // TODO rebuild the space parent and not the room - check permissions?
-            // TODO confirm this after implementing parenting behaviour
-            if (room.isSpaceRoom()) {
-                this.onSpaceUpdate();
-            } else {
-                this.onRoomUpdate(room);
-            }
-            this.emit(room.roomId);
+        switch (ev.getType()) {
+            case EventType.SpaceChild:
+                if (room.isSpaceRoom()) {
+                    this.onSpaceUpdate();
+                    this.emit(room.roomId);
+                }
+                break;
+
+            case EventType.SpaceParent:
+                // TODO rebuild the space parent and not the room - check permissions?
+                // TODO confirm this after implementing parenting behaviour
+                if (room.isSpaceRoom()) {
+                    this.onSpaceUpdate();
+                } else {
+                    this.onRoomUpdate(room);
+                }
+                this.emit(room.roomId);
+                break;
+
+            case EventType.RoomMember:
+                if (room.isSpaceRoom()) {
+                    this.onSpaceMembersChange(room, ev);
+                }
+                break;
         }
     };
 
