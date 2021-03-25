@@ -206,10 +206,10 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
-        let errMsg = err.error || "";
+        let errMsg = err.error || err.message || "";
         if (err.httpStatus === 403) {
             errMsg = _t("Failed to change password. Is your password correct?");
-        } else if (err.httpStatus) {
+        } else if (!errMsg) {
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
