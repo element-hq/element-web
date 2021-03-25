@@ -25,10 +25,8 @@ const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose 
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
 const FREQ_SAMPLE_RATE = 10; // Target rate of frequency data (samples / sec). We don't need this super often.
 
-export interface IFrequencyPackage {
-    dbBars: Float32Array;
-    dbMin: number;
-    dbMax: number;
+export interface IRecordingUpdate {
+    waveform: number[]; // floating points between 0 (low) and 1 (high).
 
     // TODO: @@ TravisR: Generalize this for a timing package?
 }
@@ -38,11 +36,11 @@ export class VoiceRecorder {
     private recorderContext: AudioContext;
     private recorderSource: MediaStreamAudioSourceNode;
     private recorderStream: MediaStream;
-    private recorderFreqNode: AnalyserNode;
+    private recorderFFT: AnalyserNode;
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
-    private observable: SimpleObservable<IFrequencyPackage>;
+    private observable: SimpleObservable<IRecordingUpdate>;
     private freqTimerId: number;
 
     public constructor(private client: MatrixClient) {
@@ -64,8 +62,16 @@ export class VoiceRecorder {
             sampleRate: SAMPLE_RATE, // once again, the browser will resample for us
         });
         this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
-        this.recorderFreqNode = this.recorderContext.createAnalyser();
-        this.recorderSource.connect(this.recorderFreqNode);
+        this.recorderFFT = this.recorderContext.createAnalyser();
+
+        // Bring the FFT time domain down a bit. The default is 2048, and this must be a power
+        // of two. We use 64 points because we happen to know down the line we need less than
+        // that, but 32 would be too few. Large numbers are not helpful here and do not add
+        // precision: they introduce higher precision outputs of the FFT (frequency data), but
+        // it makes the time domain less than helpful.
+        this.recorderFFT.fftSize = 64;
+
+        this.recorderSource.connect(this.recorderFFT);
         this.recorder = new Recorder({
             encoderPath, // magic from webpack
             encoderSampleRate: SAMPLE_RATE,
@@ -91,7 +97,7 @@ export class VoiceRecorder {
         };
     }
 
-    public get frequencyData(): SimpleObservable<IFrequencyPackage> {
+    public get liveData(): SimpleObservable<IRecordingUpdate> {
         if (!this.recording) throw new Error("No observable when not recording");
         return this.observable;
     }
@@ -121,16 +127,35 @@ export class VoiceRecorder {
         if (this.observable) {
             this.observable.close();
         }
-        this.observable = new SimpleObservable<IFrequencyPackage>();
+        this.observable = new SimpleObservable<IRecordingUpdate>();
         await this.makeRecorder();
         this.freqTimerId = setInterval(() => {
             if (!this.recording) return;
-            const data = new Float32Array(this.recorderFreqNode.frequencyBinCount);
-            this.recorderFreqNode.getFloatFrequencyData(data);
+
+            // The time domain is the input to the FFT, which means we use an array of the same
+            // size. The time domain is also known as the audio waveform. We're ignoring the
+            // output of the FFT here (frequency data) because we're not interested in it.
+            //
+            // We use bytes out of the analyser because floats have weird precision problems
+            // and are slightly more difficult to work with. The bytes are easy to work with,
+            // which is why we pick them (they're also more precise, but we care less about that).
+            const data = new Uint8Array(this.recorderFFT.fftSize);
+            this.recorderFFT.getByteTimeDomainData(data);
+
+            // Because we're dealing with a uint array we need to do math a bit differently.
+            // If we just `Array.from()` the uint array, we end up with 1s and 0s, which aren't
+            // what we're after. Instead, we have to use a bit of manual looping to correctly end
+            // up with the right values
+            const translatedData: number[] = [];
+            for (let i = 0; i < data.length; i++) {
+                // All we're doing here is inverting the amplitude and putting the metric somewhere
+                // between zero and one. Without the inversion, lower values are "louder", which is
+                // not super helpful.
+                translatedData.push(1 - (data[i] / 128.0));
+            }
+
             this.observable.update({
-                dbBars: data,
-                dbMin: this.recorderFreqNode.minDecibels,
-                dbMax: this.recorderFreqNode.maxDecibels,
+                waveform: translatedData,
             });
         }, 1000 / FREQ_SAMPLE_RATE) as any as number; // XXX: Linter doesn't understand timer environment
         await this.recorder.start();

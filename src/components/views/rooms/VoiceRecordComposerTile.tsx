@@ -21,7 +21,7 @@ import {VoiceRecorder} from "../../../voice/VoiceRecorder";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import classNames from "classnames";
-import FrequencyBars from "../voice_messages/FrequencyBars";
+import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
 
 interface IProps {
     room: Room;
@@ -68,16 +68,16 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             'mx_VoiceRecordComposerTile_stop': !!this.state.recorder,
         });
 
-        let bars = null;
+        let waveform = null;
         let tooltip = _t("Record a voice message");
         if (!!this.state.recorder) {
             // TODO: @@ TravisR: Change to match behaviour
             tooltip = _t("Stop & send recording");
-            bars = <FrequencyBars recorder={this.state.recorder} />;
+            waveform = <LiveRecordingWaveform recorder={this.state.recorder} />;
         }
 
         return (<>
-            {bars}
+            {waveform}
             <AccessibleTooltipButton
                 className={classes}
                 onClick={this.onStartStopVoiceMessage}
