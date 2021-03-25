@@ -116,7 +116,7 @@ const NewRoomIntro = () => {
                     className="mx_NewRoomIntro_inviteButton"
                     kind="primary"
                     onClick={() => {
-                        dis.dispatch({ action: "view_invite", roomId });
+                        dis.dispatch({ action: "view_invite", roomId: parentSpace.roomId });
                     }}
                 >
                     {_t("Invite to %(spaceName)s", { spaceName: parentSpace.name })}
