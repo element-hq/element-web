@@ -25,7 +25,9 @@ import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
 import Modal from "../../../../../Modal";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {
         super();
@@ -82,6 +84,7 @@ export default class VoiceUserSettingsTab extends React.Component {
             }
         }
         if (error) {
+            console.log("Failed to list userMedia devices", error);
             const brand = SdkConfig.get().brand;
             const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {

@@ -16,7 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.GenericErrorPage")
 export default class GenericErrorPage extends React.PureComponent {
     static propTypes = {
         title: PropTypes.object.isRequired, // jsx for title

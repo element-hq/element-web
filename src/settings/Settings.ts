@@ -128,6 +128,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_voice_messages": {
+        isFeature: true,
+        displayName: _td("Send and receive voice messages (in development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_latex_maths": {
         isFeature: true,
         displayName: _td("Render LaTeX maths in messages"),
@@ -334,6 +340,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "showCodeLineNumbers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show line numbers in code blocks'),
+        default: true,
+    },
+    "scrollToBottomOnMessageSent": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Jump to the bottom of the timeline when you send a message'),
         default: true,
     },
     "Pill.shouldShowPillAvatar": {

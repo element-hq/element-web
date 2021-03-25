@@ -16,9 +16,11 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef } from "react";
+import classNames from "classnames";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import GroupFilterPanel from "./GroupFilterPanel";
 import CustomRoomTagPanel from "./CustomRoomTagPanel";
-import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
@@ -36,10 +38,11 @@ import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
 import LeftPanelWidget from "./LeftPanelWidget";
-import SpacePanel from "../views/spaces/SpacePanel";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
+import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -49,6 +52,7 @@ interface IProps {
 interface IState {
     showBreadcrumbs: boolean;
     showGroupFilterPanel: boolean;
+    activeSpace?: Room;
 }
 
 // List of CSS classes which should be included in keyboard navigation within the room list
@@ -60,6 +64,7 @@ const cssClasses = [
     "mx_RoomSublist_showNButton",
 ];
 
+@replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
@@ -73,11 +78,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.state = {
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
             showGroupFilterPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
+            activeSpace: SpaceStore.instance.activeSpace,
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onBackgroundImageUpdate);
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         this.bgImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage", null, this.onBackgroundImageUpdate);
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
@@ -95,8 +102,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
+        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
+
+    private updateActiveSpace = (activeSpace: Room) => {
+        this.setState({ activeSpace });
+    };
 
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
@@ -119,7 +131,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
         const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
         if (settingBgMxc) {
-            avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(settingBgMxc, avatarSize, avatarSize);
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
         }
 
         const avatarUrlProp = `url(${avatarUrl})`;
@@ -380,7 +392,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     onEnter={this.onEnter}
                 />
                 <AccessibleTooltipButton
-                    className="mx_LeftPanel_exploreButton"
+                    className={classNames("mx_LeftPanel_exploreButton", {
+                        mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
+                    })}
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
                 />
@@ -390,11 +404,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         let leftLeftPanel;
-        // Currently TagPanel.enableTagPanel is disabled when Legacy Communities are disabled so for now
-        // ignore it and force the rendering of SpacePanel if that Labs flag is enabled.
-        if (SettingsStore.getValue("feature_spaces")) {
-            leftLeftPanel = <SpacePanel />;
-        } else if (this.state.showGroupFilterPanel) {
+        if (this.state.showGroupFilterPanel) {
             leftLeftPanel = (
                 <div className="mx_LeftPanel_GroupFilterPanelContainer">
                     <GroupFilterPanel />
@@ -410,6 +420,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
             onResize={this.onResize}
+            activeSpace={this.state.activeSpace}
         />;
 
         const containerClasses = classNames({

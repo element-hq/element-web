@@ -189,7 +189,13 @@ abstract class PlainBasePart extends BasePart {
             if (chr !== "@" && chr !== "#" && chr !== ":" && chr !== "+") {
                 return true;
             }
-            // only split if the previous character is a space
+
+            // split if we are at the beginning of the part text
+            if (offset === 0) {
+                return false;
+            }
+
+            // or split if the previous character is a space
             // or if it is a + and this is a :
             return this._text[offset - 1] !== " " &&
                 (this._text[offset - 1] !== "+" || chr !== ":");
@@ -329,8 +335,8 @@ class NewlinePart extends BasePart implements IBasePart {
 }
 
 class RoomPillPart extends PillPart {
-    constructor(displayAlias, private room: Room) {
-        super(displayAlias, displayAlias);
+    constructor(resourceId: string, label: string, private room: Room) {
+        super(resourceId, label);
     }
 
     setAvatar(node: HTMLElement) {
@@ -357,6 +363,10 @@ class RoomPillPart extends PillPart {
 }
 
 class AtRoomPillPart extends RoomPillPart {
+    constructor(text: string, room: Room) {
+        super(text, text, room);
+    }
+
     get type(): IPillPart["type"] {
         return Type.AtRoomPill;
     }
@@ -521,7 +531,7 @@ export class PartCreator {
                        r.getAltAliases().includes(alias);
             });
         }
-        return new RoomPillPart(alias, room);
+        return new RoomPillPart(alias, room ? room.name : alias, room);
     }
 
     atRoomPill(text: string) {

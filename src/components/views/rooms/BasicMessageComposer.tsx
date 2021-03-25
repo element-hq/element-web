@@ -46,6 +46,7 @@ import {IDiff} from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import {ICompletion} from "../../../autocomplete/Autocompleter";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
@@ -92,6 +93,7 @@ interface IProps {
     placeholder?: string;
     label?: string;
     initialCaret?: DocumentOffset;
+    disabled?: boolean;
 
     onChange?();
     onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
@@ -105,6 +107,7 @@ interface IState {
     completionIndex?: number;
 }
 
+@replaceableComponent("views.rooms.BasicMessageEditor")
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
     private editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
@@ -670,6 +673,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         });
         const classes = classNames("mx_BasicMessageComposer_input", {
             "mx_BasicMessageComposer_input_shouldShowPillAvatar": this.state.showPillAvatar,
+
+            // TODO: @@ TravisR: This doesn't work properly. The composer resets in a strange way.
+            "mx_BasicMessageComposer_input_disabled": this.props.disabled,
         });
 
         const shortcuts = {
@@ -702,6 +708,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 aria-expanded={Boolean(this.state.autoComplete)}
                 aria-activedescendant={completionIndex >= 0 ? generateCompletionDomId(completionIndex) : undefined}
                 dir="auto"
+                aria-disabled={this.props.disabled}
             />
         </div>);
     }

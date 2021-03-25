@@ -21,10 +21,12 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
 
+@replaceableComponent("views.messages.ReactionsRow")
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for

@@ -18,7 +18,9 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {Key} from "../../../Keyboard";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.EditableText")
 export default class EditableText extends React.Component {
     static propTypes = {
         onValueChanged: PropTypes.func,

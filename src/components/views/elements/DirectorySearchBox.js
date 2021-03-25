@@ -18,7 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.DirectorySearchBox")
 export default class DirectorySearchBox extends React.Component {
     constructor(props) {
         super(props);

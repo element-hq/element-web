@@ -17,12 +17,14 @@ limitations under the License.
 import * as React from "react";
 import ToastStore, {IToast} from "../../stores/ToastStore";
 import classNames from "classnames";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IState {
     toasts: IToast<any>[];
     countSeen: number;
 }
 
+@replaceableComponent("structures.ToastContainer")
 export default class ToastContainer extends React.Component<{}, IState> {
     constructor(props, context) {
         super(props, context);

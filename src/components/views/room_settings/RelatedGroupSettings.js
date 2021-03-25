@@ -16,15 +16,17 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixEvent} from 'matrix-js-sdk';
+import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 
+@replaceableComponent("views.room_settings.RelatedGroupSettings")
 export default class RelatedGroupSettings extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

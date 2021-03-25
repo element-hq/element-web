@@ -19,7 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk/src/models/event';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -32,11 +32,13 @@ import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import {MenuItem} from "../../structures/ContextMenu";
 import {EventType} from "matrix-js-sdk/src/@types/event";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
+@replaceableComponent("views.context_menus.MessageContextMenu")
 export default class MessageContextMenu extends React.Component {
     static propTypes = {
         /* the MatrixEvent associated with the context menu */
@@ -124,24 +126,9 @@ export default class MessageContextMenu extends React.Component {
     };
 
     onViewSourceClick = () => {
-        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
-            roomId: ev.getRoomId(),
-            eventId: ev.getId(),
-            content: ev.event,
-        }, 'mx_Dialog_viewsource');
-        this.closeMenu();
-    };
-
-    onViewClearSourceClick = () => {
-        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
-        const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
-            roomId: ev.getRoomId(),
-            eventId: ev.getId(),
-            // FIXME: _clearEvent is private
-            content: ev._clearEvent,
+            mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     };
@@ -309,7 +296,6 @@ export default class MessageContextMenu extends React.Component {
         let cancelButton;
         let forwardButton;
         let pinButton;
-        let viewClearSourceButton;
         let unhidePreviewButton;
         let externalURLButton;
         let quoteButton;
@@ -388,14 +374,6 @@ export default class MessageContextMenu extends React.Component {
                 { _t('View Source') }
             </MenuItem>
         );
-
-        if (mxEvent.getType() !== mxEvent.getWireType()) {
-            viewClearSourceButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
-                    { _t('View Decrypted Source') }
-                </MenuItem>
-            );
-        }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
@@ -481,7 +459,6 @@ export default class MessageContextMenu extends React.Component {
                 { forwardButton }
                 { pinButton }
                 { viewSourceButton }
-                { viewClearSourceButton }
                 { unhidePreviewButton }
                 { permalinkButton }
                 { quoteButton }

@@ -20,6 +20,8 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import {_t} from "../../../languageHandler";
 import RoomAvatar from "../avatars/RoomAvatar";
+import {useContextMenu} from "../../structures/ContextMenu";
+import SpaceCreateMenu from "./SpaceCreateMenu";
 import {SpaceItem} from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
@@ -56,9 +58,10 @@ const SpaceButton: React.FC<IButtonProps> = ({
 }) => {
     const classes = classNames("mx_SpaceButton", className, {
         mx_SpaceButton_active: selected,
+        mx_SpaceButton_narrow: isNarrow,
     });
 
-    let avatar = <div className="mx_SpaceButton_avatarPlaceholder" />;
+    let avatar = <div className="mx_SpaceButton_avatarPlaceholder"><div className="mx_SpaceButton_icon" /></div>;
     if (space) {
         avatar = <RoomAvatar width={32} height={32} room={space} />;
     }
@@ -74,18 +77,22 @@ const SpaceButton: React.FC<IButtonProps> = ({
     if (isNarrow) {
         button = (
             <RovingAccessibleTooltipButton className={classes} title={tooltip} onClick={onClick} role="treeitem">
-                { avatar }
-                { notifBadge }
-                { children }
+                <div className="mx_SpaceButton_selectionWrapper">
+                    { avatar }
+                    { notifBadge }
+                    { children }
+                </div>
             </RovingAccessibleTooltipButton>
         );
     } else {
         button = (
             <RovingAccessibleButton className={classes} onClick={onClick} role="treeitem">
-                { avatar }
-                <span className="mx_SpaceButton_name">{ tooltip }</span>
-                { notifBadge }
-                { children }
+                <div className="mx_SpaceButton_selectionWrapper">
+                    { avatar }
+                    <span className="mx_SpaceButton_name">{ tooltip }</span>
+                    { notifBadge }
+                    { children }
+                </div>
             </RovingAccessibleButton>
         );
     }
@@ -107,8 +114,20 @@ const useSpaces = (): [Room[], Room | null] => {
 };
 
 const SpacePanel = () => {
+    // We don't need the handle as we position the menu in a constant location
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
     const [spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
+
+    const newClasses = classNames("mx_SpaceButton_new", {
+        mx_SpaceButton_newCancel: menuDisplayed,
+    });
+
+    let contextMenu = null;
+    if (menuDisplayed) {
+        contextMenu = <SpaceCreateMenu onFinished={closeMenu} />;
+    }
 
     const onKeyDown = (ev: React.KeyboardEvent) => {
         let handled = true;
@@ -198,12 +217,25 @@ const SpacePanel = () => {
                             onExpand={() => setPanelCollapsed(false)}
                         />) }
                     </div>
+                    <SpaceButton
+                        className={newClasses}
+                        tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
+                        onClick={menuDisplayed ? closeMenu : () => {
+                            openMenu();
+                            if (!isPanelCollapsed) setPanelCollapsed(true);
+                        }}
+                        isNarrow={isPanelCollapsed}
+                    />
                 </AutoHideScrollbar>
                 <AccessibleTooltipButton
                     className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
-                    onClick={evt => setPanelCollapsed(!isPanelCollapsed)}
+                    onClick={() => {
+                        setPanelCollapsed(!isPanelCollapsed);
+                        if (menuDisplayed) closeMenu();
+                    }}
                     title={expandCollapseButtonTitle}
                 />
+                { contextMenu }
             </ul>
         )}
     </RovingTabIndexProvider>

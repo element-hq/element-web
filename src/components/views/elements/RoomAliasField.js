@@ -19,8 +19,10 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import withValidation from './Validation';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // Controlled form component wrapping Field for inputting a room alias scoped to a given domain
+@replaceableComponent("views.elements.RoomAliasField")
 export default class RoomAliasField extends React.PureComponent {
     static propTypes = {
         domain: PropTypes.string.isRequired,

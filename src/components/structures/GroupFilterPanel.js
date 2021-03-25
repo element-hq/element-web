@@ -30,7 +30,9 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.GroupFilterPanel")
 class GroupFilterPanel extends React.Component {
     static contextType = MatrixClientContext;
 
