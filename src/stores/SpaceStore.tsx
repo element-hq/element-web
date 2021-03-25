@@ -34,6 +34,7 @@ import {setHasDiff} from "../utils/sets";
 import {objectDiff} from "../utils/objects";
 import {arrayHasDiff} from "../utils/arrays";
 import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
+import RoomViewStore from "./RoomViewStore";
 
 type SpaceKey = string | symbol;
 
@@ -195,14 +196,17 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this.spaceFilteredRooms.get(space?.roomId || HOME_SPACE) || new Set();
     };
 
-    public rebuild = throttle(() => { // exported for tests
-        const visibleRooms = this.matrixClient.getVisibleRooms();
+    private rebuild = throttle(() => {
+        // get all most-upgraded rooms & spaces except spaces which have been left (historical)
+        const visibleRooms = this.matrixClient.getVisibleRooms().filter(r => {
+            return !r.isSpaceRoom() || r.getMyMembership() === "join";
+        });
 
-        // Sort spaces by room ID to force the loop breaking to be deterministic
-        const spaces = sortBy(this.getSpaces(), space => space.roomId);
-        const unseenChildren = new Set<Room>([...visibleRooms, ...spaces]);
-
+        const unseenChildren = new Set<Room>(visibleRooms);
         const backrefs = new EnhancedMap<string, Set<string>>();
+
+        // Sort spaces by room ID to force the cycle breaking to be deterministic
+        const spaces = sortBy(visibleRooms.filter(r => r.isSpaceRoom()), space => space.roomId);
 
         // TODO handle cleaning up links when a Space is removed
         spaces.forEach(space => {
@@ -216,7 +220,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         const [rootSpaces, orphanedRooms] = partitionSpacesAndRooms(Array.from(unseenChildren));
 
-        // untested algorithm to handle full-cycles
+        // somewhat algorithm to handle full-cycles
         const detachedNodes = new Set<Room>(spaces);
 
         const markTreeChildren = (rootSpace: Room, unseen: Set<Room>) => {
@@ -363,6 +367,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         } else {
             // this.onRoomUpdate(room);
             this.onRoomsUpdate();
+        }
+
+        // if the user was looking at the room and then joined select that space
+        if (room.getMyMembership() === "join" && room.roomId === RoomViewStore.getRoomId()) {
+            this.setActiveSpace(room);
         }
 
         const numSuggestedRooms = this._suggestedRooms.length;

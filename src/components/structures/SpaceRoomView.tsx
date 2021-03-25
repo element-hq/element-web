@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {RefObject, useContext, useRef, useState} from "react";
+import React, {RefObject, useContext, useMemo, useRef, useState} from "react";
 import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {EventSubscription} from "fbemitter";
@@ -26,7 +26,6 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomName from "../views/elements/RoomName";
 import RoomTopic from "../views/elements/RoomTopic";
 import InlineSpinner from "../views/elements/InlineSpinner";
-import FormButton from "../views/elements/FormButton";
 import {inviteMultipleToRoom, showRoomInviteDialog} from "../../RoomInvite";
 import {useRoomMembers} from "../../hooks/useRoomMembers";
 import createRoom, {IOpts, Preset} from "../../createRoom";
@@ -47,9 +46,7 @@ import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanel
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import {showAddExistingRooms, showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
-import {HierarchyLevel, ISpaceSummaryEvent, ISpaceSummaryRoom, showRoom} from "./SpaceRoomDirectory";
-import {useAsyncMemo} from "../../hooks/useAsyncMemo";
-import {EnhancedMap} from "../../utils/maps";
+import {HierarchyLevel, ISpaceSummaryRoom, showRoom, useSpaceSummary} from "./SpaceRoomDirectory";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
@@ -124,30 +121,36 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         }
 
         joinButtons = <>
-            <FormButton
-                label={_t("Reject")}
+            <AccessibleButton
                 kind="secondary"
                 onClick={() => {
                     setBusy(true);
                     onRejectButtonClicked();
-                }} />
-            <FormButton
-                label={_t("Accept")}
+                }}
+            >
+                { _t("Reject") }
+            </AccessibleButton>
+            <AccessibleButton
+                kind="primary"
                 onClick={() => {
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
-            />
+            >
+                { _t("Accept") }
+            </AccessibleButton>
         </>;
     } else {
         joinButtons = (
-            <FormButton
-                label={_t("Join")}
+            <AccessibleButton
+                kind="primary"
                 onClick={() => {
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
-            />
+            >
+                { _t("Join") }
+            </AccessibleButton>
         )
     }
 
@@ -223,7 +226,7 @@ const SpaceLanding = ({ space }) => {
 
     const canAddRooms = myMembership === "join" && space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
 
-    const [_, forceUpdate] = useStateToggle(false); // TODO
+    const [refreshToken, forceUpdate] = useStateToggle(false);
 
     let addRoomButtons;
     if (canAddRooms) {
@@ -253,26 +256,13 @@ const SpaceLanding = ({ space }) => {
         </AccessibleButton>;
     }
 
-    const [loading, roomsMap, relations, numRooms] = useAsyncMemo(async () => {
-        try {
-            const data = await cli.getSpaceSummary(space.roomId, undefined, myMembership !== "join");
-
-            const parentChildRelations = new EnhancedMap<string, Map<string, ISpaceSummaryEvent>>();
-            data.events.map((ev: ISpaceSummaryEvent) => {
-                if (ev.type === EventType.SpaceChild) {
-                    parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
-                }
-            });
-
-            const roomsMap = new Map<string, ISpaceSummaryRoom>(data.rooms.map(r => [r.room_id, r]));
-            const numRooms = data.rooms.filter(r => r.room_type !== RoomType.Space).length;
-            return [false, roomsMap, parentChildRelations, numRooms];
-        } catch (e) {
-            console.error(e); // TODO
-        }
-
-        return [false];
-    }, [space, _], [true]);
+    const [rooms, relations, viaMap] = useSpaceSummary(cli, space, refreshToken);
+    const [roomsMap, numRooms] = useMemo(() => {
+        if (!rooms) return [];
+        const roomsMap = new Map<string, ISpaceSummaryRoom>(rooms.map(r => [r.room_id, r]));
+        const numRooms = rooms.filter(r => r.room_type !== RoomType.Space).length;
+        return [roomsMap, numRooms];
+    }, [rooms]);
 
     let previewRooms;
     if (roomsMap) {
@@ -287,11 +277,11 @@ const SpaceLanding = ({ space }) => {
                 relations={relations}
                 parents={new Set()}
                 onViewRoomClick={(roomId, autoJoin) => {
-                    showRoom(roomsMap.get(roomId), [], autoJoin);
+                    showRoom(roomsMap.get(roomId), Array.from(viaMap.get(roomId) || []), autoJoin);
                 }}
             />
         </AutoHideScrollbar>;
-    } else if (loading) {
+    } else if (!rooms) {
         previewRooms = <InlineSpinner />;
     } else {
         previewRooms = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
@@ -407,11 +397,13 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         { fields }
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton
-                label={buttonLabel}
+            <AccessibleButton
+                kind="primary"
                 disabled={busy}
                 onClick={onClick}
-            />
+            >
+                { buttonLabel }
+            </AccessibleButton>
         </div>
     </div>;
 };
@@ -419,14 +411,16 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 const SpaceSetupPublicShare = ({ space, onFinished }) => {
     return <div className="mx_SpaceRoomView_publicShare">
         <h1>{ _t("Share %(name)s", { name: space.name }) }</h1>
-        <div className="mx_SpacePublicShare_description">
+        <div className="mx_SpaceRoomView_description">
             { _t("It's just you at the moment, it will be even better with others.") }
         </div>
 
-        <SpacePublicShare space={space} onFinished={onFinished} />
+        <SpacePublicShare space={space} />
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton label={_t("Go to my first room")} onClick={onFinished} />
+            <AccessibleButton kind="primary" onClick={onFinished}>
+                { _t("Go to my first room") }
+            </AccessibleButton>
         </div>
     </div>;
 };
@@ -545,7 +539,9 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_buttons">
-            <FormButton label={buttonLabel} disabled={busy} onClick={onClick} />
+            <AccessibleButton kind="primary" disabled={busy} onClick={onClick}>
+                { buttonLabel }
+            </AccessibleButton>
         </div>
     </div>;
 };
@@ -630,6 +626,8 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private goToFirstRoom = async () => {
+        // TODO actually go to the first room
+
         const childRooms = SpaceStore.instance.getChildRooms(this.props.space.roomId);
         if (childRooms.length) {
             const room = childRooms[0];

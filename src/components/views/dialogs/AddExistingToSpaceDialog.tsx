@@ -22,7 +22,6 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import {_t} from '../../../languageHandler';
 import {IDialogProps} from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
-import FormButton from "../elements/FormButton";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/SpaceStore";
@@ -110,7 +109,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
     const title = <React.Fragment>
         <RoomAvatar room={selectedSpace} height={40} width={40} />
         <div>
-            <h1>{ _t("Add existing spaces/rooms") }</h1>
+            <h1>{ _t("Add existing rooms") }</h1>
             { spaceOptionSection }
         </div>
     </React.Fragment>;
@@ -128,29 +127,9 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
             className="mx_textinput_icon mx_textinput_search"
             placeholder={ _t("Filter your rooms and spaces") }
             onSearch={setQuery}
+            autoComplete={true}
         />
         <AutoHideScrollbar className="mx_AddExistingToSpaceDialog_content" id="mx_AddExistingToSpaceDialog">
-            { spaces.length > 0 ? (
-                <div className="mx_AddExistingToSpaceDialog_section mx_AddExistingToSpaceDialog_section_spaces">
-                    <h3>{ _t("Spaces") }</h3>
-                    { spaces.map(space => {
-                        return <Entry
-                            key={space.roomId}
-                            room={space}
-                            checked={selectedToAdd.has(space)}
-                            onChange={(checked) => {
-                                if (checked) {
-                                    selectedToAdd.add(space);
-                                } else {
-                                    selectedToAdd.delete(space);
-                                }
-                                setSelectedToAdd(new Set(selectedToAdd));
-                            }}
-                        />;
-                    }) }
-                </div>
-            ) : null }
-
             { rooms.length > 0 ? (
                 <div className="mx_AddExistingToSpaceDialog_section">
                     <h3>{ _t("Rooms") }</h3>
@@ -172,6 +151,27 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                 </div>
             ) : undefined }
 
+            { spaces.length > 0 ? (
+                <div className="mx_AddExistingToSpaceDialog_section mx_AddExistingToSpaceDialog_section_spaces">
+                    <h3>{ _t("Spaces") }</h3>
+                    { spaces.map(space => {
+                        return <Entry
+                            key={space.roomId}
+                            room={space}
+                            checked={selectedToAdd.has(space)}
+                            onChange={(checked) => {
+                                if (checked) {
+                                    selectedToAdd.add(space);
+                                } else {
+                                    selectedToAdd.delete(space);
+                                }
+                                setSelectedToAdd(new Set(selectedToAdd));
+                            }}
+                        />;
+                    }) }
+                </div>
+            ) : null }
+
             { spaces.length + rooms.length < 1 ? <span className="mx_AddExistingToSpaceDialog_noResults">
                 { _t("No results") }
             </span> : undefined }
@@ -185,8 +185,8 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                 </AccessibleButton>
             </span>
 
-            <FormButton
-                label={busy ? _t("Applying...") : _t("Apply")}
+            <AccessibleButton
+                kind="primary"
                 disabled={busy || selectedToAdd.size < 1}
                 onClick={async () => {
                     setBusy(true);
@@ -200,7 +200,9 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                     }
                     setBusy(false);
                 }}
-            />
+            >
+                { busy ? _t("Adding...") : _t("Add") }
+            </AccessibleButton>
         </div>
     </BaseDialog>;
 };

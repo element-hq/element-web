@@ -112,10 +112,6 @@ interface IProps {
         inviterName?: string;
     };
 
-    // Servers the RoomView can use to try and assist joins
-    viaServers?: string[];
-
-    autoJoin?: boolean;
     resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
 
@@ -450,9 +446,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
         if (!joining && roomId) {
-            if (this.props.autoJoin) {
-                this.onJoinButtonClicked();
-            } else if (!room && shouldPeek) {
+            if (!room && shouldPeek) {
                 console.info("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
@@ -1123,7 +1117,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 const signUrl = this.props.threepidInvite?.signUrl;
                 dis.dispatch({
                     action: 'join_room',
-                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                    opts: { inviteSignUrl: signUrl },
                     _type: "unknown", // TODO: instrumentation
                 });
                 return Promise.resolve();

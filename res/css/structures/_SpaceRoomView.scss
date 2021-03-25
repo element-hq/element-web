@@ -22,7 +22,7 @@ $SpaceRoomViewInnerWidth: 428px;
     width: 432px;
     box-sizing: border-box;
     border-radius: 8px;
-    border: 1px solid $input-darker-bg-color;
+    border: 1px solid $space-button-outline-color;
     font-size: $font-15px;
     margin: 20px 0;
 
@@ -89,7 +89,7 @@ $SpaceRoomViewInnerWidth: 428px;
             width: $SpaceRoomViewInnerWidth;
             text-align: right; // button alignment right
 
-            .mx_FormButton {
+            .mx_AccessibleButton_hasKind {
                 padding: 8px 22px;
                 margin-left: 16px;
             }

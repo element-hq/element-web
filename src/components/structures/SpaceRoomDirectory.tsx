@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React, {useMemo, useState} from "react";
-import Room from "matrix-js-sdk/src/models/room";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixClient} from "matrix-js-sdk/src/client";
 import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import classNames from "classnames";
 import {sortBy} from "lodash";
@@ -77,7 +78,6 @@ export interface ISpaceSummaryEvent {
 
 interface ITileProps {
     room: ISpaceSummaryRoom;
-    editing?: boolean;
     suggested?: boolean;
     selected?: boolean;
     numChildRooms?: number;
@@ -88,7 +88,6 @@ interface ITileProps {
 
 const Tile: React.FC<ITileProps> = ({
     room,
-    editing,
     suggested,
     selected,
     hasPermissions,
@@ -170,12 +169,6 @@ const Tile: React.FC<ITileProps> = ({
         </div>
     </React.Fragment>;
 
-    if (editing) {
-        return <div className="mx_SpaceRoomDirectory_roomTile">
-            { content }
-        </div>
-    }
-
     let childToggle;
     let childSection;
     if (children) {
@@ -201,7 +194,7 @@ const Tile: React.FC<ITileProps> = ({
             className={classNames("mx_SpaceRoomDirectory_roomTile", {
                 mx_SpaceRoomDirectory_subspace: room.room_type === RoomType.Space,
             })}
-            onClick={hasPermissions ? onToggleClick : onPreviewClick}
+            onClick={(hasPermissions && onToggleClick) ? onToggleClick : onPreviewClick}
         >
             { content }
             { childToggle }
@@ -240,7 +233,7 @@ export const showRoom = (room: ISpaceSummaryRoom, viaServers?: string[], autoJoi
 interface IHierarchyLevelProps {
     spaceId: string;
     rooms: Map<string, ISpaceSummaryRoom>;
-    relations: EnhancedMap<string, Map<string, ISpaceSummaryEvent>>;
+    relations: Map<string, Map<string, ISpaceSummaryEvent>>;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
     onViewRoomClick(roomId: string, autoJoin: boolean): void;
@@ -260,7 +253,7 @@ export const HierarchyLevel = ({
     const space = cli.getRoom(spaceId);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId())
 
-    const sortedChildren = sortBy([...relations.get(spaceId)?.values()], ev => ev.content.order || null);
+    const sortedChildren = sortBy([...(relations.get(spaceId)?.values() || [])], ev => ev.content.order || null);
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
         if (!rooms.has(roomId)) return result;
@@ -316,23 +309,15 @@ export const HierarchyLevel = ({
     </React.Fragment>
 };
 
-const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinished }) => {
+// mutate argument refreshToken to force a reload
+export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
+    ISpaceSummaryRoom[],
+    Map<string, Map<string, ISpaceSummaryEvent>>,
+    Map<string, Set<string>>,
+    Map<string, Set<string>>,
+] | [] => {
     // TODO pagination
-    const cli = MatrixClientPeg.get();
-    const userId = cli.getUserId();
-    const [query, setQuery] = useState(initialText);
-
-    const onCreateRoomClick = () => {
-        dis.dispatch({
-            action: 'view_create_room',
-            public: true,
-        });
-        onFinished();
-    };
-
-    const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
-
-    const [rooms, parentChildMap, childParentMap, viaMap] = useAsyncMemo(async () => {
+    return useAsyncMemo(async () => {
         try {
             const data = await cli.getSpaceSummary(space.roomId);
 
@@ -350,13 +335,31 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
                 }
             });
 
-            return [data.rooms as ISpaceSummaryRoom[], parentChildRelations, childParentRelations, viaMap];
+            return [data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
         } catch (e) {
             console.error(e); // TODO
         }
 
         return [];
-    }, [space], []);
+    }, [space, refreshToken], []);
+};
+
+const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinished }) => {
+    const cli = MatrixClientPeg.get();
+    const userId = cli.getUserId();
+    const [query, setQuery] = useState(initialText);
+
+    const onCreateRoomClick = () => {
+        dis.dispatch({
+            action: 'view_create_room',
+            public: true,
+        });
+        onFinished();
+    };
+
+    const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
+
+    const [rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space);
 
     const roomsMap = useMemo(() => {
         if (!rooms) return null;
@@ -570,6 +573,8 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
                     className="mx_textinput_icon mx_textinput_search"
                     placeholder={ _t("Search names and description") }
                     onSearch={setQuery}
+                    autoFocus={true}
+                    initialValue={initialText}
                 />
 
                 { content }
