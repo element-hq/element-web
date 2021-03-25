@@ -73,10 +73,9 @@ export class VoiceRecorder {
         // The size of the audio buffer largely decides how quickly we push timing/waveform data
         // out of this class. Smaller buffers mean we update more frequently as we can't hold as
         // many bytes. Larger buffers mean slower updates. For scale, 1024 gives us about 30Hz of
-        // updates and 2048 gives us about 20Hz. We use 2048 because it updates frequently enough
-        // to feel realtime (~20fps, which is what humans perceive as "realtime"). Must be a power
-        // of 2.
-        this.recorderProcessor = this.recorderContext.createScriptProcessor(2048, CHANNELS, CHANNELS);
+        // updates and 2048 gives us about 20Hz. We use 1024 to get as close to perceived realtime
+        // as possible. Must be a power of 2.
+        this.recorderProcessor = this.recorderContext.createScriptProcessor(1024, CHANNELS, CHANNELS);
 
         // Connect our inputs and outputs
         this.recorderSource.connect(this.recorderFFT);
