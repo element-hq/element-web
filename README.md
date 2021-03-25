@@ -202,6 +202,12 @@ docker build -t \
     .
 ```
 
+Running in Kubernetes
+=====================
+
+The provided element-web docker image can also be run from within a Kubernetes cluster.
+See the [Kubernetes example](docs/kubernetes.md) for more details.
+
 config.json
 ===========
 
@@ -298,8 +304,8 @@ yarn start
 
 Wait a few seconds for the initial build to finish; you should see something like:
 ```
-[element-js] <s> [webpack.Progress] 100% 
-[element-js] 
+[element-js] <s> [webpack.Progress] 100%
+[element-js]
 [element-js] ℹ ｢wdm｣:    1840 modules
 [element-js] ℹ ｢wdm｣: Compiled successfully.
 ```
