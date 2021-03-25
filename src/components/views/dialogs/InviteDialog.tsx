@@ -673,7 +673,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             console.error(err);
             this.setState({
                 busy: false,
-                errorText: _t("We couldn't create your DM. Please check the users you want to invite and try again."),
+                errorText: _t("We couldn't create your DM."),
             });
         });
     };

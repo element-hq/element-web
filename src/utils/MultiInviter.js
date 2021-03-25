@@ -221,7 +221,7 @@ export default class MultiInviter {
 
                     const AskInviteAnywayDialog = sdk.getComponent("dialogs.AskInviteAnywayDialog");
                     console.log("Showing failed to invite dialog...");
-                    Modal.createTrackedDialog('Failed to invite the following users to the room', '', AskInviteAnywayDialog, {
+                    Modal.createTrackedDialog('Failed to invite', '', AskInviteAnywayDialog, {
                         unknownProfileUsers: unknownProfileUsers.map(u => {return {userId: u, errorText: this.errors[u].errorText};}),
                         onInviteAnyways: () => inviteUnknowns(),
                         onGiveUp: () => {
