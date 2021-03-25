@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /**
  * A component which wraps an EditableText, with a spinner while updates take
@@ -29,6 +30,7 @@ import * as sdk from '../../../index';
  * similarly asynchronous way. If this is not provided, the initial value is
  * taken from the 'initialValue' property.
  */
+@replaceableComponent("views.elements.EditableTextContainer")
 export default class EditableTextContainer extends React.Component {
     constructor(props) {
         super(props);

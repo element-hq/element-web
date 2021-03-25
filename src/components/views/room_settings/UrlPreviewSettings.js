@@ -26,8 +26,9 @@ import dis from "../../../dispatcher/dispatcher";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {Action} from "../../../dispatcher/actions";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-
+@replaceableComponent("views.room_settings.UrlPreviewSettings")
 export default class UrlPreviewSettings extends React.Component {
     static propTypes = {
         room: PropTypes.object,

@@ -55,6 +55,9 @@ import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
+import { IOpts } from "../../createRoom";
+import SpacePanel from "../views/spaces/SpacePanel";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -71,7 +74,6 @@ function canElementReceiveInput(el) {
 interface IProps {
     matrixClient: MatrixClient;
     onRegistered: (credentials: IMatrixClientCreds) => Promise<MatrixClient>;
-    viaServers?: string[];
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
     // eslint-disable-next-line camelcase
@@ -91,11 +93,14 @@ interface IProps {
     currentGroupId?: string;
     currentGroupIsNew?: boolean;
     justRegistered?: boolean;
+    roomJustCreatedOpts?: IOpts;
 }
 
 interface IUsageLimit {
+    // "hs_disabled" is NOT a specced string, but is used in Synapse
+    // This is tracked over at https://github.com/matrix-org/synapse/issues/9237
     // eslint-disable-next-line camelcase
-    limit_type: "monthly_active_user" | string;
+    limit_type: "monthly_active_user" | "hs_disabled" | string;
     // eslint-disable-next-line camelcase
     admin_contact?: string;
 }
@@ -103,6 +108,8 @@ interface IUsageLimit {
 interface IState {
     syncErrorData?: {
         error: {
+            // This is not specced, but used in Synapse. See
+            // https://github.com/matrix-org/synapse/issues/9237#issuecomment-768238922
             data: IUsageLimit;
             errcode: string;
         };
@@ -122,6 +129,7 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
+@replaceableComponent("structures.LoggedInView")
 class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
@@ -133,9 +141,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
         onRegistered: PropTypes.func,
-
-        // Used by the RoomView to handle joining rooms
-        viaServers: PropTypes.arrayOf(PropTypes.string),
 
         // and lots and lots of other stuff.
     };
@@ -221,14 +226,15 @@ class LoggedInView extends React.Component<IProps, IState> {
         let size;
         let collapsed;
         const collapseConfig: ICollapseConfig = {
-            toggleSize: 260 - 50,
+            // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
+            toggleSize: 206 - 50,
             onCollapsed: (_collapsed) => {
                 collapsed = _collapsed;
                 if (_collapsed) {
-                    dis.dispatch({action: "hide_left_panel"}, true);
+                    dis.dispatch({action: "hide_left_panel"});
                     window.localStorage.setItem("mx_lhs_size", '0');
                 } else {
-                    dis.dispatch({action: "show_left_panel"}, true);
+                    dis.dispatch({action: "show_left_panel"});
                 }
             },
             onResized: (_size) => {
@@ -241,6 +247,9 @@ class LoggedInView extends React.Component<IProps, IState> {
             onResizeStop: () => {
                 if (!collapsed) window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.stopResizing();
+            },
+            isItemCollapsed: domNode => {
+                return domNode.classList.contains("mx_LeftPanel_minimized");
             },
         };
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
@@ -612,13 +621,12 @@ class LoggedInView extends React.Component<IProps, IState> {
             case PageTypes.RoomView:
                 pageElement = <RoomView
                     ref={this._roomView}
-                    autoJoin={this.props.autoJoin}
                     onRegistered={this.props.onRegistered}
                     threepidInvite={this.props.threepidInvite}
                     oobData={this.props.roomOobData}
-                    viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     resizeNotifier={this.props.resizeNotifier}
+                    justCreatedOpts={this.props.roomJustCreatedOpts}
                 />;
                 break;
 
@@ -651,13 +659,6 @@ class LoggedInView extends React.Component<IProps, IState> {
             bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
-        const leftPanel = (
-            <LeftPanel
-                isMinimized={this.props.collapseLhs || false}
-                resizeNotifier={this.props.resizeNotifier}
-            />
-        );
-
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <div
@@ -669,7 +670,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>
-                            { leftPanel }
+                            { SettingsStore.getValue("feature_spaces") ? <SpacePanel /> : null }
+                            <LeftPanel
+                                isMinimized={this.props.collapseLhs || false}
+                                resizeNotifier={this.props.resizeNotifier}
+                            />
                             <ResizeHandle />
                             { pageElement }
                         </div>

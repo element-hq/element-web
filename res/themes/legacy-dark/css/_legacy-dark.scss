@@ -120,6 +120,7 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
+$space-button-outline-color: rgba(141, 151, 165, 0.2);
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -131,9 +132,6 @@ $panel-divider-color: $header-panel-border-color;
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: #1A1D23;
-
-// event tile lifecycle
-$event-sending-color: $text-secondary-color;
 
 // event redaction
 $event-redacted-fg-color: #606060;
@@ -167,6 +165,9 @@ $button-link-bg-color: transparent;
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
 
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: #21262c;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -196,6 +197,10 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-bg-color: #21262c82;
+$message-body-panel-icon-bg-color: #8e99a4;
+$message-body-panel-fg-color: $primary-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;

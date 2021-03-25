@@ -19,7 +19,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
-import { MatrixClient } from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import * as sdk from '../../../../index';
 

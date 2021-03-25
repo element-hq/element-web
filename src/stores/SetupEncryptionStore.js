@@ -19,11 +19,12 @@ import { MatrixClientPeg } from '../MatrixClientPeg';
 import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-export const PHASE_INTRO = 0;
-export const PHASE_BUSY = 1;
-export const PHASE_DONE = 2;    //final done stage, but still showing UX
-export const PHASE_CONFIRM_SKIP = 3;
-export const PHASE_FINISHED = 4; //UX can be closed
+export const PHASE_LOADING = 0;
+export const PHASE_INTRO = 1;
+export const PHASE_BUSY = 2;
+export const PHASE_DONE = 3;    //final done stage, but still showing UX
+export const PHASE_CONFIRM_SKIP = 4;
+export const PHASE_FINISHED = 5; //UX can be closed
 
 export class SetupEncryptionStore extends EventEmitter {
     static sharedInstance() {
@@ -36,7 +37,7 @@ export class SetupEncryptionStore extends EventEmitter {
             return;
         }
         this._started = true;
-        this.phase = PHASE_BUSY;
+        this.phase = PHASE_LOADING;
         this.verificationRequest = null;
         this.backupInfo = null;
 
@@ -75,7 +76,8 @@ export class SetupEncryptionStore extends EventEmitter {
     }
 
     async fetchKeyInfo() {
-        const keys = await MatrixClientPeg.get().isSecretStored('m.cross_signing.master', false);
+        const cli = MatrixClientPeg.get();
+        const keys = await cli.isSecretStored('m.cross_signing.master', false);
         if (keys === null || Object.keys(keys).length === 0) {
             this.keyId = null;
             this.keyInfo = null;
@@ -85,7 +87,20 @@ export class SetupEncryptionStore extends EventEmitter {
             this.keyInfo = keys[this.keyId];
         }
 
-        this.phase = PHASE_INTRO;
+        // do we have any other devices which are E2EE which we can verify against?
+        const dehydratedDevice = await cli.getDehydratedDevice();
+        this.hasDevicesToVerifyAgainst = cli.getStoredDevicesForUser(cli.getUserId()).some(
+            device =>
+                device.getIdentityKey() &&
+                (!dehydratedDevice || (device.deviceId != dehydratedDevice.device_id)),
+        );
+
+        if (!this.hasDevicesToVerifyAgainst && !this.keyInfo) {
+            // skip before we can even render anything.
+            this.phase = PHASE_FINISHED;
+        } else {
+            this.phase = PHASE_INTRO;
+        }
         this.emit("update");
     }
 

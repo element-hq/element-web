@@ -395,6 +395,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 1px solid $accent-color;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
+    font-family: inherit;
 }
 
 .mx_Dialog button:last-child {
@@ -489,54 +490,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     margin-top: 69px;
 }
 
-.mx_Beta {
-    color: red;
-    margin-right: 10px;
-    position: relative;
-    top: -3px;
-    background-color: white;
-    padding: 0 4px;
-    border-radius: 3px;
-    border: 1px solid darkred;
-    cursor: help;
-    transition-duration: 200ms;
-    font-size: smaller;
-    filter: opacity(0.5);
-}
-
-.mx_Beta:hover {
-    color: white;
-    border: 1px solid gray;
-    background-color: darkred;
-}
-
-.mx_TintableSvgButton {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-content: center;
-}
-
-.mx_TintableSvgButton object {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.mx_TintableSvgButton span {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
 // username colors
 // used by SenderProfile & RoomPreviewBar
 .mx_Username_color1 {
@@ -602,6 +555,13 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         background-color: $colour;
     }
     &::-webkit-progress-value {
+        background-color: $colour;
+    }
+}
+
+@define-mixin ProgressBarBgColour $colour {
+    background-color: $colour;
+    &::-webkit-progress-bar {
         background-color: $colour;
     }
 }

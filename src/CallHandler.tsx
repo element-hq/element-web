@@ -629,6 +629,8 @@ export default class CallHandler {
         const mappedRoomId = (await VoipUserMapper.sharedInstance().getOrCreateVirtualRoomForRoom(roomId)) || roomId;
         logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
 
+        const timeUntilTurnCresExpire = MatrixClientPeg.get().getTurnServersExpiry() - Date.now();
+        console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
 
         this.calls.set(roomId, call);
@@ -701,6 +703,14 @@ export default class CallHandler {
                     const room = MatrixClientPeg.get().getRoom(payload.room_id);
                     if (!room) {
                         console.error(`Room ${payload.room_id} does not exist.`);
+                        return;
+                    }
+
+                    if (this.getCallForRoom(room.roomId)) {
+                        Modal.createTrackedDialog('Call Handler', 'Existing Call with user', ErrorDialog, {
+                            title: _t('Already in call'),
+                            description: _t("You're already in a call with this person."),
+                        });
                         return;
                     }
 
@@ -777,6 +787,11 @@ export default class CallHandler {
                 }
                 // don't remove the call yet: let the hangup event handler do it (otherwise it will throw
                 // the hangup event away)
+                break;
+            case 'hangup_all':
+                for (const call of this.calls.values()) {
+                    call.hangup(CallErrorCode.UserHangup, false);
+                }
                 break;
             case 'answer': {
                 if (!this.calls.has(payload.room_id)) {

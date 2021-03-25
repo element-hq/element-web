@@ -25,7 +25,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component {
     constructor() {
         super();
@@ -188,7 +190,7 @@ export default class EventIndexPanel extends React.Component {
                     }
                 </div>
             );
-        } else {
+        } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     {
@@ -204,6 +206,23 @@ export default class EventIndexPanel extends React.Component {
                             },
                         )
                     }
+                </div>
+            );
+        } else {
+            eventIndexingSettings = (
+                <div className='mx_SettingsTab_subsectionText'>
+                    <p>
+                        {_t("Message search initilisation failed")}
+                    </p>
+                    {EventIndexPeg.error && (
+                    <details>
+                        <summary>{_t("Advanced")}</summary>
+                        <code>
+                            {EventIndexPeg.error.message}
+                        </code>
+                    </details>
+                    )}
+
                 </div>
             );
         }

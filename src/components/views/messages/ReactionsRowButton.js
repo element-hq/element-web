@@ -23,7 +23,9 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import dis from "../../../dispatcher/dispatcher";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.ReactionsRowButton")
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for

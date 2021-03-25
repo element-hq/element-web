@@ -24,7 +24,9 @@ import dis from '../../dispatcher/dispatcher';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.MyGroups")
 export default class MyGroups extends React.Component {
     static contextType = MatrixClientContext;
 

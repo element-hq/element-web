@@ -23,6 +23,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
 import E2EIcon from './E2EIcon';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
@@ -50,6 +51,7 @@ function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     }
 }
 
+@replaceableComponent("views.rooms.EntityTile")
 class EntityTile extends React.Component {
     static propTypes = {
         name: PropTypes.string,
