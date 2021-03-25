@@ -18,7 +18,7 @@ import React from "react";
 import {IRecordingUpdate, VoiceRecorder} from "../../../voice/VoiceRecorder";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {arrayFastResample, arraySeed} from "../../../utils/arrays";
-import {clamp, percentageOf} from "../../../utils/numbers";
+import {percentageOf} from "../../../utils/numbers";
 import Waveform from "./Waveform";
 
 interface IProps {

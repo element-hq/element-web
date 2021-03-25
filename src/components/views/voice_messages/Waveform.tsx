@@ -15,10 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, VoiceRecorder} from "../../../voice/VoiceRecorder";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {arrayFastResample, arraySeed} from "../../../utils/arrays";
-import {percentageOf} from "../../../utils/numbers";
 
 interface IProps {
     heights: number[]; // percentages as integers (0-100)
