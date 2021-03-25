@@ -79,7 +79,7 @@ import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import SpaceStore from "../../stores/SpaceStore";
+import SpaceStore, {LAST_VIEWED_ROOMS, LAST_VIEWED_ROOMS_HOME} from "../../stores/SpaceStore";
 import SpaceRoomDirectory from "./SpaceRoomDirectory";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
@@ -874,6 +874,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     //                               room name and avatar from an invite email)
     private viewRoom(roomInfo: IRoomInfo) {
         this.focusComposer = true;
+
+        // persist last viewed room from a space
+        const activeSpace = SpaceStore.instance.activeSpace;
+        const activeSpaceId = activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
+        const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
+
+        lastViewedRooms[activeSpaceId] = roomInfo.room_id;
+        window.localStorage.setItem(LAST_VIEWED_ROOMS, JSON.stringify(lastViewedRooms));
 
         if (roomInfo.room_alias) {
             console.log(

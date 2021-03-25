@@ -41,6 +41,10 @@ type SpaceKey = string | symbol;
 interface IState {}
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
+export const LAST_VIEWED_ROOMS = "mx_last_viewed_rooms";
+
+// We can't use HOME_SPACE here because JSON.stringify() will ignore any Symbols
+export const LAST_VIEWED_ROOMS_HOME = "home_space";
 
 export const HOME_SPACE = Symbol("home-space");
 export const SUGGESTED_ROOMS = Symbol("suggested-rooms");
@@ -110,6 +114,18 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);
+
+        // view last selected room from space
+        const spaceId = space?.roomId || LAST_VIEWED_ROOMS_HOME;
+        const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS));
+        const roomId = lastViewedRooms[spaceId];
+
+        if (roomId) {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: roomId,
+            });
+        } // TODO: Handle else
 
         // persist space selected
         if (space) {
