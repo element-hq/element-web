@@ -2154,7 +2154,7 @@
     "Go": "Go",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
-    "Note: Decryption keys for old messages will be shared with invited users.": "Note: Decryption keys for old messages will be shared with invited users.",
+    "Invited people will be able to read old messages.": "Invited people will be able to read old messages.",
     "Transfer": "Transfer",
     "a new master key signature": "a new master key signature",
     "a new cross-signing key signature": "a new cross-signing key signature",
