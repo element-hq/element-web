@@ -472,12 +472,17 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    // should save state when editor has contents or reply is open
+    _shouldSaveStoredEditorState = () => {
+        return !this.model.isEmpty || this.props.replyToEvent;
+    }
+
     _saveStoredEditorState = () => {
-        if (this.model.isEmpty) {
-            this._clearStoredEditorState();
-        } else {
+        if (this._shouldSaveStoredEditorState()) {
             const item = SendHistoryManager.createItem(this.model, this.props.replyToEvent);
             localStorage.setItem(this._editorStateKey, JSON.stringify(item));
+        } else {
+            this._clearStoredEditorState();
         }
     }
 
