@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -53,6 +54,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        // clear filter when changing spaces, in future we may wish to maintain a filter per-space
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.clearInput);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
@@ -72,6 +75,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
+        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.clearInput);
     }
 
     private onAction = (payload: ActionPayload) => {
