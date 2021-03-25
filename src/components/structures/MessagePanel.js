@@ -46,6 +46,9 @@ function shouldFormContinuation(prevEvent, mxEvent) {
     // check if within the max continuation period
     if (mxEvent.getTs() - prevEvent.getTs() > CONTINUATION_MAX_INTERVAL) return false;
 
+    // As we summarise redactions, do not continue a redacted event onto a non-redacted one and vice-versa
+    if (mxEvent.isRedacted() !== prevEvent.isRedacted()) return false;
+
     // Some events should appear as continuations from previous events of different types.
     if (mxEvent.getType() !== prevEvent.getType() &&
         (!continuedTypes.includes(mxEvent.getType()) ||
@@ -1125,7 +1128,7 @@ class RedactionGrouper {
     }
 
     getNewPrevEvent() {
-        return this.events[0];
+        return this.events[this.events.length - 1];
     }
 }
 
