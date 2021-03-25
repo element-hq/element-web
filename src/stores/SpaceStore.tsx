@@ -294,7 +294,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onSpaceMembersChange = (space: Room, ev: MatrixEvent) => {
+    private onSpaceMembersChange = (ev: MatrixEvent) => {
         // skip this update if we do not have a DM with this user
         if (DMRoomMap.shared().getDMRoomsForUserId(ev.getStateKey()).length < 1) return;
         this.onRoomsUpdate();
@@ -412,7 +412,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
             case EventType.RoomMember:
                 if (room.isSpaceRoom()) {
-                    this.onSpaceMembersChange(room, ev);
+                    this.onSpaceMembersChange(ev);
                 }
                 break;
         }
