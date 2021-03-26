@@ -121,21 +121,16 @@ export class SetupEncryptionStore extends EventEmitter {
             // on the first trust check, and the key backup restore will happen
             // in the background.
             await new Promise((resolve, reject) => {
-                try {
-                    accessSecretStorage(async () => {
-                        await cli.checkOwnCrossSigningTrust();
-                        resolve();
-                        if (backupInfo) {
-                            // A complete restore can take many minutes for large
-                            // accounts / slow servers, so we allow the dialog
-                            // to advance before this.
-                            await cli.restoreKeyBackupWithSecretStorage(backupInfo);
-                        }
-                    }).catch(reject);
-                } catch (e) {
-                    console.error(e);
-                    reject(e);
-                }
+                accessSecretStorage(async () => {
+                    await cli.checkOwnCrossSigningTrust();
+                    resolve();
+                    if (backupInfo) {
+                        // A complete restore can take many minutes for large
+                        // accounts / slow servers, so we allow the dialog
+                        // to advance before this.
+                        await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+                    }
+                }).catch(reject);
             });
 
             if (cli.getCrossSigningId()) {
