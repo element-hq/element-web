@@ -20,6 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import TextWithTooltip from "../elements/TextWithTooltip";
 
 const DEFAULT_NUM_FACES = 5;
 
@@ -38,7 +39,11 @@ const FacePile = ({ room, numShown = DEFAULT_NUM_FACES }: IProps) => {
 
     return <div className="mx_FacePile">
         <div className="mx_FacePile_faces">
-            { shownMembers.map(member => <MemberAvatar key={member.userId} member={member} width={28} height={28} />) }
+            { shownMembers.map(member => {
+                return <TextWithTooltip key={member.userId} tooltip={member.name}>
+                    <MemberAvatar member={member} width={28} height={28} />
+                </TextWithTooltip>;
+            }) }
         </div>
         <span>
             { _t("%(count)s people you know have already joined", { count: knownMembers.length }) }

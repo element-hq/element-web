@@ -20,10 +20,8 @@ limitations under the License.
         flex-direction: row-reverse;
         vertical-align: middle;
 
-        .mx_BaseAvatar {
-            & + .mx_BaseAvatar {
-                margin-right: -10px;
-            }
+        > span + span {
+            margin-right: -8px;
         }
 
         .mx_BaseAvatar_image {
