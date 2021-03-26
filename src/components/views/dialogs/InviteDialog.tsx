@@ -738,6 +738,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 room_id: dmRoomId,
                 transferee: this.props.call,
             });
+            dis.dispatch({
+                action: 'view_room',
+                room_id: dmRoomId,
+                should_peek: false,
+                joining: false,
+            });
             this.props.onFinished();
         } else {
             this.setState({busy: true});

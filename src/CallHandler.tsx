@@ -643,7 +643,7 @@ export default class CallHandler {
 
         this.calls.set(roomId, call);
         if (transferee) {
-            this.transferees[transferee.callId] = call;
+            this.transferees[call.callId] = transferee;
         }
 
         this.setCallListeners(call);
