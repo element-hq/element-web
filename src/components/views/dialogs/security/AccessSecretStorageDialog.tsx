@@ -348,9 +348,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                 title={title}
                 titleClass={titleClass}
             >
-            <div>
-                {content}
-            </div>
+                <div>
+                    {content}
+                </div>
             </BaseDialog>
         );
     }
