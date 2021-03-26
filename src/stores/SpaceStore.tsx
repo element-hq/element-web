@@ -123,17 +123,15 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 action: "view_room",
                 room_id: roomId,
             });
+        } else if (space) {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: space.roomId,
+            });
         } else {
-            if (space) {
-                defaultDispatcher.dispatch({
-                    action: "view_room",
-                    room_id: space.roomId,
-                });
-            } else {
-                defaultDispatcher.dispatch({
-                    action: "view_home_page",
-                });
-            }
+            defaultDispatcher.dispatch({
+                action: "view_home_page",
+            });
         }
 
         // persist space selected
