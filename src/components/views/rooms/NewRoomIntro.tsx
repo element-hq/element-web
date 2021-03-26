@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import {ViewUserPayload} from "../../../dispatcher/payloads/ViewUserPayload";
 import {Action} from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";
 import SpaceStore from "../../../stores/SpaceStore";
+import {showSpaceInvite} from "../../../utils/space";
 
 const NewRoomIntro = () => {
     const cli = useContext(MatrixClientContext);
@@ -116,7 +117,7 @@ const NewRoomIntro = () => {
                     className="mx_NewRoomIntro_inviteButton"
                     kind="primary"
                     onClick={() => {
-                        dis.dispatch({ action: "view_invite", roomId: parentSpace.roomId });
+                        showSpaceInvite(parentSpace);
                     }}
                 >
                     {_t("Invite to %(spaceName)s", { spaceName: parentSpace.name })}

@@ -50,14 +50,10 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
 import SpaceStore, {SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
-import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
+import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
-import { showRoomInviteDialog } from "../../../RoomInvite";
-import Modal from "../../../Modal";
-import SpacePublicShare from "../spaces/SpacePublicShare";
-import InfoDialog from "../dialogs/InfoDialog";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -431,21 +427,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private onSpaceInviteClick = () => {
         const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-        if (this.props.activeSpace.getJoinRule() === "public") {
-            const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
-                title: _t("Invite to %(spaceName)s", { spaceName: this.props.activeSpace.name }),
-                description: <React.Fragment>
-                    <span>{ _t("Share your public space") }</span>
-                    <SpacePublicShare space={this.props.activeSpace} onFinished={() => modal.close()} />
-                </React.Fragment>,
-                fixedWidth: false,
-                button: false,
-                className: "mx_SpacePanel_sharePublicSpace",
-                hasCloseButton: true,
-            });
-        } else {
-            showRoomInviteDialog(this.props.activeSpace.roomId, initialText);
-        }
+        showSpaceInvite(this.props.activeSpace, initialText);
     };
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {

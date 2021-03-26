@@ -33,7 +33,7 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {
     shouldShowSpaceSettings,
     showAddExistingRooms,
-    showCreateNewRoom,
+    showCreateNewRoom, showSpaceInvite,
     showSpaceSettings,
 } from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -118,21 +118,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (this.props.space.getJoinRule() === "public") {
-            const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
-                title: _t("Invite to %(spaceName)s", { spaceName: this.props.space.name }),
-                description: <React.Fragment>
-                    <span>{ _t("Share your public space") }</span>
-                    <SpacePublicShare space={this.props.space} onFinished={() => modal.close()} />
-                </React.Fragment>,
-                fixedWidth: false,
-                button: false,
-                className: "mx_SpacePanel_sharePublicSpace",
-                hasCloseButton: true,
-            });
-        } else {
-            showRoomInviteDialog(this.props.space.roomId);
-        }
+        showSpaceInvite(this.props.space);
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
