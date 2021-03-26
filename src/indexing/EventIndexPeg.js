@@ -179,6 +179,11 @@ class EventIndexPeg {
             await indexManager.deleteEventIndex();
         }
     }
+
+    resetEventStore() {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        return indexManager.resetEventStore();
+    }
 }
 
 if (!global.mxEventIndexPeg) {

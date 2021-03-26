@@ -26,6 +26,7 @@ import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../settings/SettingLevel";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SeshatResetDialog from '../dialogs/SeshatResetDialog';
 
 @replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component {
@@ -120,6 +121,16 @@ export default class EventIndexPanel extends React.Component {
         await EventIndexPeg.get().startCrawler();
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, true);
         await this.updateState();
+    }
+
+    _confirmEventStoreReset() {
+        Modal.createDialog(SeshatResetDialog, {
+            onFinished: (success) => {
+                if (success) {
+                    EventIndexPeg.resetEventStore();
+                }
+            },
+        });
     }
 
     render() {
@@ -220,6 +231,11 @@ export default class EventIndexPanel extends React.Component {
                         <code>
                             {EventIndexPeg.error.message}
                         </code>
+                        <p>
+                            <AccessibleButton key="delete" kind="danger" onClick={this._confirmEventStoreReset}>
+                                {_t("Reset")}
+                            </AccessibleButton>
+                        </p>
                     </details>
                     )}
 
