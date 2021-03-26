@@ -40,13 +40,14 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     onAccept,
     onReject,
 }) => {
-    const detailContent = detail ? <span className="mx_Toast_detail">
+    const detailContent = detail ? <div className="mx_Toast_detail">
         {detail}
-    </span> : null;
+    </div> : null;
 
     return <div>
         <div className="mx_Toast_description">
-            {description}&nbsp;{detailContent}
+            {description}
+            {detailContent}
         </div>
         <div className="mx_Toast_buttons" aria-live="off">
             {onReject && rejectLabel && <FormButton label={rejectLabel} kind="danger" onClick={onReject} /> }
