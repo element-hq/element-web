@@ -490,14 +490,19 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!SettingsStore.getValue("feature_spaces")) return;
         switch (payload.action) {
             case "view_room": {
-                // persist last viewed room from a space
-                const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
-                const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
-
-                lastViewedRooms[activeSpaceId] = payload.room_id;
-                window.localStorage.setItem(LAST_VIEWED_ROOMS, JSON.stringify(lastViewedRooms));
-
                 const room = this.matrixClient?.getRoom(payload.room_id);
+
+                // persist last viewed room from a space
+
+                // We don't want to save if the room is a
+                // space room since it can cause problems
+                if (!room.isSpaceRoom()) {
+                    const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
+                    const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
+
+                    lastViewedRooms[activeSpaceId] = payload.room_id;
+                    window.localStorage.setItem(LAST_VIEWED_ROOMS, JSON.stringify(lastViewedRooms));
+                }
 
                 if (room?.getMyMembership() === "join") {
                     if (room.isSpaceRoom()) {
