@@ -25,7 +25,6 @@ import Field from '../../elements/Field';
 import AccessibleButton from '../../elements/AccessibleButton';
 import {_t} from '../../../../languageHandler';
 import {IDialogProps} from "../IDialogProps";
-import BaseDialog from "../BaseDialog";
 
 // Maximum acceptable size of a key file. It's 59 characters including the spaces we encode,
 // so this should be plenty and allow for people putting extra whitespace in the file because
@@ -217,6 +216,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     }
 
     render() {
+        // Caution: Making this an import will break tests.
+        const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
+
         const hasPassphrase = (
             this.props.keyInfo &&
             this.props.keyInfo.passphrase &&
