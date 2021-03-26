@@ -80,10 +80,10 @@ import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import { shouldUseLoginForWelcome } from "../../utils/pages";
 import SpaceStore from "../../stores/SpaceStore";
-import SpaceRoomDirectory from "./SpaceRoomDirectory";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import {RoomUpdateCause} from "../../stores/room-list/models";
+import defaultDispatcher from "../../dispatcher/dispatcher";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -690,10 +690,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
             case Action.ViewRoomDirectory: {
                 if (SpaceStore.instance.activeSpace) {
-                    Modal.createTrackedDialog("Space room directory", "", SpaceRoomDirectory, {
-                        space: SpaceStore.instance.activeSpace,
-                        initialText: payload.initialText,
-                    }, "mx_SpaceRoomDirectory_dialogWrapper", false, true);
+                    defaultDispatcher.dispatch({
+                        action: "view_room",
+                        room_id: SpaceStore.instance.activeSpace.roomId,
+                    });
                 } else {
                     const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
                     Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
