@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -140,11 +140,12 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     render() {
         const {request} = this.props;
-        let nameLabel;
+        let description;
+        let detail;
         if (request.isSelfVerification) {
             if (this.state.device) {
-                nameLabel = _t("From %(deviceName)s (%(deviceId)s) at %(ip)s", {
-                    deviceName: this.state.device.getDisplayName(),
+                description = this.state.device.getDisplayName();
+                detail = _t("%(deviceId)s from %(ip)s", {
                     deviceId: this.state.device.deviceId,
                     ip: this.state.ip,
                 });
@@ -152,13 +153,13 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         } else {
             const userId = request.otherUserId;
             const roomId = request.channel.roomId;
-            nameLabel = roomId ? userLabelForEventRoom(userId, roomId) : userId;
+            description = roomId ? userLabelForEventRoom(userId, roomId) : userId;
             // for legacy to_device verification requests
-            if (nameLabel === userId) {
+            if (description === userId) {
                 const client = MatrixClientPeg.get();
                 const user = client.getUser(userId);
                 if (user && user.displayName) {
-                    nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
+                    description = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
                 }
             }
         }
@@ -167,7 +168,8 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             _t("Decline (%(counter)s)", {counter: this.state.counter});
 
         return <GenericToast
-            description={nameLabel}
+            description={description}
+            detail={detail}
             acceptLabel={_t("Accept")}
             onAccept={this.accept}
             rejectLabel={declineLabel}
