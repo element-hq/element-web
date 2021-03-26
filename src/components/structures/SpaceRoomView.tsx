@@ -294,6 +294,7 @@ const SpaceLanding = ({ space }) => {
         <div className="mx_SpaceRoomView_landing_topic">
             <RoomTopic room={space} />
         </div>
+        <hr />
         <div className="mx_SpaceRoomView_landing_adminButtons">
             { addRoomButtons }
             { settingsButton }
