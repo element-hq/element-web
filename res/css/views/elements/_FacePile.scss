@@ -27,6 +27,10 @@ limitations under the License.
         .mx_BaseAvatar_image {
             border: 1px solid $primary-bg-color;
         }
+
+        .mx_BaseAvatar_initial {
+            margin: 1px; // to offset the border on the image
+        }
     }
 
     > span {

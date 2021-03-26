@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { sortBy } from "lodash";
 
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
@@ -30,9 +31,9 @@ interface IProps {
 }
 
 const FacePile = ({ room, numShown = DEFAULT_NUM_FACES }: IProps) => {
-    const knownMembers = room.getJoinedMembers().filter(member => {
+    const knownMembers = sortBy(room.getJoinedMembers().filter(member => {
         return !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
-    });
+    }), member => member.getMxcAvatarUrl() ? 0 : 1); // sort users with an explicit avatar first
 
     if (knownMembers.length < 1) return null;
     const shownMembers = knownMembers.slice(0, numShown);
