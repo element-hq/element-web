@@ -491,8 +491,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         switch (payload.action) {
             case "view_room": {
                 // persist last viewed room from a space
-                const activeSpace = SpaceStore.instance.activeSpace;
-                const activeSpaceId = activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
+                const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
                 const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
 
                 lastViewedRooms[activeSpaceId] = payload.room_id;
