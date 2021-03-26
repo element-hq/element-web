@@ -43,7 +43,6 @@ interface IState {}
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 const LAST_VIEWED_ROOMS = "mx_last_viewed_rooms";
 
-// We can't use HOME_SPACE here because JSON.stringify() will ignore any Symbols
 const LAST_VIEWED_ROOMS_HOME = "home_space";
 
 export const HOME_SPACE = Symbol("home-space");
