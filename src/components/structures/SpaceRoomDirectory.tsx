@@ -252,7 +252,7 @@ export const HierarchyLevel = ({
 }: IHierarchyLevelProps) => {
     const cli = MatrixClientPeg.get();
     const space = cli.getRoom(spaceId);
-    const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId())
+    const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
     const sortedChildren = sortBy([...(relations.get(spaceId)?.values() || [])], ev => ev.content.order || null);
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
@@ -487,6 +487,8 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
         let results;
         if (roomsMap.size) {
+            const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
+
             results = <>
                 <HierarchyLevel
                     spaceId={space.roomId}
@@ -494,7 +496,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                     relations={parentChildMap}
                     parents={new Set()}
                     selectedMap={selected}
-                    onToggleClick={(parentId, childId) => {
+                    onToggleClick={hasPermissions ? (parentId, childId) => {
                         setError("");
                         if (!selected.has(parentId)) {
                             setSelected(new Map(selected.set(parentId, new Set([childId]))));
@@ -509,7 +511,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
                         parentSet.delete(childId);
                         setSelected(new Map(selected.set(parentId, new Set(parentSet))));
-                    }}
+                    } : undefined}
                     onViewRoomClick={(roomId, autoJoin) => {
                         showRoom(roomsMap.get(roomId), Array.from(viaMap.get(roomId) || []), autoJoin);
                     }}
