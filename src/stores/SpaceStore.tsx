@@ -117,8 +117,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         // view last selected room from space
         const spaceId = space?.roomId || LAST_VIEWED_ROOMS_HOME;
-        const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
-        const roomId = lastViewedRooms[spaceId];
+        const roomId = window.localStorage.getItem(`${LAST_VIEWED_ROOMS}_${spaceId}`);
 
         if (roomId) {
             defaultDispatcher.dispatch({
@@ -500,10 +499,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 // space room since it can cause problems
                 if (room && !room.isSpaceRoom()) {
                     const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
-                    const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
-
-                    lastViewedRooms[activeSpaceId] = payload.room_id;
-                    window.localStorage.setItem(LAST_VIEWED_ROOMS, JSON.stringify(lastViewedRooms));
+                    window.localStorage.setItem(`${LAST_VIEWED_ROOMS}_${activeSpaceId}`, payload.room_id);
                 }
 
                 if (room?.getMyMembership() === "join") {
