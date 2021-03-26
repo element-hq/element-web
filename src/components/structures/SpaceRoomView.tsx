@@ -92,6 +92,41 @@ const useMyRoomMembership = (room: Room) => {
     return membership;
 };
 
+const SpaceInfo = ({ space }) => {
+    const joinRule = space.getJoinRule();
+
+    let visibilitySection;
+    if (joinRule === "public") {
+        visibilitySection = <span className="mx_SpaceRoomView_info_public">
+            { _t("Public space") }
+        </span>;
+    } else {
+        visibilitySection = <span className="mx_SpaceRoomView_info_private">
+            { _t("Private space") }
+        </span>;
+    }
+
+    return <div className="mx_SpaceRoomView_info">
+        { visibilitySection }
+        { joinRule === "public" && <RoomMemberCount room={space}>
+            {(count) => count > 0 ? (
+                <AccessibleButton
+                    kind="link"
+                    onClick={() => {
+                        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+                            action: Action.SetRightPanelPhase,
+                            phase: RightPanelPhases.RoomMemberList,
+                            refireParams: { space },
+                        });
+                    }}
+                >
+                    { _t("%(count)s members", { count }) }
+                </AccessibleButton>
+            ) : null}
+        </RoomMemberCount> }
+    </div>
+};
+
 const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
@@ -158,45 +193,13 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         joinButtons = <InlineSpinner />;
     }
 
-    const joinRule = space.getJoinRule();
-
-    let visibilitySection;
-    if (joinRule === "public") {
-        visibilitySection = <span className="mx_SpaceRoomView_preview_info_public">
-            { _t("Public space") }
-        </span>;
-    } else {
-        visibilitySection = <span className="mx_SpaceRoomView_preview_info_private">
-            { _t("Private space") }
-        </span>;
-    }
-
     return <div className="mx_SpaceRoomView_preview">
         { inviterSection }
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <h1 className="mx_SpaceRoomView_preview_name">
             <RoomName room={space} />
         </h1>
-        <div className="mx_SpaceRoomView_preview_info">
-            { visibilitySection }
-            { joinRule === "public" && <RoomMemberCount room={space}>
-                {(count) => count > 0 ? (
-                    <AccessibleButton
-                        className="mx_SpaceRoomView_preview_memberCount"
-                        kind="link"
-                        onClick={() => {
-                            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                                action: Action.SetRightPanelPhase,
-                                phase: RightPanelPhases.RoomMemberList,
-                                refireParams: { space },
-                            });
-                        }}
-                    >
-                        { _t("%(count)s members", { count }) }
-                    </AccessibleButton>
-                ) : null}
-            </RoomMemberCount> }
-        </div>
+        <SpaceInfo space={space} />
         <RoomTopic room={space}>
             {(topic, ref) =>
                 <div className="mx_SpaceRoomView_preview_topic" ref={ref}>
@@ -204,7 +207,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                 </div>
             }
         </RoomTopic>
-        { joinRule === "public" && <FacePile room={space} /> }
+        { space.getJoinRule() === "public" && <FacePile room={space} /> }
         <div className="mx_SpaceRoomView_preview_joinButtons">
             { joinButtons }
         </div>
@@ -219,10 +222,14 @@ const SpaceLanding = ({ space }) => {
     let inviteButton;
     if (myMembership === "join" && space.canInvite(userId)) {
         inviteButton = (
-            <AccessibleButton className="mx_SpaceRoomView_landing_inviteButton" onClick={() => {
-                showRoomInviteDialog(space.roomId);
-            }}>
-                { _t("Invite people") }
+            <AccessibleButton
+                kind="primary"
+                className="mx_SpaceRoomView_landing_inviteButton"
+                onClick={() => {
+                    showRoomInviteDialog(space.roomId);
+                }}
+            >
+                { _t("Invite") }
             </AccessibleButton>
         );
     }
@@ -259,6 +266,14 @@ const SpaceLanding = ({ space }) => {
         </AccessibleButton>;
     }
 
+    const onMembersClick = () => {
+        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.RoomMemberList,
+            refireParams: { space },
+        });
+    };
+
     return <div className="mx_SpaceRoomView_landing">
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
@@ -266,40 +281,20 @@ const SpaceLanding = ({ space }) => {
                 {(name) => {
                     const tags = { name: () => <div className="mx_SpaceRoomView_landing_nameRow">
                         <h1>{ name }</h1>
-                        <RoomMemberCount room={space}>
-                            {(count) => count > 0 ? (
-                                <AccessibleButton
-                                    className="mx_SpaceRoomView_landing_memberCount"
-                                    kind="link"
-                                    onClick={() => {
-                                        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                                            action: Action.SetRightPanelPhase,
-                                            phase: RightPanelPhases.RoomMemberList,
-                                            refireParams: { space },
-                                        });
-                                    }}
-                                >
-                                    { _t("%(count)s members", { count }) }
-                                </AccessibleButton>
-                            ) : null}
-                        </RoomMemberCount>
                     </div> };
-                    if (shouldShowSpaceSettings(cli, space)) {
-                        if (space.getJoinRule() === "public") {
-                            return _t("Your public space <name/>", {}, tags) as JSX.Element;
-                        } else {
-                            return _t("Your private space <name/>", {}, tags) as JSX.Element;
-                        }
-                    }
                     return _t("Welcome to <name/>", {}, tags) as JSX.Element;
                 }}
             </RoomName>
+        </div>
+        <div className="mx_SpaceRoomView_landing_info">
+            <SpaceInfo space={space} />
+            <FacePile room={space} onlyKnownUsers={false} numShown={7} onClick={onMembersClick} />
+            { inviteButton }
         </div>
         <div className="mx_SpaceRoomView_landing_topic">
             <RoomTopic room={space} />
         </div>
         <div className="mx_SpaceRoomView_landing_adminButtons">
-            { inviteButton }
             { addRoomButtons }
             { settingsButton }
         </div>

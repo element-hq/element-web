@@ -14,31 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { sortBy } from "lodash";
 
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import TextWithTooltip from "../elements/TextWithTooltip";
+import { useRoomMembers } from "../../../hooks/useRoomMembers";
 
 const DEFAULT_NUM_FACES = 5;
 
-interface IProps {
+interface IProps extends HTMLAttributes<HTMLSpanElement> {
     room: Room;
+    onlyKnownUsers?: boolean;
     numShown?: number;
 }
 
-const FacePile = ({ room, numShown = DEFAULT_NUM_FACES }: IProps) => {
-    const knownMembers = sortBy(room.getJoinedMembers().filter(member => {
-        return !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
-    }), member => member.getMxcAvatarUrl() ? 0 : 1); // sort users with an explicit avatar first
+const isKnownMember = (member: RoomMember) => !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
 
-    if (knownMembers.length < 1) return null;
-    const shownMembers = knownMembers.slice(0, numShown);
+const FacePile = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, ...props }: IProps) => {
+    let members = useRoomMembers(room);
 
-    return <div className="mx_FacePile">
+    // sort users with an explicit avatar first
+    const iteratees = [member => !!member.getMxcAvatarUrl()];
+    if (onlyKnownUsers) {
+        members = members.filter(isKnownMember);
+    } else {
+        // sort known users first
+        iteratees.unshift(member => isKnownMember(member));
+    }
+    if (members.length < 1) return null;
+
+    const shownMembers = sortBy(members, iteratees).slice(0, numShown);
+    return <div {...props} className="mx_FacePile">
         <div className="mx_FacePile_faces">
             { shownMembers.map(member => {
                 return <TextWithTooltip key={member.userId} tooltip={member.name}>
@@ -46,9 +57,9 @@ const FacePile = ({ room, numShown = DEFAULT_NUM_FACES }: IProps) => {
                 </TextWithTooltip>;
             }) }
         </div>
-        <span>
-            { _t("%(count)s people you know have already joined", { count: knownMembers.length }) }
-        </span>
+        { onlyKnownUsers && <span>
+            { _t("%(count)s people you know have already joined", { count: members.length }) }
+        </span> }
     </div>
 };
 
