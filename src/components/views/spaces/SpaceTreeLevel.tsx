@@ -33,7 +33,8 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {
     shouldShowSpaceSettings,
     showAddExistingRooms,
-    showCreateNewRoom, showSpaceInvite,
+    showCreateNewRoom,
+    showSpaceInvite,
     showSpaceSettings,
 } from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
