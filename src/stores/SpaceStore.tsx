@@ -498,7 +498,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                 // We don't want to save if the room is a
                 // space room since it can cause problems
-                if (!room.isSpaceRoom()) {
+                if (room && !room.isSpaceRoom()) {
                     const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
                     const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
 
