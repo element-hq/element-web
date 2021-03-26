@@ -39,14 +39,10 @@ import {
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton, {ButtonEvent} from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import Modal from "../../../Modal";
-import SpacePublicShare from "./SpacePublicShare";
 import {Action} from "../../../dispatcher/actions";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {showRoomInviteDialog} from "../../../RoomInvite";
-import InfoDialog from "../dialogs/InfoDialog";
 import {EventType} from "matrix-js-sdk/src/@types/event";
 
 interface IItemProps {
