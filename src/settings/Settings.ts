@@ -128,6 +128,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_voice_messages": {
+        isFeature: true,
+        displayName: _td("Send and receive voice messages (in development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_latex_maths": {
         isFeature: true,
         displayName: _td("Render LaTeX maths in messages"),
@@ -211,6 +217,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_dehydration": {
         isFeature: true,
         displayName: _td("Offline encrypted messaging using dehydrated devices"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_room_history_key_sharing": {
+        isFeature: true,
+        displayName: _td("Share decryption keys for room history when inviting users"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

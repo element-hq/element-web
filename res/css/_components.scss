@@ -111,12 +111,13 @@
 @import "./views/elements/_AddressSelector.scss";
 @import "./views/elements/_AddressTile.scss";
 @import "./views/elements/_DesktopBuildsNotice.scss";
-@import "./views/elements/_DirectorySearchBox.scss";
 @import "./views/elements/_DesktopCapturerSourcePicker.scss";
+@import "./views/elements/_DirectorySearchBox.scss";
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
 @import "./views/elements/_ErrorBoundary.scss";
 @import "./views/elements/_EventListSummary.scss";
+@import "./views/elements/_FacePile.scss";
 @import "./views/elements/_Field.scss";
 @import "./views/elements/_FormButton.scss";
 @import "./views/elements/_ImageView.scss";
@@ -213,13 +214,13 @@
 @import "./views/rooms/_SendMessageComposer.scss";
 @import "./views/rooms/_Stickers.scss";
 @import "./views/rooms/_TopUnreadMessagesBar.scss";
+@import "./views/rooms/_VoiceRecordComposerTile.scss";
 @import "./views/rooms/_WhoIsTypingTile.scss";
 @import "./views/settings/_AvatarSetting.scss";
 @import "./views/settings/_CrossSigningPanel.scss";
 @import "./views/settings/_DevicesPanel.scss";
 @import "./views/settings/_E2eAdvancedPanel.scss";
 @import "./views/settings/_EmailAddresses.scss";
-@import "./views/settings/_SpellCheckLanguages.scss";
 @import "./views/settings/_IntegrationManager.scss";
 @import "./views/settings/_Notifications.scss";
 @import "./views/settings/_PhoneNumbers.scss";
@@ -227,6 +228,7 @@
 @import "./views/settings/_SecureBackupPanel.scss";
 @import "./views/settings/_SetIdServer.scss";
 @import "./views/settings/_SetIntegrationManager.scss";
+@import "./views/settings/_SpellCheckLanguages.scss";
 @import "./views/settings/_UpdateCheckButton.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
 @import "./views/settings/tabs/room/_GeneralRoomSettingsTab.scss";

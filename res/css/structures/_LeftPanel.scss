@@ -130,6 +130,10 @@ $roomListCollapsedWidth: 68px;
                     mask-repeat: no-repeat;
                     background: $secondary-fg-color;
                 }
+
+                &.mx_LeftPanel_exploreButton_space::before {
+                    mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
+                }
             }
         }
 

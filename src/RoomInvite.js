@@ -49,11 +49,12 @@ export function showStartChatInviteDialog(initialText) {
     );
 }
 
-export function showRoomInviteDialog(roomId) {
+export function showRoomInviteDialog(roomId, initialText = "") {
     // This dialog handles the room creation internally - we don't need to worry about it.
     Modal.createTrackedDialog(
         "Invite Users", "", InviteDialog, {
             kind: KIND_INVITE,
+            initialText,
             roomId,
         },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
