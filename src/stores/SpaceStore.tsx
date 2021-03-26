@@ -117,7 +117,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         // view last selected room from space
         const spaceId = space?.roomId || LAST_VIEWED_ROOMS_HOME;
-        const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS));
+        const lastViewedRooms = JSON.parse(window.localStorage.getItem(LAST_VIEWED_ROOMS)) || {};
         const roomId = lastViewedRooms[spaceId];
 
         if (roomId) {
