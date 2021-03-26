@@ -132,7 +132,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     room_id: space.roomId,
                 });
             } else {
-                // TODO: Switch to first room in the RoomList
+                defaultDispatcher.dispatch({
+                    action: "view_home_page",
+                });
             }
         }
 
