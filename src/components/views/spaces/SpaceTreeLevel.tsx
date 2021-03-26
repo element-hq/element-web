@@ -48,7 +48,6 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {showRoomInviteDialog} from "../../../RoomInvite";
 import InfoDialog from "../dialogs/InfoDialog";
 import {EventType} from "matrix-js-sdk/src/@types/event";
-import SpaceRoomDirectory from "../../structures/SpaceRoomDirectory";
 
 interface IItemProps {
     space?: Room;
@@ -113,17 +112,6 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
     private onMenuClose = () => {
         this.setState({contextMenuPosition: null});
-    };
-
-    private onHomeClick = (ev: ButtonEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        defaultDispatcher.dispatch({
-            action: "view_room",
-            room_id: this.props.space.roomId,
-        });
-        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onInviteClick = (ev: ButtonEvent) => {
@@ -206,9 +194,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog("Space room directory", "Space panel", SpaceRoomDirectory, {
-            space: this.props.space,
-        }, "mx_SpaceRoomDirectory_dialogWrapper", false, true);
+        defaultDispatcher.dispatch({
+            action: "view_room",
+            room_id: this.props.space.roomId,
+        });
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
@@ -249,6 +238,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 </IconizedContextMenuOptionList>;
             }
 
+            const canAddRooms = this.props.space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
+
             let newRoomSection;
             if (this.props.space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
                 newRoomSection = <IconizedContextMenuOptionList first>
@@ -277,11 +268,6 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 <IconizedContextMenuOptionList first>
                     { inviteOption }
                     <IconizedContextMenuOption
-                        iconClassName="mx_SpacePanel_iconHome"
-                        label={_t("Space Home")}
-                        onClick={this.onHomeClick}
-                    />
-                    <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconMembers"
                         label={_t("Members")}
                         onClick={this.onMembersClick}
@@ -289,7 +275,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     { settingsOption }
                     <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconExplore"
-                        label={_t("Explore rooms")}
+                        label={canAddRooms ? _t("Manage & explore rooms") : _t("Explore rooms")}
                         onClick={this.onExploreRoomsClick}
                     />
                 </IconizedContextMenuOptionList>

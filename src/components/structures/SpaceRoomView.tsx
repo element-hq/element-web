@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {RefObject, useContext, useMemo, useRef, useState} from "react";
-import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
+import React, {RefObject, useContext, useRef, useState} from "react";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {EventSubscription} from "fbemitter";
 
@@ -46,8 +46,7 @@ import {SetRightPanelPhasePayload} from "../../dispatcher/payloads/SetRightPanel
 import {useStateArray} from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import {showAddExistingRooms, showCreateNewRoom, shouldShowSpaceSettings, showSpaceSettings} from "../../utils/space";
-import {HierarchyLevel, ISpaceSummaryRoom, showRoom, useSpaceSummary} from "./SpaceRoomDirectory";
-import AutoHideScrollbar from "./AutoHideScrollbar";
+import {showRoom, SpaceHierarchy} from "./SpaceRoomDirectory";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
@@ -260,37 +259,6 @@ const SpaceLanding = ({ space }) => {
         </AccessibleButton>;
     }
 
-    const [rooms, relations, viaMap] = useSpaceSummary(cli, space, refreshToken);
-    const [roomsMap, numRooms] = useMemo(() => {
-        if (!rooms) return [];
-        const roomsMap = new Map<string, ISpaceSummaryRoom>(rooms.map(r => [r.room_id, r]));
-        const numRooms = rooms.filter(r => r.room_type !== RoomType.Space).length;
-        return [roomsMap, numRooms];
-    }, [rooms]);
-
-    let previewRooms;
-    if (roomsMap) {
-        previewRooms = <AutoHideScrollbar className="mx_SpaceRoomDirectory_list">
-            <div className="mx_SpaceRoomDirectory_roomCount">
-                <h3>{ myMembership === "join" ? _t("Rooms") : _t("Default Rooms")}</h3>
-                <span>{ numRooms }</span>
-            </div>
-            <HierarchyLevel
-                spaceId={space.roomId}
-                rooms={roomsMap}
-                relations={relations}
-                parents={new Set()}
-                onViewRoomClick={(roomId, autoJoin) => {
-                    showRoom(roomsMap.get(roomId), Array.from(viaMap.get(roomId) || []), autoJoin);
-                }}
-            />
-        </AutoHideScrollbar>;
-    } else if (!rooms) {
-        previewRooms = <InlineSpinner />;
-    } else {
-        previewRooms = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
-    }
-
     return <div className="mx_SpaceRoomView_landing">
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <div className="mx_SpaceRoomView_landing_name">
@@ -336,7 +304,7 @@ const SpaceLanding = ({ space }) => {
             { settingsButton }
         </div>
 
-        { previewRooms }
+        <SpaceHierarchy space={space} showRoom={showRoom} refreshToken={refreshToken} />
     </div>;
 };
 

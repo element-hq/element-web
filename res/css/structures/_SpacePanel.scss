@@ -330,10 +330,6 @@ $activeBorderColor: $secondary-fg-color;
         mask-image: url('$(res)/img/element-icons/leave.svg');
     }
 
-    .mx_SpacePanel_iconHome::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
-    }
-
     .mx_SpacePanel_iconMembers::before {
         mask-image: url('$(res)/img/element-icons/room/members.svg');
     }

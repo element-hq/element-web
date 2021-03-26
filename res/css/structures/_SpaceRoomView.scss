@@ -365,12 +365,13 @@ $SpaceRoomViewInnerWidth: 428px;
             }
         }
 
-        .mx_SpaceRoomDirectory_list {
-            max-width: 600px;
+        .mx_SearchBox {
+            margin-left: 4px;
+            max-width: 670px;
+        }
 
-            .mx_SpaceRoomDirectory_roomTile_actions {
-                display: none;
-            }
+        .mx_SpaceRoomDirectory_list {
+            max-width: 700px;
         }
     }
 
