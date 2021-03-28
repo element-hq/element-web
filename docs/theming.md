@@ -27,7 +27,7 @@ single directory tree.
  JSON Based Themes (Labs Feature):
 ==================================
 
-Themes derived from the built in themes may also be defined in settings.
+When [`feature_custom_themes`](https://github.com/vector-im/element-web/blob/master/docs/labs.md#custom-themes-feature_custom_themes) is enabled, JSON based themes derived from the built in themes may also be defined in settings.
 
 To avoid name collisions, the internal name of a theme is
 `custom-${theme.name}`. So if you want to set the custom theme below as the
