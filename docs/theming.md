@@ -1,14 +1,14 @@
-Theming Element
-============
+CSS Based Themes
+================
 
 Themes are a very basic way of providing simple alternative look & feels to the
 Element app via CSS & custom imagery.
 
-They are *NOT* co be confused with 'skins', which describe apps which sit on top
+They are *NOT* to be confused with 'skins', which describe apps which sit on top
 of matrix-react-sdk - e.g. in theory Element itself is a react-sdk skin.
 As of Jan 2017, skins are not fully supported; Element is the only available skin.
 
-To define a theme for Element:
+To define a css theme for Element:
 
  1. Pick a name, e.g. `teal`. at time of writing we have `light` and `dark`.
  2. Fork `src/skins/vector/css/themes/dark.scss` to be `teal.scss`
@@ -24,8 +24,8 @@ To define a theme for Element:
 In future, the assets for a theme will probably be gathered together into a
 single directory tree.
 
-Custom Themes
-=============
+ JSON Based Themes (Labs Feature):
+==================================
 
 Themes derived from the built in themes may also be defined in settings.
 
