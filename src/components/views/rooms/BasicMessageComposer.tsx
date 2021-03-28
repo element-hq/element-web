@@ -485,16 +485,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (model.autoComplete && model.autoComplete.hasCompletions()) {
             const autoComplete = model.autoComplete;
             switch (autocompleteAction) {
+                case AutocompleteAction.CompleteOrPrevSelection:
                 case AutocompleteAction.PrevSelection:
-                    autoComplete.onUpArrow(event);
+                    autoComplete.selectPreviousSelection();
                     handled = true;
                     break;
+                case AutocompleteAction.CompleteOrNextSelection:
                 case AutocompleteAction.NextSelection:
-                    autoComplete.onDownArrow(event);
-                    handled = true;
-                    break;
-                case AutocompleteAction.ApplySelection:
-                    autoComplete.onTab(event);
+                    autoComplete.selectNextSelection();
                     handled = true;
                     break;
                 case AutocompleteAction.Cancel:
@@ -504,8 +502,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 default:
                     return; // don't preventDefault on anything else
             }
-        } else if (autocompleteAction === AutocompleteAction.ApplySelection) {
-            this.tabCompleteName(event);
+        } else if (autocompleteAction === AutocompleteAction.CompleteOrPrevSelection
+            || autocompleteAction === AutocompleteAction.CompleteOrNextSelection) {
+            // there is no current autocomplete window, try to open it
+            this.tabCompleteName();
             handled = true;
         } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
             this.formatBarRef.current.hide();
@@ -517,7 +517,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     };
 
-    private async tabCompleteName(event: React.KeyboardEvent) {
+    private async tabCompleteName() {
         try {
             await new Promise<void>(resolve => this.setState({showVisualBell: false}, resolve));
             const {model} = this.props;
@@ -540,7 +540,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
             // Don't try to do things with the autocomplete if there is none shown
             if (model.autoComplete) {
-                await model.autoComplete.onTab(event);
+                await model.autoComplete.startSelection();
                 if (!model.autoComplete.hasSelection()) {
                     this.setState({showVisualBell: true});
                     model.autoComplete.close();
