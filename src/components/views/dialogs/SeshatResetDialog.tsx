@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,25 +15,24 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import * as sdk from "../../../index";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.dialogs.SeshatResetDialog")
-export default class SeshatResetDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
-    render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
+interface IProps {
+    onFinished(): void;
+}
+
+@replaceableComponent("views.dialogs.SeshatResetDialog")
+export default class SeshatResetDialog extends React.PureComponent<IProps> {
+    render() {
         return (
             <BaseDialog
-                    hasCancel={true}
-                    onFinished={this.props.onFinished.bind(null, false)}
-                    title={_t("Reset event index store?")}>
+                hasCancel={true}
+                onFinished={this.props.onFinished.bind(null, false)}
+                title={_t("Reset event index store?")}>
                 <div>
                     <p>
                         {_t(
