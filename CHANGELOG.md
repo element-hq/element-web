@@ -1,3 +1,27 @@
+Changes in [1.7.24](https://github.com/vector-im/element-web/releases/tag/v1.7.24) (2021-03-29)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.24-rc.1...v1.7.24)
+
+ * Upgrade to React SDK 3.17.0 and JS SDK 9.10.0
+
+Changes in [1.7.24-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.24-rc.1) (2021-03-25)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.23...v1.7.24-rc.1)
+
+ * Upgrade to React SDK 3.17.0-rc.2 and JS SDK 9.10.0-rc.1
+ * Translations update from Weblate
+   [\#16766](https://github.com/vector-im/element-web/pull/16766)
+ * Docker image: serve pre-compressed assets using gzip_static
+   [\#16698](https://github.com/vector-im/element-web/pull/16698)
+ * Fix style lint issues
+   [\#16732](https://github.com/vector-im/element-web/pull/16732)
+ * Updated expected webpack output in setup guide
+   [\#16740](https://github.com/vector-im/element-web/pull/16740)
+ * Docs for `loginForWelcome`
+   [\#16468](https://github.com/vector-im/element-web/pull/16468)
+ * Disable rageshake persistence if no logs would be submitted
+   [\#16697](https://github.com/vector-im/element-web/pull/16697)
+
 Changes in [1.7.23](https://github.com/vector-im/element-web/releases/tag/v1.7.23) (2021-03-15)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.23-rc.1...v1.7.23)
