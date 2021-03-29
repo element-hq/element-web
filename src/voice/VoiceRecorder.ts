@@ -51,9 +51,6 @@ export class VoiceRecorder {
     private async makeRecorder() {
         this.recorderStream = await navigator.mediaDevices.getUserMedia({
             audio: {
-                // specify some audio settings so we're feeding the recorder with the
-                // best possible values. The browser will handle resampling for us.
-                sampleRate: SAMPLE_RATE,
                 channelCount: CHANNELS,
                 noiseSuppression: true, // browsers ignore constraints they can't honour
                 deviceId: CallMediaHandler.getAudioInput(),
@@ -61,7 +58,6 @@ export class VoiceRecorder {
         });
         this.recorderContext = new AudioContext({
             latencyHint: "interactive",
-            sampleRate: SAMPLE_RATE, // once again, the browser will resample for us
         });
         this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
         this.recorderFreqNode = this.recorderContext.createAnalyser();
