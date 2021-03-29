@@ -2113,7 +2113,7 @@
     "Delete sessions|other": "Forigi salutaĵojn",
     "Delete sessions|one": "Forigi salutaĵon",
     "Where you’re logged in": "Kie vi salutis",
-    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Sube administru la nomojn de viaj salutaĵoj kaj ilin adiaŭu, aŭ <a>kontrolu ilin en via profilo de uzanto</a>.",
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Sube administru la nomojn de viaj salutaĵoj kaj ilin adiaŭu, aŭ <a>ilin kontrolu en via profilo de uzanto</a>.",
     "Waiting for you to accept on your other session…": "Atendante vian akcepton en via alia salutaĵo…",
     "Almost there! Is your other session showing the same shield?": "Preskaŭ finite! Ĉu via alia salutaĵo montras la saman ŝildon?",
     "Almost there! Is %(displayName)s showing the same shield?": "Preskaŭ finite! Ĉu %(displayName)s montras la saman ŝildon?",
@@ -2376,7 +2376,7 @@
     "Set a Security Phrase": "Agordi Sekurecan frazon",
     "Confirm Security Phrase": "Konfirmi Sekurecan frazon",
     "Save your Security Key": "Konservi vian Sekurecan ŝlosilon",
-    "New spinner design": "Nova fasono de la turniĝilo",
+    "New spinner design": "Nova aspekto de la atendosimbolo",
     "Show rooms with unread messages first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
     "Show previews of messages": "Montri antaŭrigardojn al mesaĝoj",
     "This room is public": "Ĉi tiu ĉambro estas publika",
@@ -3045,5 +3045,14 @@
     "Use Ctrl + F to search": "Serĉu per stirklavo (Ctrl) + F",
     "Use Command + F to search": "Serĉu per komanda klavo + F",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s ŝanĝis la servilblokajn listojn por ĉi tiu ĉambro.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s agordis la servilblokajn listojn por ĉi tiu ĉambro."
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s agordis la servilblokajn listojn por ĉi tiu ĉambro.",
+    "Public": "",
+    "Delete": "Forigi",
+    "From %(deviceName)s (%(deviceId)s) at %(ip)s": "De %(deviceName)s (%(deviceId)s) de %(ip)s",
+    "Jump to the bottom of the timeline when you send a message": "Salti al subo de historio sendinte mesaĝon",
+    "Check your devices": "Kontrolu viajn aparatojn",
+    "A new login is accessing your account: %(name)s (%(deviceID)s) at %(ip)s": "Nova saluto aliras vian konton: %(name)s (%(deviceID)s) de %(ip)s",
+    "You have unverified logins": "Vi havas nekontrolitajn salutojn",
+    "You're already in a call with this person.": "Vi jam vokas ĉi tiun personon.",
+    "Already in call": "Jam vokanta"
 }
