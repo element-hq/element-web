@@ -309,14 +309,4 @@ export default abstract class BaseEventIndexManager {
     async deleteEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
-
-    /**
-     * Reset a potentially corrupted event store
-     *
-     * @return {Promise} A promise that will resolve once the event store has
-     * been deleted.
-     */
-    async resetEventStore(): Promise<void> {
-        throw new Error("Unimplemented");
-    }
 }

@@ -36,8 +36,8 @@ export default class SeshatResetDialog extends React.PureComponent<IProps> {
                 <div>
                     <p>
                         {_t(
-                            "Your event store appears corrupted. " +
-                            "This action will restart this application.",
+                            "Your event store appears to be corrupted. " +
+                            "Your messages will be re-indexed as soon as the store is initialised.",
                         )}
                     </p>
                 </div>

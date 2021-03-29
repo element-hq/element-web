@@ -123,11 +123,15 @@ export default class EventIndexPanel extends React.Component {
         await this.updateState();
     }
 
-    _confirmEventStoreReset() {
-        Modal.createDialog(SeshatResetDialog, {
-            onFinished: (success) => {
+    _confirmEventStoreReset = () => {
+        const self = this;
+        const { close } = Modal.createDialog(SeshatResetDialog, {
+            onFinished: async (success) => {
                 if (success) {
-                    EventIndexPeg.resetEventStore();
+                    await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
+                    await EventIndexPeg.deleteEventIndex();
+                    await self._onEnable();
+                    close();
                 }
             },
         });
@@ -223,7 +227,10 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     <p>
-                        {_t("Message search initilisation failed")}
+                        {this.state.enabling
+                            ? <InlineSpinner />
+                            : _t("Message search initilisation failed")
+                        }
                     </p>
                     {EventIndexPeg.error && (
                     <details>
