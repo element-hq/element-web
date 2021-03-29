@@ -1287,6 +1287,7 @@
     "Room ID or address of ban list": "Room ID or address of ban list",
     "Subscribe": "Subscribe",
     "Start automatically after system login": "Start automatically after system login",
+    "Warn before quitting": "Warn before quitting",
     "Always show the window menu bar": "Always show the window menu bar",
     "Show tray icon and minimize window to it on close": "Show tray icon and minimize window to it on close",
     "Preferences": "Preferences",
