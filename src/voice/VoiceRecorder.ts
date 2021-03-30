@@ -19,6 +19,7 @@ import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
+import {percentageOf} from "../utils/numbers";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -133,23 +134,18 @@ export class VoiceRecorder {
         // The time domain is the input to the FFT, which means we use an array of the same
         // size. The time domain is also known as the audio waveform. We're ignoring the
         // output of the FFT here (frequency data) because we're not interested in it.
-        //
-        // We use bytes out of the analyser because floats have weird precision problems
-        // and are slightly more difficult to work with. The bytes are easy to work with,
-        // which is why we pick them (they're also more precise, but we care less about that).
-        const data = new Uint8Array(this.recorderFFT.fftSize);
-        this.recorderFFT.getByteTimeDomainData(data);
+        const data = new Float32Array(this.recorderFFT.fftSize);
+        this.recorderFFT.getFloatTimeDomainData(data);
 
-        // Because we're dealing with a uint array we need to do math a bit differently.
-        // If we just `Array.from()` the uint array, we end up with 1s and 0s, which aren't
-        // what we're after. Instead, we have to use a bit of manual looping to correctly end
-        // up with the right values
+        // We can't just `Array.from()` the array because we're dealing with 32bit floats
+        // and the built-in function won't consider that when converting between numbers.
+        // However, the runtime will convert the float32 to a float64 during the math operations
+        // which is why the loop works below. Note that a `.map()` call also doesn't work
+        // and will instead return a Float32Array still.
         const translatedData: number[] = [];
         for (let i = 0; i < data.length; i++) {
-            // All we're doing here is inverting the amplitude and putting the metric somewhere
-            // between zero and one. Without the inversion, lower values are "louder", which is
-            // not super helpful.
-            translatedData.push(1 - (data[i] / 128.0));
+            // We're clamping the values so we can do that math operation mentioned above.
+            translatedData.push(percentageOf(data[i], 0, 1));
         }
 
         this.observable.update({

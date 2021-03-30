@@ -49,16 +49,14 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         const bars = arrayFastResample(Array.from(update.waveform), DOWNSAMPLE_TARGET);
         this.setState({
             // The incoming data is between zero and one, but typically even screaming into a
-            // microphone won't send you over 0.6, so we "cap" the graph at about 0.50 for a
-            // point where the average user can still see feedback and be perceived as peaking
-            // when talking "loudly".
-            //
-            // We multiply by 100 because the Waveform component wants values in 0-100 (percentages)
-            heights: bars.map(b => percentageOf(b, 0, 0.50) * 100),
+            // microphone won't send you over 0.6, so we artificially adjust the gain for the
+            // waveform. This results in a slightly more cinematic/animated waveform for the
+            // user.
+            heights: bars.map(b => percentageOf(b, 0, 0.50)),
         });
     };
 
     public render() {
-        return <Waveform heights={this.state.heights} />;
+        return <Waveform relHeights={this.state.heights} />;
     }
 }

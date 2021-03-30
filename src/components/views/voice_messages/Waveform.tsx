@@ -18,7 +18,7 @@ import React from "react";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
-    heights: number[]; // percentages as integers (0-100)
+    relHeights: number[]; // relative heights (0-1)
 }
 
 interface IState {
@@ -37,8 +37,8 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
 
     public render() {
         return <div className='mx_Waveform'>
-            {this.props.heights.map((h, i) => {
-                return <span key={i} style={{height: h + '%'}} className='mx_Waveform_bar' />;
+            {this.props.relHeights.map((h, i) => {
+                return <span key={i} style={{height: (h * 100) + '%'}} className='mx_Waveform_bar' />;
             })}
         </div>;
     }
