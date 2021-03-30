@@ -26,6 +26,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
 import {ResizeMethod} from "../../../Avatar";
+import { _t } from '../../../languageHandler';
 
 interface IProps {
     name: string; // The name (first initial used as default)
@@ -140,6 +141,7 @@ const BaseAvatar = (props: IProps) => {
         if (onClick) {
             return (
                 <AccessibleButton
+                    aria-label={_t("Avatar")}
                     {...otherProps}
                     element="span"
                     className={classNames("mx_BaseAvatar", className)}
