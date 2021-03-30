@@ -19,7 +19,7 @@ import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
-import {percentageOf} from "../utils/numbers";
+import {clamp} from "../utils/numbers";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -143,7 +143,7 @@ export class VoiceRecorder {
             // We're clamping the values so we can do that math operation mentioned above,
             // and to ensure that we produce consistent data (it's possible for the array
             // to exceed the specified range with some audio input devices).
-            translatedData.push(percentageOf(data[i], 0, 1));
+            translatedData.push(clamp(data[i], 0, 1));
         }
 
         this.observable.update({
