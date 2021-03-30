@@ -16,7 +16,6 @@ limitations under the License.
 
 import * as Recorder from 'opus-recorder';
 import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
-import mxVoiceWorkletPath from './mxVoiceWorklet';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
@@ -37,7 +36,7 @@ export class VoiceRecorder {
     private recorderSource: MediaStreamAudioSourceNode;
     private recorderStream: MediaStream;
     private recorderFFT: AnalyserNode;
-    private recorderWorklet: AudioWorkletNode;
+    private recorderProcessor: ScriptProcessorNode;
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
@@ -71,20 +70,18 @@ export class VoiceRecorder {
         // it makes the time domain less than helpful.
         this.recorderFFT.fftSize = 64;
 
-        await this.recorderContext.audioWorklet.addModule(mxVoiceWorkletPath);
-        this.recorderWorklet = new AudioWorkletNode(this.recorderContext, "mx-voice-worklet");
+        // We use an audio processor to get accurate timing information.
+        // The size of the audio buffer largely decides how quickly we push timing/waveform data
+        // out of this class. Smaller buffers mean we update more frequently as we can't hold as
+        // many bytes. Larger buffers mean slower updates. For scale, 1024 gives us about 30Hz of
+        // updates and 2048 gives us about 20Hz. We use 1024 to get as close to perceived realtime
+        // as possible. Must be a power of 2.
+        this.recorderProcessor = this.recorderContext.createScriptProcessor(1024, CHANNELS, CHANNELS);
 
         // Connect our inputs and outputs
         this.recorderSource.connect(this.recorderFFT);
-        this.recorderSource.connect(this.recorderWorklet);
-        this.recorderWorklet.connect(this.recorderContext.destination);
-
-        // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
-        this.recorderWorklet.port.onmessage = (ev) => {
-            if (ev.data['ev'] === 'proc') {
-                this.tryUpdateLiveData(ev.data['timeMs']);
-            }
-        };
+        this.recorderSource.connect(this.recorderProcessor);
+        this.recorderProcessor.connect(this.recorderContext.destination);
 
         this.recorder = new Recorder({
             encoderPath, // magic from webpack
@@ -131,7 +128,7 @@ export class VoiceRecorder {
         return this.mxc;
     }
 
-    private tryUpdateLiveData = (timeMillis: number) => {
+    private tryUpdateLiveData = (ev: AudioProcessingEvent) => {
         if (!this.recording) return;
 
         // The time domain is the input to the FFT, which means we use an array of the same
@@ -153,7 +150,7 @@ export class VoiceRecorder {
 
         this.observable.update({
             waveform: translatedData,
-            timeSeconds: timeMillis / 1000,
+            timeSeconds: ev.playbackTime,
         });
     };
 
@@ -169,6 +166,7 @@ export class VoiceRecorder {
         }
         this.observable = new SimpleObservable<IRecordingUpdate>();
         await this.makeRecorder();
+        this.recorderProcessor.addEventListener("audioprocess", this.tryUpdateLiveData);
         await this.recorder.start();
         this.recording = true;
     }
@@ -180,7 +178,6 @@ export class VoiceRecorder {
 
         // Disconnect the source early to start shutting down resources
         this.recorderSource.disconnect();
-        this.recorderWorklet.disconnect();
         await this.recorder.stop();
 
         // close the context after the recorder so the recorder doesn't try to
@@ -192,6 +189,7 @@ export class VoiceRecorder {
 
         // Finally do our post-processing and clean up
         this.recording = false;
+        this.recorderProcessor.removeEventListener("audioprocess", this.tryUpdateLiveData);
         await this.recorder.close();
 
         return this.buffer;
