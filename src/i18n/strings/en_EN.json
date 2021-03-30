@@ -417,6 +417,7 @@
     "Other": "Other",
     "Command error": "Command error",
     "Usage": "Usage",
+    "Sends the given message as a spoiler": "Sends the given message as a spoiler",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message",
