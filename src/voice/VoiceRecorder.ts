@@ -140,7 +140,9 @@ export class VoiceRecorder {
         // and will instead return a Float32Array still.
         const translatedData: number[] = [];
         for (let i = 0; i < data.length; i++) {
-            // We're clamping the values so we can do that math operation mentioned above.
+            // We're clamping the values so we can do that math operation mentioned above,
+            // and to ensure that we produce consistent data (it's possible for the array
+            // to exceed the specified range with some audio input devices).
             translatedData.push(percentageOf(data[i], 0, 1));
         }
 
