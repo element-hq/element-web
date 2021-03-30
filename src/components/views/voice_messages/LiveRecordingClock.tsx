@@ -31,7 +31,7 @@ interface IState {
  * A clock for a live recording.
  */
 @replaceableComponent("views.voice_messages.LiveRecordingClock")
-export default class LiveRecordingClock extends React.PureComponent<IProps, IState> {
+export default class LiveRecordingClock extends React.Component<IProps, IState> {
     public constructor(props) {
         super(props);
 
