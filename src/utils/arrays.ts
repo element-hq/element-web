@@ -15,6 +15,41 @@ limitations under the License.
 */
 
 /**
+ * Quickly resample an array to have less data points. This isn't a perfect representation,
+ * though this does work best if given a large array to downsample to a much smaller array.
+ * @param {number[]} input The input array to downsample.
+ * @param {number} points The number of samples to end up with.
+ * @returns {number[]} The downsampled array.
+ */
+export function arrayFastResample(input: number[], points: number): number[] {
+    // Heavily inpired by matrix-media-repo (used with permission)
+    // https://github.com/turt2live/matrix-media-repo/blob/abe72c87d2e29/util/util_audio/fastsample.go#L10
+    const everyNth = Math.round(input.length / points);
+    const samples: number[] = [];
+    for (let i = 0; i < input.length; i += everyNth) {
+        samples.push(input[i]);
+    }
+    while (samples.length < points) {
+        samples.push(input[input.length - 1]);
+    }
+    return samples;
+}
+
+/**
+ * Creates an array of the given length, seeded with the given value.
+ * @param {T} val The value to seed the array with.
+ * @param {number} length The length of the array to create.
+ * @returns {T[]} The array.
+ */
+export function arraySeed<T>(val: T, length: number): T[] {
+    const a: T[] = [];
+    for (let i = 0; i < length; i++) {
+        a.push(val);
+    }
+    return a;
+}
+
+/**
  * Clones an array as fast as possible, retaining references of the array's values.
  * @param a The array to clone. Must be defined.
  * @returns A copy of the array.
