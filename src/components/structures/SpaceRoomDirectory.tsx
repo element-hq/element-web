@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React, {useMemo, useState} from "react";
-import Room from "matrix-js-sdk/src/models/room";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixClient} from "matrix-js-sdk/src/client";
 import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import classNames from "classnames";
 import {sortBy} from "lodash";
@@ -39,10 +40,11 @@ import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import {useStateToggle} from "../../hooks/useStateToggle";
 
-interface IProps {
+interface IHierarchyProps {
     space: Room;
     initialText?: string;
-    onFinished(): void;
+    refreshToken?: any;
+    showRoom(room: ISpaceSummaryRoom, viaServers?: string[], autoJoin?: boolean): void;
 }
 
 /* eslint-disable camelcase */
@@ -77,7 +79,6 @@ export interface ISpaceSummaryEvent {
 
 interface ITileProps {
     room: ISpaceSummaryRoom;
-    editing?: boolean;
     suggested?: boolean;
     selected?: boolean;
     numChildRooms?: number;
@@ -88,7 +89,6 @@ interface ITileProps {
 
 const Tile: React.FC<ITileProps> = ({
     room,
-    editing,
     suggested,
     selected,
     hasPermissions,
@@ -112,7 +112,7 @@ const Tile: React.FC<ITileProps> = ({
     let button;
     if (myMembership === "join") {
         button = <AccessibleButton onClick={onPreviewClick} kind="primary_outline">
-            { _t("Open") }
+            { _t("View") }
         </AccessibleButton>;
     } else if (onJoinClick) {
         button = <AccessibleButton onClick={onJoinClick} kind="primary">
@@ -170,12 +170,6 @@ const Tile: React.FC<ITileProps> = ({
         </div>
     </React.Fragment>;
 
-    if (editing) {
-        return <div className="mx_SpaceRoomDirectory_roomTile">
-            { content }
-        </div>
-    }
-
     let childToggle;
     let childSection;
     if (children) {
@@ -201,7 +195,7 @@ const Tile: React.FC<ITileProps> = ({
             className={classNames("mx_SpaceRoomDirectory_roomTile", {
                 mx_SpaceRoomDirectory_subspace: room.room_type === RoomType.Space,
             })}
-            onClick={hasPermissions ? onToggleClick : onPreviewClick}
+            onClick={(hasPermissions && onToggleClick) ? onToggleClick : onPreviewClick}
         >
             { content }
             { childToggle }
@@ -240,7 +234,7 @@ export const showRoom = (room: ISpaceSummaryRoom, viaServers?: string[], autoJoi
 interface IHierarchyLevelProps {
     spaceId: string;
     rooms: Map<string, ISpaceSummaryRoom>;
-    relations: EnhancedMap<string, Map<string, ISpaceSummaryEvent>>;
+    relations: Map<string, Map<string, ISpaceSummaryEvent>>;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
     onViewRoomClick(roomId: string, autoJoin: boolean): void;
@@ -258,9 +252,9 @@ export const HierarchyLevel = ({
 }: IHierarchyLevelProps) => {
     const cli = MatrixClientPeg.get();
     const space = cli.getRoom(spaceId);
-    const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId())
+    const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
-    const sortedChildren = sortBy([...relations.get(spaceId)?.values()], ev => ev.content.order || null);
+    const sortedChildren = sortBy([...(relations.get(spaceId)?.values() || [])], ev => ev.content.order || null);
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
         if (!rooms.has(roomId)) return result;
@@ -316,23 +310,15 @@ export const HierarchyLevel = ({
     </React.Fragment>
 };
 
-const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinished }) => {
+// mutate argument refreshToken to force a reload
+export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
+    ISpaceSummaryRoom[],
+    Map<string, Map<string, ISpaceSummaryEvent>>,
+    Map<string, Set<string>>,
+    Map<string, Set<string>>,
+] | [] => {
     // TODO pagination
-    const cli = MatrixClientPeg.get();
-    const userId = cli.getUserId();
-    const [query, setQuery] = useState(initialText);
-
-    const onCreateRoomClick = () => {
-        dis.dispatch({
-            action: 'view_create_room',
-            public: true,
-        });
-        onFinished();
-    };
-
-    const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
-
-    const [rooms, parentChildMap, childParentMap, viaMap] = useAsyncMemo(async () => {
+    return useAsyncMemo(async () => {
         try {
             const data = await cli.getSpaceSummary(space.roomId);
 
@@ -350,13 +336,29 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
                 }
             });
 
-            return [data.rooms as ISpaceSummaryRoom[], parentChildRelations, childParentRelations, viaMap];
+            return [data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
         } catch (e) {
             console.error(e); // TODO
         }
 
         return [];
-    }, [space], []);
+    }, [space, refreshToken], []);
+};
+
+export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
+    space,
+    initialText = "",
+    showRoom,
+    refreshToken,
+    children,
+}) => {
+    const cli = MatrixClientPeg.get();
+    const userId = cli.getUserId();
+    const [query, setQuery] = useState(initialText);
+
+    const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
+
+    const [rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
 
     const roomsMap = useMemo(() => {
         if (!rooms) return null;
@@ -390,21 +392,6 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
         });
         return roomsMap;
     }, [rooms, childParentMap, query]);
-
-    const title = <React.Fragment>
-        <RoomAvatar room={space} height={32} width={32} />
-        <div>
-            <h1>{ _t("Explore rooms") }</h1>
-            <div><RoomName room={space} /></div>
-        </div>
-    </React.Fragment>;
-
-    const explanation =
-        _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.", null,
-            {a: sub => {
-                return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
-            }},
-        );
 
     const [error, setError] = useState("");
     const [removing, setRemoving] = useState(false);
@@ -500,6 +487,8 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
 
         let results;
         if (roomsMap.size) {
+            const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
+
             results = <>
                 <HierarchyLevel
                     spaceId={space.roomId}
@@ -507,7 +496,7 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
                     relations={parentChildMap}
                     parents={new Set()}
                     selectedMap={selected}
-                    onToggleClick={(parentId, childId) => {
+                    onToggleClick={hasPermissions ? (parentId, childId) => {
                         setError("");
                         if (!selected.has(parentId)) {
                             setSelected(new Map(selected.set(parentId, new Set([childId]))));
@@ -522,13 +511,12 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
 
                         parentSet.delete(childId);
                         setSelected(new Map(selected.set(parentId, new Set(parentSet))));
-                    }}
+                    } : undefined}
                     onViewRoomClick={(roomId, autoJoin) => {
                         showRoom(roomsMap.get(roomId), Array.from(viaMap.get(roomId) || []), autoJoin);
-                        onFinished();
                     }}
                 />
-                <hr />
+                { children && <hr /> }
             </>;
         } else {
             results = <div className="mx_SpaceRoomDirectory_noResults">
@@ -547,32 +535,78 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, initialText = "", onFinis
             </div> }
             <AutoHideScrollbar className="mx_SpaceRoomDirectory_list">
                 { results }
-                <AccessibleButton
-                    onClick={onCreateRoomClick}
-                    kind="primary"
-                    className="mx_SpaceRoomDirectory_createRoom"
-                >
-                    { _t("Create room") }
-                </AccessibleButton>
+                { children }
             </AutoHideScrollbar>
         </>;
-    } else {
+    } else if (!rooms) {
         content = <Spinner />;
+    } else {
+        content = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
     }
 
     // TODO loading state/error state
+    return <>
+        <SearchBox
+            className="mx_textinput_icon mx_textinput_search"
+            placeholder={ _t("Search names and description") }
+            onSearch={setQuery}
+            autoFocus={true}
+            initialValue={initialText}
+        />
+
+        { content }
+    </>;
+};
+
+interface IProps {
+    space: Room;
+    initialText?: string;
+    onFinished(): void;
+}
+
+const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }) => {
+    const onCreateRoomClick = () => {
+        dis.dispatch({
+            action: 'view_create_room',
+            public: true,
+        });
+        onFinished();
+    };
+
+    const title = <React.Fragment>
+        <RoomAvatar room={space} height={32} width={32} />
+        <div>
+            <h1>{ _t("Explore rooms") }</h1>
+            <div><RoomName room={space} /></div>
+        </div>
+    </React.Fragment>;
+
     return (
         <BaseDialog className="mx_SpaceRoomDirectory" hasCancel={true} onFinished={onFinished} title={title}>
             <div className="mx_Dialog_content">
-                { explanation }
+                { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
+                    null,
+                    {a: sub => {
+                        return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
+                    }},
+                ) }
 
-                <SearchBox
-                    className="mx_textinput_icon mx_textinput_search"
-                    placeholder={ _t("Search names and description") }
-                    onSearch={setQuery}
-                />
-
-                { content }
+                <SpaceHierarchy
+                    space={space}
+                    showRoom={(room: ISpaceSummaryRoom, viaServers?: string[], autoJoin = false) => {
+                        showRoom(room, viaServers, autoJoin);
+                        onFinished();
+                    }}
+                    initialText={initialText}
+                >
+                    <AccessibleButton
+                        onClick={onCreateRoomClick}
+                        kind="primary"
+                        className="mx_SpaceRoomDirectory_createRoom"
+                    >
+                        { _t("Create room") }
+                    </AccessibleButton>
+                </SpaceHierarchy>
             </div>
         </BaseDialog>
     );

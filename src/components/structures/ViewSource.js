@@ -176,8 +176,8 @@ export default class ViewSource extends React.Component {
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
-                    <div className="mx_ViewSource_label_left">Room ID: {roomId}</div>
-                    <div className="mx_ViewSource_label_left">Event ID: {eventId}</div>
+                    <div>Room ID: {roomId}</div>
+                    <div>Event ID: {eventId}</div>
                     <div className="mx_ViewSource_separator" />
                     {isEditing ? this.editSourceContent() : this.viewSourceContent()}
                 </div>

@@ -146,9 +146,6 @@ $activeBorderColor: $secondary-fg-color;
 
         .mx_SpaceButton_toggleCollapse {
             width: $gutterSize;
-            // negative margin to place it correctly even with the complex
-            // 4px selection border each space button has when active
-            margin-right: -4px;
             height: 20px;
             mask-position: center;
             mask-size: 20px;
@@ -333,20 +330,20 @@ $activeBorderColor: $secondary-fg-color;
         mask-image: url('$(res)/img/element-icons/leave.svg');
     }
 
-    .mx_SpacePanel_iconHome::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
-    }
-
     .mx_SpacePanel_iconMembers::before {
         mask-image: url('$(res)/img/element-icons/room/members.svg');
     }
 
     .mx_SpacePanel_iconPlus::before {
-        mask-image: url('$(res)/img/element-icons/plus.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
+    }
+
+    .mx_SpacePanel_iconHash::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
     }
 }
 

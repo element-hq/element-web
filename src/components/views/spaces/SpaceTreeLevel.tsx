@@ -30,20 +30,21 @@ import IconizedContextMenu, {
 import {_t} from "../../../languageHandler";
 import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import {toRightOf} from "../../structures/ContextMenu";
-import {shouldShowSpaceSettings, showCreateNewRoom, showSpaceSettings} from "../../../utils/space";
+import {
+    shouldShowSpaceSettings,
+    showAddExistingRooms,
+    showCreateNewRoom,
+    showSpaceInvite,
+    showSpaceSettings,
+} from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {ButtonEvent} from "../elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import Modal from "../../../Modal";
-import SpacePublicShare from "./SpacePublicShare";
 import {Action} from "../../../dispatcher/actions";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {showRoomInviteDialog} from "../../../RoomInvite";
-import InfoDialog from "../dialogs/InfoDialog";
 import {EventType} from "matrix-js-sdk/src/@types/event";
-import SpaceRoomDirectory from "../../structures/SpaceRoomDirectory";
 
 interface IItemProps {
     space?: Room;
@@ -110,36 +111,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         this.setState({contextMenuPosition: null});
     };
 
-    private onHomeClick = (ev: ButtonEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        defaultDispatcher.dispatch({
-            action: "view_room",
-            room_id: this.props.space.roomId,
-        });
-        this.setState({contextMenuPosition: null}); // also close the menu
-    };
-
     private onInviteClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (this.props.space.getJoinRule() === "public") {
-            const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
-                title: _t("Invite members"),
-                description: <React.Fragment>
-                    <span>{ _t("Share your public space") }</span>
-                    <SpacePublicShare space={this.props.space} onFinished={() => modal.close()} />
-                </React.Fragment>,
-                fixedWidth: false,
-                button: false,
-                className: "mx_SpacePanel_sharePublicSpace",
-                hasCloseButton: true,
-            });
-        } else {
-            showRoomInviteDialog(this.props.space.roomId);
-        }
+        showSpaceInvite(this.props.space);
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
@@ -170,6 +146,14 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
+    private onAddExistingRoomClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        showAddExistingRooms(this.context, this.props.space);
+        this.setState({contextMenuPosition: null}); // also close the menu
+    };
+
     private onMembersClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -193,9 +177,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog("Space room directory", "Space panel", SpaceRoomDirectory, {
-            space: this.props.space,
-        }, "mx_SpaceRoomDirectory_dialogWrapper", false, true);
+        defaultDispatcher.dispatch({
+            action: "view_room",
+            room_id: this.props.space.roomId,
+        });
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
@@ -236,15 +221,22 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 </IconizedContextMenuOptionList>;
             }
 
-            let newRoomOption;
+            const canAddRooms = this.props.space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
+
+            let newRoomSection;
             if (this.props.space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
-                newRoomOption = (
+                newRoomSection = <IconizedContextMenuOptionList first>
                     <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconPlus"
-                        label={_t("New room")}
+                        label={_t("Create new room")}
                         onClick={this.onNewRoomClick}
                     />
-                );
+                    <IconizedContextMenuOption
+                        iconClassName="mx_SpacePanel_iconHash"
+                        label={_t("Add existing room")}
+                        onClick={this.onAddExistingRoomClick}
+                    />
+                </IconizedContextMenuOptionList>;
             }
 
             contextMenu = <IconizedContextMenu
@@ -259,11 +251,6 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 <IconizedContextMenuOptionList first>
                     { inviteOption }
                     <IconizedContextMenuOption
-                        iconClassName="mx_SpacePanel_iconHome"
-                        label={_t("Space Home")}
-                        onClick={this.onHomeClick}
-                    />
-                    <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconMembers"
                         label={_t("Members")}
                         onClick={this.onMembersClick}
@@ -271,11 +258,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     { settingsOption }
                     <IconizedContextMenuOption
                         iconClassName="mx_SpacePanel_iconExplore"
-                        label={_t("Explore rooms")}
+                        label={canAddRooms ? _t("Manage & explore rooms") : _t("Explore rooms")}
                         onClick={this.onExploreRoomsClick}
                     />
-                    { newRoomOption }
                 </IconizedContextMenuOptionList>
+                { newRoomSection }
                 { leaveSection }
             </IconizedContextMenu>;
         }
@@ -335,7 +322,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const avatarSize = isNested ? 24 : 32;
 
         const toggleCollapseButton = childSpaces && childSpaces.length ?
-            <button
+            <AccessibleButton
                 className="mx_SpaceButton_toggleCollapse"
                 onClick={evt => this.toggleCollapse(evt)}
             /> : null;

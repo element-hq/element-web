@@ -20,6 +20,7 @@ import React, { ReactComponentElement } from "react";
 import { Dispatcher } from "flux";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as fbEmitter from "fbemitter";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
@@ -48,9 +49,8 @@ import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../con
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
-import SpaceStore, { SUGGESTED_ROOMS } from "../../../stores/SpaceStore";
-import { showAddExistingRooms, showCreateNewRoom } from "../../../utils/space";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import SpaceStore, {SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
+import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
@@ -62,6 +62,7 @@ interface IProps {
     onResize: () => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
+    activeSpace: Room;
 }
 
 interface IState {
@@ -194,8 +195,8 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
                             : _t("You do not have permissions to add rooms to this space")}
                     />
                     <IconizedContextMenuOption
-                        label={_t("Explore space rooms")}
-                        iconClassName="mx_RoomList_iconExplore"
+                        label={_t("Explore rooms")}
+                        iconClassName="mx_RoomList_iconBrowse"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -424,6 +425,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         dis.dispatch({ action: Action.ViewRoomDirectory, initialText });
     };
 
+    private onSpaceInviteClick = () => {
+        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
+        showSpaceInvite(this.props.activeSpace, initialText);
+    };
+
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
         return this.state.suggestedRooms.map(room => {
             const name = room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room");
@@ -569,7 +575,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         kind="link"
                         onClick={this.onExplore}
                     >
-                        {_t("Explore all public rooms")}
+                        { this.props.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
+                    </AccessibleButton>
+                </div>;
+            } else if (this.props.activeSpace) {
+                explorePrompt = <div className="mx_RoomList_explorePrompt">
+                    <div>{ _t("Quick actions") }</div>
+                    { this.props.activeSpace.canInvite(MatrixClientPeg.get().getUserId()) && <AccessibleButton
+                        className="mx_RoomList_explorePrompt_spaceInvite"
+                        onClick={this.onSpaceInviteClick}
+                    >
+                        {_t("Invite people")}
+                    </AccessibleButton> }
+                    <AccessibleButton
+                        className="mx_RoomList_explorePrompt_spaceExplore"
+                        onClick={this.onExplore}
+                    >
+                        {_t("Explore rooms")}
                     </AccessibleButton>
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
