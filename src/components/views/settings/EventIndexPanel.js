@@ -167,7 +167,7 @@ export default class EventIndexPanel extends React.Component {
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
             const nativeLink = (
-                "https://github.com/vector-im/element-web/blob/develop/" +
+                "https://github.com/vector-im/element-desktop/blob/develop/" +
                 "docs/native-node-modules.md#" +
                 "adding-seshat-for-search-in-e2e-encrypted-rooms"
             );
