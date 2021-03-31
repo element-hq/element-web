@@ -40,7 +40,6 @@ import Tinter from '../../Tinter';
 import rateLimitedFunc from '../../ratelimitedfunc';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
-import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent, Key } from '../../Keyboard';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
@@ -79,6 +78,7 @@ import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { getKeyBindingsManager, RoomAction } from '../../KeyBindingsManager';
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
@@ -112,10 +112,6 @@ interface IProps {
         inviterName?: string;
     };
 
-    // Servers the RoomView can use to try and assist joins
-    viaServers?: string[];
-
-    autoJoin?: boolean;
     resizeNotifier: ResizeNotifier;
     justCreatedOpts?: IOpts;
 
@@ -450,9 +446,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
         if (!joining && roomId) {
-            if (this.props.autoJoin) {
-                this.onJoinButtonClicked();
-            } else if (!room && shouldPeek) {
+            if (!room && shouldPeek) {
                 console.info("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
@@ -668,26 +662,20 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onReactKeyDown = ev => {
         let handled = false;
 
-        switch (ev.key) {
-            case Key.ESCAPE:
-                if (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey) {
-                    this.messagePanel.forgetReadMarker();
-                    this.jumpToLiveTimeline();
-                    handled = true;
-                }
+        const action = getKeyBindingsManager().getRoomAction(ev);
+        switch (action) {
+            case RoomAction.DismissReadMarker:
+                this.messagePanel.forgetReadMarker();
+                this.jumpToLiveTimeline();
+                handled = true;
                 break;
-            case Key.PAGE_UP:
-                if (!ev.altKey && !ev.ctrlKey && ev.shiftKey && !ev.metaKey) {
-                    this.jumpToReadMarker();
-                    handled = true;
-                }
+            case RoomAction.JumpToOldestUnread:
+                this.jumpToReadMarker();
+                handled = true;
                 break;
-            case Key.U: // Mac returns lowercase
-            case Key.U.toUpperCase():
-                if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
-                    dis.dispatch({ action: "upload_file" }, true);
-                    handled = true;
-                }
+            case RoomAction.UploadFile:
+                dis.dispatch({ action: "upload_file" }, true);
+                handled = true;
                 break;
         }
 
@@ -1123,7 +1111,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 const signUrl = this.props.threepidInvite?.signUrl;
                 dis.dispatch({
                     action: 'join_room',
-                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                    opts: { inviteSignUrl: signUrl },
                     _type: "unknown", // TODO: instrumentation
                 });
                 return Promise.resolve();

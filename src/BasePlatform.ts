@@ -212,6 +212,18 @@ export default abstract class BasePlatform {
         throw new Error("Unimplemented");
     }
 
+    supportsWarnBeforeExit(): boolean {
+        return false;
+    }
+
+    async shouldWarnBeforeExit(): Promise<boolean> {
+        return false;
+    }
+
+    async setWarnBeforeExit(enabled: boolean): Promise<void> {
+        throw new Error("Unimplemented");
+    }
+
     supportsAutoHideMenuBar(): boolean {
         return false;
     }

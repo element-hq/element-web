@@ -32,6 +32,8 @@ export default class SearchBox extends React.Component {
         onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
+        autoFocus: PropTypes.bool,
+        initialValue: PropTypes.string,
 
         // If true, the search box will focus and clear itself
         // on room search focus action (it would be nicer to take
@@ -49,7 +51,7 @@ export default class SearchBox extends React.Component {
         this._search = createRef();
 
         this.state = {
-            searchTerm: "",
+            searchTerm: this.props.initialValue || "",
             blurred: true,
         };
     }
@@ -158,6 +160,7 @@ export default class SearchBox extends React.Component {
                     onBlur={this._onBlur}
                     placeholder={ placeholder }
                     autoComplete="off"
+                    autoFocus={this.props.autoFocus}
                 />
                 { clearButton }
             </div>

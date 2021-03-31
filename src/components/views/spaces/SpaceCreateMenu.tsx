@@ -21,7 +21,6 @@ import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types
 import {_t} from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {ChevronFace, ContextMenu} from "../../structures/ContextMenu";
-import FormButton from "../elements/FormButton";
 import createRoom, {IStateEvent, Preset} from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SpaceBasicSettings from "./SpaceBasicSettings";
@@ -89,6 +88,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     power_level_content_override: {
                         // Only allow Admins to write to the timeline to prevent hidden sync spam
                         events_default: 100,
+                        ...Visibility.Public ? { invite: 0 } : {},
                     },
                 },
                 spinner: false,
@@ -148,11 +148,9 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
             <SpaceBasicSettings setAvatar={setAvatar} name={name} setName={setName} topic={topic} setTopic={setTopic} />
 
-            <FormButton
-                label={busy ? _t("Creating...") : _t("Create")}
-                onClick={onSpaceCreateClick}
-                disabled={!name && !busy}
-            />
+            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={!name || busy}>
+                { busy ? _t("Creating...") : _t("Create") }
+            </AccessibleButton>
         </React.Fragment>;
     }
 

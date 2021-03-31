@@ -26,7 +26,7 @@ import {showRoomInviteDialog} from "../../../RoomInvite";
 
 interface IProps {
     space: Room;
-    onFinished(): void;
+    onFinished?(): void;
 }
 
 const SpacePublicShare = ({ space, onFinished }: IProps) => {
@@ -54,7 +54,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
             className="mx_SpacePublicShare_inviteButton"
             onClick={() => {
                 showRoomInviteDialog(space.roomId);
-                onFinished();
+                if (onFinished) onFinished();
             }}
         >
             <h3>{ _t("Invite people") }</h3>

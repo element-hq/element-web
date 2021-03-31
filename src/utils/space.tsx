@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import {EventType} from "matrix-js-sdk/src/@types/event";
@@ -24,6 +25,10 @@ import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog
 import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
 import CreateRoomDialog from "../components/views/dialogs/CreateRoomDialog";
 import createRoom, {IOpts} from "../createRoom";
+import {_t} from "../languageHandler";
+import SpacePublicShare from "../components/views/spaces/SpacePublicShare";
+import InfoDialog from "../components/views/dialogs/InfoDialog";
+import { showRoomInviteDialog } from "../RoomInvite";
 
 export const shouldShowSpaceSettings = (cli: MatrixClient, space: Room) => {
     const userId = cli.getUserId();
@@ -77,5 +82,23 @@ export const showCreateNewRoom = async (cli: MatrixClient, space: Room) => {
     const [shouldCreate, opts] = await modal.finished;
     if (shouldCreate) {
         await createRoom(opts);
+    }
+};
+
+export const showSpaceInvite = (space: Room, initialText = "") => {
+    if (space.getJoinRule() === "public") {
+        const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
+            title: _t("Invite to %(spaceName)s", { spaceName: space.name }),
+            description: <React.Fragment>
+                <span>{ _t("Share your public space") }</span>
+                <SpacePublicShare space={space} onFinished={() => modal.close()} />
+            </React.Fragment>,
+            fixedWidth: false,
+            button: false,
+            className: "mx_SpacePanel_sharePublicSpace",
+            hasCloseButton: true,
+        });
+    } else {
+        showRoomInviteDialog(space.roomId, initialText);
     }
 };
