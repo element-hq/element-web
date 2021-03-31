@@ -27,11 +27,6 @@ RUN cp /src/config.sample.json /src/webapp/config.json
 # Ensure we populate the version file
 RUN dos2unix /src/scripts/docker-write-version.sh && bash /src/scripts/docker-write-version.sh
 
-# Pre-compress for gzip_static
-RUN find /src/webapp -type f \
-    \( -iname '*.css' -o -iname '*.js' -o -iname '*.json' -o -iname '*.html' \
-    -o -iname '*.svg' -o -iname '*.ttf' -o -iname '*.wasm' \) \
-    -exec gzip -9 -k {} \; -exec touch -r {} {}.gz \;
 
 # App
 FROM nginx:alpine
@@ -39,8 +34,7 @@ FROM nginx:alpine
 COPY --from=builder /src/webapp /app
 
 # Insert wasm type into Nginx mime.types file so they load correctly.
-RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types \
- && sed -i '2i\  gzip_static on\;' /etc/nginx/conf.d/default.conf
+RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
 
 RUN rm -rf /usr/share/nginx/html \
  && ln -s /app /usr/share/nginx/html
