@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.14.0",
+  "version": "3.17.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -83,6 +83,7 @@
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-widget-api": "^0.1.0-beta.13",
     "minimist": "^1.2.5",
+    "opus-recorder": "^8.0.3",
     "pako": "^2.0.3",
     "parse5": "^6.0.1",
     "png-chunks-extract": "^1.0.0",
@@ -101,7 +102,7 @@
     "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.2",
     "url": "^0.11.0",
-    "velocity-animate": "^1.5.2",
+    "velocity-animate": "^2.0.6",
     "what-input": "^5.2.10",
     "zxcvbn": "^4.4.2"
   },
@@ -157,6 +158,7 @@
     "jest": "^26.6.3",
     "jest-canvas-mock": "^2.3.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-fetch-mock": "^3.0.3",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",

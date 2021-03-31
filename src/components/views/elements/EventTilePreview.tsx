@@ -23,6 +23,7 @@ import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Layout} from "../../../settings/Layout";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     /**
@@ -74,6 +75,7 @@ interface IState {
 
 const AVATAR_SIZE = 32;
 
+@replaceableComponent("views.elements.EventTilePreview")
 export default class EventTilePreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -97,11 +99,6 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     }
 
     private fakeEvent({message}: IState) {
-        const avatarUrl = Avatar.avatarUrlForUser(
-            { avatarUrl: this.props.avatarUrl },
-            AVATAR_SIZE, AVATAR_SIZE, "crop",
-        );
-
         // Fake it till we make it
         /* eslint-disable quote-props */
         const rawEvent = {
@@ -112,12 +109,12 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                     msgtype: "m.text",
                     body: message,
                     displayname: this.props.displayName,
-                    avatar_url: avatarUrl,
+                    avatar_url: this.props.avatarUrl,
                 },
                 msgtype: "m.text",
                 body: message,
                 displayname: this.props.displayName,
-                avatar_url: avatarUrl,
+                avatar_url: this.props.avatarUrl,
             },
             unsigned: {
                 age: 97,
@@ -133,8 +130,12 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             name: this.props.displayName,
             userId: this.props.userId,
             getAvatarUrl: (..._) => {
-                return avatarUrl;
+                return Avatar.avatarUrlForUser(
+                    { avatarUrl: this.props.avatarUrl },
+                    AVATAR_SIZE, AVATAR_SIZE, "crop",
+                );
             },
+            getMxcAvatarUrl: () => this.props.avatarUrl,
         };
 
         return event;

@@ -176,7 +176,7 @@ export async function setTheme(theme) {
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         // shouldn't we be using the 'title' tag rather than the href?
-        const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+        const match = href && href.match(/^bundles\/.*\/theme-(.*)\.css$/);
         if (match) {
             styleElements[match[1]] = a;
         }

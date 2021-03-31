@@ -19,7 +19,9 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.MessageComposerFormatBar")
 export default class MessageComposerFormatBar extends React.PureComponent {
     static propTypes = {
         onAction: PropTypes.func.isRequired,
@@ -83,8 +85,8 @@ class FormatButton extends React.PureComponent {
 
         return (
             <AccessibleTooltipButton
-                as="span"
-                role="button"
+                element="button"
+                type="button"
                 onClick={this.props.onClick}
                 title={this.props.label}
                 tooltip={tooltip}

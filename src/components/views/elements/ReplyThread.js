@@ -21,7 +21,7 @@ import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
-import {MatrixEvent} from 'matrix-js-sdk';
+import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
 import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import {LayoutPropType} from "../../../settings/Layout";
@@ -31,10 +31,12 @@ import {Action} from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
 import {UIFeature} from "../../../settings/UIFeature";
 import {PERMITTED_URL_SCHEMES} from "../../../HtmlUtils";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
+@replaceableComponent("views.elements.ReplyThread")
 export default class ReplyThread extends React.Component {
     static propTypes = {
         // the latest event in this chain of replies

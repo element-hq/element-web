@@ -213,21 +213,34 @@ $left-gutter: 64px;
     color: $accent-fg-color;
 }
 
-.mx_EventTile_encrypting {
-    color: $event-encrypting-color !important;
-}
-
-.mx_EventTile_sending {
-    color: $event-sending-color;
-}
-
-.mx_EventTile_sending .mx_UserPill,
-.mx_EventTile_sending .mx_RoomPill {
-    opacity: 0.5;
-}
-
 .mx_EventTile_notSent {
     color: $event-notsent-color;
+}
+
+.mx_EventTile_receiptSent,
+.mx_EventTile_receiptSending {
+    // We don't use `position: relative` on the element because then it won't line
+    // up with the other read receipts
+
+    &::before {
+        background-color: $tertiary-fg-color;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 14px;
+        width: 14px;
+        height: 14px;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+}
+.mx_EventTile_receiptSent::before {
+    mask-image: url('$(res)/img/element-icons/circle-sent.svg');
+}
+.mx_EventTile_receiptSending::before {
+    mask-image: url('$(res)/img/element-icons/circle-sending.svg');
 }
 
 .mx_EventTile_contextual {
@@ -257,15 +270,11 @@ $left-gutter: 64px;
     display: inline-block;
     width: 14px;
     height: 14px;
-    top: 29px;
+    // This aligns the avatar with the last line of the
+    // message. We want to move it one line up - 2.2rem
+    top: -2.2rem;
     user-select: none;
     z-index: 1;
-}
-
-.mx_EventTile_continuation .mx_EventTile_readAvatars,
-.mx_EventTile_info .mx_EventTile_readAvatars,
-.mx_EventTile_emote .mx_EventTile_readAvatars {
-    top: 7px;
 }
 
 .mx_EventTile_readAvatars .mx_BaseAvatar {

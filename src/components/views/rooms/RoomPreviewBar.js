@@ -28,6 +28,7 @@ import IdentityAuthClient from '../../../IdentityAuthClient';
 import SettingsStore from "../../../settings/SettingsStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -46,6 +47,7 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
+@replaceableComponent("views.rooms.RoomPreviewBar")
 export default class RoomPreviewBar extends React.Component {
     static propTypes = {
         onJoinClick: PropTypes.func,

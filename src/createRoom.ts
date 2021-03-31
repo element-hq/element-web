@@ -17,6 +17,7 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -31,6 +32,8 @@ import GroupStore from "./stores/GroupStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
+import SpaceStore from "./stores/SpaceStore";
+import { makeSpaceParentEvent } from "./utils/space";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -41,7 +44,7 @@ enum Visibility {
     Private = "private",
 }
 
-enum Preset {
+export enum Preset {
     PrivateChat = "private_chat",
     TrustedPrivateChat = "trusted_private_chat",
     PublicChat = "public_chat",
@@ -54,7 +57,7 @@ interface Invite3PID {
     address: string;
 }
 
-interface IStateEvent {
+export interface IStateEvent {
     type: string;
     state_key?: string; // defaults to an empty string
     content: object;
@@ -75,7 +78,7 @@ interface ICreateOpts {
     power_level_content_override?: object;
 }
 
-interface IOpts {
+export interface IOpts {
     dmUserId?: string;
     createOpts?: ICreateOpts;
     spinner?: boolean;
@@ -84,6 +87,7 @@ interface IOpts {
     inlineErrors?: boolean;
     andView?: boolean;
     associatedWithCommunity?: string;
+    parentSpace?: Room;
 }
 
 /**
@@ -175,6 +179,16 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
         });
     }
 
+    if (opts.parentSpace) {
+        opts.createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
+        opts.createOpts.initial_state.push({
+            type: EventType.RoomHistoryVisibility,
+            content: {
+                "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
+            },
+        });
+    }
+
     let modal;
     if (opts.spinner) modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
@@ -189,6 +203,9 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
             return Promise.resolve();
         }
     }).then(() => {
+        if (opts.parentSpace) {
+            return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], true);
+        }
         if (opts.associatedWithCommunity) {
             return GroupStore.addRoomToGroup(opts.associatedWithCommunity, roomId, false);
         }
@@ -197,6 +214,9 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
         // room has been created, so we race here with the client knowing that
         // the room exists, causing things like
         // https://github.com/vector-im/vector-web/issues/1813
+        // Even if we were to block on the echo, servers tend to split the room
+        // state over multiple syncs so we can't atomically know when we have the
+        // entire thing.
         if (opts.andView) {
             dis.dispatch({
                 action: 'view_room',
@@ -206,6 +226,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
                 // so we are expecting the room to come down the sync
                 // stream, if it hasn't already.
                 joining: true,
+                justCreatedOpts: opts,
             });
         }
         CountlyAnalytics.instance.trackRoomCreate(startTime, roomId);

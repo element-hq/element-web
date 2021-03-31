@@ -66,6 +66,11 @@ limitations under the License.
                 }
             }
         }
+
+        &.mx_BasicMessageComposer_input_disabled {
+            pointer-events: none;
+            cursor: not-allowed;
+        }
     }
 
     .mx_BasicMessageComposer_AutoCompleteWrapper {

@@ -20,7 +20,8 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
-import Matrix from 'matrix-js-sdk';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
 
 class TermsCheckbox extends React.PureComponent {
     static propTypes = {
@@ -41,6 +42,7 @@ class TermsCheckbox extends React.PureComponent {
     }
 }
 
+@replaceableComponent("views.dialogs.TermsDialog")
 export default class TermsDialog extends React.PureComponent {
     static propTypes = {
         /**
@@ -83,22 +85,22 @@ export default class TermsDialog extends React.PureComponent {
 
     _nameForServiceType(serviceType, host) {
         switch (serviceType) {
-            case Matrix.SERVICE_TYPES.IS:
+            case SERVICE_TYPES.IS:
                 return <div>{_t("Identity Server")}<br />({host})</div>;
-            case Matrix.SERVICE_TYPES.IM:
+            case SERVICE_TYPES.IM:
                 return <div>{_t("Integration Manager")}<br />({host})</div>;
         }
     }
 
     _summaryForServiceType(serviceType) {
         switch (serviceType) {
-            case Matrix.SERVICE_TYPES.IS:
+            case SERVICE_TYPES.IS:
                 return <div>
                     {_t("Find others by phone or email")}
                     <br />
                     {_t("Be found by phone or email")}
                 </div>;
-            case Matrix.SERVICE_TYPES.IM:
+            case SERVICE_TYPES.IM:
                 return <div>
                     {_t("Use bots, bridges, widgets and sticker packs")}
                 </div>;
