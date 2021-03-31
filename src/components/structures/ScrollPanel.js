@@ -16,10 +16,10 @@ limitations under the License.
 
 import React, {createRef} from "react";
 import PropTypes from 'prop-types';
-import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import {getKeyBindingsManager, RoomAction} from "../../KeyBindingsManager";
 
 const DEBUG_SCROLL = false;
 
@@ -535,29 +535,19 @@ export default class ScrollPanel extends React.Component {
      * @param {object} ev the keyboard event
      */
     handleScrollKey = ev => {
-        switch (ev.key) {
-            case Key.PAGE_UP:
-                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollRelative(-1);
-                }
+        const roomAction = getKeyBindingsManager().getRoomAction(ev);
+        switch (roomAction) {
+            case RoomAction.ScrollUp:
+                this.scrollRelative(-1);
                 break;
-
-            case Key.PAGE_DOWN:
-                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollRelative(1);
-                }
+            case RoomAction.RoomScrollDown:
+                this.scrollRelative(1);
                 break;
-
-            case Key.HOME:
-                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollToTop();
-                }
+            case RoomAction.JumpToFirstMessage:
+                this.scrollToTop();
                 break;
-
-            case Key.END:
-                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollToBottom();
-                }
+            case RoomAction.JumpToLatestMessage:
+                this.scrollToBottom();
                 break;
         }
     };
