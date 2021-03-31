@@ -212,7 +212,7 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     <p>
-                        {_t("Message search initilisation failed")}
+                        {_t("Message search initialisation failed")}
                     </p>
                     {EventIndexPeg.error && (
                     <details>
