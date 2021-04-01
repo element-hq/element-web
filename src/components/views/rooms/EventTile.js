@@ -936,7 +936,7 @@ export default class EventTile extends React.Component {
             );
 
         const TooltipButton = sdk.getComponent('elements.TooltipButton');
-        const keyRequestInfo = isEncryptionFailure ?
+        const keyRequestInfo = isEncryptionFailure && !isRedacted ?
             <div className="mx_EventTile_keyRequestInfo">
                 <span className="mx_EventTile_keyRequestInfo_text">
                     { keyRequestInfoContent }
