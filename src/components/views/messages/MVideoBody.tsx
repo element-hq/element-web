@@ -17,12 +17,12 @@ limitations under the License.
 
 import React from 'react';
 import MFileBody from './MFileBody';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromContent} from "../../../customisations/Media";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -76,11 +76,11 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     private getContentUrl(): string|null {
-        const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined) {
+        const media = mediaFromContent(this.props.mxEvent.getContent());
+        if (media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+            return media.srcHttp;
         }
     }
 
@@ -91,10 +91,11 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
 
     private getThumbUrl(): string|null {
         const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined) {
+        const media = mediaFromContent(content);
+        if (media.isEncrypted) {
             return this.state.decryptedThumbnailUrl;
-        } else if (content.info && content.info.thumbnail_url) {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.info.thumbnail_url);
+        } else if (media.hasThumbnail) {
+            return media.thumbnailHttp;
         } else {
             return null;
         }

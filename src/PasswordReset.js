@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 import { _t } from './languageHandler';
 
 /**
@@ -32,7 +32,7 @@ export default class PasswordReset {
      * @param {string} identityUrl The URL to the IS which has linked the email -> mxid mapping.
      */
     constructor(homeserverUrl, identityUrl) {
-        this.client = Matrix.createClient({
+        this.client = createClient({
             baseUrl: homeserverUrl,
             idBaseUrl: identityUrl,
         });

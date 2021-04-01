@@ -70,9 +70,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
-        const avatarUrl = Avatar.avatarUrlForUser(
-            {avatarUrl: profileInfo.avatar_url},
-            AVATAR_SIZE, AVATAR_SIZE, "crop");
+        const avatarUrl = profileInfo.avatar_url;
 
         this.setState({
             userId,
@@ -113,8 +111,9 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             name: displayname,
             userId: userId,
             getAvatarUrl: (..._) => {
-                return avatarUrl;
+                return Avatar.avatarUrlForUser({avatarUrl}, AVATAR_SIZE, AVATAR_SIZE, "crop");
             },
+            getMxcAvatarUrl: () => avatarUrl,
         };
 
         return event;

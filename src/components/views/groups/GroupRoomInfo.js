@@ -25,6 +25,7 @@ import GroupStore from '../../../stores/GroupStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 @replaceableComponent("views.groups.GroupRoomInfo")
 export default class GroupRoomInfo extends React.Component {
@@ -204,10 +205,8 @@ export default class GroupRoomInfo extends React.Component {
         const avatarUrl = this.state.groupRoom.avatarUrl;
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);
-            avatarElement = (<div className="mx_MemberInfo_avatar">
-                            <img src={httpUrl} />
-                        </div>);
+            const httpUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(800);
+            avatarElement = <div className="mx_MemberInfo_avatar"><img src={httpUrl} /></div>;
         }
 
         const groupRoomName = this.state.groupRoom.displayname;

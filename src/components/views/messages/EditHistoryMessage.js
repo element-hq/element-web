@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
 import {formatTime} from '../../../DateUtils';
-import {MatrixEvent} from 'matrix-js-sdk';
+import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
 import {pillifyLinks, unmountPills} from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -76,12 +76,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     _onViewSourceClick = () => {
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', 'Edit history', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
-            content: this.props.mxEvent.event,
-            isEncrypted: this.props.mxEvent.isEncrypted(),
-            // FIXME: _clearEvent is private
-            decryptedContent: this.props.mxEvent._clearEvent,
+            mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
     };
 

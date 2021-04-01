@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import { Room, MatrixEvent } from "matrix-js-sdk";
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
@@ -39,6 +38,8 @@ import SettingsStore, {LEVEL_ORDER} from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
@@ -74,13 +75,14 @@ class GenericEditor extends React.PureComponent {
     }
 }
 
-class SendCustomEvent extends GenericEditor {
+export class SendCustomEvent extends GenericEditor {
     static getLabel() { return _t('Send Custom Event'); }
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
         room: PropTypes.instanceOf(Room).isRequired,
         forceStateEvent: PropTypes.bool,
+        forceGeneralEvent: PropTypes.bool,
         inputs: PropTypes.object,
     };
 
@@ -141,6 +143,8 @@ class SendCustomEvent extends GenericEditor {
             </div>;
         }
 
+        const showTglFlip = !this.state.message && !this.props.forceStateEvent && !this.props.forceGeneralEvent;
+
         return <div>
             <div className="mx_DevTools_content">
                 <div className="mx_DevTools_eventTypeStateKeyGroup">
@@ -156,7 +160,7 @@ class SendCustomEvent extends GenericEditor {
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
-                { !this.state.message && !this.props.forceStateEvent && <div style={{float: "right"}}>
+                { showTglFlip && <div style={{float: "right"}}>
                     <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isStateEvent} />
                     <label className="mx_DevTools_tgl-btn" data-tg-off="Event" data-tg-on="State Event" htmlFor="isStateEvent" />
                 </div> }
