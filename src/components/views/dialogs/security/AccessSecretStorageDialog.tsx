@@ -296,7 +296,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             titleClass = ['mx_AccessSecretStorageDialog_titleWithIcon mx_AccessSecretStorageDialog_resetBadge'];
             content = <div>
                 <p>{_t("Only do this if you have no other device to complete verification with.")}</p>
-                <p>{_t("If you reset everything, you will restart with no trusted devices, no trusted users, and "
+                <p>{_t("If you reset everything, you will restart with no trusted sessions, no trusted users, and "
                     + "might not be able to see past messages.")}</p>
                 <DialogButtons
                     primaryButton={_t('Reset')}
