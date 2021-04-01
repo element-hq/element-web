@@ -28,7 +28,7 @@ import {
     ListAlgorithm,
     SortAlgorithm,
 } from "./models";
-import { FILTER_CHANGED, FilterKind, IFilterCondition } from "../filters/IFilterCondition";
+import { FILTER_CHANGED, IFilterCondition } from "../filters/IFilterCondition";
 import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
@@ -330,8 +330,8 @@ export class Algorithm extends EventEmitter {
             // to the rooms we know will be deduped by the Set.
             const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
             this.tryInsertStickyRoomToFilterSet(rooms, tagId);
-            let remainingRooms = rooms.map(r => r);
-            let allowedRoomsInThisTag = [];
+            const remainingRooms = rooms.map(r => r);
+            const allowedRoomsInThisTag = [];
             for (const filter of filters) {
                 const filteredRooms = remainingRooms.filter(r => filter.isVisible(r));
                 for (const room of filteredRooms) {
