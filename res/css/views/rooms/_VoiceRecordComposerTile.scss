@@ -34,3 +34,43 @@ limitations under the License.
         background-color: $voice-record-stop-symbol-color;
     }
 }
+
+.mx_VoiceRecordComposerTile_waveformContainer {
+    padding: 5px;
+    padding-right: 4px; // there's 1px from the waveform itself, so account for that
+    padding-left: 15px; // +10px for the live circle, +5px for regular padding
+    background-color: $voice-record-waveform-bg-color;
+    border-radius: 12px;
+    margin-right: 12px; // isolate from stop button
+
+    // Cheat at alignment a bit
+    display: flex;
+    align-items: center;
+
+    position: relative; // important for the live circle
+
+    color: $voice-record-waveform-fg-color;
+    font-size: $font-14px;
+
+    &::before {
+        // TODO: @@ TravisR: Animate
+        content: '';
+        background-color: $voice-record-live-circle-color;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        left: 8px;
+        top: 16px; // vertically center
+        border-radius: 10px;
+    }
+
+    .mx_Waveform_bar {
+        background-color: $voice-record-waveform-fg-color;
+    }
+
+    .mx_Clock {
+        padding-right: 8px; // isolate from waveform
+        padding-left: 10px; // isolate from live circle
+        width: 42px; // we're not using a monospace font, so fake it
+    }
+}

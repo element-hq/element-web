@@ -148,7 +148,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
             <SpaceBasicSettings setAvatar={setAvatar} name={name} setName={setName} topic={topic} setTopic={setTopic} />
 
-            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={!name && !busy}>
+            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={!name || busy}>
                 { busy ? _t("Creating...") : _t("Create") }
             </AccessibleButton>
         </React.Fragment>;

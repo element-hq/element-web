@@ -21,6 +21,9 @@ import {VoiceRecorder} from "../../../voice/VoiceRecorder";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import classNames from "classnames";
+import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 
 interface IProps {
     room: Room;
@@ -31,6 +34,10 @@ interface IState {
     recorder?: VoiceRecorder;
 }
 
+/**
+ * Container tile for rendering the voice message recorder in the composer.
+ */
+@replaceableComponent("views.rooms.VoiceRecordComposerTile")
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);
@@ -57,12 +64,17 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const recorder = new VoiceRecorder(MatrixClientPeg.get());
         await recorder.start();
         this.props.onRecording(true);
-        // TODO: @@ TravisR: Run through EQ component
-        // recorder.frequencyData.onUpdate((freq) => {
-        //     console.log('@@ UPDATE', freq);
-        // });
         this.setState({recorder});
     };
+
+    private renderWaveformArea() {
+        if (!this.state.recorder) return null;
+
+        return <div className='mx_VoiceRecordComposerTile_waveformContainer'>
+            <LiveRecordingClock recorder={this.state.recorder} />
+            <LiveRecordingWaveform recorder={this.state.recorder} />
+        </div>;
+    }
 
     public render() {
         const classes = classNames({
@@ -77,12 +89,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             tooltip = _t("Stop & send recording");
         }
 
-        return (
+        return (<>
+            {this.renderWaveformArea()}
             <AccessibleTooltipButton
                 className={classes}
                 onClick={this.onStartStopVoiceMessage}
                 title={tooltip}
             />
-        );
+        </>);
     }
 }
