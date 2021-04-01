@@ -364,6 +364,11 @@ export default class CallView extends React.Component<IProps, IState> {
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
     }
 
+    private onTransferClick = () => {
+        const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
+        this.props.call.transferToCall(transfereeCall);
+    }
+
     public render() {
         const client = MatrixClientPeg.get();
         const callRoomId = CallHandler.roomIdForCall(this.props.call);
@@ -479,25 +484,52 @@ export default class CallView extends React.Component<IProps, IState> {
         // for voice calls (fills the bg)
         let contentView: React.ReactNode;
 
+        const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
-        let onHoldText = null;
-        if (this.state.isRemoteOnHold) {
-            const holdString = CallHandler.sharedInstance().hasAnyUnheldCall() ?
-                _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
-            onHoldText = _t(holdString, {}, {
-                a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
-                    {sub}
-                </AccessibleButton>,
-            });
-        } else if (this.state.isLocalOnHold) {
-            onHoldText = _t("%(peerName)s held the call", {
-                peerName: this.props.call.getOpponentMember().name,
-            });
+        let holdTransferContent;
+        if (transfereeCall) {
+            const transferTargetRoom = MatrixClientPeg.get().getRoom(CallHandler.roomIdForCall(this.props.call));
+            const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("unknown person");
+
+            const transfereeRoom = MatrixClientPeg.get().getRoom(
+                CallHandler.roomIdForCall(transfereeCall),
+            );
+            const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
+
+            holdTransferContent = <div className="mx_CallView_holdTransferContent">
+                {_t(
+                    "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
+                    {
+                        transferTarget: transferTargetName,
+                        transferee: transfereeName,
+                    },
+                    {
+                        a: sub => <AccessibleButton kind="link" onClick={this.onTransferClick}>{sub}</AccessibleButton>,
+                    },
+                )}
+            </div>;
+        } else if (isOnHold) {
+            let onHoldText = null;
+            if (this.state.isRemoteOnHold) {
+                const holdString = CallHandler.sharedInstance().hasAnyUnheldCall() ?
+                    _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
+                onHoldText = _t(holdString, {}, {
+                    a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
+                        {sub}
+                    </AccessibleButton>,
+                });
+            } else if (this.state.isLocalOnHold) {
+                onHoldText = _t("%(peerName)s held the call", {
+                    peerName: this.props.call.getOpponentMember().name,
+                });
+            }
+            holdTransferContent = <div className="mx_CallView_holdTransferContent">
+                {onHoldText}
+            </div>;
         }
 
         if (this.props.call.type === CallType.Video) {
             let localVideoFeed = null;
-            let onHoldContent = null;
             let onHoldBackground = null;
             const backgroundStyle: CSSProperties = {};
             const containerClasses = classNames({
@@ -505,9 +537,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video_hold: isOnHold,
             });
             if (isOnHold) {
-                onHoldContent = <div className="mx_CallView_video_holdContent">
-                    {onHoldText}
-                </div>;
                 const backgroundAvatarUrl = avatarUrlForMember(
                     // is it worth getting the size of the div to pass here?
                     this.props.call.getOpponentMember(), 1024, 1024, 'crop',
@@ -534,7 +563,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     maxHeight={maxVideoHeight}
                 />
                 {localVideoFeed}
-                {onHoldContent}
+                {holdTransferContent}
                 {callControls}
             </div>;
         } else {
@@ -554,7 +583,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         />
                     </div>
                 </div>
-                <div className="mx_CallView_voice_holdText">{onHoldText}</div>
+                {holdTransferContent}
                 {callControls}
             </div>;
         }

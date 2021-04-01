@@ -55,7 +55,7 @@ limitations under the License.
         }
     }
 
-    .mx_CallView_voice_holdText {
+    .mx_CallView_holdTransferContent {
         padding-top: 10px;
         padding-bottom: 25px;
     }
@@ -82,7 +82,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_voice_hold {
+.mx_CallView_voice .mx_CallView_holdTransferContent {
     // This masks the avatar image so when it's blurred, the edge is still crisp
     .mx_CallView_voice_avatarContainer {
         border-radius: 2000px;
@@ -91,7 +91,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_voice_holdText {
+.mx_CallView_holdTransferContent {
     height: 20px;
     padding-top: 20px;
     padding-bottom: 15px;
@@ -142,7 +142,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_video_holdContent {
+.mx_CallView_video .mx_CallView_holdTransferContent {
     position: absolute;
     top: 50%;
     left: 50%;
