@@ -29,8 +29,7 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 import ServerPicker from "../../views/elements/ServerPicker";
 import PassphraseField from '../../views/auth/PassphraseField';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-
-const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
+import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 
 // Phases
 // Show the forgot password inputs
