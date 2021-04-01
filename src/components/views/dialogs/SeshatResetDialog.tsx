@@ -30,12 +30,14 @@ export default class SeshatResetDialog extends React.PureComponent<IDialogProps>
             <BaseDialog
                 hasCancel={true}
                 onFinished={this.props.onFinished.bind(null, false)}
-                title={_t("Reset event index store?")}>
+                title={_t("Reset event store?")}>
                 <div>
                     <p>
-                        {_t(
-                            "Your event store appears to be corrupted. " +
-                            "Your messages will be re-indexed as soon as the store is initialised.",
+                        {_t("You most likely do not want to reset your event index store")}
+                        <br />
+                        {_t("If you do, please note that none of your messages will be deleted, " +
+                            "but the search experience might be degraded for a few moments" +
+                            "whilst the index is recreated",
                         )}
                     </p>
                 </div>
