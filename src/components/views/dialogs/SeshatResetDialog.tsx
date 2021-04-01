@@ -21,12 +21,10 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
-interface IProps {
-    onFinished(): void;
-}
+import {IDialogProps} from "./IDialogProps";
 
 @replaceableComponent("views.dialogs.SeshatResetDialog")
-export default class SeshatResetDialog extends React.PureComponent<IProps> {
+export default class SeshatResetDialog extends React.PureComponent<IDialogProps> {
     render() {
         return (
             <BaseDialog
