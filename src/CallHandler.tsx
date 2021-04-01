@@ -673,7 +673,7 @@ export default class CallHandler {
             call.placeScreenSharingCall(
                 remoteElement,
                 localElement,
-                async () : Promise<DesktopCapturerSource> => {
+                async (): Promise<DesktopCapturerSource> => {
                     const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
                     const [source] = await finished;
                     return source;

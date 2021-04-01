@@ -124,13 +124,12 @@ export default class EventIndexPanel extends React.Component {
     }
 
     _confirmEventStoreReset = () => {
-        const self = this;
         const { close } = Modal.createDialog(SeshatResetDialog, {
             onFinished: async (success) => {
                 if (success) {
                     await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
                     await EventIndexPeg.deleteEventIndex();
-                    await self._onEnable();
+                    await this._onEnable();
                     close();
                 }
             },

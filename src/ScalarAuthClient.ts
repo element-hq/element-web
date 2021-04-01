@@ -194,7 +194,7 @@ export default class ScalarAuthClient {
                 if (err) {
                     reject(err);
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
                 } else if (!body || !body.scalar_token) {
                     reject(new Error("Missing scalar_token in response"));
                 } else {
@@ -218,7 +218,7 @@ export default class ScalarAuthClient {
                 if (err) {
                     reject(err);
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
                 } else if (!body) {
                     reject(new Error("Missing page title in response"));
                 } else {
@@ -257,7 +257,7 @@ export default class ScalarAuthClient {
                 if (err) {
                     reject(err);
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
                 } else if (!body) {
                     reject(new Error("Failed to set widget assets state"));
                 } else {

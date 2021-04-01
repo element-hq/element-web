@@ -1182,7 +1182,11 @@ function E2ePadlockUnknown(props) {
 
 function E2ePadlockUnauthenticated(props) {
     return (
-        <E2ePadlock title={_t("The authenticity of this encrypted message can't be guaranteed on this device.")} icon="unauthenticated" {...props} />
+        <E2ePadlock
+            title={_t("The authenticity of this encrypted message can't be guaranteed on this device.")}
+            icon="unauthenticated"
+            {...props}
+        />
     );
 }
 
