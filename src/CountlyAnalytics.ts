@@ -840,7 +840,7 @@ export default class CountlyAnalytics {
         let endTime = CountlyAnalytics.getTimestamp();
         const cli = MatrixClientPeg.get();
         if (!cli.getRoom(roomId)) {
-            await new Promise(resolve => {
+            await new Promise<void>(resolve => {
                 const handler = (room) => {
                     if (room.roomId === roomId) {
                         cli.off("Room", handler);
@@ -880,7 +880,7 @@ export default class CountlyAnalytics {
         let endTime = CountlyAnalytics.getTimestamp();
 
         if (!room.findEventById(eventId)) {
-            await new Promise(resolve => {
+            await new Promise<void>(resolve => {
                 const handler = (ev) => {
                     if (ev.getId() === eventId) {
                         room.off("Room.localEchoUpdated", handler);

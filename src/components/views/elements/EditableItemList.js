@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export class EditableItem extends React.Component {
     static propTypes = {
@@ -85,6 +86,7 @@ export class EditableItem extends React.Component {
     }
 }
 
+@replaceableComponent("views.elements.EditableItemList")
 export default class EditableItemList extends React.Component {
     static propTypes = {
         id: PropTypes.string.isRequired,
@@ -124,7 +126,7 @@ export default class EditableItemList extends React.Component {
                 <Field label={this.props.placeholder} type="text"
                        autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
                        list={this.props.suggestionsListId} />
-                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit">
+                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit" disabled={!this.props.newItem}>
                     {_t("Add")}
                 </AccessibleButton>
             </form>

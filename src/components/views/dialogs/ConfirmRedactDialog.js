@@ -17,21 +17,25 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /*
  * A dialog for confirming a redaction.
  */
+@replaceableComponent("views.dialogs.ConfirmRedactDialog")
 export default class ConfirmRedactDialog extends React.Component {
     render() {
-        const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
+        const TextInputDialog = sdk.getComponent('views.dialogs.TextInputDialog');
         return (
-            <QuestionDialog onFinished={this.props.onFinished}
+            <TextInputDialog onFinished={this.props.onFinished}
                 title={_t("Confirm Removal")}
                 description={
                     _t("Are you sure you wish to remove (delete) this event? " +
                        "Note that if you delete a room name or topic change, it could undo the change.")}
+                placeholder={_t("Reason (optional)")}
+                focus
                 button={_t("Remove")}>
-            </QuestionDialog>
+            </TextInputDialog>
         );
     }
 }

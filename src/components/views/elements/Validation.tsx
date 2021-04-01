@@ -32,7 +32,8 @@ interface IRule<T, D = void> {
 
 interface IArgs<T, D = void> {
     rules: IRule<T, D>[];
-    description(this: T, derivedData: D): React.ReactChild;
+    description?(this: T, derivedData: D): React.ReactChild;
+    hideDescriptionIfValid?: boolean;
     deriveData?(data: Data): Promise<D>;
 }
 
@@ -54,6 +55,8 @@ export interface IValidationResult {
  * @param {Function} description
  *     Function that returns a string summary of the kind of value that will
  *     meet the validation rules. Shown at the top of the validation feedback.
+ * @param {Boolean} hideDescriptionIfValid
+ *     If true, don't show the description if the validation passes validation.
  * @param {Function} deriveData
  *     Optional function that returns a Promise to an object of generic type D.
  *     The result of this Promise is passed to rule methods `skip`, `test`, `valid`, and `invalid`.
@@ -71,7 +74,9 @@ export interface IValidationResult {
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
-export default function withValidation<T = undefined, D = void>({ description, deriveData, rules }: IArgs<T, D>) {
+export default function withValidation<T = undefined, D = void>({
+    description, hideDescriptionIfValid, deriveData, rules,
+}: IArgs<T, D>) {
     return async function onValidate({ value, focused, allowEmpty = true }: IFieldState): Promise<IValidationResult> {
         if (!value && allowEmpty) {
             return {
@@ -156,7 +161,7 @@ export default function withValidation<T = undefined, D = void>({ description, d
         }
 
         let summary;
-        if (description) {
+        if (description && (details || !hideDescriptionIfValid)) {
             // We're setting `this` to whichever component holds the validation
             // function. That allows rules to access the state of the component.
             const content = description.call(this, derivedData);

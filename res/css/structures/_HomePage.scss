@@ -26,9 +26,10 @@ limitations under the License.
 
 .mx_HomePage_default {
     text-align: center;
+    display: flex;
 
     .mx_HomePage_default_wrapper {
-        padding: 25vh 0 12px;
+        margin: auto;
     }
 
     img {
@@ -50,46 +51,12 @@ limitations under the License.
         color: $muted-fg-color;
     }
 
-    .mx_HomePage_userAvatar {
-        position: relative;
-        width: min-content;
+    .mx_MiniAvatarUploader {
         margin: 0 auto;
-
-        &::before, &::after {
-            content: '';
-            position: absolute;
-
-            height: 26px;
-            width: 26px;
-
-            right: -6px;
-            bottom: -6px;
-        }
-
-        &::before {
-            background-color: $primary-bg-color;
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        &::after {
-            background-color: $secondary-fg-color;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-image: url('$(res)/img/element-icons/camera.svg');
-            mask-size: 16px;
-            z-index: 2;
-        }
-
-        &.mx_HomePage_userAvatar_busy::after {
-            background: url("$(res)/img/spinner.gif") no-repeat center;
-            background-size: 80%;
-            mask: unset;
-        }
     }
 
     .mx_HomePage_default_buttons {
-        margin: 80px auto 0;
+        margin: 60px auto 0;
         width: fit-content;
 
         .mx_AccessibleButton {
@@ -97,7 +64,7 @@ limitations under the License.
 
             width: 160px;
             height: 132px;
-            margin: 0 20px;
+            margin: 20px;
             position: relative;
             display: inline-block;
             border-radius: 8px;

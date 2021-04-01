@@ -22,7 +22,7 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
@@ -40,20 +40,23 @@ export function inviteMultipleToRoom(roomId, addrs) {
     return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
-export function showStartChatInviteDialog() {
+export function showStartChatInviteDialog(initialText) {
     // This dialog handles the room creation internally - we don't need to worry about it.
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Start DM', '', InviteDialog, {kind: KIND_DM},
+        'Start DM', '', InviteDialog, {kind: KIND_DM, initialText},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }
 
-export function showRoomInviteDialog(roomId) {
+export function showRoomInviteDialog(roomId, initialText = "") {
     // This dialog handles the room creation internally - we don't need to worry about it.
-    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+        "Invite Users", "", InviteDialog, {
+            kind: KIND_INVITE,
+            initialText,
+            roomId,
+        },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

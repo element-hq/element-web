@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
 import {LocalStorageCryptoStore} from 'matrix-js-sdk/src/crypto/store/localStorage-crypto-store';
 import Analytics from '../Analytics';
+import {IndexedDBStore} from "matrix-js-sdk/src/store/indexeddb";
+import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 
 const localStorage = window.localStorage;
 
@@ -132,7 +133,7 @@ export async function checkConsistency() {
 async function checkSyncStore() {
     let exists = false;
     try {
-        exists = await Matrix.IndexedDBStore.exists(
+        exists = await IndexedDBStore.exists(
             indexedDB, SYNC_STORE_NAME,
         );
         log(`Sync store using IndexedDB contains data? ${exists}`);
@@ -148,7 +149,7 @@ async function checkSyncStore() {
 async function checkCryptoStore() {
     let exists = false;
     try {
-        exists = await Matrix.IndexedDBCryptoStore.exists(
+        exists = await IndexedDBCryptoStore.exists(
             indexedDB, CRYPTO_STORE_NAME,
         );
         log(`Crypto store using IndexedDB contains data? ${exists}`);
@@ -189,4 +190,80 @@ export function trackStores(client) {
  */
 export function setCryptoInitialised(cryptoInited) {
     localStorage.setItem("mx_crypto_initialised", cryptoInited);
+}
+
+/* Simple wrapper functions around IndexedDB.
+ */
+
+let idb = null;
+
+async function idbInit(): Promise<void> {
+    if (!indexedDB) {
+        throw new Error("IndexedDB not available");
+    }
+    idb = await new Promise((resolve, reject) => {
+        const request = indexedDB.open("matrix-react-sdk", 1);
+        request.onerror = reject;
+        request.onsuccess = (event) => { resolve(request.result); };
+        request.onupgradeneeded = (event) => {
+            const db = request.result;
+            db.createObjectStore("pickleKey");
+            db.createObjectStore("account");
+        };
+    });
+}
+
+export async function idbLoad(
+    table: string,
+    key: string | string[],
+): Promise<any> {
+    if (!idb) {
+        await idbInit();
+    }
+    return new Promise((resolve, reject) => {
+        const txn = idb.transaction([table], "readonly");
+        txn.onerror = reject;
+
+        const objectStore = txn.objectStore(table);
+        const request = objectStore.get(key);
+        request.onerror = reject;
+        request.onsuccess = (event) => { resolve(request.result); };
+    });
+}
+
+export async function idbSave(
+    table: string,
+    key: string | string[],
+    data: any,
+): Promise<void> {
+    if (!idb) {
+        await idbInit();
+    }
+    return new Promise((resolve, reject) => {
+        const txn = idb.transaction([table], "readwrite");
+        txn.onerror = reject;
+
+        const objectStore = txn.objectStore(table);
+        const request = objectStore.put(data, key);
+        request.onerror = reject;
+        request.onsuccess = (event) => { resolve(); };
+    });
+}
+
+export async function idbDelete(
+    table: string,
+    key: string | string[],
+): Promise<void> {
+    if (!idb) {
+        await idbInit();
+    }
+    return new Promise((resolve, reject) => {
+        const txn = idb.transaction([table], "readwrite");
+        txn.onerror = reject;
+
+        const objectStore = txn.objectStore(table);
+        const request = objectStore.delete(key);
+        request.onerror = reject;
+        request.onsuccess = (event) => { resolve(); };
+    });
 }

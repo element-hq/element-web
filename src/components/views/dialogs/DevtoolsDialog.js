@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import { Room, MatrixEvent } from "matrix-js-sdk";
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
@@ -32,6 +31,15 @@ import {
     PHASE_STARTED,
     PHASE_CANCELLED,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import WidgetStore from "../../../stores/WidgetStore";
+import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import {SETTINGS} from "../../../settings/Settings";
+import SettingsStore, {LEVEL_ORDER} from "../../../settings/SettingsStore";
+import Modal from "../../../Modal";
+import ErrorDialog from "./ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
 class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
@@ -67,13 +75,14 @@ class GenericEditor extends React.PureComponent {
     }
 }
 
-class SendCustomEvent extends GenericEditor {
+export class SendCustomEvent extends GenericEditor {
     static getLabel() { return _t('Send Custom Event'); }
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
         room: PropTypes.instanceOf(Room).isRequired,
         forceStateEvent: PropTypes.bool,
+        forceGeneralEvent: PropTypes.bool,
         inputs: PropTypes.object,
     };
 
@@ -134,6 +143,8 @@ class SendCustomEvent extends GenericEditor {
             </div>;
         }
 
+        const showTglFlip = !this.state.message && !this.props.forceStateEvent && !this.props.forceGeneralEvent;
+
         return <div>
             <div className="mx_DevTools_content">
                 <div className="mx_DevTools_eventTypeStateKeyGroup">
@@ -149,7 +160,7 @@ class SendCustomEvent extends GenericEditor {
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
-                { !this.state.message && !this.props.forceStateEvent && <div style={{float: "right"}}>
+                { showTglFlip && <div style={{float: "right"}}>
                     <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isStateEvent} />
                     <label className="mx_DevTools_tgl-btn" data-tg-off="Event" data-tg-on="State Event" htmlFor="isStateEvent" />
                 </div> }
@@ -701,6 +712,377 @@ class VerificationExplorer extends React.Component {
     }
 }
 
+class WidgetExplorer extends React.Component {
+    static getLabel() {
+        return _t("Active Widgets");
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            query: '',
+            editWidget: null, // set to an IApp when editing
+        };
+    }
+
+    onWidgetStoreUpdate = () => {
+        this.forceUpdate();
+    };
+
+    onQueryChange = (query) => {
+        this.setState({query});
+    };
+
+    onEditWidget = (widget) => {
+        this.setState({editWidget: widget});
+    };
+
+    onBack = () => {
+        const widgets = WidgetStore.instance.getApps(this.props.room.roomId);
+        if (this.state.editWidget && widgets.includes(this.state.editWidget)) {
+            this.setState({editWidget: null});
+        } else {
+            this.props.onBack();
+        }
+    };
+
+    componentDidMount() {
+        WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
+    }
+
+    componentWillUnmount() {
+        WidgetStore.instance.off(UPDATE_EVENT, this.onWidgetStoreUpdate);
+    }
+
+    render() {
+        const room = this.props.room;
+
+        const editWidget = this.state.editWidget;
+        const widgets = WidgetStore.instance.getApps(room.roomId);
+        if (editWidget && widgets.includes(editWidget)) {
+            const allState = Array.from(Array.from(room.currentState.events.values()).map(e => e.values()))
+                .reduce((p, c) => {p.push(...c); return p;}, []);
+            const stateEv = allState.find(ev => ev.getId() === editWidget.eventId);
+            if (!stateEv) { // "should never happen"
+                return <div>
+                    {_t("There was an error finding this widget.")}
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={this.onBack}>{_t("Back")}</button>
+                    </div>
+                </div>;
+            }
+            return <SendCustomEvent
+                onBack={this.onBack}
+                room={room}
+                forceStateEvent={true}
+                inputs={{
+                    eventType: stateEv.getType(),
+                    evContent: JSON.stringify(stateEv.getContent(), null, '\t'),
+                    stateKey: stateEv.getStateKey(),
+                }}
+            />;
+        }
+
+        return (<div>
+            <div className="mx_Dialog_content">
+                <FilteredList query={this.state.query} onChange={this.onQueryChange}>
+                    {widgets.map(w => {
+                        return <button
+                            className='mx_DevTools_RoomStateExplorer_button'
+                            key={w.url + w.eventId}
+                            onClick={() => this.onEditWidget(w)}
+                        >{w.url}</button>;
+                    })}
+                </FilteredList>
+            </div>
+            <div className="mx_Dialog_buttons">
+                <button onClick={this.onBack}>{_t("Back")}</button>
+            </div>
+        </div>);
+    }
+}
+
+class SettingsExplorer extends React.Component {
+    static getLabel() {
+        return _t("Settings Explorer");
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            query: '',
+            editSetting: null, // set to a setting ID when editing
+            viewSetting: null, // set to a setting ID when exploring in detail
+
+            explicitValues: null, // stringified JSON for edit view
+            explicitRoomValues: null, // stringified JSON for edit view
+        };
+    }
+
+    onQueryChange = (ev) => {
+        this.setState({query: ev.target.value});
+    };
+
+    onExplValuesEdit = (ev) => {
+        this.setState({explicitValues: ev.target.value});
+    };
+
+    onExplRoomValuesEdit = (ev) => {
+        this.setState({explicitRoomValues: ev.target.value});
+    };
+
+    onBack = () => {
+        if (this.state.editSetting) {
+            this.setState({editSetting: null});
+        } else if (this.state.viewSetting) {
+            this.setState({viewSetting: null});
+        } else {
+            this.props.onBack();
+        }
+    };
+
+    onViewClick = (ev, settingId) => {
+        ev.preventDefault();
+        this.setState({viewSetting: settingId});
+    };
+
+    onEditClick = (ev, settingId) => {
+        ev.preventDefault();
+        this.setState({
+            editSetting: settingId,
+            explicitValues: this.renderExplicitSettingValues(settingId, null),
+            explicitRoomValues: this.renderExplicitSettingValues(settingId, this.props.room.roomId),
+        });
+    };
+
+    onSaveClick = async () => {
+        try {
+            const settingId = this.state.editSetting;
+            const parsedExplicit = JSON.parse(this.state.explicitValues);
+            const parsedExplicitRoom = JSON.parse(this.state.explicitRoomValues);
+            for (const level of Object.keys(parsedExplicit)) {
+                console.log(`[Devtools] Setting value of ${settingId} at ${level} from user input`);
+                try {
+                    const val = parsedExplicit[level];
+                    await SettingsStore.setValue(settingId, null, level, val);
+                } catch (e) {
+                    console.warn(e);
+                }
+            }
+            const roomId = this.props.room.roomId;
+            for (const level of Object.keys(parsedExplicit)) {
+                console.log(`[Devtools] Setting value of ${settingId} at ${level} in ${roomId} from user input`);
+                try {
+                    const val = parsedExplicitRoom[level];
+                    await SettingsStore.setValue(settingId, roomId, level, val);
+                } catch (e) {
+                    console.warn(e);
+                }
+            }
+            this.setState({
+                viewSetting: settingId,
+                editSetting: null,
+            });
+        } catch (e) {
+            Modal.createTrackedDialog('Devtools - Failed to save settings', '', ErrorDialog, {
+                title: _t("Failed to save settings"),
+                description: e.message,
+            });
+        }
+    };
+
+    renderSettingValue(val) {
+        // Note: we don't .toString() a string because we want JSON.stringify to inject quotes for us
+        const toStringTypes = ['boolean', 'number'];
+        if (toStringTypes.includes(typeof(val))) {
+            return val.toString();
+        } else {
+            return JSON.stringify(val);
+        }
+    }
+
+    renderExplicitSettingValues(setting, roomId) {
+        const vals = {};
+        for (const level of LEVEL_ORDER) {
+            try {
+                vals[level] = SettingsStore.getValueAt(level, setting, roomId, true, true);
+                if (vals[level] === undefined) {
+                    vals[level] = null;
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+        return JSON.stringify(vals, null, 4);
+    }
+
+    renderCanEditLevel(roomId, level) {
+        const canEdit = SettingsStore.canSetValue(this.state.editSetting, roomId, level);
+        const className = canEdit ? 'mx_DevTools_SettingsExplorer_mutable' : 'mx_DevTools_SettingsExplorer_immutable';
+        return <td className={className}><code>{canEdit.toString()}</code></td>;
+    }
+
+    render() {
+        const room = this.props.room;
+
+        if (!this.state.viewSetting && !this.state.editSetting) {
+            // view all settings
+            const allSettings = Object.keys(SETTINGS)
+                .filter(n => this.state.query ? n.toLowerCase().includes(this.state.query.toLowerCase()) : true);
+            return (
+                <div>
+                    <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
+                        <Field
+                            label={_t('Filter results')} autoFocus={true} size={64}
+                            type="text" autoComplete="off" value={this.state.query} onChange={this.onQueryChange}
+                            className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
+                        />
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>{_t("Setting ID")}</th>
+                                <th>{_t("Value")}</th>
+                                <th>{_t("Value in this room")}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {allSettings.map(i => (
+                                <tr key={i}>
+                                    <td>
+                                        <a href="" onClick={(e) => this.onViewClick(e, i)}>
+                                            <code>{i}</code>
+                                        </a>
+                                        <a href="" onClick={(e) => this.onEditClick(e, i)}
+                                           className='mx_DevTools_SettingsExplorer_edit'
+                                        >
+                                            ✏
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <code>{this.renderSettingValue(SettingsStore.getValue(i))}</code>
+                                    </td>
+                                    <td>
+                                        <code>
+                                            {this.renderSettingValue(SettingsStore.getValue(i, room.roomId))}
+                                        </code>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={this.onBack}>{_t("Back")}</button>
+                    </div>
+                </div>
+            );
+        } else if (this.state.editSetting) {
+            return (
+                <div>
+                    <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
+                        <h3>{_t("Setting:")} <code>{this.state.editSetting}</code></h3>
+
+                        <div className='mx_DevTools_SettingsExplorer_warning'>
+                            <b>{_t("Caution:")}</b> {_t(
+                                "This UI does NOT check the types of the values. Use at your own risk.",
+                            )}
+                        </div>
+
+                        <div>
+                            {_t("Setting definition:")}
+                            <pre><code>{JSON.stringify(SETTINGS[this.state.editSetting], null, 4)}</code></pre>
+                        </div>
+
+                        <div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>{_t("Level")}</th>
+                                    <th>{_t("Settable at global")}</th>
+                                    <th>{_t("Settable at room")}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {LEVEL_ORDER.map(lvl => (
+                                        <tr key={lvl}>
+                                            <td><code>{lvl}</code></td>
+                                            {this.renderCanEditLevel(null, lvl)}
+                                            {this.renderCanEditLevel(room.roomId, lvl)}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <Field
+                                id="valExpl" label={_t("Values at explicit levels")} type="text"
+                                className="mx_DevTools_textarea" element="textarea"
+                                autoComplete="off" value={this.state.explicitValues}
+                                onChange={this.onExplValuesEdit}
+                            />
+                        </div>
+
+                        <div>
+                            <Field
+                                id="valExpl" label={_t("Values at explicit levels in this room")} type="text"
+                                className="mx_DevTools_textarea" element="textarea"
+                                autoComplete="off" value={this.state.explicitRoomValues}
+                                onChange={this.onExplRoomValuesEdit}
+                            />
+                        </div>
+
+                    </div>
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={this.onSaveClick}>{_t("Save setting values")}</button>
+                        <button onClick={this.onBack}>{_t("Back")}</button>
+                    </div>
+                </div>
+            );
+        } else if (this.state.viewSetting) {
+            return (
+                <div>
+                    <div className="mx_Dialog_content mx_DevTools_SettingsExplorer">
+                        <h3>{_t("Setting:")} <code>{this.state.viewSetting}</code></h3>
+
+                        <div>
+                            {_t("Setting definition:")}
+                            <pre><code>{JSON.stringify(SETTINGS[this.state.viewSetting], null, 4)}</code></pre>
+                        </div>
+
+                        <div>
+                            {_t("Value:")}&nbsp;
+                            <code>{this.renderSettingValue(SettingsStore.getValue(this.state.viewSetting))}</code>
+                        </div>
+
+                        <div>
+                            {_t("Value in this room:")}&nbsp;
+                            <code>{this.renderSettingValue(SettingsStore.getValue(this.state.viewSetting, room.roomId))}</code>
+                        </div>
+
+                        <div>
+                            {_t("Values at explicit levels:")}
+                            <pre><code>{this.renderExplicitSettingValues(this.state.viewSetting, null)}</code></pre>
+                        </div>
+
+                        <div>
+                            {_t("Values at explicit levels in this room:")}
+                            <pre><code>{this.renderExplicitSettingValues(this.state.viewSetting, room.roomId)}</code></pre>
+                        </div>
+
+                    </div>
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{_t("Edit Values")}</button>
+                        <button onClick={this.onBack}>{_t("Back")}</button>
+                    </div>
+                </div>
+            );
+        }
+    }
+}
+
 const Entries = [
     SendCustomEvent,
     RoomStateExplorer,
@@ -708,8 +1090,11 @@ const Entries = [
     AccountDataExplorer,
     ServersInRoomList,
     VerificationExplorer,
+    WidgetExplorer,
+    SettingsExplorer,
 ];
 
+@replaceableComponent("views.dialogs.DevtoolsDialog")
 export default class DevtoolsDialog extends React.PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

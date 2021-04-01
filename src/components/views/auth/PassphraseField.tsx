@@ -21,9 +21,10 @@ import zxcvbn from "zxcvbn";
 import SdkConfig from "../../../SdkConfig";
 import withValidation, {IFieldState, IValidationResult} from "../elements/Validation";
 import {_t, _td} from "../../../languageHandler";
-import Field from "../elements/Field";
+import Field, {IInputProps} from "../elements/Field";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-interface IProps {
+interface IProps extends Omit<IInputProps, "onValidate"> {
     autoFocus?: boolean;
     id?: string;
     className?: string;
@@ -40,6 +41,7 @@ interface IProps {
     onValidate(result: IValidationResult);
 }
 
+@replaceableComponent("views.auth.PassphraseField")
 class PassphraseField extends PureComponent<IProps> {
     static defaultProps = {
         label: _td("Password"),

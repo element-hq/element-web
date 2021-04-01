@@ -25,7 +25,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component {
     constructor() {
         super();
@@ -129,11 +131,16 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t( "Securely cache encrypted messages locally for them " +
-                             "to appear in search results, using ")
-                        } {formatBytes(this.state.eventIndexSize, 0)}
-                        {_t( " to store messages from ")}
-                        {formatCountLong(this.state.roomCount)} {_t("rooms.")}
+                        {_t("Securely cache encrypted messages locally for them " +
+                            "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
+                            {
+                                size: formatBytes(this.state.eventIndexSize, 0),
+                                // This drives the singular / plural string
+                                // selection for "room" / "rooms" only.
+                                count: this.state.roomCount,
+                                rooms: formatCountLong(this.state.roomCount),
+                            },
+                        )}
                     </div>
                     <div>
                         <AccessibleButton kind="primary" onClick={this._onManage}>
@@ -160,7 +167,7 @@ export default class EventIndexPanel extends React.Component {
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
             const nativeLink = (
-                "https://github.com/vector-im/element-web/blob/develop/" +
+                "https://github.com/vector-im/element-desktop/blob/develop/" +
                 "docs/native-node-modules.md#" +
                 "adding-seshat-for-search-in-e2e-encrypted-rooms"
             );
@@ -183,7 +190,7 @@ export default class EventIndexPanel extends React.Component {
                     }
                 </div>
             );
-        } else {
+        } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     {
@@ -199,6 +206,23 @@ export default class EventIndexPanel extends React.Component {
                             },
                         )
                     }
+                </div>
+            );
+        } else {
+            eventIndexingSettings = (
+                <div className='mx_SettingsTab_subsectionText'>
+                    <p>
+                        {_t("Message search initialisation failed")}
+                    </p>
+                    {EventIndexPeg.error && (
+                    <details>
+                        <summary>{_t("Advanced")}</summary>
+                        <code>
+                            {EventIndexPeg.error.message}
+                        </code>
+                    </details>
+                    )}
+
                 </div>
             );
         }

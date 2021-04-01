@@ -15,16 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {InteractiveAuth} from "matrix-js-sdk";
+import {InteractiveAuth} from "matrix-js-sdk/src/interactive-auth";
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import getEntryComponentForLoginType from '../views/auth/InteractiveAuthEntryComponents';
 
 import * as sdk from '../../index';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
+@replaceableComponent("structures.InteractiveAuthComponent")
 export default class InteractiveAuthComponent extends React.Component {
     static propTypes = {
         // matrix client to use for UI auth requests
@@ -177,7 +179,14 @@ export default class InteractiveAuthComponent extends React.Component {
             stageState: stageState,
             errorText: stageState.error,
         }, () => {
-            if (oldStage != stageType) this._setFocus();
+            if (oldStage !== stageType) {
+                this._setFocus();
+            } else if (
+                !stageState.error && this._stageComponent.current &&
+                this._stageComponent.current.attemptFailed
+            ) {
+                this._stageComponent.current.attemptFailed();
+            }
         });
     };
 

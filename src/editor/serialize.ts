@@ -18,6 +18,10 @@ limitations under the License.
 import Markdown from '../Markdown';
 import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
+import { AllHtmlEntities } from 'html-entities';
+import SettingsStore from '../settings/SettingsStore';
+import SdkConfig from '../SdkConfig';
+import cheerio from 'cheerio';
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
@@ -30,6 +34,10 @@ export function mdSerialize(model: EditorModel) {
             case "at-room-pill":
                 return html + part.text;
             case "room-pill":
+                // Here we use the resourceId for compatibility with non-rich text clients
+                // See https://github.com/vector-im/element-web/issues/16660
+                return html +
+                    `[${part.resourceId.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
             case "user-pill":
                 return html +
                     `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
@@ -38,10 +46,43 @@ export function mdSerialize(model: EditorModel) {
 }
 
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
-    const md = mdSerialize(model);
+    let md = mdSerialize(model);
+
+    if (SettingsStore.getValue("feature_latex_maths")) {
+        const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
+            "\\$\\$(([^$]|\\\\\\$)*)\\$\\$";
+        const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
+            "\\$(([^$]|\\\\\\$)*)\\$";
+
+        md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
+            const p1e = AllHtmlEntities.encode(p1);
+            return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
+        });
+
+        md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1) {
+            const p1e = AllHtmlEntities.encode(p1);
+            return `<span data-mx-maths="${p1e}"></span>`;
+        });
+
+        // make sure div tags always start on a new line, otherwise it will confuse
+        // the markdown parser
+        md = md.replace(/(.)<div/g, function(m, p1) { return `${p1}\n<div`; });
+    }
+
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
-        return parser.toHTML();
+        // feed Markdown output to HTML parser
+        const phtml = cheerio.load(parser.toHTML(),
+            { _useHtmlParser2: true, decodeEntities: false })
+
+        // add fallback output for latex math, which should not be interpreted as markdown
+        phtml('div, span').each(function(i, e) {
+            const tex = phtml(e).attr('data-mx-maths')
+            if (tex) {
+                phtml(e).html(`<code>${tex}</code>`)
+            }
+        });
+        return phtml.html();
     }
     // ensure removal of escape backslashes in non-Markdown messages
     if (md.indexOf("\\") > -1) {
@@ -60,6 +101,9 @@ export function textSerialize(model: EditorModel) {
             case "at-room-pill":
                 return text + part.text;
             case "room-pill":
+                // Here we use the resourceId for compatibility with non-rich text clients
+                // See https://github.com/vector-im/element-web/issues/16660
+                return text + `${part.resourceId}`;
             case "user-pill":
                 return text + `${part.text}`;
         }

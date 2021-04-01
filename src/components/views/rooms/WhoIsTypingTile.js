@@ -21,7 +21,9 @@ import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.WhoIsTypingTile")
 export default class WhoIsTypingTile extends React.Component {
     static propTypes = {
         // the room this statusbar is representing.
@@ -81,7 +83,7 @@ export default class WhoIsTypingTile extends React.Component {
     };
 
     onRoomTimeline = (event, room) => {
-        if (room && room.roomId === this.props.room.roomId) {
+        if (room?.roomId === this.props.room?.roomId) {
             const userId = event.getSender();
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);

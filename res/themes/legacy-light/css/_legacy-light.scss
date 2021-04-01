@@ -172,6 +172,9 @@ $eventtile-meta-color: $roomtopic-color;
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
 
+// this probably shouldn't have it's own colour
+$voipcall-plinth-color: #f2f5f8;
+
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
@@ -184,6 +187,12 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
+
+$voice-record-stop-border-color: #E3E8F0;
+$voice-record-stop-symbol-color: $warning-color;
+$voice-record-waveform-bg-color: #E3E8F0;
+$voice-record-waveform-fg-color: $muted-fg-color;
+$voice-record-live-circle-color: $warning-color;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -219,8 +228,6 @@ $widget-body-bg-color: #fff;
 $yellow-background: #fff8e3;
 
 // event tile lifecycle
-$event-encrypting-color: #abddbc;
-$event-sending-color: #ddd;
 $event-notsent-color: #f44;
 
 $event-highlight-fg-color: $warning-color;
@@ -234,7 +241,8 @@ $event-redacted-border-color: #cccccc;
 $event-timestamp-color: #acacac;
 
 $copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
-
+$collapse-button-url: "$(res)/img/feather-customised/minimise.svg";
+$expand-button-url: "$(res)/img/feather-customised/maximise.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -277,7 +285,8 @@ $togglesw-ball-color: #fff;
 $slider-selection-color: $accent-color;
 $slider-background-color: #c1c9d6;
 
-$progressbar-color: #000;
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: rgba(141, 151, 165, 0.2);
 
 $room-warning-bg-color: $yellow-background;
 
@@ -317,6 +326,10 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
+$message-body-panel-bg-color: #e3e8f082;
+$message-body-panel-icon-bg-color: #ffffff;
+$message-body-panel-fg-color: $muted-fg-color;
+
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
 
@@ -328,7 +341,7 @@ $composer-shadow-color: tranparent;
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;

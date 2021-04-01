@@ -34,6 +34,9 @@ import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import {SettingLevel} from "./settings/SettingLevel";
 import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
+import RoomViewStore from "./stores/RoomViewStore";
+import UserActivity from "./UserActivity";
+import {mediaFromMxc} from "./customisations/Media";
 
 /*
  * Dispatches:
@@ -148,7 +151,7 @@ export const Notifier = {
         // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
 
         return {
-            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            url: mediaFromMxc(content.url).srcHttp,
             name: content.name,
             type: content.type,
             size: content.size,
@@ -376,6 +379,11 @@ export const Notifier = {
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
+            if (RoomViewStore.getRoomId() === room.roomId && UserActivity.sharedInstance().userActiveRecently()) {
+                // don't bother notifying as user was recently active in this room
+                return;
+            }
+
             if (this.isEnabled()) {
                 this._displayPopupNotification(ev, room);
             }

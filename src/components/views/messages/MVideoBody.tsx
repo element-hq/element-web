@@ -17,11 +17,12 @@ limitations under the License.
 
 import React from 'react';
 import MFileBody from './MFileBody';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromContent} from "../../../customisations/Media";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -38,7 +39,10 @@ interface IState {
     fetchingData: boolean,
 }
 
+@replaceableComponent("views.messages.MVideoBody")
 export default class MVideoBody extends React.PureComponent<IProps, IState> {
+    private videoRef = React.createRef<HTMLVideoElement>();
+
     constructor(props) {
         super(props);
         this.state = {
@@ -71,21 +75,27 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    _getContentUrl(): string|null {
-        const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined) {
+    private getContentUrl(): string|null {
+        const media = mediaFromContent(this.props.mxEvent.getContent());
+        if (media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.url);
+            return media.srcHttp;
         }
     }
 
-    _getThumbUrl(): string|null {
+    private hasContentUrl(): boolean {
+        const url = this.getContentUrl();
+        return url && !url.startsWith("data:");
+    }
+
+    private getThumbUrl(): string|null {
         const content = this.props.mxEvent.getContent();
-        if (content.file !== undefined) {
+        const media = mediaFromContent(content);
+        if (media.isEncrypted) {
             return this.state.decryptedThumbnailUrl;
-        } else if (content.info && content.info.thumbnail_url) {
-            return MatrixClientPeg.get().mxcUrlToHttp(content.info.thumbnail_url);
+        } else if (media.hasThumbnail) {
+            return media.thumbnailHttp;
         } else {
             return null;
         }
@@ -118,7 +128,10 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                 } else {
                     console.log("NOT preloading video");
                     this.setState({
-                        decryptedUrl: null,
+                        // For Chrome and Electron, we need to set some non-empty `src` to
+                        // enable the play button. Firefox does not seem to care either
+                        // way, so it's fine to do for all browsers.
+                        decryptedUrl: `data:${content?.info?.mimetype},`,
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: null,
                     });
@@ -142,8 +155,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
     }
 
-    async _videoOnPlay() {
-        if (this._getContentUrl() || this.state.fetchingData || this.state.error) {
+    private videoOnPlay = async () => {
+        if (this.hasContentUrl() || this.state.fetchingData || this.state.error) {
             // We have the file, we are fetching the file, or there is an error.
             return;
         }
@@ -164,6 +177,9 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             decryptedUrl: contentUrl,
             decryptedBlob: decryptedBlob,
             fetchingData: false,
+        }, () => {
+            if (!this.videoRef.current) return;
+            this.videoRef.current.play();
         });
         this.props.onHeightChanged();
     }
@@ -195,8 +211,8 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
             );
         }
 
-        const contentUrl = this._getContentUrl();
-        const thumbUrl = this._getThumbUrl();
+        const contentUrl = this.getContentUrl();
+        const thumbUrl = this.getThumbUrl();
         let height = null;
         let width = null;
         let poster = null;
@@ -215,11 +231,22 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
         return (
             <span className="mx_MVideoBody">
-                <video className="mx_MVideoBody" src={contentUrl} title={content.body}
-                    controls preload={preload} muted={autoplay} autoPlay={autoplay}
-                    height={height} width={width} poster={poster} onPlay={this._videoOnPlay.bind(this)}>
+                <video
+                    className="mx_MVideoBody"
+                    ref={this.videoRef}
+                    src={contentUrl}
+                    title={content.body}
+                    controls
+                    preload={preload}
+                    muted={autoplay}
+                    autoPlay={autoplay}
+                    height={height}
+                    width={width}
+                    poster={poster}
+                    onPlay={this.videoOnPlay}
+                >
                 </video>
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />
+                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         );
     }

@@ -27,6 +27,7 @@ import RoomListStore from "../../../stores/room-list/RoomListStore";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -42,6 +43,7 @@ interface IState {
     skipFirst: boolean;
 }
 
+@replaceableComponent("views.rooms.RoomBreadcrumbs")
 export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
     private isMounted = true;
 
@@ -111,7 +113,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
                     appear={true} in={this.state.doAnimation} timeout={640}
                     classNames='mx_RoomBreadcrumbs'
                 >
-                    <Toolbar className='mx_RoomBreadcrumbs'>
+                    <Toolbar className='mx_RoomBreadcrumbs' aria-label={_t("Recently visited rooms")}>
                         {tiles.slice(this.state.skipFirst ? 1 : 0)}
                     </Toolbar>
                 </CSSTransition>
