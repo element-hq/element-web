@@ -516,7 +516,12 @@ export class Algorithm extends EventEmitter {
         if (isNullOrUndefined(rooms)) throw new Error(`Array of rooms cannot be null`);
         if (!this.sortAlgorithms) throw new Error(`Cannot set known rooms without a tag sorting map`);
 
-        console.warn("Resetting known rooms, initiating regeneration");
+        if (!this.updatesInhibited) {
+            // We only log this if we're expecting to be publishing updates, which means that
+            // this could be an unexpected invocation. If we're inhibited, then this is probably
+            // an intentional invocation.
+            console.warn("Resetting known rooms, initiating regeneration");
+        }
 
         // Before we go any further we need to clear (but remember) the sticky room to
         // avoid accidentally duplicating it in the list.
