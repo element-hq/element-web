@@ -74,6 +74,8 @@ export default class ImageView extends React.Component {
     initY = 0;
     lastX = 0;
     lastY = 0;
+    previousX = 0;
+    previousY = 0;
 
     componentDidMount() {
         // We have to use addEventListener() because the listener
@@ -190,6 +192,8 @@ export default class ImageView extends React.Component {
         ev.preventDefault();
 
         this.setState({moving: true});
+        this.previousX = this.state.translationX;
+        this.previousY = this.state.translationY;
         this.initX = ev.pageX - this.lastX;
         this.initY = ev.pageY - this.lastY;
     }
@@ -209,6 +213,18 @@ export default class ImageView extends React.Component {
     }
 
     onEndMoving = () => {
+        // Zoom in or out if we haven't moved much
+        if (
+            this.state.moving === true &&
+            Math.abs(this.state.translationX - this.previousX) < 10 &&
+            Math.abs(this.state.translationY - this.previousY) < 10
+        ) {
+            if (this.state.zoom === MIN_ZOOM) {
+                this.setState({zoom: MAX_ZOOM});
+            } else {
+                this.setState({zoom: MIN_ZOOM});
+            }
+        }
         this.setState({moving: false});
     }
 
@@ -240,6 +256,14 @@ export default class ImageView extends React.Component {
     render() {
         const showEventMeta = !!this.props.mxEvent;
 
+        let cursor;
+        if (this.state.moving) {
+            cursor= "grabbing";
+        } else if (this.state.zoom === MIN_ZOOM) {
+            cursor = "zoom-in";
+        } else {
+            cursor = "zoom-out";
+        }
         const rotationDegrees = this.state.rotation + "deg";
         const zoomPercentage = this.state.zoom/100;
         const translatePixelsX = this.state.translationX + "px";
@@ -249,7 +273,7 @@ export default class ImageView extends React.Component {
         // we would apply the translation to an already rotated
         // image causing it translate in the wrong direction.
         const style = {
-            cursor: this.state.moving ? "grabbing" : "grab",
+            cursor: cursor,
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoomPercentage})
