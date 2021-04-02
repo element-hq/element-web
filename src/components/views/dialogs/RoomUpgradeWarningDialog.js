@@ -82,6 +82,33 @@ export default class RoomUpgradeWarningDialog extends React.Component {
 
         const title = this.state.isPrivate ? _t("Upgrade private room") : _t("Upgrade public room");
 
+        let bugReports = (
+            <p>
+                {_t(
+                    "This usually only affects how the room is processed on the server. If you're " +
+                    "having problems with your %(brand)s, please report a bug.", {brand},
+                )}
+            </p>
+        );
+        if (SdkConfig.get().bug_report_endpoint_url) {
+            bugReports = (
+                <p>
+                    {_t(
+                        "This usually only affects how the room is processed on the server. If you're " +
+                        "having problems with your %(brand)s, please <a>report a bug</a>.",
+                        {
+                            brand,
+                        },
+                        {
+                            "a": (sub) => {
+                                return <a href='#' onClick={this._openBugReportDialog}>{sub}</a>;
+                            },
+                        },
+                    )}
+                </p>
+            );
+        }
+
         return (
             <BaseDialog
                 className='mx_RoomUpgradeWarningDialog'
@@ -97,20 +124,7 @@ export default class RoomUpgradeWarningDialog extends React.Component {
                             "is unstable due to bugs, missing features or security vulnerabilities.",
                         )}
                     </p>
-                    <p>
-                        {_t(
-                            "This usually only affects how the room is processed on the server. If you're " +
-                            "having problems with your %(brand)s, please <a>report a bug</a>.",
-                            {
-                                brand,
-                            },
-                            {
-                                "a": (sub) => {
-                                    return <a href='#' onClick={this._openBugReportDialog}>{sub}</a>;
-                                },
-                            },
-                        )}
-                    </p>
+                    {bugReports}
                     <p>
                         {_t(
                             "You'll upgrade this room from <oldVersion /> to <newVersion />.",

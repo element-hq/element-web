@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
+import {createClient} from 'matrix-js-sdk/src/matrix';
 import React, {ReactNode} from 'react';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 
@@ -181,7 +181,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
 
         const {hsUrl, isUrl} = serverConfig;
-        const cli = Matrix.createClient({
+        const cli = createClient({
             baseUrl: hsUrl,
             idBaseUrl: isUrl,
         });

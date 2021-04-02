@@ -155,15 +155,14 @@ export default class SetupEncryptionBody extends React.Component {
             let verifyButton;
             if (store.hasDevicesToVerifyAgainst) {
                 verifyButton = <AccessibleButton kind="primary" onClick={this._onVerifyClick}>
-                    { _t("Verify with another session") }
+                    { _t("Use another login") }
                 </AccessibleButton>;
             }
 
             return (
                 <div>
                     <p>{_t(
-                        "Verify this login to access your encrypted messages and " +
-                        "prove to others that this login is really you.",
+                        "Verify your identity to access encrypted messages and prove your identity to others.",
                     )}</p>
 
                     <div className="mx_CompleteSecurity_actionRow">
@@ -205,8 +204,8 @@ export default class SetupEncryptionBody extends React.Component {
             return (
                 <div>
                     <p>{_t(
-                        "Without completing security on this session, it won’t have " +
-                        "access to encrypted messages.",
+                        "Without verifying, you won’t have access to all your messages " +
+                        "and may appear as untrusted to others.",
                     )}</p>
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton

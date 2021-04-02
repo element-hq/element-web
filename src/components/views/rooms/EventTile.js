@@ -28,7 +28,7 @@ import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Layout, LayoutPropType} from "../../../settings/Layout";
-import {EventStatus} from 'matrix-js-sdk';
+import {EventStatus} from 'matrix-js-sdk/src/models/event';
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
@@ -936,7 +936,7 @@ export default class EventTile extends React.Component {
             );
 
         const TooltipButton = sdk.getComponent('elements.TooltipButton');
-        const keyRequestInfo = isEncryptionFailure ?
+        const keyRequestInfo = isEncryptionFailure && !isRedacted ?
             <div className="mx_EventTile_keyRequestInfo">
                 <span className="mx_EventTile_keyRequestInfo_text">
                     { keyRequestInfoContent }

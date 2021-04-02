@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
+import {createClient} from "matrix-js-sdk/src/matrix";
+import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
+import {WebStorageSessionStore} from "matrix-js-sdk/src/store/session/webstorage";
+import {IndexedDBStore} from "matrix-js-sdk/src/store/indexeddb";
 
 const localStorage = window.localStorage;
 
@@ -44,7 +47,7 @@ export default function createMatrixClient(opts) {
     };
 
     if (indexedDB && localStorage) {
-        storeOpts.store = new Matrix.IndexedDBStore({
+        storeOpts.store = new IndexedDBStore({
             indexedDB: indexedDB,
             dbName: "riot-web-sync",
             localStorage: localStorage,
@@ -53,18 +56,18 @@ export default function createMatrixClient(opts) {
     }
 
     if (localStorage) {
-        storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
+        storeOpts.sessionStore = new WebStorageSessionStore(localStorage);
     }
 
     if (indexedDB) {
-        storeOpts.cryptoStore = new Matrix.IndexedDBCryptoStore(
+        storeOpts.cryptoStore = new IndexedDBCryptoStore(
             indexedDB, "matrix-js-sdk:crypto",
         );
     }
 
     opts = Object.assign(storeOpts, opts);
 
-    return Matrix.createClient(opts);
+    return createClient(opts);
 }
 
 createMatrixClient.indexedDbWorkerScript = null;
