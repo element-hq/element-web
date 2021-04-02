@@ -224,6 +224,7 @@ export default class ImageView extends React.Component {
                         mxEvent={this.props.mxEvent}
                         permalinkCreator={this.props.permalinkCreator}
                         onFinished={this.onCloseContextMenu}
+                        onCloseDialog={this.props.onFinished}
                     />
                 </ContextMenu>
             );

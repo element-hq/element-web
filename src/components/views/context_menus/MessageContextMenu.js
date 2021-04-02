@@ -52,6 +52,9 @@ export default class MessageContextMenu extends React.Component {
 
         /* callback called when the menu is dismissed */
         onFinished: PropTypes.func,
+
+        /* if the menu is inside a dialog, we sometimes need to close that dialog after click (forwarding) */
+        onCloseDialog: PropTypes.func,
     };
 
     state = {
@@ -194,6 +197,7 @@ export default class MessageContextMenu extends React.Component {
             action: 'forward_event',
             event: this.props.mxEvent,
         });
+        this.props.onCloseDialog();
         this.closeMenu();
     };
 
