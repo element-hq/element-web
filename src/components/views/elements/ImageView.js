@@ -61,7 +61,7 @@ export default class ImageView extends React.Component {
         super(props);
         this.state = {
             rotation: 0,
-            zoom: 95,
+            zoom: MIN_ZOOM,
             translationX: 0,
             translationY: 0,
             moving: false,
