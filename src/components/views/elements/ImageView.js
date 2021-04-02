@@ -275,11 +275,10 @@ export default class ImageView extends React.Component {
                 <a
                     href={permalink}
                     onClick={this.onPermalinkClicked}
-                    aria-label={formatFullDate(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+                    aria-label={formatFullDate(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour, false)}
                 >
-                    <MessageTimestamp showFullDate={true} showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} />
+                    <MessageTimestamp showFullDate={true} showTwelveHour={showTwelveHour} ts={mxEvent.getTs()} showSeconds={false} />
                 </a>
-
             );
             const avatar = (
                 <MemberAvatar
