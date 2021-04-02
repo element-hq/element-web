@@ -266,6 +266,11 @@ export default class ImageView extends React.Component {
             }
 
             const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+            const sender = (
+                <div className="mx_ImageView_info_sender">
+                    {senderName}
+                </div>
+            );
             const messageTimestamp = (
                 <a
                     href={permalink}
@@ -288,7 +293,7 @@ export default class ImageView extends React.Component {
                 <div className="mx_ImageView_info_wrapper">
                     {avatar}
                     <div className="mx_ImageView_info">
-                        {senderName}
+                        {sender}
                         {messageTimestamp}
                     </div>
                 </div>

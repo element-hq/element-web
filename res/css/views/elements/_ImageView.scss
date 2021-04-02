@@ -62,6 +62,10 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_ImageView_info_sender {
+    font-weight: bold;
+}
+
 .mx_ImageView_toolbar {
     padding-right: 16px;
     pointer-events: all;
