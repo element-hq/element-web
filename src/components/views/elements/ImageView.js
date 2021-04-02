@@ -274,6 +274,7 @@ export default class ImageView extends React.Component {
         // image causing it translate in the wrong direction.
         const style = {
             cursor: cursor,
+            transition: this.state.moving ? null : "transform 200ms ease 0s",
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoomPercentage})
