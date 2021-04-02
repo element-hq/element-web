@@ -191,6 +191,12 @@ export default class ImageView extends React.Component {
         ev.stopPropagation();
         ev.preventDefault();
 
+        // Zoom in if we are completely zoomed out
+        if (this.state.zoom === MIN_ZOOM) {
+            this.setState({zoom: MAX_ZOOM});
+            return;
+        }
+
         this.setState({moving: true});
         this.previousX = this.state.translationX;
         this.previousY = this.state.translationY;
@@ -213,21 +219,17 @@ export default class ImageView extends React.Component {
     }
 
     onEndMoving = () => {
-        // Zoom in or out if we haven't moved much
+        // Zoom out if we haven't moved much
         if (
             this.state.moving === true &&
             Math.abs(this.state.translationX - this.previousX) < 10 &&
             Math.abs(this.state.translationY - this.previousY) < 10
         ) {
-            if (this.state.zoom === MIN_ZOOM) {
-                this.setState({zoom: MAX_ZOOM});
-            } else {
-                this.setState({
-                    zoom: MIN_ZOOM,
-                    translationX: 0,
-                    translationY: 0,
-                });
-            }
+            this.setState({
+                zoom: MIN_ZOOM,
+                translationX: 0,
+                translationY: 0,
+            });
         }
         this.setState({moving: false});
     }
