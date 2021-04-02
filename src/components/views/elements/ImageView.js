@@ -202,7 +202,7 @@ export default class ImageView extends React.Component {
         ev.stopPropagation();
         ev.preventDefault();
 
-        if (!this.state.moving) return false;
+        if (!this.state.moving) return;
 
         this.lastX = ev.pageX - this.initX;
         this.lastY = ev.pageY - this.initY;
