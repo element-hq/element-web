@@ -659,12 +659,17 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         if (trigger) this.updateFn.trigger();
     }
 
+    /**
+     * Adds a filter condition to the room list store. Filters may be applied async,
+     * and thus might not cause an update to the store immediately.
+     * @param {IFilterCondition} filter The filter condition to add.
+     */
     public addFilter(filter: IFilterCondition): void {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log("Adding filter condition:", filter);
         }
-        let promise = Promise.resolve(); // use a promise to maintain sync API contract
+        let promise = Promise.resolve();
         if (filter.kind === FilterKind.Prefilter) {
             filter.on(FILTER_CHANGED, this.onPrefilterUpdated);
             this.prefilterConditions.push(filter);
@@ -678,12 +683,19 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         promise.then(() => this.updateFn.trigger());
     }
 
+    /**
+     * Removes a filter condition from the room list store. If the filter was
+     * not previously added to the room list store, this will no-op. The effects
+     * of removing a filter may be applied async and therefore might not cause
+     * an update right away.
+     * @param {IFilterCondition} filter The filter condition to remove.
+     */
     public removeFilter(filter: IFilterCondition): void {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log("Removing filter condition:", filter);
         }
-        let promise = Promise.resolve(); // use a promise to maintain sync API contract
+        let promise = Promise.resolve();
         let idx = this.filterConditions.indexOf(filter);
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
