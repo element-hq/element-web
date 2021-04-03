@@ -601,7 +601,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         />
                     </div>
                 </div>
-                <div className="mx_CallView_voice_holdText">{_t("Connecting")}</div>
+                <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
                 {callControls}
             </div>;
         } else {
