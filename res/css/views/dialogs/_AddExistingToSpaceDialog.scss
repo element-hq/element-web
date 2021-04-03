@@ -28,20 +28,21 @@ limitations under the License.
     flex-direction: column;
     flex-wrap: nowrap;
     min-height: 0;
+    height: 80vh;
 
     .mx_Dialog_title {
         display: flex;
-
-        .mx_BaseAvatar {
-            display: inline-flex;
-            margin: 5px 16px 5px 5px;
-            vertical-align: middle;
-        }
 
         .mx_BaseAvatar_image {
             border-radius: 8px;
             margin: 0;
             vertical-align: unset;
+        }
+
+        .mx_BaseAvatar {
+            display: inline-flex;
+            margin: 5px 16px 5px 5px;
+            vertical-align: middle;
         }
 
         > div {
@@ -101,6 +102,7 @@ limitations under the License.
 
     .mx_SearchBox {
         margin: 0;
+        flex-grow: 0;
     }
 
     .mx_AddExistingToSpaceDialog_errorText {
@@ -112,7 +114,10 @@ limitations under the License.
     }
 
     .mx_AddExistingToSpaceDialog_content {
+        flex-grow: 1;
+
         .mx_AddExistingToSpaceDialog_noResults {
+            display: block;
             margin-top: 24px;
         }
     }
@@ -162,8 +167,14 @@ limitations under the License.
 
         > span {
             flex-grow: 1;
-            font-size: $font-12px;
+            font-size: $font-14px;
             line-height: $font-15px;
+            font-weight: $font-semi-bold;
+
+            .mx_AccessibleButton {
+                font-size: inherit;
+                display: inline-block;
+            }
 
             > * {
                 vertical-align: middle;

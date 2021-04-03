@@ -5588,8 +5588,8 @@ mathml-tag-names@^2.1.3:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "9.9.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cd38fb9b4c349eb31feac14e806e710bf6431b72"
+  version "9.10.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4204b2170a1e04f20067b87636bb2eddf95194c4"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -6095,6 +6095,11 @@ optionator@^0.9.1:
     prelude-ls "^1.2.1"
     type-check "^0.4.0"
     word-wrap "^1.2.3"
+
+opus-recorder@^8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/opus-recorder/-/opus-recorder-8.0.3.tgz#f7b44f8f68500c9b96a15042a69f915fd9c1716d"
+  integrity sha512-8vXGiRwlJAavT9D3yYzukNVXQ8vEcKHcsQL/zXO24DQtJ0PLXvoPHNQPJrbMCdB4ypJgWDExvHF4JitQDL7dng==
 
 os-tmpdir@~1.0.2:
   version "1.0.2"

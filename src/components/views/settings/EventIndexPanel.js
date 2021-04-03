@@ -26,6 +26,7 @@ import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../settings/SettingLevel";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SeshatResetDialog from '../dialogs/SeshatResetDialog';
 
 @replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component {
@@ -122,6 +123,20 @@ export default class EventIndexPanel extends React.Component {
         await this.updateState();
     }
 
+    _confirmEventStoreReset = () => {
+        const self = this;
+        const { close } = Modal.createDialog(SeshatResetDialog, {
+            onFinished: async (success) => {
+                if (success) {
+                    await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
+                    await EventIndexPeg.deleteEventIndex();
+                    await self._onEnable();
+                    close();
+                }
+            },
+        });
+    }
+
     render() {
         let eventIndexingSettings = null;
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
@@ -167,7 +182,7 @@ export default class EventIndexPanel extends React.Component {
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
             const nativeLink = (
-                "https://github.com/vector-im/element-web/blob/develop/" +
+                "https://github.com/vector-im/element-desktop/blob/develop/" +
                 "docs/native-node-modules.md#" +
                 "adding-seshat-for-search-in-e2e-encrypted-rooms"
             );
@@ -190,7 +205,7 @@ export default class EventIndexPanel extends React.Component {
                     }
                 </div>
             );
-        } else {
+        } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     {
@@ -206,6 +221,31 @@ export default class EventIndexPanel extends React.Component {
                             },
                         )
                     }
+                </div>
+            );
+        } else {
+            eventIndexingSettings = (
+                <div className='mx_SettingsTab_subsectionText'>
+                    <p>
+                        {this.state.enabling
+                            ? <InlineSpinner />
+                            : _t("Message search initilisation failed")
+                        }
+                    </p>
+                    {EventIndexPeg.error && (
+                    <details>
+                        <summary>{_t("Advanced")}</summary>
+                        <code>
+                            {EventIndexPeg.error.message}
+                        </code>
+                        <p>
+                            <AccessibleButton key="delete" kind="danger" onClick={this._confirmEventStoreReset}>
+                                {_t("Reset")}
+                            </AccessibleButton>
+                        </p>
+                    </details>
+                    )}
+
                 </div>
             );
         }

@@ -49,13 +49,11 @@ export const showToast = async (deviceId: string) => {
         title: _t("New login. Was this you?"),
         icon: "verification_warning",
         props: {
-            description: _t(
-                "A new login is accessing your account: %(name)s (%(deviceID)s) at %(ip)s", {
-                    name: device.display_name,
-                    deviceID: deviceId,
-                    ip: device.last_seen_ip,
-                },
-            ),
+            description: device.display_name,
+            detail: _t("%(deviceId)s from %(ip)s", {
+                deviceId,
+                ip: device.last_seen_ip,
+            }),
             acceptLabel: _t("Check your devices"),
             onAccept,
             rejectLabel: _t("Later"),

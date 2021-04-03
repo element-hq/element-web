@@ -18,7 +18,7 @@ limitations under the License.
 
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import { EventStatus } from 'matrix-js-sdk';
+import { EventStatus } from 'matrix-js-sdk/src/models/event';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';

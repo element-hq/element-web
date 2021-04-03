@@ -21,7 +21,6 @@ import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types
 import {_t} from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {ChevronFace, ContextMenu} from "../../structures/ContextMenu";
-import FormButton from "../elements/FormButton";
 import createRoom, {IStateEvent, Preset} from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SpaceBasicSettings from "./SpaceBasicSettings";
@@ -89,6 +88,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     power_level_content_override: {
                         // Only allow Admins to write to the timeline to prevent hidden sync spam
                         events_default: 100,
+                        ...Visibility.Public ? { invite: 0 } : {},
                     },
                 },
                 spinner: false,
@@ -108,7 +108,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
             <p>{ _t("Spaces are new ways to group rooms and people. " +
-                "To join an existing space you’ll need an invite") }</p>
+                "To join an existing space you'll need an invite.") }</p>
 
             <SpaceCreateMenuType
                 title={_t("Public")}
@@ -140,19 +140,17 @@ const SpaceCreateMenu = ({ onFinished }) => {
             </h2>
             <p>
                 {
-                    _t("Give it a photo, name and description to help you identify it.")
+                    _t("Add some details to help people recognise it.")
                 } {
-                    _t("You can change these at any point.")
+                    _t("You can change these anytime.")
                 }
             </p>
 
             <SpaceBasicSettings setAvatar={setAvatar} name={name} setName={setName} topic={topic} setTopic={setTopic} />
 
-            <FormButton
-                label={busy ? _t("Creating...") : _t("Create")}
-                onClick={onSpaceCreateClick}
-                disabled={!name && !busy}
-            />
+            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={!name || busy}>
+                { busy ? _t("Creating...") : _t("Create") }
+            </AccessibleButton>
         </React.Fragment>;
     }
 

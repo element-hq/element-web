@@ -37,7 +37,7 @@ describe("AccessSecretStorageDialog", function() {
             recoveryKey: "a",
         });
         const e = { preventDefault: () => {} };
-        testInstance.getInstance()._onRecoveryKeyNext(e);
+        testInstance.getInstance().onRecoveryKeyNext(e);
     });
 
     it("Considers a valid key to be valid", async function() {
@@ -51,9 +51,9 @@ describe("AccessSecretStorageDialog", function() {
         stubClient();
         MatrixClientPeg.get().keyBackupKeyFromRecoveryKey = () => 'a raw key';
         MatrixClientPeg.get().checkSecretStorageKey = () => true;
-        testInstance.getInstance()._onRecoveryKeyChange(e);
+        testInstance.getInstance().onRecoveryKeyChange(e);
         // force a validation now because it debounces
-        await testInstance.getInstance()._validateRecoveryKey();
+        await testInstance.getInstance().validateRecoveryKey();
         const { recoveryKeyValid } = testInstance.getInstance().state;
         expect(recoveryKeyValid).toBe(true);
     });
@@ -69,9 +69,9 @@ describe("AccessSecretStorageDialog", function() {
         MatrixClientPeg.get().keyBackupKeyFromRecoveryKey = () => {
             throw new Error("that's no key");
         };
-        testInstance.getInstance()._onRecoveryKeyChange(e);
+        testInstance.getInstance().onRecoveryKeyChange(e);
         // force a validation now because it debounces
-        await testInstance.getInstance()._validateRecoveryKey();
+        await testInstance.getInstance().validateRecoveryKey();
 
         const { recoveryKeyValid, recoveryKeyCorrect } = testInstance.getInstance().state;
         expect(recoveryKeyValid).toBe(false);
@@ -98,8 +98,8 @@ describe("AccessSecretStorageDialog", function() {
         const e = { target: { value: "a" } };
         stubClient();
         MatrixClientPeg.get().isValidRecoveryKey = () => false;
-        testInstance.getInstance()._onPassPhraseChange(e);
-        await testInstance.getInstance()._onPassPhraseNext({ preventDefault: () => {} });
+        testInstance.getInstance().onPassPhraseChange(e);
+        await testInstance.getInstance().onPassPhraseNext({ preventDefault: () => {} });
         const notification = testInstance.root.findByProps({
             className: "mx_AccessSecretStorageDialog_keyStatus",
         });

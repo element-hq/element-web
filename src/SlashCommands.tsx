@@ -20,6 +20,7 @@ limitations under the License.
 
 import * as React from 'react';
 
+import { ContentHelpers } from 'matrix-js-sdk';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
@@ -126,10 +127,10 @@ export class Command {
         return this.getCommand() + " " + this.args;
     }
 
-    run(roomId: string, args: string, cmd: string) {
+    run(roomId: string, args: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
         if (!this.runFn) return reject(_t("Command error"));
-        return this.runFn.bind(this)(roomId, args, cmd);
+        return this.runFn.bind(this)(roomId, args);
     }
 
     getUsage() {
@@ -155,6 +156,18 @@ function success(promise?: Promise<any>) {
 
 export const Commands = [
     new Command({
+        command: 'spoiler',
+        args: '<message>',
+        description: _td('Sends the given message as a spoiler'),
+        runFn: function(roomId, message) {
+            return success(ContentHelpers.makeHtmlMessage(
+                message,
+                `<span data-mx-spoiler>${message}</span>`,
+            ));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
         command: 'shrug',
         args: '<message>',
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
@@ -163,7 +176,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return success(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -176,7 +189,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return success(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -189,7 +202,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return success(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -202,7 +215,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return success(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -211,7 +224,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, messages));
+            return success(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
     }),
@@ -220,7 +233,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as html, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
+            return success(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
     }),
@@ -965,7 +978,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, textToHtmlRainbow(args)));
+            return success(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -975,7 +988,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
+            return success(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -1200,10 +1213,13 @@ export function parseCommandString(input: string) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(roomId: string, input: string) {
+export function getCommand(input: string) {
     const {cmd, args} = parseCommandString(input);
 
     if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
-        return () => CommandMap.get(cmd).run(roomId, args, cmd);
+        return {
+            cmd: CommandMap.get(cmd),
+            args,
+        };
     }
 }

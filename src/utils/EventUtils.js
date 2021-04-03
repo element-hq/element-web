@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventStatus } from 'matrix-js-sdk';
+import { EventStatus } from 'matrix-js-sdk/src/models/event';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
 /**
