@@ -38,6 +38,9 @@ const MAX_ZOOM = 300;
 const ZOOM_STEP = 10;
 // This is used for mouse wheel events
 const ZOOM_COEFFICIENT = 10;
+// If we have moved only this much we can zoom
+const ZOOM_DISTANCE = 10;
+
 
 interface IProps {
     src: string, // the source of the image being displayed
@@ -234,8 +237,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         // Zoom out if we haven't moved much
         if (
             this.state.moving === true &&
-            Math.abs(this.state.translationX - this.previousX) < 10 &&
-            Math.abs(this.state.translationY - this.previousY) < 10
+            Math.abs(this.state.translationX - this.previousX) < ZOOM_DISTANCE &&
+            Math.abs(this.state.translationY - this.previousY) < ZOOM_DISTANCE
         ) {
             this.setState({
                 zoom: MIN_ZOOM,
