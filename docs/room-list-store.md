@@ -145,7 +145,7 @@ expect a change in the condition unless the condition says it has changed. This 
 maintain the caching behaviour described above.
 
 One might ask why we don't just use prefilter conditions for everything, and the answer is one of slight
-subtly: in the cases of prefilters we are knowingly exposing the user to a workspace-style UX where
+subtlety: in the cases of prefilters we are knowingly exposing the user to a workspace-style UX where
 room notifications are self-contained within that workspace. Runtime filters tend to not want to affect
 visible notification counts (as it doesn't want the room header to suddenly be confusing to the user as
 they type), and occasionally UX like "found 2/12 rooms" is desirable. If prefiltering were used instead,
