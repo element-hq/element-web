@@ -19,10 +19,8 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React, {createRef} from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar"
-import CallHandler from '../../../CallHandler';
 import CallMediaHandler from "../../../CallMediaHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
@@ -143,9 +141,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         };
 
         if (this.state.audioOnly) {
-            const callRoomId = CallHandler.roomIdForCall(this.props.call);
-            const callRoom = MatrixClientPeg.get().getRoom(callRoomId);
-            const member = callRoom.getMember(this.props.feed.userId);
+            const member = this.props.feed.getMember();
             const avatarSize = this.props.pipMode ? 76 : 160;
 
             return (
