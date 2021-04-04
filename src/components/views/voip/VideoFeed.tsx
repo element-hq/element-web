@@ -41,7 +41,8 @@ interface IProps {
 }
 
 interface IState {
-    audioOnly: boolean;
+    audioMuted: boolean;
+    videoMuted: boolean;
 }
 
 
@@ -54,7 +55,8 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            audioOnly: this.props.feed.isAudioOnly(),
+            audioMuted: this.props.feed.isAudioMuted(),
+            videoMuted: this.props.feed.isVideoMuted(),
         };
     }
 
@@ -115,7 +117,10 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     onNewStream = (newStream: MediaStream) => {
-        this.setState({ audioOnly: this.props.feed.isAudioOnly()});
+        this.setState({
+            audioMuted: this.props.feed.isAudioMuted(),
+            videoMuted: this.props.feed.isVideoMuted(),
+        });
         const currentMedia = this.getCurrentMedia();
         currentMedia.srcObject = newStream;
         currentMedia.play();
@@ -132,15 +137,15 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             mx_VideoFeed: true,
             mx_VideoFeed_local: this.props.feed.isLocal(),
             mx_VideoFeed_remote: !this.props.feed.isLocal(),
-            mx_VideoFeed_voice: this.state.audioOnly,
-            mx_VideoFeed_video: !this.state.audioOnly,
+            mx_VideoFeed_voice: this.state.videoMuted,
+            mx_VideoFeed_video: !this.state.videoMuted,
             mx_VideoFeed_mirror: (
                 this.props.feed.isLocal() &&
                 SettingsStore.getValue('VideoView.flipVideoHorizontally')
             ),
         };
 
-        if (this.state.audioOnly) {
+        if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
             const avatarSize = this.props.pipMode ? 76 : 160;
 

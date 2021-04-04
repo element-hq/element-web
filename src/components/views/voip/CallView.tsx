@@ -614,7 +614,7 @@ export default class CallView extends React.Component<IProps, IState> {
             const feeds = this.state.feeds.map((feed, i) => {
                 // Here we check to hide local audio feeds to achieve the same UI/UX
                 // as before. But once again this might be subject to change
-                if (feed.isAudioOnly() && feed.isLocal()) return;
+                if (feed.isVideoMuted() && feed.isLocal()) return;
                 return (
                     <VideoFeed
                         key={i}
