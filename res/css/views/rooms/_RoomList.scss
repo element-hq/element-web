@@ -27,6 +27,9 @@ limitations under the License.
 .mx_RoomList_iconExplore::before {
     mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
 }
+.mx_RoomList_iconBrowse::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
+}
 .mx_RoomList_iconDialpad::before {
     mask-image: url('$(res)/img/element-icons/roomlist/dialpad.svg');
 }
@@ -34,29 +37,33 @@ limitations under the License.
 .mx_RoomList_explorePrompt {
     margin: 4px 12px 4px;
     padding-top: 12px;
-    border-top: 1px solid $tertiary-fg-color;
-    font-size: $font-13px;
+    border-top: 1px solid $input-border-color;
+    font-size: $font-14px;
 
     div:first-child {
         font-weight: $font-semi-bold;
+        line-height: $font-18px;
+        color: $primary-fg-color;
     }
 
     .mx_AccessibleButton {
-        color: $secondary-fg-color;
+        color: $primary-fg-color;
         position: relative;
-        padding: 0 0 0 24px;
+        padding: 8px 8px 8px 32px;
         font-size: inherit;
-        margin-top: 8px;
+        margin-top: 12px;
         display: block;
         text-align: start;
+        background-color: $roomlist-button-bg-color;
+        border-radius: 4px;
 
         &::before {
             content: '';
             width: 16px;
             height: 16px;
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 8px;
+            left: 8px;
             background: $secondary-fg-color;
             mask-position: center;
             mask-size: contain;
@@ -69,6 +76,14 @@ limitations under the License.
 
         &.mx_RoomList_explorePrompt_explore::before {
             mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+        }
+
+        &.mx_RoomList_explorePrompt_spaceInvite::before {
+            mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        }
+
+        &.mx_RoomList_explorePrompt_spaceExplore::before {
+            mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
         }
     }
 }
