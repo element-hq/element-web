@@ -589,9 +589,25 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_voice: true,
             });
 
+            const feeds = this.state.feeds.map((feed, i) => {
+                // Here we check to hide local audio feeds to achieve the same UI/UX
+                // as before. But once again this might be subject to change
+                if (feed.isVideoMuted() && feed.isLocal()) return;
+                return (
+                    <VideoFeed
+                        key={i}
+                        feed={feed}
+                        call={this.props.call}
+                        pipMode={this.props.pipMode}
+                        onResize={this.props.onResize}
+                    />
+                );
+            });
+
             // Saying "Connecting" here isn't really true, but the best thing
             // I can come up with, but this might be subject to change as well
             contentView = <div className={classes} onMouseMove={this.onMouseMove}>
+                {feeds}
                 <div className="mx_CallView_voice_avatarsContainer">
                     <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
                         <RoomAvatar
