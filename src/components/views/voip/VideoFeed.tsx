@@ -26,11 +26,6 @@ import CallHandler from '../../../CallHandler';
 import CallMediaHandler from "../../../CallMediaHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export enum VideoFeedType {
-    Local,
-    Remote,
-}
-
 interface IProps {
     call: MatrixCall,
 
