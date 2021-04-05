@@ -1858,7 +1858,7 @@
     "Yours, or the other users’ internet connection": "Deine oder die Internetverbindung des Gegenüber",
     "Yours, or the other users’ session": "Deine Sitzung oder die des Gegenüber",
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> in %(roomName)s",
-    "This client does not support end-to-end encryption.": "Diese Anwendung unterstützt keine Ende-zu-Ende-Verschlüsselung.",
+    "This client does not support end-to-end encryption.": "Dieser Client unterstützt keine Ende-zu-Ende-Verschlüsselung.",
     "Verify by scanning": "Verifizierung durch Scannen eines QR-Codes",
     "If you can't scan the code above, verify by comparing unique emoji.": "Wenn du den obigen Code nicht scannen kannst, verifiziere stattdessen durch den Emoji-Vergleich.",
     "Verify all users in a room to ensure it's secure.": "Verifiziere alle Benutzer in einem Raum um die vollständige Sicherheit zu gewährleisten.",
