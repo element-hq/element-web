@@ -116,7 +116,7 @@
     "You cannot place VoIP calls in this browser.": "Du kan ikke ringe via VoIP i denne nettleseren.",
     "You cannot place a call with yourself.": "Du kan ikke ringe deg selv.",
     "Call in Progress": "Samtale pågår",
-    "A call is currently being placed!": "En samtale holder allerede på å starte",
+    "A call is currently being placed!": "En samtale holder på å starte!",
     "A call is already in progress!": "En samtale er allerede i gang!",
     "Permission Required": "Tillatelse kreves",
     "You do not have permission to start a conference call in this room": "Du har ikke tillatelse til å starte en konferansesamtale i dette rommet",
@@ -1495,5 +1495,17 @@
     "%(count)s unread messages including mentions.|other": "%(count)s uleste meldinger inkludert der du nevnes.",
     "Creating...": "Oppretter...",
     "User settings": "Brukerinnstillinger",
-    "Open": "Åpne"
+    "Open": "Åpne",
+    "Try using one of the following valid address types: %(validTypesList)s.": "Prøv å bruke en av følgende gyldige adresser: %(validTypesList)s.",
+    "The user '%(displayName)s' could not be removed from the summary.": "Brukeren '%(displayName)s' kunne ikke fjernes fra oversikten.",
+    "Belgium": "Belgia",
+    "American Samoa": "Amerikansk Samoa",
+    "United States": "USA",
+    "%(name)s is requesting verification": "%(name)s ber om verifisering",
+    "Try again": "Prøv igjen",
+    "We couldn't log you in": "Vi kunne ikke logge deg inn",
+    "This will end the conference for everyone. Continue?": "Dette vil avslutte konferansen for alle. Fortsett?",
+    "End conference": "Avslutt konferanse",
+    "You're already in a call with this person.": "Du er allerede i en samtale med denne personen.",
+    "Already in call": "Allerede i en samtale"
 }
