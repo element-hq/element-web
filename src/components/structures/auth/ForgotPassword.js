@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import PasswordReset from "../../../PasswordReset";
@@ -27,7 +27,9 @@ import classNames from 'classnames';
 import AuthPage from "../../views/auth/AuthPage";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import ServerPicker from "../../views/elements/ServerPicker";
+import PassphraseField from '../../views/auth/PassphraseField';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 
 // Phases
 // Show the forgot password inputs
@@ -137,10 +139,14 @@ export default class ForgotPassword extends React.Component {
         // refresh the server errors, just in case the server came back online
         await this._checkServerLiveliness(this.props.serverConfig);
 
+        await this['password_field'].validate({ allowEmpty: false });
+
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
         } else if (!this.state.password || !this.state.password2) {
             this.showErrorDialog(_t('A new password must be entered.'));
+        } else if (!this.state.passwordFieldValid) {
+            this.showErrorDialog(_t('Please choose a strong password'));
         } else if (this.state.password !== this.state.password2) {
             this.showErrorDialog(_t('New passwords must match each other.'));
         } else {
@@ -183,6 +189,12 @@ export default class ForgotPassword extends React.Component {
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title: title,
             description: body,
+        });
+    }
+
+    onPasswordValidate(result) {
+        this.setState({
+            passwordFieldValid: result.valid,
         });
     }
 
@@ -230,12 +242,15 @@ export default class ForgotPassword extends React.Component {
                     />
                 </div>
                 <div className="mx_AuthBody_fieldRow">
-                    <Field
+                    <PassphraseField
                         name="reset_password"
                         type="password"
-                        label={_t('New Password')}
+                        label={_td('New Password')}
                         value={this.state.password}
+                        minScore={PASSWORD_MIN_SCORE}
                         onChange={this.onInputChanged.bind(this, "password")}
+                        fieldRef={field => this['password_field'] = field}
+                        onValidate={(result) => this.onPasswordValidate(result)}
                         onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_focus")}
                         onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_blur")}
                         autoComplete="new-password"
