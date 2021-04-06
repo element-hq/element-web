@@ -20,17 +20,19 @@ import {MatrixCapabilities} from "matrix-widget-api";
 import IconizedContextMenu, {IconizedContextMenuOption, IconizedContextMenuOptionList} from "./IconizedContextMenu";
 import {ChevronFace} from "../../structures/ContextMenu";
 import {_t} from "../../../languageHandler";
-import WidgetStore, {IApp} from "../../../stores/WidgetStore";
+import {IApp} from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
 import RoomContext from "../../../contexts/RoomContext";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
-import {SettingLevel} from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import ErrorDialog from "../dialogs/ErrorDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
@@ -54,10 +56,31 @@ const WidgetContextMenu: React.FC<IProps> = ({
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
 
+    let streamAudioStreamButton;
+    if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
+        const onStreamAudioClick = async () => {
+            try {
+                await startJitsiAudioLivestream(widgetMessaging, roomId);
+            } catch (err) {
+                console.error("Failed to start livestream", err);
+                // XXX: won't i18n well, but looks like widget api only support 'message'?
+                const message = err.message || _t("Unable to start audio streaming.");
+                Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
+                    title: _t('Failed to start livestream'),
+                    description: message,
+                });
+            }
+            onFinished();
+        };
+        streamAudioStreamButton = <IconizedContextMenuOption
+            onClick={onStreamAudioClick} label={_t("Start audio stream")}
+        />;
+    }
+
     let unpinButton;
     if (showUnpin) {
         const onUnpinClick = () => {
-            WidgetStore.instance.unpinWidget(room.roomId, app.id);
+            WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right);
             onFinished();
         };
 
@@ -127,7 +150,8 @@ const WidgetContextMenu: React.FC<IProps> = ({
             console.info("Revoking permission for widget to load: " + app.eventId);
             const current = SettingsStore.getValue("allowedWidgets", roomId);
             current[app.eventId] = false;
-            SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).catch(err => {
+            const level = SettingsStore.firstSupportedLevel("allowedWidgets");
+            SettingsStore.setValue("allowedWidgets", roomId, level, current).catch(err => {
                 console.error(err);
                 // We don't really need to do anything about this - the user will just hit the button again.
             });
@@ -137,13 +161,13 @@ const WidgetContextMenu: React.FC<IProps> = ({
         revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Revoke permissions")} />;
     }
 
-    const pinnedWidgets = WidgetStore.instance.getPinnedApps(roomId);
+    const pinnedWidgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
     const widgetIndex = pinnedWidgets.findIndex(widget => widget.id === app.id);
 
     let moveLeftButton;
     if (showUnpin && widgetIndex > 0) {
         const onClick = () => {
-            WidgetStore.instance.movePinnedWidget(roomId, app.id, -1);
+            WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, -1);
             onFinished();
         };
 
@@ -153,7 +177,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     let moveRightButton;
     if (showUnpin && widgetIndex < pinnedWidgets.length - 1) {
         const onClick = () => {
-            WidgetStore.instance.movePinnedWidget(roomId, app.id, 1);
+            WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, 1);
             onFinished();
         };
 
@@ -162,6 +186,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
+            { streamAudioStreamButton }
             { editButton }
             { revokeButton }
             { deleteButton }
@@ -174,4 +199,3 @@ const WidgetContextMenu: React.FC<IProps> = ({
 };
 
 export default WidgetContextMenu;
-

@@ -35,10 +35,12 @@ import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
-import {Group} from "matrix-js-sdk";
+import {Group} from "matrix-js-sdk/src/models/group";
 import {allSettled, sleep} from "../../utils/promise";
 import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import {mediaFromMxc} from "../../customisations/Media";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -367,8 +369,7 @@ class FeaturedUser extends React.Component {
 
         const permalink = makeUserPermalink(this.props.summaryInfo.user_id);
         const userNameNode = <a href={permalink} onClick={this.onClick}>{ name }</a>;
-        const httpUrl = MatrixClientPeg.get()
-            .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
+        const httpUrl = mediaFromMxc(this.props.summaryInfo.avatar_url).getSquareThumbnailHttp(64);
 
         const deleteButton = this.props.editing ?
             <img
@@ -391,6 +392,7 @@ class FeaturedUser extends React.Component {
 const GROUP_JOINPOLICY_OPEN = "open";
 const GROUP_JOINPOLICY_INVITE = "invite";
 
+@replaceableComponent("structures.GroupView")
 export default class GroupView extends React.Component {
     static propTypes = {
         groupId: PropTypes.string.isRequired,
@@ -979,10 +981,9 @@ export default class GroupView extends React.Component {
                     <Spinner />
                 </div>;
             }
-            const httpInviterAvatar = this.state.inviterProfile ?
-                this._matrixClient.mxcUrlToHttp(
-                    this.state.inviterProfile.avatarUrl, 36, 36,
-                ) : null;
+            const httpInviterAvatar = this.state.inviterProfile
+                ? mediaFromMxc(this.state.inviterProfile.avatarUrl).getSquareThumbnailHttp(36)
+                : null;
 
             const inviter = group.inviter || {};
             let inviterName = inviter.userId;

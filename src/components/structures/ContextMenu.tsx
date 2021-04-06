@@ -22,6 +22,7 @@ import classNames from "classnames";
 
 import {Key} from "../../Keyboard";
 import {Writeable} from "../../@types/common";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -76,6 +77,7 @@ export interface IProps extends IPosition {
     hasBackground?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
+    wrapperClassName?: string;
 
     // Function to be called on menu close
     onFinished();
@@ -90,6 +92,7 @@ interface IState {
 // Generic ContextMenu Portal wrapper
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
+@replaceableComponent("structures.ContextMenu")
 export class ContextMenu extends React.PureComponent<IProps, IState> {
     private initialFocus: HTMLElement;
 
@@ -299,7 +302,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             // such that it does not leave the (padded) window.
             if (contextMenuRect) {
                 const padding = 10;
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height + padding);
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
             }
 
             position.top = adjusted;
@@ -365,7 +368,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         return (
             <div
-                className="mx_ContextualMenu_wrapper"
+                className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
                 style={{...position, ...wrapperStyle}}
                 onKeyDown={this.onKeyDown}
                 onContextMenu={this.onContextMenuPreventBubbling}
@@ -390,14 +393,15 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 }
 
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
-export const toRightOf = (elementRect: DOMRect, chevronOffset = 12) => {
+export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">, chevronOffset = 12) => {
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
     return {left, top, chevronOffset};
 };
 
-// Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
+// Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect,
+// and either above or below: wherever there is more space (maybe this should be aboveOrBelowLeftOf?)
 export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0) => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
@@ -416,6 +420,41 @@ export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None
     return menuOptions;
 };
 
+// Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
+// and always above elementRect
+export const alwaysAboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0) => {
+    const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
+
+    const buttonRight = elementRect.right + window.pageXOffset;
+    const buttonBottom = elementRect.bottom + window.pageYOffset;
+    const buttonTop = elementRect.top + window.pageYOffset;
+    // Align the right edge of the menu to the right edge of the button
+    menuOptions.right = window.innerWidth - buttonRight;
+    // Align the menu vertically on whichever side of the button has more space available.
+    if (buttonBottom < window.innerHeight / 2) {
+        menuOptions.top = buttonBottom + vPadding;
+    } else {
+        menuOptions.bottom = (window.innerHeight - buttonTop) + vPadding;
+    }
+
+    return menuOptions;
+};
+
+// Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the right of elementRect
+// and always above elementRect
+export const alwaysAboveRightOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0) => {
+    const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
+
+    const buttonLeft = elementRect.left + window.pageXOffset;
+    const buttonTop = elementRect.top + window.pageYOffset;
+    // Align the left edge of the menu to the left edge of the button
+    menuOptions.left = buttonLeft;
+    // Align the menu vertically above the menu
+    menuOptions.bottom = (window.innerHeight - buttonTop) + vPadding;
+
+    return menuOptions;
+};
+
 type ContextMenuTuple<T> = [boolean, RefObject<T>, () => void, () => void, (val: boolean) => void];
 export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<T> => {
     const button = useRef<T>(null);
@@ -430,6 +469,7 @@ export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<
     return [isOpen, button, open, close, setIsOpen];
 };
 
+@replaceableComponent("structures.LegacyContextMenu")
 export default class LegacyContextMenu extends ContextMenu {
     render() {
         return this.renderMenu(false);

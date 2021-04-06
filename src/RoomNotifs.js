@@ -202,12 +202,13 @@ function setRoomNotifsStateUnmuted(roomId, newState) {
 }
 
 function findOverrideMuteRule(roomId) {
-    if (!MatrixClientPeg.get().pushRules ||
-        !MatrixClientPeg.get().pushRules['global'] ||
-        !MatrixClientPeg.get().pushRules['global'].override) {
+    const cli = MatrixClientPeg.get();
+    if (!cli.pushRules ||
+        !cli.pushRules['global'] ||
+        !cli.pushRules['global'].override) {
         return null;
     }
-    for (const rule of MatrixClientPeg.get().pushRules['global'].override) {
+    for (const rule of cli.pushRules['global'].override) {
         if (isRuleForRoom(roomId, rule)) {
             if (isMuteRule(rule) && rule.enabled) {
                 return rule;

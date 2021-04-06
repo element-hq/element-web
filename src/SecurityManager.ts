@@ -98,11 +98,27 @@ async function getSecretStorageKey(
     { keys: keyInfos }: { keys: Record<string, ISecretStorageKeyInfo> },
     ssssItemName,
 ): Promise<[string, Uint8Array]> {
-    const keyInfoEntries = Object.entries(keyInfos);
-    if (keyInfoEntries.length > 1) {
-        throw new Error("Multiple storage key requests not implemented");
+    const cli = MatrixClientPeg.get();
+    let keyId = await cli.getDefaultSecretStorageKeyId();
+    let keyInfo;
+    if (keyId) {
+        // use the default SSSS key if set
+        keyInfo = keyInfos[keyId];
+        if (!keyInfo) {
+            // if the default key is not available, pretend the default key
+            // isn't set
+            keyId = undefined;
+        }
     }
-    const [keyId, keyInfo] = keyInfoEntries[0];
+    if (!keyId) {
+        // if no default SSSS key is set, fall back to a heuristic of using the
+        // only available key, if only one key is set
+        const keyInfoEntries = Object.entries(keyInfos);
+        if (keyInfoEntries.length > 1) {
+            throw new Error("Multiple storage key requests not implemented");
+        }
+        [keyId, keyInfo] = keyInfoEntries[0];
+    }
 
     // Check the in-memory cache
     if (isCachingAllowed() && secretStorageKeys[keyId]) {
@@ -379,6 +395,8 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
     } catch (e) {
         SecurityCustomisations.catchAccessSecretStorageError?.(e);
         console.error(e);
+        // Re-throw so that higher level logic can abort as needed
+        throw e;
     } finally {
         // Clear secret storage key cache now that work is complete
         secretStorageBeingAccessed = false;

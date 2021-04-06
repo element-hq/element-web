@@ -60,6 +60,11 @@ function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
     }
 }
 
+function parseImage(img: HTMLImageElement, partCreator: PartCreator) {
+    const { src } = img;
+    return partCreator.plain(`![${img.alt.replace(/[[\\\]]/g, c => "\\" + c)}](${src})`);
+}
+
 function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
     const parts = [];
     let language = "";
@@ -102,6 +107,8 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             return parseHeader(n, partCreator);
         case "A":
             return parseLink(<HTMLAnchorElement>n, partCreator);
+        case "IMG":
+            return parseImage(<HTMLImageElement>n, partCreator);
         case "BR":
             return partCreator.newline();
         case "EM":

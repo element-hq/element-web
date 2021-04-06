@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from "../../MatrixClientPeg";
 import isIp from "is-ip";
-import * as utils from 'matrix-js-sdk/src/utils';
+import * as utils from "matrix-js-sdk/src/utils";
+import {Room} from "matrix-js-sdk/src/models/room";
+
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
@@ -119,6 +121,10 @@ export class RoomPermalinkCreator {
         this._room.removeListener("RoomMember.membership", this.onMembership);
         this._room.removeListener("RoomState.events", this.onRoomState);
         this._started = false;
+    }
+
+    get serverCandidates() {
+        return this._serverCandidates;
     }
 
     isStarted() {
@@ -331,7 +337,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         return permalink;
     }
 
-    const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+    const m = permalink.match(matrixLinkify.ELEMENT_URL_PATTERN);
     if (m) {
         return m[1];
     }
@@ -365,7 +371,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 
         // If not a permalink, try the vector patterns.
         if (!permalinkParts) {
-            const m = permalink.match(matrixLinkify.VECTOR_URL_PATTERN);
+            const m = permalink.match(matrixLinkify.ELEMENT_URL_PATTERN);
             if (m) {
                 // A bit of a hack, but it gets the job done
                 const handler = new ElementPermalinkConstructor("http://localhost");
@@ -405,6 +411,23 @@ export function parsePermalink(fullUrl: string): PermalinkParts {
     return null; // not a permalink we can handle
 }
 
+/**
+ * Parses an app local link (`#/(user|room|group)/identifer`) to a Matrix entity
+ * (room, user, group). Such links are produced by `HtmlUtils` when encountering
+ * links, which calls `tryTransformPermalinkToLocalHref` in this module.
+ * @param {string} localLink The app local link
+ * @returns {PermalinkParts}
+ */
+export function parseAppLocalLink(localLink: string): PermalinkParts {
+    try {
+        const segments = localLink.replace("#/", "");
+        return ElementPermalinkConstructor.parseAppRoute(segments);
+    } catch (e) {
+        // Ignore failures
+    }
+    return null;
+}
+
 function getServerName(userId) {
     return userId.split(":").splice(1).join(":");
 }
@@ -434,3 +457,9 @@ function isHostnameIpAddress(hostname) {
 
     return isIp(hostname);
 }
+
+export const calculateRoomVia = (room: Room) => {
+    const permalinkCreator = new RoomPermalinkCreator(room);
+    permalinkCreator.load();
+    return permalinkCreator.serverCandidates;
+};

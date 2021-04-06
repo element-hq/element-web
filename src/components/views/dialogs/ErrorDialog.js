@@ -29,7 +29,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.ErrorDialog")
 export default class ErrorDialog extends React.Component {
     static propTypes = {
         title: PropTypes.string,
@@ -50,6 +52,10 @@ export default class ErrorDialog extends React.Component {
         button: null,
     };
 
+    onClick = () => {
+        this.props.onFinished(true);
+    };
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
@@ -64,7 +70,7 @@ export default class ErrorDialog extends React.Component {
                     { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                    <button className="mx_Dialog_primary" onClick={this.onClick} autoFocus={this.props.focus}>
                         { this.props.button || _t('OK') }
                     </button>
                 </div>

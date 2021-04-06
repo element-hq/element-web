@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015, 2016, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,19 @@ limitations under the License.
 
 .mx_MFileBody_download {
     color: $accent-color;
+
+    .mx_MFileBody_download_icon {
+        // 12px instead of 14px to better match surrounding font size
+        width: 12px;
+        height: 12px;
+        mask-size: 12px;
+
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-image: url("$(res)/img/download.svg");
+        background-color: $accent-color;
+        display: inline-block;
+    }
 }
 
 .mx_MFileBody_download a {
@@ -44,4 +57,47 @@ limitations under the License.
      * use javascript's cross-origin postMessage API to communicate how
      * big the content of the iframe is. */
     height: 1.5em;
+}
+
+.mx_MFileBody_info {
+    background-color: $message-body-panel-bg-color;
+    border-radius: 4px;
+    width: 270px;
+    padding: 8px;
+    color: $message-body-panel-fg-color;
+
+    .mx_MFileBody_info_icon {
+        background-color: $message-body-panel-icon-bg-color;
+        border-radius: 20px;
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        position: relative;
+        vertical-align: middle;
+        margin-right: 12px;
+
+        &::before {
+            content: '';
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: cover;
+            mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
+            background-color: $message-body-panel-fg-color;
+            width: 13px;
+            height: 15px;
+
+            position: absolute;
+            top: 8px;
+            left: 9px;
+        }
+    }
+
+    .mx_MFileBody_info_filename {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: inline-block;
+        width: calc(100% - 32px - 12px); // 32px icon, 12px margin on the icon
+        vertical-align: middle;
+    }
 }

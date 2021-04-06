@@ -20,8 +20,8 @@ $left-gutter: 64px;
 .mx_GroupLayout {
     .mx_EventTile {
         > .mx_SenderProfile {
-            line-height: $font-17px;
-            padding-left: $left-gutter;
+            line-height: $font-20px;
+            margin-left: $left-gutter;
         }
 
         > .mx_EventTile_line {
@@ -34,11 +34,11 @@ $left-gutter: 64px;
 
         .mx_MessageTimestamp {
             position: absolute;
-            width: 46px; /* 8 + 30 (avatar) + 8 */
+            width: $MessageTimestamp_width;
         }
 
         .mx_EventTile_line, .mx_EventTile_reply {
-            padding-top: 3px;
+            padding-top: 1px;
             padding-bottom: 3px;
             line-height: $font-22px;
         }
@@ -105,16 +105,9 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_readAvatars {
-            top: 27px;
-        }
-
-        &.mx_EventTile_continuation .mx_EventTile_readAvatars,
-        &.mx_EventTile_emote .mx_EventTile_readAvatars {
-            top: 5px;
-        }
-
-        &.mx_EventTile_info .mx_EventTile_readAvatars {
-            top: 4px;
+            // This aligns the avatar with the last line of the
+            // message. We want to move it one line up - 2rem
+            top: -2rem;
         }
 
         .mx_EventTile_content .markdown-body {

@@ -261,7 +261,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
     }
 
     public getHomeserverName(): string {
-        const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
+        const matches = /^@[^:]+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
         }
@@ -279,6 +279,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer'),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
+            // Gather up to 20 ICE candidates when a call arrives: this should be more than we'd
+            // ever normally need, so effectively this should make all the gathering happen when
+            // the call arrives.
+            iceCandidatePoolSize: 20,
             verificationMethods: [
                 verificationMethods.SAS,
                 SHOW_QR_CODE_METHOD,
@@ -292,10 +296,11 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
-        const customisedCallbacks = {
-            getDehydrationKey: SecurityCustomisations.getDehydrationKey,
-        };
-        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks, customisedCallbacks);
+        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
+        if (SecurityCustomisations.getDehydrationKey) {
+            opts.cryptoCallbacks.getDehydrationKey =
+                SecurityCustomisations.getDehydrationKey;
+        }
 
         this.matrixClient = createMatrixClient(opts);
 

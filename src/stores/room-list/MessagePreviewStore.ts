@@ -30,7 +30,7 @@ import { UPDATE_EVENT } from "../AsyncStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
-export const ROOM_PREVIEW_CHANGED = "room_preview_changed";
+const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 
 const PREVIEWS = {
     'm.room.message': {
@@ -84,6 +84,10 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         return MessagePreviewStore.internalInstance;
     }
 
+    public static getPreviewChangedEventName(room: Room): string {
+        return `${ROOM_PREVIEW_CHANGED}:${room?.roomId}`;
+    }
+
     /**
      * Gets the pre-translated preview for a given room
      * @param room The room to get the preview for.
@@ -120,7 +124,10 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         let changed = false;
         for (let i = events.length - 1; i >= 0; i--) {
-            if (i === events.length - MAX_EVENTS_BACKWARDS) return; // limit reached
+            if (i === events.length - MAX_EVENTS_BACKWARDS) {
+                // limit reached - clear the preview by breaking out of the loop
+                break;
+            }
 
             const event = events[i];
             const previewDef = PREVIEWS[event.getType()];
@@ -150,7 +157,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
                 // We've muted the underlying Map, so just emit that we've changed.
                 this.previews.set(room.roomId, map);
                 this.emit(UPDATE_EVENT, this);
-                this.emit(ROOM_PREVIEW_CHANGED, room);
+                this.emit(MessagePreviewStore.getPreviewChangedEventName(room), room);
             }
             return; // we're done
         }
@@ -158,7 +165,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         // At this point, we didn't generate a preview so clear it
         this.previews.set(room.roomId, new Map<TagID|TAG_ANY, string|null>());
         this.emit(UPDATE_EVENT, this);
-        this.emit(ROOM_PREVIEW_CHANGED, room);
+        this.emit(MessagePreviewStore.getPreviewChangedEventName(room), room);
     }
 
     protected async onAction(payload: ActionPayload) {

@@ -29,7 +29,7 @@ import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -51,7 +51,7 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     room: Room;
@@ -79,6 +79,7 @@ const contextMenuBelow = (elementRect: PartialDOMRect) => {
     return {left, top, chevronFace};
 };
 
+@replaceableComponent("views.rooms.RoomTile")
 export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
@@ -99,12 +100,23 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        MessagePreviewStore.instance.on(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+        MessagePreviewStore.instance.on(
+            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+            this.onRoomPreviewChanged,
+        );
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps = EchoChamber.forRoom(this.props.room);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        CommunityPrototypeStore.instance.on(UPDATE_EVENT, this.onCommunityUpdate);
+        CommunityPrototypeStore.instance.on(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
+        this.props.room.on("Room.name", this.onRoomNameUpdate);
+    }
+
+    private onRoomNameUpdate = (room) => {
+        this.forceUpdate();
     }
 
     private onNotificationUpdate = () => {
@@ -128,6 +140,26 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
             this.setState({messagePreview: this.generatePreview()});
         }
+        if (prevProps.room?.roomId !== this.props.room?.roomId) {
+            MessagePreviewStore.instance.off(
+                MessagePreviewStore.getPreviewChangedEventName(prevProps.room),
+                this.onRoomPreviewChanged,
+            );
+            MessagePreviewStore.instance.on(
+                MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+                this.onRoomPreviewChanged,
+            );
+            CommunityPrototypeStore.instance.off(
+                CommunityPrototypeStore.getUpdateEventName(prevProps.room?.roomId),
+                this.onCommunityUpdate,
+            );
+            CommunityPrototypeStore.instance.on(
+                CommunityPrototypeStore.getUpdateEventName(this.props.room?.roomId),
+                this.onCommunityUpdate,
+            );
+            prevProps.room?.off("Room.name", this.onRoomNameUpdate);
+            this.props.room?.on("Room.name", this.onRoomNameUpdate);
+        }
     }
 
     public componentDidMount() {
@@ -140,11 +172,18 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     public componentWillUnmount() {
         if (this.props.room) {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
+            MessagePreviewStore.instance.off(
+                MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+                this.onRoomPreviewChanged,
+            );
+            CommunityPrototypeStore.instance.off(
+                CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+                this.onCommunityUpdate,
+            );
+            this.props.room.off("Room.name", this.onRoomNameUpdate);
         }
         defaultDispatcher.unregister(this.dispatcherRef);
-        MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
-        CommunityPrototypeStore.instance.off(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -294,6 +333,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({generalMenuPosition: null}); // hide the menu
     };
 
+    private onInviteClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_invite',
+            roomId: this.props.room.roomId,
+        });
+        this.setState({generalMenuPosition: null}); // hide the menu
+    };
+
     private async saveNotifState(ev: ButtonEvent, newState: Volume) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -414,6 +464,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
             const lowPriorityLabel = _t("Low Priority");
 
+            const userId = MatrixClientPeg.get().getUserId();
+            const canInvite = this.props.room.canInvite(userId);
             contextMenu = <IconizedContextMenu
                 {...contextMenuBelow(this.state.generalMenuPosition)}
                 onFinished={this.onCloseGeneralMenu}
@@ -433,7 +485,13 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                         label={lowPriorityLabel}
                         iconClassName="mx_RoomTile_iconArrowDown"
                     />
-
+                    {canInvite ? (
+                        <IconizedContextMenuOption
+                            onClick={this.onInviteClick}
+                            label={_t("Invite People")}
+                            iconClassName="mx_RoomTile_iconInvite"
+                        />
+                    ) : null}
                     <IconizedContextMenuOption
                         onClick={this.onOpenRoomSettings}
                         label={_t("Settings")}

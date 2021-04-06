@@ -17,8 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from 'matrix-js-sdk';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import {decryptAES, encryptAES} from "matrix-js-sdk/src/crypto/aes";
@@ -46,11 +45,13 @@ import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
-import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
+import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY} from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import CountlyAnalytics from "./CountlyAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import {_t} from "./languageHandler";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -162,7 +163,8 @@ export async function getStoredSessionOwner(): Promise<[string, boolean]> {
  *     query-parameters extracted from the real query-string of the starting
  *     URI.
  *
- * @param {String} defaultDeviceDisplayName
+ * @param {string} defaultDeviceDisplayName
+ * @param {string} fragmentAfterLogin path to go to after a successful login, only used for "Try again"
  *
  * @returns {Promise} promise which resolves to true if we completed the token
  *    login, else false
@@ -170,6 +172,7 @@ export async function getStoredSessionOwner(): Promise<[string, boolean]> {
 export function attemptTokenLogin(
     queryParams: Record<string, string>,
     defaultDeviceDisplayName?: string,
+    fragmentAfterLogin?: string,
 ): Promise<boolean> {
     if (!queryParams.loginToken) {
         return Promise.resolve(false);
@@ -179,6 +182,12 @@ export function attemptTokenLogin(
     const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
     if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
+        Modal.createTrackedDialog("SSO", "Unknown HS", ErrorDialog, {
+            title: _t("We couldn't log you in"),
+            description: _t("We asked the browser to remember which homeserver you use to let you sign in, " +
+                "but unfortunately your browser has forgotten it. Go to the sign in page and try again."),
+            button: _t("Try again"),
+        });
         return Promise.resolve(false);
     }
 
@@ -198,8 +207,28 @@ export function attemptTokenLogin(
             return true;
         });
     }).catch((err) => {
-        console.error("Failed to log in with login token: " + err + " " +
-                      err.data);
+        Modal.createTrackedDialog("SSO", "Token Rejected", ErrorDialog, {
+            title: _t("We couldn't log you in"),
+            description: err.name === "ConnectionError"
+                ? _t("Your homeserver was unreachable and was not able to log you in. Please try again. " +
+                    "If this continues, please contact your homeserver administrator.")
+                : _t("Your homeserver rejected your log in attempt. " +
+                    "This could be due to things just taking too long. Please try again. " +
+                    "If this continues, please contact your homeserver administrator."),
+            button: _t("Try again"),
+            onFinished: tryAgain => {
+                if (tryAgain) {
+                    const cli = createClient({
+                        baseUrl: homeserver,
+                        idBaseUrl: identityServer,
+                    });
+                    const idpId = localStorage.getItem(SSO_IDP_ID_KEY) || undefined;
+                    PlatformPeg.get().startSingleSignOn(cli, "sso", fragmentAfterLogin, idpId);
+                }
+            },
+        });
+        console.error("Failed to log in with login token:");
+        console.error(err);
         return false;
     });
 }
@@ -246,7 +275,7 @@ function registerAsGuest(
     console.log(`Doing guest login on ${hsUrl}`);
 
     // create a temporary MatrixClient to do the login
-    const client = Matrix.createClient({
+    const client = createClient({
         baseUrl: hsUrl,
     });
 
@@ -366,7 +395,7 @@ async function abortLogin() {
 //      The plan is to gradually move the localStorage access done here into
 //      SessionStore to avoid bugs where the view becomes out-of-sync with
 //      localStorage (e.g. isGuest etc.)
-async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
     const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {

@@ -72,6 +72,7 @@ limitations under the License.
             position: relative; // to make default avatars work
             margin-right: 8px;
             height: 32px; // to remove the unknown 4px gap the browser puts below it
+            padding: 3px 0; // to align with and without using doubleName
 
             .mx_UserMenu_userAvatar {
                 border-radius: 32px; // should match avatar size
@@ -119,20 +120,16 @@ limitations under the License.
     }
 
     &.mx_UserMenu_minimized {
-        .mx_UserMenu_userHeader {
-            .mx_UserMenu_row {
-                justify-content: center;
-            }
+        padding-right: 0px;
 
-            .mx_UserMenu_userAvatarContainer {
-                margin-right: 0;
-            }
+        .mx_UserMenu_userAvatarContainer {
+            margin-right: 0px;
         }
     }
 }
 
 .mx_UserMenu_contextMenu {
-    width: 247px;
+    width: 258px;
 
     // These override the styles already present on the user menu rather than try to
     // define a new menu. They are specifically for the stacked menu when a community
@@ -275,6 +272,9 @@ limitations under the License.
 
     .mx_UserMenu_iconHome::before {
         mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
+    }
+    .mx_UserMenu_iconHosting::before {
+        mask-image: url('$(res)/img/element-icons/brands/element.svg');
     }
 
     .mx_UserMenu_iconBell::before {

@@ -33,13 +33,14 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement, {getPersistKey} from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
-import {SettingLevel} from "../../../settings/SettingLevel";
 import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
 import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
 import {MatrixCapabilities} from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component {
     constructor(props) {
         super(props);
@@ -240,7 +241,8 @@ export default class AppTile extends React.Component {
         console.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
         current[this.props.app.eventId] = true;
-        SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
+        const level = SettingsStore.firstSupportedLevel("allowedWidgets");
+        SettingsStore.setValue("allowedWidgets", roomId, level, current).then(() => {
             this.setState({hasPermissionToLoad: true});
 
             // Fetch a token for the integration manager, now that we're allowed to
@@ -325,9 +327,13 @@ export default class AppTile extends React.Component {
 
         // Additional iframe feature pemissions
         // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
-        const iframeFeatures = "microphone; camera; encrypted-media; autoplay; display-capture;";
+        const iframeFeatures = "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write;";
 
         const appTileBodyClass = 'mx_AppTileBody' + (this.props.miniMode ? '_mini  ' : ' ');
+        const appTileBodyStyles = {};
+        if (this.props.pointerEvents) {
+            appTileBodyStyles['pointer-events'] = this.props.pointerEvents;
+        }
 
         const loadingElement = (
             <div className="mx_AppLoading_spinner_fadeIn">
@@ -338,7 +344,7 @@ export default class AppTile extends React.Component {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
-                <div className={appTileBodyClass}>
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
                     <AppPermission
                         roomId={this.props.room.roomId}
                         creatorUserId={this.props.creatorUserId}
@@ -350,20 +356,20 @@ export default class AppTile extends React.Component {
             );
         } else if (this.state.initialising) {
             appTileBody = (
-                <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
+                <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')} style={appTileBodyStyles}>
                     { loadingElement }
                 </div>
             );
         } else {
             if (this.isMixedContent()) {
                 appTileBody = (
-                    <div className={appTileBodyClass}>
+                    <div className={appTileBodyClass} style={appTileBodyStyles}>
                         <AppWarning errorMsg="Error - Mixed content" />
                     </div>
                 );
             } else {
                 appTileBody = (
-                    <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
+                    <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')} style={appTileBodyStyles}>
                         { this.state.loading && loadingElement }
                         <iframe
                             allow={iframeFeatures}
@@ -477,6 +483,8 @@ AppTile.propTypes = {
     showPopout: PropTypes.bool,
     // Is this an instance of a user widget
     userWidget: PropTypes.bool,
+    // sets the pointer-events property on the iframe
+    pointerEvents: PropTypes.string,
 };
 
 AppTile.defaultProps = {

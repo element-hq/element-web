@@ -68,24 +68,24 @@ export default class AutocompleteWrapperModel {
         this.updateCallback({close: true});
     }
 
-    public async onTab(e: KeyboardEvent) {
+    /**
+     * If there is no current autocompletion, start one and move to the first selection.
+     */
+    public async startSelection() {
         const acComponent = this.getAutocompleterComponent();
-
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
             // Select the first item by moving "down"
             await acComponent.moveSelection(+1);
-        } else {
-            await acComponent.moveSelection(e.shiftKey ? -1 : +1);
         }
     }
 
-    public onUpArrow(e: KeyboardEvent) {
+    public selectPreviousSelection() {
         this.getAutocompleterComponent().moveSelection(-1);
     }
 
-    public onDownArrow(e: KeyboardEvent) {
+    public selectNextSelection() {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 

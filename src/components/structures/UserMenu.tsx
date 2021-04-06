@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,27 +15,30 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import classNames from "classnames";
+import * as fbEmitter from "fbemitter";
+
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "./ContextMenu";
-import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
+import { USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB } from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
-import {getHostingLink} from "../../utils/HostingLink";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
-import {getHomePageUrl} from "../../utils/pages";
+import { getHomePageUrl } from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
-import classNames from "classnames";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { SettingLevel } from "../../settings/SettingLevel";
 import IconizedContextMenu, {
@@ -43,14 +46,17 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
-import * as fbEmitter from "fbemitter";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import { showCommunityInviteDialog } from "../../RoomInvite";
-import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
-import {UIFeature} from "../../settings/UIFeature";
+import { UIFeature } from "../../settings/UIFeature";
+import HostSignupAction from "./HostSignupAction";
+import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
+import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
+import RoomName from "../views/elements/RoomName";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 interface IProps {
     isMinimized: boolean;
@@ -61,8 +67,10 @@ type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
 interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
+    selectedSpace?: Room;
 }
 
+@replaceableComponent("structures.UserMenu")
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;
@@ -78,6 +86,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
+        if (SettingsStore.getValue("feature_spaces")) {
+            SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
+        }
     }
 
     private get hasHomePage(): boolean {
@@ -95,6 +106,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         this.tagStoreRef.remove();
+        if (SettingsStore.getValue("feature_spaces")) {
+            SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
+        }
     }
 
     private onTagStoreUpdate = () => {
@@ -102,17 +116,25 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private isUserOnDarkTheme(): boolean {
-        const theme = SettingsStore.getValue("theme");
-        if (theme.startsWith("custom-")) {
-            return getCustomTheme(theme.substring("custom-".length)).is_dark;
+        if (SettingsStore.getValue("use_system_theme")) {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        } else {
+            const theme = SettingsStore.getValue("theme");
+            if (theme.startsWith("custom-")) {
+                return getCustomTheme(theme.substring("custom-".length)).is_dark;
+            }
+            return theme === "dark";
         }
-        return theme === "dark";
     }
 
     private onProfileUpdate = async () => {
         // the store triggered an update, so force a layout update. We don't
         // have any state to store here for that to magically happen.
         this.forceUpdate();
+    };
+
+    private onSelectedSpaceUpdate = async (selectedSpace?: Room) => {
+        this.setState({ selectedSpace });
     };
 
     private onThemeChanged = () => {
@@ -272,7 +294,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
 
         let topSection;
-        const signupLink = getHostingLink("user-context-menu");
+        const hostSignupConfig: IHostSignupConfig = SdkConfig.get().hostSignup;
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -292,24 +314,19 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     })}
                 </div>
             )
-        } else if (signupLink) {
-            topSection = (
-                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_hostingLink">
-                    {_t(
-                        "<a>Upgrade</a> to your own domain", {},
-                        {
-                            a: sub => (
-                                <a
-                                    href={signupLink}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    tabIndex={-1}
-                                >{sub}</a>
-                            ),
-                        },
-                    )}
-                </div>
-            );
+        } else if (hostSignupConfig) {
+            if (hostSignupConfig && hostSignupConfig.url) {
+                // If hostSignup.domains is set to a non-empty array, only show
+                // dialog if the user is on the domain or a subdomain.
+                const hostSignupDomains = hostSignupConfig.domains || [];
+                const mxDomain = MatrixClientPeg.get().getDomain();
+                const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
+                if (!hostSignupConfig.domains || validDomains.length > 0) {
+                    topSection = <div onClick={this.onCloseMenu}>
+                        <HostSignupAction />
+                    </div>;
+                }
+            }
         }
 
         let homeButton = null;
@@ -517,7 +534,16 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 {/* masked image in CSS */}
             </span>
         );
-        if (prototypeCommunityName) {
+        if (this.state.selectedSpace) {
+            name = (
+                <div className="mx_UserMenu_doubleName">
+                    <span className="mx_UserMenu_userName">{displayName}</span>
+                    <RoomName room={this.state.selectedSpace}>
+                        {(roomName) => <span className="mx_UserMenu_subUserName">{roomName}</span>}
+                    </RoomName>
+                </div>
+            );
+        } else if (prototypeCommunityName) {
             name = (
                 <div className="mx_UserMenu_doubleName">
                     <span className="mx_UserMenu_userName">{prototypeCommunityName}</span>

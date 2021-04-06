@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 // @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from "matrix-js-sdk";
+import {createClient} from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -33,10 +33,20 @@ interface IPasswordFlow {
     type: "m.login.password";
 }
 
+export enum IdentityProviderBrand {
+    Gitlab = "org.matrix.gitlab",
+    Github = "org.matrix.github",
+    Apple = "org.matrix.apple",
+    Google = "org.matrix.google",
+    Facebook = "org.matrix.facebook",
+    Twitter = "org.matrix.twitter",
+}
+
 export interface IIdentityProvider {
     id: string;
     name: string;
     icon?: string;
+    brand?: IdentityProviderBrand | string;
 }
 
 export interface ISSOFlow {
@@ -105,7 +115,7 @@ export default class Login {
      */
     public createTemporaryClient(): MatrixClient {
         if (this.tempClient) return this.tempClient; // use memoization
-        return this.tempClient = Matrix.createClient({
+        return this.tempClient = createClient({
             baseUrl: this.hsUrl,
             idBaseUrl: this.isUrl,
         });
@@ -200,7 +210,7 @@ export async function sendLoginRequest(
     loginType: string,
     loginParams: ILoginParams,
 ): Promise<IMatrixClientCreds> {
-    const client = Matrix.createClient({
+    const client = createClient({
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
     });

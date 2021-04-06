@@ -18,6 +18,16 @@ limitations under the License.
     position: relative;
     width: min-content;
 
+    // this isn't a floating tooltip so override some things to not need to bother with z-index and floating
+    .mx_Tooltip {
+        display: inline-block;
+        position: absolute;
+        z-index: unset;
+        width: max-content;
+        left: 72px;
+        top: 0;
+    }
+
     &::before, &::after {
         content: '';
         position: absolute;

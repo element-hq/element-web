@@ -20,6 +20,7 @@ import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
 import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';
 import { SetupEncryptionStore, PHASE_DONE } from '../../../../stores/SetupEncryptionStore';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 function iconFromPhase(phase) {
     if (phase === PHASE_DONE) {
@@ -29,6 +30,7 @@ function iconFromPhase(phase) {
     }
 }
 
+@replaceableComponent("views.dialogs.security.SetupEncryptionDialog")
 export default class SetupEncryptionDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

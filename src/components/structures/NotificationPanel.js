@@ -23,10 +23,12 @@ import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as sdk from "../../index";
 import BaseCard from "../views/right_panel/BaseCard";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
+@replaceableComponent("structures.NotificationPanel")
 class NotificationPanel extends React.Component {
     static propTypes = {
         onClose: PropTypes.func.isRequired,
@@ -39,7 +41,7 @@ class NotificationPanel extends React.Component {
 
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
             <h2>{_t('You’re all caught up')}</h2>
-            <p>{_t('You have no visible notifications in this room.')}</p>
+            <p>{_t('You have no visible notifications.')}</p>
         </div>);
 
         let content;

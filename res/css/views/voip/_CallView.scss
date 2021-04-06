@@ -35,6 +35,10 @@ limitations under the License.
 
 .mx_CallView_pip {
     width: 320px;
+    padding-bottom: 8px;
+    margin-top: 10px;
+    box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
 
     .mx_CallView_voice {
         height: 180px;
@@ -51,7 +55,7 @@ limitations under the License.
         }
     }
 
-    .mx_CallView_voice_holdText {
+    .mx_CallView_holdTransferContent {
         padding-top: 10px;
         padding-bottom: 25px;
     }
@@ -78,60 +82,16 @@ limitations under the License.
     }
 }
 
-.mx_CallView_voice_hold {
+.mx_CallView_voice .mx_CallView_holdTransferContent {
     // This masks the avatar image so when it's blurred, the edge is still crisp
     .mx_CallView_voice_avatarContainer {
         border-radius: 2000px;
         overflow: hidden;
         position: relative;
-        &::after {
-            position: absolute;
-            content: '';
-            width: 100%;
-            height: 100%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.6);
-            background-image: url('$(res)/img/voip/paused.svg');
-            background-position: center;
-            background-size: 40px;
-            background-repeat: no-repeat;
-        }
-        .mx_CallView_pip &::after {
-            background-size: 30px;
-        }
-    }
-    .mx_BaseAvatar {
-        filter: blur(20px);
-        overflow: hidden;
     }
 }
 
-.mx_CallView_voice_secondaryAvatarContainer {
-    border-radius: 2000px;
-    overflow: hidden;
-    position: relative;
-    &::after {
-        position: absolute;
-        content: '';
-        width: 100%;
-        height: 100%;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(0, 0, 0, 0.6);
-        background-image: url('$(res)/img/voip/paused.svg');
-        background-position: center;
-        background-size: 40px;
-        background-repeat: no-repeat;
-    }
-    .mx_CallView_pip &::after {
-        background-size: 24px;
-    }
-}
-
-.mx_CallView_voice_holdText {
+.mx_CallView_holdTransferContent {
     height: 20px;
     padding-top: 20px;
     padding-bottom: 15px;
@@ -182,7 +142,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_video_holdContent {
+.mx_CallView_video .mx_CallView_holdTransferContent {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -350,8 +310,14 @@ limitations under the License.
     }
 }
 
-// Makes the alignment correct
-.mx_CallView_callControls_nothing {
+.mx_CallView_callControls_dialpad {
+    margin-right: auto;
+    &::before {
+        background-image: url('$(res)/img/voip/dialpad.svg');
+    }
+}
+
+.mx_CallView_callControls_button_dialpad_hidden {
     margin-right: auto;
     cursor: initial;
 }

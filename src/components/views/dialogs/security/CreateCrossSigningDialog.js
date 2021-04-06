@@ -25,15 +25,18 @@ import DialogButtons from '../../elements/DialogButtons';
 import BaseDialog from '../BaseDialog';
 import Spinner from '../../elements/Spinner';
 import InteractiveAuthDialog from '../InteractiveAuthDialog';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
  * Walks the user through the process of creating a cross-signing keys. In most
  * cases, only a spinner is shown, but for more complex auth like SSO, the user
  * may need to complete some steps to proceed.
  */
+@replaceableComponent("views.dialogs.security.CreateCrossSigningDialog")
 export default class CreateCrossSigningDialog extends React.PureComponent {
     static propTypes = {
         accountPassword: PropTypes.string,
+        tokenLogin: PropTypes.bool,
     };
 
     constructor(props) {
@@ -96,6 +99,9 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
                 user: MatrixClientPeg.get().getUserId(),
                 password: this.state.accountPassword,
             });
+        } else if (this.props.tokenLogin) {
+            // We are hoping the grace period is active
+            await makeRequest({});
         } else {
             const dialogAesthetics = {
                 [SSOAuthEntry.PHASE_PREAUTH]: {
@@ -144,6 +150,12 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
             });
             this.props.onFinished(true);
         } catch (e) {
+            if (this.props.tokenLogin) {
+                // ignore any failures, we are relying on grace period here
+                this.props.onFinished();
+                return;
+            }
+
             this.setState({ error: e });
             console.error("Error bootstrapping cross-signing", e);
         }

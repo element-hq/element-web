@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 import {Action} from "../../dispatcher/actions";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {EventStatus} from "matrix-js-sdk/src/models/event";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -31,10 +32,11 @@ const STATUS_BAR_EXPANDED_LARGE = 2;
 function getUnsentMessages(room) {
     if (!room) { return []; }
     return room.getPendingEvents().filter(function(ev) {
-        return ev.status === Matrix.EventStatus.NOT_SENT;
+        return ev.status === EventStatus.NOT_SENT;
     });
 }
 
+@replaceableComponent("structures.RoomStatusBar")
 export default class RoomStatusBar extends React.Component {
     static propTypes = {
         // the room this statusbar is representing.
@@ -193,6 +195,10 @@ export default class RoomStatusBar extends React.Component {
                 resourceLimitError.data.admin_contact, {
                 'monthly_active_user': _td(
                     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
+                    "Please <a>contact your service administrator</a> to continue using the service.",
+                ),
+                'hs_disabled': _td(
+                    "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
                     "Please <a>contact your service administrator</a> to continue using the service.",
                 ),
                 '': _td(
