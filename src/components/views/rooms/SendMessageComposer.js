@@ -502,9 +502,10 @@ export default class SendMessageComposer extends React.Component {
             member.rawDisplayName : userId;
         const caret = this._editorRef.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        // index is -1 if there are no parts but we only care for if this would be the part in position 0
-        const insertIndex = position.index > 0 ? position.index : 0;
-        const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
+        // createMentionParts() assumes that the mention already has it's own part
+        // which isn't true, therefore we increase the position.index by 1. This
+        // also solves the problem of the index being -1 when the composer is empty.
+        const parts = partCreator.createMentionParts(position.index + 1, displayName, userId);
         model.transform(() => {
             const addedLen = model.insert(parts, position);
             return model.positionForOffset(caret.offset + addedLen, true);
