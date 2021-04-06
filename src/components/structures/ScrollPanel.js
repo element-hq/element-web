@@ -133,6 +133,10 @@ export default class ScrollPanel extends React.Component {
          */
         onScroll: PropTypes.func,
 
+        /* onUserScroll: callback which is called when the user interacts with the room timeline
+         */
+        onUserScroll: PropTypes.func,
+
         /* className: classnames to add to the top-level div
          */
         className: PropTypes.string,
@@ -535,30 +539,38 @@ export default class ScrollPanel extends React.Component {
      * @param {object} ev the keyboard event
      */
     handleScrollKey = ev => {
+        let isScrolling = false;
         switch (ev.key) {
             case Key.PAGE_UP:
                 if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
                     this.scrollRelative(-1);
                 }
                 break;
 
             case Key.PAGE_DOWN:
                 if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
                     this.scrollRelative(1);
                 }
                 break;
 
             case Key.HOME:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
                     this.scrollToTop();
                 }
                 break;
 
             case Key.END:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
                     this.scrollToBottom();
                 }
                 break;
+        }
+        if (isScrolling && this.props.onUserScroll) {
+            this.props.onUserScroll(ev);
         }
     };
 
@@ -896,6 +908,7 @@ export default class ScrollPanel extends React.Component {
         // list-style-type: none; is no longer a list
         return (<AutoHideScrollbar wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
+                onWheel={this.props.onUserScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
                     { this.props.fixedChildren }
                     <div className="mx_RoomView_messageListWrapper">

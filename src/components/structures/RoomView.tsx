@@ -637,6 +637,17 @@ export default class RoomView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
     }
 
+    private onUserScroll = () => {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.room.roomId,
+                event_id: this.state.initialEventId,
+                highlighted: false,
+            });
+        }
+    }
+
     private onLayoutChange = () => {
         this.setState({
             layout: SettingsStore.getValue("layout"),
@@ -2011,6 +2022,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 eventId={this.state.initialEventId}
                 eventPixelOffset={this.state.initialEventPixelOffset}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className={messagePanelClassNames}
