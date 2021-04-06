@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,15 +25,23 @@ const TYPING_SERVER_TIMEOUT = 30000;
  * Tracks typing state for users.
  */
 export default class TypingStore {
+    private _typingStates: {
+        [roomId: string]: {
+            isTyping: boolean,
+            userTimer: Timer,
+            serverTimer: Timer,
+        },
+    };
+
     constructor() {
         this.reset();
     }
 
     static sharedInstance(): TypingStore {
-        if (global.mxTypingStore === undefined) {
-            global.mxTypingStore = new TypingStore();
+        if (window.mxTypingStore === undefined) {
+            window.mxTypingStore = new TypingStore();
         }
-        return global.mxTypingStore;
+        return window.mxTypingStore;
     }
 
     /**

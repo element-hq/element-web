@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -59,16 +58,28 @@ async function checkIdentityServerUrl(u) {
     }
 }
 
-@replaceableComponent("views.settings.SetIdServer")
-export default class SetIdServer extends React.Component {
-    static propTypes = {
-        // Whether or not the ID server is missing terms. This affects the text
-        // shown to the user.
-        missingTerms: PropTypes.bool,
-    };
+interface IProps {
+    // Whether or not the ID server is missing terms. This affects the text
+    // shown to the user.
+    missingTerms: boolean;
+}
 
-    constructor() {
-        super();
+interface IState {
+    defaultIdServer?: string;
+    currentClientIdServer: string;
+    idServer?: string;
+    error?: string;
+    busy: boolean;
+    disconnectBusy: boolean;
+    checking: boolean;
+}
+
+@replaceableComponent("views.settings.SetIdServer")
+export default class SetIdServer extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
+
+    constructor(props) {
+        super(props);
 
         let defaultIdServer = '';
         if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
@@ -371,7 +382,7 @@ export default class SetIdServer extends React.Component {
 
         let discoSection;
         if (idServerUrl) {
-            let discoButtonContent = _t("Disconnect");
+            let discoButtonContent: React.ReactNode = _t("Disconnect");
             let discoBodyText = _t(
                 "Disconnecting from your identity server will mean you " +
                 "won't be discoverable by other users and you won't be " +

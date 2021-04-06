@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t, _td} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
@@ -23,6 +22,7 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 import {EventType} from "matrix-js-sdk/src/@types/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -63,14 +63,14 @@ function parseIntWithDefault(val, def) {
     return isNaN(res) ? def : res;
 }
 
-export class BannedUser extends React.Component {
-    static propTypes = {
-        canUnban: PropTypes.bool,
-        member: PropTypes.object.isRequired, // js-sdk RoomMember
-        by: PropTypes.string.isRequired,
-        reason: PropTypes.string,
-    };
+interface IBannedUserProps {
+    canUnban: boolean;
+    member: RoomMember;
+    by: string;
+    reason: string;
+}
 
+export class BannedUser extends React.Component<IBannedUserProps> {
     _onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -107,12 +107,12 @@ export class BannedUser extends React.Component {
     }
 }
 
-@replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
-export default class RolesRoomSettingsTab extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
+interface IProps {
+    roomId: string;
+}
 
+@replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
+export default class RolesRoomSettingsTab extends React.Component<IProps> {
     componentDidMount(): void {
         MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership);
     }

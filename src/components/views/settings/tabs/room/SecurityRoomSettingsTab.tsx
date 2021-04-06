@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
@@ -26,16 +25,28 @@ import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 import {SettingLevel} from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+
+type JoinRule = "public" | "knock" | "invite" | "private";
+type GuestAccess = "can_join" | "forbidden";
+type History = "invited" | "joined" | "shared" | "world_readable";
+
+interface IProps {
+    roomId: string;
+}
+
+interface IState {
+    joinRule: JoinRule;
+    guestAccess: GuestAccess;
+    history: History;
+    hasAliases: boolean;
+    encrypted: boolean;
+}
 
 @replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
-export default class SecurityRoomSettingsTab extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
-
-    constructor() {
-        super();
+export default class SecurityRoomSettingsTab extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
 
         this.state = {
             joinRule: "invite",
@@ -47,23 +58,23 @@ export default class SecurityRoomSettingsTab extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    async UNSAFE_componentWillMount(): void { // eslint-disable-line camelcase
+    async UNSAFE_componentWillMount(): Promise<void> { // eslint-disable-line camelcase
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvent);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         const state = room.currentState;
 
-        const joinRule = this._pullContentPropertyFromEvent(
+        const joinRule: JoinRule = this._pullContentPropertyFromEvent(
             state.getStateEvents("m.room.join_rules", ""),
             'join_rule',
             'invite',
         );
-        const guestAccess = this._pullContentPropertyFromEvent(
+        const guestAccess: GuestAccess = this._pullContentPropertyFromEvent(
             state.getStateEvents("m.room.guest_access", ""),
             'guest_access',
             'forbidden',
         );
-        const history = this._pullContentPropertyFromEvent(
+        const history: History = this._pullContentPropertyFromEvent(
             state.getStateEvents("m.room.history_visibility", ""),
             'history_visibility',
             'shared',
@@ -163,8 +174,8 @@ export default class SecurityRoomSettingsTab extends React.Component {
         // invite them, you clearly want them to join, whether they're a
         // guest or not.  In practice, guest_access should probably have
         // been implemented as part of the join_rules enum.
-        let joinRule = "invite";
-        let guestAccess = "can_join";
+        let joinRule: JoinRule = "invite";
+        let guestAccess: GuestAccess = "can_join";
 
         switch (roomAccess) {
             case "invite_only":

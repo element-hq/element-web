@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,13 @@ Once a timer is finished or aborted, it can't be started again
 a new one through `clone()` or `cloneIfRun()`.
 */
 export default class Timer {
+    private _timeout: number;
+    private _timerHandle: NodeJS.Timeout;
+    private _startTs: number;
+    private _promise: Promise<void>;
+    private _resolve: () => void;
+    private _reject: (Error) => void;
+
     constructor(timeout) {
         this._timeout = timeout;
         this._onTimeout = this._onTimeout.bind(this);
@@ -35,7 +42,7 @@ export default class Timer {
     _setNotStarted() {
         this._timerHandle = null;
         this._startTs = null;
-        this._promise = new Promise((resolve, reject) => {
+        this._promise = new Promise<void>((resolve, reject) => {
             this._resolve = resolve;
             this._reject = reject;
         }).finally(() => {

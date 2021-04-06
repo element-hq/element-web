@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,10 +28,17 @@ import {SettingLevel} from "../../../settings/SettingLevel";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import SeshatResetDialog from '../dialogs/SeshatResetDialog';
 
+interface IState {
+    enabling: boolean;
+    eventIndexSize: number;
+    roomCount: number;
+    eventIndexingEnabled: boolean;
+}
+
 @replaceableComponent("views.settings.EventIndexPanel")
-export default class EventIndexPanel extends React.Component {
-    constructor() {
-        super();
+export default class EventIndexPanel extends React.Component<{}, IState> {
+    constructor(props) {
+        super(props);
 
         this.state = {
             enabling: false,
@@ -68,7 +75,7 @@ export default class EventIndexPanel extends React.Component {
         }
     }
 
-    async componentDidMount(): void {
+    componentDidMount(): void {
         this.updateState();
     }
 
@@ -104,6 +111,8 @@ export default class EventIndexPanel extends React.Component {
 
     _onManage = async () => {
         Modal.createTrackedDialogAsync('Message search', 'Message search',
+            // @ts-ignore: TS doesn't seem to like the type of this now that it
+            // has also been converted to TS as well, but I can't figure out why...
             import('../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog'),
             {
                 onFinished: () => {},

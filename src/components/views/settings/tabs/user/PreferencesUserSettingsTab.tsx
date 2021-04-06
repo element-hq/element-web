@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +23,24 @@ import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+
+interface IState {
+    autoLaunch: boolean;
+    autoLaunchSupported: boolean;
+    warnBeforeExit: boolean;
+    warnBeforeExitSupported: boolean;
+    alwaysShowMenuBarSupported: boolean;
+    alwaysShowMenuBar: boolean;
+    minimizeToTraySupported: boolean;
+    minimizeToTray: boolean;
+    autocompleteDelay: string,
+    readMarkerInViewThresholdMs: string,
+    readMarkerOutOfViewThresholdMs: string,
+}
 
 @replaceableComponent("views.settings.tabs.user.PreferencesUserSettingsTab")
-export default class PreferencesUserSettingsTab extends React.Component {
+export default class PreferencesUserSettingsTab extends React.Component<{}, IState> {
     static ROOM_LIST_SETTINGS = [
         'breadcrumbs',
     ];
@@ -68,8 +82,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
         // Autocomplete delay (niche text box)
     ];
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             autoLaunch: false,
@@ -89,7 +103,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         };
     }
 
-    async componentDidMount(): void {
+    async componentDidMount(): Promise<void> {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();

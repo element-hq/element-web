@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2016, 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +16,7 @@ limitations under the License.
 
 import url from 'url';
 import SettingsStore from "./settings/SettingsStore";
-import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
+import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from './Terms';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import request from "browser-request";
 
@@ -31,6 +30,12 @@ const imApiVersion = "1.1";
 // TODO: Generify the name of this class and all components within - it's not just for Scalar.
 
 export default class ScalarAuthClient {
+    private apiUrl: string;
+    private uiUrl: string;
+    private scalarToken: string;
+    private termsInteractionCallback: TermsInteractionCallback;
+    private isDefaultManager: boolean;
+
     constructor(apiUrl, uiUrl) {
         this.apiUrl = apiUrl;
         this.uiUrl = uiUrl;
@@ -154,7 +159,7 @@ export default class ScalarAuthClient {
                 parsedImRestUrl.pathname = '';
                 return startTermsFlow([new Service(
                     SERVICE_TYPES.IM,
-                    parsedImRestUrl.format(),
+                    url.format(parsedImRestUrl),
                     token,
                 )], this.termsInteractionCallback).then(() => {
                     return token;
@@ -243,7 +248,7 @@ export default class ScalarAuthClient {
     disableWidgetAssets(widgetType: WidgetType, widgetId) {
         let url = this.apiUrl + '/widgets/set_assets_state';
         url = this.getStarterLink(url);
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             request({
                 method: 'GET', // XXX: Actions shouldn't be GET requests
                 uri: url,

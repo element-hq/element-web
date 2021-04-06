@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2018, 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,15 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, {createRef} from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import dis from '../../../dispatcher/dispatcher';
 import Stickerpicker from './Stickerpicker';
-import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
+import { makeRoomPermalink, RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -35,19 +37,26 @@ import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {RecordingState} from "../../../voice/VoiceRecording";
 import Tooltip, {Alignment} from "../elements/Tooltip";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
+import { E2EStatus } from '../../../utils/ShieldUtils';
+import SendMessageComposer from "./SendMessageComposer";
 
-function ComposerAvatar(props) {
+interface IComposerAvatarProps {
+    me: object;
+}
+
+function ComposerAvatar(props: IComposerAvatarProps) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
         <MemberStatusMessageAvatar member={props.me} width={24} height={24} />
     </div>;
 }
 
-ComposerAvatar.propTypes = {
-    me: PropTypes.object.isRequired,
-};
+interface ISendButtonProps {
+    onClick: () => void;
+}
 
-function SendButton(props) {
+function SendButton(props: ISendButtonProps) {
     return (
         <AccessibleTooltipButton
             className="mx_MessageComposer_sendMessage"
@@ -57,10 +66,6 @@ function SendButton(props) {
     );
 }
 
-SendButton.propTypes = {
-    onClick: PropTypes.func.isRequired,
-};
-
 const EmojiButton = ({addEmoji}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -68,7 +73,7 @@ const EmojiButton = ({addEmoji}) => {
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
         const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
         </ContextMenu>;
     }
@@ -98,17 +103,17 @@ const EmojiButton = ({addEmoji}) => {
     </React.Fragment>;
 };
 
-class UploadButton extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    }
+interface IUploadButtonProps {
+    roomId: string;
+}
+
+class UploadButton extends React.Component<IUploadButtonProps> {
+    private _uploadInput = React.createRef<HTMLInputElement>();
+    private _dispatcherRef: string;
 
     constructor(props) {
         super(props);
-        this.onUploadClick = this.onUploadClick.bind(this);
-        this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
-        this._uploadInput = createRef();
         this._dispatcherRef = dis.register(this.onAction);
     }
 
@@ -116,13 +121,13 @@ class UploadButton extends React.Component {
         dis.unregister(this._dispatcherRef);
     }
 
-    onAction = payload => {
+    private onAction = payload => {
         if (payload.action === "upload_file") {
             this.onUploadClick();
         }
     };
 
-    onUploadClick(ev) {
+    private onUploadClick = () => {
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({action: 'require_registration'});
             return;
@@ -130,7 +135,7 @@ class UploadButton extends React.Component {
         this._uploadInput.current.click();
     }
 
-    onUploadFileInputChange(ev) {
+    private onUploadFileInputChange = (ev) => {
         if (ev.target.files.length === 0) return;
 
         // take a copy so we can safely reset the value of the form control
@@ -171,19 +176,34 @@ class UploadButton extends React.Component {
     }
 }
 
+interface IProps {
+    room: Room;
+    resizeNotifier: ResizeNotifier;
+    permalinkCreator: RoomPermalinkCreator;
+    replyToEvent?: MatrixEvent;
+    e2eStatus?: E2EStatus;
+}
+
+interface IState {
+    tombstone: MatrixEvent;
+    canSendMessages: boolean;
+    isComposerEmpty: boolean;
+    haveRecording: boolean;
+    recordingTimeLeftSeconds?: number;
+    me?: RoomMember;
+}
+
 @replaceableComponent("views.rooms.MessageComposer")
-export default class MessageComposer extends React.Component {
+export default class MessageComposer extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
+    private messageComposerInput: SendMessageComposer;
+
     constructor(props) {
         super(props);
-        this.onInputStateChanged = this.onInputStateChanged.bind(this);
-        this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
-        this._onTombstoneClick = this._onTombstoneClick.bind(this);
-        this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
         VoiceRecordingStore.instance.on(UPDATE_EVENT, this._onVoiceStoreUpdate);
-        this._dispatcherRef = null;
 
         this.state = {
-            tombstone: this._getRoomTombstone(),
+            tombstone: this.getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
             isComposerEmpty: true,
             haveRecording: false,
@@ -191,7 +211,13 @@ export default class MessageComposer extends React.Component {
         };
     }
 
-    onAction = (payload) => {
+    componentDidMount() {
+        this.dispatcherRef = dis.register(this.onAction);
+        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+        this.waitForOwnMember();
+    }
+
+    private onAction = (payload) => {
         if (payload.action === 'reply_to_event') {
             // add a timeout for the reply preview to be rendered, so
             // that the ScrollPanel listening to the resizeNotifier can
@@ -203,13 +229,7 @@ export default class MessageComposer extends React.Component {
         }
     };
 
-    componentDidMount() {
-        this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
-        this._waitForOwnMember();
-    }
-
-    _waitForOwnMember() {
+    private waitForOwnMember() {
         // if we have the member already, do that
         const me = this.props.room.getMember(MatrixClientPeg.get().getUserId());
         if (me) {
@@ -227,34 +247,28 @@ export default class MessageComposer extends React.Component {
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
         VoiceRecordingStore.instance.off(UPDATE_EVENT, this._onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
     }
 
-    _onRoomStateEvents(ev, state) {
+    private onRoomStateEvents = (ev, state) => {
         if (ev.getRoomId() !== this.props.room.roomId) return;
 
         if (ev.getType() === 'm.room.tombstone') {
-            this.setState({tombstone: this._getRoomTombstone()});
+            this.setState({tombstone: this.getRoomTombstone()});
         }
         if (ev.getType() === 'm.room.power_levels') {
             this.setState({canSendMessages: this.props.room.maySendMessage()});
         }
     }
 
-    _getRoomTombstone() {
+    private getRoomTombstone() {
         return this.props.room.currentState.getStateEvents('m.room.tombstone', '');
     }
 
-    onInputStateChanged(inputState) {
-        // Merge the new input state with old to support partial updates
-        inputState = Object.assign({}, this.state.inputState, inputState);
-        this.setState({inputState});
-    }
-
-    _onTombstoneClick(ev) {
+    private onTombstoneClick = (ev) => {
         ev.preventDefault();
 
         const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
@@ -284,7 +298,7 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    renderPlaceholderText() {
+    private renderPlaceholderText = () => {
         if (this.props.replyToEvent) {
             if (this.props.e2eStatus) {
                 return _t('Send an encrypted reply…');
@@ -386,7 +400,7 @@ export default class MessageComposer extends React.Component {
             const continuesLink = replacementRoomId ? (
                 <a href={makeRoomPermalink(replacementRoomId)}
                     className="mx_MessageComposer_roomReplaced_link"
-                    onClick={this._onTombstoneClick}
+                    onClick={this.onTombstoneClick}
                 >
                     {_t("The conversation continues here.")}
                 </a>
@@ -433,14 +447,3 @@ export default class MessageComposer extends React.Component {
         );
     }
 }
-
-MessageComposer.propTypes = {
-    // js-sdk Room object
-    room: PropTypes.object.isRequired,
-
-    // string representing the current voip call state
-    callState: PropTypes.string,
-
-    // string representing the current room app drawer state
-    showApps: PropTypes.bool,
-};

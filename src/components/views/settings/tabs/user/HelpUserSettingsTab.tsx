@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -27,16 +25,21 @@ import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+
+interface IProps {
+    closeSettingsFn: () => {};
+}
+
+interface IState {
+    appVersion: string;
+    canUpdate: boolean;
+}
 
 @replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
-export default class HelpUserSettingsTab extends React.Component {
-    static propTypes = {
-        closeSettingsFn: PropTypes.func.isRequired,
-    };
-
-    constructor() {
-        super();
+export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
 
         this.state = {
             appVersion: null,

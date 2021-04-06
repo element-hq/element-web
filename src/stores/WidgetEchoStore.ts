@@ -1,6 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2018-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
+import { IWidget } from 'matrix-widget-api';
 import {WidgetType} from "../widgets/WidgetType";
 
 /**
@@ -23,6 +23,12 @@ import {WidgetType} from "../widgets/WidgetType";
  * proxying through state from the js-sdk.
  */
 class WidgetEchoStore extends EventEmitter {
+    private _roomWidgetEcho: {
+        [roomId: string]: {
+            [widgetId: string]: IWidget,
+        },
+    };
+
     constructor() {
         super();
 
@@ -65,7 +71,7 @@ class WidgetEchoStore extends EventEmitter {
         return echoedWidgets;
     }
 
-    roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type: WidgetType) {
+    roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type?: WidgetType) {
         const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
 
         // any widget IDs that are already in the room are not pending, so
@@ -89,7 +95,7 @@ class WidgetEchoStore extends EventEmitter {
         return this.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets);
     }
 
-    setRoomWidgetEcho(roomId, widgetId, state) {
+    setRoomWidgetEcho(roomId: string, widgetId: string, state: IWidget) {
         if (this._roomWidgetEcho[roomId] === undefined) this._roomWidgetEcho[roomId] = {};
 
         this._roomWidgetEcho[roomId][widgetId] = state;

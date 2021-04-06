@@ -20,7 +20,7 @@ import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
  * Generates permalinks that self-reference the running webapp
  */
 export default class ElementPermalinkConstructor extends PermalinkConstructor {
-    _elementUrl: string;
+    private _elementUrl: string;
 
     constructor(elementUrl: string) {
         super();
@@ -35,7 +35,7 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
         return `${this._elementUrl}/#/room/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
-    forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
+    forRoom(roomIdOrAlias: string, serverCandidates?: string[]): string {
         return `${this._elementUrl}/#/room/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
@@ -62,7 +62,7 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
         return testHost === (parsedUrl.host || parsedUrl.hostname); // one of the hosts should match
     }
 
-    encodeServerCandidates(candidates: string[]) {
+    encodeServerCandidates(candidates?: string[]) {
         if (!candidates || candidates.length === 0) return '';
         return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
     }

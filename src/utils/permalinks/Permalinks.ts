@@ -74,10 +74,19 @@ const MAX_SERVER_CANDIDATES = 3;
 // the list and magically have the link work.
 
 export class RoomPermalinkCreator {
+    private _room: Room;
+    private _roomId: string;
+    private _highestPlUserId: string;
+    private _populationMap: { [serverName: string]: number };
+    private _bannedHostsRegexps: RegExp[];
+    private _allowedHostsRegexps: RegExp[];
+    private _serverCandidates: string[];
+    private _started: boolean;
+
     // We support being given a roomId as a fallback in the event the `room` object
     // doesn't exist or is not healthy for us to rely on. For example, loading a
     // permalink to a room which the MatrixClient doesn't know about.
-    constructor(room, roomId = null) {
+    constructor(room: Room, roomId: string = null) {
         this._room = room;
         this._roomId = room ? room.roomId : roomId;
         this._highestPlUserId = null;
