@@ -1137,10 +1137,11 @@ export default class RoomView extends React.Component<IProps, IState> {
         ev.stopPropagation();
         ev.preventDefault();
 
-        this.setState({
-            dragCounter: this.state.dragCounter + 1,
-            draggingFile: true,
-        });
+        this.setState({dragCounter: this.state.dragCounter + 1});
+
+        if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
+            this.setState({draggingFile: true});
+        }
     };
 
     private onDragLeave = ev => {
