@@ -3075,8 +3075,8 @@
     "Show chat effects (animations when receiving e.g. confetti)": "Показать эффекты чата (анимация при получении, например, конфетти)",
     "Caution:": "Предупреждение:",
     "Settings Explorer": "Обзор настроек",
-    "Suggested": "Предложенно",
-    "This room is suggested as a good one to join": "Эта комната предложена как хорошая, чтобы присоединиться",
+    "Suggested": "Рекомендуется",
+    "This room is suggested as a good one to join": "Эта комната рекомендуется, чтобы присоединиться",
     "%(count)s rooms|one": "%(count)s комната",
     "%(count)s rooms|other": "%(count)s комнат",
     "%(count)s members|one": "%(count)s участник",
@@ -3166,5 +3166,8 @@
     "You're already in a call with this person.": "Вы уже разговариваете с этим человеком.",
     "Already in call": "Уже в вызове",
     "Original event source": "Оригинальный исходный код",
-    "Decrypted event source": "Расшифрованный исходный код"
+    "Decrypted event source": "Расшифрованный исходный код",
+    "%(count)s rooms and %(numSpaces)s spaces|one": "%(count)s комната и %(numSpaces)s пространств",
+    "%(count)s rooms and %(numSpaces)s spaces|other": "%(count)s комнат и %(numSpaces)s пространств",
+    "If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.": "Если вы не можете найти комнату, попросите приглашение или <a>создайте новую комнату</a>."
 }
