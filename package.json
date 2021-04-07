@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.17.0",
+  "version": "3.18.0-rc.1",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -27,7 +27,7 @@
     "matrix-gen-i18n": "scripts/gen-i18n.js",
     "matrix-prune-i18n": "scripts/prune-i18n.js"
   },
-  "main": "./src/index.js",
+  "main": "./lib/index.js",
   "matrix_src_main": "./src/index.js",
   "matrix_lib_main": "./lib/index.js",
   "matrix_lib_typings": "./lib/index.d.ts",
@@ -191,5 +191,6 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"
     ]
-  }
+  },
+  "typings": "./lib/index.d.ts"
 }
