@@ -25,6 +25,7 @@ import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
+import SettingsStore from "../../../settings/SettingsStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
@@ -302,10 +303,12 @@ export default class RoomPreviewBar extends React.Component {
         const brand = SdkConfig.get().brand;
         const Spinner = sdk.getComponent('elements.Spinner');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const EventTilePreview = sdk.getComponent('elements.EventTilePreview');
 
         let showSpinner = false;
         let title;
         let subTitle;
+        let reasonElement;
         let primaryActionHandler;
         let primaryActionLabel;
         let secondaryActionHandler;
@@ -491,6 +494,29 @@ export default class RoomPreviewBar extends React.Component {
                     primaryActionLabel = _t("Accept");
                 }
 
+                const myUserId = MatrixClientPeg.get().getUserId();
+                const reason = this.props.room.currentState.getMember(myUserId).events.member.event.content.reason;
+                if (reason) {
+                    this.reasonElement = React.createRef();
+                    // We hide the reason for invitation by default, since it can be a
+                    // vector for spam/harassment.
+                    const showReason = () => {
+                        this.reasonElement.current.unfade();
+                        this.reasonElement.current.changeMessage(reason);
+                    };
+                    reasonElement = <EventTilePreview
+                        ref={this.reasonElement}
+                        onClick={showReason}
+                        className="mx_RoomPreviewBar_reason"
+                        message={_t("Invite messages are hidden by default. Click to show the message.")}
+                        layout={SettingsStore.getValue("layout")}
+                        userId={inviteMember.userId}
+                        displayName={inviteMember.rawDisplayName}
+                        avatarUrl={inviteMember.events.member.event.content.avatar_url}
+                        faded={true}
+                    />;
+                }
+
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("Reject");
                 secondaryActionHandler = this.props.onRejectClick;
@@ -582,6 +608,7 @@ export default class RoomPreviewBar extends React.Component {
                     { titleElement }
                     { subTitleElements }
                 </div>
+                { reasonElement }
                 <div className="mx_RoomPreviewBar_actions">
                     { secondaryButton }
                     { extraComponents }
