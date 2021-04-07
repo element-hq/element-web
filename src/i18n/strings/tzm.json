@@ -10,5 +10,6 @@
     "Unknown device": "Allal arussin",
     "Open user settings": "Ṛẓem tisɣal n unessemres",
     "Dismiss": "Nexxel",
-    "Open": "Ṛẓem"
+    "Open": "Ṛẓem",
+    "The message from the parser is: %(message)s": "Tuzint seg tasna: %(message)s"
 }
