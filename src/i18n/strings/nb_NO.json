@@ -1553,5 +1553,6 @@
     "Call Declined": "Samtale avvist",
     "Click the button below to confirm adding this phone number.": "Klikk knappen nedenfor for å bekrefte dette telefonnummeret.",
     "Single Sign On": "Single Sign On",
-    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Bekreft dette telefonnummeret ved å bruke Single Sign On for å bevise din identitet."
+    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Bekreft dette telefonnummeret ved å bruke Single Sign On for å bevise din identitet.",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Befrekt denne e-postadressen ved å bruke Single Sign On for å bevise din identitet."
 }
