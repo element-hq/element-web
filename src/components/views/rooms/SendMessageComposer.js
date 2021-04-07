@@ -502,10 +502,8 @@ export default class SendMessageComposer extends React.Component {
             member.rawDisplayName : userId;
         const caret = this._editorRef.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        // createMentionParts() assumes that the mention already has it's own part
-        // which isn't true, therefore we increase the position.index by 1. This
-        // also solves the problem of the index being -1 when the composer is empty.
-        const parts = partCreator.createMentionParts(position.index + 1, displayName, userId);
+        // Insert suffix only if the caret is at the start of the composer
+        const parts = partCreator.createMentionParts(caret.offset === 0, displayName, userId);
         model.transform(() => {
             const addedLen = model.insert(parts, position);
             return model.positionForOffset(caret.offset + addedLen, true);
