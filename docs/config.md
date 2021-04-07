@@ -22,9 +22,12 @@ For a good example, see https://develop.element.io/config.json.
      `default_hs_url` is specified. When multiple sources are specified, it is unclear
      which should take priority and therefore the application cannot continue.
    * As of Element 1.4.0, identity servers are optional. See [Identity servers](#identity-servers) below.
+1. `sso_immediate_redirect`: When `true`, Element will assume the default server supports SSO
+   and attempt to send the user there to continue (if they aren't already logged in). Default
+   `false`. Note that this disables all usage of the welcome page.
 1. `features`: Lookup of optional features that may be force-enabled (`true`) or force-disabled (`false`).
    When features are not listed here, their defaults will be used, and users can turn them on/off if `showLabsSettings`
-   allows them to. The available optional experimental features vary from release to release and are 
+   allows them to. The available optional experimental features vary from release to release and are
    [documented](labs.md). The feature flag process is [documented](feature-flags.md) as well.
 1. `showLabsSettings`: Shows the "labs" tab of user settings. Useful to allow users to turn on experimental features
    they might not otherwise have access to.
@@ -73,7 +76,7 @@ For a good example, see https://develop.element.io/config.json.
        not selected. By default, no home page is configured. If one is set, a
        button to access it will be shown in the top left menu.
     1. `loginForWelcome`: Overrides `welcomeUrl` to make the welcome page be the
-       same page as the login page when `true`. This effectively disables the 
+       same page as the login page when `true`. This effectively disables the
        welcome page.
 1. `defaultCountryCode`: The ISO 3166 alpha2 country code to use when showing
    country selectors, like the phone number input on the registration page.
