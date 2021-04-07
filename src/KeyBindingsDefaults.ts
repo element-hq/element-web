@@ -161,27 +161,27 @@ const messageComposerBindings = (): KeyBinding<MessageComposerAction>[] => {
 const autocompleteBindings = (): KeyBinding<AutocompleteAction>[] => {
     return [
         {
-            action: AutocompleteAction.ApplySelection,
+            action: AutocompleteAction.CompleteOrNextSelection,
             keyCombo: {
                 key: Key.TAB,
             },
         },
         {
-            action: AutocompleteAction.ApplySelection,
+            action: AutocompleteAction.CompleteOrNextSelection,
             keyCombo: {
                 key: Key.TAB,
                 ctrlKey: true,
             },
         },
         {
-            action: AutocompleteAction.ApplySelection,
+            action: AutocompleteAction.CompleteOrPrevSelection,
             keyCombo: {
                 key: Key.TAB,
                 shiftKey: true,
             },
         },
         {
-            action: AutocompleteAction.ApplySelection,
+            action: AutocompleteAction.CompleteOrPrevSelection,
             keyCombo: {
                 key: Key.TAB,
                 ctrlKey: true,

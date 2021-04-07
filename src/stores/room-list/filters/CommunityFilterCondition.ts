@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { Group } from "matrix-js-sdk/src/models/group";
 import { EventEmitter } from "events";
 import GroupStore from "../../GroupStore";
@@ -39,9 +39,8 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
         this.onStoreUpdate(); // trigger a false update to seed the store
     }
 
-    public get relativePriority(): FilterPriority {
-        // Lowest priority so we can coarsely find rooms.
-        return FilterPriority.Lowest;
+    public get kind(): FilterKind {
+        return FilterKind.Prefilter;
     }
 
     public isVisible(room: Room): boolean {

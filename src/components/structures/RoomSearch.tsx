@@ -30,8 +30,11 @@ import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 
 interface IProps {
     isMinimized: boolean;
-    onVerticalArrow(ev: React.KeyboardEvent): void;
-    onEnter(ev: React.KeyboardEvent): boolean;
+    onKeyDown(ev: React.KeyboardEvent): void;
+    /**
+     * @returns true if a room has been selected and the search field should be cleared
+     */
+    onSelectRoom(): boolean;
 }
 
 interface IState {
@@ -120,10 +123,11 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 break;
             case RoomListAction.NextRoom:
             case RoomListAction.PrevRoom:
-                this.props.onVerticalArrow(ev);
+                // we don't handle these actions here put pass the event on to the interested party (LeftPanel)
+                this.props.onKeyDown(ev);
                 break;
             case RoomListAction.SelectRoom: {
-                const shouldClear = this.props.onEnter(ev);
+                const shouldClear = this.props.onSelectRoom();
                 if (shouldClear) {
                     // wrap in set immediate to delay it so that we don't clear the filter & then change room
                     setImmediate(() => {

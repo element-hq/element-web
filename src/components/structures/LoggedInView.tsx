@@ -444,6 +444,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             case RoomAction.RoomScrollDown:
             case RoomAction.JumpToFirstMessage:
             case RoomAction.JumpToLatestMessage:
+                // pass the event down to the scroll panel
                 this._onScrollKeyPressed(ev);
                 handled = true;
                 break;

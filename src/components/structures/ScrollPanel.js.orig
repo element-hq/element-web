@@ -539,24 +539,50 @@ export default class ScrollPanel extends React.Component {
      * @param {object} ev the keyboard event
      */
     handleScrollKey = ev => {
-	let isScrolling = false;
+<<<<<<< HEAD
+        let isScrolling = false;
+        switch (ev.key) {
+            case Key.PAGE_UP:
+                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
+                    this.scrollRelative(-1);
+                }
+                break;
+
+            case Key.PAGE_DOWN:
+                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
+                    this.scrollRelative(1);
+                }
+                break;
+
+            case Key.HOME:
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
+                    this.scrollToTop();
+                }
+                break;
+
+            case Key.END:
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    isScrolling = true;
+                    this.scrollToBottom();
+                }
+=======
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
             case RoomAction.ScrollUp:
                 this.scrollRelative(-1);
-		isScrolling = true;
                 break;
             case RoomAction.RoomScrollDown:
                 this.scrollRelative(1);
-		isScrolling = true;
                 break;
             case RoomAction.JumpToFirstMessage:
                 this.scrollToTop();
-		isScrolling = true;
                 break;
             case RoomAction.JumpToLatestMessage:
                 this.scrollToBottom();
-		isScrolling = true;
+>>>>>>> develop
                 break;
         }
         if (isScrolling && this.props.onUserScroll) {

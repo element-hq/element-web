@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 import { throttle } from "lodash";
@@ -31,9 +31,8 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
         super();
     }
 
-    public get relativePriority(): FilterPriority {
-        // We want this one to be at the highest priority so it can search within other filters.
-        return FilterPriority.Highest;
+    public get kind(): FilterKind {
+        return FilterKind.Runtime;
     }
 
     public get search(): string {
