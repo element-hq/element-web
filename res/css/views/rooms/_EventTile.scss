@@ -282,6 +282,10 @@ $left-gutter: 64px;
     display: inline-block;
     height: $font-14px;
     width: $font-14px;
+
+    transition:
+        left .1s ease-out,
+        top .3s ease-out;
 }
 
 .mx_EventTile_readAvatarRemainder {

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDom from "react-dom";
-import Velocity from "velocity-animate";
 import PropTypes from 'prop-types';
 
 /**
@@ -20,14 +19,10 @@ export default class Velociraptor extends React.Component {
 
         // a list of state objects to apply to each child node in turn
         startStyles: PropTypes.array,
-
-        // a list of transition options from the corresponding startStyle
-        enterTransitionOpts: PropTypes.array,
     };
 
     static defaultProps = {
         startStyles: [],
-        enterTransitionOpts: [],
     };
 
     constructor(props) {
@@ -41,6 +36,25 @@ export default class Velociraptor extends React.Component {
         this._updateChildren(this.props.children);
     }
 
+    /**
+     *
+     * @param {HTMLElement} node element to apply styles to
+     * @param {object} styles a key/value pair of CSS properties
+     * @returns {Promise<void>} promise resolving when the applied styles have finished transitioning
+     */
+    _applyStyles(node, styles) {
+        Object.entries(styles).forEach(([property, value]) => {
+            node.style[property] = value;
+        });
+        const transitionEndPromise = new Promise(resolve => {
+            node.addEventListener("transitionend", () => {
+                resolve();
+            }, { once: true });
+        });
+
+        return Promise.race([timeout(300), transitionEndPromise]);
+    }
+
     _updateChildren(newChildren) {
         const oldChildren = this.children || {};
         this.children = {};
@@ -50,14 +64,16 @@ export default class Velociraptor extends React.Component {
                 const oldNode = ReactDom.findDOMNode(this.nodes[old.key]);
 
                 if (oldNode && oldNode.style.left !== c.props.style.left) {
-                    Velocity(oldNode, { left: c.props.style.left }, this.props.transition).then(() => {
-                        // special case visibility because it's nonsensical to animate an invisible element
-                        // so we always hidden->visible pre-transition and visible->hidden after
-                        if (oldNode.style.visibility === 'visible' && c.props.style.visibility === 'hidden') {
-                            oldNode.style.visibility = c.props.style.visibility;
-                        }
-                    });
-                    //console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
+                    this._applyStyles(oldNode, { left: c.props.style.left })
+                        .then(() => {
+                            // special case visibility because it's nonsensical to animate an invisible element
+                            // so we always hidden->visible pre-transition and visible->hidden after
+                            if (oldNode.style.visibility === 'visible' && c.props.style.visibility === 'hidden') {
+                                oldNode.style.visibility = c.props.style.visibility;
+                            }
+                        });
+
+                    console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
                 }
                 if (oldNode && oldNode.style.visibility === 'hidden' && c.props.style.visibility === 'visible') {
                     oldNode.style.visibility = c.props.style.visibility;
@@ -94,33 +110,22 @@ export default class Velociraptor extends React.Component {
             this.props.startStyles.length > 0
         ) {
             const startStyles = this.props.startStyles;
-            const transitionOpts = this.props.enterTransitionOpts;
             const domNode = ReactDom.findDOMNode(node);
             // start from startStyle 1: 0 is the one we gave it
             // to start with, so now we animate 1 etc.
-            for (var i = 1; i < startStyles.length; ++i) {
-                Velocity(domNode, startStyles[i], transitionOpts[i-1]);
-                /*
-                console.log("start:",
-                            JSON.stringify(transitionOpts[i-1]),
-                            "->",
-                            JSON.stringify(startStyles[i]),
-                            );
-                */
+            for (let i = 1; i < startStyles.length; ++i) {
+                this._applyStyles(domNode, startStyles[i]);
+                // console.log("start:"
+                //             JSON.stringify(startStyles[i]),
+                //             );
             }
 
             // and then we animate to the resting state
-            Velocity(domNode, restingStyle,
-                transitionOpts[i-1])
-                .then(() => {
-                    // once we've reached the resting state, hide the element if
-                    // appropriate
-                    domNode.style.visibility = restingStyle.visibility;
-                });
+            setTimeout(() => {
+                this._applyStyles(domNode, restingStyle);
+            }, 0);
 
             // console.log("enter:",
-            //             JSON.stringify(transitionOpts[i-1]),
-            //             "->",
             //             JSON.stringify(restingStyle));
         }
         this.nodes[k] = node;
@@ -128,9 +133,13 @@ export default class Velociraptor extends React.Component {
 
     render() {
         return (
-            <span>
-                { Object.values(this.children) }
-            </span>
+            <>{ Object.values(this.children) }</>
         );
     }
+}
+
+function timeout(time) {
+    return new Promise(resolve =>
+        setTimeout(() => resolve(), time),
+    );
 }
