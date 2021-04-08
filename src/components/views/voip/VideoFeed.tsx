@@ -68,7 +68,8 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
         currentMedia.srcObject = this.props.feed.stream;
         currentMedia.autoplay = true;
-        currentMedia.muted = false;
+        // Don't play audio if the feed is local
+        currentMedia.muted = this.props.feed.isLocal();
 
         try {
             if (audioOutput) {
