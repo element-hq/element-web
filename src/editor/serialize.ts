@@ -128,9 +128,8 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
             // since maths delimiters are handled before Markdown,
             // code blocks could contain mangled content.
             // replace code blocks with original content
-            phtml('code').contents().each(function(i) {
-                const origData = phtmlOrig('code').contents()[i].data;
-                phtml('code').contents()[i].data = origData;
+            phtmlOrig('code').each(function(i) {
+                phtml('code').eq(i).text(phtmlOrig('code').eq(i).text());
             });
 
             // add fallback output for latex math, which should not be interpreted as markdown
