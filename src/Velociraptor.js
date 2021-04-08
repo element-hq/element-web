@@ -73,7 +73,7 @@ export default class Velociraptor extends React.Component {
                             }
                         });
 
-                    console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
+                    // console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
                 }
                 if (oldNode && oldNode.style.visibility === 'hidden' && c.props.style.visibility === 'visible') {
                     oldNode.style.visibility = c.props.style.visibility;

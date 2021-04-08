@@ -284,8 +284,8 @@ $left-gutter: 64px;
     width: $font-14px;
 
     transition:
-        left .1s ease-out,
-        top .3s ease-out;
+        left var(--transition-short) ease-out,
+        top var(--transition-standard) ease-out;
 }
 
 .mx_EventTile_readAvatarRemainder {
