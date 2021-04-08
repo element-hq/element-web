@@ -2621,7 +2621,7 @@
     "Call Paused": "Anruf pausiert",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Verschlüsselte Nachrichten sicher lokal zwischenspeichern, um sie in Suchergebnissen finden zu können. Es werden %(size)s benötigt, um die Nachrichten von %(rooms)s Räumen zu speichern.",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Verschlüsselte Nachrichten sicher lokal zwischenspeichern, um sie in Suchergebnissen finden zu können. Es werden %(size)s benötigt, um die Nachrichten vom Raum %(rooms)s zu speichern.",
-    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Nur ihr zwei seid in dieser Konversation, außer ihr lädt jemanden neues ein.",
+    "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Nur ihr zwei seid in dieser Konversation, außer ihr ladet jemanden Neues ein.",
     "This is the beginning of your direct message history with <displayName/>.": "Dies ist der Beginn deiner Direktnachrichten mit <displayName/>.",
     "Topic: %(topic)s (<a>edit</a>)": "Thema: %(topic)s (<a>ändern</a>)",
     "Topic: %(topic)s ": "Thema: %(topic)s ",
