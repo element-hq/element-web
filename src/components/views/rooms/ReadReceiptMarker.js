@@ -106,7 +106,18 @@ export default class ReadReceiptMarker extends React.PureComponent {
             // we've already done our display - nothing more to do.
             return;
         }
+        this._animateMarker();
+    }
 
+    componentDidUpdate(prevProps) {
+        const differentLeftOffset = prevProps.leftOffset !== this.props.leftOffset;
+        const visibilityChanged = prevProps.hidden !== this.props.hidden;
+        if (differentLeftOffset || visibilityChanged) {
+            this._animateMarker();
+        }
+    }
+
+    _animateMarker() {
         // treat new RRs as though they were off the top of the screen
         let oldTop = -15;
 
