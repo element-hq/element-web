@@ -28,7 +28,6 @@ import {
 } from '../../../stores/SetupEncryptionStore';
 import SetupEncryptionBody from "./SetupEncryptionBody";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import SecurityCustomisations from "../../../customisations/Security";
 
 @replaceableComponent("structures.auth.CompleteSecurity")
 export default class CompleteSecurity extends React.Component {
@@ -46,13 +45,6 @@ export default class CompleteSecurity extends React.Component {
 
     _onStoreUpdate = () => {
         const store = SetupEncryptionStore.sharedInstance();
-
-        // Skip "you're done" phase if the UI isn't shown
-        if (store.phase === PHASE_DONE && SecurityCustomisations.SHOW_ENCRYPTION_SETUP_UI === false) {
-            this.props.onFinished(true);
-            return;
-        }
-
         this.setState({phase: store.phase});
     };
 
@@ -69,9 +61,7 @@ export default class CompleteSecurity extends React.Component {
         let icon;
         let title;
 
-        // If the encryption UI is hidden then we can simply return nothing - the UI doesn't
-        // need to be running in order to set up encryption with the SecurityCustomisations.
-        if (phase === PHASE_LOADING || SecurityCustomisations.SHOW_ENCRYPTION_SETUP_UI === false) {
+        if (phase === PHASE_LOADING) {
             return null;
         } else if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;

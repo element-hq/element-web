@@ -80,10 +80,11 @@ import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import { shouldUseLoginForWelcome } from "../../utils/pages";
 import SpaceStore from "../../stores/SpaceStore";
+import SpaceRoomDirectory from "./SpaceRoomDirectory";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import {RoomUpdateCause} from "../../stores/room-list/models";
-import defaultDispatcher from "../../dispatcher/dispatcher";
+import SecurityCustomisations from "../../customisations/Security";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -202,6 +203,7 @@ interface IState {
     ready: boolean;
     threepidInvite?: IThreepidInvite,
     roomOobData?: object;
+    viaServers?: string[];
     pendingInitialSync?: boolean;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;
@@ -395,7 +397,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
         if (crossSigningIsSetUp) {
-            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            if (SecurityCustomisations.SHOW_ENCRYPTION_SETUP_UI === false) {
+                this.onLoggedIn();
+            } else {
+                this.setStateForNewView({view: Views.COMPLETE_SECURITY});
+            }
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
@@ -690,10 +696,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
             case Action.ViewRoomDirectory: {
                 if (SpaceStore.instance.activeSpace) {
-                    defaultDispatcher.dispatch({
-                        action: "view_room",
-                        room_id: SpaceStore.instance.activeSpace.roomId,
-                    });
+                    Modal.createTrackedDialog("Space room directory", "", SpaceRoomDirectory, {
+                        space: SpaceStore.instance.activeSpace,
+                        initialText: payload.initialText,
+                    }, "mx_SpaceRoomDirectory_dialogWrapper", false, true);
                 } else {
                     const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
                     Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
@@ -928,6 +934,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 page_type: PageTypes.RoomView,
                 threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
+                viaServers: roomInfo.via_servers,
                 ready: true,
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             }, () => {
