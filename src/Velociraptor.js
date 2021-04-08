@@ -40,19 +40,12 @@ export default class Velociraptor extends React.Component {
      *
      * @param {HTMLElement} node element to apply styles to
      * @param {object} styles a key/value pair of CSS properties
-     * @returns {Promise<void>} promise resolving when the applied styles have finished transitioning
+     * @returns {void}
      */
     _applyStyles(node, styles) {
         Object.entries(styles).forEach(([property, value]) => {
             node.style[property] = value;
         });
-        const transitionEndPromise = new Promise(resolve => {
-            node.addEventListener("transitionend", () => {
-                resolve();
-            }, { once: true });
-        });
-
-        return Promise.race([timeout(300), transitionEndPromise]);
     }
 
     _updateChildren(newChildren) {
@@ -64,19 +57,8 @@ export default class Velociraptor extends React.Component {
                 const oldNode = ReactDom.findDOMNode(this.nodes[old.key]);
 
                 if (oldNode && oldNode.style.left !== c.props.style.left) {
-                    this._applyStyles(oldNode, { left: c.props.style.left })
-                        .then(() => {
-                            // special case visibility because it's nonsensical to animate an invisible element
-                            // so we always hidden->visible pre-transition and visible->hidden after
-                            if (oldNode.style.visibility === 'visible' && c.props.style.visibility === 'hidden') {
-                                oldNode.style.visibility = c.props.style.visibility;
-                            }
-                        });
-
+                    this._applyStyles(oldNode, { left: c.props.style.left });
                     // console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
-                }
-                if (oldNode && oldNode.style.visibility === 'hidden' && c.props.style.visibility === 'visible') {
-                    oldNode.style.visibility = c.props.style.visibility;
                 }
                 // clone the old element with the props (and children) of the new element
                 // so prop updates are still received by the children.
@@ -136,10 +118,4 @@ export default class Velociraptor extends React.Component {
             <>{ Object.values(this.children) }</>
         );
     }
-}
-
-function timeout(time) {
-    return new Promise(resolve =>
-        setTimeout(() => resolve(), time),
-    );
 }

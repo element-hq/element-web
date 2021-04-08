@@ -165,7 +165,6 @@ export default class ReadReceiptMarker extends React.PureComponent {
         const style = {
             left: toPx(this.props.leftOffset),
             top: '0px',
-            visibility: this.props.hidden ? 'hidden' : 'visible',
         };
 
         let title;
