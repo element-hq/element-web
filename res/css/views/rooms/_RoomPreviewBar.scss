@@ -40,6 +40,35 @@ limitations under the License.
         word-break: break-word;
     }
 
+    .mx_RoomPreviewBar_reason {
+        text-align: left;
+        background-color: $primary-bg-color;
+        border: 1px solid $invite-reason-border-color;
+        border-radius: 10px;
+        padding: 0 16px 12px 16px;
+        margin: 5px 0 20px 0;
+
+        div {
+            pointer-events: none;
+        }
+
+        .mx_EventTile_msgOption {
+            display: none;
+        }
+
+        .mx_MatrixChat_useCompactLayout & {
+            padding-top: 9px;
+        }
+
+        &.mx_EventTilePreview_faded {
+            cursor: pointer;
+
+            .mx_SenderProfile, .mx_EventTile_avatar {
+                opacity: 0.3;
+            }
+        }
+    }
+
     .mx_Spinner {
         width: auto;
         height: auto;

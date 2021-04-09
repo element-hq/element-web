@@ -2444,5 +2444,9 @@
     "This homeserver has been blocked by it's administrator.": "このホームサーバーは管理者によりブロックされています。",
     "This homeserver has been blocked by its administrator.": "このホームサーバーは管理者によりブロックされています。",
     "You're already in a call with this person.": "あなたは既にこの人と通話中です。",
-    "Already in call": "既に電話中です"
+    "Already in call": "既に電話中です",
+    "Invite People": "ユーザーを招待",
+    "Edit devices": "デバイスを編集",
+    "%(count)s messages deleted.|one": "%(count)s 件のメッセージが削除されました。",
+    "%(count)s messages deleted.|other": "%(count)s 件のメッセージが削除されました。"
 }

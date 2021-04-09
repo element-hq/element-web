@@ -29,7 +29,9 @@ import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
-import createRoom, {canEncryptToAllUsers, findDMForUser, privateShouldBeEncrypted} from "../../../createRoom";
+import createRoom, {
+    canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
+} from "../../../createRoom";
 import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
@@ -332,6 +334,7 @@ interface IInviteDialogState {
     threepidResultsMixin: { user: Member, userId: string}[];
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
+    consultFirst: boolean;
 
     // These two flags are used for the 'Go' button to communicate what is going on.
     busy: boolean,
@@ -380,6 +383,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             threepidResultsMixin: [],
             canUseIdentityServer: !!MatrixClientPeg.get().getIdentityServerUrl(),
             tryingIdentityServer: false,
+            consultFirst: false,
 
             // These two flags are used for the 'Go' button to communicate what is going on.
             busy: false,
@@ -393,6 +397,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.props.initialText) {
             this._updateSuggestions(this.props.initialText);
         }
+    }
+
+    private onConsultFirstChange = (ev) => {
+        this.setState({consultFirst: ev.target.checked});
     }
 
     static buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number}[] {
@@ -745,16 +753,34 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             });
         }
 
-        this.setState({busy: true});
-        try {
-            await this.props.call.transfer(targetIds[0]);
-            this.setState({busy: false});
-            this.props.onFinished();
-        } catch (e) {
-            this.setState({
-                busy: false,
-                errorText: _t("Failed to transfer call"),
+        if (this.state.consultFirst) {
+            const dmRoomId = await ensureDMExists(MatrixClientPeg.get(), targetIds[0]);
+
+            dis.dispatch({
+                action: 'place_call',
+                type: this.props.call.type,
+                room_id: dmRoomId,
+                transferee: this.props.call,
             });
+            dis.dispatch({
+                action: 'view_room',
+                room_id: dmRoomId,
+                should_peek: false,
+                joining: false,
+            });
+            this.props.onFinished();
+        } else {
+            this.setState({busy: true});
+            try {
+                await this.props.call.transfer(targetIds[0]);
+                this.setState({busy: false});
+                this.props.onFinished();
+            } catch (e) {
+                this.setState({
+                    busy: false,
+                    errorText: _t("Failed to transfer call"),
+                });
+            }
         }
     };
 
@@ -1215,6 +1241,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let helpText;
         let buttonText;
         let goButtonFn;
+        let consultSection;
         let keySharingWarning = <span />;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
@@ -1339,6 +1366,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             title = _t("Transfer");
             buttonText = _t("Transfer");
             goButtonFn = this._transferCall;
+            consultSection = <div>
+                <label>
+                    <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
+                    {_t("Consult first")}
+                </label>
+            </div>;
         } else {
             console.error("Unknown kind of InviteDialog: " + this.props.kind);
         }
@@ -1375,6 +1408,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         {this._renderSection('recents')}
                         {this._renderSection('suggestions')}
                     </div>
+                    {consultSection}
                 </div>
             </BaseDialog>
         );
