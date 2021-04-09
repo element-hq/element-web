@@ -1509,8 +1509,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     // jump down to the bottom of this room, where new events are arriving
     private jumpToLiveTimeline = () => {
-        this.messagePanel.jumpToLiveTimeline();
-        dis.fire(Action.FocusComposer);
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.room.roomId,
+        });
     };
 
     // jump up to wherever our read marker is

@@ -29,8 +29,6 @@ export default (props) => {
     }
     return (<div className={className}>
         <AccessibleButton className="mx_JumpToBottomButton_scrollDown"
-            element="a"
-            href={`#/room/${props.roomId}`}
             title={_t("Scroll to most recent messages")}
             onClick={props.onScrollToBottomClick}>
         </AccessibleButton>
