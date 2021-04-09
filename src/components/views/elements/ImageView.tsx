@@ -83,15 +83,15 @@ export default class ImageView extends React.Component<IProps, IState> {
         };
     }
 
-    contextMenuButton = createRef<any>();
-    focusLock = createRef<any>();
+    private contextMenuButton = createRef<any>();
+    private focusLock = createRef<any>();
 
-    initX = 0;
-    initY = 0;
-    lastX = 0;
-    lastY = 0;
-    previousX = 0;
-    previousY = 0;
+    private initX = 0;
+    private initY = 0;
+    private lastX = 0;
+    private lastY = 0;
+    private previousX = 0;
+    private previousY = 0;
 
     componentDidMount() {
         // We have to use addEventListener() because the listener
