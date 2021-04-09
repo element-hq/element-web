@@ -224,7 +224,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         isFeature: true,
         displayName: _td("Share decryption keys for room history when inviting users"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
     },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
