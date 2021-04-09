@@ -137,13 +137,13 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private onRotateCounterClockwiseClick = () => {
         const cur = this.state.rotation;
-        const rotationDegrees = (cur - 90) % 360;
+        const rotationDegrees = cur - 90;
         this.setState({ rotation: rotationDegrees });
     };
 
     private onRotateClockwiseClick = () => {
         const cur = this.state.rotation;
-        const rotationDegrees = (cur + 90) % 360;
+        const rotationDegrees = cur + 90;
         this.setState({ rotation: rotationDegrees });
     };
 
