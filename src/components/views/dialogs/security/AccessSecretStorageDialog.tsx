@@ -222,34 +222,44 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         // rest of this function.
         Modal.toggleCurrentDialogVisibility();
 
-        // Force reset secret storage (which resets the key backup)
-        await accessSecretStorage(async () => {
-            // Now reset cross-signing so everything Just Works™ again.
-            const cli = MatrixClientPeg.get();
-            await cli.bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (makeRequest) => {
-                    // XXX: Making this an import breaks the app.
-                    const InteractiveAuthDialog = sdk.getComponent("views.dialogs.InteractiveAuthDialog");
-                    const { finished } = Modal.createTrackedDialog(
-                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                        {
-                            title: _t("Setting up keys"),
-                            matrixClient: cli,
-                            makeRequest,
+        try {
+            // Force reset secret storage (which resets the key backup)
+            await accessSecretStorage(async () => {
+                try {
+                    // Now reset cross-signing so everything Just Works™ again.
+                    const cli = MatrixClientPeg.get();
+                    await cli.bootstrapCrossSigning({
+                        authUploadDeviceSigningKeys: async (makeRequest) => {
+                            // XXX: Making this an import breaks the app.
+                            const InteractiveAuthDialog = sdk.getComponent("views.dialogs.InteractiveAuthDialog");
+                            const {finished} = Modal.createTrackedDialog(
+                                'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                                {
+                                    title: _t("Setting up keys"),
+                                    matrixClient: cli,
+                                    makeRequest,
+                                },
+                            );
+                            const [confirmed] = await finished;
+                            if (!confirmed) {
+                                throw new Error("Cross-signing key upload auth canceled");
+                            }
                         },
-                    );
-                    const [confirmed] = await finished;
-                    if (!confirmed) {
-                        throw new Error("Cross-signing key upload auth canceled");
-                    }
-                },
-                setupNewCrossSigning: true,
-            });
+                        setupNewCrossSigning: true,
+                    });
 
-            // Now we can indicate that the user is done pressing buttons, finally.
-            // Upstream flows will detect the new secret storage, key backup, etc and use it.
-            this.props.onFinished(true);
-        }, true);
+                    // Now we can indicate that the user is done pressing buttons, finally.
+                    // Upstream flows will detect the new secret storage, key backup, etc and use it.
+                    this.props.onFinished(true);
+                } catch (e) {
+                    console.error(e);
+                    this.props.onFinished(false);
+                }
+            }, true);
+        } catch (e) {
+            console.error(e);
+            this.props.onFinished(false);
+        }
     };
 
     private getKeyValidationText(): string {
