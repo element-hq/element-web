@@ -34,6 +34,7 @@ const plEventsToLabels = {
     [EventType.RoomTopic]: _td("Change topic"),
     [EventType.RoomTombstone]: _td("Upgrade the room"),
     [EventType.RoomEncryption]: _td("Enable room encryption"),
+    [EventType.RoomServerAcl]: _td("Change server ACLs"),
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": _td("Modify widgets"),
@@ -49,6 +50,7 @@ const plEventsToShow = {
     [EventType.RoomTopic]: {isState: true},
     [EventType.RoomTombstone]: {isState: true},
     [EventType.RoomEncryption]: {isState: true},
+    [EventType.RoomServerAcl]: {isState: true},
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": {isState: true},
