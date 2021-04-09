@@ -65,12 +65,17 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
         return this.matches(room.name);
     }
 
-    public matches(val: string): boolean {
+    private normalize(val: string): string {
         // Note: we have to match the filter with the removeHiddenChars() room name because the
         // function strips spaces and other characters (M becomes RN for example, in lowercase).
-        // We also doubly convert to lowercase to work around oddities of the library.
-        const noSecretsFilter = removeHiddenChars(this.search.toLowerCase()).toLowerCase();
-        const noSecretsName = removeHiddenChars(val.toLowerCase()).toLowerCase();
-        return noSecretsName.includes(noSecretsFilter);
+        return removeHiddenChars(val.toLowerCase())
+            // Strip all punctuation
+            .replace(/[\\'!"#$%&()*+,\-./:;<=>?@[\]^_`{|}~\u2000-\u206f\u2e00-\u2e7f]/g, "")
+            // We also doubly convert to lowercase to work around oddities of the library.
+            .toLowerCase();
+    }
+
+    public matches(val: string): boolean {
+        return this.normalize(val).includes(this.normalize(this.search));
     }
 }
