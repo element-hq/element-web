@@ -197,7 +197,7 @@ export default class MessageContextMenu extends React.Component {
             action: 'forward_event',
             event: this.props.mxEvent,
         });
-        this.props.onCloseDialog();
+        if (this.props.onCloseDialog) this.props.onCloseDialog();
         this.closeMenu();
     };
 
