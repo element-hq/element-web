@@ -64,7 +64,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             className="mx_ClearDecoration"
             key="fdroid"
         >
-            <img height="48" src="themes/element/img/download/fdroid.svg" alt="F-Droid"/>
+            <img height="48" src="themes/element/img/download/fdroid.svg" alt="F-Droid" />
         </a>);
     }
     if (android.length === 1) { // just a header, meaning no links
