@@ -150,6 +150,7 @@ export default class MessageContextMenu extends React.Component {
                         undefined,
                         reason ? { reason } : {},
                     );
+                    if (this.props.onCloseDialog) this.props.onCloseDialog();
                 } catch (e) {
                     const code = e.errcode || e.statusCode;
                     // only show the dialog if failing for something other than a network error
