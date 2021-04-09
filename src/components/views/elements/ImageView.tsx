@@ -83,6 +83,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         };
     }
 
+    // XXX: Refs to functional components
     private contextMenuButton = createRef<any>();
     private focusLock = createRef<any>();
 
