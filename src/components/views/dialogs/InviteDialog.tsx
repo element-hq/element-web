@@ -712,8 +712,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 this.props.onFinished();
             }
 
-            if (cli.isRoomEncrypted(this.props.roomId) &&
-                SettingsStore.getValue("feature_room_history_key_sharing")) {
+            if (cli.isRoomEncrypted(this.props.roomId)) {
                 const visibilityEvent = room.currentState.getStateEvents(
                     "m.room.history_visibility", "",
                 );
@@ -1344,8 +1343,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
 
-            if (SettingsStore.getValue("feature_room_history_key_sharing") &&
-                cli.isRoomEncrypted(this.props.roomId)) {
+            if (cli.isRoomEncrypted(this.props.roomId)) {
                 const room = cli.getRoom(this.props.roomId);
                 const visibilityEvent = room.currentState.getStateEvents(
                     "m.room.history_visibility", "",
