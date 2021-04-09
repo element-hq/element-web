@@ -1137,8 +1137,13 @@ export default class RoomView extends React.Component<IProps, IState> {
         ev.stopPropagation();
         ev.preventDefault();
 
+        // We always increment the counter no matter the types, because dragging is
+        // still happening. If we didn't, the drag counter would get out of sync.
         this.setState({dragCounter: this.state.dragCounter + 1});
 
+        // See:
+        // https://docs.w3cub.com/dom/datatransfer/types
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
         if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
             this.setState({draggingFile: true});
         }
@@ -1165,6 +1170,9 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         ev.dataTransfer.dropEffect = 'none';
 
+        // See:
+        // https://docs.w3cub.com/dom/datatransfer/types
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
         if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
             ev.dataTransfer.dropEffect = 'copy';
         }
