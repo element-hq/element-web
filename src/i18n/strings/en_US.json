@@ -652,5 +652,9 @@
     "Changes the avatar of the current room": "Changes the avatar of the current room",
     "Changes your avatar in all rooms": "Changes your avatar in all rooms",
     "Favourited": "Favorited",
-    "Explore rooms": "Explore rooms"
+    "Explore rooms": "Explore rooms",
+    "Click the button below to confirm adding this email address.": "Click the button below to confirm adding this email address.",
+    "Confirm adding email": "Confirm adding email",
+    "Single Sign On": "Single Sign On",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirm adding this email address by using Single Sign On to prove your identity."
 }
