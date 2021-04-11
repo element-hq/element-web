@@ -62,7 +62,7 @@
     "Server error": "Error servidor",
     "Single Sign On": "Autentificacion unica",
     "Confirm": "Confirmar",
-    "Dismiss": "Far desaparéisser",
+    "Dismiss": "Refusar",
     "OK": "D’acòrdi",
     "Continue": "Contunhar",
     "Go Back": "En arrièr",
@@ -118,7 +118,7 @@
     "Incoming call": "Sonada entranta",
     "Accept": "Acceptar",
     "Start": "Començament",
-    "Cancelling…": "Anullacion...",
+    "Cancelling…": "Anullacion…",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
     "Tree": "Arborescéncia",
@@ -338,5 +338,7 @@
     "Esc": "Escap",
     "Enter": "Entrada",
     "Space": "Espaci",
-    "End": "Fin"
+    "End": "Fin",
+    "Explore rooms": "Percórrer las salas",
+    "Create Account": "Crear un compte"
 }
