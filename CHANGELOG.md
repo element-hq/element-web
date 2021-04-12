@@ -1,3 +1,31 @@
+Changes in [1.7.25](https://github.com/vector-im/element-web/releases/tag/v1.7.25) (2021-04-12)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.25-rc.1...v1.7.25)
+
+ * Upgrade to React SDK 3.18.0 and JS SDK 9.11.0
+
+Changes in [1.7.25-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.25-rc.1) (2021-04-07)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.24...v1.7.25-rc.1)
+
+ * Upgrade to React SDK 3.18.0-rc.1 and JS SDK 9.11.0-rc.1
+ * Translations update from Weblate
+   [\#16882](https://github.com/vector-im/element-web/pull/16882)
+ * Revert "Docker image: serve pre-compressed assets using gzip_static"
+   [\#16838](https://github.com/vector-im/element-web/pull/16838)
+ * Move native node modules documentation to element-desktop
+   [\#16814](https://github.com/vector-im/element-web/pull/16814)
+ * Add user settings for warn before exit
+   [\#16781](https://github.com/vector-im/element-web/pull/16781)
+ * Change ISSUE_TEMPLATE bold lines to proper headers
+   [\#16768](https://github.com/vector-im/element-web/pull/16768)
+ * Add example for deployment into Kubernetes
+   [\#16447](https://github.com/vector-im/element-web/pull/16447)
+ * Create bare-bones `PULL_REQUEST_TEMPLATE.md`
+   [\#16770](https://github.com/vector-im/element-web/pull/16770)
+ * Add webpack config and labs flag docs for voice messages
+   [\#16705](https://github.com/vector-im/element-web/pull/16705)
+
 Changes in [1.7.24](https://github.com/vector-im/element-web/releases/tag/v1.7.24) (2021-03-29)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.24-rc.1...v1.7.24)

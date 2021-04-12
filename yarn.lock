@@ -7506,10 +7506,10 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@9.11.0-rc.1:
-  version "9.11.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-9.11.0-rc.1.tgz#c1bcc5d749ef6b78673ab48e2db30f4e8b56768d"
-  integrity sha512-1U7l9FgWVWghTRRhU0A7zdniXS7mZ2Zr7H/lFUp5V3SVK62K7s3mKmFlGnuBNODnWYv4ZVKvlkCNaYYLSGw6/g==
+matrix-js-sdk@9.11.0:
+  version "9.11.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-9.11.0.tgz#57ba60dfbcf2b32917eb6d7232d0e81cf0de0d3a"
+  integrity sha512-wP28ybOxyQ7lbC48QddRORYr8atEwbTqDOsu8H6u9jTTgB2qqczI/bkSoXHtutODuSeLY5x0UuwLcxVCy4yxVQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -7529,10 +7529,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.18.0-rc.1:
-  version "3.18.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.18.0-rc.1.tgz#2a41f302d898ca02b97da027b9c60d8b24722215"
-  integrity sha512-tIZniXw/2fHdBrSNzy6DmXVNE0+uko5svajQHM0a9wteBhNTap+MtoAbV0QWCpF6/NsLMsjmpxbUUfRkhFZzzQ==
+matrix-react-sdk@3.18.0:
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.18.0.tgz#119b0a908974e46ad9973aa7c4ea10ee06fab2b4"
+  integrity sha512-RkivwI4Rv+l93tmj3GK1XDK9hGAoIILcQZ+rr1cQ1AymmFSwF/mQLVJICewLZCcp2FP9osJg75/JbmPBaurxdw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
@@ -7560,7 +7560,7 @@ matrix-react-sdk@3.18.0-rc.1:
     katex "^0.12.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.20"
-    matrix-js-sdk "9.11.0-rc.1"
+    matrix-js-sdk "9.11.0"
     matrix-widget-api "^0.1.0-beta.13"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
