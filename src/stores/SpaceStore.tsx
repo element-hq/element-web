@@ -376,16 +376,16 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             this.onRoomsUpdate();
         }
 
-        // if the user was looking at the room and then joined select that space
-        if (room.getMyMembership() === "join" && room.roomId === RoomViewStore.getRoomId()) {
-            this.setActiveSpace(room);
-        }
-
         if (room.getMyMembership() === "join") {
-            const numSuggestedRooms = this._suggestedRooms.length;
-            this._suggestedRooms = this._suggestedRooms.filter(r => r.room_id !== room.roomId);
-            if (numSuggestedRooms !== this._suggestedRooms.length) {
-                this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
+            if (!room.isSpaceRoom()) {
+                const numSuggestedRooms = this._suggestedRooms.length;
+                this._suggestedRooms = this._suggestedRooms.filter(r => r.room_id !== room.roomId);
+                if (numSuggestedRooms !== this._suggestedRooms.length) {
+                    this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
+                }
+            } else if (room.roomId === RoomViewStore.getRoomId()) {
+                // if the user was looking at the space and then joined: select that space
+                this.setActiveSpace(room);
             }
         }
     };
