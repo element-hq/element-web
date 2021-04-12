@@ -220,12 +220,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_room_history_key_sharing": {
-        isFeature: true,
-        displayName: _td("Share decryption keys for room history when inviting users"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
