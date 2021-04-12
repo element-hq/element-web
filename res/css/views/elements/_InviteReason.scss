@@ -19,8 +19,7 @@ limitations under the License.
     margin-bottom: 1em;
 
     .mx_InviteReason_reason {
-        filter: none;
-        transition-duration: 0.5s;
+        visibility: visible;
     }
 
     .mx_InviteReason_toggle {
@@ -49,7 +48,7 @@ limitations under the License.
 
 .mx_InviteReason_hidden {
     .mx_InviteReason_reason {
-        filter: blur(5px) saturate(0.1) sepia(1);
+        visibility: hidden;
     }
 
     .mx_InviteReason_toggle {
