@@ -1494,7 +1494,7 @@ const UserInfoHeader: React.FC<{
         e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
-    const displayName = member.name || member.displayname;
+    const displayName = member.rawDisplayName || member.displayname;
     return <React.Fragment>
         { avatarElement }
 
