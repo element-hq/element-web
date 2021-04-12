@@ -119,10 +119,13 @@ For a good example, see https://develop.element.io/config.json.
 1. `mobileBuilds`: Used to alter promotional links to the mobile app. By default the
    builds are considered available and accessible from https://element.io. This config
    option is typically used in a context of encouraging the user to try the mobile app
-   instead of a mobile/incompatible browser. There are 3 possible fields for this config
-   option: `ios`, `android`, `fdroid`. For all 3, when set to a string then that URL will
-   be used. When not defined, the default element.io apps will be used. When explicitly
-   set to `null`, that platform will be considered unavailable.
+   instead of a mobile/incompatible browser.
+   1. `ios`: The URL to the iOS build. If `null`, it will be assumed to be not available.
+       If not set, the default element.io builds will be used.
+   1. `android`: The URL to the Android build. If `null`, it will be assumed to be not available.
+       If not set, the default element.io builds will be used.
+   1. `fdroid`: The URL to the FDroid build. If `null`, it will be assumed to be not available.
+      If not set, the default element.io builds will be used.
 1. `mobileGuideToast`: Whether to show a toast a startup which nudges users on
    iOS and Android towards the native mobile apps. The toast redirects to the
    mobile guide if they accept. Defaults to false.
