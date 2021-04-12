@@ -1360,6 +1360,7 @@
     "Change topic": "Change topic",
     "Upgrade the room": "Upgrade the room",
     "Enable room encryption": "Enable room encryption",
+    "Change server ACLs": "Change server ACLs",
     "Modify widgets": "Modify widgets",
     "Failed to unban": "Failed to unban",
     "Unban": "Unban",
