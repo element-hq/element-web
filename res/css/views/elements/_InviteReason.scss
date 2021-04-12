@@ -22,7 +22,7 @@ limitations under the License.
         visibility: visible;
     }
 
-    .mx_InviteReason_toggle {
+    .mx_InviteReason_view {
         display: none;
         position: absolute;
         inset: 0;
@@ -48,7 +48,7 @@ limitations under the License.
         visibility: hidden;
     }
 
-    .mx_InviteReason_toggle {
+    .mx_InviteReason_view {
         display: flex;
     }
 }
