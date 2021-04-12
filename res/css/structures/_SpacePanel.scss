@@ -276,15 +276,17 @@ $activeBorderColor: $secondary-fg-color;
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
-            // Hide the badge container on hover because it'll be a menu button
-            .mx_SpacePanel_badgeContainer {
-                width: 0;
-                height: 0;
-                display: none;
-            }
+            &:not(.mx_SpaceButton_home) {
+                // Hide the badge container on hover because it'll be a menu button
+                .mx_SpacePanel_badgeContainer {
+                    width: 0;
+                    height: 0;
+                    display: none;
+                }
 
-            .mx_SpaceButton_menuButton {
-                display: block;
+                .mx_SpaceButton_menuButton {
+                    display: block;
+                }
             }
         }
     }
