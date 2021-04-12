@@ -3225,5 +3225,6 @@
     "Check your devices": "Überprüfe dein Gerät",
     "%(deviceId)s from %(ip)s": "%(deviceId)s von %(ip)s",
     "This homeserver has been blocked by it's administrator.": "Dieser Heimserver wurde von seiner Administration blockiert.",
-    "You have unverified logins": "Du hast nicht-bestätigte Anmeldungen"
+    "You have unverified logins": "Du hast nicht-bestätigte Anmeldungen",
+    "Review to ensure your account is safe": "Überprüfen, um sicher zu sein, dass dein Account sicher ist"
 }
