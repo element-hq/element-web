@@ -74,6 +74,24 @@ const stateEventTileTypes = {
     'm.room.related_groups': 'messages.TextualEvent', // legacy communities flair
 };
 
+const stateEventSingular = new Set([
+    EventType.RoomEncryption,
+    EventType.RoomCanonicalAlias,
+    EventType.RoomCreate,
+    EventType.RoomName,
+    EventType.RoomAvatar,
+    EventType.RoomHistoryVisibility,
+    EventType.RoomTopic,
+    EventType.RoomPowerLevels,
+    EventType.RoomPinnedEvents,
+    EventType.RoomServerAcl,
+    WIDGET_LAYOUT_EVENT_TYPE,
+    EventType.RoomTombstone,
+    EventType.RoomJoinRules,
+    EventType.RoomGuestAccess,
+    'm.room.related_groups',
+]);
+
 // Add all the Mjolnir stuff to the renderer
 for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
@@ -130,7 +148,12 @@ export function getHandlerTile(ev) {
         }
     }
 
-    return ev.isState() ? stateEventTileTypes[type] : eventTileTypes[type];
+    if (ev.isState()) {
+        if (stateEventSingular.has(type) && ev.getStateKey() !== "") return undefined;
+        return stateEventTileTypes[type];
+    }
+
+    return eventTileTypes[type];
 }
 
 const MAX_READ_AVATARS = 5;
