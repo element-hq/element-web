@@ -138,4 +138,9 @@ export enum Action {
      * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
      */
     UploadCanceled = "upload_canceled",
+
+    /**
+     * Inserts content into the active composer. Should be used with ComposerInsertPayload
+     */
+    ComposerInsert = "composer_insert",
 }

@@ -281,8 +281,14 @@ export default class EditMessageComposer extends React.Component {
     };
 
     onAction = payload => {
-        if (payload.action === "insert_mention_edit_composer" && this._editorRef) {
-            this._editorRef.insertMention(payload.user_id);
+        if (payload.action === "edit_composer_insert" && this._editorRef) {
+            if (payload.user_id) {
+                this._editorRef.insertMention(payload.userId);
+            } else if (payload.event) {
+                this._editorRef.insertQuotedMessage(payload.event);
+            } else if (payload.text) {
+                this._editorRef.insertPlaintext(payload.text);
+            }
         }
     };
 

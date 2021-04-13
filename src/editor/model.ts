@@ -390,7 +390,7 @@ export default class EditorModel {
         return addLen;
     }
 
-    positionForOffset(totalOffset: number, atPartEnd: boolean) {
+    positionForOffset(totalOffset: number, atPartEnd = false) {
         let currentOffset = 0;
         const index = this._parts.findIndex(part => {
             const partLen = part.text.length;

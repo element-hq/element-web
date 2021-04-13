@@ -360,8 +360,8 @@ const UserOptionsSection: React.FC<{
 
             const onInsertPillButton = function() {
                 dis.dispatch({
-                    action: 'insert_mention',
-                    user_id: member.userId,
+                    action: "composer_insert",
+                    userId: member.userId,
                 });
             };
 

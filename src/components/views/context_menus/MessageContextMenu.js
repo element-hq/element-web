@@ -233,7 +233,7 @@ export default class MessageContextMenu extends React.Component {
 
     onQuoteClick = () => {
         dis.dispatch({
-            action: 'quote',
+            action: "composer_insert",
             event: this.props.mxEvent,
         });
         this.closeMenu();

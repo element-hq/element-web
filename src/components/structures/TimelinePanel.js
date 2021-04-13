@@ -467,16 +467,17 @@ class TimelinePanel extends React.Component {
                 break;
             }
 
-            case "insert_mention": {
+            case "composer_insert": {
+                // re-dispatch to the correct composer
                 if (this.state.editState) {
                     dis.dispatch({
                         ...payload,
-                        action: "insert_mention_edit_composer",
+                        action: "edit_composer_insert",
                     });
                 } else {
                     dis.dispatch({
                         ...payload,
-                        action: "insert_mention_send_composer",
+                        action: "send_composer_insert",
                     });
                 }
                 break;

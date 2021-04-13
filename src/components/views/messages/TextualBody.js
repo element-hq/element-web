@@ -390,8 +390,8 @@ export default class TextualBody extends React.Component {
     onEmoteSenderClick = event => {
         const mxEvent = this.props.mxEvent;
         dis.dispatch({
-            action: 'insert_mention',
-            user_id: mxEvent.getSender(),
+            action: "composer_insert",
+            userId: mxEvent.getSender(),
         });
     };
 

@@ -18,6 +18,7 @@ limitations under the License.
 import classNames from 'classnames';
 import React, {createRef, ClipboardEvent} from 'react';
 import {Room} from 'matrix-js-sdk/src/models/room';
+import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import EditorModel from '../../../editor/model';
@@ -32,7 +33,7 @@ import {
 import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
 import Autocomplete, {generateCompletionDomId} from '../rooms/Autocomplete';
 import {getAutoCompleteCreator} from '../../../editor/parts';
-import {parsePlainTextMessage} from '../../../editor/deserialize';
+import {parseEvent, parsePlainTextMessage} from '../../../editor/deserialize';
 import {renderModel} from '../../../editor/render';
 import TypingStore from "../../../stores/TypingStore";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -731,5 +732,31 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         });
         // refocus on composer, as we just clicked "Mention"
         this.focus();
+    }
+
+    public insertQuotedMessage(event: MatrixEvent) {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
+        // add two newlines
+        quoteParts.push(partCreator.newline());
+        quoteParts.push(partCreator.newline());
+        model.transform(() => {
+            const addedLen = model.insert(quoteParts, model.positionForOffset(0));
+            return model.positionForOffset(addedLen, true);
+        });
+        // refocus on composer, as we just clicked "Quote"
+        this.focus();
+    }
+
+    public insertPlaintext(text: string) {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([partCreator.plain(text)], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
     }
 }

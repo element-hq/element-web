@@ -312,8 +312,8 @@ export default class MessageComposer extends React.Component {
 
     addEmoji(emoji) {
         dis.dispatch({
-            action: "insert_emoji",
-            emoji,
+            action: "composer_insert",
+            text: emoji,
         });
     }
 

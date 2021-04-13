@@ -482,42 +482,16 @@ export default class SendMessageComposer extends React.Component {
             case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;
-            case 'insert_mention_send_composer':
-                this._editorRef && this._editorRef.insertMention(payload.user_id);
-                break;
-            case 'quote':
-                this._insertQuotedMessage(payload.event);
-                break;
-            case 'insert_emoji':
-                this._insertEmoji(payload.emoji);
+            case "send_composer_insert":
+                if (payload.userId) {
+                    this._editorRef && this._editorRef.insertMention(payload.userId);
+                } else if (payload.event) {
+                    this._editorRef && this._editorRef.insertQuotedMessage(payload.event);
+                } else if (payload.text) {
+                    this._editorRef && this._editorRef.insertPlaintext(payload.emoji);
+                }
                 break;
         }
-    };
-
-    _insertQuotedMessage(event) {
-        const {model} = this;
-        const {partCreator} = model;
-        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
-        // add two newlines
-        quoteParts.push(partCreator.newline());
-        quoteParts.push(partCreator.newline());
-        model.transform(() => {
-            const addedLen = model.insert(quoteParts, model.positionForOffset(0));
-            return model.positionForOffset(addedLen, true);
-        });
-        // refocus on composer, as we just clicked "Quote"
-        this._editorRef && this._editorRef.focus();
-    }
-
-    _insertEmoji = (emoji) => {
-        const {model} = this;
-        const {partCreator} = model;
-        const caret = this._editorRef.getCaret();
-        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        model.transform(() => {
-            const addedLen = model.insert([partCreator.plain(emoji)], position);
-            return model.positionForOffset(caret.offset + addedLen, true);
-        });
     };
 
     _onPaste = (event) => {
