@@ -136,6 +136,21 @@ $irc-line-height: $font-18px;
         }
     }
 
+    .mx_ReplyThread {
+        .mx_MessageTimestamp {
+            width: initial;
+        }
+
+        /**
+         * adding the icon back in the document flow
+         * if it's not present, there's no unwanted wasted space
+         */
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            order: -1;
+        }
+    }
+
     blockquote {
         margin: 0;
     }

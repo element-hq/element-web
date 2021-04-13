@@ -159,6 +159,7 @@ $left-gutter: 64px;
 .mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile_last > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile:hover > a > .mx_MessageTimestamp,
+.mx_IRCLayout .mx_ReplyThread .mx_EventTile > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile.mx_EventTile_actionBarFocused > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile.focus-visible:focus-within > a > .mx_MessageTimestamp {
     visibility: visible;
