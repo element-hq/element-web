@@ -1431,7 +1431,7 @@ const UserInfoHeader: React.FC<{
             name: member.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     }, [member]);
 
     const avatarElement = (

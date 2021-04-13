@@ -118,7 +118,7 @@ export default class MImageBody extends React.Component {
                 params.fileSize = content.info.size;
             }
 
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
         }
     }
 
