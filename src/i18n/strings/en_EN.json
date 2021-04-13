@@ -1305,6 +1305,7 @@
     "Cryptography": "Cryptography",
     "Session ID:": "Session ID:",
     "Session key:": "Session key:",
+    "You have no ignored users.": "You have no ignored users.",
     "Bulk options": "Bulk options",
     "Accept all %(invitedRooms)s invites": "Accept all %(invitedRooms)s invites",
     "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
