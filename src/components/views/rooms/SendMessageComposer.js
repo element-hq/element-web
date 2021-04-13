@@ -30,7 +30,6 @@ import {
 import {CommandPartCreator} from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
-import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
 import {CommandCategories, getCommand} from '../../../SlashCommands';
