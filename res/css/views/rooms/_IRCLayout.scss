@@ -137,6 +137,12 @@ $irc-line-height: $font-18px;
     }
 
     .mx_ReplyThread {
+        .mx_EventTile_emote {
+            > .mx_EventTile_avatar {
+                margin-left: initial;
+            }
+        }
+
         .mx_MessageTimestamp {
             width: initial;
         }
