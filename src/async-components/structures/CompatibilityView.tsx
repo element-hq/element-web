@@ -27,7 +27,55 @@ interface IProps {
 }
 
 const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
-    const brand = SdkConfig.get().brand;
+    const {brand, mobileBuilds} = SdkConfig.get();
+
+    let ios = null;
+    const iosCustomUrl = mobileBuilds?.ios;
+    if (iosCustomUrl !== null) { // could be undefined or a string
+        ios = <>
+            <p><strong>iOS</strong> (iPhone or iPad)</p>
+            <a
+                href={iosCustomUrl || "https://apps.apple.com/app/vector/id1083446067"}
+                target="_blank"
+                className="mx_ClearDecoration"
+            >
+                <img height="48" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
+            </a>
+        </>;
+    }
+
+    let android = [<p className="mx_Spacer" key="header"><strong>Android</strong></p>];
+    const andCustomUrl = mobileBuilds?.android;
+    const fdroidCustomUrl = mobileBuilds?.fdroid;
+    if (andCustomUrl !== null) { // undefined or string
+        android.push(<a
+            href={andCustomUrl || "https://play.google.com/store/apps/details?id=im.vector.app"}
+            target="_blank"
+            className="mx_ClearDecoration"
+            key="android"
+        >
+            <img height="48" src="themes/element/img/download/google.svg" alt="Google Play Store" />
+        </a>);
+    }
+    if (fdroidCustomUrl !== null) { // undefined or string
+        android.push(<a
+            href={fdroidCustomUrl || "https://f-droid.org/repository/browse/?fdid=im.vector.app"}
+            target="_blank"
+            className="mx_ClearDecoration"
+            key="fdroid"
+        >
+            <img height="48" src="themes/element/img/download/fdroid.svg" alt="F-Droid" />
+        </a>);
+    }
+    if (android.length === 1) { // just a header, meaning no links
+        android = [];
+    }
+
+    let mobileHeader = <h2 id="step2_heading">{_t("Use %(brand)s on mobile", {brand})}</h2>;
+    if (!android.length && !ios) {
+        mobileHeader = null;
+    }
+
     return <div className="mx_ErrorView">
         <div className="mx_ErrorView_container">
             <div className="mx_HomePage_header">
@@ -76,30 +124,9 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             <div className="mx_HomePage_col">
                 <div className="mx_HomePage_row">
                     <div>
-                        <h2 id="step2_heading">Use Element on mobile</h2>
-                        <p><strong>iOS</strong> (iPhone or iPad)</p>
-                        <a
-                            href="https://apps.apple.com/app/vector/id1083446067"
-                            target="_blank"
-                            className="mx_ClearDecoration"
-                        >
-                            <img height="48" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
-                        </a>
-                        <p className="mx_Spacer"><strong>Android</strong></p>
-                        <a
-                            href="https://play.google.com/store/apps/details?id=im.vector.app"
-                            target="_blank"
-                            className="mx_ClearDecoration"
-                        >
-                            <img height="48" src="themes/element/img/download/google.svg" alt="Google Play Store" />
-                        </a>
-                        <a
-                            href="https://f-droid.org/repository/browse/?fdid=im.vector.app"
-                            target="_blank"
-                            className="mx_ClearDecoration"
-                        >
-                            <img height="48" src="themes/element/img/download/fdroid.svg" alt="F-Droid" />
-                        </a>
+                        {mobileHeader}
+                        {ios}
+                        {android}
                     </div>
                 </div>
             </div>
