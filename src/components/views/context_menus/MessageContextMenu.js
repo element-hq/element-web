@@ -144,13 +144,13 @@ export default class MessageContextMenu extends React.Component {
 
                 const cli = MatrixClientPeg.get();
                 try {
+                    if (this.props.onCloseDialog) this.props.onCloseDialog();
                     await cli.redactEvent(
                         this.props.mxEvent.getRoomId(),
                         this.props.mxEvent.getId(),
                         undefined,
                         reason ? { reason } : {},
                     );
-                    if (this.props.onCloseDialog) this.props.onCloseDialog();
                 } catch (e) {
                     const code = e.errcode || e.statusCode;
                     // only show the dialog if failing for something other than a network error
@@ -194,11 +194,11 @@ export default class MessageContextMenu extends React.Component {
     };
 
     onForwardClick = () => {
+        if (this.props.onCloseDialog) this.props.onCloseDialog();
         dis.dispatch({
             action: 'forward_event',
             event: this.props.mxEvent,
         });
-        if (this.props.onCloseDialog) this.props.onCloseDialog();
         this.closeMenu();
     };
 
