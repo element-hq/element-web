@@ -120,6 +120,7 @@ export default class EditMessageComposer extends React.Component {
             saveDisabled: true,
         };
         this._createEditorModel();
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     _setEditorRef = ref => {
@@ -235,6 +236,7 @@ export default class EditMessageComposer extends React.Component {
         // then when mounting the editor again with the same editor state,
         // it will set the cursor at the end.
         this.props.editState.setEditorState(caret, parts);
+        dis.unregister(this.dispatcherRef);
     }
 
     _createEditorModel() {
@@ -276,6 +278,12 @@ export default class EditMessageComposer extends React.Component {
         this.setState({
             saveDisabled: false,
         });
+    };
+
+    onAction = payload => {
+        if (payload.action === "insert_mention_edit_composer" && this._editorRef) {
+            this._editorRef.insertMention(payload.user_id);
+        }
     };
 
     render() {

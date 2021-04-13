@@ -450,21 +450,41 @@ class TimelinePanel extends React.Component {
     };
 
     onAction = payload => {
-        if (payload.action === 'ignore_state_changed') {
-            this.forceUpdate();
-        }
-        if (payload.action === "edit_event") {
-            const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-            this.setState({editState}, () => {
-                if (payload.event && this._messagePanel.current) {
-                    this._messagePanel.current.scrollToEventIfNeeded(
-                        payload.event.getId(),
-                    );
+        switch (payload.action) {
+            case "ignore_state_changed":
+                this.forceUpdate();
+                break;
+
+            case "edit_event": {
+                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+                this.setState({editState}, () => {
+                    if (payload.event && this._messagePanel.current) {
+                        this._messagePanel.current.scrollToEventIfNeeded(
+                            payload.event.getId(),
+                        );
+                    }
+                });
+                break;
+            }
+
+            case "insert_mention": {
+                if (this.state.editState) {
+                    dis.dispatch({
+                        ...payload,
+                        action: "insert_mention_edit_composer",
+                    });
+                } else {
+                    dis.dispatch({
+                        ...payload,
+                        action: "insert_mention_send_composer",
+                    });
                 }
-            });
-        }
-        if (payload.action === "scroll_to_bottom") {
-            this.jumpToLiveTimeline();
+                break;
+            }
+
+            case "scroll_to_bottom":
+                this.jumpToLiveTimeline();
+                break;
         }
     };
 

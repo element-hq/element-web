@@ -482,8 +482,8 @@ export default class SendMessageComposer extends React.Component {
             case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;
-            case 'insert_mention':
-                this._insertMention(payload.user_id);
+            case 'insert_mention_send_composer':
+                this._editorRef && this._editorRef.insertMention(payload.user_id);
                 break;
             case 'quote':
                 this._insertQuotedMessage(payload.event);
@@ -493,25 +493,6 @@ export default class SendMessageComposer extends React.Component {
                 break;
         }
     };
-
-    _insertMention(userId) {
-        const {model} = this;
-        const {partCreator} = model;
-        const member = this.props.room.getMember(userId);
-        const displayName = member ?
-            member.rawDisplayName : userId;
-        const caret = this._editorRef.getCaret();
-        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        // index is -1 if there are no parts but we only care for if this would be the part in position 0
-        const insertIndex = position.index > 0 ? position.index : 0;
-        const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
-        model.transform(() => {
-            const addedLen = model.insert(parts, position);
-            return model.positionForOffset(caret.offset + addedLen, true);
-        });
-        // refocus on composer, as we just clicked "Mention"
-        this._editorRef && this._editorRef.focus();
-    }
 
     _insertQuotedMessage(event) {
         const {model} = this;

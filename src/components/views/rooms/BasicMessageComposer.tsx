@@ -713,4 +713,23 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     focus() {
         this.editorRef.current.focus();
     }
+
+    public insertMention(userId: string) {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const member = this.props.room.getMember(userId);
+        const displayName = member ?
+            member.rawDisplayName : userId;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        // index is -1 if there are no parts but we only care for if this would be the part in position 0
+        const insertIndex = position.index > 0 ? position.index : 0;
+        const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
+        model.transform(() => {
+            const addedLen = model.insert(parts, position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+        // refocus on composer, as we just clicked "Mention"
+        this.focus();
+    }
 }
