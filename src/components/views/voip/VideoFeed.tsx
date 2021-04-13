@@ -66,7 +66,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         this.playMedia();
     }
 
-    playMedia() {
+    private playMedia() {
         const audioOutput = CallMediaHandler.getAudioOutput();
         const currentMedia = this.getCurrentMedia();
 
@@ -117,11 +117,11 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         // seem to be necessary - Šimon
     }
 
-    getCurrentMedia() {
+    private getCurrentMedia() {
         return this.audio.current || this.video.current;
     }
 
-    onNewStream = () => {
+    private onNewStream = () => {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
@@ -129,7 +129,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         this.playMedia();
     }
 
-    onResize = (e) => {
+    private onResize = (e) => {
         if (this.props.onResize && !this.props.feed.isLocal()) {
             this.props.onResize(e);
         }
