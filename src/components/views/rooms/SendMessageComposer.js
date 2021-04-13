@@ -488,7 +488,7 @@ export default class SendMessageComposer extends React.Component {
                 } else if (payload.event) {
                     this._editorRef && this._editorRef.insertQuotedMessage(payload.event);
                 } else if (payload.text) {
-                    this._editorRef && this._editorRef.insertPlaintext(payload.emoji);
+                    this._editorRef && this._editorRef.insertPlaintext(payload.text);
                 }
                 break;
         }
