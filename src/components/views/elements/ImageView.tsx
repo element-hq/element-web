@@ -359,6 +359,19 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
+        let contextMenuButton;
+        if (this.props.mxEvent) {
+            contextMenuButton = (
+                <ContextMenuTooltipButton
+                    className="mx_ImageView_button mx_ImageView_button_more"
+                    title={_t("Options")}
+                    onClick={this.onOpenContextMenu}
+                    inputRef={this.contextMenuButton}
+                    isExpanded={this.state.contextMenuDisplayed}
+                />
+            );
+        }
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -397,13 +410,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("Download")}
                             onClick={ this.onDownloadClick }>
                         </AccessibleTooltipButton>
-                        <ContextMenuTooltipButton
-                            className="mx_ImageView_button mx_ImageView_button_more"
-                            title={_t("Options")}
-                            onClick={this.onOpenContextMenu}
-                            inputRef={this.contextMenuButton}
-                            isExpanded={this.state.contextMenuDisplayed}
-                        />
+                        {contextMenuButton}
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("Close")}
