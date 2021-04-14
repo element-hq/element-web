@@ -31,6 +31,7 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {
     canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
+    IInvite3PID,
 } from "../../../createRoom";
 import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
@@ -656,29 +657,33 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
-        let abort = false;
         try {
             const isSelf = targetIds.length === 1 && targetIds[0] === client.getUserId();
             if (targetIds.length === 1 && !isSelf) {
                 createRoomOptions.dmUserId = targetIds[0];
-                await createRoom(createRoomOptions);
-            } else if (isSelf) {
-                await createRoom(createRoomOptions);
-            } else {
-                const roomId = await createRoom(createRoomOptions);
-                /**
-                 * To avoid race condition we want to make sure the room information
-                 * is properly synced with the account before sending invites to targets
-                 * It can otherwise result in a "Cannot find room" error
-                 */
-                await client.peekInRoom(roomId);
-                const invitesState = await inviteMultipleToRoom(roomId, targetIds);
+            }
 
-                abort = this._shouldAbortAfterInviteError(invitesState);
+            if (targetIds.length > 1) {
+                createRoomOptions.createOpts = targetIds.reduce(
+                    (roomOptions, address) => {
+                        if (getAddressType(address) === 'email') {
+                            const invite: IInvite3PID = {
+                                id_server: client.getIdentityServerUrl(true),
+                                medium: 'email',
+                                address,
+                            };
+                            roomOptions.invite_3pid.push(invite);
+                        } else {
+                            roomOptions.invite.push(address);
+                        }
+                        return roomOptions;
+                    },
+                    { invite: [], invite_3pid: [] },
+                )
             }
-            if (!abort) {
-                this.props.onFinished();
-            }
+
+            await createRoom(createRoomOptions);
+            this.props.onFinished();
         } catch (err) {
             console.error(err);
             this.setState({
