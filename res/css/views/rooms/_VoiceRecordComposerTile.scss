@@ -54,7 +54,7 @@ limitations under the License.
 
     &::before {
         // Pulsing animation
-        animation: recording-pulse 1.5s infinite;
+        animation: recording-pulse 1s infinite;
 
         content: '';
         background-color: $voice-record-live-circle-color;
@@ -78,19 +78,13 @@ limitations under the License.
 }
 
 @keyframes recording-pulse {
-    // Source: https://codepen.io/FlorinPop17/pen/drJJzK
-    // Same source: https://www.florin-pop.com/blog/2019/03/css-pulse-effect/
-
     0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 $voice-record-live-circle-color;
+        opacity: 1;
     }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 6px transparent;
+    65% {
+        opacity: 0;
     }
     100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 transparent;
+        opacity: 1;
     }
 }
