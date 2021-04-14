@@ -1,6 +1,6 @@
 {
     "powered by Matrix": "ใช้เทคโนโลยี Matrix",
-    "Dismiss": "ยกเลิก",
+    "Dismiss": "ปิด",
     "Unknown device": "อุปกรณ์ที่ไม่รู้จัก",
     "You need to be using HTTPS to place a screen-sharing call.": "คุณต้องใช้ HTTPS เพื่อเริ่มติดต่อแบบแบ่งปันหน้าจอ",
     "Welcome to Element": "ยินดีต้อนรับสู่ Element",
@@ -14,5 +14,6 @@
     "Open user settings": "เปิดการตั้งค่าผู้ใช้",
     "Go to element.io": "ไปยัง element.io",
     "Failed to start": "ไม่สามารถเริ่ม",
-    "Open": "เปิด"
+    "Open": "เปิด",
+    "Powered by Matrix": "ขับเคลื่อนโดย Matrix"
 }
