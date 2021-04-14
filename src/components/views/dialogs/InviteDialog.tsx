@@ -656,35 +656,30 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
-        let createRoomPromise = Promise.resolve(null) as Promise<string | null | boolean>;
-        const isSelf = targetIds.length === 1 && targetIds[0] === MatrixClientPeg.get().getUserId();
-        if (targetIds.length === 1 && !isSelf) {
-            createRoomOptions.dmUserId = targetIds[0];
-            createRoomPromise = createRoom(createRoomOptions);
-        } else if (isSelf) {
-            createRoomPromise = createRoom(createRoomOptions);
-        } else {
-            // Create a boring room and try to invite the targets manually.
-            createRoomPromise = createRoom(createRoomOptions).then(roomId => {
-                return inviteMultipleToRoom(roomId, targetIds);
-            }).then(result => {
-                if (this._shouldAbortAfterInviteError(result)) {
-                    return true; // abort
-                }
-            });
-        }
 
-        // the createRoom call will show the room for us, so we don't need to worry about that.
-        createRoomPromise.then(abort => {
-            if (abort === true) return; // only abort on true booleans, not roomIds or something
-            this.props.onFinished();
-        }).catch(err => {
+        try {
+            const isSelf = targetIds.length === 1 && targetIds[0] === MatrixClientPeg.get().getUserId();
+            if (targetIds.length === 1 && !isSelf) {
+                createRoomOptions.dmUserId = targetIds[0];
+                await createRoom(createRoomOptions);
+            } else if (isSelf) {
+                await createRoom(createRoomOptions);
+            } else {
+                const roomId = await createRoom(createRoomOptions);
+                const invitesState = await inviteMultipleToRoom(roomId, targetIds);
+
+                const abort = this._shouldAbortAfterInviteError(invitesState);
+                if (abort === false) {
+                    this.props.onFinished();
+                }
+            }
+        } catch (err) {
             console.error(err);
             this.setState({
                 busy: false,
                 errorText: _t("We couldn't create your DM."),
             });
-        });
+        }
     };
 
     _inviteUsers = async () => {
