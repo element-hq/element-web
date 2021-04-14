@@ -1098,7 +1098,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             warnings.push((
                 <span className="warning" key="only_member_warning">
                     {' '/* Whitespace, otherwise the sentences get smashed together */ }
-                    { _t("You are the only member of this room. This room will become unjoinable if you leave.") }
+                    { _t("You are the only person here. If you leave, no one will be able to join in the future, including you.") }
                 </span>
             ));
 
@@ -1126,7 +1126,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
-        const hasWarnings = warnings.length > 0;
 
         const isSpace = roomToLeave?.isSpaceRoom();
         Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
@@ -1140,7 +1139,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </span>
             ),
             button: _t("Leave"),
-            danger: hasWarnings,
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
                     const d = leaveRoomBehaviour(roomId);
