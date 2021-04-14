@@ -1125,7 +1125,7 @@
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Bist du sicher? Du wirst alle deine verschlüsselten Nachrichten verlieren, wenn deine Schlüssel nicht gut gesichert sind.",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Verschlüsselte Nachrichten sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.",
     "Restore from Backup": "Von Sicherung wiederherstellen",
-    "Back up your keys before signing out to avoid losing them.": "Damit du deine Schlüssel nicht verlierst, sichere sie, bevor du dich abmeldest.",
+    "Back up your keys before signing out to avoid losing them.": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern.",
     "Start using Key Backup": "Beginne Schlüsselsicherung zu nutzen",
     "Credits": "Danksagungen",
     "Starting backup...": "Starte Sicherung...",
