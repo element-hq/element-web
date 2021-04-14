@@ -3,13 +3,13 @@ import ReactDom from "react-dom";
 import PropTypes from 'prop-types';
 
 /**
- * The Velociraptor contains components and animates transitions with velocity.
+ * The NodeAnimator contains components and animates transitions.
  * It will only pick up direct changes to properties ('left', currently), and so
  * will not work for animating positional changes where the position is implicit
  * from DOM order. This makes it a lot simpler and lighter: if you need fully
  * automatic positional animation, look at react-shuffle or similar libraries.
  */
-export default class Velociraptor extends React.Component {
+export default class NodeAnimator extends React.Component {
     static propTypes = {
         // either a list of child nodes, or a single child.
         children: PropTypes.any,

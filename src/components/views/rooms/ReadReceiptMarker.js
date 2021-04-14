@@ -19,7 +19,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
-import Velociraptor from "../../../Velociraptor";
+import NodeAnimator from "../../../NodeAnimator";
 import * as sdk from "../../../index";
 import {toPx} from "../../../utils/units";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
@@ -187,7 +187,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
         }
 
         return (
-            <Velociraptor
+            <NodeAnimator
                     startStyles={this.state.startStyles} >
                 <MemberAvatar
                     member={this.props.member}
@@ -199,7 +199,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
                     onClick={this.props.onClick}
                     inputRef={this._avatar}
                 />
-            </Velociraptor>
+            </NodeAnimator>
         );
     }
 }
