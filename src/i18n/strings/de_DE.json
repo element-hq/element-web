@@ -1677,7 +1677,7 @@
     "You're signed out": "Du wurdest abgemeldet",
     "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Achtung: Deine persönlichen Daten (einschließlich Verschlüsselungsschlüssel) sind noch in dieser Sitzung gespeichert. Lösche diese Daten, wenn du diese Sitzung nicht mehr benötigst, oder dich mit einem anderen Konto anmelden möchtest.",
     "Confirm deleting these sessions by using Single Sign On to prove your identity.|other": "Melde dich mittels Einmalanmeldung an, um das Löschen der Sitzungen zu bestätigen.",
-    "Confirm deleting these sessions by using Single Sign On to prove your identity.|one": "Melde dich mittels Single Sign-On an, um das Löschen der Sitzung zu bestätigen.",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|one": "Bestätige das Löschen dieser Sitzung indem du dich mittels „Single Sign-On“ anmeldest um deine Identität nachzuweisen.",
     "Confirm deleting these sessions": "Bestätige das Löschen dieser Sitzungen",
     "Click the button below to confirm deleting these sessions.|other": "Klicke den Knopf, um das Löschen dieser Sitzungen zu bestätigen.",
     "Click the button below to confirm deleting these sessions.|one": "Klicke den Knopf, um das Löschen dieser Sitzung zu bestätigen.",
