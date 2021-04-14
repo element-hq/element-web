@@ -1101,6 +1101,7 @@ export default class EventTile extends React.Component {
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
                                            showUrlPreview={this.props.showUrlPreview}
+                                           permalinkCreator={this.props.permalinkCreator}
                                            onHeightChanged={this.props.onHeightChanged} />
                             { keyRequestInfo }
                             { reactionsRow }

@@ -303,7 +303,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
-    opacity: 0.85;
+    opacity: $lightbox-background-bg-opacity;
     background-color: $lightbox-background-bg-color;
 }
 
@@ -315,6 +315,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     max-width: 100%;
     max-height: 100%;
     pointer-events: none;
+    padding: 0;
 }
 
 .mx_Dialog_header {

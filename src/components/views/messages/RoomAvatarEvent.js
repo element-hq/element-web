@@ -49,7 +49,7 @@ export default class RoomAvatarEvent extends React.Component {
             src: httpUrl,
             name: text,
         };
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
     render() {
