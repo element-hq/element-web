@@ -328,6 +328,8 @@ export default class SendMessageComposer extends React.Component {
     }
 
     async _sendMessage() {
+        const model = this.model;
+
         if (this.model.isEmpty) {
             return;
         }
@@ -336,7 +338,7 @@ export default class SendMessageComposer extends React.Component {
         let shouldSend = true;
         let content;
 
-        if (!containsEmote(this.model) && this._isSlashCommand()) {
+        if (!containsEmote(model) && this._isSlashCommand()) {
             const [cmd, args, commandText] = this._getSlashCommand();
             if (cmd) {
                 if (cmd.category === CommandCategories.messages) {
@@ -377,7 +379,7 @@ export default class SendMessageComposer extends React.Component {
             }
         }
 
-        if (isQuickReaction(this.model)) {
+        if (isQuickReaction(model)) {
             shouldSend = false;
             this._sendQuickReaction();
         }
@@ -386,7 +388,7 @@ export default class SendMessageComposer extends React.Component {
             const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
             if (!content) {
-                content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+                content = createMessageContent(model, this.props.permalinkCreator, replyToEvent);
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
@@ -409,9 +411,9 @@ export default class SendMessageComposer extends React.Component {
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, !!replyToEvent, content);
         }
 
-        this.sendHistoryManager.save(this.model, replyToEvent);
+        this.sendHistoryManager.save(model, replyToEvent);
         // clear composer
-        this.model.reset([]);
+        model.reset([]);
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
