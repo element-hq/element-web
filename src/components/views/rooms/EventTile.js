@@ -260,6 +260,9 @@ export default class EventTile extends React.Component {
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
+
+        // whether or not to show read receipts
+        showReadReceipts: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -989,7 +992,7 @@ export default class EventTile extends React.Component {
         const ircPadlock = useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
         let msgOption;
-        if (SettingsStore.getValue("showReadReceipts")) {
+        if (this.props.showReadReceipts) {
             msgOption = (
                 <div className="mx_EventTile_msgOption">
                     { readAvatars }
