@@ -988,6 +988,16 @@ export default class EventTile extends React.Component {
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
         const ircPadlock = useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
+        let msgOption;
+        if (SettingsStore.getValue("showReadReceipts")) {
+            msgOption = (
+                <div className="mx_EventTile_msgOption">
+                    { readAvatars }
+                </div>
+            );
+        }
+
+
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
@@ -1107,9 +1117,7 @@ export default class EventTile extends React.Component {
                             { reactionsRow }
                             { actionBar }
                         </div>
-                        <div className="mx_EventTile_msgOption">
-                            { readAvatars }
-                        </div>
+                        {msgOption}
                         {
                             // The avatar goes after the event tile as it's absolutely positioned to be over the
                             // event tile line, so needs to be later in the DOM so it appears on top (this avoids
