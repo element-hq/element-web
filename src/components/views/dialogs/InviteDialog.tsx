@@ -656,6 +656,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
+        let abort = false;
         try {
             const isSelf = targetIds.length === 1 && targetIds[0] === client.getUserId();
             if (targetIds.length === 1 && !isSelf) {
@@ -673,9 +674,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 await client.peekInRoom(roomId);
                 const invitesState = await inviteMultipleToRoom(roomId, targetIds);
 
-                if (!this._shouldAbortAfterInviteError(invitesState)) {
-                    this.props.onFinished();
-                }
+                abort = this._shouldAbortAfterInviteError(invitesState);
+            }
+            if (!abort) {
+                this.props.onFinished();
             }
         } catch (err) {
             console.error(err);
