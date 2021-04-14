@@ -861,8 +861,6 @@ export default class EventTile extends React.Component {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
 
-        const readAvatars = this.getReadAvatars();
-
         let avatar;
         let sender;
         let avatarSize;
@@ -993,6 +991,7 @@ export default class EventTile extends React.Component {
 
         let msgOption;
         if (this.props.showReadReceipts) {
+            const readAvatars = this.getReadAvatars();
             msgOption = (
                 <div className="mx_EventTile_msgOption">
                     { readAvatars }
