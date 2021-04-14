@@ -618,13 +618,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _startDm = async () => {
         this.setState({busy: true});
+        const client = MatrixClientPeg.get();
         const targets = this._convertFilter();
         const targetIds = targets.map(t => t.userId);
 
         // Check if there is already a DM with these people and reuse it if possible.
         let existingRoom: Room;
         if (targetIds.length === 1) {
-            existingRoom = findDMForUser(MatrixClientPeg.get(), targetIds[0]);
+            existingRoom = findDMForUser(client, targetIds[0]);
         } else {
             existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
         }
@@ -646,7 +647,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             // If so, enable encryption in the new room.
             const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
             if (!has3PidMembers) {
-                const client = MatrixClientPeg.get();
                 const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
                 if (allHaveDeviceKeys) {
                     createRoomOptions.encryption = true;
@@ -656,9 +656,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
         // Check if it's a traditional DM and create the room if required.
         // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
-
         try {
-            const isSelf = targetIds.length === 1 && targetIds[0] === MatrixClientPeg.get().getUserId();
+            const isSelf = targetIds.length === 1 && targetIds[0] === client.getUserId();
             if (targetIds.length === 1 && !isSelf) {
                 createRoomOptions.dmUserId = targetIds[0];
                 await createRoom(createRoomOptions);
@@ -666,10 +665,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 await createRoom(createRoomOptions);
             } else {
                 const roomId = await createRoom(createRoomOptions);
+                /**
+                 * To avoid race condition we want to make sure the room information
+                 * is properly synced with the account before sending invites to targets
+                 * It can otherwise result in a "Cannot find room" error
+                 */
+                await client.peekInRoom(roomId);
                 const invitesState = await inviteMultipleToRoom(roomId, targetIds);
 
-                const abort = this._shouldAbortAfterInviteError(invitesState);
-                if (abort === false) {
+                if (!this._shouldAbortAfterInviteError(invitesState)) {
                     this.props.onFinished();
                 }
             }
