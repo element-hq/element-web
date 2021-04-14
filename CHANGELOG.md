@@ -312,11 +312,12 @@ Changes in [3.15.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/
 
 ## Security notice
 
-matrix-react-sdk 3.15.0 fixes a low severity issue (CVE-2021-21320) where the
-user content sandbox can be abused to trick users into opening unexpected
-documents. The content is opened with a `blob` origin that cannot access Matrix
-user data, so messages and secrets are not at risk. Thanks to @keerok for
-responsibly disclosing this via Matrix's Security Disclosure Policy.
+matrix-react-sdk 3.15.0 fixes a moderate severity issue (CVE-2021-21320) where
+the user content sandbox can be abused to trick users into opening unexpected
+documents after several user interactions. The content can be opened with a
+`blob` origin from the Matrix client, so it is possible for a malicious document
+to access user messages and secrets. Thanks to @keerok for responsibly
+disclosing this via Matrix's Security Disclosure Policy.
 
 ## All changes
 
