@@ -262,7 +262,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
                         name,
                     },
                     component: ElectronDownloadToast,
-                    priority: 99,
+                    priority: 98,
                 });
             } else if (state === "completed") {
                 ToastStore.sharedInstance().addOrReplaceToast({
