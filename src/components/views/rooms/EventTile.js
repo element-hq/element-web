@@ -999,7 +999,6 @@ export default class EventTile extends React.Component {
             );
         }
 
-
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
