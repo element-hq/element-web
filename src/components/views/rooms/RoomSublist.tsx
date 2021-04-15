@@ -125,8 +125,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
         this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
     private calculateInitialHeight() {
@@ -240,6 +238,11 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         // Finally, nothing happened so no-op the update
         return false;
+    }
+
+    public componentDidMount() {
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
     public componentWillUnmount() {

@@ -289,12 +289,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         // shallow-copy from the template as we need to make modifications to it
         this.tagAesthetics = objectShallowClone(TAG_AESTHETICS);
         this.updateDmAddRoomAction();
-
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
     }
 
     public componentDidMount(): void {
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         SpaceStore.instance.on(SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
         this.customTagStoreRef = CustomRoomTagStore.addListener(this.updateLists);
