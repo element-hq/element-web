@@ -38,7 +38,7 @@ const MAX_ZOOM = 300;
 // This is used for the buttons
 const ZOOM_STEP = 10;
 // This is used for mouse wheel events
-const ZOOM_COEFFICIENT = 10;
+const ZOOM_COEFFICIENT = 7.5;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
