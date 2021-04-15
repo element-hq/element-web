@@ -97,6 +97,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: this.generatePreview(),
         };
+        this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
+        this.roomProps = EchoChamber.forRoom(this.props.room);
     }
 
     private onRoomNameUpdate = (room) => {
@@ -158,9 +160,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             MessagePreviewStore.getPreviewChangedEventName(this.props.room),
             this.onRoomPreviewChanged,
         );
-        this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
-        this.roomProps = EchoChamber.forRoom(this.props.room);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         this.roomProps.on("Room.name", this.onRoomNameUpdate);
         CommunityPrototypeStore.instance.on(
@@ -378,7 +378,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             return null;
         }
 
-        const state = this.roomProps?.notificationVolume;
+        const state = this.roomProps.notificationVolume;
 
         let contextMenu = null;
         if (this.state.notificationsMenuPosition) {
@@ -583,7 +583,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         const nameClasses = classNames({
             "mx_RoomTile_name": true,
             "mx_RoomTile_nameWithPreview": !!messagePreview,
-            "mx_RoomTile_nameHasUnreadEvents": this.notificationState?.isUnread,
+            "mx_RoomTile_nameHasUnreadEvents": this.notificationState.isUnread,
         });
 
         let nameContainer = (
@@ -600,15 +600,15 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
         if (this.props.tag === DefaultTagID.Invite) {
             // append nothing
-        } else if (this.notificationState?.hasMentions) {
+        } else if (this.notificationState.hasMentions) {
             ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
                 count: this.notificationState.count,
             });
-        } else if (this.notificationState?.hasUnreadCount) {
+        } else if (this.notificationState.hasUnreadCount) {
             ariaLabel += " " + _t("%(count)s unread messages.", {
                 count: this.notificationState.count,
             });
-        } else if (this.notificationState?.isUnread) {
+        } else if (this.notificationState.isUnread) {
             ariaLabel += " " + _t("Unread messages.");
         }
 
