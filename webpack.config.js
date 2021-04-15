@@ -5,8 +5,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
 
-let og_image_url = process.env.RIOT_OG_IMAGE_URL;
-if (!og_image_url) og_image_url = 'https://app.element.io/themes/element/img/logos/opengraph.png';
+let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
+if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
 const additionalPlugins = [
     // This is where you can put your customisation replacements.
@@ -124,11 +124,11 @@ module.exports = (env, argv) => {
                 // overflows (https://github.com/webpack/webpack/issues/1721), and
                 // there is no need for webpack to parse them - they can just be
                 // included as-is.
-                /highlight\.js[\\\/]lib[\\\/]languages/,
+                /highlight\.js[\\/]lib[\\/]languages/,
 
                 // olm takes ages for webpack to process, and it's already heavily
                 // optimised, so there is little to gain by us uglifying it.
-                /olm[\\\/](javascript[\\\/])?olm\.js$/,
+                /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
                 {
@@ -152,8 +152,8 @@ module.exports = (env, argv) => {
                     },
                     loader: 'babel-loader',
                     options: {
-                        cacheDirectory: true
-                    }
+                        cacheDirectory: true,
+                    },
                 },
                 {
                     test: /\.css$/,
@@ -164,14 +164,14 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
-                            }
+                            },
                         },
                         {
                             loader: 'postcss-loader',
                             ident: 'postcss',
                             options: {
-                                sourceMap: true,
-                                plugins: () => [
+                                "sourceMap": true,
+                                "plugins": () => [
                                     // Note that we use significantly fewer plugins on the plain
                                     // CSS parser. If we start to parse plain CSS, we end with all
                                     // kinds of nasty problems (like stylesheets not loading).
@@ -198,11 +198,11 @@ module.exports = (env, argv) => {
                                     // up with broken CSS.
                                     require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                                 ],
-                                parser: "postcss-scss",
+                                "parser": "postcss-scss",
                                 "local-plugins": true,
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.scss$/,
@@ -213,14 +213,14 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
-                            }
+                            },
                         },
                         {
                             loader: 'postcss-loader',
                             ident: 'postcss',
                             options: {
-                                sourceMap: true,
-                                plugins: () => [
+                                "sourceMap": true,
+                                "plugins": () => [
                                     // Note that we use slightly different plugins for SCSS.
 
                                     require('postcss-import')(),
@@ -237,11 +237,11 @@ module.exports = (env, argv) => {
                                     // up with broken CSS.
                                     require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                                 ],
-                                parser: "postcss-scss",
+                                "parser": "postcss-scss",
                                 "local-plugins": true,
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.wasm$/,
@@ -311,7 +311,7 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
-            ]
+            ],
         },
 
         plugins: [
@@ -332,7 +332,7 @@ module.exports = (env, argv) => {
                 excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
                 minify: argv.mode === 'production',
                 vars: {
-                    og_image_url: og_image_url,
+                    og_image_url: ogImageUrl,
                 },
             }),
 
@@ -438,6 +438,7 @@ function getAssetOutputPath(url, resourcePath) {
  * be placed directly into things like CSS files.
  *
  * @param {string} path Some path to a file.
+ * @returns {string} converted path
  */
 function toPublicPath(path) {
     return path.replace(/\\/g, '/');
