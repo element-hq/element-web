@@ -86,10 +86,6 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.Archived,
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
-const ALWAYS_VISIBLE_TAGS: TagID[] = [
-    DefaultTagID.DM,
-    DefaultTagID.Untagged,
-];
 
 interface ITagAesthetics {
     sectionLabel: string;
@@ -518,18 +514,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
         for (const orderedTagId of tagOrder) {
-            const orderedRooms = this.state.sublists[orderedTagId] || [];
-
             let extraTiles = null;
             if (orderedTagId === DefaultTagID.Invite) {
                 extraTiles = this.renderCommunityInvites();
             } else if (orderedTagId === DefaultTagID.Suggested) {
                 extraTiles = this.renderSuggestedRooms();
-            }
-
-            const totalTiles = orderedRooms.length + (extraTiles ? extraTiles.length : 0);
-            if (totalTiles === 0 && !ALWAYS_VISIBLE_TAGS.includes(orderedTagId)) {
-                continue; // skip tag - not needed
             }
 
             const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)

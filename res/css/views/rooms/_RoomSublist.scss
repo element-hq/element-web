@@ -18,6 +18,10 @@ limitations under the License.
     margin-left: 8px;
     margin-bottom: 4px;
 
+    &.mx_RoomSublist_hidden {
+        display: none;
+    }
+
     .mx_RoomSublist_headerContainer {
         // Create a flexbox to make alignment easy
         display: flex;

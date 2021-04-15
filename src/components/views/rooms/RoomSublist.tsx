@@ -60,6 +60,11 @@ export const HEADER_HEIGHT = 32; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
 
+const ALWAYS_VISIBLE_TAGS: TagID[] = [
+    DefaultTagID.DM,
+    DefaultTagID.Untagged,
+];
+
 // HACK: We really shouldn't have to do this.
 polyfillTouchEvent();
 
@@ -762,6 +767,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             'mx_RoomSublist': true,
             'mx_RoomSublist_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist_minimized': this.props.isMinimized,
+            'mx_RoomSublist_hidden': !this.state.rooms.length && !ALWAYS_VISIBLE_TAGS.includes(this.props.tagId),
         });
 
         let content = null;
