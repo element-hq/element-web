@@ -53,8 +53,7 @@ limitations under the License.
     font-size: $font-14px;
 
     &::before {
-        // Pulsing animation
-        animation: recording-pulse 1s infinite;
+        animation: recording-pulse 1.5s infinite;
 
         content: '';
         background-color: $voice-record-live-circle-color;
