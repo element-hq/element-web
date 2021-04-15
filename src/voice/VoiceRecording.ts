@@ -20,17 +20,29 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
 import {clamp} from "../utils/numbers";
+import EventEmitter from "events";
+import {IDestroyable} from "../utils/IDestroyable";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
+const TARGET_MAX_LENGTH = 120; // 2 minutes in seconds. Somewhat arbitrary, though longer == larger files.
+const TARGET_WARN_TIME_LEFT = 10; // 10 seconds, also somewhat arbitrary.
 
 export interface IRecordingUpdate {
     waveform: number[]; // floating points between 0 (low) and 1 (high).
     timeSeconds: number; // float
 }
 
-export class VoiceRecording {
+export enum RecordingState {
+    Started = "started",
+    EndingSoon = "ending_soon", // emits an object with a single numerical value: secondsLeft
+    Ended = "ended",
+    Uploading = "uploading",
+    Uploaded = "uploaded",
+}
+
+export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorder: Recorder;
     private recorderContext: AudioContext;
     private recorderSource: MediaStreamAudioSourceNode;
@@ -40,9 +52,12 @@ export class VoiceRecording {
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
+    private stopping = false;
+    private haveWarned = false; // whether or not EndingSoon has been fired
     private observable: SimpleObservable<IRecordingUpdate>;
 
     public constructor(private client: MatrixClient) {
+        super();
     }
 
     private async makeRecorder() {
@@ -124,7 +139,7 @@ export class VoiceRecording {
         return this.mxc;
     }
 
-    private tryUpdateLiveData = (ev: AudioProcessingEvent) => {
+    private processAudioUpdate = (ev: AudioProcessingEvent) => {
         if (!this.recording) return;
 
         // The time domain is the input to the FFT, which means we use an array of the same
@@ -150,6 +165,17 @@ export class VoiceRecording {
             waveform: translatedData,
             timeSeconds: ev.playbackTime,
         });
+
+        // Now that we've updated the data/waveform, let's do a time check. We don't want to
+        // go horribly over the limit. We also emit a warning state if needed.
+        const secondsLeft = TARGET_MAX_LENGTH - ev.playbackTime;
+        if (secondsLeft <= 0) {
+            // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
+            this.stop();
+        } else if (secondsLeft <= TARGET_WARN_TIME_LEFT && !this.haveWarned) {
+            this.emit(RecordingState.EndingSoon, {secondsLeft});
+            this.haveWarned = true;
+        }
     };
 
     public async start(): Promise<void> {
@@ -164,15 +190,19 @@ export class VoiceRecording {
         }
         this.observable = new SimpleObservable<IRecordingUpdate>();
         await this.makeRecorder();
-        this.recorderProcessor.addEventListener("audioprocess", this.tryUpdateLiveData);
+        this.recorderProcessor.addEventListener("audioprocess", this.processAudioUpdate);
         await this.recorder.start();
         this.recording = true;
+        this.emit(RecordingState.Started);
     }
 
     public async stop(): Promise<Uint8Array> {
         if (!this.recording) {
             throw new Error("No recording to stop");
         }
+
+        if (this.stopping) return;
+        this.stopping = true;
 
         // Disconnect the source early to start shutting down resources
         this.recorderSource.disconnect();
@@ -187,10 +217,17 @@ export class VoiceRecording {
 
         // Finally do our post-processing and clean up
         this.recording = false;
-        this.recorderProcessor.removeEventListener("audioprocess", this.tryUpdateLiveData);
+        this.recorderProcessor.removeEventListener("audioprocess", this.processAudioUpdate);
         await this.recorder.close();
+        this.emit(RecordingState.Ended);
 
         return this.buffer;
+    }
+
+    public destroy() {
+        // noinspection JSIgnoredPromiseFromCall - not concerned about stop() being called async here
+        this.stop();
+        this.removeAllListeners();
     }
 
     public async upload(): Promise<string> {
@@ -200,11 +237,13 @@ export class VoiceRecording {
 
         if (this.mxc) return this.mxc;
 
+        this.emit(RecordingState.Uploading);
         this.mxc = await this.client.uploadContent(new Blob([this.buffer], {
             type: "audio/ogg",
         }), {
             onlyContentUri: false, // to stop the warnings in the console
         }).then(r => r['content_uri']);
+        this.emit(RecordingState.Uploaded);
         return this.mxc;
     }
 }
