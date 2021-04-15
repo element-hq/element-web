@@ -209,6 +209,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         ev.stopPropagation();
         ev.preventDefault();
 
+        // Don't do anything if we pressed any
+        // other button than the left one
+        if (ev.button !== 0) return;
+
         // Zoom in if we are completely zoomed out
         if (this.state.zoom === MIN_ZOOM) {
             this.setState({zoom: MAX_ZOOM});
