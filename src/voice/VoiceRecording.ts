@@ -59,6 +59,19 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         super();
     }
 
+    public get contentType(): string {
+        return "audio/ogg";
+    }
+
+    public get contentLength(): number {
+        return this.buffer.length;
+    }
+
+    public get durationSeconds(): number {
+        if (!this.recorder) throw new Error("Duration not available without a recording");
+        return this.recorderContext.currentTime;
+    }
+
     private async makeRecorder() {
         this.recorderStream = await navigator.mediaDevices.getUserMedia({
             audio: {
@@ -240,7 +253,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
         this.emit(RecordingState.Uploading);
         this.mxc = await this.client.uploadContent(new Blob([this.buffer], {
-            type: "audio/ogg",
+            type: this.contentType,
         }), {
             onlyContentUri: false, // to stop the warnings in the console
         }).then(r => r['content_uri']);

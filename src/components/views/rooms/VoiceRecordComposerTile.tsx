@@ -55,7 +55,30 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
                 body: "Voice message",
                 msgtype: "org.matrix.msc2516.voice",
+                //msgtype: MsgType.Audio,
                 url: mxc,
+                info: {
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                    mimetype: this.state.recorder.contentType,
+                    size: this.state.recorder.contentLength,
+                },
+
+                // MSC1767 experiment
+                "org.matrix.msc1767.text": "Voice message",
+                "org.matrix.msc1767.file": {
+                    url: mxc,
+                    name: "Voice message.ogg",
+                    mimetype: this.state.recorder.contentType,
+                    size: this.state.recorder.contentLength,
+                },
+                "org.matrix.msc1767.audio": {
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                    // TODO: @@ TravisR: Waveform? (MSC1767 decision)
+                },
+                "org.matrix.experimental.msc2516.voice": { // MSC2516+MSC1767 experiment
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                    // TODO: @@ TravisR: Waveform.
+                },
             });
             await VoiceRecordingStore.instance.disposeRecording();
             this.setState({recorder: null});
