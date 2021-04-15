@@ -103,7 +103,7 @@ export default class Tooltip extends React.Component<IProps> {
         const right = window.innerWidth - parentBox.right - window.pageXOffset - 16;
         const left = parentBox.right + window.pageXOffset + 6;
         const horizontalCenter = parentBox.right - window.pageXOffset - (parentBox.width / 2);
-        switch(this.props.alignment) {
+        switch (this.props.alignment) {
             case Alignment.Natural:
                 if (parentBox.right > window.innerWidth / 2) {
                     style.right = right;
