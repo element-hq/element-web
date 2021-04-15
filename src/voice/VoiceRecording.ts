@@ -22,6 +22,7 @@ import {SimpleObservable} from "matrix-widget-api";
 import {clamp} from "../utils/numbers";
 import EventEmitter from "events";
 import {IDestroyable} from "../utils/IDestroyable";
+import {Singleflight} from "../utils/Singleflight";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -52,8 +53,6 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
-    private stopping = false;
-    private haveWarned = false; // whether or not EndingSoon has been fired
     private observable: SimpleObservable<IRecordingUpdate>;
 
     public constructor(private client: MatrixClient) {
@@ -172,9 +171,11 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         if (secondsLeft <= 0) {
             // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
             this.stop();
-        } else if (secondsLeft <= TARGET_WARN_TIME_LEFT && !this.haveWarned) {
-            this.emit(RecordingState.EndingSoon, {secondsLeft});
-            this.haveWarned = true;
+        } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
+            Singleflight.for(this, "ending_soon").do(() => {
+                this.emit(RecordingState.EndingSoon, {secondsLeft});
+                return Singleflight.Void;
+            });
         }
     };
 
@@ -197,37 +198,37 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     }
 
     public async stop(): Promise<Uint8Array> {
-        if (!this.recording) {
-            throw new Error("No recording to stop");
-        }
+        return Singleflight.for(this, "stop").do(async () => {
+            if (!this.recording) {
+                throw new Error("No recording to stop");
+            }
 
-        if (this.stopping) return;
-        this.stopping = true;
+            // Disconnect the source early to start shutting down resources
+            this.recorderSource.disconnect();
+            await this.recorder.stop();
 
-        // Disconnect the source early to start shutting down resources
-        this.recorderSource.disconnect();
-        await this.recorder.stop();
+            // close the context after the recorder so the recorder doesn't try to
+            // connect anything to the context (this would generate a warning)
+            await this.recorderContext.close();
 
-        // close the context after the recorder so the recorder doesn't try to
-        // connect anything to the context (this would generate a warning)
-        await this.recorderContext.close();
+            // Now stop all the media tracks so we can release them back to the user/OS
+            this.recorderStream.getTracks().forEach(t => t.stop());
 
-        // Now stop all the media tracks so we can release them back to the user/OS
-        this.recorderStream.getTracks().forEach(t => t.stop());
+            // Finally do our post-processing and clean up
+            this.recording = false;
+            this.recorderProcessor.removeEventListener("audioprocess", this.processAudioUpdate);
+            await this.recorder.close();
+            this.emit(RecordingState.Ended);
 
-        // Finally do our post-processing and clean up
-        this.recording = false;
-        this.recorderProcessor.removeEventListener("audioprocess", this.processAudioUpdate);
-        await this.recorder.close();
-        this.emit(RecordingState.Ended);
-
-        return this.buffer;
+            return this.buffer;
+        });
     }
 
     public destroy() {
         // noinspection JSIgnoredPromiseFromCall - not concerned about stop() being called async here
         this.stop();
         this.removeAllListeners();
+        Singleflight.forgetAllFor(this);
     }
 
     public async upload(): Promise<string> {
