@@ -666,14 +666,15 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             if (targetIds.length > 1) {
                 createRoomOptions.createOpts = targetIds.reduce(
                     (roomOptions, address) => {
-                        if (getAddressType(address) === 'email') {
+                        const type = getAddressType(address);
+                        if (type === 'email') {
                             const invite: IInvite3PID = {
                                 id_server: client.getIdentityServerUrl(true),
                                 medium: 'email',
                                 address,
                             };
                             roomOptions.invite_3pid.push(invite);
-                        } else {
+                        } else if (type === 'mx-user-id') {
                             roomOptions.invite.push(address);
                         }
                         return roomOptions;
