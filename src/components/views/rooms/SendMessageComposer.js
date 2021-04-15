@@ -477,6 +477,10 @@ export default class SendMessageComposer extends React.Component {
     }
 
     onAction = (payload) => {
+        // don't let the user into the composer if it is disabled - all of these branches lead
+        // to the cursor being in the composer
+        if (this.props.disabled) return;
+
         switch (payload.action) {
             case 'reply_to_event':
             case Action.FocusComposer:
