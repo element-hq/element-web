@@ -76,6 +76,14 @@ limitations under the License.
     }
 }
 
+// The keyframes are slightly weird here to help make a ramping/punch effect
+// for the recording dot. We start and end at 100% opacity to help make the
+// dot feel a bit like a real lamp that is blinking: the animation ends up
+// spending a lot of its time showing a steady state without a fade effect.
+// This lamp effect extends into why the 0% opacity keyframe is not in the
+// midpoint: lamps take longer to turn off than they do to turn on, and the
+// extra frames give it a bit of a realistic punch for when the animation is
+// ramping back up to 100% opacity.
 @keyframes recording-pulse {
     0% {
         opacity: 1;
