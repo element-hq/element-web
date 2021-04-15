@@ -53,7 +53,7 @@ limitations under the License.
     font-size: $font-14px;
 
     &::before {
-        animation: recording-pulse 1.5s infinite;
+        animation: recording-pulse 2s infinite;
 
         content: '';
         background-color: $voice-record-live-circle-color;
@@ -84,14 +84,17 @@ limitations under the License.
 // midpoint: lamps take longer to turn off than they do to turn on, and the
 // extra frames give it a bit of a realistic punch for when the animation is
 // ramping back up to 100% opacity.
+//
+// Target animation timings: steady for 1.5s, fade out for 0.3s, fade in for 0.2s
+// (intended to be used in a loop for 2s animation speed)
 @keyframes recording-pulse {
     0% {
         opacity: 1;
     }
-    65% {
+    35% {
         opacity: 0;
     }
-    100% {
+    65% {
         opacity: 1;
     }
 }
