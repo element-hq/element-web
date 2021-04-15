@@ -18,6 +18,20 @@ module.exports = (env, argv) => {
         // We override this via environment variable to avoid duplicating the scripts
         // in `package.json` just for a different mode.
         argv.mode = "development";
+
+        // More and more people are using nightly build as their main client
+        // Libraries like React have a development build that is useful
+        // when working on the app but adds significant runtime overhead
+        // We want to use the React production build but not compile the whole
+        // application to productions standards
+        additionalPlugins.concat([
+            new webpack.EnvironmentPlugin({
+                "NODE_ENV": "production",
+            }),
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": "production",
+            }),
+        ]);
     }
 
     const development = {};
