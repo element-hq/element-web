@@ -24,10 +24,10 @@ import classNames from "classnames";
 import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
+import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 
 interface IProps {
     room: Room;
-    onRecording: (haveRecording: boolean) => void;
 }
 
 interface IState {
@@ -57,13 +57,12 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 msgtype: "org.matrix.msc2516.voice",
                 url: mxc,
             });
+            await VoiceRecordingStore.instance.disposeRecording();
             this.setState({recorder: null});
-            this.props.onRecording(false);
             return;
         }
-        const recorder = new VoiceRecorder(MatrixClientPeg.get());
+        const recorder = VoiceRecordingStore.instance.startRecording();
         await recorder.start();
-        this.props.onRecording(true);
         this.setState({recorder});
     };
 
