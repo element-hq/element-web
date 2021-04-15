@@ -260,6 +260,9 @@ export default class EventTile extends React.Component {
 
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
+
+        // whether or not to show read receipts
+        showReadReceipts: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -858,8 +861,6 @@ export default class EventTile extends React.Component {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
 
-        const readAvatars = this.getReadAvatars();
-
         let avatar;
         let sender;
         let avatarSize;
@@ -988,6 +989,16 @@ export default class EventTile extends React.Component {
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
         const ircPadlock = useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
+        let msgOption;
+        if (this.props.showReadReceipts) {
+            const readAvatars = this.getReadAvatars();
+            msgOption = (
+                <div className="mx_EventTile_msgOption">
+                    { readAvatars }
+                </div>
+            );
+        }
+
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
@@ -1107,9 +1118,7 @@ export default class EventTile extends React.Component {
                             { reactionsRow }
                             { actionBar }
                         </div>
-                        <div className="mx_EventTile_msgOption">
-                            { readAvatars }
-                        </div>
+                        {msgOption}
                         {
                             // The avatar goes after the event tile as it's absolutely positioned to be over the
                             // event tile line, so needs to be later in the DOM so it appears on top (this avoids
