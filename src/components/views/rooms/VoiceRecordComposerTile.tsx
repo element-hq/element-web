@@ -17,7 +17,7 @@ limitations under the License.
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {_t} from "../../../languageHandler";
 import React from "react";
-import {VoiceRecorder} from "../../../voice/VoiceRecorder";
+import {VoiceRecording} from "../../../voice/VoiceRecording";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import classNames from "classnames";
@@ -31,7 +31,7 @@ interface IProps {
 }
 
 interface IState {
-    recorder?: VoiceRecorder;
+    recorder?: VoiceRecording;
 }
 
 /**
