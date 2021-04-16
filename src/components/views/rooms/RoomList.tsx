@@ -86,6 +86,10 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.Archived,
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
+const ALWAYS_VISIBLE_TAGS: TagID[] = [
+    DefaultTagID.DM,
+    DefaultTagID.Untagged,
+];
 
 interface ITagAesthetics {
     sectionLabel: string;
@@ -526,6 +530,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 : this.tagAesthetics[orderedTagId];
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
+            // The cost of mounting/unmounting this component all the time
+            // offsets the memory cost of keeping it at all time and hiding
+            // it when no results are found
             components.push(<RoomSublist
                 key={`sublist-${orderedTagId}`}
                 tagId={orderedTagId}
@@ -539,6 +546,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 onResize={this.props.onResize}
                 showSkeleton={showSkeleton}
                 extraTiles={extraTiles}
+                alwaysVisible={!ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
             />);
         }
 
