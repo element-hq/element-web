@@ -138,11 +138,11 @@ module.exports = (env, argv) => {
                 // overflows (https://github.com/webpack/webpack/issues/1721), and
                 // there is no need for webpack to parse them - they can just be
                 // included as-is.
-                /highlight\.js[\\/]lib[\\/]languages/,
+                /highlight\.js[\\\/]lib[\\\/]languages/,
 
                 // olm takes ages for webpack to process, and it's already heavily
                 // optimised, so there is little to gain by us uglifying it.
-                /olm[\\/](javascript[\\/])?olm\.js$/,
+                /olm[\\\/](javascript[\\\/])?olm\.js$/,
             ],
             rules: [
                 {
@@ -184,8 +184,8 @@ module.exports = (env, argv) => {
                             loader: 'postcss-loader',
                             ident: 'postcss',
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
+                                sourceMap: true,
+                                plugins: () => [
                                     // Note that we use significantly fewer plugins on the plain
                                     // CSS parser. If we start to parse plain CSS, we end with all
                                     // kinds of nasty problems (like stylesheets not loading).
@@ -212,7 +212,7 @@ module.exports = (env, argv) => {
                                     // up with broken CSS.
                                     require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                                 ],
-                                "parser": "postcss-scss",
+                                parser: "postcss-scss",
                                 "local-plugins": true,
                             },
                         },
@@ -233,8 +233,8 @@ module.exports = (env, argv) => {
                             loader: 'postcss-loader',
                             ident: 'postcss',
                             options: {
-                                "sourceMap": true,
-                                "plugins": () => [
+                                sourceMap: true,
+                                plugins: () => [
                                     // Note that we use slightly different plugins for SCSS.
 
                                     require('postcss-import')(),
@@ -251,7 +251,7 @@ module.exports = (env, argv) => {
                                     // up with broken CSS.
                                     require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                                 ],
-                                "parser": "postcss-scss",
+                                parser: "postcss-scss",
                                 "local-plugins": true,
                             },
                         },
