@@ -2091,5 +2091,15 @@
     "Successfully restored %(sessionCount)s keys": "Sėkmingai atkurti %(sessionCount)s raktai",
     "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Įspėjimas: Jūsų asmeniniai duomenys (įskaitant šifravimo raktus) vis dar yra saugomi šiame seanse. Išvalykite juos, jei baigėte naudoti šį seansą, arba norite prisijungti prie kitos paskyros.",
     "Reason (optional)": "Priežastis (nebūtina)",
-    "Reason: %(reason)s": "Priežastis: %(reason)s"
+    "Reason: %(reason)s": "Priežastis: %(reason)s",
+    "Already have an account? <a>Sign in here</a>": "Jau turite paskyrą? <a>Prisijunkite čia</a>",
+    "Host account on": "Kurti paskyrą serveryje",
+    "Forgotten your password?": "Pamiršote savo slaptažodį?",
+    "Homeserver": "Serveris",
+    "New? <a>Create account</a>": "Naujas vartotojas? <a>Sukurkite paskyrą</a>",
+    "Forgot password?": "Pamiršote slaptažodį?",
+    "Preparing to download logs": "Ruošiamasi parsiųsti žurnalus",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Jūs galite naudoti serverio parinktis, norėdami prisijungti prie kitų Matrix serverių, nurodydami kitą serverio URL. Tai leidžia jums naudoti Element su egzistuojančia paskyra kitame serveryje.",
+    "Server Options": "Serverio Parinktys",
+    "Your homeserver": "Jūsų serveris"
 }
