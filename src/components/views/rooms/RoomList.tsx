@@ -542,7 +542,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     onResize={this.props.onResize}
                     showSkeleton={showSkeleton}
                     extraTiles={extraTiles}
-                    alwaysVisible={!ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
+                    alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
                 />
             });
     }
