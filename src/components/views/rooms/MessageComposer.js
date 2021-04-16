@@ -337,7 +337,7 @@ export default class MessageComposer extends React.Component {
         const recording = VoiceRecordingStore.instance.activeRecording;
         this.setState({haveRecording: !!recording});
         if (recording) {
-            // We show a little head's up that the recording is about to automatically end soon. The 3s
+            // We show a little heads up that the recording is about to automatically end soon. The 3s
             // display time is completely arbitrary. Note that we don't need to deregister the listener
             // because the recording instance will clean that up for us.
             recording.on(RecordingState.EndingSoon, ({secondsLeft}) => {
