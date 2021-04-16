@@ -34,6 +34,7 @@ import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
+import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -180,6 +181,7 @@ export default class MessageComposer extends React.Component {
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
         WidgetStore.instance.on(UPDATE_EVENT, this._onWidgetUpdate);
         ActiveWidgetStore.on('update', this._onActiveWidgetUpdate);
+        VoiceRecordingStore.instance.on(UPDATE_EVENT, this._onVoiceStoreUpdate);
         this._dispatcherRef = null;
 
         this.state = {
@@ -240,6 +242,7 @@ export default class MessageComposer extends React.Component {
         }
         WidgetStore.instance.removeListener(UPDATE_EVENT, this._onWidgetUpdate);
         ActiveWidgetStore.removeListener('update', this._onActiveWidgetUpdate);
+        VoiceRecordingStore.instance.off(UPDATE_EVENT, this._onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
     }
 
@@ -327,8 +330,8 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    onVoiceUpdate = (haveRecording: boolean) => {
-        this.setState({haveRecording});
+    _onVoiceStoreUpdate = () => {
+        this.setState({haveRecording: !!VoiceRecordingStore.instance.activeRecording});
     };
 
     render() {
@@ -352,7 +355,6 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
-                    // TODO: @@ TravisR - Disabling the composer doesn't work
                     disabled={this.state.haveRecording}
                 />,
             );
@@ -373,8 +375,7 @@ export default class MessageComposer extends React.Component {
             if (SettingsStore.getValue("feature_voice_messages")) {
                 controls.push(<VoiceRecordComposerTile
                     key="controls_voice_record"
-                    room={this.props.room}
-                    onRecording={this.onVoiceUpdate} />);
+                    room={this.props.room} />);
             }
 
             if (!this.state.isComposerEmpty || this.state.haveRecording) {
