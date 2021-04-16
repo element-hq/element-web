@@ -203,6 +203,7 @@ export class EmailAddress extends React.Component {
                     className="mx_ExistingEmailAddress_confirmBtn"
                     kind="primary_sm"
                     onClick={this.onContinueClick}
+                    disabled={this.state.continueDisabled}
                 >
                     {_t("Complete")}
                 </AccessibleButton>

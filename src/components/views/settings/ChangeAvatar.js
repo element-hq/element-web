@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 @replaceableComponent("views.settings.ChangeAvatar")
 export default class ChangeAvatar extends React.Component {
@@ -117,7 +118,7 @@ export default class ChangeAvatar extends React.Component {
         httpPromise.then(function() {
             self.setState({
                 phase: ChangeAvatar.Phases.Display,
-                avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(newUrl),
+                avatarUrl: mediaFromMxc(newUrl).srcHttp,
             });
         }, function(error) {
             self.setState({

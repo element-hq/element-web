@@ -16,7 +16,8 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
-import {EventTimeline, RoomMember} from 'matrix-js-sdk';
+import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
+import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
 import {sleep} from "../utils/promise";
 import SettingsStore from "../settings/SettingsStore";
 import {EventEmitter} from "events";

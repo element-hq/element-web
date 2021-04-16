@@ -189,6 +189,10 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/settings.svg');
     }
 
+    .mx_RoomTile_iconInvite::before {
+        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+    }
+
     .mx_RoomTile_iconSignOut::before {
         mask-image: url('$(res)/img/element-icons/leave.svg');
     }

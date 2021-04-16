@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015, 2016, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,19 @@ limitations under the License.
 
 .mx_MFileBody_download {
     color: $accent-color;
+
+    .mx_MFileBody_download_icon {
+        // 12px instead of 14px to better match surrounding font size
+        width: 12px;
+        height: 12px;
+        mask-size: 12px;
+
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-image: url("$(res)/img/download.svg");
+        background-color: $accent-color;
+        display: inline-block;
+    }
 }
 
 .mx_MFileBody_download a {

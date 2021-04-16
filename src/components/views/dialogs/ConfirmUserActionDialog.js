@@ -16,11 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 /*
  * A dialog for confirming an operation on another user.
@@ -108,8 +109,9 @@ export default class ConfirmUserActionDialog extends React.Component {
             name = this.props.member.name;
             userId = this.props.member.userId;
         } else {
-            const httpAvatarUrl = this.props.groupMember.avatarUrl ?
-                this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl, 48, 48) : null;
+            const httpAvatarUrl = this.props.groupMember.avatarUrl
+                ? mediaFromMxc(this.props.groupMember.avatarUrl).getSquareThumbnailHttp(48)
+                : null;
             name = this.props.groupMember.displayname || this.props.groupMember.userId;
             userId = this.props.groupMember.userId;
             avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;

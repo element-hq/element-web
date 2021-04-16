@@ -788,6 +788,11 @@ export default class CallHandler {
                 // don't remove the call yet: let the hangup event handler do it (otherwise it will throw
                 // the hangup event away)
                 break;
+            case 'hangup_all':
+                for (const call of this.calls.values()) {
+                    call.hangup(CallErrorCode.UserHangup, false);
+                }
+                break;
             case 'answer': {
                 if (!this.calls.has(payload.room_id)) {
                     return; // no call to answer

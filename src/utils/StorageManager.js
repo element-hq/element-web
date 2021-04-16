@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
 import {LocalStorageCryptoStore} from 'matrix-js-sdk/src/crypto/store/localStorage-crypto-store';
 import Analytics from '../Analytics';
+import {IndexedDBStore} from "matrix-js-sdk/src/store/indexeddb";
+import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 
 const localStorage = window.localStorage;
 
@@ -132,7 +133,7 @@ export async function checkConsistency() {
 async function checkSyncStore() {
     let exists = false;
     try {
-        exists = await Matrix.IndexedDBStore.exists(
+        exists = await IndexedDBStore.exists(
             indexedDB, SYNC_STORE_NAME,
         );
         log(`Sync store using IndexedDB contains data? ${exists}`);
@@ -148,7 +149,7 @@ async function checkSyncStore() {
 async function checkCryptoStore() {
     let exists = false;
     try {
-        exists = await Matrix.IndexedDBCryptoStore.exists(
+        exists = await IndexedDBCryptoStore.exists(
             indexedDB, CRYPTO_STORE_NAME,
         );
         log(`Crypto store using IndexedDB contains data? ${exists}`);

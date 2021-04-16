@@ -21,9 +21,9 @@ import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import request from "browser-request";
 
-import * as Matrix from 'matrix-js-sdk';
 import SdkConfig from "./SdkConfig";
 import {WidgetType} from "./widgets/WidgetType";
+import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
@@ -153,7 +153,7 @@ export default class ScalarAuthClient {
                 parsedImRestUrl.path = '';
                 parsedImRestUrl.pathname = '';
                 return startTermsFlow([new Service(
-                    Matrix.SERVICE_TYPES.IM,
+                    SERVICE_TYPES.IM,
                     parsedImRestUrl.format(),
                     token,
                 )], this.termsInteractionCallback).then(() => {
