@@ -29,9 +29,7 @@ import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
 import {UIFeature} from "../../../settings/UIFeature";
-import WidgetStore from "../../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
@@ -179,16 +177,12 @@ export default class MessageComposer extends React.Component {
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
-        WidgetStore.instance.on(UPDATE_EVENT, this._onWidgetUpdate);
-        ActiveWidgetStore.on('update', this._onActiveWidgetUpdate);
         VoiceRecordingStore.instance.on(UPDATE_EVENT, this._onVoiceStoreUpdate);
         this._dispatcherRef = null;
 
         this.state = {
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
-            hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
-            joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
             isComposerEmpty: true,
             haveRecording: false,
         };
@@ -204,14 +198,6 @@ export default class MessageComposer extends React.Component {
                 this.props.resizeNotifier.notifyTimelineHeightChanged();
             }, 100);
         }
-    };
-
-    _onWidgetUpdate = () => {
-        this.setState({hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room)});
-    };
-
-    _onActiveWidgetUpdate = () => {
-        this.setState({joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room)});
     };
 
     componentDidMount() {
@@ -240,8 +226,6 @@ export default class MessageComposer extends React.Component {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
         }
-        WidgetStore.instance.removeListener(UPDATE_EVENT, this._onWidgetUpdate);
-        ActiveWidgetStore.removeListener('update', this._onActiveWidgetUpdate);
         VoiceRecordingStore.instance.off(UPDATE_EVENT, this._onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
     }
