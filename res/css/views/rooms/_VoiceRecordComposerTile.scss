@@ -53,7 +53,8 @@ limitations under the License.
     font-size: $font-14px;
 
     &::before {
-        // TODO: @@ TravisR: Animate
+        animation: recording-pulse 2s infinite;
+
         content: '';
         background-color: $voice-record-live-circle-color;
         width: 10px;
@@ -72,5 +73,28 @@ limitations under the License.
         padding-right: 8px; // isolate from waveform
         padding-left: 10px; // isolate from live circle
         width: 42px; // we're not using a monospace font, so fake it
+    }
+}
+
+// The keyframes are slightly weird here to help make a ramping/punch effect
+// for the recording dot. We start and end at 100% opacity to help make the
+// dot feel a bit like a real lamp that is blinking: the animation ends up
+// spending a lot of its time showing a steady state without a fade effect.
+// This lamp effect extends into why the 0% opacity keyframe is not in the
+// midpoint: lamps take longer to turn off than they do to turn on, and the
+// extra frames give it a bit of a realistic punch for when the animation is
+// ramping back up to 100% opacity.
+//
+// Target animation timings: steady for 1.5s, fade out for 0.3s, fade in for 0.2s
+// (intended to be used in a loop for 2s animation speed)
+@keyframes recording-pulse {
+    0% {
+        opacity: 1;
+    }
+    35% {
+        opacity: 0;
+    }
+    65% {
+        opacity: 1;
     }
 }
