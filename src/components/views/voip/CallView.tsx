@@ -536,6 +536,7 @@ export default class CallView extends React.Component<IProps, IState> {
         if (isOnHold || transfereeCall) {
             if (this.props.call.type === CallType.Video) {
                 const containerClasses = classNames({
+                    mx_CallView_content: true,
                     mx_CallView_video: true,
                     mx_CallView_video_hold: isOnHold,
                 });
@@ -557,6 +558,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 );
             } else {
                 const classes = classNames({
+                    mx_CallView_content: true,
                     mx_CallView_voice: true,
                     mx_CallView_voice_hold: isOnHold,
                 });
@@ -586,6 +588,7 @@ export default class CallView extends React.Component<IProps, IState> {
             // to change anyway - I might take an axe to this file in order to
             // try to get other things working
             const classes = classNames({
+                mx_CallView_content: true,
                 mx_CallView_voice: true,
             });
 
@@ -622,6 +625,7 @@ export default class CallView extends React.Component<IProps, IState> {
             </div>;
         } else {
             const containerClasses = classNames({
+                mx_CallView_content: true,
                 mx_CallView_video: true,
             });
 
