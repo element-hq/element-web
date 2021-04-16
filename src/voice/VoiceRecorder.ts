@@ -19,18 +19,15 @@ import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
+import {clamp} from "../utils/numbers";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
-const FREQ_SAMPLE_RATE = 4; // Target rate of frequency data (samples / sec). We don't need this super often.
 
-export interface IFrequencyPackage {
-    dbBars: Float32Array;
-    dbMin: number;
-    dbMax: number;
-
-    // TODO: @@ TravisR: Generalize this for a timing package?
+export interface IRecordingUpdate {
+    waveform: number[]; // floating points between 0 (low) and 1 (high).
+    timeSeconds: number; // float
 }
 
 export class VoiceRecorder {
@@ -38,12 +35,12 @@ export class VoiceRecorder {
     private recorderContext: AudioContext;
     private recorderSource: MediaStreamAudioSourceNode;
     private recorderStream: MediaStream;
-    private recorderFreqNode: AnalyserNode;
+    private recorderFFT: AnalyserNode;
+    private recorderProcessor: ScriptProcessorNode;
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
-    private observable: SimpleObservable<IFrequencyPackage>;
-    private freqTimerId: number;
+    private observable: SimpleObservable<IRecordingUpdate>;
 
     public constructor(private client: MatrixClient) {
     }
@@ -51,21 +48,37 @@ export class VoiceRecorder {
     private async makeRecorder() {
         this.recorderStream = await navigator.mediaDevices.getUserMedia({
             audio: {
-                // specify some audio settings so we're feeding the recorder with the
-                // best possible values. The browser will handle resampling for us.
-                sampleRate: SAMPLE_RATE,
                 channelCount: CHANNELS,
                 noiseSuppression: true, // browsers ignore constraints they can't honour
                 deviceId: CallMediaHandler.getAudioInput(),
             },
         });
         this.recorderContext = new AudioContext({
-            latencyHint: "interactive",
-            sampleRate: SAMPLE_RATE, // once again, the browser will resample for us
+            // latencyHint: "interactive", // we don't want a latency hint (this causes data smoothing)
         });
         this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
-        this.recorderFreqNode = this.recorderContext.createAnalyser();
-        this.recorderSource.connect(this.recorderFreqNode);
+        this.recorderFFT = this.recorderContext.createAnalyser();
+
+        // Bring the FFT time domain down a bit. The default is 2048, and this must be a power
+        // of two. We use 64 points because we happen to know down the line we need less than
+        // that, but 32 would be too few. Large numbers are not helpful here and do not add
+        // precision: they introduce higher precision outputs of the FFT (frequency data), but
+        // it makes the time domain less than helpful.
+        this.recorderFFT.fftSize = 64;
+
+        // We use an audio processor to get accurate timing information.
+        // The size of the audio buffer largely decides how quickly we push timing/waveform data
+        // out of this class. Smaller buffers mean we update more frequently as we can't hold as
+        // many bytes. Larger buffers mean slower updates. For scale, 1024 gives us about 30Hz of
+        // updates and 2048 gives us about 20Hz. We use 1024 to get as close to perceived realtime
+        // as possible. Must be a power of 2.
+        this.recorderProcessor = this.recorderContext.createScriptProcessor(1024, CHANNELS, CHANNELS);
+
+        // Connect our inputs and outputs
+        this.recorderSource.connect(this.recorderFFT);
+        this.recorderSource.connect(this.recorderProcessor);
+        this.recorderProcessor.connect(this.recorderContext.destination);
+
         this.recorder = new Recorder({
             encoderPath, // magic from webpack
             encoderSampleRate: SAMPLE_RATE,
@@ -91,7 +104,7 @@ export class VoiceRecorder {
         };
     }
 
-    public get frequencyData(): SimpleObservable<IFrequencyPackage> {
+    public get liveData(): SimpleObservable<IRecordingUpdate> {
         if (!this.recording) throw new Error("No observable when not recording");
         return this.observable;
     }
@@ -111,6 +124,34 @@ export class VoiceRecorder {
         return this.mxc;
     }
 
+    private tryUpdateLiveData = (ev: AudioProcessingEvent) => {
+        if (!this.recording) return;
+
+        // The time domain is the input to the FFT, which means we use an array of the same
+        // size. The time domain is also known as the audio waveform. We're ignoring the
+        // output of the FFT here (frequency data) because we're not interested in it.
+        const data = new Float32Array(this.recorderFFT.fftSize);
+        this.recorderFFT.getFloatTimeDomainData(data);
+
+        // We can't just `Array.from()` the array because we're dealing with 32bit floats
+        // and the built-in function won't consider that when converting between numbers.
+        // However, the runtime will convert the float32 to a float64 during the math operations
+        // which is why the loop works below. Note that a `.map()` call also doesn't work
+        // and will instead return a Float32Array still.
+        const translatedData: number[] = [];
+        for (let i = 0; i < data.length; i++) {
+            // We're clamping the values so we can do that math operation mentioned above,
+            // and to ensure that we produce consistent data (it's possible for the array
+            // to exceed the specified range with some audio input devices).
+            translatedData.push(clamp(data[i], 0, 1));
+        }
+
+        this.observable.update({
+            waveform: translatedData,
+            timeSeconds: ev.playbackTime,
+        });
+    };
+
     public async start(): Promise<void> {
         if (this.mxc || this.hasRecording) {
             throw new Error("Recording already prepared");
@@ -121,18 +162,9 @@ export class VoiceRecorder {
         if (this.observable) {
             this.observable.close();
         }
-        this.observable = new SimpleObservable<IFrequencyPackage>();
+        this.observable = new SimpleObservable<IRecordingUpdate>();
         await this.makeRecorder();
-        this.freqTimerId = setInterval(() => {
-            if (!this.recording) return;
-            const data = new Float32Array(this.recorderFreqNode.frequencyBinCount);
-            this.recorderFreqNode.getFloatFrequencyData(data);
-            this.observable.update({
-                dbBars: data,
-                dbMin: this.recorderFreqNode.minDecibels,
-                dbMax: this.recorderFreqNode.maxDecibels,
-            });
-        }, 1000 / FREQ_SAMPLE_RATE) as any as number; // XXX: Linter doesn't understand timer environment
+        this.recorderProcessor.addEventListener("audioprocess", this.tryUpdateLiveData);
         await this.recorder.start();
         this.recording = true;
     }
@@ -154,8 +186,8 @@ export class VoiceRecorder {
         this.recorderStream.getTracks().forEach(t => t.stop());
 
         // Finally do our post-processing and clean up
-        clearInterval(this.freqTimerId);
         this.recording = false;
+        this.recorderProcessor.removeEventListener("audioprocess", this.tryUpdateLiveData);
         await this.recorder.close();
 
         return this.buffer;

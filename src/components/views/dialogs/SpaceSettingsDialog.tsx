@@ -126,8 +126,8 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             <div>
                 { _t("Make this space private") }
                 <ToggleSwitch
-                    checked={joinRule === "private"}
-                    onChange={checked => setJoinRule(checked ? "private" : "invite")}
+                    checked={joinRule !== "public"}
+                    onChange={checked => setJoinRule(checked ? "invite" : "public")}
                     disabled={!canSetJoinRule}
                     aria-label={_t("Make this space private")}
                 />

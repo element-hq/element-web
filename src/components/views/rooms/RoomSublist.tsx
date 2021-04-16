@@ -51,6 +51,7 @@ import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import IconizedContextMenu from "../context_menus/IconizedContextMenu";
+import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
@@ -470,18 +471,19 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
-        switch (ev.key) {
-            case Key.ARROW_LEFT:
+        const action = getKeyBindingsManager().getRoomListAction(ev);
+        switch (action) {
+            case RoomListAction.CollapseSection:
                 ev.stopPropagation();
                 if (this.state.isExpanded) {
-                    // On ARROW_LEFT collapse the room sublist if it isn't already
+                    // Collapse the room sublist if it isn't already
                     this.toggleCollapsed();
                 }
                 break;
-            case Key.ARROW_RIGHT: {
+            case RoomListAction.ExpandSection: {
                 ev.stopPropagation();
                 if (!this.state.isExpanded) {
-                    // On ARROW_RIGHT expand the room sublist if it isn't already
+                    // Expand the room sublist if it isn't already
                     this.toggleCollapsed();
                 } else if (this.sublistRef.current) {
                     // otherwise focus the first room

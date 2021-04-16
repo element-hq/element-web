@@ -30,9 +30,6 @@ interface IProps {
 
     type: VideoFeedType,
 
-    // maxHeight style attribute for the video element
-    maxHeight?: number,
-
     // a callback which is called when the video element is resized
     // due to a change in video metadata
     onResize?: (e: Event) => void,
@@ -82,9 +79,6 @@ export default class VideoFeed extends React.Component<IProps> {
             ),
         };
 
-        let videoStyle = {};
-        if (this.props.maxHeight) videoStyle = { maxHeight: this.props.maxHeight };
-
-        return <video className={classnames(videoClasses)} ref={this.vid} style={videoStyle} />;
+        return <video className={classnames(videoClasses)} ref={this.vid} />;
     }
 }

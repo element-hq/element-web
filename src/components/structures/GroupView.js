@@ -981,7 +981,7 @@ export default class GroupView extends React.Component {
                     <Spinner />
                 </div>;
             }
-            const httpInviterAvatar = this.state.inviterProfile
+            const httpInviterAvatar = this.state.inviterProfile && this.state.inviterProfile.avatarUrl
                 ? mediaFromMxc(this.state.inviterProfile.avatarUrl).getSquareThumbnailHttp(36)
                 : null;
 
