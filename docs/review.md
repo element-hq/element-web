@@ -79,5 +79,5 @@ easily.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Element. Please chat with the team in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
-start so we can ensure it's something we'd be willing to merge.
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before
+you start so we can ensure it's something we'd be willing to merge.
