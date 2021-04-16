@@ -501,56 +501,48 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private renderSublists(): React.ReactElement[] {
-        const components: React.ReactElement[] = [];
-
-        const tagOrder = TAG_ORDER.reduce((p, c) => {
-            if (c === CUSTOM_TAGS_BEFORE_TAG) {
-                const customTags = Object.keys(this.state.sublists)
-                    .filter(t => isCustomTag(t));
-                p.push(...customTags);
-            }
-            p.push(c);
-            return p;
-        }, [] as TagID[]);
-
         // show a skeleton UI if the user is in no rooms and they are not filtering
         const showSkeleton = !this.state.isNameFiltering &&
             Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
 
-        for (const orderedTagId of tagOrder) {
-            let extraTiles = null;
-            if (orderedTagId === DefaultTagID.Invite) {
-                extraTiles = this.renderCommunityInvites();
-            } else if (orderedTagId === DefaultTagID.Suggested) {
-                extraTiles = this.renderSuggestedRooms();
+        return TAG_ORDER.reduce((tags, tagId) => {
+            if (tagId === CUSTOM_TAGS_BEFORE_TAG) {
+                const customTags = Object.keys(this.state.sublists)
+                    .filter(tagId => isCustomTag(tagId));
+                tags.push(...customTags);
             }
+            tags.push(tagId);
+            return tags;
+        }, [] as TagID[])
+            .map(orderedTagId => {
+                let extraTiles = null;
+                if (orderedTagId === DefaultTagID.Invite) {
+                    extraTiles = this.renderCommunityInvites();
+                } else if (orderedTagId === DefaultTagID.Suggested) {
+                    extraTiles = this.renderSuggestedRooms();
+                }
 
-            const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)
-                ? customTagAesthetics(orderedTagId)
-                : this.tagAesthetics[orderedTagId];
-            if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
+                const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)
+                    ? customTagAesthetics(orderedTagId)
+                    : this.tagAesthetics[orderedTagId];
+                if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
-            // The cost of mounting/unmounting this component all the time
-            // offsets the memory cost of keeping it at all time and hiding
-            // it when no results are found
-            components.push(<RoomSublist
-                key={`sublist-${orderedTagId}`}
-                tagId={orderedTagId}
-                forRooms={true}
-                startAsHidden={aesthetics.defaultHidden}
-                label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
-                onAddRoom={aesthetics.onAddRoom}
-                addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
-                addRoomContextMenu={aesthetics.addRoomContextMenu}
-                isMinimized={this.props.isMinimized}
-                onResize={this.props.onResize}
-                showSkeleton={showSkeleton}
-                extraTiles={extraTiles}
-                alwaysVisible={!ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
-            />);
-        }
-
-        return components;
+                return <RoomSublist
+                    key={`sublist-${orderedTagId}`}
+                    tagId={orderedTagId}
+                    forRooms={true}
+                    startAsHidden={aesthetics.defaultHidden}
+                    label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
+                    onAddRoom={aesthetics.onAddRoom}
+                    addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
+                    addRoomContextMenu={aesthetics.addRoomContextMenu}
+                    isMinimized={this.props.isMinimized}
+                    onResize={this.props.onResize}
+                    showSkeleton={showSkeleton}
+                    extraTiles={extraTiles}
+                    alwaysVisible={!ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
+                />
+            });
     }
 
     public render() {
