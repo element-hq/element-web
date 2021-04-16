@@ -527,6 +527,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     : this.tagAesthetics[orderedTagId];
                 if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
+                // The cost of mounting/unmounting this component offsets the cost
+                // of keeping it in the DOM and hiding it when it is not required
                 return <RoomSublist
                     key={`sublist-${orderedTagId}`}
                     tagId={orderedTagId}
