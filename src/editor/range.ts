@@ -32,7 +32,7 @@ export default class Range {
         this._end = bIsLarger ? positionB : positionA;
     }
 
-    moveStart(delta: number) {
+    moveStartForwards(delta: number) {
         this._start = this._start.forwardsWhile(this.model, () => {
             delta -= 1;
             return delta >= 0;

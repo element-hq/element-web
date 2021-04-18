@@ -177,7 +177,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 // because we'll replace the whole range with an emoji,
                 // so move the start forward to the start of the emoticon.
                 // Take + 1 because index is reported without the possible preceding space.
-                range.moveStart(emoticonMatch.index + moveStart);
+                range.moveStartForwards(emoticonMatch.index + moveStart);
                 // and move end backwards so that we don't replace the trailing space/newline
                 range.moveEndBackwards(moveEnd);
 
