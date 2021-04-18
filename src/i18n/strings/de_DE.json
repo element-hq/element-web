@@ -2258,7 +2258,7 @@
     "Dark": "Dunkel",
     "Use the improved room list (will refresh to apply changes)": "Verwende die verbesserte Raumliste (lädt die Anwendung neu)",
     "Use custom size": "Verwende individuelle Größe",
-    "Hey you. You're the best!": "Hey du. Du bist der Beste!",
+    "Hey you. You're the best!": "Hey du. Du bist großartig.",
     "Message layout": "Nachrichtenlayout",
     "Compact": "Kompakt",
     "Modern": "Modern",
@@ -3238,5 +3238,13 @@
     "Sends the given message as a spoiler": "Die gegebene Nachricht als Spoiler senden",
     "Values at explicit levels in this room:": "Werte für explizite Stufen in diesem Raum:",
     "Values at explicit levels:": "Werte für explizite Stufen:",
-    "Values at explicit levels in this room": "Werte für explizite Stufen in diesem Raum"
+    "Values at explicit levels in this room": "Werte für explizite Stufen in diesem Raum",
+    "Confirm abort of host creation": "Bestätige das Abbrechen der Host-Erstellung",
+    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Soll die Host-Erstellung wirklich abgebrochen werden? Dieser Prozess kann nicht wieder fortgesetzt werden.",
+    "Invite to just this room": "Nur für diesen Raum einladen",
+    "Consult first": "Konsultiere zuerst",
+    "Reset event store?": "Ereigniss-Speicher zurück setzen?",
+    "You most likely do not want to reset your event index store": "Es ist wahrscheinlich, dass du den Ereigniss-Index-Speicher nicht zurück setzen möchtest",
+    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few momentswhilst the index is recreated": "Falls du dies tust, werden keine deiner Nachrichten gelöscht. Allerdings wird die Such-Funktion eine Weile lang schlecht funktionieren, bis der Index wieder hergestellt ist",
+    "Reset event store": "Ereignis-Speicher zurück setzen"
 }
