@@ -50,7 +50,7 @@ import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // matches emoticons which follow the start of a line or whitespace
-const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
+const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s|:^$');
 export const REGEX_EMOTICON = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')$');
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
@@ -160,7 +160,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         range.expandBackwardsWhile((index, offset) => {
             const part = model.parts[index];
             n -= 1;
-            return n >= 0 && (part.type === "plain" || part.type === "pill-candidate");
+            return n >= 0 && ["plain", "pill-candidate", "newline"].includes(part.type);
         });
         const emoticonMatch = regex.exec(range.text);
         if (emoticonMatch) {
@@ -170,15 +170,20 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
             if (data) {
                 const {partCreator} = model;
-                const hasPrecedingSpace = emoticonMatch[0][0] === " ";
+                const moveStart = emoticonMatch[0][0] === " " ? 1 : 0;
+                const moveEnd = emoticonMatch[0].length - emoticonMatch.length - moveStart;
+
                 // we need the range to only comprise of the emoticon
                 // because we'll replace the whole range with an emoji,
                 // so move the start forward to the start of the emoticon.
                 // Take + 1 because index is reported without the possible preceding space.
-                range.moveStart(emoticonMatch.index + (hasPrecedingSpace ? 1 : 0));
+                range.moveStart(emoticonMatch.index + moveStart);
+                // and move end backwards so that we don't replace the trailing space/newline
+                range.moveEndBackwards(moveEnd);
+
                 // this returns the amount of added/removed characters during the replace
                 // so the caret position can be adjusted.
-                return range.replace([partCreator.plain(data.unicode + " ")]);
+                return range.replace([partCreator.plain(data.unicode)]);
             }
         }
     }

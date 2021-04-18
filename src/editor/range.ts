@@ -39,6 +39,13 @@ export default class Range {
         });
     }
 
+    moveEndBackwards(delta: number) {
+        this._end = this._end.backwardsWhile(this.model, () => {
+            delta -= 1;
+            return delta >= 0;
+        });
+    }
+
     trim() {
         this._start = this._start.forwardsWhile(this.model, whitespacePredicate);
         this._end = this._end.backwardsWhile(this.model, whitespacePredicate);
