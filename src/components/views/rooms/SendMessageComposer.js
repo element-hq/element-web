@@ -28,7 +28,7 @@ import {
     stripPrefix,
 } from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
-import BasicMessageComposer from "./BasicMessageComposer";
+import BasicMessageComposer, {REGEX_EMOTICON} from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
@@ -333,6 +333,11 @@ export default class SendMessageComposer extends React.Component {
         if (this.model.isEmpty) {
             return;
         }
+
+        // Replace emoticon at the end of the message
+        const caret = this._editorRef.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        this._editorRef.replaceEmoticon(position, REGEX_EMOTICON);
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;

@@ -51,6 +51,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
+export const REGEX_EMOTICON = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')$');
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
@@ -150,7 +151,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     }
 
-    private replaceEmoticon = (caretPosition: DocumentPosition) => {
+    public replaceEmoticon(caretPosition: DocumentPosition, regex: RegExp) {
         const {model} = this.props;
         const range = model.startRange(caretPosition);
         // expand range max 8 characters backwards from caretPosition,
@@ -161,7 +162,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             n -= 1;
             return n >= 0 && (part.type === "plain" || part.type === "pill-candidate");
         });
-        const emoticonMatch = REGEX_EMOTICON_WHITESPACE.exec(range.text);
+        const emoticonMatch = regex.exec(range.text);
         if (emoticonMatch) {
             const query = emoticonMatch[1].replace("-", "");
             // try both exact match and lower-case, this means that xd won't match xD but :P will match :p
@@ -180,7 +181,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 return range.replace([partCreator.plain(data.unicode + " ")]);
             }
         }
-    };
+    }
 
     private updateEditorState = (selection: Caret, inputType?: string, diff?: IDiff) => {
         renderModel(this.editorRef.current, this.props.model);
@@ -567,14 +568,18 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private configureEmoticonAutoReplace = () => {
-        const shouldReplace = SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji');
-        this.props.model.setTransformCallback(shouldReplace ? this.replaceEmoticon : null);
+        this.props.model.setTransformCallback(this.transform);
     };
 
     private configureShouldShowPillAvatar = () => {
         const showPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
         this.setState({ showPillAvatar });
     };
+
+    private transform = (documentPosition: DocumentPosition) => {
+        const shouldReplace = SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji');
+        if (shouldReplace) this.replaceEmoticon(documentPosition, REGEX_EMOTICON_WHITESPACE);
+    }
 
     componentWillUnmount() {
         document.removeEventListener("selectionchange", this.onSelectionChange);
