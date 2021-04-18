@@ -89,7 +89,21 @@ export default class SenderProfile extends React.Component {
     render() {
         const {mxEvent} = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
-        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+
+        let disambiguate;
+        let displayName;
+        let mxid;
+
+        const sender = mxEvent.sender;
+        if (sender) {
+            disambiguate = sender.disambiguate;
+            displayName = sender.rawDisplayName;
+            mxid = sender.userId;
+        } else {
+            disambiguate = false;
+            displayName = mxEvent.getSender();
+            mxid = mxEvent.getSender();
+        }
         const {msgtype} = mxEvent.getContent();
 
         if (msgtype === 'm.emote') {
@@ -108,20 +122,29 @@ export default class SenderProfile extends React.Component {
             />;
         }
 
-        const nameElem = name || '';
-
-        // Name + flair
-        const nameFlair = <span>
-            <span className={`mx_SenderProfile_name ${colorClass}`}>
-                { nameElem }
+        const displayNameElement = (
+            <span className={`mx_SenderProfile_displayName ${colorClass}`}>
+                { displayName || '' }
             </span>
-            { flair }
-        </span>;
+        );
+
+        let mxidElement;
+        if (disambiguate) {
+            mxidElement = (
+                <span className="mx_SenderProfile_mxid">
+                    { `[${mxid || ""}]` }
+                </span>
+            );
+        }
 
         return (
             <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
                 <div className="mx_SenderProfile_hover">
-                    { nameFlair }
+                    <div className="mx_SenderProfile_name">
+                        { displayNameElement }
+                        { mxidElement }
+                        { flair }
+                    </div>
                 </div>
             </div>
         );

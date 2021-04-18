@@ -15,6 +15,18 @@ limitations under the License.
 */
 
 .mx_SenderProfile_name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mx_SenderProfile_displayName {
     font-weight: 600;
 }
 
+.mx_SenderProfile_mxid {
+    font-weight: 600;
+    font-family: monospace;
+    font-size: 1rem;
+    color: gray;
+}
