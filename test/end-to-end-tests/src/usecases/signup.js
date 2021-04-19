@@ -32,6 +32,7 @@ module.exports = async function signup(session, username, password, homeserver) 
         await nextButton.click();
     }
     //fill out form
+    await session.delay(100);
     const usernameField = await session.query("#mx_RegistrationForm_username");
     const passwordField = await session.query("#mx_RegistrationForm_password");
     const passwordRepeatField = await session.query("#mx_RegistrationForm_passwordConfirm");
