@@ -73,9 +73,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
      */
     public disposeRecording(): Promise<void> {
         if (this.state.recording) {
-            // Stop for good measure, but completely async because we're not concerned with this
-            // passing or failing.
-            this.state.recording.stop().catch(e => console.error("Error stopping recording", e));
+            this.state.recording.destroy(); // stops internally
         }
         return this.updateState({recording: null});
     }

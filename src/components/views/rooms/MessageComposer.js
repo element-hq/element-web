@@ -33,6 +33,8 @@ import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
+import {RecordingState} from "../../../voice/VoiceRecording";
+import Tooltip, {Alignment} from "../elements/Tooltip";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -185,6 +187,7 @@ export default class MessageComposer extends React.Component {
             canSendMessages: this.props.room.maySendMessage(),
             isComposerEmpty: true,
             haveRecording: false,
+            recordingTimeLeftSeconds: null, // when set to a number, shows a toast
         };
     }
 
@@ -315,7 +318,17 @@ export default class MessageComposer extends React.Component {
     }
 
     _onVoiceStoreUpdate = () => {
-        this.setState({haveRecording: !!VoiceRecordingStore.instance.activeRecording});
+        const recording = VoiceRecordingStore.instance.activeRecording;
+        this.setState({haveRecording: !!recording});
+        if (recording) {
+            // We show a little heads up that the recording is about to automatically end soon. The 3s
+            // display time is completely arbitrary. Note that we don't need to deregister the listener
+            // because the recording instance will clean that up for us.
+            recording.on(RecordingState.EndingSoon, ({secondsLeft}) => {
+                this.setState({recordingTimeLeftSeconds: secondsLeft});
+                setTimeout(() => this.setState({recordingTimeLeftSeconds: null}), 3000);
+            });
+        }
     };
 
     render() {
@@ -396,8 +409,18 @@ export default class MessageComposer extends React.Component {
             );
         }
 
+        let recordingTooltip;
+        const secondsLeft = Math.round(this.state.recordingTimeLeftSeconds);
+        if (secondsLeft) {
+            recordingTooltip = <Tooltip
+                label={_t("%(seconds)ss left", {seconds: secondsLeft})}
+                alignment={Alignment.Top} yOffset={-50}
+            />;
+        }
+
         return (
             <div className="mx_MessageComposer mx_GroupLayout">
+                {recordingTooltip}
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
