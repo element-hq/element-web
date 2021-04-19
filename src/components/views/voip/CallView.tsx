@@ -192,7 +192,7 @@ export default class CallView extends React.Component<IProps, IState> {
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
         this.setState({feeds: newFeeds});
-    }
+    };
 
     private onCallLocalHoldUnhold = () => {
         this.setState({

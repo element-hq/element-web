@@ -127,7 +127,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             videoMuted: this.props.feed.isVideoMuted(),
         });
         this.playMedia();
-    }
+    };
 
     private onResize = (e) => {
         if (this.props.onResize && !this.props.feed.isLocal()) {
