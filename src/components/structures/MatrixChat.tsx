@@ -84,6 +84,7 @@ import {replaceableComponent} from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import {RoomUpdateCause} from "../../stores/room-list/models";
 import defaultDispatcher from "../../dispatcher/dispatcher";
+import SecurityCustomisations from "../../customisations/Security";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -395,7 +396,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
         if (crossSigningIsSetUp) {
-            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+            if (SecurityCustomisations.SHOW_ENCRYPTION_SETUP_UI === false) {
+                this.onLoggedIn();
+            } else {
+                this.setStateForNewView({view: Views.COMPLETE_SECURITY});
+            }
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {

@@ -159,6 +159,7 @@ $left-gutter: 64px;
 .mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile_last > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile:hover > a > .mx_MessageTimestamp,
+.mx_IRCLayout .mx_ReplyThread .mx_EventTile > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile.mx_EventTile_actionBarFocused > a > .mx_MessageTimestamp,
 .mx_IRCLayout .mx_EventTile.focus-visible:focus-within > a > .mx_MessageTimestamp {
     visibility: visible;
@@ -282,6 +283,10 @@ $left-gutter: 64px;
     display: inline-block;
     height: $font-14px;
     width: $font-14px;
+
+    transition:
+        left var(--transition-short) ease-out,
+        top var(--transition-standard) ease-out;
 }
 
 .mx_EventTile_readAvatarRemainder {

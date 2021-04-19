@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,17 +22,19 @@ import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import {EventType} from "matrix-js-sdk/src/@types/event";
 
 const plEventsToLabels = {
     // These will be translated for us later.
-    "m.room.avatar": _td("Change room avatar"),
-    "m.room.name": _td("Change room name"),
-    "m.room.canonical_alias": _td("Change main address for the room"),
-    "m.room.history_visibility": _td("Change history visibility"),
-    "m.room.power_levels": _td("Change permissions"),
-    "m.room.topic": _td("Change topic"),
-    "m.room.tombstone": _td("Upgrade the room"),
-    "m.room.encryption": _td("Enable room encryption"),
+    [EventType.RoomAvatar]: _td("Change room avatar"),
+    [EventType.RoomName]: _td("Change room name"),
+    [EventType.RoomCanonicalAlias]: _td("Change main address for the room"),
+    [EventType.RoomHistoryVisibility]: _td("Change history visibility"),
+    [EventType.RoomPowerLevels]: _td("Change permissions"),
+    [EventType.RoomTopic]: _td("Change topic"),
+    [EventType.RoomTombstone]: _td("Upgrade the room"),
+    [EventType.RoomEncryption]: _td("Enable room encryption"),
+    [EventType.RoomServerAcl]: _td("Change server ACLs"),
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": _td("Modify widgets"),
@@ -40,14 +42,15 @@ const plEventsToLabels = {
 
 const plEventsToShow = {
     // If an event is listed here, it will be shown in the PL settings. Defaults will be calculated.
-    "m.room.avatar": {isState: true},
-    "m.room.name": {isState: true},
-    "m.room.canonical_alias": {isState: true},
-    "m.room.history_visibility": {isState: true},
-    "m.room.power_levels": {isState: true},
-    "m.room.topic": {isState: true},
-    "m.room.tombstone": {isState: true},
-    "m.room.encryption": {isState: true},
+    [EventType.RoomAvatar]: {isState: true},
+    [EventType.RoomName]: {isState: true},
+    [EventType.RoomCanonicalAlias]: {isState: true},
+    [EventType.RoomHistoryVisibility]: {isState: true},
+    [EventType.RoomPowerLevels]: {isState: true},
+    [EventType.RoomTopic]: {isState: true},
+    [EventType.RoomTombstone]: {isState: true},
+    [EventType.RoomEncryption]: {isState: true},
+    [EventType.RoomServerAcl]: {isState: true},
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": {isState: true},

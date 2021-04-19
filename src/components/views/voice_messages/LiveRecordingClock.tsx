@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, VoiceRecorder} from "../../../voice/VoiceRecorder";
+import {IRecordingUpdate, VoiceRecording} from "../../../voice/VoiceRecording";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
 
 interface IProps {
-    recorder: VoiceRecorder;
+    recorder: VoiceRecording;
 }
 
 interface IState {

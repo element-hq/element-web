@@ -30,7 +30,7 @@ export interface IRecordingUpdate {
     timeSeconds: number; // float
 }
 
-export class VoiceRecorder {
+export class VoiceRecording {
     private recorder: Recorder;
     private recorderContext: AudioContext;
     private recorderSource: MediaStreamAudioSourceNode;
@@ -209,4 +209,4 @@ export class VoiceRecorder {
     }
 }
 
-window.mxVoiceRecorder = VoiceRecorder;
+window.mxVoiceRecorder = VoiceRecording;
