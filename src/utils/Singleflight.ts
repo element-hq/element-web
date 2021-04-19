@@ -30,7 +30,7 @@ const keyMap = new EnhancedMap<Object, EnhancedMap<string, unknown>>();
  * to disable a button, however it would be capable of returning a Promise
  * from the first call.
  *
- * The result of the function call are cached indefinitely, just in case a
+ * The result of the function call is cached indefinitely, just in case a
  * second call comes through late. There are various functions named "forget"
  * to have the cache be cleared of a result.
  *
