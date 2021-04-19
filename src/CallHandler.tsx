@@ -532,6 +532,11 @@ export default class CallHandler {
             if (newNativeAssertedIdentity) {
                 this.assertedIdentityNativeUsers[call.callId] = newNativeAssertedIdentity;
 
+                // If we don't already have a room with this user, make one. This will be slightly odd
+                // if they called us because we'll be inviting them, but there's not much we can do about
+                // this if we want the actual, native room to exist (which we do). This is why it's
+                // important to only obey asserted identity in trusted environments, since anyone you're
+                // on a call with can cause you to send a room invite to someone.
                 await ensureDMExists(MatrixClientPeg.get(), newNativeAssertedIdentity);
 
                 const newMappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
