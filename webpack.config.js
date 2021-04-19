@@ -13,6 +13,7 @@ const additionalPlugins = [
 ];
 
 module.exports = (env, argv) => {
+    let nodeEnv = argv.mode;
     if (process.env.CI_PACKAGE) {
         // Don't run minification for CI builds (this is only set for runs on develop)
         // We override this via environment variable to avoid duplicating the scripts
@@ -24,14 +25,7 @@ module.exports = (env, argv) => {
         // when working on the app but adds significant runtime overhead
         // We want to use the React production build but not compile the whole
         // application to productions standards
-        additionalPlugins.concat([
-            new webpack.EnvironmentPlugin({
-                "NODE_ENV": "production",
-            }),
-            new webpack.DefinePlugin({
-                "process.env.NODE_ENV": "production",
-            }),
-        ]);
+        nodeEnv = "production";
     }
 
     const development = {};
@@ -94,6 +88,10 @@ module.exports = (env, argv) => {
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: argv.mode === 'production',
             minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+
+            // Set the value of `process.env.NODE_ENV` for libraries like React
+            // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
+            nodeEnv,
         },
 
         resolve: {
