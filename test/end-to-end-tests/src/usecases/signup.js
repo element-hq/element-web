@@ -31,8 +31,10 @@ module.exports = async function signup(session, username, password, homeserver) 
         // accept homeserver
         await nextButton.click();
     }
-    //fill out form
+    // Delay required because of local race condition on macOs
+    // Where the form is not query-able despite being present in the DOM
     await session.delay(100);
+    //fill out form
     const usernameField = await session.query("#mx_RegistrationForm_username");
     const passwordField = await session.query("#mx_RegistrationForm_password");
     const passwordRepeatField = await session.query("#mx_RegistrationForm_passwordConfirm");
