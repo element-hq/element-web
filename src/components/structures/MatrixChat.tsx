@@ -586,6 +586,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'logout':
                 dis.dispatch({action: "hangup_all"});
+                dis.dispatch({action: "logout"});
                 Lifecycle.logout();
                 break;
             case 'require_registration':
