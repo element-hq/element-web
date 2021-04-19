@@ -101,8 +101,8 @@ limitations under the License.
     }
 
     .mx_SearchBox {
-        margin: 0;
-        margin-bottom: 24px;
+        // To match the space around the title
+        margin: 0 0 15px 0;
         flex-grow: 0;
     }
 
