@@ -1222,4 +1222,5 @@ export function getCommand(input: string) {
             args,
         };
     }
+    return {};
 }
