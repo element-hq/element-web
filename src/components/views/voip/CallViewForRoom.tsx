@@ -22,6 +22,7 @@ import dis from '../../../dispatcher/dispatcher';
 import {Resizable} from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from '../../../dispatcher/actions';
 
 interface IProps {
     // What room we should display the call for
@@ -62,6 +63,7 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
 
     private onAction = (payload) => {
         switch (payload.action) {
+            case Action.CallChangeRoom:
             case 'call_state': {
                 const newCall = this.getCall();
                 if (newCall !== this.state.call) {

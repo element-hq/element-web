@@ -208,7 +208,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onExpandClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
             room_id: userFacingRoomId,
@@ -337,7 +337,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onRoomAvatarClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
             room_id: userFacingRoomId,
@@ -345,7 +345,7 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private onSecondaryRoomAvatarClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
 
         dis.dispatch({
             action: 'view_room',
@@ -354,7 +354,7 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private onCallResumeClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
     }
 
@@ -365,8 +365,8 @@ export default class CallView extends React.Component<IProps, IState> {
 
     public render() {
         const client = MatrixClientPeg.get();
-        const callRoomId = CallHandler.roomIdForCall(this.props.call);
-        const secondaryCallRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+        const callRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
+        const secondaryCallRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
         const callRoom = client.getRoom(callRoomId);
         const secCallRoom = this.props.secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
 
@@ -482,11 +482,13 @@ export default class CallView extends React.Component<IProps, IState> {
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
         let holdTransferContent;
         if (transfereeCall) {
-            const transferTargetRoom = MatrixClientPeg.get().getRoom(CallHandler.roomIdForCall(this.props.call));
+            const transferTargetRoom = MatrixClientPeg.get().getRoom(
+                CallHandler.sharedInstance().roomIdForCall(this.props.call),
+            );
             const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("unknown person");
 
             const transfereeRoom = MatrixClientPeg.get().getRoom(
-                CallHandler.roomIdForCall(transfereeCall),
+                CallHandler.sharedInstance().roomIdForCall(transfereeCall),
             );
             const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
 
