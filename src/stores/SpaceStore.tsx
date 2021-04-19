@@ -525,6 +525,26 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.notificationStateMap.set(key, state);
         return state;
     }
+
+    // traverse space tree with DFS calling fn on each space including the given root one
+    public traverseSpace(
+        spaceId: string,
+        fn: (roomId: string) => void,
+        includeRooms = false,
+        parentPath?: Set<string>,
+    ) {
+        if (parentPath && parentPath.has(spaceId)) return; // prevent cycles
+
+        fn(spaceId);
+
+        const newPath = new Set(parentPath).add(spaceId);
+        const [childSpaces, childRooms] = partitionSpacesAndRooms(this.getChildren(spaceId));
+
+        if (includeRooms) {
+            childRooms.forEach(r => fn(r.roomId));
+        }
+        childSpaces.forEach(s => this.traverseSpace(s.roomId, fn, includeRooms, newPath));
+    }
 }
 
 export default class SpaceStore {
