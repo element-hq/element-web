@@ -5,8 +5,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
 
-let og_image_url = process.env.RIOT_OG_IMAGE_URL;
-if (!og_image_url) og_image_url = 'https://app.element.io/themes/element/img/logos/opengraph.png';
+let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
+if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
 const additionalPlugins = [
     // This is where you can put your customisation replacements.
@@ -18,6 +18,20 @@ module.exports = (env, argv) => {
         // We override this via environment variable to avoid duplicating the scripts
         // in `package.json` just for a different mode.
         argv.mode = "development";
+
+        // More and more people are using nightly build as their main client
+        // Libraries like React have a development build that is useful
+        // when working on the app but adds significant runtime overhead
+        // We want to use the React production build but not compile the whole
+        // application to productions standards
+        additionalPlugins.concat([
+            new webpack.EnvironmentPlugin({
+                "NODE_ENV": "production",
+            }),
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": "production",
+            }),
+        ]);
     }
 
     const development = {};
@@ -152,8 +166,8 @@ module.exports = (env, argv) => {
                     },
                     loader: 'babel-loader',
                     options: {
-                        cacheDirectory: true
-                    }
+                        cacheDirectory: true,
+                    },
                 },
                 {
                     test: /\.css$/,
@@ -164,7 +178,7 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
-                            }
+                            },
                         },
                         {
                             loader: 'postcss-loader',
@@ -202,7 +216,7 @@ module.exports = (env, argv) => {
                                 "local-plugins": true,
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.scss$/,
@@ -213,7 +227,7 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
-                            }
+                            },
                         },
                         {
                             loader: 'postcss-loader',
@@ -241,7 +255,7 @@ module.exports = (env, argv) => {
                                 "local-plugins": true,
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.wasm$/,
@@ -311,7 +325,7 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
-            ]
+            ],
         },
 
         plugins: [
@@ -332,7 +346,7 @@ module.exports = (env, argv) => {
                 excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
                 minify: argv.mode === 'production',
                 vars: {
-                    og_image_url: og_image_url,
+                    og_image_url: ogImageUrl,
                 },
             }),
 
@@ -438,6 +452,7 @@ function getAssetOutputPath(url, resourcePath) {
  * be placed directly into things like CSS files.
  *
  * @param {string} path Some path to a file.
+ * @returns {string} converted path
  */
 function toPublicPath(path) {
     return path.replace(/\\/g, '/');
