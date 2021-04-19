@@ -78,10 +78,10 @@ accept the change without tests for now, but we'd eventually like to be more
 strict about this further down the road.
 
 If you do spot areas that are quite hard to test today, please let us know in
-#element-dev:matrix.org. We can work on improving the app architecture and
-testing helpers so that future tests are easier for everyone to write, but we
-won't know which parts are difficult unless people shout when stumbling through
-them.
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org). We can
+work on improving the app architecture and testing helpers so that future tests
+are easier for everyone to write, but we won't know which parts are difficult
+unless people shout when stumbling through them.
 
 We recognise that this testing policy will slow things down a bit, but overall
 it should encourage better long-term health of the app and give everyone more
