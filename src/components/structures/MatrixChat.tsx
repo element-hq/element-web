@@ -1098,7 +1098,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             warnings.push((
                 <span className="warning" key="only_member_warning">
                     {' '/* Whitespace, otherwise the sentences get smashed together */ }
-                    { _t("You are the only person here. If you leave, no one will be able to join in the future, including you.") }
+                    { _t("You are the only person here. " +
+                        "If you leave, no one will be able to join in the future, including you.") }
                 </span>
             ));
 
