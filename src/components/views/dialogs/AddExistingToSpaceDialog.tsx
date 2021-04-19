@@ -59,6 +59,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
     const existingSubspacesSet = new Set(existingSubspaces);
     const existingRoomsSet = new Set(SpaceStore.instance.getChildRooms(space.roomId));
 
+    const joinRule = selectedSpace.getJoinRule();
     const [spaces, rooms, dms] = cli.getVisibleRooms().reduce((arr, room) => {
         if (room.getMyMembership() !== "join") return arr;
         if (!room.name.toLowerCase().includes(lcQuery)) return arr;
@@ -67,7 +68,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
             if (room !== space && room !== selectedSpace && !existingSubspacesSet.has(room)) {
                 arr[0].push(room);
             }
-        } else if (!existingRoomsSet.has(room) && selectedSpace.joinRule() !== "public") {
+        } else if (!existingRoomsSet.has(room) && joinRule !== "public") {
             // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
             arr[DMRoomMap.shared().getUserIdForRoomId(room.roomId) ? 2 : 1].push(room);
         }
