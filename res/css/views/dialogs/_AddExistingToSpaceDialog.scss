@@ -102,6 +102,7 @@ limitations under the License.
 
     .mx_SearchBox {
         margin: 0;
+        margin-bottom: 24px;
         flex-grow: 0;
     }
 
@@ -123,7 +124,9 @@ limitations under the License.
     }
 
     .mx_AddExistingToSpaceDialog_section {
-        margin-top: 24px;
+        &:not(:first-child) {
+            margin-top: 24px;
+        }
 
         > h3 {
             margin: 0;
