@@ -87,7 +87,6 @@ import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
 import SdkConfig from './SdkConfig';
-import DMRoomMap from './utils/DMRoomMap';
 import { ensureDMExists, findDMForUser } from './createRoom';
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
