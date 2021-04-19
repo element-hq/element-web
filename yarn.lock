@@ -5588,8 +5588,8 @@ mathml-tag-names@^2.1.3:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "9.9.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cd38fb9b4c349eb31feac14e806e710bf6431b72"
+  version "9.11.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e277de6e3d9bbb98fbfbbedd47d86ee85f6f47e5"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8143,11 +8143,6 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
-
-velocity-animate@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-2.0.6.tgz#1811ca14df7fbbef05740256f6cec0fd1b76575f"
-  integrity sha512-tU+/UtSo3GkIjEfk2KM4e24DvpgX0+FzfLr7XqNwm9BCvZUtbCHPq/AFutx/Mkp2bXlUS9EcX8yxu8XmzAv2Kw==
 
 verror@1.10.0:
   version "1.10.0"

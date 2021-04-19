@@ -24,6 +24,7 @@ import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
 import {User} from 'matrix-js-sdk/src/models/user';
 import {Room} from 'matrix-js-sdk/src/models/room';
 import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
+import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
@@ -496,11 +497,11 @@ const isMuted = (member: RoomMember, powerLevelContent: IPowerLevelsContent) => 
 export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
     const [powerLevels, setPowerLevels] = useState<IPowerLevelsContent>({});
 
-    const update = useCallback(() => {
-        if (!room) {
-            return;
-        }
-        const event = room.currentState.getStateEvents("m.room.power_levels", "");
+    const update = useCallback((ev?: MatrixEvent) => {
+        if (!room) return;
+        if (ev && ev.getType() !== EventType.RoomPowerLevels) return;
+
+        const event = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         if (event) {
             setPowerLevels(event.getContent());
         } else {
@@ -511,7 +512,7 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
         };
     }, [room]);
 
-    useEventEmitter(cli, "RoomState.members", update);
+    useEventEmitter(cli, "RoomState.events", update);
     useEffect(() => {
         update();
         return () => {
@@ -1431,7 +1432,7 @@ const UserInfoHeader: React.FC<{
             name: member.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     }, [member]);
 
     const avatarElement = (
@@ -1494,7 +1495,7 @@ const UserInfoHeader: React.FC<{
         e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
-    const displayName = member.name || member.displayname;
+    const displayName = member.rawDisplayName || member.displayname;
     return <React.Fragment>
         { avatarElement }
 

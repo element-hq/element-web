@@ -47,21 +47,65 @@ export function mdSerialize(model: EditorModel) {
 
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
     let md = mdSerialize(model);
+    // copy of raw input to remove unwanted math later
+    const orig = md;
 
     if (SettingsStore.getValue("feature_latex_maths")) {
-        const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
-            "\\$\\$(([^$]|\\\\\\$)*)\\$\\$";
-        const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
-            "\\$(([^$]|\\\\\\$)*)\\$";
+        const patternNames = ['tex', 'latex'];
+        const patternTypes = ['display', 'inline'];
+        const patternDefaults = {
+            "tex": {
+                // detect math with tex delimiters, inline: $...$, display $$...$$
+                // preferably use negative lookbehinds, not supported in all major browsers:
+                // const displayPattern = "^(?<!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
+                // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
 
-        md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
-            const p1e = AllHtmlEntities.encode(p1);
-            return `<div data-mx-maths="${p1e}">\n\n</div>\n\n`;
-        });
+                // conditions for display math detection $$...$$:
+                // - pattern starts at beginning of line or is not prefixed with backslash or dollar
+                // - left delimiter ($$) is not escaped by backslash
+                "display": "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$",
 
-        md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1) {
-            const p1e = AllHtmlEntities.encode(p1);
-            return `<span data-mx-maths="${p1e}"></span>`;
+                // conditions for inline math detection $...$:
+                // - pattern starts at beginning of line, follows whitespace character or punctuation
+                // - pattern is on a single line
+                // - left and right delimiters ($) are not escaped by backslashes
+                // - left delimiter is not followed by whitespace character
+                // - right delimiter is not prefixed with whitespace character
+                "inline":
+                    "(^|\\s|[.,!?:;])(?!\\\\)\\$(?!\\s)(([^$\\n]|\\\\\\$)*([^\\\\\\s\\$]|\\\\\\$)(?:\\\\\\$)?)\\$",
+            },
+            "latex": {
+                // detect math with latex delimiters, inline: \(...\), display \[...\]
+
+                // conditions for display math detection \[...\]:
+                // - pattern starts at beginning of line or is not prefixed with backslash
+                // - pattern is not empty
+                "display": "(^|[^\\\\])\\\\\\[(?!\\\\\\])(.*?)\\\\\\]",
+
+                // conditions for inline math detection \(...\):
+                // - pattern starts at beginning of line or is not prefixed with backslash
+                // - pattern is not empty
+                "inline": "(^|[^\\\\])\\\\\\((?!\\\\\\))(.*?)\\\\\\)",
+            },
+        };
+
+        patternNames.forEach(function(patternName) {
+            patternTypes.forEach(function(patternType) {
+                // get the regex replace pattern from config or use the default
+                const pattern = (((SdkConfig.get()["latex_maths_delims"] ||
+                    {})[patternType] || {})["pattern"] || {})[patternName] ||
+                    patternDefaults[patternName][patternType];
+
+                md = md.replace(RegExp(pattern, "gms"), function(m, p1, p2) {
+                    const p2e = AllHtmlEntities.encode(p2);
+                    switch (patternType) {
+                        case "display":
+                            return `${p1}<div data-mx-maths="${p2e}">\n\n</div>\n\n`;
+                        case "inline":
+                            return `${p1}<span data-mx-maths="${p2e}"></span>`;
+                    }
+                });
+            });
         });
 
         // make sure div tags always start on a new line, otherwise it will confuse
@@ -73,15 +117,29 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
         const phtml = cheerio.load(parser.toHTML(),
-            { _useHtmlParser2: true, decodeEntities: false })
+            { _useHtmlParser2: true, decodeEntities: false });
 
-        // add fallback output for latex math, which should not be interpreted as markdown
-        phtml('div, span').each(function(i, e) {
-            const tex = phtml(e).attr('data-mx-maths')
-            if (tex) {
-                phtml(e).html(`<code>${tex}</code>`)
-            }
-        });
+        if (SettingsStore.getValue("feature_latex_maths")) {
+            // original Markdown without LaTeX replacements
+            const parserOrig = new Markdown(orig);
+            const phtmlOrig = cheerio.load(parserOrig.toHTML(),
+                { _useHtmlParser2: true, decodeEntities: false });
+
+            // since maths delimiters are handled before Markdown,
+            // code blocks could contain mangled content.
+            // replace code blocks with original content
+            phtmlOrig('code').each(function(i) {
+                phtml('code').eq(i).text(phtmlOrig('code').eq(i).text());
+            });
+
+            // add fallback output for latex math, which should not be interpreted as markdown
+            phtml('div, span').each(function(i, e) {
+                const tex = phtml(e).attr('data-mx-maths')
+                if (tex) {
+                    phtml(e).html(`<code>${tex}</code>`)
+                }
+            });
+        }
         return phtml.html();
     }
     // ensure removal of escape backslashes in non-Markdown messages

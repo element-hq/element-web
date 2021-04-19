@@ -47,8 +47,12 @@ export default class MessageEvent extends React.Component {
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
 
+        /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
         overrideBodyTypes: PropTypes.object,
         overrideEventTypes: PropTypes.object,
+
+        /* the permalinkCreator */
+        permalinkCreator: PropTypes.object,
     };
 
     constructor(props) {
@@ -132,6 +136,7 @@ export default class MessageEvent extends React.Component {
             editState={this.props.editState}
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
+            permalinkCreator={this.props.permalinkCreator}
         /> : null;
     }
 }

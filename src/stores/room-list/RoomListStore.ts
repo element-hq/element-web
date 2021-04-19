@@ -1,6 +1,5 @@
 /*
-Copyright 2018, 2019 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,27 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import {MatrixClient} from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID, isCustomTag, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
-import { ActionPayload } from "../../dispatcher/payloads";
+import {DefaultTagID, isCustomTag, OrderedDefaultTagIDs, RoomUpdateCause, TagID} from "./models";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm} from "./algorithms/models";
+import {ActionPayload} from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { readReceiptChangeIsFor } from "../../utils/read-receipts";
-import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
-import { TagWatcher } from "./TagWatcher";
+import {readReceiptChangeIsFor} from "../../utils/read-receipts";
+import {FILTER_CHANGED, FilterKind, IFilterCondition} from "./filters/IFilterCondition";
+import {TagWatcher} from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
-import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
-import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import {Algorithm, LIST_UPDATED_EVENT} from "./algorithms/Algorithm";
+import {EffectiveMembership, getEffectiveMembership} from "../../utils/membership";
+import {isNullOrUndefined} from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
-import { MarkedExecution } from "../../utils/MarkedExecution";
-import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import { NameFilterCondition } from "./filters/NameFilterCondition";
-import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
-import { VisibilityProvider } from "./filters/VisibilityProvider";
-import { SpaceWatcher } from "./SpaceWatcher";
+import {MarkedExecution} from "../../utils/MarkedExecution";
+import {AsyncStoreWithClient} from "../AsyncStoreWithClient";
+import {NameFilterCondition} from "./filters/NameFilterCondition";
+import {RoomNotificationStateStore} from "../notifications/RoomNotificationStateStore";
+import {VisibilityProvider} from "./filters/VisibilityProvider";
+import {SpaceWatcher} from "./SpaceWatcher";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -57,6 +56,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private initialListsGenerated = false;
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
+    private prefilterConditions: IFilterCondition[] = [];
     private tagWatcher: TagWatcher;
     private spaceWatcher: SpaceWatcher;
     private updateFn = new MarkedExecution(() => {
@@ -104,6 +104,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     public async resetStore() {
         await this.reset();
         this.filterConditions = [];
+        this.prefilterConditions = [];
         this.initialListsGenerated = false;
         this.setupWatchers();
 
@@ -435,6 +436,39 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         }
     }
 
+    private async recalculatePrefiltering() {
+        if (!this.algorithm) return;
+        if (!this.algorithm.hasTagSortingMap) return; // we're still loading
+
+        if (SettingsStore.getValue("advancedRoomListLogging")) {
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+            console.log("Calculating new prefiltered room list");
+        }
+
+        // Inhibit updates because we're about to lie heavily to the algorithm
+        this.algorithm.updatesInhibited = true;
+
+        // Figure out which rooms are about to be valid, and the state of affairs
+        const rooms = this.getPlausibleRooms();
+        const currentSticky = this.algorithm.stickyRoom;
+        const stickyIsStillPresent = currentSticky && rooms.includes(currentSticky);
+
+        // Reset the sticky room before resetting the known rooms so the algorithm
+        // doesn't freak out.
+        await this.algorithm.setStickyRoom(null);
+        await this.algorithm.setKnownRooms(rooms);
+
+        // Set the sticky room back, if needed, now that we have updated the store.
+        // This will use relative stickyness to the new room set.
+        if (stickyIsStillPresent) {
+            await this.algorithm.setStickyRoom(currentSticky);
+        }
+
+        // Finally, mark an update and resume updates from the algorithm
+        this.updateFn.mark();
+        this.algorithm.updatesInhibited = false;
+    }
+
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
         await this.setAndPersistTagSorting(tagId, sort);
         this.updateFn.trigger();
@@ -557,6 +591,34 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         this.updateFn.trigger();
     };
 
+    private onPrefilterUpdated = async () => {
+        await this.recalculatePrefiltering();
+        this.updateFn.trigger();
+    };
+
+    private getPlausibleRooms(): Room[] {
+        if (!this.matrixClient) return [];
+
+        let rooms = [
+            ...this.matrixClient.getVisibleRooms(),
+            // also show space invites in the room list
+            ...this.matrixClient.getRooms().filter(r => r.isSpaceRoom() && r.getMyMembership() === "invite"),
+        ].filter(r => VisibilityProvider.instance.isRoomVisible(r));
+
+        if (this.prefilterConditions.length > 0) {
+            rooms = rooms.filter(r => {
+                for (const filter of this.prefilterConditions) {
+                    if (!filter.isVisible(r)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+
+        return rooms;
+    }
+
     /**
      * Regenerates the room whole room list, discarding any previous results.
      *
@@ -568,11 +630,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
-        const rooms = [
-            ...this.matrixClient.getVisibleRooms(),
-            // also show space invites in the room list
-            ...this.matrixClient.getRooms().filter(r => r.isSpaceRoom() && r.getMyMembership() === "invite"),
-        ].filter(r => VisibilityProvider.instance.isRoomVisible(r));
+        const rooms = this.getPlausibleRooms();
 
         const customTags = new Set<TagID>();
         if (this.state.tagsEnabled) {
@@ -601,24 +659,44 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         if (trigger) this.updateFn.trigger();
     }
 
+    /**
+     * Adds a filter condition to the room list store. Filters may be applied async,
+     * and thus might not cause an update to the store immediately.
+     * @param {IFilterCondition} filter The filter condition to add.
+     */
     public addFilter(filter: IFilterCondition): void {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log("Adding filter condition:", filter);
         }
-        this.filterConditions.push(filter);
-        if (this.algorithm) {
-            this.algorithm.addFilterCondition(filter);
+        let promise = Promise.resolve();
+        if (filter.kind === FilterKind.Prefilter) {
+            filter.on(FILTER_CHANGED, this.onPrefilterUpdated);
+            this.prefilterConditions.push(filter);
+            promise = this.recalculatePrefiltering();
+        } else {
+            this.filterConditions.push(filter);
+            if (this.algorithm) {
+                this.algorithm.addFilterCondition(filter);
+            }
         }
-        this.updateFn.trigger();
+        promise.then(() => this.updateFn.trigger());
     }
 
+    /**
+     * Removes a filter condition from the room list store. If the filter was
+     * not previously added to the room list store, this will no-op. The effects
+     * of removing a filter may be applied async and therefore might not cause
+     * an update right away.
+     * @param {IFilterCondition} filter The filter condition to remove.
+     */
     public removeFilter(filter: IFilterCondition): void {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log("Removing filter condition:", filter);
         }
-        const idx = this.filterConditions.indexOf(filter);
+        let promise = Promise.resolve();
+        let idx = this.filterConditions.indexOf(filter);
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
 
@@ -626,7 +704,13 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
                 this.algorithm.removeFilterCondition(filter);
             }
         }
-        this.updateFn.trigger();
+        idx = this.prefilterConditions.indexOf(filter);
+        if (idx >= 0) {
+            filter.off(FILTER_CHANGED, this.onPrefilterUpdated);
+            this.prefilterConditions.splice(idx, 1);
+            promise = this.recalculatePrefiltering();
+        }
+        promise.then(() => this.updateFn.trigger());
     }
 
     /**

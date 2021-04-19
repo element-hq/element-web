@@ -95,9 +95,10 @@ function textForMemberEvent(ev) {
                     senderName,
                     targetName,
                 }) + ' ' + reason;
-            } else {
-                // sender is not target and made the target leave, if not from invite/ban then this is a kick
+            } else if (prevContent.membership === "join") {
                 return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
+            } else {
+                return "";
             }
     }
 }
