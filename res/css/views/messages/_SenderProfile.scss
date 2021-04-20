@@ -17,7 +17,6 @@ limitations under the License.
 .mx_SenderProfile_name {
     display: flex;
     align-items: center;
-    gap: 5px;
 }
 
 .mx_SenderProfile_displayName {
@@ -29,4 +28,5 @@ limitations under the License.
     font-family: monospace;
     font-size: 1rem;
     color: gray;
+    margin-left: 5px;
 }
