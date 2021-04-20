@@ -51,6 +51,12 @@ export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 
 const MAX_SUGGESTED_ROOMS = 20;
 
+const getLastViewedRoomsStorageKey = (space?: Room) => {
+    const lastViewRooms = "mx_last_viewed_rooms";
+    const homeSpace = "home_space";
+    return `${lastViewRooms}_${space?.roomId || homeSpace}`;
+}
+
 const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces, rooms]
     return arr.reduce((result, room: Room) => {
         result[room.isSpaceRoom() ? 0 : 1].push(room);
@@ -110,6 +116,25 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);
+
+        // view last selected room from space
+        const roomId = window.localStorage.getItem(getLastViewedRoomsStorageKey(this.activeSpace));
+
+        if (roomId && this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join") {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: roomId,
+            });
+        } else if (space) {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: space.roomId,
+            });
+        } else {
+            defaultDispatcher.dispatch({
+                action: "view_home_page",
+            });
+        }
 
         // persist space selected
         if (space) {
@@ -487,6 +512,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         switch (payload.action) {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);
+
+                // persist last viewed room from a space
+                if (room) {
+                    window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
+                }
 
                 if (room?.getMyMembership() === "join") {
                     if (room.isSpaceRoom()) {
