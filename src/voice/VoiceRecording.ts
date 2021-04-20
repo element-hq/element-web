@@ -116,7 +116,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
         // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
         this.recorderWorklet.port.onmessage = (ev) => {
-            switch(ev.data['ev']) {
+            switch (ev.data['ev']) {
                 case PayloadEvent.Timekeep:
                     this.processAudioUpdate(ev.data['timeSeconds']);
                     break;

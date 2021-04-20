@@ -19,8 +19,8 @@ import {percentageOf} from "../utils/numbers";
 
 // from AudioWorkletGlobalScope: https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletGlobalScope
 declare const currentTime: number;
-declare const currentFrame: number;
-declare const sampleRate: number;
+// declare const currentFrame: number;
+// declare const sampleRate: number;
 
 class MxVoiceWorklet extends AudioWorkletProcessor {
     private nextAmplitudeSecond = 0;
