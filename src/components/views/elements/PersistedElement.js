@@ -139,6 +139,8 @@ export default class PersistedElement extends React.Component {
     _onAction(payload) {
         if (payload.action === 'timeline_resize') {
             this._repositionChild();
+        } else if (payload.action === 'logout') {
+            PersistedElement.destroyElement(this.props.persistKey);
         }
     }
 
