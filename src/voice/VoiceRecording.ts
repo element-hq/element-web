@@ -24,6 +24,7 @@ import EventEmitter from "events";
 import {IDestroyable} from "../utils/IDestroyable";
 import {Singleflight} from "../utils/Singleflight";
 import {PayloadEvent, WORKLET_NAME} from "./consts";
+import {arrayFastClone} from "../utils/arrays";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -55,9 +56,14 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private mxc: string;
     private recording = false;
     private observable: SimpleObservable<IRecordingUpdate>;
+    private amplitudes: number[] = []; // at each second mark, generated
 
     public constructor(private client: MatrixClient) {
         super();
+    }
+
+    public get finalWaveform(): number[] {
+        return arrayFastClone(this.amplitudes);
     }
 
     public get contentType(): string {
@@ -113,6 +119,12 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             switch(ev.data['ev']) {
                 case PayloadEvent.Timekeep:
                     this.processAudioUpdate(ev.data['timeSeconds']);
+                    break;
+                case PayloadEvent.AmplitudeMark:
+                    // Sanity check to make sure we're adding about one sample per second
+                    if (ev.data['forSecond'] === this.amplitudes.length) {
+                        this.amplitudes.push(ev.data['amplitude']);
+                    }
                     break;
             }
         };

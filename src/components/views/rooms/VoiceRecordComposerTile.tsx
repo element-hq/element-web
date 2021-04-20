@@ -77,7 +77,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 },
                 "org.matrix.experimental.msc2516.voice": { // MSC2516+MSC1767 experiment
                     duration: Math.round(this.state.recorder.durationSeconds * 1000),
-                    // TODO: @@ TravisR: Waveform.
+
+                    // Events can't have floats, so we try to maintain resolution by using 1024
+                    // as a maximum value. The waveform contains values between zero and 1, so this
+                    // should come out largely sane.
+                    //
+                    // We're expecting about one data point per second of audio.
+                    waveform: this.state.recorder.finalWaveform.map(v => Math.round(v * 1024)),
                 },
             });
             await VoiceRecordingStore.instance.disposeRecording();
