@@ -36,7 +36,7 @@ interface IState {
 @replaceableComponent("views.messages.SenderProfile")
 export default class SenderProfile extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
-    unmounted: boolean;
+    private unmounted: boolean;
 
     constructor(props: IProps) {
         super(props)
