@@ -513,9 +513,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                 // persist last viewed room from a space
 
-                // We don't want to save if the room is a
-                // space room since it can cause problems
-                if (room && !room.isSpaceRoom()) {
+                if (room) {
                     const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
                     window.localStorage.setItem(`${LAST_VIEWED_ROOMS}_${activeSpaceId}`, payload.room_id);
                 }
