@@ -44,8 +44,8 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
             // waveform.
             //
             // We translate the amplitude down to 0-1 for sanity's sake.
-            const minVal = monoChan.reduce((m, v) => Math.min(m, v), Number.MAX_SAFE_INTEGER);
-            const maxVal = monoChan.reduce((m, v) => Math.max(m, v), Number.MIN_SAFE_INTEGER);
+            const minVal = Math.min(...monoChan);
+            const maxVal = Math.max(...monoChan);
             const amplitude = percentageOf(maxVal, -1, 1) - percentageOf(minVal, -1, 1);
 
             this.port.postMessage(<IAmplitudePayload>{
