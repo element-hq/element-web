@@ -118,7 +118,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         const spaceId = space?.roomId || LAST_VIEWED_ROOMS_HOME;
         const roomId = window.localStorage.getItem(`${LAST_VIEWED_ROOMS}_${spaceId}`);
 
-        if (roomId) {
+        if (roomId && this.matrixClient.getRoom(roomId).getMyMembership() === "join") {
             defaultDispatcher.dispatch({
                 action: "view_room",
                 room_id: roomId,
