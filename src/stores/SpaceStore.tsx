@@ -41,7 +41,7 @@ type SpaceKey = string | symbol;
 interface IState {}
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
-const LAST_VIEWED_ROOMS = "mx_last_viewed_rooms";
+
 
 const LAST_VIEWED_ROOMS_HOME = "home_space";
 
@@ -53,6 +53,11 @@ export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 // Space Room ID/HOME_SPACE will be emitted when a Space's children change
 
 const MAX_SUGGESTED_ROOMS = 20;
+
+const getLastViewedRoomsStorageKey = (spaceId?) => {
+    if (!spaceId) return null;
+    return `mx_last_viewed_rooms_${spaceId}`;
+}
 
 const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces, rooms]
     return arr.reduce((result, room: Room) => {
@@ -116,7 +121,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         // view last selected room from space
         const spaceId = space?.roomId || LAST_VIEWED_ROOMS_HOME;
-        const roomId = window.localStorage.getItem(`${LAST_VIEWED_ROOMS}_${spaceId}`);
+        const roomId = window.localStorage.getItem(getLastViewedRoomsStorageKey(spaceId));
 
         if (roomId && this.matrixClient.getRoom(roomId).getMyMembership() === "join") {
             defaultDispatcher.dispatch({
@@ -515,7 +520,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                 if (room) {
                     const activeSpaceId = this.activeSpace?.roomId || LAST_VIEWED_ROOMS_HOME;
-                    window.localStorage.setItem(`${LAST_VIEWED_ROOMS}_${activeSpaceId}`, payload.room_id);
+                    window.localStorage.setItem(getLastViewedRoomsStorageKey(activeSpaceId), payload.room_id);
                 }
 
                 if (room?.getMyMembership() === "join") {
