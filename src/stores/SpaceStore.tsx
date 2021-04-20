@@ -514,7 +514,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const room = this.matrixClient?.getRoom(payload.room_id);
 
                 // persist last viewed room from a space
-                if (room) {
+                if (room && !room.isSpaceRoom()) {
                     window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
                 }
 
