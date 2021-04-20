@@ -300,7 +300,7 @@
     "You need to be logged in.": "Tev ir jāpierakstās.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Jūsu epasta adrese nav piesaistīta nevienam Matrix ID šajā bāzes serverī.",
     "You seem to be in a call, are you sure you want to quit?": "Izskatās, ka atrodies zvana režīmā. Vai tiešām vēlies iziet?",
-    "You seem to be uploading files, are you sure you want to quit?": "Izskatās, ka šobrīd augšuplādē failus. Vai tiešām vēlies iziet?",
+    "You seem to be uploading files, are you sure you want to quit?": "Izskatās, ka šobrīd notiek failu augšupielāde. Vai tiešām vēlaties iziet?",
     "Sun": "Sv.",
     "Mon": "P.",
     "Tue": "O.",
@@ -747,7 +747,7 @@
     "Unhide Preview": "Rādīt priekšskatījumu",
     "Unable to join network": "Neizdodas pievienoties tīklam",
     "Sorry, your browser is <b>not</b> able to run %(brand)s.": "Atvaino, diemžēl tavs tīmekļa pārlūks <b>nespēj</b> darbināt %(brand)s.",
-    "Uploaded on %(date)s by %(user)s": "Augšuplādēja %(user)s %(date)s",
+    "Uploaded on %(date)s by %(user)s": "Augšupielādēja %(user)s %(date)s",
     "Messages in group chats": "Ziņas grupas čatos",
     "Yesterday": "Vakardien",
     "Error encountered (%(errorDetail)s).": "Gadījās kļūda (%(errorDetail)s).",
@@ -1578,5 +1578,8 @@
     "Send a reply…": "Nosūtīt atbildi…",
     "Room version": "Istabas versija",
     "Room list": "Istabu saraksts",
-    "Failed to set topic": "Neizdevās iestatīt tematu"
+    "Failed to set topic": "Neizdevās iestatīt tematu",
+    "Upload files": "Failu augšupielāde",
+    "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Šie faili <b>pārsniedz</b> augšupielādes izmēra limitu %(limit)s.",
+    "Upload files (%(current)s of %(total)s)": "Failu augšupielāde (%(current)s no %(total)s)"
 }
