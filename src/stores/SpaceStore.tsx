@@ -514,7 +514,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const room = this.matrixClient?.getRoom(payload.room_id);
 
                 // persist last viewed room from a space
-                if (room) {
+
+                // Don't save if the room is a space room. This would cause a problem:
+                // When switching to a space home, we first view that room and
+                // only after that we switch to that space. This causes us to
+                // save the space home to be the last viewed room in the home
+                // space.
+                if (room && !room.isSpaceRoom()) {
                     window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
                 }
 
