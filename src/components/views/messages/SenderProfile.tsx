@@ -15,26 +15,37 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import MatrixEvent from "matrix-js-sdk/src/models/event";
+
+interface IProps {
+    mxEvent: MatrixEvent;
+    onClick(): void;
+    enableFlair: boolean;
+}
+
+interface IState {
+    userGroups;
+    relatedGroups;
+}
 
 @replaceableComponent("views.messages.SenderProfile")
-export default class SenderProfile extends React.Component {
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired, // event whose sender we're showing
-        onClick: PropTypes.func,
-    };
-
+export default class SenderProfile extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
+    unmounted: boolean;
 
-    state = {
-        userGroups: null,
-        relatedGroups: [],
-    };
+    constructor(props: IProps) {
+        super(props)
+
+        this.state = {
+            userGroups: null,
+            relatedGroups: [],
+        };
+    }
 
     componentDidMount() {
         this.unmounted = false;
@@ -89,28 +100,17 @@ export default class SenderProfile extends React.Component {
     render() {
         const {mxEvent} = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
-
-        let disambiguate;
-        let displayName;
-        let mxid;
-
-        const sender = mxEvent.sender;
-        if (sender) {
-            disambiguate = sender.disambiguate;
-            displayName = sender.rawDisplayName;
-            mxid = sender.userId;
-        } else {
-            disambiguate = false;
-            displayName = mxEvent.getSender();
-            mxid = mxEvent.getSender();
-        }
         const {msgtype} = mxEvent.getContent();
+
+        const disambiguate = mxEvent.sender?.disambiguate;
+        const displayName = mxEvent.sender?.rawDisplayName || mxEvent.getSender() || "";
+        const mxid = mxEvent.sender?.userId || mxEvent.getSender() || "";
 
         if (msgtype === 'm.emote') {
             return <span />; // emote message must include the name so don't duplicate it
         }
 
-        let flair = <div />;
+        let flair;
         if (this.props.enableFlair) {
             const displayedGroups = this._getDisplayedGroups(
                 this.state.userGroups, this.state.relatedGroups,
@@ -124,7 +124,7 @@ export default class SenderProfile extends React.Component {
 
         const displayNameElement = (
             <span className={`mx_SenderProfile_displayName ${colorClass}`}>
-                { displayName || '' }
+                { displayName }
             </span>
         );
 
@@ -132,7 +132,7 @@ export default class SenderProfile extends React.Component {
         if (disambiguate) {
             mxidElement = (
                 <span className="mx_SenderProfile_mxid">
-                    { `[${mxid || ""}]` }
+                    { `[${mxid}]` }
                 </span>
             );
         }
