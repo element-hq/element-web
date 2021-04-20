@@ -1096,8 +1096,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const isSpace = roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
-        const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
         const warnings = [];
+
+        const memberCount = roomToLeave.currentState.getJoinedMemberCount();
+        if (memberCount === 1) {
+            warnings.push((
+                <span className="warning" key="only_member_warning">
+                    {' '/* Whitespace, otherwise the sentences get smashed together */ }
+                    { _t("You are the only person here. " +
+                        "If you leave, no one will be able to join in the future, including you.") }
+                </span>
+            ));
+
+            return warnings;
+        }
+
+        const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
         if (joinRules) {
             const rule = joinRules.getContent().join_rule;
             if (rule !== "public") {
