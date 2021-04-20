@@ -154,6 +154,9 @@ function getRemoteAudioElement(): HTMLAudioElement {
 
 export default class CallHandler {
     private calls = new Map<string, MatrixCall>(); // roomId -> call
+    // Calls started as an attended transfer, ie. with the intention of transferring another
+    // call with a different party to this one.
+    private transferees = new Map<string, MatrixCall>(); // callId (target) -> call (transferee)
     private audioPromises = new Map<AudioID, Promise<void>>();
     private dispatcherRef: string = null;
     private supportsPstnProtocol = null;
@@ -323,6 +326,10 @@ export default class CallHandler {
             }
         }
         return callsNotInThatRoom;
+    }
+
+    getTransfereeForCallId(callId: string): MatrixCall {
+        return this.transferees[callId];
     }
 
     play(audioId: AudioID) {
@@ -622,6 +629,7 @@ export default class CallHandler {
     private async placeCall(
         roomId: string, type: PlaceCallType,
         localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
+        transferee: MatrixCall,
     ) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
         CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
@@ -634,6 +642,9 @@ export default class CallHandler {
         const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
 
         this.calls.set(roomId, call);
+        if (transferee) {
+            this.transferees[call.callId] = transferee;
+        }
 
         this.setCallListeners(call);
         this.setCallAudioElement(call);
@@ -723,7 +734,10 @@ export default class CallHandler {
                     } else if (members.length === 2) {
                         console.info(`Place ${payload.type} call in ${payload.room_id}`);
 
-                        this.placeCall(payload.room_id, payload.type, payload.local_element, payload.remote_element);
+                        this.placeCall(
+                            payload.room_id, payload.type, payload.local_element, payload.remote_element,
+                            payload.transferee,
+                        );
                     } else { // > 2
                         dis.dispatch({
                             action: "place_conference_call",

@@ -19,7 +19,6 @@ import classnames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import * as Avatar from '../../../Avatar';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Layout} from "../../../settings/Layout";
@@ -41,15 +40,26 @@ interface IProps {
      * classnames to apply to the wrapper of the preview
      */
     className: string;
+
+    /**
+     * The ID of the displayed user
+     */
+    userId: string;
+
+    /**
+     * The display name of the displayed user
+     */
+    displayName?: string;
+
+    /**
+     * The mxc:// avatar URL of the displayed user
+     */
+    avatarUrl?: string;
 }
 
-/* eslint-disable camelcase */
 interface IState {
-    userId: string;
-    displayname: string;
-    avatar_url: string;
+    message: string;
 }
-/* eslint-enable camelcase */
 
 const AVATAR_SIZE = 32;
 
@@ -57,45 +67,28 @@ const AVATAR_SIZE = 32;
 export default class EventTilePreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
-
         this.state = {
-            userId: "@erim:fink.fink",
-            displayname: "Erimayas Fink",
-            avatar_url: null,
+            message: props.message,
         };
     }
 
-    async componentDidMount() {
-        // Fetch current user data
-        const client = MatrixClientPeg.get();
-        const userId = client.getUserId();
-        const profileInfo = await client.getProfileInfo(userId);
-        const avatarUrl = profileInfo.avatar_url;
-
-        this.setState({
-            userId,
-            displayname: profileInfo.displayname,
-            avatar_url: avatarUrl,
-        });
-    }
-
-    private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
+    private fakeEvent({message}: IState) {
         // Fake it till we make it
         /* eslint-disable quote-props */
         const rawEvent = {
             type: "m.room.message",
-            sender: userId,
+            sender: this.props.userId,
             content: {
                 "m.new_content": {
                     msgtype: "m.text",
-                    body: this.props.message,
-                    displayname: displayname,
-                    avatar_url: avatarUrl,
+                    body: message,
+                    displayname: this.props.displayName,
+                    avatar_url: this.props.avatarUrl,
                 },
                 msgtype: "m.text",
-                body: this.props.message,
-                displayname: displayname,
-                avatar_url: avatarUrl,
+                body: message,
+                displayname: this.props.displayName,
+                avatar_url: this.props.avatarUrl,
             },
             unsigned: {
                 age: 97,
@@ -108,12 +101,15 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
         // Fake it more
         event.sender = {
-            name: displayname,
-            userId: userId,
+            name: this.props.displayName,
+            userId: this.props.userId,
             getAvatarUrl: (..._) => {
-                return Avatar.avatarUrlForUser({avatarUrl}, AVATAR_SIZE, AVATAR_SIZE, "crop");
+                return Avatar.avatarUrlForUser(
+                    { avatarUrl: this.props.avatarUrl },
+                    AVATAR_SIZE, AVATAR_SIZE, "crop",
+                );
             },
-            getMxcAvatarUrl: () => avatarUrl,
+            getMxcAvatarUrl: () => this.props.avatarUrl,
         };
 
         return event;

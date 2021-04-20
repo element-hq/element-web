@@ -50,7 +50,7 @@ export default class VerificationRequestDialog extends React.Component {
         const member = this.props.member ||
             otherUserId && MatrixClientPeg.get().getUser(otherUserId);
         const title = request && request.isSelfVerification ?
-            _t("Verify other session") : _t("Verification Request");
+            _t("Verify other login") : _t("Verification Request");
 
         return <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
                 contentId="mx_Dialog_content"

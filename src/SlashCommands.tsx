@@ -20,7 +20,7 @@ limitations under the License.
 
 import * as React from 'react';
 
-import { ContentHelpers } from 'matrix-js-sdk';
+import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
@@ -155,6 +155,18 @@ function success(promise?: Promise<any>) {
  */
 
 export const Commands = [
+    new Command({
+        command: 'spoiler',
+        args: '<message>',
+        description: _td('Sends the given message as a spoiler'),
+        runFn: function(roomId, message) {
+            return success(ContentHelpers.makeHtmlMessage(
+                message,
+                `<span data-mx-spoiler>${message}</span>`,
+            ));
+        },
+        category: CommandCategories.messages,
+    }),
     new Command({
         command: 'shrug',
         args: '<message>',
@@ -1210,4 +1222,5 @@ export function getCommand(input: string) {
             args,
         };
     }
+    return {};
 }

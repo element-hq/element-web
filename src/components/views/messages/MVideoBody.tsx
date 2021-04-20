@@ -132,7 +132,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
                         // enable the play button. Firefox does not seem to care either
                         // way, so it's fine to do for all browsers.
                         decryptedUrl: `data:${content?.info?.mimetype},`,
-                        decryptedThumbnailUrl: thumbnailUrl,
+                        decryptedThumbnailUrl: thumbnailUrl || `data:${content?.info?.mimetype},`,
                         decryptedBlob: null,
                     });
                 }

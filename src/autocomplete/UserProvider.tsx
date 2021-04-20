@@ -56,7 +56,6 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new QueryMatcher([], {
             keys: ['name'],
             funcs: [obj => obj.userId.slice(1)], // index by user id minus the leading '@'
-            shouldMatchPrefix: true,
             shouldMatchWordsOnly: false,
         });
 

@@ -40,7 +40,7 @@ enum RegistrationField {
     PasswordConfirm = "field_password_confirm",
 }
 
-const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
+export const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 interface IProps {
     // Values pre-filled in the input boxes when the component loads
