@@ -41,7 +41,6 @@ import {objectHasDiff} from "../../../utils/objects";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
 import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
-import {NotificationColor} from "../../../stores/notifications/NotificationColor";
 import NotificationBadge from "./NotificationBadge";
 
 const eventTileTypes = {
@@ -1264,7 +1263,7 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
         let nonCssBadge = null;
         if (isFailed) {
             nonCssBadge = <NotificationBadge
-                notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                notification={StaticNotificationState.RED_EXCLAMATION}
             />;
         }
 

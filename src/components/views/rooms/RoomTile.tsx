@@ -53,7 +53,6 @@ import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/Community
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getUnsentMessages } from "../../structures/RoomStatusBar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 interface IProps {
     room: Room;
@@ -576,7 +575,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 badge = (
                     <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
                         <NotificationBadge
-                            notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                            notification={StaticNotificationState.RED_EXCLAMATION}
                             forceCount={false}
                             roomId={this.props.room.roomId}
                         />

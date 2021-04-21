@@ -25,7 +25,6 @@ import {Action} from "../../dispatcher/actions";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import {EventStatus} from "matrix-js-sdk/src/models/event";
 import NotificationBadge from "../views/rooms/NotificationBadge";
-import {NotificationColor} from "../../stores/notifications/NotificationColor";
 import {StaticNotificationState} from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
@@ -236,7 +235,7 @@ export default class RoomStatusBar extends React.Component {
                 <div role="alert">
                     <div className="mx_RoomStatusBar_unsentBadge">
                         <NotificationBadge
-                            notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                            notification={StaticNotificationState.RED_EXCLAMATION}
                         />
                     </div>
                     <div>
