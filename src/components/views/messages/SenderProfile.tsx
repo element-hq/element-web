@@ -132,7 +132,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         if (disambiguate) {
             mxidElement = (
                 <span className="mx_SenderProfile_mxid">
-                    { `[${mxid}]` }
+                    { mxid }
                 </span>
             );
         }
