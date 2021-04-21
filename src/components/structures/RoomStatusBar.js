@@ -34,7 +34,7 @@ const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
 
-function getUnsentMessages(room) {
+export function getUnsentMessages(room) {
     if (!room) { return []; }
     return room.getPendingEvents().filter(function(ev) {
         return ev.status === EventStatus.NOT_SENT;
