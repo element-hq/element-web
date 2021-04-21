@@ -204,7 +204,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
             this.onCommunityUpdate,
         );
-        MatrixClientPeg.get()?.off("Room.localEchoUpdated", this.onLocalEchoUpdated);
+        MatrixClientPeg.get()?.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
     }
 
     private onAction = (payload: ActionPayload) => {
