@@ -36,9 +36,8 @@ limitations under the License.
 }
 
 .mx_VoiceRecordComposerTile_waveformContainer {
-    padding: 8px; // makes us 4px taller than the send/stop button
-    padding-right: 4px; // there's 1px from the waveform itself, so account for that
-    padding-left: 15px; // +10px for the live circle, +5px for regular padding
+    padding: 6px; // makes us 4px taller than the send/stop button
+    padding-right: 5px; // there's 1px from the waveform itself, so account for that
     background-color: $voice-record-waveform-bg-color;
     border-radius: 12px;
     margin: 6px; // force the composer area to put a gutter around us
@@ -53,27 +52,36 @@ limitations under the License.
     color: $voice-record-waveform-fg-color;
     font-size: $font-14px;
 
-    &.mx_VoiceRecordComposerTile_recording::before {
-        animation: recording-pulse 2s infinite;
+    &.mx_VoiceRecordComposerTile_recording {
+        padding-left: 16px; // +10px for the live circle, +6px for regular padding
 
-        content: '';
-        background-color: $voice-record-live-circle-color;
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        left: 8px;
-        top: 18px; // vertically center
-        border-radius: 10px;
+        &::before {
+            animation: recording-pulse 2s infinite;
+
+            content: '';
+            background-color: $voice-record-live-circle-color;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            left: 8px;
+            top: 16px; // vertically center
+            border-radius: 10px;
+        }
     }
 
-    .mx_Waveform_bar {
-        background-color: $voice-record-waveform-fg-color;
+    .mx_Waveform {
+        // We want the bars to be 2px shorter than the play/pause button in the waveform control
+        height: 28px; // default is 30px, so we're subtracting the 2px border off the bars
+
+        .mx_Waveform_bar {
+            background-color: $voice-record-waveform-fg-color;
+        }
     }
 
     .mx_Clock {
-        padding-right: 8px; // isolate from waveform
-        padding-left: 10px; // isolate from live circle
-        width: 42px; // we're not using a monospace font, so fake it
+        padding-right: 4px; // isolate from waveform
+        padding-left: 8px; // isolate from live circle
+        width: 40px; // we're not using a monospace font, so fake it
     }
 }
 
