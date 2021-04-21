@@ -36,11 +36,12 @@ limitations under the License.
 }
 
 .mx_VoiceRecordComposerTile_waveformContainer {
-    padding: 5px;
+    padding: 8px; // makes us 4px taller than the send/stop button
     padding-right: 4px; // there's 1px from the waveform itself, so account for that
     padding-left: 15px; // +10px for the live circle, +5px for regular padding
     background-color: $voice-record-waveform-bg-color;
     border-radius: 12px;
+    margin: 6px; // force the composer area to put a gutter around us
     margin-right: 12px; // isolate from stop button
 
     // Cheat at alignment a bit
@@ -52,7 +53,7 @@ limitations under the License.
     color: $voice-record-waveform-fg-color;
     font-size: $font-14px;
 
-    &::before {
+    &.mx_VoiceRecordComposerTile_recording::before {
         animation: recording-pulse 2s infinite;
 
         content: '';
@@ -61,7 +62,7 @@ limitations under the License.
         height: 10px;
         position: absolute;
         left: 8px;
-        top: 16px; // vertically center
+        top: 18px; // vertically center
         border-radius: 10px;
     }
 

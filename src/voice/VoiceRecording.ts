@@ -25,6 +25,7 @@ import {IDestroyable} from "../utils/IDestroyable";
 import {Singleflight} from "../utils/Singleflight";
 import {PayloadEvent, WORKLET_NAME} from "./consts";
 import {arrayFastClone} from "../utils/arrays";
+import {UPDATE_EVENT} from "../stores/AsyncStore";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -77,6 +78,16 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     public get durationSeconds(): number {
         if (!this.recorder) throw new Error("Duration not available without a recording");
         return this.recorderContext.currentTime;
+    }
+
+    public get isRecording(): boolean {
+        return this.recording;
+    }
+
+    public emit(event: string, ...args: any[]): boolean {
+        super.emit(event, ...args);
+        super.emit(UPDATE_EVENT, event, ...args);
+        return true; // we don't ever care if the event had listeners, so just return "yes"
     }
 
     private async makeRecorder() {

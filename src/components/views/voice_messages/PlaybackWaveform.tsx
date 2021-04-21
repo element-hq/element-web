@@ -17,35 +17,25 @@ limitations under the License.
 import React from "react";
 import {IRecordingUpdate, VoiceRecording} from "../../../voice/VoiceRecording";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {arrayFastResample, arraySeed} from "../../../utils/arrays";
+import {arrayFastResample, arraySeed, arrayTrimFill} from "../../../utils/arrays";
 import {percentageOf} from "../../../utils/numbers";
 import Waveform from "./Waveform";
 import {DOWNSAMPLE_TARGET, IRecordingWaveformProps, IRecordingWaveformState} from "./IRecordingWaveformStateProps";
 
 /**
- * A waveform which shows the waveform of a live recording
+ * A waveform which shows the waveform of a previously recorded recording
  */
 @replaceableComponent("views.voice_messages.LiveRecordingWaveform")
-export default class LiveRecordingWaveform extends React.PureComponent<IRecordingWaveformProps, IRecordingWaveformState> {
+export default class PlaybackWaveform extends React.PureComponent<IRecordingWaveformProps, IRecordingWaveformState> {
     public constructor(props) {
         super(props);
 
-        this.state = {heights: arraySeed(0, DOWNSAMPLE_TARGET)};
-        this.props.recorder.liveData.onUpdate(this.onRecordingUpdate);
+        // Like the live recording waveform
+        const bars = arrayFastResample(this.props.recorder.finalWaveform, DOWNSAMPLE_TARGET);
+        const seed = arraySeed(0, DOWNSAMPLE_TARGET);
+        const heights = arrayTrimFill(bars, DOWNSAMPLE_TARGET, seed).map(b => percentageOf(b, 0, 0.5));
+        this.state = {heights};
     }
-
-    private onRecordingUpdate = (update: IRecordingUpdate) => {
-        // The waveform and the downsample target are pretty close, so we should be fine to
-        // do this, despite the docs on arrayFastResample.
-        const bars = arrayFastResample(Array.from(update.waveform), DOWNSAMPLE_TARGET);
-        this.setState({
-            // The incoming data is between zero and one, but typically even screaming into a
-            // microphone won't send you over 0.6, so we artificially adjust the gain for the
-            // waveform. This results in a slightly more cinematic/animated waveform for the
-            // user.
-            heights: bars.map(b => percentageOf(b, 0, 0.50)),
-        });
-    };
 
     public render() {
         return <Waveform relHeights={this.state.heights} />;
