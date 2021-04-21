@@ -117,7 +117,7 @@ limitations under the License.
             position: relative;
 
             &:nth-child(2) {
-                border-left: 1px solid $input-darker-bg-color;
+                border-left: 1px solid $resend-button-divider-color;
             }
 
             &::before {
