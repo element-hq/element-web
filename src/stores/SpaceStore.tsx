@@ -124,11 +124,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             defaultDispatcher.dispatch({
                 action: "view_room",
                 room_id: roomId,
+                context_switch: true,
             });
         } else if (space) {
             defaultDispatcher.dispatch({
                 action: "view_room",
                 room_id: space.roomId,
+                context_switch: true,
             });
         } else {
             defaultDispatcher.dispatch({
@@ -512,6 +514,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         switch (payload.action) {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);
+
+                // Don't auto-switch rooms when reacting to a context-switch
+                // as this is not helpful and can create loops of rooms/space switching
+                if (payload.context_switch) break;
 
                 // persist last viewed room from a space
 
