@@ -38,7 +38,7 @@ const MAX_ZOOM = 300;
 // This is used for the buttons
 const ZOOM_STEP = 10;
 // This is used for mouse wheel events
-const ZOOM_COEFFICIENT = 10;
+const ZOOM_COEFFICIENT = 7.5;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
@@ -208,6 +208,10 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onStartMoving = (ev: React.MouseEvent) => {
         ev.stopPropagation();
         ev.preventDefault();
+
+        // Don't do anything if we pressed any
+        // other button than the left one
+        if (ev.button !== 0) return;
 
         // Zoom in if we are completely zoomed out
         if (this.state.zoom === MIN_ZOOM) {

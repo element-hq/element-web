@@ -436,6 +436,8 @@ export default class Registration extends React.Component<IProps, IState> {
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();
         }
+
+        return sessionLoaded;
     };
 
     private renderRegisterComponent() {
@@ -557,7 +559,12 @@ export default class Registration extends React.Component<IProps, IState> {
                             loggedInUserId: this.state.differentLoggedInUserId,
                         },
                     )}</p>
-                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={this.onLoginClickWithCheck}>
+                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={async event => {
+                        const sessionLoaded = await this.onLoginClickWithCheck(event);
+                        if (sessionLoaded) {
+                            dis.dispatch({action: "view_welcome_page"});
+                        }
+                    }}>
                         {_t("Continue with previous account")}
                     </AccessibleButton></p>
                 </div>;

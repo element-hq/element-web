@@ -68,8 +68,8 @@ limitations under the License.
         }
 
         &.mx_BasicMessageComposer_input_disabled {
+            // Ignore all user input to avoid accidentally triggering the composer
             pointer-events: none;
-            cursor: not-allowed;
         }
     }
 

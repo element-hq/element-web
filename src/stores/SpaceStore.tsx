@@ -51,6 +51,12 @@ export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 
 const MAX_SUGGESTED_ROOMS = 20;
 
+const getLastViewedRoomsStorageKey = (space?: Room) => {
+    const lastViewRooms = "mx_last_viewed_rooms";
+    const homeSpace = "home_space";
+    return `${lastViewRooms}_${space?.roomId || homeSpace}`;
+}
+
 const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces, rooms]
     return arr.reduce((result, room: Room) => {
         result[room.isSpaceRoom() ? 0 : 1].push(room);
@@ -110,6 +116,27 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);
+
+        // view last selected room from space
+        const roomId = window.localStorage.getItem(getLastViewedRoomsStorageKey(this.activeSpace));
+
+        if (roomId && this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join") {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: roomId,
+                context_switch: true,
+            });
+        } else if (space) {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: space.roomId,
+                context_switch: true,
+            });
+        } else {
+            defaultDispatcher.dispatch({
+                action: "view_home_page",
+            });
+        }
 
         // persist space selected
         if (space) {
@@ -421,11 +448,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEvent: MatrixEvent) => {
+    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEvent?: MatrixEvent) => {
         if (ev.getType() === EventType.Tag && !room.isSpaceRoom()) {
             // If the room was in favourites and now isn't or the opposite then update its position in the trees
-            const oldTags = lastEvent.getContent()?.tags;
-            const newTags = ev.getContent()?.tags;
+            const oldTags = lastEvent?.getContent()?.tags || {};
+            const newTags = ev.getContent()?.tags || {};
             if (!!oldTags[DefaultTagID.Favourite] !== !!newTags[DefaultTagID.Favourite]) {
                 this.onRoomUpdate(room);
             }
@@ -488,6 +515,21 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);
 
+                // Don't auto-switch rooms when reacting to a context-switch
+                // as this is not helpful and can create loops of rooms/space switching
+                if (payload.context_switch) break;
+
+                // persist last viewed room from a space
+
+                // Don't save if the room is a space room. This would cause a problem:
+                // When switching to a space home, we first view that room and
+                // only after that we switch to that space. This causes us to
+                // save the space home to be the last viewed room in the home
+                // space.
+                if (room && !room.isSpaceRoom()) {
+                    window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
+                }
+
                 if (room?.getMyMembership() === "join") {
                     if (room.isSpaceRoom()) {
                         this.setActiveSpace(room);
@@ -524,6 +566,26 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         const state = new SpaceNotificationState(key, getRoomFn);
         this.notificationStateMap.set(key, state);
         return state;
+    }
+
+    // traverse space tree with DFS calling fn on each space including the given root one
+    public traverseSpace(
+        spaceId: string,
+        fn: (roomId: string) => void,
+        includeRooms = false,
+        parentPath?: Set<string>,
+    ) {
+        if (parentPath && parentPath.has(spaceId)) return; // prevent cycles
+
+        fn(spaceId);
+
+        const newPath = new Set(parentPath).add(spaceId);
+        const [childSpaces, childRooms] = partitionSpacesAndRooms(this.getChildren(spaceId));
+
+        if (includeRooms) {
+            childRooms.forEach(r => fn(r.roomId));
+        }
+        childSpaces.forEach(s => this.traverseSpace(s.roomId, fn, includeRooms, newPath));
     }
 }
 

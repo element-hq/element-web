@@ -311,5 +311,8 @@
     "Your device resolution": "وضوح دستگاه شما",
     "e.g. <CurrentPageURL>": "برای مثال <CurrentPageURL>",
     "Every page you use in the app": "هر صفحه‌ی برنامه از که آن استفاده می‌کنید",
-    "e.g. %(exampleValue)s": "برای مثال %(exampleValue)s"
+    "e.g. %(exampleValue)s": "برای مثال %(exampleValue)s",
+    "Explore rooms": "کاوش اتاق",
+    "Sign In": "ورود",
+    "Create Account": "ایجاد اکانت"
 }

@@ -17,21 +17,12 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import '../../../VelocityBounce';
 import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
-import Velociraptor from "../../../Velociraptor";
+import NodeAnimator from "../../../NodeAnimator";
 import * as sdk from "../../../index";
 import {toPx} from "../../../utils/units";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-
-let bounce = false;
-try {
-    if (global.localStorage) {
-        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
-    }
-} catch (e) {
-}
 
 @replaceableComponent("views.rooms.ReadReceiptMarker")
 export default class ReadReceiptMarker extends React.PureComponent {
@@ -115,7 +106,18 @@ export default class ReadReceiptMarker extends React.PureComponent {
             // we've already done our display - nothing more to do.
             return;
         }
+        this._animateMarker();
+    }
 
+    componentDidUpdate(prevProps) {
+        const differentLeftOffset = prevProps.leftOffset !== this.props.leftOffset;
+        const visibilityChanged = prevProps.hidden !== this.props.hidden;
+        if (differentLeftOffset || visibilityChanged) {
+            this._animateMarker();
+        }
+    }
+
+    _animateMarker() {
         // treat new RRs as though they were off the top of the screen
         let oldTop = -15;
 
@@ -139,42 +141,18 @@ export default class ReadReceiptMarker extends React.PureComponent {
         }
 
         const startStyles = [];
-        const enterTransitionOpts = [];
 
         if (oldInfo && oldInfo.left) {
             // start at the old height and in the old h pos
-
             startStyles.push({ top: startTopOffset+"px",
                                left: toPx(oldInfo.left) });
-
-            const reorderTransitionOpts = {
-                duration: 100,
-                easing: 'easeOut',
-            };
-
-            enterTransitionOpts.push(reorderTransitionOpts);
         }
 
-        // then shift to the rightmost column,
-        // and then it will drop down to its resting position
-        //
-        // XXX: We use a small left value to trick velocity-animate into actually animating.
-        // This is a very annoying bug where if it thinks there's no change to `left` then it'll
-        // skip applying it, thus making our read receipt at +14px instead of +0px like it
-        // should be. This does cause a tiny amount of drift for read receipts, however with a
-        // value so small it's not perceived by a user.
-        // Note: Any smaller values (or trying to interchange units) might cause read receipts to
-        // fail to fall down or cause gaps.
-        startStyles.push({ top: startTopOffset+'px', left: '1px' });
-        enterTransitionOpts.push({
-            duration: bounce ? Math.min(Math.log(Math.abs(startTopOffset)) * 200, 3000) : 300,
-            easing: bounce ? 'easeOutBounce' : 'easeOutCubic',
-        });
+        startStyles.push({ top: startTopOffset+'px', left: '0' });
 
         this.setState({
             suppressDisplay: false,
             startStyles: startStyles,
-            enterTransitionOpts: enterTransitionOpts,
         });
     }
 
@@ -187,7 +165,6 @@ export default class ReadReceiptMarker extends React.PureComponent {
         const style = {
             left: toPx(this.props.leftOffset),
             top: '0px',
-            visibility: this.props.hidden ? 'hidden' : 'visible',
         };
 
         let title;
@@ -210,9 +187,8 @@ export default class ReadReceiptMarker extends React.PureComponent {
         }
 
         return (
-            <Velociraptor
-                    startStyles={this.state.startStyles}
-                    enterTransitionOpts={this.state.enterTransitionOpts} >
+            <NodeAnimator
+                    startStyles={this.state.startStyles} >
                 <MemberAvatar
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}
@@ -223,7 +199,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
                     onClick={this.props.onClick}
                     inputRef={this._avatar}
                 />
-            </Velociraptor>
+            </NodeAnimator>
         );
     }
 }
