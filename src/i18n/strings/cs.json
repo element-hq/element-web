@@ -3202,5 +3202,17 @@
     "What are some things you want to discuss in %(spaceName)s?": "O kterých tématech chcete diskutovat v %(spaceName)s?",
     "Let's create a room for each of them.": "Vytvořme pro každé z nich místnost.",
     "Use another login": "Použijte jiné přihlašovací jméno",
-    "Without verifying, you won’t have access to all your messages and may appear as untrusted to others.": "Bez ověření nebudete mít přístup ke všem svým zprávám a ostatním se můžete zobrazit jako nedůvěryhodný."
+    "Without verifying, you won’t have access to all your messages and may appear as untrusted to others.": "Bez ověření nebudete mít přístup ke všem svým zprávám a ostatním se můžete zobrazit jako nedůvěryhodný.",
+    "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Jste zde jediný člověk. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás.",
+    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Pokud vše resetujete, začnete bez důvěryhodných relací, bez důvěryhodných uživatelů a možná nebudete moci zobrazit minulé zprávy.",
+    "Only do this if you have no other device to complete verification with.": "Udělejte to, pouze pokud nemáte žádné jiné zařízení, se kterým byste mohli dokončit ověření.",
+    "Reset everything": "Resetovat vše",
+    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Zapomněli nebo ztratili jste všechny metody obnovy? <a>Obnovit vše</a>",
+    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Pokud tak učiníte, nezapomeňte, že žádná z vašich zpráv nebude smazána, ale vyhledávání může být na několik okamžiků zpomaleno během opětovného vytvoření indexu",
+    "View message": "Zobrazit zprávu",
+    "Zoom in": "Přiblížit",
+    "Zoom out": "Oddálit",
+    "%(seconds)ss left": "Zbývá %(seconds)ss",
+    "Change server ACLs": "Změnit seznamy přístupů serveru",
+    "Show options to enable 'Do not disturb' mode": "Zobrazit možnosti pro povolení režimu „Nerušit“"
 }
