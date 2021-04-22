@@ -88,8 +88,8 @@ export function createTestClient() {
  * @param {string} opts.type The event.type
  * @param {string} opts.room The event.room_id
  * @param {string} opts.user The event.user_id
- * @param {string} opts.skey Optional. The state key (auto inserts empty string)
- * @param {Number} opts.ts   Optional. Timestamp for the event
+ * @param {string=} opts.skey Optional. The state key (auto inserts empty string)
+ * @param {number=} opts.ts   Optional. Timestamp for the event
  * @param {Object} opts.content The event.content
  * @param {boolean} opts.event True to make a MatrixEvent.
  * @return {Object} a JSON object representing this event.
@@ -244,6 +244,7 @@ export function mkStubRoom(roomId = null) {
         getDMInviter: jest.fn(),
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
+        isSpaceRoom: jest.fn(() => false),
     };
 }
 
