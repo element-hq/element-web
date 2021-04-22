@@ -85,6 +85,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     }
 
     private onContextMenu = (ev: React.MouseEvent) => {
+        if (this.props.space.getMyMembership() !== "join") return;
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
@@ -187,6 +188,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     };
 
     private renderContextMenu(): React.ReactElement {
+        if (this.props.space.getMyMembership() !== "join") return null;
+
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
             const userId = this.context.getUserId();
