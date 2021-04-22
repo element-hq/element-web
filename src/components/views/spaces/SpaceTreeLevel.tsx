@@ -69,7 +69,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         super(props);
 
         this.state = {
-            collapsed: !props.isNested,   // default to collapsed for root items
+            collapsed: !props.isNested, // default to collapsed for root items
             contextMenuPosition: null,
         };
     }
