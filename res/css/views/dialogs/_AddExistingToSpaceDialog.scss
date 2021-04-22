@@ -157,12 +157,6 @@ limitations under the License.
             .mx_Checkbox {
                 align-items: center;
             }
-
-            .mx_FormButton {
-                min-width: 92px;
-                font-weight: normal;
-                box-sizing: border-box;
-            }
         }
     }
 
@@ -199,9 +193,5 @@ limitations under the License.
         .mx_AccessibleButton_kind_link {
             padding: 0;
         }
-    }
-
-    .mx_FormButton {
-        padding: 8px 22px;
     }
 }
