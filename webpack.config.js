@@ -388,7 +388,7 @@ module.exports = (env, argv) => {
             }),
 
             new HtmlWebpackInjectPreload({
-                files: [{ match: /.*\.(woff2?|ttf|eot)$/ }],
+                files: [{ match: /.*Inter.*\.woff2?$/ }],
             }),
 
             ...additionalPlugins,
