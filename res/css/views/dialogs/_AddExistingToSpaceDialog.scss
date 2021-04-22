@@ -148,6 +148,10 @@ limitations under the License.
                 font-size: $font-15px;
                 line-height: 30px;
                 flex-grow: 1;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin-right: 12px;
             }
 
             .mx_FormButton {
