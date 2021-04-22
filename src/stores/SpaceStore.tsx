@@ -123,7 +123,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             // view last selected room from space
             const roomId = window.localStorage.getItem(getSpaceContextKey(this.activeSpace));
 
-            if (roomId && this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join") {
+            // if the space being selected is an invite then always view that invite
+            // else if the last viewed room in this space is joined then view that
+            // else view space home or home depending on what is being clicked on
+            if (space?.getMyMembership !== "invite" &&
+                this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join"
+            ) {
                 defaultDispatcher.dispatch({
                     action: "view_room",
                     room_id: roomId,
