@@ -125,11 +125,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 defaultDispatcher.dispatch({
                     action: "view_room",
                     room_id: roomId,
+                    context_switch: true,
                 });
             } else if (space) {
                 defaultDispatcher.dispatch({
                     action: "view_room",
                     room_id: space.roomId,
+                    context_switch: true,
                 });
             } else {
                 defaultDispatcher.dispatch({
@@ -448,11 +450,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEvent: MatrixEvent) => {
+    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEvent?: MatrixEvent) => {
         if (ev.getType() === EventType.Tag && !room.isSpaceRoom()) {
             // If the room was in favourites and now isn't or the opposite then update its position in the trees
-            const oldTags = lastEvent.getContent()?.tags;
-            const newTags = ev.getContent()?.tags;
+            const oldTags = lastEvent?.getContent()?.tags || {};
+            const newTags = ev.getContent()?.tags || {};
             if (!!oldTags[DefaultTagID.Favourite] !== !!newTags[DefaultTagID.Favourite]) {
                 this.onRoomUpdate(room);
             }
@@ -514,7 +516,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         switch (payload.action) {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);
-                if (!room) break;
+
+                // Don't auto-switch rooms when reacting to a context-switch
+                // as this is not helpful and can create loops of rooms/space switching
+                if (!room || payload.context_switch) break;
+
+                // persist last viewed room from a space
 
                 if (room.isSpaceRoom()) {
                     this.setActiveSpace(room);

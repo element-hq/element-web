@@ -4,5 +4,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Nismo u mogućnosti verificirati Vašu email adresu. Provjerite dali ste kliknuli link u mailu",
     "The platform you're on": "Platforma na kojoj se nalazite",
     "The version of %(brand)s": "Verzija %(brand)s",
-    "Your language of choice": "Izabrani jezik"
+    "Your language of choice": "Izabrani jezik",
+    "Dismiss": "Odbaci"
 }

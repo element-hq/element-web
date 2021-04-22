@@ -41,7 +41,9 @@ limitations under the License.
         // The combined height must be set in the LeftPanel component for sticky headers
         // to work correctly.
         padding-bottom: 8px;
-        height: 24px;
+        // Allow the container to collapse on itself if its children
+        // are not in the normal document flow
+        max-height: 24px;
         color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {
