@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
+const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
@@ -386,6 +387,10 @@ module.exports = (env, argv) => {
                 chunks: ['usercontent'],
             }),
 
+            new HtmlWebpackInjectPreload({
+                files: [{ match: /.*\.(woff2?|ttf|eot)$/ }],
+            }),
+
             ...additionalPlugins,
         ],
 
@@ -417,6 +422,9 @@ module.exports = (env, argv) => {
             // tedious in Riot since that can take a while.
             hot: false,
             inline: false,
+        },
+        stats: {
+            warnings: false,
         },
     };
 };

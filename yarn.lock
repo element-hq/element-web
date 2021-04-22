@@ -1263,6 +1263,11 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
+"@principalstudio/html-webpack-inject-preload@^1.2.7":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@principalstudio/html-webpack-inject-preload/-/html-webpack-inject-preload-1.2.7.tgz#0c1f0b32a34d814b36ce84111f89990441cc64e8"
+  integrity sha512-KJKkiKG63ugBjf8U0e9jUcI9CLPTFIsxXplEDE0oi3mPpxd90X9SJovo3W2l7yh/ARKIYXhQq8fSXUN7M29TzQ==
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.2.tgz#858f5c4b48d80778fde4b9d541f27edc0d56488b"
@@ -12127,6 +12132,11 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+
+velocity-animate@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-2.0.6.tgz#1811ca14df7fbbef05740256f6cec0fd1b76575f"
+  integrity sha512-tU+/UtSo3GkIjEfk2KM4e24DvpgX0+FzfLr7XqNwm9BCvZUtbCHPq/AFutx/Mkp2bXlUS9EcX8yxu8XmzAv2Kw==
 
 vendors@^1.0.0:
   version "1.0.4"
