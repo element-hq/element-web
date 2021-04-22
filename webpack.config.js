@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
+const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
@@ -244,7 +245,7 @@ module.exports = (env, argv) => {
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),
-                                    require("postcss-calc")({warnWhenCannotResolve: true}),
+                                    require("postcss-calc")(),
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
@@ -344,7 +345,7 @@ module.exports = (env, argv) => {
                 inject: false,
                 excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
                 minify: argv.mode === 'production',
-                vars: {
+                templateParameters: {
                     og_image_url: ogImageUrl,
                 },
             }),
@@ -385,6 +386,10 @@ module.exports = (env, argv) => {
                 filename: 'usercontent/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['usercontent'],
+            }),
+
+            new HtmlWebpackInjectPreload({
+                files: [{ match: /.*Inter.*\.woff2?$/ }],
             }),
 
             ...additionalPlugins,

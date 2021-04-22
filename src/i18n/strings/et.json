@@ -32,5 +32,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Sinu Element'i seadistustes on vigased JSON-vormingus andmed. Palun paranda see viga ja laadi leht uuesti.",
     "Your browser can't run %(brand)s": "%(brand)s ei toimi sinu brauseris",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s kasutab mitmeid uusi brauseri-põhiseid tehnoloogiaid, mis ei ole veel sinu veebibrauseris toetatud.",
-    "Powered by Matrix": "Põhineb Matrix'il"
+    "Powered by Matrix": "Põhineb Matrix'il",
+    "Use %(brand)s on mobile": "Kasuta %(brand)s rakendust nutiseadmes"
 }
