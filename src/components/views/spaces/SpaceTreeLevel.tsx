@@ -45,6 +45,8 @@ import RoomViewStore from "../../../stores/RoomViewStore";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {EventType} from "matrix-js-sdk/src/@types/event";
+import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import {NotificationColor} from "../../../stores/notifications/NotificationColor";
 
 interface IItemProps {
     space?: Room;
@@ -300,7 +302,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             mx_SpaceButton_hasMenuOpen: !!this.state.contextMenuPosition,
             mx_SpaceButton_narrow: isNarrow,
         });
-        const notificationState = SpaceStore.instance.getNotificationState(space.roomId);
+        const notificationState = space.getMyMembership() === "invite"
+            ? StaticNotificationState.forSymbol("!", NotificationColor.Red)
+            : SpaceStore.instance.getNotificationState(space.roomId);
 
         let childItems;
         if (childSpaces && !collapsed) {
