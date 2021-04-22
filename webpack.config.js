@@ -182,8 +182,8 @@ module.exports = (env, argv) => {
                             loader: 'postcss-loader',
                             ident: 'postcss',
                             options: {
-                                sourceMap: true,
-                                plugins: () => [
+                                "sourceMap": true,
+                                "plugins": () => [
                                     // Note that we use significantly fewer plugins on the plain
                                     // CSS parser. If we start to parse plain CSS, we end with all
                                     // kinds of nasty problems (like stylesheets not loading).
@@ -210,7 +210,7 @@ module.exports = (env, argv) => {
                                     // up with broken CSS.
                                     require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                                 ],
-                                parser: "postcss-scss",
+                                "parser": "postcss-scss",
                                 "local-plugins": true,
                             },
                         },
@@ -231,8 +231,8 @@ module.exports = (env, argv) => {
                             loader: 'postcss-loader',
                             ident: 'postcss',
                             options: {
-                                sourceMap: true,
-                                plugins: () => [
+                                "sourceMap": true,
+                                "plugins": () => [
                                     // Note that we use slightly different plugins for SCSS.
 
                                     require('postcss-import')(),
@@ -249,7 +249,7 @@ module.exports = (env, argv) => {
                                     // up with broken CSS.
                                     require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
                                 ],
-                                parser: "postcss-scss",
+                                "parser": "postcss-scss",
                                 "local-plugins": true,
                             },
                         },
@@ -343,7 +343,7 @@ module.exports = (env, argv) => {
                 inject: false,
                 excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
                 minify: argv.mode === 'production',
-                vars: {
+                templateParameters: {
                     og_image_url: ogImageUrl,
                 },
             }),
