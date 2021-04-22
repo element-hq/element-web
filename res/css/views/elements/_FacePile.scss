@@ -45,8 +45,8 @@ limitations under the License.
                 position: absolute;
                 top: 0;
                 left: 0;
-                height: 30px;
-                width: 30px;
+                height: inherit;
+                width: inherit;
                 background: $tertiary-fg-color;
                 mask-position: center;
                 mask-size: 20px;
