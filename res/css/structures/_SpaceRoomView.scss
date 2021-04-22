@@ -224,12 +224,6 @@ $SpaceRoomViewInnerWidth: 428px;
 
                 .mx_FacePile_faces {
                     cursor: pointer;
-
-                    &:hover {
-                        .mx_BaseAvatar {
-                            filter: brightness(0.8);
-                        }
-                    }
                 }
             }
 
