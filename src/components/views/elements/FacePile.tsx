@@ -53,6 +53,8 @@ const FacePile = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, .
     const shownMembers = sortBy(members.filter(m => m.userId !== cli.getUserId()), iteratees).slice(0, numShown);
     if (shownMembers.length < 1) return null;
 
+    // We reverse the order of the shown faces in CSS to simplify their visual overlap,
+    // reverse members in tooltip order to make the order between the two match up.
     const commaSeparatedMembers = shownMembers.map(m => m.rawDisplayName).reverse().join(", ");
 
     let tooltip: ReactNode;
