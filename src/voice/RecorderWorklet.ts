@@ -25,10 +25,6 @@ declare const currentTime: number;
 class MxVoiceWorklet extends AudioWorkletProcessor {
     private nextAmplitudeSecond = 0;
 
-    constructor() {
-        super();
-    }
-
     process(inputs, outputs, parameters) {
         // We only fire amplitude updates once a second to avoid flooding the recording instance
         // with useless data. Much of the data would end up discarded, so we ratelimit ourselves

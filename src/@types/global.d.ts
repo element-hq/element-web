@@ -138,7 +138,6 @@ declare global {
             outputs: Float32Array[][],
             parameters: Record<string, Float32Array>
         ): boolean;
-
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
