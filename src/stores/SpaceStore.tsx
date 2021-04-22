@@ -110,30 +110,32 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._suggestedRooms;
     }
 
-    public async setActiveSpace(space: Room | null) {
+    public async setActiveSpace(space: Room | null, contextSwitch = true) {
         if (space === this.activeSpace) return;
 
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);
 
-        // view last selected room from space
-        const roomId = window.localStorage.getItem(getLastViewedRoomsStorageKey(this.activeSpace));
+        if (contextSwitch) {
+            // view last selected room from space
+            const roomId = window.localStorage.getItem(getLastViewedRoomsStorageKey(this.activeSpace));
 
-        if (roomId && this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join") {
-            defaultDispatcher.dispatch({
-                action: "view_room",
-                room_id: roomId,
-            });
-        } else if (space) {
-            defaultDispatcher.dispatch({
-                action: "view_room",
-                room_id: space.roomId,
-            });
-        } else {
-            defaultDispatcher.dispatch({
-                action: "view_home_page",
-            });
+            if (roomId && this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join") {
+                defaultDispatcher.dispatch({
+                    action: "view_room",
+                    room_id: roomId,
+                });
+            } else if (space) {
+                defaultDispatcher.dispatch({
+                    action: "view_room",
+                    room_id: space.roomId,
+                });
+            } else {
+                defaultDispatcher.dispatch({
+                    action: "view_home_page",
+                });
+            }
         }
 
         // persist space selected
@@ -512,36 +514,30 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         switch (payload.action) {
             case "view_room": {
                 const room = this.matrixClient?.getRoom(payload.room_id);
+                if (!room) break;
 
-                // persist last viewed room from a space
-
-                // Don't save if the room is a space room. This would cause a problem:
-                // When switching to a space home, we first view that room and
-                // only after that we switch to that space. This causes us to
-                // save the space home to be the last viewed room in the home
-                // space.
-                if (room && !room.isSpaceRoom()) {
-                    window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
-                }
-
-                if (room?.getMyMembership() === "join") {
-                    if (room.isSpaceRoom()) {
-                        this.setActiveSpace(room);
-                    } else if (!this.spaceFilteredRooms.get(this._activeSpace?.roomId || HOME_SPACE).has(room.roomId)) {
-                        // TODO maybe reverse these first 2 clauses once space panel active is fixed
-                        let parent = this.rootSpaces.find(s => this.spaceFilteredRooms.get(s.roomId)?.has(room.roomId));
-                        if (!parent) {
-                            parent = this.getCanonicalParent(room.roomId);
-                        }
-                        if (!parent) {
-                            const parents = Array.from(this.parentMap.get(room.roomId) || []);
-                            parent = parents.find(p => this.matrixClient.getRoom(p));
-                        }
-                        if (parent) {
-                            this.setActiveSpace(parent);
-                        }
+                if (room.isSpaceRoom()) {
+                    this.setActiveSpace(room);
+                } else if (!this.getSpaceFilteredRoomIds(this.activeSpace).has(room.roomId)) {
+                    // TODO maybe reverse these first 2 clauses once space panel active is fixed
+                    let parent = this.rootSpaces.find(s => this.spaceFilteredRooms.get(s.roomId)?.has(room.roomId));
+                    if (!parent) {
+                        parent = this.getCanonicalParent(room.roomId);
+                    }
+                    if (!parent) {
+                        const parents = Array.from(this.parentMap.get(room.roomId) || []);
+                        parent = parents.find(p => this.matrixClient.getRoom(p));
+                    }
+                    if (parent) {
+                        // don't trigger a context switch when we are switching a space to match the chosen room
+                        this.setActiveSpace(parent, false);
                     }
                 }
+
+                // Persist last viewed room from a space
+                // we don't await setActiveSpace above as we only care about this.activeSpace being up to date
+                // synchronously for the below code - everything else can and should be async.
+                window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
                 break;
             }
             case "after_leave_room":
