@@ -51,11 +51,7 @@ export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 
 const MAX_SUGGESTED_ROOMS = 20;
 
-const getLastViewedRoomsStorageKey = (space?: Room) => {
-    const lastViewRooms = "mx_last_viewed_rooms";
-    const homeSpace = "home_space";
-    return `${lastViewRooms}_${space?.roomId || homeSpace}`;
-}
+const getSpaceContextKey = (space?: Room) => `mx_space_context_${space?.roomId || "home_space"}`;
 
 const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces, rooms]
     return arr.reduce((result, room: Room) => {
@@ -119,7 +115,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         if (contextSwitch) {
             // view last selected room from space
-            const roomId = window.localStorage.getItem(getLastViewedRoomsStorageKey(this.activeSpace));
+            const roomId = window.localStorage.getItem(getSpaceContextKey(this.activeSpace));
 
             if (roomId && this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join") {
                 defaultDispatcher.dispatch({
@@ -542,7 +538,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 // Persist last viewed room from a space
                 // we don't await setActiveSpace above as we only care about this.activeSpace being up to date
                 // synchronously for the below code - everything else can and should be async.
-                window.localStorage.setItem(getLastViewedRoomsStorageKey(this.activeSpace), payload.room_id);
+                window.localStorage.setItem(getSpaceContextKey(this.activeSpace), payload.room_id);
                 break;
             }
             case "after_leave_room":
