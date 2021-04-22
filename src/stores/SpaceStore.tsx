@@ -535,10 +535,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                         const parents = Array.from(this.parentMap.get(room.roomId) || []);
                         parent = parents.find(p => this.matrixClient.getRoom(p));
                     }
-                    if (parent) {
-                        // don't trigger a context switch when we are switching a space to match the chosen room
-                        this.setActiveSpace(parent, false);
-                    }
+                    // don't trigger a context switch when we are switching a space to match the chosen room
+                    this.setActiveSpace(parent || null, false);
                 }
 
                 // Persist last viewed room from a space
