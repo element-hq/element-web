@@ -32,13 +32,14 @@ import dis from '../../../dispatcher/dispatcher';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks"
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import {normalizeWheelEvent} from "../../../utils/Mouse";
 
 const MIN_ZOOM = 100;
 const MAX_ZOOM = 300;
 // This is used for the buttons
 const ZOOM_STEP = 10;
 // This is used for mouse wheel events
-const ZOOM_COEFFICIENT = 7.5;
+const ZOOM_COEFFICIENT = 0.5;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 
@@ -115,7 +116,9 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onWheel = (ev: WheelEvent) => {
         ev.stopPropagation();
         ev.preventDefault();
-        const newZoom = this.state.zoom - (ev.deltaY * ZOOM_COEFFICIENT);
+
+        const {deltaY} = normalizeWheelEvent(ev);
+        const newZoom = this.state.zoom - (deltaY * ZOOM_COEFFICIENT);
 
         if (newZoom <= MIN_ZOOM) {
             this.setState({
