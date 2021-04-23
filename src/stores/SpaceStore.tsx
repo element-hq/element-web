@@ -583,7 +583,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return state;
     }
 
-    // traverse space tree with DFS calling fn on each space including the given root one
+    // traverse space tree with DFS calling fn on each space including the given root one,
+    // if includeRooms is true then fn will be called on each leaf room, if it is present in multiple sub-spaces
+    // then fn will be called with it multiple times.
     public traverseSpace(
         spaceId: string,
         fn: (roomId: string) => void,

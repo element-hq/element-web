@@ -18,7 +18,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore from "../../src/stores/SpaceStore";
-import { setupAsyncStoreWithClient } from "../utils/test-utils";
+import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
 import { createTestClient, mkEvent, mkStubRoom } from "../test-utils";
 import { EnhancedMap } from "../../src/utils/maps";
 import SettingsStore from "../../src/settings/SettingsStore";
@@ -45,8 +45,14 @@ const testUserId = "@test:user";
 
 let rooms = [];
 
+const mkRoom = (roomId: string) => {
+    const room = mkStubRoom(roomId);
+    rooms.push(room);
+    return room;
+};
+
 const mkSpace = (spaceId: string, children: string[] = []) => {
-    const space = mkStubRoom(spaceId);
+    const space = mkRoom(spaceId);
     space.isSpaceRoom.mockReturnValue(true);
     space.currentState.getStateEvents.mockImplementation(mockStateEventImplementation(children.map(roomId =>
         mkEvent({
@@ -59,7 +65,6 @@ const mkSpace = (spaceId: string, children: string[] = []) => {
             ts: Date.now(),
         }),
     )));
-    rooms.push(space);
     return space;
 };
 
@@ -84,9 +89,8 @@ describe("SpaceStore", () => {
             }
         });
     });
-    afterEach(() => {
-        // @ts-ignore
-        store.onNotReady();
+    afterEach(async () => {
+        await resetAsyncStoreWithClient(store);
     });
 
     describe("static hierarchy resolution tests", () => {
@@ -237,8 +241,59 @@ describe("SpaceStore", () => {
     });
 
     describe("traverseSpace", () => {
-        test.todo("avoids cycles");
-        test.todo("including rooms");
-        test.todo("excluding rooms");
+        beforeEach(() => {
+            mkSpace("!a:server", [
+                mkSpace("!b:server", [
+                    mkSpace("!c:server", [
+                        "!a:server",
+                        mkRoom("!c-child:server").roomId,
+                        mkRoom("!shared-child:server").roomId,
+                    ]).roomId,
+                    mkRoom("!b-child:server").roomId,
+                ]).roomId,
+                mkRoom("!a-child:server").roomId,
+                "!shared-child:server",
+            ]);
+        });
+
+        it("avoids cycles", () => {
+            const seenMap = new Map<string, number>();
+            store.traverseSpace("!b:server", roomId => {
+                seenMap.set(roomId, (seenMap.get(roomId) || 0) + 1);
+            });
+
+            expect(seenMap.size).toBe(3);
+            expect(seenMap.get("!a:server")).toBe(1);
+            expect(seenMap.get("!b:server")).toBe(1);
+            expect(seenMap.get("!c:server")).toBe(1);
+        });
+
+        it("including rooms", () => {
+            const seenMap = new Map<string, number>();
+            store.traverseSpace("!b:server", roomId => {
+                seenMap.set(roomId, (seenMap.get(roomId) || 0) + 1);
+            }, true);
+
+            expect(seenMap.size).toBe(7);
+            expect(seenMap.get("!a:server")).toBe(1);
+            expect(seenMap.get("!a-child:server")).toBe(1);
+            expect(seenMap.get("!b:server")).toBe(1);
+            expect(seenMap.get("!b-child:server")).toBe(1);
+            expect(seenMap.get("!c:server")).toBe(1);
+            expect(seenMap.get("!c-child:server")).toBe(1);
+            expect(seenMap.get("!shared-child:server")).toBe(2);
+        });
+
+        it("excluding rooms", () => {
+            const seenMap = new Map<string, number>();
+            store.traverseSpace("!b:server", roomId => {
+                seenMap.set(roomId, (seenMap.get(roomId) || 0) + 1);
+            }, false);
+
+            expect(seenMap.size).toBe(3);
+            expect(seenMap.get("!a:server")).toBe(1);
+            expect(seenMap.get("!b:server")).toBe(1);
+            expect(seenMap.get("!c:server")).toBe(1);
+        });
     });
 });

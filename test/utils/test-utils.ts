@@ -15,11 +15,19 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import {AsyncStoreWithClient} from "../../src/stores/AsyncStoreWithClient";
+import { AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
+
+// These methods make some use of some private methods on the AsyncStoreWithClient to simplify getting into a consistent
+// ready state without needing to wire up a dispatcher and pretend to be a js-sdk client.
 
 export const setupAsyncStoreWithClient = async (store: AsyncStoreWithClient<any>, client: MatrixClient) => {
     // @ts-ignore
     store.readyStore.useUnitTestClient(client);
     // @ts-ignore
     await store.onReady();
+};
+
+export const resetAsyncStoreWithClient = async (store: AsyncStoreWithClient<any>) => {
+    // @ts-ignore
+    await store.onNotReady();
 };
