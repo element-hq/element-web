@@ -30,6 +30,7 @@ module.exports = {
             "@typescript-eslint/ban-ts-comment": "off",
 
             "quotes": "off",
+            "indent": "off",
             "no-extra-boolean-cast": "off",
         },
     }],
