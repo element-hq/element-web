@@ -128,7 +128,24 @@ describe("SpaceStore", () => {
                 "!company:server",
             ].sort());
             expect(store.invitedSpaces).toStrictEqual([]);
-            // TODO verify actual tree structure
+
+            expect(store.getChildRooms("!space1:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!space1:server")).toStrictEqual([]);
+            expect(store.getChildRooms("!space2:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!space2:server")).toStrictEqual([]);
+            expect(store.getChildRooms("!company:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company:server")).toStrictEqual([
+                client.getRoom("!company_dept1:server"),
+                client.getRoom("!company_dept2:server"),
+            ]);
+            expect(store.getChildRooms("!company_dept1:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company_dept1:server")).toStrictEqual([
+                client.getRoom("!company_dept1_group1:server"),
+            ]);
+            expect(store.getChildRooms("!company_dept1_group1:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company_dept1_group1:server")).toStrictEqual([]);
+            expect(store.getChildRooms("!company_dept2:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company_dept2:server")).toStrictEqual([]);
         });
 
         it("handles a sub-space existing in multiple places in the space tree", async () => {
@@ -150,11 +167,28 @@ describe("SpaceStore", () => {
                 "!company:server",
             ].sort());
             expect(store.invitedSpaces).toStrictEqual([]);
-            // TODO verify actual tree structure
+
+            expect(store.getChildRooms("!space1:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!space1:server")).toStrictEqual([]);
+            expect(store.getChildRooms("!space2:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!space2:server")).toStrictEqual([]);
+            expect(store.getChildRooms("!company:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company:server")).toStrictEqual([
+                client.getRoom("!company_dept1:server"),
+                client.getRoom("!company_dept2:server"),
+                subspace,
+            ]);
+            expect(store.getChildRooms("!company_dept1:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company_dept1:server")).toStrictEqual([
+                client.getRoom("!company_dept1_group1:server"),
+            ]);
+            expect(store.getChildRooms("!company_dept1_group1:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company_dept1_group1:server")).toStrictEqual([subspace]);
+            expect(store.getChildRooms("!company_dept2:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!company_dept2:server")).toStrictEqual([subspace]);
         });
 
-        it("handles basic cycles", async () => {
-            // TODO test all input order permutations
+        it("handles full cycles", async () => {
             mkSpace("!a:server", [
                 mkSpace("!b:server", [
                     mkSpace("!c:server", [
@@ -166,11 +200,16 @@ describe("SpaceStore", () => {
 
             expect(store.spacePanelSpaces.map(r => r.roomId)).toStrictEqual(["!a:server"]);
             expect(store.invitedSpaces).toStrictEqual([]);
-            // TODO verify actual tree structure
+
+            expect(store.getChildRooms("!a:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!a:server")).toStrictEqual([client.getRoom("!b:server")]);
+            expect(store.getChildRooms("!b:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!b:server")).toStrictEqual([client.getRoom("!c:server")]);
+            expect(store.getChildRooms("!c:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!c:server")).toStrictEqual([client.getRoom("!a:server")]);
         });
 
-        it("handles complex cycles", async () => {
-            // TODO test all input order permutations
+        it("handles partial cycles", async () => {
             mkSpace("!b:server", [
                 mkSpace("!a:server", [
                     mkSpace("!c:server", [
@@ -182,11 +221,17 @@ describe("SpaceStore", () => {
 
             expect(store.spacePanelSpaces.map(r => r.roomId)).toStrictEqual(["!b:server"]);
             expect(store.invitedSpaces).toStrictEqual([]);
-            // TODO verify actual tree structure
+
+            expect(store.getChildRooms("!b:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!b:server")).toStrictEqual([client.getRoom("!a:server")]);
+            expect(store.getChildRooms("!a:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!a:server")).toStrictEqual([client.getRoom("!c:server")]);
+            expect(store.getChildRooms("!c:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!c:server")).toStrictEqual([client.getRoom("!a:server")]);
         });
 
-        it("handles really complex cycles", async () => {
-            // TODO test all input order permutations
+        it("handles partial cycles with additional spaces coming off them", async () => {
+            // TODO this test should be failing right now
             mkSpace("!a:server", [
                 mkSpace("!b:server", [
                     mkSpace("!c:server", [
@@ -199,8 +244,18 @@ describe("SpaceStore", () => {
 
             expect(store.spacePanelSpaces.map(r => r.roomId)).toStrictEqual(["!a:server"]);
             expect(store.invitedSpaces).toStrictEqual([]);
-            // TODO verify actual tree structure
-            // TODO this test should be failing right now
+
+            expect(store.getChildRooms("!a:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!a:server")).toStrictEqual([client.getRoom("!b:server")]);
+            expect(store.getChildRooms("!b:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!b:server")).toStrictEqual([client.getRoom("!c:server")]);
+            expect(store.getChildRooms("!c:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!c:server")).toStrictEqual([
+                client.getRoom("!a:server"),
+                client.getRoom("!d:server"),
+            ]);
+            expect(store.getChildRooms("!d:server")).toStrictEqual([]);
+            expect(store.getChildSpaces("!d:server")).toStrictEqual([]);
         });
 
         describe("home space behaviour", () => {
@@ -220,16 +275,16 @@ describe("SpaceStore", () => {
         test.todo("updates state when space invite is rejected");
     });
 
+    describe("active space switching tests", () => {
+        test.todo("//active space");
+    });
+
     describe("notification state tests", () => {
         test.todo("//notification states");
     });
 
     describe("room list prefilter tests", () => {
         test.todo("//room list filter");
-    });
-
-    describe("active space switching tests", () => {
-        test.todo("//active space");
     });
 
     describe("context switching tests", () => {
