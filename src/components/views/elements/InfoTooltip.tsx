@@ -18,8 +18,8 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import Tooltip from './Tooltip';
-import { _t } from "../../../languageHandler";
+import Tooltip, {Alignment} from './Tooltip';
+import {_t} from "../../../languageHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface ITooltipProps {
@@ -61,7 +61,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
             className="mx_InfoTooltip_container"
             tooltipClassName={classNames("mx_InfoTooltip_tooltip", tooltipClassName)}
             label={tooltip || title}
-            forceOnRight={true}
+            alignment={Alignment.Right}
         /> : <div />;
         return (
             <div onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className="mx_InfoTooltip">

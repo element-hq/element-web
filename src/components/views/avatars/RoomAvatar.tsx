@@ -129,7 +129,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
             name: this.props.room.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
     public render() {

@@ -28,6 +28,16 @@ $MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $EventTile_e2e
 
 :root {
     font-size: 10px;
+
+    --transition-short: .1s;
+    --transition-standard: .3s;
+}
+
+@media (prefers-reduced-motion) {
+    :root {
+        --transition-short: 0;
+        --transition-standard: 0;
+    }
 }
 
 html {
@@ -303,7 +313,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
-    opacity: 0.85;
+    opacity: $lightbox-background-bg-opacity;
     background-color: $lightbox-background-bg-color;
 }
 
@@ -315,6 +325,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     max-width: 100%;
     max-height: 100%;
     pointer-events: none;
+    padding: 0;
 }
 
 .mx_Dialog_header {

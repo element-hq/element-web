@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, VoiceRecorder} from "../../../voice/VoiceRecorder";
+import {IRecordingUpdate, VoiceRecording} from "../../../voice/VoiceRecording";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {arrayFastResample, arraySeed} from "../../../utils/arrays";
 import {percentageOf} from "../../../utils/numbers";
 import Waveform from "./Waveform";
 
 interface IProps {
-    recorder: VoiceRecorder;
+    recorder: VoiceRecording;
 }
 
 interface IState {

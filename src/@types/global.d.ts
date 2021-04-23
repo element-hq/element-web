@@ -39,7 +39,7 @@ import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import VoipUserMapper from "../VoipUserMapper";
 import {SpaceStoreClass} from "../stores/SpaceStore";
-import {VoiceRecorder} from "../voice/VoiceRecorder";
+import {VoiceRecording} from "../voice/VoiceRecording";
 
 declare global {
     interface Window {
@@ -71,7 +71,7 @@ declare global {
         mxModalWidgetStore: ModalWidgetStore;
         mxVoipUserMapper: VoipUserMapper;
         mxSpaceStore: SpaceStoreClass;
-        mxVoiceRecorder: typeof VoiceRecorder;
+        mxVoiceRecorder: typeof VoiceRecording;
     }
 
     interface Document {
@@ -139,4 +139,30 @@ declare global {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber
         columnNumber?: number;
     }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    interface AudioWorkletProcessor {
+        readonly port: MessagePort;
+        process(
+            inputs: Float32Array[][],
+            outputs: Float32Array[][],
+            parameters: Record<string, Float32Array>
+        ): boolean;
+    }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    const AudioWorkletProcessor: {
+        prototype: AudioWorkletProcessor;
+        new (options?: AudioWorkletNodeOptions): AudioWorkletProcessor;
+    };
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    function registerProcessor(
+        name: string,
+        processorCtor: (new (
+            options?: AudioWorkletNodeOptions
+        ) => AudioWorkletProcessor) & {
+            parameterDescriptors?: AudioParamDescriptor[];
+        }
+    );
 }

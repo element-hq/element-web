@@ -17,21 +17,21 @@ limitations under the License.
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {_t} from "../../../languageHandler";
 import React from "react";
-import {VoiceRecorder} from "../../../voice/VoiceRecorder";
+import {VoiceRecording} from "../../../voice/VoiceRecording";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import classNames from "classnames";
 import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
+import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 
 interface IProps {
     room: Room;
-    onRecording: (haveRecording: boolean) => void;
 }
 
 interface IState {
-    recorder?: VoiceRecorder;
+    recorder?: VoiceRecording;
 }
 
 /**
@@ -53,17 +53,45 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             await this.state.recorder.stop();
             const mxc = await this.state.recorder.upload();
             MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
-                body: "Voice message",
-                msgtype: "org.matrix.msc2516.voice",
-                url: mxc,
+                "body": "Voice message",
+                "msgtype": "org.matrix.msc2516.voice",
+                //"msgtype": MsgType.Audio,
+                "url": mxc,
+                "info": {
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                    mimetype: this.state.recorder.contentType,
+                    size: this.state.recorder.contentLength,
+                },
+
+                // MSC1767 experiment
+                "org.matrix.msc1767.text": "Voice message",
+                "org.matrix.msc1767.file": {
+                    url: mxc,
+                    name: "Voice message.ogg",
+                    mimetype: this.state.recorder.contentType,
+                    size: this.state.recorder.contentLength,
+                },
+                "org.matrix.msc1767.audio": {
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                    // TODO: @@ TravisR: Waveform? (MSC1767 decision)
+                },
+                "org.matrix.experimental.msc2516.voice": { // MSC2516+MSC1767 experiment
+                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
+
+                    // Events can't have floats, so we try to maintain resolution by using 1024
+                    // as a maximum value. The waveform contains values between zero and 1, so this
+                    // should come out largely sane.
+                    //
+                    // We're expecting about one data point per second of audio.
+                    waveform: this.state.recorder.finalWaveform.map(v => Math.round(v * 1024)),
+                },
             });
+            await VoiceRecordingStore.instance.disposeRecording();
             this.setState({recorder: null});
-            this.props.onRecording(false);
             return;
         }
-        const recorder = new VoiceRecorder(MatrixClientPeg.get());
+        const recorder = VoiceRecordingStore.instance.startRecording();
         await recorder.start();
-        this.props.onRecording(true);
         this.setState({recorder});
     };
 

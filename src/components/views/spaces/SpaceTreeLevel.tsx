@@ -45,6 +45,8 @@ import RoomViewStore from "../../../stores/RoomViewStore";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {EventType} from "matrix-js-sdk/src/@types/event";
+import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import {NotificationColor} from "../../../stores/notifications/NotificationColor";
 
 interface IItemProps {
     space?: Room;
@@ -67,7 +69,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         super(props);
 
         this.state = {
-            collapsed: !props.isNested,   // default to collapsed for root items
+            collapsed: !props.isNested, // default to collapsed for root items
             contextMenuPosition: null,
         };
     }
@@ -83,6 +85,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     }
 
     private onContextMenu = (ev: React.MouseEvent) => {
+        if (this.props.space.getMyMembership() !== "join") return;
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
@@ -185,6 +188,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     };
 
     private renderContextMenu(): React.ReactElement {
+        if (this.props.space.getMyMembership() !== "join") return null;
+
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
             const userId = this.context.getUserId();
@@ -300,7 +305,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             mx_SpaceButton_hasMenuOpen: !!this.state.contextMenuPosition,
             mx_SpaceButton_narrow: isNarrow,
         });
-        const notificationState = SpaceStore.instance.getNotificationState(space.roomId);
+        const notificationState = space.getMyMembership() === "invite"
+            ? StaticNotificationState.forSymbol("!", NotificationColor.Red)
+            : SpaceStore.instance.getNotificationState(space.roomId);
 
         let childItems;
         if (childSpaces && !collapsed) {

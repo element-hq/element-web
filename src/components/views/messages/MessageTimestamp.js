@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {formatFullDate, formatTime} from '../../../DateUtils';
+import {formatFullDate, formatTime, formatFullTime} from '../../../DateUtils';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.messages.MessageTimestamp")
@@ -25,13 +25,24 @@ export default class MessageTimestamp extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,
         showTwelveHour: PropTypes.bool,
+        showFullDate: PropTypes.bool,
+        showSeconds: PropTypes.bool,
     };
 
     render() {
         const date = new Date(this.props.ts);
+        let timestamp;
+        if (this.props.showFullDate) {
+            timestamp = formatFullDate(date, this.props.showTwelveHour, this.props.showSeconds);
+        } else if (this.props.showSeconds) {
+            timestamp = formatFullTime(date, this.props.showTwelveHour);
+        } else {
+            timestamp = formatTime(date, this.props.showTwelveHour);
+        }
+
         return (
             <span className="mx_MessageTimestamp" title={formatFullDate(date, this.props.showTwelveHour)} aria-hidden={true}>
-                { formatTime(date, this.props.showTwelveHour) }
+                {timestamp}
             </span>
         );
     }

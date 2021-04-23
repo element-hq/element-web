@@ -18,6 +18,10 @@ limitations under the License.
     margin-left: 8px;
     margin-bottom: 4px;
 
+    &.mx_RoomSublist_hidden {
+        display: none;
+    }
+
     .mx_RoomSublist_headerContainer {
         // Create a flexbox to make alignment easy
         display: flex;
@@ -37,7 +41,9 @@ limitations under the License.
         // The combined height must be set in the LeftPanel component for sticky headers
         // to work correctly.
         padding-bottom: 8px;
-        height: 24px;
+        // Allow the container to collapse on itself if its children
+        // are not in the normal document flow
+        max-height: 24px;
         color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {

@@ -20,7 +20,7 @@ limitations under the License.
 
 import * as React from 'react';
 
-import { ContentHelpers } from 'matrix-js-sdk';
+import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
@@ -1222,4 +1222,5 @@ export function getCommand(input: string) {
             args,
         };
     }
+    return {};
 }

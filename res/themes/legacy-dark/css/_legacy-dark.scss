@@ -83,6 +83,7 @@ $dialog-close-fg-color: #9fa9ba;
 
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #e7e7e7;
@@ -203,8 +204,6 @@ $message-body-panel-fg-color: $primary-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
-
-$invite-reason-border-color: $room-highlight-color;
 
 $composer-shadow-color: tranparent;
 

@@ -101,7 +101,8 @@ limitations under the License.
     }
 
     .mx_SearchBox {
-        margin: 0;
+        // To match the space around the title
+        margin: 0 0 15px 0;
         flex-grow: 0;
     }
 
@@ -123,7 +124,9 @@ limitations under the License.
     }
 
     .mx_AddExistingToSpaceDialog_section {
-        margin-top: 24px;
+        &:not(:first-child) {
+            margin-top: 24px;
+        }
 
         > h3 {
             margin: 0;
