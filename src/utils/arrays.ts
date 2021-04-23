@@ -54,7 +54,7 @@ export function arraySeed<T>(val: T, length: number): T[] {
  * @param a The array to clone. Must be defined.
  * @returns A copy of the array.
  */
-export function arrayFastClone(a: any[]): any[] {
+export function arrayFastClone<T>(a: T[]): T[] {
     return a.slice(0, a.length);
 }
 

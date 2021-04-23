@@ -130,11 +130,14 @@ export function sanitizedHtmlNode(insaneHtml: string) {
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
 
-export function sanitizedHtmlNodeInnerText(insaneHtml: string) {
-    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
-    const contentDiv = document.createElement("div");
-    contentDiv.innerHTML = saneHtml;
-    return contentDiv.innerText;
+export function getHtmlText(insaneHtml: string) {
+    return sanitizeHtml(insaneHtml, {
+        allowedTags: [],
+        allowedAttributes: {},
+        selfClosing: [],
+        allowedSchemes: [],
+        disallowedTagsMode: 'discard',
+    })
 }
 
 /**
