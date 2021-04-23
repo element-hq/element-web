@@ -3262,5 +3262,17 @@
     "Send and receive voice messages (in development)": "Envoyez et recevez des messages vocaux (en développement)",
     "%(deviceId)s from %(ip)s": "%(deviceId)s depuis %(ip)s",
     "Review to ensure your account is safe": "Vérifiez pour assurer la sécurité de votre compte",
-    "Sends the given message as a spoiler": "Envoie le message flouté"
+    "Sends the given message as a spoiler": "Envoie le message flouté",
+    "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Vous êtes la seule personne ici. Si vous partez, plus personne ne pourra rejoindre cette conversation, y compris vous.",
+    "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Si vous réinitialisez tout, vous allez repartir sans session et utilisateur de confiance. Vous pourriez ne pas voir certains messages passés.",
+    "Only do this if you have no other device to complete verification with.": "Poursuivez seulement si vous n’avez aucun autre appareil avec lequel procéder à la vérification.",
+    "Reset everything": "Tout réinitialiser",
+    "Forgotten or lost all recovery methods? <a>Reset all</a>": "Vous avez perdu ou oublié tous vos moyens de récupération ? <a>Tout réinitialiser</a>",
+    "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Si vous le faites, notez qu’aucun de vos messages ne sera supprimé, mais la recherche pourrait être dégradée pendant quelques instants, le temps de recréer l’index",
+    "View message": "Afficher le message",
+    "Zoom in": "Zoomer",
+    "Zoom out": "Dé-zoomer",
+    "%(seconds)ss left": "%(seconds)s secondes restantes",
+    "Change server ACLs": "Modifier les ACL du serveur",
+    "Show options to enable 'Do not disturb' mode": "Afficher une option pour activer le mode « Ne pas déranger »"
 }
