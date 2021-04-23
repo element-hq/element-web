@@ -62,32 +62,40 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
     componentDidMount() {
         this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
-
-        this.playMedia();
+        this.playAllMedia();
     }
 
-    private playMedia() {
-        const audioOutput = CallMediaHandler.getAudioOutput();
-        const currentMedia = this.getCurrentMedia();
+    componentWillUnmount() {
+        this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
+        this.video.current?.removeEventListener('resize', this.onResize);
+        this.stopAllMedia();
+    }
 
-        currentMedia.srcObject = this.props.feed.stream;
-        currentMedia.autoplay = true;
-        // Don't play audio if the feed is local
-        currentMedia.muted = this.props.feed.isLocal();
+    private playMediaElement(element: HTMLVideoElement | HTMLAudioElement) {
+        if (element instanceof HTMLAudioElement) {
+            const audioOutput = CallMediaHandler.getAudioOutput();
 
-        try {
-            if (audioOutput) {
-                // This seems quite unreliable in Chrome, although I haven't yet managed to make a jsfiddle where
-                // it fails.
-                // It seems reliable if you set the sink ID after setting the srcObject and then set the sink ID
-                // back to the default after the call is over - Dave
-                currentMedia.setSinkId(audioOutput);
+            // Don't play audio if the feed is local
+            element.muted = this.props.feed.isLocal();
+
+            if (audioOutput && !element.muted) {
+                try {
+                    // This seems quite unreliable in Chrome, although I haven't yet managed to make a jsfiddle where
+                    // it fails.
+                    // It seems reliable if you set the sink ID after setting the srcObject and then set the sink ID
+                    // back to the default after the call is over - Dave
+                    element.setSinkId(audioOutput);
+                } catch (e) {
+                    console.error("Couldn't set requested audio output device: using default", e);
+                    logger.warn("Couldn't set requested audio output device: using default", e);
+                }
             }
-        } catch (e) {
-            console.error("Couldn't set requested audio output device: using default", e);
-            logger.warn("Couldn't set requested audio output device: using default", e);
+        } else {
+            element.muted = true;
         }
 
+        element.srcObject = this.props.feed.stream;
+        element.autoplay = true;
         try {
             // A note on calling methods on media elements:
             // We used to have queues per media element to serialise all calls on those elements.
@@ -98,27 +106,30 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            currentMedia.play()
+            element.play()
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }
     }
 
-    componentWillUnmount() {
-        this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
-        this.video.current?.removeEventListener('resize', this.onResize);
+    private stopMediaElement(element: HTMLAudioElement | HTMLVideoElement) {
+        element.pause();
+        element.src = null;
 
-        const currentMedia = this.getCurrentMedia();
-        currentMedia.pause();
-        currentMedia.srcObject = null;
         // As per comment in componentDidMount, setting the sink ID back to the
         // default once the call is over makes setSinkId work reliably. - Dave
         // Since we are not using the same element anymore, the above doesn't
         // seem to be necessary - Šimon
     }
 
-    private getCurrentMedia() {
-        return this.audio.current || this.video.current;
+    private playAllMedia() {
+        this.playMediaElement(this.audio.current);
+        if (this.video.current) this.playMediaElement(this.video.current);
+    }
+
+    private stopAllMedia() {
+        this.stopMediaElement(this.audio.current)
+        if (this.video.current) this.stopMediaElement(this.video.current);
     }
 
     private onNewStream = () => {
@@ -126,7 +137,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
-        this.playMedia();
+        this.playAllMedia();
     };
 
     private onResize = (e) => {
@@ -141,12 +152,15 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             mx_VideoFeed_local: this.props.feed.isLocal(),
             mx_VideoFeed_remote: !this.props.feed.isLocal(),
             mx_VideoFeed_voice: this.state.videoMuted,
-            mx_VideoFeed_video: !this.state.videoMuted,
             mx_VideoFeed_mirror: (
                 this.props.feed.isLocal() &&
                 SettingsStore.getValue('VideoView.flipVideoHorizontally')
             ),
         };
+
+        const audio = (
+            <audio ref={this.audio} />
+        );
 
         if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
@@ -159,12 +173,15 @@ export default class VideoFeed extends React.Component<IProps, IState> {
                         height={avatarSize}
                         width={avatarSize}
                     />
-                    <audio ref={this.audio}></audio>
+                    {audio}
                 </div>
             );
         } else {
             return (
-                <video className={classnames(videoClasses)} ref={this.video} />
+                <div className={classnames(videoClasses)}>
+                    <video className="mx_VideoFeed_video" ref={this.video} />
+                    {audio}
+                </div>
             );
         }
     }
