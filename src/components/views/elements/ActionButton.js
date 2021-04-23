@@ -20,7 +20,9 @@ import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.ActionButton")
 export default class ActionButton extends React.Component {
     static propTypes = {
         size: PropTypes.string,

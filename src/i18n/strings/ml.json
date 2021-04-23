@@ -127,5 +127,8 @@
     "Failed to change settings": "സജ്ജീകരണങ്ങള്‍ മാറ്റുന്നവാന്‍ സാധിച്ചില്ല",
     "View Source": "സോഴ്സ് കാണുക",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "നിങ്ങളുടെ ഇപ്പോളത്തെ ബ്രൌസര്‍ റയട്ട് പ്രവര്‍ത്തിപ്പിക്കാന്‍ പൂര്‍ണമായും പര്യാപത്മല്ല. പല ഫീച്ചറുകളും പ്രവര്‍ത്തിക്കാതെയിരിക്കാം. ഈ ബ്രൌസര്‍ തന്നെ ഉപയോഗിക്കണമെങ്കില്‍ മുന്നോട്ട് പോകാം. പക്ഷേ നിങ്ങള്‍ നേരിടുന്ന പ്രശ്നങ്ങള്‍ നിങ്ങളുടെ ഉത്തരവാദിത്തത്തില്‍ ആയിരിക്കും!",
-    "Checking for an update...": "അപ്ഡേറ്റ് ഉണ്ടോ എന്ന് തിരയുന്നു..."
+    "Checking for an update...": "അപ്ഡേറ്റ് ഉണ്ടോ എന്ന് തിരയുന്നു...",
+    "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
+    "Sign In": "പ്രവേശിക്കുക",
+    "Create Account": "അക്കൗണ്ട് സൃഷ്ടിക്കുക"
 }

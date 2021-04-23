@@ -28,9 +28,11 @@ import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import ErrorDialog from "../dialogs/ErrorDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
@@ -53,6 +55,27 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
+
+    let streamAudioStreamButton;
+    if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
+        const onStreamAudioClick = async () => {
+            try {
+                await startJitsiAudioLivestream(widgetMessaging, roomId);
+            } catch (err) {
+                console.error("Failed to start livestream", err);
+                // XXX: won't i18n well, but looks like widget api only support 'message'?
+                const message = err.message || _t("Unable to start audio streaming.");
+                Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
+                    title: _t('Failed to start livestream'),
+                    description: message,
+                });
+            }
+            onFinished();
+        };
+        streamAudioStreamButton = <IconizedContextMenuOption
+            onClick={onStreamAudioClick} label={_t("Start audio stream")}
+        />;
+    }
 
     let unpinButton;
     if (showUnpin) {
@@ -163,6 +186,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
+            { streamAudioStreamButton }
             { editButton }
             { revokeButton }
             { deleteButton }
@@ -175,4 +199,3 @@ const WidgetContextMenu: React.FC<IProps> = ({
 };
 
 export default WidgetContextMenu;
-

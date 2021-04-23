@@ -21,9 +21,12 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 function nop() {}
 
+@replaceableComponent("views.groups.GroupTile")
 class GroupTile extends React.Component {
     static propTypes = {
         groupId: PropTypes.string.isRequired,
@@ -71,8 +74,9 @@ class GroupTile extends React.Component {
         const descElement = this.props.showDescription ?
             <div className="mx_GroupTile_desc">{ profile.shortDescription }</div> :
             <div />;
-        const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
-            profile.avatarUrl, avatarHeight, avatarHeight, "crop") : null;
+        const httpUrl = profile.avatarUrl
+            ? mediaFromMxc(profile.avatarUrl).getSquareThumbnailHttp(avatarHeight)
+            : null;
 
         let avatarElement = (
             <div className="mx_GroupTile_avatar">

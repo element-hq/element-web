@@ -23,7 +23,9 @@ import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.PinnedEventTile")
 export default class PinnedEventTile extends React.Component {
     static propTypes = {
         mxRoom: PropTypes.object.isRequired,

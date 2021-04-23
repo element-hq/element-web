@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {Filter} from 'matrix-js-sdk';
+import {Filter} from 'matrix-js-sdk/src/filter';
 import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
@@ -26,10 +26,12 @@ import { _t } from '../../languageHandler';
 import BaseCard from "../views/right_panel/BaseCard";
 import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import DesktopBuildsNotice, {WarningKind} from "../views/elements/DesktopBuildsNotice";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
+@replaceableComponent("structures.FilePanel")
 class FilePanel extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

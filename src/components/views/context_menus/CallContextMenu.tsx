@@ -22,11 +22,13 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import CallHandler from '../../../CallHandler';
 import InviteDialog, { KIND_CALL_TRANSFER } from '../dialogs/InviteDialog';
 import Modal from '../../../Modal';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
 }
 
+@replaceableComponent("views.context_menus.CallContextMenu")
 export default class CallContextMenu extends React.Component<IProps> {
     static propTypes = {
         // js-sdk User object. Not required because it might not exist.

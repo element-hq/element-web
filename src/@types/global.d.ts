@@ -38,6 +38,8 @@ import UserActivity from "../UserActivity";
 import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import VoipUserMapper from "../VoipUserMapper";
+import {SpaceStoreClass} from "../stores/SpaceStore";
+import {VoiceRecording} from "../voice/VoiceRecording";
 
 declare global {
     interface Window {
@@ -68,6 +70,8 @@ declare global {
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
         mxVoipUserMapper: VoipUserMapper;
+        mxSpaceStore: SpaceStoreClass;
+        mxVoiceRecorder: typeof VoiceRecording;
     }
 
     interface Document {
