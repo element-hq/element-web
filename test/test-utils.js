@@ -224,7 +224,7 @@ export function mkStubRoom(roomId = null) {
         hasMembershipState: () => null,
         getVersion: () => '1',
         shouldUpgradeToVersion: () => null,
-        getMyMembership: () => "join",
+        getMyMembership: jest.fn().mockReturnValue("join"),
         maySendMessage: jest.fn().mockReturnValue(true),
         currentState: {
             getStateEvents: jest.fn(),
@@ -233,11 +233,7 @@ export function mkStubRoom(roomId = null) {
             maySendEvent: jest.fn().mockReturnValue(true),
             members: [],
         },
-        tags: {
-            "m.favourite": {
-                order: 0.5,
-            },
-        },
+        tags: {},
         setBlacklistUnverifiedDevices: jest.fn(),
         on: jest.fn(),
         removeListener: jest.fn(),
@@ -245,6 +241,9 @@ export function mkStubRoom(roomId = null) {
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
         isSpaceRoom: jest.fn(() => false),
+        getUnreadNotificationCount: jest.fn(() => 0),
+        getEventReadUpTo: jest.fn(() => null),
+        timeline: [],
     };
 }
 
