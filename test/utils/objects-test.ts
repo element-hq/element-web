@@ -23,7 +23,7 @@ import {
     objectKeyChanges,
     objectShallowClone,
     objectWithOnly,
-} from "../src/utils/objects";
+} from "../../src/utils/objects";
 
 describe('objects', () => {
     describe('objectExcluding', () => {

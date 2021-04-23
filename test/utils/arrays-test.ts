@@ -25,8 +25,8 @@ import {
     arrayUnion,
     ArrayUtil,
     GroupedArray,
-} from "../src/utils/arrays";
-import {objectFromEntries} from "../src/utils/objects";
+} from "../../src/utils/arrays";
+import {objectFromEntries} from "../../src/utils/objects";
 
 function expectSample(i: number, input: number[], expected: number[]) {
     console.log(`Resample case index: ${i}`); // for debugging test failures
