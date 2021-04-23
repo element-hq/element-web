@@ -19,9 +19,11 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore from "../../src/stores/SpaceStore";
 import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
-import { createTestClient, mkEvent, mkStubRoom } from "../test-utils";
+import { mkEvent, mkStubRoom, stubClient } from "../test-utils";
 import { EnhancedMap } from "../../src/utils/maps";
 import SettingsStore from "../../src/settings/SettingsStore";
+import DMRoomMap from "../../src/utils/DMRoomMap";
+import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
 type MatrixEvent = any; // importing from js-sdk upsets things
 
@@ -71,9 +73,14 @@ const mkSpace = (spaceId: string, children: string[] = []) => {
 const getValue = jest.fn();
 SettingsStore.getValue = getValue;
 
+const getUserIdForRoomId = jest.fn();
+// @ts-ignore
+DMRoomMap.sharedInstance = { getUserIdForRoomId };
+
 describe("SpaceStore", () => {
+    stubClient();
     const store = SpaceStore.instance;
-    const client = createTestClient();
+    const client = MatrixClientPeg.get();
 
     const run = async () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
@@ -259,11 +266,80 @@ describe("SpaceStore", () => {
         });
 
         describe("home space behaviour", () => {
-            test.todo("home space contains orphaned rooms");
-            test.todo("home space contains favourites");
-            test.todo("home space contains dm rooms");
-            test.todo("home space contains invites");
-            test.todo("home space contains invites even if they are also shown in a space");
+            const fav1 = "!fav1:server";
+            const fav2 = "!fav2:server";
+            const fav3 = "!fav3:server";
+            const dm1 = "!dm1:server";
+            const dm1Partner = "@dm1Partner:server";
+            const dm2 = "!dm2:server";
+            const dm2Partner = "@dm2Partner:server";
+            const dm3 = "!dm3:server";
+            const dm3Partner = "@dm3Partner:server";
+            const orphan1 = "!orphan1:server";
+            const orphan2 = "!orphan2:server";
+            const invite1 = "!invite1:server";
+            const invite2 = "!invite2:server";
+            const spaceRoom1 = "!spaceRoom1:server";
+            const space1 = "!space1:server";
+            const space2 = "!space2:server";
+            const space3 = "!space3:server";
+
+            beforeEach(async () => {
+                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, spaceRoom1].forEach(mkRoom);
+                mkSpace(space1, [fav1, spaceRoom1]);
+                mkSpace(space2, [fav2, fav3]);
+                mkSpace(space3, [invite2]);
+
+                [fav1, fav2, fav3].forEach(roomId => {
+                    client.getRoom(roomId).tags = {
+                        "m.favourite": {
+                            order: 0.5,
+                        },
+                    };
+                });
+
+                [invite1, invite2].forEach(roomId => {
+                    client.getRoom(roomId).getMyMembership.mockReturnValue("invite");
+                });
+
+                getUserIdForRoomId.mockImplementation(roomId => {
+                    return {
+                        [dm1]: dm1Partner,
+                        [dm2]: dm2Partner,
+                        [dm3]: dm3Partner,
+                    }[roomId];
+                });
+                await run();
+            });
+
+            it("home space contains orphaned rooms", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(orphan1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(null).has(orphan2)).toBeTruthy();
+            });
+
+            it("home space contains favourites", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(fav1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(null).has(fav2)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(null).has(fav3)).toBeTruthy();
+            });
+
+            it("home space contains dm rooms", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(dm1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(null).has(dm2)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(null).has(dm3)).toBeTruthy();
+            });
+
+            it("home space contains invites", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(invite1)).toBeTruthy();
+            });
+
+            it("home space contains invites even if they are also shown in a space", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(invite2)).toBeTruthy();
+            });
+
+            it("home space does not contain rooms/low priority from rooms within spaces", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(spaceRoom1)).toBeFalsy();
+            });
         });
     });
 
