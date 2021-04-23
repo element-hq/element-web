@@ -405,8 +405,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         this.spaceFilteredRooms.forEach((roomIds, s) => {
             // Update NotificationStates
-            const rooms = this.matrixClient.getRooms().filter(room => roomIds.has(room.roomId));
-            this.getNotificationState(s)?.setRooms(rooms);
+            this.getNotificationState(s)?.setRooms(visibleRooms.filter(room => roomIds.has(room.roomId)));
         });
     }, 100, {trailing: true, leading: true});
 

@@ -23,6 +23,8 @@ import {clamp} from "../utils/numbers";
 import EventEmitter from "events";
 import {IDestroyable} from "../utils/IDestroyable";
 import {Singleflight} from "../utils/Singleflight";
+import {PayloadEvent, WORKLET_NAME} from "./consts";
+import {arrayFastClone} from "../utils/arrays";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -49,14 +51,32 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorderSource: MediaStreamAudioSourceNode;
     private recorderStream: MediaStream;
     private recorderFFT: AnalyserNode;
-    private recorderProcessor: ScriptProcessorNode;
+    private recorderWorklet: AudioWorkletNode;
     private buffer = new Uint8Array(0);
     private mxc: string;
     private recording = false;
     private observable: SimpleObservable<IRecordingUpdate>;
+    private amplitudes: number[] = []; // at each second mark, generated
 
     public constructor(private client: MatrixClient) {
         super();
+    }
+
+    public get finalWaveform(): number[] {
+        return arrayFastClone(this.amplitudes);
+    }
+
+    public get contentType(): string {
+        return "audio/ogg";
+    }
+
+    public get contentLength(): number {
+        return this.buffer.length;
+    }
+
+    public get durationSeconds(): number {
+        if (!this.recorder) throw new Error("Duration not available without a recording");
+        return this.recorderContext.currentTime;
     }
 
     private async makeRecorder() {
@@ -80,18 +100,34 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         // it makes the time domain less than helpful.
         this.recorderFFT.fftSize = 64;
 
-        // We use an audio processor to get accurate timing information.
-        // The size of the audio buffer largely decides how quickly we push timing/waveform data
-        // out of this class. Smaller buffers mean we update more frequently as we can't hold as
-        // many bytes. Larger buffers mean slower updates. For scale, 1024 gives us about 30Hz of
-        // updates and 2048 gives us about 20Hz. We use 1024 to get as close to perceived realtime
-        // as possible. Must be a power of 2.
-        this.recorderProcessor = this.recorderContext.createScriptProcessor(1024, CHANNELS, CHANNELS);
+        // Set up our worklet. We use this for timing information and waveform analysis: the
+        // web audio API prefers this be done async to avoid holding the main thread with math.
+        const mxRecorderWorkletPath = document.body.dataset.vectorRecorderWorkletScript;
+        if (!mxRecorderWorkletPath) {
+            throw new Error("Unable to create recorder: no worklet script registered");
+        }
+        await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
+        this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
 
         // Connect our inputs and outputs
         this.recorderSource.connect(this.recorderFFT);
-        this.recorderSource.connect(this.recorderProcessor);
-        this.recorderProcessor.connect(this.recorderContext.destination);
+        this.recorderSource.connect(this.recorderWorklet);
+        this.recorderWorklet.connect(this.recorderContext.destination);
+
+        // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
+        this.recorderWorklet.port.onmessage = (ev) => {
+            switch (ev.data['ev']) {
+                case PayloadEvent.Timekeep:
+                    this.processAudioUpdate(ev.data['timeSeconds']);
+                    break;
+                case PayloadEvent.AmplitudeMark:
+                    // Sanity check to make sure we're adding about one sample per second
+                    if (ev.data['forSecond'] === this.amplitudes.length) {
+                        this.amplitudes.push(ev.data['amplitude']);
+                    }
+                    break;
+            }
+        };
 
         this.recorder = new Recorder({
             encoderPath, // magic from webpack
@@ -138,7 +174,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return this.mxc;
     }
 
-    private processAudioUpdate = (ev: AudioProcessingEvent) => {
+    private processAudioUpdate = (timeSeconds: number) => {
         if (!this.recording) return;
 
         // The time domain is the input to the FFT, which means we use an array of the same
@@ -162,12 +198,12 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
         this.observable.update({
             waveform: translatedData,
-            timeSeconds: ev.playbackTime,
+            timeSeconds: timeSeconds,
         });
 
         // Now that we've updated the data/waveform, let's do a time check. We don't want to
         // go horribly over the limit. We also emit a warning state if needed.
-        const secondsLeft = TARGET_MAX_LENGTH - ev.playbackTime;
+        const secondsLeft = TARGET_MAX_LENGTH - timeSeconds;
         if (secondsLeft <= 0) {
             // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
             this.stop();
@@ -191,7 +227,6 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         }
         this.observable = new SimpleObservable<IRecordingUpdate>();
         await this.makeRecorder();
-        this.recorderProcessor.addEventListener("audioprocess", this.processAudioUpdate);
         await this.recorder.start();
         this.recording = true;
         this.emit(RecordingState.Started);
@@ -205,6 +240,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
             // Disconnect the source early to start shutting down resources
             this.recorderSource.disconnect();
+            this.recorderWorklet.disconnect();
             await this.recorder.stop();
 
             // close the context after the recorder so the recorder doesn't try to
@@ -216,7 +252,6 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
             // Finally do our post-processing and clean up
             this.recording = false;
-            this.recorderProcessor.removeEventListener("audioprocess", this.processAudioUpdate);
             await this.recorder.close();
             this.emit(RecordingState.Ended);
 
@@ -240,7 +275,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
         this.emit(RecordingState.Uploading);
         this.mxc = await this.client.uploadContent(new Blob([this.buffer], {
-            type: "audio/ogg",
+            type: this.contentType,
         }), {
             onlyContentUri: false, // to stop the warnings in the console
         }).then(r => r['content_uri']);
