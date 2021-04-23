@@ -24,6 +24,7 @@ import { EnhancedMap } from "../../src/utils/maps";
 import SettingsStore from "../../src/settings/SettingsStore";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import defaultDispatcher from "../../src/dispatcher/dispatcher";
 
 type MatrixEvent = any; // importing from js-sdk upsets things
 
@@ -49,6 +50,7 @@ let rooms = [];
 
 const mkRoom = (roomId: string) => {
     const room = mkStubRoom(roomId);
+    room.currentState.getStateEvents.mockImplementation(mockStateEventImplementation([]));
     rooms.push(room);
     return room;
 };
@@ -81,6 +83,8 @@ describe("SpaceStore", () => {
     stubClient();
     const store = SpaceStore.instance;
     const client = MatrixClientPeg.get();
+
+    const viewRoom = roomId => defaultDispatcher.dispatch({ action: "view_room", room_id: roomId }, true);
 
     const run = async () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
@@ -387,10 +391,58 @@ describe("SpaceStore", () => {
     });
 
     describe("space auto switching tests", () => {
-        // it("no switch required, room is in target space");
-        // it("switch to canonical parent space for room");
-        // it("switch to first containing space for room");
-        // it("switch to home for orphaned room");
+        const space1 = "!space1:server";
+        const space2 = "!space2:server";
+        const room1 = "!room1:server"; // in space 1 & 2
+        const room2 = "!room2:server"; // in space 1 & 2 (canonical)
+        const orphan1 = "!orphan:server";
+
+        beforeEach(async () => {
+            [room1, room2, orphan1].forEach(mkRoom);
+            mkSpace(space1, [room1, room2]);
+            mkSpace(space2, [room1, room2]);
+
+            client.getRoom(room2).currentState.getStateEvents.mockImplementation(mockStateEventImplementation([
+                mkEvent({
+                    event: true,
+                    type: EventType.SpaceParent,
+                    room: room2,
+                    user: testUserId,
+                    skey: space2,
+                    content: { via: [], canonical: true },
+                    ts: Date.now(),
+                }),
+            ]));
+            await run();
+        });
+
+        it("no switch required, room is in current space", async () => {
+            viewRoom(room1);
+            await store.setActiveSpace(client.getRoom(space1), false);
+            viewRoom(room2);
+            expect(store.activeSpace).toBe(client.getRoom(space1));
+        });
+
+        it("switch to canonical parent space for room", async () => {
+            viewRoom(room1);
+            await store.setActiveSpace(null, false);
+            viewRoom(room2);
+            expect(store.activeSpace).toBe(client.getRoom(space2));
+        });
+
+        it("switch to first containing space for room", async () => {
+            viewRoom(room2);
+            await store.setActiveSpace(null, false);
+            viewRoom(room1);
+            expect(store.activeSpace).toBe(client.getRoom(space1));
+        });
+
+        it("switch to home for orphaned room", async () => {
+            viewRoom(room1);
+            await store.setActiveSpace(client.getRoom(space1), false);
+            viewRoom(orphan1);
+            expect(store.activeSpace).toBeNull();
+        });
     });
 
     describe("traverseSpace", () => {
