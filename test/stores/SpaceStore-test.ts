@@ -265,7 +265,7 @@ describe("SpaceStore", () => {
             expect(store.getChildSpaces("!d:server")).toStrictEqual([]);
         });
 
-        describe("home space behaviour", () => {
+        describe("test fixture 1", () => {
             const fav1 = "!fav1:server";
             const fav2 = "!fav2:server";
             const fav3 = "!fav3:server";
@@ -287,7 +287,7 @@ describe("SpaceStore", () => {
             beforeEach(async () => {
                 [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, spaceRoom1].forEach(mkRoom);
                 mkSpace(space1, [fav1, spaceRoom1]);
-                mkSpace(space2, [fav2, fav3]);
+                mkSpace(space2, [fav1, fav2, fav3, spaceRoom1]);
                 mkSpace(space3, [invite2]);
 
                 [fav1, fav2, fav3].forEach(roomId => {
@@ -340,6 +340,25 @@ describe("SpaceStore", () => {
             it("home space does not contain rooms/low priority from rooms within spaces", () => {
                 expect(store.getSpaceFilteredRoomIds(null).has(spaceRoom1)).toBeFalsy();
             });
+
+            it("space contains child rooms", () => {
+                const space = client.getRoom(space1);
+                expect(store.getSpaceFilteredRoomIds(space).has(fav1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(space).has(spaceRoom1)).toBeTruthy();
+            });
+
+            it("space contains child favourites", () => {
+                const space = client.getRoom(space2);
+                expect(store.getSpaceFilteredRoomIds(space).has(fav1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(space).has(fav2)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(space).has(fav3)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(space).has(spaceRoom1)).toBeTruthy();
+            });
+
+            it("space contains child invites", () => {
+                const space = client.getRoom(space3);
+                expect(store.getSpaceFilteredRoomIds(space).has(invite2)).toBeTruthy();
+            });
         });
     });
 
@@ -368,7 +387,10 @@ describe("SpaceStore", () => {
     });
 
     describe("space auto switching tests", () => {
-        test.todo("//auto pick space for a room");
+        // it("no switch required, room is in target space");
+        // it("switch to canonical parent space for room");
+        // it("switch to first containing space for room");
+        // it("switch to home for orphaned room");
     });
 
     describe("traverseSpace", () => {
@@ -388,43 +410,37 @@ describe("SpaceStore", () => {
         });
 
         it("avoids cycles", () => {
-            const seenMap = new Map<string, number>();
-            store.traverseSpace("!b:server", roomId => {
-                seenMap.set(roomId, (seenMap.get(roomId) || 0) + 1);
-            });
+            const fn = jest.fn();
+            store.traverseSpace("!b:server", fn);
 
-            expect(seenMap.size).toBe(3);
-            expect(seenMap.get("!a:server")).toBe(1);
-            expect(seenMap.get("!b:server")).toBe(1);
-            expect(seenMap.get("!c:server")).toBe(1);
+            expect(fn).toBeCalledTimes(3);
+            expect(fn).toBeCalledWith("!a:server");
+            expect(fn).toBeCalledWith("!b:server");
+            expect(fn).toBeCalledWith("!c:server");
         });
 
         it("including rooms", () => {
-            const seenMap = new Map<string, number>();
-            store.traverseSpace("!b:server", roomId => {
-                seenMap.set(roomId, (seenMap.get(roomId) || 0) + 1);
-            }, true);
+            const fn = jest.fn();
+            store.traverseSpace("!b:server", fn, true);
 
-            expect(seenMap.size).toBe(7);
-            expect(seenMap.get("!a:server")).toBe(1);
-            expect(seenMap.get("!a-child:server")).toBe(1);
-            expect(seenMap.get("!b:server")).toBe(1);
-            expect(seenMap.get("!b-child:server")).toBe(1);
-            expect(seenMap.get("!c:server")).toBe(1);
-            expect(seenMap.get("!c-child:server")).toBe(1);
-            expect(seenMap.get("!shared-child:server")).toBe(2);
+            expect(fn).toBeCalledTimes(8); // twice for shared-child
+            expect(fn).toBeCalledWith("!a:server");
+            expect(fn).toBeCalledWith("!a-child:server");
+            expect(fn).toBeCalledWith("!b:server");
+            expect(fn).toBeCalledWith("!b-child:server");
+            expect(fn).toBeCalledWith("!c:server");
+            expect(fn).toBeCalledWith("!c-child:server");
+            expect(fn).toBeCalledWith("!shared-child:server");
         });
 
         it("excluding rooms", () => {
-            const seenMap = new Map<string, number>();
-            store.traverseSpace("!b:server", roomId => {
-                seenMap.set(roomId, (seenMap.get(roomId) || 0) + 1);
-            }, false);
+            const fn = jest.fn();
+            store.traverseSpace("!b:server", fn, false);
 
-            expect(seenMap.size).toBe(3);
-            expect(seenMap.get("!a:server")).toBe(1);
-            expect(seenMap.get("!b:server")).toBe(1);
-            expect(seenMap.get("!c:server")).toBe(1);
+            expect(fn).toBeCalledTimes(3);
+            expect(fn).toBeCalledWith("!a:server");
+            expect(fn).toBeCalledWith("!b:server");
+            expect(fn).toBeCalledWith("!c:server");
         });
     });
 });
