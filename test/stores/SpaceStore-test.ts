@@ -79,6 +79,25 @@ const getUserIdForRoomId = jest.fn();
 // @ts-ignore
 DMRoomMap.sharedInstance = { getUserIdForRoomId };
 
+const fav1 = "!fav1:server";
+const fav2 = "!fav2:server";
+const fav3 = "!fav3:server";
+const dm1 = "!dm1:server";
+const dm1Partner = "@dm1Partner:server";
+const dm2 = "!dm2:server";
+const dm2Partner = "@dm2Partner:server";
+const dm3 = "!dm3:server";
+const dm3Partner = "@dm3Partner:server";
+const orphan1 = "!orphan1:server";
+const orphan2 = "!orphan2:server";
+const invite1 = "!invite1:server";
+const invite2 = "!invite2:server";
+const room1 = "!room1:server";
+const room2 = "!room2:server";
+const space1 = "!space1:server";
+const space2 = "!space2:server";
+const space3 = "!space3:server";
+
 describe("SpaceStore", () => {
     stubClient();
     const store = SpaceStore.instance;
@@ -270,28 +289,10 @@ describe("SpaceStore", () => {
         });
 
         describe("test fixture 1", () => {
-            const fav1 = "!fav1:server";
-            const fav2 = "!fav2:server";
-            const fav3 = "!fav3:server";
-            const dm1 = "!dm1:server";
-            const dm1Partner = "@dm1Partner:server";
-            const dm2 = "!dm2:server";
-            const dm2Partner = "@dm2Partner:server";
-            const dm3 = "!dm3:server";
-            const dm3Partner = "@dm3Partner:server";
-            const orphan1 = "!orphan1:server";
-            const orphan2 = "!orphan2:server";
-            const invite1 = "!invite1:server";
-            const invite2 = "!invite2:server";
-            const spaceRoom1 = "!spaceRoom1:server";
-            const space1 = "!space1:server";
-            const space2 = "!space2:server";
-            const space3 = "!space3:server";
-
             beforeEach(async () => {
-                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, spaceRoom1].forEach(mkRoom);
-                mkSpace(space1, [fav1, spaceRoom1]);
-                mkSpace(space2, [fav1, fav2, fav3, spaceRoom1]);
+                [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, room1].forEach(mkRoom);
+                mkSpace(space1, [fav1, room1]);
+                mkSpace(space2, [fav1, fav2, fav3, room1]);
                 mkSpace(space3, [invite2]);
 
                 [fav1, fav2, fav3].forEach(roomId => {
@@ -342,13 +343,13 @@ describe("SpaceStore", () => {
             });
 
             it("home space does not contain rooms/low priority from rooms within spaces", () => {
-                expect(store.getSpaceFilteredRoomIds(null).has(spaceRoom1)).toBeFalsy();
+                expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeFalsy();
             });
 
             it("space contains child rooms", () => {
                 const space = client.getRoom(space1);
                 expect(store.getSpaceFilteredRoomIds(space).has(fav1)).toBeTruthy();
-                expect(store.getSpaceFilteredRoomIds(space).has(spaceRoom1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(space).has(room1)).toBeTruthy();
             });
 
             it("space contains child favourites", () => {
@@ -356,7 +357,7 @@ describe("SpaceStore", () => {
                 expect(store.getSpaceFilteredRoomIds(space).has(fav1)).toBeTruthy();
                 expect(store.getSpaceFilteredRoomIds(space).has(fav2)).toBeTruthy();
                 expect(store.getSpaceFilteredRoomIds(space).has(fav3)).toBeTruthy();
-                expect(store.getSpaceFilteredRoomIds(space).has(spaceRoom1)).toBeTruthy();
+                expect(store.getSpaceFilteredRoomIds(space).has(room1)).toBeTruthy();
             });
 
             it("space contains child invites", () => {
@@ -387,16 +388,72 @@ describe("SpaceStore", () => {
     });
 
     describe("context switching tests", () => {
-        test.todo("//context switching");
+        const fn = jest.spyOn(defaultDispatcher, "dispatch");
+
+        beforeEach(async () => {
+            [room1, room2, orphan1].forEach(mkRoom);
+            mkSpace(space1, [room1, room2]);
+            mkSpace(space2, [room2]);
+            await run();
+        });
+        afterEach(() => {
+            fn.mockClear();
+            localStorage.clear();
+        });
+
+        const getCurrentRoom = () => fn.mock.calls.reverse().find(([p]) => p.action === "view_room")?.[0].room_id;
+
+        it("last viewed room in target space is the current viewed and in both spaces", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room2);
+            await store.setActiveSpace(client.getRoom(space2));
+            viewRoom(room2);
+            await store.setActiveSpace(client.getRoom(space1));
+            expect(getCurrentRoom()).toBe(room2);
+        });
+
+        it("last viewed room in target space is in the current space", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room2);
+            await store.setActiveSpace(client.getRoom(space2));
+            expect(getCurrentRoom()).toBe(space2);
+            await store.setActiveSpace(client.getRoom(space1));
+            expect(getCurrentRoom()).toBe(room2);
+        });
+
+        it("last viewed room in target space is not in the current space", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room1);
+            await store.setActiveSpace(client.getRoom(space2));
+            viewRoom(room2);
+            await store.setActiveSpace(client.getRoom(space1));
+            expect(getCurrentRoom()).toBe(room1);
+        });
+
+        it("last viewed room is target space is not known", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room1);
+            localStorage.setItem(`mx_space_context_${space2}`, orphan2);
+            await store.setActiveSpace(client.getRoom(space2));
+            expect(getCurrentRoom()).toBe(space2);
+        });
+
+        it("no last viewed room in target space", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room1);
+            await store.setActiveSpace(client.getRoom(space2));
+            expect(getCurrentRoom()).toBe(space2);
+        });
+
+        it("no last viewed room in home space", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            viewRoom(room1);
+            await store.setActiveSpace(null);
+            expect(fn.mock.calls[fn.mock.calls.length - 1][0]).toStrictEqual({ action: "view_home_page" });
+        });
     });
 
     describe("space auto switching tests", () => {
-        const space1 = "!space1:server";
-        const space2 = "!space2:server";
-        const room1 = "!room1:server"; // in space 1 & 2
-        const room2 = "!room2:server"; // in space 1 & 2 (canonical)
-        const orphan1 = "!orphan:server";
-
         beforeEach(async () => {
             [room1, room2, orphan1].forEach(mkRoom);
             mkSpace(space1, [room1, room2]);
