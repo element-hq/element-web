@@ -3249,7 +3249,7 @@
     "Reset event store": "Lähtesta sündmuste andmekogu",
     "Verify other login": "Verifitseeri muu sisselogimissessioon",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Suhtlen teise osapoolega %(transferTarget)s. <a>Saadan andmeid kasutajale %(transferee)s</a>",
-    "Message search initilisation failed": "Sõnumite otsingu alustamine ei õnnestunud",
+    "Message search initialisation failed": "Sõnumite otsingu alustamine ei õnnestunud",
     "Invite messages are hidden by default. Click to show the message.": "Kutsed on vaikimisi peidetud. Sõnumi nägemiseks klõpsi.",
     "Accept on your other login…": "Nõustu oma teise sisselogimissessiooniga…",
     "Avatar": "Tunnuspilt",

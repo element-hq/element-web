@@ -3163,7 +3163,7 @@
     "Quick actions": "Snelle acties",
     "Invite to just this room": "Uitnodigen voor alleen dit gesprek",
     "Warn before quitting": "Waarschuwen voordat u afsluit",
-    "Message search initilisation failed": "Zoeken in berichten opstarten is mislukt",
+    "Message search initialisation failed": "Zoeken in berichten opstarten is mislukt",
     "Manage & explore rooms": "Beheer & ontdek gesprekken",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Overleggen met %(transferTarget)s. <a>Verstuur naar %(transferee)s</a>",
     "unknown person": "onbekend persoon",

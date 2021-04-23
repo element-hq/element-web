@@ -3213,7 +3213,7 @@
     "Review to ensure your account is safe": "Revisa que tu cuenta esté segura",
     "Sends the given message as a spoiler": "Envía el mensaje como un spoiler",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Consultando a %(transferTarget)s. <a>Transferir a %(transferee)s</a>",
-    "Message search initilisation failed": "Ha fallado la inicialización de la búsqueda de mensajes",
+    "Message search initialisation failed": "Ha fallado la inicialización de la búsqueda de mensajes",
     "Reset event store?": "¿Restablecer almacenamiento de eventos?",
     "You most likely do not want to reset your event index store": "Lo más probable es que no quieras restablecer tu almacenamiento de índice de ecentos",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few momentswhilst the index is recreated": "Si lo haces, ten en cuenta que no se borrarán tus mensajes, pero la experiencia de búsqueda será peor durante unos momentos mientras se recrea el índice",
