@@ -59,7 +59,6 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
-import { createNewMatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
@@ -395,7 +394,7 @@ export default class CallHandler {
         // We don't allow placing more than one call per room, but that doesn't mean there
         // can't be more than one, eg. in a glare situation. This checks that the given call
         // is the call we consider 'the' call for its room.
-        const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
 
         const callForThisRoom = this.getCallForRoom(mappedRoomId);
         return callForThisRoom && call.callId === callForThisRoom.callId;
@@ -539,7 +538,7 @@ export default class CallHandler {
                 // on a call with can cause you to send a room invite to someone.
                 await ensureDMExists(MatrixClientPeg.get(), newNativeAssertedIdentity);
 
-                const newMappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
+                const newMappedRoomId = this.roomIdForCall(call);
                 console.log(`Old room ID: ${mappedRoomId}, new room ID: ${newMappedRoomId}`);
                 if (newMappedRoomId !== mappedRoomId) {
                     this.removeCallForRoom(mappedRoomId);
@@ -691,7 +690,7 @@ export default class CallHandler {
 
         const timeUntilTurnCresExpire = MatrixClientPeg.get().getTurnServersExpiry() - Date.now();
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
-        const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
+        const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
         this.calls.set(roomId, call);
         if (transferee) {
