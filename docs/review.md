@@ -87,6 +87,14 @@ We recognise that this testing policy will slow things down a bit, but overall
 it should encourage better long-term health of the app and give everyone more
 confidence when making changes as coverage increases over time.
 
+For changes guarded by a feature flag, we currently lean towards prioritising
+our ability to evolve quickly using such flags and thus we will not currently
+require tests to appear at the same time as the initial landing of features
+guarded by flags, as long as (for new flagged features going forward) the
+feature author understands that they are effectively deferring part of their
+work (adding tests) until later and tests are expected to appear before the
+feature can be enabled by default.
+
 ## Design and Product Review
 
 We want to ensure that all changes to Element fit with our design and product
