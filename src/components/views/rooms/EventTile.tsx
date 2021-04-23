@@ -925,7 +925,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             // so that the correct avatar is shown as the text is
             // `$target accepted the invitation for $email`
             if (this.props.mxEvent.getContent().third_party_invite) {
-               member = this.props.mxEvent.target;
+                member = this.props.mxEvent.target;
             } else {
                 member = this.props.mxEvent.sender;
             }
@@ -942,8 +942,9 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (needsSenderProfile) {
             if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
-                                        mxEvent={this.props.mxEvent}
-                                        enableFlair={this.props.enableFlair} />;
+                    mxEvent={this.props.mxEvent}
+                    enableFlair={this.props.enableFlair}
+                />;
             } else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={this.props.enableFlair} />;
             }
@@ -1006,12 +1007,12 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const linkedTimestamp = <a
-                href={permalink}
-                onClick={this.onPermalinkClicked}
-                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
-            >
-                { timestamp }
-            </a>;
+            href={permalink}
+            onClick={this.onPermalinkClicked}
+            aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+        >
+            { timestamp }
+        </a>;
 
         const useIRCLayout = this.props.layout == Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
@@ -1049,11 +1050,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                         </div>
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this._tile}
-                                           mxEvent={this.props.mxEvent}
-                                           highlights={this.props.highlights}
-                                           highlightLink={this.props.highlightLink}
-                                           showUrlPreview={this.props.showUrlPreview}
-                                           onHeightChanged={this.props.onHeightChanged} />
+                                mxEvent={this.props.mxEvent}
+                                highlights={this.props.highlights}
+                                highlightLink={this.props.highlightLink}
+                                showUrlPreview={this.props.showUrlPreview}
+                                onHeightChanged={this.props.onHeightChanged}
+                            />
                         </div>
                     </div>
                 );
@@ -1063,12 +1065,13 @@ export default class EventTile extends React.Component<IProps, IState> {
                     <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this._tile}
-                                           mxEvent={this.props.mxEvent}
-                                           highlights={this.props.highlights}
-                                           highlightLink={this.props.highlightLink}
-                                           showUrlPreview={this.props.showUrlPreview}
-                                           tileShape={this.props.tileShape}
-                                           onHeightChanged={this.props.onHeightChanged} />
+                                mxEvent={this.props.mxEvent}
+                                highlights={this.props.highlights}
+                                highlightLink={this.props.highlightLink}
+                                showUrlPreview={this.props.showUrlPreview}
+                                tileShape={this.props.tileShape}
+                                onHeightChanged={this.props.onHeightChanged}
+                            />
                         </div>
                         <a
                             className="mx_EventTile_senderDetailsLink"
@@ -1106,12 +1109,13 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
-                                           mxEvent={this.props.mxEvent}
-                                           highlights={this.props.highlights}
-                                           highlightLink={this.props.highlightLink}
-                                           onHeightChanged={this.props.onHeightChanged}
-                                           replacingEventId={this.props.replacingEventId}
-                                           showUrlPreview={false} />
+                                mxEvent={this.props.mxEvent}
+                                highlights={this.props.highlights}
+                                highlightLink={this.props.highlightLink}
+                                onHeightChanged={this.props.onHeightChanged}
+                                replacingEventId={this.props.replacingEventId}
+                                showUrlPreview={false}
+                            />
                         </div>
                     </div>
                 );
@@ -1136,14 +1140,15 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
-                                           mxEvent={this.props.mxEvent}
-                                           replacingEventId={this.props.replacingEventId}
-                                           editState={this.props.editState}
-                                           highlights={this.props.highlights}
-                                           highlightLink={this.props.highlightLink}
-                                           showUrlPreview={this.props.showUrlPreview}
-                                           permalinkCreator={this.props.permalinkCreator}
-                                           onHeightChanged={this.props.onHeightChanged} />
+                                mxEvent={this.props.mxEvent}
+                                replacingEventId={this.props.replacingEventId}
+                                editState={this.props.editState}
+                                highlights={this.props.highlights}
+                                highlightLink={this.props.highlightLink}
+                                showUrlPreview={this.props.showUrlPreview}
+                                permalinkCreator={this.props.permalinkCreator}
+                                onHeightChanged={this.props.onHeightChanged}
+                            />
                             { keyRequestInfo }
                             { reactionsRow }
                             { actionBar }

@@ -215,28 +215,27 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 <div className="mx_SettingsTab_section">
                     <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {
-                            _t( "If you've submitted a bug via GitHub, debug logs can help " +
-                                "us track down the problem. Debug logs contain application " +
-                                "usage data including your username, the IDs or aliases of " +
-                                "the rooms or groups you have visited and the usernames of " +
-                                "other users. They do not contain messages.",
-                            )
-                        }
+                        {_t(
+                            "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contain messages.",
+                        )}
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this._onBugReport} kind='primary'>
                                 {_t("Submit debug logs")}
                             </AccessibleButton>
                         </div>
-                        {
-                            _t( "To report a Matrix-related security issue, please read the Matrix.org " +
-                                "<a>Security Disclosure Policy</a>.", {},
-                                {
-                                    'a': (sub) =>
-                                        <a href="https://matrix.org/security-disclosure-policy/"
-                                           rel="noreferrer noopener" target="_blank">{sub}</a>,
-                                })
-                        }
+                        {_t(
+                            "To report a Matrix-related security issue, please read the Matrix.org " +
+                            "<a>Security Disclosure Policy</a>.", {},
+                            {
+                                a: sub => <a href="https://matrix.org/security-disclosure-policy/"
+                                    rel="noreferrer noopener" target="_blank"
+                                >{sub}</a>,
+                            },
+                        )}
                     </div>
                 </div>
             );
@@ -272,7 +271,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
                         {_t("Access Token:") + ' '}
                         <AccessibleButton element="span" onClick={this._showSpoiler}
-                                          data-spoiler={MatrixClientPeg.get().getAccessToken()}>
+                            data-spoiler={MatrixClientPeg.get().getAccessToken()}
+                        >
                             &lt;{ _t("click to reveal") }&gt;
                         </AccessibleButton>
                         <div className='mx_HelpUserSettingsTab_debugButton'>

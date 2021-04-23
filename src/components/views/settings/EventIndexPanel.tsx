@@ -153,18 +153,17 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
                 <div>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Securely cache encrypted messages locally for them " +
-                            "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
-                            {
-                                size: formatBytes(this.state.eventIndexSize, 0),
-                                // This drives the singular / plural string
-                                // selection for "room" / "rooms" only.
-                                count: this.state.roomCount,
-                                rooms: formatCountLong(this.state.roomCount),
-                            },
-                        )}
-                    </div>
+                    <div className='mx_SettingsTab_subsectionText'>{_t(
+                        "Securely cache encrypted messages locally for them " +
+                        "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
+                        {
+                            size: formatBytes(this.state.eventIndexSize, 0),
+                            // This drives the singular / plural string
+                            // selection for "room" / "rooms" only.
+                            count: this.state.roomCount,
+                            rooms: formatCountLong(this.state.roomCount),
+                        },
+                    )}</div>
                     <div>
                         <AccessibleButton kind="primary" onClick={this._onManage}>
                             {_t("Manage")}
@@ -175,10 +174,10 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         } else if (!this.state.eventIndexingEnabled && EventIndexPeg.supportIsInstalled()) {
             eventIndexingSettings = (
                 <div>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {_t( "Securely cache encrypted messages locally for them to " +
-                             "appear in search results.")}
-                    </div>
+                    <div className='mx_SettingsTab_subsectionText'>{_t(
+                        "Securely cache encrypted messages locally for them to " +
+                        "appear in search results.",
+                    )}</div>
                     <div>
                         <AccessibleButton kind="primary" disabled={this.state.enabling}
                             onClick={this._onEnable}>
@@ -196,40 +195,36 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             );
 
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>
+                <div className='mx_SettingsTab_subsectionText'>{_t(
+                    "%(brand)s is missing some components required for securely " +
+                    "caching encrypted messages locally. If you'd like to " +
+                    "experiment with this feature, build a custom %(brand)s Desktop " +
+                    "with <nativeLink>search components added</nativeLink>.",
                     {
-                        _t( "%(brand)s is missing some components required for securely " +
-                            "caching encrypted messages locally. If you'd like to " +
-                            "experiment with this feature, build a custom %(brand)s Desktop " +
-                            "with <nativeLink>search components added</nativeLink>.",
-                            {
-                                brand,
-                            },
-                            {
-                                'nativeLink': (sub) => <a href={nativeLink} target="_blank"
-                                    rel="noreferrer noopener">{sub}</a>,
-                            },
-                        )
-                    }
-                </div>
+                        brand,
+                    },
+                    {
+                        nativeLink: sub => <a href={nativeLink}
+                            target="_blank" rel="noreferrer noopener"
+                        >{sub}</a>,
+                    },
+                )}</div>
             );
         } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>
+                <div className='mx_SettingsTab_subsectionText'>{_t(
+                    "%(brand)s can't securely cache encrypted messages locally " +
+                    "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
+                    "for encrypted messages to appear in search results.",
                     {
-                        _t( "%(brand)s can't securely cache encrypted messages locally " +
-                            "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
-                            "for encrypted messages to appear in search results.",
-                            {
-                                brand,
-                            },
-                            {
-                                'desktopLink': (sub) => <a href="https://element.io/get-started"
-                                    target="_blank" rel="noreferrer noopener">{sub}</a>,
-                            },
-                        )
-                    }
-                </div>
+                        brand,
+                    },
+                    {
+                        desktopLink: sub => <a href="https://element.io/get-started"
+                            target="_blank" rel="noreferrer noopener"
+                        >{sub}</a>,
+                    },
+                )}</div>
             );
         } else {
             eventIndexingSettings = (
@@ -241,19 +236,18 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         }
                     </p>
                     {EventIndexPeg.error && (
-                    <details>
-                        <summary>{_t("Advanced")}</summary>
-                        <code>
-                            {EventIndexPeg.error.message}
-                        </code>
-                        <p>
-                            <AccessibleButton key="delete" kind="danger" onClick={this._confirmEventStoreReset}>
-                                {_t("Reset")}
-                            </AccessibleButton>
-                        </p>
-                    </details>
+                        <details>
+                            <summary>{_t("Advanced")}</summary>
+                            <code>
+                                {EventIndexPeg.error.message}
+                            </code>
+                            <p>
+                                <AccessibleButton key="delete" kind="danger" onClick={this._confirmEventStoreReset}>
+                                    {_t("Reset")}
+                                </AccessibleButton>
+                            </p>
+                        </details>
                     )}
-
                 </div>
             );
         }

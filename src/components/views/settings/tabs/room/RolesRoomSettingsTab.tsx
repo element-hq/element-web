@@ -87,8 +87,10 @@ export class BannedUser extends React.Component<IBannedUserProps> {
 
         if (this.props.canUnban) {
             unbanButton = (
-                <AccessibleButton kind='danger_sm' onClick={this._onUnbanClick}
-                                  className='mx_RolesRoomSettingsTab_unbanBtn'>
+                <AccessibleButton className='mx_RolesRoomSettingsTab_unbanBtn'
+                    kind='danger_sm'
+                    onClick={this._onUnbanClick}
+                >
                     { _t('Unban') }
                 </AccessibleButton>
             );
@@ -345,8 +347,9 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                             if (sender) bannedBy = sender.name;
                             return (
                                 <BannedUser key={member.userId} canUnban={canBanUsers}
-                                            member={member} reason={banEvent.reason}
-                                            by={bannedBy} />
+                                    member={member} reason={banEvent.reason}
+                                    by={bannedBy}
+                                />
                             );
                         })}
                     </ul>
