@@ -599,11 +599,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private getPlausibleRooms(): Room[] {
         if (!this.matrixClient) return [];
 
-        let rooms = [
-            ...this.matrixClient.getVisibleRooms(),
-            // also show space invites in the room list
-            ...this.matrixClient.getRooms().filter(r => r.isSpaceRoom() && r.getMyMembership() === "invite"),
-        ].filter(r => VisibilityProvider.instance.isRoomVisible(r));
+        let rooms = this.matrixClient.getVisibleRooms().filter(r => VisibilityProvider.instance.isRoomVisible(r));
 
         if (this.prefilterConditions.length > 0) {
             rooms = rooms.filter(r => {
