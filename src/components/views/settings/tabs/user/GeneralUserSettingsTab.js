@@ -192,7 +192,11 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
         this.setState({language: newLanguage});
-        PlatformPeg.get().reload();
+        const platform = PlatformPeg.get();
+        if (platform) {
+            platform.reload();
+            platform.setLanguage(newLanguage);
+        }
     };
 
     _onSpellCheckLanguagesChange = (languages) => {
