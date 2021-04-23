@@ -510,6 +510,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.eventIndexManager;
     }
 
+    async setLanguage(language: string) {
+        return this._ipcCall('setLanguage', language);
+    }
+
     setSpellCheckLanguages(preferredLangs: string[]) {
         this._ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
             console.log("Failed to send setSpellCheckLanguages IPC to Electron");
