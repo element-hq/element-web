@@ -104,7 +104,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
-        window.addEventListener("resize", this.onWindowResize);
+        window.addEventListener("resize", this.calculateZoom);
         this.calculateZoom();
     }
 
@@ -112,11 +112,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
     }
 
-    private onWindowResize = (ev) => {
-        this.calculateZoom();
-    }
-
-    private calculateZoom() {
+    private calculateZoom = () => {
         // TODO: What if we don't have width and height props?
 
         const imageWrapper = document.getElementsByClassName(IMAGE_WRAPPER_CLASS)[0];
