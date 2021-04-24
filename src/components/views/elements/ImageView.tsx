@@ -115,9 +115,18 @@ export default class ImageView extends React.Component<IProps, IState> {
         // TODO: What if we don't have width and height props?
 
         const imageWrapper = document.getElementsByClassName(IMAGE_WRAPPER_CLASS)[0];
+
         const zoomX = imageWrapper.clientWidth / this.props.width;
         const zoomY = imageWrapper.clientHeight / this.props.height;
+        // We set minZoom to the min of the zoomX and zoomY to avoid overflow in
+        // any direction. We also multiply by MAX_SCALE to get a gap around the
+        // image by default
         const minZoom = Math.min(zoomX, zoomY) * MAX_SCALE;
+        // If minZoom is bigger or equal to 1, it means we scaling the image up
+        // to fit the viewport and therefore we want to disable zooming, so we
+        // set the maxZoom to be the same as the minZoom. Otherwise, we are
+        // scaling the image down - we want the user to be allowed to zoom to
+        // 100%
         const maxZoom = minZoom >= 1 ? minZoom : 1;
 
         if (this.state.zoom <= this.state.minZoom) this.setState({zoom: minZoom});
