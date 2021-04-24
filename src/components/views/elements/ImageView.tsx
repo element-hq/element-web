@@ -79,7 +79,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.state = {
             zoom: 0,
             minZoom: MAX_SCALE,
-            maxZoom: 100,
+            maxZoom: MAX_SCALE,
             rotation: 0,
             translationX: 0,
             translationY: 0,
