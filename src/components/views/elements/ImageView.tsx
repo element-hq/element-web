@@ -100,7 +100,6 @@ export default class ImageView extends React.Component<IProps, IState> {
     private previousY = 0;
 
     componentDidMount() {
-        console.log("LOG calculating", this.props.width, this.props.height);
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
