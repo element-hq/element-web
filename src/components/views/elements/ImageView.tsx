@@ -34,8 +34,6 @@ import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks"
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import {normalizeWheelEvent} from "../../../utils/Mouse";
 
-const MIN_ZOOM = 100;
-const MAX_ZOOM = 300;
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
 // This is used for the buttons
@@ -66,6 +64,7 @@ interface IProps {
 interface IState {
     zoom: number,
     minZoom: number,
+    maxZoom: number,
     rotation: number,
     translationX: number,
     translationY: number,
@@ -79,7 +78,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             zoom: 0,
-            minZoom: 100,
+            minZoom: MAX_SCALE,
+            maxZoom: 100,
             rotation: 0,
             translationX: 0,
             translationY: 0,
@@ -100,11 +100,12 @@ export default class ImageView extends React.Component<IProps, IState> {
     private previousY = 0;
 
     componentDidMount() {
+        console.log("LOG calculating", this.props.width, this.props.height);
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
         window.addEventListener("resize", this.onWindowResize);
-        this.calculateMinZoom();
+        this.calculateZoom();
     }
 
     componentWillUnmount() {
@@ -112,18 +113,23 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     private onWindowResize = (ev) => {
-        this.calculateMinZoom();
+        this.calculateZoom();
     }
 
-    private calculateMinZoom() {
-        // TODO: What if we don't have width and  height props?
+    private calculateZoom() {
+        // TODO: What if we don't have width and height props?
+
         const imageWrapper = document.getElementsByClassName(IMAGE_WRAPPER_CLASS)[0];
         const zoomX = (imageWrapper.clientWidth / this.props.width) * 100;
         const zoomY = (imageWrapper.clientHeight / this.props.height) * 100;
-        const zoom = Math.min(zoomX, zoomY) * MAX_SCALE;
+        const minZoom = Math.min(zoomX, zoomY) * MAX_SCALE;
+        const maxZoom = minZoom >= 100 ? minZoom : 100;
 
-        if (this.state.zoom <= this.state.minZoom) this.setState({zoom: zoom});
-        this.setState({minZoom: zoom});
+        if (this.state.zoom <= this.state.minZoom) this.setState({zoom: minZoom});
+        this.setState({
+            minZoom: minZoom,
+            maxZoom: maxZoom,
+        });
     }
 
     private onKeyDown = (ev: KeyboardEvent) => {
@@ -141,16 +147,16 @@ export default class ImageView extends React.Component<IProps, IState> {
         const {deltaY} = normalizeWheelEvent(ev);
         const newZoom = this.state.zoom - (deltaY * ZOOM_COEFFICIENT);
 
-        if (newZoom <= MIN_ZOOM) {
+        if (newZoom <= this.state.minZoom) {
             this.setState({
-                zoom: MIN_ZOOM,
+                zoom: this.state.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
             return;
         }
-        if (newZoom >= MAX_ZOOM) {
-            this.setState({zoom: MAX_ZOOM});
+        if (newZoom >= this.state.maxZoom) {
+            this.setState({zoom: this.state.maxZoom});
             return;
         }
 
@@ -172,8 +178,8 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private onZoomInClick = () => {
-        if (this.state.zoom >= MAX_ZOOM) {
-            this.setState({zoom: MAX_ZOOM});
+        if (this.state.zoom >= this.state.maxZoom) {
+            this.setState({zoom: this.state.maxZoom});
             return;
         }
 
@@ -183,9 +189,9 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private onZoomOutClick = () => {
-        if (this.state.zoom <= MIN_ZOOM) {
+        if (this.state.zoom <= this.state.minZoom) {
             this.setState({
-                zoom: MIN_ZOOM,
+                zoom: this.state.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
@@ -238,8 +244,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         if (ev.button !== 0) return;
 
         // Zoom in if we are completely zoomed out
-        if (this.state.zoom === MIN_ZOOM) {
-            this.setState({zoom: MAX_ZOOM});
+        if (this.state.zoom === this.state.minZoom) {
+            this.setState({zoom: this.state.maxZoom});
             return;
         }
 
@@ -272,7 +278,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             Math.abs(this.state.translationY - this.previousY) < ZOOM_DISTANCE
         ) {
             this.setState({
-                zoom: MIN_ZOOM,
+                zoom: this.state.minZoom,
                 translationX: 0,
                 translationY: 0,
             });
@@ -311,7 +317,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         let cursor;
         if (this.state.moving) {
             cursor= "grabbing";
-        } else if (this.state.zoom === MIN_ZOOM) {
+        } else if (this.state.zoom === this.state.minZoom) {
             cursor = "zoom-in";
         } else {
             cursor = "zoom-out";
