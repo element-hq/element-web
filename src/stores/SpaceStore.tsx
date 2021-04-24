@@ -499,6 +499,17 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
+    protected async reset() {
+        this.rootSpaces = [];
+        this.orphanedRooms = new Set();
+        this.parentMap = new EnhancedMap();
+        this.notificationStateMap = new Map();
+        this.spaceFilteredRooms = new Map();
+        this._activeSpace = null;
+        this._suggestedRooms = [];
+        this._invitedSpaces = new Set();
+    }
+
     protected async onNotReady() {
         if (!SettingsStore.getValue("feature_spaces")) return;
         if (this.matrixClient) {
@@ -508,7 +519,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             this.matrixClient.removeListener("Room.accountData", this.onRoomAccountData);
             this.matrixClient.removeListener("accountData", this.onAccountData);
         }
-        await this.reset({});
+        await this.reset();
     }
 
     protected async onReady() {
