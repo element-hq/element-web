@@ -203,7 +203,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     public getChildSpaces(spaceId: string): Room[] {
-        return this.getChildren(spaceId).filter(r => r.isSpaceRoom());
+        // don't show invited subspaces as they surface at the top level for better visibility
+        return this.getChildren(spaceId).filter(r => r.isSpaceRoom() && r.getMyMembership() === "join");
     }
 
     public getParents(roomId: string, canonicalOnly = false): Room[] {

@@ -288,6 +288,17 @@ describe("SpaceStore", () => {
             expect(store.getChildSpaces("!d:server")).toStrictEqual([]);
         });
 
+        it("invite to a subspace is only shown at the top level", async () => {
+            mkSpace(invite1).getMyMembership.mockReturnValue("invite");
+            mkSpace(space1, [invite1]);
+            await run();
+
+            expect(store.spacePanelSpaces).toStrictEqual([client.getRoom(space1)]);
+            expect(store.getChildSpaces(space1)).toStrictEqual([]);
+            expect(store.getChildRooms(space1)).toStrictEqual([]);
+            expect(store.invitedSpaces).toStrictEqual([client.getRoom(invite1)]);
+        });
+
         describe("test fixture 1", () => {
             beforeEach(async () => {
                 [fav1, fav2, fav3, dm1, dm2, dm3, orphan1, orphan2, invite1, invite2, room1].forEach(mkRoom);
