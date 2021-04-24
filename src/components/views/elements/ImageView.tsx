@@ -37,9 +37,9 @@ import {normalizeWheelEvent} from "../../../utils/Mouse";
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
 // This is used for the buttons
-const ZOOM_STEP = 10;
+const ZOOM_STEP = 0.10;
 // This is used for mouse wheel events
-const ZOOM_COEFFICIENT = 0.5;
+const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
 const IMAGE_WRAPPER_CLASS = "mx_ImageView_image_wrapper";
