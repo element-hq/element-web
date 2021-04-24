@@ -36,13 +36,15 @@ import {normalizeWheelEvent} from "../../../utils/Mouse";
 
 const MIN_ZOOM = 100;
 const MAX_ZOOM = 300;
+// Max scale to keep gaps around the image
+const MAX_SCALE = 0.95;
 // This is used for the buttons
 const ZOOM_STEP = 10;
 // This is used for mouse wheel events
 const ZOOM_COEFFICIENT = 0.5;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
-
+const IMAGE_WRAPPER_CLASS = "mx_ImageView_image_wrapper";
 
 interface IProps {
     src: string, // the source of the image being displayed
@@ -62,8 +64,9 @@ interface IProps {
 }
 
 interface IState {
-    rotation: number,
     zoom: number,
+    minZoom: number,
+    rotation: number,
     translationX: number,
     translationY: number,
     moving: boolean,
@@ -75,8 +78,9 @@ export default class ImageView extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
         this.state = {
+            zoom: 0,
+            minZoom: 100,
             rotation: 0,
-            zoom: MIN_ZOOM,
             translationX: 0,
             translationY: 0,
             moving: false,
@@ -99,10 +103,27 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
+        window.addEventListener("resize", this.onWindowResize);
+        this.calculateMinZoom();
     }
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
+    }
+
+    private onWindowResize = (ev) => {
+        this.calculateMinZoom();
+    }
+
+    private calculateMinZoom() {
+        // TODO: What if we don't have width and  height props?
+        const imageWrapper = document.getElementsByClassName(IMAGE_WRAPPER_CLASS)[0];
+        const zoomX = (imageWrapper.clientWidth / this.props.width) * 100;
+        const zoomY = (imageWrapper.clientHeight / this.props.height) * 100;
+        const zoom = Math.min(zoomX, zoomY) * MAX_SCALE;
+
+        if (this.state.zoom <= this.state.minZoom) this.setState({zoom: zoom});
+        this.setState({minZoom: zoom});
     }
 
     private onKeyDown = (ev: KeyboardEvent) => {
@@ -427,7 +448,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                         {this.renderContextMenu()}
                     </div>
                 </div>
-                <div className="mx_ImageView_image_wrapper">
+                <div className={IMAGE_WRAPPER_CLASS}>
                     <img
                         src={this.props.src}
                         title={this.props.name}
