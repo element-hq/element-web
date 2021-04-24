@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +25,8 @@ import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import InviteReason from "../elements/InviteReason";
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -45,6 +45,7 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
+@replaceableComponent("views.rooms.RoomPreviewBar")
 export default class RoomPreviewBar extends React.Component {
     static propTypes = {
         onJoinClick: PropTypes.func,
@@ -304,6 +305,7 @@ export default class RoomPreviewBar extends React.Component {
         let showSpinner = false;
         let title;
         let subTitle;
+        let reasonElement;
         let primaryActionHandler;
         let primaryActionLabel;
         let secondaryActionHandler;
@@ -489,6 +491,12 @@ export default class RoomPreviewBar extends React.Component {
                     primaryActionLabel = _t("Accept");
                 }
 
+                const myUserId = MatrixClientPeg.get().getUserId();
+                const reason = this.props.room.currentState.getMember(myUserId).events.member.event.content.reason;
+                if (reason) {
+                    reasonElement = <InviteReason reason={reason} />;
+                }
+
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("Reject");
                 secondaryActionHandler = this.props.onRejectClick;
@@ -580,6 +588,7 @@ export default class RoomPreviewBar extends React.Component {
                     { titleElement }
                     { subTitleElements }
                 </div>
+                { reasonElement }
                 <div className="mx_RoomPreviewBar_actions">
                     { secondaryButton }
                     { extraComponents }

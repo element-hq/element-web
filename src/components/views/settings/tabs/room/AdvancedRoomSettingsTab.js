@@ -22,7 +22,9 @@ import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.room.AdvancedRoomSettingsTab")
 export default class AdvancedRoomSettingsTab extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,

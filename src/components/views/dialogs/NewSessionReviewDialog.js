@@ -66,6 +66,10 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
             verificationRequestPromise: requestPromise,
             member: cli.getUser(userId),
+            onFinished: async () => {
+                const request = await requestPromise;
+                request.cancel();
+            },
         });
     }
 

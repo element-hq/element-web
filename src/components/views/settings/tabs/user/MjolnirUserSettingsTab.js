@@ -23,7 +23,9 @@ import {BanList, RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.MjolnirUserSettingsTab")
 export default class MjolnirUserSettingsTab extends React.Component {
     constructor() {
         super();

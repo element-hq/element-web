@@ -1,0 +1,100 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_VoiceRecordComposerTile_stop {
+    // 28px plus a 2px border makes this a 32px square (as intended)
+    width: 28px;
+    height: 28px;
+    border: 2px solid $voice-record-stop-border-color;
+    border-radius: 32px;
+    margin-right: 16px; // between us and the send button
+    position: relative;
+
+    &::after {
+        content: '';
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        top: 7px;
+        left: 7px;
+        border-radius: 2px;
+        background-color: $voice-record-stop-symbol-color;
+    }
+}
+
+.mx_VoiceRecordComposerTile_waveformContainer {
+    padding: 5px;
+    padding-right: 4px; // there's 1px from the waveform itself, so account for that
+    padding-left: 15px; // +10px for the live circle, +5px for regular padding
+    background-color: $voice-record-waveform-bg-color;
+    border-radius: 12px;
+    margin-right: 12px; // isolate from stop button
+
+    // Cheat at alignment a bit
+    display: flex;
+    align-items: center;
+
+    position: relative; // important for the live circle
+
+    color: $voice-record-waveform-fg-color;
+    font-size: $font-14px;
+
+    &::before {
+        animation: recording-pulse 2s infinite;
+
+        content: '';
+        background-color: $voice-record-live-circle-color;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        left: 8px;
+        top: 16px; // vertically center
+        border-radius: 10px;
+    }
+
+    .mx_Waveform_bar {
+        background-color: $voice-record-waveform-fg-color;
+    }
+
+    .mx_Clock {
+        padding-right: 8px; // isolate from waveform
+        padding-left: 10px; // isolate from live circle
+        width: 42px; // we're not using a monospace font, so fake it
+    }
+}
+
+// The keyframes are slightly weird here to help make a ramping/punch effect
+// for the recording dot. We start and end at 100% opacity to help make the
+// dot feel a bit like a real lamp that is blinking: the animation ends up
+// spending a lot of its time showing a steady state without a fade effect.
+// This lamp effect extends into why the 0% opacity keyframe is not in the
+// midpoint: lamps take longer to turn off than they do to turn on, and the
+// extra frames give it a bit of a realistic punch for when the animation is
+// ramping back up to 100% opacity.
+//
+// Target animation timings: steady for 1.5s, fade out for 0.3s, fade in for 0.2s
+// (intended to be used in a loop for 2s animation speed)
+@keyframes recording-pulse {
+    0% {
+        opacity: 1;
+    }
+    35% {
+        opacity: 0;
+    }
+    65% {
+        opacity: 1;
+    }
+}

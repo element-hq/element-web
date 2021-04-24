@@ -181,8 +181,7 @@ $irc-line-height: $font-18px;
         > span {
             display: flex;
 
-            > .mx_SenderProfile_name,
-            > .mx_SenderProfile_aux {
+            > .mx_SenderProfile_name {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 min-width: var(--name-width);
@@ -212,11 +211,29 @@ $irc-line-height: $font-18px;
             background: transparent;
 
             > span {
-                > .mx_SenderProfile_name,
-                > .mx_SenderProfile_aux {
+                > .mx_SenderProfile_name {
                     min-width: inherit;
                 }
             }
+        }
+
+        .mx_EventTile_emote {
+            > .mx_EventTile_avatar {
+                margin-left: initial;
+            }
+        }
+
+        .mx_MessageTimestamp {
+            width: initial;
+        }
+
+        /**
+         * adding the icon back in the document flow
+         * if it's not present, there's no unwanted wasted space
+         */
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            order: -1;
         }
     }
 

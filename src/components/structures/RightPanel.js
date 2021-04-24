@@ -34,7 +34,9 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {Action} from "../../dispatcher/actions";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.RightPanel")
 export default class RightPanel extends React.Component {
     static get propTypes() {
         return {

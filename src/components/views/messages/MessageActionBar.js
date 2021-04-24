@@ -18,7 +18,7 @@ limitations under the License.
 
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import { EventStatus } from 'matrix-js-sdk';
+import { EventStatus } from 'matrix-js-sdk/src/models/event';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -28,6 +28,7 @@ import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
 import Toolbar from "../../../accessibility/Toolbar";
 import {RovingAccessibleTooltipButton, useRovingTabIndex} from "../../../accessibility/RovingTabIndex";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -101,6 +102,7 @@ const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     </React.Fragment>;
 };
 
+@replaceableComponent("views.messages.MessageActionBar")
 export default class MessageActionBar extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,

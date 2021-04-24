@@ -29,9 +29,12 @@ import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
 import {UIFeature} from "../../../settings/UIFeature";
-import WidgetStore from "../../../stores/WidgetStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
+import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
+import {RecordingState} from "../../../voice/VoiceRecording";
+import Tooltip, {Alignment} from "../elements/Tooltip";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -168,6 +171,7 @@ class UploadButton extends React.Component {
     }
 }
 
+@replaceableComponent("views.rooms.MessageComposer")
 export default class MessageComposer extends React.Component {
     constructor(props) {
         super(props);
@@ -175,16 +179,15 @@ export default class MessageComposer extends React.Component {
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
-        WidgetStore.instance.on(UPDATE_EVENT, this._onWidgetUpdate);
-        ActiveWidgetStore.on('update', this._onActiveWidgetUpdate);
+        VoiceRecordingStore.instance.on(UPDATE_EVENT, this._onVoiceStoreUpdate);
         this._dispatcherRef = null;
 
         this.state = {
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
-            hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room),
-            joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room),
             isComposerEmpty: true,
+            haveRecording: false,
+            recordingTimeLeftSeconds: null, // when set to a number, shows a toast
         };
     }
 
@@ -198,14 +201,6 @@ export default class MessageComposer extends React.Component {
                 this.props.resizeNotifier.notifyTimelineHeightChanged();
             }, 100);
         }
-    };
-
-    _onWidgetUpdate = () => {
-        this.setState({hasConference: WidgetStore.instance.doesRoomHaveConference(this.props.room)});
-    };
-
-    _onActiveWidgetUpdate = () => {
-        this.setState({joinedConference: WidgetStore.instance.isJoinedToConferenceIn(this.props.room)});
     };
 
     componentDidMount() {
@@ -234,8 +229,7 @@ export default class MessageComposer extends React.Component {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
         }
-        WidgetStore.instance.removeListener(UPDATE_EVENT, this._onWidgetUpdate);
-        ActiveWidgetStore.removeListener('update', this._onActiveWidgetUpdate);
+        VoiceRecordingStore.instance.off(UPDATE_EVENT, this._onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
     }
 
@@ -323,6 +317,20 @@ export default class MessageComposer extends React.Component {
         });
     }
 
+    _onVoiceStoreUpdate = () => {
+        const recording = VoiceRecordingStore.instance.activeRecording;
+        this.setState({haveRecording: !!recording});
+        if (recording) {
+            // We show a little heads up that the recording is about to automatically end soon. The 3s
+            // display time is completely arbitrary. Note that we don't need to deregister the listener
+            // because the recording instance will clean that up for us.
+            recording.on(RecordingState.EndingSoon, ({secondsLeft}) => {
+                this.setState({recordingTimeLeftSeconds: secondsLeft});
+                setTimeout(() => this.setState({recordingTimeLeftSeconds: null}), 3000);
+            });
+        }
+    };
+
     render() {
         const controls = [
             this.state.me ? <ComposerAvatar key="controls_avatar" me={this.state.me} /> : null,
@@ -344,17 +352,30 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator}
                     replyToEvent={this.props.replyToEvent}
                     onChange={this.onChange}
+                    disabled={this.state.haveRecording}
                 />,
-                <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
-                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
             );
 
+            if (!this.state.haveRecording) {
+                controls.push(
+                    <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+                    <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
+                );
+            }
+
             if (SettingsStore.getValue(UIFeature.Widgets) &&
-                SettingsStore.getValue("MessageComposerInput.showStickersButton")) {
+                SettingsStore.getValue("MessageComposerInput.showStickersButton") &&
+                !this.state.haveRecording) {
                 controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
             }
 
-            if (!this.state.isComposerEmpty) {
+            if (SettingsStore.getValue("feature_voice_messages")) {
+                controls.push(<VoiceRecordComposerTile
+                    key="controls_voice_record"
+                    room={this.props.room} />);
+            }
+
+            if (!this.state.isComposerEmpty || this.state.haveRecording) {
                 controls.push(
                     <SendButton key="controls_send" onClick={this.sendMessage} />,
                 );
@@ -388,8 +409,18 @@ export default class MessageComposer extends React.Component {
             );
         }
 
+        let recordingTooltip;
+        const secondsLeft = Math.round(this.state.recordingTimeLeftSeconds);
+        if (secondsLeft) {
+            recordingTooltip = <Tooltip
+                label={_t("%(seconds)ss left", {seconds: secondsLeft})}
+                alignment={Alignment.Top} yOffset={-50}
+            />;
+        }
+
         return (
             <div className="mx_MessageComposer mx_GroupLayout">
+                {recordingTooltip}
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">

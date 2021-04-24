@@ -31,6 +31,7 @@ class EventIndexPeg {
     constructor() {
         this.index = null;
         this._supportIsInstalled = false;
+        this.error = null;
     }
 
     /**
@@ -96,6 +97,7 @@ class EventIndexPeg {
             await index.init();
         } catch (e) {
             console.log("EventIndex: Error initializing the event index", e);
+            this.error = e;
             return false;
         }
 

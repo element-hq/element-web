@@ -23,14 +23,17 @@ import * as sdk from "../../../index";
 import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
+@replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();
 
         const client = MatrixClientPeg.get();
         let avatarUrl = OwnProfileStore.instance.avatarMxc;
-        if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
+        if (avatarUrl) avatarUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(96);
         this.state = {
             userId: client.getUserId(),
             originalDisplayName: OwnProfileStore.instance.displayName,
@@ -95,7 +98,7 @@ export default class ProfileSettings extends React.Component {
                     ` (${this.state.avatarFile.size}) bytes`);
                 const uri = await client.uploadContent(this.state.avatarFile);
                 await client.setAvatarUrl(uri);
-                newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
+                newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
                 newState.originalAvatarUrl = newState.avatarUrl;
                 newState.avatarFile = null;
             } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {

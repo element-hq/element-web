@@ -60,6 +60,8 @@ limitations under the License.
         width: 27px;
         height: 24px;
         box-sizing: border-box;
+        background: none;
+        vertical-align: middle;
     }
 
     .mx_MessageComposerFormatBar_button::after {

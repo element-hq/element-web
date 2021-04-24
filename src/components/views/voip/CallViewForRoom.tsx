@@ -19,6 +19,9 @@ import React from 'react';
 import CallHandler from '../../../CallHandler';
 import CallView from './CallView';
 import dis from '../../../dispatcher/dispatcher';
+import {Resizable} from "re-resizable";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     // What room we should display the call for
@@ -27,9 +30,7 @@ interface IProps {
     // maxHeight style attribute for the video panel
     maxVideoHeight?: number;
 
-    // a callback which is called when the content in the callview changes
-    // in a way that is likely to cause a resize.
-    onResize?: any;
+    resizeNotifier: ResizeNotifier,
 }
 
 interface IState {
@@ -40,6 +41,7 @@ interface IState {
  * Wrapper for CallView that always display the call in a given room,
  * or nothing if there is no call in that room.
  */
+@replaceableComponent("views.voip.CallViewForRoom")
 export default class CallViewForRoom extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
@@ -77,11 +79,50 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
         return call;
     }
 
+    private onResizeStart = () => {
+        this.props.resizeNotifier.startResizing();
+    };
+
+    private onResize = () => {
+        this.props.resizeNotifier.notifyTimelineHeightChanged();
+    };
+
+    private onResizeStop = () => {
+        this.props.resizeNotifier.stopResizing();
+    };
+
     public render() {
         if (!this.state.call) return null;
+        // We subtract 8 as it the margin-bottom of the mx_CallViewForRoom_ResizeWrapper
+        const maxHeight = this.props.maxVideoHeight - 8;
 
-        return <CallView call={this.state.call} pipMode={false}
-            onResize={this.props.onResize} maxVideoHeight={this.props.maxVideoHeight}
-        />;
+        return (
+            <div className="mx_CallViewForRoom">
+                <Resizable
+                    minHeight={380}
+                    maxHeight={maxHeight}
+                    enable={{
+                        top: false,
+                        right: false,
+                        bottom: true,
+                        left: false,
+                        topRight: false,
+                        bottomRight: false,
+                        bottomLeft: false,
+                        topLeft: false,
+                    }}
+                    onResizeStart={this.onResizeStart}
+                    onResize={this.onResize}
+                    onResizeStop={this.onResizeStop}
+                    className="mx_CallViewForRoom_ResizeWrapper"
+                    handleClasses={{bottom: "mx_CallViewForRoom_ResizeHandle"}}
+                >
+                    <CallView
+                        call={this.state.call}
+                        pipMode={false}
+                    />
+                </Resizable>
+            </div>
+        );
     }
 }

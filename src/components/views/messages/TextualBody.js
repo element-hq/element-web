@@ -35,7 +35,9 @@ import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -214,12 +216,12 @@ export default class TextualBody extends React.Component {
     }
 
     _addLineNumbers(pre) {
+        // Calculate number of lines in pre
+        const number = pre.innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
         pre.innerHTML = '<span class="mx_EventTile_lineNumbers"></span>' + pre.innerHTML + '<span></span>';
         const lineNumbers = pre.getElementsByClassName("mx_EventTile_lineNumbers")[0];
-        // Calculate number of lines in pre
-        const number = pre.innerHTML.split(/\n/).length;
         // Iterate through lines starting with 1 (number of the first line is 1)
-        for (let i = 1; i < number; i++) {
+        for (let i = 1; i <= number; i++) {
             lineNumbers.innerHTML += '<span class="mx_EventTile_lineNumber">' + i + '</span>';
         }
     }

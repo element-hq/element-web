@@ -32,14 +32,16 @@ import * as sdk from "../../../../..";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import {Service, startTermsFlow} from "../../../../../Terms";
-import {SERVICE_TYPES} from "matrix-js-sdk";
+import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 import Spinner from "../../../elements/Spinner";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
 import {UIFeature} from "../../../../../settings/UIFeature";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.GeneralUserSettingsTab")
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
@@ -204,10 +206,10 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
-        let errMsg = err.error || "";
+        let errMsg = err.error || err.message || "";
         if (err.httpStatus === 403) {
             errMsg = _t("Failed to change password. Is your password correct?");
-        } else if (err.httpStatus) {
+        } else if (!errMsg) {
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

@@ -26,6 +26,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 import CountlyAnalytics from "../../../CountlyAnalytics";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -75,6 +76,7 @@ import CountlyAnalytics from "../../../CountlyAnalytics";
 
 export const DEFAULT_PHASE = 0;
 
+@replaceableComponent("views.auth.PasswordAuthEntry")
 export class PasswordAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.password";
 
@@ -173,6 +175,7 @@ export class PasswordAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.RecaptchaAuthEntry")
 export class RecaptchaAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.recaptcha";
 
@@ -235,6 +238,7 @@ export class RecaptchaAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.TermsAuthEntry")
 export class TermsAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.terms";
 
@@ -385,6 +389,7 @@ export class TermsAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.EmailIdentityAuthEntry")
 export class EmailIdentityAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.email.identity";
 
@@ -432,6 +437,7 @@ export class EmailIdentityAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.MsisdnAuthEntry")
 export class MsisdnAuthEntry extends React.Component {
     static LOGIN_TYPE = "m.login.msisdn";
 
@@ -578,6 +584,7 @@ export class MsisdnAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.SSOAuthEntry")
 export class SSOAuthEntry extends React.Component {
     static propTypes = {
         matrixClient: PropTypes.object.isRequired,
@@ -708,6 +715,7 @@ export class SSOAuthEntry extends React.Component {
     }
 }
 
+@replaceableComponent("views.auth.FallbackAuthEntry")
 export class FallbackAuthEntry extends React.Component {
     static propTypes = {
         matrixClient: PropTypes.object.isRequired,

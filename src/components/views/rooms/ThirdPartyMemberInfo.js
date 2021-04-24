@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {MatrixEvent} from "matrix-js-sdk";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import {_t} from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import * as sdk from "../../../index";
@@ -25,7 +25,9 @@ import Modal from "../../../Modal";
 import {isValid3pidInvite} from "../../../RoomInvite";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.ThirdPartyMemberInfo")
 export default class ThirdPartyMemberInfo extends React.Component {
     static propTypes = {
         event: PropTypes.instanceOf(MatrixEvent).isRequired,

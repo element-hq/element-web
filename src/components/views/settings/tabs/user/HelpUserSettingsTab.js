@@ -28,7 +28,9 @@ import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
 import AccessTokenDialog from '../../../dialogs/AccessTokenDialog';
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
 export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,

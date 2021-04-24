@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import classnames from 'classnames';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     outlined?: boolean;
@@ -24,6 +25,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 interface IState {
 }
 
+@replaceableComponent("views.elements.StyledRadioButton")
 export default class StyledRadioButton extends React.PureComponent<IProps, IState> {
     public static readonly defaultProps = {
         className: '',

@@ -128,6 +128,18 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_dnd": {
+        isFeature: true,
+        displayName: _td("Show options to enable 'Do not disturb' mode"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_voice_messages": {
+        isFeature: true,
+        displayName: _td("Send and receive voice messages (in development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_latex_maths": {
         isFeature: true,
         displayName: _td("Render LaTeX maths in messages"),
@@ -218,6 +230,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
+    "doNotDisturb": {
+        supportedLevels: [SettingLevel.DEVICE],
         default: false,
     },
     "mjolnirRooms": {

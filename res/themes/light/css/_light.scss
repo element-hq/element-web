@@ -67,9 +67,6 @@ $groupFilterPanel-bg-color: rgba(232, 232, 232, 0.77);
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
 
-// used by RoomDropTarget
-$droptarget-bg-color: rgba(255,255,255,0.5);
-
 // used by AddressSelector
 $selected-color: $secondary-accent-color;
 
@@ -121,6 +118,7 @@ $dialog-close-fg-color: #c1c1c1;
 
 $dialog-background-bg-color: #e9e9e9;
 $lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.95;
 
 $imagebody-giflabel: rgba(0, 0, 0, 0.7);
 $imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
@@ -181,7 +179,12 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
-$space-button-outline-color: #E3E8F0;
+
+$voice-record-stop-border-color: #E3E8F0;
+$voice-record-stop-symbol-color: #ff4b55; // $warning-color, but without letting people change it in themes
+$voice-record-waveform-bg-color: #E3E8F0;
+$voice-record-waveform-fg-color: $muted-fg-color;
+$voice-record-live-circle-color: #ff4b55; // $warning-color, but without letting people change it in themes
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -223,8 +226,6 @@ $widget-body-bg-color: #FFF;
 $yellow-background: #fff8e3;
 
 // event tile lifecycle
-$event-encrypting-color: #abddbc;
-$event-sending-color: #ddd;
 $event-notsent-color: #f44;
 
 $event-highlight-fg-color: $warning-color;
@@ -282,7 +283,8 @@ $togglesw-ball-color: #fff;
 $slider-selection-color: $accent-color;
 $slider-background-color: #c1c9d6;
 
-$progressbar-color: #000;
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: rgba(141, 151, 165, 0.2);
 
 $room-warning-bg-color: $yellow-background;
 
@@ -322,6 +324,10 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-bg-color: #e3e8f082;
+$message-body-panel-icon-bg-color: #ffffff;
+$message-body-panel-fg-color: $muted-fg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
