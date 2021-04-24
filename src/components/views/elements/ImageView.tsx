@@ -312,6 +312,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         let cursor;
         if (this.state.moving) {
             cursor= "grabbing";
+        } else if (this.state.maxZoom === this.state.minZoom) {
+            cursor = "pointer";
         } else if (this.state.zoom === this.state.minZoom) {
             cursor = "zoom-in";
         } else {
