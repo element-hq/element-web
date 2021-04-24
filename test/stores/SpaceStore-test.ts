@@ -17,7 +17,7 @@ limitations under the License.
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import "../skinned-sdk"; // Must be first for skinning to work
-import SpaceStore from "../../src/stores/SpaceStore";
+import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../src/stores/SpaceStore";
 import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
 import { mkEvent, mkStubRoom, stubClient } from "../test-utils";
 import { EnhancedMap } from "../../src/utils/maps";
@@ -387,7 +387,59 @@ describe("SpaceStore", () => {
     });
 
     describe("active space switching tests", () => {
-        test.todo("//active space");
+        const fn = jest.spyOn(store, "emit");
+
+        beforeEach(async () => {
+            mkRoom(room1); // not a space
+            mkSpace(space1, [
+                mkSpace(space2).roomId,
+            ]);
+            mkSpace(space3).getMyMembership.mockReturnValue("invite");
+            await run();
+            await store.setActiveSpace(null);
+            expect(store.activeSpace).toBe(null);
+        });
+        afterEach(() => {
+            fn.mockClear();
+        });
+
+        it("switch to home space", async () => {
+            await store.setActiveSpace(client.getRoom(space1));
+            fn.mockClear();
+
+            await store.setActiveSpace(null);
+            expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, null);
+            expect(store.activeSpace).toBe(null);
+        });
+
+        it("switch to invited space", async () => {
+            const space = client.getRoom(space3);
+            await store.setActiveSpace(space);
+            expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
+            expect(store.activeSpace).toBe(space);
+        });
+
+        it("switch to top level space", async () => {
+            const space = client.getRoom(space1);
+            await store.setActiveSpace(space);
+            expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
+            expect(store.activeSpace).toBe(space);
+        });
+
+        it("switch to subspace", async () => {
+            const space = client.getRoom(space2);
+            await store.setActiveSpace(space);
+            expect(fn).toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
+            expect(store.activeSpace).toBe(space);
+        });
+
+        it("switch to unknown space is a nop", async () => {
+            expect(store.activeSpace).toBe(null);
+            const space = client.getRoom(room1); // not a space
+            await store.setActiveSpace(space);
+            expect(fn).not.toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
+            expect(store.activeSpace).toBe(null);
+        });
     });
 
     describe("notification state tests", () => {

@@ -113,7 +113,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
-        if (space === this.activeSpace) return;
+        if (space === this.activeSpace || (space && !space?.isSpaceRoom())) return;
 
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
