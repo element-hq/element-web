@@ -136,20 +136,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         });
     }
 
-    private onKeyDown = (ev: KeyboardEvent) => {
-        if (ev.key === Key.ESCAPE) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            this.props.onFinished();
-        }
-    };
-
-    private onWheel = (ev: WheelEvent) => {
-        ev.stopPropagation();
-        ev.preventDefault();
-
-        const {deltaY} = normalizeWheelEvent(ev);
-        const newZoom = this.state.zoom - (deltaY * ZOOM_COEFFICIENT);
+    private zoom(delta: number) {
+        const newZoom = this.state.zoom + delta;
 
         if (newZoom <= this.state.minZoom) {
             this.setState({
@@ -167,6 +155,30 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({
             zoom: newZoom,
         });
+    }
+
+    private onWheel = (ev: WheelEvent) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        const {deltaY} = normalizeWheelEvent(ev);
+        this.zoom(-(deltaY * ZOOM_COEFFICIENT));
+    };
+
+    private onZoomInClick = () => {
+        this.zoom(ZOOM_STEP);
+    };
+
+    private onZoomOutClick = () => {
+        this.zoom(-ZOOM_STEP);
+    };
+
+    private onKeyDown = (ev: KeyboardEvent) => {
+        if (ev.key === Key.ESCAPE) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            this.props.onFinished();
+        }
     };
 
     private onRotateCounterClockwiseClick = () => {
@@ -179,31 +191,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         const cur = this.state.rotation;
         const rotationDegrees = cur + 90;
         this.setState({ rotation: rotationDegrees });
-    };
-
-    private onZoomInClick = () => {
-        if (this.state.zoom >= this.state.maxZoom) {
-            this.setState({zoom: this.state.maxZoom});
-            return;
-        }
-
-        this.setState({
-            zoom: this.state.zoom + ZOOM_STEP,
-        });
-    };
-
-    private onZoomOutClick = () => {
-        if (this.state.zoom <= this.state.minZoom) {
-            this.setState({
-                zoom: this.state.minZoom,
-                translationX: 0,
-                translationY: 0,
-            });
-            return;
-        }
-        this.setState({
-            zoom: this.state.zoom - ZOOM_STEP,
-        });
     };
 
     private onDownloadClick = () => {
