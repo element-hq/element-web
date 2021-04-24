@@ -120,10 +120,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         // TODO: What if we don't have width and height props?
 
         const imageWrapper = document.getElementsByClassName(IMAGE_WRAPPER_CLASS)[0];
-        const zoomX = (imageWrapper.clientWidth / this.props.width) * 100;
-        const zoomY = (imageWrapper.clientHeight / this.props.height) * 100;
+        const zoomX = imageWrapper.clientWidth / this.props.width;
+        const zoomY = imageWrapper.clientHeight / this.props.height;
         const minZoom = Math.min(zoomX, zoomY) * MAX_SCALE;
-        const maxZoom = minZoom >= 100 ? minZoom : 100;
+        const maxZoom = minZoom >= 1 ? minZoom : 1;
 
         if (this.state.zoom <= this.state.minZoom) this.setState({zoom: minZoom});
         this.setState({
@@ -323,7 +323,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             cursor = "zoom-out";
         }
         const rotationDegrees = this.state.rotation + "deg";
-        const zoomPercentage = this.state.zoom/100;
+        const zoom = this.state.zoom;
         const translatePixelsX = this.state.translationX + "px";
         const translatePixelsY = this.state.translationY + "px";
         // The order of the values is important!
@@ -335,7 +335,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             transition: this.state.moving ? null : "transform 200ms ease 0s",
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
-                        scale(${zoomPercentage})
+                        scale(${zoom})
                         rotate(${rotationDegrees})`,
         };
 
