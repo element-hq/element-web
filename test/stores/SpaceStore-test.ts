@@ -14,10 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { EventEmitter } from "events";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import "../skinned-sdk"; // Must be first for skinning to work
-import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../src/stores/SpaceStore";
+import SpaceStore, {
+    UPDATE_INVITED_SPACES,
+    UPDATE_SELECTED_SPACE,
+    UPDATE_TOP_LEVEL_SPACES
+} from "../../src/stores/SpaceStore";
 import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
 import { mkEvent, mkStubRoom, stubClient } from "../test-utils";
 import { EnhancedMap } from "../../src/utils/maps";
@@ -43,6 +48,8 @@ const mockStateEventImplementation = (events: MatrixEvent[]) => {
         return Array.from(stateMap.get(eventType)?.values() || []);
     };
 };
+
+const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise(r => e.once(k, r));
 
 const testUserId = "@test:user";
 
@@ -108,6 +115,7 @@ describe("SpaceStore", () => {
     const run = async () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
         await setupAsyncStoreWithClient(store, client);
+        jest.runAllTimers();
     };
 
     beforeEach(() => {
@@ -379,11 +387,82 @@ describe("SpaceStore", () => {
     });
 
     describe("hierarchy resolution update tests", () => {
-        test.todo("updates state when spaces are joined");
-        test.todo("updates state when spaces are left");
-        test.todo("updates state when space invite comes in");
-        test.todo("updates state when space invite is accepted");
-        test.todo("updates state when space invite is rejected");
+        let emitter: EventEmitter;
+        beforeEach(async () => {
+            emitter = new EventEmitter();
+            client.on.mockImplementation(emitter.on.bind(emitter));
+            client.removeListener.mockImplementation(emitter.removeListener.bind(emitter));
+        });
+        afterEach(() => {
+            client.on.mockReset();
+            client.removeListener.mockReset();
+        });
+
+        it("updates state when spaces are joined", async () => {
+            await run();
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+            const space = mkSpace(space1);
+            const prom = emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
+            emitter.emit("Room", space);
+            await prom;
+            expect(store.spacePanelSpaces).toStrictEqual([space]);
+            expect(store.invitedSpaces).toStrictEqual([]);
+        });
+
+        it("updates state when spaces are left", async () => {
+            const space = mkSpace(space1);
+            await run();
+
+            expect(store.spacePanelSpaces).toStrictEqual([space]);
+            space.getMyMembership.mockReturnValue("leave");
+            const prom = emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
+            emitter.emit("Room.myMembership", space, "leave", "join");
+            await prom;
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+        });
+
+        it("updates state when space invite comes in", async () => {
+            await run();
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+            expect(store.invitedSpaces).toStrictEqual([]);
+            const space = mkSpace(space1);
+            space.getMyMembership.mockReturnValue("invite");
+            const prom = emitPromise(store, UPDATE_INVITED_SPACES);
+            emitter.emit("Room", space);
+            await prom;
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+            expect(store.invitedSpaces).toStrictEqual([space]);
+        });
+
+        it("updates state when space invite is accepted", async () => {
+            const space = mkSpace(space1);
+            space.getMyMembership.mockReturnValue("invite");
+            await run();
+
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+            expect(store.invitedSpaces).toStrictEqual([space]);
+            space.getMyMembership.mockReturnValue("join");
+            const prom = emitPromise(store, UPDATE_TOP_LEVEL_SPACES);
+            emitter.emit("Room.myMembership", space, "join", "invite");
+            await prom;
+            expect(store.spacePanelSpaces).toStrictEqual([space]);
+            expect(store.invitedSpaces).toStrictEqual([]);
+        });
+
+        it("updates state when space invite is rejected", async () => {
+            const space = mkSpace(space1);
+            space.getMyMembership.mockReturnValue("invite");
+            await run();
+
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+            expect(store.invitedSpaces).toStrictEqual([space]);
+            space.getMyMembership.mockReturnValue("leave");
+            const prom = emitPromise(store, UPDATE_INVITED_SPACES);
+            emitter.emit("Room.myMembership", space, "leave", "invite");
+            await prom;
+            expect(store.spacePanelSpaces).toStrictEqual([]);
+            expect(store.invitedSpaces).toStrictEqual([]);
+        });
     });
 
     describe("active space switching tests", () => {
@@ -440,14 +519,6 @@ describe("SpaceStore", () => {
             expect(fn).not.toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space);
             expect(store.activeSpace).toBe(null);
         });
-    });
-
-    describe("notification state tests", () => {
-        test.todo("//notification states");
-    });
-
-    describe("room list prefilter tests", () => {
-        test.todo("//room list filter");
     });
 
     describe("context switching tests", () => {
