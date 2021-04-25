@@ -414,7 +414,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if ((membership || room.getMyMembership()) === "invite") {
             this._invitedSpaces.add(room);
             this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
-        } else if (oldMembership === "invite") {
+        } else if (oldMembership === "invite" && membership !== "join") {
             this._invitedSpaces.delete(room);
             this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
         } else if (room?.isSpaceRoom()) {
