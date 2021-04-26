@@ -91,6 +91,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private contextMenuButton = createRef<any>();
     private focusLock = createRef<any>();
     private imageWrapper = createRef<HTMLDivElement>();
+    private image = createRef<HTMLImageElement>();
 
     private initX = 0;
     private initY = 0;
@@ -103,8 +104,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
+        // We want to recalculate zoom whenever the windows size changes
         window.addEventListener("resize", this.calculateZoom);
-        this.calculateZoom();
+        // After the image loads for the first time we want to calculate the zoom
+        this.image.current.addEventListener("load", this.calculateZoom);
     }
 
     componentWillUnmount() {
@@ -112,12 +115,14 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     private calculateZoom = () => {
-        // TODO: What if we don't have width and height props?
-
+        const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const zoomX = imageWrapper.clientWidth / this.props.width;
-        const zoomY = imageWrapper.clientHeight / this.props.height;
+        const width = this.props.width || image.naturalWidth;
+        const height = this.props.height || image.naturalHeight;
+
+        const zoomX = imageWrapper.clientWidth / width;
+        const zoomY = imageWrapper.clientHeight / height;
         // We set minZoom to the min of the zoomX and zoomY to avoid overflow in
         // any direction. We also multiply by MAX_SCALE to get a gap around the
         // image by default
@@ -454,6 +459,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                         src={this.props.src}
                         title={this.props.name}
                         style={style}
+                        ref={this.image}
                         className="mx_ImageView_image"
                         draggable={true}
                         onMouseDown={this.onStartMoving}
