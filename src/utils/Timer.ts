@@ -26,16 +26,14 @@ Once a timer is finished or aborted, it can't be started again
 a new one through `clone()` or `cloneIfRun()`.
 */
 export default class Timer {
-    private timeout: number;
     private timerHandle: NodeJS.Timeout;
     private startTs: number;
     private promise: Promise<void>;
     private resolve: () => void;
     private reject: (Error) => void;
 
-    constructor(timeout) {
+    constructor(private timeout: number) {
         this.timeout = timeout;
-        this.onTimeout = this.onTimeout.bind(this);
         this.setNotStarted();
     }
 
@@ -50,7 +48,7 @@ export default class Timer {
         });
     }
 
-    private onTimeout() {
+    private onTimeout = () => {
         const now = Date.now();
         const elapsed = now - this.startTs;
         if (elapsed >= this.timeout) {
