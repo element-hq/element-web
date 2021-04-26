@@ -42,7 +42,6 @@ const ZOOM_STEP = 0.10;
 const ZOOM_COEFFICIENT = 0.0025;
 // If we have moved only this much we can zoom
 const ZOOM_DISTANCE = 10;
-const IMAGE_WRAPPER_CLASS = "mx_ImageView_image_wrapper";
 
 interface IProps {
     src: string, // the source of the image being displayed
@@ -91,6 +90,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     // XXX: Refs to functional components
     private contextMenuButton = createRef<any>();
     private focusLock = createRef<any>();
+    private imageWrapper = createRef<HTMLDivElement>();
 
     private initX = 0;
     private initY = 0;
@@ -114,7 +114,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private calculateZoom = () => {
         // TODO: What if we don't have width and height props?
 
-        const imageWrapper = document.getElementsByClassName(IMAGE_WRAPPER_CLASS)[0];
+        const imageWrapper = this.imageWrapper.current;
 
         const zoomX = imageWrapper.clientWidth / this.props.width;
         const zoomY = imageWrapper.clientHeight / this.props.height;
@@ -447,7 +447,9 @@ export default class ImageView extends React.Component<IProps, IState> {
                         {this.renderContextMenu()}
                     </div>
                 </div>
-                <div className={IMAGE_WRAPPER_CLASS}>
+                <div
+                    className="mx_ImageView_image_wrapper"
+                    ref={this.imageWrapper}>
                     <img
                         src={this.props.src}
                         title={this.props.name}
