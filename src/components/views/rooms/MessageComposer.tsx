@@ -136,7 +136,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
         this.uploadInput.current.click();
     }
 
-    private onUploadFileInputChange = (ev) => {
+    private onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (ev.target.files.length === 0) return;
 
         // take a copy so we can safely reset the value of the form control
