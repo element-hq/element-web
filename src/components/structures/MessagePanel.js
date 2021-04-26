@@ -966,7 +966,6 @@ class CreationGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-        const isGrouped=true;
         const panel = this.panel;
         const ret = [];
         const createEvent = this.createEvent;
@@ -1052,7 +1051,6 @@ class RedactionGrouper {
         this.lastShownEvent = lastShownEvent;
         this.nextEvent = nextEvent;
         this.nextEventTile = nextEventTile;
-
     }
 
     shouldGroup(ev) {
@@ -1099,11 +1097,11 @@ class RedactionGrouper {
         );
 
         const senders = new Set();
-       
+
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
             const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
-            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent,isGrouped, this.nextEvent, this.nextEventTile);
+            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
@@ -1215,7 +1213,7 @@ class MemberGrouper {
             // of MemberEventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent,isGrouped);
+            return panel._getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
