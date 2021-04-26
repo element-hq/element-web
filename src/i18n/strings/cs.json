@@ -3214,5 +3214,16 @@
     "Zoom out": "Oddálit",
     "%(seconds)ss left": "Zbývá %(seconds)ss",
     "Change server ACLs": "Změnit seznamy přístupů serveru",
-    "Show options to enable 'Do not disturb' mode": "Zobrazit možnosti pro povolení režimu „Nerušit“"
+    "Show options to enable 'Do not disturb' mode": "Zobrazit možnosti pro povolení režimu „Nerušit“",
+    "You can select all or individual messages to retry or delete": "Můžete vybrat všechny nebo jednotlivé zprávy, které chcete zkusit poslat znovu nebo odstranit",
+    "Sending": "Odesílání",
+    "Retry all": "Zkusit všechny znovu",
+    "Delete all": "Smazat všechny",
+    "Some of your messages have not been sent": "Některé z vašich zpráv nebyly odeslány",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s členů včetně %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Včetně %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "Zobrazit jednoho člena",
+    "View all %(count)s members|other": "Zobrazit všech %(count)s členů",
+    "Failed to send": "Odeslání se nezdařilo"
 }
