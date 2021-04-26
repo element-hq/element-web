@@ -27,16 +27,12 @@ export class TermsNotSignedError extends Error {}
  * require agreement from the user before the user can use that service.
  */
 export class Service {
-    public serviceType: string;
-    public baseUrl: string;
-    public accessToken: string;
-
     /**
      * @param {MatrixClient.SERVICE_TYPES} serviceType The type of service
      * @param {string} baseUrl The Base URL of the service (ie. before '/_matrix')
      * @param {string} accessToken The user's access token for the service
      */
-    constructor(serviceType, baseUrl, accessToken) {
+    constructor(public serviceType: string, public baseUrl: string, public accessToken: string) {
         this.serviceType = serviceType;
         this.baseUrl = baseUrl;
         this.accessToken = accessToken;
