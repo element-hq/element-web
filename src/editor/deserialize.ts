@@ -60,6 +60,11 @@ function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
     }
 }
 
+function parseImage(img: HTMLImageElement, partCreator: PartCreator) {
+    const { src } = img;
+    return partCreator.plain(`![${img.alt.replace(/[[\\\]]/g, c => "\\" + c)}](${src})`);
+}
+
 function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
     const parts = [];
     let language = "";
@@ -102,6 +107,8 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             return parseHeader(n, partCreator);
         case "A":
             return parseLink(<HTMLAnchorElement>n, partCreator);
+        case "IMG":
+            return parseImage(<HTMLImageElement>n, partCreator);
         case "BR":
             return partCreator.newline();
         case "EM":
@@ -136,11 +143,11 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             // math nodes are translated back into delimited latex strings
             if (n.hasAttribute("data-mx-maths")) {
                 const delimLeft = (n.nodeName == "SPAN") ?
-                    (SdkConfig.get()['latex_maths_delims'] || {})['inline_left'] || "$" :
-                    (SdkConfig.get()['latex_maths_delims'] || {})['display_left'] || "$$";
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['inline'] || {})['left'] || "\\(" :
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['display'] || {})['left'] || "\\[";
                 const delimRight = (n.nodeName == "SPAN") ?
-                    (SdkConfig.get()['latex_maths_delims'] || {})['inline_right'] || "$" :
-                    (SdkConfig.get()['latex_maths_delims'] || {})['display_right'] || "$$";
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['inline'] || {})['right'] || "\\)" :
+                    ((SdkConfig.get()['latex_maths_delims'] || {})['display'] || {})['right'] || "\\]";
                 const tex = n.getAttribute("data-mx-maths");
                 return partCreator.plain(delimLeft + tex + delimRight);
             } else if (!checkDescendInto(n)) {

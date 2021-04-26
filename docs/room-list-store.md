@@ -6,7 +6,7 @@ It's so complicated it needs its own README.
 
 Legend:
 * Orange = External event.
-* Purple = Deterministic flow. 
+* Purple = Deterministic flow.
 * Green = Algorithm definition.
 * Red = Exit condition/point.
 * Blue = Process definition.
@@ -24,8 +24,8 @@ algorithm to call, instead of having all the logic in the room list store itself
 
 
 Tag sorting is effectively the comparator supplied to the list algorithm. This gives the list algorithm
-the power to decide when and how to apply the tag sorting, if at all. For example, the importance algorithm, 
-later described in this document, heavily uses the list ordering behaviour to break the tag into categories. 
+the power to decide when and how to apply the tag sorting, if at all. For example, the importance algorithm,
+later described in this document, heavily uses the list ordering behaviour to break the tag into categories.
 Each category then gets sorted by the appropriate tag sorting algorithm.
 
 ### Tag sorting algorithm: Alphabetical
@@ -36,7 +36,7 @@ useful.
 
 ### Tag sorting algorithm: Manual
 
-Manual sorting makes use of the `order` property present on all tags for a room, per the 
+Manual sorting makes use of the `order` property present on all tags for a room, per the
 [Matrix specification](https://matrix.org/docs/spec/client_server/r0.6.0#room-tagging). Smaller values
 of `order` cause rooms to appear closer to the top of the list.
 
@@ -74,7 +74,7 @@ relative (perceived) importance to the user:
   set to 'All Messages'.
 * **Bold**: The room has unread messages waiting for the user. Essentially this is a grey room without
   a badge/notification count (or 'Mentions Only'/'Muted').
-* **Idle**: No useful (see definition of useful above) activity has occurred in the room since the user 
+* **Idle**: No useful (see definition of useful above) activity has occurred in the room since the user
   last read it.
 
 Conveniently, each tag gets ordered by those categories as presented: red rooms appear above grey, grey
@@ -82,7 +82,7 @@ above bold, etc.
 
 Once the algorithm has determined which rooms belong in which categories, the tag sorting algorithm
 gets applied to each category in a sub-list fashion. This should result in the red rooms (for example)
-being sorted alphabetically amongst each other as well as the grey rooms sorted amongst each other, but 
+being sorted alphabetically amongst each other as well as the grey rooms sorted amongst each other, but
 collectively the tag will be sorted into categories with red being at the top.
 
 ## Sticky rooms
@@ -103,48 +103,62 @@ receive another notification which causes the room to move into the topmost posi
 above the sticky room will move underneath to allow for the new room to take the top slot, maintaining
 the sticky room's position.
 
-Though only applicable to the importance algorithm, the sticky room is not aware of category boundaries 
-and thus the user can see a shift in what kinds of rooms move around their selection. An example would 
-be the user having 4 red rooms, the user selecting the third room (leaving 2 above it), and then having 
-the rooms above it read on another device. This would result in 1 red room and 1 other kind of room 
+Though only applicable to the importance algorithm, the sticky room is not aware of category boundaries
+and thus the user can see a shift in what kinds of rooms move around their selection. An example would
+be the user having 4 red rooms, the user selecting the third room (leaving 2 above it), and then having
+the rooms above it read on another device. This would result in 1 red room and 1 other kind of room
 above the sticky room as it will try to maintain 2 rooms above the sticky room.
 
 An exception for the sticky room placement is when there's suddenly not enough rooms to maintain the placement
 exactly. This typically happens if the user selects a room and leaves enough rooms where it cannot maintain
 the N required rooms above the sticky room. In this case, the sticky room will simply decrease N as needed.
-The N value will never increase while selection remains unchanged: adding a bunch of rooms after having 
+The N value will never increase while selection remains unchanged: adding a bunch of rooms after having
 put the sticky room in a position where it's had to decrease N will not increase N.
 
 ## Responsibilities of the store
 
-The store is responsible for the ordering, upkeep, and tracking of all rooms. The room list component simply gets 
-an object containing the tags it needs to worry about and the rooms within. The room list component will 
-decide which tags need rendering (as it commonly filters out empty tags in most cases), and will deal with 
+The store is responsible for the ordering, upkeep, and tracking of all rooms. The room list component simply gets
+an object containing the tags it needs to worry about and the rooms within. The room list component will
+decide which tags need rendering (as it commonly filters out empty tags in most cases), and will deal with
 all kinds of filtering.
 
 ## Filtering
 
-Filters are provided to the store as condition classes, which are then passed along to the algorithm
-implementations. The implementations then get to decide how to actually filter the rooms, however in
-practice the base `Algorithm` class deals with the filtering in a more optimized/generic way.
+Filters are provided to the store as condition classes and have two major kinds: Prefilters and Runtime.
 
-The results of filters get cached to avoid needlessly iterating over potentially thousands of rooms,
-as the old room list store does. When a filter condition changes, it emits an update which (in this
-case) the `Algorithm` class will pick up and act accordingly. Typically, this also means filtering a 
+Prefilters flush out rooms which shouldn't appear to the algorithm implementations. Typically this is
+due to some higher order room list filtering (such as spaces or tags) deliberately exposing a subset of
+rooms to the user. The algorithm implementations will not see a room being prefiltered out.
+
+Runtime filters are used for more dynamic filtering, such as the user filtering by room name. These
+filters are passed along to the algorithm implementations where those implementations decide how and
+when to apply the filter. In practice, the base `Algorithm` class ends up doing the heavy lifting for
+optimization reasons.
+
+The results of runtime filters get cached to avoid needlessly iterating over potentially thousands of
+rooms, as the old room list store does. When a filter condition changes, it emits an update which (in this
+case) the `Algorithm` class will pick up and act accordingly. Typically, this also means filtering a
 minor subset where possible to avoid over-iterating rooms.
 
 All filter conditions are considered "stable" by the consumers, meaning that the consumer does not
 expect a change in the condition unless the condition says it has changed. This is intentional to
 maintain the caching behaviour described above.
 
+One might ask why we don't just use prefilter conditions for everything, and the answer is one of slight
+subtlety: in the cases of prefilters we are knowingly exposing the user to a workspace-style UX where
+room notifications are self-contained within that workspace. Runtime filters tend to not want to affect
+visible notification counts (as it doesn't want the room header to suddenly be confusing to the user as
+they type), and occasionally UX like "found 2/12 rooms" is desirable. If prefiltering were used instead,
+the notification counts would vary while the user was typing and "found 2/12" UX would not be possible.
+
 ## Class breakdowns
 
-The `RoomListStore` is the major coordinator of various algorithm implementations, which take care 
-of the various `ListAlgorithm` and `SortingAlgorithm` options. The `Algorithm` class is responsible 
-for figuring out which tags get which rooms, as Matrix specifies them as a reverse map: tags get 
-defined on rooms and are not defined as a collection of rooms (unlike how they are presented to the 
-user). Various list-specific utilities are also included, though they are expected to move somewhere 
-more general when needed. For example, the `membership` utilities could easily be moved elsewhere 
+The `RoomListStore` is the major coordinator of various algorithm implementations, which take care
+of the various `ListAlgorithm` and `SortingAlgorithm` options. The `Algorithm` class is responsible
+for figuring out which tags get which rooms, as Matrix specifies them as a reverse map: tags get
+defined on rooms and are not defined as a collection of rooms (unlike how they are presented to the
+user). Various list-specific utilities are also included, though they are expected to move somewhere
+more general when needed. For example, the `membership` utilities could easily be moved elsewhere
 as needed.
 
 The various bits throughout the room list store should also have jsdoc of some kind to help describe

@@ -35,7 +35,9 @@ import PercentageDistributor from "../../../resizer/distributors/percentage";
 import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayoutStore";
 import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
 import {useStateCallback} from "../../../hooks/useStateCallback";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.AppsDrawer")
 export default class AppsDrawer extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
@@ -53,6 +55,8 @@ export default class AppsDrawer extends React.Component {
 
         this.state = {
             apps: this._getApps(),
+            resizingVertical: false, // true when changing the height of the apps drawer
+            resizingHorizontal: false, // true when chagning the distribution of the width between widgets
         };
 
         this._resizeContainer = null;
@@ -85,13 +89,16 @@ export default class AppsDrawer extends React.Component {
     }
 
     onIsResizing = (resizing) => {
-        this.setState({ resizing });
+        // This one is the vertical, ie. change height of apps drawer
+        this.setState({ resizingVertical: resizing });
         if (!resizing) {
             this._relaxResizer();
         }
     };
 
     _createResizer() {
+        // This is the horizontal one, changing the distribution of the width between the app tiles
+        // (ie. a vertical resize handle because, the handle itself is vertical...)
         const classNames = {
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
@@ -100,6 +107,7 @@ export default class AppsDrawer extends React.Component {
         const collapseConfig = {
             onResizeStart: () => {
                 this._resizeContainer.classList.add("mx_AppsDrawer_resizing");
+                this.setState({ resizingHorizontal: true });
             },
             onResizeStop: () => {
                 this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
@@ -107,6 +115,7 @@ export default class AppsDrawer extends React.Component {
                     this.props.room, Container.Top,
                     this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
                 );
+                this.setState({ resizingHorizontal: false });
             },
         };
         // pass a truthy container for now, we won't call attach until we update it
@@ -162,6 +171,10 @@ export default class AppsDrawer extends React.Component {
         }
     };
 
+    isResizing() {
+        return this.state.resizingVertical || this.state.resizingHorizontal;
+    }
+
     onAction = (action) => {
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
@@ -209,6 +222,7 @@ export default class AppsDrawer extends React.Component {
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}
+                pointerEvents={this.isResizing() ? 'none' : undefined}
             />);
         });
 

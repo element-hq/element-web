@@ -88,7 +88,7 @@ describe('MemberList', () => {
         };
         memberListRoom.currentState = {
             members: {},
-            getStateEvents: () => [], // ignore 3pid invites
+            getStateEvents: (eventType, stateKey) => stateKey === undefined ? [] : null, // ignore 3pid invites
         };
         for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
             memberListRoom.currentState.members[member.userId] = member;

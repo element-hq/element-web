@@ -1,5 +1,3 @@
-"use strict";
-
 import React from 'react';
 import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
@@ -81,6 +79,13 @@ export function createTestClient() {
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
         isCryptoEnabled: () => false,
+
+        // Used by various internal bits we aren't concerned with (yet)
+        _sessionStore: {
+            store: {
+                getItem: jest.fn(),
+            },
+        },
     };
 }
 
@@ -215,6 +220,7 @@ export function mkStubRoom(roomId = null) {
             rawDisplayName: 'Member',
             roomId: roomId,
             getAvatarUrl: () => 'mxc://avatar.url/image.png',
+            getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
         }),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getJoinedMembers: jest.fn().mockReturnValue([]),
@@ -244,6 +250,7 @@ export function mkStubRoom(roomId = null) {
         removeListener: jest.fn(),
         getDMInviter: jest.fn(),
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
+        getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
     };
 }
 

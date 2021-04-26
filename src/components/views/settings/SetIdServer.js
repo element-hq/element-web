@@ -27,6 +27,7 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
 import {timeout} from "../../../utils/promise";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -58,6 +59,7 @@ async function checkIdentityServerUrl(u) {
     }
 }
 
+@replaceableComponent("views.settings.SetIdServer")
 export default class SetIdServer extends React.Component {
     static propTypes = {
         // Whether or not the ID server is missing terms. This affects the text

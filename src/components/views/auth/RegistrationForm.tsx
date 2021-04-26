@@ -30,6 +30,7 @@ import PassphraseField from "./PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import Field from '../elements/Field';
 import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 enum RegistrationField {
     Email = "field_email",
@@ -39,7 +40,7 @@ enum RegistrationField {
     PasswordConfirm = "field_password_confirm",
 }
 
-const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
+export const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 interface IProps {
     // Values pre-filled in the input boxes when the component loads
@@ -80,6 +81,7 @@ interface IState {
 /*
  * A pure UI component which displays a registration form.
  */
+@replaceableComponent("views.auth.RegistrationForm")
 export default class RegistrationForm extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onValidationChange: console.error,

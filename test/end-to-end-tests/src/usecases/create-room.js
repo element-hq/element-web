@@ -21,15 +21,7 @@ async function openRoomDirectory(session) {
 }
 
 async function findSublist(session, name) {
-    const sublists = await session.queryAll('.mx_RoomSublist');
-    for (const sublist of sublists) {
-        const header = await sublist.$('.mx_RoomSublist_headerText');
-        const headerText = await session.innerText(header);
-        if (headerText.toLowerCase().includes(name.toLowerCase())) {
-            return sublist;
-        }
-    }
-    throw new Error(`could not find room list section that contains '${name}' in header`);
+    return await session.query(`.mx_RoomSublist[aria-label="${name}" i]`);
 }
 
 async function createRoom(session, roomName, encrypted=false) {

@@ -25,12 +25,14 @@ import DialogButtons from '../../elements/DialogButtons';
 import BaseDialog from '../BaseDialog';
 import Spinner from '../../elements/Spinner';
 import InteractiveAuthDialog from '../InteractiveAuthDialog';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
  * Walks the user through the process of creating a cross-signing keys. In most
  * cases, only a spinner is shown, but for more complex auth like SSO, the user
  * may need to complete some steps to proceed.
  */
+@replaceableComponent("views.dialogs.security.CreateCrossSigningDialog")
 export default class CreateCrossSigningDialog extends React.PureComponent {
     static propTypes = {
         accountPassword: PropTypes.string,

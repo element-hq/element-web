@@ -21,9 +21,11 @@ import PropTypes from 'prop-types';
 import { showGroupAddRoomDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
+@replaceableComponent("views.groups.GroupRoomList")
 export default class GroupRoomList extends React.Component {
     static propTypes = {
         groupId: PropTypes.string.isRequired,

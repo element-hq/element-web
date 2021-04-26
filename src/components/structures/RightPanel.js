@@ -24,13 +24,19 @@ import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
-import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
+import {
+    RightPanelPhases,
+    RIGHT_PANEL_PHASES_NO_ARGS,
+    RIGHT_PANEL_SPACE_PHASES,
+} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {Action} from "../../dispatcher/actions";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.RightPanel")
 export default class RightPanel extends React.Component {
     static get propTypes() {
         return {
@@ -79,6 +85,8 @@ export default class RightPanel extends React.Component {
                 return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;
+        } else if (this.props.room?.isSpaceRoom() && !RIGHT_PANEL_SPACE_PHASES.includes(rps.roomPanelPhase)) {
+            return RightPanelPhases.SpaceMemberList;
         } else if (userForPanel) {
             // XXX FIXME AAAAAARGH: What is going on with this class!? It takes some of its state
             // from its props and some from a store, except if the contents of the store changes
@@ -99,9 +107,8 @@ export default class RightPanel extends React.Component {
                 return rps.roomPanelPhase;
             }
             return RightPanelPhases.RoomMemberInfo;
-        } else {
-            return rps.roomPanelPhase;
         }
+        return rps.roomPanelPhase;
     }
 
     componentDidMount() {
@@ -181,6 +188,7 @@ export default class RightPanel extends React.Component {
                 verificationRequest: payload.verificationRequest,
                 verificationRequestPromise: payload.verificationRequestPromise,
                 widgetId: payload.widgetId,
+                space: payload.space,
             });
         }
     }
@@ -232,6 +240,13 @@ export default class RightPanel extends React.Component {
                     panel = <MemberList roomId={roomId} key={roomId} onClose={this.onClose} />;
                 }
                 break;
+            case RightPanelPhases.SpaceMemberList:
+                panel = <MemberList
+                    roomId={this.state.space ? this.state.space.roomId : roomId}
+                    key={this.state.space ? this.state.space.roomId : roomId}
+                    onClose={this.onClose}
+                />;
+                break;
 
             case RightPanelPhases.GroupMemberList:
                 if (this.props.groupId) {
@@ -244,10 +259,11 @@ export default class RightPanel extends React.Component {
                 break;
 
             case RightPanelPhases.RoomMemberInfo:
+            case RightPanelPhases.SpaceMemberInfo:
             case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
                     user={this.state.member}
-                    room={this.props.room}
+                    room={this.state.phase === RightPanelPhases.SpaceMemberInfo ? this.state.space : this.props.room}
                     key={roomId || this.state.member.userId}
                     onClose={this.onClose}
                     phase={this.state.phase}
@@ -257,6 +273,7 @@ export default class RightPanel extends React.Component {
                 break;
 
             case RightPanelPhases.Room3pidMemberInfo:
+            case RightPanelPhases.Space3pidMemberInfo:
                 panel = <ThirdPartyMemberInfo event={this.state.event} key={roomId} />;
                 break;
 

@@ -18,7 +18,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as TextForEvent from "../../../TextForEvent";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.TextualEvent")
 export default class TextualEvent extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
