@@ -1,3 +1,17 @@
+Changes in [3.19.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.19.0) (2021-04-26)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.19.0-rc.1...v3.19.0)
+
+ * Upgrade to JS SDK 10.0.0
+ * [Release] Dynamic max and min zoom in the new ImageView
+   [\#5927](https://github.com/matrix-org/matrix-react-sdk/pull/5927)
+ * [Release] Add a WheelEvent normalization function
+   [\#5911](https://github.com/matrix-org/matrix-react-sdk/pull/5911)
+ * Add a WheelEvent normalization function
+   [\#5904](https://github.com/matrix-org/matrix-react-sdk/pull/5904)
+ * [Release] Use floats for image background opacity
+   [\#5907](https://github.com/matrix-org/matrix-react-sdk/pull/5907)
+
 Changes in [3.19.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.19.0-rc.1) (2021-04-21)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.18.0...v3.19.0-rc.1)
