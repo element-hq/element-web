@@ -26,7 +26,7 @@ import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../../settings/SettingLevel";
 
 interface IProps {
-    onFinished: (boolean) => {},
+    onFinished: (boolean) => void;
 }
 
 interface IState {
