@@ -27,6 +27,7 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
+// Knock and private are reserved keywords which are not yet implemented.
 enum JoinRule {
     Public = "public",
     Knock = "knock",
