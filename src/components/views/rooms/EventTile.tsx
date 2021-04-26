@@ -222,20 +222,20 @@ interface IProps {
     isSelectedEvent?: boolean;
 
     // callback called when dynamic content in events are loaded
-    onHeightChanged?: () => void,
+    onHeightChanged?: () => void;
 
     // a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'.
-    readReceipts?: IReadReceiptProps[],
+    readReceipts?: IReadReceiptProps[];
 
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations. Should be an empty object when the room
     // first loads
-    readReceiptMap?: any,
+    readReceiptMap?: any;
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we
     // are being unmounted.
-    checkUnmounting?: () => boolean,
+    checkUnmounting?: () => boolean;
 
     // the status of this event - ie, mxEvent.status. Denormalised to here so
     // that we can tell when it changes.
@@ -253,13 +253,13 @@ interface IProps {
     isTwelveHour?: boolean;
 
     // helper function to access relations for this event
-    getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations,
+    getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
 
     // whether to show reactions for this event
     showReactions?: boolean;
 
     // which layout to use
-    layout: Layout,
+    layout: Layout;
 
     // whether or not to show flair at all
     enableFlair?: boolean;
