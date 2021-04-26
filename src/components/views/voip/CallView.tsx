@@ -629,8 +629,9 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video: true,
             });
 
-            // TODO: Later the CallView should probably be reworked to support any
-            // number of feeds but now we can always expect there to be two feeds
+            // TODO: Later the CallView should probably be reworked to support
+            // any number of feeds but now we can always expect there to be two
+            // feeds. This is because the js-sdk ignores any new incoming streams
             const feeds = this.state.feeds.map((feed, i) => {
                 // Here we check to hide local audio feeds to achieve the same UI/UX
                 // as before. But once again this might be subject to change
