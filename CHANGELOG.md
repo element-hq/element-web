@@ -1,3 +1,35 @@
+Changes in [1.7.26](https://github.com/vector-im/element-web/releases/tag/v1.7.26) (2021-04-26)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.26-rc.1...v1.7.26)
+
+ * Upgrade to React SDK 3.19.0 and JS SDK 10.0.0
+
+Changes in [1.7.26-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.26-rc.1) (2021-04-21)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.25...v1.7.26-rc.1)
+
+ * Upgrade to React SDK 3.19.0-rc.1 and JS SDK 10.0.0-rc.1
+ * Translations update from Weblate
+   [\#17031](https://github.com/vector-im/element-web/pull/17031)
+ * Bump ssri from 6.0.1 to 6.0.2
+   [\#17010](https://github.com/vector-im/element-web/pull/17010)
+ * Fix `NODE_ENV` value for CI environments
+   [\#17003](https://github.com/vector-im/element-web/pull/17003)
+ * Use React production mode in CI builds
+   [\#16969](https://github.com/vector-im/element-web/pull/16969)
+ * Labs documentation for DND mode
+   [\#16962](https://github.com/vector-im/element-web/pull/16962)
+ * Rename blackboxing to new option ignore list
+   [\#16965](https://github.com/vector-im/element-web/pull/16965)
+ * Remove velocity-animate from lockfile
+   [\#16963](https://github.com/vector-im/element-web/pull/16963)
+ * Add mobile download link configuration
+   [\#16890](https://github.com/vector-im/element-web/pull/16890)
+ * Switch develop to not-staging Scalar by default
+   [\#16883](https://github.com/vector-im/element-web/pull/16883)
+ * Support a config option to skip login/welcome and go to SSO
+   [\#16880](https://github.com/vector-im/element-web/pull/16880)
+
 Changes in [1.7.25](https://github.com/vector-im/element-web/releases/tag/v1.7.25) (2021-04-12)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.25-rc.1...v1.7.25)
