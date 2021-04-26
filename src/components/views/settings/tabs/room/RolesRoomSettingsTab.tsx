@@ -64,10 +64,10 @@ function parseIntWithDefault(val, def) {
 }
 
 interface IBannedUserProps {
-    canUnban: boolean;
+    canUnban?: boolean;
     member: RoomMember;
     by: string;
-    reason: string;
+    reason?: string;
 }
 
 export class BannedUser extends React.Component<IBannedUserProps> {
