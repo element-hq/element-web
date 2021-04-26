@@ -130,6 +130,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
             placeholder={ _t("Filter your rooms and spaces") }
             onSearch={setQuery}
             autoComplete={true}
+            autoFocus={true}
         />
         <AutoHideScrollbar className="mx_AddExistingToSpaceDialog_content" id="mx_AddExistingToSpaceDialog">
             { rooms.length > 0 ? (
