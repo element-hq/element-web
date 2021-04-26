@@ -20,31 +20,31 @@ import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
  * Generates permalinks that self-reference the running webapp
  */
 export default class ElementPermalinkConstructor extends PermalinkConstructor {
-    private _elementUrl: string;
+    private elementUrl: string;
 
     constructor(elementUrl: string) {
         super();
-        this._elementUrl = elementUrl;
+        this.elementUrl = elementUrl;
 
-        if (!this._elementUrl.startsWith("http:") && !this._elementUrl.startsWith("https:")) {
+        if (!this.elementUrl.startsWith("http:") && !this.elementUrl.startsWith("https:")) {
             throw new Error("Element prefix URL does not appear to be an HTTP(S) URL");
         }
     }
 
     forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
-        return `${this._elementUrl}/#/room/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this.elementUrl}/#/room/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     forRoom(roomIdOrAlias: string, serverCandidates?: string[]): string {
-        return `${this._elementUrl}/#/room/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
+        return `${this.elementUrl}/#/room/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
     forUser(userId: string): string {
-        return `${this._elementUrl}/#/user/${userId}`;
+        return `${this.elementUrl}/#/user/${userId}`;
     }
 
     forGroup(groupId: string): string {
-        return `${this._elementUrl}/#/group/${groupId}`;
+        return `${this.elementUrl}/#/group/${groupId}`;
     }
 
     forEntity(entityId: string): string {
@@ -58,7 +58,7 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
     }
 
     isPermalinkHost(testHost: string): boolean {
-        const parsedUrl = new URL(this._elementUrl);
+        const parsedUrl = new URL(this.elementUrl);
         return testHost === (parsedUrl.host || parsedUrl.hostname); // one of the hosts should match
     }
 
@@ -71,11 +71,11 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
     // https://github.com/turt2live/matrix-js-bot-sdk/blob/7c4665c9a25c2c8e0fe4e509f2616505b5b66a1c/src/Permalinks.ts#L33-L61
     // Adapted for Element's URL format
     parsePermalink(fullUrl: string): PermalinkParts {
-        if (!fullUrl || !fullUrl.startsWith(this._elementUrl)) {
+        if (!fullUrl || !fullUrl.startsWith(this.elementUrl)) {
             throw new Error("Does not appear to be a permalink");
         }
 
-        const parts = fullUrl.substring(`${this._elementUrl}/#/`.length);
+        const parts = fullUrl.substring(`${this.elementUrl}/#/`.length);
         return ElementPermalinkConstructor.parseAppRoute(parts);
     }
 

@@ -51,7 +51,7 @@ export default class ScalarAuthClient {
         this.isDefaultManager = apiUrl === configApiUrl && configUiUrl === uiUrl;
     }
 
-    _writeTokenToStore() {
+    private writeTokenToStore() {
         window.localStorage.setItem("mx_scalar_token_at_" + this.apiUrl, this.scalarToken);
         if (this.isDefaultManager) {
             // We remove the old token from storage to migrate upwards. This is safe
@@ -61,7 +61,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    _readTokenFromStore() {
+    private readTokenFromStore() {
         let token = window.localStorage.getItem("mx_scalar_token_at_" + this.apiUrl);
         if (!token && this.isDefaultManager) {
             token = window.localStorage.getItem("mx_scalar_token");
@@ -69,9 +69,9 @@ export default class ScalarAuthClient {
         return token;
     }
 
-    _readToken() {
+    private readToken() {
         if (this.scalarToken) return this.scalarToken;
-        return this._readTokenFromStore();
+        return this.readTokenFromStore();
     }
 
     setTermsInteractionCallback(callback) {
@@ -90,12 +90,12 @@ export default class ScalarAuthClient {
 
     // Returns a promise that resolves to a scalar_token string
     getScalarToken() {
-        const token = this._readToken();
+        const token = this.readToken();
 
         if (!token) {
             return this.registerForToken();
         } else {
-            return this._checkToken(token).catch((e) => {
+            return this.checkToken(token).catch((e) => {
                 if (e instanceof TermsNotSignedError) {
                     // retrying won't help this
                     throw e;
@@ -105,7 +105,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    _getAccountName(token) {
+    private getAccountName(token) {
         const url = this.apiUrl + "/account";
 
         return new Promise(function(resolve, reject) {
@@ -130,8 +130,8 @@ export default class ScalarAuthClient {
         });
     }
 
-    _checkToken(token) {
-        return this._getAccountName(token).then(userId => {
+    private checkToken(token) {
+        return this.getAccountName(token).then(userId => {
             const me = MatrixClientPeg.get().getUserId();
             if (userId !== me) {
                 throw new Error("Scalar token is owned by someone else: " + me);
@@ -177,10 +177,10 @@ export default class ScalarAuthClient {
             return this.exchangeForScalarToken(tokenObject);
         }).then((token) => {
             // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
-            return this._checkToken(token);
+            return this.checkToken(token);
         }).then((token) => {
             this.scalarToken = token;
-            this._writeTokenToStore();
+            this.writeTokenToStore();
             return token;
         });
     }

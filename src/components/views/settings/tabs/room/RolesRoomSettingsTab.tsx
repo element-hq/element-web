@@ -71,7 +71,7 @@ interface IBannedUserProps {
 }
 
 export class BannedUser extends React.Component<IBannedUserProps> {
-    _onUnbanClick = (e) => {
+    private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to unban: " + err);
@@ -89,7 +89,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
             unbanButton = (
                 <AccessibleButton className='mx_RolesRoomSettingsTab_unbanBtn'
                     kind='danger_sm'
-                    onClick={this._onUnbanClick}
+                    onClick={this.onUnbanClick}
                 >
                     { _t('Unban') }
                 </AccessibleButton>
@@ -116,22 +116,22 @@ interface IProps {
 @replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
     componentDidMount(): void {
-        MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership);
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomMembership);
     }
 
     componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("RoomState.members", this._onRoomMembership);
+            client.removeListener("RoomState.members", this.onRoomMembership);
         }
     }
 
-    _onRoomMembership = (event, state, member) => {
+    private onRoomMembership = (event, state, member) => {
         if (state.roomId !== this.props.roomId) return;
         this.forceUpdate();
     };
 
-    _populateDefaultPlEvents(eventsSection, stateLevel, eventsLevel) {
+    private populateDefaultPlEvents(eventsSection, stateLevel, eventsLevel) {
         for (const desiredEvent of Object.keys(plEventsToShow)) {
             if (!(desiredEvent in eventsSection)) {
                 eventsSection[desiredEvent] = (plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel);
@@ -139,7 +139,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
     }
 
-    _onPowerLevelsChanged = (value, powerLevelKey) => {
+    private onPowerLevelsChanged = (value, powerLevelKey) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -184,7 +184,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    _onUserPowerLevelChanged = (value, powerLevelKey) => {
+    private onUserPowerLevelChanged = (value, powerLevelKey) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -268,7 +268,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             currentUserLevel = defaultUserLevel;
         }
 
-        this._populateDefaultPlEvents(
+        this.populateDefaultPlEvents(
             eventsLevels,
             parseIntWithDefault(plContent.state_default, powerLevelDescriptors.state_default.defaultValue),
             parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
@@ -290,7 +290,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                             label={user}
                             key={user}
                             powerLevelKey={user} // Will be sent as the second parameter to `onChange`
-                            onChange={this._onUserPowerLevelChanged}
+                            onChange={this.onUserPowerLevelChanged}
                         />,
                     );
                 } else if (userLevels[user] < defaultUserLevel) { // muted
@@ -301,7 +301,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                             label={user}
                             key={user}
                             powerLevelKey={user} // Will be sent as the second parameter to `onChange`
-                            onChange={this._onUserPowerLevelChanged}
+                            onChange={this.onUserPowerLevelChanged}
                         />,
                     );
                 }
@@ -376,7 +376,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     usersDefault={defaultUserLevel}
                     disabled={!canChangeLevels || currentUserLevel < value}
                     powerLevelKey={key} // Will be sent as the second parameter to `onChange`
-                    onChange={this._onPowerLevelsChanged}
+                    onChange={this.onPowerLevelsChanged}
                 />
             </div>;
         });
@@ -401,7 +401,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                         usersDefault={defaultUserLevel}
                         disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
                         powerLevelKey={"event_levels_" + eventType}
-                        onChange={this._onPowerLevelsChanged}
+                        onChange={this.onPowerLevelsChanged}
                     />
                 </div>
             );

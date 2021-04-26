@@ -293,10 +293,10 @@ interface IState {
 
 @replaceableComponent("views.rooms.EventTile")
 export default class EventTile extends React.Component<IProps, IState> {
-    private _suppressReadReceiptAnimation: boolean;
-    private _isListeningForReceipts: boolean;
-    private _tile = React.createRef();
-    private _replyThread = React.createRef();
+    private suppressReadReceiptAnimation: boolean;
+    private isListeningForReceipts: boolean;
+    private tile = React.createRef();
+    private replyThread = React.createRef();
 
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
@@ -323,23 +323,22 @@ export default class EventTile extends React.Component<IProps, IState> {
         };
 
         // don't do RR animations until we are mounted
-        this._suppressReadReceiptAnimation = true;
+        this.suppressReadReceiptAnimation = true;
 
         // Throughout the component we manage a read receipt listener to see if our tile still
         // qualifies for a "sent" or "sending" state (based on their relevant conditions). We
         // don't want to over-subscribe to the read receipt events being fired, so we use a flag
         // to determine if we've already subscribed and use a combination of other flags to find
         // out if we should even be subscribed at all.
-        this._isListeningForReceipts = false;
+        this.isListeningForReceipts = false;
     }
 
     /**
      * When true, the tile qualifies for some sort of special read receipt. This could be a 'sending'
      * or 'sent' receipt, for example.
      * @returns {boolean}
-     * @private
      */
-    get _isEligibleForSpecialReceipt() {
+    private get isEligibleForSpecialReceipt() {
         // First, if there are other read receipts then just short-circuit this.
         if (this.props.readReceipts && this.props.readReceipts.length > 0) return false;
         if (!this.props.mxEvent) return false;
@@ -368,9 +367,9 @@ export default class EventTile extends React.Component<IProps, IState> {
         return true;
     }
 
-    get _shouldShowSentReceipt() {
+    private get shouldShowSentReceipt() {
         // If we're not even eligible, don't show the receipt.
-        if (!this._isEligibleForSpecialReceipt) return false;
+        if (!this.isEligibleForSpecialReceipt) return false;
 
         // We only show the 'sent' receipt on the last successful event.
         if (!this.props.lastSuccessful) return false;
@@ -388,9 +387,9 @@ export default class EventTile extends React.Component<IProps, IState> {
         return true;
     }
 
-    get _shouldShowSendingReceipt() {
+    private get shouldShowSendingReceipt() {
         // If we're not even eligible, don't show the receipt.
-        if (!this._isEligibleForSpecialReceipt) return false;
+        if (!this.isEligibleForSpecialReceipt) return false;
 
         // Check the event send status to see if we are pending. Null/undefined status means the
         // message was sent, so check for that and 'sent' explicitly.
@@ -404,22 +403,22 @@ export default class EventTile extends React.Component<IProps, IState> {
     // TODO: [REACT-WARNING] Move into constructor
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
-        this._verifyEvent(this.props.mxEvent);
+        this.verifyEvent(this.props.mxEvent);
     }
 
     componentDidMount() {
-        this._suppressReadReceiptAnimation = false;
+        this.suppressReadReceiptAnimation = false;
         const client = this.context;
         client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         client.on("userTrustStatusChanged", this.onUserVerificationChanged);
-        this.props.mxEvent.on("Event.decrypted", this._onDecrypted);
+        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
         if (this.props.showReactions) {
-            this.props.mxEvent.on("Event.relationsCreated", this._onReactionsCreated);
+            this.props.mxEvent.on("Event.relationsCreated", this.onReactionsCreated);
         }
 
-        if (this._shouldShowSentReceipt || this._shouldShowSendingReceipt) {
-            client.on("Room.receipt", this._onRoomReceipt);
-            this._isListeningForReceipts = true;
+        if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
+            client.on("Room.receipt", this.onRoomReceipt);
+            this.isListeningForReceipts = true;
         }
     }
 
@@ -429,7 +428,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         // re-check the sender verification as outgoing events progress through
         // the send process.
         if (nextProps.eventSendStatus !== this.props.eventSendStatus) {
-            this._verifyEvent(nextProps.mxEvent);
+            this.verifyEvent(nextProps.mxEvent);
         }
     }
 
@@ -438,35 +437,35 @@ export default class EventTile extends React.Component<IProps, IState> {
             return true;
         }
 
-        return !this._propsEqual(this.props, nextProps);
+        return !this.propsEqual(this.props, nextProps);
     }
 
     componentWillUnmount() {
         const client = this.context;
         client.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         client.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
-        client.removeListener("Room.receipt", this._onRoomReceipt);
-        this._isListeningForReceipts = false;
-        this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
+        client.removeListener("Room.receipt", this.onRoomReceipt);
+        this.isListeningForReceipts = false;
+        this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
         if (this.props.showReactions) {
-            this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
+            this.props.mxEvent.removeListener("Event.relationsCreated", this.onReactionsCreated);
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         // If we're not listening for receipts and expect to be, register a listener.
-        if (!this._isListeningForReceipts && (this._shouldShowSentReceipt || this._shouldShowSendingReceipt)) {
-            this.context.on("Room.receipt", this._onRoomReceipt);
-            this._isListeningForReceipts = true;
+        if (!this.isListeningForReceipts && (this.shouldShowSentReceipt || this.shouldShowSendingReceipt)) {
+            this.context.on("Room.receipt", this.onRoomReceipt);
+            this.isListeningForReceipts = true;
         }
     }
 
-    _onRoomReceipt = (ev, room) => {
+    private onRoomReceipt = (ev, room) => {
         // ignore events for other rooms
         const tileRoom = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         if (room !== tileRoom) return;
 
-        if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt && !this._isListeningForReceipts) {
+        if (!this.shouldShowSentReceipt && !this.shouldShowSendingReceipt && !this.isListeningForReceipts) {
             return;
         }
 
@@ -474,36 +473,36 @@ export default class EventTile extends React.Component<IProps, IState> {
         // the getters we use here to determine what needs rendering.
         this.forceUpdate(() => {
             // Per elsewhere in this file, we can remove the listener once we will have no further purpose for it.
-            if (!this._shouldShowSentReceipt && !this._shouldShowSendingReceipt) {
-                this.context.removeListener("Room.receipt", this._onRoomReceipt);
-                this._isListeningForReceipts = false;
+            if (!this.shouldShowSentReceipt && !this.shouldShowSendingReceipt) {
+                this.context.removeListener("Room.receipt", this.onRoomReceipt);
+                this.isListeningForReceipts = false;
             }
         });
     };
 
     /** called when the event is decrypted after we show it.
      */
-    _onDecrypted = () => {
+    private onDecrypted = () => {
         // we need to re-verify the sending device.
-        // (we call onHeightChanged in _verifyEvent to handle the case where decryption
+        // (we call onHeightChanged in verifyEvent to handle the case where decryption
         // has caused a change in size of the event tile)
-        this._verifyEvent(this.props.mxEvent);
+        this.verifyEvent(this.props.mxEvent);
         this.forceUpdate();
     };
 
-    onDeviceVerificationChanged = (userId, device) => {
+    private onDeviceVerificationChanged = (userId, device) => {
         if (userId === this.props.mxEvent.getSender()) {
-            this._verifyEvent(this.props.mxEvent);
+            this.verifyEvent(this.props.mxEvent);
         }
     };
 
-    onUserVerificationChanged = (userId, _trustStatus) => {
+    private onUserVerificationChanged = (userId, _trustStatus) => {
         if (userId === this.props.mxEvent.getSender()) {
-            this._verifyEvent(this.props.mxEvent);
+            this.verifyEvent(this.props.mxEvent);
         }
     };
 
-    async _verifyEvent(mxEvent) {
+    private async verifyEvent(mxEvent) {
         if (!mxEvent.isEncrypted()) {
             return;
         }
@@ -557,7 +556,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     }
 
-    _propsEqual(objA, objB) {
+    private propsEqual(objA, objB) {
         const keysA = Object.keys(objA);
         const keysB = Object.keys(objB);
 
@@ -624,7 +623,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     };
 
     getReadAvatars() {
-        if (this._shouldShowSentReceipt || this._shouldShowSendingReceipt) {
+        if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
             return <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
         }
 
@@ -671,7 +670,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     leftOffset={left} hidden={hidden}
                     readReceiptInfo={readReceiptInfo}
                     checkUnmounting={this.props.checkUnmounting}
-                    suppressAnimation={this._suppressReadReceiptAnimation}
+                    suppressAnimation={this.suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
                     timestamp={receipt.ts}
                     showTwelveHour={this.props.isTwelveHour}
@@ -728,7 +727,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         });
     };
 
-    _renderE2EPadlock() {
+    private renderE2EPadlock() {
         const ev = this.props.mxEvent;
 
         // event could not be decrypted
@@ -777,9 +776,9 @@ export default class EventTile extends React.Component<IProps, IState> {
         });
     };
 
-    getTile = () => this._tile.current;
+    getTile = () => this.tile.current;
 
-    getReplyThread = () => this._replyThread.current;
+    getReplyThread = () => this.replyThread.current;
 
     getReactions = () => {
         if (
@@ -799,11 +798,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
     };
 
-    _onReactionsCreated = (relationType, eventType) => {
+    private onReactionsCreated = (relationType, eventType) => {
         if (relationType !== "m.annotation" || eventType !== "m.reaction") {
             return;
         }
-        this.props.mxEvent.removeListener("Event.relationsCreated", this._onReactionsCreated);
+        this.props.mxEvent.removeListener("Event.relationsCreated", this.onReactionsCreated);
         this.setState({
             reactions: this.getReactions(),
         });
@@ -1017,8 +1016,8 @@ export default class EventTile extends React.Component<IProps, IState> {
         const useIRCLayout = this.props.layout == Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
-        const groupPadlock = !useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
-        const ircPadlock = useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
+        const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
 
         let msgOption;
         if (this.props.showReadReceipts) {
@@ -1049,7 +1048,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             </a>
                         </div>
                         <div className="mx_EventTile_line">
-                            <EventTileType ref={this._tile}
+                            <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
                                 highlights={this.props.highlights}
                                 highlightLink={this.props.highlightLink}
@@ -1064,7 +1063,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                 return (
                     <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_line">
-                            <EventTileType ref={this._tile}
+                            <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
                                 highlights={this.props.highlights}
                                 highlightLink={this.props.highlightLink}
@@ -1095,7 +1094,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         this.props.mxEvent,
                         this.props.onHeightChanged,
                         this.props.permalinkCreator,
-                        this._replyThread,
+                        this.replyThread,
                     );
                 }
                 return (
@@ -1108,7 +1107,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { groupTimestamp }
                             { groupPadlock }
                             { thread }
-                            <EventTileType ref={this._tile}
+                            <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
                                 highlights={this.props.highlights}
                                 highlightLink={this.props.highlightLink}
@@ -1125,7 +1124,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.mxEvent,
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
-                    this._replyThread,
+                    this.replyThread,
                     this.props.layout,
                 );
 
@@ -1139,7 +1138,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { groupTimestamp }
                             { groupPadlock }
                             { thread }
-                            <EventTileType ref={this._tile}
+                            <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
                                 replacingEventId={this.props.replacingEventId}
                                 editState={this.props.editState}

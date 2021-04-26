@@ -74,29 +74,29 @@ const MAX_SERVER_CANDIDATES = 3;
 // the list and magically have the link work.
 
 export class RoomPermalinkCreator {
-    private _room: Room;
-    private _roomId: string;
-    private _highestPlUserId: string;
-    private _populationMap: { [serverName: string]: number };
-    private _bannedHostsRegexps: RegExp[];
-    private _allowedHostsRegexps: RegExp[];
+    private room: Room;
+    private roomId: string;
+    private highestPlUserId: string;
+    private populationMap: { [serverName: string]: number };
+    private bannedHostsRegexps: RegExp[];
+    private allowedHostsRegexps: RegExp[];
     private _serverCandidates: string[];
-    private _started: boolean;
+    private started: boolean;
 
     // We support being given a roomId as a fallback in the event the `room` object
     // doesn't exist or is not healthy for us to rely on. For example, loading a
     // permalink to a room which the MatrixClient doesn't know about.
     constructor(room: Room, roomId: string = null) {
-        this._room = room;
-        this._roomId = room ? room.roomId : roomId;
-        this._highestPlUserId = null;
-        this._populationMap = null;
-        this._bannedHostsRegexps = null;
-        this._allowedHostsRegexps = null;
+        this.room = room;
+        this.roomId = room ? room.roomId : roomId;
+        this.highestPlUserId = null;
+        this.populationMap = null;
+        this.bannedHostsRegexps = null;
+        this.allowedHostsRegexps = null;
         this._serverCandidates = null;
-        this._started = false;
+        this.started = false;
 
-        if (!this._roomId) {
+        if (!this.roomId) {
             throw new Error("Failed to resolve a roomId for the permalink creator to use");
         }
 
@@ -105,7 +105,7 @@ export class RoomPermalinkCreator {
     }
 
     load() {
-        if (!this._room || !this._room.currentState) {
+        if (!this.room || !this.room.currentState) {
             // Under rare and unknown circumstances it is possible to have a room with no
             // currentState, at least potentially at the early stages of joining a room.
             // To avoid breaking everything, we'll just warn rather than throw as well as
@@ -113,23 +113,23 @@ export class RoomPermalinkCreator {
             console.warn("Tried to load a permalink creator with no room state");
             return;
         }
-        this._updateAllowedServers();
-        this._updateHighestPlUser();
-        this._updatePopulationMap();
-        this._updateServerCandidates();
+        this.updateAllowedServers();
+        this.updateHighestPlUser();
+        this.updatePopulationMap();
+        this.updateServerCandidates();
     }
 
     start() {
         this.load();
-        this._room.on("RoomMember.membership", this.onMembership);
-        this._room.on("RoomState.events", this.onRoomState);
-        this._started = true;
+        this.room.on("RoomMember.membership", this.onMembership);
+        this.room.on("RoomState.events", this.onRoomState);
+        this.started = true;
     }
 
     stop() {
-        this._room.removeListener("RoomMember.membership", this.onMembership);
-        this._room.removeListener("RoomState.events", this.onRoomState);
-        this._started = false;
+        this.room.removeListener("RoomMember.membership", this.onMembership);
+        this.room.removeListener("RoomState.events", this.onRoomState);
+        this.started = false;
     }
 
     get serverCandidates() {
@@ -137,44 +137,44 @@ export class RoomPermalinkCreator {
     }
 
     isStarted() {
-        return this._started;
+        return this.started;
     }
 
     forEvent(eventId) {
-        return getPermalinkConstructor().forEvent(this._roomId, eventId, this._serverCandidates);
+        return getPermalinkConstructor().forEvent(this.roomId, eventId, this._serverCandidates);
     }
 
     forShareableRoom() {
-        if (this._room) {
+        if (this.room) {
             // Prefer to use canonical alias for permalink if possible
-            const alias = this._room.getCanonicalAlias();
+            const alias = this.room.getCanonicalAlias();
             if (alias) {
                 return getPermalinkConstructor().forRoom(alias, this._serverCandidates);
             }
         }
-        return getPermalinkConstructor().forRoom(this._roomId, this._serverCandidates);
+        return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
     forRoom() {
-        return getPermalinkConstructor().forRoom(this._roomId, this._serverCandidates);
+        return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
-    onRoomState(event) {
+    private onRoomState(event) {
         switch (event.getType()) {
             case "m.room.server_acl":
-                this._updateAllowedServers();
-                this._updateHighestPlUser();
-                this._updatePopulationMap();
-                this._updateServerCandidates();
+                this.updateAllowedServers();
+                this.updateHighestPlUser();
+                this.updatePopulationMap();
+                this.updateServerCandidates();
                 return;
             case "m.room.power_levels":
-                this._updateHighestPlUser();
-                this._updateServerCandidates();
+                this.updateHighestPlUser();
+                this.updateServerCandidates();
                 return;
         }
     }
 
-    onMembership(evt, member, oldMembership) {
+    private onMembership(evt, member, oldMembership) {
         const userId = member.userId;
         const membership = member.membership;
         const serverName = getServerName(userId);
@@ -182,17 +182,17 @@ export class RoomPermalinkCreator {
         const hasLeft = oldMembership === "join" && membership !== "join";
 
         if (hasLeft) {
-            this._populationMap[serverName]--;
+            this.populationMap[serverName]--;
         } else if (hasJoined) {
-            this._populationMap[serverName]++;
+            this.populationMap[serverName]++;
         }
 
-        this._updateHighestPlUser();
-        this._updateServerCandidates();
+        this.updateHighestPlUser();
+        this.updateServerCandidates();
     }
 
-    _updateHighestPlUser() {
-        const plEvent = this._room.currentState.getStateEvents("m.room.power_levels", "");
+    private updateHighestPlUser() {
+        const plEvent = this.room.currentState.getStateEvents("m.room.power_levels", "");
         if (plEvent) {
             const content = plEvent.getContent();
             if (content) {
@@ -200,14 +200,14 @@ export class RoomPermalinkCreator {
                 if (users) {
                     const entries = Object.entries(users);
                     const allowedEntries = entries.filter(([userId]) => {
-                        const member = this._room.getMember(userId);
+                        const member = this.room.getMember(userId);
                         if (!member || member.membership !== "join") {
                             return false;
                         }
                         const serverName = getServerName(userId);
                         return !isHostnameIpAddress(serverName) &&
-                            !isHostInRegex(serverName, this._bannedHostsRegexps) &&
-                            isHostInRegex(serverName, this._allowedHostsRegexps);
+                            !isHostInRegex(serverName, this.bannedHostsRegexps) &&
+                            isHostInRegex(serverName, this.allowedHostsRegexps);
                     });
                     const maxEntry = allowedEntries.reduce((max, entry) => {
                         return (entry[1] > max[1]) ? entry : max;
@@ -215,20 +215,20 @@ export class RoomPermalinkCreator {
                     const [userId, powerLevel] = maxEntry;
                     // object wasn't empty, and max entry wasn't a demotion from the default
                     if (userId !== null && powerLevel >= 50) {
-                        this._highestPlUserId = userId;
+                        this.highestPlUserId = userId;
                         return;
                     }
                 }
             }
         }
-        this._highestPlUserId = null;
+        this.highestPlUserId = null;
     }
 
-    _updateAllowedServers() {
+    private updateAllowedServers() {
         const bannedHostsRegexps = [];
         let allowedHostsRegexps = [new RegExp(".*")]; // default allow everyone
-        if (this._room.currentState) {
-            const aclEvent = this._room.currentState.getStateEvents("m.room.server_acl", "");
+        if (this.room.currentState) {
+            const aclEvent = this.room.currentState.getStateEvents("m.room.server_acl", "");
             if (aclEvent && aclEvent.getContent()) {
                 const getRegex = (hostname) => new RegExp("^" + utils.globToRegexp(hostname, false) + "$");
 
@@ -240,35 +240,35 @@ export class RoomPermalinkCreator {
                 allowed.forEach(h => allowedHostsRegexps.push(getRegex(h)));
             }
         }
-        this._bannedHostsRegexps = bannedHostsRegexps;
-        this._allowedHostsRegexps = allowedHostsRegexps;
+        this.bannedHostsRegexps = bannedHostsRegexps;
+        this.allowedHostsRegexps = allowedHostsRegexps;
     }
 
-    _updatePopulationMap() {
+    private updatePopulationMap() {
         const populationMap: { [server: string]: number } = {};
-        for (const member of this._room.getJoinedMembers()) {
+        for (const member of this.room.getJoinedMembers()) {
             const serverName = getServerName(member.userId);
             if (!populationMap[serverName]) {
                 populationMap[serverName] = 0;
             }
             populationMap[serverName]++;
         }
-        this._populationMap = populationMap;
+        this.populationMap = populationMap;
     }
 
-    _updateServerCandidates() {
+    private updateServerCandidates() {
         let candidates = [];
-        if (this._highestPlUserId) {
-            candidates.push(getServerName(this._highestPlUserId));
+        if (this.highestPlUserId) {
+            candidates.push(getServerName(this.highestPlUserId));
         }
 
-        const serversByPopulation = Object.keys(this._populationMap)
-            .sort((a, b) => this._populationMap[b] - this._populationMap[a])
+        const serversByPopulation = Object.keys(this.populationMap)
+            .sort((a, b) => this.populationMap[b] - this.populationMap[a])
             .filter(a => {
                 return !candidates.includes(a) &&
                     !isHostnameIpAddress(a) &&
-                    !isHostInRegex(a, this._bannedHostsRegexps) &&
-                    isHostInRegex(a, this._allowedHostsRegexps);
+                    !isHostInRegex(a, this.bannedHostsRegexps) &&
+                    isHostInRegex(a, this.allowedHostsRegexps);
             });
 
         const remainingServers = serversByPopulation.slice(0, MAX_SERVER_CANDIDATES - candidates.length);

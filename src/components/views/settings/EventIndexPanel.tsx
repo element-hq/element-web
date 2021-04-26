@@ -109,7 +109,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     }
 
-    _onManage = async () => {
+    private onManage = async () => {
         Modal.createTrackedDialogAsync('Message search', 'Message search',
             // @ts-ignore: TS doesn't seem to like the type of this now that it
             // has also been converted to TS as well, but I can't figure out why...
@@ -120,7 +120,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         );
     }
 
-    _onEnable = async () => {
+    private onEnable = async () => {
         this.setState({
             enabling: true,
         });
@@ -132,13 +132,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         await this.updateState();
     }
 
-    _confirmEventStoreReset = () => {
+    private confirmEventStoreReset = () => {
         const { close } = Modal.createDialog(SeshatResetDialog, {
             onFinished: async (success) => {
                 if (success) {
                     await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
                     await EventIndexPeg.deleteEventIndex();
-                    await this._onEnable();
+                    await this.onEnable();
                     close();
                 }
             },
@@ -165,7 +165,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         },
                     )}</div>
                     <div>
-                        <AccessibleButton kind="primary" onClick={this._onManage}>
+                        <AccessibleButton kind="primary" onClick={this.onManage}>
                             {_t("Manage")}
                         </AccessibleButton>
                     </div>
@@ -180,7 +180,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                     )}</div>
                     <div>
                         <AccessibleButton kind="primary" disabled={this.state.enabling}
-                            onClick={this._onEnable}>
+                            onClick={this.onEnable}>
                             {_t("Enable")}
                         </AccessibleButton>
                         {this.state.enabling ? <InlineSpinner /> : <div />}
@@ -242,7 +242,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                                 {EventIndexPeg.error.message}
                             </code>
                             <p>
-                                <AccessibleButton key="delete" kind="danger" onClick={this._confirmEventStoreReset}>
+                                <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
                                     {_t("Reset")}
                                 </AccessibleButton>
                             </p>

@@ -43,15 +43,15 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         };
     }
 
-    _onPersonalRuleChanged = (e) => {
+    private onPersonalRuleChanged = (e) => {
         this.setState({newPersonalRule: e.target.value});
     };
 
-    _onNewListChanged = (e) => {
+    private onNewListChanged = (e) => {
         this.setState({newList: e.target.value});
     };
 
-    _onAddPersonalRule = async (e) => {
+    private onAddPersonalRule = async (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -78,7 +78,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     };
 
-    _onSubscribeList = async (e) => {
+    private onSubscribeList = async (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -100,7 +100,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     };
 
-    async _removePersonalRule(rule: ListRule) {
+    private async removePersonalRule(rule: ListRule) {
         this.setState({busy: true});
         try {
             const list = Mjolnir.sharedInstance().getPersonalList();
@@ -118,7 +118,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     }
 
-    async _unsubscribeFromList(list: BanList) {
+    private async unsubscribeFromList(list: BanList) {
         this.setState({busy: true});
         try {
             await Mjolnir.sharedInstance().unsubscribeFromList(list.roomId);
@@ -136,7 +136,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     }
 
-    _viewListRules(list: BanList) {
+    private viewListRules(list: BanList) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         const room = MatrixClientPeg.get().getRoom(list.roomId);
@@ -167,7 +167,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         });
     }
 
-    _renderPersonalBanListRules() {
+    private renderPersonalBanListRules() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const list = Mjolnir.sharedInstance().getPersonalList();
@@ -180,7 +180,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                 <li key={rule.entity} className="mx_MjolnirUserSettingsTab_listItem">
                     <AccessibleButton
                         kind="danger_sm"
-                        onClick={() => this._removePersonalRule(rule)}
+                        onClick={() => this.removePersonalRule(rule)}
                         disabled={this.state.busy}
                     >
                         {_t("Remove")}
@@ -198,7 +198,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         );
     }
 
-    _renderSubscribedBanLists() {
+    private renderSubscribedBanLists() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const personalList = Mjolnir.sharedInstance().getPersonalList();
@@ -215,14 +215,14 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                 <li key={list.roomId} className="mx_MjolnirUserSettingsTab_listItem">
                     <AccessibleButton
                         kind="danger_sm"
-                        onClick={() => this._unsubscribeFromList(list)}
+                        onClick={() => this.unsubscribeFromList(list)}
                         disabled={this.state.busy}
                     >
                         {_t("Unsubscribe")}
                     </AccessibleButton>&nbsp;
                     <AccessibleButton
                         kind="primary_sm"
-                        onClick={() => this._viewListRules(list)}
+                        onClick={() => this.viewListRules(list)}
                         disabled={this.state.busy}
                     >
                         {_t("View rules")}
@@ -277,21 +277,21 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         )}
                     </div>
                     <div>
-                        {this._renderPersonalBanListRules()}
+                        {this.renderPersonalBanListRules()}
                     </div>
                     <div>
-                        <form onSubmit={this._onAddPersonalRule} autoComplete="off">
+                        <form onSubmit={this.onAddPersonalRule} autoComplete="off">
                             <Field
                                 type="text"
                                 label={_t("Server or user ID to ignore")}
                                 placeholder={_t("eg: @bot:* or example.org")}
                                 value={this.state.newPersonalRule}
-                                onChange={this._onPersonalRuleChanged}
+                                onChange={this.onPersonalRuleChanged}
                             />
                             <AccessibleButton
                                 type="submit"
                                 kind="primary"
-                                onClick={this._onAddPersonalRule}
+                                onClick={this.onAddPersonalRule}
                                 disabled={this.state.busy}
                             >
                                 {_t("Ignore")}
@@ -309,20 +309,20 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         )}</span>
                     </div>
                     <div>
-                        {this._renderSubscribedBanLists()}
+                        {this.renderSubscribedBanLists()}
                     </div>
                     <div>
-                        <form onSubmit={this._onSubscribeList} autoComplete="off">
+                        <form onSubmit={this.onSubscribeList} autoComplete="off">
                             <Field
                                 type="text"
                                 label={_t("Room ID or address of ban list")}
                                 value={this.state.newList}
-                                onChange={this._onNewListChanged}
+                                onChange={this.onNewListChanged}
                             />
                             <AccessibleButton
                                 type="submit"
                                 kind="primary"
-                                onClick={this._onSubscribeList}
+                                onClick={this.onSubscribeList}
                                 disabled={this.state.busy}
                             >
                                 {_t("Subscribe")}

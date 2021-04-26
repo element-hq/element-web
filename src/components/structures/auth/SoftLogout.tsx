@@ -83,7 +83,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return;
         }
 
-        this._initLogin();
+        this.initLogin();
 
         const cli = MatrixClientPeg.get();
         if (cli.isCryptoEnabled()) {
@@ -105,7 +105,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         });
     };
 
-    async _initLogin() {
+    private async initLogin() {
         const queryParams = this.props.realQueryParams;
         const hasAllParams = queryParams && queryParams['loginToken'];
         if (hasAllParams) {
@@ -200,7 +200,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         });
     }
 
-    _renderSignInSection() {
+    private renderSignInSection() {
         if (this.state.loginView === LOGIN_VIEW.LOADING) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
@@ -300,7 +300,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
                     <h3>{_t("Sign in")}</h3>
                     <div>
-                        {this._renderSignInSection()}
+                        {this.renderSignInSection()}
                     </div>
 
                     <h3>{_t("Clear personal data")}</h3>

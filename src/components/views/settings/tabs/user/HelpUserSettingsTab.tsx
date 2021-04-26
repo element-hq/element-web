@@ -56,7 +56,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     }
 
-    _onClearCacheAndReload = (e) => {
+    private onClearCacheAndReload = (e) => {
         if (!PlatformPeg.get()) return;
 
         // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
@@ -68,7 +68,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    _onBugReport = (e) => {
+    private onBugReport = (e) => {
         const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
         if (!BugReportDialog) {
             return;
@@ -76,7 +76,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
-    _onStartBotChat = (e) => {
+    private onStartBotChat = (e) => {
         this.props.closeSettingsFn();
         createRoom({
             dmUserId: SdkConfig.get().welcomeUserId,
@@ -84,7 +84,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    _showSpoiler = (event) => {
+    private showSpoiler = (event) => {
         const target = event.target;
         target.innerHTML = target.getAttribute('data-spoiler');
 
@@ -96,7 +96,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         selection.addRange(range);
     };
 
-    _renderLegal() {
+    private renderLegal() {
         const tocLinks = SdkConfig.get().terms_and_conditions_links;
         if (!tocLinks) return null;
 
@@ -117,7 +117,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         );
     }
 
-    _renderCredits() {
+    private renderCredits() {
         // Note: This is not translated because it is legal text.
         // Also, &nbsp; is ugly but necessary.
         return (
@@ -191,7 +191,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         },
                     )}
                     <div>
-                        <AccessibleButton onClick={this._onStartBotChat} kind='primary'>
+                        <AccessibleButton onClick={this.onStartBotChat} kind='primary'>
                             {_t("Chat with %(brand)s Bot", { brand })}
                         </AccessibleButton>
                     </div>
@@ -223,7 +223,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             "other users. They do not contain messages.",
                         )}
                         <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onBugReport} kind='primary'>
+                            <AccessibleButton onClick={this.onBugReport} kind='primary'>
                                 {_t("Submit debug logs")}
                             </AccessibleButton>
                         </div>
@@ -262,21 +262,21 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         {updateButton}
                     </div>
                 </div>
-                {this._renderLegal()}
-                {this._renderCredits()}
+                {this.renderLegal()}
+                {this.renderCredits()}
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
                         {_t("Access Token:") + ' '}
-                        <AccessibleButton element="span" onClick={this._showSpoiler}
+                        <AccessibleButton element="span" onClick={this.showSpoiler}
                             data-spoiler={MatrixClientPeg.get().getAccessToken()}
                         >
                             &lt;{ _t("click to reveal") }&gt;
                         </AccessibleButton>
                         <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
+                            <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
                                 {_t("Clear cache and reload")}
                             </AccessibleButton>
                         </div>

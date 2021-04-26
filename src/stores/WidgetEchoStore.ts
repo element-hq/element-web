@@ -23,7 +23,7 @@ import {WidgetType} from "../widgets/WidgetType";
  * proxying through state from the js-sdk.
  */
 class WidgetEchoStore extends EventEmitter {
-    private _roomWidgetEcho: {
+    private roomWidgetEcho: {
         [roomId: string]: {
             [widgetId: string]: IWidget,
         },
@@ -32,7 +32,7 @@ class WidgetEchoStore extends EventEmitter {
     constructor() {
         super();
 
-        this._roomWidgetEcho = {
+        this.roomWidgetEcho = {
             // Map as below. Object is the content of the widget state event,
             // so for widgets that have been deleted locally, the object is empty.
             // roomId: {
@@ -55,7 +55,7 @@ class WidgetEchoStore extends EventEmitter {
     getEchoedRoomWidgets(roomId, currentRoomWidgets) {
         const echoedWidgets = [];
 
-        const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
+        const roomEchoState = Object.assign({}, this.roomWidgetEcho[roomId]);
 
         for (const w of currentRoomWidgets) {
             const widgetId = w.getStateKey();
@@ -72,7 +72,7 @@ class WidgetEchoStore extends EventEmitter {
     }
 
     roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type?: WidgetType) {
-        const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
+        const roomEchoState = Object.assign({}, this.roomWidgetEcho[roomId]);
 
         // any widget IDs that are already in the room are not pending, so
         // echoes for them don't count as pending.
@@ -96,15 +96,15 @@ class WidgetEchoStore extends EventEmitter {
     }
 
     setRoomWidgetEcho(roomId: string, widgetId: string, state: IWidget) {
-        if (this._roomWidgetEcho[roomId] === undefined) this._roomWidgetEcho[roomId] = {};
+        if (this.roomWidgetEcho[roomId] === undefined) this.roomWidgetEcho[roomId] = {};
 
-        this._roomWidgetEcho[roomId][widgetId] = state;
+        this.roomWidgetEcho[roomId][widgetId] = state;
         this.emit('update', roomId, widgetId);
     }
 
     removeRoomWidgetEcho(roomId, widgetId) {
-        delete this._roomWidgetEcho[roomId][widgetId];
-        if (Object.keys(this._roomWidgetEcho[roomId]).length === 0) delete this._roomWidgetEcho[roomId];
+        delete this.roomWidgetEcho[roomId][widgetId];
+        if (Object.keys(this.roomWidgetEcho[roomId]).length === 0) delete this.roomWidgetEcho[roomId];
         this.emit('update', roomId, widgetId);
     }
 }

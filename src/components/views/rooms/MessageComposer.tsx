@@ -108,17 +108,17 @@ interface IUploadButtonProps {
 }
 
 class UploadButton extends React.Component<IUploadButtonProps> {
-    private _uploadInput = React.createRef<HTMLInputElement>();
-    private _dispatcherRef: string;
+    private uploadInput = React.createRef<HTMLInputElement>();
+    private dispatcherRef: string;
 
     constructor(props) {
         super(props);
 
-        this._dispatcherRef = dis.register(this.onAction);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     componentWillUnmount() {
-        dis.unregister(this._dispatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     private onAction = payload => {
@@ -132,7 +132,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
             dis.dispatch({action: 'require_registration'});
             return;
         }
-        this._uploadInput.current.click();
+        this.uploadInput.current.click();
     }
 
     private onUploadFileInputChange = (ev) => {
@@ -165,7 +165,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
                 title={_t('Upload file')}
             >
                 <input
-                    ref={this._uploadInput}
+                    ref={this.uploadInput}
                     type="file"
                     style={uploadInputStyle}
                     multiple
@@ -200,7 +200,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     constructor(props) {
         super(props);
-        VoiceRecordingStore.instance.on(UPDATE_EVENT, this._onVoiceStoreUpdate);
+        VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
 
         this.state = {
             tombstone: this.getRoomTombstone(),
@@ -249,7 +249,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
-        VoiceRecordingStore.instance.off(UPDATE_EVENT, this._onVoiceStoreUpdate);
+        VoiceRecordingStore.instance.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
     }
 
@@ -331,7 +331,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         });
     }
 
-    _onVoiceStoreUpdate = () => {
+    private onVoiceStoreUpdate = () => {
         const recording = VoiceRecordingStore.instance.activeRecording;
         this.setState({haveRecording: !!recording});
         if (recording) {

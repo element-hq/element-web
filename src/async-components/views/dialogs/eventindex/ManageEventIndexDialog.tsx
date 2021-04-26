@@ -131,14 +131,14 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         });
     }
 
-    _onDisable = async () => {
+    private onDisable = async () => {
         Modal.createTrackedDialogAsync("Disable message search", "Disable message search",
             import("./DisableEventIndexDialog"),
             null, null, /* priority = */ false, /* static = */ true,
         );
     };
 
-    _onCrawlerSleepTimeChange = (e) => {
+    private onCrawlerSleepTimeChange = (e) => {
         this.setState({crawlerSleepTime: e.target.value});
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
@@ -177,7 +177,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
                         value={this.state.crawlerSleepTime}
-                        onChange={this._onCrawlerSleepTimeChange} />
+                        onChange={this.onCrawlerSleepTimeChange} />
                 </div>
             </div>
         );
@@ -196,7 +196,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                     onPrimaryButtonClick={this.props.onFinished}
                     primaryButtonClass="primary"
                     cancelButton={_t("Disable")}
-                    onCancel={this._onDisable}
+                    onCancel={this.onDisable}
                     cancelButtonClass="danger"
                 />
             </BaseDialog>
