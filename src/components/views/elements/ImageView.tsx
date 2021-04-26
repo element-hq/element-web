@@ -108,6 +108,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         window.addEventListener("resize", this.calculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current.addEventListener("load", this.calculateZoom);
+        // Try to precalculate the zoom from width and height props
+        this.calculateZoom();
     }
 
     componentWillUnmount() {
