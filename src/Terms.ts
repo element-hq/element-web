@@ -33,9 +33,6 @@ export class Service {
      * @param {string} accessToken The user's access token for the service
      */
     constructor(public serviceType: string, public baseUrl: string, public accessToken: string) {
-        this.serviceType = serviceType;
-        this.baseUrl = baseUrl;
-        this.accessToken = accessToken;
     }
 }
 

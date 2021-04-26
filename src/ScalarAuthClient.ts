@@ -35,8 +35,6 @@ export default class ScalarAuthClient {
     private isDefaultManager: boolean;
 
     constructor(private apiUrl: string, private uiUrl: string) {
-        this.apiUrl = apiUrl;
-        this.uiUrl = uiUrl;
         this.scalarToken = null;
         // `undefined` to allow `startTermsFlow` to fallback to a default
         // callback if this is unset.

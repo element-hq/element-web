@@ -33,7 +33,6 @@ export default class Timer {
     private reject: (Error) => void;
 
     constructor(private timeout: number) {
-        this.timeout = timeout;
         this.setNotStarted();
     }
 
