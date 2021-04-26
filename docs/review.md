@@ -58,6 +58,43 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Assign issues only when in progress to indicate to others what can be picked
   up
 
+## Code Quality
+
+In the past, we have occasionally written different kinds of tests for
+Element and the SDKs, but it hasn't been a consistent focus. Going forward, we'd
+like to change that.
+
+* For new features, code reviewers will expect some form of automated testing to
+  be included by default
+* For bug fixes, regression tests are of course great to have, but we don't want
+  to block fixes on this, so we won't require them at this time
+
+The above policy is not a strict rule, but instead it's meant to be a
+conversation between the author and reviewer. As an author, try to think about
+writing a test when making your next change. As a reviewer, try to think about
+how you might test the area of code you are reviewing. If the reviewer agrees
+it would be quite difficult to test some new feature, then it's okay for them to
+accept the change without tests for now, but we'd eventually like to be more
+strict about this further down the road.
+
+If you do spot areas that are quite hard to test today, please let us know in
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org). We can
+work on improving the app architecture and testing helpers so that future tests
+are easier for everyone to write, but we won't know which parts are difficult
+unless people shout when stumbling through them.
+
+We recognise that this testing policy will slow things down a bit, but overall
+it should encourage better long-term health of the app and give everyone more
+confidence when making changes as coverage increases over time.
+
+For changes guarded by a feature flag, we currently lean towards prioritising
+our ability to evolve quickly using such flags and thus we will not currently
+require tests to appear at the same time as the initial landing of features
+guarded by flags, as long as (for new flagged features going forward) the
+feature author understands that they are effectively deferring part of their
+work (adding tests) until later and tests are expected to appear before the
+feature can be enabled by default.
+
 ## Design and Product Review
 
 We want to ensure that all changes to Element fit with our design and product
@@ -79,5 +116,5 @@ easily.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Element. Please chat with the team in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
-start so we can ensure it's something we'd be willing to merge.
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before
+you start so we can ensure it's something we'd be willing to merge.

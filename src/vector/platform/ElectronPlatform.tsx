@@ -399,6 +399,18 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('setAutoLaunchEnabled', enabled);
     }
 
+    supportsWarnBeforeExit(): boolean {
+        return true;
+    }
+
+    async shouldWarnBeforeExit(): Promise<boolean> {
+        return this._ipcCall('shouldWarnBeforeExit');
+    }
+
+    async setWarnBeforeExit(enabled: boolean): Promise<void> {
+        return this._ipcCall('setWarnBeforeExit', enabled);
+    }
+
     supportsAutoHideMenuBar(): boolean {
         // This is irelevant on Mac as Menu bars don't live in the app window
         return !isMac;
