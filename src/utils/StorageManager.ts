@@ -32,15 +32,15 @@ try {
 const SYNC_STORE_NAME = "riot-web-sync";
 const CRYPTO_STORE_NAME = "matrix-js-sdk:crypto";
 
-function log(msg) {
+function log(msg: string) {
     console.log(`StorageManager: ${msg}`);
 }
 
-function error(msg, ...args) {
+function error(msg: string, ...args: string[]) {
     console.error(`StorageManager: ${msg}`, ...args);
 }
 
-function track(action) {
+function track(action: string) {
     Analytics.trackEvent("StorageManager", action);
 }
 
