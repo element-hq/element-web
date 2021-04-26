@@ -41,11 +41,11 @@ interface IProps extends IDialogProps {
 }
 
 const Entry = ({ room, checked, onChange }) => {
-    return <div className="mx_AddExistingToSpaceDialog_entry">
+    return <label className="mx_AddExistingToSpaceDialog_entry">
         <RoomAvatar room={room} height={32} width={32} />
         <span className="mx_AddExistingToSpaceDialog_entry_name">{ room.name }</span>
         <StyledCheckbox onChange={(e) => onChange(e.target.checked)} checked={checked} />
-    </div>;
+    </label>;
 };
 
 const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, onCreateRoomClick, onFinished }) => {
