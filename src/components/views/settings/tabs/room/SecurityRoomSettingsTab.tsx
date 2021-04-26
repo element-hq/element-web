@@ -29,7 +29,7 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 
 type JoinRule = "public" | "knock" | "invite" | "private";
 type GuestAccess = "can_join" | "forbidden";
-type History = "invited" | "joined" | "shared" | "world_readable";
+type HistoryVisibility = "invited" | "joined" | "shared" | "world_readable";
 
 interface IProps {
     roomId: string;
@@ -38,7 +38,7 @@ interface IProps {
 interface IState {
     joinRule: JoinRule;
     guestAccess: GuestAccess;
-    history: History;
+    history: HistoryVisibility;
     hasAliases: boolean;
     encrypted: boolean;
 }
@@ -74,7 +74,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             'guest_access',
             'forbidden',
         );
-        const history: History = this.pullContentPropertyFromEvent(
+        const history: HistoryVisibility = this.pullContentPropertyFromEvent(
             state.getStateEvents("m.room.history_visibility", ""),
             'history_visibility',
             'shared',
