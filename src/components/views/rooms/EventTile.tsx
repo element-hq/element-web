@@ -245,7 +245,7 @@ interface IProps {
     // It could also be done by subclassing EventTile, but that'd be quite
     // boiilerplatey.  So just make the necessary render decisions conditional
     // for now.
-    tileShape?: string;
+    tileShape?: 'notif' | 'file_grid' | 'reply' | 'reply_preview';
 
     // show twelve hour timestamps
     isTwelveHour?: boolean;
