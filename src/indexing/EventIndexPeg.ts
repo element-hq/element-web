@@ -28,16 +28,10 @@ import {SettingLevel} from "../settings/SettingLevel";
 const INDEX_VERSION = 1;
 
 export class EventIndexPeg {
-    public index: EventIndex;
-    public error: Error;
+    public index: EventIndex = null;
+    public error: Error = null;
 
-    private _supportIsInstalled: boolean;
-
-    constructor() {
-        this.index = null;
-        this.error = null;
-        this._supportIsInstalled = false;
-    }
+    private _supportIsInstalled = false;
 
     /**
      * Initialize the EventIndexPeg and if event indexing is enabled initialize
