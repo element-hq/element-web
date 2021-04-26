@@ -312,11 +312,12 @@ export const HierarchyLevel = ({
 
 // mutate argument refreshToken to force a reload
 export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
+    null,
     ISpaceSummaryRoom[],
-    Map<string, Map<string, ISpaceSummaryEvent>>,
-    Map<string, Set<string>>,
-    Map<string, Set<string>>,
-] | [] => {
+    Map<string, Map<string, ISpaceSummaryEvent>>?,
+    Map<string, Set<string>>?,
+    Map<string, Set<string>>?,
+] | [Error] => {
     // TODO pagination
     return useAsyncMemo(async () => {
         try {
@@ -336,13 +337,12 @@ export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: a
                 }
             });
 
-            return [data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
+            return [null, data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
         } catch (e) {
             console.error(e); // TODO
+            return [e];
         }
-
-        return [];
-    }, [space, refreshToken], []);
+    }, [space, refreshToken], [undefined]);
 };
 
 export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
@@ -358,7 +358,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const [rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
+    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
 
     const roomsMap = useMemo(() => {
         if (!rooms) return null;
@@ -538,10 +538,10 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                 { children }
             </AutoHideScrollbar>
         </>;
-    } else if (!rooms) {
-        content = <Spinner />;
-    } else {
+    } else if (summaryError) {
         content = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+    } else {
+        content = <Spinner />;
     }
 
     // TODO loading state/error state
