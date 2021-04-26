@@ -316,11 +316,12 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     render() {
         const showEventMeta = !!this.props.mxEvent;
+        const zoomingDisabled = this.state.maxZoom === this.state.minZoom;
 
         let cursor;
         if (this.state.moving) {
             cursor= "grabbing";
-        } else if (this.state.maxZoom === this.state.minZoom) {
+        } else if (zoomingDisabled) {
             cursor = "default";
         } else if (this.state.zoom === this.state.minZoom) {
             cursor = "zoom-in";
@@ -412,6 +413,25 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
+        let zoomOutButton;
+        let zoomInButton;
+        if (!zoomingDisabled) {
+            zoomOutButton = (
+                <AccessibleTooltipButton
+                    className="mx_ImageView_button mx_ImageView_button_zoomOut"
+                    title={_t("Zoom out")}
+                    onClick={this.onZoomOutClick}>
+                </AccessibleTooltipButton>
+            );
+            zoomInButton = (
+                <AccessibleTooltipButton
+                    className="mx_ImageView_button mx_ImageView_button_zoomIn"
+                    title={_t("Zoom in")}
+                    onClick={ this.onZoomInClick }>
+                </AccessibleTooltipButton>
+            );
+        }
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -435,16 +455,8 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("Rotate Left")}
                             onClick={ this.onRotateCounterClockwiseClick }>
                         </AccessibleTooltipButton>
-                        <AccessibleTooltipButton
-                            className="mx_ImageView_button mx_ImageView_button_zoomOut"
-                            title={_t("Zoom out")}
-                            onClick={ this.onZoomOutClick }>
-                        </AccessibleTooltipButton>
-                        <AccessibleTooltipButton
-                            className="mx_ImageView_button mx_ImageView_button_zoomIn"
-                            title={_t("Zoom in")}
-                            onClick={ this.onZoomInClick }>
-                        </AccessibleTooltipButton>
+                        {zoomOutButton}
+                        {zoomInButton}
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}
