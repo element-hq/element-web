@@ -34,9 +34,9 @@ interface IState {
     alwaysShowMenuBar: boolean;
     minimizeToTraySupported: boolean;
     minimizeToTray: boolean;
-    autocompleteDelay: string,
-    readMarkerInViewThresholdMs: string,
-    readMarkerOutOfViewThresholdMs: string,
+    autocompleteDelay: string;
+    readMarkerInViewThresholdMs: string;
+    readMarkerOutOfViewThresholdMs: string;
 }
 
 @replaceableComponent("views.settings.tabs.user.PreferencesUserSettingsTab")
