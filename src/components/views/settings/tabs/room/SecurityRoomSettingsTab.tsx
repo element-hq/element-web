@@ -27,9 +27,24 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
-type JoinRule = "public" | "knock" | "invite" | "private";
-type GuestAccess = "can_join" | "forbidden";
-type HistoryVisibility = "invited" | "joined" | "shared" | "world_readable";
+enum JoinRule {
+    Public = "public",
+    Knock = "knock",
+    Invite = "invite",
+    Private = "private",
+}
+
+enum GuestAccess {
+    CanJoin = "can_join",
+    Forbidden = "forbidden",
+}
+
+enum HistoryVisibility {
+    Invited = "invited",
+    Joined = "joined",
+    Shared = "shared",
+    WorldReadable = "world_readable",
+}
 
 interface IProps {
     roomId: string;
@@ -49,9 +64,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         super(props);
 
         this.state = {
-            joinRule: "invite",
-            guestAccess: "can_join",
-            history: "shared",
+            joinRule: JoinRule.Invite,
+            guestAccess: GuestAccess.CanJoin,
+            history: HistoryVisibility.Shared,
             hasAliases: false,
             encrypted: false,
         };
@@ -141,8 +156,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         e.preventDefault();
         e.stopPropagation();
 
-        const joinRule = "invite";
-        const guestAccess = "can_join";
+        const joinRule = JoinRule.Invite;
+        const guestAccess = GuestAccess.CanJoin;
 
         const beforeJoinRule = this.state.joinRule;
         const beforeGuestAccess = this.state.guestAccess;
@@ -173,20 +188,20 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         // invite them, you clearly want them to join, whether they're a
         // guest or not.  In practice, guest_access should probably have
         // been implemented as part of the join_rules enum.
-        let joinRule: JoinRule = "invite";
-        let guestAccess: GuestAccess = "can_join";
+        let joinRule = JoinRule.Invite;
+        let guestAccess = GuestAccess.CanJoin;
 
         switch (roomAccess) {
             case "invite_only":
                 // no change - use defaults above
                 break;
             case "public_no_guests":
-                joinRule = "public";
-                guestAccess = "forbidden";
+                joinRule = JoinRule.Public;
+                guestAccess = GuestAccess.Forbidden;
                 break;
             case "public_with_guests":
-                joinRule = "public";
-                guestAccess = "can_join";
+                joinRule = JoinRule.Public;
+                guestAccess = GuestAccess.CanJoin;
                 break;
         }
 
