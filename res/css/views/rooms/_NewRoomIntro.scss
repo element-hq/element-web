@@ -18,8 +18,8 @@ limitations under the License.
     margin: 40px 0 48px 64px;
 
     .mx_MiniAvatarUploader_hasAvatar:not(.mx_MiniAvatarUploader_busy):not(:hover) {
-        &::before, &::after {
-            content: unset;
+        .mx_MiniAvatarUploader_indicator {
+            display: none;
         }
     }
 

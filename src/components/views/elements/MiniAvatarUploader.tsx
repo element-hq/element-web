@@ -19,6 +19,7 @@ import {EventType} from 'matrix-js-sdk/src/@types/event';
 import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
+import Spinner from "./Spinner";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useTimeout} from "../../../hooks/useTimeout";
 import Analytics from "../../../Analytics";
@@ -87,6 +88,12 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
             onMouseLeave={() => setHover(false)}
         >
             { children }
+
+            <div className="mx_MiniAvatarUploader_indicator">
+                { busy ?
+                    <Spinner w={20} h={20} /> :
+                    <div className="mx_MiniAvatarUploader_cameraIcon"></div> }
+            </div>
 
             <div className={classNames("mx_Tooltip", {
                 "mx_Tooltip_visible": visible,

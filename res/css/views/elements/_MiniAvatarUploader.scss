@@ -28,8 +28,7 @@ limitations under the License.
         top: 0;
     }
 
-    &::before, &::after {
-        content: '';
+    .mx_MiniAvatarUploader_indicator {
         position: absolute;
 
         height: 26px;
@@ -37,27 +36,22 @@ limitations under the License.
 
         right: -6px;
         bottom: -6px;
-    }
 
-    &::before {
         background-color: $primary-bg-color;
         border-radius: 50%;
         z-index: 1;
-    }
 
-    &::after {
-        background-color: $secondary-fg-color;
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-image: url('$(res)/img/element-icons/camera.svg');
-        mask-size: 16px;
-        z-index: 2;
-    }
+        .mx_MiniAvatarUploader_cameraIcon {
+            height: 100%;
+            width: 100%;
 
-    &.mx_MiniAvatarUploader_busy::after {
-        background: url("$(res)/img/spinner.gif") no-repeat center;
-        background-size: 80%;
-        mask: unset;
+            background-color: $secondary-fg-color;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-image: url('$(res)/img/element-icons/camera.svg');
+            mask-size: 16px;
+            z-index: 2;
+        }
     }
 }
 
