@@ -463,6 +463,31 @@ describe("SpaceStore", () => {
             expect(store.spacePanelSpaces).toStrictEqual([]);
             expect(store.invitedSpaces).toStrictEqual([]);
         });
+
+        it("room invite gets added to relevant space filters", async () => {
+            const space = mkSpace(space1, [invite1]);
+            await run();
+
+            expect(store.spacePanelSpaces).toStrictEqual([space]);
+            expect(store.invitedSpaces).toStrictEqual([]);
+            expect(store.getChildSpaces(space1)).toStrictEqual([]);
+            expect(store.getChildRooms(space1)).toStrictEqual([]);
+            expect(store.getSpaceFilteredRoomIds(client.getRoom(space1)).has(invite1)).toBeFalsy();
+            expect(store.getSpaceFilteredRoomIds(null).has(invite1)).toBeFalsy();
+
+            const invite = mkRoom(invite1);
+            invite.getMyMembership.mockReturnValue("invite");
+            const prom = emitPromise(store, space1);
+            emitter.emit("Room", space);
+            await prom;
+
+            expect(store.spacePanelSpaces).toStrictEqual([space]);
+            expect(store.invitedSpaces).toStrictEqual([]);
+            expect(store.getChildSpaces(space1)).toStrictEqual([]);
+            expect(store.getChildRooms(space1)).toStrictEqual([invite]);
+            expect(store.getSpaceFilteredRoomIds(client.getRoom(space1)).has(invite1)).toBeTruthy();
+            expect(store.getSpaceFilteredRoomIds(null).has(invite1)).toBeTruthy();
+        });
     });
 
     describe("active space switching tests", () => {

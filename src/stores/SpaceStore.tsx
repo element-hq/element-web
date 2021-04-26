@@ -410,32 +410,39 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         });
     }, 100, {trailing: true, leading: true});
 
-    private onRoom = (room: Room, membership?: string, oldMembership?: string) => {
-        if ((membership || room.getMyMembership()) === "invite") {
-            this._invitedSpaces.add(room);
-            this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
-        } else if (oldMembership === "invite" && membership !== "join") {
-            this._invitedSpaces.delete(room);
-            this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
-        } else if (room?.isSpaceRoom()) {
-            this.onSpaceUpdate();
-            this.emit(room.roomId);
-        } else {
+    private onRoom = (room: Room, newMembership?: string, oldMembership?: string) => {
+        const membership = newMembership || room.getMyMembership();
+
+        if (!room.isSpaceRoom()) {
             // this.onRoomUpdate(room);
             this.onRoomsUpdate();
-        }
 
-        if (room.getMyMembership() === "join") {
-            if (!room.isSpaceRoom()) {
+            if (membership === "join") {
+                // the user just joined a room, remove it from the suggested list if it was there
                 const numSuggestedRooms = this._suggestedRooms.length;
                 this._suggestedRooms = this._suggestedRooms.filter(r => r.room_id !== room.roomId);
                 if (numSuggestedRooms !== this._suggestedRooms.length) {
                     this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
                 }
-            } else if (room.roomId === RoomViewStore.getRoomId()) {
-                // if the user was looking at the space and then joined: select that space
-                this.setActiveSpace(room);
             }
+            return;
+        }
+
+        // Space
+        if (membership === "invite") {
+            this._invitedSpaces.add(room);
+            this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
+        } else if (oldMembership === "invite" && membership !== "join") {
+            this._invitedSpaces.delete(room);
+            this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
+        } else {
+            this.onSpaceUpdate();
+            this.emit(room.roomId);
+        }
+
+        if (membership === "join" && room.roomId === RoomViewStore.getRoomId()) {
+            // if the user was looking at the space and then joined: select that space
+            this.setActiveSpace(room);
         }
     };
 
