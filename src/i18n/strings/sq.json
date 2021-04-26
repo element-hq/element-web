@@ -3283,5 +3283,16 @@
     "%(seconds)ss left": "Edhe %(seconds)ss",
     "Change server ACLs": "Ndryshoni ACL-ra shërbyesi",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Po kryhet këshillim me %(transferTarget)s. <a>Shpërngule te %(transferee)s</a>",
-    "Show options to enable 'Do not disturb' mode": "Shfaq mundësi për aktivizim të mënyrës “Mos më shqetësoni”"
+    "Show options to enable 'Do not disturb' mode": "Shfaq mundësi për aktivizim të mënyrës “Mos më shqetësoni”",
+    "You can select all or individual messages to retry or delete": "Për riprovim ose fshirje mund të përzgjidhni krejt mesazhet, ose të tillë individualë",
+    "Sending": "Po dërgohet",
+    "Retry all": "Riprovoji krejt",
+    "Delete all": "Fshiji krejt",
+    "Some of your messages have not been sent": "Disa nga mesazhet tuaj s’janë dërguar",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s anëtarë, përfshi %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Prfshi %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "Shihni 1 anëtar",
+    "View all %(count)s members|other": "Shihni krejt %(count)s anëtarët",
+    "Failed to send": "S’u arrit të dërgohet"
 }
