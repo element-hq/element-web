@@ -510,8 +510,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.eventIndexManager;
     }
 
-    async setLanguage(language: string) {
-        return this._ipcCall('setLanguage', language);
+    async setLanguage(preferredLangs: string[]) {
+        return this._ipcCall('setLanguage', preferredLangs);
     }
 
     setSpellCheckLanguages(preferredLangs: string[]) {
