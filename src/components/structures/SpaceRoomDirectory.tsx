@@ -397,6 +397,10 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     const [removing, setRemoving] = useState(false);
     const [saving, setSaving] = useState(false);
 
+    if (summaryError) {
+        return <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+    }
+
     let content;
     if (roomsMap) {
         const numRooms = Array.from(roomsMap.values()).filter(r => r.room_type !== RoomType.Space).length;
@@ -538,8 +542,6 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                 { children }
             </AutoHideScrollbar>
         </>;
-    } else if (summaryError) {
-        content = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
     } else {
         content = <Spinner />;
     }
