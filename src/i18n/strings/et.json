@@ -3275,5 +3275,16 @@
     "Zoom out": "Suumi välja",
     "%(seconds)ss left": "jäänud %(seconds)s sekundit",
     "Change server ACLs": "Muuda serveri ligipääsuõigusi",
-    "Show options to enable 'Do not disturb' mode": "Näita valikuid „Ära sega“ režiimi sisse lülitamiseks"
+    "Show options to enable 'Do not disturb' mode": "Näita valikuid „Ära sega“ režiimi sisse lülitamiseks",
+    "You can select all or individual messages to retry or delete": "Sa võid valida kas kõik või mõned sõnumid kas kustutamiseks või uuesti saatmiseks",
+    "Sending": "Saadan",
+    "Retry all": "Proovi kõikidega uuesti",
+    "Delete all": "Kustuta kõik",
+    "Some of your messages have not been sent": "Mõned sinu sõnumid on saatmata",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s liiget, sealhulgas %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Sealhulgas %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "Vaata üht liiget",
+    "View all %(count)s members|other": "Vaata kõiki %(count)s liiget",
+    "Failed to send": "Saatmine ei õnnestunud"
 }
