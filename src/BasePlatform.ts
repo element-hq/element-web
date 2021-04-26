@@ -258,7 +258,7 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    async setLanguage(language: string) {
+    async setLanguage(preferredLangs: string[]) {
         throw new Error("Unimplemented");
     }
 

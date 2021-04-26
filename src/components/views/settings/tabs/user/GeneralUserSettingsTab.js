@@ -194,8 +194,8 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.setState({language: newLanguage});
         const platform = PlatformPeg.get();
         if (platform) {
-            platform.reload();
             platform.setLanguage(newLanguage);
+            platform.reload();
         }
     };
 
