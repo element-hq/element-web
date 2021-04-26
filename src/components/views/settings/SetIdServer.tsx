@@ -27,6 +27,7 @@ import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
 import {timeout} from "../../../utils/promise";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { ActionPayload } from '../../../dispatcher/payloads';
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -107,7 +108,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
     }
 
-    private onAction = (payload) => {
+    private onAction = (payload: ActionPayload) => {
         // We react to changes in the ID server in the event the user is staring at this form
         // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;

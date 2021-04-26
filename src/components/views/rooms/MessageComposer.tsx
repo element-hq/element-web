@@ -22,6 +22,7 @@ import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import dis from '../../../dispatcher/dispatcher';
+import { ActionPayload } from "../../../dispatcher/payloads";
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink, RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
@@ -121,7 +122,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
         dis.unregister(this.dispatcherRef);
     }
 
-    private onAction = payload => {
+    private onAction = (payload: ActionPayload) => {
         if (payload.action === "upload_file") {
             this.onUploadClick();
         }
@@ -217,7 +218,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         this.waitForOwnMember();
     }
 
-    private onAction = (payload) => {
+    private onAction = (payload: ActionPayload) => {
         if (payload.action === 'reply_to_event') {
             // add a timeout for the reply preview to be rendered, so
             // that the ScrollPanel listening to the resizeNotifier can
