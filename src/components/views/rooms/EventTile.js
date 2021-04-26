@@ -40,6 +40,8 @@ import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStor
 import {objectHasDiff} from "../../../utils/objects";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
+import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import NotificationBadge from "./NotificationBadge";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -838,7 +840,6 @@ export default class EventTile extends React.Component {
             mx_EventTile_12hr: this.props.isTwelveHour,
             // Note: we keep the `sending` state class for tests, not for our styles
             mx_EventTile_sending: !isEditing && isSending,
-            mx_EventTile_notSent: this.props.eventSendStatus === 'not_sent',
             mx_EventTile_highlight: this.props.tileShape === 'notif' ? false : this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
@@ -1253,10 +1254,18 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
 
     render() {
         const isSent = !this.props.messageState || this.props.messageState === 'sent';
+        const isFailed = this.props.messageState === 'not_sent';
         const receiptClasses = classNames({
             'mx_EventTile_receiptSent': isSent,
-            'mx_EventTile_receiptSending': !isSent,
+            'mx_EventTile_receiptSending': !isSent && !isFailed,
         });
+
+        let nonCssBadge = null;
+        if (isFailed) {
+            nonCssBadge = <NotificationBadge
+                notification={StaticNotificationState.RED_EXCLAMATION}
+            />;
+        }
 
         let tooltip = null;
         if (this.state.hover) {
@@ -1265,6 +1274,8 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
                 label = _t("Encrypting your message...");
             } else if (isSent) {
                 label = _t("Your message was sent");
+            } else if (isFailed) {
+                label = _t("Failed to send");
             }
             // The yOffset is somewhat arbitrary - it just brings the tooltip down to be more associated
             // with the read receipt.
@@ -1273,6 +1284,7 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
 
         return <span className="mx_EventTile_readAvatars">
             <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
+                {nonCssBadge}
                 {tooltip}
             </span>
         </span>;

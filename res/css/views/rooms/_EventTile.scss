@@ -214,10 +214,6 @@ $left-gutter: 64px;
     color: $accent-fg-color;
 }
 
-.mx_EventTile_notSent {
-    color: $event-notsent-color;
-}
-
 .mx_EventTile_receiptSent,
 .mx_EventTile_receiptSending {
     // We don't use `position: relative` on the element because then it won't line

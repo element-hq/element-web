@@ -79,6 +79,13 @@ export function createTestClient() {
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
         isCryptoEnabled: () => false,
+
+        // Used by various internal bits we aren't concerned with (yet)
+        _sessionStore: {
+            store: {
+                getItem: jest.fn(),
+            },
+        },
     };
 }
 
