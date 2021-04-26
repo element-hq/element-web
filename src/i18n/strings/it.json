@@ -32,5 +32,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "La configurazione del tuo elemento contiene un JSON non valido. Correggi il problema e ricarica la pagina.",
     "Your browser can't run %(brand)s": "Il tuo browser non può eseguire %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funzionalità avanzate del browser che non sono supportate dal tuo browser attuale.",
-    "Powered by Matrix": "Offerto da Matrix"
+    "Powered by Matrix": "Offerto da Matrix",
+    "Use %(brand)s on mobile": "Usa %(brand)s su mobile"
 }
