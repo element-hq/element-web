@@ -104,7 +104,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
-        // We want to recalculate zoom whenever the windows size changes
+        // We want to recalculate zoom whenever the window's size changes
         window.addEventListener("resize", this.calculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current.addEventListener("load", this.calculateZoom);
