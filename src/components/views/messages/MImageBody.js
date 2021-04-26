@@ -185,9 +185,8 @@ export default class MImageBody extends React.Component {
         // So either we need to support custom timeline widths here, or reimpose the cap, otherwise the
         // thumbnail resolution will be unnecessarily reduced.
         // custom timeline widths seems preferable.
-        const pixelRatio = window.devicePixelRatio;
-        const thumbWidth = Math.round(800 * pixelRatio);
-        const thumbHeight = Math.round(600 * pixelRatio);
+        const thumbWidth = 800;
+        const thumbHeight = 600;
 
         const content = this.props.mxEvent.getContent();
         const media = mediaFromContent(content);
