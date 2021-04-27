@@ -59,7 +59,7 @@ export default class Timer {
         }
     }
 
-    changeTimeout(timeout) {
+    changeTimeout(timeout: number) {
         if (timeout === this.timeout) {
             return;
         }
