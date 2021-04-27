@@ -86,6 +86,7 @@ import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
+import EventEmitter from 'events';
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -137,7 +138,11 @@ export enum PlaceCallType {
     ScreenSharing = 'screensharing',
 }
 
-export default class CallHandler {
+export enum CallHandlerEvent {
+    CallsChanged = "calls_changed",
+}
+
+export default class CallHandler extends EventEmitter {
     private calls = new Map<string, MatrixCall>(); // roomId -> call
     // Calls started as an attended transfer, ie. with the intention of transferring another
     // call with a different party to this one.
@@ -482,6 +487,7 @@ export default class CallHandler {
             }
 
             this.calls.set(mappedRoomId, newCall);
+            this.emit(CallHandlerEvent.CallsChanged, this.calls);
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
@@ -618,6 +624,7 @@ export default class CallHandler {
         const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
 
         this.calls.set(roomId, call);
+        this.emit(CallHandlerEvent.CallsChanged, this.calls);
         if (transferee) {
             this.transferees[call.callId] = transferee;
         }
@@ -745,6 +752,7 @@ export default class CallHandler {
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(mappedRoomId, call)
+                    this.emit(CallHandlerEvent.CallsChanged, this.calls);
                     this.setCallListeners(call);
 
                     // get ready to send encrypted events in the room, so if the user does answer
