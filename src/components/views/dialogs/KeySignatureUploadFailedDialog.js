@@ -24,7 +24,7 @@ export default function KeySignatureUploadFailedDialog({
         source,
         continuation,
         onFinished,
-    }) {
+}) {
     const RETRIES = 2;
     const BaseDialog = sdk.getComponent('dialogs.BaseDialog');
     const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -84,10 +84,10 @@ export default function KeySignatureUploadFailedDialog({
     } else {
         body = (<div>
             {success ?
-              <span>{_t("Upload completed")}</span> :
-              cancelled ?
-                <span>{_t("Cancelled signature upload")}</span> :
-                <span>{_t("Unable to upload")}</span>}
+                <span>{_t("Upload completed")}</span> :
+                cancelled ?
+                    <span>{_t("Cancelled signature upload")}</span> :
+                    <span>{_t("Unable to upload")}</span>}
             <DialogButtons
                 primaryButton={_t("OK")}
                 hasCancel={false}

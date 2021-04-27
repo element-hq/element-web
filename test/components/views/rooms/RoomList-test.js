@@ -70,8 +70,9 @@ describe('RoomList', () => {
         root = ReactDOM.render(
             <DragDropContext>
                 <WrappedRoomList searchFilter="" onResize={() => {}} />
-            </DragDropContext>
-        , parentDiv);
+            </DragDropContext>,
+            parentDiv,
+        );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
         movingRoom = createRoom({name: 'Moving room'});

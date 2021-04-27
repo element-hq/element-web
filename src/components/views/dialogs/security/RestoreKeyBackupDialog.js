@@ -374,7 +374,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     "If you've forgotten your Security Phrase you can "+
                     "<button1>use your Security Key</button1> or " +
                     "<button2>set up new recovery options</button2>"
-                , {}, {
+                    , {}, {
                     button1: s => <AccessibleButton className="mx_linkButton"
                         element="span"
                         onClick={this._onUseRecoveryKeyClick}
@@ -387,7 +387,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     >
                         {s}
                     </AccessibleButton>,
-                })}
+                    })}
             </div>;
         } else {
             title = _t("Enter Security Key");
@@ -436,14 +436,14 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 {_t(
                     "If you've forgotten your Security Key you can "+
                     "<button>set up new recovery options</button>"
-                , {}, {
+                    , {}, {
                     button: s => <AccessibleButton className="mx_linkButton"
                         element="span"
                         onClick={this._onResetRecoveryClick}
                     >
                         {s}
                     </AccessibleButton>,
-                })}
+                    })}
             </div>;
         }
 
@@ -452,9 +452,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={title}
             >
-            <div className='mx_RestoreKeyBackupDialog_content'>
-                {content}
-            </div>
+                <div className='mx_RestoreKeyBackupDialog_content'>
+                    {content}
+                </div>
             </BaseDialog>
         );
     }

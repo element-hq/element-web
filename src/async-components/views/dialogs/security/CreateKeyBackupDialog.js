@@ -498,9 +498,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 title={this._titleForPhase(this.state.phase)}
                 hasCancel={[PHASE_PASSPHRASE, PHASE_DONE].includes(this.state.phase)}
             >
-            <div>
-                {content}
-            </div>
+                <div>
+                    {content}
+                </div>
             </BaseDialog>
         );
     }

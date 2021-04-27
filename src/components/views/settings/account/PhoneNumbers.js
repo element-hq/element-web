@@ -85,12 +85,18 @@ export class ExistingPhoneNumber extends React.Component {
                     <span className="mx_ExistingPhoneNumber_promptText">
                         {_t("Remove %(phone)s?", {phone: this.props.msisdn.address})}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
-                                      className="mx_ExistingPhoneNumber_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onActuallyRemove}
+                        kind="danger_sm"
+                        className="mx_ExistingPhoneNumber_confirmBtn"
+                    >
                         {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
-                                      className="mx_ExistingPhoneNumber_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onDontRemove}
+                        kind="link_sm"
+                        className="mx_ExistingPhoneNumber_confirmBtn"
+                    >
                         {_t("Cancel")}
                     </AccessibleButton>
                 </div>
@@ -246,8 +252,11 @@ export default class PhoneNumbers extends React.Component {
                             value={this.state.newPhoneNumberCode}
                             onChange={this._onChangeNewPhoneNumberCode}
                         />
-                        <AccessibleButton onClick={this._onContinueClick} kind="primary"
-                                          disabled={this.state.continueDisabled}>
+                        <AccessibleButton
+                            onClick={this._onContinueClick}
+                            kind="primary"
+                            disabled={this.state.continueDisabled}
+                        >
                             {_t("Continue")}
                         </AccessibleButton>
                     </form>

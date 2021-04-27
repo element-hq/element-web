@@ -549,15 +549,15 @@ function textForMjolnirEvent(event) {
     if (USER_RULE_TYPES.includes(event.getType())) {
         return _t("%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching " +
             "%(newGlob)s for %(reason)s",
-            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+        {senderName, oldGlob: prevEntity, newGlob: entity, reason});
     } else if (ROOM_RULE_TYPES.includes(event.getType())) {
         return _t("%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching " +
             "%(newGlob)s for %(reason)s",
-            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+        {senderName, oldGlob: prevEntity, newGlob: entity, reason});
     } else if (SERVER_RULE_TYPES.includes(event.getType())) {
         return _t("%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching " +
             "%(newGlob)s for %(reason)s",
-            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+        {senderName, oldGlob: prevEntity, newGlob: entity, reason});
     }
 
     // Unknown type. We'll say something but we shouldn't end up here.

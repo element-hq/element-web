@@ -100,7 +100,7 @@ export default class Notifications extends React.Component {
         MatrixClientPeg.get().setPushRuleEnabled(
             'global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked,
         ).then(function() {
-           self._refreshFromServer();
+            self._refreshFromServer();
         });
     };
 
@@ -580,12 +580,12 @@ export default class Notifications extends React.Component {
                         "vectorRuleId": "_keywords",
                         "description": (
                             <span>
-                            { _t('Messages containing <span>keywords</span>',
-                                {},
-                                { 'span': (sub) =>
-                                    <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
-                                },
-                            )}
+                                { _t('Messages containing <span>keywords</span>',
+                                    {},
+                                    { 'span': (sub) =>
+                                        <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
+                                    },
+                                )}
                             </span>
                         ),
                         "vectorState": self.state.vectorContentRules.vectorState,
@@ -743,8 +743,8 @@ export default class Notifications extends React.Component {
 
     emailNotificationsRow(address, label) {
         return <LabelledToggleSwitch value={this.hasEmailPusher(this.state.pushers, address)}
-                                     onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
-                                     label={label} key={`emailNotif_${label}`} />;
+            onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
+            label={label} key={`emailNotif_${label}`} />;
     }
 
     render() {
@@ -757,8 +757,8 @@ export default class Notifications extends React.Component {
         let masterPushRuleDiv;
         if (this.state.masterPushRule) {
             masterPushRuleDiv = <LabelledToggleSwitch value={!this.state.masterPushRule.enabled}
-                                                      onChange={this.onEnableNotificationsChange}
-                                                      label={_t('Enable notifications for this account')} />;
+                onChange={this.onEnableNotificationsChange}
+                label={_t('Enable notifications for this account')} />;
         }
 
         let clearNotificationsButton;
@@ -874,16 +874,16 @@ export default class Notifications extends React.Component {
                     { spinner }
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
-                                          onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications for this session')} />
+                        onChange={this.onEnableDesktopNotificationsChange}
+                        label={_t('Enable desktop notifications for this session')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
-                                          onChange={this.onEnableDesktopNotificationBodyChange}
-                                          label={_t('Show message in desktop notification')} />
+                        onChange={this.onEnableDesktopNotificationBodyChange}
+                        label={_t('Show message in desktop notification')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
-                                          onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications for this session')} />
+                        onChange={this.onEnableAudioNotificationsChange}
+                        label={_t('Enable audible notifications for this session')} />
 
                     { emailNotificationsRows }
 

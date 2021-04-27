@@ -785,8 +785,10 @@ class TimelinePanel extends React.Component {
             return;
         }
         const lastDisplayedEvent = this.state.events[lastDisplayedIndex];
-        this._setReadMarker(lastDisplayedEvent.getId(),
-                            lastDisplayedEvent.getTs());
+        this._setReadMarker(
+            lastDisplayedEvent.getId(),
+            lastDisplayedEvent.getTs(),
+        );
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
@@ -872,7 +874,7 @@ class TimelinePanel extends React.Component {
             // The messagepanel knows where the RM is, so we must have loaded
             // the relevant event.
             this._messagePanel.current.scrollToEvent(this.state.readMarkerEventId,
-                                                 0, 1/3);
+                0, 1/3);
             return;
         }
 
@@ -1044,7 +1046,7 @@ class TimelinePanel extends React.Component {
                 }
                 if (eventId) {
                     this._messagePanel.current.scrollToEvent(eventId, pixelOffset,
-                                                         offsetBase);
+                        offsetBase);
                 } else {
                     this._messagePanel.current.scrollToBottom();
                 }
@@ -1418,8 +1420,8 @@ class TimelinePanel extends React.Component {
             ['PREPARED', 'CATCHUP'].includes(this.state.clientSyncState)
         );
         const events = this.state.firstVisibleEventIndex
-              ? this.state.events.slice(this.state.firstVisibleEventIndex)
-              : this.state.events;
+            ? this.state.events.slice(this.state.firstVisibleEventIndex)
+            : this.state.events;
         return (
             <MessagePanel
                 ref={this._messagePanel}

@@ -310,9 +310,14 @@ export default class AliasSettings extends React.Component {
         let found = false;
         const canonicalValue = this.state.canonicalAlias || "";
         const canonicalAliasSection = (
-            <Field onChange={this.onCanonicalAliasChange} value={canonicalValue}
-                   disabled={this.state.updatingCanonicalAlias || !this.props.canSetCanonicalAlias}
-                   element='select' id='canonicalAlias' label={_t('Main address')}>
+            <Field
+                onChange={this.onCanonicalAliasChange}
+                value={canonicalValue}
+                disabled={this.state.updatingCanonicalAlias || !this.props.canSetCanonicalAlias}
+                element='select'
+                id='canonicalAlias'
+                label={_t('Main address')}
+            >
                 <option value="" key="unset">{ _t('not specified') }</option>
                 {
                     this._getAliases().map((alias, i) => {
@@ -326,9 +331,9 @@ export default class AliasSettings extends React.Component {
                 }
                 {
                     found || !this.state.canonicalAlias ? '' :
-                    <option value={ this.state.canonicalAlias } key='arbitrary'>
-                        { this.state.canonicalAlias }
-                    </option>
+                        <option value={ this.state.canonicalAlias } key='arbitrary'>
+                            { this.state.canonicalAlias }
+                        </option>
                 }
             </Field>
         );

@@ -93,10 +93,10 @@ module.exports = class ElementSession {
             const type = req.resourceType();
             const response = await req.response();
             //if (type === 'xhr' || type === 'fetch') {
-                buffer += `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
-                // if (req.method() === "POST") {
-                //   buffer += "  Post data: " + req.postData();
-                // }
+            buffer += `${type} ${response.status()} ${req.method()} ${req.url()} \n`;
+            // if (req.method() === "POST") {
+            //   buffer += "  Post data: " + req.postData();
+            // }
             //}
         });
         return {

@@ -311,7 +311,7 @@ function unpackMegolmKeyFile(data) {
     while (1) {
         const lineEnd = fileStr.indexOf('\n', lineStart);
         const line = fileStr.slice(lineStart, lineEnd < 0 ? undefined : lineEnd)
-              .trim();
+            .trim();
         if (line === TRAILER_LINE) {
             break;
         }
