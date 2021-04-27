@@ -3292,5 +3292,16 @@
     "Zoom in": "Nagyít",
     "Zoom out": "Kicsinyít",
     "%(seconds)ss left": "%(seconds)s mp van vissza",
-    "Show options to enable 'Do not disturb' mode": "Mutassa a lehetőséget a „Ne zavarjanak” módhoz"
+    "Show options to enable 'Do not disturb' mode": "Mutassa a lehetőséget a „Ne zavarjanak” módhoz",
+    "You can select all or individual messages to retry or delete": "Újraküldéshez vagy törléshez kiválaszthatja az üzeneteket egyenként vagy az összeset együtt",
+    "Retry all": "Mind újraküldése",
+    "Sending": "Küldés",
+    "Delete all": "Mind törlése",
+    "Some of your messages have not been sent": "Néhány üzenete nem lett elküldve",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s résztvevő beleértve: %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Beleértve: %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "1 résztvevő megmutatása",
+    "View all %(count)s members|other": "Az összes %(count)s résztvevő megmutatása",
+    "Failed to send": "Küldés sikertelen"
 }
