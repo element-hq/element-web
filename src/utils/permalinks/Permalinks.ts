@@ -17,6 +17,9 @@ limitations under the License.
 import isIp from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
 import {Room} from "matrix-js-sdk/src/models/room";
+import {EventType} from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
@@ -99,9 +102,6 @@ export class RoomPermalinkCreator {
         if (!this.roomId) {
             throw new Error("Failed to resolve a roomId for the permalink creator to use");
         }
-
-        this.onMembership = this.onMembership.bind(this);
-        this.onRoomState = this.onRoomState.bind(this);
     }
 
     load() {
@@ -140,11 +140,11 @@ export class RoomPermalinkCreator {
         return this.started;
     }
 
-    forEvent(eventId) {
+    forEvent(eventId: string): string {
         return getPermalinkConstructor().forEvent(this.roomId, eventId, this._serverCandidates);
     }
 
-    forShareableRoom() {
+    forShareableRoom(): string {
         if (this.room) {
             // Prefer to use canonical alias for permalink if possible
             const alias = this.room.getCanonicalAlias();
@@ -155,26 +155,26 @@ export class RoomPermalinkCreator {
         return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
-    forRoom() {
+    forRoom(): string {
         return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
-    private onRoomState(event) {
+    private onRoomState = (event: MatrixEvent) => {
         switch (event.getType()) {
-            case "m.room.server_acl":
+            case EventType.RoomServerAcl:
                 this.updateAllowedServers();
                 this.updateHighestPlUser();
                 this.updatePopulationMap();
                 this.updateServerCandidates();
                 return;
-            case "m.room.power_levels":
+            case EventType.RoomPowerLevels:
                 this.updateHighestPlUser();
                 this.updateServerCandidates();
                 return;
         }
     }
 
-    private onMembership(evt, member, oldMembership) {
+    private onMembership = (evt: MatrixEvent, member: RoomMember, oldMembership: string) => {
         const userId = member.userId;
         const membership = member.membership;
         const serverName = getServerName(userId);
@@ -282,11 +282,11 @@ export function makeGenericPermalink(entityId: string): string {
     return getPermalinkConstructor().forEntity(entityId);
 }
 
-export function makeUserPermalink(userId) {
+export function makeUserPermalink(userId: string): string {
     return getPermalinkConstructor().forUser(userId);
 }
 
-export function makeRoomPermalink(roomId) {
+export function makeRoomPermalink(roomId: string): string {
     if (!roomId) {
         throw new Error("can't permalink a falsey roomId");
     }
@@ -305,7 +305,7 @@ export function makeRoomPermalink(roomId) {
     return permalinkCreator.forRoom();
 }
 
-export function makeGroupPermalink(groupId) {
+export function makeGroupPermalink(groupId: string): string {
     return getPermalinkConstructor().forGroup(groupId);
 }
 
@@ -437,24 +437,24 @@ export function parseAppLocalLink(localLink: string): PermalinkParts {
     return null;
 }
 
-function getServerName(userId) {
+function getServerName(userId: string): string {
     return userId.split(":").splice(1).join(":");
 }
 
-function getHostnameFromMatrixDomain(domain) {
+function getHostnameFromMatrixDomain(domain: string): string {
     if (!domain) return null;
     return new URL(`https://${domain}`).hostname;
 }
 
-function isHostInRegex(hostname, regexps) {
+function isHostInRegex(hostname: string, regexps: RegExp[]) {
     hostname = getHostnameFromMatrixDomain(hostname);
     if (!hostname) return true; // assumed
-    if (regexps.length > 0 && !regexps[0].test) throw new Error(regexps[0]);
+    if (regexps.length > 0 && !regexps[0].test) throw new Error(regexps[0].toString());
 
     return regexps.filter(h => h.test(hostname)).length > 0;
 }
 
-function isHostnameIpAddress(hostname) {
+function isHostnameIpAddress(hostname: string): boolean {
     hostname = getHostnameFromMatrixDomain(hostname);
     if (!hostname) return false;
 
