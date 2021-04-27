@@ -30,8 +30,18 @@ limitations under the License.
     height: 1.5em;
     font-size: 18px;
     font-weight: 600;
-    max-width: 155px;
-    overflow: auto;
+    max-width: 150px;
+    border: none;
+    margin: 0px;
+  
+}
+.mx_DialPadContextMenu_dialled input{
+    font-size: 18px;
+    font-weight: 600;
+    overflow: hidden;
+    text-align: left;
+    direction: rtl;
+    background-color: rgb(0, 0, 0, 0);
 }
 
 .mx_DialPadContextMenu_dialPad {
