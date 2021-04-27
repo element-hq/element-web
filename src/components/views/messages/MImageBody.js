@@ -217,7 +217,7 @@ export default class MImageBody extends React.Component {
             const info = content.info;
             if (
                 this._isGif() ||
-                pixelRatio === 1.0 ||
+                window.devicePixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
                 return media.getThumbnailOfSourceHttp(thumbWidth, thumbHeight);
