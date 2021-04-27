@@ -3297,5 +3297,16 @@
     "Zoom out": "Alonxar",
     "%(seconds)ss left": "%(seconds)ss restantes",
     "Change server ACLs": "Cambiar ACLs do servidor",
-    "Show options to enable 'Do not disturb' mode": "Mostrar opcións para activar o modo 'Non molestar'"
+    "Show options to enable 'Do not disturb' mode": "Mostrar opcións para activar o modo 'Non molestar'",
+    "You can select all or individual messages to retry or delete": "Podes elexir todo ou mensaxes individuais para reintentar ou eliminar",
+    "Sending": "Enviando",
+    "Retry all": "Reintentar todo",
+    "Delete all": "Eliminar todo",
+    "Some of your messages have not been sent": "Algunha das túas mensaxes non se enviou",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s membros, incluíndo a %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Incluíndo a %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "Ver 1 membro",
+    "View all %(count)s members|other": "Ver tódolos %(count)s membros",
+    "Failed to send": "Fallou o envío"
 }
