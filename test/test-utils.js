@@ -83,6 +83,13 @@ export function createTestClient() {
             rooms: [],
             events: [],
         }),
+
+        // Used by various internal bits we aren't concerned with (yet)
+        _sessionStore: {
+            store: {
+                getItem: jest.fn(),
+            },
+        },
     };
 }
 
