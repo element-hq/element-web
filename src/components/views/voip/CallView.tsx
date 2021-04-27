@@ -312,7 +312,7 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
-    // Note that this assumes we always have a callview on screen at any given time
+    // Note that this assumes we always have a CallView on screen at any given time
     // CallHandler would probably be a better place for this
     private onNativeKeyDown = ev => {
         let handled = false;
