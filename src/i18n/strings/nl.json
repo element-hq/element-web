@@ -3183,5 +3183,16 @@
     "Zoom out": "Uitzoomen",
     "%(seconds)ss left": "%(seconds)s's over",
     "Change server ACLs": "Wijzig server ACL's",
-    "Show options to enable 'Do not disturb' mode": "Toon opties om de 'Niet storen' modus in te schakelen"
+    "Show options to enable 'Do not disturb' mode": "Toon opties om de 'Niet storen' modus in te schakelen",
+    "You can select all or individual messages to retry or delete": "U kunt alles selecteren of per individueel bericht opnieuw verzenden of verwijderen",
+    "Sending": "Wordt verstuurd",
+    "Retry all": "Alles opnieuw proberen",
+    "Delete all": "Verwijder alles",
+    "Some of your messages have not been sent": "Enkele van uw berichten zijn niet verstuurd",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s leden inclusief %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Inclusief %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "Bekijk 1 lid",
+    "View all %(count)s members|other": "Bekijk alle %(count)s leden",
+    "Failed to send": "Verzenden is mislukt"
 }
