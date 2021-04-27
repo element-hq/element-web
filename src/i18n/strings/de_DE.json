@@ -3264,5 +3264,10 @@
     "Zoom in": "Vergrößern",
     "Zoom out": "Verkleinern",
     "%(seconds)ss left": "%(seconds)s vergangen",
-    "Change server ACLs": "ACLs des Servers bearbeiten"
+    "Change server ACLs": "ACLs des Servers bearbeiten",
+    "Failed to send": "Fehler beim Senden",
+    "View all %(count)s members|other": "Alle %(count)s Mitglieder anzeigen",
+    "View all %(count)s members|one": "Mitglied anzeigen",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "Some of your messages have not been sent": "Einige Nachrichten konnten nicht gesendet werden"
 }
