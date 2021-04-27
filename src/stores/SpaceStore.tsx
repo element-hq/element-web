@@ -543,7 +543,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 // persist last viewed room from a space
 
                 if (room.isSpaceRoom()) {
-                    this.setActiveSpace(room);
+                    // Don't context switch when navigating to the space room
+                    // as it will cause you to end up in the wrong room
+                    this.setActiveSpace(room, false);
                 } else if (!this.getSpaceFilteredRoomIds(this.activeSpace).has(room.roomId)) {
                     // TODO maybe reverse these first 2 clauses once space panel active is fixed
                     let parent = this.rootSpaces.find(s => this.spaceFilteredRooms.get(s.roomId)?.has(room.roomId));
