@@ -23,6 +23,8 @@ import Modal from "../../../../../Modal";
 import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 import {EventType} from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -115,23 +117,23 @@ interface IProps {
 
 @replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
-    componentDidMount(): void {
+    componentDidMount() {
         MatrixClientPeg.get().on("RoomState.members", this.onRoomMembership);
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("RoomState.members", this.onRoomMembership);
         }
     }
 
-    private onRoomMembership = (event, state, member) => {
+    private onRoomMembership = (event: MatrixEvent, state: RoomState, member: RoomMember) => {
         if (state.roomId !== this.props.roomId) return;
         this.forceUpdate();
     };
 
-    private populateDefaultPlEvents(eventsSection, stateLevel, eventsLevel) {
+    private populateDefaultPlEvents(eventsSection: Record<string, number>, stateLevel: number, eventsLevel: number) {
         for (const desiredEvent of Object.keys(plEventsToShow)) {
             if (!(desiredEvent in eventsSection)) {
                 eventsSection[desiredEvent] = (plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel);
@@ -139,7 +141,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
     }
 
-    private onPowerLevelsChanged = (value, powerLevelKey) => {
+    private onPowerLevelsChanged = (inputValue: string, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -150,7 +152,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
         const eventsLevelPrefix = "event_levels_";
 
-        value = parseInt(value);
+        const value = parseInt(inputValue);
 
         if (powerLevelKey.startsWith(eventsLevelPrefix)) {
             // deep copy "events" object, Object.assign itself won't deep copy
@@ -184,7 +186,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    private onUserPowerLevelChanged = (value, powerLevelKey) => {
+    private onUserPowerLevelChanged = (value: string, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
