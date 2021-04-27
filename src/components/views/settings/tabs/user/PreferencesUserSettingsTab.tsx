@@ -103,7 +103,7 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         };
     }
 
-    async componentDidMount(): Promise<void> {
+    async componentDidMount() {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
@@ -142,38 +142,38 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         });
     }
 
-    private onAutoLaunchChange = (checked) => {
+    private onAutoLaunchChange = (checked: boolean) => {
         PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
     };
 
-    private onWarnBeforeExitChange = (checked) => {
+    private onWarnBeforeExitChange = (checked: boolean) => {
         PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({warnBeforeExit: checked}));
     }
 
-    private onAlwaysShowMenuBarChange = (checked) => {
+    private onAlwaysShowMenuBarChange = (checked: boolean) => {
         PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
     };
 
-    private onMinimizeToTrayChange = (checked) => {
+    private onMinimizeToTrayChange = (checked: boolean) => {
         PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({minimizeToTray: checked}));
     };
 
-    private onAutocompleteDelayChange = (e) => {
+    private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({autocompleteDelay: e.target.value});
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private onReadMarkerInViewThresholdMs = (e) => {
+    private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({readMarkerInViewThresholdMs: e.target.value});
         SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private onReadMarkerOutOfViewThresholdMs = (e) => {
+    private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds) {
+    private renderGroup(settingIds: string[]): React.ReactNodeArray {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return settingIds.filter(SettingsStore.isEnabled).map(i => {
             return <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />;
