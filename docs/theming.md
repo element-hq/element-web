@@ -29,7 +29,6 @@ single directory tree.
 
 JSON themes derived from the built in CSS themes may be defined in the `config.json` file. When [`feature_custom_themes`](https://github.com/vector-im/element-web/blob/master/docs/labs.md#custom-themes-feature_custom_themes) is enabled, users can add new JSON themes in the Appearance section of Settings.
 
-
 To avoid name collisions, the internal name of a theme is
 `custom-${theme.name}`. So if you want to set the custom theme below as the
 default theme, you would use `default_theme: "custom-Electric Blue"`.
