@@ -257,6 +257,10 @@ export default class SettingsStore {
         return SETTINGS[settingName].isFeature;
     }
 
+    public static getBetaInfo(settingName: string) {
+        return SETTINGS[settingName]?.betaInfo;
+    }
+
     /**
      * Determines if a setting is enabled.
      * If a setting is disabled then it should be hidden from the user.

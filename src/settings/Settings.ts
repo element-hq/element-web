@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import type { ReactNode } from "react";
 
-import { _td } from '../languageHandler';
+import { _t, _td } from '../languageHandler';
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -39,6 +40,7 @@ import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
+import SdkConfig from "../SdkConfig";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -117,16 +119,32 @@ export interface ISetting {
     // historical settings which we don't want existing user's values be wiped. Do
     // not use this for new settings.
     invertedSettingName?: string;
+
+    betaInfo?: {
+        title: string; // _td
+        caption: string; // _td
+        disclaimer?: (() => ReactNode) | string; // _td
+        image: string; // require(...)
+    };
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_spaces": {
         isFeature: true,
-        displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. " +
-            "Requires compatible homeserver for some features."),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
+        betaInfo: {
+            title: _td("Spaces"),
+            caption: _td("Spaces are a new way to group people and rooms for fun, " +
+                "work, yourself or anything in between."),
+            disclaimer: () => _t("%(brand)s will reload with Spaces enabled, " +
+                "and communities and custom tags disabled. " +
+                "You can leave the beta at anytime. " +
+                "Certain features will require a compatible homeserver. " +
+                "Beta only available for Web, Desktop, and Android.", { brand: SdkConfig.get().brand }),
+            image: require("../../res/img/betas/spaces.png"),
+        },
     },
     "feature_dnd": {
         isFeature: true,
