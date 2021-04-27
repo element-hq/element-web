@@ -29,7 +29,7 @@ interface IProps {
 
     feed: CallFeed,
 
-    // Whether this call view is for picture-in-pictue mode
+    // Whether this call view is for picture-in-picture mode
     // otherwise, it's the larger call view when viewing the room the call is in.
     // This is sort of a proxy for a number of things but we currently have no
     // need to control those things separately, so this is simpler.
