@@ -27,9 +27,9 @@
   ],
   "style": "bundle.css",
   "scripts": {
-    "i18n": "gen-i18n",
-    "prunei18n": "prune-i18n",
-    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && gen-i18n && compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
+    "i18n": "matrix-gen-i18n",
+    "prunei18n": "matrix-prune-i18n",
+    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && matrix-gen-i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
     "reskindex:watch-react": "node scripts/yarn-sub.js matrix-react-sdk reskindex:watch",
