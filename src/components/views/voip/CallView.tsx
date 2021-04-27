@@ -40,11 +40,11 @@ interface IProps {
         // Another ongoing call to display information about
         secondaryCall?: MatrixCall,
 
-        // a callback which is called when the content in the callview changes
+        // a callback which is called when the content in the CallView changes
         // in a way that is likely to cause a resize.
         onResize?: any;
 
-        // Whether this call view is for picture-in-pictue mode
+        // Whether this call view is for picture-in-picture mode
         // otherwise, it's the larger call view when viewing the room the call is in.
         // This is sort of a proxy for a number of things but we currently have no
         // need to control those things separately, so this is simpler.
