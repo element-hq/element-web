@@ -21,7 +21,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
 import MemberAvatar from "../avatars/MemberAvatar"
-import CallMediaHandler from "../../../CallMediaHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
@@ -45,11 +44,9 @@ interface IState {
     videoMuted: boolean;
 }
 
-
 @replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.Component<IProps, IState> {
-    private video = createRef<HTMLVideoElement>();
-    private audio = createRef<HTMLAudioElement>();
+    private element = createRef<HTMLVideoElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -62,38 +59,20 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
     componentDidMount() {
         this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
-        this.playAllMedia();
+        this.playMedia();
     }
 
     componentWillUnmount() {
         this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
-        this.video.current?.removeEventListener('resize', this.onResize);
-        this.stopAllMedia();
+        this.element.current?.removeEventListener('resize', this.onResize);
+        this.stopMedia();
     }
 
-    private playMediaElement(element: HTMLVideoElement | HTMLAudioElement) {
-        if (element instanceof HTMLAudioElement) {
-            const audioOutput = CallMediaHandler.getAudioOutput();
-
-            // Don't play audio if the feed is local
-            element.muted = this.props.feed.isLocal();
-
-            if (audioOutput && !element.muted) {
-                try {
-                    // This seems quite unreliable in Chrome, although I haven't yet managed to make a jsfiddle where
-                    // it fails.
-                    // It seems reliable if you set the sink ID after setting the srcObject and then set the sink ID
-                    // back to the default after the call is over - Dave
-                    element.setSinkId(audioOutput);
-                } catch (e) {
-                    console.error("Couldn't set requested audio output device: using default", e);
-                    logger.warn("Couldn't set requested audio output device: using default", e);
-                }
-            }
-        } else {
-            element.muted = true;
-        }
-
+    private playMedia() {
+        const element = this.element.current;
+        if (!element) return;
+        // We play audio in AudioFeed, not here
+        element.muted = true;
         element.srcObject = this.props.feed.stream;
         element.autoplay = true;
         try {
@@ -112,7 +91,10 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         }
     }
 
-    private stopMediaElement(element: HTMLAudioElement | HTMLVideoElement) {
+    private stopMedia() {
+        const element = this.element.current;
+        if (!element) return;
+
         element.pause();
         element.src = null;
 
@@ -122,22 +104,12 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         // seem to be necessary - Šimon
     }
 
-    private playAllMedia() {
-        this.playMediaElement(this.audio.current);
-        if (this.video.current) this.playMediaElement(this.video.current);
-    }
-
-    private stopAllMedia() {
-        this.stopMediaElement(this.audio.current)
-        if (this.video.current) this.stopMediaElement(this.video.current);
-    }
-
     private onNewStream = () => {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
-        this.playAllMedia();
+        this.playMedia();
     };
 
     private onResize = (e) => {
@@ -152,15 +124,12 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             mx_VideoFeed_local: this.props.feed.isLocal(),
             mx_VideoFeed_remote: !this.props.feed.isLocal(),
             mx_VideoFeed_voice: this.state.videoMuted,
+            mx_VideoFeed_video: !this.state.videoMuted,
             mx_VideoFeed_mirror: (
                 this.props.feed.isLocal() &&
                 SettingsStore.getValue('VideoView.flipVideoHorizontally')
             ),
         };
-
-        const audio = (
-            <audio ref={this.audio} />
-        );
 
         if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
@@ -173,15 +142,11 @@ export default class VideoFeed extends React.Component<IProps, IState> {
                         height={avatarSize}
                         width={avatarSize}
                     />
-                    {audio}
                 </div>
             );
         } else {
             return (
-                <div className={classnames(videoClasses)}>
-                    <video className="mx_VideoFeed_video" ref={this.video} />
-                    {audio}
-                </div>
+                <video className={classnames(videoClasses)} ref={this.element} />
             );
         }
     }
