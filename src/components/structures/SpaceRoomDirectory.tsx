@@ -136,7 +136,7 @@ const Tile: React.FC<ITileProps> = ({
 
     let url: string;
     if (room.avatar_url) {
-        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(Math.floor(20 * window.devicePixelRatio));
+        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20);
     }
 
     let description = _t("%(count)s members", { count: room.num_joined_members });
