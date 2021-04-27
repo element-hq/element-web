@@ -592,10 +592,10 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_voice: true,
             });
 
-            const feeds = this.state.feeds.map((feed, i) => {
+            const feeds = this.props.call.getLocalFeeds().map((feed, i) => {
                 // Here we check to hide local audio feeds to achieve the same UI/UX
                 // as before. But once again this might be subject to change
-                if (feed.isVideoMuted() && feed.isLocal()) return;
+                if (feed.isVideoMuted()) return;
                 return (
                     <VideoFeed
                         key={i}
