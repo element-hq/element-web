@@ -97,9 +97,19 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 waveform: this.state.recorder.finalWaveform.map(v => Math.round(v * 1024)),
             },
         });
-        await VoiceRecordingStore.instance.disposeRecording();
-        this.setState({recorder: null});
+        await this.disposeRecording();
     }
+
+    private async disposeRecording() {
+        await VoiceRecordingStore.instance.disposeRecording();
+
+        // Reset back to no recording, which means no phase (ie: restart component entirely)
+        this.setState({recorder: null, recordingPhase: null});
+    }
+
+    private onCancel = async () => {
+        await this.disposeRecording();
+    };
 
     private onRecordStartEndClick = async () => {
         if (this.state.recorder) {
@@ -134,6 +144,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         let playPause = null;
         if (this.state.recordingPhase === RecordingState.Ended) {
+            // TODO: @@ TR: Should we disable this during upload? What does a failed upload look like?
             playPause = <PlayPauseButton recorder={this.state.recorder} />;
         }
 
@@ -146,6 +157,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
     public render() {
         let recordingInfo;
+        let deleteButton;
         if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {
             const classes = classNames({
                 'mx_MessageComposer_button': !this.state.recorder,
@@ -170,7 +182,16 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             recordingInfo = stopOrRecordBtn;
         }
 
+        if (this.state.recorder && this.state.recordingPhase !== RecordingState.Uploading) {
+            deleteButton = <AccessibleTooltipButton
+                className='mx_VoiceRecordComposerTile_delete'
+                title={_t("Delete recording")}
+                onClick={this.onCancel}
+            />;
+        }
+
         return (<>
+            {deleteButton}
             {this.renderWaveformArea()}
             {recordingInfo}
         </>);
