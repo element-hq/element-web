@@ -23,6 +23,7 @@ import request from "browser-request";
 import SdkConfig from "./SdkConfig";
 import {WidgetType} from "./widgets/WidgetType";
 import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
@@ -57,7 +58,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    private readTokenFromStore() {
+    private readTokenFromStore(): string {
         let token = window.localStorage.getItem("mx_scalar_token_at_" + this.apiUrl);
         if (!token && this.isDefaultManager) {
             token = window.localStorage.getItem("mx_scalar_token");
@@ -65,7 +66,7 @@ export default class ScalarAuthClient {
         return token;
     }
 
-    private readToken() {
+    private readToken(): string {
         if (this.scalarToken) return this.scalarToken;
         return this.readTokenFromStore();
     }
@@ -74,18 +75,18 @@ export default class ScalarAuthClient {
         this.termsInteractionCallback = callback;
     }
 
-    connect() {
+    connect(): Promise<void> {
         return this.getScalarToken().then((tok) => {
             this.scalarToken = tok;
         });
     }
 
-    hasCredentials() {
+    hasCredentials(): boolean {
         return this.scalarToken != null; // undef or null
     }
 
     // Returns a promise that resolves to a scalar_token string
-    getScalarToken() {
+    getScalarToken(): Promise<string> {
         const token = this.readToken();
 
         if (!token) {
@@ -101,7 +102,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    private getAccountName(token) {
+    private getAccountName(token: string): Promise<string> {
         const url = this.apiUrl + "/account";
 
         return new Promise(function(resolve, reject) {
@@ -126,7 +127,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    private checkToken(token) {
+    private checkToken(token: string): Promise<string> {
         return this.getAccountName(token).then(userId => {
             const me = MatrixClientPeg.get().getUserId();
             if (userId !== me) {
@@ -166,7 +167,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    registerForToken() {
+    registerForToken(): Promise<string> {
         // Get openid bearer token from the HS as the first part of our dance
         return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
             // Now we can send that to scalar and exchange it for a scalar token
@@ -181,7 +182,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    exchangeForScalarToken(openidTokenObject) {
+    exchangeForScalarToken(openidTokenObject: any): Promise<string> {
         const scalarRestUrl = this.apiUrl;
 
         return new Promise(function(resolve, reject) {
@@ -205,7 +206,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    getScalarPageTitle(url) {
+    getScalarPageTitle(url: string): Promise<string> {
         let scalarPageLookupUrl = this.apiUrl + '/widgets/title_lookup';
         scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
         scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
@@ -241,7 +242,7 @@ export default class ScalarAuthClient {
      * @param  {string} widgetId   The widget ID to disable assets for
      * @return {Promise}           Resolves on completion
      */
-    disableWidgetAssets(widgetType: WidgetType, widgetId) {
+    disableWidgetAssets(widgetType: WidgetType, widgetId: string): Promise<void> {
         let url = this.apiUrl + '/widgets/set_assets_state';
         url = this.getStarterLink(url);
         return new Promise<void>((resolve, reject) => {
@@ -268,7 +269,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    getScalarInterfaceUrlForRoom(room, screen, id) {
+    getScalarInterfaceUrlForRoom(room: Room, screen: string, id: string): string {
         const roomId = room.roomId;
         const roomName = room.name;
         let url = this.uiUrl;
@@ -285,7 +286,7 @@ export default class ScalarAuthClient {
         return url;
     }
 
-    getStarterLink(starterLinkUrl) {
+    getStarterLink(starterLinkUrl: string): string {
         return starterLinkUrl + "?scalar_token=" + encodeURIComponent(this.scalarToken);
     }
 }
