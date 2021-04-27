@@ -26,7 +26,7 @@ interface IProps {
     featureId: string;
 }
 
-export const BetaPill = ({ onClick }) => {
+export const BetaPill = ({ onClick }: { onClick?: () => void }) => {
     return <span className="mx_BetaCard_betaPill" onClick={onClick}>
         { _t("Beta") }
     </span>;
