@@ -5699,8 +5699,8 @@ matrix-react-test-utils@^0.2.2:
   integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
 
 "matrix-web-i18n@github:matrix-org/matrix-web-i18n":
-  version "1.1.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-web-i18n/tar.gz/68ea0c57b6c74c40df6419eb5ac0fa8945ff8a75"
+  version "1.1.2"
+  resolved "https://codeload.github.com/matrix-org/matrix-web-i18n/tar.gz/63f9119bc0bc304e83d4e8e22364caa7850e7671"
   dependencies:
     "@babel/parser" "^7.13.16"
     "@babel/traverse" "^7.13.17"
