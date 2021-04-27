@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
@@ -74,7 +75,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    async UNSAFE_componentWillMount(): Promise<void> { // eslint-disable-line camelcase
+    async UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         MatrixClientPeg.get().on("RoomState.events", this.onStateEvent);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
@@ -83,17 +84,17 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const joinRule: JoinRule = this.pullContentPropertyFromEvent(
             state.getStateEvents("m.room.join_rules", ""),
             'join_rule',
-            'invite',
+            JoinRule.Invite,
         );
         const guestAccess: GuestAccess = this.pullContentPropertyFromEvent(
             state.getStateEvents("m.room.guest_access", ""),
             'guest_access',
-            'forbidden',
+            GuestAccess.Forbidden,
         );
         const history: HistoryVisibility = this.pullContentPropertyFromEvent(
             state.getStateEvents("m.room.history_visibility", ""),
             'history_visibility',
-            'shared',
+            HistoryVisibility.Shared,
         );
         const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
         this.setState({joinRule, guestAccess, history, encrypted});
@@ -101,16 +102,16 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({hasAliases});
     }
 
-    private pullContentPropertyFromEvent(event, key, defaultValue) {
+    private pullContentPropertyFromEvent<T>(event: MatrixEvent, key: string, defaultValue: T): T {
         if (!event || !event.getContent()) return defaultValue;
         return event.getContent()[key] || defaultValue;
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         MatrixClientPeg.get().removeListener("RoomState.events", this.onStateEvent);
     }
 
-    private onStateEvent = (e) => {
+    private onStateEvent = (e: MatrixEvent) => {
         const refreshWhenTypes = [
             'm.room.join_rules',
             'm.room.guest_access',
@@ -120,7 +121,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (refreshWhenTypes.includes(e.getType())) this.forceUpdate();
     };
 
-    private onEncryptionChange = (e) => {
+    private onEncryptionChange = (e: React.ChangeEvent) => {
         Modal.createTrackedDialog('Enable encryption', '', QuestionDialog, {
             title: _t('Enable encryption?'),
             description: _t(
@@ -153,7 +154,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private fixGuestAccess = (e) => {
+    private fixGuestAccess = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -175,7 +176,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private onRoomAccessRadioToggle = (roomAccess) => {
+    private onRoomAccessRadioToggle = (roomAccess: string) => {
         //                         join_rule
         //                      INVITE  |  PUBLIC
         //        ----------------------+----------------
@@ -221,7 +222,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private onHistoryRadioToggle = (history) => {
+    private onHistoryRadioToggle = (history: HistoryVisibility) => {
         const beforeHistory = this.state.history;
         this.setState({history: history});
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.history_visibility", {
@@ -232,11 +233,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private updateBlacklistDevicesFlag = (checked) => {
+    private updateBlacklistDevicesFlag = (checked: boolean) => {
         MatrixClientPeg.get().getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
     };
 
-    private async hasAliases() {
+    private async hasAliases(): Promise<boolean> {
         const cli = MatrixClientPeg.get();
         if (await cli.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
             const response = await cli.unstableGetLocalAliases(this.props.roomId);
@@ -335,22 +336,22 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     onChange={this.onHistoryRadioToggle}
                     definitions={[
                         {
-                            value: "world_readable",
+                            value: HistoryVisibility.WorldReadable,
                             disabled: !canChangeHistory,
                             label: _t("Anyone"),
                         },
                         {
-                            value: "shared",
+                            value: HistoryVisibility.Shared,
                             disabled: !canChangeHistory,
                             label: _t('Members only (since the point in time of selecting this option)'),
                         },
                         {
-                            value: "invited",
+                            value: HistoryVisibility.Invited,
                             disabled: !canChangeHistory,
                             label: _t('Members only (since they were invited)'),
                         },
                         {
-                            value: "joined",
+                            value: HistoryVisibility.Joined,
                             disabled: !canChangeHistory,
                             label: _t('Members only (since they joined)'),
                         },
