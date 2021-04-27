@@ -3274,5 +3274,16 @@
     "Zoom out": "Dé-zoomer",
     "%(seconds)ss left": "%(seconds)s secondes restantes",
     "Change server ACLs": "Modifier les ACL du serveur",
-    "Show options to enable 'Do not disturb' mode": "Afficher une option pour activer le mode « Ne pas déranger »"
+    "Show options to enable 'Do not disturb' mode": "Afficher une option pour activer le mode « Ne pas déranger »",
+    "You can select all or individual messages to retry or delete": "Vous pouvez choisir de renvoyer ou supprimer tous les messages ou seulement certains",
+    "Sending": "Envoi",
+    "Retry all": "Tout renvoyer",
+    "Delete all": "Tout supprimer",
+    "Some of your messages have not been sent": "Certains de vos messages n’ont pas été envoyés",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s membres dont %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Dont %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "Afficher le membre",
+    "View all %(count)s members|other": "Afficher les %(count)s membres",
+    "Failed to send": "Échec de l’envoi"
 }
