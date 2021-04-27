@@ -188,7 +188,9 @@ export default class CallHandler {
     public roomIdForCall(call: MatrixCall): string {
         if (!call) return null;
 
-        if (SdkConfig.get()['voipObeyAssertedIdentity']) {
+        const voipConfig = SdkConfig.get()['voip'];
+
+        if (voipConfig && voipConfig.obeyAssertedIdentity) {
             const nativeUser = this.assertedIdentityNativeUsers[call.callId];
             if (nativeUser) {
                 const room = findDMForUser(MatrixClientPeg.get(), nativeUser);

@@ -189,7 +189,9 @@ describe('CallHandler', () => {
 
         // Now set the config option
         SdkConfig.put({
-            voipObeyAssertedIdentity: true,
+            voip: {
+                obeyAssertedIdentity: true,
+            },
         });
 
         // ...and send another asserted identity event for a different user
