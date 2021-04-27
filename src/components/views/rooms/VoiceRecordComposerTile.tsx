@@ -27,6 +27,7 @@ import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import PlaybackWaveform from "../voice_messages/PlaybackWaveform";
+import PlayPauseButton from "../voice_messages/PlayPauseButton";
 
 interface IProps {
     room: Room;
@@ -131,7 +132,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             waveform = <PlaybackWaveform recorder={this.state.recorder} />;
         }
 
+        let playPause = null;
+        if (this.state.recordingPhase === RecordingState.Ended) {
+            playPause = <PlayPauseButton recorder={this.state.recorder} />;
+        }
+
         return <div className={classes}>
+            {playPause}
             {clock}
             {waveform}
         </div>;

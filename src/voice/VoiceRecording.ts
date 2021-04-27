@@ -26,6 +26,7 @@ import {Singleflight} from "../utils/Singleflight";
 import {PayloadEvent, WORKLET_NAME} from "./consts";
 import {arrayFastClone} from "../utils/arrays";
 import {UPDATE_EVENT} from "../stores/AsyncStore";
+import {Playback} from "./Playback";
 
 const CHANNELS = 1; // stereo isn't important
 const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -267,6 +268,14 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             this.emit(RecordingState.Ended);
 
             return this.buffer;
+        });
+    }
+
+    public getPlayback(): Promise<Playback> {
+        return Singleflight.for(this, "playback").do(async () => {
+            const playback = new Playback(this.buffer.buffer); // cast to ArrayBuffer proper
+            await playback.prepare();
+            return playback;
         });
     }
 
