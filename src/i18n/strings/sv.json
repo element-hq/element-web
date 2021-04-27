@@ -3228,5 +3228,8 @@
     "Zoom out": "Zooma ut",
     "%(seconds)ss left": "%(seconds)ss kvar",
     "Change server ACLs": "Ändra server-ACLer",
-    "Show options to enable 'Do not disturb' mode": "Visa alternativ för att aktivera 'Stör ej'-läget"
+    "Show options to enable 'Do not disturb' mode": "Visa alternativ för att aktivera 'Stör ej'-läget",
+    "Delete all": "Radera alla",
+    "View all %(count)s members|one": "Visa 1 medlem",
+    "View all %(count)s members|other": "Visa alla %(count)s medlemmar"
 }
