@@ -31,6 +31,14 @@ import dis from "../../../dispatcher/dispatcher";
 import SpaceStore from "../../../stores/SpaceStore";
 import {showSpaceInvite} from "../../../utils/space";
 
+import { privateShouldBeEncrypted } from "../../../createRoom";
+
+function hasExpectedEncryptionSettings(room): boolean {
+    const isEncrypted: boolean = room._client.isRoomEncrypted(room.roomId);
+    const isPublic: boolean = room.getJoinRule() === "public";
+    return isPublic || !privateShouldBeEncrypted() || isEncrypted;
+}
+
 const NewRoomIntro = () => {
     const cli = useContext(MatrixClientContext);
     const {room, roomId} = useContext(RoomContext);
@@ -168,6 +176,18 @@ const NewRoomIntro = () => {
 
     return <div className="mx_NewRoomIntro">
         { body }
+
+        { !hasExpectedEncryptionSettings(room) && <p className="mx_NewRoomIntro_message" role="alert">
+            {_t("Messages in this room are not end-to-end encrypted. " +
+                    "Messages sent in an unencrypted room can be seen by the server and third parties. " +
+                    "<a>Learn more about encryption.</a>", {},
+            {
+                a: sub => <a href="https://element.io/help#encryption"
+                    rel="noreferrer noopener" target="_blank"
+                >{sub}</a>,
+            })}
+
+        </p>}
     </div>;
 };
 
