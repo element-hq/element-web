@@ -3300,5 +3300,16 @@
     "Zoom out": "縮小",
     "%(seconds)ss left": "剩%(seconds)s秒",
     "Change server ACLs": "變更伺服器 ACL",
-    "Show options to enable 'Do not disturb' mode": "顯示啟用「勿打擾」模式的選項"
+    "Show options to enable 'Do not disturb' mode": "顯示啟用「勿打擾」模式的選項",
+    "You can select all or individual messages to retry or delete": "您可以選取全部或單獨的訊息來重試或刪除",
+    "Sending": "正在傳送",
+    "Retry all": "重試全部",
+    "Delete all": "刪除全部",
+    "Some of your messages have not been sent": "您的部份訊息未傳送",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s 個成員包含 %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "包含 %(commaSeparatedMembers)s",
+    "View all %(count)s members|one": "檢視 1 個成員",
+    "View all %(count)s members|other": "檢視全部 %(count)s 個成員",
+    "Failed to send": "傳送失敗"
 }
