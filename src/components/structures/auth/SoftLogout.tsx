@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {sendLoginRequest} from "../../../Login";
+import {ISSOFlow, LoginFlow, sendLoginRequest} from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "../../../BasePlatform";
 import SSOButtons from "../../views/elements/SSOButtons";
@@ -42,26 +41,38 @@ const FLOWS_TO_VIEWS = {
     "m.login.sso": LOGIN_VIEW.SSO,
 };
 
-@replaceableComponent("structures.auth.SoftLogout")
-export default class SoftLogout extends React.Component {
-    static propTypes = {
-        // Query parameters from MatrixChat
-        realQueryParams: PropTypes.object, // {loginToken}
-
-        // Called when the SSO login completes
-        onTokenLoginCompleted: PropTypes.func,
+interface IProps {
+    // Query parameters from MatrixChat
+    realQueryParams: {
+        loginToken?: string;
     };
+    fragmentAfterLogin?: string;
 
-    constructor() {
-        super();
+    // Called when the SSO login completes
+    onTokenLoginCompleted: () => void,
+}
+
+interface IState {
+    loginView: number;
+    keyBackupNeeded: boolean;
+    busy: boolean;
+    password: string;
+    errorText: string;
+    flows: LoginFlow[];
+}
+
+@replaceableComponent("structures.auth.SoftLogout")
+export default class SoftLogout extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
 
         this.state = {
             loginView: LOGIN_VIEW.LOADING,
             keyBackupNeeded: true, // assume we do while we figure it out (see componentDidMount)
-
             busy: false,
             password: "",
             errorText: "",
+            flows: [],
         };
     }
 
@@ -72,7 +83,7 @@ export default class SoftLogout extends React.Component {
             return;
         }
 
-        this._initLogin();
+        this.initLogin();
 
         const cli = MatrixClientPeg.get();
         if (cli.isCryptoEnabled()) {
@@ -94,7 +105,7 @@ export default class SoftLogout extends React.Component {
         });
     };
 
-    async _initLogin() {
+    private async initLogin() {
         const queryParams = this.props.realQueryParams;
         const hasAllParams = queryParams && queryParams['loginToken'];
         if (hasAllParams) {
@@ -189,7 +200,7 @@ export default class SoftLogout extends React.Component {
         });
     }
 
-    _renderSignInSection() {
+    private renderSignInSection() {
         if (this.state.loginView === LOGIN_VIEW.LOADING) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
@@ -247,7 +258,7 @@ export default class SoftLogout extends React.Component {
             } // else we already have a message and should use it (key backup warning)
 
             const loginType = this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso";
-            const flow = this.state.flows.find(flow => flow.type === "m.login." + loginType);
+            const flow = this.state.flows.find(flow => flow.type === "m.login." + loginType) as ISSOFlow;
 
             return (
                 <div>
@@ -289,7 +300,7 @@ export default class SoftLogout extends React.Component {
 
                     <h3>{_t("Sign in")}</h3>
                     <div>
-                        {this._renderSignInSection()}
+                        {this.renderSignInSection()}
                     </div>
 
                     <h3>{_t("Clear personal data")}</h3>

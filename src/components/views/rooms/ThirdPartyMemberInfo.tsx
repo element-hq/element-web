@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import {Room} from "matrix-js-sdk/src/models/room";
 import {_t} from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import * as sdk from "../../../index";
@@ -27,11 +27,22 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    event: MatrixEvent;
+}
+
+interface IState {
+    stateKey: string;
+    roomId: string;
+    displayName: string;
+    invited: boolean;
+    canKick: boolean;
+    senderName: string;
+}
+
 @replaceableComponent("views.rooms.ThirdPartyMemberInfo")
-export default class ThirdPartyMemberInfo extends React.Component {
-    static propTypes = {
-        event: PropTypes.instanceOf(MatrixEvent).isRequired,
-    };
+export default class ThirdPartyMemberInfo extends React.Component<IProps, IState> {
+    private room: Room;
 
     constructor(props) {
         super(props);

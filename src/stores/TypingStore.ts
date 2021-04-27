@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,15 +25,23 @@ const TYPING_SERVER_TIMEOUT = 30000;
  * Tracks typing state for users.
  */
 export default class TypingStore {
+    private typingStates: {
+        [roomId: string]: {
+            isTyping: boolean,
+            userTimer: Timer,
+            serverTimer: Timer,
+        },
+    };
+
     constructor() {
         this.reset();
     }
 
     static sharedInstance(): TypingStore {
-        if (global.mxTypingStore === undefined) {
-            global.mxTypingStore = new TypingStore();
+        if (window.mxTypingStore === undefined) {
+            window.mxTypingStore = new TypingStore();
         }
-        return global.mxTypingStore;
+        return window.mxTypingStore;
     }
 
     /**
@@ -41,7 +49,7 @@ export default class TypingStore {
      * MatrixClientPeg client changes.
      */
     reset() {
-        this._typingStates = {
+        this.typingStates = {
             // "roomId": {
             //     isTyping: bool,     // Whether the user is typing or not
             //     userTimer: Timer,   // Local timeout for "user has stopped typing"
@@ -59,14 +67,14 @@ export default class TypingStore {
         if (!SettingsStore.getValue('sendTypingNotifications')) return;
         if (SettingsStore.getValue('lowBandwidth')) return;
 
-        let currentTyping = this._typingStates[roomId];
+        let currentTyping = this.typingStates[roomId];
         if ((!isTyping && !currentTyping) || (currentTyping && currentTyping.isTyping === isTyping)) {
             // No change in state, so don't do anything. We'll let the timer run its course.
             return;
         }
 
         if (!currentTyping) {
-            currentTyping = this._typingStates[roomId] = {
+            currentTyping = this.typingStates[roomId] = {
                 isTyping: isTyping,
                 serverTimer: new Timer(TYPING_SERVER_TIMEOUT),
                 userTimer: new Timer(TYPING_USER_TIMEOUT),
@@ -78,7 +86,7 @@ export default class TypingStore {
         if (isTyping) {
             if (!currentTyping.serverTimer.isRunning()) {
                 currentTyping.serverTimer.restart().finished().then(() => {
-                    const currentTyping = this._typingStates[roomId];
+                    const currentTyping = this.typingStates[roomId];
                     if (currentTyping) currentTyping.isTyping = false;
 
                     // The server will (should) time us out on typing, so we don't

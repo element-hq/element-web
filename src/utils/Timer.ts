@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,44 +26,48 @@ Once a timer is finished or aborted, it can't be started again
 a new one through `clone()` or `cloneIfRun()`.
 */
 export default class Timer {
-    constructor(timeout) {
-        this._timeout = timeout;
-        this._onTimeout = this._onTimeout.bind(this);
-        this._setNotStarted();
+    private timerHandle: NodeJS.Timeout;
+    private startTs: number;
+    private promise: Promise<void>;
+    private resolve: () => void;
+    private reject: (Error) => void;
+
+    constructor(private timeout: number) {
+        this.setNotStarted();
     }
 
-    _setNotStarted() {
-        this._timerHandle = null;
-        this._startTs = null;
-        this._promise = new Promise((resolve, reject) => {
-            this._resolve = resolve;
-            this._reject = reject;
+    private setNotStarted() {
+        this.timerHandle = null;
+        this.startTs = null;
+        this.promise = new Promise<void>((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
         }).finally(() => {
-            this._timerHandle = null;
+            this.timerHandle = null;
         });
     }
 
-    _onTimeout() {
+    private onTimeout = () => {
         const now = Date.now();
-        const elapsed = now - this._startTs;
-        if (elapsed >= this._timeout) {
-            this._resolve();
-            this._setNotStarted();
+        const elapsed = now - this.startTs;
+        if (elapsed >= this.timeout) {
+            this.resolve();
+            this.setNotStarted();
         } else {
-            const delta = this._timeout - elapsed;
-            this._timerHandle = setTimeout(this._onTimeout, delta);
+            const delta = this.timeout - elapsed;
+            this.timerHandle = setTimeout(this.onTimeout, delta);
         }
     }
 
-    changeTimeout(timeout) {
-        if (timeout === this._timeout) {
+    changeTimeout(timeout: number) {
+        if (timeout === this.timeout) {
             return;
         }
-        const isSmallerTimeout = timeout < this._timeout;
-        this._timeout = timeout;
+        const isSmallerTimeout = timeout < this.timeout;
+        this.timeout = timeout;
         if (this.isRunning() && isSmallerTimeout) {
-            clearTimeout(this._timerHandle);
-            this._onTimeout();
+            clearTimeout(this.timerHandle);
+            this.onTimeout();
         }
     }
 
@@ -73,8 +77,8 @@ export default class Timer {
      */
     start() {
         if (!this.isRunning()) {
-            this._startTs = Date.now();
-            this._timerHandle = setTimeout(this._onTimeout, this._timeout);
+            this.startTs = Date.now();
+            this.timerHandle = setTimeout(this.onTimeout, this.timeout);
         }
         return this;
     }
@@ -89,7 +93,7 @@ export default class Timer {
             // can be called in fast succession,
             // instead just take note and compare
             // when the already running timeout expires
-            this._startTs = Date.now();
+            this.startTs = Date.now();
             return this;
         } else {
             return this.start();
@@ -103,9 +107,9 @@ export default class Timer {
      */
     abort() {
         if (this.isRunning()) {
-            clearTimeout(this._timerHandle);
-            this._reject(new Error("Timer was aborted."));
-            this._setNotStarted();
+            clearTimeout(this.timerHandle);
+            this.reject(new Error("Timer was aborted."));
+            this.setNotStarted();
         }
         return this;
     }
@@ -116,10 +120,10 @@ export default class Timer {
      *@return {Promise}
      */
     finished() {
-        return this._promise;
+        return this.promise;
     }
 
     isRunning() {
-        return this._timerHandle !== null;
+        return this.timerHandle !== null;
     }
 }

@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,27 +15,31 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
-import * as sdk from "../../../../../";
+import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+
+interface IProps {
+    closeSettingsFn: () => {};
+}
+
+interface IState {
+    appVersion: string;
+    canUpdate: boolean;
+}
 
 @replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
-export default class HelpUserSettingsTab extends React.Component {
-    static propTypes = {
-        closeSettingsFn: PropTypes.func.isRequired,
-    };
-
-    constructor() {
-        super();
+export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
 
         this.state = {
             appVersion: null,
@@ -53,7 +56,7 @@ export default class HelpUserSettingsTab extends React.Component {
         });
     }
 
-    _onClearCacheAndReload = (e) => {
+    private onClearCacheAndReload = (e) => {
         if (!PlatformPeg.get()) return;
 
         // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
@@ -65,7 +68,7 @@ export default class HelpUserSettingsTab extends React.Component {
         });
     };
 
-    _onBugReport = (e) => {
+    private onBugReport = (e) => {
         const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
         if (!BugReportDialog) {
             return;
@@ -73,7 +76,7 @@ export default class HelpUserSettingsTab extends React.Component {
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
-    _onStartBotChat = (e) => {
+    private onStartBotChat = (e) => {
         this.props.closeSettingsFn();
         createRoom({
             dmUserId: SdkConfig.get().welcomeUserId,
@@ -81,7 +84,7 @@ export default class HelpUserSettingsTab extends React.Component {
         });
     };
 
-    _showSpoiler = (event) => {
+    private showSpoiler = (event) => {
         const target = event.target;
         target.innerHTML = target.getAttribute('data-spoiler');
 
@@ -93,7 +96,7 @@ export default class HelpUserSettingsTab extends React.Component {
         selection.addRange(range);
     };
 
-    _renderLegal() {
+    private renderLegal() {
         const tocLinks = SdkConfig.get().terms_and_conditions_links;
         if (!tocLinks) return null;
 
@@ -114,7 +117,7 @@ export default class HelpUserSettingsTab extends React.Component {
         );
     }
 
-    _renderCredits() {
+    private renderCredits() {
         // Note: This is not translated because it is legal text.
         // Also, &nbsp; is ugly but necessary.
         return (
@@ -122,28 +125,28 @@ export default class HelpUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
                 <ul>
                     <li>
-                        The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
-                        default cover photo</a> is ©&nbsp;
-                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">Jesús Roncero</a>{' '}
-                        used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noreferrer noopener" target="_blank">
-                        CC-BY-SA 4.0</a>.
+                        The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener"
+                            target="_blank">default cover photo</a> is ©&nbsp;
+                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener"
+                            target="_blank">Jesús Roncero</a> used under the terms of&nbsp;
+                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noreferrer noopener"
+                            target="_blank">CC-BY-SA 4.0</a>.
                     </li>
                     <li>
                         The <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener"
-                               target="_blank"> twemoji-colr</a> font is ©&nbsp;
-                        <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">Mozilla Foundation</a>{' '}
-                        used under the terms of&nbsp;
-                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">
-                        Apache 2.0</a>.
+                            target="_blank">twemoji-colr</a> font is ©&nbsp;
+                        <a href="https://mozilla.org" rel="noreferrer noopener"
+                            target="_blank">Mozilla Foundation</a> used under the terms of&nbsp;
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener"
+                            target="_blank">Apache 2.0</a>.
                     </li>
                     <li>
-                        The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
-                        Twemoji</a> emoji art is ©&nbsp;
-                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">Twitter, Inc and other
-                        contributors</a> used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer noopener" target="_blank">
-                        CC-BY 4.0</a>.
+                        The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener"
+                            target="_blank">Twemoji</a> emoji art is ©&nbsp;
+                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener"
+                            target="_blank">Twitter, Inc and other contributors</a> used under the terms of&nbsp;
+                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer noopener"
+                            target="_blank">CC-BY 4.0</a>.
                     </li>
                 </ul>
             </div>
@@ -188,7 +191,7 @@ export default class HelpUserSettingsTab extends React.Component {
                         },
                     )}
                     <div>
-                        <AccessibleButton onClick={this._onStartBotChat} kind='primary'>
+                        <AccessibleButton onClick={this.onStartBotChat} kind='primary'>
                             {_t("Chat with %(brand)s Bot", { brand })}
                         </AccessibleButton>
                     </div>
@@ -212,28 +215,27 @@ export default class HelpUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_section">
                     <span className='mx_SettingsTab_subheading'>{_t('Bug reporting')}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {
-                            _t( "If you've submitted a bug via GitHub, debug logs can help " +
-                                "us track down the problem. Debug logs contain application " +
-                                "usage data including your username, the IDs or aliases of " +
-                                "the rooms or groups you have visited and the usernames of " +
-                                "other users. They do not contain messages.",
-                            )
-                        }
+                        {_t(
+                            "If you've submitted a bug via GitHub, debug logs can help " +
+                            "us track down the problem. Debug logs contain application " +
+                            "usage data including your username, the IDs or aliases of " +
+                            "the rooms or groups you have visited and the usernames of " +
+                            "other users. They do not contain messages.",
+                        )}
                         <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onBugReport} kind='primary'>
+                            <AccessibleButton onClick={this.onBugReport} kind='primary'>
                                 {_t("Submit debug logs")}
                             </AccessibleButton>
                         </div>
-                        {
-                            _t( "To report a Matrix-related security issue, please read the Matrix.org " +
-                                "<a>Security Disclosure Policy</a>.", {},
-                                {
-                                    'a': (sub) =>
-                                        <a href="https://matrix.org/security-disclosure-policy/"
-                                           rel="noreferrer noopener" target="_blank">{sub}</a>,
-                                })
-                        }
+                        {_t(
+                            "To report a Matrix-related security issue, please read the Matrix.org " +
+                            "<a>Security Disclosure Policy</a>.", {},
+                            {
+                                a: sub => <a href="https://matrix.org/security-disclosure-policy/"
+                                    rel="noreferrer noopener" target="_blank"
+                                >{sub}</a>,
+                            },
+                        )}
                     </div>
                 </div>
             );
@@ -260,20 +262,21 @@ export default class HelpUserSettingsTab extends React.Component {
                         {updateButton}
                     </div>
                 </div>
-                {this._renderLegal()}
-                {this._renderCredits()}
+                {this.renderLegal()}
+                {this.renderCredits()}
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Advanced")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
                         {_t("Access Token:") + ' '}
-                        <AccessibleButton element="span" onClick={this._showSpoiler}
-                                          data-spoiler={MatrixClientPeg.get().getAccessToken()}>
+                        <AccessibleButton element="span" onClick={this.showSpoiler}
+                            data-spoiler={MatrixClientPeg.get().getAccessToken()}
+                        >
                             &lt;{ _t("click to reveal") }&gt;
                         </AccessibleButton>
                         <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
+                            <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
                                 {_t("Clear cache and reload")}
                             </AccessibleButton>
                         </div>
