@@ -141,6 +141,7 @@ export enum PlaceCallType {
 
 export enum CallHandlerEvent {
     CallsChanged = "calls_changed",
+    CallChangeRoom = "call_change_room",
 }
 
 export default class CallHandler extends EventEmitter {
@@ -537,10 +538,7 @@ export default class CallHandler extends EventEmitter {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
                     this.calls.set(mappedRoomId, call);
-                    dis.dispatch({
-                        action: Action.CallChangeRoom,
-                        call,
-                    });
+                    this.emit(CallHandlerEvent.CallChangeRoom, call);
                 }
             }
         });
