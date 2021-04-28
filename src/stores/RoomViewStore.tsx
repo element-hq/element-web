@@ -60,6 +60,8 @@ const INITIAL_STATE = {
     replyingToEvent: null,
 
     shouldPeek: false,
+
+    viaServers: [],
 };
 
 /**
@@ -113,6 +115,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 this.setState({
                     roomId: null,
                     roomAlias: null,
+                    viaServers: [],
                 });
                 break;
             case 'view_room_error':
@@ -191,6 +194,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 replyingToEvent: null,
                 // pull the user out of Room Settings
                 isEditingSettings: false,
+                viaServers: payload.via_servers,
             };
 
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
@@ -226,6 +230,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     roomAlias: payload.room_alias,
                     roomLoading: true,
                     roomLoadError: null,
+                    viaServers: payload.via_servers,
                 });
                 try {
                     const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
@@ -261,6 +266,7 @@ class RoomViewStore extends Store<ActionPayload> {
             roomAlias: payload.room_alias,
             roomLoading: false,
             roomLoadError: payload.err,
+            viaServers: [],
         });
     }
 
@@ -273,8 +279,9 @@ class RoomViewStore extends Store<ActionPayload> {
         const cli = MatrixClientPeg.get();
         const address = this.state.roomAlias || this.state.roomId;
         try {
+            const viaServers = this.state.viaServers || [];
             await retry<void, MatrixError>(() => cli.joinRoom(address, {
-                viaServers: payload.via_servers,
+                viaServers,
                 ...payload.opts,
             }), NUM_JOIN_RETRY, (err) => {
                 // if we received a Gateway timeout then retry
