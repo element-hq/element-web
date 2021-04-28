@@ -26,7 +26,7 @@
     "Results from DuckDuckGo": "ผลจาก DuckDuckGo",
     "%(brand)s version:": "เวอร์ชัน %(brand)s:",
     "Cancel": "ยกเลิก",
-    "Dismiss": "ไม่สนใจ",
+    "Dismiss": "ปิด",
     "Mute": "เงียบ",
     "Notifications": "การแจ้งเตือน",
     "Operation failed": "การดำเนินการล้มเหลว",
@@ -378,5 +378,10 @@
     "Unable to fetch notification target list": "ไม่สามารถรับรายชื่ออุปกรณ์แจ้งเตือน",
     "Quote": "อ้างอิง",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "การแสดงผลของโปรแกรมอาจผิดพลาด ฟังก์ชันบางอย่างหรือทั้งหมดอาจไม่ทำงานในเบราว์เซอร์ปัจจุบันของคุณ หากคุณต้องการลองดำเนินการต่อ คุณต้องรับมือกับปัญหาที่อาจจะเกิดขึ้นด้วยตัวคุณเอง!",
-    "Checking for an update...": "กำลังตรวจหาอัปเดต..."
+    "Checking for an update...": "กำลังตรวจหาอัปเดต...",
+    "Explore rooms": "สำรวจห้อง",
+    "Sign In": "ลงชื่อเข้า",
+    "Create Account": "สร้างบัญชี",
+    "Add Email Address": "เพิ่มที่อยู่อีเมล",
+    "Confirm": "ยืนยัน"
 }

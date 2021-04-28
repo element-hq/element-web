@@ -96,7 +96,7 @@ export default class LinkPreviewWidget extends React.Component {
             link: this.props.link,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
     render() {

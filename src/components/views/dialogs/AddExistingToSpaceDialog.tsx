@@ -22,7 +22,6 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import {_t} from '../../../languageHandler';
 import {IDialogProps} from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
-import FormButton from "../elements/FormButton";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/SpaceStore";
@@ -58,20 +57,23 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
 
     const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
     const existingSubspacesSet = new Set(existingSubspaces);
-    const spaces = SpaceStore.instance.getSpaces().filter(s => {
-        return !existingSubspacesSet.has(s) // not already in space
-            && space !== s // not the top-level space
-            && selectedSpace !== s // not the selected space
-            && s.name.toLowerCase().includes(lcQuery); // contains query
-    });
+    const existingRoomsSet = new Set(SpaceStore.instance.getChildRooms(space.roomId));
 
-    const existingRooms = SpaceStore.instance.getChildRooms(space.roomId);
-    const existingRoomsSet = new Set(existingRooms);
-    const rooms = cli.getVisibleRooms().filter(room => {
-        return !existingRoomsSet.has(room) // not already in space
-            && room.name.toLowerCase().includes(lcQuery) // contains query
-            && !DMRoomMap.shared().getUserIdForRoomId(room.roomId); // not a DM
-    });
+    const joinRule = selectedSpace.getJoinRule();
+    const [spaces, rooms, dms] = cli.getVisibleRooms().reduce((arr, room) => {
+        if (room.getMyMembership() !== "join") return arr;
+        if (!room.name.toLowerCase().includes(lcQuery)) return arr;
+
+        if (room.isSpaceRoom()) {
+            if (room !== space && room !== selectedSpace && !existingSubspacesSet.has(room)) {
+                arr[0].push(room);
+            }
+        } else if (!existingRoomsSet.has(room) && joinRule !== "public") {
+            // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
+            arr[DMRoomMap.shared().getUserIdForRoomId(room.roomId) ? 2 : 1].push(room);
+        }
+        return arr;
+    }, [[], [], []]);
 
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
@@ -109,7 +111,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
     const title = <React.Fragment>
         <RoomAvatar room={selectedSpace} height={40} width={40} />
         <div>
-            <h1>{ _t("Add existing spaces/rooms") }</h1>
+            <h1>{ _t("Add existing rooms") }</h1>
             { spaceOptionSection }
         </div>
     </React.Fragment>;
@@ -127,29 +129,9 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
             className="mx_textinput_icon mx_textinput_search"
             placeholder={ _t("Filter your rooms and spaces") }
             onSearch={setQuery}
+            autoComplete={true}
         />
         <AutoHideScrollbar className="mx_AddExistingToSpaceDialog_content" id="mx_AddExistingToSpaceDialog">
-            { spaces.length > 0 ? (
-                <div className="mx_AddExistingToSpaceDialog_section mx_AddExistingToSpaceDialog_section_spaces">
-                    <h3>{ _t("Spaces") }</h3>
-                    { spaces.map(space => {
-                        return <Entry
-                            key={space.roomId}
-                            room={space}
-                            checked={selectedToAdd.has(space)}
-                            onChange={(checked) => {
-                                if (checked) {
-                                    selectedToAdd.add(space);
-                                } else {
-                                    selectedToAdd.delete(space);
-                                }
-                                setSelectedToAdd(new Set(selectedToAdd));
-                            }}
-                        />;
-                    }) }
-                </div>
-            ) : null }
-
             { rooms.length > 0 ? (
                 <div className="mx_AddExistingToSpaceDialog_section">
                     <h3>{ _t("Rooms") }</h3>
@@ -171,7 +153,49 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                 </div>
             ) : undefined }
 
-            { spaces.length + rooms.length < 1 ? <span className="mx_AddExistingToSpaceDialog_noResults">
+            { spaces.length > 0 ? (
+                <div className="mx_AddExistingToSpaceDialog_section mx_AddExistingToSpaceDialog_section_spaces">
+                    <h3>{ _t("Spaces") }</h3>
+                    { spaces.map(space => {
+                        return <Entry
+                            key={space.roomId}
+                            room={space}
+                            checked={selectedToAdd.has(space)}
+                            onChange={(checked) => {
+                                if (checked) {
+                                    selectedToAdd.add(space);
+                                } else {
+                                    selectedToAdd.delete(space);
+                                }
+                                setSelectedToAdd(new Set(selectedToAdd));
+                            }}
+                        />;
+                    }) }
+                </div>
+            ) : null }
+
+            { dms.length > 0 ? (
+                <div className="mx_AddExistingToSpaceDialog_section">
+                    <h3>{ _t("Direct Messages") }</h3>
+                    { dms.map(space => {
+                        return <Entry
+                            key={space.roomId}
+                            room={space}
+                            checked={selectedToAdd.has(space)}
+                            onChange={(checked) => {
+                                if (checked) {
+                                    selectedToAdd.add(space);
+                                } else {
+                                    selectedToAdd.delete(space);
+                                }
+                                setSelectedToAdd(new Set(selectedToAdd));
+                            }}
+                        />;
+                    }) }
+                </div>
+            ) : null }
+
+            { spaces.length + rooms.length + dms.length < 1 ? <span className="mx_AddExistingToSpaceDialog_noResults">
                 { _t("No results") }
             </span> : undefined }
         </AutoHideScrollbar>
@@ -184,8 +208,8 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                 </AccessibleButton>
             </span>
 
-            <FormButton
-                label={busy ? _t("Applying...") : _t("Apply")}
+            <AccessibleButton
+                kind="primary"
                 disabled={busy || selectedToAdd.size < 1}
                 onClick={async () => {
                     setBusy(true);
@@ -199,7 +223,9 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
                     }
                     setBusy(false);
                 }}
-            />
+            >
+                { busy ? _t("Adding...") : _t("Add") }
+            </AccessibleButton>
         </div>
     </BaseDialog>;
 };

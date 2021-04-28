@@ -296,10 +296,11 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
-        const customisedCallbacks = {
-            getDehydrationKey: SecurityCustomisations.getDehydrationKey,
-        };
-        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks, customisedCallbacks);
+        Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
+        if (SecurityCustomisations.getDehydrationKey) {
+            opts.cryptoCallbacks.getDehydrationKey =
+                SecurityCustomisations.getDehydrationKey;
+        }
 
         this.matrixClient = createMatrixClient(opts);
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,17 +20,21 @@ import classNames from "classnames";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { Key } from "../../Keyboard";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
+import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 
 interface IProps {
     isMinimized: boolean;
-    onVerticalArrow(ev: React.KeyboardEvent): void;
-    onEnter(ev: React.KeyboardEvent): boolean;
+    onKeyDown(ev: React.KeyboardEvent): void;
+    /**
+     * @returns true if a room has been selected and the search field should be cleared
+     */
+    onSelectRoom(): boolean;
 }
 
 interface IState {
@@ -53,6 +57,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        // clear filter when changing spaces, in future we may wish to maintain a filter per-space
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.clearInput);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
@@ -72,6 +78,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
+        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.clearInput);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -108,18 +115,26 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
-        if (ev.key === Key.ESCAPE) {
-            this.clearInput();
-            defaultDispatcher.fire(Action.FocusComposer);
-        } else if (ev.key === Key.ARROW_UP || ev.key === Key.ARROW_DOWN) {
-            this.props.onVerticalArrow(ev);
-        } else if (ev.key === Key.ENTER) {
-            const shouldClear = this.props.onEnter(ev);
-            if (shouldClear) {
-                // wrap in set immediate to delay it so that we don't clear the filter & then change room
-                setImmediate(() => {
-                    this.clearInput();
-                });
+        const action = getKeyBindingsManager().getRoomListAction(ev);
+        switch (action) {
+            case RoomListAction.ClearSearch:
+                this.clearInput();
+                defaultDispatcher.fire(Action.FocusComposer);
+                break;
+            case RoomListAction.NextRoom:
+            case RoomListAction.PrevRoom:
+                // we don't handle these actions here put pass the event on to the interested party (LeftPanel)
+                this.props.onKeyDown(ev);
+                break;
+            case RoomListAction.SelectRoom: {
+                const shouldClear = this.props.onSelectRoom();
+                if (shouldClear) {
+                    // wrap in set immediate to delay it so that we don't clear the filter & then change room
+                    setImmediate(() => {
+                        this.clearInput();
+                    });
+                }
+                break;
             }
         }
     };

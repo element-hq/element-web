@@ -27,9 +27,12 @@ limitations under the License.
 .mx_CallView_large {
     padding-bottom: 10px;
     margin: 5px 5px 5px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 
     .mx_CallView_voice {
-        height: 360px;
+        flex: 1;
     }
 }
 
@@ -55,7 +58,7 @@ limitations under the License.
         }
     }
 
-    .mx_CallView_voice_holdText {
+    .mx_CallView_holdTransferContent {
         padding-top: 10px;
         padding-bottom: 25px;
     }
@@ -82,7 +85,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_voice_hold {
+.mx_CallView_voice .mx_CallView_holdTransferContent {
     // This masks the avatar image so when it's blurred, the edge is still crisp
     .mx_CallView_voice_avatarContainer {
         border-radius: 2000px;
@@ -91,7 +94,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_voice_holdText {
+.mx_CallView_holdTransferContent {
     height: 20px;
     padding-top: 20px;
     padding-bottom: 15px;
@@ -104,6 +107,7 @@ limitations under the License.
 
 .mx_CallView_video {
     width: 100%;
+    height: 100%;
     position: relative;
     z-index: 30;
     border-radius: 8px;
@@ -142,7 +146,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView_video_holdContent {
+.mx_CallView_video .mx_CallView_holdTransferContent {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -177,6 +181,7 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     justify-content: left;
+    flex-shrink: 0;
 }
 
 .mx_CallView_header_callType {

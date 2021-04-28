@@ -85,8 +85,8 @@ class FormatButton extends React.PureComponent {
 
         return (
             <AccessibleTooltipButton
-                as="span"
-                role="button"
+                element="button"
+                type="button"
                 onClick={this.props.onClick}
                 title={this.props.label}
                 tooltip={tooltip}

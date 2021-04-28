@@ -28,7 +28,6 @@ import {getTopic} from "../elements/RoomTopic";
 import {avatarUrlForRoom} from "../../../Avatar";
 import ToggleSwitch from "../elements/ToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
-import FormButton from "../elements/FormButton";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {allSettled} from "../../../utils/promise";
@@ -127,23 +126,24 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             <div>
                 { _t("Make this space private") }
                 <ToggleSwitch
-                    checked={joinRule === "private"}
-                    onChange={checked => setJoinRule(checked ? "private" : "invite")}
+                    checked={joinRule !== "public"}
+                    onChange={checked => setJoinRule(checked ? "invite" : "public")}
                     disabled={!canSetJoinRule}
                     aria-label={_t("Make this space private")}
                 />
             </div>
 
-            <FormButton
+            <AccessibleButton
                 kind="danger"
-                label={_t("Leave Space")}
                 onClick={() => {
                     defaultDispatcher.dispatch({
                         action: "leave_room",
                         room_id: space.roomId,
                     });
                 }}
-            />
+            >
+                { _t("Leave Space") }
+            </AccessibleButton>
 
             <div className="mx_SpaceSettingsDialog_buttons">
                 <AccessibleButton onClick={() => Modal.createDialog(DevtoolsDialog, {roomId: space.roomId})}>
@@ -152,7 +152,9 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 <AccessibleButton onClick={onFinished} disabled={busy} kind="link">
                     { _t("Cancel") }
                 </AccessibleButton>
-                <FormButton onClick={onSave} disabled={busy} label={busy ? _t("Saving...") : _t("Save Changes")} />
+                <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
+                    { busy ? _t("Saving...") : _t("Save Changes") }
+                </AccessibleButton>
             </div>
         </div>
     </BaseDialog>;

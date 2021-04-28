@@ -28,12 +28,11 @@ import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
 
 const FIELD_OLD_PASSWORD = 'field_old_password';
 const FIELD_NEW_PASSWORD = 'field_new_password';
 const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
-
-const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 @replaceableComponent("views.settings.ChangePassword")
 export default class ChangePassword extends React.Component {

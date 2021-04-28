@@ -97,22 +97,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: this.generatePreview(),
         };
-
-        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        MessagePreviewStore.instance.on(
-            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
-            this.onRoomPreviewChanged,
-        );
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
-        this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps = EchoChamber.forRoom(this.props.room);
-        this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        CommunityPrototypeStore.instance.on(
-            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
-            this.onCommunityUpdate,
-        );
-        this.props.room.on("Room.name", this.onRoomNameUpdate);
     }
 
     private onRoomNameUpdate = (room) => {
@@ -167,6 +153,20 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (this.state.selected) {
             this.scrollIntoView();
         }
+
+        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        MessagePreviewStore.instance.on(
+            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+            this.onRoomPreviewChanged,
+        );
+        this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
+        this.roomProps.on("Room.name", this.onRoomNameUpdate);
+        CommunityPrototypeStore.instance.on(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
     }
 
     public componentWillUnmount() {
@@ -182,8 +182,15 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             );
             this.props.room.off("Room.name", this.onRoomNameUpdate);
         }
+        ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
+        this.roomProps.off("Room.name", this.onRoomNameUpdate);
+        CommunityPrototypeStore.instance.off(
+            CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
+            this.onCommunityUpdate,
+        );
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -547,7 +554,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         />;
 
         let badge: React.ReactNode;
-        if (!this.props.isMinimized) {
+        if (!this.props.isMinimized && this.notificationState) {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
             badge = (
                 <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
@@ -563,7 +570,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         let messagePreview = null;
         if (this.showMessagePreview && this.state.messagePreview) {
             messagePreview = (
-                <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
+                <div
+                    className="mx_RoomTile_messagePreview"
+                    id={messagePreviewId(this.props.room.roomId)}
+                    title={this.state.messagePreview}
+                >
                     {this.state.messagePreview}
                 </div>
             );

@@ -35,7 +35,7 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpacePanel_spaceTreeWrapper {
         flex: 1;
-        overflow-y: scroll;
+        padding: 8px 8px 16px 0;
     }
 
     .mx_SpacePanel_toggleCollapse {
@@ -59,11 +59,10 @@ $activeBorderColor: $secondary-fg-color;
         margin: 0;
         list-style: none;
         padding: 0;
-        padding-left: 16px;
-    }
 
-    .mx_AutoHideScrollbar {
-        padding: 16px 0;
+        > .mx_SpaceItem {
+            padding-left: 16px;
+        }
     }
 
     .mx_SpaceButton_toggleCollapse {
@@ -99,7 +98,6 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpaceButton {
         border-radius: 8px;
-        margin-bottom: 2px;
         display: flex;
         align-items: center;
         padding: 4px 4px 4px 0;
@@ -147,9 +145,6 @@ $activeBorderColor: $secondary-fg-color;
 
         .mx_SpaceButton_toggleCollapse {
             width: $gutterSize;
-            // negative margin to place it correctly even with the complex
-            // 4px selection border each space button has when active
-            margin-right: -4px;
             height: 20px;
             mask-position: center;
             mask-size: 20px;
@@ -280,15 +275,17 @@ $activeBorderColor: $secondary-fg-color;
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
-            // Hide the badge container on hover because it'll be a menu button
-            .mx_SpacePanel_badgeContainer {
-                width: 0;
-                height: 0;
-                display: none;
-            }
+            &:not(.mx_SpaceButton_home) {
+                // Hide the badge container on hover because it'll be a menu button
+                .mx_SpacePanel_badgeContainer {
+                    width: 0;
+                    height: 0;
+                    display: none;
+                }
 
-            .mx_SpaceButton_menuButton {
-                display: block;
+                .mx_SpaceButton_menuButton {
+                    display: block;
+                }
             }
         }
     }
@@ -334,20 +331,20 @@ $activeBorderColor: $secondary-fg-color;
         mask-image: url('$(res)/img/element-icons/leave.svg');
     }
 
-    .mx_SpacePanel_iconHome::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
-    }
-
     .mx_SpacePanel_iconMembers::before {
         mask-image: url('$(res)/img/element-icons/room/members.svg');
     }
 
     .mx_SpacePanel_iconPlus::before {
-        mask-image: url('$(res)/img/element-icons/plus.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
+    }
+
+    .mx_SpacePanel_iconHash::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
     }
 }
 

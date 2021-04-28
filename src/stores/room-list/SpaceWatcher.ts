@@ -28,12 +28,22 @@ export class SpaceWatcher {
     private activeSpace: Room = SpaceStore.instance.activeSpace;
 
     constructor(private store: RoomListStoreClass) {
-        this.filter.updateSpace(this.activeSpace); // get the filter into a consistent state
+        this.updateFilter(); // get the filter into a consistent state
         store.addFilter(this.filter);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
     }
 
-    private onSelectedSpaceUpdated = (activeSpace) => {
-        this.filter.updateSpace(this.activeSpace = activeSpace);
+    private onSelectedSpaceUpdated = (activeSpace: Room) => {
+        this.activeSpace = activeSpace;
+        this.updateFilter();
+    };
+
+    private updateFilter = () => {
+        if (this.activeSpace) {
+            SpaceStore.instance.traverseSpace(this.activeSpace.roomId, roomId => {
+                this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+            });
+        }
+        this.filter.updateSpace(this.activeSpace);
     };
 }

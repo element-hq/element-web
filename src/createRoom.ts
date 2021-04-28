@@ -90,6 +90,12 @@ export interface IOpts {
     parentSpace?: Room;
 }
 
+export interface IInvite3PID {
+    id_server: string,
+    medium: 'email',
+    address: string,
+}
+
 /**
  * Create a new room, and switch to it.
  *

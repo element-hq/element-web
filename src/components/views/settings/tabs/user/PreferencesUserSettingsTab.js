@@ -74,6 +74,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
         this.state = {
             autoLaunch: false,
             autoLaunchSupported: false,
+            warnBeforeExit: true,
+            warnBeforeExitSupported: false,
             alwaysShowMenuBar: true,
             alwaysShowMenuBarSupported: false,
             minimizeToTray: true,
@@ -96,6 +98,12 @@ export default class PreferencesUserSettingsTab extends React.Component {
             autoLaunch = await platform.getAutoLaunchEnabled();
         }
 
+        const warnBeforeExitSupported = await platform.supportsWarnBeforeExit();
+        let warnBeforeExit = false;
+        if (warnBeforeExitSupported) {
+            warnBeforeExit = await platform.shouldWarnBeforeExit();
+        }
+
         const alwaysShowMenuBarSupported = await platform.supportsAutoHideMenuBar();
         let alwaysShowMenuBar = true;
         if (alwaysShowMenuBarSupported) {
@@ -111,6 +119,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
         this.setState({
             autoLaunch,
             autoLaunchSupported,
+            warnBeforeExit,
+            warnBeforeExitSupported,
             alwaysShowMenuBarSupported,
             alwaysShowMenuBar,
             minimizeToTraySupported,
@@ -121,6 +131,10 @@ export default class PreferencesUserSettingsTab extends React.Component {
     _onAutoLaunchChange = (checked) => {
         PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
     };
+
+    _onWarnBeforeExitChange = (checked) => {
+        PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({warnBeforeExit: checked}));
+    }
 
     _onAlwaysShowMenuBarChange = (checked) => {
         PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
@@ -159,6 +173,14 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 value={this.state.autoLaunch}
                 onChange={this._onAutoLaunchChange}
                 label={_t('Start automatically after system login')} />;
+        }
+
+        let warnBeforeExitOption = null;
+        if (this.state.warnBeforeExitSupported) {
+            warnBeforeExitOption = <LabelledToggleSwitch
+                value={this.state.warnBeforeExit}
+                onChange={this._onWarnBeforeExitChange}
+                label={_t('Warn before quitting')} />;
         }
 
         let autoHideMenuOption = null;
@@ -202,6 +224,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}
+                    {warnBeforeExitOption}
                     <Field
                         label={_t('Autocomplete delay (ms)')}
                         type='number'

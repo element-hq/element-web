@@ -25,6 +25,7 @@ export default class TextWithTooltip extends React.Component {
         class: PropTypes.string,
         tooltipClass: PropTypes.string,
         tooltip: PropTypes.node.isRequired,
+        tooltipProps: PropTypes.object,
     };
 
     constructor() {
@@ -46,13 +47,17 @@ export default class TextWithTooltip extends React.Component {
     render() {
         const Tooltip = sdk.getComponent("elements.Tooltip");
 
+        const {class: className, children, tooltip, tooltipClass, tooltipProps, ...props} = this.props;
+
         return (
-            <span onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className={this.props.class}>
-                {this.props.children}
+            <span {...props} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className={className}>
+                {children}
                 {this.state.hover && <Tooltip
-                    label={this.props.tooltip}
-                    tooltipClassName={this.props.tooltipClass}
-                    className={"mx_TextWithTooltip_tooltip"} /> }
+                    {...tooltipProps}
+                    label={tooltip}
+                    tooltipClassName={tooltipClass}
+                    className={"mx_TextWithTooltip_tooltip"}
+                /> }
             </span>
         );
     }

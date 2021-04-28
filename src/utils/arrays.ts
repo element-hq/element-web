@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +15,70 @@ limitations under the License.
 */
 
 /**
+ * Quickly resample an array to have less/more data points. If an input which is larger
+ * than the desired size is provided, it will be downsampled. Similarly, if the input
+ * is smaller than the desired size then it will be upsampled.
+ * @param {number[]} input The input array to resample.
+ * @param {number} points The number of samples to end up with.
+ * @returns {number[]} The resampled array.
+ */
+export function arrayFastResample(input: number[], points: number): number[] {
+    if (input.length === points) return input; // short-circuit a complicated call
+
+    // Heavily inspired by matrix-media-repo (used with permission)
+    // https://github.com/turt2live/matrix-media-repo/blob/abe72c87d2e29/util/util_audio/fastsample.go#L10
+    let samples: number[] = [];
+    if (input.length > points) {
+        // Danger: this loop can cause out of memory conditions if the input is too small.
+        const everyNth = Math.round(input.length / points);
+        for (let i = 0; i < input.length; i += everyNth) {
+            samples.push(input[i]);
+        }
+    } else {
+        // Smaller inputs mean we have to spread the values over the desired length. We
+        // end up overshooting the target length in doing this, so we'll resample down
+        // before returning. This recursion is risky, but mathematically should not go
+        // further than 1 level deep.
+        const spreadFactor = Math.ceil(points / input.length);
+        for (const val of input) {
+            samples.push(...arraySeed(val, spreadFactor));
+        }
+        samples = arrayFastResample(samples, points);
+    }
+
+    // Sanity fill, just in case
+    while (samples.length < points) {
+        samples.push(input[input.length - 1]);
+    }
+
+    // Sanity trim, just in case
+    if (samples.length > points) {
+        samples = samples.slice(0, points);
+    }
+
+    return samples;
+}
+
+/**
+ * Creates an array of the given length, seeded with the given value.
+ * @param {T} val The value to seed the array with.
+ * @param {number} length The length of the array to create.
+ * @returns {T[]} The array.
+ */
+export function arraySeed<T>(val: T, length: number): T[] {
+    const a: T[] = [];
+    for (let i = 0; i < length; i++) {
+        a.push(val);
+    }
+    return a;
+}
+
+/**
  * Clones an array as fast as possible, retaining references of the array's values.
  * @param a The array to clone. Must be defined.
  * @returns A copy of the array.
  */
-export function arrayFastClone(a: any[]): any[] {
+export function arrayFastClone<T>(a: T[]): T[] {
     return a.slice(0, a.length);
 }
 
@@ -141,6 +200,13 @@ export class GroupedArray<K, T> {
      * @param val The group to help. Can be modified in-place.
      */
     constructor(private val: Map<K, T[]>) {
+    }
+
+    /**
+     * The value of this group, after all applicable alterations.
+     */
+    public get value(): Map<K, T[]> {
+        return this.val;
     }
 
     /**
