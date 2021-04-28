@@ -27,6 +27,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from '../../../dispatcher/actions';
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -142,6 +143,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         switch (payload.action) {
             // listen for call state changes to prod the render method, which
             // may hide the global CallView if the call it is tracking is dead
+            case Action.CallChangeRoom:
             case 'call_state': {
                 const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
                     CallHandler.sharedInstance().getAllActiveCallsNotInRoom(this.state.roomId),
