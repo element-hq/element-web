@@ -39,9 +39,9 @@ import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import VoipUserMapper from "../VoipUserMapper";
 import {SpaceStoreClass} from "../stores/SpaceStore";
-import {VoiceRecording} from "../voice/VoiceRecording";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
+import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
 
 declare global {
     interface Window {
@@ -73,7 +73,7 @@ declare global {
         mxModalWidgetStore: ModalWidgetStore;
         mxVoipUserMapper: VoipUserMapper;
         mxSpaceStore: SpaceStoreClass;
-        mxVoiceRecorder: typeof VoiceRecording;
+        mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
     }

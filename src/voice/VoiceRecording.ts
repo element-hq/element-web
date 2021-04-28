@@ -315,5 +315,3 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return this.mxc;
     }
 }
-
-window.mxVoiceRecorder = VoiceRecording;
