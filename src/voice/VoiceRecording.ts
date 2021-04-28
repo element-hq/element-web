@@ -217,8 +217,19 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
         // Now that we've updated the data/waveform, let's do a time check. We don't want to
         // go horribly over the limit. We also emit a warning state if needed.
-        const secondsLeft = TARGET_MAX_LENGTH - timeSeconds;
-        if (secondsLeft <= 0) {
+        //
+        // We use the recorder's perspective of time to make sure we don't cut off the last
+        // frame of audio, otherwise we end up with a 1:59 clip (119.68 seconds). This extra
+        // safety can allow us to overshoot the target a bit, but at least when we say 2min
+        // maximum we actually mean it.
+        //
+        // In testing, recorder time and worker time lag by about 400ms, which is roughly the
+        // time needed to encode a sample/frame.
+        //
+        // Ref for recorderSeconds: https://github.com/chris-rudmin/opus-recorder#instance-fields
+        const recorderSeconds = this.recorder.encodedSamplePosition / 48000;
+        const secondsLeft = TARGET_MAX_LENGTH - recorderSeconds;
+        if (secondsLeft < 0) { // go over to make sure we definitely capture that last frame
             // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
             this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
@@ -253,9 +264,9 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             }
 
             // Disconnect the source early to start shutting down resources
+            await this.recorder.stop(); // stop first to flush the last frame
             this.recorderSource.disconnect();
             this.recorderWorklet.disconnect();
-            await this.recorder.stop();
 
             // close the context after the recorder so the recorder doesn't try to
             // connect anything to the context (this would generate a warning)
