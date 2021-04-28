@@ -16,7 +16,7 @@ limitations under the License.
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {_t} from "../../../languageHandler";
-import React from "react";
+import React, {ReactNode} from "react";
 import {RecordingState, VoiceRecording} from "../../../voice/VoiceRecording";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -26,8 +26,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import PlaybackWaveform from "../voice_messages/PlaybackWaveform";
-import PlayPauseButton from "../voice_messages/PlayPauseButton";
+import RecordingPlayback from "../voice_messages/RecordingPlayback";
 
 interface IProps {
     room: Room;
@@ -94,7 +93,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 // should come out largely sane.
                 //
                 // We're expecting about one data point per second of audio.
-                waveform: this.state.recorder.finalWaveform.map(v => Math.round(v * 1024)),
+                waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
             },
         });
         await this.disposeRecording();
@@ -128,34 +127,22 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         this.setState({recorder, recordingPhase: RecordingState.Started});
     };
 
-    private renderWaveformArea() {
-        if (!this.state.recorder) return null;
+    private renderWaveformArea(): ReactNode {
+        if (!this.state.recorder) return null; // no recorder means we're not recording: no waveform
 
-        const classes = classNames({
-            'mx_VoiceRecordComposerTile_waveformContainer': true,
-            'mx_VoiceRecordComposerTile_recording': this.state.recordingPhase === RecordingState.Started,
-        });
-
-        const clock = <LiveRecordingClock recorder={this.state.recorder} />;
-        let waveform = <LiveRecordingWaveform recorder={this.state.recorder} />;
         if (this.state.recordingPhase !== RecordingState.Started) {
-            waveform = <PlaybackWaveform recorder={this.state.recorder} />;
-        }
-
-        let playPause = null;
-        if (this.state.recordingPhase === RecordingState.Ended) {
             // TODO: @@ TR: Should we disable this during upload? What does a failed upload look like?
-            playPause = <PlayPauseButton recorder={this.state.recorder} />;
+            return <RecordingPlayback playback={this.state.recorder.getPlayback()} />;
         }
 
-        return <div className={classes}>
-            {playPause}
-            {clock}
-            {waveform}
+        // only other UI is the recording-in-progress UI
+        return <div className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
+            <LiveRecordingClock recorder={this.state.recorder} />
+            <LiveRecordingWaveform recorder={this.state.recorder} />
         </div>;
     }
 
-    public render() {
+    public render(): ReactNode {
         let recordingInfo;
         let deleteButton;
         if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {

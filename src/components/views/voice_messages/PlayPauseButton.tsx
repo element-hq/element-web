@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {ReactNode} from "react";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {VoiceRecording} from "../../../voice/VoiceRecording";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -24,12 +24,14 @@ import classNames from "classnames";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 
 interface IProps {
-    recorder: VoiceRecording;
+    // Playback instance to manipulate. Cannot change during the component lifecycle.
+    playback: Playback;
+
+    // The playback phase to render. Able to change during the component lifecycle.
+    playbackPhase: PlaybackState;
 }
 
 interface IState {
-    playback: Playback;
-    playbackPhase: PlaybackState;
 }
 
 /**
@@ -40,40 +42,16 @@ interface IState {
 export default class PlayPauseButton extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);
-        this.state = {
-            playback: null, // not ready yet
-            playbackPhase: PlaybackState.Decoding,
-        };
+        this.state = {};
     }
-
-    public async componentDidMount() {
-        const playback = await this.props.recorder.getPlayback();
-        playback.on(UPDATE_EVENT, this.onPlaybackState);
-        this.setState({
-            playback: playback,
-
-            // We know the playback is no longer decoding when we get here. It'll emit an update
-            // before we've bound a listener, so we just update the state here.
-            playbackPhase: PlaybackState.Stopped,
-        });
-    }
-
-    public componentWillUnmount() {
-        if (this.state.playback) this.state.playback.off(UPDATE_EVENT, this.onPlaybackState);
-    }
-
-    private onPlaybackState = (newState: PlaybackState) => {
-        this.setState({playbackPhase: newState});
-    };
 
     private onClick = async () => {
-        if (!this.state.playback) return; // ignore for now
-        await this.state.playback.toggle();
+        await this.props.playback.toggle();
     };
 
-    public render() {
-        const isPlaying = this.state.playback?.isPlaying;
-        const isDisabled = this.state.playbackPhase === PlaybackState.Decoding;
+    public render(): ReactNode {
+        const isPlaying = this.props.playback.isPlaying;
+        const isDisabled = this.props.playbackPhase === PlaybackState.Decoding;
         const classes = classNames('mx_PlayPauseButton', {
             'mx_PlayPauseButton_play': !isPlaying,
             'mx_PlayPauseButton_pause': isPlaying,

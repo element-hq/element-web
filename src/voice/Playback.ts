@@ -16,6 +16,10 @@ limitations under the License.
 
 import EventEmitter from "events";
 import {UPDATE_EVENT} from "../stores/AsyncStore";
+import {arrayFastResample, arraySeed} from "../utils/arrays";
+import {SimpleObservable} from "matrix-widget-api";
+import {IDestroyable} from "../utils/IDestroyable";
+import {PlaybackClock} from "./PlaybackClock";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -24,15 +28,52 @@ export enum PlaybackState {
     Playing = "playing", // active progress through timeline
 }
 
-export class Playback extends EventEmitter {
-    private context: AudioContext;
+export const PLAYBACK_WAVEFORM_SAMPLES = 35;
+const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
+
+export class Playback extends EventEmitter implements IDestroyable {
+    private readonly context: AudioContext;
     private source: AudioBufferSourceNode;
     private state = PlaybackState.Decoding;
     private audioBuf: AudioBuffer;
+    private resampledWaveform: number[];
+    private waveformObservable = new SimpleObservable<number[]>();
+    private readonly clock: PlaybackClock;
 
-    constructor(private buf: ArrayBuffer) {
+    /**
+     * Creates a new playback instance from a buffer.
+     * @param {ArrayBuffer} buf The buffer containing the sound sample.
+     * @param {number[]} seedWaveform Optional seed waveform to present until the proper waveform
+     * can be calculated. Contains values between zero and one, inclusive.
+     */
+    constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
         super();
         this.context = new AudioContext();
+        this.resampledWaveform = arrayFastResample(seedWaveform, PLAYBACK_WAVEFORM_SAMPLES);
+        this.waveformObservable.update(this.resampledWaveform);
+        this.clock = new PlaybackClock(this.context);
+
+        // TODO: @@ TR: Calculate real waveform
+    }
+
+    public get waveform(): number[] {
+        return this.resampledWaveform;
+    }
+
+    public get waveformData(): SimpleObservable<number[]> {
+        return this.waveformObservable;
+    }
+
+    public get clockInfo(): PlaybackClock {
+        return this.clock;
+    }
+
+    public get currentState(): PlaybackState {
+        return this.state;
+    }
+
+    public get isPlaying(): boolean {
+        return this.currentState === PlaybackState.Playing;
     }
 
     public emit(event: PlaybackState, ...args: any[]): boolean {
@@ -42,17 +83,18 @@ export class Playback extends EventEmitter {
         return true; // we don't ever care if the event had listeners, so just return "yes"
     }
 
+    public destroy() {
+        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
+        this.stop();
+        this.removeAllListeners();
+        this.clock.destroy();
+        this.waveformObservable.close();
+    }
+
     public async prepare() {
         this.audioBuf = await this.context.decodeAudioData(this.buf);
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
-    }
-
-    public get currentState(): PlaybackState {
-        return this.state;
-    }
-
-    public get isPlaying(): boolean {
-        return this.currentState === PlaybackState.Playing;
+        this.clock.durationSeconds = this.audioBuf.duration;
     }
 
     private onPlaybackEnd = async () => {
@@ -78,6 +120,7 @@ export class Playback extends EventEmitter {
         // We use the context suspend/resume functions because it allows us to pause a source
         // node, but that still doesn't help us when the source node runs out (see above).
         await this.context.resume();
+        this.clock.flagStart();
         this.emit(PlaybackState.Playing);
     }
 
@@ -88,6 +131,7 @@ export class Playback extends EventEmitter {
 
     public async stop() {
         await this.onPlaybackEnd();
+        this.clock.flagStop();
     }
 
     public async toggle() {

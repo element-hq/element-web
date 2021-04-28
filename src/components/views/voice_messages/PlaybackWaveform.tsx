@@ -15,27 +15,40 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, VoiceRecording} from "../../../voice/VoiceRecording";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {arrayFastResample, arraySeed, arrayTrimFill} from "../../../utils/arrays";
-import {percentageOf} from "../../../utils/numbers";
+import {arraySeed, arrayTrimFill} from "../../../utils/arrays";
 import Waveform from "./Waveform";
-import {DOWNSAMPLE_TARGET, IRecordingWaveformProps, IRecordingWaveformState} from "./IRecordingWaveformStateProps";
+import {Playback, PLAYBACK_WAVEFORM_SAMPLES} from "../../../voice/Playback";
+
+interface IProps {
+    playback: Playback;
+}
+
+interface IState {
+    heights: number[];
+}
 
 /**
  * A waveform which shows the waveform of a previously recorded recording
  */
-@replaceableComponent("views.voice_messages.LiveRecordingWaveform")
-export default class PlaybackWaveform extends React.PureComponent<IRecordingWaveformProps, IRecordingWaveformState> {
+@replaceableComponent("views.voice_messages.PlaybackWaveform")
+export default class PlaybackWaveform extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);
 
-        // Like the live recording waveform
-        const bars = arrayFastResample(this.props.recorder.finalWaveform, DOWNSAMPLE_TARGET);
-        const seed = arraySeed(0, DOWNSAMPLE_TARGET);
-        const heights = arrayTrimFill(bars, DOWNSAMPLE_TARGET, seed).map(b => percentageOf(b, 0, 0.5));
-        this.state = {heights};
+        this.state = {heights: this.toHeights(this.props.playback.waveform)};
+
+        this.props.playback.waveformData.onUpdate(this.onWaveformUpdate);
     }
+
+    private toHeights(waveform: number[]) {
+        const seed = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
+        return arrayTrimFill(waveform, PLAYBACK_WAVEFORM_SAMPLES, seed);
+    }
+
+    private onWaveformUpdate = (waveform: number[]) => {
+        this.setState({heights: this.toHeights(waveform)});
+    };
 
     public render() {
         return <Waveform relHeights={this.state.heights} />;

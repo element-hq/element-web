@@ -24,7 +24,6 @@ import EventEmitter from "events";
 import {IDestroyable} from "../utils/IDestroyable";
 import {Singleflight} from "../utils/Singleflight";
 import {PayloadEvent, WORKLET_NAME} from "./consts";
-import {arrayFastClone} from "../utils/arrays";
 import {UPDATE_EVENT} from "../stores/AsyncStore";
 import {Playback} from "./Playback";
 
@@ -59,13 +58,10 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recording = false;
     private observable: SimpleObservable<IRecordingUpdate>;
     private amplitudes: number[] = []; // at each second mark, generated
+    private playback: Playback;
 
     public constructor(private client: MatrixClient) {
         super();
-    }
-
-    public get finalWaveform(): number[] {
-        return arrayFastClone(this.amplitudes);
     }
 
     public get contentType(): string {
@@ -277,12 +273,19 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         });
     }
 
-    public getPlayback(): Promise<Playback> {
-        return Singleflight.for(this, "playback").do(async () => {
-            const playback = new Playback(this.audioBuffer.buffer); // cast to ArrayBuffer proper
-            await playback.prepare();
-            return playback;
+    /**
+     * Gets a playback instance for this voice recording. Note that the playback will not
+     * have been prepared fully, meaning the `prepare()` function needs to be called on it.
+     *
+     * The same playback instance is returned each time.
+     *
+     * @returns {Playback} The playback instance.
+     */
+    public getPlayback(): Playback {
+        this.playback = Singleflight.for(this, "playback").do(() => {
+            return new Playback(this.audioBuffer.buffer, this.amplitudes); // cast to ArrayBuffer proper;
         });
+        return this.playback;
     }
 
     public destroy() {
@@ -290,6 +293,9 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         this.stop();
         this.removeAllListeners();
         Singleflight.forgetAllFor(this);
+        // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
+        this.playback?.destroy();
+        this.observable.close();
     }
 
     public async upload(): Promise<string> {
