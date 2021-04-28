@@ -54,7 +54,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorderStream: MediaStream;
     private recorderFFT: AnalyserNode;
     private recorderWorklet: AudioWorkletNode;
-    private buffer = new Uint8Array(0);
+    private buffer = new Uint8Array(0); // use this.audioBuffer to access
     private mxc: string;
     private recording = false;
     private observable: SimpleObservable<IRecordingUpdate>;
@@ -166,6 +166,12 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         };
     }
 
+    private get audioBuffer(): Uint8Array {
+        // We need a clone of the buffer to avoid accidentally changing the position
+        // on the real thing.
+        return this.buffer.slice(0);
+    }
+
     public get liveData(): SimpleObservable<IRecordingUpdate> {
         if (!this.recording) throw new Error("No observable when not recording");
         return this.observable;
@@ -267,13 +273,13 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             await this.recorder.close();
             this.emit(RecordingState.Ended);
 
-            return this.buffer;
+            return this.audioBuffer;
         });
     }
 
     public getPlayback(): Promise<Playback> {
         return Singleflight.for(this, "playback").do(async () => {
-            const playback = new Playback(this.buffer.buffer); // cast to ArrayBuffer proper
+            const playback = new Playback(this.audioBuffer.buffer); // cast to ArrayBuffer proper
             await playback.prepare();
             return playback;
         });
@@ -294,7 +300,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         if (this.mxc) return this.mxc;
 
         this.emit(RecordingState.Uploading);
-        this.mxc = await this.client.uploadContent(new Blob([this.buffer], {
+        this.mxc = await this.client.uploadContent(new Blob([this.audioBuffer], {
             type: this.contentType,
         }), {
             onlyContentUri: false, // to stop the warnings in the console

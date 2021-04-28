@@ -198,6 +198,7 @@ interface IState {
 export default class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private messageComposerInput: SendMessageComposer;
+    private voiceRecordingButton: VoiceRecordComposerTile;
 
     constructor(props) {
         super(props);
@@ -322,7 +323,15 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         });
     }
 
-    sendMessage = () => {
+    sendMessage = async () => {
+        if (this.state.haveRecording && this.voiceRecordingButton) {
+            // There shouldn't be any text message to send when a voice recording is active, so
+            // just send out the voice recording.
+            await this.voiceRecordingButton.send();
+            return;
+        }
+
+        // XXX: Private function access
         this.messageComposerInput._sendMessage();
     }
 
@@ -387,6 +396,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             if (SettingsStore.getValue("feature_voice_messages")) {
                 controls.push(<VoiceRecordComposerTile
                     key="controls_voice_record"
+                    ref={c => this.voiceRecordingButton = c}
                     room={this.props.room} />);
             }
 
