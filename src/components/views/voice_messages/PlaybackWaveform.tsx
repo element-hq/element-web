@@ -19,6 +19,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {arraySeed, arrayTrimFill} from "../../../utils/arrays";
 import Waveform from "./Waveform";
 import {Playback, PLAYBACK_WAVEFORM_SAMPLES} from "../../../voice/Playback";
+import {percentageOf} from "../../../utils/numbers";
 
 interface IProps {
     playback: Playback;
@@ -26,6 +27,7 @@ interface IProps {
 
 interface IState {
     heights: number[];
+    progress: number;
 }
 
 /**
@@ -36,9 +38,13 @@ export default class PlaybackWaveform extends React.PureComponent<IProps, IState
     public constructor(props) {
         super(props);
 
-        this.state = {heights: this.toHeights(this.props.playback.waveform)};
+        this.state = {
+            heights: this.toHeights(this.props.playback.waveform),
+            progress: 0, // default no progress
+        };
 
         this.props.playback.waveformData.onUpdate(this.onWaveformUpdate);
+        this.props.playback.clockInfo.liveData.onUpdate(this.onTimeUpdate);
     }
 
     private toHeights(waveform: number[]) {
@@ -50,7 +56,12 @@ export default class PlaybackWaveform extends React.PureComponent<IProps, IState
         this.setState({heights: this.toHeights(waveform)});
     };
 
+    private onTimeUpdate = (time: number[]) => {
+        const progress = percentageOf(time[0], 0, time[1]);
+        this.setState({progress});
+    };
+
     public render() {
-        return <Waveform relHeights={this.state.heights} />;
+        return <Waveform relHeights={this.state.heights} progress={this.state.progress} />;
     }
 }
