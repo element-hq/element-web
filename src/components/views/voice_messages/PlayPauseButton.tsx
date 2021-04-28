@@ -29,18 +29,14 @@ interface IProps {
     playbackPhase: PlaybackState;
 }
 
-interface IState {
-}
-
 /**
  * Displays a play/pause button (activating the play/pause function of the recorder)
  * to be displayed in reference to a recording.
  */
 @replaceableComponent("views.voice_messages.PlayPauseButton")
-export default class PlayPauseButton extends React.PureComponent<IProps, IState> {
+export default class PlayPauseButton extends React.PureComponent<IProps> {
     public constructor(props) {
         super(props);
-        this.state = {};
     }
 
     private onClick = async () => {
