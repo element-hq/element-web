@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +23,24 @@ import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+
+interface IState {
+    autoLaunch: boolean;
+    autoLaunchSupported: boolean;
+    warnBeforeExit: boolean;
+    warnBeforeExitSupported: boolean;
+    alwaysShowMenuBarSupported: boolean;
+    alwaysShowMenuBar: boolean;
+    minimizeToTraySupported: boolean;
+    minimizeToTray: boolean;
+    autocompleteDelay: string;
+    readMarkerInViewThresholdMs: string;
+    readMarkerOutOfViewThresholdMs: string;
+}
 
 @replaceableComponent("views.settings.tabs.user.PreferencesUserSettingsTab")
-export default class PreferencesUserSettingsTab extends React.Component {
+export default class PreferencesUserSettingsTab extends React.Component<{}, IState> {
     static ROOM_LIST_SETTINGS = [
         'breadcrumbs',
     ];
@@ -68,8 +82,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
         // Autocomplete delay (niche text box)
     ];
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             autoLaunch: false,
@@ -89,7 +103,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         };
     }
 
-    async componentDidMount(): void {
+    async componentDidMount() {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
@@ -128,38 +142,38 @@ export default class PreferencesUserSettingsTab extends React.Component {
         });
     }
 
-    _onAutoLaunchChange = (checked) => {
+    private onAutoLaunchChange = (checked: boolean) => {
         PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
     };
 
-    _onWarnBeforeExitChange = (checked) => {
+    private onWarnBeforeExitChange = (checked: boolean) => {
         PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({warnBeforeExit: checked}));
     }
 
-    _onAlwaysShowMenuBarChange = (checked) => {
+    private onAlwaysShowMenuBarChange = (checked: boolean) => {
         PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
     };
 
-    _onMinimizeToTrayChange = (checked) => {
+    private onMinimizeToTrayChange = (checked: boolean) => {
         PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({minimizeToTray: checked}));
     };
 
-    _onAutocompleteDelayChange = (e) => {
+    private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({autocompleteDelay: e.target.value});
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    _onReadMarkerInViewThresholdMs = (e) => {
+    private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({readMarkerInViewThresholdMs: e.target.value});
         SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    _onReadMarkerOutOfViewThresholdMs = (e) => {
+    private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    _renderGroup(settingIds) {
+    private renderGroup(settingIds: string[]): React.ReactNodeArray {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return settingIds.filter(SettingsStore.isEnabled).map(i => {
             return <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />;
@@ -171,7 +185,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         if (this.state.autoLaunchSupported) {
             autoLaunchOption = <LabelledToggleSwitch
                 value={this.state.autoLaunch}
-                onChange={this._onAutoLaunchChange}
+                onChange={this.onAutoLaunchChange}
                 label={_t('Start automatically after system login')} />;
         }
 
@@ -179,7 +193,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         if (this.state.warnBeforeExitSupported) {
             warnBeforeExitOption = <LabelledToggleSwitch
                 value={this.state.warnBeforeExit}
-                onChange={this._onWarnBeforeExitChange}
+                onChange={this.onWarnBeforeExitChange}
                 label={_t('Warn before quitting')} />;
         }
 
@@ -187,7 +201,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         if (this.state.alwaysShowMenuBarSupported) {
             autoHideMenuOption = <LabelledToggleSwitch
                 value={this.state.alwaysShowMenuBar}
-                onChange={this._onAlwaysShowMenuBarChange}
+                onChange={this.onAlwaysShowMenuBarChange}
                 label={_t('Always show the window menu bar')} />;
         }
 
@@ -195,7 +209,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         if (this.state.minimizeToTraySupported) {
             minimizeToTrayOption = <LabelledToggleSwitch
                 value={this.state.minimizeToTray}
-                onChange={this._onMinimizeToTrayChange}
+                onChange={this.onMinimizeToTrayChange}
                 label={_t('Show tray icon and minimize window to it on close')} />;
         }
 
@@ -205,22 +219,22 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("General")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}
@@ -229,17 +243,17 @@ export default class PreferencesUserSettingsTab extends React.Component {
                         label={_t('Autocomplete delay (ms)')}
                         type='number'
                         value={this.state.autocompleteDelay}
-                        onChange={this._onAutocompleteDelayChange} />
+                        onChange={this.onAutocompleteDelayChange} />
                     <Field
                         label={_t('Read Marker lifetime (ms)')}
                         type='number'
                         value={this.state.readMarkerInViewThresholdMs}
-                        onChange={this._onReadMarkerInViewThresholdMs} />
+                        onChange={this.onReadMarkerInViewThresholdMs} />
                     <Field
                         label={_t('Read Marker off-screen lifetime (ms)')}
                         type='number'
                         value={this.state.readMarkerOutOfViewThresholdMs}
-                        onChange={this._onReadMarkerOutOfViewThresholdMs} />
+                        onChange={this.onReadMarkerOutOfViewThresholdMs} />
                 </div>
             </div>
         );

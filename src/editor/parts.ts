@@ -341,11 +341,7 @@ class RoomPillPart extends PillPart {
 
     setAvatar(node: HTMLElement) {
         let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(
-            this.room,
-            16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio,
-            "crop");
+        let avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
         if (!avatarUrl) {
             initialLetter = Avatar.getInitialLetter(this.room ? this.room.name : this.resourceId);
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room ? this.room.roomId : this.resourceId);
@@ -383,11 +379,7 @@ class UserPillPart extends PillPart {
         }
         const name = this.member.name || this.member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this.member.userId);
-        const avatarUrl = Avatar.avatarUrlForMember(
-            this.member,
-            16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio,
-            "crop");
+        const avatarUrl = Avatar.avatarUrlForMember(this.member, 16, 16, "crop");
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
             initialLetter = Avatar.getInitialLetter(name);

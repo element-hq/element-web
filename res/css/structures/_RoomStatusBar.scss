@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomStatusBar {
+.mx_RoomStatusBar:not(.mx_RoomStatusBar_unsentMessages) {
     margin-left: 65px;
     min-height: 50px;
 }
@@ -68,6 +68,99 @@ limitations under the License.
     min-height: 58px;
 }
 
+.mx_RoomStatusBar_unsentMessages {
+    > div[role="alert"] {
+        // cheat some basic alignment
+        display: flex;
+        align-items: center;
+        min-height: 70px;
+        margin: 12px;
+        padding-left: 16px;
+        background-color: $header-panel-bg-color;
+        border-radius: 4px;
+    }
+
+    .mx_RoomStatusBar_unsentBadge {
+        margin-right: 12px;
+
+        .mx_NotificationBadge {
+            // Override sizing from the default badge
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 24px !important;
+
+            .mx_NotificationBadge_count {
+                font-size: $font-16px !important; // override default
+            }
+        }
+    }
+
+    .mx_RoomStatusBar_unsentTitle {
+        color: $warning-color;
+        font-size: $font-15px;
+    }
+
+    .mx_RoomStatusBar_unsentDescription {
+        font-size: $font-12px;
+    }
+
+    .mx_RoomStatusBar_unsentButtonBar {
+        flex-grow: 1;
+        text-align: right;
+        margin-right: 22px;
+        color: $muted-fg-color;
+
+        .mx_AccessibleButton {
+            padding: 5px 10px;
+            padding-left: 28px; // 16px for the icon, 2px margin to text, 10px regular padding
+            display: inline-block;
+            position: relative;
+
+            &:nth-child(2) {
+                border-left: 1px solid $resend-button-divider-color;
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 10px; // inset for regular button padding
+                background-color: $muted-fg-color;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+            }
+
+            &.mx_RoomStatusBar_unsentCancelAllBtn::before {
+                mask-image: url('$(res)/img/element-icons/trashcan.svg');
+                width: 12px;
+                height: 16px;
+                top: calc(50% - 8px); // text sizes are dynamic
+            }
+
+            &.mx_RoomStatusBar_unsentResendAllBtn {
+                padding-left: 34px; // 28px from above, but +6px to account for the wider icon
+
+                &::before {
+                    mask-image: url('$(res)/img/element-icons/retry.svg');
+                    width: 18px;
+                    height: 18px;
+                    top: calc(50% - 9px); // text sizes are dynamic
+                }
+            }
+        }
+
+        .mx_InlineSpinner {
+            vertical-align: middle;
+            margin-right: 5px;
+            top: 1px; // just to help the vertical alignment be slightly better
+
+            & + span {
+                margin-right: 10px; // same margin/padding as the rightmost button
+            }
+        }
+    }
+}
+
 .mx_RoomStatusBar_connectionLostBar img {
     padding-left: 10px;
     padding-right: 10px;
@@ -103,7 +196,7 @@ limitations under the License.
 }
 
 .mx_MatrixChat_useCompactLayout {
-    .mx_RoomStatusBar {
+    .mx_RoomStatusBar:not(.mx_RoomStatusBar_unsentMessages) {
         min-height: 40px;
     }
 
