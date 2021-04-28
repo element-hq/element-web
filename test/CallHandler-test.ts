@@ -172,7 +172,7 @@ describe('CallHandler', () => {
 
         let callRoomChangeEventCount = 0;
         const roomChangePromise = new Promise<void>(resolve => {
-            CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, () => {
+            callHandler.addListener(CallHandlerEvent.CallChangeRoom, () => {
                 ++callRoomChangeEventCount;
                 resolve();
             });
@@ -200,7 +200,7 @@ describe('CallHandler', () => {
 
         await roomChangePromise;
         dis.unregister(dispatchHandle);
-        CallHandler.sharedInstance().removeAllListeners();
+        callHandler.removeAllListeners();
 
         // If everything's gone well, we should have seen only one room change
         // event and the call should now be in user 3's room.
