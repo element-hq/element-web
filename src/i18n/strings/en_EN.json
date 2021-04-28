@@ -2660,6 +2660,8 @@
     "Public space": "Public space",
     "Private space": "Private space",
     "<inviter/> invites you": "<inviter/> invites you",
+    "To view %(spaceName)s, turn on the <a>Spaces beta</a>": "To view %(spaceName)s, turn on the <a>Spaces beta</a>",
+    "To join %(spaceName)s, turn on the <a>Spaces beta</a>": "To join %(spaceName)s, turn on the <a>Spaces beta</a>",
     "Add existing rooms & spaces": "Add existing rooms & spaces",
     "Welcome to <name/>": "Welcome to <name/>",
     "Random": "Random",

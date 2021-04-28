@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import classNames from "classnames";
 
 import {_t} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -27,7 +28,12 @@ interface IProps {
 }
 
 export const BetaPill = ({ onClick }: { onClick?: () => void }) => {
-    return <span className="mx_BetaCard_betaPill" onClick={onClick}>
+    return <span
+        className={classNames("mx_BetaCard_betaPill", {
+            mx_BetaCard_betaPill_clickable: !!onClick,
+        })}
+        onClick={onClick}
+    >
         { _t("Beta") }
     </span>;
 };

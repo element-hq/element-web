@@ -123,6 +123,28 @@ $SpaceRoomViewInnerWidth: 428px;
         box-sizing: border-box;
         box-shadow: 2px 15px 30px $dialog-shadow-color;
         border-radius: 8px;
+        position: relative;
+
+        // XXX remove this when spaces leaves Beta
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            right: 24px;
+            top: 32px;
+        }
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_preview_spaceBetaPrompt {
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $secondary-fg-color;
+            margin-top: 14px;
+
+            .mx_AccessibleButton_kind_link {
+                display: inline;
+                padding: 0;
+                font-size: inherit;
+                line-height: inherit;
+            }
+        }
 
         .mx_SpaceRoomView_preview_inviter {
             display: flex;

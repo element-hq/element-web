@@ -69,6 +69,10 @@ limitations under the License.
     color: #FFFFFF;
     display: inline-block;
     vertical-align: text-bottom;
+
+    &.mx_BetaCard_betaPill_clickable {
+        cursor: pointer;
+    }
 }
 
 $pulse-color: $accent-color-alt;

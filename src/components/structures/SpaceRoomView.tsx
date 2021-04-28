@@ -51,6 +51,10 @@ import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
+import {BetaPill} from "../views/beta/BetaCard";
+import {USER_LABS_TAB} from "../views/dialogs/UserSettingsDialog";
+import SettingsStore from "../../settings/SettingsStore";
+import dis from "../../dispatcher/dispatcher";
 
 interface IProps {
     space: Room;
@@ -127,15 +131,40 @@ const SpaceInfo = ({ space }) => {
     </div>
 };
 
+const onBetaClick = () => {
+    defaultDispatcher.dispatch({
+        action: Action.ViewUserSettings,
+        initialTabId: USER_LABS_TAB,
+    });
+};
+
 const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
 
     const [busy, setBusy] = useState(false);
 
+    const spacesEnabled = SettingsStore.getValue("feature_spaces");
+
     let inviterSection;
     let joinButtons;
-    if (myMembership === "invite") {
+    if (myMembership === "join") {
+        // XXX remove this when spaces leaves Beta
+        joinButtons = (
+            <AccessibleButton
+                kind="danger"
+                onClick={() => {
+                    setBusy(true);
+                    dis.dispatch({
+                        action: "leave_room",
+                        room_id: space.roomId,
+                    });
+                }}
+            >
+                { _t("Leave") }
+            </AccessibleButton>
+        );
+    } else if (myMembership === "invite") {
         const inviteSender = space.getMember(cli.getUserId())?.events.member?.getSender();
         const inviter = inviteSender && space.getMember(inviteSender);
 
@@ -171,6 +200,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
+                disabled={!spacesEnabled}
             >
                 { _t("Accept") }
             </AccessibleButton>
@@ -183,10 +213,11 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
+                disabled={!spacesEnabled}
             >
                 { _t("Join") }
             </AccessibleButton>
-        )
+        );
     }
 
     if (busy) {
@@ -194,6 +225,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     }
 
     return <div className="mx_SpaceRoomView_preview">
+        <BetaPill onClick={onBetaClick} />
         { inviterSection }
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <h1 className="mx_SpaceRoomView_preview_name">
@@ -211,6 +243,20 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         <div className="mx_SpaceRoomView_preview_joinButtons">
             { joinButtons }
         </div>
+        { !spacesEnabled && <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
+            { myMembership === "join"
+                ? _t("To view %(spaceName)s, turn on the <a>Spaces beta</a>", {
+                    spaceName: space.name,
+                }, {
+                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                })
+                : _t("To join %(spaceName)s, turn on the <a>Spaces beta</a>", {
+                    spaceName: space.name,
+                }, {
+                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                })
+            }
+        </div> }
     </div>;
 };
 
@@ -631,7 +677,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.state.myMembership === "join") {
+                if (this.state.myMembership === "join" && SettingsStore.getValue("feature_spaces")) {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return <SpacePreview
