@@ -152,7 +152,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         // XXX remove this when spaces leaves Beta
         joinButtons = (
             <AccessibleButton
-                kind="danger"
+                kind="danger_outline"
                 onClick={() => {
                     dis.dispatch({
                         action: "leave_room",
