@@ -56,7 +56,7 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
                 { value ? _t("Leave the beta") : _t("Join the beta") }
             </AccessibleButton>
             { disclaimer && <div className="mx_BetaCard_disclaimer">
-                { typeof disclaimer === "string" ? _t(disclaimer) : disclaimer() }
+                { disclaimer(value) }
             </div> }
         </div>
         <img src={image} alt="" />

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import type { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 import { _t, _td } from '../languageHandler';
 import {
@@ -123,7 +123,7 @@ export interface ISetting {
     betaInfo?: {
         title: string; // _td
         caption: string; // _td
-        disclaimer?: (() => ReactNode) | string; // _td
+        disclaimer?: (enabled: boolean) => ReactNode;
         image: string; // require(...)
     };
 }
@@ -138,11 +138,25 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             title: _td("Spaces"),
             caption: _td("Spaces are a new way to group people and rooms for fun, " +
                 "work, yourself or anything in between."),
-            disclaimer: () => _t("%(brand)s will reload with Spaces enabled, " +
-                "and communities and custom tags disabled. " +
-                "You can leave the beta at anytime. " +
-                "Certain features will require a compatible homeserver. " +
-                "Beta only available for Web, Desktop, and Android.", { brand: SdkConfig.get().brand }),
+            disclaimer: (enabled) => {
+                if (enabled) {
+                    return <>
+                        <p>{ _t("%(brand)s will reload with Spaces disabled. " +
+                            "Communities and custom tags will be visible again.", {
+                            brand: SdkConfig.get().brand,
+                        }) }</p>
+                        <p>{ _t("Beta available for web, desktop and Android. Thank you for trying the beta.") }</p>
+                    </>;
+                }
+
+                return <>
+                    <p>{ _t("%(brand)s will reload with Spaces enabled, communities and custom tags hidden.", {
+                        brand: SdkConfig.get().brand,
+                    }) }</p>
+                    <p>{ _t("Beta available for web, desktop and Android. " +
+                        "Some features may be unavailable on your homeserver.") }</p>
+                </>;
+            },
             image: require("../../res/img/betas/spaces.png"),
         },
     },

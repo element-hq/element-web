@@ -81,6 +81,7 @@ $SpaceRoomViewInnerWidth: 428px;
             color: $secondary-fg-color;
             margin-top: 12px;
             margin-bottom: 24px;
+            max-width: $SpaceRoomViewInnerWidth;
         }
 
         .mx_SpaceRoomView_buttons {
@@ -374,6 +375,23 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     .mx_SpaceRoomView_inviteTeammates {
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_inviteTeammates_betaDisclaimer {
+            padding: 58px 16px 16px;
+            position: relative;
+            border-radius: 8px;
+            background-color: $header-panel-bg-color;
+            max-width: $SpaceRoomViewInnerWidth;
+            margin: 20px 0 30px;
+            box-sizing: border-box;
+
+            .mx_BetaCard_betaPill {
+                position: absolute;
+                left: 16px;
+                top: 16px;
+            }
+        }
+
         .mx_SpaceRoomView_inviteTeammates_buttons {
             color: $secondary-fg-color;
             margin-top: 28px;

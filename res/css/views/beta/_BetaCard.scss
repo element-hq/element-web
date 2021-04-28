@@ -29,6 +29,10 @@ limitations under the License.
             line-height: $font-22px;
             color: $primary-fg-color;
             margin: 4px 0 14px;
+
+            .mx_BetaCard_betaPill {
+                margin-left: 12px;
+            }
         }
 
         .mx_BetaCard_caption {
@@ -62,7 +66,6 @@ limitations under the License.
     background-color: $accent-color-alt;
     padding: 4px 10px;
     border-radius: 8px;
-    margin-left: 12px;
     text-transform: uppercase;
     font-size: 12px;
     line-height: 15px;

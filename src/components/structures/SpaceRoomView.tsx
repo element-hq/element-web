@@ -438,11 +438,13 @@ const SpaceSetupPublicShare = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPrivateScope = ({ space, onFinished }) => {
+const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
     return <div className="mx_SpaceRoomView_privateScope">
         <h1>{ _t("Who are you working with?") }</h1>
         <div className="mx_SpaceRoomView_description">
-            { _t("Make sure the right people have access to %(name)s", { name: space.name }) }
+            { _t("Make sure the right people have access to %(name)s", {
+                name: justCreatedOpts?.createOpts?.name || space.name,
+            }) }
         </div>
 
         <AccessibleButton
@@ -537,6 +539,17 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         <h1>{ _t("Invite your teammates") }</h1>
         <div className="mx_SpaceRoomView_description">
             { _t("Make sure the right people have access. You can invite more later.") }
+        </div>
+
+        <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
+            <BetaPill />
+            { _t("<b>This is an experimental feature.</b> For now, " +
+                "new users receiving an invite will have to open the invite on <link/> to actually join.", {}, {
+                b: sub => <b>{ sub }</b>,
+                link: () => <a href="https://app.element.io/" rel="noreferrer noopener" target="_blank">
+                    app.element.io
+                </a>,
+            }) }
         </div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
@@ -703,6 +716,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
             case Phase.PrivateScope:
                 return <SpaceSetupPrivateScope
                     space={this.props.space}
+                    justCreatedOpts={this.props.justCreatedOpts}
                     onFinished={(invite: boolean) => {
                         this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateCreateRooms });
                     }}
