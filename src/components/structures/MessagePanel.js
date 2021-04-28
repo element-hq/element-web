@@ -1101,7 +1101,8 @@ class RedactionGrouper {
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
             const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
-            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
+            return panel._getTilesForEvent(
+                prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
