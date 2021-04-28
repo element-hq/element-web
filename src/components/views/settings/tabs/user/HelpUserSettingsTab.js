@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
+import AccessibleTooltipButton from '../../../elements/AccessibleTooltipButton';
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
@@ -27,8 +28,11 @@ import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
-import AccessTokenDialog from '../../../dialogs/AccessTokenDialog';
 import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import {copyPlaintext} from "../../../../../utils/strings";
+import * as ContextMenu from "../../../../structures/ContextMenu";
+import {toRightOf} from "../../../../structures/ContextMenu";
+
 
 @replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
 export default class HelpUserSettingsTab extends React.Component {
@@ -151,15 +155,18 @@ export default class HelpUserSettingsTab extends React.Component {
         );
     }
 
-    onAccessTokenSpoilerClick = async (event) => {
-        // React throws away the event before we can use it (we are async, after all).
-        event.persist();
+    onAccessTokenCopyClick = async (e) => {
+        e.preventDefault();
+        const target = e.target; // copy target before we go async and React throws it away
 
-        // We make the user accept a scary popup to combat Social Engineering. No peeking!
-        await Modal.createTrackedDialog('Reveal Access Token', '', AccessTokenDialog).finished;
-
-        // Pass it onto the handler.
-        this._showSpoiler(event);
+        const successful = await copyPlaintext(MatrixClientPeg.get().getAccessToken());
+        const buttonRect = target.getBoundingClientRect();
+        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+        const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+            ...toRightOf(buttonRect, 2),
+            message: successful ? _t('Copied!') : _t('Failed to copy'),
+        });
+        target.onmouseleave = close;
     }
 
     render() {
@@ -279,11 +286,20 @@ export default class HelpUserSettingsTab extends React.Component {
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
-                        {_t("Access Token:") + ' '}
-                        <AccessibleButton element="span" onClick={this.onAccessTokenSpoilerClick}
-                                          data-spoiler={MatrixClientPeg.get().getAccessToken()}>
-                            &lt;{ _t("click to reveal") }&gt;
-                        </AccessibleButton>
+                        <br />
+                        <details>
+                            <summary>{_t("Access Token")}</summary><br />
+                            { _t("Your access token gives full access to your account."
+                               + " Do not share it with anyone." ) }
+                            <div className="mx_HelpUserSettingsTab_accessToken">
+                                <code>{MatrixClientPeg.get().getAccessToken()}</code>
+                                <AccessibleTooltipButton
+                                    title={_t("Copy")}
+                                    onClick={this.onAccessTokenCopyClick}
+                                    className="mx_HelpUserSettingsTab_accessToken_copy"
+                                />
+                            </div>
+                        </details><br />
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
                                 {_t("Clear cache and reload")}
