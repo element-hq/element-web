@@ -57,7 +57,8 @@ export default class PlaybackWaveform extends React.PureComponent<IProps, IState
     };
 
     private onTimeUpdate = (time: number[]) => {
-        const progress = percentageOf(time[0], 0, time[1]);
+        // Track percentages to very coarse precision, otherwise 0.002 ends up highlighting a bar.
+        const progress = Number(percentageOf(time[0], 0, time[1]).toFixed(1));
         this.setState({progress});
     };
 
