@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import * as sdk from '../../../../index';
-import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 import SdkConfig from '../../../../SdkConfig';
 import SettingsStore from "../../../../settings/SettingsStore";
@@ -26,14 +25,23 @@ import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import {SettingLevel} from "../../../../settings/SettingLevel";
 
+interface IProps {
+    onFinished: (confirmed: boolean) => void;
+}
+
+interface IState {
+    eventIndexSize: number;
+    eventCount: number;
+    crawlingRoomsCount: number;
+    roomCount: number;
+    currentRoom: string;
+    crawlerSleepTime: number;
+}
+
 /*
  * Allows the user to introspect the event index state and disable it.
  */
-export default class ManageEventIndexDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
-
+export default class ManageEventIndexDialog extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
@@ -84,7 +92,7 @@ export default class ManageEventIndexDialog extends React.Component {
         }
     }
 
-    async componentDidMount(): void {
+    async componentDidMount(): Promise<void> {
         let eventIndexSize = 0;
         let crawlingRoomsCount = 0;
         let roomCount = 0;
@@ -123,14 +131,14 @@ export default class ManageEventIndexDialog extends React.Component {
         });
     }
 
-    _onDisable = async () => {
+    private onDisable = async () => {
         Modal.createTrackedDialogAsync("Disable message search", "Disable message search",
             import("./DisableEventIndexDialog"),
             null, null, /* priority = */ false, /* static = */ true,
         );
     };
 
-    _onCrawlerSleepTimeChange = (e) => {
+    private onCrawlerSleepTimeChange = (e) => {
         this.setState({crawlerSleepTime: e.target.value});
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
@@ -144,7 +152,7 @@ export default class ManageEventIndexDialog extends React.Component {
             crawlerState = _t("Not currently indexing messages for any room.");
         } else {
             crawlerState = (
-                    _t("Currently indexing: %(currentRoom)s", { currentRoom: this.state.currentRoom })
+                _t("Currently indexing: %(currentRoom)s", { currentRoom: this.state.currentRoom })
             );
         }
 
@@ -169,7 +177,7 @@ export default class ManageEventIndexDialog extends React.Component {
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
                         value={this.state.crawlerSleepTime}
-                        onChange={this._onCrawlerSleepTimeChange} />
+                        onChange={this.onCrawlerSleepTimeChange} />
                 </div>
             </div>
         );
@@ -188,7 +196,7 @@ export default class ManageEventIndexDialog extends React.Component {
                     onPrimaryButtonClick={this.props.onFinished}
                     primaryButtonClass="primary"
                     cancelButton={_t("Disable")}
-                    onCancel={this._onDisable}
+                    onCancel={this.onDisable}
                     cancelButtonClass="danger"
                 />
             </BaseDialog>

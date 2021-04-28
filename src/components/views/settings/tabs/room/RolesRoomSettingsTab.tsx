@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t, _td} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
@@ -23,6 +22,9 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 import {EventType} from "matrix-js-sdk/src/@types/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -63,15 +65,15 @@ function parseIntWithDefault(val, def) {
     return isNaN(res) ? def : res;
 }
 
-export class BannedUser extends React.Component {
-    static propTypes = {
-        canUnban: PropTypes.bool,
-        member: PropTypes.object.isRequired, // js-sdk RoomMember
-        by: PropTypes.string.isRequired,
-        reason: PropTypes.string,
-    };
+interface IBannedUserProps {
+    canUnban?: boolean;
+    member: RoomMember;
+    by: string;
+    reason?: string;
+}
 
-    _onUnbanClick = (e) => {
+export class BannedUser extends React.Component<IBannedUserProps> {
+    private onUnbanClick = (e) => {
         MatrixClientPeg.get().unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to unban: " + err);
@@ -87,8 +89,10 @@ export class BannedUser extends React.Component {
 
         if (this.props.canUnban) {
             unbanButton = (
-                <AccessibleButton kind='danger_sm' onClick={this._onUnbanClick}
-                                  className='mx_RolesRoomSettingsTab_unbanBtn'>
+                <AccessibleButton className='mx_RolesRoomSettingsTab_unbanBtn'
+                    kind='danger_sm'
+                    onClick={this.onUnbanClick}
+                >
                     { _t('Unban') }
                 </AccessibleButton>
             );
@@ -107,29 +111,29 @@ export class BannedUser extends React.Component {
     }
 }
 
-@replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
-export default class RolesRoomSettingsTab extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
+interface IProps {
+    roomId: string;
+}
 
-    componentDidMount(): void {
-        MatrixClientPeg.get().on("RoomState.members", this._onRoomMembership);
+@replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
+export default class RolesRoomSettingsTab extends React.Component<IProps> {
+    componentDidMount() {
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomMembership);
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("RoomState.members", this._onRoomMembership);
+            client.removeListener("RoomState.members", this.onRoomMembership);
         }
     }
 
-    _onRoomMembership = (event, state, member) => {
+    private onRoomMembership = (event: MatrixEvent, state: RoomState, member: RoomMember) => {
         if (state.roomId !== this.props.roomId) return;
         this.forceUpdate();
     };
 
-    _populateDefaultPlEvents(eventsSection, stateLevel, eventsLevel) {
+    private populateDefaultPlEvents(eventsSection: Record<string, number>, stateLevel: number, eventsLevel: number) {
         for (const desiredEvent of Object.keys(plEventsToShow)) {
             if (!(desiredEvent in eventsSection)) {
                 eventsSection[desiredEvent] = (plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel);
@@ -137,7 +141,7 @@ export default class RolesRoomSettingsTab extends React.Component {
         }
     }
 
-    _onPowerLevelsChanged = (value, powerLevelKey) => {
+    private onPowerLevelsChanged = (inputValue: string, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -148,7 +152,7 @@ export default class RolesRoomSettingsTab extends React.Component {
 
         const eventsLevelPrefix = "event_levels_";
 
-        value = parseInt(value);
+        const value = parseInt(inputValue);
 
         if (powerLevelKey.startsWith(eventsLevelPrefix)) {
             // deep copy "events" object, Object.assign itself won't deep copy
@@ -182,7 +186,7 @@ export default class RolesRoomSettingsTab extends React.Component {
         });
     };
 
-    _onUserPowerLevelChanged = (value, powerLevelKey) => {
+    private onUserPowerLevelChanged = (value: string, powerLevelKey: string) => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents('m.room.power_levels', '');
@@ -266,7 +270,7 @@ export default class RolesRoomSettingsTab extends React.Component {
             currentUserLevel = defaultUserLevel;
         }
 
-        this._populateDefaultPlEvents(
+        this.populateDefaultPlEvents(
             eventsLevels,
             parseIntWithDefault(plContent.state_default, powerLevelDescriptors.state_default.defaultValue),
             parseIntWithDefault(plContent.events_default, powerLevelDescriptors.events_default.defaultValue),
@@ -288,7 +292,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                             label={user}
                             key={user}
                             powerLevelKey={user} // Will be sent as the second parameter to `onChange`
-                            onChange={this._onUserPowerLevelChanged}
+                            onChange={this.onUserPowerLevelChanged}
                         />,
                     );
                 } else if (userLevels[user] < defaultUserLevel) { // muted
@@ -299,7 +303,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                             label={user}
                             key={user}
                             powerLevelKey={user} // Will be sent as the second parameter to `onChange`
-                            onChange={this._onUserPowerLevelChanged}
+                            onChange={this.onUserPowerLevelChanged}
                         />,
                     );
                 }
@@ -345,8 +349,9 @@ export default class RolesRoomSettingsTab extends React.Component {
                             if (sender) bannedBy = sender.name;
                             return (
                                 <BannedUser key={member.userId} canUnban={canBanUsers}
-                                            member={member} reason={banEvent.reason}
-                                            by={bannedBy} />
+                                    member={member} reason={banEvent.reason}
+                                    by={bannedBy}
+                                />
                             );
                         })}
                     </ul>
@@ -373,7 +378,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                     usersDefault={defaultUserLevel}
                     disabled={!canChangeLevels || currentUserLevel < value}
                     powerLevelKey={key} // Will be sent as the second parameter to `onChange`
-                    onChange={this._onPowerLevelsChanged}
+                    onChange={this.onPowerLevelsChanged}
                 />
             </div>;
         });
@@ -398,7 +403,7 @@ export default class RolesRoomSettingsTab extends React.Component {
                         usersDefault={defaultUserLevel}
                         disabled={!canChangeLevels || currentUserLevel < eventsLevels[eventType]}
                         powerLevelKey={"event_levels_" + eventType}
-                        onChange={this._onPowerLevelsChanged}
+                        onChange={this.onPowerLevelsChanged}
                     />
                 </div>
             );

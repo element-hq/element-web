@@ -26,7 +26,10 @@ limitations under the License.
     word-break: break-word;
     display: flex;
     flex-direction: column;
+}
 
+.mx_SpaceRoomDirectory,
+.mx_SpaceRoomView_landing {
     .mx_Dialog_title {
         display: flex;
 
@@ -56,65 +59,63 @@ limitations under the License.
         }
     }
 
-    .mx_Dialog_content {
-        .mx_AccessibleButton_kind_link {
-            padding: 0;
-        }
+    .mx_AccessibleButton_kind_link {
+        padding: 0;
+    }
 
-        .mx_SearchBox {
-            margin: 24px 0 16px;
-        }
+    .mx_SearchBox {
+        margin: 24px 0 16px;
+    }
 
-        .mx_SpaceRoomDirectory_noResults {
-            text-align: center;
+    .mx_SpaceRoomDirectory_noResults {
+        text-align: center;
 
-            > div {
-                font-size: $font-15px;
-                line-height: $font-24px;
-                color: $secondary-fg-color;
-            }
-        }
-
-        .mx_SpaceRoomDirectory_listHeader {
-            display: flex;
-            min-height: 32px;
-            align-items: center;
+        > div {
             font-size: $font-15px;
             line-height: $font-24px;
-            color: $primary-fg-color;
+            color: $secondary-fg-color;
+        }
+    }
 
-            .mx_AccessibleButton {
-                padding: 2px 8px;
-                font-weight: normal;
+    .mx_SpaceRoomDirectory_listHeader {
+        display: flex;
+        min-height: 32px;
+        align-items: center;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $primary-fg-color;
 
-                & + .mx_AccessibleButton {
-                    margin-left: 16px;
-                }
-            }
+        .mx_AccessibleButton {
+            padding: 2px 8px;
+            font-weight: normal;
 
-            > span {
-                margin-left: auto;
+            & + .mx_AccessibleButton {
+                margin-left: 16px;
             }
         }
 
-        .mx_SpaceRoomDirectory_error {
-            position: relative;
-            font-weight: $font-semi-bold;
-            color: $notice-primary-color;
-            font-size: $font-15px;
-            line-height: $font-18px;
-            margin: 20px auto 12px;
-            padding-left: 24px;
-            width: max-content;
+        > span {
+            margin-left: auto;
+        }
+    }
 
-            &::before {
-                content: "";
-                position: absolute;
-                height: 16px;
-                width: 16px;
-                left: 0;
-                background-image: url("$(res)/img/element-icons/warning-badge.svg");
-            }
+    .mx_SpaceRoomDirectory_error {
+        position: relative;
+        font-weight: $font-semi-bold;
+        color: $notice-primary-color;
+        font-size: $font-15px;
+        line-height: $font-18px;
+        margin: 20px auto 12px;
+        padding-left: 24px;
+        width: max-content;
+
+        &::before {
+            content: "";
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 0;
+            background-image: url("$(res)/img/element-icons/warning-badge.svg");
         }
     }
 }

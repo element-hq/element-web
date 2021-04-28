@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 import {_t, _td, newTranslatableError} from "../languageHandler";
 import {makeType} from "./TypeUtils";
 import SdkConfig from '../SdkConfig';
 
-const LIVELINESS_DISCOVERY_ERRORS = [
+const LIVELINESS_DISCOVERY_ERRORS: string[] = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
     AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER,
 ];
@@ -40,17 +39,23 @@ export class ValidatedServerConfig {
     warning: string;
 }
 
+export interface IAuthComponentState {
+    serverIsAlive: boolean;
+    serverErrorIsFatal: boolean;
+    serverDeadError?: ReactNode;
+}
+
 export default class AutoDiscoveryUtils {
     /**
      * Checks if a given error or error message is considered an error
      * relating to the liveliness of the server. Must be an error returned
      * from this AutoDiscoveryUtils class.
-     * @param {string|Error} error The error to check
+     * @param {string | Error} error The error to check
      * @returns {boolean} True if the error is a liveliness error.
      */
-    static isLivelinessError(error: string|Error): boolean {
+    static isLivelinessError(error: string | Error): boolean {
         if (!error) return false;
-        return !!LIVELINESS_DISCOVERY_ERRORS.find(e => e === error || e === error.message);
+        return !!LIVELINESS_DISCOVERY_ERRORS.find(e => typeof error === "string" ? e === error : e === error.message);
     }
 
     /**
@@ -61,7 +66,7 @@ export default class AutoDiscoveryUtils {
      * implementation for known values.
      * @returns {*} The state for the component, given the error.
      */
-    static authComponentStateForError(err: string | Error | null, pageName = "login"): Object {
+    static authComponentStateForError(err: string | Error | null, pageName = "login"): IAuthComponentState {
         if (!err) {
             return {
                 serverIsAlive: true,
@@ -70,7 +75,7 @@ export default class AutoDiscoveryUtils {
             };
         }
         let title = _t("Cannot reach homeserver");
-        let body = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
+        let body: ReactNode = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
         if (!AutoDiscoveryUtils.isLivelinessError(err)) {
             const brand = SdkConfig.get().brand;
             title = _t("Your %(brand)s is misconfigured", { brand });
@@ -92,7 +97,7 @@ export default class AutoDiscoveryUtils {
         }
 
         let isFatalError = true;
-        const errorMessage = err.message ? err.message : err;
+        const errorMessage = typeof err === "string" ? err : err.message;
         if (errorMessage === AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER) {
             isFatalError = false;
             title = _t("Cannot reach identity server");
@@ -141,7 +146,10 @@ export default class AutoDiscoveryUtils {
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
     static async validateServerConfigWithStaticUrls(
-        homeserverUrl: string, identityUrl: string, syntaxOnly = false): ValidatedServerConfig {
+        homeserverUrl: string,
+        identityUrl?: string,
+        syntaxOnly = false,
+    ): Promise<ValidatedServerConfig> {
         if (!homeserverUrl) {
             throw newTranslatableError(_td("No homeserver URL provided"));
         }
@@ -171,7 +179,7 @@ export default class AutoDiscoveryUtils {
      * @param {string} serverName The homeserver domain name (eg: "matrix.org") to validate.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static async validateServerName(serverName: string): ValidatedServerConfig {
+    static async validateServerName(serverName: string): Promise<ValidatedServerConfig> {
         const result = await AutoDiscovery.findClientConfig(serverName);
         return AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
     }

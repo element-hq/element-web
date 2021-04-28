@@ -160,7 +160,6 @@ export default class EditHistoryMessage extends React.PureComponent {
             "mx_EventTile": true,
             // Note: we keep the `sending` state class for tests, not for our styles
             "mx_EventTile_sending": isSending,
-            "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });
         return (
             <li>

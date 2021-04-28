@@ -31,8 +31,7 @@ limitations under the License.
 
 .mx_ImageView_image {
     pointer-events: all;
-    max-width: 95%;
-    max-height: 95%;
+    flex-shrink: 0;
 }
 
 .mx_ImageView_panel {

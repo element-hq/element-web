@@ -651,11 +651,12 @@ export default class CallHandler extends EventEmitter {
             }
 
             call.placeScreenSharingCall(
-                async () : Promise<DesktopCapturerSource> => {
+                async (): Promise<DesktopCapturerSource> => {
                     const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
                     const [source] = await finished;
                     return source;
-                });
+                },
+            );
         } else {
             console.error("Unknown conf call type: " + type);
         }

@@ -763,7 +763,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             'mx_RoomSublist': true,
             'mx_RoomSublist_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist_minimized': this.props.isMinimized,
-            'mx_RoomSublist_hidden': !this.state.rooms.length && this.props.alwaysVisible !== true,
+            'mx_RoomSublist_hidden': (
+                !this.state.rooms.length && !this.props.extraTiles?.length && this.props.alwaysVisible !== true
+            ),
         });
 
         let content = null;
