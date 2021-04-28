@@ -132,6 +132,10 @@ For a good example, see https://develop.element.io/config.json.
 1. `audioStreamUrl`: If supplied, show an option on Jitsi widgets to stream
    audio using Jitsi's live streaming feature. This option is experimental and
    may be removed at any time without notice.
+1. `voip`: Behaviour related to calls
+   1. `obeyAssertedIdentity`: If set, MSC3086 asserted identity messages sent
+      on VoIP calls will cause the call to appear in the room corresponding to the
+      asserted identity. This *must* only be set in trusted environments.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element
