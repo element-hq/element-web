@@ -552,6 +552,7 @@ export default class CallHandler extends EventEmitter {
 
     private removeCallForRoom(roomId: string) {
         this.calls.delete(roomId);
+        this.emit(CallHandlerEvent.CallsChanged, this.calls);
     }
 
     private showICEFallbackPrompt() {
