@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClient} from "matrix-js-sdk/src/client";
@@ -34,6 +34,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import {calculateRoomVia} from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -57,6 +58,8 @@ interface IAddExistingToSpaceProps {
 
 export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, selected, onChange }) => {
     const cli = useContext(MatrixClientContext);
+    const visibleRooms = useMemo(() => sortRooms(cli.getVisibleRooms()), [cli]);
+
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
 
@@ -65,7 +68,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
     const existingRoomsSet = new Set(SpaceStore.instance.getChildRooms(space.roomId));
 
     const joinRule = space.getJoinRule();
-    const [spaces, rooms, dms] = cli.getVisibleRooms().reduce((arr, room) => {
+    const [spaces, rooms, dms] = visibleRooms.reduce((arr, room) => {
         if (room.getMyMembership() !== "join") return arr;
         if (!room.name.toLowerCase().includes(lcQuery)) return arr;
 
