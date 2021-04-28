@@ -199,7 +199,6 @@ describe('CallHandler', () => {
         fakeCall.emit(CallEvent.AssertedIdentityChanged);
 
         await roomChangePromise;
-        dis.unregister(dispatchHandle);
         callHandler.removeAllListeners();
 
         // If everything's gone well, we should have seen only one room change
