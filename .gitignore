@@ -2,6 +2,7 @@
 /*.log
 package-lock.json
 
+/coverage
 /node_modules
 /lib
 

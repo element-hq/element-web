@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -28,6 +27,7 @@ import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
 import {timeout} from "../../../utils/promise";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { ActionPayload } from '../../../dispatcher/payloads';
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -59,16 +59,28 @@ async function checkIdentityServerUrl(u) {
     }
 }
 
-@replaceableComponent("views.settings.SetIdServer")
-export default class SetIdServer extends React.Component {
-    static propTypes = {
-        // Whether or not the ID server is missing terms. This affects the text
-        // shown to the user.
-        missingTerms: PropTypes.bool,
-    };
+interface IProps {
+    // Whether or not the ID server is missing terms. This affects the text
+    // shown to the user.
+    missingTerms: boolean;
+}
 
-    constructor() {
-        super();
+interface IState {
+    defaultIdServer?: string;
+    currentClientIdServer: string;
+    idServer?: string;
+    error?: string;
+    busy: boolean;
+    disconnectBusy: boolean;
+    checking: boolean;
+}
+
+@replaceableComponent("views.settings.SetIdServer")
+export default class SetIdServer extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
+
+    constructor(props) {
+        super(props);
 
         let defaultIdServer = '';
         if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
@@ -96,7 +108,7 @@ export default class SetIdServer extends React.Component {
         dis.unregister(this.dispatcherRef);
     }
 
-    onAction = (payload) => {
+    private onAction = (payload: ActionPayload) => {
         // We react to changes in the ID server in the event the user is staring at this form
         // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;
@@ -106,13 +118,13 @@ export default class SetIdServer extends React.Component {
         });
     };
 
-    _onIdentityServerChanged = (ev) => {
+    private onIdentityServerChanged = (ev) => {
         const u = ev.target.value;
 
         this.setState({idServer: u});
     };
 
-    _getTooltip = () => {
+    private getTooltip = () => {
         if (this.state.checking) {
             const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
             return <div>
@@ -126,11 +138,11 @@ export default class SetIdServer extends React.Component {
         }
     };
 
-    _idServerChangeEnabled = () => {
+    private idServerChangeEnabled = () => {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    _saveIdServer = (fullUrl) => {
+    private saveIdServer = (fullUrl) => {
         // Account data change will update localstorage, client, etc through dispatcher
         MatrixClientPeg.get().setAccountData("m.identity_server", {
             base_url: fullUrl,
@@ -143,7 +155,7 @@ export default class SetIdServer extends React.Component {
         });
     };
 
-    _checkIdServer = async (e) => {
+    private checkIdServer = async (e) => {
         e.preventDefault();
         const { idServer, currentClientIdServer } = this.state;
 
@@ -166,14 +178,14 @@ export default class SetIdServer extends React.Component {
                 // Double check that the identity server even has terms of service.
                 const hasTerms = await doesIdentityServerHaveTerms(fullUrl);
                 if (!hasTerms) {
-                    const [confirmed] = await this._showNoTermsWarning(fullUrl);
+                    const [confirmed] = await this.showNoTermsWarning(fullUrl);
                     save = confirmed;
                 }
 
                 // Show a general warning, possibly with details about any bound
                 // 3PIDs that would be left behind.
                 if (save && currentClientIdServer && fullUrl !== currentClientIdServer) {
-                    const [confirmed] = await this._showServerChangeWarning({
+                    const [confirmed] = await this.showServerChangeWarning({
                         title: _t("Change identity server"),
                         unboundMessage: _t(
                             "Disconnect from the identity server <current /> and " +
@@ -189,7 +201,7 @@ export default class SetIdServer extends React.Component {
                 }
 
                 if (save) {
-                    this._saveIdServer(fullUrl);
+                    this.saveIdServer(fullUrl);
                 }
             } catch (e) {
                 console.error(e);
@@ -204,7 +216,7 @@ export default class SetIdServer extends React.Component {
         });
     };
 
-    _showNoTermsWarning(fullUrl) {
+    private showNoTermsWarning(fullUrl) {
         const QuestionDialog = sdk.getComponent("views.dialogs.QuestionDialog");
         const { finished } = Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
             title: _t("Identity server has no terms of service"),
@@ -223,10 +235,10 @@ export default class SetIdServer extends React.Component {
         return finished;
     }
 
-    _onDisconnectClicked = async () => {
+    private onDisconnectClicked = async () => {
         this.setState({disconnectBusy: true});
         try {
-            const [confirmed] = await this._showServerChangeWarning({
+            const [confirmed] = await this.showServerChangeWarning({
                 title: _t("Disconnect identity server"),
                 unboundMessage: _t(
                     "Disconnect from the identity server <idserver />?", {},
@@ -235,14 +247,14 @@ export default class SetIdServer extends React.Component {
                 button: _t("Disconnect"),
             });
             if (confirmed) {
-                this._disconnectIdServer();
+                this.disconnectIdServer();
             }
         } finally {
             this.setState({disconnectBusy: false});
         }
     };
 
-    async _showServerChangeWarning({ title, unboundMessage, button }) {
+    private async showServerChangeWarning({ title, unboundMessage, button }) {
         const { currentClientIdServer } = this.state;
 
         let threepids = [];
@@ -318,7 +330,7 @@ export default class SetIdServer extends React.Component {
         return finished;
     }
 
-    _disconnectIdServer = () => {
+    private disconnectIdServer = () => {
         // Account data change will update localstorage, client, etc through dispatcher
         MatrixClientPeg.get().setAccountData("m.identity_server", {
             base_url: null, // clear
@@ -371,7 +383,7 @@ export default class SetIdServer extends React.Component {
 
         let discoSection;
         if (idServerUrl) {
-            let discoButtonContent = _t("Disconnect");
+            let discoButtonContent: React.ReactNode = _t("Disconnect");
             let discoBodyText = _t(
                 "Disconnecting from your identity server will mean you " +
                 "won't be discoverable by other users and you won't be " +
@@ -391,14 +403,14 @@ export default class SetIdServer extends React.Component {
             }
             discoSection = <div>
                 <span className="mx_SettingsTab_subsectionText">{discoBodyText}</span>
-                <AccessibleButton onClick={this._onDisconnectClicked} kind="danger_sm">
+                <AccessibleButton onClick={this.onDisconnectClicked} kind="danger_sm">
                     {discoButtonContent}
                 </AccessibleButton>
             </div>;
         }
 
         return (
-            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this._checkIdServer}>
+            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this.checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
                     {sectionTitle}
                 </span>
@@ -411,15 +423,15 @@ export default class SetIdServer extends React.Component {
                     autoComplete="off"
                     placeholder={this.state.defaultIdServer}
                     value={this.state.idServer}
-                    onChange={this._onIdentityServerChanged}
-                    tooltipContent={this._getTooltip()}
+                    onChange={this.onIdentityServerChanged}
+                    tooltipContent={this.getTooltip()}
                     tooltipClassName="mx_SetIdServer_tooltip"
                     disabled={this.state.busy}
                     forceValidity={this.state.error ? false : null}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
-                    onClick={this._checkIdServer}
-                    disabled={!this._idServerChangeEnabled()}
+                    onClick={this.checkIdServer}
+                    disabled={!this.idServerChangeEnabled()}
                 >{_t("Change")}</AccessibleButton>
                 {discoSection}
             </form>

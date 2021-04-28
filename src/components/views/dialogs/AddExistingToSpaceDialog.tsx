@@ -42,11 +42,11 @@ interface IProps extends IDialogProps {
 }
 
 const Entry = ({ room, checked, onChange }) => {
-    return <div className="mx_AddExistingToSpace_entry">
+    return <label className="mx_AddExistingToSpace_entry">
         <RoomAvatar room={room} height={32} width={32} />
         <span className="mx_AddExistingToSpace_entry_name">{ room.name }</span>
         <StyledCheckbox onChange={(e) => onChange(e.target.checked)} checked={checked} />
-    </div>;
+    </label>;
 };
 
 interface IAddExistingToSpaceProps {
@@ -73,9 +73,13 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
             if (room !== space && !existingSubspacesSet.has(room)) {
                 arr[0].push(room);
             }
-        } else if (!existingRoomsSet.has(room) && joinRule !== "public") {
-            // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
-            arr[DMRoomMap.shared().getUserIdForRoomId(room.roomId) ? 2 : 1].push(room);
+        } else if (!existingRoomsSet.has(room)) {
+            if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                arr[1].push(room);
+            } else if (joinRule !== "public") {
+                // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
+                arr[2].push(room);
+            }
         }
         return arr;
     }, [[], [], []]);
@@ -86,6 +90,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
             placeholder={ _t("Filter your rooms and spaces") }
             onSearch={setQuery}
             autoComplete={true}
+            autoFocus={true}
         />
         <AutoHideScrollbar className="mx_AddExistingToSpace_content" id="mx_AddExistingToSpace">
             { rooms.length > 0 ? (

@@ -30,7 +30,7 @@ interface IProps {
      * If true, the badge will show a count if at all possible. This is typically
      * used to override the user's preference for things like room sublists.
      */
-    forceCount: boolean;
+    forceCount?: boolean;
 
     /**
      * The room ID, if any, the badge represents.

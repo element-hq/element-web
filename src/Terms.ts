@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ limitations under the License.
 import classNames from 'classnames';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import * as sdk from './';
+import * as sdk from '.';
 import Modal from './Modal';
 
 export class TermsNotSignedError extends Error {}
@@ -32,12 +32,29 @@ export class Service {
      * @param {string} baseUrl The Base URL of the service (ie. before '/_matrix')
      * @param {string} accessToken The user's access token for the service
      */
-    constructor(serviceType, baseUrl, accessToken) {
-        this.serviceType = serviceType;
-        this.baseUrl = baseUrl;
-        this.accessToken = accessToken;
+    constructor(public serviceType: string, public baseUrl: string, public accessToken: string) {
     }
 }
+
+interface Policy {
+    // @ts-ignore: No great way to express indexed types together with other keys
+    version: string;
+    [lang: string]: {
+        url: string;
+    };
+}
+type Policies = {
+    [policy: string]: Policy,
+};
+
+export type TermsInteractionCallback = (
+    policiesAndServicePairs: {
+        service: Service,
+        policies: Policies,
+    }[],
+    agreedUrls: string[],
+    extraClassNames?: string,
+) => Promise<string[]>;
 
 /**
  * Start a flow where the user is presented with terms & conditions for some services
@@ -51,8 +68,8 @@ export class Service {
  *     if they cancel.
  */
 export async function startTermsFlow(
-    services,
-    interactionCallback = dialogTermsInteractionCallback,
+    services: Service[],
+    interactionCallback: TermsInteractionCallback = dialogTermsInteractionCallback,
 ) {
     const termsPromises = services.map(
         (s) => MatrixClientPeg.get().getTerms(s.serviceType, s.baseUrl),
@@ -77,7 +94,7 @@ export async function startTermsFlow(
      * }
      */
 
-    const terms = await Promise.all(termsPromises);
+    const terms: { policies: Policies }[] = await Promise.all(termsPromises);
     const policiesAndServicePairs = terms.map((t, i) => { return { 'service': services[i], 'policies': t.policies }; });
 
     // fetch the set of agreed policy URLs from account data
@@ -158,10 +175,13 @@ export async function startTermsFlow(
 }
 
 export function dialogTermsInteractionCallback(
-    policiesAndServicePairs,
-    agreedUrls,
-    extraClassNames,
-) {
+    policiesAndServicePairs: {
+        service: Service,
+        policies: { [policy: string]: Policy },
+    }[],
+    agreedUrls: string[],
+    extraClassNames?: string,
+): Promise<string[]> {
     return new Promise((resolve, reject) => {
         console.log("Terms that need agreement", policiesAndServicePairs);
         const TermsDialog = sdk.getComponent("views.dialogs.TermsDialog");

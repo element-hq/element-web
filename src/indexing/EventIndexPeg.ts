@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,12 +27,11 @@ import {SettingLevel} from "../settings/SettingLevel";
 
 const INDEX_VERSION = 1;
 
-class EventIndexPeg {
-    constructor() {
-        this.index = null;
-        this._supportIsInstalled = false;
-        this.error = null;
-    }
+export class EventIndexPeg {
+    public index: EventIndex = null;
+    public error: Error = null;
+
+    private _supportIsInstalled = false;
 
     /**
      * Initialize the EventIndexPeg and if event indexing is enabled initialize
@@ -181,7 +180,7 @@ class EventIndexPeg {
     }
 }
 
-if (!global.mxEventIndexPeg) {
-    global.mxEventIndexPeg = new EventIndexPeg();
+if (!window.mxEventIndexPeg) {
+    window.mxEventIndexPeg = new EventIndexPeg();
 }
-export default global.mxEventIndexPeg;
+export default window.mxEventIndexPeg;

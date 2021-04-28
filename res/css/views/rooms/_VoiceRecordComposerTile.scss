@@ -35,44 +35,40 @@ limitations under the License.
     }
 }
 
-.mx_VoiceRecordComposerTile_waveformContainer {
-    padding: 5px;
-    padding-right: 4px; // there's 1px from the waveform itself, so account for that
-    padding-left: 15px; // +10px for the live circle, +5px for regular padding
-    background-color: $voice-record-waveform-bg-color;
-    border-radius: 12px;
-    margin-right: 12px; // isolate from stop button
+.mx_VoiceRecordComposerTile_delete {
+    width: 14px; // w&h are size of icon
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 7px; // distance from left edge of waveform container (container has some margin too)
+    background-color: $muted-fg-color;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-image: url('$(res)/img/element-icons/trashcan.svg');
+}
 
-    // Cheat at alignment a bit
-    display: flex;
-    align-items: center;
+.mx_VoiceMessagePrimaryContainer {
+    // Note: remaining class properties are in the PlayerContainer CSS.
+
+    margin: 6px; // force the composer area to put a gutter around us
+    margin-right: 12px; // isolate from stop button
 
     position: relative; // important for the live circle
 
-    color: $voice-record-waveform-fg-color;
-    font-size: $font-14px;
+    &.mx_VoiceRecordComposerTile_recording {
+        padding-left: 16px; // +10px for the live circle, +6px for regular padding
 
-    &::before {
-        animation: recording-pulse 2s infinite;
+        &::before {
+            animation: recording-pulse 2s infinite;
 
-        content: '';
-        background-color: $voice-record-live-circle-color;
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        left: 8px;
-        top: 16px; // vertically center
-        border-radius: 10px;
-    }
-
-    .mx_Waveform_bar {
-        background-color: $voice-record-waveform-fg-color;
-    }
-
-    .mx_Clock {
-        padding-right: 8px; // isolate from waveform
-        padding-left: 10px; // isolate from live circle
-        width: 42px; // we're not using a monospace font, so fake it
+            content: '';
+            background-color: $voice-record-live-circle-color;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            left: 8px;
+            top: 16px; // vertically center
+            border-radius: 10px;
+        }
     }
 }
 

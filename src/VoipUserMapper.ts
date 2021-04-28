@@ -57,7 +57,11 @@ export default class VoipUserMapper {
         if (!virtualRoom) return null;
         const virtualRoomEvent = virtualRoom.getAccountData(VIRTUAL_ROOM_EVENT_TYPE);
         if (!virtualRoomEvent || !virtualRoomEvent.getContent()) return null;
-        return virtualRoomEvent.getContent()['native_room'] || null;
+        const nativeRoomID = virtualRoomEvent.getContent()['native_room'];
+        const nativeRoom = MatrixClientPeg.get().getRoom(nativeRoomID);
+        if (!nativeRoom || nativeRoom.getMyMembership() !== 'join') return null;
+
+        return nativeRoomID;
     }
 
     public isVirtualRoom(room: Room): boolean {

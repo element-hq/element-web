@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,15 +32,15 @@ try {
 const SYNC_STORE_NAME = "riot-web-sync";
 const CRYPTO_STORE_NAME = "matrix-js-sdk:crypto";
 
-function log(msg) {
+function log(msg: string) {
     console.log(`StorageManager: ${msg}`);
 }
 
-function error(msg) {
-    console.error(`StorageManager: ${msg}`);
+function error(msg: string, ...args: string[]) {
+    console.error(`StorageManager: ${msg}`, ...args);
 }
 
-function track(action) {
+function track(action: string) {
     Analytics.trackEvent("StorageManager", action);
 }
 
@@ -73,7 +73,7 @@ export async function checkConsistency() {
         dataInLocalStorage = localStorage.length > 0;
         log(`Local storage contains data? ${dataInLocalStorage}`);
 
-        cryptoInited = localStorage.getItem("mx_crypto_initialised");
+        cryptoInited = !!localStorage.getItem("mx_crypto_initialised");
         log(`Crypto initialised? ${cryptoInited}`);
     } else {
         healthy = false;

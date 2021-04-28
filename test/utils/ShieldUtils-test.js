@@ -128,7 +128,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
 describe("shieldStatusForMembership other-trust behaviour", function() {
     beforeAll(() => {
-        DMRoomMap._sharedInstance = {
+        DMRoomMap.sharedInstance = {
             getUserIdForRoomId: (roomId) => roomId === "DM" ? "@any:h" : null,
         };
     });

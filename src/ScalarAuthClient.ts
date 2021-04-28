@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2016, 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,13 +16,14 @@ limitations under the License.
 
 import url from 'url';
 import SettingsStore from "./settings/SettingsStore";
-import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
+import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from './Terms';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import request from "browser-request";
 
 import SdkConfig from "./SdkConfig";
 import {WidgetType} from "./widgets/WidgetType";
 import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
@@ -31,9 +31,11 @@ const imApiVersion = "1.1";
 // TODO: Generify the name of this class and all components within - it's not just for Scalar.
 
 export default class ScalarAuthClient {
-    constructor(apiUrl, uiUrl) {
-        this.apiUrl = apiUrl;
-        this.uiUrl = uiUrl;
+    private scalarToken: string;
+    private termsInteractionCallback: TermsInteractionCallback;
+    private isDefaultManager: boolean;
+
+    constructor(private apiUrl: string, private uiUrl: string) {
         this.scalarToken = null;
         // `undefined` to allow `startTermsFlow` to fallback to a default
         // callback if this is unset.
@@ -46,7 +48,7 @@ export default class ScalarAuthClient {
         this.isDefaultManager = apiUrl === configApiUrl && configUiUrl === uiUrl;
     }
 
-    _writeTokenToStore() {
+    private writeTokenToStore() {
         window.localStorage.setItem("mx_scalar_token_at_" + this.apiUrl, this.scalarToken);
         if (this.isDefaultManager) {
             // We remove the old token from storage to migrate upwards. This is safe
@@ -56,7 +58,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    _readTokenFromStore() {
+    private readTokenFromStore(): string {
         let token = window.localStorage.getItem("mx_scalar_token_at_" + this.apiUrl);
         if (!token && this.isDefaultManager) {
             token = window.localStorage.getItem("mx_scalar_token");
@@ -64,33 +66,33 @@ export default class ScalarAuthClient {
         return token;
     }
 
-    _readToken() {
+    private readToken(): string {
         if (this.scalarToken) return this.scalarToken;
-        return this._readTokenFromStore();
+        return this.readTokenFromStore();
     }
 
     setTermsInteractionCallback(callback) {
         this.termsInteractionCallback = callback;
     }
 
-    connect() {
+    connect(): Promise<void> {
         return this.getScalarToken().then((tok) => {
             this.scalarToken = tok;
         });
     }
 
-    hasCredentials() {
+    hasCredentials(): boolean {
         return this.scalarToken != null; // undef or null
     }
 
     // Returns a promise that resolves to a scalar_token string
-    getScalarToken() {
-        const token = this._readToken();
+    getScalarToken(): Promise<string> {
+        const token = this.readToken();
 
         if (!token) {
             return this.registerForToken();
         } else {
-            return this._checkToken(token).catch((e) => {
+            return this.checkToken(token).catch((e) => {
                 if (e instanceof TermsNotSignedError) {
                     // retrying won't help this
                     throw e;
@@ -100,7 +102,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    _getAccountName(token) {
+    private getAccountName(token: string): Promise<string> {
         const url = this.apiUrl + "/account";
 
         return new Promise(function(resolve, reject) {
@@ -125,8 +127,8 @@ export default class ScalarAuthClient {
         });
     }
 
-    _checkToken(token) {
-        return this._getAccountName(token).then(userId => {
+    private checkToken(token: string): Promise<string> {
+        return this.getAccountName(token).then(userId => {
             const me = MatrixClientPeg.get().getUserId();
             if (userId !== me) {
                 throw new Error("Scalar token is owned by someone else: " + me);
@@ -154,7 +156,7 @@ export default class ScalarAuthClient {
                 parsedImRestUrl.pathname = '';
                 return startTermsFlow([new Service(
                     SERVICE_TYPES.IM,
-                    parsedImRestUrl.format(),
+                    url.format(parsedImRestUrl),
                     token,
                 )], this.termsInteractionCallback).then(() => {
                     return token;
@@ -165,22 +167,22 @@ export default class ScalarAuthClient {
         });
     }
 
-    registerForToken() {
+    registerForToken(): Promise<string> {
         // Get openid bearer token from the HS as the first part of our dance
         return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
             // Now we can send that to scalar and exchange it for a scalar token
             return this.exchangeForScalarToken(tokenObject);
         }).then((token) => {
             // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
-            return this._checkToken(token);
+            return this.checkToken(token);
         }).then((token) => {
             this.scalarToken = token;
-            this._writeTokenToStore();
+            this.writeTokenToStore();
             return token;
         });
     }
 
-    exchangeForScalarToken(openidTokenObject) {
+    exchangeForScalarToken(openidTokenObject: any): Promise<string> {
         const scalarRestUrl = this.apiUrl;
 
         return new Promise(function(resolve, reject) {
@@ -194,7 +196,7 @@ export default class ScalarAuthClient {
                 if (err) {
                     reject(err);
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
                 } else if (!body || !body.scalar_token) {
                     reject(new Error("Missing scalar_token in response"));
                 } else {
@@ -204,7 +206,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    getScalarPageTitle(url) {
+    getScalarPageTitle(url: string): Promise<string> {
         let scalarPageLookupUrl = this.apiUrl + '/widgets/title_lookup';
         scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
         scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
@@ -218,7 +220,7 @@ export default class ScalarAuthClient {
                 if (err) {
                     reject(err);
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
                 } else if (!body) {
                     reject(new Error("Missing page title in response"));
                 } else {
@@ -240,10 +242,10 @@ export default class ScalarAuthClient {
      * @param  {string} widgetId   The widget ID to disable assets for
      * @return {Promise}           Resolves on completion
      */
-    disableWidgetAssets(widgetType: WidgetType, widgetId) {
+    disableWidgetAssets(widgetType: WidgetType, widgetId: string): Promise<void> {
         let url = this.apiUrl + '/widgets/set_assets_state';
         url = this.getStarterLink(url);
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             request({
                 method: 'GET', // XXX: Actions shouldn't be GET requests
                 uri: url,
@@ -257,7 +259,7 @@ export default class ScalarAuthClient {
                 if (err) {
                     reject(err);
                 } else if (response.statusCode / 100 !== 2) {
-                    reject({statusCode: response.statusCode});
+                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
                 } else if (!body) {
                     reject(new Error("Failed to set widget assets state"));
                 } else {
@@ -267,7 +269,7 @@ export default class ScalarAuthClient {
         });
     }
 
-    getScalarInterfaceUrlForRoom(room, screen, id) {
+    getScalarInterfaceUrlForRoom(room: Room, screen: string, id: string): string {
         const roomId = room.roomId;
         const roomName = room.name;
         let url = this.uiUrl;
@@ -284,7 +286,7 @@ export default class ScalarAuthClient {
         return url;
     }
 
-    getStarterLink(starterLinkUrl) {
+    getStarterLink(starterLinkUrl: string): string {
         return starterLinkUrl + "?scalar_token=" + encodeURIComponent(this.scalarToken);
     }
 }
