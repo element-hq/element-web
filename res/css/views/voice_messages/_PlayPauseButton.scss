@@ -38,7 +38,7 @@ limitations under the License.
         height: 16px;
         top: 8px; // center
         left: 12px; // center
-        mask-image: url('$(res)/img/element-icons/play-symbol.svg');
+        mask-image: url('$(res)/img/element-icons/play.svg');
     }
 
     &.mx_PlayPauseButton_pause::before {
@@ -46,6 +46,6 @@ limitations under the License.
         height: 12px;
         top: 10px; // center
         left: 11px; // center
-        mask-image: url('$(res)/img/element-icons/pause-symbol.svg');
+        mask-image: url('$(res)/img/element-icons/pause.svg');
     }
 }
