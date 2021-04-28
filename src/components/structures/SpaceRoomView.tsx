@@ -154,7 +154,6 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
             <AccessibleButton
                 kind="danger"
                 onClick={() => {
-                    setBusy(true);
                     dis.dispatch({
                         action: "leave_room",
                         room_id: space.roomId,
