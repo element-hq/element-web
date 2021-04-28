@@ -74,6 +74,26 @@ export function arraySeed<T>(val: T, length: number): T[] {
 }
 
 /**
+ * Trims or fills the array to ensure it meets the desired length. The seed array
+ * given is pulled from to fill any missing slots - it is recommended that this be
+ * at least `len` long. The resulting array will be exactly `len` long, either
+ * trimmed from the source or filled with the some/all of the seed array.
+ * @param {T[]} a The array to trim/fill.
+ * @param {number} len The length to trim or fill to, as needed.
+ * @param {T[]} seed Values to pull from if the array needs filling.
+ * @returns {T[]} The resulting array of `len` length.
+ */
+export function arrayTrimFill<T>(a: T[], len: number, seed: T[]): T[] {
+    // Dev note: we do length checks because the spread operator can result in some
+    // performance penalties in more critical code paths. As a utility, it should be
+    // as fast as possible to not cause a problem for the call stack, no matter how
+    // critical that stack is.
+    if (a.length === len) return a;
+    if (a.length > len) return a.slice(0, len);
+    return a.concat(seed.slice(0, len - a.length));
+}
+
+/**
  * Clones an array as fast as possible, retaining references of the array's values.
  * @param a The array to clone. Must be defined.
  * @returns A copy of the array.

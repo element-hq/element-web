@@ -29,14 +29,20 @@ interface IState {
  * displayed, making it possible to see "82:29".
  */
 @replaceableComponent("views.voice_messages.Clock")
-export default class Clock extends React.PureComponent<IProps, IState> {
+export default class Clock extends React.Component<IProps, IState> {
     public constructor(props) {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>, nextContext: any): boolean {
+        const currentFloor = Math.floor(this.props.seconds);
+        const nextFloor = Math.floor(nextProps.seconds);
+        return currentFloor !== nextFloor;
+    }
+
     public render() {
         const minutes = Math.floor(this.props.seconds / 60).toFixed(0).padStart(2, '0');
-        const seconds = Math.round(this.props.seconds % 60).toFixed(0).padStart(2, '0'); // hide millis
+        const seconds = Math.floor(this.props.seconds % 60).toFixed(0).padStart(2, '0'); // hide millis
         return <span className='mx_Clock'>{minutes}:{seconds}</span>;
     }
 }
