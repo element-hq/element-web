@@ -16,12 +16,10 @@ limitations under the License.
 
 import React, {ReactNode} from "react";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {VoiceRecording} from "../../../voice/VoiceRecording";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {_t} from "../../../languageHandler";
 import {Playback, PlaybackState} from "../../../voice/Playback";
 import classNames from "classnames";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 
 interface IProps {
     // Playback instance to manipulate. Cannot change during the component lifecycle.
