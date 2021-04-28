@@ -562,7 +562,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last, nextEvent, nextEventWithTile) {
+    _getTilesForEvent(prevEvent, mxEv, last, isGrouped=false, nextEvent, nextEventWithTile) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -582,7 +582,7 @@ export default class MessagePanel extends React.Component {
 
         // do we need a date separator since the last event?
         const wantsDateSeparator = this._wantsDateSeparator(prevEvent, eventDate);
-        if (wantsDateSeparator) {
+        if (wantsDateSeparator && !isGrouped) {
             const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
         }
@@ -966,7 +966,6 @@ class CreationGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-
         const panel = this.panel;
         const ret = [];
         const createEvent = this.createEvent;
@@ -982,7 +981,7 @@ class CreationGrouper {
         // If this m.room.create event should be shown (room upgrade) then show it before the summary
         if (panel._shouldShowEvent(createEvent)) {
             // pass in the createEvent as prevEvent as well so no extra DateSeparator is rendered
-            ret.push(...panel._getTilesForEvent(createEvent, createEvent, false));
+            ret.push(...panel._getTilesForEvent(createEvent, createEvent));
         }
 
         for (const ejected of this.ejectedEvents) {
@@ -1081,7 +1080,7 @@ class RedactionGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-
+        const isGrouped=true;
         const panel = this.panel;
         const ret = [];
         const lastShownEvent = this.lastShownEvent;
@@ -1098,10 +1097,12 @@ class RedactionGrouper {
         );
 
         const senders = new Set();
+
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
             const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
-            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent, this.nextEvent, this.nextEventTile);
+            return panel._getTilesForEvent(
+                prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
@@ -1180,7 +1181,7 @@ class MemberGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
-
+        const isGrouped=true;
         const panel = this.panel;
         const lastShownEvent = this.lastShownEvent;
         const ret = [];
@@ -1213,7 +1214,7 @@ class MemberGrouper {
             // of MemberEventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent);
+            return panel._getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {

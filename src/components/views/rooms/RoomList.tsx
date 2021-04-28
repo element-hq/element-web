@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 Vector Creations Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2018, 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +35,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
 import ExtraTile from "./ExtraTile";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
@@ -492,7 +489,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     isSelected={false}
                     displayName={g.name}
                     avatar={avatar}
-                    notificationState={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                    notificationState={StaticNotificationState.RED_EXCLAMATION}
                     onClick={openGroup}
                     key={`temporaryGroupTile_${g.groupId}`}
                 />
@@ -548,6 +545,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
+        const cli = MatrixClientPeg.get();
+        const userId = cli.getUserId();
+
         let explorePrompt: JSX.Element;
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
@@ -568,21 +568,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         { this.props.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
                     </AccessibleButton>
                 </div>;
-            } else if (this.props.activeSpace) {
+            } else if (
+                this.props.activeSpace?.canInvite(userId) || this.props.activeSpace?.getMyMembership() === "join"
+            ) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{ _t("Quick actions") }</div>
-                    { this.props.activeSpace.canInvite(MatrixClientPeg.get().getUserId()) && <AccessibleButton
+                    { this.props.activeSpace.canInvite(userId) && <AccessibleButton
                         className="mx_RoomList_explorePrompt_spaceInvite"
                         onClick={this.onSpaceInviteClick}
                     >
                         {_t("Invite people")}
                     </AccessibleButton> }
-                    <AccessibleButton
+                    { this.props.activeSpace.getMyMembership() === "join" && <AccessibleButton
                         className="mx_RoomList_explorePrompt_spaceExplore"
                         onClick={this.onExplore}
                     >
                         {_t("Explore rooms")}
-                    </AccessibleButton>
+                    </AccessibleButton> }
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
                 const unfilteredLists = RoomListStore.instance.unfilteredLists

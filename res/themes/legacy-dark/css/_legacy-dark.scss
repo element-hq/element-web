@@ -61,6 +61,8 @@ $input-invalid-border-color: $warning-color;
 
 $field-focused-label-bg-color: $bg-color;
 
+$resend-button-divider-color: $muted-fg-color;
+
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
 $scrollbar-track-color: transparent;
@@ -83,7 +85,7 @@ $dialog-close-fg-color: #9fa9ba;
 
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
-$lightbox-background-bg-opacity: 85%;
+$lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #e7e7e7;
@@ -107,7 +109,7 @@ $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // this probably shouldn't have it's own colour
-$voipcall-plinth-color: #f2f5f8;
+$voipcall-plinth-color: #394049;
 
 // ********************
 
