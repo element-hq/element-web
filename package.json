@@ -49,7 +49,8 @@
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",
-    "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080"
+    "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080",
+    "coverage": "yarn test --coverage"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -188,6 +189,12 @@
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.{js,ts,tsx}"
+    ],
+    "coverageReporters": [
+      "text"
     ]
   }
 }
