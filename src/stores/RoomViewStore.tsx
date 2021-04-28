@@ -278,8 +278,8 @@ class RoomViewStore extends Store<ActionPayload> {
 
         const cli = MatrixClientPeg.get();
         const address = this.state.roomAlias || this.state.roomId;
+        const viaServers = this.state.viaServers || [];
         try {
-            const viaServers = this.state.viaServers || [];
             await retry<void, MatrixError>(() => cli.joinRoom(address, {
                 viaServers,
                 ...payload.opts,
