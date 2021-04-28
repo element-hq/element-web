@@ -25,7 +25,6 @@ interface IProps {
 
 interface IState {
     feeds: Array<CallFeed>;
-    onHold: boolean;
 }
 
 export default class AudioFeedArrayForCall extends React.Component<IProps, IState> {
@@ -34,18 +33,15 @@ export default class AudioFeedArrayForCall extends React.Component<IProps, IStat
 
         this.state = {
             feeds: [],
-            onHold: false,
         };
     }
 
     componentDidMount() {
         this.props.call.addListener(CallEvent.FeedsChanged, this.onFeedsChanged);
-        this.props.call.addListener(CallEvent.HoldUnhold, this.onHoldUnhold);
     }
 
     componentWillUnmount() {
         this.props.call.removeListener(CallEvent.FeedsChanged, this.onFeedsChanged);
-        this.props.call.removeListener(CallEvent.HoldUnhold, this.onHoldUnhold);
     }
 
     onFeedsChanged = () => {
@@ -54,20 +50,11 @@ export default class AudioFeedArrayForCall extends React.Component<IProps, IStat
         });
     }
 
-    onHoldUnhold = (onHold: boolean) => {
-        this.setState({onHold: onHold});
-    }
-
     render() {
-        // If we are onHold don't render any audio elements
-        if (this.state.onHold) return null;
-
-        const feeds = this.state.feeds.map((feed, i) => {
+        return this.state.feeds.map((feed, i) => {
             return (
                 <AudioFeed feed={feed} key={i} />
             );
         });
-
-        return feeds;
     }
 }
