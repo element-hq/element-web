@@ -542,12 +542,12 @@ export default class MessagePanel extends React.Component {
             }
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
-                const isGrouped =false
+                const isGrouped =false;
                 if (wantTile) {
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, isGrouped, 
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, isGrouped,
                         nextEvent, nextTile));
                     prevEvent = mxEv;
                 }
@@ -989,7 +989,7 @@ class CreationGrouper {
 
         for (const ejected of this.ejectedEvents) {
             ret.push(...panel._getTilesForEvent(
-                createEvent, ejected, createEvent === lastShownEvent,isGrouped
+                createEvent, ejected, createEvent === lastShownEvent, isGrouped,
             ));
         }
 
