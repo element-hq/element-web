@@ -245,9 +245,8 @@ describe('MemberEventListSummary', function() {
         );
     });
 
-    it('truncates multiple sequences of repetitions with other events between',
-        function() {
-            const events = generateEvents([
+    it('truncates multiple sequences of repetitions with other events between', function() {
+        const events = generateEvents([
             {
                 userId: "@user_1:some.domain",
                 prevMembership: "ban",
@@ -276,29 +275,28 @@ describe('MemberEventListSummary', function() {
                 membership: "invite",
                 senderId: "@some_other_user:some.domain",
             },
-            ]);
-            const props = {
+        ]);
+        const props = {
             events: events,
             children: generateTiles(events),
             summaryLength: 1,
             avatarsMaxLength: 5,
             threshold: 3,
-            };
+        };
 
-            const instance = ReactTestUtils.renderIntoDocument(
-                <MemberEventListSummary {...props} />,
-            );
-            const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-                instance, "mx_EventListSummary_summary",
-            );
-            const summaryText = summary.textContent;
+        const instance = ReactTestUtils.renderIntoDocument(
+            <MemberEventListSummary {...props} />,
+        );
+        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
+            instance, "mx_EventListSummary_summary",
+        );
+        const summaryText = summary.textContent;
 
-            expect(summaryText).toBe(
-                "user_1 was unbanned, joined and left 2 times, was banned, " +
+        expect(summaryText).toBe(
+            "user_1 was unbanned, joined and left 2 times, was banned, " +
             "joined and left 3 times and was invited",
-            );
-        },
-    );
+        );
+    });
 
     it('handles multiple users following the same sequence of memberships', function() {
         const events = generateEvents([
@@ -396,9 +394,8 @@ describe('MemberEventListSummary', function() {
         );
     });
 
-    it('correctly orders sequences of transitions by the order of their first event',
-        function() {
-            const events = generateEvents([
+    it('correctly orders sequences of transitions by the order of their first event', function() {
+        const events = generateEvents([
             {
                 userId: "@user_2:some.domain",
                 prevMembership: "ban",
@@ -425,29 +422,28 @@ describe('MemberEventListSummary', function() {
             {userId: "@user_2:some.domain", prevMembership: "join", membership: "leave"},
             {userId: "@user_2:some.domain", prevMembership: "leave", membership: "join"},
             {userId: "@user_2:some.domain", prevMembership: "join", membership: "leave"},
-            ]);
-            const props = {
+        ]);
+        const props = {
             events: events,
             children: generateTiles(events),
             summaryLength: 1,
             avatarsMaxLength: 5,
             threshold: 3,
-            };
+        };
 
-            const instance = ReactTestUtils.renderIntoDocument(
-                <MemberEventListSummary {...props} />,
-            );
-            const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-                instance, "mx_EventListSummary_summary",
-            );
-            const summaryText = summary.textContent;
+        const instance = ReactTestUtils.renderIntoDocument(
+            <MemberEventListSummary {...props} />,
+        );
+        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
+            instance, "mx_EventListSummary_summary",
+        );
+        const summaryText = summary.textContent;
 
-            expect(summaryText).toBe(
-                "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
+        expect(summaryText).toBe(
+            "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
             "joined and left 2 times and was banned",
-            );
-        },
-    );
+        );
+    });
 
     it('correctly identifies transitions', function() {
         const events = generateEvents([
@@ -570,9 +566,8 @@ describe('MemberEventListSummary', function() {
         );
     });
 
-    it('handles invitation plurals correctly when there are multiple invites',
-        function() {
-            const events = generateEvents([
+    it('handles invitation plurals correctly when there are multiple invites', function() {
+        const events = generateEvents([
             {
                 userId: "@user_1:some.domain",
                 prevMembership: "invite",
@@ -583,28 +578,27 @@ describe('MemberEventListSummary', function() {
                 prevMembership: "invite",
                 membership: "leave",
             },
-            ]);
-            const props = {
+        ]);
+        const props = {
             events: events,
             children: generateTiles(events),
             summaryLength: 1,
             avatarsMaxLength: 5,
             threshold: 1, // threshold = 1 to force collapse
-            };
+        };
 
-            const instance = ReactTestUtils.renderIntoDocument(
-                <MemberEventListSummary {...props} />,
-            );
-            const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-                instance, "mx_EventListSummary_summary",
-            );
-            const summaryText = summary.textContent;
+        const instance = ReactTestUtils.renderIntoDocument(
+            <MemberEventListSummary {...props} />,
+        );
+        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
+            instance, "mx_EventListSummary_summary",
+        );
+        const summaryText = summary.textContent;
 
-            expect(summaryText).toBe(
-                "user_1 rejected their invitation 2 times",
-            );
-        },
-    );
+        expect(summaryText).toBe(
+            "user_1 rejected their invitation 2 times",
+        );
+    });
 
     it('handles a summary length = 2, with no "others"', function() {
         const events = generateEvents([

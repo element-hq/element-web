@@ -127,8 +127,12 @@ export default class EditableItemList extends React.Component {
 
     _renderNewItemField() {
         return (
-            <form onSubmit={this._onItemAdded} autoComplete="off"
-                noValidate={true} className="mx_EditableItemList_newItem">
+            <form
+                onSubmit={this._onItemAdded}
+                autoComplete="off"
+                noValidate={true}
+                className="mx_EditableItemList_newItem"
+            >
                 <Field label={this.props.placeholder} type="text"
                     autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
                     list={this.props.suggestionsListId} />

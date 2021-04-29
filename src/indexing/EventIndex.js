@@ -785,8 +785,14 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to true if events were added to the
      * timeline, false otherwise.
      */
-    async populateFileTimeline(timelineSet, timeline, room, limit = 10,
-        fromEvent = null, direction = EventTimeline.BACKWARDS) {
+    async populateFileTimeline(
+        timelineSet,
+        timeline,
+        room,
+        limit = 10,
+        fromEvent = null,
+        direction = EventTimeline.BACKWARDS,
+    ) {
         const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
 
         // If this is a normal fill request, not a pagination request, we need
