@@ -131,7 +131,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     }
 
     private get showMessagePreview(): boolean {
-        return !this.props.isMinimized && this.props.showMessagePreview;
+        return this.props.showMessagePreview;
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
