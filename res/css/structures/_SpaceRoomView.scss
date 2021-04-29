@@ -84,6 +84,15 @@ $SpaceRoomViewInnerWidth: 428px;
             max-width: $SpaceRoomViewInnerWidth;
         }
 
+        .mx_AddExistingToSpace {
+            max-width: $SpaceRoomViewInnerWidth;
+
+            .mx_AddExistingToSpace_content {
+                height: calc(100vh - 360px);
+                max-height: 400px;
+            }
+        }
+
         .mx_SpaceRoomView_buttons {
             display: block;
             margin-top: 44px;
