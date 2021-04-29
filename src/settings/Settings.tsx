@@ -153,8 +153,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
                         "Communities and custom tags will be hidden.", {
                         brand: SdkConfig.get().brand,
                     }) }</p>
-                    <p>{ _t("You can leave the beta any time from settings or tapping on a beta badge, " +
-                        "like the one above.") }</p>
+                    <b>{ _t("You can leave the beta any time from settings or tapping on a beta badge, " +
+                        "like the one above.") }</b>
                     <p>{ _t("Beta available for web, desktop and Android. " +
                         "Some features may be unavailable on your homeserver.") }</p>
                 </>;
