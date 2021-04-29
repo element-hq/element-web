@@ -68,6 +68,7 @@ class TimelinePanel extends React.Component {
         showReadReceipts: PropTypes.bool,
         // Enable managing RRs and RMs. These require the timelineSet to have a room.
         manageReadReceipts: PropTypes.bool,
+        sendReadReceiptOnLoad: PropTypes.bool,
         manageReadMarkers: PropTypes.bool,
 
         // true to give the component a 'display: none' style.
@@ -126,6 +127,7 @@ class TimelinePanel extends React.Component {
         // event tile heights. (See _unpaginateEvents)
         timelineCap: Number.MAX_VALUE,
         className: 'mx_RoomView_messagePanel',
+        sendReadReceiptOnLoad: true,
     };
 
     constructor(props) {
@@ -1049,7 +1051,9 @@ class TimelinePanel extends React.Component {
                     this._messagePanel.current.scrollToBottom();
                 }
 
-                this.sendReadReceipt();
+                if (this.props.sendReadReceiptOnLoad) {
+                    this.sendReadReceipt();
+                }
             });
         };
 
