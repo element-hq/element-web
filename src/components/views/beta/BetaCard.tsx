@@ -21,6 +21,7 @@ import {_t} from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import TextWithTooltip from "../elements/TextWithTooltip";
 
 interface IProps {
     title?: string;
@@ -28,6 +29,26 @@ interface IProps {
 }
 
 export const BetaPill = ({ onClick }: { onClick?: () => void }) => {
+    if (onClick) {
+        return <TextWithTooltip
+            class={classNames("mx_BetaCard_betaPill", {
+                mx_BetaCard_betaPill_clickable: !!onClick,
+            })}
+            tooltip={<div>
+                <div className="mx_Tooltip_title">
+                    { _t("Spaces is a beta feature") }
+                </div>
+                <div className="mx_Tooltip_sub">
+                    { _t("Tap for more info") }
+                </div>
+            </div>}
+            onClick={onClick}
+            tooltipProps={{ yOffset: -10 }}
+        >
+            { _t("Beta") }
+        </TextWithTooltip>;
+    }
+
     return <span
         className={classNames("mx_BetaCard_betaPill", {
             mx_BetaCard_betaPill_clickable: !!onClick,

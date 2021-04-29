@@ -143,16 +143,32 @@ $SpaceRoomViewInnerWidth: 428px;
         }
         // XXX remove this when spaces leaves Beta
         .mx_SpaceRoomView_preview_spaceBetaPrompt {
-            font-size: $font-15px;
+            font-weight: $font-semi-bold;
+            font-size: $font-14px;
             line-height: $font-24px;
-            color: $secondary-fg-color;
-            margin-top: 14px;
+            color: $primary-fg-color;
+            margin-top: 24px;
+            position: relative;
+            padding-left: 24px;
 
             .mx_AccessibleButton_kind_link {
                 display: inline;
                 padding: 0;
                 font-size: inherit;
                 line-height: inherit;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: $font-24px;
+                width: 20px;
+                left: 0;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+                background-color: $secondary-fg-color;
             }
         }
 

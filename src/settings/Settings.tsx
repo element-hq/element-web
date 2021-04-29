@@ -136,8 +136,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("Spaces"),
-            caption: _td("Spaces are a new way to group people and rooms for fun, " +
-                "work, yourself or anything in between."),
+            caption: _td("Spaces are new ways to group rooms and people."),
             disclaimer: (enabled) => {
                 if (enabled) {
                     return <>
@@ -150,9 +149,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
                 }
 
                 return <>
-                    <p>{ _t("%(brand)s will reload with Spaces enabled, communities and custom tags hidden.", {
+                    <p>{ _t("%(brand)s will reload with Spaces enabled. " +
+                        "Communities and custom tags will be hidden.", {
                         brand: SdkConfig.get().brand,
                     }) }</p>
+                    <p>{ _t("You can leave the beta any time from settings or tapping on a beta badge, " +
+                        "like the one above.") }</p>
                     <p>{ _t("Beta available for web, desktop and Android. " +
                         "Some features may be unavailable on your homeserver.") }</p>
                 </>;

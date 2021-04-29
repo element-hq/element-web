@@ -169,6 +169,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     >
         <FocusLock returnFocus={true}>
             <BetaPill onClick={() => {
+                onFinished();
                 defaultDispatcher.dispatch({
                     action: Action.ViewUserSettings,
                     initialTabId: USER_LABS_TAB,
