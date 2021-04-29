@@ -64,6 +64,11 @@ export function createTestClient() {
         getRoomIdForAlias: jest.fn().mockResolvedValue(undefined),
         getRoomDirectoryVisibility: jest.fn().mockResolvedValue(undefined),
         getProfileInfo: jest.fn().mockResolvedValue({}),
+        getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
+        getClientWellKnown: jest.fn().mockReturnValue(null),
+        supportsVoip: jest.fn().mockReturnValue(true),
+        getTurnServersExpiry: jest.fn().mockReturnValue(2^32),
+        getThirdpartyUser: jest.fn().mockResolvedValue([]),
         getAccountData: (type) => {
             return mkEvent({
                 type,

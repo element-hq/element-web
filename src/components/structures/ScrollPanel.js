@@ -525,7 +525,7 @@ export default class ScrollPanel extends React.Component {
      */
     scrollRelative = mult => {
         const scrollNode = this._getScrollNode();
-        const delta = mult * scrollNode.clientHeight * 0.5;
+        const delta = mult * scrollNode.clientHeight * 0.9;
         scrollNode.scrollBy(0, delta);
         this._saveScrollState();
     };

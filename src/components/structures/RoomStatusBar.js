@@ -128,7 +128,11 @@ export default class RoomStatusBar extends React.Component {
 
     _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
         if (room.roomId !== this.props.room.roomId) return;
-        this.setState({unsentMessages: getUnsentMessages(this.props.room)});
+        const messages = getUnsentMessages(this.props.room);
+        this.setState({
+            unsentMessages: messages,
+            isResending: messages.length > 0 && this.state.isResending,
+        });
     };
 
     // Check whether current size is greater than 0, if yes call props.onVisible
