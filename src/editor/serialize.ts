@@ -61,9 +61,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
                 // const inlinePattern = "(?:^|\\s)(?<!\\\\)\\$(?!\\s)(([^$]|\\\\\\$)+?)(?<!\\\\|\\s)\\$";
 
                 // conditions for display math detection $$...$$:
-                // - pattern starts at beginning of line or is not prefixed with backslash or dollar
+                // - pattern starts and ends on a new line
                 // - left delimiter ($$) is not escaped by backslash
-                "display": "(^|[^\\\\$])\\$\\$(([^$]|\\\\\\$)+?)\\$\\$",
+                "display": "(^)\\$\\$(([^$]|\\\\\\$)+?)\\$\\$$",
 
                 // conditions for inline math detection $...$:
                 // - pattern starts at beginning of line, follows whitespace character or punctuation
@@ -78,9 +78,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
                 // detect math with latex delimiters, inline: \(...\), display \[...\]
 
                 // conditions for display math detection \[...\]:
-                // - pattern starts at beginning of line or is not prefixed with backslash
+                // - pattern starts and ends on a new line
                 // - pattern is not empty
-                "display": "(^|[^\\\\])\\\\\\[(?!\\\\\\])(.*?)\\\\\\]",
+                "display": "(^)\\\\\\[(?!\\\\\\])(.*?)\\\\\\]$",
 
                 // conditions for inline math detection \(...\):
                 // - pattern starts at beginning of line or is not prefixed with backslash
