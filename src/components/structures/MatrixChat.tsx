@@ -1686,6 +1686,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const type = screen === "start_sso" ? "sso" : "cas";
             PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen === 'groups') {
+            if (SettingsStore.getValue("feature_spaces")) {
+                dis.dispatch({ action: "view_home_page" });
+                return;
+            }
             dis.dispatch({
                 action: 'view_my_groups',
             });
@@ -1769,6 +1773,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
+            if (SettingsStore.getValue("feature_spaces")) {
+                dis.dispatch({ action: "view_home_page" });
+                return;
+            }
+
             const groupId = screen.substring(6);
 
             // TODO: Check valid group ID
