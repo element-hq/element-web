@@ -165,7 +165,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         });
 
         let placeholder = _t("Filter");
-        if (SpaceStore.instance.spacePanelSpaces.length) {
+        if (this.state.inSpaces) {
             placeholder = _t("Filter all spaces");
         }
 
