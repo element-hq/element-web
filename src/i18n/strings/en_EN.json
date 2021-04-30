@@ -2508,7 +2508,7 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "Attach files from chat or just drag and drop them anywhere in a room.",
     "Communities": "Communities",
     "Create community": "Create community",
-    "<h1>HTML for your community's page</h1><p>Use the long description to introduce new members to the community, or distributesome important <a href=\"foo\">links</a></p><p>You can even add images with Matrix URLs <img src=\"mxc://url\" /></p>": "<h1>HTML for your community's page</h1><p>Use the long description to introduce new members to the community, or distributesome important <a href=\"foo\">links</a></p><p>You can even add images with Matrix URLs <img src=\"mxc://url\" /></p>",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n",
     "Add rooms to the community summary": "Add rooms to the community summary",
     "Which rooms would you like to add to this summary?": "Which rooms would you like to add to this summary?",
     "Add to summary": "Add to summary",

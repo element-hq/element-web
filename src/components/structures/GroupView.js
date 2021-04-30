@@ -43,15 +43,15 @@ import {mediaFromMxc} from "../../customisations/Media";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const LONG_DESC_PLACEHOLDER = _td(
-    "<h1>HTML for your community's page</h1>" +
-    "<p>" +
-        "Use the long description to introduce new members to the community, or distribute" +
-        "some important <a href=\"foo\">links</a>" +
-    "</p>" +
-    "<p>" +
-        "You can even add images with Matrix URLs <img src=\"mxc://url\" />" +
-    "</p>",
-);
+    `<h1>HTML for your community's page</h1>
+<p>
+    Use the long description to introduce new members to the community, or distribute
+    some important <a href="foo">links</a>
+</p>
+<p>
+    You can even add images with Matrix URLs <img src="mxc://url" />
+</p>
+`);
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
