@@ -350,7 +350,7 @@ export default class MessageContextMenu extends React.Component {
                 >
                     { _t('Source URL') }
                 </MenuItem>
-          );
+            );
         }
 
         if (this.props.collapseReplyThread) {

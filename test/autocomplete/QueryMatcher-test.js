@@ -177,7 +177,7 @@ describe('QueryMatcher', function() {
         const qm = new QueryMatcher(NONWORDOBJECTS, {
             keys: ["name"],
             shouldMatchWordsOnly: false,
-         });
+        });
 
         const results = qm.match('bob');
         expect(results.length).toBe(1);

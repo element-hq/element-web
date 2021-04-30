@@ -26,9 +26,9 @@ describe("AccessSecretStorageDialog", function() {
     it("Closes the dialog if _onRecoveryKeyNext is called with a valid key", (done) => {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
-              checkPrivateKey={(p) => p && p.recoveryKey && p.recoveryKey == "a"}
-              onFinished={(v) => {
-                  if (v) { done(); }
+                checkPrivateKey={(p) => p && p.recoveryKey && p.recoveryKey == "a"}
+                onFinished={(v) => {
+                    if (v) { done(); }
                 }}
             />,
         );
@@ -43,7 +43,7 @@ describe("AccessSecretStorageDialog", function() {
     it("Considers a valid key to be valid", async function() {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
-              checkPrivateKey={() => true}
+                checkPrivateKey={() => true}
             />,
         );
         const v = "asdf";
@@ -61,7 +61,7 @@ describe("AccessSecretStorageDialog", function() {
     it("Notifies the user if they input an invalid Security Key", async function(done) {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
-              checkPrivateKey={async () => false}
+                checkPrivateKey={async () => false}
             />,
         );
         const e = { target: { value: "a" } };
@@ -87,12 +87,14 @@ describe("AccessSecretStorageDialog", function() {
     it("Notifies the user if they input an invalid passphrase", async function(done) {
         const testInstance = TestRenderer.create(
             <AccessSecretStorageDialog
-              checkPrivateKey={() => false}
-              onFinished={() => {}}
-              keyInfo={ { passphrase: {
-                  salt: 'nonempty',
-                  iterations: 2,
-              } } }
+                checkPrivateKey={() => false}
+                onFinished={() => {}}
+                keyInfo={{
+                    passphrase: {
+                        salt: 'nonempty',
+                        iterations: 2,
+                    },
+                }}
             />,
         );
         const e = { target: { value: "a" } };

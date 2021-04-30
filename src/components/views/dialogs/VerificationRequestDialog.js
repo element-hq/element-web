@@ -52,11 +52,13 @@ export default class VerificationRequestDialog extends React.Component {
         const title = request && request.isSelfVerification ?
             _t("Verify other login") : _t("Verification Request");
 
-        return <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
-                contentId="mx_Dialog_content"
-                title={title}
-                hasCancel={true}
-            >
+        return <BaseDialog
+            className="mx_InfoDialog"
+            onFinished={this.props.onFinished}
+            contentId="mx_Dialog_content"
+            title={title}
+            hasCancel={true}
+        >
             <EncryptionPanel
                 layout="dialog"
                 verificationRequest={this.props.verificationRequest}

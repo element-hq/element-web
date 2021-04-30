@@ -46,8 +46,12 @@ export default class LabelledToggleSwitch extends React.Component {
         // This is a minimal version of a SettingsFlag
 
         let firstPart = <span className="mx_SettingsFlag_label">{this.props.label}</span>;
-        let secondPart = <ToggleSwitch checked={this.props.value} disabled={this.props.disabled}
-                                         onChange={this.props.onChange} aria-label={this.props.label} />;
+        let secondPart = <ToggleSwitch
+            checked={this.props.value}
+            disabled={this.props.disabled}
+            onChange={this.props.onChange}
+            aria-label={this.props.label}
+        />;
 
         if (this.props.toggleInFront) {
             const temp = firstPart;
