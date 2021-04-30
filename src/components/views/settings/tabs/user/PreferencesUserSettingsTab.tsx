@@ -231,7 +231,7 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
                 </div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Keybindings")}</span>
+                    <span className="mx_SettingsTab_subheading">{_t("Keyboard shortcuts")}</span>
                     {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                 </div>
 
