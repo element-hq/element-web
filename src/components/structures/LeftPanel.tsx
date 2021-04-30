@@ -347,7 +347,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             if (element) {
                 classes = element.classList;
             }
-        } while (element && !cssClasses.some(c => classes.contains(c)));
+        } while (element && (!cssClasses.some(c => classes.contains(c)) || element.offsetParent === null));
 
         if (element) {
             element.focus();
