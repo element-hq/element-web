@@ -236,12 +236,12 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Keybindings")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Displaying time")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
@@ -251,17 +251,17 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Code blocks")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Images, GIFs and videos")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Hide things on the timeline")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.THINGS_TO_HIDE_ON_TIMELINE_SETTINGS)}
+                    {this.renderGroup(PreferencesUserSettingsTab.THINGS_TO_HIDE_ON_TIMELINE_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
