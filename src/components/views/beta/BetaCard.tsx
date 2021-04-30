@@ -60,7 +60,10 @@ export const BetaPill = ({ onClick }: { onClick?: () => void }) => {
 };
 
 const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
-    const { title, caption, disclaimer, image } = SettingsStore.getBetaInfo(featureId);
+    const info = SettingsStore.getBetaInfo(featureId);
+    if (!info) return null; // Beta is invalid/disabled
+
+    const { title, caption, disclaimer, image } = info;
     const value = SettingsStore.getValue(featureId);
 
     return <div className="mx_BetaCard">

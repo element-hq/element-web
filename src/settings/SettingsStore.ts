@@ -258,7 +258,12 @@ export default class SettingsStore {
     }
 
     public static getBetaInfo(settingName: string) {
-        return SETTINGS[settingName]?.betaInfo;
+        // consider a beta disabled if the config is explicitly set to false, in which case treat as normal Labs flag
+        if (SettingsStore.isFeature(settingName)
+            && SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
+        ) {
+            return SETTINGS[settingName]?.betaInfo;
+        }
     }
 
     /**
