@@ -124,7 +124,7 @@ class GroupFilterPanel extends React.Component {
         });
 
         let betaDot;
-        if (!SettingsStore.getValue("feature_spaces") && !localStorage.getItem("mx_seenSpacesBeta")) {
+        if (SettingsStore.getBetaInfo("feature_spaces") && !localStorage.getItem("mx_seenSpacesBeta")) {
             betaDot = <div className="mx_BetaDot" />;
         }
 
