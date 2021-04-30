@@ -601,7 +601,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
         let rooms = this.matrixClient.getVisibleRooms().filter(r => VisibilityProvider.instance.isRoomVisible(r));
 
-        if (this.prefilterConditions.length > 0) {
+        // if spaces are enabled only consider the prefilter conditions when there are no runtime conditions
+        // for the search all spaces feature
+        if (this.prefilterConditions.length > 0
+            && (!SettingsStore.getValue("feature_spaces") || !this.filterConditions.length)
+        ) {
             rooms = rooms.filter(r => {
                 for (const filter of this.prefilterConditions) {
                     if (!filter.isVisible(r)) {
@@ -675,6 +679,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             if (this.algorithm) {
                 this.algorithm.addFilterCondition(filter);
             }
+            // Runtime filters with spaces disable prefiltering for the search all spaces effect
+            if (SettingsStore.getValue("feature_spaces")) {
+                promise = this.recalculatePrefiltering();
+            }
         }
         promise.then(() => this.updateFn.trigger());
     }
@@ -698,6 +706,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
             if (this.algorithm) {
                 this.algorithm.removeFilterCondition(filter);
+                // Runtime filters with spaces disable prefiltering for the search all spaces effect
+                if (SettingsStore.getValue("feature_spaces")) {
+                    promise = this.recalculatePrefiltering();
+                }
             }
         }
         idx = this.prefilterConditions.indexOf(filter);
