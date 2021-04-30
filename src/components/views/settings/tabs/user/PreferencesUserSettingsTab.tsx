@@ -71,7 +71,7 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'autoplayGifsAndVideos',
         'showImages',
     ];
-    static THINGS_TO_HIDE_ON_TIMELINE_SETTINGS = [
+    static TIMELINE_SETTINGS = [
         'showTypingNotifications',
         'showRedactions',
         'showReadReceipts',
@@ -79,14 +79,10 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
         'showDisplaynameChanges',
         'showChatEffects',
         'showAvatarChanges',
-    ];
-
-    static TIMELINE_SETTINGS = [
+        'Pill.shouldShowPillAvatar',
         'TextualBody.enableBigEmoji',
         'scrollToBottomOnMessageSent',
-        'Pill.shouldShowPillAvatar',
     ];
-
     static GENERAL_SETTINGS = [
         'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
@@ -257,11 +253,6 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Images, GIFs and videos")}</span>
                     {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
-                </div>
-
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Hide things on the timeline")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.THINGS_TO_HIDE_ON_TIMELINE_SETTINGS)}
                 </div>
 
                 <div className="mx_SettingsTab_section">
