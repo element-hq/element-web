@@ -21,11 +21,13 @@ import WidgetStore from "../../../stores/WidgetStore";
 import EventTileBubble from "./EventTileBubble";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     mxEvent: MatrixEvent;
 }
 
+@replaceableComponent("views.messages.MJitsiWidgetEvent")
 export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
     constructor(props) {
         super(props);

@@ -189,7 +189,13 @@ abstract class PlainBasePart extends BasePart {
             if (chr !== "@" && chr !== "#" && chr !== ":" && chr !== "+") {
                 return true;
             }
-            // only split if the previous character is a space
+
+            // split if we are at the beginning of the part text
+            if (offset === 0) {
+                return false;
+            }
+
+            // or split if the previous character is a space
             // or if it is a + and this is a :
             return this._text[offset - 1] !== " " &&
                 (this._text[offset - 1] !== "+" || chr !== ":");
@@ -329,17 +335,13 @@ class NewlinePart extends BasePart implements IBasePart {
 }
 
 class RoomPillPart extends PillPart {
-    constructor(displayAlias, private room: Room) {
-        super(displayAlias, displayAlias);
+    constructor(resourceId: string, label: string, private room: Room) {
+        super(resourceId, label);
     }
 
     setAvatar(node: HTMLElement) {
         let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(
-            this.room,
-            16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio,
-            "crop");
+        let avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
         if (!avatarUrl) {
             initialLetter = Avatar.getInitialLetter(this.room ? this.room.name : this.resourceId);
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room ? this.room.roomId : this.resourceId);
@@ -357,6 +359,10 @@ class RoomPillPart extends PillPart {
 }
 
 class AtRoomPillPart extends RoomPillPart {
+    constructor(text: string, room: Room) {
+        super(text, text, room);
+    }
+
     get type(): IPillPart["type"] {
         return Type.AtRoomPill;
     }
@@ -373,11 +379,7 @@ class UserPillPart extends PillPart {
         }
         const name = this.member.name || this.member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this.member.userId);
-        const avatarUrl = Avatar.avatarUrlForMember(
-            this.member,
-            16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio,
-            "crop");
+        const avatarUrl = Avatar.avatarUrlForMember(this.member, 16, 16, "crop");
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
             initialLetter = Avatar.getInitialLetter(name);
@@ -521,7 +523,7 @@ export class PartCreator {
                        r.getAltAliases().includes(alias);
             });
         }
-        return new RoomPillPart(alias, room);
+        return new RoomPillPart(alias, room ? room.name : alias, room);
     }
 
     atRoomPill(text: string) {
@@ -533,9 +535,9 @@ export class PartCreator {
         return new UserPillPart(userId, displayName, member);
     }
 
-    createMentionParts(partIndex: number, displayName: string, userId: string) {
+    createMentionParts(insertTrailingCharacter: boolean, displayName: string, userId: string) {
         const pill = this.userPill(displayName, userId);
-        const postfix = this.plain(partIndex === 0 ? ": " : " ");
+        const postfix = this.plain(insertTrailingCharacter ? ": " : " ");
         return [pill, postfix];
     }
 }

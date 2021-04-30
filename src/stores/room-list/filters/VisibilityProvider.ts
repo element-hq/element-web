@@ -37,7 +37,11 @@ export class VisibilityProvider {
         await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
     }
 
-    public isRoomVisible(room: Room): boolean {
+    public isRoomVisible(room?: Room): boolean {
+        if (!room) {
+            return false;
+        }
+
         if (
             CallHandler.sharedInstance().getSupportsVirtualRooms() &&
             VoipUserMapper.sharedInstance().isVirtualRoom(room)

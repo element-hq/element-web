@@ -32,6 +32,7 @@ import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
 import {SettingLevel} from "../../../settings/SettingLevel";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -65,6 +66,7 @@ function portLegacyActions(actions) {
     }
 }
 
+@replaceableComponent("views.settings.Notifications")
 export default class Notifications extends React.Component {
     static phases = {
         LOADING: "LOADING", // The component is loading or sending data to the hs

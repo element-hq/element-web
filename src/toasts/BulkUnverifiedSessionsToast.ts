@@ -39,10 +39,10 @@ export const showToast = (deviceIds: Set<string>) => {
 
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Review where you’re logged in"),
+        title: _t("You have unverified logins"),
         icon: "verification_warning",
         props: {
-            description: _t("Verify all your sessions to ensure your account & messages are safe"),
+            description: _t("Review to ensure your account is safe"),
             acceptLabel: _t("Review"),
             onAccept,
             rejectLabel: _t("Later"),

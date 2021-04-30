@@ -18,7 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.verification.VerificationCancelled")
 export default class VerificationCancelled extends React.Component {
     static propTypes = {
         onDone: PropTypes.func.isRequired,

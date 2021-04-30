@@ -395,6 +395,8 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
     } catch (e) {
         SecurityCustomisations.catchAccessSecretStorageError?.(e);
         console.error(e);
+        // Re-throw so that higher level logic can abort as needed
+        throw e;
     } finally {
         // Clear secret storage key cache now that work is complete
         secretStorageBeingAccessed = false;

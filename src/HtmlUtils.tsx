@@ -32,10 +32,10 @@ import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from './settings/SettingsStore';
 import cheerio from 'cheerio';
 
-import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 import ReplyThread from "./components/views/elements/ReplyThread";
+import {mediaFromMxc} from "./customisations/Media";
 
 linkifyMatrix(linkify);
 
@@ -130,11 +130,14 @@ export function sanitizedHtmlNode(insaneHtml: string) {
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
 
-export function sanitizedHtmlNodeInnerText(insaneHtml: string) {
-    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
-    const contentDiv = document.createElement("div");
-    contentDiv.innerHTML = saneHtml;
-    return contentDiv.innerText;
+export function getHtmlText(insaneHtml: string) {
+    return sanitizeHtml(insaneHtml, {
+        allowedTags: [],
+        allowedAttributes: {},
+        selfClosing: [],
+        allowedSchemes: [],
+        disallowedTagsMode: 'discard',
+    })
 }
 
 /**
@@ -181,11 +184,9 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         if (!attribs.src || !attribs.src.startsWith('mxc://') || !SettingsStore.getValue("showImages")) {
             return { tagName, attribs: {}};
         }
-        attribs.src = MatrixClientPeg.get().mxcUrlToHttp(
-            attribs.src,
-            attribs.width || 800,
-            attribs.height || 600,
-        );
+        const width = Number(attribs.width) || 800;
+        const height = Number(attribs.height) || 600;
+        attribs.src = mediaFromMxc(attribs.src).getThumbnailOfSourceHttp(width, height);
         return { tagName, attribs };
     },
     'code': function(tagName: string, attribs: sanitizeHtml.Attributes) {
@@ -239,6 +240,7 @@ const sanitizeHtmlParams: IExtendedSanitizeOptions = {
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'sup', 'sub',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span', 'img',
+        'details', 'summary',
     ],
     allowedAttributes: {
         // custom ones first:

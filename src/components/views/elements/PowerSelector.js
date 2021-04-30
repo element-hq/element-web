@@ -20,7 +20,9 @@ import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import {Key} from "../../../Keyboard";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.PowerSelector")
 export default class PowerSelector extends React.Component {
     static propTypes = {
         value: PropTypes.number.isRequired,

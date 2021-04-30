@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import {XOR} from "../../../@types/common";
 
 export interface IProps {
     description: ReactNode;
+    detail?: ReactNode;
     acceptLabel: string;
 
     onAccept();
@@ -33,14 +34,20 @@ interface IPropsExtended extends IProps {
 
 const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     description,
+    detail,
     acceptLabel,
     rejectLabel,
     onAccept,
     onReject,
 }) => {
+    const detailContent = detail ? <div className="mx_Toast_detail">
+        {detail}
+    </div> : null;
+
     return <div>
         <div className="mx_Toast_description">
-            { description }
+            {description}
+            {detailContent}
         </div>
         <div className="mx_Toast_buttons" aria-live="off">
             {onReject && rejectLabel && <FormButton label={rejectLabel} kind="danger" onClick={onReject} /> }

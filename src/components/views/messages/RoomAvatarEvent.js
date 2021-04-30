@@ -23,7 +23,10 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
+@replaceableComponent("views.messages.RoomAvatarEvent")
 export default class RoomAvatarEvent extends React.Component {
     static propTypes = {
         /* the MatrixEvent to show */
@@ -33,7 +36,7 @@ export default class RoomAvatarEvent extends React.Component {
     onAvatarClick = () => {
         const cli = MatrixClientPeg.get();
         const ev = this.props.mxEvent;
-        const httpUrl = cli.mxcUrlToHttp(ev.getContent().url);
+        const httpUrl = mediaFromMxc(ev.getContent().url).srcHttp;
 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const text = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
@@ -46,7 +49,7 @@ export default class RoomAvatarEvent extends React.Component {
             src: httpUrl,
             name: text,
         };
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
     render() {

@@ -22,6 +22,7 @@ import classNames from "classnames";
 
 import {Key} from "../../Keyboard";
 import {Writeable} from "../../@types/common";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -91,6 +92,7 @@ interface IState {
 // Generic ContextMenu Portal wrapper
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
+@replaceableComponent("structures.ContextMenu")
 export class ContextMenu extends React.PureComponent<IProps, IState> {
     private initialFocus: HTMLElement;
 
@@ -467,6 +469,7 @@ export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<
     return [isOpen, button, open, close, setIsOpen];
 };
 
+@replaceableComponent("structures.LegacyContextMenu")
 export default class LegacyContextMenu extends ContextMenu {
     render() {
         return this.renderMenu(false);

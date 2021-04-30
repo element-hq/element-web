@@ -63,6 +63,8 @@ $input-invalid-border-color: $warning-color;
 
 $field-focused-label-bg-color: $bg-color;
 
+$resend-button-divider-color: #b9bec64a; // muted-text with a 4A opacity.
+
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
 $scrollbar-track-color: transparent;
@@ -85,6 +87,7 @@ $dialog-close-fg-color: #9fa9ba;
 
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #21262c;
@@ -109,7 +112,7 @@ $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // this probably shouldn't have it's own colour
-$voipcall-plinth-color: #21262c;
+$voipcall-plinth-color: #394049;
 
 // ********************
 
@@ -123,7 +126,6 @@ $roomsublist-divider-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
-$space-button-outline-color: rgba(141, 151, 165, 0.2);
 
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
@@ -137,9 +139,6 @@ $panel-divider-color: transparent;
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: rgba(141, 151, 165, 0.2);
-
-// event tile lifecycle
-$event-sending-color: $text-secondary-color;
 
 // event redaction
 $event-redacted-fg-color: #606060;
@@ -173,6 +172,9 @@ $button-link-bg-color: transparent;
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
 
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: #21262c;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -202,6 +204,10 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-bg-color: #21262c82;
+$message-body-panel-icon-bg-color: #8e99a4;
+$message-body-panel-fg-color: $primary-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
@@ -239,7 +245,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }

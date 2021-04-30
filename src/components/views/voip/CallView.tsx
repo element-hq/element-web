@@ -31,6 +31,7 @@ import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} f
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
         // The call for us to display
@@ -38,9 +39,6 @@ interface IProps {
 
         // Another ongoing call to display information about
         secondaryCall?: MatrixCall,
-
-        // maxHeight style attribute for the video panel
-        maxVideoHeight?: number;
 
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
@@ -95,11 +93,9 @@ function exitFullscreen() {
 const CONTROLS_HIDE_DELAY = 1000;
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
-const HEADER_HEIGHT = 44;
-const BOTTOM_PADDING = 10;
-const BOTTOM_MARGIN_TOP_BOTTOM = 10; // top margin plus bottom margin
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
+@replaceableComponent("views.voip.CallView")
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();
@@ -212,7 +208,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onExpandClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
             room_id: userFacingRoomId,
@@ -341,7 +337,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onRoomAvatarClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         dis.dispatch({
             action: 'view_room',
             room_id: userFacingRoomId,
@@ -349,7 +345,7 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private onSecondaryRoomAvatarClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
 
         dis.dispatch({
             action: 'view_room',
@@ -358,14 +354,19 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private onCallResumeClick = () => {
-        const userFacingRoomId = CallHandler.roomIdForCall(this.props.call);
+        const userFacingRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
         CallHandler.sharedInstance().setActiveCallRoomId(userFacingRoomId);
+    }
+
+    private onTransferClick = () => {
+        const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
+        this.props.call.transferToCall(transfereeCall);
     }
 
     public render() {
         const client = MatrixClientPeg.get();
-        const callRoomId = CallHandler.roomIdForCall(this.props.call);
-        const secondaryCallRoomId = CallHandler.roomIdForCall(this.props.secondaryCall);
+        const callRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
+        const secondaryCallRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
         const callRoom = client.getRoom(callRoomId);
         const secCallRoom = this.props.secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
 
@@ -477,25 +478,54 @@ export default class CallView extends React.Component<IProps, IState> {
         // for voice calls (fills the bg)
         let contentView: React.ReactNode;
 
+        const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
-        let onHoldText = null;
-        if (this.state.isRemoteOnHold) {
-            const holdString = CallHandler.sharedInstance().hasAnyUnheldCall() ?
-                _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
-            onHoldText = _t(holdString, {}, {
-                a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
-                    {sub}
-                </AccessibleButton>,
-            });
-        } else if (this.state.isLocalOnHold) {
-            onHoldText = _t("%(peerName)s held the call", {
-                peerName: this.props.call.getOpponentMember().name,
-            });
+        let holdTransferContent;
+        if (transfereeCall) {
+            const transferTargetRoom = MatrixClientPeg.get().getRoom(
+                CallHandler.sharedInstance().roomIdForCall(this.props.call),
+            );
+            const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("unknown person");
+
+            const transfereeRoom = MatrixClientPeg.get().getRoom(
+                CallHandler.sharedInstance().roomIdForCall(transfereeCall),
+            );
+            const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
+
+            holdTransferContent = <div className="mx_CallView_holdTransferContent">
+                {_t(
+                    "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
+                    {
+                        transferTarget: transferTargetName,
+                        transferee: transfereeName,
+                    },
+                    {
+                        a: sub => <AccessibleButton kind="link" onClick={this.onTransferClick}>{sub}</AccessibleButton>,
+                    },
+                )}
+            </div>;
+        } else if (isOnHold) {
+            let onHoldText = null;
+            if (this.state.isRemoteOnHold) {
+                const holdString = CallHandler.sharedInstance().hasAnyUnheldCall() ?
+                    _td("You held the call <a>Switch</a>") : _td("You held the call <a>Resume</a>");
+                onHoldText = _t(holdString, {}, {
+                    a: sub => <AccessibleButton kind="link" onClick={this.onCallResumeClick}>
+                        {sub}
+                    </AccessibleButton>,
+                });
+            } else if (this.state.isLocalOnHold) {
+                onHoldText = _t("%(peerName)s held the call", {
+                    peerName: this.props.call.getOpponentMember().name,
+                });
+            }
+            holdTransferContent = <div className="mx_CallView_holdTransferContent">
+                {onHoldText}
+            </div>;
         }
 
         if (this.props.call.type === CallType.Video) {
             let localVideoFeed = null;
-            let onHoldContent = null;
             let onHoldBackground = null;
             const backgroundStyle: CSSProperties = {};
             const containerClasses = classNames({
@@ -503,9 +533,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video_hold: isOnHold,
             });
             if (isOnHold) {
-                onHoldContent = <div className="mx_CallView_video_holdContent">
-                    {onHoldText}
-                </div>;
                 const backgroundAvatarUrl = avatarUrlForMember(
                     // is it worth getting the size of the div to pass here?
                     this.props.call.getOpponentMember(), 1024, 1024, 'crop',
@@ -517,22 +544,11 @@ export default class CallView extends React.Component<IProps, IState> {
                 localVideoFeed = <VideoFeed type={VideoFeedType.Local} call={this.props.call} />;
             }
 
-            // if we're fullscreen, we don't want to set a maxHeight on the video element.
-            const maxVideoHeight = getFullScreenElement() || !this.props.maxVideoHeight ? null : (
-                this.props.maxVideoHeight - (HEADER_HEIGHT + BOTTOM_PADDING + BOTTOM_MARGIN_TOP_BOTTOM)
-            );
-            contentView = <div className={containerClasses}
-                ref={this.contentRef} onMouseMove={this.onMouseMove}
-                // Put the max height on here too because this div is ended up 4px larger than the content
-                // and is causing it to scroll, and I am genuinely baffled as to why.
-                style={{maxHeight: maxVideoHeight}}
-            >
+            contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
                 {onHoldBackground}
-                <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize}
-                    maxHeight={maxVideoHeight}
-                />
+                <VideoFeed type={VideoFeedType.Remote} call={this.props.call} onResize={this.props.onResize} />
                 {localVideoFeed}
-                {onHoldContent}
+                {holdTransferContent}
                 {callControls}
             </div>;
         } else {
@@ -552,7 +568,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         />
                     </div>
                 </div>
-                <div className="mx_CallView_voice_holdText">{onHoldText}</div>
+                {holdTransferContent}
                 {callControls}
             </div>;
         }

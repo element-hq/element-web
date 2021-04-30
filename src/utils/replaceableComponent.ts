@@ -30,9 +30,11 @@ import * as sdk from '../index';
  * @param {string} name The dot-path name of the component being replaced.
  * @param {React.Component} origComponent The component that can be replaced
  * with a skinned version. If no skinned version is available, this component
- * will be used.
+ * will be used. Note that this is automatically provided to the function and
+ * thus is optional for purposes of types.
+ * @returns {ClassDecorator} The decorator.
  */
-export function replaceableComponent(name: string, origComponent: React.Component) {
+export function replaceableComponent(name: string, origComponent?: React.Component): ClassDecorator {
     // Decorators return a function to override the class (origComponent). This
     // ultimately assumes that `getComponent()` won't throw an error and instead
     // return a falsey value like `null` when the skin doesn't have a component.

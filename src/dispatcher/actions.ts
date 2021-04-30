@@ -113,4 +113,32 @@ export enum Action {
      * XXX: Ditto
      */
     VirtualRoomSupportUpdated = "virtual_room_support_updated",
+
+    // Probably would be better to have a VoIP states in a store and have the store emit changes
+    CallChangeRoom = "call_change_room",
+
+    /**
+     * Fired when an upload has started. Should be used with UploadStartedPayload.
+     */
+    UploadStarted = "upload_started",
+
+    /**
+     * Fired when an upload makes progress. Should be used with UploadProgressPayload.
+     */
+    UploadProgress = "upload_progress",
+
+    /**
+     * Fired when an upload is completed. Should be used with UploadFinishedPayload.
+     */
+    UploadFinished = "upload_finished",
+
+    /**
+     * Fired when an upload fails. Should be used with UploadErrorPayload.
+     */
+    UploadFailed = "upload_failed",
+
+    /**
+     * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
+     */
+    UploadCanceled = "upload_canceled",
 }

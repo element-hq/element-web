@@ -24,6 +24,7 @@ import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
 import {User} from 'matrix-js-sdk/src/models/user';
 import {Room} from 'matrix-js-sdk/src/models/room';
 import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
+import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
@@ -46,6 +47,7 @@ import EncryptionPanel from "./EncryptionPanel";
 import {useAsyncMemo} from '../../../hooks/useAsyncMemo';
 import {legacyVerifyUser, verifyDevice, verifyUser} from '../../../verification';
 import {Action} from "../../../dispatcher/actions";
+import { USER_SECURITY_TAB } from "../dialogs/UserSettingsDialog";
 import {useIsEncrypted} from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import {E2EStatus} from "../../../utils/ShieldUtils";
@@ -63,6 +65,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface IDevice {
     deviceId: string;
@@ -494,11 +497,11 @@ const isMuted = (member: RoomMember, powerLevelContent: IPowerLevelsContent) => 
 export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
     const [powerLevels, setPowerLevels] = useState<IPowerLevelsContent>({});
 
-    const update = useCallback(() => {
-        if (!room) {
-            return;
-        }
-        const event = room.currentState.getStateEvents("m.room.power_levels", "");
+    const update = useCallback((ev?: MatrixEvent) => {
+        if (!room) return;
+        if (ev && ev.getType() !== EventType.RoomPowerLevels) return;
+
+        const event = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         if (event) {
             setPowerLevels(event.getContent());
         } else {
@@ -509,7 +512,7 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
         };
     }, [room]);
 
-    useEventEmitter(cli, "RoomState.members", update);
+    useEventEmitter(cli, "RoomState.events", update);
     useEffect(() => {
         update();
         return () => {
@@ -1367,6 +1370,20 @@ const BasicUserInfo: React.FC<{
         }
     }
 
+    let editDevices;
+    if (member.userId == cli.getUserId()) {
+        editDevices = (<p>
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
+                dis.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: USER_SECURITY_TAB,
+                });
+            }}>
+                { _t("Edit devices") }
+            </AccessibleButton>
+        </p>)
+    }
+
     const securitySection = (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
@@ -1376,6 +1393,7 @@ const BasicUserInfo: React.FC<{
                 loading={showDeviceListSpinner}
                 devices={devices}
                 userId={member.userId} /> }
+            { editDevices }
         </div>
     );
 
@@ -1408,14 +1426,14 @@ const UserInfoHeader: React.FC<{
         const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
         if (!avatarUrl) return;
 
-        const httpUrl = cli.mxcUrlToHttp(avatarUrl);
+        const httpUrl = mediaFromMxc(avatarUrl).srcHttp;
         const params = {
             src: httpUrl,
             name: member.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }, [cli, member]);
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
+    }, [member]);
 
     const avatarElement = (
         <div className="mx_UserInfo_avatar">
@@ -1477,7 +1495,7 @@ const UserInfoHeader: React.FC<{
         e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
     }
 
-    const displayName = member.name || member.displayname;
+    const displayName = member.rawDisplayName || member.displayname;
     return <React.Fragment>
         { avatarElement }
 

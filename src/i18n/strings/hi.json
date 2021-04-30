@@ -585,5 +585,8 @@
     "You cannot modify widgets in this room.": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s ने कमरे में शामिल होने के लिए %(targetDisplayName)s के निमंत्रण को रद्द कर दिया।",
     "User %(userId)s is already in the room": "उपयोगकर्ता %(userId)s पहले से ही रूम में है",
-    "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।"
+    "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
+    "Explore rooms": "रूम का अन्वेषण करें",
+    "Sign In": "साइन करना",
+    "Create Account": "खाता बनाएं"
 }

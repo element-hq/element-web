@@ -18,6 +18,7 @@ import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React, {createRef} from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export enum VideoFeedType {
     Local,
@@ -29,14 +30,12 @@ interface IProps {
 
     type: VideoFeedType,
 
-    // maxHeight style attribute for the video element
-    maxHeight?: number,
-
     // a callback which is called when the video element is resized
     // due to a change in video metadata
     onResize?: (e: Event) => void,
 }
 
+@replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.Component<IProps> {
     private vid = createRef<HTMLVideoElement>();
 
@@ -80,9 +79,6 @@ export default class VideoFeed extends React.Component<IProps> {
             ),
         };
 
-        let videoStyle = {};
-        if (this.props.maxHeight) videoStyle = { maxHeight: this.props.maxHeight };
-
-        return <video className={classnames(videoClasses)} ref={this.vid} style={videoStyle} />;
+        return <video className={classnames(videoClasses)} ref={this.vid} />;
     }
 }
