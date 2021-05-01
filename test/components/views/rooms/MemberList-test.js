@@ -100,7 +100,7 @@ describe('MemberList', () => {
             memberList = r;
         };
         root = ReactDOM.render(<WrappedMemberList roomId={memberListRoom.roomId}
-                                                  wrappedRef={gatherWrappedRef} />, parentDiv);
+            wrappedRef={gatherWrappedRef} />, parentDiv);
     });
 
     afterEach((done) => {

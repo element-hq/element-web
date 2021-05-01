@@ -59,7 +59,6 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
-import { createNewMatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
@@ -86,6 +85,8 @@ import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
+import SdkConfig from './SdkConfig';
+import { ensureDMExists, findDMForUser } from './createRoom';
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -167,6 +168,11 @@ export default class CallHandler {
     private invitedRoomsAreVirtual = new Map<string, boolean>();
     private invitedRoomCheckInProgress = false;
 
+    // Map of the asserted identity users after we've looked them up using the API.
+    // We need to be be able to determine the mapped room synchronously, so we
+    // do the async lookup when we get new information and then store these mappings here
+    private assertedIdentityNativeUsers = new Map<string, string>();
+
     static sharedInstance() {
         if (!window.mxCallHandler) {
             window.mxCallHandler = new CallHandler()
@@ -179,8 +185,19 @@ export default class CallHandler {
      * Gets the user-facing room associated with a call (call.roomId may be the call "virtual room"
      * if a voip_mxid_translate_pattern is set in the config)
      */
-    public static roomIdForCall(call: MatrixCall): string {
+    public roomIdForCall(call: MatrixCall): string {
         if (!call) return null;
+
+        const voipConfig = SdkConfig.get()['voip'];
+
+        if (voipConfig && voipConfig.obeyAssertedIdentity) {
+            const nativeUser = this.assertedIdentityNativeUsers[call.callId];
+            if (nativeUser) {
+                const room = findDMForUser(MatrixClientPeg.get(), nativeUser);
+                if (room) return room.roomId
+            }
+        }
+
         return VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(call.roomId) || call.roomId;
     }
 
@@ -379,14 +396,14 @@ export default class CallHandler {
         // We don't allow placing more than one call per room, but that doesn't mean there
         // can't be more than one, eg. in a glare situation. This checks that the given call
         // is the call we consider 'the' call for its room.
-        const mappedRoomId = CallHandler.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
 
         const callForThisRoom = this.getCallForRoom(mappedRoomId);
         return callForThisRoom && call.callId === callForThisRoom.callId;
     }
 
     private setCallListeners(call: MatrixCall) {
-        const mappedRoomId = CallHandler.roomIdForCall(call);
+        let mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
 
         call.on(CallEvent.Error, (err: CallError) => {
             if (!this.matchesCallForThisRoom(call)) return;
@@ -500,6 +517,42 @@ export default class CallHandler {
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
+        call.on(CallEvent.AssertedIdentityChanged, async () => {
+            if (!this.matchesCallForThisRoom(call)) return;
+
+            console.log(`Call ID ${call.callId} got new asserted identity:`, call.getRemoteAssertedIdentity());
+
+            const newAssertedIdentity = call.getRemoteAssertedIdentity().id;
+            let newNativeAssertedIdentity = newAssertedIdentity;
+            if (newAssertedIdentity) {
+                const response = await this.sipNativeLookup(newAssertedIdentity);
+                if (response.length) newNativeAssertedIdentity = response[0].userid;
+            }
+            console.log(`Asserted identity ${newAssertedIdentity} mapped to ${newNativeAssertedIdentity}`);
+
+            if (newNativeAssertedIdentity) {
+                this.assertedIdentityNativeUsers[call.callId] = newNativeAssertedIdentity;
+
+                // If we don't already have a room with this user, make one. This will be slightly odd
+                // if they called us because we'll be inviting them, but there's not much we can do about
+                // this if we want the actual, native room to exist (which we do). This is why it's
+                // important to only obey asserted identity in trusted environments, since anyone you're
+                // on a call with can cause you to send a room invite to someone.
+                await ensureDMExists(MatrixClientPeg.get(), newNativeAssertedIdentity);
+
+                const newMappedRoomId = this.roomIdForCall(call);
+                console.log(`Old room ID: ${mappedRoomId}, new room ID: ${newMappedRoomId}`);
+                if (newMappedRoomId !== mappedRoomId) {
+                    this.removeCallForRoom(mappedRoomId);
+                    mappedRoomId = newMappedRoomId;
+                    this.calls.set(mappedRoomId, call);
+                    dis.dispatch({
+                        action: Action.CallChangeRoom,
+                        call,
+                    });
+                }
+            }
+        });
     }
 
     private async logCallStats(call: MatrixCall, mappedRoomId: string) {
@@ -551,7 +604,7 @@ export default class CallHandler {
     }
 
     private setCallState(call: MatrixCall, status: CallState) {
-        const mappedRoomId = CallHandler.roomIdForCall(call);
+        const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
 
         console.log(
             `Call state in ${mappedRoomId} changed to ${status}`,
@@ -639,7 +692,7 @@ export default class CallHandler {
 
         const timeUntilTurnCresExpire = MatrixClientPeg.get().getTurnServersExpiry() - Date.now();
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
-        const call = createNewMatrixCall(MatrixClientPeg.get(), mappedRoomId);
+        const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
         this.calls.set(roomId, call);
         if (transferee) {
@@ -673,7 +726,7 @@ export default class CallHandler {
             call.placeScreenSharingCall(
                 remoteElement,
                 localElement,
-                async () : Promise<DesktopCapturerSource> => {
+                async (): Promise<DesktopCapturerSource> => {
                     const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
                     const [source] = await finished;
                     return source;
@@ -772,7 +825,7 @@ export default class CallHandler {
 
                     const call = payload.call as MatrixCall;
 
-                    const mappedRoomId = CallHandler.roomIdForCall(call);
+                    const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
                     if (this.getCallForRoom(mappedRoomId)) {
                         // ignore multiple incoming calls to the same room
                         return;

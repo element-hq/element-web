@@ -54,7 +54,7 @@ export default class PasswordReset {
             return res;
         }, function(err) {
             if (err.errcode === 'M_THREEPID_NOT_FOUND') {
-                 err.message = _t('This email address was not found');
+                err.message = _t('This email address was not found');
             } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
             }

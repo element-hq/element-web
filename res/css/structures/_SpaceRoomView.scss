@@ -81,6 +81,16 @@ $SpaceRoomViewInnerWidth: 428px;
             color: $secondary-fg-color;
             margin-top: 12px;
             margin-bottom: 24px;
+            max-width: $SpaceRoomViewInnerWidth;
+        }
+
+        .mx_AddExistingToSpace {
+            max-width: $SpaceRoomViewInnerWidth;
+
+            .mx_AddExistingToSpace_content {
+                height: calc(100vh - 360px);
+                max-height: 400px;
+            }
         }
 
         .mx_SpaceRoomView_buttons {
@@ -214,45 +224,15 @@ $SpaceRoomViewInnerWidth: 428px;
 
             .mx_SpaceRoomView_info {
                 display: inline-block;
-                margin: 0;
+                margin: 0 auto 0 0;
             }
 
             .mx_FacePile {
                 display: inline-block;
-                margin-left: auto;
                 margin-right: 12px;
 
                 .mx_FacePile_faces {
                     cursor: pointer;
-
-                    > span:hover {
-                        .mx_BaseAvatar {
-                            filter: brightness(0.8);
-                        }
-                    }
-
-                    > span:first-child {
-                        position: relative;
-
-                        .mx_BaseAvatar {
-                            filter: brightness(0.8);
-                        }
-
-                        &::before {
-                            content: "";
-                            z-index: 1;
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            height: 30px;
-                            width: 30px;
-                            background: #ffffff; // white icon fill
-                            mask-position: center;
-                            mask-size: 24px;
-                            mask-repeat: no-repeat;
-                            mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
-                        }
-                    }
                 }
             }
 

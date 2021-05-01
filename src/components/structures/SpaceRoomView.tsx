@@ -51,6 +51,9 @@ import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
+import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
+import {allSettled} from "../../utils/promise";
+import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
 
 interface IProps {
     space: Room;
@@ -354,7 +357,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Creating rooms...") : _t("Continue")
+        buttonLabel = busy ? _t("Creating rooms...") : _t("Continue");
     }
 
     return <div>
@@ -363,6 +366,65 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
         { fields }
+
+        <div className="mx_SpaceRoomView_buttons">
+            <AccessibleButton
+                kind="primary"
+                disabled={busy}
+                onClick={onClick}
+            >
+                { buttonLabel }
+            </AccessibleButton>
+        </div>
+    </div>;
+};
+
+const SpaceAddExistingRooms = ({ space, onFinished }) => {
+    const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
+
+    const [busy, setBusy] = useState(false);
+    const [error, setError] = useState("");
+
+    let onClick = onFinished;
+    let buttonLabel = _t("Skip for now");
+    if (selectedToAdd.size > 0) {
+        onClick = async () => {
+            // TODO rate limiting
+            setBusy(true);
+            try {
+                await allSettled(Array.from(selectedToAdd).map((room) =>
+                    SpaceStore.instance.addRoomToSpace(space, room.roomId, calculateRoomVia(room))));
+                onFinished(true);
+            } catch (e) {
+                console.error("Failed to add rooms to space", e);
+                setError(_t("Failed to add rooms to space"));
+            }
+            setBusy(false);
+        };
+        buttonLabel = busy ? _t("Adding...") : _t("Add");
+    }
+
+    return <div>
+        <h1>{ _t("What do you want to organise?") }</h1>
+        <div className="mx_SpaceRoomView_description">
+            { _t("Pick rooms or conversations to add. This is just a space for you, " +
+                "no one will be informed. You can add more later.") }
+        </div>
+
+        { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
+
+        <AddExistingToSpace
+            space={space}
+            selected={selectedToAdd}
+            onChange={(checked, room) => {
+                if (checked) {
+                    selectedToAdd.add(room);
+                } else {
+                    selectedToAdd.delete(room);
+                }
+                setSelectedToAdd(new Set(selectedToAdd));
+            }}
+        />
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton
@@ -659,7 +721,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupPrivateScope
                     space={this.props.space}
                     onFinished={(invite: boolean) => {
-                        this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateCreateRooms });
+                        this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateExistingRooms });
                     }}
                 />;
             case Phase.PrivateInvite:
@@ -673,6 +735,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     title={_t("What projects are you working on?")}
                     description={_t("We'll create rooms for each of them. " +
                         "You can add more later too, including already existing ones.")}
+                    onFinished={() => this.setState({ phase: Phase.Landing })}
+                />;
+            case Phase.PrivateExistingRooms:
+                return <SpaceAddExistingRooms
+                    space={this.props.space}
                     onFinished={() => this.setState({ phase: Phase.Landing })}
                 />;
         }

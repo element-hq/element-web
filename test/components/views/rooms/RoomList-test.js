@@ -29,7 +29,10 @@ function waitForRoomListStoreUpdate() {
 
 describe('RoomList', () => {
     function createRoom(opts) {
-        const room = new Room(generateRoomId(), null, client.getUserId());
+        const room = new Room(generateRoomId(), MatrixClientPeg.get(), client.getUserId(), {
+            // The room list now uses getPendingEvents(), so we need a detached ordering.
+            pendingEventOrdering: "detached",
+        });
         if (opts) {
             Object.assign(room, opts);
         }
@@ -67,8 +70,9 @@ describe('RoomList', () => {
         root = ReactDOM.render(
             <DragDropContext>
                 <WrappedRoomList searchFilter="" onResize={() => {}} />
-            </DragDropContext>
-        , parentDiv);
+            </DragDropContext>,
+            parentDiv,
+        );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
         movingRoom = createRoom({name: 'Moving room'});

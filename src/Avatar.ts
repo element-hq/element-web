@@ -27,11 +27,7 @@ export type ResizeMethod = "crop" | "scale";
 export function avatarUrlForMember(member: RoomMember, width: number, height: number, resizeMethod: ResizeMethod) {
     let url: string;
     if (member?.getMxcAvatarUrl()) {
-        url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
-            Math.floor(width * window.devicePixelRatio),
-            Math.floor(height * window.devicePixelRatio),
-            resizeMethod,
-        );
+        url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
     if (!url) {
         // member can be null here currently since on invites, the JS SDK
@@ -44,11 +40,7 @@ export function avatarUrlForMember(member: RoomMember, width: number, height: nu
 
 export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
     if (!user.avatarUrl) return null;
-    return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(
-        Math.floor(width * window.devicePixelRatio),
-        Math.floor(height * window.devicePixelRatio),
-        resizeMethod,
-    );
+    return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(width, height, resizeMethod);
 }
 
 function isValidHexColor(color: string): boolean {

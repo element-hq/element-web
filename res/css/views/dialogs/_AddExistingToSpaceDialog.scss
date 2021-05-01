@@ -21,6 +21,66 @@ limitations under the License.
     }
 }
 
+.mx_AddExistingToSpace {
+    .mx_SearchBox {
+        // To match the space around the title
+        margin: 0 0 15px 0;
+        flex-grow: 0;
+    }
+
+    .mx_AddExistingToSpace_content {
+        flex-grow: 1;
+    }
+
+    .mx_AddExistingToSpace_noResults {
+        display: block;
+        margin-top: 24px;
+    }
+
+    .mx_AddExistingToSpace_section {
+        &:not(:first-child) {
+            margin-top: 24px;
+        }
+
+        > h3 {
+            margin: 0;
+            color: $secondary-fg-color;
+            font-size: $font-12px;
+            font-weight: $font-semi-bold;
+            line-height: $font-15px;
+        }
+
+        .mx_AddExistingToSpace_entry {
+            display: flex;
+            margin-top: 12px;
+
+            .mx_BaseAvatar {
+                margin-right: 12px;
+            }
+
+            .mx_AddExistingToSpace_entry_name {
+                font-size: $font-15px;
+                line-height: 30px;
+                flex-grow: 1;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin-right: 12px;
+            }
+
+            .mx_Checkbox {
+                align-items: center;
+            }
+        }
+    }
+
+    .mx_AddExistingToSpace_section_spaces {
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+    }
+}
+
 .mx_AddExistingToSpaceDialog {
     width: 480px;
     color: $primary-fg-color;
@@ -100,11 +160,6 @@ limitations under the License.
         }
     }
 
-    .mx_SearchBox {
-        margin: 0;
-        flex-grow: 0;
-    }
-
     .mx_AddExistingToSpaceDialog_errorText {
         font-weight: $font-semi-bold;
         font-size: $font-12px;
@@ -113,52 +168,8 @@ limitations under the License.
         margin-bottom: 28px;
     }
 
-    .mx_AddExistingToSpaceDialog_content {
-        flex-grow: 1;
-
-        .mx_AddExistingToSpaceDialog_noResults {
-            display: block;
-            margin-top: 24px;
-        }
-    }
-
-    .mx_AddExistingToSpaceDialog_section {
-        margin-top: 24px;
-
-        > h3 {
-            margin: 0;
-            color: $secondary-fg-color;
-            font-size: $font-12px;
-            font-weight: $font-semi-bold;
-            line-height: $font-15px;
-        }
-
-        .mx_AddExistingToSpaceDialog_entry {
-            display: flex;
-            margin-top: 12px;
-
-            .mx_BaseAvatar {
-                margin-right: 12px;
-            }
-
-            .mx_AddExistingToSpaceDialog_entry_name {
-                font-size: $font-15px;
-                line-height: 30px;
-                flex-grow: 1;
-            }
-
-            .mx_FormButton {
-                min-width: 92px;
-                font-weight: normal;
-                box-sizing: border-box;
-            }
-        }
-    }
-
-    .mx_AddExistingToSpaceDialog_section_spaces {
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
+    .mx_AddExistingToSpace {
+        display: contents;
     }
 
     .mx_AddExistingToSpaceDialog_footer {
@@ -188,9 +199,5 @@ limitations under the License.
         .mx_AccessibleButton_kind_link {
             padding: 0;
         }
-    }
-
-    .mx_FormButton {
-        padding: 8px 22px;
     }
 }

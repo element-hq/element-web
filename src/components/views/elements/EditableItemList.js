@@ -65,12 +65,18 @@ export class EditableItem extends React.Component {
                     <span className="mx_EditableItem_promptText">
                         {_t("Are you sure?")}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="primary_sm"
-                                      className="mx_EditableItem_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onActuallyRemove}
+                        kind="primary_sm"
+                        className="mx_EditableItem_confirmBtn"
+                    >
                         {_t("Yes")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="danger_sm"
-                                      className="mx_EditableItem_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onDontRemove}
+                        kind="danger_sm"
+                        className="mx_EditableItem_confirmBtn"
+                    >
                         {_t("No")}
                     </AccessibleButton>
                 </div>
@@ -121,11 +127,15 @@ export default class EditableItemList extends React.Component {
 
     _renderNewItemField() {
         return (
-            <form onSubmit={this._onItemAdded} autoComplete="off"
-                  noValidate={true} className="mx_EditableItemList_newItem">
+            <form
+                onSubmit={this._onItemAdded}
+                autoComplete="off"
+                noValidate={true}
+                className="mx_EditableItemList_newItem"
+            >
                 <Field label={this.props.placeholder} type="text"
-                       autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
-                       list={this.props.suggestionsListId} />
+                    autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
+                    list={this.props.suggestionsListId} />
                 <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit" disabled={!this.props.newItem}>
                     {_t("Add")}
                 </AccessibleButton>

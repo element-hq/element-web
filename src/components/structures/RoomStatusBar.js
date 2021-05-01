@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,16 +20,20 @@ import { _t, _td } from '../../languageHandler';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
-import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
+import {messageForResourceLimitError} from '../../utils/ErrorUtils';
 import {Action} from "../../dispatcher/actions";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import {EventStatus} from "matrix-js-sdk/src/models/event";
+import NotificationBadge from "../views/rooms/NotificationBadge";
+import {StaticNotificationState} from "../../stores/notifications/StaticNotificationState";
+import AccessibleButton from "../views/elements/AccessibleButton";
+import InlineSpinner from "../views/elements/InlineSpinner";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
 
-function getUnsentMessages(room) {
+export function getUnsentMessages(room) {
     if (!room) { return []; }
     return room.getPendingEvents().filter(function(ev) {
         return ev.status === EventStatus.NOT_SENT;
@@ -76,6 +80,7 @@ export default class RoomStatusBar extends React.Component {
         syncState: MatrixClientPeg.get().getSyncState(),
         syncStateData: MatrixClientPeg.get().getSyncStateData(),
         unsentMessages: getUnsentMessages(this.props.room),
+        isResending: false,
     };
 
     componentDidMount() {
@@ -109,7 +114,10 @@ export default class RoomStatusBar extends React.Component {
     };
 
     _onResendAllClick = () => {
-        Resend.resendUnsentEvents(this.props.room);
+        Resend.resendUnsentEvents(this.props.room).then(() => {
+            this.setState({isResending: false});
+        });
+        this.setState({isResending: true});
         dis.fire(Action.FocusComposer);
     };
 
@@ -120,9 +128,10 @@ export default class RoomStatusBar extends React.Component {
 
     _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
         if (room.roomId !== this.props.room.roomId) return;
-
+        const messages = getUnsentMessages(this.props.room);
         this.setState({
-            unsentMessages: getUnsentMessages(this.props.room),
+            unsentMessages: messages,
+            isResending: messages.length > 0 && this.state.isResending,
         });
     };
 
@@ -141,7 +150,7 @@ export default class RoomStatusBar extends React.Component {
     _getSize() {
         if (this._shouldShowConnectionError()) {
             return STATUS_BAR_EXPANDED;
-        } else if (this.state.unsentMessages.length > 0) {
+        } else if (this.state.unsentMessages.length > 0 || this.state.isResending) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
@@ -162,7 +171,6 @@ export default class RoomStatusBar extends React.Component {
 
     _getUnsentMessageContent() {
         const unsentMessages = this.state.unsentMessages;
-        if (!unsentMessages.length) return null;
 
         let title;
 
@@ -192,89 +200,92 @@ export default class RoomStatusBar extends React.Component {
         } else if (resourceLimitError) {
             title = messageForResourceLimitError(
                 resourceLimitError.data.limit_type,
-                resourceLimitError.data.admin_contact, {
-                'monthly_active_user': _td(
-                    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-                'hs_disabled': _td(
-                    "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-                '': _td(
-                    "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-            });
-        } else if (
-            unsentMessages.length === 1 &&
-            unsentMessages[0].error &&
-            unsentMessages[0].error.data &&
-            unsentMessages[0].error.data.error
-        ) {
-            title = messageForSendError(unsentMessages[0].error.data) || unsentMessages[0].error.data.error;
+                resourceLimitError.data.admin_contact,
+                {
+                    'monthly_active_user': _td(
+                        "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    'hs_disabled': _td(
+                        "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    '': _td(
+                        "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                },
+            );
         } else {
-            title = _t('%(count)s of your messages have not been sent.', { count: unsentMessages.length });
+            title = _t('Some of your messages have not been sent');
         }
 
-        const content = _t("%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> " +
-            "now. You can also select individual messages to resend or cancel.",
-            { count: unsentMessages.length },
-            {
-                'resendText': (sub) =>
-                    <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,
-                'cancelText': (sub) =>
-                    <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
-            },
-        );
+        let buttonRow = <>
+            <AccessibleButton onClick={this._onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
+                {_t("Delete all")}
+            </AccessibleButton>
+            <AccessibleButton onClick={this._onResendAllClick} className="mx_RoomStatusBar_unsentResendAllBtn">
+                {_t("Retry all")}
+            </AccessibleButton>
+        </>;
+        if (this.state.isResending) {
+            buttonRow = <>
+                <InlineSpinner w={20} h={20} />
+                {/* span for css */}
+                <span>{_t("Sending")}</span>
+            </>;
+        }
 
-        return <div className="mx_RoomStatusBar_connectionLostBar">
-            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24" height="24" title={_t("Warning")} alt="" />
-            <div>
-                <div className="mx_RoomStatusBar_connectionLostBar_title">
-                    { title }
-                </div>
-                <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                    { content }
+        return <>
+            <div className="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages">
+                <div role="alert">
+                    <div className="mx_RoomStatusBar_unsentBadge">
+                        <NotificationBadge
+                            notification={StaticNotificationState.RED_EXCLAMATION}
+                        />
+                    </div>
+                    <div>
+                        <div className="mx_RoomStatusBar_unsentTitle">
+                            { title }
+                        </div>
+                        <div className="mx_RoomStatusBar_unsentDescription">
+                            { _t("You can select all or individual messages to retry or delete") }
+                        </div>
+                    </div>
+                    <div className="mx_RoomStatusBar_unsentButtonBar">
+                        {buttonRow}
+                    </div>
                 </div>
             </div>
-        </div>;
+        </>;
     }
 
-    // return suitable content for the main (text) part of the status bar.
-    _getContent() {
+    render() {
         if (this._shouldShowConnectionError()) {
             return (
-                <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24" height="24" title="/!\ " alt="/!\ " />
-                    <div>
-                        <div className="mx_RoomStatusBar_connectionLostBar_title">
-                            { _t('Connectivity to the server has been lost.') }
-                        </div>
-                        <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                            { _t('Sent messages will be stored until your connection has returned.') }
+                <div className="mx_RoomStatusBar">
+                    <div role="alert">
+                        <div className="mx_RoomStatusBar_connectionLostBar">
+                            <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24"
+                                height="24" title="/!\ " alt="/!\ " />
+                            <div>
+                                <div className="mx_RoomStatusBar_connectionLostBar_title">
+                                    {_t('Connectivity to the server has been lost.')}
+                                </div>
+                                <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                                    {_t('Sent messages will be stored until your connection has returned.')}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         }
 
-        if (this.state.unsentMessages.length > 0) {
+        if (this.state.unsentMessages.length > 0 || this.state.isResending) {
             return this._getUnsentMessageContent();
         }
 
         return null;
-    }
-
-    render() {
-        const content = this._getContent();
-
-        return (
-            <div className="mx_RoomStatusBar">
-                <div role="alert">
-                    { content }
-                </div>
-            </div>
-        );
     }
 }

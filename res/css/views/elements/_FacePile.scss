@@ -20,7 +20,7 @@ limitations under the License.
         flex-direction: row-reverse;
         vertical-align: middle;
 
-        > span + span {
+        > .mx_FacePile_face + .mx_FacePile_face {
             margin-right: -8px;
         }
 
@@ -31,9 +31,32 @@ limitations under the License.
         .mx_BaseAvatar_initial {
             margin: 1px; // to offset the border on the image
         }
+
+        .mx_FacePile_more {
+            position: relative;
+            border-radius: 100%;
+            width: 30px;
+            height: 30px;
+            background-color: $groupFilterPanel-bg-color;
+
+            &::before {
+                content: "";
+                z-index: 1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: inherit;
+                width: inherit;
+                background: $tertiary-fg-color;
+                mask-position: center;
+                mask-size: 20px;
+                mask-repeat: no-repeat;
+                mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+            }
+        }
     }
 
-    > span {
+    .mx_FacePile_summary {
         margin-left: 12px;
         font-size: $font-14px;
         line-height: $font-24px;

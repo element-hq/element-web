@@ -190,6 +190,9 @@ export interface IState {
     rejectError?: Error;
     hasPinnedWidgets?: boolean;
     dragCounter: number;
+    // whether or not a spaces context switch brought us here,
+    // if it did we don't want the room to be marked as read as soon as it is loaded.
+    wasContextSwitch?: boolean;
 }
 
 @replaceableComponent("structures.RoomView")
@@ -326,6 +329,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
             showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
+            wasContextSwitch: RoomViewStore.getWasContextSwitch(),
         };
 
         if (!initial && this.state.shouldPeek && !newState.shouldPeek) {
@@ -2014,6 +2018,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 showReadReceipts={this.state.showReadReceipts}
                 manageReadReceipts={!this.state.isPeeking}
+                sendReadReceiptOnLoad={!this.state.wasContextSwitch}
                 manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}
                 highlightedEventId={highlightedEventId}
