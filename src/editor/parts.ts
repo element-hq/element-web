@@ -34,7 +34,7 @@ interface ISerializedPart {
 interface ISerializedPillPart {
     type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
     text: string;
-    resourceId: string;
+    resourceId?: string;
 }
 
 export type SerializedPart = ISerializedPart | ISerializedPillPart;
@@ -373,6 +373,13 @@ class AtRoomPillPart extends RoomPillPart {
 
     get type(): IPillPart["type"] {
         return Type.AtRoomPill;
+    }
+
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+        };
     }
 }
 
