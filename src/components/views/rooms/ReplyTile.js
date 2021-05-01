@@ -1,5 +1,5 @@
 /*
-Copyright 2020 Tulir Asokan <tulir@maunium.net>
+Copyright 2020-2021 Tulir Asokan <tulir@maunium.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,42 +25,8 @@ import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixClient} from 'matrix-js-sdk';
 
-import { objectHasDiff } from '../../../utils/objects';
-
-const eventTileTypes = {
-    'm.room.message': 'messages.MessageEvent',
-    'm.sticker': 'messages.MessageEvent',
-    'm.call.invite': 'messages.TextualEvent',
-    'm.call.answer': 'messages.TextualEvent',
-    'm.call.hangup': 'messages.TextualEvent',
-};
-
-const stateEventTileTypes = {
-    'm.room.aliases': 'messages.TextualEvent',
-    // 'm.room.aliases': 'messages.RoomAliasesEvent', // too complex
-    'm.room.canonical_alias': 'messages.TextualEvent',
-    'm.room.create': 'messages.RoomCreate',
-    'm.room.member': 'messages.TextualEvent',
-    'm.room.name': 'messages.TextualEvent',
-    'm.room.avatar': 'messages.RoomAvatarEvent',
-    'm.room.third_party_invite': 'messages.TextualEvent',
-    'm.room.history_visibility': 'messages.TextualEvent',
-    'm.room.encryption': 'messages.TextualEvent',
-    'm.room.topic': 'messages.TextualEvent',
-    'm.room.power_levels': 'messages.TextualEvent',
-    'm.room.pinned_events': 'messages.TextualEvent',
-    'm.room.server_acl': 'messages.TextualEvent',
-    'im.vector.modular.widgets': 'messages.TextualEvent',
-    'm.room.tombstone': 'messages.TextualEvent',
-    'm.room.join_rules': 'messages.TextualEvent',
-    'm.room.guest_access': 'messages.TextualEvent',
-    'm.room.related_groups': 'messages.TextualEvent',
-};
-
-function getHandlerTile(ev) {
-    const type = ev.getType();
-    return ev.isState() ? stateEventTileTypes[type] : eventTileTypes[type];
-}
+import {objectHasDiff} from '../../../utils/objects';
+import {getHandlerTile} from "./EventTile";
 
 class ReplyTile extends React.Component {
     static contextTypes = {
@@ -94,7 +60,7 @@ class ReplyTile extends React.Component {
             return true;
         }
 
-        return !this._propsEqual(this.props, nextProps);
+        return objectHasDiff(this.props, nextProps);
     }
 
     componentWillUnmount() {
@@ -106,28 +72,6 @@ class ReplyTile extends React.Component {
         if (this.props.onHeightChanged) {
             this.props.onHeightChanged();
         }
-    }
-
-    _propsEqual(objA, objB) {
-        const keysA = Object.keys(objA);
-        const keysB = Object.keys(objB);
-
-        if (keysA.length !== keysB.length) {
-            return false;
-        }
-
-        for (let i = 0; i < keysA.length; i++) {
-            const key = keysA[i];
-
-            if (!objB.hasOwnProperty(key)) {
-                return false;
-            }
-
-            if (objA[key] !== objB[key]) {
-                return false;
-            }
-        }
-        return true;
     }
 
     onClick(e) {

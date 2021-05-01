@@ -247,7 +247,7 @@ interface IProps {
     // It could also be done by subclassing EventTile, but that'd be quite
     // boiilerplatey.  So just make the necessary render decisions conditional
     // for now.
-    tileShape?: 'notif' | 'file_grid' | 'reply' | 'reply_preview';
+    tileShape?: 'notif' | 'file_grid';
 
     // show twelve hour timestamps
     isTwelveHour?: boolean;
@@ -940,7 +940,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         if (needsSenderProfile) {
-            if (!this.props.tileShape || this.props.tileShape === 'reply' || this.props.tileShape === 'reply_preview') {
+            if (!this.props.tileShape) {
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
                     enableFlair={this.props.enableFlair}
@@ -1087,39 +1087,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                 );
             }
 
-            case 'reply':
-            case 'reply_preview': {
-                let thread;
-                if (this.props.tileShape === 'reply_preview') {
-                    thread = ReplyThread.makeThread(
-                        this.props.mxEvent,
-                        this.props.onHeightChanged,
-                        this.props.permalinkCreator,
-                        this.replyThread,
-                    );
-                }
-                return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
-                        { ircTimestamp }
-                        { avatar }
-                        { sender }
-                        { ircPadlock }
-                        <div className="mx_EventTile_reply">
-                            { groupTimestamp }
-                            { groupPadlock }
-                            { thread }
-                            <EventTileType ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                onHeightChanged={this.props.onHeightChanged}
-                                replacingEventId={this.props.replacingEventId}
-                                showUrlPreview={false}
-                            />
-                        </div>
-                    </div>
-                );
-            }
             default: {
                 const thread = ReplyThread.makeThread(
                     this.props.mxEvent,
