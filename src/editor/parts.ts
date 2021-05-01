@@ -287,6 +287,14 @@ abstract class PillPart extends BasePart implements IPillPart {
         }
     }
 
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+            resourceId: this.resourceId,
+        };
+    }
+
     get canEdit() {
         return false;
     }
@@ -394,14 +402,6 @@ class UserPillPart extends PillPart {
     get className() {
         return "mx_UserPill mx_Pill";
     }
-
-    serialize(): ISerializedPillPart {
-        return {
-            type: this.type,
-            text: this.text,
-            resourceId: this.resourceId,
-        };
-    }
 }
 
 class PillCandidatePart extends PlainBasePart implements IPillCandidatePart {
@@ -495,7 +495,7 @@ export class PartCreator {
             case Type.PillCandidate:
                 return this.pillCandidate(part.text);
             case Type.RoomPill:
-                return this.roomPill(part.text);
+                return this.roomPill(part.resourceId);
             case Type.UserPill:
                 return this.userPill(part.text, part.resourceId);
         }
