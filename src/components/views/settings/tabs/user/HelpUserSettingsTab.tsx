@@ -42,6 +42,8 @@ interface IState {
 
 @replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
 export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
+    protected closeCopiedTooltip: () => void;
+
     constructor(props) {
         super(props);
 
