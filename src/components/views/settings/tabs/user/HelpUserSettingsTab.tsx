@@ -60,6 +60,12 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     }
 
+    componentWillUnmount() {
+        // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
+        // the tooltip otherwise, such as pressing Escape
+        if (this.closeCopiedTooltip) this.closeCopiedTooltip();
+    }
+
     private onClearCacheAndReload = (e) => {
         if (!PlatformPeg.get()) return;
 
@@ -168,7 +174,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             ...toRightOf(buttonRect, 2),
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         });
-        target.onmouseleave = close;
+        this.closeCopiedTooltip = target.onmouseleave = close;
     }
 
     render() {
@@ -290,8 +296,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         <br />
                         <details>
                             <summary>{_t("Access Token")}</summary><br />
-                            { _t("Your access token gives full access to your account."
-                               + " Do not share it with anyone." ) }
+                            <b>{_t("Your access token gives full access to your account."
+                               + " Do not share it with anyone." )}</b>
                             <div className="mx_HelpUserSettingsTab_accessToken">
                                 <code>{MatrixClientPeg.get().getAccessToken()}</code>
                                 <AccessibleTooltipButton
