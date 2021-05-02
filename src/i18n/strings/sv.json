@@ -3231,5 +3231,13 @@
     "Show options to enable 'Do not disturb' mode": "Visa alternativ för att aktivera 'Stör ej'-läget",
     "Delete all": "Radera alla",
     "View all %(count)s members|one": "Visa 1 medlem",
-    "View all %(count)s members|other": "Visa alla %(count)s medlemmar"
+    "View all %(count)s members|other": "Visa alla %(count)s medlemmar",
+    "You can select all or individual messages to retry or delete": "Du kan välja alla eller individuella meddelanden att försöka igen eller radera",
+    "Sending": "Skickar",
+    "Retry all": "Försök alla igen",
+    "Some of your messages have not been sent": "Vissa av dina meddelanden har inte skickats",
+    "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
+    "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s medlemmar inklusive %(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Inklusive %(commaSeparatedMembers)s",
+    "Failed to send": "Misslyckades att skicka"
 }
