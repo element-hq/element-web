@@ -50,6 +50,13 @@ interface IState {
     // Any other call we're displaying: only if the user is on two calls and not viewing either of the rooms
     // they belong to
     secondaryCall: MatrixCall;
+
+    // Position of the CallPreview
+    translationX: number;
+    translationY: number;
+
+    // True if the CallPreview is being dragged
+    moving: boolean;
 }
 
 // Splits a list of calls into one 'primary' one and a list
@@ -106,8 +113,16 @@ export default class CallPreview extends React.Component<IProps, IState> {
             roomId,
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
+            translationX: 0,
+            translationY: 0,
+            moving: false,
         };
     }
+
+    private initX = 0;
+    private initY = 0;
+    private lastX = 0;
+    private lastY = 0;
 
     public componentDidMount() {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
