@@ -187,6 +187,9 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     private onStartMoving = (event: React.MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         this.setState({moving: true});
 
         this.initX = event.pageX - this.lastX;
@@ -194,6 +197,9 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+
         if (!this.state.moving) return;
 
         this.lastX = event.pageX - this.initX;
