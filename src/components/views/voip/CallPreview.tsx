@@ -209,8 +209,26 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     public render() {
         if (this.state.primaryCall) {
+            const translatePixelsX = this.state.translationX + "px";
+            const translatePixelsY = this.state.translationY + "px";
+            const style = {
+                transform: `translateX(${translatePixelsX})
+                            translateY(${translatePixelsY})`,
+            };
+
             return (
-                <CallView call={this.state.primaryCall} secondaryCall={this.state.secondaryCall} pipMode={true} />
+                <div className="mx_CallPreview" style={style}>
+                    <CallView
+                        call={this.state.primaryCall}
+                        secondaryCall={this.state.secondaryCall}
+                        pipMode={true}
+                        dragCallbacks={{
+                            onStartMoving: this.onStartMoving,
+                            onMoving: this.onMoving,
+                            onEndMoving: this.onEndMoving,
+                        }}
+                    />
+                </div>
             );
         }
 
