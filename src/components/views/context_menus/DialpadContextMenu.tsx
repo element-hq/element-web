@@ -48,7 +48,7 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
     onChange = (ev) => {
         this.setState({value: ev.target.value});
     }
-    
+
 
     render() {
         return <ContextMenu {...this.props}>
@@ -56,12 +56,10 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
                 <div>
                     <span className="mx_DialPadContextMenu_title">{_t("Dial pad")}</span>
                 </div>
-                <form >
-                    <Field className="mx_DialPadContextMenu_dialled"
-                        value={this.state.value} autoFocus={true}
-                        onChange={this.onChange}
-                    />
-                </form>
+                <Field className="mx_DialPadContextMenu_dialled"
+                    value={this.state.value} autoFocus={true}
+                    onChange={this.onChange}
+                />
             </div>
             <div className="mx_DialPadContextMenu_horizSep" />
             <div className="mx_DialPadContextMenu_dialPad">

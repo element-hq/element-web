@@ -33,14 +33,15 @@ limitations under the License.
     max-width: 150px;
     border: none;
     margin: 0px;
-  
 }
-.mx_DialPadContextMenu_dialled input{
+.mx_DialPadContextMenu_dialled input {
     font-size: 18px;
     font-weight: 600;
     overflow: hidden;
+    max-width: 150px;
     text-align: left;
     direction: rtl;
+    padding: 8px 0px;
     background-color: rgb(0, 0, 0, 0);
 }
 
