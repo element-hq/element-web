@@ -184,6 +184,29 @@ export default class CallPreview extends React.Component<IProps, IState> {
         });
     }
 
+    private onStartMoving = (event: React.MouseEvent) => {
+        this.setState({moving: true});
+
+        this.initX = event.pageX - this.lastX;
+        this.initY = event.pageY - this.lastY;
+    }
+
+    private onMoving = (event: React.MouseEvent) => {
+        if (!this.state.moving) return;
+
+        this.lastX = event.pageX - this.initX;
+        this.lastY = event.pageY - this.initY;
+
+        this.setState({
+            translationX: this.lastX,
+            translationY: this.lastY,
+        });
+    }
+
+    private onEndMoving = () => {
+        this.setState({moving: false});
+    }
+
     public render() {
         if (this.state.primaryCall) {
             return (
