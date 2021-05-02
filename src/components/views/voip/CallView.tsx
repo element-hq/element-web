@@ -49,6 +49,13 @@ interface IProps {
         // This is sort of a proxy for a number of things but we currently have no
         // need to control those things separately, so this is simpler.
         pipMode?: boolean;
+
+        // Callbacks for dragging the CallView in PIP mode
+        dragCallbacks?: {
+            onStartMoving: (event: React.MouseEvent) => void;
+            onMoving: (event: React.MouseEvent) => void;
+            onEndMoving: () => void;
+        }
 }
 
 interface IState {
