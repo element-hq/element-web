@@ -126,8 +126,6 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private initX = 0;
     private initY = 0;
-    private lastX = DEFAULT_X_OFFSET;
-    private lastY = DEFAULT_Y_OFFSET;
 
     public componentDidMount() {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
@@ -199,8 +197,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
         this.setState({moving: true});
 
-        this.initX = event.pageX - this.lastX;
-        this.initY = event.pageY - this.lastY;
+        this.initX = event.pageX - this.state.translationX;
+        this.initY = event.pageY - this.state.translationY;
     };
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
@@ -215,27 +213,30 @@ export default class CallPreview extends React.Component<IProps, IState> {
         const precalculatedLastX = event.pageX - this.initX;
         const precalculatedLastY = event.pageY - this.initY;
 
+        let translationX;
+        let translationY;
+
         // Avoid overflow on the x axis
         if (precalculatedLastX + width >= window.innerWidth) {
-            this.lastX = window.innerWidth - width;
+            translationX = window.innerWidth - width;
         } else if (precalculatedLastX <= 0) {
-            this.lastX = 0;
+            translationX = 0;
         } else {
-            this.lastX = precalculatedLastX;
+            translationX = precalculatedLastX;
         }
 
         // Avoid overflow on the y axis
         if (precalculatedLastY + height >= window.innerHeight) {
-            this.lastY = window.innerHeight - height;
+            translationY = window.innerHeight - height;
         } else if (precalculatedLastY <= 0) {
-            this.lastY = 0;
+            translationY = 0;
         } else {
-            this.lastY = precalculatedLastY;
+            translationY = precalculatedLastY;
         }
 
         this.setState({
-            translationX: this.lastX,
-            translationY: this.lastY,
+            translationX: translationX,
+            translationY: translationY,
         });
     };
 
