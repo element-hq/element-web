@@ -626,7 +626,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 <div
                     className="mx_CallView_header"
                     onMouseDown={this.props.dragCallbacks?.onStartMoving}
-                    onMouseUp={this.props.dragCallbacks?.onEndMoving}
                 >
                     <AccessibleButton onClick={this.onRoomAvatarClick}>
                         <RoomAvatar room={callRoom} height={32} width={32} />

@@ -127,6 +127,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         document.addEventListener("mousemove", this.onMoving);
+        document.addEventListener("mouseup", this.onEndMoving);
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
     }
@@ -134,6 +135,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
     public componentWillUnmount() {
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         document.removeEventListener("mousemove", this.onMoving);
+        document.removeEventListener("mouseup", this.onEndMoving);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
