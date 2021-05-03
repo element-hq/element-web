@@ -199,10 +199,10 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
+        if (!this.state.moving) return;
+
         event.preventDefault();
         event.stopPropagation();
-
-        if (!this.state.moving) return;
 
         this.lastX = event.pageX - this.initX;
         this.lastY = event.pageY - this.initY;
