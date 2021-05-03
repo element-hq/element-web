@@ -49,7 +49,7 @@ export class Playback extends EventEmitter implements IDestroyable {
     constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
         super();
         this.context = new AudioContext();
-        this.resampledWaveform = arrayFastResample(seedWaveform, PLAYBACK_WAVEFORM_SAMPLES);
+        this.resampledWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
 
