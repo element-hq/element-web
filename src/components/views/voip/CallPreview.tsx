@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 
 import CallView from "./CallView";
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -121,6 +121,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
             moving: false,
         };
     }
+
+    private callViewWrapper = createRef<HTMLDivElement>();
 
     private initX = 0;
     private initY = 0;
@@ -230,7 +232,11 @@ export default class CallPreview extends React.Component<IProps, IState> {
             };
 
             return (
-                <div className="mx_CallPreview" style={style}>
+                <div
+                    className="mx_CallPreview"
+                    style={style}
+                    ref={this.callViewWrapper}
+                >
                     <CallView
                         call={this.state.primaryCall}
                         secondaryCall={this.state.secondaryCall}
