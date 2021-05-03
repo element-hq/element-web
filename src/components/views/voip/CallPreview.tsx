@@ -232,11 +232,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
                         call={this.state.primaryCall}
                         secondaryCall={this.state.secondaryCall}
                         pipMode={true}
-                        dragCallbacks={{
-                            onStartMoving: this.onStartMoving,
-                            onMoving: this.onMoving,
-                            onEndMoving: this.onEndMoving,
-                        }}
+                        onMouseDownOnHeader={this.onStartMoving}
                     />
                 </div>
             );
