@@ -153,7 +153,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private onWindowSizeChanged = () => {
         this.setTranslation(this.state.translationX, this.state.translationY);
-    }
+    };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
         const width = this.callViewWrapper.current.clientWidth || PIP_VIEW_WIDTH;
