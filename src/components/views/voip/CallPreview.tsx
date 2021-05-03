@@ -29,6 +29,9 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import { Action } from '../../../dispatcher/actions';
 
+const DEFAULT_X_OFFSET = 64;
+const DEFAULT_Y_OFFSET = 64;
+
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
     CallState.InviteSent,
@@ -113,16 +116,16 @@ export default class CallPreview extends React.Component<IProps, IState> {
             roomId,
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
-            translationX: 0,
-            translationY: 0,
+            translationX: DEFAULT_X_OFFSET,
+            translationY: DEFAULT_Y_OFFSET,
             moving: false,
         };
     }
 
     private initX = 0;
     private initY = 0;
-    private lastX = 0;
-    private lastY = 0;
+    private lastX = DEFAULT_X_OFFSET;
+    private lastY = DEFAULT_Y_OFFSET;
 
     public componentDidMount() {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
