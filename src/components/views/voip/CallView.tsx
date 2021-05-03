@@ -53,7 +53,6 @@ interface IProps {
         // Callbacks for dragging the CallView in PIP mode
         dragCallbacks?: {
             onStartMoving: (event: React.MouseEvent) => void;
-            onMoving: (event: React.MouseEvent) => void;
             onEndMoving: () => void;
         }
 }
@@ -627,7 +626,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 <div
                     className="mx_CallView_header"
                     onMouseDown={this.props.dragCallbacks?.onStartMoving}
-                    onMouseMove={this.props.dragCallbacks?.onMoving}
                     onMouseUp={this.props.dragCallbacks?.onEndMoving}
                 >
                     <AccessibleButton onClick={this.onRoomAvatarClick}>
