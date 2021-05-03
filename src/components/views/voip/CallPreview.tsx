@@ -209,8 +209,29 @@ export default class CallPreview extends React.Component<IProps, IState> {
         event.preventDefault();
         event.stopPropagation();
 
-        this.lastX = event.pageX - this.initX;
-        this.lastY = event.pageY - this.initY;
+        const width = this.callViewWrapper.current.clientWidth;
+        const height = this.callViewWrapper.current.clientHeight;
+
+        const precalculatedLastX = event.pageX - this.initX;
+        const precalculatedLastY = event.pageY - this.initY;
+
+        // Avoid overflow on the x axis
+        if (precalculatedLastX + width >= window.innerWidth) {
+            this.lastX = window.innerWidth - width;
+        } else if (precalculatedLastX <= 0) {
+            this.lastX = 0;
+        } else {
+            this.lastX = precalculatedLastX;
+        }
+
+        // Avoid overflow on the y axis
+        if (precalculatedLastY + height >= window.innerHeight) {
+            this.lastY = window.innerHeight - height;
+        } else if (precalculatedLastY <= 0) {
+            this.lastY = 0;
+        } else {
+            this.lastY = precalculatedLastY;
+        }
 
         this.setState({
             translationX: this.lastX,
