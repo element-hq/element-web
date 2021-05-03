@@ -156,8 +156,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
     };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
-        const width = this.callViewWrapper.current.clientWidth || PIP_VIEW_WIDTH;
-        const height = this.callViewWrapper.current.clientHeight || PIP_VIEW_HEIGHT;
+        const width = this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH;
+        const height = this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT;
 
         let outTranslationX;
         let outTranslationY;
