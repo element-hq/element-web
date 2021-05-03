@@ -27,6 +27,7 @@ import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
+import {MsgType} from "matrix-js-sdk/lib/@types/event";
 
 interface IProps {
     room: Room;
@@ -64,8 +65,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const mxc = await this.state.recorder.upload();
         MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
             "body": "Voice message",
-            "msgtype": "org.matrix.msc2516.voice",
-            //"msgtype": MsgType.Audio,
+            //"msgtype": "org.matrix.msc2516.voice",
+            "msgtype": MsgType.Audio,
             "url": mxc,
             "info": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
@@ -83,10 +84,6 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             },
             "org.matrix.msc1767.audio": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
-                // TODO: @@ TravisR: Waveform? (MSC1767 decision)
-            },
-            "org.matrix.experimental.msc2516.voice": { // MSC2516+MSC1767 experiment
-                duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
                 // Events can't have floats, so we try to maintain resolution by using 1024
                 // as a maximum value. The waveform contains values between zero and 1, so this
@@ -95,6 +92,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 // We're expecting about one data point per second of audio.
                 waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
             },
+            "org.matrix.msc2516.voice": {}, // No content, this is a rendering hint
         });
         await this.disposeRecording();
     }
