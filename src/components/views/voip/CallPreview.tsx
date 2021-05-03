@@ -29,11 +29,11 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import { Action } from '../../../dispatcher/actions';
 
-const PIP_VIEW_WIDTH = 320;
-const PIP_VIEW_HEIGHT = 180;
+const PIP_VIEW_WIDTH = 336;
+const PIP_VIEW_HEIGHT = 232;
 
-const DEFAULT_X_OFFSET = 64;
-const DEFAULT_Y_OFFSET = 64;
+const DEFAULT_X_OFFSET = 16;
+const DEFAULT_Y_OFFSET = 48;
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
