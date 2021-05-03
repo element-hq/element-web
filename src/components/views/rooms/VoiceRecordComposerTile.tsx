@@ -27,7 +27,7 @@ import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
-import {MsgType} from "matrix-js-sdk/lib/@types/event";
+import {MsgType} from "matrix-js-sdk/src/@types/event";
 
 interface IProps {
     room: Room;
