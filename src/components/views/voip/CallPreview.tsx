@@ -29,6 +29,9 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import { Action } from '../../../dispatcher/actions';
 
+const PIP_VIEW_WIDTH = 320;
+const PIP_VIEW_HEIGHT = 180;
+
 const DEFAULT_X_OFFSET = 64;
 const DEFAULT_Y_OFFSET = 64;
 
@@ -116,7 +119,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             roomId,
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
-            translationX: DEFAULT_X_OFFSET,
+            translationX: window.innerWidth - DEFAULT_X_OFFSET - PIP_VIEW_WIDTH,
             translationY: DEFAULT_Y_OFFSET,
             moving: false,
         };
@@ -131,6 +134,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
+        window.addEventListener("resize", this.onWindowSizeChanged);
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
     }
@@ -139,11 +143,46 @@ export default class CallPreview extends React.Component<IProps, IState> {
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         document.removeEventListener("mousemove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
+        window.removeEventListener("resize", this.onWindowSizeChanged);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
         dis.unregister(this.dispatcherRef);
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
+    }
+
+    private onWindowSizeChanged = () => {
+        const width = this.callViewWrapper.current.clientWidth || PIP_VIEW_WIDTH;
+        const height = this.callViewWrapper.current.clientHeight || PIP_VIEW_HEIGHT;
+
+        const precalculatedLastX = this.state.translationX;
+        const precalculatedLastY = this.state.translationY;
+
+        let translationX;
+        let translationY;
+
+        // Avoid overflow on the x axis
+        if (precalculatedLastX + width >= window.innerWidth) {
+            translationX = window.innerWidth - width;
+        } else if (precalculatedLastX <= 0) {
+            translationX = 0;
+        } else {
+            translationX = precalculatedLastX;
+        }
+
+        // Avoid overflow on the y axis
+        if (precalculatedLastY + height >= window.innerHeight) {
+            translationY = window.innerHeight - height;
+        } else if (precalculatedLastY <= 0) {
+            translationY = 0;
+        } else {
+            translationY = precalculatedLastY;
+        }
+
+        this.setState({
+            translationX: translationX,
+            translationY: translationY,
+        });
     }
 
     private onRoomViewStoreUpdate = (payload) => {
