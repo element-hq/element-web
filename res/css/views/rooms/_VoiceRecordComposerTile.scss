@@ -40,7 +40,7 @@ limitations under the License.
     height: 18px;
     vertical-align: middle;
     margin-right: 7px; // distance from left edge of waveform container (container has some margin too)
-    background-color: $muted-fg-color;
+    background-color: $voice-record-icon-color;
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-image: url('$(res)/img/element-icons/trashcan.svg');
