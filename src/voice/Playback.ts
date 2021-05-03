@@ -93,6 +93,8 @@ export class Playback extends EventEmitter implements IDestroyable {
     public async prepare() {
         this.audioBuf = await this.context.decodeAudioData(this.buf);
 
+        // Update the waveform to the real waveform once we have channel data to use. We don't
+        // exactly trust the user-provided waveform to be accurate...
         const waveform = Array.from(this.audioBuf.getChannelData(0)).map(v => clamp(v, 0, 1));
         this.resampledWaveform = arrayFastResample(waveform, PLAYBACK_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
