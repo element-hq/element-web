@@ -856,9 +856,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
                 fixedWidth={false}
             >
-            <div>
-                {content}
-            </div>
+                <div>
+                    {content}
+                </div>
             </BaseDialog>
         );
     }

@@ -200,20 +200,22 @@ export default class RoomStatusBar extends React.Component {
         } else if (resourceLimitError) {
             title = messageForResourceLimitError(
                 resourceLimitError.data.limit_type,
-                resourceLimitError.data.admin_contact, {
-                'monthly_active_user': _td(
-                    "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-                'hs_disabled': _td(
-                    "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-                '': _td(
-                    "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
-                    "Please <a>contact your service administrator</a> to continue using the service.",
-                ),
-            });
+                resourceLimitError.data.admin_contact,
+                {
+                    'monthly_active_user': _td(
+                        "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    'hs_disabled': _td(
+                        "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                    '': _td(
+                        "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
+                        "Please <a>contact your service administrator</a> to continue using the service.",
+                    ),
+                },
+            );
         } else {
             title = _t('Some of your messages have not been sent');
         }
@@ -265,7 +267,7 @@ export default class RoomStatusBar extends React.Component {
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
                             <img src={require("../../../res/img/feather-customised/warning-triangle.svg")} width="24"
-                                 height="24" title="/!\ " alt="/!\ " />
+                                height="24" title="/!\ " alt="/!\ " />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                                     {_t('Connectivity to the server has been lost.')}

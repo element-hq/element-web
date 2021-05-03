@@ -170,8 +170,12 @@ export default class ProfileSettings extends React.Component {
                 noValidate={true}
                 className="mx_ProfileSettings_profileForm"
             >
-                <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
-                       onChange={this._onAvatarChanged} accept="image/*" />
+                <input
+                    type="file"
+                    ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
+                    onChange={this._onAvatarChanged}
+                    accept="image/*"
+                />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
                         <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>

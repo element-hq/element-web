@@ -257,12 +257,16 @@ export default class SecurityUserSettingsTab extends React.Component {
 
         const userIds = !ignoredUserIds?.length
             ? _t('You have no ignored users.')
-            : ignoredUserIds.map((u) => <IgnoredUser
-             userId={u}
-             onUnignored={this._onUserUnignored}
-             key={u}
-             inProgress={waitingUnignored.includes(u)}
-             />);
+            : ignoredUserIds.map((u) => {
+                return (
+                    <IgnoredUser
+                        userId={u}
+                        onUnignored={this._onUserUnignored}
+                        key={u}
+                        inProgress={waitingUnignored.includes(u)}
+                    />
+                );
+            });
 
         return (
             <div className='mx_SettingsTab_section'>

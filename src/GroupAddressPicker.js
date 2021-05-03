@@ -148,13 +148,15 @@ function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog(
             'Failed to add the following room to the group',
-            '', ErrorDialog,
-        {
-            title: _t(
-                "Failed to add the following rooms to %(groupId)s:",
-                {groupId},
-            ),
-            description: errorList.join(", "),
-        });
+            '',
+            ErrorDialog,
+            {
+                title: _t(
+                    "Failed to add the following rooms to %(groupId)s:",
+                    {groupId},
+                ),
+                description: errorList.join(", "),
+            },
+        );
     });
 }

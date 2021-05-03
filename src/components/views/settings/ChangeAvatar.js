@@ -154,7 +154,7 @@ export default class ChangeAvatar extends React.Component {
             const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
             avatarImg = <BaseAvatar width={this.props.width} height={this.props.height} resizeMethod='crop'
-                        name='?' idName={MatrixClientPeg.get().getUserIdLocalpart()} url={this.state.avatarUrl} />;
+                name='?' idName={MatrixClientPeg.get().getUserIdLocalpart()} url={this.state.avatarUrl} />;
         }
 
         let uploadSection;
