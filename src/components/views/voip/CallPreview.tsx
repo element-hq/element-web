@@ -191,7 +191,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
         });
-    }
+    };
 
     private onStartMoving = (event: React.MouseEvent) => {
         event.preventDefault();
@@ -201,7 +201,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
         this.initX = event.pageX - this.lastX;
         this.initY = event.pageY - this.lastY;
-    }
+    };
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
         if (!this.state.moving) return;
@@ -216,11 +216,11 @@ export default class CallPreview extends React.Component<IProps, IState> {
             translationX: this.lastX,
             translationY: this.lastY,
         });
-    }
+    };
 
     private onEndMoving = () => {
         this.setState({moving: false});
-    }
+    };
 
     public render() {
         if (this.state.primaryCall) {
