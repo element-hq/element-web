@@ -152,36 +152,37 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     private onWindowSizeChanged = () => {
+        this.setTranslation(this.state.translationX, this.state.translationY);
+    }
+
+    private setTranslation(inTranslationX: number, inTranslationY: number) {
         const width = this.callViewWrapper.current.clientWidth || PIP_VIEW_WIDTH;
         const height = this.callViewWrapper.current.clientHeight || PIP_VIEW_HEIGHT;
 
-        const precalculatedLastX = this.state.translationX;
-        const precalculatedLastY = this.state.translationY;
-
-        let translationX;
-        let translationY;
+        let outTranslationX;
+        let outTranslationY;
 
         // Avoid overflow on the x axis
-        if (precalculatedLastX + width >= window.innerWidth) {
-            translationX = window.innerWidth - width;
-        } else if (precalculatedLastX <= 0) {
-            translationX = 0;
+        if (inTranslationX + width >= window.innerWidth) {
+            outTranslationX = window.innerWidth - width;
+        } else if (inTranslationX <= 0) {
+            outTranslationX = 0;
         } else {
-            translationX = precalculatedLastX;
+            outTranslationX = inTranslationX;
         }
 
         // Avoid overflow on the y axis
-        if (precalculatedLastY + height >= window.innerHeight) {
-            translationY = window.innerHeight - height;
-        } else if (precalculatedLastY <= 0) {
-            translationY = 0;
+        if (inTranslationY + height >= window.innerHeight) {
+            outTranslationY = window.innerHeight - height;
+        } else if (inTranslationY <= 0) {
+            outTranslationY = 0;
         } else {
-            translationY = precalculatedLastY;
+            outTranslationY = inTranslationY;
         }
 
         this.setState({
-            translationX: translationX,
-            translationY: translationY,
+            translationX: outTranslationX,
+            translationY: outTranslationY,
         });
     }
 
@@ -246,37 +247,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         event.preventDefault();
         event.stopPropagation();
 
-        const width = this.callViewWrapper.current.clientWidth;
-        const height = this.callViewWrapper.current.clientHeight;
-
-        const precalculatedLastX = event.pageX - this.initX;
-        const precalculatedLastY = event.pageY - this.initY;
-
-        let translationX;
-        let translationY;
-
-        // Avoid overflow on the x axis
-        if (precalculatedLastX + width >= window.innerWidth) {
-            translationX = window.innerWidth - width;
-        } else if (precalculatedLastX <= 0) {
-            translationX = 0;
-        } else {
-            translationX = precalculatedLastX;
-        }
-
-        // Avoid overflow on the y axis
-        if (precalculatedLastY + height >= window.innerHeight) {
-            translationY = window.innerHeight - height;
-        } else if (precalculatedLastY <= 0) {
-            translationY = 0;
-        } else {
-            translationY = precalculatedLastY;
-        }
-
-        this.setState({
-            translationX: translationX,
-            translationY: translationY,
-        });
+        this.setTranslation(event.pageX - this.initX, event.pageY - this.initY);
     };
 
     private onEndMoving = () => {
