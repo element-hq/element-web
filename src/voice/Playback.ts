@@ -20,6 +20,7 @@ import {arrayFastResample, arraySeed} from "../utils/arrays";
 import {SimpleObservable} from "matrix-widget-api";
 import {IDestroyable} from "../utils/IDestroyable";
 import {PlaybackClock} from "./PlaybackClock";
+import {clamp} from "../utils/numbers";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -52,8 +53,6 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.resampledWaveform = arrayFastResample(seedWaveform, PLAYBACK_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
-
-        // TODO: @@ TR: Calculate real waveform
     }
 
     public get waveform(): number[] {
@@ -93,6 +92,11 @@ export class Playback extends EventEmitter implements IDestroyable {
 
     public async prepare() {
         this.audioBuf = await this.context.decodeAudioData(this.buf);
+
+        const waveform = Array.from(this.audioBuf.getChannelData(0)).map(v => clamp(v, 0, 1));
+        this.resampledWaveform = arrayFastResample(waveform, PLAYBACK_WAVEFORM_SAMPLES);
+        this.waveformObservable.update(this.resampledWaveform);
+
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
         this.clock.durationSeconds = this.audioBuf.duration;
     }
