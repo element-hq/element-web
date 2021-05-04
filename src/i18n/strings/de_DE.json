@@ -3282,5 +3282,7 @@
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Falls du es wirklich willst: Es werden keine Nachrichten gelöscht. Außerdem wird die Suche, während der Index erstellt wird, etwas langsamer sein",
     "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s Mitglieder inklusive %(commaSeparatedMembers)s",
     "Including %(commaSeparatedMembers)s": "Inklusive%(commaSeparatedMembers)s",
-    "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Beratung mit %(transferTarget)s. <a>Übertragung zu %(transferee)s</a>"
+    "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Beratung mit %(transferTarget)s. <a>Übertragung zu %(transferee)s</a>",
+    "Play": "Abspielen",
+    "Pause": "Pause"
 }
