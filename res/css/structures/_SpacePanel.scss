@@ -79,7 +79,10 @@ $activeBorderColor: $secondary-fg-color;
     .mx_SpaceItem {
         display: inline-flex;
         flex-flow: wrap;
-        align-self: baseline;
+
+        &.mx_SpaceItem_narrow {
+            align-self: baseline;
+        }
     }
 
     .mx_SpaceItem.collapsed {
@@ -276,7 +279,7 @@ $activeBorderColor: $secondary-fg-color;
         .mx_SpaceButton:hover,
         .mx_SpaceButton:focus-within,
         .mx_SpaceButton_hasMenuOpen {
-            &:not(.mx_SpaceButton_home) {
+            &:not(.mx_SpaceButton_home):not(.mx_SpaceButton_invite) {
                 // Hide the badge container on hover because it'll be a menu button
                 .mx_SpacePanel_badgeContainer {
                     width: 0;
