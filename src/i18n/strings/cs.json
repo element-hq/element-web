@@ -3201,7 +3201,7 @@
     "Please choose a strong password": "Vyberte silné heslo",
     "What are some things you want to discuss in %(spaceName)s?": "O kterých tématech chcete diskutovat v %(spaceName)s?",
     "Let's create a room for each of them.": "Vytvořme pro každé z nich místnost.",
-    "Use another login": "Použijte jiné přihlašovací jméno",
+    "Use another login": "Použít jinou relaci",
     "Without verifying, you won’t have access to all your messages and may appear as untrusted to others.": "Bez ověření nebudete mít přístup ke všem svým zprávám a ostatním se můžete zobrazit jako nedůvěryhodný.",
     "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Jste zde jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás.",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Pokud vše resetujete, začnete bez důvěryhodných relací, bez důvěryhodných uživatelů a možná nebudete moci zobrazit minulé zprávy.",
@@ -3225,5 +3225,13 @@
     "Including %(commaSeparatedMembers)s": "Včetně %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "Zobrazit jednoho člena",
     "View all %(count)s members|other": "Zobrazit všech %(count)s členů",
-    "Failed to send": "Odeslání se nezdařilo"
+    "Failed to send": "Odeslání se nezdařilo",
+    "What do you want to organise?": "Co si přejete organizovat?",
+    "Filter all spaces": "Filtrovat všechny prostory",
+    "Delete recording": "Smazat zvukovou zprávu",
+    "Stop the recording": "Zastavit nahrávání",
+    "%(count)s results in all spaces|one": "%(count)s výsledek ve všech prostorech",
+    "%(count)s results in all spaces|other": "%(count)s výsledků ve všech prostorech",
+    "Play": "Přehrát",
+    "Pause": "Pozastavit"
 }
