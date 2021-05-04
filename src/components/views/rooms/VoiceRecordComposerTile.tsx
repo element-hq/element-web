@@ -28,6 +28,9 @@ import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
 import {MsgType} from "matrix-js-sdk/src/@types/event";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import CallMediaHandler from "../../../CallMediaHandler";
 
 interface IProps {
     room: Room;
@@ -113,16 +116,59 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             await this.state.recorder.stop();
             return;
         }
-        const recorder = VoiceRecordingStore.instance.startRecording();
-        await recorder.start();
 
-        // We don't need to remove the listener: the recorder will clean that up for us.
-        recorder.on(UPDATE_EVENT, (ev: RecordingState) => {
-            if (ev === RecordingState.EndingSoon) return; // ignore this state: it has no UI purpose here
-            this.setState({recordingPhase: ev});
-        });
+        // The "microphone access error" dialogs are used a lot, so let's functionify them
+        const accessError = () => {
+            Modal.createTrackedDialog('Microphone Access Error', '', ErrorDialog, {
+                title: _t("Unable to access your microphone"),
+                description: <>
+                    <p>{_t(
+                        "We were unable to access your microphone. Please check your browser settings and try again.",
+                    )}</p>
+                </>,
+            });
+        };
 
-        this.setState({recorder, recordingPhase: RecordingState.Started});
+        // Do a sanity test to ensure we're about to grab a valid microphone reference. Things might
+        // change between this and recording, but at least we will have tried.
+        try {
+            const devices = await CallMediaHandler.getDevices();
+            if (!devices?.['audioinput']?.length) {
+                Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
+                    title: _t("No microphone found"),
+                    description: <>
+                        <p>{_t(
+                            "We didn't find a microphone on your device. Please check your settings and try again.",
+                        )}</p>
+                    </>,
+                });
+                return;
+            }
+            // else we probably have a device that is good enough
+        } catch (e) {
+            console.error("Error getting devices: ", e);
+            accessError();
+            return;
+        }
+
+        try {
+            const recorder = VoiceRecordingStore.instance.startRecording();
+            await recorder.start();
+
+            // We don't need to remove the listener: the recorder will clean that up for us.
+            recorder.on(UPDATE_EVENT, (ev: RecordingState) => {
+                if (ev === RecordingState.EndingSoon) return; // ignore this state: it has no UI purpose here
+                this.setState({recordingPhase: ev});
+            });
+
+            this.setState({recorder, recordingPhase: RecordingState.Started});
+        } catch (e) {
+            console.error("Error starting recording: ", e);
+            accessError();
+
+            // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack
+            VoiceRecordingStore.instance.disposeRecording();
+        }
     };
 
     private renderWaveformArea(): ReactNode {

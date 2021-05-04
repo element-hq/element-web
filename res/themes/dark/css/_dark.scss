@@ -42,6 +42,14 @@ $preview-bar-bg-color: $header-panel-bg-color;
 $groupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
 $inverted-bg-color: $base-color;
 
+$voice-record-stop-border-color: #6F7882; // "Quarterly"
+$voice-record-waveform-bg-color: #394049; // "Dark Tile"
+$voice-record-waveform-fg-color: $tertiary-fg-color;
+$voice-record-waveform-incomplete-fg-color: #5b646d;
+$voice-record-icon-color: $tertiary-fg-color;
+$voice-playback-button-bg-color: $tertiary-fg-color;
+$voice-playback-button-fg-color: $bg-color;
+
 // used by AddressSelector
 $selected-color: $room-highlight-color;
 
