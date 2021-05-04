@@ -105,7 +105,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
         if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
+            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
         }
     }
 
@@ -207,7 +207,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             this.props.room.off("Room.name", this.onRoomNameUpdate);
         }
         if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
+            this.props.resizeNotifier.off("middlePanelResized", this.onResize);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         defaultDispatcher.unregister(this.dispatcherRef);
