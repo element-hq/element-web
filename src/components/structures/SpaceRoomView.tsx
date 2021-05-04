@@ -483,9 +483,11 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPublicShare = ({ space, onFinished }) => {
+const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished }) => {
     return <div className="mx_SpaceRoomView_publicShare">
-        <h1>{ _t("Share %(name)s", { name: space.name }) }</h1>
+        <h1>{ _t("Share %(name)s", {
+            name: justCreatedOpts?.createOpts?.name || space.name,
+        }) }</h1>
         <div className="mx_SpaceRoomView_description">
             { _t("It's just you at the moment, it will be even better with others.") }
         </div>
@@ -764,7 +766,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
                     title={_t("What are some things you want to discuss in %(spaceName)s?", {
-                        spaceName: this.props.space.name,
+                        spaceName: this.props.justCreatedOpts?.createOpts?.name || this.props.space.name,
                     })}
                     description={
                         _t("Let's create a room for each of them.") + "\n" +
@@ -773,7 +775,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;
             case Phase.PublicShare:
-                return <SpaceSetupPublicShare space={this.props.space} onFinished={this.goToFirstRoom} />;
+                return <SpaceSetupPublicShare
+                    justCreatedOpts={this.props.justCreatedOpts}
+                    space={this.props.space}
+                    onFinished={this.goToFirstRoom}
+                />;
 
             case Phase.PrivateScope:
                 return <SpaceSetupPrivateScope
