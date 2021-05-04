@@ -1708,7 +1708,7 @@
     "Backup has a <validity>invalid</validity> signature from this user": "Záloha má <validity>neplatný</validity> podpis od tohoto uživatele",
     "Backup has a signature from <verify>unknown</verify> user with ID %(deviceId)s": "Záloha je podepsaná <verify>neznámým</verify> uživatelem %(deviceId)s",
     "Close preview": "Zavřít náhled",
-    "Hide verified sessions": "Schovat ověřené relace",
+    "Hide verified sessions": "Skrýt ověřené relace",
     "%(count)s verified sessions|other": "%(count)s ověřených relací",
     "%(count)s verified sessions|one": "1 ověřená relace",
     "Language Dropdown": "Menu jazyků",
