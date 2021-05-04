@@ -3294,5 +3294,16 @@
     "Including %(commaSeparatedMembers)s": "Prfshi %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "Shihni 1 anëtar",
     "View all %(count)s members|other": "Shihni krejt %(count)s anëtarët",
-    "Failed to send": "S’u arrit të dërgohet"
+    "Failed to send": "S’u arrit të dërgohet",
+    "Enter your Security Phrase a second time to confirm it.": "Jepni Frazën tuaj të Sigurisë edhe një herë, për ta ripohuar.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Zgjidhni dhoma ose biseda që të shtohen. Kjo është thjesht një hapësirë për ju, s’do ta dijë kush tjetër. Mund të shtoni të tjerë më vonë.",
+    "What do you want to organise?": "Ç’doni të sistemoni?",
+    "Filter all spaces": "Filtro krejt hapësirat",
+    "Delete recording": "Fshije regjistrimin",
+    "Stop the recording": "Ndale regjistrimin",
+    "%(count)s results in all spaces|one": "%(count)s përfundim në krejt hapësirat",
+    "%(count)s results in all spaces|other": "%(count)s përfundime në krejt hapësirat",
+    "You have no ignored users.": "S’keni përdorues të shpërfillur.",
+    "Play": "Luaje",
+    "Pause": "Ndalesë"
 }
