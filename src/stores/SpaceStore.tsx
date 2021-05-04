@@ -112,6 +112,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._suggestedRooms;
     }
 
+    /**
+     * Sets the active space, updates room list filters,
+     * optionally switches the user's room back to where they were when they last viewed that space.
+     * @param space which space to switch to.
+     * @param contextSwitch whether to switch the user's context,
+     * should not be done when the space switch is done implicitly due to another event like switching room.
+     */
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
         if (space === this.activeSpace || (space && !space?.isSpaceRoom())) return;
 
@@ -305,7 +312,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         // if the currently selected space no longer exists, remove its selection
         if (this._activeSpace && detachedNodes.has(this._activeSpace)) {
-            this.setActiveSpace(null);
+            this.setActiveSpace(null, false);
         }
 
         this.onRoomsUpdate(); // TODO only do this if a change has happened
@@ -593,7 +600,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             }
             case "after_leave_room":
                 if (this._activeSpace && payload.room_id === this._activeSpace.roomId) {
-                    this.setActiveSpace(null);
+                    this.setActiveSpace(null, false);
                 }
                 break;
         }
