@@ -167,7 +167,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return results.map(e => e.event);
     }
 
-    public async readStateEvents(eventType: string, stateKey: string | undefined, limit: number): Promise<MatrixEvent[]> {
+    public async readStateEvents(
+        eventType: string, stateKey: string | undefined, limit: number,
+    ): Promise<MatrixEvent[]> {
         limit = limit > 0 ? Math.min(limit, 100) : 100; // arbitrary choice
 
         const client = MatrixClientPeg.get();
