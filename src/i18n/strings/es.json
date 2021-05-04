@@ -32,5 +32,6 @@
     "Open": "Abrir",
     "Your browser can't run %(brand)s": "Tu navegador no es compatible con %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funciones avanzadas que su navegador actual no soporta.",
-    "Powered by Matrix": "Funciona con Matrix"
+    "Powered by Matrix": "Funciona con Matrix",
+    "Use %(brand)s on mobile": "Usar %(brand)s en modo móvil"
 }

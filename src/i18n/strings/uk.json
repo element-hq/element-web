@@ -32,5 +32,6 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Powered by Matrix": "Працює на Matrix",
     "Your browser can't run %(brand)s": "Ваш переглядач неспроможний запустити %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s використовує передові властивості, які ваш браузер не підтримує."
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s використовує передові властивості, які ваш браузер не підтримує.",
+    "Use %(brand)s on mobile": "Користуйтеся %(brand)s на мобільному"
 }

@@ -4,5 +4,8 @@
     "Unknown device": "Perangkat Tidak Diketahui",
     "You need to be using HTTPS to place a screen-sharing call.": "Anda perlu menggunakan HTTPS untuk melakukan panggilan berbagi-layar.",
     "Welcome to Element": "Selamat datang di Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Obrolan terenkripsi, terdesentralisasi &amp; kolaborasi didukung oleh [matrix]"
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Obrolan terenkripsi, terdesentralisasi &amp; kolaborasi didukung oleh [matrix]",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfigurasi Element Anda mengandung JSON yang tidak valid. Mohon perbaiki masalahnya dan muat ulang halaman nya.",
+    "Invalid configuration: no default server specified.": "Konfigurasi tidak valid: server default belum ditentukan.",
+    "Missing indexeddb worker script!": "Tidak ada script worker indexeddb!"
 }
