@@ -79,8 +79,10 @@ $activeBorderColor: $secondary-fg-color;
     .mx_SpaceItem {
         display: inline-flex;
         flex-flow: wrap;
-        align-self: baseline;
-        width: 100%;
+
+        &.mx_SpaceItem_narrow {
+            align-self: baseline;
+        }
     }
 
     .mx_SpaceItem.collapsed {

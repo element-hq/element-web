@@ -297,6 +297,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const isActive = activeSpaces.includes(space);
         const itemClasses = classNames({
             "mx_SpaceItem": true,
+            "mx_SpaceItem_narrow": isNarrow,
             "collapsed": collapsed,
             "hasSubSpaces": childSpaces && childSpaces.length,
         });
