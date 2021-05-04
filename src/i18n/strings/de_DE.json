@@ -2951,7 +2951,7 @@
     "Call failed because no webcam or microphone could not be accessed. Check that:": "Der Anruf ist fehlgeschlagen weil nicht auf das Mikrofon oder die Webcam zugegriffen werden konnte. Stelle sicher, dass:",
     "Unable to access webcam / microphone": "Auf Webcam / Mikrofon konnte nicht zugegriffen werden",
     "Unable to access microphone": "Es konnte nicht auf das Mikrofon zugegriffen werden",
-    "Host account on": "Benutzer*innenkonto betreiben an",
+    "Host account on": "Konto betreiben an",
     "Hold": "Halten",
     "Resume": "Fortsetzen",
     "We call the places where you can host your account ‘homeservers’.": "Den Ort, an dem du dein Konto betreibst, nennen wir „Heimserver“.",
@@ -3284,5 +3284,14 @@
     "Including %(commaSeparatedMembers)s": "Inklusive%(commaSeparatedMembers)s",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Beratung mit %(transferTarget)s. <a>Übertragung zu %(transferee)s</a>",
     "Play": "Abspielen",
-    "Pause": "Pause"
+    "Pause": "Pause",
+    "What do you want to organise?": "Was möchtenst Du organisieren?",
+    "Enter your Security Phrase a second time to confirm it.": "Gib dein Kennwort ein zweites Mal zur Bestätigung ein.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Wähle Räume oder Konversationen die Du hinzufügen möchtest. Dieser Bereich ist nur für Dich, niemand wird informiert. Du kannst später mehr hinzufügen.",
+    "Filter all spaces": "Alle Bereiche filtern",
+    "Delete recording": "Aufnahme löschen",
+    "Stop the recording": "Aufnahme stoppen",
+    "%(count)s results in all spaces|one": "%(count)s Ergebnis in allen Bereichen",
+    "%(count)s results in all spaces|other": "%(count)s Ergebnisse in allen Bereichen",
+    "You have no ignored users.": "Du ignorierst keine Benutzer."
 }
