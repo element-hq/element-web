@@ -19,12 +19,12 @@ limitations under the License.
     width: 32px;
     height: 32px;
     border-radius: 32px;
-    background-color: $primary-bg-color;
+    background-color: $voice-playback-button-bg-color;
 
     &::before {
         content: '';
         position: absolute; // sizing varies by icon
-        background-color: $muted-fg-color;
+        background-color: $voice-playback-button-fg-color;
         mask-repeat: no-repeat;
         mask-size: contain;
     }
