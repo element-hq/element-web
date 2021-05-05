@@ -1187,7 +1187,7 @@
     "Changes your display nickname in the current room only": "Změní vaši zobrazovanou přezdívku pouze v této místnosti",
     "User %(userId)s is already in the room": "Uživatel %(userId)s už je v této místnosti",
     "The user must be unbanned before they can be invited.": "Uživatel je vykázán, nelze ho pozvat.",
-    "Show read receipts sent by other users": "Zobrazovat potvrzení o přijetí",
+    "Show read receipts sent by other users": "Zobrazovat potvrzení o přečtení",
     "Scissors": "Nůžky",
     "Accept all %(invitedRooms)s invites": "Přijmout pozvání do všech těchto místností: %(invitedRooms)s",
     "Change room avatar": "Změnit avatar místnosti",
