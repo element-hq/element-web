@@ -70,9 +70,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     constructor(props) {
         super(props);
 
+        const collapsedLocalStorage = localStorage.getItem(getSpaceCollapsedKey(props.space));
         // XXX: localStorage doesn't allow booleans
         // default to collapsed for root items
-        const collapsed = localStorage.getItem(getSpaceCollapsedKey(props.space)) === "true" || !props.isNested;
+        const collapsed = collapsedLocalStorage ? collapsedLocalStorage === "true" : !props.isNested;
 
         this.state = {
             collapsed: collapsed,
