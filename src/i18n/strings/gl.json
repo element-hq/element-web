@@ -3308,5 +3308,16 @@
     "Including %(commaSeparatedMembers)s": "Incluíndo a %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "Ver 1 membro",
     "View all %(count)s members|other": "Ver tódolos %(count)s membros",
-    "Failed to send": "Fallou o envío"
+    "Failed to send": "Fallou o envío",
+    "Enter your Security Phrase a second time to confirm it.": "Escribe a túa Frase de Seguridade por segunda vez para confirmala.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Elixe salas ou conversas para engadilas. Este é un espazo para ti, ninguén será notificado. Podes engadir máis posteriormente.",
+    "What do you want to organise?": "Que queres organizar?",
+    "Filter all spaces": "Filtrar os espazos",
+    "Delete recording": "Eliminar a gravación",
+    "Stop the recording": "Deter a gravación",
+    "%(count)s results in all spaces|one": "%(count)s resultado en tódolos espazos",
+    "%(count)s results in all spaces|other": "%(count)s resultados en tódolos espazos",
+    "You have no ignored users.": "Non tes usuarias ignoradas.",
+    "Play": "Reproducir",
+    "Pause": "Deter"
 }
