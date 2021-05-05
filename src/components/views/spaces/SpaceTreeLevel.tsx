@@ -48,6 +48,8 @@ import {EventType} from "matrix-js-sdk/src/@types/event";
 import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
 import {NotificationColor} from "../../../stores/notifications/NotificationColor";
 
+const getSpaceCollapsedKey = (space: Room) => `mx_space_collapsed_${space.roomId}`;
+
 interface IItemProps {
     space?: Room;
     activeSpaces: Room[];
@@ -68,8 +70,12 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     constructor(props) {
         super(props);
 
+        // XXX: localStorage doesn't allow booleans
+        // default to collapsed for root items
+        const collapsed = localStorage.getItem(getSpaceCollapsedKey(props.space)) === "true" || !props.isNested;
+
         this.state = {
-            collapsed: !props.isNested, // default to collapsed for root items
+            collapsed: collapsed,
             contextMenuPosition: null,
         };
     }
@@ -78,7 +84,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         if (this.props.onExpand && this.state.collapsed) {
             this.props.onExpand();
         }
-        this.setState({collapsed: !this.state.collapsed});
+        const newCollapsedState = !this.state.collapsed;
+        // XXX: localStorage doesn't allow booleans
+        localStorage.setItem(getSpaceCollapsedKey(this.props.space), newCollapsedState.toString());
+        this.setState({collapsed: newCollapsedState});
         // don't bubble up so encapsulating button for space
         // doesn't get triggered
         evt.stopPropagation();
