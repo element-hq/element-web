@@ -21,6 +21,7 @@ $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $primary-fg-color: #2e2f32;
 $secondary-fg-color: #737D8C;
 $tertiary-fg-color: #8D99A5;
+$quaternary-fg-color: #C1C6CD;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -190,7 +191,7 @@ $voice-record-live-circle-color: #ff4b55;
 $voice-record-stop-border-color: #E3E8F0; // "Separator"
 $voice-record-waveform-bg-color: #E3E8F0; // "Separator"
 $voice-record-waveform-fg-color: $secondary-fg-color;
-$voice-record-waveform-incomplete-fg-color: #C1C6CD; // "Quartary"
+$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
 $voice-record-icon-color: $tertiary-fg-color;
 $voice-playback-button-bg-color: $primary-bg-color;
 $voice-playback-button-fg-color: $secondary-fg-color;
