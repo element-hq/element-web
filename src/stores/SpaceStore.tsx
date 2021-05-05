@@ -413,7 +413,19 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         this.spaceFilteredRooms.forEach((roomIds, s) => {
             // Update NotificationStates
-            this.getNotificationState(s)?.setRooms(visibleRooms.filter(room => roomIds.has(room.roomId)));
+            this.getNotificationState(s)?.setRooms(visibleRooms.filter(room => {
+                if (roomIds.has(room.roomId)) {
+                    // Don't aggregate notifications for DMs except in the Home Space
+                    if (s !== HOME_SPACE) {
+                        return !DMRoomMap.shared().getUserIdForRoomId(room.roomId)
+                            || RoomListStore.instance.getTagsForRoom(room).includes(DefaultTagID.Favourite);
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }));
         });
     }, 100, {trailing: true, leading: true});
 
