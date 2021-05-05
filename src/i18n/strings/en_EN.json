@@ -833,7 +833,7 @@
     "Match system theme": "Match system theme",
     "Use a system font": "Use a system font",
     "System font name": "System font name",
-    "Allow Peer-to-Peer for 1:1 calls": "Allow Peer-to-Peer for 1:1 calls",
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)",
     "Send analytics data": "Send analytics data",
     "Never send encrypted messages to unverified sessions from this session": "Never send encrypted messages to unverified sessions from this session",
     "Never send encrypted messages to unverified sessions in this room from this session": "Never send encrypted messages to unverified sessions in this room from this session",
