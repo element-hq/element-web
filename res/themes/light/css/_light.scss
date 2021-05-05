@@ -331,9 +331,10 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-bg-color: #e3e8f082;
-$message-body-panel-icon-bg-color: #ffffff;
-$message-body-panel-fg-color: $muted-fg-color;
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: $voice-record-waveform-bg-color;
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: $primary-bg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
