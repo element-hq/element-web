@@ -120,8 +120,19 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
      * should not be done when the space switch is done implicitly due to another event like switching room.
      */
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
-        if (space === this.activeSpace || (space && !space?.isSpaceRoom())) return;
-
+        if (space && !space?.isSpaceRoom()) return;
+        if (space === this.activeSpace) {
+            const notificationState = this.getNotificationState(space.roomId);
+            if (notificationState.count) {
+                const roomId = notificationState.getRoomWithMaxNotifications();
+                defaultDispatcher.dispatch({
+                    action: "view_room",
+                    room_id: roomId,
+                    context_switch: true,
+                });
+            }
+            return;
+        }
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);

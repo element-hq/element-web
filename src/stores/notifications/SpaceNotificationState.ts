@@ -53,6 +53,11 @@ export class SpaceNotificationState extends NotificationState {
         this.calculateTotalState();
     }
 
+    public getRoomWithMaxNotifications() {
+        return this.rooms.reduce((prev, curr) =>
+            (prev._notificationCounts.total > curr._notificationCounts.total ? prev : curr)).roomId;
+    }
+
     public destroy() {
         super.destroy();
         for (const state of Object.values(this.states)) {
