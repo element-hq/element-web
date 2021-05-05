@@ -201,9 +201,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             const childRoom = this.matrixClient?.getRoom(roomId);
             const createTs = childRoom?.currentState.getStateEvents(EventType.RoomCreate, "")?.getTs();
             return getOrder(ev.getContent().order, createTs, roomId);
-        })
-            .map(ev => this.matrixClient.getRoom(ev.getStateKey()))
-            .filter(room => room?.getMyMembership() === "join" || room?.getMyMembership() === "invite") || [];
+        }).map(ev => {
+            return this.matrixClient.getRoom(ev.getStateKey());
+        }).filter(room => {
+            return room?.getMyMembership() === "join" || room?.getMyMembership() === "invite";
+        }) || [];
     }
 
     public getChildRooms(spaceId: string): Room[] {
