@@ -178,7 +178,7 @@ limitations under the License.
                 height: 8px;
                 width: 100%;
 
-                @mixin ProgressBarBorderRadius "8px";
+                @mixin ProgressBarBorderRadius 8px;
             }
 
             .mx_AddExistingToSpaceDialog_progressText {
