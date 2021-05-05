@@ -577,7 +577,7 @@ export class Algorithm extends EventEmitter {
 
         await this.generateFreshTags(newTags);
 
-        this.cachedRooms = newTags;
+        this.cachedRooms = newTags; // this recalculates the filtered rooms for us
         this.updateTagsFromCache();
 
         // Now that we've finished generation, we need to update the sticky room to what
