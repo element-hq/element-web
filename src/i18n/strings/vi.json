@@ -6,7 +6,7 @@
     "Welcome to Element": "Chào mừng tới Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat phân tán, mã hóa &amp; giao tiếp được tài trợ bởi [matrix]",
     "Unexpected error preparing the app. See console for details.": "Lỗi xảy ra trong lúc chuẩn bị app. Xem console log để biết chi tiết.",
-    "The message from the parser is: %(message)s": "Nội dung tin là: %(message)s",
+    "The message from the parser is: %(message)s": "Thông báo của trình xử lý là: %(message)s",
     "Invalid JSON": "JSON không hợp lệ",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Thiết lập không hợp lệ: chỉ có thể điền một trong số default_server_config, default_server_name, hoặc default_hs_url.",
     "Invalid configuration: no default server specified.": "Cấu hình không hợp lệ: máy chủ mặc định không được thiết lập.",
@@ -23,8 +23,15 @@
     "Unsupported browser": "Trình duyệt không được hỗ trợ",
     "Go to your browser to complete Sign In": "Mở trình duyệt web để hoàn thành đăng nhập",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Máy tính để bàn (%(platformName)s)",
-    "Previous/next recently visited room or community": "Phòng chat hoặc cộng đồng gần đây trước/tiếp theo",
+    "Previous/next recently visited room or community": "Phòng chat hoặc cộng đồng đã đi đến gần đây trước/tiếp theo",
     "Open user settings": "Mở cài đặt người dùng",
     "Open": "Mở",
-    "Unable to load config file: please refresh the page to try again.": "Không thể tải tệp cấu hình: hãy làm mới trang để thử lại."
+    "Unable to load config file: please refresh the page to try again.": "Không thể tải tệp cấu hình: hãy làm mới trang để thử lại.",
+    "Failed to start": "Khởi động thất bại",
+    "Use %(brand)s on mobile": "Sử dụng %(brand)s trên di động",
+    "Powered by Matrix": "Được chạy bởi công nghệ Matrix",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Missing indexeddb worker script!": "Thiếu tệp lệnh làm việc của indexeddb!",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Thiết lập Element của bạn chứa JSON không hợp lệ. Vui lòng sửa vấn đề và tải lại trang.",
+    "Your Element is misconfigured": "Element của bạn bị thiết lập sai"
 }
