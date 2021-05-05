@@ -28,7 +28,7 @@ Platform Targets:
  * WebRTC features (VoIP and Video calling) are only available in Chrome & Firefox.
  * Mobile Web is not currently a target platform - instead please use the native
    iOS (https://github.com/matrix-org/matrix-ios-kit) and Android
-   (https://github.com/matrix-org/matrix-android-sdk) SDKs.
+   (https://github.com/vector-im/element-android) SDKs.
 
 All code lands on the `develop` branch - `master` is only used for stable releases.
 **Please file PRs against `develop`!!**
