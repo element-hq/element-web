@@ -3248,5 +3248,16 @@
     "%(seconds)ss left": "%(seconds)ss restantes",
     "Failed to send": "No se ha podido mandar",
     "Change server ACLs": "Cambiar los ACLs del servidor",
-    "Show options to enable 'Do not disturb' mode": "Mostrar opciones para activar el modo «no molestar»"
+    "Show options to enable 'Do not disturb' mode": "Mostrar opciones para activar el modo «no molestar»",
+    "Stop the recording": "Parar grabación",
+    "Delete recording": "Borrar grabación",
+    "Enter your Security Phrase a second time to confirm it.": "Escribe tu frase de seguridad de nuevo para confirmarla.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Elige salas o conversaciones para añadirlas. Este espacio es solo para ti, no informaremos a nadie. Puedes añadir más más tarde.",
+    "What do you want to organise?": "¿Qué quieres organizar?",
+    "Filter all spaces": "Filtrar todos los espacios",
+    "%(count)s results in all spaces|one": "%(count)s resultado en todos los espacios",
+    "%(count)s results in all spaces|other": "%(count)s resultados en todos los espacios",
+    "You have no ignored users.": "No has ignorado a nadie.",
+    "Pause": "Pausar",
+    "Play": "Reproducir"
 }
