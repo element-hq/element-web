@@ -52,7 +52,7 @@ import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
 import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
-import {allSettled} from "../../utils/promise";
+import {sleep} from "../../utils/promise";
 import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
 
 interface IProps {
@@ -389,15 +389,24 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
     let buttonLabel = _t("Skip for now");
     if (selectedToAdd.size > 0) {
         onClick = async () => {
-            // TODO rate limiting
             setBusy(true);
-            try {
-                await allSettled(Array.from(selectedToAdd).map((room) =>
-                    SpaceStore.instance.addRoomToSpace(space, room.roomId, calculateRoomVia(room))));
-                onFinished(true);
-            } catch (e) {
-                console.error("Failed to add rooms to space", e);
-                setError(_t("Failed to add rooms to space"));
+
+            for (const room of selectedToAdd) {
+                const via = calculateRoomVia(room);
+                try {
+                    await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async e => {
+                        if (e.errcode === "M_LIMIT_EXCEEDED") {
+                            await sleep(e.data.retry_after_ms);
+                            return SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
+                        }
+
+                        throw e;
+                    });
+                } catch (e) {
+                    console.error("Failed to add rooms to space", e);
+                    setError(_t("Failed to add rooms to space"));
+                    break;
+                }
             }
             setBusy(false);
         };
