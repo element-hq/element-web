@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {sortBy, throttle} from "lodash";
+import {ListIteratee, Many, sortBy, throttle} from "lodash";
 import {EventType, RoomType} from "matrix-js-sdk/src/@types/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
@@ -61,15 +61,18 @@ const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces,
     }, [[], []]);
 };
 
-const getOrder = (ev: MatrixEvent): string | null => {
-    const content = ev.getContent();
-    if (typeof content.order === "string" && Array.from(content.order).every((c: string) => {
+// For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
+export const getOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
+    let validatedOrder: string = null;
+
+    if (typeof order === "string" && Array.from(order).every((c: string) => {
         const charCode = c.charCodeAt(0);
         return charCode >= 0x20 && charCode <= 0x7F;
     })) {
-        return content.order;
+        validatedOrder = order;
     }
-    return null;
+
+    return [validatedOrder, creationTs, roomId];
 }
 
 const getRoomFn: FetchRoomFn = (room: Room) => {
@@ -200,9 +203,16 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private getChildren(spaceId: string): Room[] {
         const room = this.matrixClient?.getRoom(spaceId);
         const childEvents = room?.currentState.getStateEvents(EventType.SpaceChild).filter(ev => ev.getContent()?.via);
-        return sortBy(childEvents, getOrder)
-            .map(ev => this.matrixClient.getRoom(ev.getStateKey()))
-            .filter(room => room?.getMyMembership() === "join" || room?.getMyMembership() === "invite") || [];
+        return sortBy(childEvents, ev => {
+            const roomId = ev.getStateKey();
+            const childRoom = this.matrixClient?.getRoom(roomId);
+            const createTs = childRoom?.currentState.getStateEvents(EventType.RoomCreate, "")?.getTs();
+            return getOrder(ev.getContent().order, createTs, roomId);
+        }).map(ev => {
+            return this.matrixClient.getRoom(ev.getStateKey());
+        }).filter(room => {
+            return room?.getMyMembership() === "join" || room?.getMyMembership() === "invite";
+        }) || [];
     }
 
     public getChildRooms(spaceId: string): Room[] {
