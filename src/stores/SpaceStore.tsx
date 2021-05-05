@@ -132,7 +132,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 });
             }
             return;
-        }
+        } else if (space === this.activeSpace) return;
+
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(SUGGESTED_ROOMS, this._suggestedRooms = []);
