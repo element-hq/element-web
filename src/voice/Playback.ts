@@ -29,7 +29,7 @@ export enum PlaybackState {
     Playing = "playing", // active progress through timeline
 }
 
-export const PLAYBACK_WAVEFORM_SAMPLES = 35;
+export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
 
 export class Playback extends EventEmitter implements IDestroyable {
