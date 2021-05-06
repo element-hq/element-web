@@ -24,7 +24,7 @@ import {sortBy} from "lodash";
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import dis from "../../dispatcher/dispatcher";
 import {_t} from "../../languageHandler";
-import AccessibleButton from "../views/elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import Spinner from "../views/elements/Spinner";
 import SearchBox from "./SearchBox";
@@ -108,8 +108,16 @@ const Tile: React.FC<ITileProps> = ({
     const cliRoom = cli.getRoom(room.room_id);
     const myMembership = cliRoom?.getMyMembership();
 
-    const onPreviewClick = () => onViewRoomClick(false);
-    const onJoinClick = () => onViewRoomClick(true);
+    const onPreviewClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        onViewRoomClick(false);
+    }
+    const onJoinClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        onViewRoomClick(true);
+    }
 
     let button;
     if (myMembership === "join") {
