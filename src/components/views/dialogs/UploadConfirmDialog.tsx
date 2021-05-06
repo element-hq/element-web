@@ -20,6 +20,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import filesize from "filesize";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { getBlobSafeMimeType } from '../../../utils/blobs';
 
 interface IProps {
     file: File;
@@ -31,6 +32,7 @@ interface IProps {
 @replaceableComponent("views.dialogs.UploadConfirmDialog")
 export default class UploadConfirmDialog extends React.Component<IProps> {
     private objectUrl: string;
+    private mimeType: string;
 
     static defaultProps = {
         totalFiles: 1,
@@ -39,7 +41,13 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     constructor(props) {
         super(props);
 
-        this.objectUrl = URL.createObjectURL(props.file);
+        // Create a fresh `Blob` for previewing (even though `File` already is
+        // one) so we can adjust the MIME type if needed.
+        this.mimeType = getBlobSafeMimeType(props.file.type);
+        const blob = new Blob([props.file], { type:
+            this.mimeType,
+        });
+        this.objectUrl = URL.createObjectURL(blob);
     }
 
     componentWillUnmount() {
@@ -76,7 +84,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         }
 
         let preview;
-        if (this.props.file.type.startsWith('image/')) {
+        if (this.mimeType.startsWith('image/')) {
             preview = <div className="mx_UploadConfirmDialog_previewOuter">
                 <div className="mx_UploadConfirmDialog_previewInner">
                     <div><img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} /></div>
