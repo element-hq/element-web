@@ -95,7 +95,7 @@ export default class ChangelogDialog extends React.Component {
                 description={content}
                 button={_t("Update")}
                 onFinished={this.props.onFinished}
-                />
+            />
         );
     }
 }

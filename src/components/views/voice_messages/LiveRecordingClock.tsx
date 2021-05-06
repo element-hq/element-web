@@ -31,18 +31,12 @@ interface IState {
  * A clock for a live recording.
  */
 @replaceableComponent("views.voice_messages.LiveRecordingClock")
-export default class LiveRecordingClock extends React.Component<IProps, IState> {
+export default class LiveRecordingClock extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);
 
         this.state = {seconds: 0};
         this.props.recorder.liveData.onUpdate(this.onRecordingUpdate);
-    }
-
-    shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>, nextContext: any): boolean {
-        const currentFloor = Math.floor(this.state.seconds);
-        const nextFloor = Math.floor(nextState.seconds);
-        return currentFloor !== nextFloor;
     }
 
     private onRecordingUpdate = (update: IRecordingUpdate) => {

@@ -135,9 +135,13 @@ export default class PowerSelector extends React.Component {
         if (this.state.custom) {
             picker = (
                 <Field type="number"
-                       label={label} max={this.props.maxValue}
-                       onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
-                       value={String(this.state.customValue)} disabled={this.props.disabled} />
+                    label={label} max={this.props.maxValue}
+                    onBlur={this.onCustomBlur}
+                    onKeyDown={this.onCustomKeyDown}
+                    onChange={this.onCustomChange}
+                    value={String(this.state.customValue)}
+                    disabled={this.props.disabled}
+                />
             );
         } else {
             // Each level must have a definition in this.state.levelRoleMap
@@ -154,8 +158,9 @@ export default class PowerSelector extends React.Component {
 
             picker = (
                 <Field element="select"
-                       label={label} onChange={this.onSelectChange}
-                       value={String(this.state.selectValue)} disabled={this.props.disabled}>
+                    label={label} onChange={this.onSelectChange}
+                    value={String(this.state.selectValue)} disabled={this.props.disabled}
+                >
                     {options}
                 </Field>
             );

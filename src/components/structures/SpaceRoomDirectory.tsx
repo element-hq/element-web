@@ -39,6 +39,7 @@ import {mediaFromMxc} from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import {useStateToggle} from "../../hooks/useStateToggle";
+import {getOrder} from "../../stores/SpaceStore";
 
 interface IHierarchyProps {
     space: Room;
@@ -136,7 +137,7 @@ const Tile: React.FC<ITileProps> = ({
 
     let url: string;
     if (room.avatar_url) {
-        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(Math.floor(20 * window.devicePixelRatio));
+        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20);
     }
 
     let description = _t("%(count)s members", { count: room.num_joined_members });
@@ -254,7 +255,11 @@ export const HierarchyLevel = ({
     const space = cli.getRoom(spaceId);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
-    const sortedChildren = sortBy([...(relations.get(spaceId)?.values() || [])], ev => ev.content.order || null);
+    const children = Array.from(relations.get(spaceId)?.values() || []);
+    const sortedChildren = sortBy(children, ev => {
+        // XXX: Space Summary API doesn't give the child origin_server_ts but once it does we should use it for sorting
+        return getOrder(ev.content.order, null, ev.state_key);
+    });
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
         if (!rooms.has(roomId)) return result;
@@ -312,11 +317,12 @@ export const HierarchyLevel = ({
 
 // mutate argument refreshToken to force a reload
 export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: any): [
+    null,
     ISpaceSummaryRoom[],
-    Map<string, Map<string, ISpaceSummaryEvent>>,
-    Map<string, Set<string>>,
-    Map<string, Set<string>>,
-] | [] => {
+    Map<string, Map<string, ISpaceSummaryEvent>>?,
+    Map<string, Set<string>>?,
+    Map<string, Set<string>>?,
+] | [Error] => {
     // TODO pagination
     return useAsyncMemo(async () => {
         try {
@@ -336,13 +342,12 @@ export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: a
                 }
             });
 
-            return [data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
+            return [null, data.rooms as ISpaceSummaryRoom[], parentChildRelations, viaMap, childParentRelations];
         } catch (e) {
             console.error(e); // TODO
+            return [e];
         }
-
-        return [];
-    }, [space, refreshToken], []);
+    }, [space, refreshToken], [undefined]);
 };
 
 export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
@@ -358,7 +363,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const [rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
+    const [summaryError, rooms, parentChildMap, viaMap, childParentMap] = useSpaceSummary(cli, space, refreshToken);
 
     const roomsMap = useMemo(() => {
         if (!rooms) return null;
@@ -396,6 +401,10 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     const [error, setError] = useState("");
     const [removing, setRemoving] = useState(false);
     const [saving, setSaving] = useState(false);
+
+    if (summaryError) {
+        return <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+    }
 
     let content;
     if (roomsMap) {
@@ -538,10 +547,8 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                 { children }
             </AutoHideScrollbar>
         </>;
-    } else if (!rooms) {
-        content = <Spinner />;
     } else {
-        content = <p>{_t("Your server does not support showing space hierarchies.")}</p>;
+        content = <Spinner />;
     }
 
     // TODO loading state/error state

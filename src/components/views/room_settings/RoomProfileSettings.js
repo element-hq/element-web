@@ -205,16 +205,34 @@ export default class RoomProfileSettings extends React.Component {
                 noValidate={true}
                 className="mx_ProfileSettings_profileForm"
             >
-                <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
-                       onChange={this._onAvatarChanged} accept="image/*" />
+                <input
+                    type="file"
+                    ref={this._avatarUpload}
+                    className="mx_ProfileSettings_avatarUpload"
+                    onChange={this._onAvatarChanged}
+                    accept="image/*"
+                />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
-                        <Field label={_t("Room Name")}
-                               type="text" value={this.state.displayName} autoComplete="off"
-                               onChange={this._onDisplayNameChanged} disabled={!this.state.canSetName} />
-                        <Field className="mx_ProfileSettings_controls_topic" id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}
-                               type="text" value={this.state.topic} autoComplete="off"
-                               onChange={this._onTopicChanged} element="textarea" />
+                        <Field
+                            label={_t("Room Name")}
+                            type="text"
+                            value={this.state.displayName}
+                            autoComplete="off"
+                            onChange={this._onDisplayNameChanged}
+                            disabled={!this.state.canSetName}
+                        />
+                        <Field
+                            className="mx_ProfileSettings_controls_topic"
+                            id="profileTopic"
+                            label={_t("Room Topic")}
+                            disabled={!this.state.canSetTopic}
+                            type="text"
+                            value={this.state.topic}
+                            autoComplete="off"
+                            onChange={this._onTopicChanged}
+                            element="textarea"
+                        />
                     </div>
                     <AvatarSetting
                         avatarUrl={this.state.avatarUrl}

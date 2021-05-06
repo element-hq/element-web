@@ -42,9 +42,12 @@ export default class IntegrationsDisabledDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_IntegrationsDisabledDialog' hasCancel={true}
-                        onFinished={this.props.onFinished}
-                        title={_t("Integrations are disabled")}>
+            <BaseDialog
+                className='mx_IntegrationsDisabledDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Integrations are disabled")}
+            >
                 <div className='mx_IntegrationsDisabledDialog_content'>
                     <p>{_t("Enable 'Manage Integrations' in Settings to do this.")}</p>
                 </div>
