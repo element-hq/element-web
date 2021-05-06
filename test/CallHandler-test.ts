@@ -16,7 +16,7 @@ limitations under the License.
 
 import './skinned-sdk';
 
-import CallHandler, { PlaceCallType } from '../src/CallHandler';
+import CallHandler, { PlaceCallType, CallHandlerEvent } from '../src/CallHandler';
 import { stubClient, mkStubRoom } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
@@ -172,11 +172,9 @@ describe('CallHandler', () => {
 
         let callRoomChangeEventCount = 0;
         const roomChangePromise = new Promise<void>(resolve => {
-            dispatchHandle = dis.register(payload => {
-                if (payload.action === Action.CallChangeRoom) {
-                    ++callRoomChangeEventCount;
-                    resolve();
-                }
+            callHandler.addListener(CallHandlerEvent.CallChangeRoom, () => {
+                ++callRoomChangeEventCount;
+                resolve();
             });
         });
 
@@ -201,7 +199,7 @@ describe('CallHandler', () => {
         fakeCall.emit(CallEvent.AssertedIdentityChanged);
 
         await roomChangePromise;
-        dis.unregister(dispatchHandle);
+        callHandler.removeAllListeners();
 
         // If everything's gone well, we should have seen only one room change
         // event and the call should now be in user 3's room.

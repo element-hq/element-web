@@ -577,9 +577,8 @@ export class Algorithm extends EventEmitter {
 
         await this.generateFreshTags(newTags);
 
-        this.cachedRooms = newTags;
+        this.cachedRooms = newTags; // this recalculates the filtered rooms for us
         this.updateTagsFromCache();
-        this.recalculateFilteredRooms();
 
         // Now that we've finished generation, we need to update the sticky room to what
         // it was. It's entirely possible that it changed lists though, so if it did then

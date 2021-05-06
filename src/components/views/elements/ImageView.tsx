@@ -114,6 +114,8 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
+        window.removeEventListener("resize", this.calculateZoom);
+        this.image.current.removeEventListener("load", this.calculateZoom);
     }
 
     private calculateZoom = () => {
