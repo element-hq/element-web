@@ -192,12 +192,15 @@ $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%)
 $groupFilterPanel-divider-color: $roomlist-header-color;
 
 // See non-legacy _light for variable information
-$voice-record-stop-border-color: #E3E8F0;
 $voice-record-stop-symbol-color: #ff4b55;
-$voice-record-waveform-bg-color: #E3E8F0;
-$voice-record-waveform-fg-color: $muted-fg-color;
-$voice-record-waveform-incomplete-fg-color: #C1C6CD;
 $voice-record-live-circle-color: #ff4b55;
+$voice-record-stop-border-color: #E3E8F0;
+$voice-record-waveform-bg-color: #E3E8F0;
+$voice-record-waveform-fg-color: $secondary-fg-color;
+$voice-record-waveform-incomplete-fg-color: #C1C6CD;
+$voice-record-icon-color: $tertiary-fg-color;
+$voice-playback-button-bg-color: $primary-bg-color;
+$voice-playback-button-fg-color: $secondary-fg-color;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;

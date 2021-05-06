@@ -43,7 +43,7 @@ import {mediaFromMxc} from "../../customisations/Media";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 
 const LONG_DESC_PLACEHOLDER = _td(
-`<h1>HTML for your community's page</h1>
+    `<h1>HTML for your community's page</h1>
 <p>
     Use the long description to introduce new members to the community, or distribute
     some important <a href="foo">links</a>
@@ -110,14 +110,16 @@ class CategoryRoomList extends React.Component {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog(
                         'Failed to add the following room to the group summary',
-                        '', ErrorDialog,
-                    {
-                        title: _t(
-                            "Failed to add the following rooms to the summary of %(groupId)s:",
-                            {groupId: this.props.groupId},
-                        ),
-                        description: errorList.join(", "),
-                    });
+                        '',
+                        ErrorDialog,
+                        {
+                            title: _t(
+                                "Failed to add the following rooms to the summary of %(groupId)s:",
+                                {groupId: this.props.groupId},
+                            ),
+                            description: errorList.join(", "),
+                        },
+                    );
                 });
             },
         }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
@@ -146,8 +148,8 @@ class CategoryRoomList extends React.Component {
         let catHeader = <div />;
         if (this.props.category && this.props.category.profile) {
             catHeader = <div className="mx_GroupView_featuredThings_category">
-            { this.props.category.profile.name }
-        </div>;
+                { this.props.category.profile.name }
+            </div>;
         }
         return <div className="mx_GroupView_featuredThings_container">
             { catHeader }
@@ -190,13 +192,14 @@ class FeaturedRoom extends React.Component {
             Modal.createTrackedDialog(
                 'Failed to remove room from group summary',
                 '', ErrorDialog,
-            {
-                title: _t(
-                    "Failed to remove the room from the summary of %(groupId)s",
-                    {groupId: this.props.groupId},
-                ),
-                description: _t("The room '%(roomName)s' could not be removed from the summary.", {roomName}),
-            });
+                {
+                    title: _t(
+                        "Failed to remove the room from the summary of %(groupId)s",
+                        {groupId: this.props.groupId},
+                    ),
+                    description: _t("The room '%(roomName)s' could not be removed from the summary.", {roomName}),
+                },
+            );
         });
     };
 
@@ -283,13 +286,14 @@ class RoleUserList extends React.Component {
                     Modal.createTrackedDialog(
                         'Failed to add the following users to the community summary',
                         '', ErrorDialog,
-                    {
-                        title: _t(
-                            "Failed to add the following users to the summary of %(groupId)s:",
-                            {groupId: this.props.groupId},
-                        ),
-                        description: errorList.join(", "),
-                    });
+                        {
+                            title: _t(
+                                "Failed to add the following users to the summary of %(groupId)s:",
+                                {groupId: this.props.groupId},
+                            ),
+                            description: errorList.join(", "),
+                        },
+                    );
                 });
             },
         }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
@@ -299,11 +303,11 @@ class RoleUserList extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
-                 <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
-                 <div className="mx_GroupView_featuredThings_addButton_label">
-                     { _t('Add a User') }
-                 </div>
-             </AccessibleButton>) : <div />;
+                <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
+                <div className="mx_GroupView_featuredThings_addButton_label">
+                    { _t('Add a User') }
+                </div>
+            </AccessibleButton>) : <div />;
         const userNodes = this.props.users.map((u) => {
             return <FeaturedUser
                 key={u.user_id}
@@ -352,14 +356,16 @@ class FeaturedUser extends React.Component {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog(
                 'Failed to remove user from community summary',
-                '', ErrorDialog,
-            {
-                title: _t(
-                    "Failed to remove a user from the summary of %(groupId)s",
-                    {groupId: this.props.groupId},
-                ),
-                description: _t("The user '%(displayName)s' could not be removed from the summary.", {displayName}),
-            });
+                '',
+                ErrorDialog,
+                {
+                    title: _t(
+                        "Failed to remove a user from the summary of %(groupId)s",
+                        {groupId: this.props.groupId},
+                    ),
+                    description: _t("The user '%(displayName)s' could not be removed from the summary.", {displayName}),
+                },
+            );
         });
     };
 
@@ -767,8 +773,8 @@ export default class GroupView extends React.Component {
             title: _t("Leave Community"),
             description: (
                 <span>
-                { _t("Leave %(groupName)s?", {groupName: this.props.groupId}) }
-                { warnings }
+                    { _t("Leave %(groupName)s?", {groupName: this.props.groupId}) }
+                    { warnings }
                 </span>
             ),
             button: _t("Leave"),
@@ -1055,10 +1061,11 @@ export default class GroupView extends React.Component {
             return null;
         }
 
-        const membershipButtonClasses = classnames([
-            'mx_RoomHeader_textButton',
-            'mx_GroupView_textButton',
-        ],
+        const membershipButtonClasses = classnames(
+            [
+                'mx_RoomHeader_textButton',
+                'mx_GroupView_textButton',
+            ],
             membershipButtonExtraClasses,
         );
 

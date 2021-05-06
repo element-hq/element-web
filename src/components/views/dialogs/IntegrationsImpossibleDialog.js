@@ -37,9 +37,12 @@ export default class IntegrationsImpossibleDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_IntegrationsImpossibleDialog' hasCancel={false}
-                        onFinished={this.props.onFinished}
-                        title={_t("Integrations not allowed")}>
+            <BaseDialog
+                className='mx_IntegrationsImpossibleDialog'
+                hasCancel={false}
+                onFinished={this.props.onFinished}
+                title={_t("Integrations not allowed")}
+            >
                 <div className='mx_IntegrationsImpossibleDialog_content'>
                     <p>
                         {_t(

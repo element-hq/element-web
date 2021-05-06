@@ -101,7 +101,7 @@ limitations under the License.
 
         .mx_BaseAvatar {
             display: inline-flex;
-            margin: 5px 16px 5px 5px;
+            margin: auto 16px auto 5px;
             vertical-align: middle;
         }
 
@@ -160,31 +160,32 @@ limitations under the License.
         }
     }
 
-    .mx_AddExistingToSpaceDialog_errorText {
-        font-weight: $font-semi-bold;
-        font-size: $font-12px;
-        line-height: $font-15px;
-        color: $notice-primary-color;
-        margin-bottom: 28px;
-    }
-
     .mx_AddExistingToSpace {
         display: contents;
     }
 
     .mx_AddExistingToSpaceDialog_footer {
         display: flex;
-        margin-top: 32px;
+        margin-top: 20px;
 
         > span {
             flex-grow: 1;
-            font-size: $font-14px;
+            font-size: $font-12px;
             line-height: $font-15px;
-            font-weight: $font-semi-bold;
+            color: $secondary-fg-color;
 
-            .mx_AccessibleButton {
-                font-size: inherit;
-                display: inline-block;
+            .mx_ProgressBar {
+                height: 8px;
+                width: 100%;
+
+                @mixin ProgressBarBorderRadius 8px;
+            }
+
+            .mx_AddExistingToSpaceDialog_progressText {
+                margin-top: 8px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-fg-color;
             }
 
             > * {
@@ -192,8 +193,54 @@ limitations under the License.
             }
         }
 
+        .mx_AddExistingToSpaceDialog_error {
+            padding-left: 12px;
+
+            > img {
+                align-self: center;
+            }
+
+            .mx_AddExistingToSpaceDialog_errorHeading {
+                font-weight: $font-semi-bold;
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $notice-primary-color;
+            }
+
+            .mx_AddExistingToSpaceDialog_errorCaption {
+                margin-top: 4px;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $primary-fg-color;
+            }
+        }
+
         .mx_AccessibleButton {
             display: inline-block;
+            align-self: center;
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            padding: 8px 36px;
+        }
+
+        .mx_AddExistingToSpaceDialog_retryButton {
+            margin-left: 12px;
+            padding-left: 24px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                background-color: $primary-fg-color;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/retry.svg');
+                width: 18px;
+                height: 18px;
+                left: 0;
+            }
         }
 
         .mx_AccessibleButton_kind_link {

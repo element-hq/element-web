@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, VoiceRecording} from "../../../voice/VoiceRecording";
+import {IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording} from "../../../voice/VoiceRecording";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {arrayFastResample, arraySeed} from "../../../utils/arrays";
 import {percentageOf} from "../../../utils/numbers";
 import Waveform from "./Waveform";
-import {PLAYBACK_WAVEFORM_SAMPLES} from "../../../voice/Playback";
 
 interface IProps {
     recorder: VoiceRecording;
@@ -38,14 +37,14 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
     public constructor(props) {
         super(props);
 
-        this.state = {heights: arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES)};
+        this.state = {heights: arraySeed(0, RECORDING_PLAYBACK_SAMPLES)};
         this.props.recorder.liveData.onUpdate(this.onRecordingUpdate);
     }
 
     private onRecordingUpdate = (update: IRecordingUpdate) => {
         // The waveform and the downsample target are pretty close, so we should be fine to
         // do this, despite the docs on arrayFastResample.
-        const bars = arrayFastResample(Array.from(update.waveform), PLAYBACK_WAVEFORM_SAMPLES);
+        const bars = arrayFastResample(Array.from(update.waveform), RECORDING_PLAYBACK_SAMPLES);
         this.setState({
             // The incoming data is between zero and one, but typically even screaming into a
             // microphone won't send you over 0.6, so we artificially adjust the gain for the
