@@ -3239,5 +3239,16 @@
     "%(count)s members including %(commaSeparatedMembers)s|one": "%(commaSeparatedMembers)s",
     "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s medlemmar inklusive %(commaSeparatedMembers)s",
     "Including %(commaSeparatedMembers)s": "Inklusive %(commaSeparatedMembers)s",
-    "Failed to send": "Misslyckades att skicka"
+    "Failed to send": "Misslyckades att skicka",
+    "Enter your Security Phrase a second time to confirm it.": "Ange din säkerhetsfras igen för att bekräfta den.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Välj rum eller konversationer att lägga till. Detta är bara ett utrymmer för dig, ingen kommer att informeras. Du kan lägga till fler senare.",
+    "What do you want to organise?": "Vad vill du organisera?",
+    "Filter all spaces": "Filtrera alla utrymmen",
+    "Delete recording": "Radera inspelningen",
+    "Stop the recording": "Stoppa inspelningen",
+    "%(count)s results in all spaces|one": "%(count)s resultat i alla utrymmen",
+    "%(count)s results in all spaces|other": "%(count)s resultat i alla utrymmen",
+    "You have no ignored users.": "Du har inga ignorerade användare.",
+    "Play": "Spela",
+    "Pause": "Pausa"
 }
