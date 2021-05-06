@@ -3168,7 +3168,7 @@
     "Open": "Otevřít",
     "Share decryption keys for room history when inviting users": "Při pozvání uživatelů sdílet dešifrovací klíče pro historii místnosti",
     "Manage & explore rooms": "Spravovat a prozkoumat místnosti",
-    "Message search initialisation failed": "Inicializace vyhledávání zpráv se nezdařila",
+    "Message search initilisation failed": "Inicializace vyhledávání zpráv se nezdařila",
     "%(count)s people you know have already joined|one": "%(count)s osoba, kterou znáte, se již připojila",
     "Invited people will be able to read old messages.": "Pozvaní lidé budou moci číst staré zprávy.",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few momentswhilst the index is recreated": "Pokud tak učiníte, nezapomeňte, že žádná z vašich zpráv nebude smazána, ale vyhledávání může být na několik okamžiků degradováno, zatímco index bude znovu vytvářen",

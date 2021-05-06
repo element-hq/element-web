@@ -3254,7 +3254,7 @@
     "You have unverified logins": "您有未驗證的登入",
     "unknown person": "不明身份的人",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "與 %(transferTarget)s 進行協商。<a>轉讓至 %(transferee)s</a>",
-    "Message search initialisation failed": "訊息搜尋初始化失敗",
+    "Message search initilisation failed": "訊息搜尋初始化失敗",
     "Invite to just this room": "邀請到此聊天室",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few momentswhilst the index is recreated": "如果這樣做，請注意，您的任何訊息都不會被刪除，但是在重新建立索引的同時，搜索體驗可能會降低片刻",
     "Let's create a room for each of them.": "讓我們為每個主題建立一個聊天室吧。",

@@ -3254,7 +3254,7 @@
     "Quick actions": "Actions rapides",
     "Invite to just this room": "Inviter seulement dans ce salon",
     "Warn before quitting": "Avertir avant de quitter",
-    "Message search initialisation failed": "Échec de l’initialisation de la recherche de message",
+    "Message search initilisation failed": "Échec de l’initialisation de la recherche de message",
     "Manage & explore rooms": "Gérer et découvrir les salons",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Consultation avec %(transferTarget)s. <a>Transfert à %(transferee)s</a>",
     "unknown person": "personne inconnue",

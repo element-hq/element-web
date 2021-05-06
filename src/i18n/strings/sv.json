@@ -3212,7 +3212,7 @@
     "Verification requested": "Verifiering begärd",
     "Sends the given message as a spoiler": "Skickar det angivna meddelandet som en spoiler",
     "Manage & explore rooms": "Hantera och utforska rum",
-    "Message search initialisation failed": "Initialisering av meddelandesökning misslyckades",
+    "Message search initilisation failed": "Initialisering av meddelandesökning misslyckades",
     "Please choose a strong password": "Vänligen välj ett starkt lösenord",
     "Use another login": "Använd annan inloggning",
     "Verify your identity to access encrypted messages and prove your identity to others.": "Verifiera din identitet för att komma åt krypterade meddelanden och bevisa din identitet för andra.",

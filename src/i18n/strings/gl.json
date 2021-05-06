@@ -3269,7 +3269,7 @@
     "unknown person": "persoa descoñecida",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Consultando con %(transferTarget)s. <a>Transferir a %(transferee)s</a>",
     "Manage & explore rooms": "Xestionar e explorar salas",
-    "Message search initialisation failed": "Fallo a inicialización da busca de mensaxes",
+    "Message search initilisation failed": "Fallo a inicialización da busca de mensaxes",
     "Quick actions": "Accións rápidas",
     "Invite messages are hidden by default. Click to show the message.": "As mensaxes de convite están agochadas por defecto. Preme para amosar a mensaxe.",
     "Record a voice message": "Gravar mensaxe de voz",

@@ -3227,7 +3227,7 @@
     "This homeserver has been blocked by it's administrator.": "Dieser Heimserver wurde von seiner Administration blockiert.",
     "You have unverified logins": "Du hast nicht-bestätigte Anmeldungen",
     "Review to ensure your account is safe": "Überprüfen, um sicher zu sein, dass dein Konto sicher ist",
-    "Message search initialisation failed": "Initialisierung der Nachrichtensuche fehlgeschlagen",
+    "Message search initilisation failed": "Initialisierung der Nachrichtensuche fehlgeschlagen",
     "Support": "Unterstützen",
     "This room is suggested as a good one to join": "Dieser Raum wurde als gut zum Beitreten vorgeschlagen",
     "Your message wasn't sent because this homeserver has been blocked by it's administrator. Please <a>contact your service administrator</a> to continue using the service.": "Deine Nachricht wurde nicht versendet, weil dieser Heimserver von dessen Administrator gesperrt wurde. Bitte <a>kontaktiere deinen Dienstadministrator</a> um den Dienst weiterzunutzen.",

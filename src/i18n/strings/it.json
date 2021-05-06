@@ -3260,7 +3260,7 @@
     "Invite to just this room": "Invita solo in questa stanza",
     "%(count)s people you know have already joined|other": "%(count)s persone che conosci sono già entrate",
     "%(count)s people you know have already joined|one": "%(count)s persona che conosci è già entrata",
-    "Message search initialisation failed": "Inizializzazione ricerca messaggi fallita",
+    "Message search initilisation failed": "Inizializzazione ricerca messaggi fallita",
     "Add existing rooms": "Aggiungi stanze esistenti",
     "Warn before quitting": "Avvisa prima di uscire",
     "Invited people will be able to read old messages.": "Le persone invitate potranno leggere i vecchi messaggi.",
