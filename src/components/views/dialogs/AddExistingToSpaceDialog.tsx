@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClient} from "matrix-js-sdk/src/client";
@@ -29,11 +29,13 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import {getDisplayAliasForRoom} from "../../../Rooms";
 import AccessibleButton from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {allSettled} from "../../../utils/promise";
+import {sleep} from "../../../utils/promise";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {calculateRoomVia} from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import ProgressBar from "../elements/ProgressBar";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -45,7 +47,11 @@ const Entry = ({ room, checked, onChange }) => {
     return <label className="mx_AddExistingToSpace_entry">
         <RoomAvatar room={room} height={32} width={32} />
         <span className="mx_AddExistingToSpace_entry_name">{ room.name }</span>
-        <StyledCheckbox onChange={(e) => onChange(e.target.checked)} checked={checked} />
+        <StyledCheckbox
+            onChange={onChange ? (e) => onChange(e.target.checked) : null}
+            checked={checked}
+            disabled={!onChange}
+        />
     </label>;
 };
 
@@ -57,6 +63,8 @@ interface IAddExistingToSpaceProps {
 
 export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, selected, onChange }) => {
     const cli = useContext(MatrixClientContext);
+    const visibleRooms = useMemo(() => sortRooms(cli.getVisibleRooms()), [cli]);
+
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
 
@@ -65,7 +73,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
     const existingRoomsSet = new Set(SpaceStore.instance.getChildRooms(space.roomId));
 
     const joinRule = space.getJoinRule();
-    const [spaces, rooms, dms] = cli.getVisibleRooms().reduce((arr, room) => {
+    const [spaces, rooms, dms] = visibleRooms.reduce((arr, room) => {
         if (room.getMyMembership() !== "join") return arr;
         if (!room.name.toLowerCase().includes(lcQuery)) return arr;
 
@@ -101,9 +109,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
                             key={room.roomId}
                             room={room}
                             checked={selected.has(room)}
-                            onChange={(checked) => {
+                            onChange={onChange ? (checked) => {
                                 onChange(checked, room);
-                            }}
+                            } : null}
                         />;
                     }) }
                 </div>
@@ -117,9 +125,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
                             key={space.roomId}
                             room={space}
                             checked={selected.has(space)}
-                            onChange={(checked) => {
+                            onChange={onChange ? (checked) => {
                                 onChange(checked, space);
-                            }}
+                            } : null}
                         />;
                     }) }
                 </div>
@@ -133,9 +141,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
                             key={room.roomId}
                             room={room}
                             checked={selected.has(room)}
-                            onChange={(checked) => {
+                            onChange={onChange ? (checked) => {
                                 onChange(checked, room);
-                            }}
+                            } : null}
                         />;
                     }) }
                 </div>
@@ -153,8 +161,8 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
     const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
     const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
 
-    const [busy, setBusy] = useState(false);
-    const [error, setError] = useState("");
+    const [progress, setProgress] = useState<number>(null);
+    const [error, setError] = useState<Error>(null);
 
     let spaceOptionSection;
     if (existingSubspaces.length > 0) {
@@ -194,6 +202,82 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
         </div>
     </React.Fragment>;
 
+    const addRooms = async () => {
+        setError(null);
+        setProgress(0);
+
+        let error;
+
+        for (const room of selectedToAdd) {
+            const via = calculateRoomVia(room);
+            try {
+                await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async e => {
+                    if (e.errcode === "M_LIMIT_EXCEEDED") {
+                        await sleep(e.data.retry_after_ms);
+                        return SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
+                    }
+
+                    throw e;
+                });
+                setProgress(i => i + 1);
+            } catch (e) {
+                console.error("Failed to add rooms to space", e);
+                setError(error = e);
+                break;
+            }
+        }
+
+        if (!error) {
+            onFinished(true);
+        }
+    };
+
+    const busy = progress !== null;
+
+    let footer;
+    if (error) {
+        footer = <>
+            <img
+                src={require("../../../../res/img/element-icons/warning-badge.svg")}
+                height="24"
+                width="24"
+                alt=""
+            />
+
+            <span className="mx_AddExistingToSpaceDialog_error">
+                <div className="mx_AddExistingToSpaceDialog_errorHeading">{ _t("Not all selected were added") }</div>
+                <div className="mx_AddExistingToSpaceDialog_errorCaption">{ _t("Try again") }</div>
+            </span>
+
+            <AccessibleButton className="mx_AddExistingToSpaceDialog_retryButton" onClick={addRooms}>
+                { _t("Retry") }
+            </AccessibleButton>
+        </>;
+    } else if (busy) {
+        footer = <span>
+            <ProgressBar value={progress} max={selectedToAdd.size} />
+            <div className="mx_AddExistingToSpaceDialog_progressText">
+                { _t("Adding rooms... (%(progress)s out of %(count)s)", {
+                    count: selectedToAdd.size,
+                    progress,
+                }) }
+            </div>
+        </span>;
+    } else {
+        footer = <>
+            <span>
+                <div>{ _t("Want to add a new room instead?") }</div>
+                <AccessibleButton onClick={() => onCreateRoomClick(cli, space)} kind="link">
+                    { _t("Create a new room") }
+                </AccessibleButton>
+            </span>
+
+            <AccessibleButton kind="primary" disabled={selectedToAdd.size < 1} onClick={addRooms}>
+                { _t("Add") }
+            </AccessibleButton>
+        </>;
+    }
+
     return <BaseDialog
         title={title}
         className="mx_AddExistingToSpaceDialog"
@@ -201,50 +285,23 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
         onFinished={onFinished}
         fixedWidth={false}
     >
-        { error && <div className="mx_AddExistingToSpaceDialog_errorText">{ error }</div> }
-
         <MatrixClientContext.Provider value={cli}>
             <AddExistingToSpace
                 space={space}
                 selected={selectedToAdd}
-                onChange={(checked, room) => {
+                onChange={!busy && !error ? (checked, room) => {
                     if (checked) {
                         selectedToAdd.add(room);
                     } else {
                         selectedToAdd.delete(room);
                     }
                     setSelectedToAdd(new Set(selectedToAdd));
-                }}
+                } : null}
             />
         </MatrixClientContext.Provider>
 
         <div className="mx_AddExistingToSpaceDialog_footer">
-            <span>
-                <div>{ _t("Don't want to add an existing room?") }</div>
-                <AccessibleButton onClick={() => onCreateRoomClick(cli, space)} kind="link">
-                    { _t("Create a new room") }
-                </AccessibleButton>
-            </span>
-
-            <AccessibleButton
-                kind="primary"
-                disabled={busy || selectedToAdd.size < 1}
-                onClick={async () => {
-                    // TODO rate limiting
-                    setBusy(true);
-                    try {
-                        await allSettled(Array.from(selectedToAdd).map((room) =>
-                            SpaceStore.instance.addRoomToSpace(space, room.roomId, calculateRoomVia(room))));
-                        onFinished(true);
-                    } catch (e) {
-                        console.error("Failed to add rooms to space", e);
-                        setError(_t("Failed to add rooms to space"));
-                    }
-                    setBusy(false);
-                }}
-            >
-                { busy ? _t("Adding...") : _t("Add") }
-            </AccessibleButton>
+            { footer }
         </div>
     </BaseDialog>;
 };

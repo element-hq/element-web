@@ -39,6 +39,7 @@ import {mediaFromMxc} from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import {useStateToggle} from "../../hooks/useStateToggle";
+import {getOrder} from "../../stores/SpaceStore";
 
 interface IHierarchyProps {
     space: Room;
@@ -254,7 +255,11 @@ export const HierarchyLevel = ({
     const space = cli.getRoom(spaceId);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
-    const sortedChildren = sortBy([...(relations.get(spaceId)?.values() || [])], ev => ev.content.order || null);
+    const children = Array.from(relations.get(spaceId)?.values() || []);
+    const sortedChildren = sortBy(children, ev => {
+        // XXX: Space Summary API doesn't give the child origin_server_ts but once it does we should use it for sorting
+        return getOrder(ev.content.order, null, ev.state_key);
+    });
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
         if (!rooms.has(roomId)) return result;

@@ -61,9 +61,9 @@ limitations under the License.
 
 .mx_MFileBody_info {
     background-color: $message-body-panel-bg-color;
-    border-radius: 4px;
-    width: 270px;
-    padding: 8px;
+    border-radius: 12px;
+    width: 243px; // same width as a playable voice message, accounting for padding
+    padding: 6px 12px;
     color: $message-body-panel-fg-color;
 
     .mx_MFileBody_info_icon {
@@ -82,7 +82,7 @@ limitations under the License.
             mask-position: center;
             mask-size: cover;
             mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
-            background-color: $message-body-panel-fg-color;
+            background-color: $message-body-panel-icon-fg-color;
             width: 13px;
             height: 15px;
 
