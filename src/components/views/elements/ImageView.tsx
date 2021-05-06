@@ -120,11 +120,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const width = image.naturalWidth;
-        const height = image.naturalHeight;
-
-        const zoomX = imageWrapper.clientWidth / width;
-        const zoomY = imageWrapper.clientHeight / height;
+        const zoomX = imageWrapper.clientWidth / image.naturalWidth;
+        const zoomY = imageWrapper.clientHeight / image.naturalHeight;
 
         // If the image is smaller in both dimensions set its the zoom to 1 to
         // display it in its original size
