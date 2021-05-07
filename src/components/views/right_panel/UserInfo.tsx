@@ -188,7 +188,7 @@ function DeviceItem({userId, device}: {userId: string, device: IDevice}) {
     };
 
     let deviceName;
-    if (device.getDisplayName() === null || device.getDisplayName().trim() === "") {
+    if (!device.getDisplayName()?.trim()) {
         deviceName = device.deviceId;
     } else {
         deviceName = device.ambiguous ?
