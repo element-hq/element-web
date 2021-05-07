@@ -1096,7 +1096,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        const isSpace = roomToLeave?.isSpaceRoom();
+        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const warnings = [];
 
@@ -1135,7 +1135,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        const isSpace = roomToLeave?.isSpaceRoom();
+        const isSpace = SettingsStore.getValue("feature_spaces") && roomToLeave?.isSpaceRoom();
         Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
             title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (

@@ -54,6 +54,12 @@ import FacePile from "../views/elements/FacePile";
 import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
 import {sleep} from "../../utils/promise";
 import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
+import {ChevronFace, ContextMenuButton, useContextMenu} from "./ContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../views/context_menus/IconizedContextMenu";
+import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import {BetaPill} from "../views/beta/BetaCard";
 import {USER_LABS_TAB} from "../views/dialogs/UserSettingsDialog";
 import SettingsStore from "../../settings/SettingsStore";
@@ -262,6 +268,67 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     </div>;
 };
 
+const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
+    const cli = useContext(MatrixClientContext);
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu;
+    if (menuDisplayed) {
+        const rect = handle.current.getBoundingClientRect();
+        contextMenu = <IconizedContextMenu
+            left={rect.left + window.pageXOffset + 0}
+            top={rect.bottom + window.pageYOffset + 8}
+            chevronFace={ChevronFace.None}
+            onFinished={closeMenu}
+            className="mx_RoomTile_contextMenu"
+            compact
+        >
+            <IconizedContextMenuOptionList first>
+                <IconizedContextMenuOption
+                    label={_t("Create new room")}
+                    iconClassName="mx_RoomList_iconPlus"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+
+                        if (await showCreateNewRoom(cli, space)) {
+                            onNewRoomAdded();
+                        }
+                    }}
+                />
+                <IconizedContextMenuOption
+                    label={_t("Add existing room")}
+                    iconClassName="mx_RoomList_iconHash"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+
+                        const [added] = await showAddExistingRooms(cli, space);
+                        if (added) {
+                            onNewRoomAdded();
+                        }
+                    }}
+                />
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>;
+    }
+
+    return <>
+        <ContextMenuButton
+            kind="primary"
+            inputRef={handle}
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            label={_t("Add")}
+        >
+            { _t("Add") }
+        </ContextMenuButton>
+        { contextMenu }
+    </>;
+};
+
 const SpaceLanding = ({ space }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
@@ -286,32 +353,20 @@ const SpaceLanding = ({ space }) => {
 
     const [refreshToken, forceUpdate] = useStateToggle(false);
 
-    let addRoomButtons;
+    let addRoomButton;
     if (canAddRooms) {
-        addRoomButtons = <React.Fragment>
-            <AccessibleButton className="mx_SpaceRoomView_landing_addButton" onClick={async () => {
-                const [added] = await showAddExistingRooms(cli, space);
-                if (added) {
-                    forceUpdate();
-                }
-            }}>
-                { _t("Add existing rooms & spaces") }
-            </AccessibleButton>
-            <AccessibleButton className="mx_SpaceRoomView_landing_createButton" onClick={() => {
-                showCreateNewRoom(cli, space);
-            }}>
-                { _t("Create a new room") }
-            </AccessibleButton>
-        </React.Fragment>;
+        addRoomButton = <SpaceLandingAddButton space={space} onNewRoomAdded={forceUpdate} />;
     }
 
     let settingsButton;
     if (shouldShowSpaceSettings(cli, space)) {
-        settingsButton = <AccessibleButton className="mx_SpaceRoomView_landing_settingsButton" onClick={() => {
-            showSpaceSettings(cli, space);
-        }}>
-            { _t("Settings") }
-        </AccessibleButton>;
+        settingsButton = <AccessibleTooltipButton
+            className="mx_SpaceRoomView_landing_settingsButton"
+            onClick={() => {
+                showSpaceSettings(cli, space);
+            }}
+            title={_t("Settings")}
+        />;
     }
 
     const onMembersClick = () => {
@@ -338,17 +393,19 @@ const SpaceLanding = ({ space }) => {
             <SpaceInfo space={space} />
             <FacePile room={space} onlyKnownUsers={false} numShown={7} onClick={onMembersClick} />
             { inviteButton }
+            { settingsButton }
         </div>
         <div className="mx_SpaceRoomView_landing_topic">
             <RoomTopic room={space} />
         </div>
         <hr />
-        <div className="mx_SpaceRoomView_landing_adminButtons">
-            { addRoomButtons }
-            { settingsButton }
-        </div>
 
-        <SpaceHierarchy space={space} showRoom={showRoom} refreshToken={refreshToken} />
+        <SpaceHierarchy
+            space={space}
+            showRoom={showRoom}
+            refreshToken={refreshToken}
+            additionalButtons={addRoomButton}
+        />
     </div>;
 };
 
