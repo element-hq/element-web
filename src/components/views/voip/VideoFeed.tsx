@@ -37,6 +37,8 @@ interface IProps {
     // a callback which is called when the video element is resized
     // due to a change in video metadata
     onResize?: (e: Event) => void,
+
+    className: string,
 }
 
 interface IState {
@@ -121,8 +123,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     render() {
         const videoClasses = {
             mx_VideoFeed: true,
-            mx_VideoFeed_local: this.props.feed.isLocal(),
-            mx_VideoFeed_remote: !this.props.feed.isLocal(),
+            [this.props.className]: true,
             mx_VideoFeed_voice: this.state.videoMuted,
             mx_VideoFeed_video: !this.state.videoMuted,
             mx_VideoFeed_mirror: (

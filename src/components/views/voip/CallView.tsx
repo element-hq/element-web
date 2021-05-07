@@ -33,6 +33,13 @@ import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+const FEED_CLASS_NAMES = [
+    "mx_VideoFeed_primary",
+    "mx_VideoFeed_secondary",
+    "mx_VideoFeed_tertiary",
+    "mx_VideoFeed_quaternary",
+];
+
 interface IProps {
         // The call for us to display
         call: MatrixCall,
@@ -371,6 +378,34 @@ export default class CallView extends React.Component<IProps, IState> {
         this.props.call.transferToCall(transfereeCall);
     }
 
+    private renderFeeds(feeds: Array<CallFeed>, offset = 0) {
+        const sortedFeeds = [...feeds].sort((a, b) => {
+            if (b.purpose === SDPStreamMetadataPurpose.Screenshare && !b.isLocal()) return 1;
+            if (a.isLocal() && !b.isLocal()) return 1;
+            return 0;
+        });
+
+        return sortedFeeds.map((feed, i) => {
+            i += offset;
+            // TODO: Later the CallView should probably be reworked to support
+            // any number of feeds but now we can't render more than 4 feeds
+            if (i >= 4) return;
+            // Here we check to hide local audio feeds to achieve the same UI/UX
+            // as before. But once again this might be subject to change
+            if (feed.isVideoMuted() && feed.isLocal()) return;
+            return (
+                <VideoFeed
+                    key={feed.stream.id}
+                    className={FEED_CLASS_NAMES[i]}
+                    feed={feed}
+                    call={this.props.call}
+                    pipMode={this.props.pipMode}
+                    onResize={this.props.onResize}
+                />
+            );
+        });
+    }
+
     public render() {
         const client = MatrixClientPeg.get();
         const callRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
@@ -594,20 +629,8 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_voice: true,
             });
 
-            const feeds = this.props.call.getLocalFeeds().map((feed, i) => {
-                // Here we check to hide local audio feeds to achieve the same UI/UX
-                // as before. But once again this might be subject to change
-                if (feed.isVideoMuted()) return;
-                return (
-                    <VideoFeed
-                        key={i}
-                        feed={feed}
-                        call={this.props.call}
-                        pipMode={this.props.pipMode}
-                        onResize={this.props.onResize}
-                    />
-                );
-            });
+            // We pass offset of one to avoid a feed being rendered as primary
+            const feeds = this.renderFeeds(this.props.call.getLocalFeeds(), 1);
 
             // Saying "Connecting" here isn't really true, but the best thing
             // I can come up with, but this might be subject to change as well
@@ -631,23 +654,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video: true,
             });
 
-            // TODO: Later the CallView should probably be reworked to support
-            // any number of feeds but now we can always expect there to be two
-            // feeds. This is because the js-sdk ignores any new incoming streams
-            const feeds = this.state.feeds.map((feed, i) => {
-                // Here we check to hide local audio feeds to achieve the same UI/UX
-                // as before. But once again this might be subject to change
-                if (feed.isVideoMuted() && feed.isLocal()) return;
-                return (
-                    <VideoFeed
-                        key={i}
-                        feed={feed}
-                        call={this.props.call}
-                        pipMode={this.props.pipMode}
-                        onResize={this.props.onResize}
-                    />
-                );
-            });
+            const feeds = this.renderFeeds(this.state.feeds);
 
             contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
                 {feeds}
