@@ -361,8 +361,8 @@ describe("SpaceStore", () => {
                 expect(store.getSpaceFilteredRoomIds(null).has(invite2)).toBeTruthy();
             });
 
-            it("home space does not contain rooms/low priority from rooms within spaces", () => {
-                expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeFalsy();
+            it("home space does contain rooms/low priority even if they are also shown in a space", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeTruthy();
             });
 
             it("space contains child rooms", () => {
