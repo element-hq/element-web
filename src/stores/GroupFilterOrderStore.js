@@ -168,7 +168,7 @@ class GroupFilterOrderStore extends Store {
 
                 Analytics.trackEvent('FilterStore', 'select_tag');
             }
-            break;
+                break;
             case 'deselect_tags':
                 if (payload.tag) {
                     // if a tag is passed, only deselect that tag
@@ -181,7 +181,7 @@ class GroupFilterOrderStore extends Store {
                     });
                 }
                 Analytics.trackEvent('FilterStore', 'deselect_tags');
-            break;
+                break;
             case 'on_client_not_viable':
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
@@ -207,8 +207,8 @@ class GroupFilterOrderStore extends Store {
             groupIds.forEach(groupId => {
                 const rooms =
                     GroupStore.getGroupRooms(groupId)
-                    .map(r => client.getRoom(r.roomId)) // to Room objects
-                    .filter(r => r !== null && r !== undefined);   // filter out rooms we haven't joined from the group
+                        .map(r => client.getRoom(r.roomId)) // to Room objects
+                        .filter(r => r !== null && r !== undefined);   // filter out rooms we haven't joined from the group
                 const badge = rooms && RoomNotifs.aggregateNotificationCount(rooms);
                 changedBadges[groupId] = (badge && badge.count !== 0) ? badge : undefined;
             });

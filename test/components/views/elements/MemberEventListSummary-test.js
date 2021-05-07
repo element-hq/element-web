@@ -245,8 +245,7 @@ describe('MemberEventListSummary', function() {
         );
     });
 
-    it('truncates multiple sequences of repetitions with other events between',
-    function() {
+    it('truncates multiple sequences of repetitions with other events between', function() {
         const events = generateEvents([
             {
                 userId: "@user_1:some.domain",
@@ -395,8 +394,7 @@ describe('MemberEventListSummary', function() {
         );
     });
 
-    it('correctly orders sequences of transitions by the order of their first event',
-    function() {
+    it('correctly orders sequences of transitions by the order of their first event', function() {
         const events = generateEvents([
             {
                 userId: "@user_2:some.domain",
@@ -568,8 +566,7 @@ describe('MemberEventListSummary', function() {
         );
     });
 
-    it('handles invitation plurals correctly when there are multiple invites',
-    function() {
+    it('handles invitation plurals correctly when there are multiple invites', function() {
         const events = generateEvents([
             {
                 userId: "@user_1:some.domain",

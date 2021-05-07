@@ -37,7 +37,11 @@ export class VisibilityProvider {
         await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
     }
 
-    public isRoomVisible(room: Room): boolean {
+    public isRoomVisible(room?: Room): boolean {
+        if (!room) {
+            return false;
+        }
+
         if (
             CallHandler.sharedInstance().getSupportsVirtualRooms() &&
             VoipUserMapper.sharedInstance().isVirtualRoom(room)
@@ -46,7 +50,7 @@ export class VisibilityProvider {
         }
 
         // hide space rooms as they'll be shown in the SpacePanel
-        if (room.isSpaceRoom() && SettingsStore.getValue("feature_spaces")) {
+        if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
             return false;
         }
 

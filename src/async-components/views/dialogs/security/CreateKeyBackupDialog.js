@@ -310,7 +310,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
-                "Please enter your Security Phrase a second time to confirm.",
+                "Enter your Security Phrase a second time to confirm it.",
             )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
@@ -498,9 +498,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 title={this._titleForPhase(this.state.phase)}
                 hasCancel={[PHASE_PASSPHRASE, PHASE_DONE].includes(this.state.phase)}
             >
-            <div>
-                {content}
-            </div>
+                <div>
+                    {content}
+                </div>
             </BaseDialog>
         );
     }

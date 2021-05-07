@@ -258,7 +258,7 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    setLanguage(preferredLangs: string[]) {}
+    async setLanguage(preferredLangs: string[]) {}
 
     setSpellCheckLanguages(preferredLangs: string[]) {}
 

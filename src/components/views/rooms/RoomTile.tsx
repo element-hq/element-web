@@ -1,8 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2017, 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +17,7 @@ limitations under the License.
 
 import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
@@ -51,13 +50,17 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { getUnsentMessages } from "../../structures/RoomStatusBar";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
+import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
+    resizeNotifier: ResizeNotifier;
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
@@ -67,6 +70,7 @@ interface IState {
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
     messagePreview?: string;
+    hasUnsentEvents: boolean;
 }
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomId}`;
@@ -93,12 +97,20 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
+            hasUnsentEvents: this.countUnsentEvents() > 0,
 
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: this.generatePreview(),
         };
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+        }
+    }
+
+    private countUnsentEvents(): number {
+        return getUnsentMessages(this.props.room).length;
     }
 
     private onRoomNameUpdate = (room) => {
@@ -107,6 +119,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onNotificationUpdate = () => {
         this.forceUpdate(); // notification state changed - update
+    };
+
+    private onResize = () => {
+        if (this.showMessagePreview && !this.state.messagePreview) {
+            this.setState({messagePreview: this.generatePreview()});
+        }
+    };
+
+    private onLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
+        if (!room?.roomId === this.props.room.roomId) return;
+        this.setState({hasUnsentEvents: this.countUnsentEvents() > 0});
     };
 
     private onRoomPropertyUpdate = (property: CachedRoomKey) => {
@@ -167,6 +190,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
             this.onCommunityUpdate,
         );
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
     }
 
     public componentWillUnmount() {
@@ -182,6 +206,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             );
             this.props.room.off("Room.name", this.onRoomNameUpdate);
         }
+        if (this.props.resizeNotifier) {
+            this.props.resizeNotifier.off("middlePanelResized", this.onResize);
+        }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
@@ -191,6 +218,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
             this.onCommunityUpdate,
         );
+        MatrixClientPeg.get()?.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -554,17 +582,30 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         />;
 
         let badge: React.ReactNode;
-        if (!this.props.isMinimized && this.notificationState) {
+        if (!this.props.isMinimized) {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
-            badge = (
-                <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
-                    <NotificationBadge
-                        notification={this.notificationState}
-                        forceCount={false}
-                        roomId={this.props.room.roomId}
-                    />
-                </div>
-            );
+            if (this.state.hasUnsentEvents) {
+                // hardcode the badge to a danger state when there's unsent messages
+                badge = (
+                    <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
+                        <NotificationBadge
+                            notification={StaticNotificationState.RED_EXCLAMATION}
+                            forceCount={false}
+                            roomId={this.props.room.roomId}
+                        />
+                    </div>
+                );
+            } else if (this.notificationState) {
+                badge = (
+                    <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
+                        <NotificationBadge
+                            notification={this.notificationState}
+                            forceCount={false}
+                            roomId={this.props.room.roomId}
+                        />
+                    </div>
+                );
+            }
         }
 
         let messagePreview = null;
