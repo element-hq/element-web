@@ -22,6 +22,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { SettingLevel } from "../settings/SettingLevel";
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -87,6 +88,23 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
         this.matrixClient.on("Room.myMembership", this.onMyMembership);
         this.matrixClient.on("Room", this.onRoom);
+
+        const client = MatrixClientPeg.get();
+        const breadcrumbs = client.store.getAccountData("im.vector.setting.breadcrumbs");
+        const breadcrumbsRooms: string[] = breadcrumbs?.getContent().recent_rooms || [];
+
+        breadcrumbsRooms.map(async roomId => {
+            const room = client.getRoom(roomId);
+            if (room) {
+                const [cryptoEvent] = room.currentState.getStateEvents("m.room.encryption");
+                if (cryptoEvent) {
+                    if (!client.isRoomEncrypted(roomId)) {
+                        await client._crypto.onCryptoEvent(cryptoEvent);
+                    }
+                    return room?.decryptAllEvents();
+                }
+            }
+        });
     }
 
     protected async onNotReady() {
