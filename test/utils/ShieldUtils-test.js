@@ -26,7 +26,7 @@ describe("mkClient self-test", function() {
         ["@TF:h", true],
         ["@FT:h", false],
         ["@FF:h", false]],
-        )("behaves well for user trust %s", (userId, trust) => {
+    )("behaves well for user trust %s", (userId, trust) => {
         expect(mkClient().checkUserTrust(userId).isCrossSigningVerified()).toBe(trust);
     });
 
@@ -35,7 +35,7 @@ describe("mkClient self-test", function() {
         ["@TF:h", false],
         ["@FT:h", true],
         ["@FF:h", false]],
-        )("behaves well for device trust %s", (userId, trust) => {
+    )("behaves well for device trust %s", (userId, trust) => {
         expect(mkClient().checkDeviceTrust(userId, "device").isVerified()).toBe(trust);
     });
 });
@@ -128,7 +128,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
 
 describe("shieldStatusForMembership other-trust behaviour", function() {
     beforeAll(() => {
-        DMRoomMap._sharedInstance = {
+        DMRoomMap.sharedInstance = {
             getUserIdForRoomId: (roomId) => roomId === "DM" ? "@any:h" : null,
         };
     });

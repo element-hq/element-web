@@ -347,7 +347,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             if (element) {
                 classes = element.classList;
             }
-        } while (element && !cssClasses.some(c => classes.contains(c)));
+        } while (element && (!cssClasses.some(c => classes.contains(c)) || element.offsetParent === null));
 
         if (element) {
             element.focus();
@@ -416,7 +416,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
-            resizeNotifier={null}
+            resizeNotifier={this.props.resizeNotifier}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}

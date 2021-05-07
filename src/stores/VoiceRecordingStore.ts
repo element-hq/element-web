@@ -78,3 +78,5 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         return this.updateState({recording: null});
     }
 }
+
+window.mxVoiceRecordingStore = VoiceRecordingStore.instance;

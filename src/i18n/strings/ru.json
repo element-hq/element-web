@@ -3210,5 +3210,6 @@
     "Removing...": "Удаление…",
     "Failed to remove some rooms. Try again later": "Не удалось удалить несколько комнат. Попробуйте позже",
     "%(count)s rooms and 1 space|one": "%(count)s комната и одно пространство",
-    "%(count)s rooms and 1 space|other": "%(count)s комнат и одно пространство"
+    "%(count)s rooms and 1 space|other": "%(count)s комнат и одно пространство",
+    "Sends the given message as a spoiler": "Отправить данное сообщение под спойлером"
 }

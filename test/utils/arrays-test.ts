@@ -22,6 +22,7 @@ import {
     arrayHasOrderChange,
     arrayMerge,
     arraySeed,
+    arrayTrimFill,
     arrayUnion,
     ArrayUtil,
     GroupedArray,
@@ -61,6 +62,38 @@ describe('arrays', () => {
                 {input: [1, 2, 3], output: [1, 2, 3]}, // Odd
                 {input: [1, 2], output: [1, 2]}, // Even
             ].forEach((c, i) => expectSample(i, c.input, c.output));
+        });
+    });
+
+    describe('arrayTrimFill', () => {
+        it('should shrink arrays', () => {
+            const input = [1, 2, 3];
+            const output = [1, 2];
+            const seed = [4, 5, 6];
+            const result = arrayTrimFill(input, output.length, seed);
+            expect(result).toBeDefined();
+            expect(result).toHaveLength(output.length);
+            expect(result).toEqual(output);
+        });
+
+        it('should expand arrays', () => {
+            const input = [1, 2, 3];
+            const output = [1, 2, 3, 4, 5];
+            const seed = [4, 5, 6];
+            const result = arrayTrimFill(input, output.length, seed);
+            expect(result).toBeDefined();
+            expect(result).toHaveLength(output.length);
+            expect(result).toEqual(output);
+        });
+
+        it('should keep arrays the same', () => {
+            const input = [1, 2, 3];
+            const output = [1, 2, 3];
+            const seed = [4, 5, 6];
+            const result = arrayTrimFill(input, output.length, seed);
+            expect(result).toBeDefined();
+            expect(result).toHaveLength(output.length);
+            expect(result).toEqual(output);
         });
     });
 
