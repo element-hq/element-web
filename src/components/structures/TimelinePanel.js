@@ -1141,6 +1141,14 @@ class TimelinePanel extends React.Component {
     // get the list of events from the timeline window and the pending event list
     _getEvents() {
         const events = this._timelineWindow.getEvents();
+
+        events
+            .forEach(event => {
+                if (event.shouldAttemptDecryption()) {
+                    event.attemptDecryption(MatrixClientPeg.get()._crypto);
+                }
+            });
+
         const firstVisibleEventIndex = this._checkForPreJoinUISI(events);
 
         // Hold onto the live events separately. The read receipt and read marker
