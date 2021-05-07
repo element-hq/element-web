@@ -47,6 +47,11 @@ module.exports = (env, argv) => {
     return {
         ...development,
 
+        node: {
+            // Mock out the NodeFS module: The opus decoder imports this wrongly.
+            fs: 'empty',
+        },
+
         entry: {
             "bundle": "./src/vector/index.ts",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
@@ -275,6 +280,43 @@ module.exports = (env, argv) => {
                     options: {
                         // We deliberately override the name so it makes sense in debugging
                         name: 'opus-encoderWorker.min.[hash:7].[ext]',
+                        outputPath: '.',
+                    },
+                },
+                {
+                    // This is from the same place as the encoderWorker above, but only needed
+                    // for Safari support.
+                    test: /decoderWorker\.min\.js$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately override the name so it makes sense in debugging
+                        name: 'opus-decoderWorker.min.[hash:7].[ext]',
+                        outputPath: '.',
+                    },
+                },
+                {
+                    // This is from the same place as the encoderWorker above, but only needed
+                    // for Safari support.
+                    test: /decoderWorker\.min\.wasm$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately don't change the name because the decoderWorker has this
+                        // hardcoded. This is here to avoid the default wasm rule from adding a hash.
+                        name: 'decoderWorker.min.wasm',
+                        outputPath: '.',
+                    },
+                },
+                {
+                    // This is from the same place as the encoderWorker above, but only needed
+                    // for Safari support.
+                    test: /waveWorker\.min\.js$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately override the name so it makes sense in debugging
+                        name: 'wave-encoderWorker.min.[hash:7].[ext]',
                         outputPath: '.',
                     },
                 },
