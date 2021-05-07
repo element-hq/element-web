@@ -1135,7 +1135,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                         { ircTimestamp }
                         { sender }
                         { ircPadlock }
-                        <div className={`mx_EventTile_line ${ isBubbleMessage && tileHandler == "messages.ViewSourceEvent" ? "hidden" : ""}`}>
+                        <div className={`mx_EventTile_line ${ isBubbleMessage
+                             && tileHandler == "messages.ViewSourceEvent" ? "hidden" : ""}`}>
                             { groupTimestamp }
                             { groupPadlock }
                             { thread }
