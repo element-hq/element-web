@@ -101,6 +101,7 @@ const invite1 = "!invite1:server";
 const invite2 = "!invite2:server";
 const room1 = "!room1:server";
 const room2 = "!room2:server";
+const room3 = "!room3:server";
 const space1 = "!space1:server";
 const space2 = "!space2:server";
 const space3 = "!space3:server";
@@ -614,8 +615,8 @@ describe("SpaceStore", () => {
 
     describe("space auto switching tests", () => {
         beforeEach(async () => {
-            [room1, room2, orphan1].forEach(mkRoom);
-            mkSpace(space1, [room1, room2]);
+            [room1, room2, room3, orphan1].forEach(mkRoom);
+            mkSpace(space1, [room1, room2, room3]);
             mkSpace(space2, [room1, room2]);
 
             client.getRoom(room2).currentState.getStateEvents.mockImplementation(mockStateEventImplementation([
@@ -649,7 +650,7 @@ describe("SpaceStore", () => {
         it("switch to first containing space for room", async () => {
             viewRoom(room2);
             await store.setActiveSpace(client.getRoom(space2), false);
-            viewRoom(room1);
+            viewRoom(room3);
             expect(store.activeSpace).toBe(client.getRoom(space1));
         });
 
