@@ -535,7 +535,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     // Don't context switch when navigating to the space room
                     // as it will cause you to end up in the wrong room
                     this.setActiveSpace(room, false);
-                } else if (!this.getSpaceFilteredRoomIds(this.activeSpace).has(roomId)) {
+                } else if (this.activeSpace && !this.getSpaceFilteredRoomIds(this.activeSpace).has(roomId)) {
                     this.switchToRelatedSpace(roomId);
                 }
 

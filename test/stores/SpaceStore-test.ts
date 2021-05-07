@@ -641,14 +641,14 @@ describe("SpaceStore", () => {
 
         it("switch to canonical parent space for room", async () => {
             viewRoom(room1);
-            await store.setActiveSpace(null, false);
+            await store.setActiveSpace(client.getRoom(space2), false);
             viewRoom(room2);
             expect(store.activeSpace).toBe(client.getRoom(space2));
         });
 
         it("switch to first containing space for room", async () => {
             viewRoom(room2);
-            await store.setActiveSpace(null, false);
+            await store.setActiveSpace(client.getRoom(space2), false);
             viewRoom(room1);
             expect(store.activeSpace).toBe(client.getRoom(space1));
         });
@@ -657,6 +657,13 @@ describe("SpaceStore", () => {
             viewRoom(room1);
             await store.setActiveSpace(client.getRoom(space1), false);
             viewRoom(orphan1);
+            expect(store.activeSpace).toBeNull();
+        });
+
+        it("when switching rooms in the all rooms home space don't switch to related space", async () => {
+            viewRoom(room2);
+            await store.setActiveSpace(null, false);
+            viewRoom(room1);
             expect(store.activeSpace).toBeNull();
         });
     });
