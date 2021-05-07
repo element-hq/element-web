@@ -19,16 +19,17 @@ import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import CallMediaHandler from "../CallMediaHandler";
 import {SimpleObservable} from "matrix-widget-api";
-import {clamp} from "../utils/numbers";
+import {clamp, percentageOf, percentageWithin} from "../utils/numbers";
 import EventEmitter from "events";
 import {IDestroyable} from "../utils/IDestroyable";
 import {Singleflight} from "../utils/Singleflight";
 import {PayloadEvent, WORKLET_NAME} from "./consts";
 import {UPDATE_EVENT} from "../stores/AsyncStore";
 import {Playback} from "./Playback";
+import {createAudioContext} from "./compat";
 
 const CHANNELS = 1; // stereo isn't important
-const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
+export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
 const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus.
 const TARGET_MAX_LENGTH = 120; // 2 minutes in seconds. Somewhat arbitrary, though longer == larger files.
 const TARGET_WARN_TIME_LEFT = 10; // 10 seconds, also somewhat arbitrary.
@@ -55,6 +56,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private recorderStream: MediaStream;
     private recorderFFT: AnalyserNode;
     private recorderWorklet: AudioWorkletNode;
+    private recorderProcessor: ScriptProcessorNode;
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
     private mxc: string;
     private recording = false;
@@ -98,7 +100,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                     deviceId: CallMediaHandler.getAudioInput(),
                 },
             });
-            this.recorderContext = new AudioContext({
+            this.recorderContext = createAudioContext({
                 // latencyHint: "interactive", // we don't want a latency hint (this causes data smoothing)
             });
             this.recorderSource = this.recorderContext.createMediaStreamSource(this.recorderStream);
@@ -118,28 +120,38 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 // noinspection ExceptionCaughtLocallyJS
                 throw new Error("Unable to create recorder: no worklet script registered");
             }
-            await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
-            this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
 
             // Connect our inputs and outputs
             this.recorderSource.connect(this.recorderFFT);
-            this.recorderSource.connect(this.recorderWorklet);
-            this.recorderWorklet.connect(this.recorderContext.destination);
 
-            // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
-            this.recorderWorklet.port.onmessage = (ev) => {
-                switch (ev.data['ev']) {
-                    case PayloadEvent.Timekeep:
-                        this.processAudioUpdate(ev.data['timeSeconds']);
-                        break;
-                    case PayloadEvent.AmplitudeMark:
-                        // Sanity check to make sure we're adding about one sample per second
-                        if (ev.data['forSecond'] === this.amplitudes.length) {
-                            this.amplitudes.push(ev.data['amplitude']);
-                        }
-                        break;
-                }
-            };
+            if (this.recorderContext.audioWorklet) {
+                await this.recorderContext.audioWorklet.addModule(mxRecorderWorkletPath);
+                this.recorderWorklet = new AudioWorkletNode(this.recorderContext, WORKLET_NAME);
+                this.recorderSource.connect(this.recorderWorklet);
+                this.recorderWorklet.connect(this.recorderContext.destination);
+
+                // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
+                this.recorderWorklet.port.onmessage = (ev) => {
+                    switch (ev.data['ev']) {
+                        case PayloadEvent.Timekeep:
+                            this.processAudioUpdate(ev.data['timeSeconds']);
+                            break;
+                        case PayloadEvent.AmplitudeMark:
+                            // Sanity check to make sure we're adding about one sample per second
+                            if (ev.data['forSecond'] === this.amplitudes.length) {
+                                this.amplitudes.push(ev.data['amplitude']);
+                            }
+                            break;
+                    }
+                };
+            } else {
+                // Safari fallback: use a processor node instead, buffered to 1024 bytes of data
+                // like the worklet is.
+                this.recorderProcessor = this.recorderContext.createScriptProcessor(1024, CHANNELS, CHANNELS);
+                this.recorderSource.connect(this.recorderProcessor);
+                this.recorderProcessor.connect(this.recorderContext.destination);
+                this.recorderProcessor.addEventListener("audioprocess", this.onAudioProcess);
+            }
 
             this.recorder = new Recorder({
                 encoderPath, // magic from webpack
@@ -209,6 +221,13 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return this.mxc;
     }
 
+    private onAudioProcess = (ev: AudioProcessingEvent) => {
+        this.processAudioUpdate(ev.playbackTime);
+
+        // We skip the functionality of the worklet regarding waveform calculations: we
+        // should get that information pretty quick during the playback info.
+    };
+
     private processAudioUpdate = (timeSeconds: number) => {
         if (!this.recording) return;
 
@@ -216,7 +235,16 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         // size. The time domain is also known as the audio waveform. We're ignoring the
         // output of the FFT here (frequency data) because we're not interested in it.
         const data = new Float32Array(this.recorderFFT.fftSize);
-        this.recorderFFT.getFloatTimeDomainData(data);
+        if (!this.recorderFFT.getFloatTimeDomainData) {
+            // Safari compat
+            const data2 = new Uint8Array(this.recorderFFT.fftSize);
+            this.recorderFFT.getByteTimeDomainData(data2);
+            for (let i = 0; i < data2.length; i++) {
+                data[i] = percentageWithin(percentageOf(data2[i], 0, 256), -1, 1);
+            }
+        } else {
+            this.recorderFFT.getFloatTimeDomainData(data);
+        }
 
         // We can't just `Array.from()` the array because we're dealing with 32bit floats
         // and the built-in function won't consider that when converting between numbers.
@@ -287,7 +315,11 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             // Disconnect the source early to start shutting down resources
             await this.recorder.stop(); // stop first to flush the last frame
             this.recorderSource.disconnect();
-            this.recorderWorklet.disconnect();
+            if (this.recorderWorklet) this.recorderWorklet.disconnect();
+            if (this.recorderProcessor) {
+                this.recorderProcessor.disconnect();
+                this.recorderProcessor.removeEventListener("audioprocess", this.onAudioProcess);
+            }
 
             // close the context after the recorder so the recorder doesn't try to
             // connect anything to the context (this would generate a warning)

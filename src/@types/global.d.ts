@@ -52,6 +52,9 @@ declare global {
             init: () => Promise<void>;
         };
 
+        // Needed for Safari, unknown to TypeScript
+        webkitAudioContext: typeof AudioContext;
+
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
