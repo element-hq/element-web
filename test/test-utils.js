@@ -202,6 +202,39 @@ export function mkMessage(opts) {
     return mkEvent(opts);
 }
 
+
+/**
+ * Create an Redacted Event.
+ * @param {Object} opts Values for the event.
+ * @param {string} opts.type The event.type
+ * @param {string} opts.room The event.room_id
+ * @param {string} opts.user The event.user_id
+ * @param {string} opts.skey Optional. The state key (auto inserts empty string)
+ * @param {Number} opts.ts   Optional. Timestamp for the event
+ * @param {Object} opts.content The event.content
+ * @param {boolean} opts.event True to make a MatrixEvent.
+ * @return {Object} a JSON object representing this event.
+ */
+ export function mkRedactedEvent(opts) {
+    if (!opts.type ) {
+        throw new Error("Missing .type =>" + JSON.stringify(opts));
+    }
+    const event = {
+        type: opts.type,
+        room_id: opts.room,
+        sender: opts.user,
+        content: {},
+        prev_content: opts.prev_content,
+        event_id: "$" + Math.random() + "-" + Math.random(),
+        origin_server_ts: opts.ts,
+        //isRedacted() only checks if redacted_because is true or not
+      //  unsigned :{redacted_because:opts.redacted_because} This is not working atm
+    };
+    //Might want to add the other parameters for generalized tests
+    return opts.event ? new MatrixEvent(event) : event;
+}
+
+
 export function mkStubRoom(roomId = null) {
     const stubTimeline = { getEvents: () => [] };
     return {
