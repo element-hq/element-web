@@ -238,7 +238,8 @@ $SpaceRoomViewInnerWidth: 428px;
 
             .mx_SpaceRoomView_landing_inviteButton {
                 position: relative;
-                padding-left: 40px;
+                padding: 4px 18px 4px 40px;
+                line-height: $font-24px;
                 height: min-content;
 
                 &::before {
