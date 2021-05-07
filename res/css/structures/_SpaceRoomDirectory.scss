@@ -86,12 +86,17 @@ limitations under the License.
         color: $primary-fg-color;
 
         .mx_AccessibleButton {
-            padding: 2px 8px;
+            padding: 4px 12px;
             font-weight: normal;
 
             & + .mx_AccessibleButton {
                 margin-left: 16px;
             }
+        }
+
+        .mx_AccessibleButton_kind_danger_outline,
+        .mx_AccessibleButton_kind_primary_outline {
+            padding: 3px 12px; // to account for the 1px border
         }
 
         > span {
@@ -246,9 +251,15 @@ limitations under the License.
             grid-row: 1/3;
 
             .mx_AccessibleButton {
-                padding: 8px 18px;
+                line-height: $font-24px;
+                padding: 4px 16px;
                 display: inline-block;
                 visibility: hidden;
+            }
+
+            .mx_AccessibleButton_kind_danger_outline,
+            .mx_AccessibleButton_kind_primary_outline {
+                padding: 3px 16px; // to account for the 1px border
             }
 
             .mx_Checkbox {
