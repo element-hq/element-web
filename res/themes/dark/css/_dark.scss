@@ -9,6 +9,7 @@ $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
 $text-primary-color: #ffffff;
 $text-secondary-color: #B9BEC6;
+$quaternary-fg-color: #6F7882;
 $search-bg-color: #181b21;
 $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
@@ -41,14 +42,6 @@ $preview-bar-bg-color: $header-panel-bg-color;
 
 $groupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
 $inverted-bg-color: $base-color;
-
-$voice-record-stop-border-color: #6F7882; // "Quarterly"
-$voice-record-waveform-bg-color: #394049; // "Dark Tile"
-$voice-record-waveform-fg-color: $tertiary-fg-color;
-$voice-record-waveform-incomplete-fg-color: #5b646d;
-$voice-record-icon-color: $tertiary-fg-color;
-$voice-playback-button-bg-color: $tertiary-fg-color;
-$voice-playback-button-fg-color: $bg-color;
 
 // used by AddressSelector
 $selected-color: $room-highlight-color;
@@ -213,9 +206,18 @@ $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-bg-color: #21262c82;
-$message-body-panel-icon-bg-color: #8e99a4;
-$message-body-panel-fg-color: $primary-fg-color;
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #394049; // "Dark Tile"
+$message-body-panel-icon-fg-color: #21262C; // "Separator"
+$message-body-panel-icon-bg-color: $tertiary-fg-color;
+
+$voice-record-stop-border-color: $quaternary-fg-color;
+$voice-record-waveform-bg-color: $message-body-panel-bg-color;
+$voice-record-waveform-fg-color: $message-body-panel-fg-color;
+$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
+$voice-record-icon-color: $quaternary-fg-color;
+$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
+$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;

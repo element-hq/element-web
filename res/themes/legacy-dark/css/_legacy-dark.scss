@@ -124,15 +124,6 @@ $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%)
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
 
-// See non-legacy dark for variable information
-$voice-record-stop-border-color: #6F7882;
-$voice-record-waveform-bg-color: #394049;
-$voice-record-waveform-fg-color: $tertiary-fg-color;
-$voice-record-waveform-incomplete-fg-color: #5b646d;
-$voice-record-icon-color: $tertiary-fg-color;
-$voice-playback-button-bg-color: $tertiary-fg-color;
-$voice-playback-button-fg-color: $bg-color;
-
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: #1A1D23;
@@ -209,9 +200,19 @@ $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-bg-color: #21262c82;
-$message-body-panel-icon-bg-color: #8e99a4;
-$message-body-panel-fg-color: $primary-fg-color;
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #394049;
+$message-body-panel-icon-fg-color: $primary-bg-color;
+$message-body-panel-icon-bg-color: $secondary-fg-color;
+
+// See non-legacy dark for variable information
+$voice-record-stop-border-color: #6F7882;
+$voice-record-waveform-bg-color: $message-body-panel-bg-color;
+$voice-record-waveform-fg-color: $message-body-panel-fg-color;
+$voice-record-waveform-incomplete-fg-color: #6F7882;
+$voice-record-icon-color: #6F7882;
+$voice-playback-button-bg-color: $tertiary-fg-color;
+$voice-playback-button-fg-color: #21262C;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;

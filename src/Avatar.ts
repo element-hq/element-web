@@ -20,6 +20,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import DMRoomMap from './utils/DMRoomMap';
 import {mediaFromMxc} from "./customisations/Media";
+import SettingsStore from "./settings/SettingsStore";
 
 export type ResizeMethod = "crop" | "scale";
 
@@ -143,7 +144,7 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     }
 
     // space rooms cannot be DMs so skip the rest
-    if (room.isSpaceRoom()) return null;
+    if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
 
     let otherMember = null;
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
