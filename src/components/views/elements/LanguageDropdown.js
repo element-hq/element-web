@@ -60,10 +60,10 @@ export default class LanguageDropdown extends React.Component {
             // doesn't know this, therefore we do this.
             const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
             if (language) {
-              this.props.onOptionChange(language);
+                this.props.onOptionChange(language);
             } else {
-              const language = languageHandler.normalizeLanguageKey(languageHandler.getLanguageFromBrowser());
-              this.props.onOptionChange(language);
+                const language = languageHandler.normalizeLanguageKey(languageHandler.getLanguageFromBrowser());
+                this.props.onOptionChange(language);
             }
         }
     }

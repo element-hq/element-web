@@ -255,7 +255,7 @@ matrixLinkify.options = {
     target: function(href, type) {
         if (type === 'url') {
             const transformed = tryTransformPermalinkToLocalHref(href);
-            if (transformed !== href || href.match(matrixLinkify.ELEMENT_URL_PATTERN)) {
+            if (transformed !== href || decodeURIComponent(href).match(matrixLinkify.ELEMENT_URL_PATTERN)) {
                 return null;
             } else {
                 return '_blank';

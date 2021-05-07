@@ -17,7 +17,7 @@ limitations under the License.
 
 .mx_CallView {
     border-radius: 8px;
-    background-color: $voipcall-plinth-color;
+    background-color: $dark-panel-bg-color;
     padding-left: 8px;
     padding-right: 8px;
     // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
@@ -40,7 +40,8 @@ limitations under the License.
     width: 320px;
     padding-bottom: 8px;
     margin-top: 10px;
-    box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
+    background-color: $voipcall-plinth-color;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.20);
     border-radius: 8px;
 
     .mx_CallView_voice {
@@ -64,14 +65,17 @@ limitations under the License.
     }
 }
 
-.mx_CallView_voice {
+.mx_CallView_content {
     position: relative;
     display: flex;
-    flex-direction: column;
+    border-radius: 8px;
+}
+
+.mx_CallView_voice {
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     background-color: $inverted-bg-color;
-    border-radius: 8px;
 }
 
 .mx_CallView_voice_avatarsContainer {
@@ -108,9 +112,7 @@ limitations under the License.
 .mx_CallView_video {
     width: 100%;
     height: 100%;
-    position: relative;
     z-index: 30;
-    border-radius: 8px;
     overflow: hidden;
 }
 

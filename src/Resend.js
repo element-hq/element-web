@@ -21,11 +21,11 @@ import { EventStatus } from 'matrix-js-sdk/src/models/event';
 
 export default class Resend {
     static resendUnsentEvents(room) {
-        room.getPendingEvents().filter(function(ev) {
+        return Promise.all(room.getPendingEvents().filter(function(ev) {
             return ev.status === EventStatus.NOT_SENT;
-        }).forEach(function(event) {
-            Resend.resend(event);
-        });
+        }).map(function(event) {
+            return Resend.resend(event);
+        }));
     }
 
     static cancelUnsentEvents(room) {
@@ -38,7 +38,7 @@ export default class Resend {
 
     static resend(event) {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        MatrixClientPeg.get().resendEvent(event, room).then(function(res) {
+        return MatrixClientPeg.get().resendEvent(event, room).then(function(res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event,

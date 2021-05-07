@@ -34,7 +34,7 @@ interface ISerializedPart {
 interface ISerializedPillPart {
     type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
     text: string;
-    resourceId: string;
+    resourceId?: string;
 }
 
 export type SerializedPart = ISerializedPart | ISerializedPillPart;
@@ -287,6 +287,14 @@ abstract class PillPart extends BasePart implements IPillPart {
         }
     }
 
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+            resourceId: this.resourceId,
+        };
+    }
+
     get canEdit() {
         return false;
     }
@@ -341,11 +349,7 @@ class RoomPillPart extends PillPart {
 
     setAvatar(node: HTMLElement) {
         let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(
-            this.room,
-            16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio,
-            "crop");
+        let avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
         if (!avatarUrl) {
             initialLetter = Avatar.getInitialLetter(this.room ? this.room.name : this.resourceId);
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room ? this.room.roomId : this.resourceId);
@@ -370,6 +374,13 @@ class AtRoomPillPart extends RoomPillPart {
     get type(): IPillPart["type"] {
         return Type.AtRoomPill;
     }
+
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+        };
+    }
 }
 
 class UserPillPart extends PillPart {
@@ -383,11 +394,7 @@ class UserPillPart extends PillPart {
         }
         const name = this.member.name || this.member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this.member.userId);
-        const avatarUrl = Avatar.avatarUrlForMember(
-            this.member,
-            16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio,
-            "crop");
+        const avatarUrl = Avatar.avatarUrlForMember(this.member, 16, 16, "crop");
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
             initialLetter = Avatar.getInitialLetter(name);
@@ -401,14 +408,6 @@ class UserPillPart extends PillPart {
 
     get className() {
         return "mx_UserPill mx_Pill";
-    }
-
-    serialize(): ISerializedPillPart {
-        return {
-            type: this.type,
-            text: this.text,
-            resourceId: this.resourceId,
-        };
     }
 }
 
@@ -503,7 +502,7 @@ export class PartCreator {
             case Type.PillCandidate:
                 return this.pillCandidate(part.text);
             case Type.RoomPill:
-                return this.roomPill(part.text);
+                return this.roomPill(part.resourceId);
             case Type.UserPill:
                 return this.userPill(part.text, part.resourceId);
         }
@@ -543,9 +542,9 @@ export class PartCreator {
         return new UserPillPart(userId, displayName, member);
     }
 
-    createMentionParts(partIndex: number, displayName: string, userId: string) {
+    createMentionParts(insertTrailingCharacter: boolean, displayName: string, userId: string) {
         const pill = this.userPill(displayName, userId);
-        const postfix = this.plain(partIndex === 0 ? ": " : " ");
+        const postfix = this.plain(insertTrailingCharacter ? ": " : " ");
         return [pill, postfix];
     }
 }

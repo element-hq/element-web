@@ -68,10 +68,12 @@ export default class UrlPreviewSettings extends React.Component {
             if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
                 previewsForRoom = (
                     <label>
-                        <SettingsFlag name="urlPreviewsEnabled"
-                                      level={SettingLevel.ROOM}
-                                      roomId={roomId}
-                                      isExplicit={true} />
+                        <SettingsFlag
+                            name="urlPreviewsEnabled"
+                            level={SettingLevel.ROOM}
+                            roomId={roomId}
+                            isExplicit={true}
+                        />
                     </label>
                 );
             } else {
@@ -91,8 +93,8 @@ export default class UrlPreviewSettings extends React.Component {
 
         const previewsForRoomAccount = ( // in an e2ee room we use a special key to enforce per-room opt-in
             <SettingsFlag name={isEncrypted ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled'}
-                          level={SettingLevel.ROOM_ACCOUNT}
-                          roomId={roomId} />
+                level={SettingLevel.ROOM_ACCOUNT}
+                roomId={roomId} />
         );
 
         return (

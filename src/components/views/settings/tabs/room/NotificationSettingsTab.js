@@ -155,7 +155,7 @@ export default class NotificationsSettingsTab extends React.Component {
                     <div>
                         <span>{_t("Notification sound")}: <code>{this.state.currentSound}</code></span><br />
                         <AccessibleButton className="mx_NotificationSound_resetSound" disabled={this.state.currentSound == "default"} onClick={this._clearSound.bind(this)} kind="primary">
-                                {_t("Reset")}
+                            {_t("Reset")}
                         </AccessibleButton>
                     </div>
                     <div>
@@ -167,11 +167,11 @@ export default class NotificationsSettingsTab extends React.Component {
                         {currentUploadedFile}
 
                         <AccessibleButton className="mx_NotificationSound_browse" onClick={this._triggerUploader.bind(this)} kind="primary">
-                                {_t("Browse")}
+                            {_t("Browse")}
                         </AccessibleButton>
 
                         <AccessibleButton className="mx_NotificationSound_save" disabled={this.state.uploadedFile == null} onClick={this._onClickSaveSound.bind(this)} kind="primary">
-                                {_t("Save")}
+                            {_t("Save")}
                         </AccessibleButton>
                         <br />
                     </div>

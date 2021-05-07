@@ -192,7 +192,11 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
         this.setState({language: newLanguage});
-        PlatformPeg.get().reload();
+        const platform = PlatformPeg.get();
+        if (platform) {
+            platform.setLanguage(newLanguage);
+            platform.reload();
+        }
     };
 
     _onSpellCheckLanguagesChange = (languages) => {
@@ -319,8 +323,11 @@ export default class GeneralUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
-                <LanguageDropdown className="mx_GeneralUserSettingsTab_languageInput"
-                                  onOptionChange={this._onLanguageChange} value={this.state.language} />
+                <LanguageDropdown
+                    className="mx_GeneralUserSettingsTab_languageInput"
+                    onOptionChange={this._onLanguageChange}
+                    value={this.state.language}
+                />
             </div>
         );
     }
@@ -329,8 +336,10 @@ export default class GeneralUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Spell check dictionaries")}</span>
-                <SpellCheckSettings languages={this.state.spellCheckLanguages}
-                                    onLanguagesChange={this._onSpellCheckLanguagesChange} />
+                <SpellCheckSettings
+                    languages={this.state.spellCheckLanguages}
+                    onLanguagesChange={this._onSpellCheckLanguagesChange}
+                />
             </div>
         );
     }

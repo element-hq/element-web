@@ -70,9 +70,12 @@ export default class WidgetOpenIDPermissionsDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_WidgetOpenIDPermissionsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished}
-                        title={_t("Allow this widget to verify your identity")}>
+            <BaseDialog
+                className='mx_WidgetOpenIDPermissionsDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Allow this widget to verify your identity")}
+            >
                 <div className='mx_WidgetOpenIDPermissionsDialog_content'>
                     <p>
                         {_t("The widget will verify your user ID, but won't be able to perform actions for you:")}

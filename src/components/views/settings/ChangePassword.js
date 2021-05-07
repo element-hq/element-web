@@ -206,7 +206,7 @@ export default class ChangePassword extends React.Component {
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
                 invalid: () => _t("Passwords can't be empty"),
             },
-         ],
+        ],
     });
 
     onChangeNewPassword = (ev) => {
@@ -245,7 +245,7 @@ export default class ChangePassword extends React.Component {
                 },
                 invalid: () => _t("Passwords don't match"),
             },
-         ],
+        ],
     });
 
     onClickChange = async (ev) => {
