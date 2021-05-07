@@ -111,7 +111,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     if (visibility === null) {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
-            <p>{ _t("Spaces are new ways to group rooms and people. " +
+            <p>{ _t("Spaces are a new way to group rooms and people. " +
                 "To join an existing space you'll need an invite.") }</p>
 
             <SpaceCreateMenuType

@@ -138,7 +138,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("Spaces"),
-            caption: _td("Spaces are new ways to group rooms and people."),
+            caption: _td("Spaces are a new way to group rooms and people."),
             disclaimer: (enabled) => {
                 if (enabled) {
                     return <>
