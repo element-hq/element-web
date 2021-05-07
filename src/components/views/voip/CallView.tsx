@@ -32,6 +32,9 @@ import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker";
+import Modal from '../../../Modal';
+import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
 
 const FEED_CLASS_NAMES = [
     "mx_VideoFeed_primary",
@@ -63,6 +66,7 @@ interface IState {
     isRemoteOnHold: boolean,
     micMuted: boolean,
     vidMuted: boolean,
+    screensharing: boolean,
     callState: CallState,
     controlsVisible: boolean,
     showMoreMenu: boolean,
@@ -119,6 +123,7 @@ export default class CallView extends React.Component<IProps, IState> {
             isRemoteOnHold: this.props.call.isRemoteOnHold(),
             micMuted: this.props.call.isMicrophoneMuted(),
             vidMuted: this.props.call.isLocalVideoMuted(),
+            screensharing: this.props.call.isScreensharing(),
             callState: this.props.call.state,
             controlsVisible: true,
             showMoreMenu: false,
@@ -292,6 +297,18 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({vidMuted: newVal});
     }
 
+    private onScreenshareClick = async () => {
+        const isScreensharing = await this.props.call.setScreensharingEnabled(
+            !this.state.screensharing,
+            async (): Promise<DesktopCapturerSource> => {
+                const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
+                const [source] = await finished;
+                return source;
+            },
+        );
+        this.setState({screensharing: isScreensharing})
+    }
+
     private onMoreClick = () => {
         if (this.controlsHideTimer) {
             clearTimeout(this.controlsHideTimer);
@@ -452,6 +469,12 @@ export default class CallView extends React.Component<IProps, IState> {
             mx_CallView_callControls_button_vidOff: this.state.vidMuted,
         });
 
+        const screensharingClasses = classNames({
+            mx_CallView_callControls_button: true,
+            mx_CallView_callControls_button_screensharingOn: this.state.screensharing,
+            mx_CallView_callControls_button_screensharingOff: !this.state.screensharing,
+        });
+
         // Put the other states of the mic/video icons in the document to make sure they're cached
         // (otherwise the icon disappears briefly when toggled)
         const micCacheClasses = classNames({
@@ -476,6 +499,11 @@ export default class CallView extends React.Component<IProps, IState> {
         const vidMuteButton = this.props.call.type === CallType.Video ? <AccessibleButton
             className={vidClasses}
             onClick={this.onVidMuteClick}
+        /> : null;
+
+        const screensharingButton = this.props.call.opponentSupportsSDPStreamMetadata() ? <AccessibleButton
+            className={screensharingClasses}
+            onClick={this.onScreenshareClick}
         /> : null;
 
         // The dial pad & 'more' button actions are only relevant in a connected call
@@ -512,6 +540,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 }}
             />
             {vidMuteButton}
+            {screensharingButton}
             <div className={micCacheClasses} />
             <div className={vidCacheClasses} />
             {contextMenuButton}
