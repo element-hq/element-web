@@ -3308,5 +3308,16 @@
     "Including %(commaSeparatedMembers)s": "Inclusi %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "Vedi 1 membro",
     "View all %(count)s members|other": "Vedi tutti i %(count)s membri",
-    "Failed to send": "Invio fallito"
+    "Failed to send": "Invio fallito",
+    "Enter your Security Phrase a second time to confirm it.": "Inserisci di nuovo la password di sicurezza per confermarla.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Scegli le stanze o le conversazioni da aggiungere. Questo è uno spazio solo per te, nessuno ne saprà nulla. Puoi aggiungerne altre in seguito.",
+    "What do you want to organise?": "Cosa vuoi organizzare?",
+    "Filter all spaces": "Filtra tutti gli spazi",
+    "Delete recording": "Elimina registrazione",
+    "Stop the recording": "Ferma la registrazione",
+    "%(count)s results in all spaces|one": "%(count)s risultato in tutti gli spazi",
+    "%(count)s results in all spaces|other": "%(count)s risultati in tutti gli spazi",
+    "You have no ignored users.": "Non hai utenti ignorati.",
+    "Play": "Riproduci",
+    "Pause": "Pausa"
 }
