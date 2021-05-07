@@ -16,13 +16,12 @@ limitations under the License.
 
 import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React from 'react';
-import CallHandler from '../../../CallHandler';
+import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import CallView from './CallView';
 import dis from '../../../dispatcher/dispatcher';
 import {Resizable} from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import { Action } from '../../../dispatcher/actions';
 
 interface IProps {
     // What room we should display the call for
@@ -55,22 +54,27 @@ export default class CallViewForRoom extends React.Component<IProps, IState> {
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
     public componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
+        CallHandler.sharedInstance().removeListener(CallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
     private onAction = (payload) => {
         switch (payload.action) {
-            case Action.CallChangeRoom:
             case 'call_state': {
-                const newCall = this.getCall();
-                if (newCall !== this.state.call) {
-                    this.setState({call: newCall});
-                }
+                this.updateCall();
                 break;
             }
+        }
+    };
+
+    private updateCall = () => {
+        const newCall = this.getCall();
+        if (newCall !== this.state.call) {
+            this.setState({call: newCall});
         }
     };
 
