@@ -353,6 +353,18 @@ limitations under the License.
     }
 }
 
+.mx_CallView_callControls_button_screensharingOn {
+    &::before {
+        background-image: url('$(res)/img/voip/screensharing-on.svg');
+    }
+}
+
+.mx_CallView_callControls_button_screensharingOff {
+    &::before {
+        background-image: url('$(res)/img/voip/screensharing-off.svg');
+    }
+}
+
 .mx_CallView_callControls_button_hangup {
     &::before {
         background-image: url('$(res)/img/voip/hangup.svg');
