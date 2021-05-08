@@ -123,6 +123,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     render() {
         const videoClasses = {
             mx_VideoFeed: true,
+            mx_VideoFeed_nonPrimary: this.props.className !== "mx_VideoFeed_primary",
             [this.props.className]: true,
             mx_VideoFeed_voice: this.state.videoMuted,
             mx_VideoFeed_video: !this.state.videoMuted,
