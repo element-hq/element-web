@@ -154,11 +154,11 @@ export default class MessageContextMenu extends React.Component {
     };
 
     onForwardClick = () => {
-        if (this.props.onCloseDialog) this.props.onCloseDialog();
-        dis.dispatch({
-            action: 'forward_event',
+        const ForwardDialog = sdk.getComponent("dialogs.ForwardDialog");
+        Modal.createTrackedDialog('Forward Message', '', ForwardDialog, {
+            cli: MatrixClientPeg.get(),
             event: this.props.mxEvent,
-        });
+        }, 'mx_Dialog_forwardmessage');
         this.closeMenu();
     };
 
