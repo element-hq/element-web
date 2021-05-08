@@ -264,33 +264,6 @@ describe('MessagePanel', function() {
             }),
         ];
     }
-
-    //Create a few redacted events 
-    //isRedacted just checks the redacted_because   
-    function mkRedactionEvents() {
-        const events = [];
-        const ts0 = Date.now();
-        let i=0
-            
-            let redaction = test_utils.mkEvent({
-                type: "m.room.redaction",
-                event: true, room: "!room:id", user: "@user:id",     ts: ts0 + ++i * 1000 ,
-                content: {},
-            });
-            let event =test_utils.mkRedactedEvent({
-                type: "m.room.message",
-                event: true, room: "!room:id", user: "@user:id",
-                ts: ts0 + i * 1000 ,
-              //  redacted_because: redaction This is not working at the moment
-            })
-            redaction.redacts = event.event_id;
-            
-            events.push(event);
-            events.push(redaction);
-
-            return events;
- 
-        }
           
     function isReadMarkerVisible(rmContainer) {
         return rmContainer && rmContainer.children.length > 0;
@@ -493,19 +466,4 @@ describe('MessagePanel', function() {
       
     
         })
-
-    it('should render only one Date separator for redacted events', function () {
-    const events = mkRedactionEvents()
-    const res = mount(
-        <WrappedMessagePanel
-            className="cls"
-            events={events}
-        />,
-    );
-    const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
-   
-    expect(Dates.length).toEqual(1);
-  
-
-    })
 });
