@@ -78,8 +78,10 @@ export default class MessageContextMenu extends React.Component {
 
         // We explicitly decline to show the redact option on ACL events as it has a potential
         // to obliterate the room - https://github.com/matrix-org/synapse/issues/4042
+        // Similarly for encryption events, since redacting them "breaks everything"
         const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)
-            && this.props.mxEvent.getType() !== EventType.RoomServerAcl;
+            && this.props.mxEvent.getType() !== EventType.RoomServerAcl
+            && this.props.mxEvent.getType() !== EventType.RoomEncryption;
         let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
