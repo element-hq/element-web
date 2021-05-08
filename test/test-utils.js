@@ -218,7 +218,7 @@ export function mkMessage(opts) {
     return mkEvent(opts);
 }
 
-export function mkStubRoom(roomId = null) {
+export function mkStubRoom(roomId = null, name) {
     const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
@@ -254,6 +254,7 @@ export function mkStubRoom(roomId = null) {
         on: jest.fn(),
         removeListener: jest.fn(),
         getDMInviter: jest.fn(),
+        name,
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
         isSpaceRoom: jest.fn(() => false),
