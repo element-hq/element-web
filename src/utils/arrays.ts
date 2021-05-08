@@ -60,7 +60,7 @@ export function arrayFastResample(input: number[], points: number): number[] {
 export function arraySmoothingResample(input: number[], points: number): number[] {
     if (input.length === points) return input; // short-circuit a complicated call
 
-    let samples: number[] = [];
+    const samples: number[] = [];
     if (input.length > points) {
         // We're downsampling. To preserve the curve we'll actually reduce our sample
         // selection and average some points between them.
@@ -99,8 +99,8 @@ export function arraySmoothingResample(input: number[], points: number): number[
  * @returns {number[]} The rescaled array.
  */
 export function arrayRescale(input: number[], newMin: number, newMax: number): number[] {
-    let min: number = Math.min(...input);
-    let max: number = Math.max(...input);
+    const min: number = Math.min(...input);
+    const max: number = Math.max(...input);
     return input.map(v => percentageWithin(percentageOf(v, min, max), newMin, newMax));
 }
 
