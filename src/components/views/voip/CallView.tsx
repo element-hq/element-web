@@ -203,7 +203,14 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
-        this.setState({feeds: newFeeds});
+        // Sort the feeds so that screensharing and remote feeds have priority
+        const sortedFeeds = [...newFeeds].sort((a, b) => {
+            if (b.purpose === SDPStreamMetadataPurpose.Screenshare && !b.isLocal()) return 1;
+            if (a.isLocal() && !b.isLocal()) return 1;
+            return -1;
+        });
+
+        this.setState({feeds: sortedFeeds});
     };
 
     private onCallLocalHoldUnhold = () => {
@@ -396,13 +403,7 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private renderFeeds(feeds: Array<CallFeed>, offset = 0) {
-        const sortedFeeds = [...feeds].sort((a, b) => {
-            if (b.purpose === SDPStreamMetadataPurpose.Screenshare && !b.isLocal()) return 1;
-            if (a.isLocal() && !b.isLocal()) return 1;
-            return 0;
-        });
-
-        return sortedFeeds.map((feed, i) => {
+        return feeds.map((feed, i) => {
             i += offset;
             // TODO: Later the CallView should probably be reworked to support
             // any number of feeds but now we can't render more than 4 feeds
