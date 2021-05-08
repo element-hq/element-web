@@ -501,10 +501,15 @@ export default class CallView extends React.Component<IProps, IState> {
             onClick={this.onVidMuteClick}
         /> : null;
 
-        const screensharingButton = this.props.call.opponentSupportsSDPStreamMetadata() ? <AccessibleButton
-            className={screensharingClasses}
-            onClick={this.onScreenshareClick}
-        /> : null;
+        let screensharingButton;
+        if (this.props.call.opponentSupportsSDPStreamMetadata() || this.props.call.type === CallType.Video) {
+            screensharingButton = (
+                <AccessibleButton
+                    className={screensharingClasses}
+                    onClick={this.onScreenshareClick}
+                />
+            );
+        }
 
         // The dial pad & 'more' button actions are only relevant in a connected call
         // When not connected, we have to put something there to make the flexbox alignment correct
