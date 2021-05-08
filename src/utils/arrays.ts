@@ -29,7 +29,7 @@ export function arrayFastResample(input: number[], points: number): number[] {
 
     // Heavily inspired by matrix-media-repo (used with permission)
     // https://github.com/turt2live/matrix-media-repo/blob/abe72c87d2e29/util/util_audio/fastsample.go#L10
-    let samples: number[] = [];
+    const samples: number[] = [];
     if (input.length > points) {
         // Danger: this loop can cause out of memory conditions if the input is too small.
         const everyNth = Math.round(input.length / points);
@@ -60,7 +60,7 @@ export function arrayFastResample(input: number[], points: number): number[] {
 export function arraySmoothingResample(input: number[], points: number): number[] {
     if (input.length === points) return input; // short-circuit a complicated call
 
-    const samples: number[] = [];
+    let samples: number[] = [];
     if (input.length > points) {
         // We're downsampling. To preserve the curve we'll actually reduce our sample
         // selection and average some points between them.
