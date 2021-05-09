@@ -36,7 +36,7 @@ export function initRageshake() {
     prom.then(() => {
         console.log("Initialised rageshake.");
         console.log("To fix line numbers in Chrome: " +
-            "Meatball menu → Settings → Blackboxing → Add /rageshake\\.js$");
+            "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$");
 
         window.addEventListener('beforeunload', (e) => {
             console.log('element-web closing');

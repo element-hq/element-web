@@ -1,8 +1,8 @@
 {
     "default_server_name": "matrix.org",
     "brand": "Element",
-    "integrations_ui_url": "https://scalar-staging.vector.im/",
-    "integrations_rest_url": "https://scalar-staging.vector.im/api",
+    "integrations_ui_url": "https://scalar.vector.im/",
+    "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
         "https://scalar.vector.im/_matrix/integrations/v1",
         "https://scalar.vector.im/api",

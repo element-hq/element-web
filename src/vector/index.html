@@ -22,7 +22,7 @@
     <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-150.png') %>">
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
-    <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
+    <meta property="og:image" content="<%= og_image_url %>" />
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
         style-src 'self' 'unsafe-inline';
@@ -49,11 +49,24 @@
            <link rel="stylesheet" href="<%= file %>">
         <% }
     } %>
+
+    <% for (var i=0; i < htmlWebpackPlugin.tags.headTags.length; i++) {
+        var tag = htmlWebpackPlugin.tags.headTags[i];
+        var path = tag.attributes && tag.attributes.href;
+        if (path.indexOf("Inter") !== -1) { %>
+            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
+        <% }
+    } %>
+
   </head>
-  <body style="height: 100%; margin: 0;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
+  <body
+      style="height: 100%; margin: 0;"
+      data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("indexeddb-worker.js")) %>"
+      data-vector-recorder-worklet-script="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("recorder-worklet.js")) %>"
+  >
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
-    <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+    <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>
 
     <!-- Legacy supporting Prefetch images -->
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
