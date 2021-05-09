@@ -1458,7 +1458,6 @@
     "Encrypting your message...": "Encrypting your message...",
     "Your message was sent": "Your message was sent",
     "Failed to send": "Failed to send",
-    "Please select the destination room for this message": "Please select the destination room for this message",
     "Scroll to most recent messages": "Scroll to most recent messages",
     "Close preview": "Close preview",
     "and %(count)s others...|other": "and %(count)s others...",
