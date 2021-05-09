@@ -34,6 +34,7 @@ import {Action} from "../../../dispatcher/actions";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SendHistoryManager from '../../../SendHistoryManager';
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -120,6 +121,7 @@ export default class EditMessageComposer extends React.Component {
             saveDisabled: true,
         };
         this._createEditorModel();
+        window.addEventListener("beforeunload", this._saveStoredEditorState);
     }
 
     _setEditorRef = ref => {
@@ -174,8 +176,41 @@ export default class EditMessageComposer extends React.Component {
     }
 
     _cancelEdit = () => {
+        this._clearStoredEditorState();
         dis.dispatch({action: "edit_event", event: null});
         dis.fire(Action.FocusComposer);
+    }
+
+    get _shouldSaveStoredEditorState() {
+        return localStorage.getItem(`mx_edit_state_${this.props.editState.getEvent().getRoomId()}
+        _${this.props.editState.getEvent().event.event_id}`) !== null;
+    }
+
+    _restoreStoredEditorState(partCreator) {
+        const json = localStorage.getItem(this._editorStateKey);
+        if (json) {
+            try {
+                const {parts: serializedParts} = JSON.parse(json);
+                const parts = serializedParts.map(p => partCreator.deserializePart(p));
+                return parts;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
+
+    get _editorStateKey() {
+        return `mx_edit_state_${this.props.editState.getEvent().getRoomId()}
+        _${this.props.editState.getEvent().event.event_id}`;
+    }
+
+    _clearStoredEditorState() {
+        localStorage.removeItem(this._editorStateKey);
+    }
+
+    _saveStoredEditorState() {
+        const item = SendHistoryManager.createItem(this.model);
+        localStorage.setItem(this._editorStateKey, JSON.stringify(item));
     }
 
     _isContentModified(newContent) {
@@ -195,13 +230,13 @@ export default class EditMessageComposer extends React.Component {
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
-
         // If content is modified then send an updated event into the room
         if (this._isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId();
             this._cancelPreviousPendingEdit();
             const prom = this.context.sendMessage(roomId, editContent);
             dis.dispatch({action: "message_sent"});
+            this._clearStoredEditorState();
             CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
         }
 
@@ -235,6 +270,10 @@ export default class EditMessageComposer extends React.Component {
         // then when mounting the editor again with the same editor state,
         // it will set the cursor at the end.
         this.props.editState.setEditorState(caret, parts);
+        window.removeEventListener("beforeunload", this._saveStoredEditorState);
+        if (this._shouldSaveStoredEditorState) {
+            this._saveStoredEditorState();
+        }
     }
 
     _createEditorModel() {
@@ -247,10 +286,10 @@ export default class EditMessageComposer extends React.Component {
             // restore serialized parts from the state
             parts = editState.getSerializedParts().map(p => partCreator.deserializePart(p));
         } else {
-            // otherwise, parse the body of the event
-            parts = parseEvent(editState.getEvent(), partCreator);
+            parts = this._restoreStoredEditorState(partCreator) || parseEvent(editState.getEvent(), partCreator);
         }
         this.model = new EditorModel(parts, partCreator);
+        this._saveStoredEditorState();
     }
 
     _getInitialCaretPosition() {

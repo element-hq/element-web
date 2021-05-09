@@ -34,6 +34,7 @@ import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResiz
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import defaultDispatcher from '../../dispatcher/dispatcher';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -564,15 +565,23 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
+    _wasEventBeingEdited = (mxEv) => {
+        return localStorage.getItem(`mx_edit_state_${mxEv.getRoomId()}
+        _${mxEv.getId()}`) !== null;
+    }
+
     _getTilesForEvent(prevEvent, mxEv, last, nextEvent, nextEventWithTile) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
 
+        if (!this.props.editState && this._wasEventBeingEdited(mxEv) ) {
+            defaultDispatcher.dispatch({action: "edit_event", event: mxEv});
+        }
+
         const isEditing = this.props.editState &&
             this.props.editState.getEvent().getId() === mxEv.getId();
-
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
         let ts1 = mxEv.getTs();
