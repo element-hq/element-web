@@ -182,8 +182,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     get _shouldSaveStoredEditorState() {
-        return localStorage.getItem(`mx_edit_state_${this.props.editState.getEvent().getRoomId()}
-        _${this.props.editState.getEvent().event.event_id}`) !== null;
+        return localStorage.getItem(this._editorStateKey) !== null;
     }
 
     _restoreStoredEditorState(partCreator) {
