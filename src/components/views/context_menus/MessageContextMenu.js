@@ -31,6 +31,7 @@ import { isContentActionable } from '../../../utils/EventUtils';
 import {MenuItem} from "../../structures/ContextMenu";
 import {EventType} from "matrix-js-sdk/src/@types/event";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import ForwardDialog from "../dialogs/ForwardDialog";
 
 export function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -154,7 +155,6 @@ export default class MessageContextMenu extends React.Component {
     };
 
     onForwardClick = () => {
-        const ForwardDialog = sdk.getComponent("dialogs.ForwardDialog");
         Modal.createTrackedDialog('Forward Message', '', ForwardDialog, {
             cli: MatrixClientPeg.get(),
             event: this.props.mxEvent,
