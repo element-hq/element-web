@@ -32,5 +32,6 @@
     "Your Element is misconfigured": "Je Element is verkeerd geconfigureerd",
     "Your browser can't run %(brand)s": "Je browser kan %(brand)s niet draaien",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in je huidige browser.",
-    "Powered by Matrix": "Gebruikt Matrix technologie"
+    "Powered by Matrix": "Gebruikt Matrix technologie",
+    "Use %(brand)s on mobile": "Gebruik %(brand)s op uw mobiel"
 }

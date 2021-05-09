@@ -32,5 +32,6 @@
     "Open": "Открыть",
     "Your browser can't run %(brand)s": "Ваш браузер не может запустить %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером.",
-    "Powered by Matrix": "На технологии Matrix"
+    "Powered by Matrix": "На технологии Matrix",
+    "Use %(brand)s on mobile": "Воспользуйтесь %(brand)s на мобильном телефоне"
 }

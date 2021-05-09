@@ -32,5 +32,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
     "Your browser can't run %(brand)s": "Shfletuesi juaj s’mund të xhirojë %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s përdor veçori të thelluara të shfletuesit, të cilat shfletuesi juaj i tanishëm s’i mbulon.",
-    "Powered by Matrix": "Bazuar në Matrix"
+    "Powered by Matrix": "Bazuar në Matrix",
+    "Use %(brand)s on mobile": "Përdor %(brand)s në celular"
 }

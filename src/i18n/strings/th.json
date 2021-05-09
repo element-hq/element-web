@@ -1,13 +1,19 @@
 {
     "powered by Matrix": "ใช้เทคโนโลยี Matrix",
-    "Dismiss": "ไม่สนใจ",
+    "Dismiss": "ปิด",
     "Unknown device": "อุปกรณ์ที่ไม่รู้จัก",
     "You need to be using HTTPS to place a screen-sharing call.": "คุณต้องใช้ HTTPS เพื่อเริ่มติดต่อแบบแบ่งปันหน้าจอ",
     "Welcome to Element": "ยินดีต้อนรับสู่ Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "ระบบแชทและประสานงาน ไร้ศูนย์กลางและเข้ารหัสได้ โดยใช้เทคโนโลยีจาก [matrix]",
-    "The message from the parser is: %(message)s": "ข้อความจากparserคือ:%(message)s",
+    "The message from the parser is: %(message)s": "ข้อความจากตัวแยกวิเคราะห์คือ: %(message)s",
     "Invalid JSON": "JSON ไม่ถูกต้อง",
-    "Sign In": "เข้าสู่ระบบ",
+    "Sign In": "ลงชื่อเข้า",
     "Create Account": "สร้างบัญชี",
-    "Explore rooms": "สำรวจห้อง"
+    "Explore rooms": "สำรวจห้อง",
+    "Download Completed": "การดาวน์โหลดเสร็จสมบูรณ์",
+    "Open user settings": "เปิดการตั้งค่าผู้ใช้",
+    "Go to element.io": "ไปยัง element.io",
+    "Failed to start": "ไม่สามารถเริ่ม",
+    "Open": "เปิด",
+    "Powered by Matrix": "ขับเคลื่อนโดย Matrix"
 }
