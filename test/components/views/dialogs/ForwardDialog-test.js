@@ -147,4 +147,17 @@ describe("ForwardDialog", () => {
         const wrapper = await mountForwardDialog(replyMessage);
         expect(wrapper.find("ReplyThread")).toBeTruthy();
     });
+
+    it("disables buttons for rooms without send permissions", async () => {
+        const readOnlyRoom = TestUtils.mkStubRoom("a", "a");
+        readOnlyRoom.maySendMessage = jest.fn().mockReturnValue(false);
+        const rooms = [readOnlyRoom, TestUtils.mkStubRoom("b", "b")];
+
+        const wrapper = await mountForwardDialog(undefined, rooms);
+
+        const firstButton = wrapper.find("Entry AccessibleButton").first();
+        expect(firstButton.prop("disabled")).toBe(true);
+        const secondButton = wrapper.find("Entry AccessibleButton").last();
+        expect(secondButton.prop("disabled")).toBe(false);
+    });
 });
