@@ -108,8 +108,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         window.addEventListener("resize", this.calculateZoom);
         // After the image loads for the first time we want to calculate the zoom
         this.image.current.addEventListener("load", this.calculateZoom);
-        // Try to precalculate the zoom from width and height props
-        this.calculateZoom();
     }
 
     componentWillUnmount() {
@@ -120,11 +118,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const width = this.props.width || image.naturalWidth;
-        const height = this.props.height || image.naturalHeight;
-
-        const zoomX = imageWrapper.clientWidth / width;
-        const zoomY = imageWrapper.clientHeight / height;
+        const zoomX = imageWrapper.clientWidth / image.naturalWidth;
+        const zoomY = imageWrapper.clientHeight / image.naturalHeight;
 
         // If the image is smaller in both dimensions set its the zoom to 1 to
         // display it in its original size
