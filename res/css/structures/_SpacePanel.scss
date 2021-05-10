@@ -237,7 +237,6 @@ $activeBorderColor: $secondary-fg-color;
 
     .mx_SpacePanel_badgeContainer {
         position: absolute;
-        height: 16px;
 
         // Create a flexbox to make aligning dot badges easier
         display: flex;
@@ -249,23 +248,37 @@ $activeBorderColor: $secondary-fg-color;
 
         .mx_NotificationBadge_dot {
             // make the smaller dot occupy the same width for centering
-            margin-left: 7px;
-            margin-right: 7px;
+            margin: 0 7px;
         }
     }
 
     &.collapsed {
         .mx_SpaceButton {
             .mx_SpacePanel_badgeContainer {
-                right: -3px;
-                top: -3px;
+                right: 0;
+                top: 0;
+
+                .mx_NotificationBadge {
+                    background-clip: padding-box;
+                }
+
+                .mx_NotificationBadge_dot {
+                    margin: 0 -1px 0 0;
+                    border: 3px solid $groupFilterPanel-bg-color;
+                }
+
+                .mx_NotificationBadge_2char,
+                .mx_NotificationBadge_3char {
+                    margin: -5px -5px 0 0;
+                    border: 2px solid $groupFilterPanel-bg-color;
+                }
             }
 
             &.mx_SpaceButton_active .mx_SpacePanel_badgeContainer {
                 // when we draw the selection border we move the relative bounds of our parent
                 // so update our position within the bounds of the parent to maintain position overall
-                right: -6px;
-                top: -6px;
+                right: -3px;
+                top: -3px;
             }
         }
     }
