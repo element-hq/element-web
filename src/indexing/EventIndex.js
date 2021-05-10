@@ -210,8 +210,6 @@ export default class EventIndex extends EventEmitter {
      * listener, if so queues it up to be added to the index.
      */
     onEventDecrypted = async (ev, err) => {
-        const eventId = ev.getId();
-
         // If the event isn't in our live event set, ignore it.
         if (err) return;
         await this.addLiveEventToIndex(ev);
