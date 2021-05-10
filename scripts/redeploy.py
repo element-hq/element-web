@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# auto-deploy script for https://riot.im/develop
+# auto-deploy script for https://develop.element.io
 #
 # Listens for buildkite webhook pokes (https://buildkite.com/docs/apis/webhooks)
 # When it gets one, downloads the artifact from buildkite
@@ -133,9 +133,9 @@ def on_receive_buildkite_poke():
     for artifact in artifacts_array:
         if re.match(r"dist/.*.tar.gz", artifact['path']):
             artifact_to_deploy = artifact
-        if artifact_to_deploy is None:
-            print("No suitable artifacts found")
-            return jsonify({})
+    if artifact_to_deploy is None:
+        print("No suitable artifacts found")
+        return jsonify({})
 
     # double paranoia check: make sure the artifact is on the right org too
     if required_api_prefix is not None and not artifact_to_deploy['url'].startswith(required_api_prefix):
@@ -191,7 +191,7 @@ def deploy_tarball(artifact, build_dir):
 
     # Download the tarball here as buildkite needs auth to do this
     # we don't pgp-sign buildkite artifacts, relying on HTTPS and buildkite
-    # not being evil. If that's not good enough for you, don't use riot.im/develop.
+    # not being evil. If that's not good enough for you, don't use develop.element.io.
     resp = requests.get(artifact['download_url'], stream=True, headers=req_headers())
     resp.raise_for_status()
     with open(artifact['filename'], 'wb') as ofp:

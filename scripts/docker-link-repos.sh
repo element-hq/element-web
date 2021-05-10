@@ -32,8 +32,9 @@ cd react-sdk
 yarn link
 yarn link matrix-js-sdk
 yarn --network-timeout=100000 install
+yarn reskindex
 cd ../
 
-echo "Setting up riot-web with react-sdk and js-sdk packages"
+echo "Setting up element-web with react-sdk and js-sdk packages"
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk

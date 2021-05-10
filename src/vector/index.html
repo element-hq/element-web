@@ -3,16 +3,23 @@
   <head>
     <meta charset="utf-8">
     <title>SciChat</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon.png') %>">
-    <link rel="mask-icon" href="<%= require('../../res/vector-icons/safari-pinned-tab.svg') %>" color="#0094ca">
+    <link rel="apple-touch-icon" sizes="57x57" href="<%= require('../../res/vector-icons/apple-touch-icon-57.png') %>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= require('../../res/vector-icons/apple-touch-icon-60.png') %>">
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= require('../../res/vector-icons/apple-touch-icon-72.png') %>">
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= require('../../res/vector-icons/apple-touch-icon-76.png') %>">
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= require('../../res/vector-icons/apple-touch-icon-114.png') %>">
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/apple-touch-icon-120.png') %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/apple-touch-icon-144.png') %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/apple-touch-icon-152.png') %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon-180.png') %>">
     <link rel="manifest" href="manifest.json">
     <meta name="referrer" content="no-referrer">
-    <link rel="icon" type="image/png" sizes="32x32" href="<%= require('../../res/vector-icons/favicon-32x32.png') %>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<%= require('../../res/vector-icons/favicon-16x16.png') %>">
     <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-title" content="SciChat">
     <meta name="application-name" content="SciChat">
     <meta name="msapplication-TileColor" content="#0094ca">
+    <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-150.png') %>">
     <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#0094ca">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
@@ -43,13 +50,21 @@
         <% }
     } %>
   </head>
-  <body style="height: 100%;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
-    <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <section id="matrixchat" style="height: 100%; overflow: auto;"></section>
+  <body style="height: 100%; margin: 0;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
+    <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
+    <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+
+    <!-- Legacy supporting Prefetch images -->
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
         <source src="media/message.mp3" type="audio/mpeg" />

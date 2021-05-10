@@ -1,8 +1,8 @@
 # Builder
-FROM node:10 as builder
+FROM node:14-buster as builder
 
 # Support custom branches of the react-sdk and js-sdk. This also helps us build
-# images of riot-web develop.
+# images of element-web develop.
 ARG USE_CUSTOM_SDKS=true
 ARG REACT_SDK_REPO="https://github.com/SciCatProject/matrix-react-sdk.git"
 ARG REACT_SDK_BRANCH="master"
@@ -11,7 +11,10 @@ ARG JS_SDK_BRANCH="master"
 
 ARG RIOT_OG_IMAGE_URL="https://github.com/SciCatProject/riot-web/raw/develop/ess-branding/esslogo.png"
 
-RUN apt-get update && apt-get install -y git dos2unix
+RUN apt-get update && apt-get install -y git dos2unix \
+# These packages are required for building Canvas on architectures like Arm
+# See https://www.npmjs.com/package/canvas#compiling
+  build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 WORKDIR /src
 

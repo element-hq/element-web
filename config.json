@@ -26,7 +26,7 @@
         "https://scichat-integration.esss.lu.se/widgets"
     ],
     "integrations_jitsi_widget_url": "https://scichat-integration.esss.lu.se/widgets/jitsi",
-    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
+    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "defaultCountryCode": "SE",
     "showLabsSettings": false,
     "features": {
@@ -38,5 +38,8 @@
     "welcomeUserId": "@scicatbot:ess",
     "enable_presence_by_hs_url": {
         "https://matrix.org": false
-    }
+    },
+    "settingDefaults": {
+      "breadcrumbs": true
+  }
 }
