@@ -133,8 +133,8 @@ describe("ForwardDialog", () => {
             room: "!111111111111111111:example.org",
             user: "@alice:example.org",
             content: {
-                msgtype: "m.text",
-                body: "> <@bob:example.org> Hi Alice!\n\nHi Bob!",
+                "msgtype": "m.text",
+                "body": "> <@bob:example.org> Hi Alice!\n\nHi Bob!",
                 "m.relates_to": {
                     "m.in_reply_to": {
                         event_id: "$2222222222222222222222222222222222222222222",
