@@ -22,7 +22,7 @@ import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
 import cheerio from 'cheerio';
-import htmlparser2 from 'htmlparser2';
+import * as htmlparser2 from 'htmlparser2';
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {

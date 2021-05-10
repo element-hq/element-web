@@ -31,7 +31,7 @@ import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from './settings/SettingsStore';
 import cheerio from 'cheerio';
-import htmlparser2 from 'htmlparser2';
+import * as htmlparser2 from 'htmlparser2';
 
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
