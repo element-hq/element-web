@@ -128,7 +128,7 @@ export default class CallView extends React.Component<IProps, IState> {
             controlsVisible: true,
             showMoreMenu: false,
             showDialpad: false,
-            feeds: this.props.call.getFeeds(),
+            feeds: this.sortFeeds(this.props.call.getFeeds()),
         }
 
         this.updateCallListeners(null, this.props.call);
@@ -203,14 +203,7 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
-        // Sort the feeds so that screensharing and remote feeds have priority
-        const sortedFeeds = [...newFeeds].sort((a, b) => {
-            if (b.purpose === SDPStreamMetadataPurpose.Screenshare && !b.isLocal()) return 1;
-            if (a.isLocal() && !b.isLocal()) return 1;
-            return -1;
-        });
-
-        this.setState({feeds: sortedFeeds});
+        this.setState({feeds: this.sortFeeds(newFeeds)});
     };
 
     private onCallLocalHoldUnhold = () => {
@@ -251,6 +244,15 @@ export default class CallView extends React.Component<IProps, IState> {
 
     private onMouseMove = () => {
         this.showControls();
+    }
+
+    private sortFeeds(feeds: Array<CallFeed>) {
+        // Sort the feeds so that screensharing and remote feeds have priority
+        return [...feeds].sort((a, b) => {
+            if (b.purpose === SDPStreamMetadataPurpose.Screenshare && !b.isLocal()) return 1;
+            if (a.isLocal() && !b.isLocal()) return 1;
+            return -1;
+        });
     }
 
     private showControls() {
