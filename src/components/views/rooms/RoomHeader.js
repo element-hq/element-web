@@ -34,6 +34,7 @@ import RoomName from "../elements/RoomName";
 import {PlaceCallType} from "../../../CallHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
+import InfoDialog from "../dialogs/InfoDialog";
 
 @replaceableComponent("views.rooms.RoomHeader")
 export default class RoomHeader extends React.Component {
@@ -120,7 +121,11 @@ export default class RoomHeader extends React.Component {
     }
 
     _displayInfoDialogAboutScreensharing() {
-
+        Modal.createDialog(InfoDialog, {
+            title: _t("Screensharing has changed"),
+            description: _t("You don't have to shift-click anymore! You can now share " +
+            "your screen in any video call and in voice calls if other side supports it."),
+        });
     }
 
     render() {
