@@ -137,7 +137,7 @@
     "@types/react": "^16.9",
     "@types/react-dom": "^16.9.10",
     "@types/react-transition-group": "^4.4.0",
-    "@types/sanitize-html": "^1.27.0",
+    "@types/sanitize-html": "^2.3.1",
     "@types/zxcvbn": "^4.4.0",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
