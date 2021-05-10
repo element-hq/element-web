@@ -48,6 +48,8 @@ limitations under the License.
 
         .mx_ForwardList_content {
             flex-grow: 1;
+            // Push the scrollbar into the gutter
+            margin-right: -6px;
         }
 
         .mx_ForwardList_noResults {
@@ -56,6 +58,8 @@ limitations under the License.
         }
 
         .mx_ForwardList_section {
+            margin-right: 6px;
+
             &:not(:first-child) {
                 margin-top: 24px;
             }
