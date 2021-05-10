@@ -31,6 +31,7 @@ import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
@@ -63,41 +64,58 @@ enum SendState {
 const Entry: React.FC<IEntryProps> = ({ room, send }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
 
-    let label;
-    let className;
-    if (sendState === SendState.CanSend) {
-        label = _t("Send");
-        className = "mx_ForwardList_canSend";
-    } else if (sendState === SendState.Sending) {
-        label = _t("Sending…");
-        className = "mx_ForwardList_sending";
-    } else if (sendState === SendState.Sent) {
-        label = _t("Sent");
-        className = "mx_ForwardList_sent";
+    let button;
+    if (room.maySendMessage()) {
+        let label;
+        let className;
+        if (sendState === SendState.CanSend) {
+            label = _t("Send");
+            className = "mx_ForwardList_canSend";
+        } else if (sendState === SendState.Sending) {
+            label = _t("Sending…");
+            className = "mx_ForwardList_sending";
+        } else if (sendState === SendState.Sent) {
+            label = _t("Sent");
+            className = "mx_ForwardList_sent";
+        } else {
+            label = _t("Failed to send");
+            className = "mx_ForwardList_sendFailed";
+        }
+
+        button =
+            <AccessibleButton
+                kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
+                className={className}
+                onClick={async () => {
+                    setSendState(SendState.Sending);
+                    try {
+                        await send();
+                        setSendState(SendState.Sent);
+                    } catch (e) {
+                        setSendState(SendState.Failed);
+                    }
+                }}
+                disabled={sendState !== SendState.CanSend}
+            >
+                { label }
+            </AccessibleButton>;
     } else {
-        label = _t("Failed to send");
-        className = "mx_ForwardList_sendFailed";
+        button =
+            <AccessibleTooltipButton
+                kind="primary_outline"
+                className={"mx_ForwardList_canSend"}
+                onClick={() => {}}
+                disabled={true}
+                title={_t("You do not have permission to post to this room")}
+            >
+                { _t("Send") }
+            </AccessibleTooltipButton>;
     }
 
     return <div className="mx_ForwardList_entry">
         <RoomAvatar room={room} height={32} width={32} />
         <span className="mx_ForwardList_entry_name">{ room.name }</span>
-        <AccessibleButton
-            kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
-            className={className}
-            onClick={async () => {
-                setSendState(SendState.Sending);
-                try {
-                    await send();
-                    setSendState(SendState.Sent);
-                } catch (e) {
-                    setSendState(SendState.Failed);
-                }
-            }}
-            disabled={sendState !== SendState.CanSend}
-        >
-            { label }
-        </AccessibleButton>
+        { button }
     </div>;
 };
 
