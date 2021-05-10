@@ -31,6 +31,7 @@ import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from './settings/SettingsStore';
 import cheerio from 'cheerio';
+import htmlparser2 from 'htmlparser2';
 
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
@@ -422,8 +423,9 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
 
             if (SettingsStore.getValue("feature_latex_maths")) {
-                const phtml = cheerio.load(safeBody,
-                    { _useHtmlParser2: true, decodeEntities: false })
+                const phtml = cheerio.load(htmlparser2.parseDocument(safeBody, {
+                    decodeEntities: false,
+                }));
                 // @ts-ignore - The types for `replaceWith` wrongly expect
                 // Cheerio instance to be returned.
                 phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
@@ -431,6 +433,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
                         AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
                         {
                             throwOnError: false,
+                            // @ts-ignore - `e` can be an Element, not just a Node
                             displayMode: e.name == 'div',
                             output: "htmlAndMathml",
                         });

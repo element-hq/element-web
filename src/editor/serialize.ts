@@ -22,6 +22,7 @@ import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
 import cheerio from 'cheerio';
+import htmlparser2 from 'htmlparser2';
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
@@ -116,14 +117,16 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
-        const phtml = cheerio.load(parser.toHTML(),
-            { _useHtmlParser2: true, decodeEntities: false });
+        const phtml = cheerio.load(htmlparser2.parseDocument(parser.toHTML(), {
+            decodeEntities: false,
+        }));
 
         if (SettingsStore.getValue("feature_latex_maths")) {
             // original Markdown without LaTeX replacements
             const parserOrig = new Markdown(orig);
-            const phtmlOrig = cheerio.load(parserOrig.toHTML(),
-                { _useHtmlParser2: true, decodeEntities: false });
+            const phtmlOrig = cheerio.load(htmlparser2.parseDocument(parserOrig.toHTML(), {
+                decodeEntities: false,
+            }));
 
             // since maths delimiters are handled before Markdown,
             // code blocks could contain mangled content.
