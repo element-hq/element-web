@@ -33,6 +33,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 
 const AVATAR_SIZE = 30;
@@ -41,6 +42,9 @@ interface IProps extends IDialogProps {
     cli: MatrixClient;
     // The event to forward
     event: MatrixEvent;
+    // We need a permalink creator for the source room to pass through to EventTile
+    // in case the event is a reply (even though the user can't get at the link)
+    permalinkCreator: RoomPermalinkCreator;
 }
 
 interface IEntryProps {
@@ -97,7 +101,7 @@ const Entry: React.FC<IEntryProps> = ({ room, send }) => {
     </div>;
 };
 
-const ForwardDialog: React.FC<IProps> = ({ cli, event, onFinished }) => {
+const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinished }) => {
     const userId = cli.getUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
@@ -113,7 +117,7 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, onFinished }) => {
             age: 97,
         },
         event_id: "$9999999999999999999999999999999999999999999",
-        room_id: "!999999999999999999:example.org",
+        room_id: event.getRoomId(),
     });
     mockEvent.sender = {
         name: profileInfo.displayname || userId,
@@ -165,6 +169,7 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, onFinished }) => {
                 mxEvent={mockEvent}
                 layout={previewLayout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                permalinkCreator={permalinkCreator}
             />
         </div>
         <div className="mx_ForwardList">
