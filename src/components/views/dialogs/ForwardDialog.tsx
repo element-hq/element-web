@@ -21,6 +21,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClient} from "matrix-js-sdk/src/client";
 
 import {_t} from "../../../languageHandler";
+import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
 import {Layout} from "../../../settings/Layout";
@@ -50,8 +51,9 @@ interface IProps extends IDialogProps {
 
 interface IEntryProps {
     room: Room;
-    // Callback to forward the message to this room
-    send(): Promise<void>;
+    event: MatrixEvent;
+    cli: MatrixClient;
+    onFinished(success: boolean): void;
 }
 
 enum SendState {
@@ -61,8 +63,25 @@ enum SendState {
     Failed,
 }
 
-const Entry: React.FC<IEntryProps> = ({ room, send }) => {
+const Entry: React.FC<IEntryProps> = ({ room, event, cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
+
+    const jumpToRoom = () => {
+        dis.dispatch({
+            action: "view_room",
+            room_id: room.roomId,
+        });
+        onFinished(true);
+    };
+    const send = async () => {
+        setSendState(SendState.Sending);
+        try {
+            await cli.sendEvent(room.roomId, event.getType(), event.getContent());
+            setSendState(SendState.Sent);
+        } catch (e) {
+            setSendState(SendState.Failed);
+        }
+    };
 
     let button;
     if (room.maySendMessage()) {
@@ -85,16 +104,8 @@ const Entry: React.FC<IEntryProps> = ({ room, send }) => {
         button =
             <AccessibleButton
                 kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
-                className={className}
-                onClick={async () => {
-                    setSendState(SendState.Sending);
-                    try {
-                        await send();
-                        setSendState(SendState.Sent);
-                    } catch (e) {
-                        setSendState(SendState.Failed);
-                    }
-                }}
+                className={`mx_ForwardList_sendButton ${className}`}
+                onClick={send}
                 disabled={sendState !== SendState.CanSend}
             >
                 { label }
@@ -103,7 +114,7 @@ const Entry: React.FC<IEntryProps> = ({ room, send }) => {
         button =
             <AccessibleTooltipButton
                 kind="primary_outline"
-                className={"mx_ForwardList_canSend"}
+                className="mx_ForwardList_sendButton mx_ForwardList_canSend"
                 onClick={() => {}}
                 disabled={true}
                 title={_t("You do not have permission to post to this room")}
@@ -113,8 +124,10 @@ const Entry: React.FC<IEntryProps> = ({ room, send }) => {
     }
 
     return <div className="mx_ForwardList_entry">
-        <RoomAvatar room={room} height={32} width={32} />
-        <span className="mx_ForwardList_entry_name">{ room.name }</span>
+        <AccessibleButton className="mx_ForwardList_roomButton" onClick={jumpToRoom}>
+            <RoomAvatar room={room} height={32} width={32} />
+            <span className="mx_ForwardList_entry_name">{ room.name }</span>
+        </AccessibleButton>
         { button }
     </div>;
 };
@@ -207,7 +220,9 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
                             <Entry
                                 key={room.roomId}
                                 room={room}
-                                send={() => cli.sendEvent(room.roomId, event.getType(), event.getContent())}
+                                event={event}
+                                cli={cli}
+                                onFinished={onFinished}
                             />,
                         ) }
                     </div>
@@ -220,7 +235,9 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
                             <Entry
                                 key={room.roomId}
                                 room={room}
-                                send={() => cli.sendEvent(room.roomId, event.getType(), event.getContent())}
+                                event={event}
+                                cli={cli}
+                                onFinished={onFinished}
                             />,
                         ) }
                     </div>

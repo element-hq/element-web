@@ -74,23 +74,30 @@ limitations under the License.
 
             .mx_ForwardList_entry {
                 display: flex;
+                justify-content: space-between;
                 margin-top: 12px;
 
-                .mx_BaseAvatar {
+                .mx_ForwardList_roomButton {
+                    display: flex;
                     margin-right: 12px;
-                }
-
-                .mx_ForwardList_entry_name {
-                    font-size: $font-15px;
-                    line-height: 30px;
                     flex-grow: 1;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    margin-right: 12px;
+                    min-width: 0;
+
+                    .mx_BaseAvatar {
+                        margin-right: 12px;
+                    }
+
+                    .mx_ForwardList_entry_name {
+                        font-size: $font-15px;
+                        line-height: 30px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        margin-right: 12px;
+                    }
                 }
 
-                .mx_AccessibleButton {
+                .mx_ForwardList_sendButton {
                     &.mx_ForwardList_sending, &.mx_ForwardList_sent {
                         &::before {
                             content: '';

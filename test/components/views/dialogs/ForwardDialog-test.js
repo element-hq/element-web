@@ -100,7 +100,7 @@ describe("ForwardDialog", () => {
             cancelSend = reject;
         }));
 
-        const firstButton = wrapper.find("Entry AccessibleButton").first();
+        const firstButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
         expect(firstButton.text()).toBe("Send");
 
         act(() => { firstButton.simulate("click"); });
@@ -113,8 +113,8 @@ describe("ForwardDialog", () => {
         });
         expect(firstButton.text()).toBe("Failed to send");
 
-        const secondButton = wrapper.find("Entry AccessibleButton").at(1);
-        expect(secondButton.text()).toBe("Send");
+        const secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").at(1);
+        expect(secondButton.render().text()).toBe("Send");
 
         act(() => { secondButton.simulate("click"); });
         expect(secondButton.text()).toBe("Sending…");
@@ -155,9 +155,9 @@ describe("ForwardDialog", () => {
 
         const wrapper = await mountForwardDialog(undefined, rooms);
 
-        const firstButton = wrapper.find("Entry AccessibleButton").first();
+        const firstButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
         expect(firstButton.prop("disabled")).toBe(true);
-        const secondButton = wrapper.find("Entry AccessibleButton").last();
+        const secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").last();
         expect(secondButton.prop("disabled")).toBe(false);
     });
 });
