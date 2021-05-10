@@ -39,6 +39,7 @@ const AVATAR_SIZE = 30;
 
 interface IProps extends IDialogProps {
     cli: MatrixClient;
+    // The event to forward
     event: MatrixEvent;
 }
 
@@ -116,7 +117,7 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, onFinished }) => {
     });
     mockEvent.sender = {
         name: profileInfo.displayname || userId,
-        userId: userId,
+        userId,
         getAvatarUrl: (..._) => {
             return avatarUrlForUser(
                 { avatarUrl: profileInfo.avatar_url },
@@ -179,28 +180,28 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, onFinished }) => {
                 { rooms.length > 0 ? (
                     <div className="mx_ForwardList_section">
                         <h3>{ _t("Rooms") }</h3>
-                        { rooms.map(room => {
-                            return <Entry
+                        { rooms.map(room =>
+                            <Entry
                                 key={room.roomId}
                                 room={room}
                                 send={() => cli.sendEvent(room.roomId, event.getType(), event.getContent())}
-                            />;
-                        }) }
+                            />,
+                        ) }
                     </div>
                 ) : undefined }
 
                 { dms.length > 0 ? (
                     <div className="mx_ForwardList_section">
                         <h3>{ _t("Direct Messages") }</h3>
-                        { dms.map(room => {
-                            return <Entry
+                        { dms.map(room =>
+                            <Entry
                                 key={room.roomId}
                                 room={room}
                                 send={() => cli.sendEvent(room.roomId, event.getType(), event.getContent())}
-                            />;
-                        }) }
+                            />,
+                        ) }
                     </div>
-                ) : null }
+                ) : undefined }
 
                 { rooms.length + dms.length < 1 ? <span className="mx_ForwardList_noResults">
                     { _t("No results") }
