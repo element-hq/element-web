@@ -60,6 +60,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
+import {Key} from "../../Keyboard";
 
 interface IProps {
     space: Room;
@@ -367,6 +368,7 @@ const SpaceLanding = ({ space }) => {
 const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
+    let onClick = onFinished;
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
     // TODO vary default prefills for "Just Me" spaces
@@ -382,10 +384,17 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             value={roomNames[i]}
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
+            onKeyDown={ev => {
+                if (ev.key === Key.ENTER) {
+                    ev.preventDefault();
+                    onClick();
+                }
+            }}
         />;
     });
 
     const onNextClick = async () => {
+        if (busy) return;
         setError("");
         setBusy(true);
         try {
@@ -410,7 +419,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setBusy(false);
     };
 
-    let onClick = onFinished;
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
         onClick = onNextClick;
@@ -556,6 +564,7 @@ const validateEmailRules = withValidation({
 const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
+    let onClick = onFinished;
     const numFields = 3;
     const fieldRefs: RefObject<Field>[] = [useRef(), useRef(), useRef()];
     const [emailAddresses, setEmailAddress] = useStateArray(numFields, "");
@@ -572,10 +581,17 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
             ref={fieldRefs[i]}
             onValidate={validateEmailRules}
             autoFocus={i === 0}
+            onKeyDown={ev => {
+                if (ev.key === Key.ENTER) {
+                    ev.preventDefault();
+                    onClick();
+                }
+            }}
         />;
     });
 
     const onNextClick = async () => {
+        if (busy) return;
         setError("");
         for (let i = 0; i < fieldRefs.length; i++) {
             const fieldRef = fieldRefs[i];
@@ -609,7 +625,6 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         setBusy(false);
     };
 
-    let onClick = onFinished;
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some(name => name.trim())) {
         onClick = onNextClick;
