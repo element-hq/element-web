@@ -101,6 +101,7 @@ const invite1 = "!invite1:server";
 const invite2 = "!invite2:server";
 const room1 = "!room1:server";
 const room2 = "!room2:server";
+const room3 = "!room3:server";
 const space1 = "!space1:server";
 const space2 = "!space2:server";
 const space3 = "!space3:server";
@@ -361,8 +362,8 @@ describe("SpaceStore", () => {
                 expect(store.getSpaceFilteredRoomIds(null).has(invite2)).toBeTruthy();
             });
 
-            it("home space does not contain rooms/low priority from rooms within spaces", () => {
-                expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeFalsy();
+            it("home space does contain rooms/low priority even if they are also shown in a space", () => {
+                expect(store.getSpaceFilteredRoomIds(null).has(room1)).toBeTruthy();
             });
 
             it("space contains child rooms", () => {
@@ -614,8 +615,8 @@ describe("SpaceStore", () => {
 
     describe("space auto switching tests", () => {
         beforeEach(async () => {
-            [room1, room2, orphan1].forEach(mkRoom);
-            mkSpace(space1, [room1, room2]);
+            [room1, room2, room3, orphan1].forEach(mkRoom);
+            mkSpace(space1, [room1, room2, room3]);
             mkSpace(space2, [room1, room2]);
 
             client.getRoom(room2).currentState.getStateEvents.mockImplementation(mockStateEventImplementation([
@@ -641,15 +642,15 @@ describe("SpaceStore", () => {
 
         it("switch to canonical parent space for room", async () => {
             viewRoom(room1);
-            await store.setActiveSpace(null, false);
+            await store.setActiveSpace(client.getRoom(space2), false);
             viewRoom(room2);
             expect(store.activeSpace).toBe(client.getRoom(space2));
         });
 
         it("switch to first containing space for room", async () => {
             viewRoom(room2);
-            await store.setActiveSpace(null, false);
-            viewRoom(room1);
+            await store.setActiveSpace(client.getRoom(space2), false);
+            viewRoom(room3);
             expect(store.activeSpace).toBe(client.getRoom(space1));
         });
 
@@ -657,6 +658,13 @@ describe("SpaceStore", () => {
             viewRoom(room1);
             await store.setActiveSpace(client.getRoom(space1), false);
             viewRoom(orphan1);
+            expect(store.activeSpace).toBeNull();
+        });
+
+        it("when switching rooms in the all rooms home space don't switch to related space", async () => {
+            viewRoom(room2);
+            await store.setActiveSpace(null, false);
+            viewRoom(room1);
             expect(store.activeSpace).toBeNull();
         });
     });
