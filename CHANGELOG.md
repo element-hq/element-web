@@ -1,3 +1,11 @@
+Changes in [3.20.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.20.0) (2021-05-10)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.20.0-rc.1...v3.20.0)
+
+ * Upgrade to JS SDK 10.1.0
+ * [Release] Don't use the event's metadata to calc the scale of an image
+   [\#6004](https://github.com/matrix-org/matrix-react-sdk/pull/6004)
+
 Changes in [3.20.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.20.0-rc.1) (2021-05-04)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.19.0...v3.20.0-rc.1)
