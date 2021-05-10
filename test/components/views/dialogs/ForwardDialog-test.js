@@ -24,44 +24,51 @@ import {act} from "react-dom/test-utils";
 import * as TestUtils from "../../../test-utils";
 import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import {RoomPermalinkCreator} from "../../../../src/utils/permalinks/Permalinks";
 import ForwardDialog from "../../../../src/components/views/dialogs/ForwardDialog";
 
 configure({ adapter: new Adapter() });
 
 describe("ForwardDialog", () => {
-    let client;
-    let wrapper;
-
-    const message = TestUtils.mkMessage({
-        room: "!111111111111111111:example.org",
+    const sourceRoom = "!111111111111111111:example.org";
+    const defaultMessage = TestUtils.mkMessage({
+        room: sourceRoom,
         user: "@alice:example.org",
         msg: "Hello world!",
         event: true,
     });
+    const defaultRooms = ["a", "A", "b"].map(name => TestUtils.mkStubRoom(name, name));
 
-    beforeEach(async () => {
-        TestUtils.stubClient();
-        DMRoomMap.makeShared();
-        client = MatrixClientPeg.get();
-        client.getVisibleRooms = jest.fn().mockReturnValue(
-            ["a", "A", "b"].map(name => TestUtils.mkStubRoom(name, name)),
-        );
-        client.getUserId = jest.fn().mockReturnValue("@bob:example.org");
+    const mountForwardDialog = async (message = defaultMessage, rooms = defaultRooms) => {
+        const client = MatrixClientPeg.get();
+        client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
 
+        let wrapper;
         await act(async () => {
             wrapper = mount(
                 <ForwardDialog
                     cli={client}
                     event={message}
+                    permalinkCreator={new RoomPermalinkCreator(undefined, sourceRoom)}
                     onFinished={jest.fn()}
                 />,
             );
             // Wait one tick for our profile data to load so the state update happens within act
             await new Promise(resolve => setImmediate(resolve));
         });
+
+        return wrapper;
+    };
+
+    beforeEach(() => {
+        TestUtils.stubClient();
+        DMRoomMap.makeShared();
+        MatrixClientPeg.get().getUserId = jest.fn().mockReturnValue("@bob:example.org");
     });
 
-    it("shows a preview with us as the sender", () => {
+    it("shows a preview with us as the sender", async () => {
+        const wrapper = await mountForwardDialog();
+
         const previewBody = wrapper.find(".mx_EventTile_body");
         expect(previewBody.text()).toBe("Hello world!");
 
@@ -70,7 +77,9 @@ describe("ForwardDialog", () => {
         expect(previewAvatar.prop("title")).toBe("@bob:example.org");
     });
 
-    it("filters the rooms", () => {
+    it("filters the rooms", async () => {
+        const wrapper = await mountForwardDialog();
+
         const roomsBefore = wrapper.find(".mx_ForwardList_entry");
         expect(roomsBefore).toHaveLength(3);
 
@@ -83,10 +92,12 @@ describe("ForwardDialog", () => {
     });
 
     it("tracks message sending progress across multiple rooms", async () => {
+        const wrapper = await mountForwardDialog();
+
         // Make sendEvent require manual resolution so we can see the sending state
         let finishSend;
         let cancelSend;
-        client.sendEvent = jest.fn(() => new Promise((resolve, reject) => {
+        MatrixClientPeg.get().sendEvent = jest.fn(() => new Promise((resolve, reject) => {
             finishSend = resolve;
             cancelSend = reject;
         }));
@@ -120,5 +131,26 @@ describe("ForwardDialog", () => {
             await new Promise(resolve => setImmediate(resolve));
         });
         expect(secondRoom.find(".mx_AccessibleButton").text()).toBe("Sent");
+    });
+
+    it("can render replies", async () => {
+        const replyMessage = TestUtils.mkEvent({
+            type: "m.room.message",
+            room: "!111111111111111111:example.org",
+            user: "@alice:example.org",
+            content: {
+                msgtype: "m.text",
+                body: "> <@bob:example.org> Hi Alice!\n\nHi Bob!",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: "$2222222222222222222222222222222222222222222",
+                    },
+                },
+            },
+            event: true,
+        });
+
+        const wrapper = await mountForwardDialog(replyMessage);
+        expect(wrapper.find("ReplyThread")).toBeTruthy();
     });
 });

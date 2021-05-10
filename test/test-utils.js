@@ -236,6 +236,7 @@ export function mkStubRoom(roomId = null, name) {
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
         getUnfilteredTimelineSet: () => null,
+        findEventById: () => null,
         getAccountData: () => null,
         hasMembershipState: () => null,
         getVersion: () => '1',
