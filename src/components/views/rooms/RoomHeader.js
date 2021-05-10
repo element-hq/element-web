@@ -33,6 +33,7 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import {PlaceCallType} from "../../../CallHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Modal from '../../../Modal';
 
 @replaceableComponent("views.rooms.RoomHeader")
 export default class RoomHeader extends React.Component {
@@ -116,6 +117,10 @@ export default class RoomHeader extends React.Component {
         if (!currentPinEvent) return false;
 
         return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
+    }
+
+    _displayInfoDialogAboutScreensharing() {
+
     }
 
     render() {
@@ -241,8 +246,8 @@ export default class RoomHeader extends React.Component {
             videoCallButton =
                 <AccessibleTooltipButton
                     className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
-                    onClick={(ev) => this.props.onCallPlaced(
-                        ev.shiftKey ? PlaceCallType.ScreenSharing : PlaceCallType.Video)}
+                    onClick={(ev) => ev.shiftKey ?
+                        this._displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(PlaceCallType.Video)}
                     title={_t("Video call")} />;
         }
 
