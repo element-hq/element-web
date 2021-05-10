@@ -80,15 +80,13 @@ describe("ForwardDialog", () => {
     it("filters the rooms", async () => {
         const wrapper = await mountForwardDialog();
 
-        const roomsBefore = wrapper.find(".mx_ForwardList_entry");
-        expect(roomsBefore).toHaveLength(3);
+        expect(wrapper.find("Entry")).toHaveLength(3);
 
-        const searchInput = wrapper.find(".mx_SearchBox input");
+        const searchInput = wrapper.find("SearchBox input");
         searchInput.instance().value = "a";
         searchInput.simulate("change");
 
-        const roomsAfter = wrapper.find(".mx_ForwardList_entry");
-        expect(roomsAfter).toHaveLength(2);
+        expect(wrapper.find("Entry")).toHaveLength(2);
     });
 
     it("tracks message sending progress across multiple rooms", async () => {
@@ -102,35 +100,31 @@ describe("ForwardDialog", () => {
             cancelSend = reject;
         }));
 
-        const firstRoom = wrapper.find(".mx_ForwardList_entry").first();
-        expect(firstRoom.find(".mx_AccessibleButton").text()).toBe("Send");
+        const firstButton = wrapper.find("Entry AccessibleButton").first();
+        expect(firstButton.text()).toBe("Send");
 
-        act(() => {
-            firstRoom.find(".mx_AccessibleButton").simulate("click");
-        });
-        expect(firstRoom.find(".mx_AccessibleButton").text()).toBe("Sending…");
+        act(() => { firstButton.simulate("click"); });
+        expect(firstButton.text()).toBe("Sending…");
 
         await act(async () => {
             cancelSend();
             // Wait one tick for the button to realize the send failed
             await new Promise(resolve => setImmediate(resolve));
         });
-        expect(firstRoom.find(".mx_AccessibleButton").text()).toBe("Failed to send");
+        expect(firstButton.text()).toBe("Failed to send");
 
-        const secondRoom = wrapper.find(".mx_ForwardList_entry").at(1);
-        expect(secondRoom.find(".mx_AccessibleButton").text()).toBe("Send");
+        const secondButton = wrapper.find("Entry AccessibleButton").at(1);
+        expect(secondButton.text()).toBe("Send");
 
-        act(() => {
-            secondRoom.find(".mx_AccessibleButton").simulate("click");
-        });
-        expect(secondRoom.find(".mx_AccessibleButton").text()).toBe("Sending…");
+        act(() => { secondButton.simulate("click"); });
+        expect(secondButton.text()).toBe("Sending…");
 
         await act(async () => {
             finishSend();
             // Wait one tick for the button to realize the send succeeded
             await new Promise(resolve => setImmediate(resolve));
         });
-        expect(secondRoom.find(".mx_AccessibleButton").text()).toBe("Sent");
+        expect(secondButton.text()).toBe("Sent");
     });
 
     it("can render replies", async () => {
