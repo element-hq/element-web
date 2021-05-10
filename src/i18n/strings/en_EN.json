@@ -996,6 +996,7 @@
     "Upload": "Upload",
     "Name": "Name",
     "Description": "Description",
+    "Please enter a name for the space": "Please enter a name for the space",
     "Create a space": "Create a space",
     "Spaces are new ways to group rooms and people. To join an existing space you'll need an invite.": "Spaces are new ways to group rooms and people. To join an existing space you'll need an invite.",
     "Public": "Public",
