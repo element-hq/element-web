@@ -7,25 +7,80 @@
     "start_url": "index.html",
     "icons": [
         {
-            "src": "/android-chrome-192x192.png",
-            "sizes": "192x192",
+            "src": "/vector-icons/44.png",
+            "sizes": "44x44",
             "type": "image/png"
         },
         {
-            "src": "/android-chrome-512x512.png",
-            "sizes": "512x512",
+            "src": "/vector-icons/1240x600.png",
+            "sizes": "1240x600",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/300.png",
+            "sizes": "300x300",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/150.png",
+            "sizes": "150x150",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/88.png",
+            "sizes": "88x88",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/24.png",
+            "sizes": "24x24",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/50.png",
+            "sizes": "50x50",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/620x300.png",
+            "sizes": "620x300",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/180.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/120.png",
+            "sizes": "120x120",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/76.png",
+            "sizes": "76x76",
             "type": "image/png"
         }
     ],
     "related_applications": [
         {
             "platform": "play",
-            "url": "https://play.google.com/store/apps/details?id=im.vector.alpha",
-            "id": "im.vector.alpha"
+            "url": "https://play.google.com/store/apps/details?id=im.vector.app",
+            "id": "im.vector.app"
         },
         {
             "platform": "itunes",
-            "url": "https://itunes.apple.com/gb/app/riot-open-source-team-collaboration-via-matrix/id1083446067"
+            "url": "https://apps.apple.com/app/vector/id1083446067"
         }
     ]
 }
