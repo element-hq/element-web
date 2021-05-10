@@ -60,6 +60,33 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         return this.matrixClient && this.matrixClient.getVisibleRooms().length >= 20;
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const prevRoomCount = (prevState.rooms?.length || 0);
+        const currentRoomCount = (this.state.rooms?.length || 0)
+
+        /**
+         * Only decrypting the breadcrumb rooms events on app initialisation
+         * when room count transitions from 0 to the number of rooms it contains
+         */
+        if (prevRoomCount === 0 && currentRoomCount > prevRoomCount) {
+            const client = MatrixClientPeg.get();
+            /**
+             * Rooms in the breadcrumb have a good chance to be interacted with
+             * again by a user. Decrypting the messages ahead of time will help
+             * reduce content shift on first render
+             */
+            this.state.rooms?.forEach(async room => {
+                const [cryptoEvent] = room.currentState.getStateEvents("m.room.encryption");
+                if (cryptoEvent) {
+                    if (!client.isRoomEncrypted(room.roomId)) {
+                        await client._crypto.onCryptoEvent(cryptoEvent);
+                    }
+                    room?.decryptAllEvents();
+                }
+            });
+        }
+    }
+
     protected async onAction(payload: ActionPayload) {
         if (!this.matrixClient) return;
 
@@ -88,23 +115,6 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
         this.matrixClient.on("Room.myMembership", this.onMyMembership);
         this.matrixClient.on("Room", this.onRoom);
-
-        const client = MatrixClientPeg.get();
-        const breadcrumbs = client.store.getAccountData("im.vector.setting.breadcrumbs");
-        const breadcrumbsRooms: string[] = breadcrumbs?.getContent().recent_rooms || [];
-
-        breadcrumbsRooms.map(async roomId => {
-            const room = client.getRoom(roomId);
-            if (room) {
-                const [cryptoEvent] = room.currentState.getStateEvents("m.room.encryption");
-                if (cryptoEvent) {
-                    if (!client.isRoomEncrypted(roomId)) {
-                        await client._crypto.onCryptoEvent(cryptoEvent);
-                    }
-                    return room?.decryptAllEvents();
-                }
-            }
-        });
     }
 
     protected async onNotReady() {

@@ -1142,7 +1142,6 @@ class TimelinePanel extends React.Component {
     _getEvents() {
         const events = this._timelineWindow.getEvents();
 
-
         // `slice` performs a shallow copy of the array
         // we want the last event to be decrypted first but displayed last
         // `reverse` is destructive and unfortunately mutates the "events" array
