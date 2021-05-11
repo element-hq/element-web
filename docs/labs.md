@@ -126,7 +126,11 @@ encrypted on the server, as described in [MSC2697](https://github.com/matrix-org
 
 ## Voice messages (`feature_voice_messages`)
 
-An implementation of [voice messages](https://github.com/vector-im/element-web/issues/1358) in Element.
+Offers a way to send more time-sensitive information through the power of voice. When enabled, use the microphone
+icon on the lower right to start recording your message. You will have a chance to review after you're done recording,
+and if it sounds fine then send it off for the rest of the room to hear.
+
+Voice messages are automatically downloaded to ensure they are ready for playback as soon as possible.
 
 ## Do not disturb (`feature_dnd`)
 
