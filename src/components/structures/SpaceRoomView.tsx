@@ -60,7 +60,6 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import {Key} from "../../Keyboard";
 
 interface IProps {
     space: Room;
