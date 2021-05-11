@@ -20,6 +20,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/SpaceStore";
+import SpaceTreeLevelLayoutStore from "../../../stores/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
 import {RovingAccessibleButton} from "../../../accessibility/roving/RovingAccessibleButton";
 import {RovingAccessibleTooltipButton} from "../../../accessibility/roving/RovingAccessibleTooltipButton";
@@ -48,8 +49,6 @@ import {EventType} from "matrix-js-sdk/src/@types/event";
 import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
 import {NotificationColor} from "../../../stores/notifications/NotificationColor";
 
-const getSpaceCollapsedKey = (space: Room) => `mx_space_collapsed_${space.roomId}`;
-
 interface IItemProps {
     space?: Room;
     activeSpaces: Room[];
@@ -70,13 +69,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     constructor(props) {
         super(props);
 
-        const collapsedLocalStorage = localStorage.getItem(getSpaceCollapsedKey(props.space));
-        // XXX: localStorage doesn't allow booleans
-        // default to collapsed for root items
-        const collapsed = collapsedLocalStorage ? collapsedLocalStorage === "true" : !props.isNested;
-
         this.state = {
-            collapsed: collapsed,
+            // default to collapsed for root items
+            collapsed: SpaceTreeLevelLayoutStore.getSpaceCollapsedState(props.space, !props.isNested),
             contextMenuPosition: null,
         };
     }
@@ -86,8 +81,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             this.props.onExpand();
         }
         const newCollapsedState = !this.state.collapsed;
-        // XXX: localStorage doesn't allow booleans
-        localStorage.setItem(getSpaceCollapsedKey(this.props.space), newCollapsedState.toString());
+
+        SpaceTreeLevelLayoutStore.setSpaceCollapsedState(this.props.space, newCollapsedState);
         this.setState({collapsed: newCollapsedState});
         // don't bubble up so encapsulating button for space
         // doesn't get triggered
