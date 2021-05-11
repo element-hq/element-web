@@ -1,3 +1,31 @@
+Changes in [1.7.27](https://github.com/vector-im/element-web/releases/tag/v1.7.27) (2021-05-10)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.27-rc.1...v1.7.27)
+
+ * Upgrade to React SDK 3.20.0 and JS SDK 10.1.0
+
+Changes in [1.7.27-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.27-rc.1) (2021-05-04)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.26...v1.7.27-rc.1)
+
+ * Upgrade to React SDK 3.20.0-rc.1 and JS SDK 10.1.0-rc.1
+ * Translations update from Weblate
+   [\#17160](https://github.com/vector-im/element-web/pull/17160)
+ * Document option for obeying asserted identity
+   [\#17008](https://github.com/vector-im/element-web/pull/17008)
+ * Implement IPC call to Electron to set language
+   [\#17052](https://github.com/vector-im/element-web/pull/17052)
+ * Convert Vector skin react components to Typescript
+   [\#17061](https://github.com/vector-im/element-web/pull/17061)
+ * Add code quality review policy
+   [\#16980](https://github.com/vector-im/element-web/pull/16980)
+ * Register RecorderWorklet from react-sdk
+   [\#17013](https://github.com/vector-im/element-web/pull/17013)
+ * Preload Inter font to avoid FOIT on slow connections
+   [\#17039](https://github.com/vector-im/element-web/pull/17039)
+ * Disable `postcss-calc`'s noisy `warnWhenCannotResolve` option
+   [\#17041](https://github.com/vector-im/element-web/pull/17041)
+
 Changes in [1.7.26](https://github.com/vector-im/element-web/releases/tag/v1.7.26) (2021-04-26)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.26-rc.1...v1.7.26)
