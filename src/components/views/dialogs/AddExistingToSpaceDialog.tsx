@@ -36,6 +36,7 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
+import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -307,6 +308,7 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ matrixClient: cli, space, 
         <div className="mx_AddExistingToSpaceDialog_footer">
             { footer }
         </div>
+        <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
     </BaseDialog>;
 };
 

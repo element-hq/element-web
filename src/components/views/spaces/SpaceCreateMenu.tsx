@@ -32,6 +32,7 @@ import {Action} from "../../../dispatcher/actions";
 import {USER_LABS_TAB} from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
+import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -152,6 +153,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
             />
 
             <p>{ _t("You can change this later") }</p>
+
+            <SpaceFeedbackPrompt onClick={onFinished} />
         </React.Fragment>;
     } else {
         body = <React.Fragment>

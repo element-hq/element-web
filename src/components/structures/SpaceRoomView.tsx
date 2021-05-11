@@ -64,6 +64,9 @@ import {BetaPill} from "../views/beta/BetaCard";
 import {USER_LABS_TAB} from "../views/dialogs/UserSettingsDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import dis from "../../dispatcher/dispatcher";
+import Modal from "../../Modal";
+import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
+import SdkConfig from "../../SdkConfig";
 
 interface IProps {
     space: Room;
@@ -88,6 +91,26 @@ enum Phase {
     PrivateCreateRooms,
     PrivateExistingRooms,
 }
+
+// XXX: Temporary for the Spaces Beta only
+export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
+    if (!SdkConfig.get().bug_report_endpoint_url) return null;
+
+    return <div className="mx_SpaceFeedbackPrompt">
+        <hr />
+        <div>
+            <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a beta feature.") }</span>
+            <AccessibleButton kind="link" onClick={() => {
+                if (onClick) onClick();
+                Modal.createTrackedDialog("Beta Feedback", "feature_spaces", BetaFeedbackDialog, {
+                    featureId: "feature_spaces",
+                });
+            }}>
+                { _t("Feedback") }
+            </AccessibleButton>
+        </div>
+    </div>;
+};
 
 const RoomMemberCount = ({ room, children }) => {
     const members = useRoomMembers(room);
@@ -398,6 +421,7 @@ const SpaceLanding = ({ space }) => {
         <div className="mx_SpaceRoomView_landing_topic">
             <RoomTopic room={space} />
         </div>
+        <SpaceFeedbackPrompt />
         <hr />
 
         <SpaceHierarchy
@@ -487,6 +511,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                 value={buttonLabel}
             />
         </div>
+        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -555,6 +580,7 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
                 { buttonLabel }
             </AccessibleButton>
         </div>
+        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -574,6 +600,7 @@ const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished }) => {
                 { _t("Go to my first room") }
             </AccessibleButton>
         </div>
+        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -600,6 +627,7 @@ const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
             <h3>{ _t("Me and my teammates") }</h3>
             <div>{ _t("A private space for you and your teammates") }</div>
         </AccessibleButton>
+        <SpaceFeedbackPrompt />
     </div>;
 };
 
@@ -721,6 +749,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
                 value={buttonLabel}
             />
         </div>
+        <SpaceFeedbackPrompt />
     </div>;
 };
 
