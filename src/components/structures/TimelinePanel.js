@@ -38,6 +38,7 @@ import {haveTileForEvent} from "../views/rooms/EventTile";
 import {UIFeature} from "../../settings/UIFeature";
 import {objectHasDiff} from "../../utils/objects";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import { arrayFastClone } from "../../utils/arrays";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1142,11 +1143,11 @@ class TimelinePanel extends React.Component {
     _getEvents() {
         const events = this._timelineWindow.getEvents();
 
-        // `slice` performs a shallow copy of the array
+        // `arrayFastClone` performs a shallow copy of the array
         // we want the last event to be decrypted first but displayed last
         // `reverse` is destructive and unfortunately mutates the "events" array
-        events
-            .slice().reverse()
+        arrayFastClone(events)
+            .reverse()
             .forEach(event => {
                 if (event.shouldAttemptDecryption()) {
                     event.attemptDecryption(MatrixClientPeg.get()._crypto);
