@@ -18,6 +18,7 @@ import React from 'react';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
+import AccessibleTooltipButton from '../../../elements/AccessibleTooltipButton';
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
@@ -26,6 +27,9 @@ import PlatformPeg from "../../../../../PlatformPeg";
 import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 import UpdateCheckButton from "../../UpdateCheckButton";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import { copyPlaintext } from "../../../../../utils/strings";
+import * as ContextMenu from "../../../../structures/ContextMenu";
+import { toRightOf } from "../../../../structures/ContextMenu";
 
 interface IProps {
     closeSettingsFn: () => {};
@@ -38,6 +42,8 @@ interface IState {
 
 @replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
 export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
+    protected closeCopiedTooltip: () => void;
+
     constructor(props) {
         super(props);
 
@@ -54,6 +60,12 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         PlatformPeg.get().canSelfUpdate().then((v) => this.setState({canUpdate: v})).catch((e) => {
             console.error("Error getting self updatability: ", e);
         });
+    }
+
+    componentWillUnmount() {
+        // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
+        // the tooltip otherwise, such as pressing Escape
+        if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
     private onClearCacheAndReload = (e) => {
@@ -151,6 +163,20 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 </ul>
             </div>
         );
+    }
+
+    onAccessTokenCopyClick = async (e) => {
+        e.preventDefault();
+        const target = e.target; // copy target before we go async and React throws it away
+
+        const successful = await copyPlaintext(MatrixClientPeg.get().getAccessToken());
+        const buttonRect = target.getBoundingClientRect();
+        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+        const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+            ...toRightOf(buttonRect, 2),
+            message: successful ? _t('Copied!') : _t('Failed to copy'),
+        });
+        this.closeCopiedTooltip = target.onmouseleave = close;
     }
 
     render() {
@@ -269,12 +295,20 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code><br />
                         {_t("Identity Server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code><br />
-                        {_t("Access Token:") + ' '}
-                        <AccessibleButton element="span" onClick={this.showSpoiler}
-                            data-spoiler={MatrixClientPeg.get().getAccessToken()}
-                        >
-                            &lt;{ _t("click to reveal") }&gt;
-                        </AccessibleButton>
+                        <br />
+                        <details>
+                            <summary>{_t("Access Token")}</summary><br />
+                            <b>{_t("Your access token gives full access to your account."
+                               + " Do not share it with anyone." )}</b>
+                            <div className="mx_HelpUserSettingsTab_accessToken">
+                                <code>{MatrixClientPeg.get().getAccessToken()}</code>
+                                <AccessibleTooltipButton
+                                    title={_t("Copy")}
+                                    onClick={this.onAccessTokenCopyClick}
+                                    className="mx_HelpUserSettingsTab_accessToken_copy"
+                                />
+                            </div>
+                        </details><br />
                         <div className='mx_HelpUserSettingsTab_debugButton'>
                             <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
                                 {_t("Clear cache and reload")}

@@ -85,6 +85,7 @@ import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
+import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
 
@@ -138,22 +139,12 @@ export enum PlaceCallType {
     ScreenSharing = 'screensharing',
 }
 
-function getRemoteAudioElement(): HTMLAudioElement {
-    // this needs to be somewhere at the top of the DOM which
-    // always exists to avoid audio interruptions.
-    // Might as well just use DOM.
-    const remoteAudioElement = document.getElementById("remoteAudio") as HTMLAudioElement;
-    if (!remoteAudioElement) {
-        console.error(
-            "Failed to find remoteAudio element - cannot play audio!" +
-            "You need to add an <audio/> to the DOM.",
-        );
-        return null;
-    }
-    return remoteAudioElement;
+export enum CallHandlerEvent {
+    CallsChanged = "calls_changed",
+    CallChangeRoom = "call_change_room",
 }
 
-export default class CallHandler {
+export default class CallHandler extends EventEmitter {
     private calls = new Map<string, MatrixCall>(); // roomId -> call
     // Calls started as an attended transfer, ie. with the intention of transferring another
     // call with a different party to this one.
@@ -514,6 +505,7 @@ export default class CallHandler {
             }
 
             this.calls.set(mappedRoomId, newCall);
+            this.emit(CallHandlerEvent.CallsChanged, this.calls);
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
@@ -546,10 +538,7 @@ export default class CallHandler {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
                     this.calls.set(mappedRoomId, call);
-                    dis.dispatch({
-                        action: Action.CallChangeRoom,
-                        call,
-                    });
+                    this.emit(CallHandlerEvent.CallChangeRoom, call);
                 }
             }
         });
@@ -598,11 +587,6 @@ export default class CallHandler {
         }
     }
 
-    private setCallAudioElement(call: MatrixCall) {
-        const audioElement = getRemoteAudioElement();
-        if (audioElement) call.setRemoteAudioElement(audioElement);
-    }
-
     private setCallState(call: MatrixCall, status: CallState) {
         const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
 
@@ -619,6 +603,7 @@ export default class CallHandler {
 
     private removeCallForRoom(roomId: string) {
         this.calls.delete(roomId);
+        this.emit(CallHandlerEvent.CallsChanged, this.calls);
     }
 
     private showICEFallbackPrompt() {
@@ -679,11 +664,7 @@ export default class CallHandler {
         }, null, true);
     }
 
-    private async placeCall(
-        roomId: string, type: PlaceCallType,
-        localElement: HTMLVideoElement, remoteElement: HTMLVideoElement,
-        transferee: MatrixCall,
-    ) {
+    private async placeCall(roomId: string, type: PlaceCallType, transferee: MatrixCall) {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
         CountlyAnalytics.instance.trackStartCall(roomId, type === PlaceCallType.Video, false);
 
@@ -695,22 +676,19 @@ export default class CallHandler {
         const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
         this.calls.set(roomId, call);
+        this.emit(CallHandlerEvent.CallsChanged, this.calls);
         if (transferee) {
             this.transferees[call.callId] = transferee;
         }
 
         this.setCallListeners(call);
-        this.setCallAudioElement(call);
 
         this.setActiveCallRoomId(roomId);
 
         if (type === PlaceCallType.Voice) {
             call.placeVoiceCall();
         } else if (type === 'video') {
-            call.placeVideoCall(
-                remoteElement,
-                localElement,
-            );
+            call.placeVideoCall();
         } else if (type === PlaceCallType.ScreenSharing) {
             const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
             if (screenCapErrorString) {
@@ -724,13 +702,12 @@ export default class CallHandler {
             }
 
             call.placeScreenSharingCall(
-                remoteElement,
-                localElement,
                 async (): Promise<DesktopCapturerSource> => {
                     const {finished} = Modal.createDialog(DesktopCapturerSourcePicker);
                     const [source] = await finished;
                     return source;
-                });
+                },
+            );
         } else {
             console.error("Unknown conf call type: " + type);
         }
@@ -787,17 +764,12 @@ export default class CallHandler {
                     } else if (members.length === 2) {
                         console.info(`Place ${payload.type} call in ${payload.room_id}`);
 
-                        this.placeCall(
-                            payload.room_id, payload.type, payload.local_element, payload.remote_element,
-                            payload.transferee,
-                        );
+                        this.placeCall(payload.room_id, payload.type, payload.transferee);
                     } else { // > 2
                         dis.dispatch({
                             action: "place_conference_call",
                             room_id: payload.room_id,
                             type: payload.type,
-                            remote_element: payload.remote_element,
-                            local_element: payload.local_element,
                         });
                     }
                 }
@@ -833,6 +805,7 @@ export default class CallHandler {
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
                     this.calls.set(mappedRoomId, call)
+                    this.emit(CallHandlerEvent.CallsChanged, this.calls);
                     this.setCallListeners(call);
 
                     // get ready to send encrypted events in the room, so if the user does answer
@@ -875,7 +848,6 @@ export default class CallHandler {
 
                 const call = this.calls.get(payload.room_id);
                 call.answer();
-                this.setCallAudioElement(call);
                 this.setActiveCallRoomId(payload.room_id);
                 CountlyAnalytics.instance.trackJoinCall(payload.room_id, call.type === CallType.Video, false);
                 dis.dispatch({

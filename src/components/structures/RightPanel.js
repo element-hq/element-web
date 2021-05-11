@@ -35,6 +35,7 @@ import {Action} from "../../dispatcher/actions";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import SettingsStore from "../../settings/SettingsStore";
 
 @replaceableComponent("structures.RightPanel")
 export default class RightPanel extends React.Component {
@@ -85,7 +86,9 @@ export default class RightPanel extends React.Component {
                 return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (this.props.room?.isSpaceRoom() && !RIGHT_PANEL_SPACE_PHASES.includes(rps.roomPanelPhase)) {
+        } else if (SettingsStore.getValue("feature_spaces") && this.props.room?.isSpaceRoom()
+            && !RIGHT_PANEL_SPACE_PHASES.includes(rps.roomPanelPhase)
+        ) {
             return RightPanelPhases.SpaceMemberList;
         } else if (userForPanel) {
             // XXX FIXME AAAAAARGH: What is going on with this class!? It takes some of its state
