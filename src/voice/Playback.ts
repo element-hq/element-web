@@ -16,11 +16,10 @@ limitations under the License.
 
 import EventEmitter from "events";
 import {UPDATE_EVENT} from "../stores/AsyncStore";
-import {arrayFastResample, arraySeed} from "../utils/arrays";
+import {arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample} from "../utils/arrays";
 import {SimpleObservable} from "matrix-widget-api";
 import {IDestroyable} from "../utils/IDestroyable";
 import {PlaybackClock} from "./PlaybackClock";
-import {clamp} from "../utils/numbers";
 import {createAudioContext, decodeOgg} from "./compat";
 
 export enum PlaybackState {
@@ -32,6 +31,12 @@ export enum PlaybackState {
 
 export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
+
+function makePlaybackWaveform(input: number[]): number[] {
+    // We use a smoothing resample to keep the rough shape of the waveform the user will be seeing. We
+    // then rescale so the user can see the waveform properly (loud noises == 100%).
+    return arrayRescale(arraySmoothingResample(input, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
+}
 
 export class Playback extends EventEmitter implements IDestroyable {
     private readonly context: AudioContext;
@@ -56,6 +61,10 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.clock = new PlaybackClock(this.context);
     }
 
+    /**
+     * Stable waveform for the playback. Values are guaranteed to be between
+     * zero and one, inclusive.
+     */
     public get waveform(): number[] {
         return this.resampledWaveform;
     }
@@ -112,8 +121,8 @@ export class Playback extends EventEmitter implements IDestroyable {
 
         // Update the waveform to the real waveform once we have channel data to use. We don't
         // exactly trust the user-provided waveform to be accurate...
-        const waveform = Array.from(this.audioBuf.getChannelData(0)).map(v => clamp(v, 0, 1));
-        this.resampledWaveform = arrayFastResample(waveform, PLAYBACK_WAVEFORM_SAMPLES);
+        const waveform = Array.from(this.audioBuf.getChannelData(0));
+        this.resampledWaveform = makePlaybackWaveform(waveform);
         this.waveformObservable.update(this.resampledWaveform);
 
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
