@@ -116,14 +116,22 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
-        const phtml = cheerio.load(parser.toHTML(),
-            { _useHtmlParser2: true, decodeEntities: false });
+        const phtml = cheerio.load(parser.toHTML(), {
+            // @ts-ignore: The `_useHtmlParser2` internal option is the
+            // simplest way to both parse and render using `htmlparser2`.
+            _useHtmlParser2: true,
+            decodeEntities: false,
+        });
 
         if (SettingsStore.getValue("feature_latex_maths")) {
             // original Markdown without LaTeX replacements
             const parserOrig = new Markdown(orig);
-            const phtmlOrig = cheerio.load(parserOrig.toHTML(),
-                { _useHtmlParser2: true, decodeEntities: false });
+            const phtmlOrig = cheerio.load(parserOrig.toHTML(), {
+                // @ts-ignore: The `_useHtmlParser2` internal option is the
+                // simplest way to both parse and render using `htmlparser2`.
+                _useHtmlParser2: true,
+                decodeEntities: false,
+            });
 
             // since maths delimiters are handled before Markdown,
             // code blocks could contain mangled content.
