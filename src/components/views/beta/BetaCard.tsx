@@ -73,9 +73,7 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
     if (value && feedbackLabel && feedbackSubheading && SdkConfig.get().bug_report_endpoint_url) {
         feedbackButton = <AccessibleButton
             onClick={() => {
-                Modal.createTrackedDialog("Beta Feedback", featureId, BetaFeedbackDialog, {
-                    featureId,
-                });
+                Modal.createTrackedDialog("Beta Feedback", featureId, BetaFeedbackDialog, { featureId });
             }}
             kind="primary"
         >
