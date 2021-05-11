@@ -69,9 +69,15 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     constructor(props) {
         super(props);
 
+        const collapsed = SpaceTreeLevelLayoutStore.getSpaceCollapsedState(
+            props.space.roomId,
+            this.props.parents,
+            !props.isNested,
+        );
+
         this.state = {
             // default to collapsed for root items
-            collapsed: SpaceTreeLevelLayoutStore.getSpaceCollapsedState(props.space, !props.isNested),
+            collapsed: collapsed,
             contextMenuPosition: null,
         };
     }
@@ -82,7 +88,11 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         }
         const newCollapsedState = !this.state.collapsed;
 
-        SpaceTreeLevelLayoutStore.setSpaceCollapsedState(this.props.space, newCollapsedState);
+        SpaceTreeLevelLayoutStore.setSpaceCollapsedState(
+            this.props.space.roomId,
+            this.props.parents,
+            newCollapsedState,
+        );
         this.setState({collapsed: newCollapsedState});
         // don't bubble up so encapsulating button for space
         // doesn't get triggered

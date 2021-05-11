@@ -14,18 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Room} from "matrix-js-sdk/src/models/room";
-
-const getSpaceCollapsedKey = (space: Room) => `mx_space_collapsed_${space.roomId}`;
+const getSpaceCollapsedKey = (roomId: string, parents: Set<string>): string => {
+    const separator = "/";
+    let path = "";
+    if (parents) {
+        for (const entry of parents.entries()) {
+            path += entry + separator;
+        }
+    }
+    return `mx_space_collapsed_${path + roomId}`;
+};
 
 export default class SpaceTreeLevelLayoutStore {
-    public static setSpaceCollapsedState(space: Room, collapsed: boolean) {
+    public static setSpaceCollapsedState(roomId: string, parents: Set<string>, collapsed: boolean) {
         // XXX: localStorage doesn't allow booleans
-        localStorage.setItem(getSpaceCollapsedKey(space), collapsed.toString());
+        localStorage.setItem(getSpaceCollapsedKey(roomId, parents), collapsed.toString());
     }
 
-    public static getSpaceCollapsedState(space: Room, fallback: boolean): boolean {
-        const collapsedLocalStorage = localStorage.getItem(getSpaceCollapsedKey(space));
+    public static getSpaceCollapsedState(roomId: string, parents: Set<string>, fallback: boolean): boolean {
+        const collapsedLocalStorage = localStorage.getItem(getSpaceCollapsedKey(roomId, parents));
         // XXX: localStorage doesn't allow booleans
         return collapsedLocalStorage ? collapsedLocalStorage === "true" : fallback;
     }
