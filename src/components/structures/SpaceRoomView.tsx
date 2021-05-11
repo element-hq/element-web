@@ -368,7 +368,6 @@ const SpaceLanding = ({ space }) => {
 const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
-    let onClick = onFinished;
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
     // TODO vary default prefills for "Just Me" spaces
@@ -384,16 +383,11 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             value={roomNames[i]}
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
-            onKeyDown={ev => {
-                if (ev.key === Key.ENTER) {
-                    ev.preventDefault();
-                    onClick();
-                }
-            }}
         />;
     });
 
-    const onNextClick = async () => {
+    const onNextClick = async (ev) => {
+        ev.preventDefault();
         if (busy) return;
         setError("");
         setBusy(true);
@@ -419,6 +413,10 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setBusy(false);
     };
 
+    let onClick = (ev) => {
+        ev.preventDefault();
+        onFinished();
+    };
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
         onClick = onNextClick;
@@ -430,16 +428,20 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         <div className="mx_SpaceRoomView_description">{ description }</div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-        { fields }
+        <form onSubmit={onClick} id="mx_SpaceSetupFirstRooms">
+            { fields }
+        </form>
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton
                 kind="primary"
                 disabled={busy}
                 onClick={onClick}
-            >
-                { buttonLabel }
-            </AccessibleButton>
+                element="input"
+                type="submit"
+                form="mx_SpaceSetupFirstRooms"
+                value={buttonLabel}
+            />
         </div>
     </div>;
 };
@@ -564,7 +566,6 @@ const validateEmailRules = withValidation({
 const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
-    let onClick = onFinished;
     const numFields = 3;
     const fieldRefs: RefObject<Field>[] = [useRef(), useRef(), useRef()];
     const [emailAddresses, setEmailAddress] = useStateArray(numFields, "");
@@ -581,16 +582,11 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
             ref={fieldRefs[i]}
             onValidate={validateEmailRules}
             autoFocus={i === 0}
-            onKeyDown={ev => {
-                if (ev.key === Key.ENTER) {
-                    ev.preventDefault();
-                    onClick();
-                }
-            }}
         />;
     });
 
-    const onNextClick = async () => {
+    const onNextClick = async (ev) => {
+        ev.preventDefault();
         if (busy) return;
         setError("");
         for (let i = 0; i < fieldRefs.length; i++) {
@@ -625,6 +621,10 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         setBusy(false);
     };
 
+    let onClick = (ev) => {
+        ev.preventDefault();
+        onFinished();
+    };
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some(name => name.trim())) {
         onClick = onNextClick;
@@ -638,7 +638,9 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-        { fields }
+        <form onSubmit={onClick} id="mx_SpaceSetupPrivateInvite">
+            { fields }
+        </form>
 
         <div className="mx_SpaceRoomView_inviteTeammates_buttons">
             <AccessibleButton
@@ -650,9 +652,15 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_buttons">
-            <AccessibleButton kind="primary" disabled={busy} onClick={onClick}>
-                { buttonLabel }
-            </AccessibleButton>
+            <AccessibleButton
+                kind="primary"
+                disabled={busy}
+                onClick={onClick}
+                element="input"
+                type="submit"
+                form="mx_SpaceSetupPrivateInvite"
+                value={buttonLabel}
+            />
         </div>
     </div>;
 };

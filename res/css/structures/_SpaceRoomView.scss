@@ -103,6 +103,10 @@ $SpaceRoomViewInnerWidth: 428px;
                 padding: 8px 22px;
                 margin-left: 16px;
             }
+
+            input.mx_AccessibleButton {
+                border: none; // override default styles
+            }
         }
 
         .mx_Field {
