@@ -177,6 +177,14 @@ export default class EditMessageComposer extends React.Component {
         }
     }
 
+    get _editorRoomKey() {
+        return `mx_edit_room_${this._getRoom().roomId}`;
+    }
+
+    get _editorStateKey() {
+        return `mx_edit_state_${this.props.editState.getEvent().getId()}`;
+    }
+
     _cancelEdit = () => {
         this._clearStoredEditorState();
         dis.dispatch({action: "edit_event", event: null});
@@ -184,7 +192,7 @@ export default class EditMessageComposer extends React.Component {
     }
 
     get _shouldSaveStoredEditorState() {
-        return localStorage.getItem(this._editorStateKey) !== null;
+        return localStorage.getItem(this._editorRoomKey) !== null;
     }
 
     _restoreStoredEditorState(partCreator) {
@@ -200,17 +208,21 @@ export default class EditMessageComposer extends React.Component {
         }
     }
 
-    get _editorStateKey() {
-        return `mx_edit_state_${this.props.editState.getEvent().getRoomId()}
-        _${this.props.editState.getEvent().event.event_id}`;
+    _clearStoredEditorState() {
+        localStorage.removeItem(this._editorRoomKey);
+        localStorage.removeItem(this._editorStateKey);
     }
 
-    _clearStoredEditorState() {
-        localStorage.removeItem(this._editorStateKey);
+    _clearPreviousEdit() {
+        if (localStorage.getItem(this._editorRoomKey)) {
+            localStorage.removeItem(`mx_edit_state_${localStorage.getItem(this._editorRoomKey)}`);
+        }
     }
 
     _saveStoredEditorState() {
         const item = SendHistoryManager.createItem(this.model);
+        this._clearPreviousEdit();
+        localStorage.setItem(this._editorRoomKey, this.props.editState.getEvent().getId());
         localStorage.setItem(this._editorStateKey, JSON.stringify(item));
     }
 

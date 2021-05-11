@@ -472,6 +472,10 @@ export default class MessagePanel extends React.Component {
         return {nextEvent, nextTile};
     }
 
+    get _roomHasPendingEdit() {
+        return localStorage.getItem(`mx_edit_room_${this.props.room.roomId}`);
+    }
+
     _getEventTiles() {
         this.eventNodes = {};
 
@@ -560,6 +564,13 @@ export default class MessagePanel extends React.Component {
             }
         }
 
+        if (!this.props.editState && this._roomHasPendingEdit) {
+            defaultDispatcher.dispatch({
+                action: "edit_event",
+                event: this.props.room.findEventById(this._roomHasPendingEdit),
+            });
+        }
+
         if (grouper) {
             ret.push(...grouper.getTiles());
         }
@@ -567,20 +578,11 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _wasEventBeingEdited = (mxEv) => {
-        return localStorage.getItem(`mx_edit_state_${mxEv.getRoomId()}
-        _${mxEv.getId()}`) !== null;
-    }
-
     _getTilesForEvent(prevEvent, mxEv, last, isGrouped=false, nextEvent, nextEventWithTile) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
-
-        if (!this.props.editState && this._wasEventBeingEdited(mxEv) ) {
-            defaultDispatcher.dispatch({action: "edit_event", event: mxEv});
-        }
 
         const isEditing = this.props.editState &&
             this.props.editState.getEvent().getId() === mxEv.getId();
