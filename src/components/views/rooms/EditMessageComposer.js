@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import * as sdk from '../../../index';
-import {_t} from '../../../languageHandler';
+import {_t, _td} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
@@ -24,16 +24,18 @@ import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import {parseEvent} from '../../../editor/deserialize';
-import {PartCreator} from '../../../editor/parts';
+import {CommandPartCreator} from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk/src/models/event';
 import BasicMessageComposer from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {CommandCategories, getCommand} from '../../../SlashCommands';
 import {Action} from "../../../dispatcher/actions";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Modal from '../../../Modal';
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -178,6 +180,22 @@ export default class EditMessageComposer extends React.Component {
         dis.fire(Action.FocusComposer);
     }
 
+    _isSlashCommand() {
+        const parts = this.model.parts;
+        const firstPart = parts[0];
+        if (firstPart) {
+            if (firstPart.type === "command" && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
+                return true;
+            }
+
+            if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
+                && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     _isContentModified(newContent) {
         // if nothing has changed then bail
         const oldContent = this.props.editState.getEvent().getContent();
@@ -190,19 +208,112 @@ export default class EditMessageComposer extends React.Component {
         return true;
     }
 
-    _sendEdit = () => {
+    _getSlashCommand() {
+        const commandText = this.model.parts.reduce((text, part) => {
+            // use mxid to textify user pills in a command
+            if (part.type === "user-pill") {
+                return text + part.resourceId;
+            }
+            return text + part.text;
+        }, "");
+        const {cmd, args} = getCommand(commandText);
+        return [cmd, args, commandText];
+    }
+
+    async _runSlashCommand(cmd, args, roomId) {
+        const result = cmd.run(roomId, args);
+        let messageContent;
+        let error = result.error;
+        if (result.promise) {
+            try {
+                if (cmd.category === CommandCategories.messages) {
+                    messageContent = await result.promise;
+                } else {
+                    await result.promise;
+                }
+            } catch (err) {
+                error = err;
+            }
+        }
+        if (error) {
+            console.error("Command failure: %s", error);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            // assume the error is a server error when the command is async
+            const isServerError = !!result.promise;
+            const title = isServerError ? _td("Server error") : _td("Command error");
+
+            let errText;
+            if (typeof error === 'string') {
+                errText = error;
+            } else if (error.message) {
+                errText = error.message;
+            } else {
+                errText = _t("Server unavailable, overloaded, or something else went wrong.");
+            }
+
+            Modal.createTrackedDialog(title, '', ErrorDialog, {
+                title: _t(title),
+                description: errText,
+            });
+        } else {
+            console.log("Command success.");
+            if (messageContent) return messageContent;
+        }
+    }
+
+    _sendEdit = async () => {
         const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
+        let shouldSend = true;
 
         // If content is modified then send an updated event into the room
         if (this._isContentModified(newContent)) {
             const roomId = editedEvent.getRoomId();
-            this._cancelPreviousPendingEdit();
-            const prom = this.context.sendMessage(roomId, editContent);
-            dis.dispatch({action: "message_sent"});
-            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
+            if (!containsEmote(this.model) && this._isSlashCommand()) {
+                const [cmd, args, commandText] = this._getSlashCommand();
+                if (cmd) {
+                    if (cmd.category === CommandCategories.messages) {
+                        editContent["m.new_content"] = await this._runSlashCommand(cmd, args, roomId);
+                    } else {
+                        this._runSlashCommand(cmd, args, roomId);
+                        shouldSend = false;
+                    }
+                } else {
+                    // ask the user if their unknown command should be sent as a message
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                    const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+                        title: _t("Unknown Command"),
+                        description: <div>
+                            <p>
+                                { _t("Unrecognised command: %(commandText)s", {commandText}) }
+                            </p>
+                            <p>
+                                { _t("You can use <code>/help</code> to list available commands. " +
+                                    "Did you mean to send this as a message?", {}, {
+                                    code: t => <code>{ t }</code>,
+                                }) }
+                            </p>
+                            <p>
+                                { _t("Hint: Begin your message with <code>//</code> to start it with a slash.", {}, {
+                                    code: t => <code>{ t }</code>,
+                                }) }
+                            </p>
+                        </div>,
+                        button: _t('Send as message'),
+                    });
+                    const [sendAnyway] = await finished;
+                    // if !sendAnyway bail to let the user edit the composer and try again
+                    if (!sendAnyway) return;
+                }
+            }
+            if (shouldSend) {
+                this._cancelPreviousPendingEdit();
+                const prom = this.context.sendMessage(roomId, editContent);
+                dis.dispatch({action: "message_sent"});
+                CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
+            }
         }
 
         // close the event editing and focus composer
@@ -240,7 +351,7 @@ export default class EditMessageComposer extends React.Component {
     _createEditorModel() {
         const {editState} = this.props;
         const room = this._getRoom();
-        const partCreator = new PartCreator(room, this.context);
+        const partCreator = new CommandPartCreator(room, this.context);
         let parts;
         if (editState.hasEditorState()) {
             // if restoring state from a previous editor,
