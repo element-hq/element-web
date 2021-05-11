@@ -44,6 +44,7 @@ import { ActionPayload } from "../../../dispatcher/payloads";
 import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
+import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
@@ -74,7 +75,8 @@ interface IProps {
     tagId: TagID;
     onResize: () => void;
     showSkeleton?: boolean;
-
+    alwaysVisible?: boolean;
+    resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
 
     // TODO: Account for https://github.com/vector-im/element-web/issues/14179
@@ -125,8 +127,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
         this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
     private calculateInitialHeight() {
@@ -240,6 +240,11 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         // Finally, nothing happened so no-op the update
         return false;
+    }
+
+    public componentDidMount() {
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
     public componentWillUnmount() {
@@ -524,6 +529,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 tiles.push(<RoomTile
                     room={room}
                     key={`room-${room.roomId}`}
+                    resizeNotifier={this.props.resizeNotifier}
                     showMessagePreview={this.layout.showPreviews}
                     isMinimized={this.props.isMinimized}
                     tag={this.props.tagId}
@@ -759,6 +765,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             'mx_RoomSublist': true,
             'mx_RoomSublist_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist_minimized': this.props.isMinimized,
+            'mx_RoomSublist_hidden': (
+                !this.state.rooms.length && !this.props.extraTiles?.length && this.props.alwaysVisible !== true
+            ),
         });
 
         let content = null;

@@ -51,6 +51,15 @@ import MemberAvatar from "../views/avatars/MemberAvatar";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
+import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
+import {sleep} from "../../utils/promise";
+import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
+import {ChevronFace, ContextMenuButton, useContextMenu} from "./ContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../views/context_menus/IconizedContextMenu";
+import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 
 interface IProps {
     space: Room;
@@ -214,6 +223,67 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     </div>;
 };
 
+const SpaceLandingAddButton = ({ space, onNewRoomAdded }) => {
+    const cli = useContext(MatrixClientContext);
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu;
+    if (menuDisplayed) {
+        const rect = handle.current.getBoundingClientRect();
+        contextMenu = <IconizedContextMenu
+            left={rect.left + window.pageXOffset + 0}
+            top={rect.bottom + window.pageYOffset + 8}
+            chevronFace={ChevronFace.None}
+            onFinished={closeMenu}
+            className="mx_RoomTile_contextMenu"
+            compact
+        >
+            <IconizedContextMenuOptionList first>
+                <IconizedContextMenuOption
+                    label={_t("Create new room")}
+                    iconClassName="mx_RoomList_iconPlus"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+
+                        if (await showCreateNewRoom(cli, space)) {
+                            onNewRoomAdded();
+                        }
+                    }}
+                />
+                <IconizedContextMenuOption
+                    label={_t("Add existing room")}
+                    iconClassName="mx_RoomList_iconHash"
+                    onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+
+                        const [added] = await showAddExistingRooms(cli, space);
+                        if (added) {
+                            onNewRoomAdded();
+                        }
+                    }}
+                />
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>;
+    }
+
+    return <>
+        <ContextMenuButton
+            kind="primary"
+            inputRef={handle}
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            label={_t("Add")}
+        >
+            { _t("Add") }
+        </ContextMenuButton>
+        { contextMenu }
+    </>;
+};
+
 const SpaceLanding = ({ space }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
@@ -238,32 +308,20 @@ const SpaceLanding = ({ space }) => {
 
     const [refreshToken, forceUpdate] = useStateToggle(false);
 
-    let addRoomButtons;
+    let addRoomButton;
     if (canAddRooms) {
-        addRoomButtons = <React.Fragment>
-            <AccessibleButton className="mx_SpaceRoomView_landing_addButton" onClick={async () => {
-                const [added] = await showAddExistingRooms(cli, space);
-                if (added) {
-                    forceUpdate();
-                }
-            }}>
-                { _t("Add existing rooms & spaces") }
-            </AccessibleButton>
-            <AccessibleButton className="mx_SpaceRoomView_landing_createButton" onClick={() => {
-                showCreateNewRoom(cli, space);
-            }}>
-                { _t("Create a new room") }
-            </AccessibleButton>
-        </React.Fragment>;
+        addRoomButton = <SpaceLandingAddButton space={space} onNewRoomAdded={forceUpdate} />;
     }
 
     let settingsButton;
     if (shouldShowSpaceSettings(cli, space)) {
-        settingsButton = <AccessibleButton className="mx_SpaceRoomView_landing_settingsButton" onClick={() => {
-            showSpaceSettings(cli, space);
-        }}>
-            { _t("Settings") }
-        </AccessibleButton>;
+        settingsButton = <AccessibleTooltipButton
+            className="mx_SpaceRoomView_landing_settingsButton"
+            onClick={() => {
+                showSpaceSettings(cli, space);
+            }}
+            title={_t("Settings")}
+        />;
     }
 
     const onMembersClick = () => {
@@ -290,17 +348,19 @@ const SpaceLanding = ({ space }) => {
             <SpaceInfo space={space} />
             <FacePile room={space} onlyKnownUsers={false} numShown={7} onClick={onMembersClick} />
             { inviteButton }
+            { settingsButton }
         </div>
         <div className="mx_SpaceRoomView_landing_topic">
             <RoomTopic room={space} />
         </div>
         <hr />
-        <div className="mx_SpaceRoomView_landing_adminButtons">
-            { addRoomButtons }
-            { settingsButton }
-        </div>
 
-        <SpaceHierarchy space={space} showRoom={showRoom} refreshToken={refreshToken} />
+        <SpaceHierarchy
+            space={space}
+            showRoom={showRoom}
+            refreshToken={refreshToken}
+            additionalButtons={addRoomButton}
+        />
     </div>;
 };
 
@@ -354,7 +414,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Creating rooms...") : _t("Continue")
+        buttonLabel = busy ? _t("Creating rooms...") : _t("Continue");
     }
 
     return <div>
@@ -363,6 +423,74 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
         { fields }
+
+        <div className="mx_SpaceRoomView_buttons">
+            <AccessibleButton
+                kind="primary"
+                disabled={busy}
+                onClick={onClick}
+            >
+                { buttonLabel }
+            </AccessibleButton>
+        </div>
+    </div>;
+};
+
+const SpaceAddExistingRooms = ({ space, onFinished }) => {
+    const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
+
+    const [busy, setBusy] = useState(false);
+    const [error, setError] = useState("");
+
+    let onClick = onFinished;
+    let buttonLabel = _t("Skip for now");
+    if (selectedToAdd.size > 0) {
+        onClick = async () => {
+            setBusy(true);
+
+            for (const room of selectedToAdd) {
+                const via = calculateRoomVia(room);
+                try {
+                    await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async e => {
+                        if (e.errcode === "M_LIMIT_EXCEEDED") {
+                            await sleep(e.data.retry_after_ms);
+                            return SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
+                        }
+
+                        throw e;
+                    });
+                } catch (e) {
+                    console.error("Failed to add rooms to space", e);
+                    setError(_t("Failed to add rooms to space"));
+                    break;
+                }
+            }
+            setBusy(false);
+        };
+        buttonLabel = busy ? _t("Adding...") : _t("Add");
+    }
+
+    return <div>
+        <h1>{ _t("What do you want to organise?") }</h1>
+        <div className="mx_SpaceRoomView_description">
+            { _t("Pick rooms or conversations to add. This is just a space for you, " +
+                "no one will be informed. You can add more later.") }
+        </div>
+
+        { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
+
+        <AddExistingToSpace
+            space={space}
+            selected={selectedToAdd}
+            onChange={(checked, room) => {
+                if (checked) {
+                    selectedToAdd.add(room);
+                } else {
+                    selectedToAdd.delete(room);
+                }
+                setSelectedToAdd(new Set(selectedToAdd));
+            }}
+        />
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton
@@ -659,7 +787,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupPrivateScope
                     space={this.props.space}
                     onFinished={(invite: boolean) => {
-                        this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateCreateRooms });
+                        this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateExistingRooms });
                     }}
                 />;
             case Phase.PrivateInvite:
@@ -673,6 +801,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     title={_t("What projects are you working on?")}
                     description={_t("We'll create rooms for each of them. " +
                         "You can add more later too, including already existing ones.")}
+                    onFinished={() => this.setState({ phase: Phase.Landing })}
+                />;
+            case Phase.PrivateExistingRooms:
+                return <SpaceAddExistingRooms
+                    space={this.props.space}
                     onFinished={() => this.setState({ phase: Phase.Landing })}
                 />;
         }

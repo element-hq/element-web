@@ -28,6 +28,16 @@ $MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $EventTile_e2e
 
 :root {
     font-size: 10px;
+
+    --transition-short: .1s;
+    --transition-standard: .3s;
+}
+
+@media (prefers-reduced-motion) {
+    :root {
+        --transition-short: 0;
+        --transition-standard: 0;
+    }
 }
 
 html {

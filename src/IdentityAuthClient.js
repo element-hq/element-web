@@ -163,7 +163,7 @@ export default class IdentityAuthClient {
                     </div>
                 ),
                 button: _t("Trust"),
-            });
+                });
             const [confirmed] = await finished;
             if (confirmed) {
                 // eslint-disable-next-line react-hooks/rules-of-hooks

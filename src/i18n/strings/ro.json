@@ -70,5 +70,9 @@
     "Add to community": "Adăugați la comunitate",
     "Failed to invite the following users to %(groupId)s:": "Nu a putut fi invitat următorii utilizatori %(groupId)s",
     "Failed to invite users to community": "Nu a fost posibilă invitarea utilizatorilor la comunitate",
-    "Failed to invite users to %(groupId)s": "Nu a fost posibilă invitarea utilizatorilor la %(groupId)s"
+    "Failed to invite users to %(groupId)s": "Nu a fost posibilă invitarea utilizatorilor la %(groupId)s",
+    "Explore rooms": "Explorează camerele",
+    "Sign In": "Autentificare",
+    "Create Account": "Înregistare",
+    "Dismiss": "Închide"
 }

@@ -158,7 +158,7 @@ export default class EditorModel {
         }
     }
 
-    reset(serializedParts: SerializedPart[], caret: Caret, inputType: string) {
+    reset(serializedParts: SerializedPart[], caret?: Caret, inputType?: string) {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
         if (!caret) {
             caret = this.getPositionAtEnd();

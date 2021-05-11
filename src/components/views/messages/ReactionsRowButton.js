@@ -129,12 +129,13 @@ export default class ReactionsRowButton extends React.PureComponent {
                 },
             );
         }
-
+        const isPeeking = room.getMyMembership() !== "join";
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <AccessibleButton
             className={classes}
             aria-label={label}
             onClick={this.onClick}
+            disabled={isPeeking}
             onMouseOver={this.onMouseOver}
             onMouseLeave={this.onMouseLeave}
         >

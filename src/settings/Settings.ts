@@ -128,6 +128,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_dnd": {
+        isFeature: true,
+        displayName: _td("Show options to enable 'Do not disturb' mode"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_voice_messages": {
         isFeature: true,
         displayName: _td("Send and receive voice messages (in development)"),
@@ -224,6 +230,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
+    "doNotDisturb": {
+        supportedLevels: [SettingLevel.DEVICE],
         default: false,
     },
     "mjolnirRooms": {
@@ -428,7 +438,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
+        displayName: _td(
+            "Allow Peer-to-Peer for 1:1 calls " +
+            "(if you enable this, the other party might be able to see your IP address)",
+        ),
         default: true,
         invertedSettingName: 'webRtcForceTURN',
     },

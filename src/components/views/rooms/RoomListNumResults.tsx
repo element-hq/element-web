@@ -19,6 +19,7 @@ import React, {useState} from "react";
 import { _t } from "../../../languageHandler";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import SpaceStore from "../../../stores/SpaceStore";
 
 const RoomListNumResults: React.FC = () => {
     const [count, setCount] = useState<number>(null);
@@ -34,7 +35,10 @@ const RoomListNumResults: React.FC = () => {
     if (typeof count !== "number") return null;
 
     return <div className="mx_LeftPanel_roomListFilterCount">
-        {_t("%(count)s results", { count })}
+        { SpaceStore.instance.spacePanelSpaces.length
+            ? _t("%(count)s results in all spaces", { count })
+            : _t("%(count)s results", { count })
+        }
     </div>;
 };
 

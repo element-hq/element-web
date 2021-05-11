@@ -153,17 +153,17 @@ class GroupFilterPanel extends React.Component {
                     type="draggable-TagTile"
                 >
                     { (provided, snapshot) => (
-                            <div
-                                className="mx_GroupFilterPanel_tagTileContainer"
-                                ref={provided.innerRef}
-                            >
-                                { this.renderGlobalIcon() }
-                                { tags }
-                                <div>
-                                    {createButton}
-                                </div>
-                                { provided.placeholder }
+                        <div
+                            className="mx_GroupFilterPanel_tagTileContainer"
+                            ref={provided.innerRef}
+                        >
+                            { this.renderGlobalIcon() }
+                            { tags }
+                            <div>
+                                {createButton}
                             </div>
+                            { provided.placeholder }
+                        </div>
                     ) }
                 </Droppable>
             </AutoHideScrollbar>

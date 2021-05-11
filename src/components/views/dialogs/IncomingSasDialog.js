@@ -130,7 +130,7 @@ export default class IncomingSasDialog extends React.Component {
         const oppProfile = this.state.opponentProfile;
         if (oppProfile) {
             const url = oppProfile.avatar_url
-                ? mediaFromMxc(oppProfile.avatar_url).getSquareThumbnailHttp(Math.floor(48 * window.devicePixelRatio))
+                ? mediaFromMxc(oppProfile.avatar_url).getSquareThumbnailHttp(48)
                 : null;
             profile = <div className="mx_IncomingSasDialog_opponentProfile">
                 <BaseAvatar name={oppProfile.displayname}
