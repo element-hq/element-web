@@ -26,11 +26,12 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s%(browserName)s، %(osName)s",
     "Unsupported browser": "مرورگر پش‬تبانی نشده",
     "Your browser can't run %(brand)s": "مرورگر شما نمیتواند %(brand)s را اجرا کند",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s از ویژگی های پیشرفته مرورگر استفاده میکند که که در مرورگر فعلی شما پشتیبانی نمیشوند.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s از ویژگی های پیشرفته مرورگر استفاده میکند که در مرورگر فعلی شما پشتیبانی نمیشوند.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "لطفا برای تجربه بهتر <chromeLink>کروم</chromeLink>، <firefoxLink>فایرفاکس</firefoxLink>، یا <safariLink>سافاری</safariLink> را نصب کنید.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "شما میتوانید با مرورگر فعلی خود ادامه دهید، اما ممکن است برخی یا کل ویژگی ها کار نکنند و نگاه و احساس از برنامه ممکن است درست نباشد.",
     "I understand the risks and wish to continue": "از خطرات این کار آگاهم و مایلم که ادامه بدهم",
     "Go to element.io": "برو به element.io",
     "Failed to start": "مشکل در آغاز",
-    "Powered by Matrix": "قدرت‌گرفته از ماتریکس"
+    "Powered by Matrix": "قدرت‌گرفته از ماتریکس",
+    "Use %(brand)s on mobile": "استفاده از %(brand)s روی گوشی"
 }
