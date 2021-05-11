@@ -103,6 +103,10 @@ $SpaceRoomViewInnerWidth: 428px;
                 padding: 8px 22px;
                 margin-left: 16px;
             }
+
+            input.mx_AccessibleButton {
+                border: none; // override default styles
+            }
         }
 
         .mx_Field {
@@ -133,6 +137,44 @@ $SpaceRoomViewInnerWidth: 428px;
         box-sizing: border-box;
         box-shadow: 2px 15px 30px $dialog-shadow-color;
         border-radius: 8px;
+        position: relative;
+
+        // XXX remove this when spaces leaves Beta
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            right: 24px;
+            top: 32px;
+        }
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_preview_spaceBetaPrompt {
+            font-weight: $font-semi-bold;
+            font-size: $font-14px;
+            line-height: $font-24px;
+            color: $primary-fg-color;
+            margin-top: 24px;
+            position: relative;
+            padding-left: 24px;
+
+            .mx_AccessibleButton_kind_link {
+                display: inline;
+                padding: 0;
+                font-size: inherit;
+                line-height: inherit;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: $font-24px;
+                width: 20px;
+                left: 0;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+                background-color: $secondary-fg-color;
+            }
+        }
 
         .mx_SpaceRoomView_preview_inviter {
             display: flex;
@@ -238,7 +280,8 @@ $SpaceRoomViewInnerWidth: 428px;
 
             .mx_SpaceRoomView_landing_inviteButton {
                 position: relative;
-                padding-left: 40px;
+                padding: 4px 18px 4px 40px;
+                line-height: $font-24px;
                 height: min-content;
 
                 &::before {
@@ -254,6 +297,27 @@ $SpaceRoomViewInnerWidth: 428px;
                     mask-image: url('$(res)/img/element-icons/room/invite.svg');
                 }
             }
+
+            .mx_SpaceRoomView_landing_settingsButton {
+                position: relative;
+                margin-left: 16px;
+                width: 24px;
+                height: 24px;
+
+                &::before {
+                    position: absolute;
+                    content: "";
+                    left: 0;
+                    top: 0;
+                    height: 24px;
+                    width: 24px;
+                    background: $tertiary-fg-color;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    mask-image: url('$(res)/img/element-icons/settings.svg');
+                }
+            }
         }
 
         .mx_SpaceRoomView_landing_topic {
@@ -266,80 +330,6 @@ $SpaceRoomViewInnerWidth: 428px;
             border: none;
             height: 1px;
             background-color: $groupFilterPanel-bg-color;
-        }
-
-        .mx_SpaceRoomView_landing_adminButtons {
-            margin-top: 24px;
-
-            .mx_AccessibleButton {
-                position: relative;
-                width: 160px;
-                height: 124px;
-                box-sizing: border-box;
-                padding: 72px 16px 0;
-                border-radius: 12px;
-                border: 1px solid $input-border-color;
-                margin-right: 28px;
-                margin-bottom: 20px;
-                font-size: $font-14px;
-                display: inline-block;
-                vertical-align: bottom;
-
-                &:last-child {
-                    margin-right: 0;
-                }
-
-                &:hover {
-                    background-color: rgba(141, 151, 165, 0.1);
-                }
-
-                &::before, &::after {
-                    position: absolute;
-                    content: "";
-                    left: 16px;
-                    top: 16px;
-                    height: 40px;
-                    width: 40px;
-                    border-radius: 20px;
-                }
-
-                &::after {
-                    mask-position: center;
-                    mask-size: 30px;
-                    mask-repeat: no-repeat;
-                    background: #ffffff; // white icon fill
-                }
-
-                &.mx_SpaceRoomView_landing_addButton {
-                    &::before {
-                        background-color: #ac3ba8;
-                    }
-
-                    &::after {
-                        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
-                    }
-                }
-
-                &.mx_SpaceRoomView_landing_createButton {
-                    &::before {
-                        background-color: #368bd6;
-                    }
-
-                    &::after {
-                        mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
-                    }
-                }
-
-                &.mx_SpaceRoomView_landing_settingsButton {
-                    &::before {
-                        background-color: #5c56f5;
-                    }
-
-                    &::after {
-                        mask-image: url('$(res)/img/element-icons/settings.svg');
-                    }
-                }
-            }
         }
 
         .mx_SearchBox {
@@ -362,6 +352,23 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     .mx_SpaceRoomView_inviteTeammates {
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_inviteTeammates_betaDisclaimer {
+            padding: 58px 16px 16px;
+            position: relative;
+            border-radius: 8px;
+            background-color: $header-panel-bg-color;
+            max-width: $SpaceRoomViewInnerWidth;
+            margin: 20px 0 30px;
+            box-sizing: border-box;
+
+            .mx_BetaCard_betaPill {
+                position: absolute;
+                left: 16px;
+                top: 16px;
+            }
+        }
+
         .mx_SpaceRoomView_inviteTeammates_buttons {
             color: $secondary-fg-color;
             margin-top: 28px;

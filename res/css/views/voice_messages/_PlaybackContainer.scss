@@ -19,8 +19,9 @@ limitations under the License.
 
 // Container for live recording and playback controls
 .mx_VoiceMessagePrimaryContainer {
-    padding: 6px; // makes us 4px taller than the send/stop button
-    padding-right: 5px; // there's 1px from the waveform itself, so account for that
+    // 7px top and bottom for visual design. 12px left & right, but the waveform (right)
+    // has a 1px padding on it that we want to account for.
+    padding: 7px 12px 7px 11px;
     background-color: $voice-record-waveform-bg-color;
     border-radius: 12px;
 
@@ -30,11 +31,9 @@ limitations under the License.
 
     color: $voice-record-waveform-fg-color;
     font-size: $font-14px;
+    line-height: $font-24px;
 
     .mx_Waveform {
-        // We want the bars to be 2px shorter than the play/pause button in the waveform control
-        height: 28px; // default is 30px, so we're subtracting the 2px border off the bars
-
         .mx_Waveform_bar {
             background-color: $voice-record-waveform-incomplete-fg-color;
 
@@ -47,8 +46,8 @@ limitations under the License.
     }
 
     .mx_Clock {
-        padding-right: 4px; // isolate from waveform
-        padding-left: 8px; // isolate from live circle
-        width: 40px; // we're not using a monospace font, so fake it
+        width: 42px; // we're not using a monospace font, so fake it
+        padding-right: 6px; // with the fixed width this ends up as a visual 8px most of the time, as intended.
+        padding-left: 8px; // isolate from recording circle / play control
     }
 }

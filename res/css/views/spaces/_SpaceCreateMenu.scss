@@ -29,6 +29,7 @@ $spacePanelWidth: 71px;
         width: 480px;
         box-sizing: border-box;
         background-color: $primary-bg-color;
+        position: relative;
 
         > div {
             > h2 {
@@ -42,6 +43,13 @@ $spacePanelWidth: 71px;
                 color: $secondary-fg-color;
                 margin: 0;
             }
+        }
+
+        // XXX remove this when spaces leaves Beta
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            top: 24px;
+            right: 24px;
         }
 
         .mx_SpaceCreateMenuType {
