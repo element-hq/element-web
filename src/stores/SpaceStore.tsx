@@ -120,7 +120,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
      * should not be done when the space switch is done implicitly due to another event like switching room.
      */
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
-        if (space && !space?.isSpaceRoom()) return;
+        if (!space?.isSpaceRoom()) return;
         if (space === this.activeSpace) {
             const notificationState = this.getNotificationState(space ? space.roomId : HOME_SPACE);
             if (notificationState.count) {
