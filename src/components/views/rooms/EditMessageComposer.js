@@ -195,7 +195,7 @@ export default class EditMessageComposer extends React.Component {
                 const parts = serializedParts.map(p => partCreator.deserializePart(p));
                 return parts;
             } catch (e) {
-                console.error(e);
+                console.error("Error parsing editing state: ", e);
             }
         }
     }
