@@ -1,3 +1,21 @@
+Changes in [1.7.28-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.28-rc.1) (2021-05-11)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.27...v1.7.28-rc.1)
+
+ * Upgrade to React SDK 3.21.0-rc.1 and JS SDK 11.0.0-rc.1
+ * Switch back to release version of `sanitize-html`
+   [\#17231](https://github.com/vector-im/element-web/pull/17231)
+ * Bump url-parse from 1.4.7 to 1.5.1
+   [\#17199](https://github.com/vector-im/element-web/pull/17199)
+ * Bump lodash from 4.17.20 to 4.17.21
+   [\#17205](https://github.com/vector-im/element-web/pull/17205)
+ * Bump hosted-git-info from 2.8.8 to 2.8.9
+   [\#17219](https://github.com/vector-im/element-web/pull/17219)
+ * Disable host checking on the webpack dev server
+   [\#17194](https://github.com/vector-im/element-web/pull/17194)
+ * Bump ua-parser-js from 0.7.23 to 0.7.24
+   [\#17190](https://github.com/vector-im/element-web/pull/17190)
+
 Changes in [1.7.27](https://github.com/vector-im/element-web/releases/tag/v1.7.27) (2021-05-10)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.27-rc.1...v1.7.27)
