@@ -94,7 +94,7 @@ describe('MessagePanel', function() {
         return events;
     }
 
-    //Just to avoid breaking Dateseparator tests that might run at 00hrs
+    // Just to avoid breaking Dateseparator tests that might run at 00hrs
     function mkOneDayEvents() {
         const events = [];
         const ts0 = Date.parse('09 May 2004 00:12:00 GMT');
@@ -264,7 +264,6 @@ describe('MessagePanel', function() {
             }),
         ];
     }
-          
     function isReadMarkerVisible(rmContainer) {
         return rmContainer && rmContainer.children.length > 0;
     }
@@ -453,7 +452,7 @@ describe('MessagePanel', function() {
     });
 
     it('should render Date separators for the events', function () {
-        const events = mkOneDayEvents()
+        const events = mkOneDayEvents();
         const res = mount(
             <WrappedMessagePanel
                 className="cls"
@@ -463,7 +462,5 @@ describe('MessagePanel', function() {
         const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
        
         expect(Dates.length).toEqual(1);
-      
-    
-        })
+    });
 });

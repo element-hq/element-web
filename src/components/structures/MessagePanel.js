@@ -544,7 +544,7 @@ export default class MessagePanel extends React.Component {
             }
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
-                const isGrouped =false;
+                const isGrouped = false;
                 if (wantTile) {
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
@@ -972,7 +972,7 @@ class CreationGrouper {
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
         const panel = this.panel;
         const ret = [];
-        const isGrouped=true;
+        const isGrouped = true;
         const createEvent = this.createEvent;
         const lastShownEvent = this.lastShownEvent;
 
@@ -1085,7 +1085,7 @@ class RedactionGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-        const isGrouped=true;
+        const isGrouped = true;
         const panel = this.panel;
         const ret = [];
         const lastShownEvent = this.lastShownEvent;
@@ -1102,7 +1102,6 @@ class RedactionGrouper {
         );
 
         const senders = new Set();
-
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
             const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
@@ -1186,7 +1185,7 @@ class MemberGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
-        const isGrouped=true;
+        const isGrouped = true;
         const panel = this.panel;
         const lastShownEvent = this.lastShownEvent;
         const ret = [];
