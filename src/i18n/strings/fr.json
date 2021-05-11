@@ -3024,7 +3024,7 @@
     "Use Command + F to search": "Utilisez Commande + F pour rechercher",
     "Show line numbers in code blocks": "Afficher les numéros de ligne dans les blocs de code",
     "Expand code blocks by default": "Développer les blocs de code par défaut",
-    "Show stickers button": "Afficher le bouton autocollants",
+    "Show stickers button": "Afficher le bouton des autocollants",
     "Use app": "Utiliser l’application",
     "Element Web is experimental on mobile. For a better experience and the latest features, use our free native app.": "Element Web est expérimental sur téléphone. Pour une meilleure expérience et bénéficier des dernières fonctionnalités, utilisez notre application native gratuite.",
     "Use app for a better experience": "Utilisez une application pour une meilleure expérience",
@@ -3285,5 +3285,16 @@
     "Including %(commaSeparatedMembers)s": "Dont %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "Afficher le membre",
     "View all %(count)s members|other": "Afficher les %(count)s membres",
-    "Failed to send": "Échec de l’envoi"
+    "Failed to send": "Échec de l’envoi",
+    "Play": "Lecture",
+    "Pause": "Pause",
+    "Enter your Security Phrase a second time to confirm it.": "Saisissez à nouveau votre phrase secrète pour la confirmer.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Choisissez des salons ou conversations à ajouter. C’est un espace rien que pour vous, personne n’en sera informé. Vous pourrez en ajouter plus tard.",
+    "What do you want to organise?": "Que voulez-vous organiser ?",
+    "Filter all spaces": "Filtrer tous les espaces",
+    "Delete recording": "Supprimer l’enregistrement",
+    "Stop the recording": "Arrêter l’enregistrement",
+    "%(count)s results in all spaces|one": "%(count)s résultat dans tous les espaces",
+    "%(count)s results in all spaces|other": "%(count)s résultats dans tous les espaces",
+    "You have no ignored users.": "Vous n’avez ignoré personne."
 }
