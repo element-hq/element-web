@@ -120,6 +120,10 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({ space, 
             { spaces.length > 0 ? (
                 <div className="mx_AddExistingToSpace_section mx_AddExistingToSpace_section_spaces">
                     <h3>{ _t("Spaces") }</h3>
+                    <div className="mx_AddExistingToSpace_section_experimental">
+                        <div>{ _t("Feeling experimental?") }</div>
+                        <div>{ _t("You can add existing spaces to a space.") }</div>
+                    </div>
                     { spaces.map(space => {
                         return <Entry
                             key={space.roomId}
