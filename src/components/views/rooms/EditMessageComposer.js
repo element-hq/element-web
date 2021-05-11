@@ -179,6 +179,7 @@ export default class EditMessageComposer extends React.Component {
         dis.dispatch({action: "edit_event", event: null});
         dis.fire(Action.FocusComposer);
     }
+
     _isSlashCommand() {
         const parts = this.model.parts;
         const firstPart = parts[0];
