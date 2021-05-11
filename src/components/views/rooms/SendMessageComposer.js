@@ -33,21 +33,22 @@ import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import {getCommand} from '../../../SlashCommands';
+import {CommandCategories, getCommand} from '../../../SlashCommands';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
 import {containsEmoji} from "../../../effects/utils";
 import {CHAT_EFFECTS} from '../../../effects';
-import SettingsStore from "../../../settings/SettingsStore";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
+import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from '../../../settings/SettingsStore';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -111,12 +112,15 @@ export function isQuickReaction(model) {
     return false;
 }
 
+@replaceableComponent("views.rooms.SendMessageComposer")
 export default class SendMessageComposer extends React.Component {
     static propTypes = {
         room: PropTypes.object.isRequired,
         placeholder: PropTypes.string,
         permalinkCreator: PropTypes.object.isRequired,
         replyToEvent: PropTypes.object,
+        onChange: PropTypes.func,
+        disabled: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -144,59 +148,49 @@ export default class SendMessageComposer extends React.Component {
         if (this._editorRef.isComposing(event)) {
             return;
         }
-        const hasModifier = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
-        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
-        const send = ctrlEnterToSend
-            ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
-            : event.key === Key.ENTER && !hasModifier;
-        if (send) {
-            this._sendMessage();
-            event.preventDefault();
-        } else if (event.key === Key.ARROW_UP) {
-            this.onVerticalArrow(event, true);
-        } else if (event.key === Key.ARROW_DOWN) {
-            this.onVerticalArrow(event, false);
-        } else if (event.key === Key.ESCAPE) {
-            dis.dispatch({
-                action: 'reply_to_event',
-                event: null,
-            });
-        } else if (this._prepareToEncrypt) {
-            // This needs to be last!
-            this._prepareToEncrypt();
+        const action = getKeyBindingsManager().getMessageComposerAction(event);
+        switch (action) {
+            case MessageComposerAction.Send:
+                this._sendMessage();
+                event.preventDefault();
+                break;
+            case MessageComposerAction.SelectPrevSendHistory:
+            case MessageComposerAction.SelectNextSendHistory: {
+                // Try select composer history
+                const selected = this.selectSendHistory(action === MessageComposerAction.SelectPrevSendHistory);
+                if (selected) {
+                    // We're selecting history, so prevent the key event from doing anything else
+                    event.preventDefault();
+                }
+                break;
+            }
+            case MessageComposerAction.EditPrevMessage:
+                // selection must be collapsed and caret at start
+                if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
+                    const editEvent = findEditableEvent(this.props.room, false);
+                    if (editEvent) {
+                        // We're selecting history, so prevent the key event from doing anything else
+                        event.preventDefault();
+                        dis.dispatch({
+                            action: 'edit_event',
+                            event: editEvent,
+                        });
+                    }
+                }
+                break;
+            case MessageComposerAction.CancelEditing:
+                dis.dispatch({
+                    action: 'reply_to_event',
+                    event: null,
+                });
+                break;
+            default:
+                if (this._prepareToEncrypt) {
+                    // This needs to be last!
+                    this._prepareToEncrypt();
+                }
         }
     };
-
-    onVerticalArrow(e, up) {
-        // arrows from an initial-caret composer navigates recent messages to edit
-        // ctrl-alt-arrows navigate send history
-        if (e.shiftKey || e.metaKey) return;
-
-        const shouldSelectHistory = e.altKey && e.ctrlKey;
-        const shouldEditLastMessage = !e.altKey && !e.ctrlKey && up && !this.props.replyToEvent;
-
-        if (shouldSelectHistory) {
-            // Try select composer history
-            const selected = this.selectSendHistory(up);
-            if (selected) {
-                // We're selecting history, so prevent the key event from doing anything else
-                e.preventDefault();
-            }
-        } else if (shouldEditLastMessage) {
-            // selection must be collapsed and caret at start
-            if (this._editorRef.isSelectionCollapsed() && this._editorRef.isCaretAtStart()) {
-                const editEvent = findEditableEvent(this.props.room, false);
-                if (editEvent) {
-                    // We're selecting history, so prevent the key event from doing anything else
-                    e.preventDefault();
-                    dis.dispatch({
-                        action: 'edit_event',
-                        event: editEvent,
-                    });
-                }
-            }
-        }
-    }
 
     // we keep sent messages/commands in a separate history (separate from undo history)
     // so you can alt+up/down in them
@@ -262,7 +256,7 @@ export default class SendMessageComposer extends React.Component {
                     const myReactionKeys = [...myReactionEvents]
                         .filter(event => !event.isRedacted())
                         .map(event => event.getRelation().key);
-                        shouldReact = !myReactionKeys.includes(reaction);
+                    shouldReact = !myReactionKeys.includes(reaction);
                 }
                 if (shouldReact) {
                     MatrixClientPeg.get().sendEvent(lastMessage.getRoomId(), "m.reaction", {
@@ -287,15 +281,22 @@ export default class SendMessageComposer extends React.Component {
             }
             return text + part.text;
         }, "");
-        return [getCommand(this.props.room.roomId, commandText), commandText];
+        const {cmd, args} = getCommand(commandText);
+        return [cmd, args, commandText];
     }
 
-    async _runSlashCommand(fn) {
-        const cmd = fn();
-        let error = cmd.error;
-        if (cmd.promise) {
+    async _runSlashCommand(cmd, args) {
+        const result = cmd.run(this.props.room.roomId, args);
+        let messageContent;
+        let error = result.error;
+        if (result.promise) {
             try {
-                await cmd.promise;
+                if (cmd.category === CommandCategories.messages) {
+                    // The command returns a modified message that we need to pass on
+                    messageContent = await result.promise;
+                } else {
+                    await result.promise;
+                }
             } catch (err) {
                 error = err;
             }
@@ -304,7 +305,7 @@ export default class SendMessageComposer extends React.Component {
             console.error("Command failure: %s", error);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             // assume the error is a server error when the command is async
-            const isServerError = !!cmd.promise;
+            const isServerError = !!result.promise;
             const title = isServerError ? _td("Server error") : _td("Command error");
 
             let errText;
@@ -322,6 +323,7 @@ export default class SendMessageComposer extends React.Component {
             });
         } else {
             console.log("Command success.");
+            if (messageContent) return messageContent;
         }
     }
 
@@ -330,13 +332,22 @@ export default class SendMessageComposer extends React.Component {
             return;
         }
 
+        const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
+        let content;
 
         if (!containsEmote(this.model) && this._isSlashCommand()) {
-            const [cmd, commandText] = this._getSlashCommand();
+            const [cmd, args, commandText] = this._getSlashCommand();
             if (cmd) {
-                shouldSend = false;
-                this._runSlashCommand(cmd);
+                if (cmd.category === CommandCategories.messages) {
+                    content = await this._runSlashCommand(cmd, args);
+                    if (replyToEvent) {
+                        addReplyToMessageContent(content, replyToEvent, this.props.permalinkCreator);
+                    }
+                } else {
+                    this._runSlashCommand(cmd, args);
+                    shouldSend = false;
+                }
             } else {
                 // ask the user if their unknown command should be sent as a message
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -371,11 +382,12 @@ export default class SendMessageComposer extends React.Component {
             this._sendQuickReaction();
         }
 
-        const replyToEvent = this.props.replyToEvent;
         if (shouldSend) {
             const startTime = CountlyAnalytics.getTimestamp();
             const {roomId} = this.props.room;
-            const content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+            if (!content) {
+                content = createMessageContent(this.model, this.props.permalinkCreator, replyToEvent);
+            }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
@@ -403,7 +415,9 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.clearUndoHistory();
         this._editorRef.focus();
         this._clearStoredEditorState();
-        dis.dispatch({action: "scroll_to_bottom"});
+        if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+            dis.dispatch({action: "scroll_to_bottom"});
+        }
     }
 
     componentWillUnmount() {
@@ -448,16 +462,25 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    // should save state when editor has contents or reply is open
+    _shouldSaveStoredEditorState = () => {
+        return !this.model.isEmpty || this.props.replyToEvent;
+    }
+
     _saveStoredEditorState = () => {
-        if (this.model.isEmpty) {
-            this._clearStoredEditorState();
-        } else {
+        if (this._shouldSaveStoredEditorState()) {
             const item = SendHistoryManager.createItem(this.model, this.props.replyToEvent);
             localStorage.setItem(this._editorStateKey, JSON.stringify(item));
+        } else {
+            this._clearStoredEditorState();
         }
     }
 
     onAction = (payload) => {
+        // don't let the user into the composer if it is disabled - all of these branches lead
+        // to the cursor being in the composer
+        if (this.props.disabled) return;
+
         switch (payload.action) {
             case 'reply_to_event':
             case Action.FocusComposer:
@@ -483,9 +506,8 @@ export default class SendMessageComposer extends React.Component {
             member.rawDisplayName : userId;
         const caret = this._editorRef.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        // index is -1 if there are no parts but we only care for if this would be the part in position 0
-        const insertIndex = position.index > 0 ? position.index : 0;
-        const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
+        // Insert suffix only if the caret is at the start of the composer
+        const parts = partCreator.createMentionParts(caret.offset === 0, displayName, userId);
         model.transform(() => {
             const addedLen = model.insert(parts, position);
             return model.positionForOffset(caret.offset + addedLen, true);
@@ -497,7 +519,7 @@ export default class SendMessageComposer extends React.Component {
     _insertQuotedMessage(event) {
         const {model} = this;
         const {partCreator} = model;
-        const quoteParts = parseEvent(event, partCreator, { isQuotedMessage: true });
+        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
         // add two newlines
         quoteParts.push(partCreator.newline());
         quoteParts.push(partCreator.newline());
@@ -536,16 +558,22 @@ export default class SendMessageComposer extends React.Component {
         }
     }
 
+    onChange = () => {
+        if (this.props.onChange) this.props.onChange(this.model);
+    }
+
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
                 <BasicMessageComposer
+                    onChange={this.onChange}
                     ref={this._setEditorRef}
                     model={this.model}
                     room={this.props.room}
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onPaste={this._onPaste}
+                    disabled={this.props.disabled}
                 />
             </div>
         );

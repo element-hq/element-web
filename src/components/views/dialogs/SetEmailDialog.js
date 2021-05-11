@@ -22,6 +22,7 @@ import * as Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 
 /*
@@ -29,6 +30,7 @@ import Modal from '../../../Modal';
  *
  * On success, `onFinished(true)` is called.
  */
+@replaceableComponent("views.dialogs.SetEmailDialog")
 export default class SetEmailDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

@@ -34,6 +34,7 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
 import {isE2eAdvancedPanelPossible} from "../../E2eAdvancedPanel";
 import CountlyAnalytics from "../../../../../CountlyAnalytics";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -59,6 +60,7 @@ export class IgnoredUser extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.tabs.user.SecurityUserSettingsTab")
 export default class SecurityUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
@@ -253,15 +255,18 @@ export default class SecurityUserSettingsTab extends React.Component {
     _renderIgnoredUsers() {
         const {waitingUnignored, ignoredUserIds} = this.state;
 
-        if (!ignoredUserIds || ignoredUserIds.length === 0) return null;
-
-        const userIds = ignoredUserIds
-            .map((u) => <IgnoredUser
-             userId={u}
-             onUnignored={this._onUserUnignored}
-             key={u}
-             inProgress={waitingUnignored.includes(u)}
-             />);
+        const userIds = !ignoredUserIds?.length
+            ? _t('You have no ignored users.')
+            : ignoredUserIds.map((u) => {
+                return (
+                    <IgnoredUser
+                        userId={u}
+                        onUnignored={this._onUserUnignored}
+                        key={u}
+                        inProgress={waitingUnignored.includes(u)}
+                    />
+                );
+            });
 
         return (
             <div className='mx_SettingsTab_section'>

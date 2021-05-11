@@ -17,7 +17,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.ViewSourceEvent")
 export default class ViewSourceEvent extends React.PureComponent {
     static propTypes = {
         /* the MatrixEvent to show */

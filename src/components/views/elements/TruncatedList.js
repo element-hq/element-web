@@ -18,7 +18,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.TruncatedList")
 export default class TruncatedList extends React.Component {
     static propTypes = {
         // The number of elements to show before truncating. If negative, no truncation is done.

@@ -19,7 +19,9 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import ServerOfflineDialog from "../dialogs/ServerOfflineDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.toasts.NonUrgentEchoFailureToast")
 export default class NonUrgentEchoFailureToast extends React.PureComponent {
     private openDialog = () => {
         Modal.createTrackedDialog('Local Echo Server Error', '', ServerOfflineDialog, {});

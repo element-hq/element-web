@@ -25,6 +25,7 @@ import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -89,12 +90,18 @@ export class ExistingEmailAddress extends React.Component {
                     <span className="mx_ExistingEmailAddress_promptText">
                         {_t("Remove %(email)s?", {email: this.props.email.address} )}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
-                                      className="mx_ExistingEmailAddress_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onActuallyRemove}
+                        kind="danger_sm"
+                        className="mx_ExistingEmailAddress_confirmBtn"
+                    >
                         {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
-                                      className="mx_ExistingEmailAddress_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onDontRemove}
+                        kind="link_sm"
+                        className="mx_ExistingEmailAddress_confirmBtn"
+                    >
                         {_t("Cancel")}
                     </AccessibleButton>
                 </div>
@@ -112,6 +119,7 @@ export class ExistingEmailAddress extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.account.EmailAddresses")
 export default class EmailAddresses extends React.Component {
     static propTypes = {
         emails: PropTypes.array.isRequired,
@@ -178,19 +186,23 @@ export default class EmailAddresses extends React.Component {
         e.preventDefault();
 
         this.setState({continueDisabled: true});
-        this.state.addTask.checkEmailLinkClicked().then(() => {
-            const email = this.state.newEmailAddress;
+        this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
+            let newEmailAddress = this.state.newEmailAddress;
+            if (finished) {
+                const email = this.state.newEmailAddress;
+                const emails = [
+                    ...this.props.emails,
+                    { address: email, medium: "email" },
+                ];
+                this.props.onEmailsChange(emails);
+                newEmailAddress = "";
+            }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
-                newEmailAddress: "",
+                newEmailAddress,
             });
-            const emails = [
-                ...this.props.emails,
-                { address: email, medium: "email" },
-            ];
-            this.props.onEmailsChange(emails);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -222,21 +234,28 @@ export default class EmailAddresses extends React.Component {
         );
         if (this.state.verifying) {
             addButton = (
-              <div>
-                  <div>{_t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.")}</div>
-                  <AccessibleButton onClick={this._onContinueClick} kind="primary"
-                                    disabled={this.state.continueDisabled}>
-                      {_t("Continue")}
-                  </AccessibleButton>
-              </div>
+                <div>
+                    <div>{_t("We've sent you an email to verify your address. Please follow the instructions there and then click the button below.")}</div>
+                    <AccessibleButton
+                        onClick={this._onContinueClick}
+                        kind="primary"
+                        disabled={this.state.continueDisabled}
+                    >
+                        {_t("Continue")}
+                    </AccessibleButton>
+                </div>
             );
         }
 
         return (
             <div className="mx_EmailAddresses">
                 {existingEmailElements}
-                <form onSubmit={this._onAddClick} autoComplete="off"
-                      noValidate={true} className="mx_EmailAddresses_new">
+                <form
+                    onSubmit={this._onAddClick}
+                    autoComplete="off"
+                    noValidate={true}
+                    className="mx_EmailAddresses_new"
+                >
                     <Field
                         type="text"
                         label={_t("Email Address")}

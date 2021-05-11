@@ -23,6 +23,7 @@ import {Room} from 'matrix-js-sdk/src/models/room';
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
 
@@ -47,6 +48,7 @@ interface IState {
     forceComplete: boolean;
 }
 
+@replaceableComponent("views.rooms.Autocomplete")
 export default class Autocomplete extends React.PureComponent<IProps, IState> {
     autocompleter: Autocompleter;
     queryRequested: string;

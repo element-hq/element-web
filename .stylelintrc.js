@@ -4,6 +4,7 @@ module.exports = {
         "stylelint-scss",
     ],
     "rules": {
+        "color-hex-case": null,
         "indentation": 4,
         "comment-empty-line-before": null,
         "declaration-empty-line-before": null,

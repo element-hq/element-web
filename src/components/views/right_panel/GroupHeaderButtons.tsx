@@ -26,6 +26,7 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
 import {ViewUserPayload} from "../../../dispatcher/payloads/ViewUserPayload";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const GROUP_PHASES = [
     RightPanelPhases.GroupMemberInfo,
@@ -38,6 +39,7 @@ const ROOM_PHASES = [
 
 interface IProps {}
 
+@replaceableComponent("views.right_panel.GroupHeaderButtons")
 export default class GroupHeaderButtons extends HeaderButtons {
     constructor(props: IProps) {
         super(props, HeaderKind.Group);

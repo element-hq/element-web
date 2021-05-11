@@ -1443,5 +1443,7 @@
     "Terms of service not accepted or the identity server is invalid.": "Dienstvoorwoardn nie anveird, of den identiteitsserver is oungeldig.",
     "Enter a new identity server": "Gift e nieuwen identiteitsserver in",
     "Remove %(email)s?": "%(email)s verwydern?",
-    "Remove %(phone)s?": "%(phone)s verwydern?"
+    "Remove %(phone)s?": "%(phone)s verwydern?",
+    "Explore rooms": "Gesprekkn ountdekkn",
+    "Create Account": "Account anmoakn"
 }

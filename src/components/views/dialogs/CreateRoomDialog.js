@@ -17,6 +17,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Room} from "matrix-js-sdk/src/models/room";
+
 import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import withValidation from '../elements/Validation';
@@ -25,11 +27,14 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
 import {privateShouldBeEncrypted} from "../../../createRoom";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.CreateRoomDialog")
 export default class CreateRoomDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
         defaultPublic: PropTypes.bool,
+        parentSpace: PropTypes.instanceOf(Room),
     };
 
     constructor(props) {
@@ -83,6 +88,10 @@ export default class CreateRoomDialog extends React.Component {
 
         if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
             opts.associatedWithCommunity = CommunityPrototypeStore.instance.getSelectedCommunityId();
+        }
+
+        if (this.props.parentSpace) {
+            opts.parentSpace = this.props.parentSpace;
         }
 
         return opts;

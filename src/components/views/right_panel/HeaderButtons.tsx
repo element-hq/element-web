@@ -28,6 +28,7 @@ import {
     SetRightPanelPhaseRefireParams,
 } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
 import {EventSubscription} from "fbemitter";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export enum HeaderKind {
   Room = "room",
@@ -41,6 +42,7 @@ interface IState {
 
 interface IProps {}
 
+@replaceableComponent("views.right_panel.HeaderButtons")
 export default abstract class HeaderButtons extends React.Component<IProps, IState> {
     private storeToken: EventSubscription;
     private dispatcherRef: string;

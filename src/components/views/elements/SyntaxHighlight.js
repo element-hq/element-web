@@ -17,7 +17,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {highlightBlock} from 'highlight.js';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.SyntaxHighlight")
 export default class SyntaxHighlight extends React.Component {
     static propTypes = {
         className: PropTypes.string,

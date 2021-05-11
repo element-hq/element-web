@@ -21,12 +21,14 @@ import classNames from "classnames";
 import {_t} from "../../../languageHandler";
 import {Key} from "../../../Keyboard";
 import {CategoryKey, ICategory} from "./Category";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     categories: ICategory[];
     onAnchorClick(id: CategoryKey): void
 }
 
+@replaceableComponent("views.emojipicker.Header")
 class Header extends React.PureComponent<IProps> {
     private findNearestEnabled(index: number, delta: number) {
         index += this.props.categories.length;

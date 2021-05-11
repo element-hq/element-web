@@ -46,6 +46,8 @@ import {IDiff} from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import {ICompletion} from "../../../autocomplete/Autocompleter";
+import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
@@ -92,6 +94,7 @@ interface IProps {
     placeholder?: string;
     label?: string;
     initialCaret?: DocumentOffset;
+    disabled?: boolean;
 
     onChange?();
     onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
@@ -105,6 +108,7 @@ interface IState {
     completionIndex?: number;
 }
 
+@replaceableComponent("views.rooms.BasicMessageEditor")
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
     private editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
@@ -137,7 +141,12 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public componentDidUpdate(prevProps: IProps) {
-        if (this.props.placeholder !== prevProps.placeholder && this.props.placeholder) {
+        // We need to re-check the placeholder when the enabled state changes because it causes the
+        // placeholder element to remount, which gets rid of the `::before` class. Re-evaluating the
+        // placeholder means we get a proper `::before` with the placeholder.
+        const enabledChange = this.props.disabled !== prevProps.disabled;
+        const placeholderChanged = this.props.placeholder !== prevProps.placeholder;
+        if (this.props.placeholder && (placeholderChanged || enabledChange)) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
                 this.showPlaceholder();
@@ -424,106 +433,101 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onKeyDown = (event: React.KeyboardEvent) => {
         const model = this.props.model;
-        const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
         let handled = false;
-        // format bold
-        if (modKey && event.key === Key.B) {
-            this.onFormatAction(Formatting.Bold);
-            handled = true;
-        // format italics
-        } else if (modKey && event.key === Key.I) {
-            this.onFormatAction(Formatting.Italics);
-            handled = true;
-        // format quote
-        } else if (modKey && event.key === Key.GREATER_THAN) {
-            this.onFormatAction(Formatting.Quote);
-            handled = true;
-        // redo
-        } else if ((!IS_MAC && modKey && event.key === Key.Y) ||
-                  (IS_MAC && modKey && event.shiftKey && event.key === Key.Z)) {
-            if (this.historyManager.canRedo()) {
-                const {parts, caret} = this.historyManager.redo();
-                // pass matching inputType so historyManager doesn't push echo
-                // when invoked from rerender callback.
-                model.reset(parts, caret, "historyRedo");
-            }
-            handled = true;
-        // undo
-        } else if (modKey && event.key === Key.Z) {
-            if (this.historyManager.canUndo()) {
-                const {parts, caret} = this.historyManager.undo(this.props.model);
-                // pass matching inputType so historyManager doesn't push echo
-                // when invoked from rerender callback.
-                model.reset(parts, caret, "historyUndo");
-            }
-            handled = true;
-        // insert newline on Shift+Enter
-        } else if (event.key === Key.ENTER && (event.shiftKey || (IS_MAC && event.altKey))) {
-            this.insertText("\n");
-            handled = true;
-        // move selection to start of composer
-        } else if (modKey && event.key === Key.HOME && !event.shiftKey) {
-            setSelection(this.editorRef.current, model, {
-                index: 0,
-                offset: 0,
-            });
-            handled = true;
-        // move selection to end of composer
-        } else if (modKey && event.key === Key.END && !event.shiftKey) {
-            setSelection(this.editorRef.current, model, {
-                index: model.parts.length - 1,
-                offset: model.parts[model.parts.length - 1].text.length,
-            });
-            handled = true;
-        // autocomplete or enter to send below shouldn't have any modifier keys pressed.
-        } else {
-            const metaOrAltPressed = event.metaKey || event.altKey;
-            const modifierPressed = metaOrAltPressed || event.shiftKey;
-            if (model.autoComplete && model.autoComplete.hasCompletions()) {
-                const autoComplete = model.autoComplete;
-                switch (event.key) {
-                    case Key.ARROW_UP:
-                        if (!modifierPressed) {
-                            autoComplete.onUpArrow(event);
-                            handled = true;
-                        }
-                        break;
-                    case Key.ARROW_DOWN:
-                        if (!modifierPressed) {
-                            autoComplete.onDownArrow(event);
-                            handled = true;
-                        }
-                        break;
-                    case Key.TAB:
-                    case Key.ENTER:
-                        if (!metaOrAltPressed) {
-                            autoComplete.onTab(event);
-                            handled = true;
-                        }
-                        break;
-                    case Key.ESCAPE:
-                        if (!modifierPressed) {
-                            autoComplete.onEscape(event);
-                            handled = true;
-                        }
-                        break;
-                    default:
-                        return; // don't preventDefault on anything else
-                }
-            } else if (!this.props.model.isEmpty && !this.state.showVisualBell && event.key === Key.TAB) {
-                this.tabCompleteName(event);
+        const action = getKeyBindingsManager().getMessageComposerAction(event);
+        switch (action) {
+            case MessageComposerAction.FormatBold:
+                this.onFormatAction(Formatting.Bold);
                 handled = true;
-            } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
-                this.formatBarRef.current.hide();
-            }
+                break;
+            case MessageComposerAction.FormatItalics:
+                this.onFormatAction(Formatting.Italics);
+                handled = true;
+                break;
+            case MessageComposerAction.FormatQuote:
+                this.onFormatAction(Formatting.Quote);
+                handled = true;
+                break;
+            case MessageComposerAction.EditRedo:
+                if (this.historyManager.canRedo()) {
+                    const {parts, caret} = this.historyManager.redo();
+                    // pass matching inputType so historyManager doesn't push echo
+                    // when invoked from rerender callback.
+                    model.reset(parts, caret, "historyRedo");
+                }
+                handled = true;
+                break;
+            case MessageComposerAction.EditUndo:
+                if (this.historyManager.canUndo()) {
+                    const {parts, caret} = this.historyManager.undo(this.props.model);
+                    // pass matching inputType so historyManager doesn't push echo
+                    // when invoked from rerender callback.
+                    model.reset(parts, caret, "historyUndo");
+                }
+                handled = true;
+                break;
+            case MessageComposerAction.NewLine:
+                this.insertText("\n");
+                handled = true;
+                break;
+            case MessageComposerAction.MoveCursorToStart:
+                setSelection(this.editorRef.current, model, {
+                    index: 0,
+                    offset: 0,
+                });
+                handled = true;
+                break;
+            case MessageComposerAction.MoveCursorToEnd:
+                setSelection(this.editorRef.current, model, {
+                    index: model.parts.length - 1,
+                    offset: model.parts[model.parts.length - 1].text.length,
+                });
+                handled = true;
+                break;
         }
+        if (handled) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
+        const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);
+        if (model.autoComplete && model.autoComplete.hasCompletions()) {
+            const autoComplete = model.autoComplete;
+            switch (autocompleteAction) {
+                case AutocompleteAction.CompleteOrPrevSelection:
+                case AutocompleteAction.PrevSelection:
+                    autoComplete.selectPreviousSelection();
+                    handled = true;
+                    break;
+                case AutocompleteAction.CompleteOrNextSelection:
+                case AutocompleteAction.NextSelection:
+                    autoComplete.selectNextSelection();
+                    handled = true;
+                    break;
+                case AutocompleteAction.Cancel:
+                    autoComplete.onEscape(event);
+                    handled = true;
+                    break;
+                default:
+                    return; // don't preventDefault on anything else
+            }
+        } else if (autocompleteAction === AutocompleteAction.CompleteOrPrevSelection
+            || autocompleteAction === AutocompleteAction.CompleteOrNextSelection) {
+            // there is no current autocomplete window, try to open it
+            this.tabCompleteName();
+            handled = true;
+        } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
+            this.formatBarRef.current.hide();
+        }
+
         if (handled) {
             event.preventDefault();
             event.stopPropagation();
         }
     };
 
-    private async tabCompleteName(event: React.KeyboardEvent) {
+    private async tabCompleteName() {
         try {
             await new Promise<void>(resolve => this.setState({showVisualBell: false}, resolve));
             const {model} = this.props;
@@ -546,7 +550,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
             // Don't try to do things with the autocomplete if there is none shown
             if (model.autoComplete) {
-                await model.autoComplete.onTab(event);
+                await model.autoComplete.startSelection();
                 if (!model.autoComplete.hasSelection()) {
                     this.setState({showVisualBell: true});
                     model.autoComplete.close();
@@ -678,6 +682,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         });
         const classes = classNames("mx_BasicMessageComposer_input", {
             "mx_BasicMessageComposer_input_shouldShowPillAvatar": this.state.showPillAvatar,
+            "mx_BasicMessageComposer_input_disabled": this.props.disabled,
         });
 
         const shortcuts = {
@@ -716,6 +721,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 aria-owns="mx_Autocomplete"
                 aria-activedescendant={activeDescendant}
                 dir="auto"
+                aria-disabled={this.props.disabled}
             />
         </div>);
     }

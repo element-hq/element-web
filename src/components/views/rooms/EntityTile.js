@@ -23,6 +23,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
 import E2EIcon from './E2EIcon';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
@@ -50,6 +51,7 @@ function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     }
 }
 
+@replaceableComponent("views.rooms.EntityTile")
 class EntityTile extends React.Component {
     static propTypes = {
         name: PropTypes.string,
@@ -174,8 +176,11 @@ class EntityTile extends React.Component {
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
             <div ref={(c) => this.container = c} >
-                <AccessibleButton className={classNames(mainClassNames)} title={this.props.title}
-                                  onClick={this.props.onClick}>
+                <AccessibleButton
+                    className={classNames(mainClassNames)}
+                    title={this.props.title}
+                    onClick={this.props.onClick}
+                >
                     <div className="mx_EntityTile_avatar">
                         { av }
                         { e2eIcon }

@@ -17,17 +17,20 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
+import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
 import * as sdk from '../../../index';
 import {
     SetupEncryptionStore,
+    PHASE_LOADING,
     PHASE_INTRO,
     PHASE_BUSY,
     PHASE_DONE,
     PHASE_CONFIRM_SKIP,
     PHASE_FINISHED,
 } from '../../../stores/SetupEncryptionStore';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function keyHasPassphrase(keyInfo) {
     return (
@@ -37,6 +40,7 @@ function keyHasPassphrase(keyInfo) {
     );
 }
 
+@replaceableComponent("structures.auth.SetupEncryptionBody")
 export default class SetupEncryptionBody extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -79,6 +83,22 @@ export default class SetupEncryptionBody extends React.Component {
     _onUsePassphraseClick = async () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.usePassPhrase();
+    }
+
+    _onVerifyClick = () => {
+        const cli = MatrixClientPeg.get();
+        const userId = cli.getUserId();
+        const requestPromise = cli.requestVerification(userId);
+
+        this.props.onFinished(true);
+        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
+            verificationRequestPromise: requestPromise,
+            member: cli.getUser(userId),
+            onFinished: async () => {
+                const request = await requestPromise;
+                request.cancel();
+            },
+        });
     }
 
     onSkipClick = () => {
@@ -132,32 +152,21 @@ export default class SetupEncryptionBody extends React.Component {
                 </AccessibleButton>;
             }
 
-            const brand = SdkConfig.get().brand;
+            let verifyButton;
+            if (store.hasDevicesToVerifyAgainst) {
+                verifyButton = <AccessibleButton kind="primary" onClick={this._onVerifyClick}>
+                    { _t("Use another login") }
+                </AccessibleButton>;
+            }
 
             return (
                 <div>
                     <p>{_t(
-                        "Confirm your identity by verifying this login from one of your other sessions, " +
-                        "granting it access to encrypted messages.",
+                        "Verify your identity to access encrypted messages and prove your identity to others.",
                     )}</p>
-                    <p>{_t(
-                        "This requires the latest %(brand)s on your other devices:",
-                        { brand },
-                    )}</p>
-
-                    <div className="mx_CompleteSecurity_clients">
-                        <div className="mx_CompleteSecurity_clients_desktop">
-                            <div>{_t("%(brand)s Web", { brand })}</div>
-                            <div>{_t("%(brand)s Desktop", { brand })}</div>
-                        </div>
-                        <div className="mx_CompleteSecurity_clients_mobile">
-                            <div>{_t("%(brand)s iOS", { brand })}</div>
-                            <div>{_t("%(brand)s Android", { brand })}</div>
-                        </div>
-                        <p>{_t("or another cross-signing capable Matrix client")}</p>
-                    </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
+                        {verifyButton}
                         {useRecoveryKeyButton}
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
@@ -195,8 +204,8 @@ export default class SetupEncryptionBody extends React.Component {
             return (
                 <div>
                     <p>{_t(
-                        "Without completing security on this session, it won’t have " +
-                        "access to encrypted messages.",
+                        "Without verifying, you won’t have access to all your messages " +
+                        "and may appear as untrusted to others.",
                     )}</p>
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton
@@ -215,7 +224,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
                 </div>
             );
-        } else if (phase === PHASE_BUSY) {
+        } else if (phase === PHASE_BUSY || phase === PHASE_LOADING) {
             const Spinner = sdk.getComponent('views.elements.Spinner');
             return <Spinner />;
         } else {

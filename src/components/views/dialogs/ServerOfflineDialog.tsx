@@ -28,10 +28,12 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { IDialogProps } from "./IDialogProps";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
 }
 
+@replaceableComponent("views.dialogs.ServerOfflineDialog")
 export default class ServerOfflineDialog extends React.PureComponent<IProps> {
     public componentDidMount() {
         EchoStore.instance.on(UPDATE_EVENT, this.onEchosUpdated);

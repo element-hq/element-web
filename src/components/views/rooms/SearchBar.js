@@ -21,7 +21,9 @@ import classNames from "classnames";
 import { _t } from '../../../languageHandler';
 import {Key} from "../../../Keyboard";
 import DesktopBuildsNotice, {WarningKind} from "../elements/DesktopBuildsNotice";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.SearchBar")
 export default class SearchBar extends React.Component {
     constructor(props) {
         super(props);

@@ -20,7 +20,9 @@ import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.ActionButton")
 export default class ActionButton extends React.Component {
     static propTypes = {
         size: PropTypes.string,
@@ -68,8 +70,8 @@ export default class ActionButton extends React.Component {
         }
 
         const icon = this.props.iconPath ?
-                (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
-                undefined;
+            (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+            undefined;
 
         const classNames = ["mx_RoleButton"];
         if (this.props.className) {

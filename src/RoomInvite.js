@@ -22,7 +22,7 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
@@ -49,11 +49,14 @@ export function showStartChatInviteDialog(initialText) {
     );
 }
 
-export function showRoomInviteDialog(roomId) {
+export function showRoomInviteDialog(roomId, initialText = "") {
     // This dialog handles the room creation internally - we don't need to worry about it.
-    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+        "Invite Users", "", InviteDialog, {
+            kind: KIND_INVITE,
+            initialText,
+            roomId,
+        },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

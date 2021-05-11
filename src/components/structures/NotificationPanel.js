@@ -23,10 +23,12 @@ import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as sdk from "../../index";
 import BaseCard from "../views/right_panel/BaseCard";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
+@replaceableComponent("structures.NotificationPanel")
 class NotificationPanel extends React.Component {
     static propTypes = {
         onClose: PropTypes.func.isRequired,

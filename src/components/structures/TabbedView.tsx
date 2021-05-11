@@ -20,6 +20,7 @@ import * as React from "react";
 import {_t} from '../../languageHandler';
 import * as sdk from "../../index";
 import AutoHideScrollbar from './AutoHideScrollbar';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /**
  * Represents a tab for the TabbedView.
@@ -45,6 +46,7 @@ interface IState {
     activeTabIndex: number;
 }
 
+@replaceableComponent("structures.TabbedView")
 export default class TabbedView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

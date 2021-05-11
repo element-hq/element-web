@@ -27,6 +27,7 @@ import {sortBy} from "lodash";
 import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
+import {mediaFromMxc} from "../customisations/Media";
 
 const COMMUNITY_REGEX = /\B\+\S*/g;
 
@@ -95,7 +96,7 @@ export default class CommunityProvider extends AutocompleteProvider {
                             name={name || groupId}
                             width={24}
                             height={24}
-                            url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
+                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24) : null} />
                     </PillCompletion>
                 ),
                 range,

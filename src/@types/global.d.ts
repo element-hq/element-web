@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,6 +37,11 @@ import CountlyAnalytics from "../CountlyAnalytics";
 import UserActivity from "../UserActivity";
 import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import VoipUserMapper from "../VoipUserMapper";
+import {SpaceStoreClass} from "../stores/SpaceStore";
+import TypingStore from "../stores/TypingStore";
+import { EventIndexPeg } from "../indexing/EventIndexPeg";
+import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
 
 declare global {
     interface Window {
@@ -66,11 +71,18 @@ declare global {
         mxCountlyAnalytics: typeof CountlyAnalytics;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
+        mxVoipUserMapper: VoipUserMapper;
+        mxSpaceStore: SpaceStoreClass;
+        mxVoiceRecordingStore: VoiceRecordingStore;
+        mxTypingStore: TypingStore;
+        mxEventIndexPeg: EventIndexPeg;
     }
 
     interface Document {
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasStorageAccess
         hasStorageAccess?: () => Promise<boolean>;
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/requestStorageAccess
+        requestStorageAccess?: () => Promise<undefined>;
 
         // Safari & IE11 only have this prefixed: we used prefixed versions
         // previously so let's continue to support them for now
@@ -106,6 +118,16 @@ declare global {
 
     interface HTMLAudioElement {
         type?: string;
+        // sinkId & setSinkId are experimental and typescript doesn't know about them
+        sinkId: string;
+        setSinkId(outputId: string);
+    }
+
+    interface HTMLVideoElement {
+        type?: string;
+        // sinkId & setSinkId are experimental and typescript doesn't know about them
+        sinkId: string;
+        setSinkId(outputId: string);
     }
 
     interface Element {
@@ -123,4 +145,30 @@ declare global {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber
         columnNumber?: number;
     }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    interface AudioWorkletProcessor {
+        readonly port: MessagePort;
+        process(
+            inputs: Float32Array[][],
+            outputs: Float32Array[][],
+            parameters: Record<string, Float32Array>
+        ): boolean;
+    }
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    const AudioWorkletProcessor: {
+        prototype: AudioWorkletProcessor;
+        new (options?: AudioWorkletNodeOptions): AudioWorkletProcessor;
+    };
+
+    // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
+    function registerProcessor(
+        name: string,
+        processorCtor: (new (
+            options?: AudioWorkletNodeOptions
+        ) => AudioWorkletProcessor) & {
+            parameterDescriptors?: AudioParamDescriptor[];
+        }
+    );
 }

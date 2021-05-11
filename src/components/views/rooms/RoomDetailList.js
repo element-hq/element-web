@@ -22,7 +22,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import {roomShape} from './RoomDetailRow';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.RoomDetailList")
 export default class RoomDetailList extends React.Component {
     static propTypes = {
         rooms: PropTypes.arrayOf(roomShape),

@@ -22,7 +22,9 @@ import * as sdk from '../../../index';
 import { unicodeToShortcode } from '../../../HtmlUtils';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.ReactionsRowButtonTooltip")
 export default class ReactionsRowButtonTooltip extends React.PureComponent {
     static propTypes = {
         // The event we're displaying reactions for

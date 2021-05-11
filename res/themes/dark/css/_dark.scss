@@ -9,6 +9,7 @@ $header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
 $text-primary-color: #ffffff;
 $text-secondary-color: #B9BEC6;
+$quaternary-fg-color: #6F7882;
 $search-bg-color: #181b21;
 $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
@@ -63,6 +64,8 @@ $input-invalid-border-color: $warning-color;
 
 $field-focused-label-bg-color: $bg-color;
 
+$resend-button-divider-color: #b9bec64a; // muted-text with a 4A opacity.
+
 // scrollbars
 $scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
 $scrollbar-track-color: transparent;
@@ -85,6 +88,7 @@ $dialog-close-fg-color: #9fa9ba;
 
 $dialog-background-bg-color: $header-panel-bg-color;
 $lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.85;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #21262c;
@@ -109,7 +113,7 @@ $header-divider-color: $header-panel-text-primary-color;
 $composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // this probably shouldn't have it's own colour
-$voipcall-plinth-color: #21262c;
+$voipcall-plinth-color: #394049;
 
 // ********************
 
@@ -136,9 +140,6 @@ $panel-divider-color: transparent;
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 $widget-body-bg-color: rgba(141, 151, 165, 0.2);
-
-// event tile lifecycle
-$event-sending-color: $text-secondary-color;
 
 // event redaction
 $event-redacted-fg-color: #606060;
@@ -172,6 +173,9 @@ $button-link-bg-color: transparent;
 // Toggle switch
 $togglesw-off-color: $room-highlight-color;
 
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: #21262c;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -201,6 +205,19 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #394049; // "Dark Tile"
+$message-body-panel-icon-fg-color: #21262C; // "Separator"
+$message-body-panel-icon-bg-color: $tertiary-fg-color;
+
+$voice-record-stop-border-color: $quaternary-fg-color;
+$voice-record-waveform-bg-color: $message-body-panel-bg-color;
+$voice-record-waveform-fg-color: $message-body-panel-fg-color;
+$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
+$voice-record-icon-color: $quaternary-fg-color;
+$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
+$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
@@ -238,7 +255,7 @@ $composer-shadow-color: rgba(0, 0, 0, 0.28);
 @define-mixin mx_DialogButton_secondary {
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color !important;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }

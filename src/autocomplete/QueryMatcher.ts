@@ -23,7 +23,6 @@ interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
     funcs?: Array<(T) => string>;
     shouldMatchWordsOnly?: boolean;
-    shouldMatchPrefix?: boolean;
     // whether to apply unhomoglyph and strip diacritics to fuzz up the search. Defaults to true
     fuzzy?: boolean;
 }
@@ -55,12 +54,6 @@ export default class QueryMatcher<T extends Object> {
         // query and the value being queried before matching
         if (this._options.shouldMatchWordsOnly === undefined) {
             this._options.shouldMatchWordsOnly = true;
-        }
-
-        // By default, match anywhere in the string being searched. If enabled, only return
-        // matches that are prefixed with the query.
-        if (this._options.shouldMatchPrefix === undefined) {
-            this._options.shouldMatchPrefix = false;
         }
     }
 
@@ -112,7 +105,7 @@ export default class QueryMatcher<T extends Object> {
                 resultKey = resultKey.replace(/[^\w]/g, '');
             }
             const index = resultKey.indexOf(query);
-            if (index !== -1 && (!this._options.shouldMatchPrefix || index === 0)) {
+            if (index !== -1) {
                 matches.push(
                     ...candidates.map((candidate) => ({index, ...candidate})),
                 );

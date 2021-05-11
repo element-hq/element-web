@@ -24,6 +24,7 @@ import AccessibleButton from "./AccessibleButton";
 import {_t} from "../../../languageHandler";
 import {IdentityProviderBrand, IIdentityProvider, ISSOFlow} from "../../../Login";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -72,7 +73,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         brandClass = `mx_SSOButton_brand_${brandName}`;
         icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
-        const src = matrixClient.mxcUrlToHttp(idp.icon, 24, 24, "crop", true);
+        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24);
         icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 

@@ -22,6 +22,7 @@ import React from 'react';
 import classNames from 'classnames';
 import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     // Whether this button is highlighted
@@ -41,6 +42,7 @@ interface IProps {
 
 // TODO: replace this, the composer buttons and the right panel buttons with a unified
 // representation
+@replaceableComponent("views.right_panel.HeaderButton")
 export default class HeaderButton extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);

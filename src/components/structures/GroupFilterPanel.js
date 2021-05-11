@@ -30,7 +30,9 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.GroupFilterPanel")
 class GroupFilterPanel extends React.Component {
     static contextType = MatrixClientContext;
 
@@ -151,17 +153,17 @@ class GroupFilterPanel extends React.Component {
                     type="draggable-TagTile"
                 >
                     { (provided, snapshot) => (
-                            <div
-                                className="mx_GroupFilterPanel_tagTileContainer"
-                                ref={provided.innerRef}
-                            >
-                                { this.renderGlobalIcon() }
-                                { tags }
-                                <div>
-                                    {createButton}
-                                </div>
-                                { provided.placeholder }
+                        <div
+                            className="mx_GroupFilterPanel_tagTileContainer"
+                            ref={provided.innerRef}
+                        >
+                            { this.renderGlobalIcon() }
+                            { tags }
+                            <div>
+                                {createButton}
                             </div>
+                            { provided.placeholder }
+                        </div>
                     ) }
                 </Droppable>
             </AutoHideScrollbar>

@@ -19,6 +19,7 @@ import { _t } from '../../../languageHandler';
 import { ContextMenu, IProps as IContextMenuProps } from '../../structures/ContextMenu';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import Dialpad from '../voip/DialPad';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -28,6 +29,7 @@ interface IState {
     value: string;
 }
 
+@replaceableComponent("views.context_menus.DialpadContextMenu")
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

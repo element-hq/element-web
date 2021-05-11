@@ -21,7 +21,9 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import {Key} from "../../../Keyboard";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.IntegrationManager")
 export default class IntegrationManager extends React.Component {
     static propTypes = {
         // false to display an error saying that we couldn't connect to the integration manager

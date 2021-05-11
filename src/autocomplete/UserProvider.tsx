@@ -56,7 +56,6 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new QueryMatcher([], {
             keys: ['name'],
             funcs: [obj => obj.userId.slice(1)], // index by user id minus the leading '@'
-            shouldMatchPrefix: true,
             shouldMatchWordsOnly: false,
         });
 
@@ -155,6 +154,7 @@ export default class UserProvider extends AutocompleteProvider {
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
+        this.users = this.users.concat(this.room.getMembersWithMembership("invite"));
 
         this.users = sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 

@@ -252,6 +252,19 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
 }
 
+.mx_RoomHeader_voiceCallButton::before {
+    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+
+    // The call button SVG is padded slightly differently, so match it up to the size
+    // of the other icons
+    mask-size: 20px;
+    mask-position: center;
+}
+
+.mx_RoomHeader_videoCallButton::before {
+    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+}
+
 .mx_RoomHeader_showPanel {
     height: 16px;
 }

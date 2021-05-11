@@ -35,7 +35,6 @@ const mockclock = require('../../mock-clock');
 import Adapter from "enzyme-adapter-react-16";
 import { configure, mount } from "enzyme";
 
-import Velocity from 'velocity-animate';
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
@@ -75,18 +74,10 @@ describe('MessagePanel', function() {
             return arg === "showDisplaynameChanges";
         });
 
-        // This option clobbers the duration of all animations to be 1ms
-        // which makes unit testing a lot simpler (the animation doesn't
-        // complete without this even if we mock the clock and tick it
-        // what should be the correct amount of time).
-        Velocity.mock = true;
-
         DMRoomMap.makeShared();
     });
 
-    afterEach(function() {
-        delete Velocity.mock;
-
+    afterEach(function () {
         clock.uninstall();
     });
 
@@ -97,7 +88,21 @@ describe('MessagePanel', function() {
             events.push(test_utils.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
-                    ts: ts0 + i*1000,
+                    ts: ts0 + i * 1000,
+                }));
+        }
+        return events;
+    }
+
+    // Just to avoid breaking Dateseparator tests that might run at 00hrs
+    function mkOneDayEvents() {
+        const events = [];
+        const ts0 = Date.parse('09 May 2004 00:12:00 GMT');
+        for (let i = 0; i < 10; i++) {
+            events.push(test_utils.mkMessage(
+                {
+                    event: true, room: "!room:id", user: "@user:id",
+                    ts: ts0 + i * 1000,
                 }));
         }
         return events;
@@ -113,7 +118,7 @@ describe('MessagePanel', function() {
         let i = 0;
         events.push(test_utils.mkMessage({
             event: true, room: "!room:id", user: "@user:id",
-            ts: ts0 + ++i*1000,
+            ts: ts0 + ++i * 1000,
         }));
 
         for (i = 0; i < 10; i++) {
@@ -125,6 +130,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + i*1000,
                 mship: 'join',
@@ -157,8 +163,9 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
-                ts: ts0 + i*1000,
+                ts: ts0 + i * 1000,
                 mship: 'join',
                 prevMship: 'join',
                 name: 'A user',
@@ -202,6 +209,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 1,
                 mship: 'join',
@@ -248,6 +256,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 5,
                 mship: 'invite',
@@ -255,7 +264,6 @@ describe('MessagePanel', function() {
             }),
         ];
     }
-
     function isReadMarkerVisible(rmContainer) {
         return rmContainer && rmContainer.children.length > 0;
     }
@@ -441,5 +449,18 @@ describe('MessagePanel', function() {
 
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+
+    it('should render Date separators for the events', function () {
+        const events = mkOneDayEvents();
+        const res = mount(
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+            />,
+        );
+        const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
+       
+        expect(Dates.length).toEqual(1);
     });
 });

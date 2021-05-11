@@ -20,7 +20,10 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
+@replaceableComponent("views.settings.ChangeAvatar")
 export default class ChangeAvatar extends React.Component {
     static propTypes = {
         initialAvatarUrl: PropTypes.string,
@@ -115,7 +118,7 @@ export default class ChangeAvatar extends React.Component {
         httpPromise.then(function() {
             self.setState({
                 phase: ChangeAvatar.Phases.Display,
-                avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(newUrl),
+                avatarUrl: mediaFromMxc(newUrl).srcHttp,
             });
         }, function(error) {
             self.setState({
@@ -151,7 +154,7 @@ export default class ChangeAvatar extends React.Component {
             const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
             avatarImg = <BaseAvatar width={this.props.width} height={this.props.height} resizeMethod='crop'
-                        name='?' idName={MatrixClientPeg.get().getUserIdLocalpart()} url={this.state.avatarUrl} />;
+                name='?' idName={MatrixClientPeg.get().getUserIdLocalpart()} url={this.state.avatarUrl} />;
         }
 
         let uploadSection;

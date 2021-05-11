@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
+const { promises: fsp } = fs;
 const path = require('path');
 const glob = require('glob');
 const util = require('util');
@@ -25,6 +26,8 @@ async function reskindex() {
     const header = args.h || args.header;
 
     const strm = fs.createWriteStream(componentIndexTmp);
+    // Wait for the open event to ensure the file descriptor is set
+    await new Promise(resolve => strm.once("open", resolve));
 
     if (header) {
        strm.write(fs.readFileSync(header));
@@ -53,14 +56,9 @@ async function reskindex() {
 
     strm.write("export {components};\n");
     // Ensure the file has been fully written to disk before proceeding
+    await util.promisify(fs.fsync)(strm.fd);
     await util.promisify(strm.end);
-    fs.rename(componentIndexTmp, componentIndex, function(err) {
-        if (err) {
-            console.error("Error moving new index into place: " + err);
-        } else {
-            console.log('Reskindex: completed');
-        }
-    });
+    await fsp.rename(componentIndexTmp, componentIndex);
 }
 
 // Expects both arrays of file names to be sorted
@@ -77,9 +75,17 @@ function filesHaveChanged(files, prevFiles) {
     return false;
 }
 
+// Wrapper since await at the top level is not well supported yet
+function run() {
+    (async function() {
+        await reskindex();
+        console.log("Reskindex completed");
+    })();
+}
+
 // -w indicates watch mode where any FS events will trigger reskindex
 if (!args.w) {
-    reskindex();
+    run();
     return;
 }
 
@@ -87,5 +93,5 @@ let watchDebouncer = null;
 chokidar.watch(path.join(componentsDir, componentJsGlob)).on('all', (event, path) => {
     if (path === componentIndex) return;
     if (watchDebouncer) clearTimeout(watchDebouncer);
-    watchDebouncer = setTimeout(reskindex, 1000);
+    watchDebouncer = setTimeout(run, 1000);
 });

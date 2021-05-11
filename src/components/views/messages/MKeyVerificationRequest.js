@@ -25,7 +25,9 @@ import dis from "../../../dispatcher/dispatcher";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import EventTileBubble from "./EventTileBubble";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MKeyVerificationRequest")
 export default class MKeyVerificationRequest extends React.Component {
     constructor(props) {
         super(props);

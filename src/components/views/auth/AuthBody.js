@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.auth.AuthBody")
 export default class AuthBody extends React.PureComponent {
     render() {
         return <div className="mx_AuthBody">

@@ -33,8 +33,13 @@ limitations under the License.
 
         .mx_AccessibleButton {
             line-height: $font-24px;
+            display: inline-block;
 
-            &::before {
+            & + .mx_AccessibleButton {
+                margin-left: 12px;
+            }
+
+            &:not(.mx_AccessibleButton_kind_primary_outline)::before {
                 content: '';
                 display: inline-block;
                 background-color: $button-fg-color;

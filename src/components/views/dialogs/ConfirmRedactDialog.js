@@ -17,10 +17,12 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /*
  * A dialog for confirming a redaction.
  */
+@replaceableComponent("views.dialogs.ConfirmRedactDialog")
 export default class ConfirmRedactDialog extends React.Component {
     render() {
         const TextInputDialog = sdk.getComponent('views.dialogs.TextInputDialog');

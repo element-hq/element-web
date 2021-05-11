@@ -36,6 +36,7 @@ import {
     PHASE_CANCELLED,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // XXX: Should be defined in matrix-js-sdk
 enum VerificationPhase {
@@ -65,6 +66,7 @@ interface IState {
     reciprocateQREvent?: ReciprocateQRCode;
 }
 
+@replaceableComponent("views.right_panel.VerificationPanel")
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
     private hasVerifier: boolean;
 

@@ -19,6 +19,7 @@ import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog"
 import AccessibleButton from './AccessibleButton';
 import {getDesktopCapturerSources} from "matrix-js-sdk/src/webrtc/call";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export interface DesktopCapturerSource {
     id: string;
@@ -69,6 +70,7 @@ export interface DesktopCapturerSourcePickerIProps {
     onFinished(source: DesktopCapturerSource): void;
 }
 
+@replaceableComponent("views.elements.DesktopCapturerSourcePicker")
 export default class DesktopCapturerSourcePicker extends React.Component<
     DesktopCapturerSourcePickerIProps,
     DesktopCapturerSourcePickerIState

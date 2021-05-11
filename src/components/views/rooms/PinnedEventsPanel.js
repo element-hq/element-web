@@ -22,7 +22,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import PinnedEventTile from "./PinnedEventTile";
 import { _t } from '../../../languageHandler';
 import PinningUtils from "../../../utils/PinningUtils";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.PinnedEventsPanel")
 export default class PinnedEventsPanel extends React.Component {
     static propTypes = {
         // The Room from the js-sdk we're going to show pinned events for
@@ -62,10 +64,10 @@ export default class PinnedEventsPanel extends React.Component {
 
             pinnedEvents.getContent().pinned.map((eventId) => {
                 promises.push(cli.getEventTimeline(this.props.room.getUnfilteredTimelineSet(), eventId, 0).then(
-                (timeline) => {
-                    const event = timeline.getEvents().find((e) => e.getId() === eventId);
-                    return {eventId, timeline, event};
-                }).catch((err) => {
+                    (timeline) => {
+                        const event = timeline.getEvents().find((e) => e.getId() === eventId);
+                        return {eventId, timeline, event};
+                    }).catch((err) => {
                     console.error("Error looking up pinned event " + eventId + " in room " + this.props.room.roomId);
                     console.error(err);
                     return null; // return lack of context to avoid unhandled errors
@@ -111,10 +113,14 @@ export default class PinnedEventsPanel extends React.Component {
         }
 
         return this.state.pinned.map((context) => {
-            return (<PinnedEventTile key={context.event.getId()}
-                                     mxRoom={this.props.room}
-                                     mxEvent={context.event}
-                                     onUnpinned={this._updatePinnedMessages} />);
+            return (
+                <PinnedEventTile
+                    key={context.event.getId()}
+                    mxRoom={this.props.room}
+                    mxEvent={context.event}
+                    onUnpinned={this._updatePinnedMessages}
+                />
+            );
         });
     }
 

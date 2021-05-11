@@ -16,7 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.context_menus.GenericTextContextMenu")
 export default class GenericTextContextMenu extends React.Component {
     static propTypes = {
         message: PropTypes.string.isRequired,
