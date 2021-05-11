@@ -33,6 +33,8 @@ const BITRATE = 24000; // 24kbps is pretty high quality for our use case in opus
 const TARGET_MAX_LENGTH = 120; // 2 minutes in seconds. Somewhat arbitrary, though longer == larger files.
 const TARGET_WARN_TIME_LEFT = 10; // 10 seconds, also somewhat arbitrary.
 
+export const RECORDING_PLAYBACK_SAMPLES = 44;
+
 export interface IRecordingUpdate {
     waveform: number[]; // floating points between 0 (low) and 1 (high).
     timeSeconds: number; // float

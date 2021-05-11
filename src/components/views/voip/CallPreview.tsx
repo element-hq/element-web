@@ -19,7 +19,7 @@ import React from 'react';
 
 import CallView from "./CallView";
 import RoomViewStore from '../../../stores/RoomViewStore';
-import CallHandler from '../../../CallHandler';
+import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import PersistentApp from "../elements/PersistentApp";
@@ -27,7 +27,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import { Action } from '../../../dispatcher/actions';
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -110,12 +109,14 @@ export default class CallPreview extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
     }
 
     public componentWillUnmount() {
+        CallHandler.sharedInstance().removeListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
@@ -143,19 +144,22 @@ export default class CallPreview extends React.Component<IProps, IState> {
         switch (payload.action) {
             // listen for call state changes to prod the render method, which
             // may hide the global CallView if the call it is tracking is dead
-            case Action.CallChangeRoom:
             case 'call_state': {
-                const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
-                    CallHandler.sharedInstance().getAllActiveCallsNotInRoom(this.state.roomId),
-                );
-
-                this.setState({
-                    primaryCall: primaryCall,
-                    secondaryCall: secondaryCalls[0],
-                });
+                this.updateCalls();
                 break;
             }
         }
+    };
+
+    private updateCalls = () => {
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCalls(
+            CallHandler.sharedInstance().getAllActiveCallsNotInRoom(this.state.roomId),
+        );
+
+        this.setState({
+            primaryCall: primaryCall,
+            secondaryCall: secondaryCalls[0],
+        });
     };
 
     private onCallRemoteHold = () => {

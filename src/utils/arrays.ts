@@ -36,14 +36,12 @@ export function arrayFastResample(input: number[], points: number): number[] {
         }
     } else {
         // Smaller inputs mean we have to spread the values over the desired length. We
-        // end up overshooting the target length in doing this, so we'll resample down
-        // before returning. This recursion is risky, but mathematically should not go
-        // further than 1 level deep.
+        // end up overshooting the target length in doing this, but we're not looking to
+        // be super accurate so we'll let the sanity trims do their job.
         const spreadFactor = Math.ceil(points / input.length);
         for (const val of input) {
             samples.push(...arraySeed(val, spreadFactor));
         }
-        samples = arrayFastResample(samples, points);
     }
 
     // Sanity fill, just in case

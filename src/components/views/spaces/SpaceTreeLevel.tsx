@@ -307,15 +307,19 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const isActive = activeSpaces.includes(space);
         const itemClasses = classNames({
             "mx_SpaceItem": true,
+            "mx_SpaceItem_narrow": isNarrow,
             "collapsed": collapsed,
             "hasSubSpaces": childSpaces && childSpaces.length,
         });
+
+        const isInvite = space.getMyMembership() === "invite";
         const classes = classNames("mx_SpaceButton", {
             mx_SpaceButton_active: isActive,
             mx_SpaceButton_hasMenuOpen: !!this.state.contextMenuPosition,
             mx_SpaceButton_narrow: isNarrow,
+            mx_SpaceButton_invite: isInvite,
         });
-        const notificationState = space.getMyMembership() === "invite"
+        const notificationState = isInvite
             ? StaticNotificationState.forSymbol("!", NotificationColor.Red)
             : SpaceStore.instance.getNotificationState(space.roomId);
 

@@ -114,9 +114,6 @@ export enum Action {
      */
     VirtualRoomSupportUpdated = "virtual_room_support_updated",
 
-    // Probably would be better to have a VoIP states in a store and have the store emit changes
-    CallChangeRoom = "call_change_room",
-
     /**
      * Fired when an upload has started. Should be used with UploadStartedPayload.
      */

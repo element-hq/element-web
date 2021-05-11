@@ -39,23 +39,25 @@ limitations under the License.
     width: 14px; // w&h are size of icon
     height: 18px;
     vertical-align: middle;
-    margin-right: 7px; // distance from left edge of waveform container (container has some margin too)
-    background-color: $muted-fg-color;
+    margin-right: 11px; // distance from left edge of waveform container (container has some margin too)
+    background-color: $voice-record-icon-color;
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-image: url('$(res)/img/element-icons/trashcan.svg');
 }
 
-.mx_VoiceMessagePrimaryContainer {
+.mx_MessageComposer_row .mx_VoiceMessagePrimaryContainer {
     // Note: remaining class properties are in the PlayerContainer CSS.
 
     margin: 6px; // force the composer area to put a gutter around us
-    margin-right: 12px; // isolate from stop button
+    margin-right: 12px; // isolate from stop/send button
 
     position: relative; // important for the live circle
 
     &.mx_VoiceRecordComposerTile_recording {
-        padding-left: 16px; // +10px for the live circle, +6px for regular padding
+        // We are putting the circle in this padding, so we need +10px from the regular
+        // padding on the left side.
+        padding-left: 22px;
 
         &::before {
             animation: recording-pulse 2s infinite;
@@ -65,8 +67,8 @@ limitations under the License.
             width: 10px;
             height: 10px;
             position: absolute;
-            left: 8px;
-            top: 16px; // vertically center
+            left: 12px; // 12px from the left edge for container padding
+            top: 18px; // vertically center (middle align with clock)
             border-radius: 10px;
         }
     }

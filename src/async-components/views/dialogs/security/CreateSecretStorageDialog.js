@@ -647,7 +647,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         }
         return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
-                "Enter your recovery passphrase a second time to confirm it.",
+                "Enter your Security Phrase a second time to confirm it.",
             )}</p>
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
@@ -655,7 +655,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onChange={this._onPassPhraseConfirmChange}
                     value={this.state.passPhraseConfirm}
                     className="mx_CreateSecretStorageDialog_passPhraseField"
-                    label={_t("Confirm your recovery passphrase")}
+                    label={_t("Confirm your Security Phrase")}
                     autoFocus={true}
                     autoComplete="new-password"
                 />

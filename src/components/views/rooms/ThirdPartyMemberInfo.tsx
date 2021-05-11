@@ -26,6 +26,7 @@ import {isValid3pidInvite} from "../../../RoomInvite";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     event: MatrixEvent;
@@ -135,7 +136,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         }
 
         let scopeHeader;
-        if (this.room.isSpaceRoom()) {
+        if (SettingsStore.getValue("feature_spaces") && this.room.isSpaceRoom()) {
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={this.room} height={32} width={32} />
                 <RoomName room={this.room} />

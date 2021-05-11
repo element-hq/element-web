@@ -16,7 +16,7 @@
 
 import SettingsStore from "./settings/SettingsStore";
 import {SettingLevel} from "./settings/SettingLevel";
-import {setMatrixCallAudioInput, setMatrixCallAudioOutput, setMatrixCallVideoInput} from "matrix-js-sdk/src/matrix";
+import {setMatrixCallAudioInput, setMatrixCallVideoInput} from "matrix-js-sdk/src/matrix";
 
 export default {
     hasAnyLabeledDevices: async function() {
@@ -50,18 +50,15 @@ export default {
     },
 
     loadDevices: function() {
-        const audioOutDeviceId = SettingsStore.getValue("webrtc_audiooutput");
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
 
-        setMatrixCallAudioOutput(audioOutDeviceId);
         setMatrixCallAudioInput(audioDeviceId);
         setMatrixCallVideoInput(videoDeviceId);
     },
 
     setAudioOutput: function(deviceId) {
         SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
-        setMatrixCallAudioOutput(deviceId);
     },
 
     setAudioInput: function(deviceId) {

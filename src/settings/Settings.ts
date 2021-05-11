@@ -438,7 +438,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
+        displayName: _td(
+            "Allow Peer-to-Peer for 1:1 calls " +
+            "(if you enable this, the other party might be able to see your IP address)",
+        ),
         default: true,
         invertedSettingName: 'webRtcForceTURN',
     },
