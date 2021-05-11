@@ -16,7 +16,7 @@ limitations under the License.
 
 import EventEmitter from "events";
 import {UPDATE_EVENT} from "../stores/AsyncStore";
-import {arrayRescale, arraySeed, arraySmoothingResample} from "../utils/arrays";
+import {arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample} from "../utils/arrays";
 import {SimpleObservable} from "matrix-widget-api";
 import {IDestroyable} from "../utils/IDestroyable";
 import {PlaybackClock} from "./PlaybackClock";
