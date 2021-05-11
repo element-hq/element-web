@@ -410,9 +410,10 @@ export default class CallView extends React.Component<IProps, IState> {
             // TODO: Later the CallView should probably be reworked to support
             // any number of feeds but now we can't render more than 4 feeds
             if (i >= 4) return;
-            // Here we check to hide local audio feeds to achieve the same UI/UX
-            // as before. But once again this might be subject to change
-            if (feed.isVideoMuted() && feed.isLocal()) return;
+            // Here we check to hide any non-main audio feeds from the UI
+            // This is because we don't want them to obstruct the view
+            // But once again this might be subject to change
+            if (feed.isVideoMuted() && i > 0) return;
             return (
                 <VideoFeed
                     key={feed.stream.id}
