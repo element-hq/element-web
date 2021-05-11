@@ -906,6 +906,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
+                // Not all timeline events are decrypted ahead of time anymore
+                // Only the critical ones for a typical UI are
+                // This will start the decryption process for all events when a
+                // user views a room
                 room.decryptAllEvents();
                 const theAlias = Rooms.getDisplayAliasForRoom(room);
                 if (theAlias) {

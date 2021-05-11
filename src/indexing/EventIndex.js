@@ -188,6 +188,7 @@ export default class EventIndex extends EventEmitter {
         }
 
         if (ev.isBeingDecrypted()) {
+            // XXX: Private member access
             await ev._decryptionPromise;
         }
 
@@ -523,6 +524,11 @@ export default class EventIndex extends EventEmitter {
                             emit: false,
                         });
                     } else {
+                        // TODO the decryption promise is a private property, this
+                        // should either be made public or we should convert the
+                        // event that gets fired when decryption is done into a
+                        // promise using the once event emitter method:
+                        // https://nodejs.org/api/events.html#events_events_once_emitter_name
                         return event._decryptionPromise;
                     }
                 });
