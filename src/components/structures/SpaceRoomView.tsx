@@ -385,7 +385,9 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         />;
     });
 
-    const onNextClick = async () => {
+    const onNextClick = async (ev) => {
+        ev.preventDefault();
+        if (busy) return;
         setError("");
         setBusy(true);
         try {
@@ -410,7 +412,10 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setBusy(false);
     };
 
-    let onClick = onFinished;
+    let onClick = (ev) => {
+        ev.preventDefault();
+        onFinished();
+    };
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
         onClick = onNextClick;
@@ -422,16 +427,20 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         <div className="mx_SpaceRoomView_description">{ description }</div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-        { fields }
+        <form onSubmit={onClick} id="mx_SpaceSetupFirstRooms">
+            { fields }
+        </form>
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton
                 kind="primary"
                 disabled={busy}
                 onClick={onClick}
-            >
-                { buttonLabel }
-            </AccessibleButton>
+                element="input"
+                type="submit"
+                form="mx_SpaceSetupFirstRooms"
+                value={buttonLabel}
+            />
         </div>
     </div>;
 };
@@ -575,7 +584,9 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         />;
     });
 
-    const onNextClick = async () => {
+    const onNextClick = async (ev) => {
+        ev.preventDefault();
+        if (busy) return;
         setError("");
         for (let i = 0; i < fieldRefs.length; i++) {
             const fieldRef = fieldRefs[i];
@@ -609,7 +620,10 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         setBusy(false);
     };
 
-    let onClick = onFinished;
+    let onClick = (ev) => {
+        ev.preventDefault();
+        onFinished();
+    };
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some(name => name.trim())) {
         onClick = onNextClick;
@@ -623,7 +637,9 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-        { fields }
+        <form onSubmit={onClick} id="mx_SpaceSetupPrivateInvite">
+            { fields }
+        </form>
 
         <div className="mx_SpaceRoomView_inviteTeammates_buttons">
             <AccessibleButton
@@ -635,9 +651,15 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         </div>
 
         <div className="mx_SpaceRoomView_buttons">
-            <AccessibleButton kind="primary" disabled={busy} onClick={onClick}>
-                { buttonLabel }
-            </AccessibleButton>
+            <AccessibleButton
+                kind="primary"
+                disabled={busy}
+                onClick={onClick}
+                element="input"
+                type="submit"
+                form="mx_SpaceSetupPrivateInvite"
+                value={buttonLabel}
+            />
         </div>
     </div>;
 };
