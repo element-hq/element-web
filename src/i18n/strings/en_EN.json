@@ -2040,6 +2040,8 @@
     "%(networkName)s rooms": "%(networkName)s rooms",
     "Matrix rooms": "Matrix rooms",
     "Filter your rooms and spaces": "Filter your rooms and spaces",
+    "Feeling experimental?": "Feeling experimental?",
+    "You can add existing spaces to a space.": "You can add existing spaces to a space.",
     "Direct Messages": "Direct Messages",
     "Space selection": "Space selection",
     "Add existing rooms": "Add existing rooms",
