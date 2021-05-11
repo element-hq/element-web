@@ -269,7 +269,7 @@ function uint8ToString(buf: Buffer) {
     return out;
 }
 
-export async function submitFeedback(endpoint: string, label: string, comment: string) {
+export async function submitFeedback(endpoint: string, label: string, comment: string, canContact = false) {
     let version = "UNKNOWN";
     try {
         version = await PlatformPeg.get().getAppVersion();
@@ -278,10 +278,12 @@ export async function submitFeedback(endpoint: string, label: string, comment: s
     const body = new FormData();
     body.append("label", label);
     body.append("text", comment);
+    body.append("can_contact", canContact ? "yes" : "no");
 
     body.append("app", "element-web");
     body.append("version", version);
     body.append("platform", PlatformPeg.get().getHumanReadableName());
+    body.append("user_id", MatrixClientPeg.get()?.getUserId());
 
     await _submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
 }

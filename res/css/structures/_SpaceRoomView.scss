@@ -339,6 +339,15 @@ $SpaceRoomViewInnerWidth: 428px;
         .mx_SearchBox {
             margin: 0 0 20px;
         }
+
+        .mx_SpaceFeedbackPrompt {
+            margin-bottom: 16px;
+
+            // hide the HR as we have our own
+            & + hr {
+                display: none;
+            }
+        }
     }
 
     .mx_SpaceRoomView_privateScope {
@@ -495,7 +504,7 @@ $SpaceRoomViewInnerWidth: 428px;
         }
 
         .mx_AccessibleButton_kind_link {
-            color: $accent-color-alt;
+            color: $accent-color;
             position: relative;
             padding: 0 0 0 24px;
             margin-left: 8px;
@@ -508,7 +517,7 @@ $SpaceRoomViewInnerWidth: 428px;
                 left: 0;
                 height: 16px;
                 width: 16px;
-                background-color: $accent-color-alt;
+                background-color: $accent-color;
                 mask-repeat: no-repeat;
                 mask-size: contain;
                 mask-image: url('$(res)/img/element-icons/chat-bubbles.svg');
