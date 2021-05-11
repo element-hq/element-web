@@ -167,7 +167,10 @@
       "^react$": "<rootDir>/node_modules/react",
       "^react-dom$": "<rootDir>/node_modules/react-dom",
       "^matrix-js-sdk$": "<rootDir>/node_modules/matrix-js-sdk/src",
-      "^matrix-react-sdk$": "<rootDir>/node_modules/matrix-react-sdk/src"
+      "^matrix-react-sdk$": "<rootDir>/node_modules/matrix-react-sdk/src",
+      "decoderWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
+      "decoderWorker\\.min\\.wasm": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
+      "waveWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
