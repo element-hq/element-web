@@ -58,7 +58,7 @@
     "blueimp-canvas-to-blob": "^3.28.0",
     "browser-encrypt-attachment": "^0.3.0",
     "browser-request": "^0.3.3",
-    "cheerio": "^1.0.0-rc.5",
+    "cheerio": "^1.0.0-rc.9",
     "classnames": "^2.2.6",
     "commonmark": "^0.29.3",
     "counterpart": "^0.18.6",
