@@ -186,7 +186,10 @@
     ],
     "moduleNameMapper": {
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
-      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json"
+      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
+      "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
+      "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
+      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"
