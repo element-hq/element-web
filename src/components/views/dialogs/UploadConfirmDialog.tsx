@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,20 +16,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import filesize from "filesize";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { getBlobSafeMimeType } from '../../../utils/blobs';
+
+interface IProps {
+    file: File;
+    currentIndex: number;
+    totalFiles?: number;
+    onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
+}
 
 @replaceableComponent("views.dialogs.UploadConfirmDialog")
-export default class UploadConfirmDialog extends React.Component {
-    static propTypes = {
-        file: PropTypes.object.isRequired,
-        currentIndex: PropTypes.number,
-        totalFiles: PropTypes.number,
-        onFinished: PropTypes.func.isRequired,
-    }
+export default class UploadConfirmDialog extends React.Component<IProps> {
+    private objectUrl: string;
+    private mimeType: string;
 
     static defaultProps = {
         totalFiles: 1,
@@ -38,22 +41,28 @@ export default class UploadConfirmDialog extends React.Component {
     constructor(props) {
         super(props);
 
-        this._objectUrl = URL.createObjectURL(props.file);
+        // Create a fresh `Blob` for previewing (even though `File` already is
+        // one) so we can adjust the MIME type if needed.
+        this.mimeType = getBlobSafeMimeType(props.file.type);
+        const blob = new Blob([props.file], { type:
+            this.mimeType,
+        });
+        this.objectUrl = URL.createObjectURL(blob);
     }
 
     componentWillUnmount() {
-        if (this._objectUrl) URL.revokeObjectURL(this._objectUrl);
+        if (this.objectUrl) URL.revokeObjectURL(this.objectUrl);
     }
 
-    _onCancelClick = () => {
+    private onCancelClick = () => {
         this.props.onFinished(false);
     }
 
-    _onUploadClick = () => {
+    private onUploadClick = () => {
         this.props.onFinished(true);
     }
 
-    _onUploadAllClick = () => {
+    private onUploadAllClick = () => {
         this.props.onFinished(true, true);
     }
 
@@ -75,10 +84,10 @@ export default class UploadConfirmDialog extends React.Component {
         }
 
         let preview;
-        if (this.props.file.type.startsWith('image/')) {
+        if (this.mimeType.startsWith('image/')) {
             preview = <div className="mx_UploadConfirmDialog_previewOuter">
                 <div className="mx_UploadConfirmDialog_previewInner">
-                    <div><img className="mx_UploadConfirmDialog_imagePreview" src={this._objectUrl} /></div>
+                    <div><img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} /></div>
                     <div>{this.props.file.name} ({filesize(this.props.file.size)})</div>
                 </div>
             </div>;
@@ -95,7 +104,7 @@ export default class UploadConfirmDialog extends React.Component {
 
         let uploadAllButton;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
-            uploadAllButton = <button onClick={this._onUploadAllClick}>
+            uploadAllButton = <button onClick={this.onUploadAllClick}>
                 {_t("Upload all")}
             </button>;
         }
@@ -103,7 +112,7 @@ export default class UploadConfirmDialog extends React.Component {
         return (
             <BaseDialog className='mx_UploadConfirmDialog'
                 fixedWidth={false}
-                onFinished={this._onCancelClick}
+                onFinished={this.onCancelClick}
                 title={title}
                 contentId='mx_Dialog_content'
             >
@@ -113,7 +122,7 @@ export default class UploadConfirmDialog extends React.Component {
 
                 <DialogButtons primaryButton={_t('Upload')}
                     hasCancel={false}
-                    onPrimaryButtonClick={this._onUploadClick}
+                    onPrimaryButtonClick={this.onUploadClick}
                     focus={true}
                 >
                     {uploadAllButton}
