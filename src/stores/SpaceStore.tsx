@@ -118,7 +118,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
         if (space && !space.isSpaceRoom()) return;
         if (space === this.activeSpace) {
-            const notificationState = this.getNotificationState(space ? space.roomId : HOME_SPACE);
+            const notificationState = space
+                ? this.getNotificationState(space.roomId)
+                : RoomNotificationStateStore.instance.globalState;
+
             if (notificationState.count) {
                 const roomId = notificationState.getRoomWithMaxNotifications();
                 defaultDispatcher.dispatch({
