@@ -60,6 +60,10 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
+import {BetaPill} from "../views/beta/BetaCard";
+import {USER_LABS_TAB} from "../views/dialogs/UserSettingsDialog";
+import SettingsStore from "../../settings/SettingsStore";
+import dis from "../../dispatcher/dispatcher";
 
 interface IProps {
     space: Room;
@@ -136,15 +140,39 @@ const SpaceInfo = ({ space }) => {
     </div>
 };
 
+const onBetaClick = () => {
+    defaultDispatcher.dispatch({
+        action: Action.ViewUserSettings,
+        initialTabId: USER_LABS_TAB,
+    });
+};
+
 const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
     const myMembership = useMyRoomMembership(space);
 
     const [busy, setBusy] = useState(false);
 
+    const spacesEnabled = SettingsStore.getValue("feature_spaces");
+
     let inviterSection;
     let joinButtons;
-    if (myMembership === "invite") {
+    if (myMembership === "join") {
+        // XXX remove this when spaces leaves Beta
+        joinButtons = (
+            <AccessibleButton
+                kind="danger_outline"
+                onClick={() => {
+                    dis.dispatch({
+                        action: "leave_room",
+                        room_id: space.roomId,
+                    });
+                }}
+            >
+                { _t("Leave") }
+            </AccessibleButton>
+        );
+    } else if (myMembership === "invite") {
         const inviteSender = space.getMember(cli.getUserId())?.events.member?.getSender();
         const inviter = inviteSender && space.getMember(inviteSender);
 
@@ -180,6 +208,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
+                disabled={!spacesEnabled}
             >
                 { _t("Accept") }
             </AccessibleButton>
@@ -192,10 +221,11 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
+                disabled={!spacesEnabled}
             >
                 { _t("Join") }
             </AccessibleButton>
-        )
+        );
     }
 
     if (busy) {
@@ -203,6 +233,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
     }
 
     return <div className="mx_SpaceRoomView_preview">
+        <BetaPill onClick={onBetaClick} />
         { inviterSection }
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <h1 className="mx_SpaceRoomView_preview_name">
@@ -220,6 +251,20 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }) => 
         <div className="mx_SpaceRoomView_preview_joinButtons">
             { joinButtons }
         </div>
+        { !spacesEnabled && <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
+            { myMembership === "join"
+                ? _t("To view %(spaceName)s, turn on the <a>Spaces beta</a>", {
+                    spaceName: space.name,
+                }, {
+                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                })
+                : _t("To join %(spaceName)s, turn on the <a>Spaces beta</a>", {
+                    spaceName: space.name,
+                }, {
+                    a: sub => <AccessibleButton onClick={onBetaClick} kind="link">{ sub }</AccessibleButton>,
+                })
+            }
+        </div> }
     </div>;
 };
 
@@ -513,9 +558,11 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPublicShare = ({ space, onFinished }) => {
+const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished }) => {
     return <div className="mx_SpaceRoomView_publicShare">
-        <h1>{ _t("Share %(name)s", { name: space.name }) }</h1>
+        <h1>{ _t("Share %(name)s", {
+            name: justCreatedOpts?.createOpts?.name || space.name,
+        }) }</h1>
         <div className="mx_SpaceRoomView_description">
             { _t("It's just you at the moment, it will be even better with others.") }
         </div>
@@ -530,11 +577,13 @@ const SpaceSetupPublicShare = ({ space, onFinished }) => {
     </div>;
 };
 
-const SpaceSetupPrivateScope = ({ space, onFinished }) => {
+const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
     return <div className="mx_SpaceRoomView_privateScope">
         <h1>{ _t("Who are you working with?") }</h1>
         <div className="mx_SpaceRoomView_description">
-            { _t("Make sure the right people have access to %(name)s", { name: space.name }) }
+            { _t("Make sure the right people have access to %(name)s", {
+                name: justCreatedOpts?.createOpts?.name || space.name,
+            }) }
         </div>
 
         <AccessibleButton
@@ -634,6 +683,17 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         <h1>{ _t("Invite your teammates") }</h1>
         <div className="mx_SpaceRoomView_description">
             { _t("Make sure the right people have access. You can invite more later.") }
+        </div>
+
+        <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
+            <BetaPill onClick={onBetaClick} />
+            { _t("<b>This is an experimental feature.</b> For now, " +
+                "new users receiving an invite will have to open the invite on <link/> to actually join.", {}, {
+                b: sub => <b>{ sub }</b>,
+                link: () => <a href="https://app.element.io/" rel="noreferrer noopener" target="_blank">
+                    app.element.io
+                </a>,
+            }) }
         </div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
@@ -781,7 +841,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.state.myMembership === "join") {
+                if (this.state.myMembership === "join" && SettingsStore.getValue("feature_spaces")) {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return <SpacePreview
@@ -794,7 +854,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
                     title={_t("What are some things you want to discuss in %(spaceName)s?", {
-                        spaceName: this.props.space.name,
+                        spaceName: this.props.justCreatedOpts?.createOpts?.name || this.props.space.name,
                     })}
                     description={
                         _t("Let's create a room for each of them.") + "\n" +
@@ -803,11 +863,16 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     onFinished={() => this.setState({ phase: Phase.PublicShare })}
                 />;
             case Phase.PublicShare:
-                return <SpaceSetupPublicShare space={this.props.space} onFinished={this.goToFirstRoom} />;
+                return <SpaceSetupPublicShare
+                    justCreatedOpts={this.props.justCreatedOpts}
+                    space={this.props.space}
+                    onFinished={this.goToFirstRoom}
+                />;
 
             case Phase.PrivateScope:
                 return <SpaceSetupPrivateScope
                     space={this.props.space}
+                    justCreatedOpts={this.props.justCreatedOpts}
                     onFinished={(invite: boolean) => {
                         this.setState({ phase: invite ? Phase.PrivateInvite : Phase.PrivateExistingRooms });
                     }}

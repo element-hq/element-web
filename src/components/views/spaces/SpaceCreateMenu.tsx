@@ -17,6 +17,7 @@ limitations under the License.
 import React, {useContext, useRef, useState} from "react";
 import classNames from "classnames";
 import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types/event";
+import FocusLock from "react-focus-lock";
 
 import {_t} from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -25,7 +26,10 @@ import createRoom, {IStateEvent, Preset} from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {SpaceAvatar} from "./SpaceBasicSettings";
 import AccessibleButton from "../elements/AccessibleButton";
-import FocusLock from "react-focus-lock";
+import {BetaPill} from "../beta/BetaCard";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import {Action} from "../../../dispatcher/actions";
+import {USER_LABS_TAB} from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 
@@ -131,7 +135,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     if (visibility === null) {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
-            <p>{ _t("Spaces are new ways to group rooms and people. " +
+            <p>{ _t("Spaces are a new way to group rooms and people. " +
                 "To join an existing space you'll need an invite.") }</p>
 
             <SpaceCreateMenuType
@@ -209,6 +213,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
         managed={false}
     >
         <FocusLock returnFocus={true}>
+            <BetaPill onClick={() => {
+                onFinished();
+                defaultDispatcher.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: USER_LABS_TAB,
+                });
+            }} />
             { body }
         </FocusLock>
     </ContextMenu>;
