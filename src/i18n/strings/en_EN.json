@@ -2019,6 +2019,7 @@
     "Home": "Home",
     "Enter a server name": "Enter a server name",
     "Looks good": "Looks good",
+    "You are not allowed to view this server's rooms list": "You are not allowed to view this server's rooms list",
     "Can't find this server or its room list": "Can't find this server or its room list",
     "Your server": "Your server",
     "Are you sure you want to remove <b>%(serverName)s</b>": "Are you sure you want to remove <b>%(serverName)s</b>",
