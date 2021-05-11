@@ -64,7 +64,8 @@ export default class AutocompleteWrapperModel {
         return ac && ac.countCompletions() > 0;
     }
 
-    public onEnter() {
+    public async confirmCompletion() {
+        await this.getAutocompleterComponent().onConfirmCompletion();
         this.updateCallback({close: true});
     }
 
@@ -76,9 +77,6 @@ export default class AutocompleteWrapperModel {
         if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
-        } else {
-            await acComponent.onConfirmCompletion();
-            this.updateCallback({close: true});
         }
     }
 
