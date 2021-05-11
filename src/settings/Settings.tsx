@@ -172,7 +172,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_voice_messages": {
         isFeature: true,
-        displayName: _td("Send and receive voice messages (in development)"),
+        displayName: _td("Send and receive voice messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

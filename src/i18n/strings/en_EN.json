@@ -793,7 +793,7 @@
     "You can leave the beta any time from settings or tapping on a beta badge, like the one above.": "You can leave the beta any time from settings or tapping on a beta badge, like the one above.",
     "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.": "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.",
     "Show options to enable 'Do not disturb' mode": "Show options to enable 'Do not disturb' mode",
-    "Send and receive voice messages (in development)": "Send and receive voice messages (in development)",
+    "Send and receive voice messages": "Send and receive voice messages",
     "Render LaTeX maths in messages": "Render LaTeX maths in messages",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.",
     "New spinner design": "New spinner design",
