@@ -77,7 +77,7 @@ describe('MessagePanel', function() {
         DMRoomMap.makeShared();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         clock.uninstall();
     });
 
@@ -88,7 +88,21 @@ describe('MessagePanel', function() {
             events.push(test_utils.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
-                    ts: ts0 + i*1000,
+                    ts: ts0 + i * 1000,
+                }));
+        }
+        return events;
+    }
+
+    // Just to avoid breaking Dateseparator tests that might run at 00hrs
+    function mkOneDayEvents() {
+        const events = [];
+        const ts0 = Date.parse('09 May 2004 00:12:00 GMT');
+        for (let i = 0; i < 10; i++) {
+            events.push(test_utils.mkMessage(
+                {
+                    event: true, room: "!room:id", user: "@user:id",
+                    ts: ts0 + i * 1000,
                 }));
         }
         return events;
@@ -104,7 +118,7 @@ describe('MessagePanel', function() {
         let i = 0;
         events.push(test_utils.mkMessage({
             event: true, room: "!room:id", user: "@user:id",
-            ts: ts0 + ++i*1000,
+            ts: ts0 + ++i * 1000,
         }));
 
         for (i = 0; i < 10; i++) {
@@ -151,7 +165,7 @@ describe('MessagePanel', function() {
                     },
                     getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
-                ts: ts0 + i*1000,
+                ts: ts0 + i * 1000,
                 mship: 'join',
                 prevMship: 'join',
                 name: 'A user',
@@ -250,7 +264,6 @@ describe('MessagePanel', function() {
             }),
         ];
     }
-
     function isReadMarkerVisible(rmContainer) {
         return rmContainer && rmContainer.children.length > 0;
     }
@@ -436,5 +449,18 @@ describe('MessagePanel', function() {
 
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+
+    it('should render Date separators for the events', function () {
+        const events = mkOneDayEvents();
+        const res = mount(
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+            />,
+        );
+        const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
+       
+        expect(Dates.length).toEqual(1);
     });
 });
