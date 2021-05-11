@@ -49,6 +49,18 @@ const inPlaceOf = (elementRect) => ({
 });
 
 const validServer = withValidation({
+    deriveData: async ({ value }) => {
+        try {
+            // check if we can successfully load this server's room directory
+            await MatrixClientPeg.get().publicRooms({
+                limit: 1,
+                server: value,
+            });
+            return {};
+        } catch (error) {
+            return { error };
+        }
+    },
     rules: [
         {
             key: "required",
@@ -57,21 +69,11 @@ const validServer = withValidation({
         }, {
             key: "available",
             final: true,
-            test: async ({ value }) => {
-                try {
-                    const opts = {
-                        limit: 1,
-                        server: value,
-                    };
-                    // check if we can successfully load this server's room directory
-                    await MatrixClientPeg.get().publicRooms(opts);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            },
+            test: async (_, { error }) => !error,
             valid: () => _t("Looks good"),
-            invalid: () => _t("Can't find this server or its room list"),
+            invalid: ({ error }) => error.errcode === "M_FORBIDDEN"
+                ? _t("You are not allowed to view this server's rooms list")
+                : _t("Can't find this server or its room list"),
         },
     ],
 });
