@@ -69,7 +69,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     constructor(props) {
         super(props);
 
-        const collapsed = SpaceTreeLevelLayoutStore.getSpaceCollapsedState(
+        const collapsed = SpaceTreeLevelLayoutStore.instance.getSpaceCollapsedState(
             props.space.roomId,
             this.props.parents,
             !props.isNested,
@@ -88,7 +88,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         }
         const newCollapsedState = !this.state.collapsed;
 
-        SpaceTreeLevelLayoutStore.setSpaceCollapsedState(
+        SpaceTreeLevelLayoutStore.instance.setSpaceCollapsedState(
             this.props.space.roomId,
             this.props.parents,
             newCollapsedState,

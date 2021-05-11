@@ -26,12 +26,21 @@ const getSpaceCollapsedKey = (roomId: string, parents: Set<string>): string => {
 };
 
 export default class SpaceTreeLevelLayoutStore {
-    public static setSpaceCollapsedState(roomId: string, parents: Set<string>, collapsed: boolean) {
+    private static internalInstance: SpaceTreeLevelLayoutStore;
+
+    public static get instance(): SpaceTreeLevelLayoutStore {
+        if (!SpaceTreeLevelLayoutStore.internalInstance) {
+            SpaceTreeLevelLayoutStore.internalInstance = new SpaceTreeLevelLayoutStore();
+        }
+        return SpaceTreeLevelLayoutStore.internalInstance;
+    }
+
+    public setSpaceCollapsedState(roomId: string, parents: Set<string>, collapsed: boolean) {
         // XXX: localStorage doesn't allow booleans
         localStorage.setItem(getSpaceCollapsedKey(roomId, parents), collapsed.toString());
     }
 
-    public static getSpaceCollapsedState(roomId: string, parents: Set<string>, fallback: boolean): boolean {
+    public getSpaceCollapsedState(roomId: string, parents: Set<string>, fallback: boolean): boolean {
         const collapsedLocalStorage = localStorage.getItem(getSpaceCollapsedKey(roomId, parents));
         // XXX: localStorage doesn't allow booleans
         return collapsedLocalStorage ? collapsedLocalStorage === "true" : fallback;
