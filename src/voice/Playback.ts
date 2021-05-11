@@ -20,6 +20,7 @@ import {arrayRescale, arraySeed, arraySmoothingResample} from "../utils/arrays";
 import {SimpleObservable} from "matrix-widget-api";
 import {IDestroyable} from "../utils/IDestroyable";
 import {PlaybackClock} from "./PlaybackClock";
+import {createAudioContext, decodeOgg} from "./compat";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -54,8 +55,8 @@ export class Playback extends EventEmitter implements IDestroyable {
      */
     constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
         super();
-        this.context = new AudioContext();
-        this.resampledWaveform = makePlaybackWaveform(seedWaveform ?? DEFAULT_WAVEFORM);
+        this.context = createAudioContext();
+        this.resampledWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
     }
@@ -100,7 +101,23 @@ export class Playback extends EventEmitter implements IDestroyable {
     }
 
     public async prepare() {
-        this.audioBuf = await this.context.decodeAudioData(this.buf);
+        // Safari compat: promise API not supported on this function
+        this.audioBuf = await new Promise((resolve, reject) => {
+            this.context.decodeAudioData(this.buf, b => resolve(b), async e => {
+                // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
+                // very well.
+                console.error("Error decoding recording: ", e);
+                console.warn("Trying to re-encode to WAV instead...");
+
+                const wav = await decodeOgg(this.buf);
+
+                // noinspection ES6MissingAwait - not needed when using callbacks
+                this.context.decodeAudioData(wav, b => resolve(b), e => {
+                    console.error("Still failed to decode recording: ", e);
+                    reject(e);
+                });
+            });
+        });
 
         // Update the waveform to the real waveform once we have channel data to use. We don't
         // exactly trust the user-provided waveform to be accurate...

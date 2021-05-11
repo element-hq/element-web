@@ -3303,5 +3303,16 @@
     "Including %(commaSeparatedMembers)s": "Beleértve: %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "1 résztvevő megmutatása",
     "View all %(count)s members|other": "Az összes %(count)s résztvevő megmutatása",
-    "Failed to send": "Küldés sikertelen"
+    "Failed to send": "Küldés sikertelen",
+    "Enter your Security Phrase a second time to confirm it.": "A megerősítéshez adja meg a biztonsági jelmondatot még egyszer.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Válassz szobákat vagy beszélgetéseket amit hozzáadhat. Ez csak az ön tere, senki nem lesz értesítve. Továbbiakat később is hozzáadhat.",
+    "What do you want to organise?": "Mit szeretne megszervezni?",
+    "Filter all spaces": "Minden tér szűrése",
+    "Delete recording": "Felvétel törlése",
+    "Stop the recording": "Felvétel megállítása",
+    "%(count)s results in all spaces|one": "%(count)s találat van az összes térben",
+    "%(count)s results in all spaces|other": "%(count)s találat a terekben",
+    "You have no ignored users.": "Nincs figyelmen kívül hagyott felhasználó.",
+    "Play": "Lejátszás",
+    "Pause": "Szünet"
 }

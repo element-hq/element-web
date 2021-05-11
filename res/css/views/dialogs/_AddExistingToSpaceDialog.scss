@@ -79,6 +79,32 @@ limitations under the License.
             border-radius: 8px;
         }
     }
+
+    .mx_AddExistingToSpace_section_experimental {
+        position: relative;
+        border-radius: 8px;
+        margin: 12px 0;
+        padding: 8px 8px 8px 42px;
+        background-color: $header-panel-bg-color;
+
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-fg-color;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: calc(50% - 8px); // vertical centering
+            height: 16px;
+            width: 16px;
+            background-color: $secondary-fg-color;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+            mask-position: center;
+        }
+    }
 }
 
 .mx_AddExistingToSpaceDialog {

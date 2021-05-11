@@ -103,6 +103,10 @@ $SpaceRoomViewInnerWidth: 428px;
                 padding: 8px 22px;
                 margin-left: 16px;
             }
+
+            input.mx_AccessibleButton {
+                border: none; // override default styles
+            }
         }
 
         .mx_Field {
@@ -133,6 +137,44 @@ $SpaceRoomViewInnerWidth: 428px;
         box-sizing: border-box;
         box-shadow: 2px 15px 30px $dialog-shadow-color;
         border-radius: 8px;
+        position: relative;
+
+        // XXX remove this when spaces leaves Beta
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            right: 24px;
+            top: 32px;
+        }
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_preview_spaceBetaPrompt {
+            font-weight: $font-semi-bold;
+            font-size: $font-14px;
+            line-height: $font-24px;
+            color: $primary-fg-color;
+            margin-top: 24px;
+            position: relative;
+            padding-left: 24px;
+
+            .mx_AccessibleButton_kind_link {
+                display: inline;
+                padding: 0;
+                font-size: inherit;
+                line-height: inherit;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: $font-24px;
+                width: 20px;
+                left: 0;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+                background-color: $secondary-fg-color;
+            }
+        }
 
         .mx_SpaceRoomView_preview_inviter {
             display: flex;
@@ -310,6 +352,23 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     .mx_SpaceRoomView_inviteTeammates {
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_inviteTeammates_betaDisclaimer {
+            padding: 58px 16px 16px;
+            position: relative;
+            border-radius: 8px;
+            background-color: $header-panel-bg-color;
+            max-width: $SpaceRoomViewInnerWidth;
+            margin: 20px 0 30px;
+            box-sizing: border-box;
+
+            .mx_BetaCard_betaPill {
+                position: absolute;
+                left: 16px;
+                top: 16px;
+            }
+        }
+
         .mx_SpaceRoomView_inviteTeammates_buttons {
             color: $secondary-fg-color;
             margin-top: 28px;
