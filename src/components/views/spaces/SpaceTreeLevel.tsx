@@ -72,11 +72,10 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const collapsed = SpaceTreeLevelLayoutStore.instance.getSpaceCollapsedState(
             props.space.roomId,
             this.props.parents,
-            !props.isNested,
+            !props.isNested, // default to collapsed for root items
         );
 
         this.state = {
-            // default to collapsed for root items
             collapsed: collapsed,
             contextMenuPosition: null,
         };
