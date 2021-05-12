@@ -116,13 +116,13 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
 
             <SpaceBasicSettings
                 avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
-                avatarDisabled={!canSetAvatar}
+                avatarDisabled={busy || !canSetAvatar}
                 setAvatar={setNewAvatar}
                 name={name}
-                nameDisabled={!canSetName}
+                nameDisabled={busy || !canSetName}
                 setName={setName}
                 topic={topic}
-                topicDisabled={!canSetTopic}
+                topicDisabled={busy || !canSetTopic}
                 setTopic={setTopic}
             />
 
