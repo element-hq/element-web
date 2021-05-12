@@ -59,7 +59,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
     return (<QuestionDialog
         className="mx_BetaFeedbackDialog"
         hasCancelButton={true}
-        title={_t("Beta feedback")}
+        title={_t("%(featureName)s beta feedback", { featureName: info.title })}
         description={<React.Fragment>
             <div className="mx_BetaFeedbackDialog_subheading">
                 { _t(info.feedbackSubheading) }
@@ -87,6 +87,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
                 onChange={(ev) => {
                     setComment(ev.target.value);
                 }}
+                autoFocus={true}
             />
 
             <StyledCheckbox
