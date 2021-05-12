@@ -67,7 +67,7 @@ $spacePanelWidth: 71px;
             width: 28px;
             height: 28px;
             position: relative;
-            background-color: $theme-button-bg-color;
+            background-color: $roomlist-button-bg-color;
             border-radius: 14px;
             margin-bottom: 12px;
 
@@ -78,7 +78,7 @@ $spacePanelWidth: 71px;
                 width: 28px;
                 top: 0;
                 left: 0;
-                background-color: $muted-fg-color;
+                background-color: $tertiary-fg-color;
                 transform: rotate(90deg);
                 mask-repeat: no-repeat;
                 mask-position: 2px 3px;
