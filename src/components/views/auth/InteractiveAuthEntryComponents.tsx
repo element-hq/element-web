@@ -786,7 +786,9 @@ export class FallbackAuthEntry extends React.Component {
         }
         return (
             <div>
-                <a href="" ref={this._fallbackButton} onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
+                <a href="" ref={this._fallbackButton} onClick={this._onShowFallbackClick}>{
+                    _t("Start authentication")
+                }</a>
                 {errorSection}
             </div>
         );

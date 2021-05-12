@@ -169,8 +169,16 @@ export class SendCustomEvent extends GenericEditor {
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
                 { showTglFlip && <div style={{float: "right"}}>
-                    <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isStateEvent} />
-                    <label className="mx_DevTools_tgl-btn" data-tg-off="Event" data-tg-on="State Event" htmlFor="isStateEvent" />
+                    <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                        type="checkbox"
+                        checked={this.state.isStateEvent}
+                        onChange={this._onChange}
+                    />
+                    <label className="mx_DevTools_tgl-btn"
+                        data-tg-off="Event"
+                        data-tg-on="State Event"
+                        htmlFor="isStateEvent"
+                    />
                 </div> }
             </div>
         </div>;
@@ -253,8 +261,17 @@ class SendAccountData extends GenericEditor {
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
                 { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} disabled={this.props.forceMode} />
-                    <label className="mx_DevTools_tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
+                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                        type="checkbox"
+                        checked={this.state.isRoomAccountData}
+                        disabled={this.props.forceMode}
+                        onChange={this._onChange}
+                    />
+                    <label className="mx_DevTools_tgl-btn"
+                        data-tg-off="Account Data"
+                        data-tg-on="Room Data"
+                        htmlFor="isRoomAccountData"
+                    />
                 </div> }
             </div>
         </div>;
@@ -581,8 +598,16 @@ class AccountDataExplorer extends React.PureComponent {
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} />
-                    <label className="mx_DevTools_tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
+                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                        type="checkbox"
+                        checked={this.state.isRoomAccountData}
+                        onChange={this._onChange}
+                    />
+                    <label className="mx_DevTools_tgl-btn"
+                        data-tg-off="Account Data"
+                        data-tg-on="Room Data"
+                        htmlFor="isRoomAccountData"
+                    />
                 </div> }
             </div>
         </div>;
@@ -1062,27 +1087,37 @@ class SettingsExplorer extends React.Component {
 
                         <div>
                             {_t("Value:")}&nbsp;
-                            <code>{this.renderSettingValue(SettingsStore.getValue(this.state.viewSetting))}</code>
+                            <code>{this.renderSettingValue(
+                                SettingsStore.getValue(this.state.viewSetting),
+                            )}</code>
                         </div>
 
                         <div>
                             {_t("Value in this room:")}&nbsp;
-                            <code>{this.renderSettingValue(SettingsStore.getValue(this.state.viewSetting, room.roomId))}</code>
+                            <code>{this.renderSettingValue(
+                                SettingsStore.getValue(this.state.viewSetting, room.roomId),
+                            )}</code>
                         </div>
 
                         <div>
                             {_t("Values at explicit levels:")}
-                            <pre><code>{this.renderExplicitSettingValues(this.state.viewSetting, null)}</code></pre>
+                            <pre><code>{this.renderExplicitSettingValues(
+                                this.state.viewSetting, null,
+                            )}</code></pre>
                         </div>
 
                         <div>
                             {_t("Values at explicit levels in this room:")}
-                            <pre><code>{this.renderExplicitSettingValues(this.state.viewSetting, room.roomId)}</code></pre>
+                            <pre><code>{this.renderExplicitSettingValues(
+                                this.state.viewSetting, room.roomId,
+                            )}</code></pre>
                         </div>
 
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{_t("Edit Values")}</button>
+                        <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{
+                            _t("Edit Values")
+                        }</button>
                         <button onClick={this.onBack}>{_t("Back")}</button>
                     </div>
                 </div>
