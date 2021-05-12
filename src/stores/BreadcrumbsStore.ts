@@ -16,12 +16,14 @@ limitations under the License.
 
 import SettingsStore from "../settings/SettingsStore";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { SettingLevel } from "../settings/SettingLevel";
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -57,6 +59,30 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
     private get meetsRoomRequirement(): boolean {
         return this.matrixClient && this.matrixClient.getVisibleRooms().length >= 20;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const prevRoomCount = (prevState.rooms?.length || 0);
+        const currentRoomCount = (this.state.rooms?.length || 0)
+
+        // Only decrypting the breadcrumb rooms events on app initialisation
+        // when room count transitions from 0 to the number of rooms it contains
+        if (prevRoomCount === 0 && currentRoomCount > prevRoomCount) {
+            const client = MatrixClientPeg.get();
+            // Rooms in the breadcrumb have a good chance to be interacted with
+            // again by a user. Decrypting the messages ahead of time will help
+            // reduce content shift on first render
+            this.state.rooms?.forEach(async room => {
+                const [cryptoEvent] = room.currentState.getStateEvents(EventType.RoomEncryption);
+                if (cryptoEvent) {
+                    if (!client.isRoomEncrypted(room.roomId)) {
+                        // XXX: Private member access
+                        await client._crypto.onCryptoEvent(cryptoEvent);
+                    }
+                    room?.decryptAllEvents();
+                }
+            });
+        }
     }
 
     protected async onAction(payload: ActionPayload) {
