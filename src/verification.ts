@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { User } from "matrix-js-sdk/src/models/user";
+
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
 import Modal from './Modal';
 import * as sdk from './index';
-import {RightPanelPhases} from "./stores/RightPanelStorePhases";
-import {findDMForUser} from './createRoom';
-import {accessSecretStorage} from './SecurityManager';
-import {verificationMethods} from 'matrix-js-sdk/src/crypto';
-import {Action} from './dispatcher/actions';
+import { RightPanelPhases } from "./stores/RightPanelStorePhases";
+import { findDMForUser } from './createRoom';
+import { accessSecretStorage } from './SecurityManager';
+import { verificationMethods } from 'matrix-js-sdk/src/crypto';
+import { Action } from './dispatcher/actions';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
+import {IDevice} from "./components/views/right_panel/UserInfo";
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
@@ -39,7 +42,7 @@ async function enable4SIfNeeded() {
     return true;
 }
 
-export async function verifyDevice(user, device) {
+export async function verifyDevice(user: User, device: IDevice) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
         dis.dispatch({action: 'require_registration'});
@@ -82,7 +85,7 @@ export async function verifyDevice(user, device) {
     });
 }
 
-export async function legacyVerifyUser(user) {
+export async function legacyVerifyUser(user: User) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
         dis.dispatch({action: 'require_registration'});
@@ -102,7 +105,7 @@ export async function legacyVerifyUser(user) {
     });
 }
 
-export async function verifyUser(user) {
+export async function verifyUser(user: User) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
         dis.dispatch({action: 'require_registration'});
@@ -122,7 +125,7 @@ export async function verifyUser(user) {
     });
 }
 
-export function pendingVerificationRequestForUser(user) {
+export function pendingVerificationRequestForUser(user: User) {
     const cli = MatrixClientPeg.get();
     const dmRoom = findDMForUser(cli, user.userId);
     if (dmRoom) {
