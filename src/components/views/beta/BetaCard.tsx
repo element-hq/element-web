@@ -22,6 +22,9 @@ import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
 import TextWithTooltip from "../elements/TextWithTooltip";
+import Modal from "../../../Modal";
+import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
+import SdkConfig from "../../../SdkConfig";
 
 interface IProps {
     title?: string;
@@ -63,8 +66,20 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
     const info = SettingsStore.getBetaInfo(featureId);
     if (!info) return null; // Beta is invalid/disabled
 
-    const { title, caption, disclaimer, image } = info;
+    const { title, caption, disclaimer, image, feedbackLabel, feedbackSubheading } = info;
     const value = SettingsStore.getValue(featureId);
+
+    let feedbackButton;
+    if (value && feedbackLabel && feedbackSubheading && SdkConfig.get().bug_report_endpoint_url) {
+        feedbackButton = <AccessibleButton
+            onClick={() => {
+                Modal.createTrackedDialog("Beta Feedback", featureId, BetaFeedbackDialog, { featureId });
+            }}
+            kind="primary"
+        >
+            { _t("Feedback") }
+        </AccessibleButton>;
+    }
 
     return <div className="mx_BetaCard">
         <div>
@@ -73,12 +88,15 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
                 <BetaPill />
             </h3>
             <span className="mx_BetaCard_caption">{ _t(caption) }</span>
-            <AccessibleButton
-                onClick={() => SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value)}
-                kind="primary"
-            >
-                { value ? _t("Leave the beta") : _t("Join the beta") }
-            </AccessibleButton>
+            <div>
+                { feedbackButton }
+                <AccessibleButton
+                    onClick={() => SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value)}
+                    kind={feedbackButton ? "primary_outline" : "primary"}
+                >
+                    { value ? _t("Leave the beta") : _t("Join the beta") }
+                </AccessibleButton>
+            </div>
             { disclaimer && <div className="mx_BetaCard_disclaimer">
                 { disclaimer(value) }
             </div> }

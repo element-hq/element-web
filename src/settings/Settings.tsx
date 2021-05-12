@@ -125,6 +125,8 @@ export interface ISetting {
         caption: string; // _td
         disclaimer?: (enabled: boolean) => ReactNode;
         image: string; // require(...)
+        feedbackSubheading?: string;
+        feedbackLabel?: string;
     };
 }
 
@@ -142,7 +144,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             disclaimer: (enabled) => {
                 if (enabled) {
                     return <>
-                        <p>{ _t("%(brand)s will reload with Spaces disabled. " +
+                        <p>{ _t("If you leave, %(brand)s will reload with Spaces disabled. " +
                             "Communities and custom tags will be visible again.", {
                             brand: SdkConfig.get().brand,
                         }) }</p>
@@ -162,6 +164,9 @@ export const SETTINGS: {[setting: string]: ISetting} = {
                 </>;
             },
             image: require("../../res/img/betas/spaces.png"),
+            feedbackSubheading: _td("You’re using an early version of Spaces, " +
+                "your feedback will really help inform the next versions."),
+            feedbackLabel: "spaces-feedback",
         },
     },
     "feature_dnd": {

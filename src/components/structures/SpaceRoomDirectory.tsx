@@ -574,7 +574,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     return <>
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Search names and description") }
+            placeholder={ _t("Search names and descriptions") }
             onSearch={setQuery}
             autoFocus={true}
             initialValue={initialText}

@@ -39,19 +39,21 @@ limitations under the License.
             font-size: $font-15px;
             line-height: $font-20px;
             color: $secondary-fg-color;
+            margin-bottom: 20px;
         }
 
         .mx_AccessibleButton {
             display: block;
-            margin: 20px 0;
-            padding: 12px 40px;
-            width: max-content;
+            margin: 12px 0;
+            padding: 7px 40px;
+            width: auto;
         }
 
         .mx_BetaCard_disclaimer {
             font-size: $font-12px;
             line-height: $font-15px;
             color: $secondary-fg-color;
+            margin-top: 20px;
         }
     }
 
