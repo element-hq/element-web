@@ -178,7 +178,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
             </p>
 
             <form className="mx_SpaceBasicSettings" onSubmit={onSpaceCreateClick}>
-                <SpaceAvatar setAvatar={setAvatar} />
+                <SpaceAvatar setAvatar={setAvatar} avatarDisabled={busy} />
 
                 <Field
                     name="spaceName"
@@ -188,6 +188,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     onChange={ev => setName(ev.target.value)}
                     ref={spaceNameField}
                     onValidate={spaceNameValidator}
+                    disabled={busy}
                 />
 
                 <Field
@@ -197,6 +198,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     value={topic}
                     onChange={ev => setTopic(ev.target.value)}
                     rows={3}
+                    disabled={busy}
                 />
             </form>
 

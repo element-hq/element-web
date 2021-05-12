@@ -451,6 +451,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             value={roomNames[i]}
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
+            disabled={busy}
         />;
     });
 
@@ -658,6 +659,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
             ref={fieldRefs[i]}
             onValidate={validateEmailRules}
             autoFocus={i === 0}
+            disabled={busy}
         />;
     });
 
