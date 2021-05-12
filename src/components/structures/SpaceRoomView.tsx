@@ -546,6 +546,7 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
                 }
             }
             setBusy(false);
+            onFinished();
         };
         buttonLabel = busy ? _t("Adding...") : _t("Add");
     }
