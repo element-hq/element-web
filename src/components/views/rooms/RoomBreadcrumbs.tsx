@@ -98,7 +98,6 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
                     <DecoratedRoomAvatar
                         room={r}
                         avatarSize={32}
-                        tag={roomTag}
                         displayBadge={true}
                         forceCount={true}
                     />
