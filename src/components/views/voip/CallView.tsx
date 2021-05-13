@@ -506,10 +506,14 @@ export default class CallView extends React.Component<IProps, IState> {
         /> : null;
 
         let screensharingButton;
-        // Screensharing is possible, if we can send a second stream and identify
-        // it using SDPStreamMetadata or if we can replace the already existing
-        // usermedia track by a screensharing track
-        if (this.props.call.opponentSupportsSDPStreamMetadata() || this.props.call.type === CallType.Video) {
+        // Screensharing is possible, if we can send a second stream and
+        // identify it using SDPStreamMetadata or if we can replace the already
+        // existing usermedia track by a screensharing track. We also need to be
+        // connected to know the state of the other side
+        if (
+            (this.props.call.opponentSupportsSDPStreamMetadata() || this.props.call.type === CallType.Video) &&
+            this.props.call.state === CallState.Connected
+        ) {
             screensharingButton = (
                 <AccessibleButton
                     className={screensharingClasses}
