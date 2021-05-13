@@ -33,7 +33,7 @@ interface IProps {
     content: string;
     // The count of votes for this key
     count: number;
-    // A Set of Martix reaction events for this key
+    // A Set of Matrix reaction events for this key
     reactionEvents: Set<MatrixEvent>;
     // A possible Matrix event if the current user has voted for this type
     myReactionEvent?: MatrixEvent;
