@@ -32,5 +32,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element stillingar þínar innihalda ógilda JSON. Vinsamlegast leiðréttu vandamálið og endurhladdu síðuna.",
     "Your Element is misconfigured": "Element þitt er rangt stillt",
     "Invalid configuration: no default server specified.": "Ógild stilling: enginn sjálfgefinn þjónn tilgreindur.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ógild stilling: getur aðeins tilgreint einn af default_server_config, default_server_name eða default_hs_url."
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ógild stilling: getur aðeins tilgreint einn af default_server_config, default_server_name eða default_hs_url.",
+    "Use %(brand)s on mobile": "Nota %(brand)s í síma"
 }
