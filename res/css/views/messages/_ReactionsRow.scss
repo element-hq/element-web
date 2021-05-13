@@ -20,10 +20,11 @@ limitations under the License.
 
     .mx_ReactionsRow_addReactionButton {
         position: relative;
-        display: inline-block;
+        display: none;
         width: 16px;
         height: 16px;
-        vertical-align: sub;
+        vertical-align: middle;
+        margin-left: 6px;
 
         &::before {
             content: '';
@@ -39,12 +40,16 @@ limitations under the License.
     }
 }
 
+.mx_EventTile:hover .mx_ReactionsRow_addReactionButton {
+    display: inline-block;
+}
+
 .mx_ReactionsRow_showAll {
     text-decoration: none;
     font-size: $font-10px;
     font-weight: 600;
     margin-left: 6px;
-    vertical-align: top;
+    vertical-align: middle;
 
     &:hover,
     &:link,

@@ -192,8 +192,8 @@ export default class ReactionsRow extends React.PureComponent {
             aria-label={_t("Reactions")}
         >
             { items }
-            { addReactionButton }
             { showAllButton }
+            { addReactionButton }
         </div>;
     }
 }
