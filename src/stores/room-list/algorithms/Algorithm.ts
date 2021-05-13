@@ -720,7 +720,7 @@ export class Algorithm extends EventEmitter {
                 // If we have tags for a room and don't have the room referenced, something went horribly
                 // wrong - the reference should have been updated above.
                 if (hasTags && !knownRoomRef && !isSticky) {
-                    throw new Error(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
+                    throw new Error(`${room.roomId} is missing from room array but is known`);
                 }
 
                 // Like above, update the reference to the sticky room if we need to
@@ -808,7 +808,9 @@ export class Algorithm extends EventEmitter {
                 if (this.stickyRoom === room) {
                     if (SettingsStore.getValue("advancedRoomListLogging")) {
                         // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                        console.warn(`[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`);
+                        console.warn(
+                            `[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`,
+                        );
                     }
                     return false;
                 }
@@ -870,7 +872,9 @@ export class Algorithm extends EventEmitter {
 
             if (SettingsStore.getValue("advancedRoomListLogging")) {
                 // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                console.log(`[RoomListDebug] Finished handling ${room.roomId} with cause ${cause} (changed=${changed})`);
+                console.log(
+                    `[RoomListDebug] Finished handling ${room.roomId} with cause ${cause} (changed=${changed})`,
+                );
             }
             return changed;
         } finally {
