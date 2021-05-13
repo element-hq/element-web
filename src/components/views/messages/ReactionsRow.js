@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import classNames from "classnames";
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -43,7 +44,9 @@ const ReactButton = ({ mxEvent, reactions }) => {
 
     return <React.Fragment>
         <ContextMenuTooltipButton
-            className="mx_ReactionsRow_addReactionButton"
+            className={classNames("mx_ReactionsRow_addReactionButton", {
+                mx_ReactionsRow_addReactionButton_active: menuDisplayed,
+            })}
             title={_t("Add reaction")}
             onClick={openMenu}
             isExpanded={menuDisplayed}
