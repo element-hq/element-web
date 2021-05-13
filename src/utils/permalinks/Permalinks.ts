@@ -346,9 +346,14 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         return permalink;
     }
 
-    const m = decodeURIComponent(permalink).match(matrixLinkify.ELEMENT_URL_PATTERN);
-    if (m) {
-        return m[1];
+    try {
+        const m = decodeURIComponent(permalink).match(matrixLinkify.ELEMENT_URL_PATTERN);
+        if (m) {
+            return m[1];
+        }
+    } catch (e) {
+        // Not a valid URI
+        return permalink;
     }
 
     // A bit of a hack to convert permalinks of unknown origin to Element links

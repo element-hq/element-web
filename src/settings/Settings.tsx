@@ -164,8 +164,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
                 </>;
             },
             image: require("../../res/img/betas/spaces.png"),
-            feedbackSubheading: _td("You’re using an early version of Spaces, " +
-                "your feedback will really help inform the next versions."),
+            feedbackSubheading: _td("Your feedback will help make spaces better. " +
+                "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
         },
     },

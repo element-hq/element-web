@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,49 +14,54 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import dis from "../../../dispatcher/dispatcher";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import ReactionsRowButtonTooltip from "./ReactionsRowButtonTooltip";
+import AccessibleButton from "../elements/AccessibleButton";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+
+interface IProps {
+    // The event we're displaying reactions for
+    mxEvent: MatrixEvent;
+    // The reaction content / key / emoji
+    content: string;
+    // The count of votes for this key
+    count: number;
+    // A Set of Matrix reaction events for this key
+    reactionEvents: Set<MatrixEvent>;
+    // A possible Matrix event if the current user has voted for this type
+    myReactionEvent?: MatrixEvent;
+}
+
+interface IState {
+    tooltipRendered: boolean;
+    tooltipVisible: boolean;
+}
 
 @replaceableComponent("views.messages.ReactionsRowButton")
-export default class ReactionsRowButton extends React.PureComponent {
-    static propTypes = {
-        // The event we're displaying reactions for
-        mxEvent: PropTypes.object.isRequired,
-        // The reaction content / key / emoji
-        content: PropTypes.string.isRequired,
-        // The count of votes for this key
-        count: PropTypes.number.isRequired,
-        // A Set of Martix reaction events for this key
-        reactionEvents: PropTypes.object.isRequired,
-        // A possible Matrix event if the current user has voted for this type
-        myReactionEvent: PropTypes.object,
-    }
+export default class ReactionsRowButton extends React.PureComponent<IProps, IState> {
+    static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    state = {
+        tooltipRendered: false,
+        tooltipVisible: false,
+    };
 
-        this.state = {
-            tooltipVisible: false,
-        };
-    }
-
-    onClick = (ev) => {
+    onClick = () => {
         const { mxEvent, myReactionEvent, content } = this.props;
         if (myReactionEvent) {
-            MatrixClientPeg.get().redactEvent(
+            this.context.redactEvent(
                 mxEvent.getRoomId(),
                 myReactionEvent.getId(),
             );
         } else {
-            MatrixClientPeg.get().sendEvent(mxEvent.getRoomId(), "m.reaction", {
+            this.context.sendEvent(mxEvent.getRoomId(), "m.reaction", {
                 "m.relates_to": {
                     "rel_type": "m.annotation",
                     "event_id": mxEvent.getId(),
@@ -83,8 +88,6 @@ export default class ReactionsRowButton extends React.PureComponent {
     }
 
     render() {
-        const ReactionsRowButtonTooltip =
-            sdk.getComponent('messages.ReactionsRowButtonTooltip');
         const { mxEvent, content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({
@@ -102,7 +105,7 @@ export default class ReactionsRowButton extends React.PureComponent {
             />;
         }
 
-        const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+        const room = this.context.getRoom(mxEvent.getRoomId());
         let label;
         if (room) {
             const senders = [];
@@ -130,7 +133,6 @@ export default class ReactionsRowButton extends React.PureComponent {
             );
         }
         const isPeeking = room.getMyMembership() !== "join";
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return <AccessibleButton
             className={classes}
             aria-label={label}
