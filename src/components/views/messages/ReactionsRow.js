@@ -16,15 +16,43 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import {aboveLeftOf, ContextMenu, useContextMenu} from "../../structures/ContextMenu";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
+
+const ReactButton = ({ mxEvent, reactions }) => {
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu;
+    if (menuDisplayed) {
+        const buttonRect = button.current.getBoundingClientRect();
+        const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+            <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
+        </ContextMenu>;
+    }
+
+    return <React.Fragment>
+        <ContextMenuTooltipButton
+            className="mx_ReactionsRow_addReactionButton"
+            title={_t("Add reaction")}
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            inputRef={button}
+        />
+
+        { contextMenu }
+    </React.Fragment>;
+};
 
 @replaceableComponent("views.messages.ReactionsRow")
 export default class ReactionsRow extends React.PureComponent {
@@ -151,13 +179,21 @@ export default class ReactionsRow extends React.PureComponent {
             </a>;
         }
 
+        const cli = MatrixClientPeg.get();
+
+        let addReactionButton;
+        if (cli.getRoom(mxEvent.getRoomId()).currentState.maySendEvent(EventType.Reaction, cli.getUserId())) {
+            addReactionButton = <ReactButton mxEvent={mxEvent} reactions={reactions} />;
+        }
+
         return <div
             className="mx_ReactionsRow"
             role="toolbar"
             aria-label={_t("Reactions")}
         >
-            {items}
-            {showAllButton}
+            { items }
+            { addReactionButton }
+            { showAllButton }
         </div>;
     }
 }

@@ -1864,6 +1864,7 @@
     "You sent a verification request": "You sent a verification request",
     "Error decrypting video": "Error decrypting video",
     "Error processing voice message": "Error processing voice message",
+    "Add reaction": "Add reaction",
     "Show all": "Show all",
     "Reactions": "Reactions",
     "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> reacted with %(content)s</reactedWith>",

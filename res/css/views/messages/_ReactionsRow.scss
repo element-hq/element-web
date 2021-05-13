@@ -17,6 +17,26 @@ limitations under the License.
 .mx_ReactionsRow {
     margin: 6px 0;
     color: $primary-fg-color;
+
+    .mx_ReactionsRow_addReactionButton {
+        position: relative;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: sub;
+
+        &::before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            mask-size: cover;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: $tertiary-fg-color;
+            mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
+        }
+    }
 }
 
 .mx_ReactionsRow_showAll {
