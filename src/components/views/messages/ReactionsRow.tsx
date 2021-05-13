@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,29 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import React from "react";
 import classNames from "classnames";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Relations } from "matrix-js-sdk/src/models/relations";
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
-import {aboveLeftOf, ContextMenu, useContextMenu} from "../../structures/ContextMenu";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import { aboveLeftOf, ContextMenu, useContextMenu } from "../../structures/ContextMenu";
+import ReactionPicker from "../emojipicker/ReactionPicker";
+import ReactionsRowButton from "./ReactionsRowButton";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
 
-const ReactButton = ({ mxEvent, reactions }) => {
+const ReactButton = ({ mxEvent, reactions }: IProps) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
-        const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
         contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
@@ -57,17 +58,24 @@ const ReactButton = ({ mxEvent, reactions }) => {
     </React.Fragment>;
 };
 
-@replaceableComponent("views.messages.ReactionsRow")
-export default class ReactionsRow extends React.PureComponent {
-    static propTypes = {
-        // The event we're displaying reactions for
-        mxEvent: PropTypes.object.isRequired,
-        // The Relations model from the JS SDK for reactions to `mxEvent`
-        reactions: PropTypes.object,
-    }
+interface IProps {
+    // The event we're displaying reactions for
+    mxEvent: MatrixEvent;
+    // The Relations model from the JS SDK for reactions to `mxEvent`
+    reactions?: Relations;
+}
 
-    constructor(props) {
-        super(props);
+interface IState {
+    myReactions: MatrixEvent[];
+    showAll: boolean;
+}
+
+@replaceableComponent("views.messages.ReactionsRow")
+export default class ReactionsRow extends React.PureComponent<IProps, IState> {
+    static contextType = MatrixClientContext;
+
+    constructor(props, context) {
+        super(props, context);
 
         if (props.reactions) {
             props.reactions.on("Relations.add", this.onReactionsChange);
@@ -123,7 +131,7 @@ export default class ReactionsRow extends React.PureComponent {
         if (!reactions) {
             return null;
         }
-        const userId = MatrixClientPeg.get().getUserId();
+        const userId = this.context.getUserId();
         const myReactions = reactions.getAnnotationsBySender()[userId];
         if (!myReactions) {
             return null;
@@ -145,7 +153,6 @@ export default class ReactionsRow extends React.PureComponent {
             return null;
         }
 
-        const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
         let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
             const count = events.size;
             if (!count) {
@@ -182,7 +189,7 @@ export default class ReactionsRow extends React.PureComponent {
             </a>;
         }
 
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
 
         let addReactionButton;
         if (cli.getRoom(mxEvent.getRoomId()).currentState.maySendEvent(EventType.Reaction, cli.getUserId())) {
