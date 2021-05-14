@@ -37,6 +37,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import ProgressBar from "../elements/ProgressBar";
 import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -46,7 +47,10 @@ interface IProps extends IDialogProps {
 
 const Entry = ({ room, checked, onChange }) => {
     return <label className="mx_AddExistingToSpace_entry">
-        <RoomAvatar room={room} height={32} width={32} />
+        { room?.isSpaceRoom()
+            ? <RoomAvatar room={room} height={32} width={32} />
+            : <DecoratedRoomAvatar room={room} avatarSize={32} />
+        }
         <span className="mx_AddExistingToSpace_entry_name">{ room.name }</span>
         <StyledCheckbox
             onChange={onChange ? (e) => onChange(e.target.checked) : null}

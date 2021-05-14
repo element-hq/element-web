@@ -54,7 +54,8 @@ limitations under the License.
             display: flex;
             margin-top: 12px;
 
-            .mx_BaseAvatar {
+            // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
+            .mx_DecoratedRoomAvatar {
                 margin-right: 12px;
             }
 
@@ -75,6 +76,10 @@ limitations under the License.
     }
 
     .mx_AddExistingToSpace_section_spaces {
+        .mx_BaseAvatar {
+            margin-right: 12px;
+        }
+
         .mx_BaseAvatar_image {
             border-radius: 8px;
         }
