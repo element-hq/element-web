@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import {UPDATE_EVENT} from "../stores/AsyncStore";
-import {arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample} from "../utils/arrays";
-import {SimpleObservable} from "matrix-widget-api";
-import {IDestroyable} from "../utils/IDestroyable";
-import {PlaybackClock} from "./PlaybackClock";
-import {createAudioContext, decodeOgg} from "./compat";
+import { UPDATE_EVENT } from "../stores/AsyncStore";
+import { arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample } from "../utils/arrays";
+import { SimpleObservable } from "matrix-widget-api";
+import { IDestroyable } from "../utils/IDestroyable";
+import { PlaybackClock } from "./PlaybackClock";
+import { createAudioContext, decodeOgg } from "./compat";
+import { clamp } from "../utils/numbers";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -33,9 +34,20 @@ export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
 
 function makePlaybackWaveform(input: number[]): number[] {
-    // We use a smoothing resample to keep the rough shape of the waveform the user will be seeing. We
-    // then rescale so the user can see the waveform properly (loud noises == 100%).
-    return arrayRescale(arraySmoothingResample(input, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
+    // First, convert negative amplitudes to positive so we don't detect zero as "noisy".
+    const noiseWaveform = input.map(v => Math.abs(v));
+
+    // Next, we'll resample the waveform using a smoothing approach so we can keep the same rough shape.
+    // We also rescale the waveform to be 0-1 for the remaining function logic.
+    const resampled = arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
+
+    // Then, we'll do a high and low pass filter to isolate actual speaking volumes within the rescaled
+    // waveform. Most speech happens below the 0.5 mark.
+    const filtered = resampled.map(v => clamp(v, 0.1, 0.5));
+
+    // Finally, we'll rescale the filtered waveform (0.1-0.5 becomes 0-1 again) so the user sees something
+    // sensible. This is what we return to keep our contract of "values between zero and one".
+    return arrayRescale(filtered, 0, 1);
 }
 
 export class Playback extends EventEmitter implements IDestroyable {
@@ -126,6 +138,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.waveformObservable.update(this.resampledWaveform);
 
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
+        this.clock.flagLoadTime(); // must happen first because setting the duration fires a clock update
         this.clock.durationSeconds = this.audioBuf.duration;
     }
 
