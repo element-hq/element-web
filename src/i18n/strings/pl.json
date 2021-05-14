@@ -2265,5 +2265,11 @@
     "There was an error finding this widget.": "Wystąpił błąd podczas próby odnalezienia tego widżetu.",
     "Active Widgets": "Aktywne widżety",
     "Encryption not enabled": "Nie włączono szyfrowania",
-    "Encryption enabled": "Włączono szyfrowanie"
+    "Encryption enabled": "Włączono szyfrowanie",
+    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Twój serwer domowy był nieosiągalny i nie mógł Cię zalogować. Spróbuj ponownie. Jeśli to się powtórzy, skontaktuj się z administratorem swojego serwera.",
+    "Try again": "Spróbuj ponownie",
+    "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Poprosiliśmy przeglądarkę o zapamiętanie, z którego serwera głównego korzystasz, aby umożliwić Ci logowanie, ale niestety Twoja przeglądarka o tym zapomniała. Przejdź do strony logowania i spróbuj ponownie.",
+    "We couldn't log you in": "Nie mogliśmy Cię zalogować",
+    "You're already in a call with this person.": "Prowadzisz już rozmowę z tą osobą.",
+    "Already in call": "Już dzwoni"
 }

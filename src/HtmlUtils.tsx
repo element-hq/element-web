@@ -422,8 +422,12 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
 
             if (SettingsStore.getValue("feature_latex_maths")) {
-                const phtml = cheerio.load(safeBody,
-                    { _useHtmlParser2: true, decodeEntities: false })
+                const phtml = cheerio.load(safeBody, {
+                    // @ts-ignore: The `_useHtmlParser2` internal option is the
+                    // simplest way to both parse and render using `htmlparser2`.
+                    _useHtmlParser2: true,
+                    decodeEntities: false,
+                });
                 // @ts-ignore - The types for `replaceWith` wrongly expect
                 // Cheerio instance to be returned.
                 phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
@@ -431,6 +435,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
                         AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
                         {
                             throwOnError: false,
+                            // @ts-ignore - `e` can be an Element, not just a Node
                             displayMode: e.name == 'div',
                             output: "htmlAndMathml",
                         });

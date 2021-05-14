@@ -38,7 +38,7 @@ import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 import {inviteUsersToRoom} from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
-import { parseFragment as parseHtml } from "parse5";
+import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
 import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
@@ -856,7 +856,7 @@ export const Commands = [
                 // some superfast regex over the text so we don't have to.
                 const embed = parseHtml(widgetUrl);
                 if (embed && embed.childNodes && embed.childNodes.length === 1) {
-                    const iframe = embed.childNodes[0];
+                    const iframe = embed.childNodes[0] as ChildElement;
                     if (iframe.tagName.toLowerCase() === 'iframe' && iframe.attrs) {
                         const srcAttr = iframe.attrs.find(a => a.name === 'src');
                         console.log("Pulling URL out of iframe (embed code)");

@@ -52,6 +52,9 @@ declare global {
             init: () => Promise<void>;
         };
 
+        // Needed for Safari, unknown to TypeScript
+        webkitAudioContext: typeof AudioContext;
+
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
@@ -118,6 +121,16 @@ declare global {
 
     interface HTMLAudioElement {
         type?: string;
+        // sinkId & setSinkId are experimental and typescript doesn't know about them
+        sinkId: string;
+        setSinkId(outputId: string);
+    }
+
+    interface HTMLVideoElement {
+        type?: string;
+        // sinkId & setSinkId are experimental and typescript doesn't know about them
+        sinkId: string;
+        setSinkId(outputId: string);
     }
 
     interface Element {

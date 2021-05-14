@@ -38,7 +38,12 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force?: boolean): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force?: boolean,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
@@ -55,10 +60,11 @@ export default class CommandProvider extends AutocompleteProvider {
         } else {
             if (query === '/') {
                 // If they have just entered `/` show everything
+                // We exclude the limit on purpose to have a comprehensive list
                 matches = Commands;
             } else {
                 // otherwise fuzzy match against all of the fields
-                matches = this.matcher.match(command[1]);
+                matches = this.matcher.match(command[1], limit);
             }
         }
 
