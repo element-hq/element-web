@@ -1089,7 +1089,7 @@
     "Securely cache encrypted messages locally for them to appear in search results.": "Securely cache encrypted messages locally for them to appear in search results.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.",
-    "Message search initilisation failed": "Message search initilisation failed",
+    "Message search initialisation failed": "Message search initialisation failed",
     "Connecting to integration manager...": "Connecting to integration manager...",
     "Cannot connect to integration manager": "Cannot connect to integration manager",
     "The integration manager is offline or it cannot reach your homeserver.": "The integration manager is offline or it cannot reach your homeserver.",
