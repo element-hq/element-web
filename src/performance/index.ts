@@ -28,10 +28,10 @@ interface GetEntriesOptions {
     type?: string,
 }
 
-type PerformanceCallbackFunction = (entry: PerformanceEntry) => void;
+type PerformanceCallbackFunction = (entry: PerformanceEntry[]) => void;
 
 interface PerformanceDataListener {
-    entryTypes?: string[],
+    entryNames?: string[],
     callback: PerformanceCallbackFunction
 }
 
@@ -92,7 +92,11 @@ export default class PerformanceMonitor {
         // when adding a data callback
         entries.push(measurement);
 
-        listeners.forEach(listener => emitPerformanceData(listener, measurement));
+        listeners.forEach(listener => {
+            if (shouldEmit(listener, measurement)) {
+                listener.callback([measurement])
+            }
+        });
 
         return measurement;
     }
@@ -116,9 +120,11 @@ export default class PerformanceMonitor {
 
     static addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
         listeners.push(listener);
-
         if (buffer) {
-            entries.forEach(entry => emitPerformanceData(listener, entry));
+            const toEmit = entries.filter(entry => shouldEmit(listener, entry));
+            if (toEmit.length > 0) {
+                listener.callback(toEmit);
+            }
         }
     }
 
@@ -134,10 +140,8 @@ export default class PerformanceMonitor {
     }
 }
 
-function emitPerformanceData(listener, entry): void {
-    if (!listener.entryTypes || listener.entryTypes.includes(entry.entryType)) {
-        listener.callback(entry)
-    }
+function shouldEmit(listener: PerformanceDataListener, entry: PerformanceEntry): boolean {
+    return !listener.entryNames || listener.entryNames.includes(entry.name);
 }
 
 /**
@@ -157,3 +161,6 @@ function supportsPerformanceApi(): boolean {
 function buildKey(name: string, id?: string): string {
     return `${name}${id ? `:${id}` : ''}`;
 }
+
+window.mxPerformanceMonitor = PerformanceMonitor;
+window.mxPerformanceEntryNames = PerformanceEntryNames;

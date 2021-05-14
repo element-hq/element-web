@@ -1858,7 +1858,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // returns a promise which resolves to the new MatrixClient
     onRegistered(credentials: IMatrixClientCreds) {
-        PerformanceMonitor.stop(PerformanceEntryNames.REGISTER);
         return Lifecycle.setLoggedIn(credentials);
     }
 
@@ -1949,6 +1948,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
         PerformanceMonitor.stop(PerformanceEntryNames.LOGIN);
+        PerformanceMonitor.stop(PerformanceEntryNames.REGISTER);
     };
 
     // complete security / e2e setup has finished
