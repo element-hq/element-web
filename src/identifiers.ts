@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export const ELEMENT_CLIENT_ID = "im.vector.web"; // root namespace for a lot of our settings
+export const ELEMENT_CLIENT_ID = "io.element.web";
