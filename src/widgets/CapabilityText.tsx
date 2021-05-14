@@ -70,48 +70,40 @@ export class CapabilityText {
             [WidgetKind.Room]: {
                 [EventDirection.Send]: _td("Change the topic of this room"),
                 [EventDirection.Receive]: _td("See when the topic changes in this room"),
-                [EventDirection.Read]: _td("See the current topic for this room"),
             },
             [GENERIC_WIDGET_KIND]: {
                 [EventDirection.Send]: _td("Change the topic of your active room"),
                 [EventDirection.Receive]: _td("See when the topic changes in your active room"),
-                [EventDirection.Read]: _td("See the current topic in your active room"),
             },
         },
         [EventType.RoomName]: {
             [WidgetKind.Room]: {
                 [EventDirection.Send]: _td("Change the name of this room"),
                 [EventDirection.Receive]: _td("See when the name changes in this room"),
-                [EventDirection.Read]: _td("See the current name for this room"),
             },
             [GENERIC_WIDGET_KIND]: {
                 [EventDirection.Send]: _td("Change the name of your active room"),
                 [EventDirection.Receive]: _td("See when the name changes in your active room"),
-                [EventDirection.Read]: _td("See the current name of your active room"),
             },
         },
         [EventType.RoomAvatar]: {
             [WidgetKind.Room]: {
                 [EventDirection.Send]: _td("Change the avatar of this room"),
                 [EventDirection.Receive]: _td("See when the avatar changes in this room"),
-                [EventDirection.Read]: _td("See the current avatar for this room"),
             },
             [GENERIC_WIDGET_KIND]: {
                 [EventDirection.Send]: _td("Change the avatar of your active room"),
                 [EventDirection.Receive]: _td("See when the avatar changes in your active room"),
-                [EventDirection.Read]: _td("See the current avatar for your active room"),
             },
         },
         [EventType.RoomMember]: {
             [WidgetKind.Room]: {
                 [EventDirection.Send]: _td("Kick, ban, or invite people to this room, and make you leave"),
                 [EventDirection.Receive]: _td("See when people join, leave, or are invited to this room"),
-                [EventDirection.Read]: _td("See the membership status of anyone in this room"),
             },
             [GENERIC_WIDGET_KIND]: {
                 [EventDirection.Send]: _td("Kick, ban, or invite people to your active room, and make you leave"),
                 [EventDirection.Receive]: _td("See when people join, leave, or are invited to your active room"),
-                [EventDirection.Read]: _td("See the membership status of anyone in this room"),
             },
         },
     };
@@ -121,12 +113,10 @@ export class CapabilityText {
             [WidgetKind.Room]: {
                 [EventDirection.Send]: _td("Send stickers to this room as you"),
                 [EventDirection.Receive]: _td("See when a sticker is posted in this room"),
-                [EventDirection.Read]: _td("See recent stickers posted to this room"),
             },
             [GENERIC_WIDGET_KIND]: {
                 [EventDirection.Send]: _td("Send stickers to your active room as you"),
                 [EventDirection.Receive]: _td("See when anyone posts a sticker to your active room"),
-                [EventDirection.Read]: _td("See recent stickers posted to your active room"),
             },
         },
     };
