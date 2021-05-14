@@ -3354,5 +3354,17 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s cargará con Espazos activado. Comunidades e etiquetas personais estarán agochadas.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta dispoñible para web, escritorio e Android. Grazas por probar a beta.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s volverá a cargar con Espazos desactivado. Comunidade e etiquetas personalizadas estarán visibles de volta.",
-    "Spaces are a new way to group rooms and people.": "Espazos é un novo xeito de agrupar salas e persoas."
+    "Spaces are a new way to group rooms and people.": "Espazos é un novo xeito de agrupar salas e persoas.",
+    "Spaces are a beta feature.": "Espazos é unha ferramenta en beta.",
+    "Search names and descriptions": "Buscar nome e descricións",
+    "You may contact me if you have any follow up questions": "Podes contactar conmigo se tes algunha outra suxestión",
+    "To leave the beta, visit your settings.": "Para saír da beta, vai aos axustes.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "A túa plataforma e nome de usuaria serán notificados para axudarnos a utilizar a túa opinión do mellor xeito posible.",
+    "%(featureName)s beta feedback": "Opinión acerca de %(featureName)s beta",
+    "Thank you for your feedback, we really appreciate it.": "Grazas pola túa opinión, realmente apreciámola.",
+    "Beta feedback": "Opinión sobre a beta",
+    "Add reaction": "Engadir reacción",
+    "Send and receive voice messages": "Enviar e recibir mensaxes de voz",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "A túa opinión axudaranos a mellorar os espazos. Canto máis detallada sexa moito mellor para nós.",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se saes, %(brand)s volverá a cargar con Espazos desactivados. Comunidades e etiquetas personais serán visibles outra vez."
 }
