@@ -3357,5 +3357,6 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s 將在啟用空間的情況下重新載入。社群與自訂標籤將會隱藏。",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "測試版可用於網路、桌面與 Android。感謝您試用測試版。",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s 將在停用空間的情況下重新載入。社群與自訂標籤將再次可見。",
-    "Spaces are a new way to group rooms and people.": "空間是將聊天室與人們分組的一種新方式。"
+    "Spaces are a new way to group rooms and people.": "空間是將聊天室與人們分組的一種新方式。",
+    "Message search initialisation failed": "訊息搜尋初始化失敗"
 }
