@@ -3325,5 +3325,6 @@
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s wird mit deaktivierten Spaces neuladen und du kannst Communities und Custom Tags wieder verwenden können.",
     "Spaces are a beta feature.": "Spaces sind in der Beta.",
     "Spaces are a new way to group rooms and people. To join an existing space you'll need an invite.": "Wir haben Spaces entwickelt, damit ihr eure vielen Räume besser organisieren könnt. Um einen existierenden Space beitreten zu können musst du (noch) von jemandem eingeladen werden.",
-    "Spaces are a new way to group rooms and people.": "Wir haben Spaces entwickelt, damit ihr eure vielen Räume besser organisieren könnt."
+    "Spaces are a new way to group rooms and people.": "Wir haben Spaces entwickelt, damit ihr eure vielen Räume besser organisieren könnt.",
+    "Message search initialisation failed": "Initialisierung der Nachrichtensuche fehlgeschlagen"
 }
