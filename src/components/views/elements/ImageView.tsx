@@ -443,14 +443,14 @@ export default class ImageView extends React.Component<IProps, IState> {
                     {info}
                     <div className="mx_ImageView_toolbar">
                         <AccessibleTooltipButton
-                            className="mx_ImageView_button mx_ImageView_button_rotateCW"
-                            title={_t("Rotate Right")}
-                            onClick={this.onRotateClockwiseClick}>
-                        </AccessibleTooltipButton>
-                        <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
                             title={_t("Rotate Left")}
                             onClick={ this.onRotateCounterClockwiseClick }>
+                        </AccessibleTooltipButton>
+                        <AccessibleTooltipButton
+                            className="mx_ImageView_button mx_ImageView_button_rotateCW"
+                            title={_t("Rotate Right")}
+                            onClick={this.onRotateClockwiseClick}>
                         </AccessibleTooltipButton>
                         {zoomOutButton}
                         {zoomInButton}
