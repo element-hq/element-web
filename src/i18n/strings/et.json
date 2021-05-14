@@ -3332,5 +3332,17 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "Käivitame %(brand)s uuesti nii, et kogukonnakeskused on kasutusel. Vana tüüpi kogukonnad ja kohandatud sildid on siis välja lülitatud.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Käivitame %(brand)s uuesti nii, et kogukonnakeskused ei ole kasutusel. Vana tüüpi kogukonnad ja kohandatud sildid saavad jälle olema kasutusel.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Rakenduse beetaversioon on saadaval veebirakendusena, töölauarakendusena ja Androidi jaoks. Tänud, et oled huviline katsetama meie rakendust.",
-    "Spaces are a new way to group rooms and people.": "Kogukonnakeskused on uus viis jututubade ja inimeste ühendamiseks."
+    "Spaces are a new way to group rooms and people.": "Kogukonnakeskused on uus viis jututubade ja inimeste ühendamiseks.",
+    "Spaces are a beta feature.": "Kogukonnakeskused on veel katsetamisjärgus funktsionaalsus.",
+    "Search names and descriptions": "Otsi nimede ja kirjelduste seast",
+    "You may contact me if you have any follow up questions": "Kui sul on lisaküsimusi, siis vastan neile hea meelega",
+    "To leave the beta, visit your settings.": "Beetaversiooni saad välja lülitada rakenduse seadistustest.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Lisame sinu kommentaaridele ka kasutajanime ja operatsioonisüsteemi.",
+    "%(featureName)s beta feedback": "%(featureName)s testversiooni tagasiside",
+    "Thank you for your feedback, we really appreciate it.": "Täname sind nende kommentaaride eest.",
+    "Beta feedback": "Tagasiside testversioonile",
+    "Add reaction": "Lisa reaktsioon",
+    "Send and receive voice messages": "Saada ja võta vastu häälsõnumeid",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "Sinu tagasiside aitab teha kogukonnakeskuseid paremaks. Mida detailsemalt sa oma arvamust kirjeldad, seda parem.",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Kui sa lahkud, siis käivitame %(brand)s uuesti nii, et kogukonnakeskused ei ole kasutusel. Vana tüüpi kogukonnad ja kohandatud sildid saavad jälle olema kasutusel."
 }
