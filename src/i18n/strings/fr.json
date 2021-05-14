@@ -3331,5 +3331,6 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s va être redémarré avec les espaces activés. Les communautés et les étiquettes personnalisées seront cachés.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Bêta disponible pour l’application web, de bureau et Android. Merci d’essayer la bêta.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s va être redémarré avec les espaces désactivés. Les communautés et les étiquettes personnalisées seront de nouveau visibles.",
-    "Spaces are a new way to group rooms and people.": "Les espaces sont un nouveau moyen de regrouper les salons et les personnes."
+    "Spaces are a new way to group rooms and people.": "Les espaces sont un nouveau moyen de regrouper les salons et les personnes.",
+    "Message search initialisation failed": "Échec de l’initialisation de la recherche de message"
 }
