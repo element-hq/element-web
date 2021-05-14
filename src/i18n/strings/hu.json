@@ -3349,5 +3349,14 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s a Terekkel lesz újra betöltve. A közösségek és egyedi címkék rejtve maradnak.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Béta verzió elérhető webre, asztali kliensre és Androidra. Köszönjük, hogy kipróbálja.",
     "Spaces are a new way to group rooms and people.": "Szobák és emberek csoportosításának új lehetősége a Terek használata.",
-    "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s a Terek nélkül lesz újra betöltve. A közösségek és egyedi címkék újra megjelennek."
+    "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s a Terek nélkül lesz újra betöltve. A közösségek és egyedi címkék újra megjelennek.",
+    "To leave the beta, visit your settings.": "A beállításokban tudja elhagyni a bétát.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "A platform és a felhasználói neve felhasználásra kerül ami segít nekünk a visszajelzést minél jobban felhasználni.",
+    "%(featureName)s beta feedback": "%(featureName)s béta visszajelzés",
+    "Thank you for your feedback, we really appreciate it.": "Köszönjük a visszajelzését, ezt nagyra értékeljük.",
+    "Beta feedback": "Béta visszajelzés",
+    "Add reaction": "Reakció hozzáadása",
+    "Send and receive voice messages": "Hangüzenet küldése, fogadása",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "A visszajelzése segítség a terek javításához. Minél részletesebb annál jobb.",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Távozás után %(brand)s Terek nélkül lesz újra betöltve. A közösségek és egyedi címkék újra megjelennek."
 }
