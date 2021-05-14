@@ -114,11 +114,10 @@ limitations under the License.
             }
         }
 
-    .mx_RoomSublist_auxButton:hover,
-    .mx_RoomSublist_menuButton:hover {
+        .mx_RoomSublist_auxButton:hover,
+        .mx_RoomSublist_menuButton:hover {
             background:$roomlist-button-bg-color;
         }
-
 
         // Hide the menu button by default
         .mx_RoomSublist_menuButton {
