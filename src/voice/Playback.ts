@@ -126,6 +126,7 @@ export class Playback extends EventEmitter implements IDestroyable {
         this.waveformObservable.update(this.resampledWaveform);
 
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
+        this.clock.flagLoadTime(); // must happen first because setting the duration fires a clock update
         this.clock.durationSeconds = this.audioBuf.duration;
     }
 
