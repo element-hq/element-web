@@ -3240,5 +3240,6 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s zal herladen met Spaces ingeschakeld. Gemeenschappen en labels worden verborgen.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta beschikbaar voor web, desktop en Android. Bedankt dat u de beta wilt proberen.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s zal herladen met Spaces uitgeschakeld. Gemeenschappen en labels zullen weer zichtbaar worden.",
-    "Spaces are a new way to group rooms and people.": "Spaces zijn de nieuwe manier om gesprekken en personen te groeperen."
+    "Spaces are a new way to group rooms and people.": "Spaces zijn de nieuwe manier om gesprekken en personen te groeperen.",
+    "Message search initialisation failed": "Zoeken in berichten opstarten is mislukt"
 }
