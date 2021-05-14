@@ -34,7 +34,7 @@ import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import SettingsStore from "../../../settings/SettingsStore";
 import { VisibilityProvider } from "../filters/VisibilityProvider";
-import {MultiLock} from "../../../utils/MultiLock";
+import { MultiLock } from "../../../utils/MultiLock";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.

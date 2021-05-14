@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {EnhancedMap} from "./maps";
+import { EnhancedMap } from "./maps";
 import AwaitLock from "await-lock";
 
 export type DoneFn = () => void;
