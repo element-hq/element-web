@@ -3366,5 +3366,6 @@
     "Add reaction": "Aggiungi reazione",
     "Send and receive voice messages": "Invia e ricevi messaggi vocali",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "La tua opinione aiuterà a migliorare gli spazi. Più dettagli dai, meglio è.",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se esci, %(brand)s si ricaricherà con gli spazi disattivati. Le comunità e le etichette personalizzate saranno di nuovo visibili."
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se esci, %(brand)s si ricaricherà con gli spazi disattivati. Le comunità e le etichette personalizzate saranno di nuovo visibili.",
+    "Message search initialisation failed": "Inizializzazione ricerca messaggi fallita"
 }
