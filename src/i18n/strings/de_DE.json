@@ -2488,7 +2488,7 @@
     "Secret storage:": "Sicherer Speicher:",
     "ready": "bereit",
     "not ready": "nicht bereit",
-    "Secure Backup": "Sichere Aufbewahrungskopie",
+    "Secure Backup": "Sicheres Backup",
     "End Call": "Anruf beenden",
     "Remove the group call from the room?": "Konferenzgespräch aus diesem Raum entfernen?",
     "You don't have permission to remove the call from the room": "Du hast keine Berechtigung um den Konferenzanruf aus dem Raum zu entfernen",
@@ -3318,9 +3318,12 @@
     "Please enter a name for the space": "Gib den Namen des Spaces ein",
     "Connecting": "Verbinden",
     "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Direktverbindung für Direktanrufe aktivieren. Dadurch sieht dein Gegenüber möglicherweise deine IP-Adresse.",
-    "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.": "Die Betaversion ist verfügbar für Browser, Desktop und Android verfügbar. Je nach Homeserver sind einige Funktionen möglicherweise nicht verfügbar.",
-    "You can leave the beta any time from settings or tapping on a beta badge, like the one above.": "Du kannst die Betaversion jederzeit verlassen. Mache dies entweder in den Einstellungen oder klicke auf Beta-Icons wie dieses hier.",
+    "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.": "Die Betaversion ist verfügbar für Browser, Desktop und Android. Je nach Homeserver sind einige Funktionen möglicherweise nicht verfügbar.",
+    "You can leave the beta any time from settings or tapping on a beta badge, like the one above.": "Du kannst die Betaversion jederzeit verlassen. Mache dies entweder in den Einstellungen oder klicke auf eines der \"Beta\"-Icons wie das hier oben.",
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s wird mit aktivierten Spaces neuladen. Danach kannst Communities und Custom Tags nicht verwenden.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Die Betaversion ist für Browser, Desktop und Android verfügbar. Danke, dass Du die Betaversion testest.",
-    "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s wird mit deaktivierten Spaces neuladen und du kannst Communities und Custom Tags wieder verwenden können."
+    "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s wird mit deaktivierten Spaces neuladen und du kannst Communities und Custom Tags wieder verwenden können.",
+    "Spaces are a beta feature.": "Spaces sind in der Beta.",
+    "Spaces are a new way to group rooms and people. To join an existing space you'll need an invite.": "Wir haben Spaces entwickelt, damit ihr eure vielen Räume besser organisieren könnt. Um einen existierenden Space beitreten zu können musst du (noch) von jemandem eingeladen werden.",
+    "Spaces are a new way to group rooms and people.": "Wir haben Spaces entwickelt, damit ihr eure vielen Räume besser organisieren könnt."
 }
