@@ -486,14 +486,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     startPageChangeTimer() {
-        PerformanceMonitor.start(PerformanceEntryNames.SWITCH_ROOM);
+        PerformanceMonitor.start(PerformanceEntryNames.PAGE_CHANGE);
     }
 
     stopPageChangeTimer() {
-        PerformanceMonitor.stop(PerformanceEntryNames.SWITCH_ROOM);
+        PerformanceMonitor.stop(PerformanceEntryNames.PAGE_CHANGE);
 
         const entries = PerformanceMonitor.getEntries({
-            name: PerformanceEntryNames.SWITCH_ROOM,
+            name: PerformanceEntryNames.PAGE_CHANGE,
         });
         const measurement = entries.pop();
 
@@ -1612,13 +1612,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'start_registration',
                 params: params,
             });
-            Performance.start(PerformanceEntryNames.REGISTER);
+            PerformanceMonitor.start(PerformanceEntryNames.REGISTER);
         } else if (screen === 'login') {
             dis.dispatch({
                 action: 'start_login',
                 params: params,
             });
-            Performance.start(PerformanceEntryNames.LOGIN);
+            PerformanceMonitor.start(PerformanceEntryNames.LOGIN);
         } else if (screen === 'forgot_password') {
             dis.dispatch({
                 action: 'start_password_recovery',
@@ -1858,7 +1858,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // returns a promise which resolves to the new MatrixClient
     onRegistered(credentials: IMatrixClientCreds) {
-        Performance.stop(PerformanceEntryNames.REGISTER);
+        PerformanceMonitor.stop(PerformanceEntryNames.REGISTER);
         return Lifecycle.setLoggedIn(credentials);
     }
 
@@ -1948,7 +1948,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
-        Performance.stop(PerformanceEntryNames.LOGIN);
+        PerformanceMonitor.stop(PerformanceEntryNames.LOGIN);
     };
 
     // complete security / e2e setup has finished

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { string } from "prop-types";
 import { PerformanceEntryNames } from "./entry-names";
 
 const START_PREFIX = "start:";
@@ -29,6 +28,16 @@ interface GetEntriesOptions {
     type?: string,
 }
 
+type PerformanceCallbackFunction = (entry: PerformanceEntry) => void;
+
+interface PerformanceDataListener {
+    entryTypes?: string[],
+    callback: PerformanceCallbackFunction
+}
+
+let listeners: PerformanceDataListener[] = [];
+const entries: PerformanceEntry[] = [];
+
 export default class PerformanceMonitor {
     /**
      * Starts a performance recording
@@ -42,7 +51,7 @@ export default class PerformanceMonitor {
         }
         const key = buildKey(name, id);
 
-        if (!performance.getEntriesByName(key).length) {
+        if (performance.getEntriesByName(key).length > 0) {
             console.warn(`Recording already started for: ${name}`);
             return;
         }
@@ -57,12 +66,12 @@ export default class PerformanceMonitor {
      * @param id Specify an identifier appended to the measurement name
      * @returns {void}
      */
-    static stop(name: string, id?: string): void {
+    static stop(name: string, id?: string): PerformanceEntry {
         if (!supportsPerformanceApi()) {
             return;
         }
         const key = buildKey(name, id);
-        if (!performance.getEntriesByName(START_PREFIX + key).length) {
+        if (performance.getEntriesByName(START_PREFIX + key).length === 0) {
             console.warn(`No recording started for: ${name}`);
             return;
         }
@@ -75,6 +84,17 @@ export default class PerformanceMonitor {
         );
 
         this.clear(name, id);
+
+        const measurement = performance.getEntriesByName(key).pop();
+
+        // Keeping a reference to all PerformanceEntry created
+        // by this abstraction for historical events collection
+        // when adding a data callback
+        entries.push(measurement);
+
+        listeners.forEach(listener => emitPerformanceData(listener, measurement));
+
+        return measurement;
     }
 
     static clear(name: string, id?: string): void {
@@ -87,17 +107,36 @@ export default class PerformanceMonitor {
     }
 
     static getEntries({ name, type }: GetEntriesOptions = {}): PerformanceEntry[] {
-        if (!supportsPerformanceApi()) {
-            return;
-        }
+        return entries.filter(entry => {
+            const satisfiesName = !name || entry.name === name;
+            const satisfiedType = !type || entry.entryType === type;
+            return satisfiesName && satisfiedType;
+        });
+    }
 
-        if (!name && !type) {
-            return performance.getEntries();
-        } else if (!name) {
-            return performance.getEntriesByType(type);
-        } else {
-            return performance.getEntriesByName(name, type);
+    static addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
+        listeners.push(listener);
+
+        if (buffer) {
+            entries.forEach(entry => emitPerformanceData(listener, entry));
         }
+    }
+
+    static removePerformanceDataCallback(callback?: PerformanceCallbackFunction) {
+        if (!callback) {
+            listeners = [];
+        } else {
+            listeners.splice(
+                listeners.findIndex(listener => listener.callback === callback),
+                1,
+            );
+        }
+    }
+}
+
+function emitPerformanceData(listener, entry): void {
+    if (!listener.entryTypes || listener.entryTypes.includes(entry.entryType)) {
+        listener.callback(entry)
     }
 }
 
