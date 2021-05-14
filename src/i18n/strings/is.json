@@ -460,5 +460,11 @@
     "Create Account": "Stofna Reikning",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "vinsamlegast setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> fyrir besta reynsluna.",
     "Explore rooms": "Kanna herbergi",
-    "Sign In": "Skrá inn"
+    "Sign In": "Skrá inn",
+    "The user's homeserver does not support the version of the room.": "Heimaþjónn notandans styður ekki útgáfu herbergis.",
+    "The user must be unbanned before they can be invited.": "Notandinn þarf að vera afbannaður áður en að hægt er að bjóða þeim.",
+    "User %(user_id)s may or may not exist": "Notandi %(user_id)s gæti verið til",
+    "User %(user_id)s does not exist": "Notandi %(user_id)s er ekki til",
+    "User %(userId)s is already in the room": "Notandi %(userId)s er nú þegar í herberginu",
+    "You do not have permission to invite people to this room.": "Þú hefur ekki heimild til að bjóða fólk í þessa spjallrás."
 }
