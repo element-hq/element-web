@@ -22,7 +22,7 @@ const fs = require("fs");
 const program = require('commander');
 program
     .option('--no-logs', "don't output logs, document html on error", false)
-    .option('--app-url [url]', "url to test", "http://localhost:8080")
+    .option('--app-url [url]', "url to test", "http://localhost:5000")
     .option('--windowed', "dont run tests headless", false)
     .option('--slow-mo', "type at a human speed", false)
     .option('--dev-tools', "open chrome devtools in browser window", false)
