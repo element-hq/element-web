@@ -209,7 +209,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             const userId = this.context.getUserId();
 
             let inviteOption;
-            if (this.props.space.canInvite(userId)) {
+            if (this.props.space.getJoinRule() === "public" || this.props.space.canInvite(userId)) {
                 inviteOption = (
                     <IconizedContextMenuOption
                         className="mx_SpacePanel_contextMenu_inviteButton"
