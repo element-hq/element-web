@@ -27,7 +27,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import {DefaultTagID} from "../../../stores/room-list/models";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
