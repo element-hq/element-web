@@ -3355,5 +3355,6 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s do të ringarkohet me Hapësirat të aktivizuara. Bashkësitë dhe etiketat vetjake do të jenë të fshehura.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta e gatshme për web, desktop dhe Android. Faleminderit që provoni beta-n.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Nëse ikni, %(brand)s-i do të ringarkohet me Hapësira të çaktivizuara. Bashkësitë dhe etiketat vetjake do të jenë sërish të dukshme.",
-    "Spaces are a new way to group rooms and people.": "Hapësirat janë një rrugë e re për të grupuar dhoma dhe njerëz."
+    "Spaces are a new way to group rooms and people.": "Hapësirat janë një rrugë e re për të grupuar dhoma dhe njerëz.",
+    "Message search initialisation failed": "Dështoi gatitje kërkimi mesazhesh"
 }
