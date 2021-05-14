@@ -3358,5 +3358,6 @@
     "Add reaction": "Reakció hozzáadása",
     "Send and receive voice messages": "Hangüzenet küldése, fogadása",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "A visszajelzése segítség a terek javításához. Minél részletesebb annál jobb.",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Távozás után %(brand)s Terek nélkül lesz újra betöltve. A közösségek és egyedi címkék újra megjelennek."
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Távozás után %(brand)s Terek nélkül lesz újra betöltve. A közösségek és egyedi címkék újra megjelennek.",
+    "Message search initialisation failed": "Üzenet keresés beállítása sikertelen"
 }
