@@ -3250,5 +3250,6 @@
     "%(count)s results in all spaces|other": "%(count)s resultat i alla utrymmen",
     "You have no ignored users.": "Du har inga ignorerade användare.",
     "Play": "Spela",
-    "Pause": "Pausa"
+    "Pause": "Pausa",
+    "Message search initialisation failed": "Initialisering av meddelandesökning misslyckades"
 }
