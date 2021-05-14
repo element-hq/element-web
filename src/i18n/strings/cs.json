@@ -3271,5 +3271,6 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s se znovu načte s povolenými Prostory. Skupiny a vlastní značky budou skryty.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta verze je k dispozici pro web, desktop a Android. Děkujeme vám za vyzkoušení beta verze.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s se znovu načte s vypnutými Prostory. Skupiny a vlastní značky budou opět viditelné.",
-    "Spaces are a new way to group rooms and people.": "Prostory představují nový způsob seskupování místností a osob."
+    "Spaces are a new way to group rooms and people.": "Prostory představují nový způsob seskupování místností a osob.",
+    "Message search initialisation failed": "Inicializace vyhledávání zpráv se nezdařila"
 }
