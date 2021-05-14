@@ -3354,5 +3354,17 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s si ricaricherà con gli spazi attivati. Le comunità e le etichette personalizzate saranno nascoste.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta disponibile per web, desktop e Android. Grazie per la partecipazione alla beta.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s si ricaricherà con gli spazi disattivati. Le comunità e le etichette personalizzate saranno di nuovo visibili.",
-    "Spaces are a new way to group rooms and people.": "Gli spazi sono un nuovo modo di raggruppare stanze e persone."
+    "Spaces are a new way to group rooms and people.": "Gli spazi sono un nuovo modo di raggruppare stanze e persone.",
+    "Spaces are a beta feature.": "Gli spazi sono una funzionalità beta.",
+    "Search names and descriptions": "Cerca nomi e descrizioni",
+    "You may contact me if you have any follow up questions": "Potete contattarmi se avete altre domande",
+    "To leave the beta, visit your settings.": "Per abbandonare la beta, vai nelle impostazioni.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Verranno annotate la tua piattaforma e il nome utente per aiutarci ad usare la tua opinione al meglio.",
+    "%(featureName)s beta feedback": "Feedback %(featureName)s beta",
+    "Thank you for your feedback, we really appreciate it.": "Grazie per la tua opinione, lo appreziamo molto.",
+    "Beta feedback": "Feedback beta",
+    "Add reaction": "Aggiungi reazione",
+    "Send and receive voice messages": "Invia e ricevi messaggi vocali",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "La tua opinione aiuterà a migliorare gli spazi. Più dettagli dai, meglio è.",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se esci, %(brand)s si ricaricherà con gli spazi disattivati. Le comunità e le etichette personalizzate saranno di nuovo visibili."
 }
