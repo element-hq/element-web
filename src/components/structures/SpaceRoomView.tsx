@@ -52,8 +52,6 @@ import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
 import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
-import {sleep} from "../../utils/promise";
-import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "./ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -519,39 +517,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 };
 
 const SpaceAddExistingRooms = ({ space, onFinished }) => {
-    const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
-
-    const [busy, setBusy] = useState(false);
-    const [error, setError] = useState("");
-
-    let onClick = onFinished;
-    let buttonLabel = _t("Skip for now");
-    if (selectedToAdd.size > 0) {
-        onClick = async () => {
-            setBusy(true);
-
-            for (const room of selectedToAdd) {
-                const via = calculateRoomVia(room);
-                try {
-                    await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async e => {
-                        if (e.errcode === "M_LIMIT_EXCEEDED") {
-                            await sleep(e.data.retry_after_ms);
-                            return SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
-                        }
-
-                        throw e;
-                    });
-                } catch (e) {
-                    console.error("Failed to add rooms to space", e);
-                    setError(_t("Failed to add rooms to space"));
-                    break;
-                }
-            }
-            setBusy(false);
-        };
-        buttonLabel = busy ? _t("Adding...") : _t("Add");
-    }
-
     return <div>
         <h1>{ _t("What do you want to organise?") }</h1>
         <div className="mx_SpaceRoomView_description">
@@ -559,29 +524,18 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
                 "no one will be informed. You can add more later.") }
         </div>
 
-        { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-
         <AddExistingToSpace
             space={space}
-            selected={selectedToAdd}
-            onChange={(checked, room) => {
-                if (checked) {
-                    selectedToAdd.add(room);
-                } else {
-                    selectedToAdd.delete(room);
-                }
-                setSelectedToAdd(new Set(selectedToAdd));
-            }}
+            emptySelectionButton={
+                <AccessibleButton kind="primary" onClick={onFinished}>
+                    { _t("Skip for now") }
+                </AccessibleButton>
+            }
+            onFinished={onFinished}
         />
 
         <div className="mx_SpaceRoomView_buttons">
-            <AccessibleButton
-                kind="primary"
-                disabled={busy}
-                onClick={onClick}
-            >
-                { buttonLabel }
-            </AccessibleButton>
+
         </div>
         <SpaceFeedbackPrompt />
     </div>;
