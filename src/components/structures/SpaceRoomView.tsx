@@ -52,8 +52,6 @@ import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
 import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
-import {sleep} from "../../utils/promise";
-import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "./ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
