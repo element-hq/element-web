@@ -73,10 +73,10 @@ describe('arrays', () => {
             // we'd be feeding a thousand values in and seeing what a curve of 250 values looks like,
             // but that's not really feasible to manually verify accuracy.
             [
-                {input: [2, 2, 0, 2, 2, 0, 2, 2, 0], output: [1, 1, 2, 1]}, // Odd -> Even
-                {input: [2, 2, 0, 2, 2, 0, 2, 2, 0], output: [1, 1, 2]}, // Odd -> Odd
-                {input: [2, 2, 0, 2, 2, 0, 2, 2], output: [1, 1, 2]}, // Even -> Odd
-                {input: [2, 2, 0, 2, 2, 0, 2, 2], output: [1, 2]}, // Even -> Even
+                {input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3]}, // Odd -> Even
+                {input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3]}, // Odd -> Odd
+                {input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3]}, // Even -> Odd
+                {input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3]}, // Even -> Even
             ].forEach((c, i) => expectSample(i, c.input, c.output, true));
         });
 

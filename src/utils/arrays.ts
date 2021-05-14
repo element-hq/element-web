@@ -75,7 +75,8 @@ export function arraySmoothingResample(input: number[], points: number): number[
             for (let i = 1; i < input.length - 1; i += 2) {
                 const prevPoint = input[i - 1];
                 const nextPoint = input[i + 1];
-                const average = (prevPoint + nextPoint) / 2;
+                const currPoint = input[i];
+                const average = (prevPoint + nextPoint + currPoint) / 3;
                 samples.push(average);
             }
             input = samples;
