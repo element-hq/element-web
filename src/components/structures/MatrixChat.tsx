@@ -86,6 +86,8 @@ import {RoomUpdateCause} from "../../stores/room-list/models";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import SecurityCustomisations from "../../customisations/Security";
 
+import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
+
 /** constants for MatrixChat.state.view */
 export enum Views {
     // a special initial state which is only used at startup, while we are
@@ -484,42 +486,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     startPageChangeTimer() {
-        // Tor doesn't support performance
-        if (!performance || !performance.mark) return null;
-
-        // This shouldn't happen because UNSAFE_componentWillUpdate and componentDidUpdate
-        // are used.
-        if (this.pageChanging) {
-            console.warn('MatrixChat.startPageChangeTimer: timer already started');
-            return;
-        }
-        this.pageChanging = true;
-        performance.mark('element_MatrixChat_page_change_start');
+        PerformanceMonitor.start(PerformanceEntryNames.SWITCH_ROOM);
     }
 
     stopPageChangeTimer() {
-        // Tor doesn't support performance
-        if (!performance || !performance.mark) return null;
+        PerformanceMonitor.stop(PerformanceEntryNames.SWITCH_ROOM);
 
-        if (!this.pageChanging) {
-            console.warn('MatrixChat.stopPageChangeTimer: timer not started');
-            return;
-        }
-        this.pageChanging = false;
-        performance.mark('element_MatrixChat_page_change_stop');
-        performance.measure(
-            'element_MatrixChat_page_change_delta',
-            'element_MatrixChat_page_change_start',
-            'element_MatrixChat_page_change_stop',
-        );
-        performance.clearMarks('element_MatrixChat_page_change_start');
-        performance.clearMarks('element_MatrixChat_page_change_stop');
-        const measurement = performance.getEntriesByName('element_MatrixChat_page_change_delta').pop();
+        const entries = PerformanceMonitor.getEntries({
+            name: PerformanceEntryNames.SWITCH_ROOM,
+        });
+        const measurement = entries.pop();
 
-        // In practice, sometimes the entries list is empty, so we get no measurement
-        if (!measurement) return null;
-
-        return measurement.duration;
+        return measurement
+            ? measurement.duration
+            : null;
     }
 
     shouldTrackPageChange(prevState: IState, state: IState) {
@@ -1632,11 +1612,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'start_registration',
                 params: params,
             });
+            Performance.start(PerformanceEntryNames.REGISTER);
         } else if (screen === 'login') {
             dis.dispatch({
                 action: 'start_login',
                 params: params,
             });
+            Performance.start(PerformanceEntryNames.LOGIN);
         } else if (screen === 'forgot_password') {
             dis.dispatch({
                 action: 'start_password_recovery',
@@ -1876,6 +1858,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // returns a promise which resolves to the new MatrixClient
     onRegistered(credentials: IMatrixClientCreds) {
+        Performance.stop(PerformanceEntryNames.REGISTER);
         return Lifecycle.setLoggedIn(credentials);
     }
 
@@ -1965,6 +1948,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
+        Performance.stop(PerformanceEntryNames.LOGIN);
     };
 
     // complete security / e2e setup has finished
