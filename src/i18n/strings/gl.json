@@ -3366,5 +3366,6 @@
     "Add reaction": "Engadir reacción",
     "Send and receive voice messages": "Enviar e recibir mensaxes de voz",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "A túa opinión axudaranos a mellorar os espazos. Canto máis detallada sexa moito mellor para nós.",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se saes, %(brand)s volverá a cargar con Espazos desactivados. Comunidades e etiquetas personais serán visibles outra vez."
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se saes, %(brand)s volverá a cargar con Espazos desactivados. Comunidades e etiquetas personais serán visibles outra vez.",
+    "Message search initialisation failed": "Fallo a inicialización da busca de mensaxes"
 }
