@@ -345,7 +345,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                 <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this.onPassPhraseNext}>
                     <input
                         type="password"
-                        id="passPhraseInput"
+                        id="mx_passPhraseInput"
                         className="mx_AccessSecretStorageDialog_passPhraseInput"
                         onChange={this.onPassPhraseChange}
                         value={this.state.passPhrase}
