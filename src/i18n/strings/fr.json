@@ -3337,5 +3337,12 @@
     "%(featureName)s beta feedback": "Commentaires sur la bêta de %(featureName)s",
     "Thank you for your feedback, we really appreciate it.": "Merci pour vos commentaires, nous en sommes vraiment reconnaissants.",
     "Beta feedback": "Commentaires sur la bêta",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Si vous quittez, %(brand)s sera rechargé avec les espaces désactivés. Les communautés et les étiquettes personnalisées seront à nouveau visibles."
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Si vous quittez, %(brand)s sera rechargé avec les espaces désactivés. Les communautés et les étiquettes personnalisées seront à nouveau visibles.",
+    "Spaces are a beta feature.": "Les espaces sont une fonctionnalité en bêta.",
+    "Search names and descriptions": "Rechercher par nom et description",
+    "You may contact me if you have any follow up questions": "Vous pouvez me contacter si vous avez des questions par la suite",
+    "To leave the beta, visit your settings.": "Pour quitter la bêta, consultez les paramètres.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Votre plateforme et nom d’utilisateur seront consignés pour nous aider à tirer le maximum de vos retours.",
+    "Add reaction": "Ajouter une réaction",
+    "Send and receive voice messages": "Envoyer et recevoir des messages vocaux"
 }
