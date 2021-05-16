@@ -58,7 +58,12 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();
@@ -90,7 +95,7 @@ export default class RoomProvider extends AutocompleteProvider {
 
             this.matcher.setObjects(matcherObjects);
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString);
+            completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
                 (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,

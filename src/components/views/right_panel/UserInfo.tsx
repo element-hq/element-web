@@ -67,7 +67,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {mediaFromMxc} from "../../../customisations/Media";
 
-interface IDevice {
+export interface IDevice {
     deviceId: string;
     ambiguous?: boolean;
     getDisplayName(): string;

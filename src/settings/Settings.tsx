@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import React, { ReactNode } from "react";
 
-import { _td } from '../languageHandler';
+import { _t, _td } from '../languageHandler';
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
@@ -39,6 +40,7 @@ import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
+import SdkConfig from "../SdkConfig";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -117,6 +119,15 @@ export interface ISetting {
     // historical settings which we don't want existing user's values be wiped. Do
     // not use this for new settings.
     invertedSettingName?: string;
+
+    betaInfo?: {
+        title: string; // _td
+        caption: string; // _td
+        disclaimer?: (enabled: boolean) => ReactNode;
+        image: string; // require(...)
+        feedbackSubheading?: string;
+        feedbackLabel?: string;
+    };
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
@@ -127,6 +138,36 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
+        betaInfo: {
+            title: _td("Spaces"),
+            caption: _td("Spaces are a new way to group rooms and people."),
+            disclaimer: (enabled) => {
+                if (enabled) {
+                    return <>
+                        <p>{ _t("If you leave, %(brand)s will reload with Spaces disabled. " +
+                            "Communities and custom tags will be visible again.", {
+                            brand: SdkConfig.get().brand,
+                        }) }</p>
+                        <p>{ _t("Beta available for web, desktop and Android. Thank you for trying the beta.") }</p>
+                    </>;
+                }
+
+                return <>
+                    <p>{ _t("%(brand)s will reload with Spaces enabled. " +
+                        "Communities and custom tags will be hidden.", {
+                        brand: SdkConfig.get().brand,
+                    }) }</p>
+                    <b>{ _t("You can leave the beta any time from settings or tapping on a beta badge, " +
+                        "like the one above.") }</b>
+                    <p>{ _t("Beta available for web, desktop and Android. " +
+                        "Some features may be unavailable on your homeserver.") }</p>
+                </>;
+            },
+            image: require("../../res/img/betas/spaces.png"),
+            feedbackSubheading: _td("Your feedback will help make spaces better. " +
+                "The more detail you can go into, the better."),
+            feedbackLabel: "spaces-feedback",
+        },
     },
     "feature_dnd": {
         isFeature: true,
@@ -136,7 +177,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_voice_messages": {
         isFeature: true,
-        displayName: _td("Send and receive voice messages (in development)"),
+        displayName: _td("Send and receive voice messages"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

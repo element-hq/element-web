@@ -257,6 +257,15 @@ export default class SettingsStore {
         return SETTINGS[settingName].isFeature;
     }
 
+    public static getBetaInfo(settingName: string) {
+        // consider a beta disabled if the config is explicitly set to false, in which case treat as normal Labs flag
+        if (SettingsStore.isFeature(settingName)
+            && SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
+        ) {
+            return SETTINGS[settingName]?.betaInfo;
+        }
+    }
+
     /**
      * Determines if a setting is enabled.
      * If a setting is disabled then it should be hidden from the user.
@@ -445,8 +454,8 @@ export default class SettingsStore {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
-        // When features are specified in the config.json, we force them as enabled or disabled.
-        if (SettingsStore.isFeature(settingName)) {
+        // When non-beta features are specified in the config.json, we force them as enabled or disabled.
+        if (SettingsStore.isFeature(settingName) && !SETTINGS[settingName]?.betaInfo) {
             const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);
             if (configVal === true || configVal === false) return false;
         }
