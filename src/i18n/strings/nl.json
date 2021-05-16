@@ -3241,5 +3241,17 @@
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta beschikbaar voor web, desktop en Android. Bedankt dat u de beta wilt proberen.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s zal herladen met Spaces uitgeschakeld. Gemeenschappen en labels zullen weer zichtbaar worden.",
     "Spaces are a new way to group rooms and people.": "Spaces zijn de nieuwe manier om gesprekken en personen te groeperen.",
-    "Message search initialisation failed": "Zoeken in berichten opstarten is mislukt"
+    "Message search initialisation failed": "Zoeken in berichten opstarten is mislukt",
+    "Spaces are a beta feature.": "Spaces zijn een beta functie.",
+    "Search names and descriptions": "Namen en beschrijvingen zoeken",
+    "You may contact me if you have any follow up questions": "U mag contact met mij opnemen als u nog vervolg vragen heeft",
+    "To leave the beta, visit your settings.": "Om de beta te verlaten, ga naar uw instellingen.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Uw platform en gebruikersnaam zullen worden opgeslagen om onze te helpen uw feedback zo goed mogelijk te gebruiken.",
+    "%(featureName)s beta feedback": "%(featureName)s beta feedback",
+    "Thank you for your feedback, we really appreciate it.": "Bedankt voor uw feedback, we waarderen het enorm.",
+    "Beta feedback": "Beta feedback",
+    "Add reaction": "Reactie toevoegen",
+    "Send and receive voice messages": "Stuur en ontvang spraakberichten",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "Uw feedback maakt spaces beter. Hoe meer details u kan geven, des te beter.",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Als u de pagina nu verlaat zal %(brand)s herladen met Spaces uitgeschakeld. Gemeenschappen en labels zullen weer zichtbaar worden."
 }
