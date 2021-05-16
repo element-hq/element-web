@@ -30,7 +30,7 @@ import BaseDialog from "./BaseDialog";
 import {avatarUrlForUser} from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
-import RoomAvatar from "../avatars/RoomAvatar";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
@@ -125,7 +125,7 @@ const Entry: React.FC<IEntryProps> = ({ room, event, cli, onFinished }) => {
 
     return <div className="mx_ForwardList_entry">
         <AccessibleButton className="mx_ForwardList_roomButton" onClick={jumpToRoom}>
-            <RoomAvatar room={room} height={32} width={32} />
+            <DecoratedRoomAvatar room={room} avatarSize={32} />
             <span className="mx_ForwardList_entry_name">{ room.name }</span>
         </AccessibleButton>
         { button }
