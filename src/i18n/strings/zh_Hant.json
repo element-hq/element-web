@@ -3358,5 +3358,17 @@
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "測試版可用於網路、桌面與 Android。感謝您試用測試版。",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s 將在停用空間的情況下重新載入。社群與自訂標籤將再次可見。",
     "Spaces are a new way to group rooms and people.": "空間是將聊天室與人們分組的一種新方式。",
-    "Message search initialisation failed": "訊息搜尋初始化失敗"
+    "Message search initialisation failed": "訊息搜尋初始化失敗",
+    "Spaces are a beta feature.": "空間為測試版功能。",
+    "Search names and descriptions": "搜尋名稱與描述",
+    "You may contact me if you have any follow up questions": "如果您還有任何後續問題，可以聯絡我",
+    "To leave the beta, visit your settings.": "要離開測試版，請造訪您的設定。",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "我們將會記錄您的平台與使用者名稱，以協助我們盡可能使用您的回饋。",
+    "%(featureName)s beta feedback": "%(featureName)s 測試版回饋",
+    "Thank you for your feedback, we really appreciate it.": "感謝您的回饋，我們衷心感謝。",
+    "Beta feedback": "測試版回饋",
+    "Add reaction": "新增反應",
+    "Send and receive voice messages": "傳送與接收語音訊息",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "您的回饋意見將會讓空間變得更好。您可以輸入愈多細節愈好。",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "若您離開，%(brand)s 將在停用空間的情況下重新載入。社群與自訂標籤將再次可見。"
 }
