@@ -40,7 +40,7 @@ export default class InlineSpinner extends React.Component {
         } else {
             icon = (
                 <div
-                    className="mx_InlineSpinner_icon"
+                    className="mx_InlineSpinner_icon mx_Spinner_icon"
                     style={{width: w, height: h}}
                     aria-label={_t("Loading...")}
                 ></div>
