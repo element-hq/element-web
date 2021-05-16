@@ -60,6 +60,10 @@ const INITIAL_STATE = {
     replyingToEvent: null,
 
     shouldPeek: false,
+
+    viaServers: [],
+
+    wasContextSwitch: false,
 };
 
 /**
@@ -113,6 +117,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 this.setState({
                     roomId: null,
                     roomAlias: null,
+                    viaServers: [],
+                    wasContextSwitch: false,
                 });
                 break;
             case 'view_room_error':
@@ -191,6 +197,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 replyingToEvent: null,
                 // pull the user out of Room Settings
                 isEditingSettings: false,
+                viaServers: payload.via_servers,
+                wasContextSwitch: payload.context_switch,
             };
 
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
@@ -226,6 +234,8 @@ class RoomViewStore extends Store<ActionPayload> {
                     roomAlias: payload.room_alias,
                     roomLoading: true,
                     roomLoadError: null,
+                    viaServers: payload.via_servers,
+                    wasContextSwitch: payload.context_switch,
                 });
                 try {
                     const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
@@ -251,6 +261,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 room_alias: payload.room_alias,
                 auto_join: payload.auto_join,
                 oob_data: payload.oob_data,
+                viaServers: payload.via_servers,
+                wasContextSwitch: payload.context_switch,
             });
         }
     }
@@ -272,9 +284,10 @@ class RoomViewStore extends Store<ActionPayload> {
 
         const cli = MatrixClientPeg.get();
         const address = this.state.roomAlias || this.state.roomId;
+        const viaServers = this.state.viaServers || [];
         try {
             await retry<void, MatrixError>(() => cli.joinRoom(address, {
-                viaServers: payload.via_servers,
+                viaServers,
                 ...payload.opts,
             }), NUM_JOIN_RETRY, (err) => {
                 // if we received a Gateway timeout then retry
@@ -418,6 +431,10 @@ class RoomViewStore extends Store<ActionPayload> {
 
     public shouldPeek() {
         return this.state.shouldPeek;
+    }
+
+    public getWasContextSwitch() {
+        return this.state.wasContextSwitch;
     }
 }
 

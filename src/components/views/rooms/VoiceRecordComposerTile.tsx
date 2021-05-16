@@ -16,8 +16,8 @@ limitations under the License.
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {_t} from "../../../languageHandler";
-import React from "react";
-import {VoiceRecording} from "../../../voice/VoiceRecording";
+import React, {ReactNode} from "react";
+import {RecordingState, VoiceRecording} from "../../../voice/VoiceRecording";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import classNames from "classnames";
@@ -25,6 +25,12 @@ import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
+import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import RecordingPlayback from "../voice_messages/RecordingPlayback";
+import {MsgType} from "matrix-js-sdk/src/@types/event";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import CallMediaHandler from "../../../CallMediaHandler";
 
 interface IProps {
     room: Room;
@@ -32,6 +38,7 @@ interface IProps {
 
 interface IState {
     recorder?: VoiceRecording;
+    recordingPhase?: RecordingState;
 }
 
 /**
@@ -43,87 +50,181 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         super(props);
 
         this.state = {
-            recorder: null, // not recording by default
+            recorder: null, // no recording started by default
         };
     }
 
-    private onStartStopVoiceMessage = async () => {
-        // TODO: @@ TravisR: We do not want to auto-send on stop.
-        if (this.state.recorder) {
-            await this.state.recorder.stop();
-            const mxc = await this.state.recorder.upload();
-            MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
-                "body": "Voice message",
-                "msgtype": "org.matrix.msc2516.voice",
-                //"msgtype": MsgType.Audio,
-                "url": mxc,
-                "info": {
-                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
-                    mimetype: this.state.recorder.contentType,
-                    size: this.state.recorder.contentLength,
-                },
+    public async componentWillUnmount() {
+        await VoiceRecordingStore.instance.disposeRecording();
+    }
 
-                // MSC1767 experiment
-                "org.matrix.msc1767.text": "Voice message",
-                "org.matrix.msc1767.file": {
-                    url: mxc,
-                    name: "Voice message.ogg",
-                    mimetype: this.state.recorder.contentType,
-                    size: this.state.recorder.contentLength,
-                },
-                "org.matrix.msc1767.audio": {
-                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
-                    // TODO: @@ TravisR: Waveform? (MSC1767 decision)
-                },
-                "org.matrix.experimental.msc2516.voice": { // MSC2516+MSC1767 experiment
-                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
-
-                    // Events can't have floats, so we try to maintain resolution by using 1024
-                    // as a maximum value. The waveform contains values between zero and 1, so this
-                    // should come out largely sane.
-                    //
-                    // We're expecting about one data point per second of audio.
-                    waveform: this.state.recorder.finalWaveform.map(v => Math.round(v * 1024)),
-                },
-            });
-            await VoiceRecordingStore.instance.disposeRecording();
-            this.setState({recorder: null});
-            return;
+    // called by composer
+    public async send() {
+        if (!this.state.recorder) {
+            throw new Error("No recording started - cannot send anything");
         }
-        const recorder = VoiceRecordingStore.instance.startRecording();
-        await recorder.start();
-        this.setState({recorder});
+
+        await this.state.recorder.stop();
+        const mxc = await this.state.recorder.upload();
+        MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
+            "body": "Voice message",
+            //"msgtype": "org.matrix.msc2516.voice",
+            "msgtype": MsgType.Audio,
+            "url": mxc,
+            "info": {
+                duration: Math.round(this.state.recorder.durationSeconds * 1000),
+                mimetype: this.state.recorder.contentType,
+                size: this.state.recorder.contentLength,
+            },
+
+            // MSC1767 experiment
+            "org.matrix.msc1767.text": "Voice message",
+            "org.matrix.msc1767.file": {
+                url: mxc,
+                name: "Voice message.ogg",
+                mimetype: this.state.recorder.contentType,
+                size: this.state.recorder.contentLength,
+            },
+            "org.matrix.msc1767.audio": {
+                duration: Math.round(this.state.recorder.durationSeconds * 1000),
+
+                // Events can't have floats, so we try to maintain resolution by using 1024
+                // as a maximum value. The waveform contains values between zero and 1, so this
+                // should come out largely sane.
+                //
+                // We're expecting about one data point per second of audio.
+                waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
+            },
+            "org.matrix.msc2516.voice": {}, // No content, this is a rendering hint
+        });
+        await this.disposeRecording();
+    }
+
+    private async disposeRecording() {
+        await VoiceRecordingStore.instance.disposeRecording();
+
+        // Reset back to no recording, which means no phase (ie: restart component entirely)
+        this.setState({recorder: null, recordingPhase: null});
+    }
+
+    private onCancel = async () => {
+        await this.disposeRecording();
     };
 
-    private renderWaveformArea() {
-        if (!this.state.recorder) return null;
+    private onRecordStartEndClick = async () => {
+        if (this.state.recorder) {
+            await this.state.recorder.stop();
+            return;
+        }
 
-        return <div className='mx_VoiceRecordComposerTile_waveformContainer'>
+        // The "microphone access error" dialogs are used a lot, so let's functionify them
+        const accessError = () => {
+            Modal.createTrackedDialog('Microphone Access Error', '', ErrorDialog, {
+                title: _t("Unable to access your microphone"),
+                description: <>
+                    <p>{_t(
+                        "We were unable to access your microphone. Please check your browser settings and try again.",
+                    )}</p>
+                </>,
+            });
+        };
+
+        // Do a sanity test to ensure we're about to grab a valid microphone reference. Things might
+        // change between this and recording, but at least we will have tried.
+        try {
+            const devices = await CallMediaHandler.getDevices();
+            if (!devices?.['audioinput']?.length) {
+                Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
+                    title: _t("No microphone found"),
+                    description: <>
+                        <p>{_t(
+                            "We didn't find a microphone on your device. Please check your settings and try again.",
+                        )}</p>
+                    </>,
+                });
+                return;
+            }
+            // else we probably have a device that is good enough
+        } catch (e) {
+            console.error("Error getting devices: ", e);
+            accessError();
+            return;
+        }
+
+        try {
+            const recorder = VoiceRecordingStore.instance.startRecording();
+            await recorder.start();
+
+            // We don't need to remove the listener: the recorder will clean that up for us.
+            recorder.on(UPDATE_EVENT, (ev: RecordingState) => {
+                if (ev === RecordingState.EndingSoon) return; // ignore this state: it has no UI purpose here
+                this.setState({recordingPhase: ev});
+            });
+
+            this.setState({recorder, recordingPhase: RecordingState.Started});
+        } catch (e) {
+            console.error("Error starting recording: ", e);
+            accessError();
+
+            // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack
+            VoiceRecordingStore.instance.disposeRecording();
+        }
+    };
+
+    private renderWaveformArea(): ReactNode {
+        if (!this.state.recorder) return null; // no recorder means we're not recording: no waveform
+
+        if (this.state.recordingPhase !== RecordingState.Started) {
+            // TODO: @@ TR: Should we disable this during upload? What does a failed upload look like?
+            return <RecordingPlayback playback={this.state.recorder.getPlayback()} />;
+        }
+
+        // only other UI is the recording-in-progress UI
+        return <div className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
             <LiveRecordingClock recorder={this.state.recorder} />
             <LiveRecordingWaveform recorder={this.state.recorder} />
         </div>;
     }
 
-    public render() {
-        const classes = classNames({
-            'mx_MessageComposer_button': !this.state.recorder,
-            'mx_MessageComposer_voiceMessage': !this.state.recorder,
-            'mx_VoiceRecordComposerTile_stop': !!this.state.recorder,
-        });
+    public render(): ReactNode {
+        let recordingInfo;
+        let deleteButton;
+        if (!this.state.recordingPhase || this.state.recordingPhase === RecordingState.Started) {
+            const classes = classNames({
+                'mx_MessageComposer_button': !this.state.recorder,
+                'mx_MessageComposer_voiceMessage': !this.state.recorder,
+                'mx_VoiceRecordComposerTile_stop': this.state.recorder?.isRecording,
+            });
 
-        let tooltip = _t("Record a voice message");
-        if (!!this.state.recorder) {
-            // TODO: @@ TravisR: Change to match behaviour
-            tooltip = _t("Stop & send recording");
+            let tooltip = _t("Record a voice message");
+            if (!!this.state.recorder) {
+                tooltip = _t("Stop the recording");
+            }
+
+            let stopOrRecordBtn = <AccessibleTooltipButton
+                className={classes}
+                onClick={this.onRecordStartEndClick}
+                title={tooltip}
+            />;
+            if (this.state.recorder && !this.state.recorder?.isRecording) {
+                stopOrRecordBtn = null;
+            }
+
+            recordingInfo = stopOrRecordBtn;
+        }
+
+        if (this.state.recorder && this.state.recordingPhase !== RecordingState.Uploading) {
+            deleteButton = <AccessibleTooltipButton
+                className='mx_VoiceRecordComposerTile_delete'
+                title={_t("Delete recording")}
+                onClick={this.onCancel}
+            />;
         }
 
         return (<>
+            {deleteButton}
             {this.renderWaveformArea()}
-            <AccessibleTooltipButton
-                className={classes}
-                onClick={this.onStartStopVoiceMessage}
-                title={tooltip}
-            />
+            {recordingInfo}
         </>);
     }
 }

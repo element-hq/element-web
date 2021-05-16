@@ -125,7 +125,10 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
-        if (SdkConfig.get()['showLabsSettings']) {
+        // Show the Labs tab if enabled or if there are any active betas
+        if (SdkConfig.get()['showLabsSettings']
+            || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
+        ) {
             tabs.push(new Tab(
                 USER_LABS_TAB,
                 _td("Labs"),
@@ -155,8 +158,12 @@ export default class UserSettingsDialog extends React.Component {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         return (
-            <BaseDialog className='mx_UserSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Settings")}>
+            <BaseDialog
+                className='mx_UserSettingsDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Settings")}
+            >
                 <div className='mx_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} initialTabId={this.props.initialTabId} />
                 </div>

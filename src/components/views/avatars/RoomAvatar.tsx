@@ -93,8 +93,8 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         let oobAvatar = null;
         if (props.oobData.avatarUrl) {
             oobAvatar = mediaFromMxc(props.oobData.avatarUrl).getThumbnailOfSourceHttp(
-                Math.floor(props.width * window.devicePixelRatio),
-                Math.floor(props.height * window.devicePixelRatio),
+                props.width,
+                props.height,
                 props.resizeMethod,
             );
         }
@@ -109,12 +109,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     private static getRoomAvatarUrl(props: IProps): string {
         if (!props.room) return null;
 
-        return Avatar.avatarUrlForRoom(
-            props.room,
-            Math.floor(props.width * window.devicePixelRatio),
-            Math.floor(props.height * window.devicePixelRatio),
-            props.resizeMethod,
-        );
+        return Avatar.avatarUrlForRoom(props.room, props.width, props.height, props.resizeMethod);
     }
 
     private onRoomAvatarClick = () => {

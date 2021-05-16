@@ -128,8 +128,8 @@ export default class LinkPreviewWidget extends React.Component {
         let img;
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                    <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
-                  </div>;
+                <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
+            </div>;
         }
 
         // The description includes &-encoded HTML entities, we decode those as React treats the thing as an

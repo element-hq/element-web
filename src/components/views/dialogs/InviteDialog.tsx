@@ -1312,7 +1312,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             goButtonFn = this._startDm;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
-            const isSpace = room?.isSpaceRoom();
+            const isSpace = SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom();
             title = isSpace
                 ? _t("Invite to %(spaceName)s", {
                     spaceName: room.name || _t("Unnamed Space"),

@@ -231,8 +231,10 @@ export class KeyBindingsManager {
     /**
      * Finds a matching KeyAction for a given KeyboardEvent
      */
-    private getAction<T extends string>(getters: KeyBindingGetter<T>[], ev: KeyboardEvent | React.KeyboardEvent)
-        : T | undefined {
+    private getAction<T extends string>(
+        getters: KeyBindingGetter<T>[],
+        ev: KeyboardEvent | React.KeyboardEvent,
+    ): T | undefined {
         for (const getter of getters) {
             const bindings = getter();
             const binding = bindings.find(it => isKeyComboMatch(ev, it.keyCombo, isMac));
