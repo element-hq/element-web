@@ -3295,5 +3295,7 @@
     "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s kommer att ladda om med utrymmen aktiverade. Gemenskaper och anpassade taggar kommer att döljas.",
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta tillgänglig för webben, skrivbord och Android. Tack för att du provar betan.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Om du lämnar så kommer %(brand)s att ladda om med utrymmen inaktiverade. Gemenskaper och anpassade taggar kommer att synas igen.",
-    "Spaces are a new way to group rooms and people.": "Utrymmen är nya sätt att gruppera rum och personer."
+    "Spaces are a new way to group rooms and people.": "Utrymmen är nya sätt att gruppera rum och personer.",
+    "<b>This is an experimental feature.</b> For now, new users receiving an invite will have to open the invite on <link/> to actually join.": "<b>Det här är en experimentell funktion.</b> För tillfället så behöver nya inbjudna användare öppna inbjudan på <link/> för att faktiskt gå med.",
+    "To join %(spaceName)s, turn on the <a>Spaces beta</a>": "För att gå med i %(spaceName)s, aktivera <a>utrymmesbetan</a>"
 }
