@@ -168,7 +168,7 @@ export default class PerformanceMonitor {
 }
 
 
-// Convienience exports
+// Convenience exports
 export {
     PerformanceEntryNames,
 }
