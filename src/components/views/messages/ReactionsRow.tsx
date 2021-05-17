@@ -50,6 +50,10 @@ const ReactButton = ({ mxEvent, reactions }: IProps) => {
             })}
             title={_t("Add reaction")}
             onClick={openMenu}
+            onContextMenu={e => {
+                e.preventDefault();
+                openMenu();
+            }}
             isExpanded={menuDisplayed}
             inputRef={button}
         />
@@ -173,6 +177,8 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 myReactionEvent={myReactionEvent}
             />;
         }).filter(item => !!item);
+
+        if (!items.length) return null;
 
         // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
         // The "+ 1" ensure that the "show all" reveals something that takes up
