@@ -486,13 +486,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     startPageChangeTimer() {
-        PerformanceMonitor.start(PerformanceEntryNames.PAGE_CHANGE);
+        PerformanceMonitor.instance.start(PerformanceEntryNames.PAGE_CHANGE);
     }
 
     stopPageChangeTimer() {
-        PerformanceMonitor.stop(PerformanceEntryNames.PAGE_CHANGE);
+        const perfMonitor = PerformanceMonitor.instance;
 
-        const entries = PerformanceMonitor.getEntries({
+        perfMonitor.stop(PerformanceEntryNames.PAGE_CHANGE);
+
+        const entries = perfMonitor.getEntries({
             name: PerformanceEntryNames.PAGE_CHANGE,
         });
         const measurement = entries.pop();
@@ -1612,13 +1614,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'start_registration',
                 params: params,
             });
-            PerformanceMonitor.start(PerformanceEntryNames.REGISTER);
+            PerformanceMonitor.instance.start(PerformanceEntryNames.REGISTER);
         } else if (screen === 'login') {
             dis.dispatch({
                 action: 'start_login',
                 params: params,
             });
-            PerformanceMonitor.start(PerformanceEntryNames.LOGIN);
+            PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
         } else if (screen === 'forgot_password') {
             dis.dispatch({
                 action: 'start_password_recovery',
@@ -1947,8 +1949,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
-        PerformanceMonitor.stop(PerformanceEntryNames.LOGIN);
-        PerformanceMonitor.stop(PerformanceEntryNames.REGISTER);
+        PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
+        PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };
 
     // complete security / e2e setup has finished

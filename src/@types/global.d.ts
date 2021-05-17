@@ -81,7 +81,7 @@ declare global {
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
         mxPerformanceMonitor: PerformanceMonitor;
-        mxPerformanceEntryNames: PerformanceEntryNames;
+        mxPerformanceEntryNames: any;
     }
 
     interface Document {

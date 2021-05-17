@@ -16,13 +16,6 @@ limitations under the License.
 
 import { PerformanceEntryNames } from "./entry-names";
 
-const START_PREFIX = "start:";
-const STOP_PREFIX = "stop:";
-
-export {
-    PerformanceEntryNames,
-}
-
 interface GetEntriesOptions {
     name?: string,
     type?: string,
@@ -35,28 +28,40 @@ interface PerformanceDataListener {
     callback: PerformanceCallbackFunction
 }
 
-let listeners: PerformanceDataListener[] = [];
-const entries: PerformanceEntry[] = [];
-
 export default class PerformanceMonitor {
+    static _instance: PerformanceMonitor;
+
+    private START_PREFIX = "start:"
+    private STOP_PREFIX = "stop:"
+
+    private listeners: PerformanceDataListener[] = []
+    private entries: PerformanceEntry[] = []
+
+    public static get instance(): PerformanceMonitor {
+        if (!PerformanceMonitor._instance) {
+            PerformanceMonitor._instance = new PerformanceMonitor();
+        }
+        return PerformanceMonitor._instance;
+    }
+
     /**
      * Starts a performance recording
      * @param name Name of the recording
      * @param id Specify an identifier appended to the measurement name
      * @returns {void}
      */
-    static start(name: string, id?: string): void {
-        if (!supportsPerformanceApi()) {
+    start(name: string, id?: string): void {
+        if (!this.supportsPerformanceApi()) {
             return;
         }
-        const key = buildKey(name, id);
+        const key = this.buildKey(name, id);
 
         if (performance.getEntriesByName(key).length > 0) {
             console.warn(`Recording already started for: ${name}`);
             return;
         }
 
-        performance.mark(START_PREFIX + key);
+        performance.mark(this.START_PREFIX + key);
     }
 
     /**
@@ -66,21 +71,21 @@ export default class PerformanceMonitor {
      * @param id Specify an identifier appended to the measurement name
      * @returns {void}
      */
-    static stop(name: string, id?: string): PerformanceEntry {
-        if (!supportsPerformanceApi()) {
+    stop(name: string, id?: string): PerformanceEntry {
+        if (!this.supportsPerformanceApi()) {
             return;
         }
-        const key = buildKey(name, id);
-        if (performance.getEntriesByName(START_PREFIX + key).length === 0) {
+        const key = this.buildKey(name, id);
+        if (performance.getEntriesByName(this.START_PREFIX + key).length === 0) {
             console.warn(`No recording started for: ${name}`);
             return;
         }
 
-        performance.mark(STOP_PREFIX + key);
+        performance.mark(this.STOP_PREFIX + key);
         performance.measure(
             key,
-            START_PREFIX + key,
-            STOP_PREFIX + key,
+            this.START_PREFIX + key,
+            this.STOP_PREFIX + key,
         );
 
         this.clear(name, id);
@@ -90,10 +95,10 @@ export default class PerformanceMonitor {
         // Keeping a reference to all PerformanceEntry created
         // by this abstraction for historical events collection
         // when adding a data callback
-        entries.push(measurement);
+        this.entries.push(measurement);
 
-        listeners.forEach(listener => {
-            if (shouldEmit(listener, measurement)) {
+        this.listeners.forEach(listener => {
+            if (this.shouldEmit(listener, measurement)) {
                 listener.callback([measurement])
             }
         });
@@ -101,66 +106,73 @@ export default class PerformanceMonitor {
         return measurement;
     }
 
-    static clear(name: string, id?: string): void {
-        if (!supportsPerformanceApi()) {
+    clear(name: string, id?: string): void {
+        if (!this.supportsPerformanceApi()) {
             return;
         }
-        const key = buildKey(name, id);
-        performance.clearMarks(START_PREFIX + key);
-        performance.clearMarks(STOP_PREFIX + key);
+        const key = this.buildKey(name, id);
+        performance.clearMarks(this.START_PREFIX + key);
+        performance.clearMarks(this.STOP_PREFIX + key);
     }
 
-    static getEntries({ name, type }: GetEntriesOptions = {}): PerformanceEntry[] {
-        return entries.filter(entry => {
+    getEntries({ name, type }: GetEntriesOptions = {}): PerformanceEntry[] {
+        return this.entries.filter(entry => {
             const satisfiesName = !name || entry.name === name;
             const satisfiedType = !type || entry.entryType === type;
             return satisfiesName && satisfiedType;
         });
     }
 
-    static addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
-        listeners.push(listener);
+    addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
+        this.listeners.push(listener);
         if (buffer) {
-            const toEmit = entries.filter(entry => shouldEmit(listener, entry));
+            const toEmit = this.entries.filter(entry => this.shouldEmit(listener, entry));
             if (toEmit.length > 0) {
                 listener.callback(toEmit);
             }
         }
     }
 
-    static removePerformanceDataCallback(callback?: PerformanceCallbackFunction) {
+    removePerformanceDataCallback(callback?: PerformanceCallbackFunction) {
         if (!callback) {
-            listeners = [];
+            this.listeners = [];
         } else {
-            listeners.splice(
-                listeners.findIndex(listener => listener.callback === callback),
+            this.listeners.splice(
+                this.listeners.findIndex(listener => listener.callback === callback),
                 1,
             );
         }
     }
+
+    /**
+     * Tor browser does not support the Performance API
+     * @returns {boolean} true if the Performance API is supported
+     */
+    private supportsPerformanceApi(): boolean {
+        return performance !== undefined && performance.mark !== undefined;
+    }
+
+    private shouldEmit(listener: PerformanceDataListener, entry: PerformanceEntry): boolean {
+        return !listener.entryNames || listener.entryNames.includes(entry.name);
+    }
+
+    /**
+     * Internal utility to ensure consistent name for the recording
+     * @param name Name of the recording
+     * @param id Specify an identifier appended to the measurement name
+     * @returns {string} a compound of the name and identifier if present
+     */
+    private buildKey(name: string, id?: string): string {
+        return `${name}${id ? `:${id}` : ''}`;
+    }
 }
 
-function shouldEmit(listener: PerformanceDataListener, entry: PerformanceEntry): boolean {
-    return !listener.entryNames || listener.entryNames.includes(entry.name);
+
+// Convienience exports
+export {
+    PerformanceEntryNames,
 }
 
-/**
- * Tor browser does not support the Performance API
- * @returns {boolean} true if the Performance API is supported
- */
-function supportsPerformanceApi(): boolean {
-    return performance !== undefined && performance.mark !== undefined;
-}
-
-/**
- * Internal utility to ensure consistent name for the recording
- * @param name Name of the recording
- * @param id Specify an identifier appended to the measurement name
- * @returns {string} a compound of the name and identifier if present
- */
-function buildKey(name: string, id?: string): string {
-    return `${name}${id ? `:${id}` : ''}`;
-}
-
-window.mxPerformanceMonitor = PerformanceMonitor;
+// Exposing those to the window object to bridge them from tests
+window.mxPerformanceMonitor = PerformanceMonitor.instance;
 window.mxPerformanceEntryNames = PerformanceEntryNames;
