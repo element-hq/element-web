@@ -219,16 +219,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
     };
 
-    // Child components assume that the client peg will not be null, so give them some
-    // sort of assurance here by only allowing a re-render if the client is truthy.
-    //
-    // This is required because `LoggedInView` maintains its own state and if this state
-    // updates after the client peg has been made null (during logout), then it will
-    // attempt to re-render and the children will throw errors.
-    shouldComponentUpdate() {
-        return Boolean(MatrixClientPeg.get());
-    }
-
     canResetTimelineInRoom = (roomId) => {
         if (!this._roomView.current) {
             return true;
