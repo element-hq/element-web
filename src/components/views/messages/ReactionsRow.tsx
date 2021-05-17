@@ -50,6 +50,10 @@ const ReactButton = ({ mxEvent, reactions }: IProps) => {
             })}
             title={_t("Add reaction")}
             onClick={openMenu}
+            onContextMenu={e => {
+                e.preventDefault();
+                openMenu();
+            }}
             isExpanded={menuDisplayed}
             inputRef={button}
         />
