@@ -42,7 +42,7 @@ import {SpaceStoreClass} from "../stores/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
 import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
-import PerformanceMonitor, { PerformanceEntryNames } from "../performance";
+import PerformanceMonitor from "../performance";
 
 declare global {
     interface Window {
