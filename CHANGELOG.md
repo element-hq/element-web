@@ -1,3 +1,22 @@
+Changes in [1.7.28](https://github.com/vector-im/element-web/releases/tag/v1.7.28) (2021-05-17)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.28-rc.1...v1.7.28)
+
+## Security notice
+
+Element Web 1.7.28 fixes (by upgrading to matrix-react-sdk 3.21.0) a low
+severity issue (GHSA-8796-gc9j-63rv) related to file upload. When uploading a
+file, the local file preview can lead to execution of scripts embedded in the
+uploaded file, but only after several user interactions to open the preview in
+a separate tab. This only impacts the local user while in the process of
+uploading. It cannot be exploited remotely or by other users. Thanks to
+[Muhammad Zaid Ghifari](https://github.com/MR-ZHEEV) for responsibly disclosing
+this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.21.0 and JS SDK 11.0.0
+
 Changes in [1.7.28-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.28-rc.1) (2021-05-11)
 =========================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.27...v1.7.28-rc.1)
