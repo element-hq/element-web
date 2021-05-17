@@ -3332,5 +3332,10 @@
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Bêta disponible pour l’application web, de bureau et Android. Merci d’essayer la bêta.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s va être redémarré avec les espaces désactivés. Les communautés et les étiquettes personnalisées seront de nouveau visibles.",
     "Spaces are a new way to group rooms and people.": "Les espaces sont un nouveau moyen de regrouper les salons et les personnes.",
-    "Message search initialisation failed": "Échec de l’initialisation de la recherche de message"
+    "Message search initialisation failed": "Échec de l’initialisation de la recherche de message",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "Vos commentaires aideront à rendre les espaces meilleurs. N'hésitez pas à entrer dans les détails.",
+    "%(featureName)s beta feedback": "Commentaires sur la bêta de %(featureName)s",
+    "Thank you for your feedback, we really appreciate it.": "Merci pour vos commentaires, nous en sommes vraiment reconnaissants.",
+    "Beta feedback": "Commentaires sur la bêta",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Si vous quittez, %(brand)s sera rechargé avec les espaces désactivés. Les communautés et les étiquettes personnalisées seront à nouveau visibles."
 }
