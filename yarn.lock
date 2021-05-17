@@ -7663,21 +7663,6 @@ matrix-js-sdk@11.0.0:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
-matrix-js-sdk@11.0.0-rc.1:
-  version "11.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-11.0.0-rc.1.tgz#a40fdc9e93a1a9e873dd867e5766a20ea780e1d8"
-  integrity sha512-zATTKWH4yrs6mKcLQNvhvwi1IRGUEx3xt3MPCFuSuQq23TMbnxhOZMMpUF6n19FpioHw9jbz7cPsdVKM2gpDLw==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -7686,10 +7671,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.21.0-rc.1:
-  version "3.21.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.21.0-rc.1.tgz#0c707ffbeddbcd9771a8ef807729d237b57e8288"
-  integrity sha512-rnv2uijK8rej79cjLiYhpWAd1gGQ1uwl6asWYvmL1W2lOjHsyN5POUkGyLc93TfGjeJiEtKITXSEFOiWdZWDzw==
+matrix-react-sdk@3.21.0:
+  version "3.21.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.21.0.tgz#18a162cd270f979c4f6b630fb65d668ba3e07fd1"
+  integrity sha512-Hdb5XE1qXPr7/bZmLvCU6BNWSjqkS2Lfv7wtco4y08G+KN6PqTv8Sp3vDuFUhKkT6KQomyjh8jIkOudp4fiLUA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
@@ -7717,7 +7702,7 @@ matrix-react-sdk@3.21.0-rc.1:
     katex "^0.12.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.20"
-    matrix-js-sdk "11.0.0-rc.1"
+    matrix-js-sdk "11.0.0"
     matrix-widget-api "^0.1.0-beta.13"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
