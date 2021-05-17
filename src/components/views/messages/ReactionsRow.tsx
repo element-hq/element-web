@@ -174,6 +174,8 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             />;
         }).filter(item => !!item);
 
+        if (!items.length) return null;
+
         // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
         // The "+ 1" ensure that the "show all" reveals something that takes up
         // more space than the button itself.
