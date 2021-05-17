@@ -3272,5 +3272,17 @@
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta verze je k dispozici pro web, desktop a Android. Děkujeme vám za vyzkoušení beta verze.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s se znovu načte s vypnutými Prostory. Skupiny a vlastní značky budou opět viditelné.",
     "Spaces are a new way to group rooms and people.": "Prostory představují nový způsob seskupování místností a osob.",
-    "Message search initialisation failed": "Inicializace vyhledávání zpráv se nezdařila"
+    "Message search initialisation failed": "Inicializace vyhledávání zpráv se nezdařila",
+    "Spaces are a beta feature.": "Prostory jsou funkcí beta verze.",
+    "Search names and descriptions": "Hledat názvy a popisy",
+    "You may contact me if you have any follow up questions": "V případě dalších dotazů se na mě můžete obrátit",
+    "To leave the beta, visit your settings.": "Chcete-li opustit beta verzi, jděte do nastavení.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Vaše platforma a uživatelské jméno budou zaznamenány, abychom mohli co nejlépe využít vaši zpětnou vazbu.",
+    "%(featureName)s beta feedback": "%(featureName)s zpětná vazba beta verze",
+    "Thank you for your feedback, we really appreciate it.": "Děkujeme za vaši zpětnou vazbu, velmi si jí vážíme.",
+    "Beta feedback": "Zpětná vazba na betaverzi",
+    "Add reaction": "Přidat reakci",
+    "Send and receive voice messages": "Odeslat a přijmout hlasové zprávy",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "Vaše zpětná vazba pomůže zlepšit prostory. Čím podrobnější bude, tím lépe.",
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Pokud odejdete, %(brand)s se znovu načte s vypnutými Prostory. Skupiny a vlastní značky budou opět viditelné."
 }
