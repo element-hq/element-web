@@ -2102,7 +2102,7 @@
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Prototipo de comunidades v2. Requiere un servidor compatible. Altamente experimental - usar con precuación.",
     "Font size": "Tamaño del texto",
     "Use custom size": "Usar un tamaño personalizado",
-    "Use a more compact ‘Modern’ layout": "Usar un diseño más «moderno y compacto",
+    "Use a more compact ‘Modern’ layout": "Usar un diseño más «moderno y compacto»",
     "Use a system font": "Usar una fuente del sistema",
     "System font name": "Nombre de la fuente",
     "Enable experimental, compact IRC style layout": "Activar el diseño experimental de IRC compacto",
@@ -3292,5 +3292,18 @@
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Versión beta disponible para web, escritorio y Android. Gracias por usar la beta.",
     "%(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "%(brand)s volverá a cargarse con los espacios desactivados. Las comunidades y etiquetas personalizadas serán visibles de nuevo.",
     "Spaces are a new way to group rooms and people.": "Los espacios son una nueva manera de agrupar salas y gente.",
-    "Message search initialisation failed": "Ha fallado la inicialización de la búsqueda de mensajes"
+    "Message search initialisation failed": "Ha fallado la inicialización de la búsqueda de mensajes",
+    "Spaces are a beta feature.": "Los espacios son una funcionalidad en beta.",
+    "Search names and descriptions": "Buscar por nombre y descripción",
+    "You may contact me if you have any follow up questions": "Os podéis poner en contacto conmigo si tenéis alguna pregunta",
+    "To leave the beta, visit your settings.": "Para salir de la beta, ve a tus ajustes.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Tu nombre de usuario y plataforma serán adjuntados, para que podamos interpretar tus comentarios lo mejor posible.",
+    "%(featureName)s beta feedback": "Comentarios sobre la funcionalidad beta %(featureName)s",
+    "Thank you for your feedback, we really appreciate it.": "Muchas gracias por tus comentarios.",
+    "Beta feedback": "Danos tu opinión sobre la beta",
+    "Add reaction": "Reaccionar",
+    "Feeling experimental? Labs are the best way to get things early, test out new features and help shape them before they actually launch. <a>Learn more</a>.": "¿Te apetece probar cosas nuevas? Los experimentos son la mejor manera de conseguir acceso anticipado a nuevas funcionalidades, probarlas y ayudar a mejorarlas antes de su lanzamiento. <a>Más información</a>.",
+    "Send and receive voice messages": "Enviar y recibir mensajes de voz",
+    "Your feedback will help make spaces better. The more detail you can go into, the better.": "Tus comentarios ayudarán a mejorar los espacios. Cuanto más detalle incluyas, mejor.",
+    "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.": "Beta disponible para la versión web, de escritorio o Android. Puede que algunas funcionalidades no estén disponibles en tu servidor base."
 }
