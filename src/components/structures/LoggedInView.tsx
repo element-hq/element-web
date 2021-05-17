@@ -27,7 +27,7 @@ import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
-import {MatrixClientPeg, IMatrixClientCreds} from '../../MatrixClientPeg';
+import { IMatrixClientCreds } from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
