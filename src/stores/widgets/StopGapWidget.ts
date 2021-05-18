@@ -395,6 +395,7 @@ export class StopGapWidget extends EventEmitter {
     }
 
     private onEvent = (ev: MatrixEvent) => {
+        MatrixClientPeg.get().decryptEventIfNeeded(ev);
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         if (ev.getRoomId() !== this.eventListenerRoomId) return;
         this.feedEvent(ev);
