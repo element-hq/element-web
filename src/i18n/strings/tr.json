@@ -10,7 +10,7 @@
     "Explore rooms": "Odaları keşfet",
     "Invalid JSON": "JSON geçersiz",
     "Unexpected error preparing the app. See console for details.": "Uygulama hazırlanırken beklenmeyen bir hata oldu. Detaylar için konsola bakın.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Geçersiz yapılandırma: default_server_config, default_server_name, yada default_hs_url den sadece birisi seçilebilir.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Hatalı ayarlar: default_server_config, default_server_name ve default_hs_url ayarlarından en fazla biri girilebilir.",
     "Invalid configuration: no default server specified.": "Geçersiz yapılandırma: varsayılan sunucu seçilmemiş.",
     "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s",
     "Go to your browser to complete Sign In": "Oturum açmayı tamamlamak için tarayıcınıza gidin",
