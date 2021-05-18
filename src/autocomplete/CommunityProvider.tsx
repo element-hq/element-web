@@ -50,7 +50,12 @@ export default class CommunityProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
@@ -81,7 +86,7 @@ export default class CommunityProvider extends AutocompleteProvider {
             this.matcher.setObjects(groups);
 
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString);
+            completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
                 (c) => score(matchedString, c.groupId),
                 (c) => c.groupId.length,

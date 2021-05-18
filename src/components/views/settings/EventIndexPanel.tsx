@@ -232,7 +232,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                     <p>
                         {this.state.enabling
                             ? <InlineSpinner />
-                            : _t("Message search initilisation failed")
+                            : _t("Message search initialisation failed")
                         }
                     </p>
                     {EventIndexPeg.error && (

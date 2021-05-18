@@ -54,6 +54,15 @@ export class PlaybackClock implements IDestroyable {
         }
     };
 
+    /**
+     * Mark the time in the audio context where the clip starts/has been loaded.
+     * This is to ensure the clock isn't skewed into thinking it is ~0.5s into
+     * a clip when the duration is set.
+     */
+    public flagLoadTime() {
+        this.clipStart = this.context.currentTime;
+    }
+
     public flagStart() {
         if (this.stopped) {
             this.clipStart = this.context.currentTime;

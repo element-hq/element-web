@@ -93,7 +93,14 @@ export default abstract class AutocompleteProvider {
         };
     }
 
-    abstract getCompletions(query: string, selection: ISelectionRange, force: boolean): Promise<ICompletion[]>;
+    abstract getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force: boolean,
+        limit: number,
+    ): Promise<ICompletion[]> {
+        return [];
+    }
 
     abstract getName(): string;
 

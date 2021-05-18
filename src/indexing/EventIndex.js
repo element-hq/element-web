@@ -38,7 +38,6 @@ export default class EventIndex extends EventEmitter {
         this._eventsPerCrawl = 100;
         this._crawler = null;
         this._currentCheckpoint = null;
-        this.liveEventsForIndex = new Set();
     }
 
     async init() {
@@ -188,16 +187,12 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
-        // If the event is not yet decrypted mark it for the
-        // Event.decrypted callback.
         if (ev.isBeingDecrypted()) {
-            const eventId = ev.getId();
-            this.liveEventsForIndex.add(eventId);
-        } else {
-            // If the event is decrypted or is unencrypted add it to the
-            // index now.
-            await this.addLiveEventToIndex(ev);
+            // XXX: Private member access
+            await ev._decryptionPromise;
         }
+
+        await this.addLiveEventToIndex(ev);
     }
 
     onRoomStateEvent = async (ev, state) => {
@@ -216,10 +211,7 @@ export default class EventIndex extends EventEmitter {
      * listener, if so queues it up to be added to the index.
      */
     onEventDecrypted = async (ev, err) => {
-        const eventId = ev.getId();
-
         // If the event isn't in our live event set, ignore it.
-        if (!this.liveEventsForIndex.delete(eventId)) return;
         if (err) return;
         await this.addLiveEventToIndex(ev);
     }
@@ -523,18 +515,23 @@ export default class EventIndex extends EventEmitter {
                 }
             });
 
-            const decryptionPromises = [];
-
-            matrixEvents.forEach(ev => {
-                if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
-                    // TODO the decryption promise is a private property, this
-                    // should either be made public or we should convert the
-                    // event that gets fired when decryption is done into a
-                    // promise using the once event emitter method:
-                    // https://nodejs.org/api/events.html#events_events_once_emitter_name
-                    decryptionPromises.push(ev._decryptionPromise);
-                }
-            });
+            const decryptionPromises = matrixEvents
+                .filter(event => event.isEncrypted())
+                .map(event => {
+                    if (event.shouldAttemptDecryption()) {
+                        return event.attemptDecryption(client._crypto, {
+                            isRetry: true,
+                            emit: false,
+                        });
+                    } else {
+                        // TODO the decryption promise is a private property, this
+                        // should either be made public or we should convert the
+                        // event that gets fired when decryption is done into a
+                        // promise using the once event emitter method:
+                        // https://nodejs.org/api/events.html#events_events_once_emitter_name
+                        return event._decryptionPromise;
+                    }
+                });
 
             // Let us wait for all the events to get decrypted.
             await Promise.all(decryptionPromises);

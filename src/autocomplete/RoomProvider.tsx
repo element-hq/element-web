@@ -1,8 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
-Copyright 2017 Vector Creations Ltd
-Copyright 2017, 2018 New Vector Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2017, 2018, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,17 +16,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
+import {uniqBy, sortBy} from "lodash";
 import Room from "matrix-js-sdk/src/models/room";
+
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
-import * as sdk from '../index';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
-import {uniqBy, sortBy} from "lodash";
+import RoomAvatar from '../components/views/avatars/RoomAvatar';
+import SettingsStore from "../settings/SettingsStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -49,7 +50,7 @@ function matcherObject(room: Room, displayedAlias: string, matchName = "") {
 }
 
 export default class RoomProvider extends AutocompleteProvider {
-    matcher: QueryMatcher<Room>;
+    protected matcher: QueryMatcher<Room>;
 
     constructor() {
         super(ROOM_REGEX);
@@ -58,15 +59,28 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
-        const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
+    protected getRooms() {
+        const cli = MatrixClientPeg.get();
+        let rooms = cli.getVisibleRooms();
 
-        const client = MatrixClientPeg.get();
+        if (SettingsStore.getValue("feature_spaces")) {
+            rooms = rooms.filter(r => !r.isSpaceRoom());
+        }
+
+        return rooms;
+    }
+
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
-            let matcherObjects = client.getVisibleRooms().reduce((aliases, room) => {
+            let matcherObjects = this.getRooms().reduce((aliases, room) => {
                 if (room.getCanonicalAlias()) {
                     aliases = aliases.concat(matcherObject(room, room.getCanonicalAlias(), room.name));
                 }
@@ -90,7 +104,7 @@ export default class RoomProvider extends AutocompleteProvider {
 
             this.matcher.setObjects(matcherObjects);
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString);
+            completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
                 (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
@@ -110,7 +124,7 @@ export default class RoomProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).filter((completion) => !!completion.completion && completion.completion.length > 0).slice(0, 4);
+            }).filter((completion) => !!completion.completion && completion.completion.length > 0);
         }
         return completions;
     }

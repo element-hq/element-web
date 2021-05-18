@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.20.0",
+  "version": "3.21.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -80,7 +80,7 @@
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.20",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-    "matrix-widget-api": "^0.1.0-beta.13",
+    "matrix-widget-api": "^0.1.0-beta.14",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
     "pako": "^2.0.3",
@@ -186,7 +186,10 @@
     ],
     "moduleNameMapper": {
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
-      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json"
+      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
+      "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
+      "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
+      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"

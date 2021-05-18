@@ -87,7 +87,7 @@ export default class QueryMatcher<T extends Object> {
         }
     }
 
-    match(query: string): T[] {
+    match(query: string, limit = -1): T[] {
         query = this.processQuery(query);
         if (this._options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
@@ -129,7 +129,10 @@ export default class QueryMatcher<T extends Object> {
         });
 
         // Now map the keys to the result objects. Also remove any duplicates.
-        return uniq(matches.map((match) => match.object));
+        const dedupped = uniq(matches.map((match) => match.object));
+        const maxLength = limit === -1 ? dedupped.length : limit;
+
+        return dedupped.slice(0, maxLength);
     }
 
     private processQuery(query: string): string {

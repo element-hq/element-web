@@ -3286,5 +3286,16 @@
     "Including %(commaSeparatedMembers)s": "Sealhulgas %(commaSeparatedMembers)s",
     "View all %(count)s members|one": "Vaata üht liiget",
     "View all %(count)s members|other": "Vaata kõiki %(count)s liiget",
-    "Failed to send": "Saatmine ei õnnestunud"
+    "Failed to send": "Saatmine ei õnnestunud",
+    "Enter your Security Phrase a second time to confirm it.": "Kinnitamiseks palun sisesta turvafraas teist korda.",
+    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Lisamiseks vali vestlusi ja jututubasid. Hetkel on see kogukonnakeskus vaid sinu jaoks ja esialgu keegi ei saa sellest teada. Teisi saad liituma kutsuda hiljem.",
+    "What do you want to organise?": "Mida sa soovid ette võtta?",
+    "Filter all spaces": "Otsi kõikides kogukonnakeskustest",
+    "Delete recording": "Kustuta salvestus",
+    "Stop the recording": "Lõpeta salvestamine",
+    "%(count)s results in all spaces|one": "%(count)s tulemus kõikides kogukonnakeskustes",
+    "%(count)s results in all spaces|other": "%(count)s tulemust kõikides kogukonnakeskustes",
+    "You have no ignored users.": "Sa ei ole veel kedagi eiranud.",
+    "Play": "Esita",
+    "Pause": "Peata"
 }

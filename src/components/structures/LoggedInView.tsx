@@ -27,7 +27,7 @@ import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
-import {MatrixClientPeg, IMatrixClientCreds} from '../../MatrixClientPeg';
+import { IMatrixClientCreds } from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
@@ -218,16 +218,6 @@ class LoggedInView extends React.Component<IProps, IState> {
             activeCalls: CallHandler.sharedInstance().getAllActiveCalls(),
         });
     };
-
-    // Child components assume that the client peg will not be null, so give them some
-    // sort of assurance here by only allowing a re-render if the client is truthy.
-    //
-    // This is required because `LoggedInView` maintains its own state and if this state
-    // updates after the client peg has been made null (during logout), then it will
-    // attempt to re-render and the children will throw errors.
-    shouldComponentUpdate() {
-        return Boolean(MatrixClientPeg.get());
-    }
 
     canResetTimelineInRoom = (roomId) => {
         if (!this._roomView.current) {

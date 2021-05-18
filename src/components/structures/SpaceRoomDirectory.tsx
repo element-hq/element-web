@@ -41,6 +41,7 @@ import TextWithTooltip from "../views/elements/TextWithTooltip";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import {getOrder} from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
+import {linkifyElement} from "../../HtmlUtils";
 
 interface IHierarchyProps {
     space: Room;
@@ -172,7 +173,16 @@ const Tile: React.FC<ITileProps> = ({
             { suggestedSection }
         </div>
 
-        <div className="mx_SpaceRoomDirectory_roomTile_info">
+        <div
+            className="mx_SpaceRoomDirectory_roomTile_info"
+            ref={e => e && linkifyElement(e)}
+            onClick={ev => {
+                // prevent clicks on links from bubbling up to the room tile
+                if ((ev.target as HTMLElement).tagName === "A") {
+                    ev.stopPropagation();
+                }
+            }}
+        >
             { description }
         </div>
         <div className="mx_SpaceRoomDirectory_actions">
@@ -574,7 +584,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
     return <>
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
-            placeholder={ _t("Search names and description") }
+            placeholder={ _t("Search names and descriptions") }
             onSearch={setQuery}
             autoFocus={true}
             initialValue={initialText}
