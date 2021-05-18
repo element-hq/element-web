@@ -464,8 +464,12 @@ function getLangsJson(): Promise<object> {
         request(
             { method: "GET", url },
             (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
+                if (err) {
                     reject(err);
+                    return;
+                }
+                if (response.status < 200 || response.status >= 300) {
+                    reject(new Error(`Failed to load ${url}, got ${response.status}`));
                     return;
                 }
                 resolve(JSON.parse(body));
@@ -507,8 +511,12 @@ function getLanguage(langPath: string): Promise<object> {
         request(
             { method: "GET", url: langPath },
             (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
+                if (err) {
                     reject(err);
+                    return;
+                }
+                if (response.status < 200 || response.status >= 300) {
+                    reject(new Error(`Failed to load ${langPath}, got ${response.status}`));
                     return;
                 }
                 resolve(weblateToCounterpart(JSON.parse(body)));
