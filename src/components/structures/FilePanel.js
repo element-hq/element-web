@@ -50,6 +50,9 @@ class FilePanel extends React.Component {
         if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
+        const client = MatrixClientPeg.get();
+        client.decryptEventIfNeeded(ev);
+
         if (ev.isBeingDecrypted()) {
             this.decryptingEvents.add(ev.getId());
         } else {
