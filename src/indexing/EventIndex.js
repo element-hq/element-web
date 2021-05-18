@@ -189,7 +189,7 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
-        await client.decryptEvent(ev);
+        await client.decryptEventIfNeeded(ev);
 
         await this.addLiveEventToIndex(ev);
     }
@@ -517,7 +517,7 @@ export default class EventIndex extends EventEmitter {
             const decryptionPromises = matrixEvents
                 .filter(event => event.isEncrypted())
                 .map(event => {
-                    return client.decryptEvent(event, {
+                    return client.decryptEventIfNeeded(event, {
                         isRetry: true,
                         emit: false,
                     });

@@ -1149,10 +1149,8 @@ class TimelinePanel extends React.Component {
         arrayFastClone(events)
             .reverse()
             .forEach(event => {
-                if (event.shouldAttemptDecryption()) {
-                    const client = MatrixClientPeg.get();
-                    client.decryptEvent(event);
-                }
+                const client = MatrixClientPeg.get();
+                client.decryptEventIfNeeded(event);
             });
 
         const firstVisibleEventIndex = this._checkForPreJoinUISI(events);

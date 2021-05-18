@@ -39,9 +39,7 @@ export default class ViewSourceEvent extends React.PureComponent {
         const {mxEvent} = this.props;
 
         const client = MatrixClientPeg.get();
-        if (mxEvent.shouldAttemptDecryption()) {
-            client.decryptEvent(mxEvent);
-        }
+        client.decryptEventIfNeeded(mxEvent);
 
         if (mxEvent.isBeingDecrypted()) {
             mxEvent.once("Event.decrypted", () => this.forceUpdate());

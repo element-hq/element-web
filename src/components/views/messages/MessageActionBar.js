@@ -124,10 +124,8 @@ export default class MessageActionBar extends React.PureComponent {
             this.props.mxEvent.on("Event.status", this.onSent);
         }
 
-        if (this.props.mxEvent.shouldAttemptDecryption()) {
-            const client = MatrixClientPeg.get();
-            client.decryptEvent(this.props.mxEvent);
-        }
+        const client = MatrixClientPeg.get();
+        client.decryptEventIfNeeded(this.props.mxEvent);
 
         if (this.props.mxEvent.isBeingDecrypted()) {
             this.props.mxEvent.once("Event.decrypted", this.onDecrypted);
