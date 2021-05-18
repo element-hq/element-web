@@ -97,13 +97,13 @@ export default class SpaceInvaders implements ICanvasEffect {
                 this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 
                 this.lastAnimationTime = Date.now();
-                this.animateAndRenderSnowflakes();
+                this.animateAndRenderInvaders();
             }
             requestAnimationFrame(this.renderLoop);
         }
     };
 
-    private animateAndRenderSnowflakes() {
+    private animateAndRenderInvaders() {
         if (!this.context || !this.context.canvas) {
             return;
         }
