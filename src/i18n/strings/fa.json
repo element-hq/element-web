@@ -632,5 +632,7 @@
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "هرگاه این صفحه شامل اطلاعات قابل شناسایی مانند شناسه‌ی اتاق ، کاربر یا گروه باشد ، این داده‌ها قبل از ارسال به سرور حذف می شوند.",
     "Your user agent": "نماینده کاربری شما",
     "Whether you're using %(brand)s as an installed Progressive Web App": "این که آیا شما از%(brand)s به عنوان یک PWA استفاده می‌کنید یا نه",
-    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "این که آیا از ویژگی 'breadcrumbs' (نمایه‌ی کاربری بالای فهرست اتاق‌ها) استفاده می‌کنید یا خیر"
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "این که آیا از ویژگی 'breadcrumbs' (نمایه‌ی کاربری بالای فهرست اتاق‌ها) استفاده می‌کنید یا خیر",
+    "Use an identity server to invite by email. Manage in Settings.": "برای دعوت از یک سرور هویت‌سنجی استفاده نمائید. می‌توانید این مورد را در تنظیمات پیکربندی نمائید.",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "برای دعوت با استفاده از ایمیل از یک سرور هویت‌سنجی استفاده نمائید. جهت استفاده از سرور هویت‌سنجی پیش‌فرض (%(defaultIdentityServerName)s) بر روی ادامه کلیک کنید، وگرنه آن را در بخش تنظیمات پیکربندی نمائید."
 }
