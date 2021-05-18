@@ -9,8 +9,8 @@ import sdk from '../../../skinned-sdk';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import dis from '../../../../src/dispatcher/dispatcher';
-import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
-import GroupStore from '../../../../src/stores/GroupStore.js';
+import DMRoomMap from '../../../../src/utils/DMRoomMap';
+import GroupStore from '../../../../src/stores/GroupStore';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
@@ -29,7 +29,10 @@ function waitForRoomListStoreUpdate() {
 
 describe('RoomList', () => {
     function createRoom(opts) {
-        const room = new Room(generateRoomId(), null, client.getUserId());
+        const room = new Room(generateRoomId(), MatrixClientPeg.get(), client.getUserId(), {
+            // The room list now uses getPendingEvents(), so we need a detached ordering.
+            pendingEventOrdering: "detached",
+        });
         if (opts) {
             Object.assign(room, opts);
         }
@@ -67,8 +70,9 @@ describe('RoomList', () => {
         root = ReactDOM.render(
             <DragDropContext>
                 <WrappedRoomList searchFilter="" onResize={() => {}} />
-            </DragDropContext>
-        , parentDiv);
+            </DragDropContext>,
+            parentDiv,
+        );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
         movingRoom = createRoom({name: 'Moving room'});
@@ -296,6 +300,11 @@ describe('RoomList', () => {
             GroupStore._notifyListeners();
 
             await waitForRoomListStoreUpdate();
+
+            // XXX: Even though the store updated, it can take a bit before the update makes
+            // it to the components. This gives it plenty of time to figure out what to do.
+            await (new Promise(resolve => setTimeout(resolve, 500)));
+
             expectRoomInSubList(otherRoom, (s) => s.props.tagId === DefaultTagID.Untagged);
         });
 

@@ -18,8 +18,8 @@ import {useState, useEffect, DependencyList} from 'react';
 
 type Fn<T> = () => Promise<T>;
 
-export const useAsyncMemo = <T>(fn: Fn<T>, deps: DependencyList, initialValue?: T) => {
-    const [value, setValue] = useState(initialValue);
+export const useAsyncMemo = <T>(fn: Fn<T>, deps: DependencyList, initialValue?: T): T => {
+    const [value, setValue] = useState<T>(initialValue);
     useEffect(() => {
         fn().then(setValue);
     }, deps); // eslint-disable-line react-hooks/exhaustive-deps

@@ -13,17 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
+import React, {ComponentProps} from 'react';
 import Room from 'matrix-js-sdk/src/models/room';
-import {getHttpUriForMxc} from 'matrix-js-sdk/src/content-repo';
 
 import BaseAvatar from './BaseAvatar';
 import ImageView from '../elements/ImageView';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
+import {ResizeMethod} from "../../../Avatar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
-interface IProps {
+interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
@@ -32,14 +34,16 @@ interface IProps {
     oobData?: any;
     width?: number;
     height?: number;
-    resizeMethod?: string;
+    resizeMethod?: ResizeMethod;
     viewAvatarOnClick?: boolean;
+    onClick?(): void;
 }
 
 interface IState {
     urls: string[];
 }
 
+@replaceableComponent("views.avatars.RoomAvatar")
 export default class RoomAvatar extends React.Component<IProps, IState> {
     public static defaultProps = {
         width: 36,
@@ -86,16 +90,16 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     private static getImageUrls(props: IProps): string[] {
-        return [
-            getHttpUriForMxc(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                // Default props don't play nicely with getDerivedStateFromProps
-                //props.oobData !== undefined ? props.oobData.avatarUrl : {},
-                props.oobData.avatarUrl,
-                Math.floor(props.width * window.devicePixelRatio),
-                Math.floor(props.height * window.devicePixelRatio),
+        let oobAvatar = null;
+        if (props.oobData.avatarUrl) {
+            oobAvatar = mediaFromMxc(props.oobData.avatarUrl).getThumbnailOfSourceHttp(
+                props.width,
+                props.height,
                 props.resizeMethod,
-            ), // highest priority
+            );
+        }
+        return [
+            oobAvatar, // highest priority
             RoomAvatar.getRoomAvatarUrl(props),
         ].filter(function(url) {
             return (url !== null && url !== "");
@@ -105,28 +109,26 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     private static getRoomAvatarUrl(props: IProps): string {
         if (!props.room) return null;
 
-        return Avatar.avatarUrlForRoom(
-            props.room,
-            Math.floor(props.width * window.devicePixelRatio),
-            Math.floor(props.height * window.devicePixelRatio),
-            props.resizeMethod,
-        );
+        return Avatar.avatarUrlForRoom(props.room, props.width, props.height, props.resizeMethod);
     }
 
     private onRoomAvatarClick = () => {
-        const avatarUrl = this.props.room.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            null, null, null, false);
+        const avatarUrl = Avatar.avatarUrlForRoom(
+            this.props.room,
+            null,
+            null,
+            null,
+        );
         const params = {
             src: avatarUrl,
             name: this.props.room.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
     public render() {
-        const {room, oobData, viewAvatarOnClick, ...otherProps} = this.props;
+        const {room, oobData, viewAvatarOnClick, onClick, ...otherProps} = this.props;
 
         const roomName = room ? room.name : oobData.name;
 
@@ -135,7 +137,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
                 name={roomName}
                 idName={room ? room.roomId : null}
                 urls={this.state.urls}
-                onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : null}
+                onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />
         );
     }

@@ -458,5 +458,7 @@
     "Passphrases must match": "Lykilfrasar verða að stemma",
     "Passphrase must not be empty": "Lykilfrasi má ekki vera auður",
     "Create Account": "Stofna Reikning",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "vinsamlegast setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> fyrir besta reynsluna."
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "vinsamlegast setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> fyrir besta reynsluna.",
+    "Explore rooms": "Kanna herbergi",
+    "Sign In": "Skrá inn"
 }

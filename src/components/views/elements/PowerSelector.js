@@ -16,16 +16,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import {Key} from "../../../Keyboard";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'PowerSelector',
-
-    propTypes: {
+@replaceableComponent("views.elements.PowerSelector")
+export default class PowerSelector extends React.Component {
+    static propTypes = {
         value: PropTypes.number.isRequired,
         // The maximum value that can be set with the power selector
         maxValue: PropTypes.number.isRequired,
@@ -42,10 +41,17 @@ export default createReactClass({
 
         // The name to annotate the selector with
         label: PropTypes.string,
-    },
+    }
 
-    getInitialState: function() {
-        return {
+    static defaultProps = {
+        maxValue: Infinity,
+        usersDefault: 0,
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
             levelRoleMap: {},
             // List of power levels to show in the drop-down
             options: [],
@@ -53,26 +59,20 @@ export default createReactClass({
             customValue: this.props.value,
             selectValue: 0,
         };
-    },
-
-    getDefaultProps: function() {
-        return {
-            maxValue: Infinity,
-            usersDefault: 0,
-        };
-    },
-
-    componentDidMount: function() {
-        // TODO: [REACT-WARNING] Move this to class constructor
-        this._initStateFromProps(this.props);
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps: function(newProps) {
-        this._initStateFromProps(newProps);
-    },
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
+        this._initStateFromProps(this.props);
+    }
 
-    _initStateFromProps: function(newProps) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps(newProps) {
+        this._initStateFromProps(newProps);
+    }
+
+    _initStateFromProps(newProps) {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap(newProps.usersDefault);
         const options = Object.keys(levelRoleMap).filter(level => {
@@ -92,9 +92,9 @@ export default createReactClass({
             customLevel: newProps.value,
             selectValue: isCustom ? "SELECT_VALUE_CUSTOM" : newProps.value,
         });
-    },
+    }
 
-    onSelectChange: function(event) {
+    onSelectChange = event => {
         const isCustom = event.target.value === "SELECT_VALUE_CUSTOM";
         if (isCustom) {
             this.setState({custom: true});
@@ -102,20 +102,20 @@ export default createReactClass({
             this.props.onChange(event.target.value, this.props.powerLevelKey);
             this.setState({selectValue: event.target.value});
         }
-    },
+    };
 
-    onCustomChange: function(event) {
+    onCustomChange = event => {
         this.setState({customValue: event.target.value});
-    },
+    };
 
-    onCustomBlur: function(event) {
+    onCustomBlur = event => {
         event.preventDefault();
         event.stopPropagation();
 
         this.props.onChange(parseInt(this.state.customValue), this.props.powerLevelKey);
-    },
+    };
 
-    onCustomKeyDown: function(event) {
+    onCustomKeyDown = event => {
         if (event.key === Key.ENTER) {
             event.preventDefault();
             event.stopPropagation();
@@ -127,17 +127,21 @@ export default createReactClass({
             // handle the onBlur safely.
             event.target.blur();
         }
-    },
+    };
 
-    render: function() {
+    render() {
         let picker;
         const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {
             picker = (
                 <Field type="number"
-                       label={label} max={this.props.maxValue}
-                       onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
-                       value={String(this.state.customValue)} disabled={this.props.disabled} />
+                    label={label} max={this.props.maxValue}
+                    onBlur={this.onCustomBlur}
+                    onKeyDown={this.onCustomKeyDown}
+                    onChange={this.onCustomChange}
+                    value={String(this.state.customValue)}
+                    disabled={this.props.disabled}
+                />
             );
         } else {
             // Each level must have a definition in this.state.levelRoleMap
@@ -154,8 +158,9 @@ export default createReactClass({
 
             picker = (
                 <Field element="select"
-                       label={label} onChange={this.onSelectChange}
-                       value={String(this.state.selectValue)} disabled={this.props.disabled}>
+                    label={label} onChange={this.onSelectChange}
+                    value={String(this.state.selectValue)} disabled={this.props.disabled}
+                >
                     {options}
                 </Field>
             );
@@ -166,5 +171,5 @@ export default createReactClass({
                 { picker }
             </div>
         );
-    },
-});
+    }
+}

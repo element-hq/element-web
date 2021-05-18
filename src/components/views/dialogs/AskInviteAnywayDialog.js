@@ -16,37 +16,38 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    propTypes: {
+@replaceableComponent("views.dialogs.AskInviteAnywayDialog")
+export default class AskInviteAnywayDialog extends React.Component {
+    static propTypes = {
         unknownProfileUsers: PropTypes.array.isRequired, // [ {userId, errorText}... ]
         onInviteAnyways: PropTypes.func.isRequired,
         onGiveUp: PropTypes.func.isRequired,
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    _onInviteClicked: function() {
+    _onInviteClicked = () => {
         this.props.onInviteAnyways();
         this.props.onFinished(true);
-    },
+    };
 
-    _onInviteNeverWarnClicked: function() {
+    _onInviteNeverWarnClicked = () => {
         SettingsStore.setValue("promptBeforeInviteUnknownUsers", null, SettingLevel.ACCOUNT, false);
         this.props.onInviteAnyways();
         this.props.onFinished(true);
-    },
+    };
 
-    _onGiveUpClicked: function() {
+    _onGiveUpClicked = () => {
         this.props.onGiveUp();
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         const errorList = this.props.unknownProfileUsers
@@ -78,5 +79,5 @@ export default createReactClass({
                 </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

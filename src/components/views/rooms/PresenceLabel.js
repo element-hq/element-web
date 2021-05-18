@@ -16,15 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-
-export default createReactClass({
-    displayName: 'PresenceLabel',
-
-    propTypes: {
+@replaceableComponent("views.rooms.PresenceLabel")
+export default class PresenceLabel extends React.Component {
+    static propTypes = {
         // number of milliseconds ago this user was last active.
         // zero = unknown
         activeAgo: PropTypes.number,
@@ -35,18 +33,16 @@ export default createReactClass({
 
         // offline, online, etc
         presenceState: PropTypes.string,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            ago: -1,
-            presenceState: null,
-        };
-    },
+    static defaultProps = {
+        activeAgo: -1,
+        presenceState: null,
+    };
 
     // Return duration as a string using appropriate time units
     // XXX: This would be better handled using a culture-aware library, but we don't use one yet.
-    getDuration: function(time) {
+    getDuration(time) {
         if (!time) return;
         const t = parseInt(time / 1000);
         const s = t % 60;
@@ -66,9 +62,9 @@ export default createReactClass({
             return _t("%(duration)sh", {duration: h});
         }
         return _t("%(duration)sd", {duration: d});
-    },
+    }
 
-    getPrettyPresence: function(presence, activeAgo, currentlyActive) {
+    getPrettyPresence(presence, activeAgo, currentlyActive) {
         if (!currentlyActive && activeAgo !== undefined && activeAgo > 0) {
             const duration = this.getDuration(activeAgo);
             if (presence === "online") return _t("Online for %(duration)s", { duration: duration });
@@ -81,13 +77,13 @@ export default createReactClass({
             if (presence === "offline") return _t("Offline");
             return _t("Unknown");
         }
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div className="mx_PresenceLabel">
                 { this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive) }
             </div>
         );
-    },
-});
+    }
+}

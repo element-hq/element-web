@@ -166,7 +166,8 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
 
     const onKeyDownHandler = useCallback((ev) => {
         let handled = false;
-        if (handleHomeEnd) {
+        // Don't interfere with input default keydown behaviour
+        if (handleHomeEnd && ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
             // check if we actually have any items
             switch (ev.key) {
                 case Key.HOME:
@@ -190,7 +191,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
             ev.preventDefault();
             ev.stopPropagation();
         } else if (onKeyDown) {
-            return onKeyDown(ev, state);
+            return onKeyDown(ev, context.state);
         }
     }, [context.state, onKeyDown, handleHomeEnd]);
 
@@ -204,7 +205,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
 // onFocus should be called when the index gained focus in any manner
 // isActive should be used to set tabIndex in a manner such as `tabIndex={isActive ? 0 : -1}`
 // ref should be passed to a DOM node which will be used for DOM compareDocumentPosition
-export const useRovingTabIndex = (inputRef: Ref): [FocusHandler, boolean, Ref] => {
+export const useRovingTabIndex = (inputRef?: Ref): [FocusHandler, boolean, Ref] => {
     const context = useContext(RovingTabIndexContext);
     let ref = useRef<HTMLElement>(null);
 

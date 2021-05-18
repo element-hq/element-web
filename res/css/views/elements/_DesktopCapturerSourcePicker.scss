@@ -1,0 +1,72 @@
+/*
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_desktopCapturerSourcePicker {
+    overflow: hidden;
+}
+
+.mx_desktopCapturerSourcePicker_tabLabels {
+    display: flex;
+    padding: 0 0 8px 0;
+}
+
+.mx_desktopCapturerSourcePicker_tabLabel,
+.mx_desktopCapturerSourcePicker_tabLabel_selected {
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
+    padding: 8px 0;
+    font-size: $font-13px;
+}
+
+.mx_desktopCapturerSourcePicker_tabLabel_selected {
+    background-color: $tab-label-active-bg-color;
+    color: $tab-label-active-fg-color;
+}
+
+.mx_desktopCapturerSourcePicker_panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    height: 500px;
+    overflow: overlay;
+}
+
+.mx_desktopCapturerSourcePicker_stream_button {
+    display: flex;
+    flex-direction: column;
+    margin: 8px;
+    border-radius: 4px;
+}
+
+.mx_desktopCapturerSourcePicker_stream_button:hover,
+.mx_desktopCapturerSourcePicker_stream_button:focus {
+    background: $roomtile-selected-bg-color;
+}
+
+.mx_desktopCapturerSourcePicker_stream_thumbnail {
+    margin: 4px;
+    width: 312px;
+}
+
+.mx_desktopCapturerSourcePicker_stream_name {
+    margin: 0 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 312px;
+}

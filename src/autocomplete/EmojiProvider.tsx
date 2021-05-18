@@ -23,8 +23,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import {ICompletion, ISelectionRange} from './Autocompleter';
-import _uniq from 'lodash/uniq';
-import _sortBy from 'lodash/sortBy';
+import {uniq, sortBy} from 'lodash';
 import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
 import { EMOJI, IEmoji } from '../emoji';
@@ -85,7 +84,12 @@ export default class EmojiProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force?: boolean): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force?: boolean,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         if (!SettingsStore.getValue("MessageComposerInput.suggestEmoji")) {
             return []; // don't give any suggestions if the user doesn't want them
         }
@@ -94,7 +98,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString);
+            completions = this.matcher.match(matchedString, limit);
 
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
@@ -115,7 +119,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             }
             // Finally, sort by original ordering
             sorters.push((c) => c._orderBy);
-            completions = _sortBy(_uniq(completions), sorters);
+            completions = sortBy(uniq(completions), sorters);
 
             completions = completions.map(({shortname}) => {
                 const unicode = shortcodeToUnicode(shortname);
@@ -139,7 +143,11 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
-            <div className="mx_Autocomplete_Completion_container_pill" role="listbox" aria-label={_t("Emoji Autocomplete")}>
+            <div
+                className="mx_Autocomplete_Completion_container_pill"
+                role="listbox"
+                aria-label={_t("Emoji Autocomplete")}
+            >
                 { completions }
             </div>
         );

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
@@ -22,37 +21,37 @@ import PropTypes from 'prop-types';
 import { showGroupAddRoomDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
-export default createReactClass({
-    propTypes: {
+@replaceableComponent("views.groups.GroupRoomList")
+export default class GroupRoomList extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            rooms: null,
-            truncateAt: INITIAL_LOAD_NUM_ROOMS,
-            searchQuery: "",
-        };
-    },
+    state = {
+        rooms: null,
+        truncateAt: INITIAL_LOAD_NUM_ROOMS,
+        searchQuery: "",
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._unmounted = false;
         this._initGroupStore(this.props.groupId);
-    },
+    }
 
     componentWillUnmount() {
         this._unmounted = true;
         this._unregisterGroupStore();
-    },
+    }
 
     _unregisterGroupStore() {
         GroupStore.unregisterListener(this.onGroupStoreUpdated);
-    },
+    }
 
-    _initGroupStore: function(groupId) {
+    _initGroupStore(groupId) {
         GroupStore.registerListener(groupId, this.onGroupStoreUpdated);
         // XXX: This should be more fluxy - let's get the error from GroupStore .getError or something
         // XXX: This is also leaked - we should remove it when unmounting
@@ -62,16 +61,16 @@ export default createReactClass({
                 rooms: null,
             });
         });
-    },
+    }
 
-    onGroupStoreUpdated: function() {
+    onGroupStoreUpdated = () => {
         if (this._unmounted) return;
         this.setState({
             rooms: GroupStore.getGroupRooms(this.props.groupId),
         });
-    },
+    };
 
-    _createOverflowTile: function(overflowCount, totalCount) {
+    _createOverflowTile = (overflowCount, totalCount) => {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const EntityTile = sdk.getComponent("rooms.EntityTile");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
@@ -82,25 +81,25 @@ export default createReactClass({
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={this._showFullRoomList} />
         );
-    },
+    };
 
-    _showFullRoomList: function() {
+    _showFullRoomList = () => {
         this.setState({
             truncateAt: -1,
         });
-    },
+    };
 
-    onSearchQueryChanged: function(ev) {
+    onSearchQueryChanged = ev => {
         this.setState({ searchQuery: ev.target.value });
-    },
+    };
 
-    onAddRoomToGroupButtonClick() {
+    onAddRoomToGroupButtonClick = () => {
         showGroupAddRoomDialog(this.props.groupId).then(() => {
             this.forceUpdate();
         });
-    },
+    };
 
-    makeGroupRoomTiles: function(query) {
+    makeGroupRoomTiles(query) {
         const GroupRoomTile = sdk.getComponent("groups.GroupRoomTile");
         query = (query || "").toLowerCase();
 
@@ -123,9 +122,9 @@ export default createReactClass({
         });
 
         return roomList;
-    },
+    }
 
-    render: function() {
+    render() {
         if (this.state.rooms === null) {
             return null;
         }
@@ -142,9 +141,14 @@ export default createReactClass({
             );
         }
         const inputBox = (
-            <input className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query" type="text"
-                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder={_t('Filter community rooms')} autoComplete="off" />
+            <input
+                className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query"
+                type="text"
+                onChange={this.onSearchQueryChanged}
+                value={this.state.searchQuery}
+                placeholder={_t('Filter community rooms')}
+                autoComplete="off"
+            />
         );
 
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
@@ -153,12 +157,12 @@ export default createReactClass({
                 { inviteButton }
                 <AutoHideScrollbar className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}>
+                        createOverflowElement={this._createOverflowTile}>
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
                 </AutoHideScrollbar>
                 { inputBox }
             </div>
         );
-    },
-});
+    }
+}

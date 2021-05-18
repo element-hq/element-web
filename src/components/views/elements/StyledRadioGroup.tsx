@@ -25,6 +25,7 @@ interface IDefinition<T extends string> {
     disabled?: boolean;
     label: React.ReactChild;
     description?: React.ReactChild;
+    checked?: boolean; // If provided it will override the value comparison done in the group
 }
 
 interface IProps<T extends string> {
@@ -33,7 +34,7 @@ interface IProps<T extends string> {
     definitions: IDefinition<T>[];
     value?: T; // if not provided no options will be selected
     outlined?: boolean;
-    onChange(newValue: T);
+    onChange(newValue: T): void;
 }
 
 function StyledRadioGroup<T extends string>({name, definitions, value, className, outlined, onChange}: IProps<T>) {
@@ -46,7 +47,7 @@ function StyledRadioGroup<T extends string>({name, definitions, value, className
             <StyledRadioButton
                 className={classNames(className, d.className)}
                 onChange={_onChange}
-                checked={d.value === value}
+                checked={d.checked !== undefined ? d.checked : d.value === value}
                 name={name}
                 value={d.value}
                 disabled={d.disabled}

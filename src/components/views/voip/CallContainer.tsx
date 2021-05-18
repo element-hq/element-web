@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import IncomingCallBox from './IncomingCallBox';
 import CallPreview from './CallPreview';
-import * as VectorConferenceHandler from '../../../VectorConferenceHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
 
@@ -27,11 +27,12 @@ interface IState {
 
 }
 
+@replaceableComponent("views.voip.CallContainer")
 export default class CallContainer extends React.PureComponent<IProps, IState> {
     public render() {
         return <div className="mx_CallContainer">
             <IncomingCallBox />
-            <CallPreview ConferenceHandler={VectorConferenceHandler} />
+            <CallPreview />
         </div>;
     }
 }

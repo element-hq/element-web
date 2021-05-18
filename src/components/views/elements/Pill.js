@@ -1,7 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2017 - 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,46 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
-import { Room, RoomMember } from 'matrix-js-sdk';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
-import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
+import {getPrimaryPermalinkEntity, parseAppLocalLink} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import {mediaFromMxc} from "../../../customisations/Media";
+import Tooltip from './Tooltip';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-// For URLs of matrix.to links in the timeline which have been reformatted by
-// HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+])[^/]*)$/;
+@replaceableComponent("views.elements.Pill")
+class Pill extends React.Component {
+    static roomNotifPos(text) {
+        return text.indexOf("@room");
+    }
 
-const Pill = createReactClass({
-    statics: {
-        isPillUrl: (url) => {
-            return !!getPrimaryPermalinkEntity(url);
-        },
-        isMessagePillUrl: (url) => {
-            return !!REGEX_LOCAL_PERMALINK.exec(url);
-        },
-        roomNotifPos: (text) => {
-            return text.indexOf("@room");
-        },
-        roomNotifLen: () => {
-            return "@room".length;
-        },
-        TYPE_USER_MENTION: 'TYPE_USER_MENTION',
-        TYPE_ROOM_MENTION: 'TYPE_ROOM_MENTION',
-        TYPE_GROUP_MENTION: 'TYPE_GROUP_MENTION',
-        TYPE_AT_ROOM_MENTION: 'TYPE_AT_ROOM_MENTION', // '@room' mention
-    },
+    static roomNotifLen() {
+        return "@room".length;
+    }
 
-    props: {
+    static TYPE_USER_MENTION = 'TYPE_USER_MENTION';
+    static TYPE_ROOM_MENTION = 'TYPE_ROOM_MENTION';
+    static TYPE_GROUP_MENTION = 'TYPE_GROUP_MENTION';
+    static TYPE_AT_ROOM_MENTION = 'TYPE_AT_ROOM_MENTION'; // '@room' mention
+
+    static propTypes = {
         // The Type of this Pill. If url is given, this is auto-detected.
         type: PropTypes.string,
-        // The URL to pillify (no validation is done, see isPillUrl and isMessagePillUrl)
+        // The URL to pillify (no validation is done)
         url: PropTypes.string,
         // Whether the pill is in a message
         inMessage: PropTypes.bool,
@@ -65,37 +57,35 @@ const Pill = createReactClass({
         shouldShowPillAvatar: PropTypes.bool,
         // Whether to render this pill as if it were highlit by a selection
         isSelected: PropTypes.bool,
-    },
+    };
 
-    getInitialState() {
-        return {
-            // ID/alias of the room/user
-            resourceId: null,
-            // Type of pill
-            pillType: null,
+    state = {
+        // ID/alias of the room/user
+        resourceId: null,
+        // Type of pill
+        pillType: null,
 
-            // The member related to the user pill
-            member: null,
-            // The group related to the group pill
-            group: null,
-            // The room related to the room pill
-            room: null,
-        };
-    },
+        // The member related to the user pill
+        member: null,
+        // The group related to the group pill
+        group: null,
+        // The room related to the room pill
+        room: null,
+        // Is the user hovering the pill
+        hover: false,
+    };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;
 
         if (nextProps.url) {
             if (nextProps.inMessage) {
-                // Default to the empty array if no match for simplicity
-                // resource and prefix will be undefined instead of throwing
-                const matrixToMatch = REGEX_LOCAL_PERMALINK.exec(nextProps.url) || [];
-
-                resourceId = matrixToMatch[1]; // The room/user ID
-                prefix = matrixToMatch[2]; // The first character of prefix
+                const parts = parseAppLocalLink(nextProps.url);
+                resourceId = parts.primaryEntityId; // The room/user ID
+                prefix = parts.sigil; // The first character of prefix
             } else {
                 resourceId = getPrimaryPermalinkEntity(nextProps.url);
                 prefix = resourceId ? resourceId[0] : undefined;
@@ -155,7 +145,7 @@ const Pill = createReactClass({
             }
         }
         this.setState({resourceId, pillType, member, group, room});
-    },
+    }
 
     componentDidMount() {
         this._unmounted = false;
@@ -163,13 +153,25 @@ const Pill = createReactClass({
 
         // eslint-disable-next-line new-cap
         this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
-    },
+    }
 
     componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    doProfileLookup: function(userId, member) {
+    onMouseOver = () => {
+        this.setState({
+            hover: true,
+        });
+    };
+
+    onMouseLeave = () => {
+        this.setState({
+            hover: false,
+        });
+    };
+
+    doProfileLookup(userId, member) {
         MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
             if (this._unmounted) {
                 return;
@@ -188,15 +190,16 @@ const Pill = createReactClass({
         }).catch((err) => {
             console.error('Could not retrieve profile data for ' + userId + ':', err);
         });
-    },
+    }
 
-    onUserPillClicked: function() {
+    onUserPillClicked = () => {
         dis.dispatch({
             action: Action.ViewUser,
             member: this.state.member,
         });
-    },
-    render: function() {
+    };
+
+    render() {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
@@ -222,25 +225,25 @@ const Pill = createReactClass({
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                    // If this user is not a member of this room, default to the empty member
-                    const member = this.state.member;
-                    if (member) {
-                        userId = member.userId;
-                        member.rawDisplayName = member.rawDisplayName || '';
-                        linkText = member.rawDisplayName;
-                        if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
-                        }
-                        pillClass = 'mx_UserPill';
-                        href = null;
-                        onClick = this.onUserPillClicked;
+                // If this user is not a member of this room, default to the empty member
+                const member = this.state.member;
+                if (member) {
+                    userId = member.userId;
+                    member.rawDisplayName = member.rawDisplayName || '';
+                    linkText = member.rawDisplayName;
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
                     }
+                    pillClass = 'mx_UserPill';
+                    href = null;
+                    onClick = this.onUserPillClicked;
+                }
             }
                 break;
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
-                    linkText = resource;
+                    linkText = room.name || resource;
                     if (this.props.shouldShowPillAvatar) {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
@@ -251,12 +254,12 @@ const Pill = createReactClass({
             case Pill.TYPE_GROUP_MENTION: {
                 if (this.state.group) {
                     const {avatarUrl, groupId, name} = this.state.group;
-                    const cli = MatrixClientPeg.get();
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
-                                             url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
+                        avatar = <BaseAvatar
+                            name={name || groupId} width={16} height={16} aria-hidden="true"
+                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
                 }
@@ -270,22 +273,43 @@ const Pill = createReactClass({
         });
 
         if (this.state.pillType) {
+            const {yOffset} = this.props;
+
+            let tip;
+            if (this.state.hover && resource) {
+                tip = <Tooltip label={resource} yOffset={yOffset} />;
+            }
+
             return <MatrixClientContext.Provider value={this._matrixClient}>
                 { this.props.inMessage ?
-                    <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
+                    <a
+                        className={classes}
+                        href={href}
+                        onClick={onClick}
+                        data-offset-key={this.props.offsetKey}
+                        onMouseOver={this.onMouseOver}
+                        onMouseLeave={this.onMouseLeave}
+                    >
                         { avatar }
                         { linkText }
+                        { tip }
                     </a> :
-                    <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
+                    <span
+                        className={classes}
+                        data-offset-key={this.props.offsetKey}
+                        onMouseOver={this.onMouseOver}
+                        onMouseLeave={this.onMouseLeave}
+                    >
                         { avatar }
                         { linkText }
+                        { tip }
                     </span> }
             </MatrixClientContext.Provider>;
         } else {
             // Deliberately render nothing if the URL isn't recognised
             return null;
         }
-    },
-});
+    }
+}
 
 export default Pill;

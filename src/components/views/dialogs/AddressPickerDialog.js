@@ -19,7 +19,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -34,6 +33,7 @@ import { abbreviateUrl } from '../../../utils/UrlUtils';
 import {sleep} from "../../../utils/promise";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -44,11 +44,9 @@ const addressTypeName = {
     'email': _td("email address"),
 };
 
-
-export default createReactClass({
-    displayName: "AddressPickerDialog",
-
-    propTypes: {
+@replaceableComponent("views.dialogs.AddressPickerDialog")
+export default class AddressPickerDialog extends React.Component {
+    static propTypes = {
         title: PropTypes.string.isRequired,
         description: PropTypes.node,
         // Extra node inserted after picker input, dropdown and errors
@@ -66,26 +64,28 @@ export default createReactClass({
         // Whether the current user should be included in the addresses returned. Only
         // applicable when pickerType is `user`. Default: false.
         includeSelf: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            value: "",
-            focus: true,
-            validAddressTypes: addressTypes,
-            pickerType: 'user',
-            includeSelf: false,
-        };
-    },
+    static defaultProps = {
+        value: "",
+        focus: true,
+        validAddressTypes: addressTypes,
+        pickerType: 'user',
+        includeSelf: false,
+    };
 
-    getInitialState: function() {
+    constructor(props) {
+        super(props);
+
+        this._textinput = createRef();
+
         let validAddressTypes = this.props.validAddressTypes;
         // Remove email from validAddressTypes if no IS is configured. It may be added at a later stage by the user
         if (!MatrixClientPeg.get().getIdentityServerUrl() && validAddressTypes.includes("email")) {
             validAddressTypes = validAddressTypes.filter(type => type !== "email");
         }
 
-        return {
+        this.state = {
             // Whether to show an error message because of an invalid address
             invalidAddressError: false,
             // List of UserAddressType objects representing
@@ -106,19 +106,14 @@ export default createReactClass({
             // dialog is open and represents the supported list of address types at this time.
             validAddressTypes,
         };
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._textinput = createRef();
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
             this._textinput.current.value = this.props.value;
         }
-    },
+    }
 
     getPlaceholder() {
         const { placeholder } = this.props;
@@ -127,9 +122,9 @@ export default createReactClass({
         }
         // Otherwise it's a function, as checked by prop types.
         return placeholder(this.state.validAddressTypes);
-    },
+    }
 
-    onButtonClick: function() {
+    onButtonClick = () => {
         let selectedList = this.state.selectedList.slice();
         // Check the text input field to see if user has an unconverted address
         // If there is and it's valid add it to the local selectedList
@@ -138,13 +133,13 @@ export default createReactClass({
             if (selectedList === null) return;
         }
         this.props.onFinished(true, selectedList);
-    },
+    };
 
-    onCancel: function() {
+    onCancel = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    onKeyDown: function(e) {
+    onKeyDown = e => {
         const textInput = this._textinput.current ? this._textinput.current.value : undefined;
 
         if (e.key === Key.ESCAPE) {
@@ -181,9 +176,9 @@ export default createReactClass({
             e.preventDefault();
             this._addAddressesToList([textInput]);
         }
-    },
+    };
 
-    onQueryChanged: function(ev) {
+    onQueryChanged = ev => {
         const query = ev.target.value;
         if (this.queryChangedDebouncer) {
             clearTimeout(this.queryChangedDebouncer);
@@ -216,28 +211,24 @@ export default createReactClass({
                 searchError: null,
             });
         }
-    },
+    };
 
-    onDismissed: function(index) {
-        return () => {
-            const selectedList = this.state.selectedList.slice();
-            selectedList.splice(index, 1);
-            this.setState({
-                selectedList,
-                suggestedList: [],
-                query: "",
-            });
-            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-        };
-    },
+    onDismissed = index => () => {
+        const selectedList = this.state.selectedList.slice();
+        selectedList.splice(index, 1);
+        this.setState({
+            selectedList,
+            suggestedList: [],
+            query: "",
+        });
+        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+    };
 
-    onClick: function(index) {
-        return () => {
-            this.onSelected(index);
-        };
-    },
+    onClick = index => () => {
+        this.onSelected(index);
+    };
 
-    onSelected: function(index) {
+    onSelected = index => {
         const selectedList = this.state.selectedList.slice();
         selectedList.push(this._getFilteredSuggestions()[index]);
         this.setState({
@@ -246,9 +237,9 @@ export default createReactClass({
             query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-    },
+    };
 
-    _doNaiveGroupSearch: function(query) {
+    _doNaiveGroupSearch(query) {
         const lowerCaseQuery = query.toLowerCase();
         this.setState({
             busy: true,
@@ -280,9 +271,9 @@ export default createReactClass({
                 busy: false,
             });
         });
-    },
+    }
 
-    _doNaiveGroupRoomSearch: function(query) {
+    _doNaiveGroupRoomSearch(query) {
         const lowerCaseQuery = query.toLowerCase();
         const results = [];
         GroupStore.getGroupRooms(this.props.groupId).forEach((r) => {
@@ -302,9 +293,9 @@ export default createReactClass({
         this.setState({
             busy: false,
         });
-    },
+    }
 
-    _doRoomSearch: function(query) {
+    _doRoomSearch(query) {
         const lowerCaseQuery = query.toLowerCase();
         const rooms = MatrixClientPeg.get().getRooms();
         const results = [];
@@ -359,9 +350,9 @@ export default createReactClass({
         this.setState({
             busy: false,
         });
-    },
+    }
 
-    _doUserDirectorySearch: function(query) {
+    _doUserDirectorySearch(query) {
         this.setState({
             busy: true,
             query,
@@ -393,9 +384,9 @@ export default createReactClass({
                 busy: false,
             });
         });
-    },
+    }
 
-    _doLocalSearch: function(query) {
+    _doLocalSearch(query) {
         this.setState({
             query,
             searchError: null,
@@ -417,9 +408,9 @@ export default createReactClass({
             });
         });
         this._processResults(results, query);
-    },
+    }
 
-    _processResults: function(results, query) {
+    _processResults(results, query) {
         const suggestedList = [];
         results.forEach((result) => {
             if (result.room_id) {
@@ -485,9 +476,9 @@ export default createReactClass({
         }, () => {
             if (this.addressSelector) this.addressSelector.moveSelectionTop();
         });
-    },
+    }
 
-    _addAddressesToList: function(addressTexts) {
+    _addAddressesToList(addressTexts) {
         const selectedList = this.state.selectedList.slice();
 
         let hasError = false;
@@ -529,9 +520,9 @@ export default createReactClass({
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return hasError ? null : selectedList;
-    },
+    }
 
-    _lookupThreepid: async function(medium, address) {
+    async _lookupThreepid(medium, address) {
         let cancelled = false;
         // Note that we can't safely remove this after we're done
         // because we don't know that it's the same one, so we just
@@ -577,9 +568,9 @@ export default createReactClass({
                 searchError: _t('Something went wrong!'),
             });
         }
-    },
+    }
 
-    _getFilteredSuggestions: function() {
+    _getFilteredSuggestions() {
         // map addressType => set of addresses to avoid O(n*m) operation
         const selectedAddresses = {};
         this.state.selectedList.forEach(({address, addressType}) => {
@@ -591,17 +582,17 @@ export default createReactClass({
         return this.state.suggestedList.filter(({address, addressType}) => {
             return !(selectedAddresses[addressType] && selectedAddresses[addressType].has(address));
         });
-    },
+    }
 
-    _onPaste: function(e) {
+    _onPaste = e => {
         // Prevent the text being pasted into the textarea
         e.preventDefault();
         const text = e.clipboardData.getData("text");
         // Process it as a list of addresses to add instead
         this._addAddressesToList(text.split(/[\s,]+/));
-    },
+    };
 
-    onUseDefaultIdentityServerClick(e) {
+    onUseDefaultIdentityServerClick = e => {
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
@@ -612,15 +603,15 @@ export default createReactClass({
         const { validAddressTypes } = this.state;
         validAddressTypes.push('email');
         this.setState({ validAddressTypes });
-    },
+    };
 
-    onManageSettingsClick(e) {
+    onManageSettingsClick = e => {
         e.preventDefault();
         dis.fire(Action.ViewUserSettings);
         this.onCancel();
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
@@ -738,5 +729,5 @@ export default createReactClass({
                     onCancel={this.onCancel} />
             </BaseDialog>
         );
-    },
-});
+    }
+}

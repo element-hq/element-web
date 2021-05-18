@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
+import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
@@ -28,14 +29,15 @@ import { FontWatcher } from "../../../../../settings/watchers/FontWatcher";
 import { RecheckThemePayload } from '../../../../../dispatcher/payloads/RecheckThemePayload';
 import { Action } from '../../../../../dispatcher/actions';
 import { IValidationResult, IFieldState } from '../../../elements/Validation';
-import StyledRadioButton from '../../../elements/StyledRadioButton';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
-import classNames from 'classnames';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
+import {UIFeature} from "../../../../../settings/UIFeature";
+import {Layout} from "../../../../../settings/Layout";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -61,10 +63,14 @@ interface IState extends IThemeState {
     useSystemFont: boolean;
     systemFont: string;
     showAdvanced: boolean;
-    useIRCLayout: boolean;
+    layout: Layout;
+    // User profile data for the message preview
+    userId: string;
+    displayName: string;
+    avatarUrl: string;
 }
 
-
+@replaceableComponent("views.settings.tabs.user.AppearanceUserSettingsTab")
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
@@ -82,8 +88,24 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             systemFont: SettingsStore.getValue("systemFont"),
             showAdvanced: false,
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
+            userId: "@erim:fink.fink",
+            displayName: "Erimayas Fink",
+            avatarUrl: null,
         };
+    }
+
+    async componentDidMount() {
+        // Fetch the current user profile for the message preview
+        const client = MatrixClientPeg.get();
+        const userId = client.getUserId();
+        const profileInfo = await client.getProfileInfo(userId);
+
+        this.setState({
+            userId,
+            displayName: profileInfo.displayname,
+            avatarUrl: profileInfo.avatar_url,
+        });
     }
 
     private calculateThemeState(): IThemeState {
@@ -170,7 +192,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             "baseFontSize",
             null,
             SettingLevel.DEVICE,
-            parseInt(value, 10) - FontWatcher.SIZE_DIFF
+            parseInt(value, 10) - FontWatcher.SIZE_DIFF,
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
@@ -212,15 +234,15 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({customThemeUrl: e.target.value});
     };
 
-    private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const val = e.target.value === "true";
-
-        this.setState({
-            useIRCLayout: val,
-        });
-
-        SettingsStore.setValue("useIRCLayout", null, SettingLevel.DEVICE, val);
-    };
+    private onIRCLayoutChange = (enabled: boolean) => {
+        if (enabled) {
+            this.setState({layout: Layout.IRC});
+            SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+        } else {
+            this.setState({layout: Layout.Group});
+            SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+        }
+    }
 
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
@@ -237,7 +259,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         }
 
         let customThemeForm: JSX.Element;
-        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+        if (SettingsStore.getValue("feature_custom_themes")) {
             let messageElement = null;
             if (this.state.customThemeMessage.text) {
                 if (this.state.customThemeMessage.isError) {
@@ -294,7 +316,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     />
                 </div>
                 {customThemeForm}
-           </div>
+            </div>
         );
     }
 
@@ -305,7 +327,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
                 message={this.MESSAGE_PREVIEW_TEXT}
-                useIRCLayout={this.state.useIRCLayout}
+                layout={this.state.layout}
+                userId={this.state.userId}
+                displayName={this.state.displayName}
+                avatarUrl={this.state.avatarUrl}
             />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
@@ -341,57 +366,15 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     }
 
-    private renderLayoutSection = () => {
-        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
-            <span className="mx_SettingsTab_subheading">{_t("Message layout")}</span>
-
-            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
-                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.useIRCLayout,
-                })}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.MESSAGE_PREVIEW_TEXT}
-                        useIRCLayout={true}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value="true"
-                        checked={this.state.useIRCLayout}
-                        onChange={this.onLayoutChange}
-                    >
-                        {_t("Compact")}
-                    </StyledRadioButton>
-                </div>
-                <div className="mx_AppearanceUserSettingsTab_spacer" />
-                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
-                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: !this.state.useIRCLayout,
-                })}>
-                    <EventTilePreview
-                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={this.MESSAGE_PREVIEW_TEXT}
-                        useIRCLayout={false}
-                    />
-                    <StyledRadioButton
-                        name="layout"
-                        value="false"
-                        checked={!this.state.useIRCLayout}
-                        onChange={this.onLayoutChange}
-                    >
-                        {_t("Modern")}
-                    </StyledRadioButton>
-                </div>
-            </div>
-        </div>;
-    };
-
     private renderAdvancedSection() {
+        if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
+
         const brand = SdkConfig.get().brand;
         const toggle = <div
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"
             onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
         >
-            {this.state.showAdvanced ? "Hide advanced" : "Show advanced"}
+            {this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced")}
         </div>;
 
         let advanced: React.ReactNode;
@@ -406,14 +389,15 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     name="useCompactLayout"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
-                    disabled={this.state.useIRCLayout}
+                    disabled={this.state.layout == Layout.IRC}
                 />
-                <SettingsFlag
-                    name="useIRCLayout"
-                    level={SettingLevel.DEVICE}
-                    useCheckbox={true}
-                    onChange={(checked) => this.setState({useIRCLayout: checked})}
-                />
+                <StyledCheckbox
+                    checked={this.state.layout == Layout.IRC}
+                    onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
+                >
+                    {_t("Enable experimental, compact IRC style layout")}
+                </StyledCheckbox>
+
                 <SettingsFlag
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}

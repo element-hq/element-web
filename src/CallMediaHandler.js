@@ -14,9 +14,9 @@
  limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
 import SettingsStore from "./settings/SettingsStore";
 import {SettingLevel} from "./settings/SettingLevel";
+import {setMatrixCallAudioInput, setMatrixCallVideoInput} from "matrix-js-sdk/src/matrix";
 
 export default {
     hasAnyLabeledDevices: async function() {
@@ -50,28 +50,25 @@ export default {
     },
 
     loadDevices: function() {
-        const audioOutDeviceId = SettingsStore.getValue("webrtc_audiooutput");
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
 
-        Matrix.setMatrixCallAudioOutput(audioOutDeviceId);
-        Matrix.setMatrixCallAudioInput(audioDeviceId);
-        Matrix.setMatrixCallVideoInput(videoDeviceId);
+        setMatrixCallAudioInput(audioDeviceId);
+        setMatrixCallVideoInput(videoDeviceId);
     },
 
     setAudioOutput: function(deviceId) {
         SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
-        Matrix.setMatrixCallAudioOutput(deviceId);
     },
 
     setAudioInput: function(deviceId) {
         SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
-        Matrix.setMatrixCallAudioInput(deviceId);
+        setMatrixCallAudioInput(deviceId);
     },
 
     setVideoInput: function(deviceId) {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
-        Matrix.setMatrixCallVideoInput(deviceId);
+        setMatrixCallVideoInput(deviceId);
     },
 
     getAudioOutput: function() {

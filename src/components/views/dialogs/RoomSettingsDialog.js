@@ -29,6 +29,8 @@ import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -37,6 +39,7 @@ export const ROOM_NOTIFICATIONS_TAB = "ROOM_NOTIFICATIONS_TAB";
 export const ROOM_BRIDGES_TAB = "ROOM_BRIDGES_TAB";
 export const ROOM_ADVANCED_TAB = "ROOM_ADVANCED_TAB";
 
+@replaceableComponent("views.dialogs.RoomSettingsDialog")
 export default class RoomSettingsDialog extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -52,9 +55,9 @@ export default class RoomSettingsDialog extends React.Component {
     }
 
     _onAction = (payload) => {
-        // When room changes below us, close the room settings
+        // When view changes below us, close the room settings
         // whilst the modal is open this can only be triggered when someone hits Leave Room
-        if (payload.action === 'view_next_room') {
+        if (payload.action === 'view_home_page') {
             this.props.onFinished();
         }
     };
@@ -87,7 +90,7 @@ export default class RoomSettingsDialog extends React.Component {
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
 
-        if (SettingsStore.isFeatureEnabled("feature_bridge_state")) {
+        if (SettingsStore.getValue("feature_bridge_state")) {
             tabs.push(new Tab(
                 ROOM_BRIDGES_TAB,
                 _td("Bridges"),
@@ -96,12 +99,14 @@ export default class RoomSettingsDialog extends React.Component {
             ));
         }
 
-        tabs.push(new Tab(
-            ROOM_ADVANCED_TAB,
-            _td("Advanced"),
-            "mx_RoomSettingsDialog_warningIcon",
-            <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
-        ));
+        if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
+            tabs.push(new Tab(
+                ROOM_ADVANCED_TAB,
+                _td("Advanced"),
+                "mx_RoomSettingsDialog_warningIcon",
+                <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
+            ));
+        }
 
         return tabs;
     }
@@ -111,9 +116,13 @@ export default class RoomSettingsDialog extends React.Component {
 
         const roomName = MatrixClientPeg.get().getRoom(this.props.roomId).name;
         return (
-            <BaseDialog className='mx_RoomSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Room Settings - %(roomName)s", {roomName})}>
-                <div className='ms_SettingsDialog_content'>
+            <BaseDialog
+                className='mx_RoomSettingsDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Room Settings - %(roomName)s", {roomName})}
+            >
+                <div className='mx_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} />
                 </div>
             </BaseDialog>

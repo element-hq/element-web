@@ -18,6 +18,14 @@ limitations under the License.
     display: flex;
 }
 
+.mx_RoomHeader_buttons + .mx_HeaderButtons {
+    // remove the | separator line for when next to RoomHeaderButtons
+    // TODO: remove this once when we redo communities and make the right panel similar to the new rooms one
+    &::before {
+        content: unset;
+    }
+}
+
 .mx_HeaderButtons::before {
     content: "";
     background-color: $header-divider-color;

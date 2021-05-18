@@ -52,7 +52,7 @@ describe('Login', function() {
 
         // Set non-empty flows & matrixClient to get past the loading spinner
         root.setState({
-            currentFlow: "m.login.password",
+            flows: [{ type: "m.login.password" }],
         });
 
         const form = ReactTestUtils.findRenderedComponentWithType(
@@ -61,10 +61,7 @@ describe('Login', function() {
         );
         expect(form).toBeTruthy();
 
-        const changeServerLink = ReactTestUtils.findRenderedDOMComponentWithClass(
-            root,
-            'mx_AuthBody_editServerDetails',
-        );
+        const changeServerLink = ReactTestUtils.findRenderedDOMComponentWithClass(root, 'mx_ServerPicker_change');
         expect(changeServerLink).toBeTruthy();
     });
 
@@ -77,7 +74,7 @@ describe('Login', function() {
 
         // Set non-empty flows & matrixClient to get past the loading spinner
         root.setState({
-            currentFlow: "m.login.password",
+            flows: [{ type: "m.login.password" }],
         });
 
         const form = ReactTestUtils.findRenderedComponentWithType(
@@ -86,10 +83,70 @@ describe('Login', function() {
         );
         expect(form).toBeTruthy();
 
-        const changeServerLinks = ReactTestUtils.scryRenderedDOMComponentsWithClass(
-            root,
-            'mx_AuthBody_editServerDetails',
-        );
+        const changeServerLinks = ReactTestUtils.scryRenderedDOMComponentsWithClass(root, 'mx_ServerPicker_change');
         expect(changeServerLinks).toHaveLength(0);
+    });
+
+    it("should show SSO button if that flow is available", () => {
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
+            disable_custom_urls: true,
+        });
+
+        const root = render();
+
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            flows: [{ type: "m.login.sso" }],
+        });
+
+        const ssoButton = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_SSOButton");
+        expect(ssoButton).toBeTruthy();
+    });
+
+    it("should show both SSO button and username+password if both are available", () => {
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
+            disable_custom_urls: true,
+        });
+
+        const root = render();
+
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            flows: [{ type: "m.login.password" }, { type: "m.login.sso" }],
+        });
+
+        const form = ReactTestUtils.findRenderedComponentWithType(root, sdk.getComponent('auth.PasswordLogin'));
+        expect(form).toBeTruthy();
+
+        const ssoButton = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_SSOButton");
+        expect(ssoButton).toBeTruthy();
+    });
+
+    it("should show multiple SSO buttons if multiple identity_providers are available", () => {
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
+            disable_custom_urls: true,
+        });
+
+        const root = render();
+
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            flows: [{
+                "type": "m.login.sso",
+                "org.matrix.msc2858.identity_providers": [{
+                    id: "a",
+                    name: "Provider 1",
+                }, {
+                    id: "b",
+                    name: "Provider 2",
+                }, {
+                    id: "c",
+                    name: "Provider 3",
+                }],
+            }],
+        });
+
+        const ssoButtons = ReactTestUtils.scryRenderedDOMComponentsWithClass(root, "mx_SSOButton");
+        expect(ssoButtons.length).toBe(3);
     });
 });

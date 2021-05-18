@@ -17,26 +17,16 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import '../../../VelocityBounce';
 import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
-import Velociraptor from "../../../Velociraptor";
+import NodeAnimator from "../../../NodeAnimator";
 import * as sdk from "../../../index";
 import {toPx} from "../../../utils/units";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-let bounce = false;
-try {
-    if (global.localStorage) {
-        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
-    }
-} catch (e) {
-}
-
-export default createReactClass({
-    displayName: 'ReadReceiptMarker',
-
-    propTypes: {
+@replaceableComponent("views.rooms.ReadReceiptMarker")
+export default class ReadReceiptMarker extends React.PureComponent {
+    static propTypes = {
         // the RoomMember to show the RR for
         member: PropTypes.object,
         // userId to fallback the avatar to
@@ -70,30 +60,27 @@ export default createReactClass({
 
         // True to show twelve hour format, false otherwise
         showTwelveHour: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            leftOffset: 0,
-        };
-    },
+    static defaultProps = {
+        leftOffset: 0,
+    };
 
-    getInitialState: function() {
-        // if we are going to animate the RR, we don't show it on first render,
-        // and instead just add a placeholder to the DOM; once we've been
-        // mounted, we start an animation which moves the RR from its old
-        // position.
-        return {
+    constructor(props) {
+        super(props);
+
+        this._avatar = createRef();
+
+        this.state = {
+            // if we are going to animate the RR, we don't show it on first render,
+            // and instead just add a placeholder to the DOM; once we've been
+            // mounted, we start an animation which moves the RR from its old
+            // position.
             suppressDisplay: !this.props.suppressAnimation,
         };
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._avatar = createRef();
-    },
-
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
         const rrInfo = this.props.readReceiptInfo;
@@ -112,14 +99,25 @@ export default createReactClass({
         rrInfo.top = avatarNode.offsetTop;
         rrInfo.left = avatarNode.offsetLeft;
         rrInfo.parent = avatarNode.offsetParent;
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         if (!this.state.suppressDisplay) {
             // we've already done our display - nothing more to do.
             return;
         }
+        this._animateMarker();
+    }
 
+    componentDidUpdate(prevProps) {
+        const differentLeftOffset = prevProps.leftOffset !== this.props.leftOffset;
+        const visibilityChanged = prevProps.hidden !== this.props.hidden;
+        if (differentLeftOffset || visibilityChanged) {
+            this._animateMarker();
+        }
+    }
+
+    _animateMarker() {
         // treat new RRs as though they were off the top of the screen
         let oldTop = -15;
 
@@ -143,39 +141,22 @@ export default createReactClass({
         }
 
         const startStyles = [];
-        const enterTransitionOpts = [];
 
         if (oldInfo && oldInfo.left) {
             // start at the old height and in the old h pos
-
             startStyles.push({ top: startTopOffset+"px",
                                left: toPx(oldInfo.left) });
-
-            const reorderTransitionOpts = {
-                duration: 100,
-                easing: 'easeOut',
-            };
-
-            enterTransitionOpts.push(reorderTransitionOpts);
         }
 
-        // then shift to the rightmost column,
-        // and then it will drop down to its resting position
-        startStyles.push({ top: startTopOffset+'px', left: '0px' });
-        enterTransitionOpts.push({
-            duration: bounce ? Math.min(Math.log(Math.abs(startTopOffset)) * 200, 3000) : 300,
-            easing: bounce ? 'easeOutBounce' : 'easeOutCubic',
-        });
+        startStyles.push({ top: startTopOffset+'px', left: '0' });
 
         this.setState({
             suppressDisplay: false,
             startStyles: startStyles,
-            enterTransitionOpts: enterTransitionOpts,
         });
-    },
+    }
 
-
-    render: function() {
+    render() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
             return <div ref={this._avatar} />;
@@ -184,7 +165,6 @@ export default createReactClass({
         const style = {
             left: toPx(this.props.leftOffset),
             top: '0px',
-            visibility: this.props.hidden ? 'hidden' : 'visible',
         };
 
         let title;
@@ -207,9 +187,7 @@ export default createReactClass({
         }
 
         return (
-            <Velociraptor
-                    startStyles={this.state.startStyles}
-                    enterTransitionOpts={this.state.enterTransitionOpts} >
+            <NodeAnimator startStyles={this.state.startStyles}>
                 <MemberAvatar
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}
@@ -220,7 +198,7 @@ export default createReactClass({
                     onClick={this.props.onClick}
                     inputRef={this._avatar}
                 />
-            </Velociraptor>
+            </NodeAnimator>
         );
-    },
-});
+    }
+}

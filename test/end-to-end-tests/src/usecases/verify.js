@@ -93,7 +93,7 @@ module.exports.acceptSasVerification = async function(session, name) {
     // verify the toast is for verification
     const toastHeader = await requestToast.$("h2");
     const toastHeaderText = await session.innerText(toastHeader);
-    assert.equal(toastHeaderText, 'Verification Request');
+    assert.equal(toastHeaderText, 'Verification requested');
     const toastDescription = await requestToast.$(".mx_Toast_description");
     const toastDescText = await session.innerText(toastDescription);
     assert.equal(toastDescText.startsWith(name), true,

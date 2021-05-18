@@ -54,7 +54,7 @@ $irc-line-height: $font-18px;
             flex-shrink: 0;
             width: var(--name-width);
             text-overflow: ellipsis;
-            text-align: right;
+            text-align: left;
             display: flex;
             align-items: center;
             overflow: visible;
@@ -181,11 +181,11 @@ $irc-line-height: $font-18px;
         > span {
             display: flex;
 
-            > .mx_SenderProfile_name,
-            > .mx_SenderProfile_aux {
+            > .mx_SenderProfile_name {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 min-width: var(--name-width);
+                text-align: end;
             }
         }
     }
@@ -205,6 +205,35 @@ $irc-line-height: $font-18px;
         .mx_SenderProfile {
             width: unset;
             max-width: var(--name-width);
+        }
+
+        .mx_SenderProfile_hover {
+            background: transparent;
+
+            > span {
+                > .mx_SenderProfile_name {
+                    min-width: inherit;
+                }
+            }
+        }
+
+        .mx_EventTile_emote {
+            > .mx_EventTile_avatar {
+                margin-left: initial;
+            }
+        }
+
+        .mx_MessageTimestamp {
+            width: initial;
+        }
+
+        /**
+         * adding the icon back in the document flow
+         * if it's not present, there's no unwanted wasted space
+         */
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            order: -1;
         }
     }
 

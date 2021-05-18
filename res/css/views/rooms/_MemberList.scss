@@ -44,6 +44,17 @@ limitations under the License.
     .mx_AutoHideScrollbar {
         flex: 1 1 0;
     }
+
+    .mx_RightPanel_scopeHeader {
+        // vertically align with position on other right panel cards
+        // to prevent it bouncing as user navigates right panel
+        margin-top: -8px;
+    }
+}
+
+.mx_GroupMemberList_query,
+.mx_GroupRoomList_query {
+    flex: 0 0 auto;
 }
 
 .mx_MemberList_chevron {
@@ -59,10 +70,8 @@ limitations under the License.
     flex: 1 1 0px;
 }
 
-.mx_MemberList_query,
-.mx_GroupMemberList_query,
-.mx_GroupRoomList_query {
-    flex: 1 1 0;
+.mx_MemberList_query {
+    height: 16px;
 
     // stricter rule to override the one in _common.scss
     &[type="text"] {
@@ -92,17 +101,27 @@ limitations under the License.
 }
 
 .mx_MemberList_invite span {
-    background-image: url('$(res)/img/element-icons/room/invite.svg');
-    background-repeat: no-repeat;
-    background-position: center left;
-    background-size: 20px;
-    padding: 8px 0 8px 25px;
+    padding: 8px 0;
+    display: inline-flex;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        background-color: $button-fg-color;
+        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 20px;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
 }
 
-.mx_MemberList_inviteCommunity span {
-    background-image: url('$(res)/img/icon-invite-people.svg');
+.mx_MemberList_inviteCommunity span::before {
+    mask-image: url('$(res)/img/icon-invite-people.svg');
 }
 
-.mx_MemberList_addRoomToCommunity span {
-    background-image: url('$(res)/img/icons-room-add.svg');
+.mx_MemberList_addRoomToCommunity span::before {
+    mask-image: url('$(res)/img/icons-room-add.svg');
 }

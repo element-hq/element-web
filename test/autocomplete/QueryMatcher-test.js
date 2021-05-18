@@ -177,24 +177,10 @@ describe('QueryMatcher', function() {
         const qm = new QueryMatcher(NONWORDOBJECTS, {
             keys: ["name"],
             shouldMatchWordsOnly: false,
-         });
+        });
 
         const results = qm.match('bob');
         expect(results.length).toBe(1);
         expect(results[0].name).toBe('bob');
-    });
-
-    it('Matches only by prefix with shouldMatchPrefix on', function() {
-        const qm = new QueryMatcher([
-            {name: "Victoria"},
-            {name: "Tori"},
-        ], {
-            keys: ["name"],
-            shouldMatchPrefix: true,
-         });
-
-        const results = qm.match('tori');
-        expect(results.length).toBe(1);
-        expect(results[0].name).toBe('Tori');
     });
 });

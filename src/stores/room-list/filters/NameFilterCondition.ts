@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 import { throttle } from "lodash";
@@ -31,9 +31,8 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
         super();
     }
 
-    public get relativePriority(): FilterPriority {
-        // We want this one to be at the highest priority so it can search within other filters.
-        return FilterPriority.Highest;
+    public get kind(): FilterKind {
+        return FilterKind.Runtime;
     }
 
     public get search(): string {
@@ -66,12 +65,17 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
         return this.matches(room.name);
     }
 
-    public matches(val: string): boolean {
+    private normalize(val: string): string {
         // Note: we have to match the filter with the removeHiddenChars() room name because the
         // function strips spaces and other characters (M becomes RN for example, in lowercase).
-        // We also doubly convert to lowercase to work around oddities of the library.
-        const noSecretsFilter = removeHiddenChars(this.search.toLowerCase()).toLowerCase();
-        const noSecretsName = removeHiddenChars(val.toLowerCase()).toLowerCase();
-        return noSecretsName.includes(noSecretsFilter);
+        return removeHiddenChars(val.toLowerCase())
+            // Strip all punctuation
+            .replace(/[\\'!"#$%&()*+,\-./:;<=>?@[\]^_`{|}~\u2000-\u206f\u2e00-\u2e7f]/g, "")
+            // We also doubly convert to lowercase to work around oddities of the library.
+            .toLowerCase();
+    }
+
+    public matches(val: string): boolean {
+        return this.normalize(val).includes(this.normalize(this.search));
     }
 }

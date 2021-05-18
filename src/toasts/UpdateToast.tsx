@@ -74,18 +74,18 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
         };
     } else {
         onAccept = installUpdate;
-        acceptLabel = _t("Restart");
+        acceptLabel = _t("Update");
     }
 
     const brand = SdkConfig.get().brand;
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Upgrade your %(brand)s", { brand }),
+        title: _t("Update %(brand)s", { brand }),
         props: {
-            description: _t("A new version of %(brand)s is available!", { brand }),
+            description: _t("New version of %(brand)s is available", { brand }),
             acceptLabel,
             onAccept,
-            rejectLabel: _t("Later"),
+            rejectLabel: _t("Dismiss"),
             onReject,
         },
         component: GenericToast,

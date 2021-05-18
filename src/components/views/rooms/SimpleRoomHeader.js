@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import AccessibleButton from '../elements/AccessibleButton';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // cancel button which is shared between room header and simple room header
 export function CancelButton(props) {
@@ -37,18 +37,17 @@ export function CancelButton(props) {
  * A stripped-down room header used for things like the user settings
  * and room directory.
  */
-export default createReactClass({
-    displayName: 'SimpleRoomHeader',
-
-    propTypes: {
+@replaceableComponent("views.rooms.SimpleRoomHeader")
+export default class SimpleRoomHeader extends React.Component {
+    static propTypes = {
         title: PropTypes.string,
         onCancelClick: PropTypes.func,
 
         // `src` to a TintableSvg. Optional.
         icon: PropTypes.string,
-    },
+    };
 
-    render: function() {
+    render() {
         let cancelButton;
         let icon;
         if (this.props.onCancelClick) {
@@ -73,5 +72,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

@@ -15,13 +15,14 @@ module.exports = {
         "prefer-promise-reject-errors": "off",
         "no-async-promise-executor": "off",
         "quotes": "off",
-        "indent": "off",
     },
 
     overrides: [{
-        "files": ["src/**/*.{ts, tsx}"],
+        "files": ["src/**/*.{ts,tsx}"],
         "extends": ["matrix-org/ts"],
         "rules": {
+            // We're okay being explicit at the moment
+            "@typescript-eslint/no-empty-interface": "off",
             // We disable this while we're transitioning
             "@typescript-eslint/no-explicit-any": "off",
             // We'd rather not do this but we do

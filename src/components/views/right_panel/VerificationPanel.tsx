@@ -30,14 +30,13 @@ import {_t} from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import E2EIcon from "../rooms/E2EIcon";
 import {
-    PHASE_UNSENT,
-    PHASE_REQUESTED,
     PHASE_READY,
     PHASE_DONE,
     PHASE_STARTED,
     PHASE_CANCELLED,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // XXX: Should be defined in matrix-js-sdk
 enum VerificationPhase {
@@ -67,6 +66,7 @@ interface IState {
     reciprocateQREvent?: ReciprocateQRCode;
 }
 
+@replaceableComponent("views.right_panel.VerificationPanel")
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
     private hasVerifier: boolean;
 
@@ -104,14 +104,15 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                     </div>;
             }
             if (showSAS) {
-                sasBlockDialog =
-                    <div className='mx_VerificationPanel_QRPhase_startOption'>
-                        <p>{_t("Compare unique emoji")}</p>
-                        <span className='mx_VerificationPanel_QRPhase_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
-                        <AccessibleButton disabled={this.state.emojiButtonClicked} onClick={this.startSAS} kind='primary'>
-                            {_t("Start")}
-                        </AccessibleButton>
-                    </div>;
+                sasBlockDialog = <div className='mx_VerificationPanel_QRPhase_startOption'>
+                    <p>{_t("Compare unique emoji")}</p>
+                    <span className='mx_VerificationPanel_QRPhase_helpText'>
+                        {_t("Compare a unique set of emoji if you don't have a camera on either device")}
+                    </span>
+                    <AccessibleButton disabled={this.state.emojiButtonClicked} onClick={this.startSAS} kind='primary'>
+                        {_t("Start")}
+                    </AccessibleButton>
+                </div>;
             }
             const or = qrBlockDialog && sasBlockDialog ?
                 <div className='mx_VerificationPanel_QRPhase_betweenText'>{_t("or")}</div> : null;
@@ -165,8 +166,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         }
 
         const noCommonMethodBlock = noCommonMethodError ?
-             <div className="mx_UserInfo_container">{noCommonMethodError}</div> :
-             null;
+            <div className="mx_UserInfo_container">{noCommonMethodError}</div> :
+            null;
 
         // TODO: add way to open camera to scan a QR code
         return <React.Fragment>

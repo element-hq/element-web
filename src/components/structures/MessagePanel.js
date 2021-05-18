@@ -26,10 +26,15 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
+import DMRoomMap from "../../utils/DMRoomMap";
+import NewRoomIntro from "../views/rooms/NewRoomIntro";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import defaultDispatcher from '../../dispatcher/dispatcher';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -41,6 +46,9 @@ function shouldFormContinuation(prevEvent, mxEvent) {
     if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
     // check if within the max continuation period
     if (mxEvent.getTs() - prevEvent.getTs() > CONTINUATION_MAX_INTERVAL) return false;
+
+    // As we summarise redactions, do not continue a redacted event onto a non-redacted one and vice-versa
+    if (mxEvent.isRedacted() !== prevEvent.isRedacted()) return false;
 
     // Some events should appear as continuations from previous events of different types.
     if (mxEvent.getType() !== prevEvent.getType() &&
@@ -62,6 +70,7 @@ const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType()
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
+@replaceableComponent("structures.MessagePanel")
 export default class MessagePanel extends React.Component {
     static propTypes = {
         // true to give the component a 'display: none' style.
@@ -133,11 +142,13 @@ export default class MessagePanel extends React.Component {
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
 
-        // whether to use the irc layout
-        useIRCLayout: PropTypes.bool,
+        // which layout to use
+        layout: LayoutPropType,
+
+        // whether or not to show flair at all
+        enableFlair: PropTypes.bool,
     };
 
-    // Force props to be loaded for useIRCLayout
     constructor(props) {
         super(props);
 
@@ -417,8 +428,10 @@ export default class MessagePanel extends React.Component {
             // we get a new DOM node (restarting the animation) when the ghost
             // moves to a different event.
             return (
-                <li key={"_readuptoghost_"+eventId}
-                      className="mx_RoomView_myReadMarker_container">
+                <li
+                    key={"_readuptoghost_"+eventId}
+                    className="mx_RoomView_myReadMarker_container"
+                >
                     { hr }
                 </li>
             );
@@ -444,6 +457,24 @@ export default class MessagePanel extends React.Component {
             ghostReadMarkers: this.state.ghostReadMarkers.filter(eid => eid !== finishedEventId),
         });
     };
+
+    _getNextEventInfo(arr, i) {
+        const nextEvent = i < arr.length - 1
+            ? arr[i + 1]
+            : null;
+
+        // The next event with tile is used to to determine the 'last successful' flag
+        // when rendering the tile. The shouldShowEvent function is pretty quick at what
+        // it does, so this should have no significant cost even when a room is used for
+        // not-chat purposes.
+        const nextTile = arr.slice(i + 1).find(e => this._shouldShowEvent(e));
+
+        return {nextEvent, nextTile};
+    }
+
+    get _roomHasPendingEdit() {
+        return this.props.room && localStorage.getItem(`mx_edit_room_${this.props.room.roomId}`);
+    }
 
     _getEventTiles() {
         this.eventNodes = {};
@@ -482,6 +513,9 @@ export default class MessagePanel extends React.Component {
 
         let prevEvent = null; // the last event we showed
 
+        // Note: the EventTile might still render a "sent/sending receipt" independent of
+        // this information. When not providing read receipt information, the tile is likely
+        // to assume that sent receipts are to be shown more often.
         this._readReceiptsByEvent = {};
         if (this.props.showReadReceipts) {
             this._readReceiptsByEvent = this._getReadReceiptsByShownEvent();
@@ -493,6 +527,7 @@ export default class MessagePanel extends React.Component {
             const mxEv = this.props.events[i];
             const eventId = mxEv.getId();
             const last = (mxEv === lastShownEvent);
+            const {nextEvent, nextTile} = this._getNextEventInfo(this.props.events, i);
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
@@ -509,22 +544,31 @@ export default class MessagePanel extends React.Component {
 
             for (const Grouper of groupers) {
                 if (Grouper.canStartGroup(this, mxEv)) {
-                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent);
+                    grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent, nextEvent, nextTile);
                 }
             }
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
+                const isGrouped = false;
                 if (wantTile) {
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last));
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, isGrouped,
+                        nextEvent, nextTile));
                     prevEvent = mxEv;
                 }
 
                 const readMarker = this._readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
                 if (readMarker) ret.push(readMarker);
             }
+        }
+
+        if (!this.props.editState && this._roomHasPendingEdit) {
+            defaultDispatcher.dispatch({
+                action: "edit_event",
+                event: this.props.room.findEventById(this._roomHasPendingEdit),
+            });
         }
 
         if (grouper) {
@@ -534,7 +578,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last) {
+    _getTilesForEvent(prevEvent, mxEv, last, isGrouped=false, nextEvent, nextEventWithTile) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -542,7 +586,6 @@ export default class MessagePanel extends React.Component {
 
         const isEditing = this.props.editState &&
             this.props.editState.getEvent().getId() === mxEv.getId();
-
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
         let ts1 = mxEv.getTs();
@@ -554,9 +597,14 @@ export default class MessagePanel extends React.Component {
 
         // do we need a date separator since the last event?
         const wantsDateSeparator = this._wantsDateSeparator(prevEvent, eventDate);
-        if (wantsDateSeparator) {
+        if (wantsDateSeparator && !isGrouped) {
             const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
+        }
+
+        let willWantDateSeparator = false;
+        if (nextEvent) {
+            willWantDateSeparator = this._wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
         }
 
         // is this a continuation of the previous message?
@@ -571,6 +619,30 @@ export default class MessagePanel extends React.Component {
 
         const readReceipts = this._readReceiptsByEvent[eventId];
 
+        let isLastSuccessful = false;
+        const isSentState = s => !s || s === 'sent';
+        const isSent = isSentState(mxEv.getAssociatedStatus());
+        const hasNextEvent = nextEvent && this._shouldShowEvent(nextEvent);
+        if (!hasNextEvent && isSent) {
+            isLastSuccessful = true;
+        } else if (hasNextEvent && isSent && !isSentState(nextEvent.getAssociatedStatus())) {
+            isLastSuccessful = true;
+        }
+
+        // This is a bit nuanced, but if our next event is hidden but a future event is not
+        // hidden then we're not the last successful.
+        if (
+            nextEventWithTile &&
+            nextEventWithTile !== nextEvent &&
+            isSentState(nextEventWithTile.getAssociatedStatus())
+        ) {
+            isLastSuccessful = false;
+        }
+
+        // We only want to consider "last successful" if the event is sent by us, otherwise of course
+        // it's successful: we received it.
+        isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
+
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <li
@@ -579,7 +651,8 @@ export default class MessagePanel extends React.Component {
                 data-scroll-tokens={scrollToken}
             >
                 <TileErrorBoundary mxEvent={mxEv}>
-                    <EventTile mxEvent={mxEv}
+                    <EventTile
+                        mxEvent={mxEv}
                         continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
                         replacingEventId={mxEv.replacingEventId()}
@@ -594,10 +667,14 @@ export default class MessagePanel extends React.Component {
                         isTwelveHour={this.props.isTwelveHour}
                         permalinkCreator={this.props.permalinkCreator}
                         last={last}
+                        lastInSection={willWantDateSeparator}
+                        lastSuccessful={isLastSuccessful}
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
-                        useIRCLayout={this.props.useIRCLayout}
+                        layout={this.props.layout}
+                        enableFlair={this.props.enableFlair}
+                        showReadReceipts={this.props.showReadReceipts}
                     />
                 </TileErrorBoundary>
             </li>,
@@ -794,7 +871,7 @@ export default class MessagePanel extends React.Component {
         }
 
         let ircResizer = null;
-        if (this.props.useIRCLayout) {
+        if (this.props.layout == Layout.IRC) {
             ircResizer = <IRCTimelineProfileResizer
                 minWidth={20}
                 maxWidth={600}
@@ -904,9 +981,9 @@ class CreationGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-
         const panel = this.panel;
         const ret = [];
+        const isGrouped = true;
         const createEvent = this.createEvent;
         const lastShownEvent = this.lastShownEvent;
 
@@ -920,12 +997,12 @@ class CreationGrouper {
         // If this m.room.create event should be shown (room upgrade) then show it before the summary
         if (panel._shouldShowEvent(createEvent)) {
             // pass in the createEvent as prevEvent as well so no extra DateSeparator is rendered
-            ret.push(...panel._getTilesForEvent(createEvent, createEvent, false));
+            ret.push(...panel._getTilesForEvent(createEvent, createEvent));
         }
 
         for (const ejected of this.ejectedEvents) {
             ret.push(...panel._getTilesForEvent(
-                createEvent, ejected, createEvent === lastShownEvent,
+                createEvent, ejected, createEvent === lastShownEvent, isGrouped,
             ));
         }
 
@@ -934,21 +1011,31 @@ class CreationGrouper {
             // of EventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent);
+            return panel._getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
         }).reduce((a, b) => a.concat(b), []);
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1];
+
+        let summaryText;
+        const roomId = ev.getRoomId();
+        const creator = ev.sender ? ev.sender.name : ev.getSender();
+        if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
+            summaryText = _t("%(creator)s created this DM.", { creator });
+        } else {
+            summaryText = _t("%(creator)s created and configured the room.", { creator });
+        }
+
+        ret.push(<NewRoomIntro key="newroomintro" />);
+
         ret.push(
             <EventListSummary
-                 key="roomcreationsummary"
-                 events={this.events}
-                 onToggle={panel._onHeightChanged} // Update scroll state
-                 summaryMembers={[ev.sender]}
-                 summaryText={_t("%(creator)s created and configured the room.", {
-                     creator: ev.sender ? ev.sender.name : ev.getSender(),
-                 })}
+                key="roomcreationsummary"
+                events={this.events}
+                onToggle={panel._onHeightChanged} // Update scroll state
+                summaryMembers={[ev.sender]}
+                summaryText={summaryText}
             >
-                 { eventTiles }
+                { eventTiles }
             </EventListSummary>,
         );
 
@@ -961,6 +1048,104 @@ class CreationGrouper {
 
     getNewPrevEvent() {
         return this.createEvent;
+    }
+}
+
+class RedactionGrouper {
+    static canStartGroup = function(panel, ev) {
+        return panel._shouldShowEvent(ev) && ev.isRedacted();
+    }
+
+    constructor(panel, ev, prevEvent, lastShownEvent, nextEvent, nextEventTile) {
+        this.panel = panel;
+        this.readMarker = panel._readMarkerForEvent(
+            ev.getId(),
+            ev === lastShownEvent,
+        );
+        this.events = [ev];
+        this.prevEvent = prevEvent;
+        this.lastShownEvent = lastShownEvent;
+        this.nextEvent = nextEvent;
+        this.nextEventTile = nextEventTile;
+    }
+
+    shouldGroup(ev) {
+        // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
+        if (!this.panel._shouldShowEvent(ev)) {
+            return true;
+        }
+        if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
+            return false;
+        }
+        return ev.isRedacted();
+    }
+
+    add(ev) {
+        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
+        if (!this.panel._shouldShowEvent(ev)) {
+            return;
+        }
+        this.events.push(ev);
+    }
+
+    getTiles() {
+        if (!this.events || !this.events.length) return [];
+
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
+        const isGrouped = true;
+        const panel = this.panel;
+        const ret = [];
+        const lastShownEvent = this.lastShownEvent;
+
+        if (panel._wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
+            const ts = this.events[0].getTs();
+            ret.push(
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+            );
+        }
+
+        const key = "redactioneventlistsummary-" + (
+            this.prevEvent ? this.events[0].getId() : "initial"
+        );
+
+        const senders = new Set();
+        let eventTiles = this.events.map((e, i) => {
+            senders.add(e.sender);
+            const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
+            return panel._getTilesForEvent(
+                prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
+        }).reduce((a, b) => a.concat(b), []);
+
+        if (eventTiles.length === 0) {
+            eventTiles = null;
+        }
+
+        ret.push(
+            <EventListSummary
+                key={key}
+                threshold={2}
+                events={this.events}
+                onToggle={panel._onHeightChanged} // Update scroll state
+                summaryMembers={Array.from(senders)}
+                summaryText={_t("%(count)s messages deleted.", { count: eventTiles.length })}
+            >
+                { eventTiles }
+            </EventListSummary>,
+        );
+
+        if (this.readMarker) {
+            ret.push(this.readMarker);
+        }
+
+        return ret;
+    }
+
+    getNewPrevEvent() {
+        return this.events[this.events.length - 1];
     }
 }
 
@@ -1011,7 +1196,7 @@ class MemberGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
-
+        const isGrouped = true;
         const panel = this.panel;
         const lastShownEvent = this.lastShownEvent;
         const ret = [];
@@ -1044,7 +1229,7 @@ class MemberGrouper {
             // of MemberEventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent);
+            return panel._getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
@@ -1053,11 +1238,11 @@ class MemberGrouper {
 
         ret.push(
             <MemberEventListSummary key={key}
-                 events={this.events}
-                 onToggle={panel._onHeightChanged} // Update scroll state
-                 startExpanded={highlightInMels}
+                events={this.events}
+                onToggle={panel._onHeightChanged} // Update scroll state
+                startExpanded={highlightInMels}
             >
-                 { eventTiles }
+                { eventTiles }
             </MemberEventListSummary>,
         );
 
@@ -1074,4 +1259,4 @@ class MemberGrouper {
 }
 
 // all the grouper classes that we use
-const groupers = [CreationGrouper, MemberGrouper];
+const groupers = [CreationGrouper, MemberGrouper, RedactionGrouper];

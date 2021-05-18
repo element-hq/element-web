@@ -14,16 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var notifications = require('../../src/notifications');
+const notifications = require('../../src/notifications');
 
-var prvs = notifications.PushRuleVectorState;
-
-var expect = require('expect');
+const prvs = notifications.PushRuleVectorState;
 
 describe("PushRuleVectorState", function() {
     describe("contentRuleVectorStateKind", function() {
-        it("should understand normal notifications", function () {
-            var rule = {
+        it("should understand normal notifications", function() {
+            const rule = {
                 actions: [
                     "notify",
                 ],
@@ -33,26 +31,26 @@ describe("PushRuleVectorState", function() {
                 toEqual(prvs.ON);
         });
 
-        it("should handle loud notifications", function () {
-            var rule = {
+        it("should handle loud notifications", function() {
+            const rule = {
                 actions: [
                     "notify",
                     { set_tweak: "highlight", value: true },
                     { set_tweak: "sound", value: "default" },
-                ]
+                ],
             };
 
             expect(prvs.contentRuleVectorStateKind(rule)).
                 toEqual(prvs.LOUD);
         });
 
-        it("should understand missing highlight.value", function () {
-            var rule = {
+        it("should understand missing highlight.value", function() {
+            const rule = {
                 actions: [
                     "notify",
                     { set_tweak: "highlight" },
                     { set_tweak: "sound", value: "default" },
-                ]
+                ],
             };
 
             expect(prvs.contentRuleVectorStateKind(rule)).

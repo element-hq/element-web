@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import classNames from 'classnames';
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -25,6 +25,8 @@ import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
+import {ResizeMethod} from "../../../Avatar";
+import { _t } from '../../../languageHandler';
 
 interface IProps {
     name: string; // The name (first initial used as default)
@@ -35,41 +37,43 @@ interface IProps {
     width?: number;
     height?: number;
     // XXX: resizeMethod not actually used.
-    resizeMethod?: string;
+    resizeMethod?: ResizeMethod;
     defaultToInitialLetter?: boolean; // true to add default url
     onClick?: React.MouseEventHandler;
     inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
     className?: string;
 }
 
+const calculateUrls = (url, urls) => {
+    // work out the full set of urls to try to load. This is formed like so:
+    // imageUrls: [ props.url, ...props.urls ]
+
+    let _urls = [];
+    if (!SettingsStore.getValue("lowBandwidth")) {
+        _urls = urls || [];
+
+        if (url) {
+            // copy urls and put url first
+            _urls = [url, ..._urls];
+        }
+    }
+
+    // deduplicate URLs
+    return Array.from(new Set(_urls));
+};
+
 const useImageUrl = ({url, urls}): [string, () => void] => {
-    const [imageUrls, setUrls] = useState<string[]>([]);
-    const [urlsIndex, setIndex] = useState<number>();
+    const [imageUrls, setUrls] = useState<string[]>(calculateUrls(url, urls));
+    const [urlsIndex, setIndex] = useState<number>(0);
 
     const onError = useCallback(() => {
         setIndex(i => i + 1); // try the next one
     }, []);
-    const memoizedUrls = useMemo(() => urls, [JSON.stringify(urls)]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        // work out the full set of urls to try to load. This is formed like so:
-        // imageUrls: [ props.url, ...props.urls ]
-
-        let _urls = [];
-        if (!SettingsStore.getValue("lowBandwidth")) {
-            _urls = memoizedUrls || [];
-
-            if (url) {
-                _urls.unshift(url); // put in urls[0]
-            }
-        }
-
-        // deduplicate URLs
-        _urls = Array.from(new Set(_urls));
-
+        setUrls(calculateUrls(url, urls));
         setIndex(0);
-        setUrls(_urls);
-    }, [url, memoizedUrls]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [url, JSON.stringify(urls)]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const cli = useContext(MatrixClientContext);
     const onClientSync = useCallback((syncState, prevState) => {
@@ -95,7 +99,7 @@ const BaseAvatar = (props: IProps) => {
         urls,
         width = 40,
         height = 40,
-        resizeMethod = "crop", // eslint-disable-line no-unused-vars
+        resizeMethod = "crop", // eslint-disable-line @typescript-eslint/no-unused-vars
         defaultToInitialLetter = true,
         onClick,
         inputRef,
@@ -137,6 +141,7 @@ const BaseAvatar = (props: IProps) => {
         if (onClick) {
             return (
                 <AccessibleButton
+                    aria-label={_t("Avatar")}
                     {...otherProps}
                     element="span"
                     className={classNames("mx_BaseAvatar", className)}
@@ -174,7 +179,7 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                title={title} alt=""
+                title={title} alt={_t("Avatar")}
                 inputRef={inputRef}
                 {...otherProps} />
         );

@@ -26,9 +26,10 @@ limitations under the License.
 
 .mx_HomePage_default {
     text-align: center;
+    display: flex;
 
     .mx_HomePage_default_wrapper {
-        padding: 25vh 0 12px;
+        margin: auto;
     }
 
     img {
@@ -50,56 +51,54 @@ limitations under the License.
         color: $muted-fg-color;
     }
 
+    .mx_MiniAvatarUploader {
+        margin: 0 auto;
+    }
+
     .mx_HomePage_default_buttons {
-        margin: 80px auto 0;
+        margin: 60px auto 0;
         width: fit-content;
 
         .mx_AccessibleButton {
             padding: 73px 8px 15px; // top: 20px top padding + 40px icon + 13px margin
 
-            width: 104px; // 120px - 2* 8px
-            margin: 0 39px; // 55px - 2* 8px
+            width: 160px;
+            height: 132px;
+            margin: 20px;
             position: relative;
             display: inline-block;
             border-radius: 8px;
             vertical-align: top;
             word-break: break-word;
+            box-sizing: border-box;
 
             font-weight: 600;
             font-size: $font-15px;
             line-height: $font-20px;
-            color: $muted-fg-color;
-
-            &:hover {
-                color: $accent-color;
-                background: rgba($accent-color, 0.06);
-
-                &::before {
-                    background-color: $accent-color;
-                }
-            }
+            color: #fff; // on all themes
+            background-color: $accent-color;
 
             &::before {
                 top: 20px;
-                left: 40px; // (120px-40px)/2
+                left: 60px; // (160px-40px)/2
                 width: 40px;
                 height: 40px;
 
                 content: '';
                 position: absolute;
-                background-color: $muted-fg-color;
+                background-color: #fff; // on all themes
                 mask-repeat: no-repeat;
                 mask-size: contain;
             }
 
             &.mx_HomePage_button_sendDm::before {
-                mask-image: url('$(res)/img/feather-customised/message-circle.svg');
+                mask-image: url('$(res)/img/element-icons/feedback.svg');
             }
             &.mx_HomePage_button_explore::before {
-                mask-image: url('$(res)/img/feather-customised/explore.svg');
+                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
             }
             &.mx_HomePage_button_createGroup::before {
-                mask-image: url('$(res)/img/feather-customised/group.svg');
+                mask-image: url('$(res)/img/element-icons/community-members.svg');
             }
         }
     }

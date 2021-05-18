@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import GenericToast from "./GenericToast";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {DeviceInfo} from "matrix-js-sdk/src/crypto/deviceinfo";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     toastKey: string;
@@ -38,8 +39,10 @@ interface IProps {
 interface IState {
     counter: number;
     device?: DeviceInfo;
+    ip?: string;
 }
 
+@replaceableComponent("views.toasts.VerificationRequestToast")
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
     private intervalHandle: NodeJS.Timeout;
 
@@ -66,9 +69,15 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         // a toast hanging around after logging in if you did a verification as part of login).
         this._checkRequestIsPending();
 
+
         if (request.isSelfVerification) {
             const cli = MatrixClientPeg.get();
-            this.setState({device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
+            const device = await cli.getDevice(request.channel.deviceId);
+            const ip = device.last_seen_ip;
+            this.setState({
+                device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId),
+                ip,
+            });
         }
     }
 
@@ -118,6 +127,9 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 const VerificationRequestDialog = sdk.getComponent("views.dialogs.VerificationRequestDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
                     verificationRequest: request,
+                    onFinished: () => {
+                        request.cancel();
+                    },
                 }, null, /* priority = */ false, /* static = */ true);
             }
             await request.accept();
@@ -128,24 +140,26 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     render() {
         const {request} = this.props;
-        let nameLabel;
+        let description;
+        let detail;
         if (request.isSelfVerification) {
             if (this.state.device) {
-                nameLabel = _t("From %(deviceName)s (%(deviceId)s)", {
-                    deviceName: this.state.device.getDisplayName(),
+                description = this.state.device.getDisplayName();
+                detail = _t("%(deviceId)s from %(ip)s", {
                     deviceId: this.state.device.deviceId,
+                    ip: this.state.ip,
                 });
             }
         } else {
             const userId = request.otherUserId;
             const roomId = request.channel.roomId;
-            nameLabel = roomId ? userLabelForEventRoom(userId, roomId) : userId;
+            description = roomId ? userLabelForEventRoom(userId, roomId) : userId;
             // for legacy to_device verification requests
-            if (nameLabel === userId) {
+            if (description === userId) {
                 const client = MatrixClientPeg.get();
                 const user = client.getUser(userId);
                 if (user && user.displayName) {
-                    nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
+                    description = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
                 }
             }
         }
@@ -154,7 +168,8 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             _t("Decline (%(counter)s)", {counter: this.state.counter});
 
         return <GenericToast
-            description={nameLabel}
+            description={description}
+            detail={detail}
             acceptLabel={_t("Accept")}
             onAccept={this.accept}
             rejectLabel={declineLabel}

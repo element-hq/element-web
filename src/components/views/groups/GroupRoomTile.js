@@ -16,35 +16,36 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { GroupRoomType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
-const GroupRoomTile = createReactClass({
-    displayName: 'GroupRoomTile',
-
-    propTypes: {
+@replaceableComponent("views.groups.GroupRoomTile")
+class GroupRoomTile extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
         groupRoom: GroupRoomType.isRequired,
-    },
+    };
 
-    onClick: function(e) {
+    static contextType = MatrixClientContext
+
+    onClick = e => {
         dis.dispatch({
             action: 'view_group_room',
             groupId: this.props.groupId,
             groupRoomId: this.props.groupRoom.roomId,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const avatarUrl = this.context.mxcUrlToHttp(
-            this.props.groupRoom.avatarUrl,
-            36, 36, 'crop',
-        );
+        const avatarUrl = this.props.groupRoom.avatarUrl
+            ? mediaFromMxc(this.props.groupRoom.avatarUrl).getSquareThumbnailHttp(36)
+            : null;
 
         const av = (
             <BaseAvatar name={this.props.groupRoom.displayname}
@@ -63,10 +64,7 @@ const GroupRoomTile = createReactClass({
                 </div>
             </AccessibleButton>
         );
-    },
-});
-
-GroupRoomTile.contextType = MatrixClientContext;
-
+    }
+}
 
 export default GroupRoomTile;

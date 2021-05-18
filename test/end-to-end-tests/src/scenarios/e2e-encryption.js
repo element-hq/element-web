@@ -21,6 +21,7 @@ const {receiveMessage} = require('../usecases/timeline');
 const {createDm} = require('../usecases/create-room');
 const {checkRoomSettings} = require('../usecases/room-settings');
 const {startSasVerifcation, acceptSasVerification} = require('../usecases/verify');
+const { setupSecureBackup } = require('../usecases/security');
 const assert = require('assert');
 
 module.exports = async function e2eEncryptionScenarios(alice, bob) {
@@ -43,4 +44,5 @@ module.exports = async function e2eEncryptionScenarios(alice, bob) {
     const bobMessage = "You've got to tell me!";
     await sendMessage(bob, bobMessage);
     await receiveMessage(alice, {sender: "bob", body: bobMessage, encrypted: true});
+    await setupSecureBackup(alice);
 };

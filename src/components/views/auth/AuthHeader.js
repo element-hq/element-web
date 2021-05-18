@@ -17,17 +17,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'AuthHeader',
-
-    propTypes: {
+@replaceableComponent("views.auth.AuthHeader")
+export default class AuthHeader extends React.Component {
+    static propTypes = {
         disableLanguageSelector: PropTypes.bool,
-    },
+    };
 
-    render: function() {
+    render() {
         const AuthHeaderLogo = sdk.getComponent('auth.AuthHeaderLogo');
         const LanguageSelector = sdk.getComponent('views.auth.LanguageSelector');
 
@@ -37,5 +36,5 @@ export default createReactClass({
                 <LanguageSelector disabled={this.props.disableLanguageSelector} />
             </div>
         );
-    },
-});
+    }
+}

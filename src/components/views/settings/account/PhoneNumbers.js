@@ -25,6 +25,7 @@ import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -84,12 +85,18 @@ export class ExistingPhoneNumber extends React.Component {
                     <span className="mx_ExistingPhoneNumber_promptText">
                         {_t("Remove %(phone)s?", {phone: this.props.msisdn.address})}
                     </span>
-                    <AccessibleButton onClick={this._onActuallyRemove} kind="danger_sm"
-                                      className="mx_ExistingPhoneNumber_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onActuallyRemove}
+                        kind="danger_sm"
+                        className="mx_ExistingPhoneNumber_confirmBtn"
+                    >
                         {_t("Remove")}
                     </AccessibleButton>
-                    <AccessibleButton onClick={this._onDontRemove} kind="link_sm"
-                                      className="mx_ExistingPhoneNumber_confirmBtn">
+                    <AccessibleButton
+                        onClick={this._onDontRemove}
+                        kind="link_sm"
+                        className="mx_ExistingPhoneNumber_confirmBtn"
+                    >
                         {_t("Cancel")}
                     </AccessibleButton>
                 </div>
@@ -107,6 +114,7 @@ export class ExistingPhoneNumber extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.account.PhoneNumbers")
 export default class PhoneNumbers extends React.Component {
     static propTypes = {
         msisdns: PropTypes.array.isRequired,
@@ -177,21 +185,25 @@ export default class PhoneNumbers extends React.Component {
         this.setState({continueDisabled: true});
         const token = this.state.newPhoneNumberCode;
         const address = this.state.verifyMsisdn;
-        this.state.addTask.haveMsisdnToken(token).then(() => {
+        this.state.addTask.haveMsisdnToken(token).then(([finished]) => {
+            let newPhoneNumber = this.state.newPhoneNumber;
+            if (finished) {
+                const msisdns = [
+                    ...this.props.msisdns,
+                    { address, medium: "msisdn" },
+                ];
+                this.props.onMsisdnsChange(msisdns);
+                newPhoneNumber = "";
+            }
             this.setState({
                 addTask: null,
                 continueDisabled: false,
                 verifying: false,
                 verifyMsisdn: "",
                 verifyError: null,
-                newPhoneNumber: "",
+                newPhoneNumber,
                 newPhoneNumberCode: "",
             });
-            const msisdns = [
-                ...this.props.msisdns,
-                { address, medium: "msisdn" },
-            ];
-            this.props.onMsisdnsChange(msisdns);
         }).catch((err) => {
             this.setState({continueDisabled: false});
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
@@ -240,8 +252,11 @@ export default class PhoneNumbers extends React.Component {
                             value={this.state.newPhoneNumberCode}
                             onChange={this._onChangeNewPhoneNumberCode}
                         />
-                        <AccessibleButton onClick={this._onContinueClick} kind="primary"
-                                          disabled={this.state.continueDisabled}>
+                        <AccessibleButton
+                            onClick={this._onContinueClick}
+                            kind="primary"
+                            disabled={this.state.continueDisabled}
+                        >
                             {_t("Continue")}
                         </AccessibleButton>
                     </form>

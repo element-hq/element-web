@@ -94,4 +94,48 @@ export enum Action {
      * Trigged after the phase of the right panel is set. Should be used with AfterRightPanelPhaseChangePayload.
      */
     AfterRightPanelPhaseChange = "after_right_panel_phase_change",
+
+    /**
+     * Opens the modal dial pad
+     */
+    OpenDialPad = "open_dial_pad",
+
+    /**
+     * Fired when CallHandler has checked for PSTN protocol support
+     * payload: none
+     * XXX: Is an action the right thing for this?
+     */
+    PstnSupportUpdated = "pstn_support_updated",
+
+    /**
+     * Similar to PstnSupportUpdated, fired when CallHandler has checked for virtual room support
+     * payload: none
+     * XXX: Ditto
+     */
+    VirtualRoomSupportUpdated = "virtual_room_support_updated",
+
+    /**
+     * Fired when an upload has started. Should be used with UploadStartedPayload.
+     */
+    UploadStarted = "upload_started",
+
+    /**
+     * Fired when an upload makes progress. Should be used with UploadProgressPayload.
+     */
+    UploadProgress = "upload_progress",
+
+    /**
+     * Fired when an upload is completed. Should be used with UploadFinishedPayload.
+     */
+    UploadFinished = "upload_finished",
+
+    /**
+     * Fired when an upload fails. Should be used with UploadErrorPayload.
+     */
+    UploadFailed = "upload_failed",
+
+    /**
+     * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
+     */
+    UploadCanceled = "upload_canceled",
 }

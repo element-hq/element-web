@@ -21,9 +21,10 @@ import zxcvbn from "zxcvbn";
 import SdkConfig from "../../../SdkConfig";
 import withValidation, {IFieldState, IValidationResult} from "../elements/Validation";
 import {_t, _td} from "../../../languageHandler";
-import Field from "../elements/Field";
+import Field, {IInputProps} from "../elements/Field";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-interface IProps {
+interface IProps extends Omit<IInputProps, "onValidate"> {
     autoFocus?: boolean;
     id?: string;
     className?: string;
@@ -40,11 +41,8 @@ interface IProps {
     onValidate(result: IValidationResult);
 }
 
-interface IState {
-    complexity: zxcvbn.ZXCVBNResult;
-}
-
-class PassphraseField extends PureComponent<IProps, IState> {
+@replaceableComponent("views.auth.PassphraseField")
+class PassphraseField extends PureComponent<IProps> {
     static defaultProps = {
         label: _td("Password"),
         labelEnterPassword: _td("Enter password"),
@@ -52,13 +50,15 @@ class PassphraseField extends PureComponent<IProps, IState> {
         labelAllowedButUnsafe: _td("Password is allowed, but unsafe"),
     };
 
-    state = { complexity: null };
-
-    public readonly validate = withValidation<this>({
-        description: function() {
-            const complexity = this.state.complexity;
+    public readonly validate = withValidation<this, zxcvbn.ZXCVBNResult>({
+        description: function(complexity) {
             const score = complexity ? complexity.score : 0;
             return <progress className="mx_PassphraseField_progress" max={4} value={score} />;
+        },
+        deriveData: async ({ value }) => {
+            if (!value) return null;
+            const { scorePassword } = await import('../../../utils/PasswordScorer');
+            return scorePassword(value);
         },
         rules: [
             {
@@ -68,28 +68,24 @@ class PassphraseField extends PureComponent<IProps, IState> {
             },
             {
                 key: "complexity",
-                test: async function({ value }) {
+                test: async function({ value }, complexity) {
                     if (!value) {
                         return false;
                     }
-                    const { scorePassword } = await import('../../../utils/PasswordScorer');
-                    const complexity = scorePassword(value);
-                    this.setState({ complexity });
                     const safe = complexity.score >= this.props.minScore;
                     const allowUnsafe = SdkConfig.get()["dangerously_allow_unsafe_and_insecure_passwords"];
                     return allowUnsafe || safe;
                 },
-                valid: function() {
+                valid: function(complexity) {
                     // Unsafe passwords that are valid are only possible through a
                     // configuration flag. We'll print some helper text to signal
                     // to the user that their password is allowed, but unsafe.
-                    if (this.state.complexity.score >= this.props.minScore) {
+                    if (complexity.score >= this.props.minScore) {
                         return _t(this.props.labelStrongPassword);
                     }
                     return _t(this.props.labelAllowedButUnsafe);
                 },
-                invalid: function() {
-                    const complexity = this.state.complexity;
+                invalid: function(complexity) {
                     if (!complexity) {
                         return null;
                     }

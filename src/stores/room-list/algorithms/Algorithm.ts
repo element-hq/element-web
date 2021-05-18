@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { EventEmitter } from "events";
-import { arrayDiff, arrayHasDiff, ArrayUtil } from "../../../utils/arrays";
-import { getEnumValues } from "../../../utils/enums";
+import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";
 import { DefaultTagID, RoomUpdateCause, TagID } from "../models";
 import {
     IListOrderingMap,
@@ -29,11 +28,13 @@ import {
     ListAlgorithm,
     SortAlgorithm,
 } from "./models";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
+import { FILTER_CHANGED, IFilterCondition } from "../filters/IFilterCondition";
 import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import SettingsStore from "../../../settings/SettingsStore";
+import { VisibilityProvider } from "../filters/VisibilityProvider";
+import { MultiLock } from "../../../utils/MultiLock";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -77,6 +78,12 @@ export class Algorithm extends EventEmitter {
     } = {};
     private allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
     private allowedRoomsByFilters: Set<Room> = new Set<Room>();
+    private handlerLock = new MultiLock();
+
+    /**
+     * Set to true to suspend emissions of algorithm updates.
+     */
+    public updatesInhibited = false;
 
     public constructor() {
         super();
@@ -84,6 +91,14 @@ export class Algorithm extends EventEmitter {
 
     public get stickyRoom(): Room {
         return this._stickyRoom ? this._stickyRoom.room : null;
+    }
+
+    public get knownRooms(): Room[] {
+        return this.rooms;
+    }
+
+    public get hasTagSortingMap(): boolean {
+        return !!this.sortAlgorithms;
     }
 
     protected get hasFilters(): boolean {
@@ -163,7 +178,7 @@ export class Algorithm extends EventEmitter {
 
             // If we removed the last filter, tell consumers that we've "updated" our filtered
             // view. This will trick them into getting the complete room list.
-            if (!this.hasFilters) {
+            if (!this.hasFilters && !this.updatesInhibited) {
                 this.emit(LIST_UPDATED_EVENT);
             }
         }
@@ -173,6 +188,7 @@ export class Algorithm extends EventEmitter {
         await this.recalculateFilteredRooms();
 
         // re-emit the update so the list store can fire an off-cycle update if needed
+        if (this.updatesInhibited) return;
         this.emit(FILTER_CHANGED);
     }
 
@@ -185,8 +201,17 @@ export class Algorithm extends EventEmitter {
     }
 
     private async doUpdateStickyRoom(val: Room) {
+        if (SettingsStore.getValue("feature_spaces") && val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
+            // no-op sticky rooms for spaces - they're effectively virtual rooms
+            val = null;
+        }
+
         // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
         // otherwise we risk duplicating rooms.
+
+        if (val && !VisibilityProvider.instance.isRoomVisible(val)) {
+            val = null; // the room isn't visible - lie to the rest of this function
+        }
 
         // Set the last sticky room to indicate that we're in a change. The code throughout the
         // class can safely handle a null room, so this should be safe to do as a backup.
@@ -206,7 +231,7 @@ export class Algorithm extends EventEmitter {
         }
 
         // When we do have a room though, we expect to be able to find it
-        let tag = this.roomIdsToTags[val.roomId][0];
+        let tag = this.roomIdsToTags[val.roomId]?.[0];
         if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
 
         // We specifically do NOT use the ordered rooms set as it contains the sticky room, which
@@ -291,6 +316,7 @@ export class Algorithm extends EventEmitter {
         this.recalculateStickyRoom();
 
         // Finally, trigger an update
+        if (this.updatesInhibited) return;
         this.emit(LIST_UPDATED_EVENT);
     }
 
@@ -301,10 +327,6 @@ export class Algorithm extends EventEmitter {
 
         console.warn("Recalculating filtered room list");
         const filters = Array.from(this.allowedByFilter.keys());
-        const orderedFilters = new ArrayUtil(filters)
-            .groupBy(f => f.relativePriority)
-            .orderBy(getEnumValues(FilterPriority))
-            .value;
         const newMap: ITagMap = {};
         for (const tagId of Object.keys(this.cachedRooms)) {
             // Cheaply clone the rooms so we can more easily do operations on the list.
@@ -312,18 +334,9 @@ export class Algorithm extends EventEmitter {
             // to the rooms we know will be deduped by the Set.
             const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
             this.tryInsertStickyRoomToFilterSet(rooms, tagId);
-            let remainingRooms = rooms.map(r => r);
-            let allowedRoomsInThisTag = [];
-            let lastFilterPriority = orderedFilters[0].relativePriority;
-            for (const filter of orderedFilters) {
-                if (filter.relativePriority !== lastFilterPriority) {
-                    // Every time the filter changes priority, we want more specific filtering.
-                    // To accomplish that, reset the variables to make it look like the process
-                    // has started over, but using the filtered rooms as the seed.
-                    remainingRooms = allowedRoomsInThisTag;
-                    allowedRoomsInThisTag = [];
-                    lastFilterPriority = filter.relativePriority;
-                }
+            const remainingRooms = rooms.map(r => r);
+            const allowedRoomsInThisTag = [];
+            for (const filter of filters) {
                 const filteredRooms = remainingRooms.filter(r => filter.isVisible(r));
                 for (const room of filteredRooms) {
                     const idx = remainingRooms.indexOf(room);
@@ -342,6 +355,7 @@ export class Algorithm extends EventEmitter {
         const allowedRooms = Object.values(newMap).reduce((rv, v) => { rv.push(...v); return rv; }, <Room[]>[]);
         this.allowedRoomsByFilters = new Set(allowedRooms);
         this.filteredRooms = newMap;
+        if (this.updatesInhibited) return;
         this.emit(LIST_UPDATED_EVENT);
     }
 
@@ -396,6 +410,7 @@ export class Algorithm extends EventEmitter {
             if (!!this._cachedStickyRooms) {
                 // Clear the cache if we won't be needing it
                 this._cachedStickyRooms = null;
+                if (this.updatesInhibited) return;
                 this.emit(LIST_UPDATED_EVENT);
             }
             return;
@@ -438,6 +453,7 @@ export class Algorithm extends EventEmitter {
         }
 
         // Finally, trigger an update
+        if (this.updatesInhibited) return;
         this.emit(LIST_UPDATED_EVENT);
     }
 
@@ -504,7 +520,12 @@ export class Algorithm extends EventEmitter {
         if (isNullOrUndefined(rooms)) throw new Error(`Array of rooms cannot be null`);
         if (!this.sortAlgorithms) throw new Error(`Cannot set known rooms without a tag sorting map`);
 
-        console.warn("Resetting known rooms, initiating regeneration");
+        if (!this.updatesInhibited) {
+            // We only log this if we're expecting to be publishing updates, which means that
+            // this could be an unexpected invocation. If we're inhibited, then this is probably
+            // an intentional invocation.
+            console.warn("Resetting known rooms, initiating regeneration");
+        }
 
         // Before we go any further we need to clear (but remember) the sticky room to
         // avoid accidentally duplicating it in the list.
@@ -560,9 +581,8 @@ export class Algorithm extends EventEmitter {
 
         await this.generateFreshTags(newTags);
 
-        this.cachedRooms = newTags;
+        this.cachedRooms = newTags; // this recalculates the filtered rooms for us
         this.updateTagsFromCache();
-        this.recalculateFilteredRooms();
 
         // Now that we've finished generation, we need to update the sticky room to what
         // it was. It's entirely possible that it changed lists though, so if it did then
@@ -661,191 +681,204 @@ export class Algorithm extends EventEmitter {
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log(`Handle room update for ${room.roomId} called with cause ${cause}`);
+            console.log(`Acquiring lock for ${room.roomId} with cause ${cause}`);
         }
-        if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
-
-        // Note: check the isSticky against the room ID just in case the reference is wrong
-        const isSticky = this._stickyRoom && this._stickyRoom.room && this._stickyRoom.room.roomId === room.roomId;
-        if (cause === RoomUpdateCause.NewRoom) {
-            const isForLastSticky = this._lastStickyRoom && this._lastStickyRoom.room === room;
-            const roomTags = this.roomIdsToTags[room.roomId];
-            const hasTags = roomTags && roomTags.length > 0;
-
-            // Don't change the cause if the last sticky room is being re-added. If we fail to
-            // pass the cause through as NewRoom, we'll fail to lie to the algorithm and thus
-            // lose the room.
-            if (hasTags && !isForLastSticky) {
-                console.warn(`${room.roomId} is reportedly new but is already known - assuming TagChange instead`);
-                cause = RoomUpdateCause.PossibleTagChange;
+        const release = await this.handlerLock.acquire(room.roomId);
+        try {
+            if (SettingsStore.getValue("advancedRoomListLogging")) {
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                console.log(`Handle room update for ${room.roomId} called with cause ${cause}`);
             }
+            if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
-            // Check to see if the room is known first
-            let knownRoomRef = this.rooms.includes(room);
-            if (hasTags && !knownRoomRef) {
-                console.warn(`${room.roomId} might be a reference change - attempting to update reference`);
-                this.rooms = this.rooms.map(r => r.roomId === room.roomId ? room : r);
-                knownRoomRef = this.rooms.includes(room);
-                if (!knownRoomRef) {
-                    console.warn(`${room.roomId} is still not referenced. It may be sticky.`);
+            // Note: check the isSticky against the room ID just in case the reference is wrong
+            const isSticky = this._stickyRoom && this._stickyRoom.room && this._stickyRoom.room.roomId === room.roomId;
+            if (cause === RoomUpdateCause.NewRoom) {
+                const isForLastSticky = this._lastStickyRoom && this._lastStickyRoom.room === room;
+                const roomTags = this.roomIdsToTags[room.roomId];
+                const hasTags = roomTags && roomTags.length > 0;
+
+                // Don't change the cause if the last sticky room is being re-added. If we fail to
+                // pass the cause through as NewRoom, we'll fail to lie to the algorithm and thus
+                // lose the room.
+                if (hasTags && !isForLastSticky) {
+                    console.warn(`${room.roomId} is reportedly new but is already known - assuming TagChange instead`);
+                    cause = RoomUpdateCause.PossibleTagChange;
+                }
+
+                // Check to see if the room is known first
+                let knownRoomRef = this.rooms.includes(room);
+                if (hasTags && !knownRoomRef) {
+                    console.warn(`${room.roomId} might be a reference change - attempting to update reference`);
+                    this.rooms = this.rooms.map(r => r.roomId === room.roomId ? room : r);
+                    knownRoomRef = this.rooms.includes(room);
+                    if (!knownRoomRef) {
+                        console.warn(`${room.roomId} is still not referenced. It may be sticky.`);
+                    }
+                }
+
+                // If we have tags for a room and don't have the room referenced, something went horribly
+                // wrong - the reference should have been updated above.
+                if (hasTags && !knownRoomRef && !isSticky) {
+                    throw new Error(`${room.roomId} is missing from room array but is known`);
+                }
+
+                // Like above, update the reference to the sticky room if we need to
+                if (hasTags && isSticky) {
+                    // Go directly in and set the sticky room's new reference, being careful not
+                    // to trigger a sticky room update ourselves.
+                    this._stickyRoom.room = room;
+                }
+
+                // If after all that we're still a NewRoom update, add the room if applicable.
+                // We don't do this for the sticky room (because it causes duplication issues)
+                // or if we know about the reference (as it should be replaced).
+                if (cause === RoomUpdateCause.NewRoom && !isSticky && !knownRoomRef) {
+                    this.rooms.push(room);
                 }
             }
 
-            // If we have tags for a room and don't have the room referenced, something went horribly
-            // wrong - the reference should have been updated above.
-            if (hasTags && !knownRoomRef && !isSticky) {
-                throw new Error(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
-            }
+            let didTagChange = false;
+            if (cause === RoomUpdateCause.PossibleTagChange) {
+                const oldTags = this.roomIdsToTags[room.roomId] || [];
+                const newTags = this.getTagsForRoom(room);
+                const diff = arrayDiff(oldTags, newTags);
+                if (diff.removed.length > 0 || diff.added.length > 0) {
+                    for (const rmTag of diff.removed) {
+                        if (SettingsStore.getValue("advancedRoomListLogging")) {
+                            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                            console.log(`Removing ${room.roomId} from ${rmTag}`);
+                        }
+                        const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
+                        if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
+                        await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                        this._cachedRooms[rmTag] = algorithm.orderedRooms;
+                        this.recalculateFilteredRoomsForTag(rmTag); // update filter to re-sort the list
+                        this.recalculateStickyRoom(rmTag); // update sticky room to make sure it moves if needed
+                    }
+                    for (const addTag of diff.added) {
+                        if (SettingsStore.getValue("advancedRoomListLogging")) {
+                            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                            console.log(`Adding ${room.roomId} to ${addTag}`);
+                        }
+                        const algorithm: OrderingAlgorithm = this.algorithms[addTag];
+                        if (!algorithm) throw new Error(`No algorithm for ${addTag}`);
+                        await algorithm.handleRoomUpdate(room, RoomUpdateCause.NewRoom);
+                        this._cachedRooms[addTag] = algorithm.orderedRooms;
+                    }
 
-            // Like above, update the reference to the sticky room if we need to
-            if (hasTags && isSticky) {
-                // Go directly in and set the sticky room's new reference, being careful not
-                // to trigger a sticky room update ourselves.
-                this._stickyRoom.room = room;
-            }
+                    // Update the tag map so we don't regen it in a moment
+                    this.roomIdsToTags[room.roomId] = newTags;
 
-            // If after all that we're still a NewRoom update, add the room if applicable.
-            // We don't do this for the sticky room (because it causes duplication issues)
-            // or if we know about the reference (as it should be replaced).
-            if (cause === RoomUpdateCause.NewRoom && !isSticky && !knownRoomRef) {
-                this.rooms.push(room);
-            }
-        }
-
-        let didTagChange = false;
-        if (cause === RoomUpdateCause.PossibleTagChange) {
-            const oldTags = this.roomIdsToTags[room.roomId] || [];
-            const newTags = this.getTagsForRoom(room);
-            const diff = arrayDiff(oldTags, newTags);
-            if (diff.removed.length > 0 || diff.added.length > 0) {
-                for (const rmTag of diff.removed) {
                     if (SettingsStore.getValue("advancedRoomListLogging")) {
                         // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                        console.log(`Removing ${room.roomId} from ${rmTag}`);
+                        console.log(`Changing update cause for ${room.roomId} to Timeline to sort rooms`);
                     }
-                    const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
-                    if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
-                    await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
-                    this._cachedRooms[rmTag] = algorithm.orderedRooms;
-                    this.recalculateFilteredRoomsForTag(rmTag); // update filter to re-sort the list
-                    this.recalculateStickyRoom(rmTag); // update sticky room to make sure it moves if needed
-                }
-                for (const addTag of diff.added) {
-                    if (SettingsStore.getValue("advancedRoomListLogging")) {
-                        // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                        console.log(`Adding ${room.roomId} to ${addTag}`);
-                    }
-                    const algorithm: OrderingAlgorithm = this.algorithms[addTag];
-                    if (!algorithm) throw new Error(`No algorithm for ${addTag}`);
-                    await algorithm.handleRoomUpdate(room, RoomUpdateCause.NewRoom);
-                    this._cachedRooms[addTag] = algorithm.orderedRooms;
-                }
-
-                // Update the tag map so we don't regen it in a moment
-                this.roomIdsToTags[room.roomId] = newTags;
-
-                if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                    console.log(`Changing update cause for ${room.roomId} to Timeline to sort rooms`);
-                }
-                cause = RoomUpdateCause.Timeline;
-                didTagChange = true;
-            } else {
-                if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                    console.log(`Received no-op update for ${room.roomId} - changing to Timeline update`);
-                }
-                cause = RoomUpdateCause.Timeline;
-            }
-
-            if (didTagChange && isSticky) {
-                // Manually update the tag for the sticky room without triggering a sticky room
-                // update. The update will be handled implicitly by the sticky room handling and
-                // requires no changes on our part, if we're in the middle of a sticky room change.
-                if (this._lastStickyRoom) {
-                    this._stickyRoom = {
-                        room,
-                        tag: this.roomIdsToTags[room.roomId][0],
-                        position: 0, // right at the top as it changed tags
-                    };
+                    cause = RoomUpdateCause.Timeline;
+                    didTagChange = true;
                 } else {
-                    // We have to clear the lock as the sticky room change will trigger updates.
-                    await this.setStickyRoom(room);
+                    if (SettingsStore.getValue("advancedRoomListLogging")) {
+                        // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                        console.log(`Received no-op update for ${room.roomId} - changing to Timeline update`);
+                    }
+                    cause = RoomUpdateCause.Timeline;
+                }
+
+                if (didTagChange && isSticky) {
+                    // Manually update the tag for the sticky room without triggering a sticky room
+                    // update. The update will be handled implicitly by the sticky room handling and
+                    // requires no changes on our part, if we're in the middle of a sticky room change.
+                    if (this._lastStickyRoom) {
+                        this._stickyRoom = {
+                            room,
+                            tag: this.roomIdsToTags[room.roomId][0],
+                            position: 0, // right at the top as it changed tags
+                        };
+                    } else {
+                        // We have to clear the lock as the sticky room change will trigger updates.
+                        await this.setStickyRoom(room);
+                    }
                 }
             }
-        }
 
-        // If the update is for a room change which might be the sticky room, prevent it. We
-        // need to make sure that the causes (NewRoom and RoomRemoved) are still triggered though
-        // as the sticky room relies on this.
-        if (cause !== RoomUpdateCause.NewRoom && cause !== RoomUpdateCause.RoomRemoved) {
-            if (this.stickyRoom === room) {
-                if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                    console.warn(`[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`);
+            // If the update is for a room change which might be the sticky room, prevent it. We
+            // need to make sure that the causes (NewRoom and RoomRemoved) are still triggered though
+            // as the sticky room relies on this.
+            if (cause !== RoomUpdateCause.NewRoom && cause !== RoomUpdateCause.RoomRemoved) {
+                if (this.stickyRoom === room) {
+                    if (SettingsStore.getValue("advancedRoomListLogging")) {
+                        // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                        console.warn(
+                            `[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`,
+                        );
+                    }
+                    return false;
                 }
-                return false;
             }
-        }
 
-        if (!this.roomIdsToTags[room.roomId]) {
-            if (CAUSES_REQUIRING_ROOM.includes(cause)) {
+            if (!this.roomIdsToTags[room.roomId]) {
+                if (CAUSES_REQUIRING_ROOM.includes(cause)) {
+                    if (SettingsStore.getValue("advancedRoomListLogging")) {
+                        // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                        console.warn(`Skipping tag update for ${room.roomId} because we don't know about the room`);
+                    }
+                    return false;
+                }
+
                 if (SettingsStore.getValue("advancedRoomListLogging")) {
                     // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                    console.warn(`Skipping tag update for ${room.roomId} because we don't know about the room`);
+                    console.log(`[RoomListDebug] Updating tags for room ${room.roomId} (${room.name})`);
                 }
-                return false;
+
+                // Get the tags for the room and populate the cache
+                const roomTags = this.getTagsForRoom(room).filter(t => !isNullOrUndefined(this.cachedRooms[t]));
+
+                // "This should never happen" condition - we specify DefaultTagID.Untagged in getTagsForRoom(),
+                // which means we should *always* have a tag to go off of.
+                if (!roomTags.length) throw new Error(`Tags cannot be determined for ${room.roomId}`);
+
+                this.roomIdsToTags[room.roomId] = roomTags;
+
+                if (SettingsStore.getValue("advancedRoomListLogging")) {
+                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
+                    console.log(`[RoomListDebug] Updated tags for ${room.roomId}:`, roomTags);
+                }
             }
 
             if (SettingsStore.getValue("advancedRoomListLogging")) {
                 // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                console.log(`[RoomListDebug] Updating tags for room ${room.roomId} (${room.name})`);
+                console.log(`[RoomListDebug] Reached algorithmic handling for ${room.roomId} and cause ${cause}`);
             }
 
-            // Get the tags for the room and populate the cache
-            const roomTags = this.getTagsForRoom(room).filter(t => !isNullOrUndefined(this.cachedRooms[t]));
+            const tags = this.roomIdsToTags[room.roomId];
+            if (!tags) {
+                console.warn(`No tags known for "${room.name}" (${room.roomId})`);
+                return false;
+            }
 
-            // "This should never happen" condition - we specify DefaultTagID.Untagged in getTagsForRoom(),
-            // which means we should *always* have a tag to go off of.
-            if (!roomTags.length) throw new Error(`Tags cannot be determined for ${room.roomId}`);
+            let changed = didTagChange;
+            for (const tag of tags) {
+                const algorithm: OrderingAlgorithm = this.algorithms[tag];
+                if (!algorithm) throw new Error(`No algorithm for ${tag}`);
 
-            this.roomIdsToTags[room.roomId] = roomTags;
+                await algorithm.handleRoomUpdate(room, cause);
+                this._cachedRooms[tag] = algorithm.orderedRooms;
+
+                // Flag that we've done something
+                this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
+                this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
+                changed = true;
+            }
 
             if (SettingsStore.getValue("advancedRoomListLogging")) {
                 // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-                console.log(`[RoomListDebug] Updated tags for ${room.roomId}:`, roomTags);
+                console.log(
+                    `[RoomListDebug] Finished handling ${room.roomId} with cause ${cause} (changed=${changed})`,
+                );
             }
+            return changed;
+        } finally {
+            release();
         }
-
-        if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log(`[RoomListDebug] Reached algorithmic handling for ${room.roomId} and cause ${cause}`);
-        }
-
-        const tags = this.roomIdsToTags[room.roomId];
-        if (!tags) {
-            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
-            return false;
-        }
-
-        let changed = didTagChange;
-        for (const tag of tags) {
-            const algorithm: OrderingAlgorithm = this.algorithms[tag];
-            if (!algorithm) throw new Error(`No algorithm for ${tag}`);
-
-            await algorithm.handleRoomUpdate(room, cause);
-            this._cachedRooms[tag] = algorithm.orderedRooms;
-
-            // Flag that we've done something
-            this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
-            this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
-            changed = true;
-        }
-
-        if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
-            console.log(`[RoomListDebug] Finished handling ${room.roomId} with cause ${cause} (changed=${changed})`);
-        }
-        return changed;
     }
 }

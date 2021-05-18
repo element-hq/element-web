@@ -19,8 +19,11 @@ import classnames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import * as Avatar from '../../../Avatar';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
+import SettingsStore from "../../../settings/SettingsStore";
+import {Layout} from "../../../settings/Layout";
+import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     /**
@@ -31,81 +34,82 @@ interface IProps {
     /**
      * Whether to use the irc layout or not
      */
-    useIRCLayout: boolean;
+    layout: Layout;
 
     /**
      * classnames to apply to the wrapper of the preview
      */
     className: string;
+
+    /**
+     * The ID of the displayed user
+     */
+    userId: string;
+
+    /**
+     * The display name of the displayed user
+     */
+    displayName?: string;
+
+    /**
+     * The mxc:// avatar URL of the displayed user
+     */
+    avatarUrl?: string;
 }
 
 interface IState {
-    userId: string;
-    displayname: string;
-    avatar_url: string;
+    message: string;
 }
 
 const AVATAR_SIZE = 32;
 
+@replaceableComponent("views.elements.EventTilePreview")
 export default class EventTilePreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
-
         this.state = {
-            userId: "@erim:fink.fink",
-            displayname: "Erimayas Fink",
-            avatar_url: null,
+            message: props.message,
         };
     }
 
-    async componentDidMount() {
-        // Fetch current user data
-        const client = MatrixClientPeg.get();
-        const userId = client.getUserId();
-        const profileInfo = await client.getProfileInfo(userId);
-        const avatar_url = Avatar.avatarUrlForUser(
-            {avatarUrl: profileInfo.avatar_url},
-            AVATAR_SIZE, AVATAR_SIZE, "crop");
-
-        this.setState({
-            userId,
-            displayname: profileInfo.displayname,
-            avatar_url,
-        });
-
-    }
-
-    private fakeEvent({userId, displayname, avatar_url}: IState) {
+    private fakeEvent({message}: IState) {
         // Fake it till we make it
-        const event = new MatrixEvent(JSON.parse(`{
-                "type": "m.room.message",
-                "sender": "${userId}",
-                "content": {
-                  "m.new_content": {
-                    "msgtype": "m.text",
-                    "body": "${this.props.message}",
-                    "displayname": "${displayname}",
-                    "avatar_url": "${avatar_url}"
-                  },
-                  "msgtype": "m.text",
-                  "body": "${this.props.message}",
-                  "displayname": "${displayname}",
-                  "avatar_url": "${avatar_url}"
+        /* eslint-disable quote-props */
+        const rawEvent = {
+            type: "m.room.message",
+            sender: this.props.userId,
+            content: {
+                "m.new_content": {
+                    msgtype: "m.text",
+                    body: message,
+                    displayname: this.props.displayName,
+                    avatar_url: this.props.avatarUrl,
                 },
-                "unsigned": {
-                  "age": 97
-                },
-                "event_id": "$9999999999999999999999999999999999999999999",
-                "room_id": "!999999999999999999:matrix.org"
-              }`));
+                msgtype: "m.text",
+                body: message,
+                displayname: this.props.displayName,
+                avatar_url: this.props.avatarUrl,
+            },
+            unsigned: {
+                age: 97,
+            },
+            event_id: "$9999999999999999999999999999999999999999999",
+            room_id: "!999999999999999999:example.org",
+        };
+        const event = new MatrixEvent(rawEvent);
+        /* eslint-enable quote-props */
 
         // Fake it more
         event.sender = {
-            name: displayname,
-            userId: userId,
+            name: this.props.displayName,
+            userId: this.props.userId,
             getAvatarUrl: (..._) => {
-                return avatar_url;
+                return Avatar.avatarUrlForUser(
+                    { avatarUrl: this.props.avatarUrl },
+                    AVATAR_SIZE, AVATAR_SIZE, "crop",
+                );
             },
+            getMxcAvatarUrl: () => this.props.avatarUrl,
         };
 
         return event;
@@ -114,16 +118,17 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     public render() {
         const event = this.fakeEvent(this.state);
 
-        let className = classnames(
-            this.props.className,
-            {
-                "mx_IRCLayout": this.props.useIRCLayout,
-                "mx_GroupLayout": !this.props.useIRCLayout,
-            }
-        );
+        const className = classnames(this.props.className, {
+            "mx_IRCLayout": this.props.layout == Layout.IRC,
+            "mx_GroupLayout": this.props.layout == Layout.Group,
+        });
 
         return <div className={className}>
-            <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
+            <EventTile
+                mxEvent={event}
+                layout={this.props.layout}
+                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+            />
         </div>;
     }
 }

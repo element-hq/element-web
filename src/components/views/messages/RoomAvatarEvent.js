@@ -18,25 +18,25 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
-export default createReactClass({
-    displayName: 'RoomAvatarEvent',
-
-    propTypes: {
+@replaceableComponent("views.messages.RoomAvatarEvent")
+export default class RoomAvatarEvent extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
-    },
+    };
 
-    onAvatarClick: function() {
+    onAvatarClick = () => {
         const cli = MatrixClientPeg.get();
         const ev = this.props.mxEvent;
-        const httpUrl = cli.mxcUrlToHttp(ev.getContent().url);
+        const httpUrl = mediaFromMxc(ev.getContent().url).srcHttp;
 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const text = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
@@ -49,10 +49,10 @@ export default createReactClass({
             src: httpUrl,
             name: text,
         };
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    },
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
+    };
 
-    render: function() {
+    render() {
         const ev = this.props.mxEvent;
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
@@ -86,5 +86,5 @@ export default createReactClass({
                 }
             </div>
         );
-    },
-});
+    }
+}

@@ -17,7 +17,9 @@ limitations under the License.
 import React from 'react';
 import MImageBody from './MImageBody';
 import * as sdk from '../../../index';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MStickerBody")
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody
     onClick(ev) {

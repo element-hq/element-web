@@ -18,7 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.verification.VerificationCancelled")
 export default class VerificationCancelled extends React.Component {
     static propTypes = {
         onDone: PropTypes.func.isRequired,
@@ -27,14 +29,14 @@ export default class VerificationCancelled extends React.Component {
     render() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
-                <p>{_t(
-                    "The other party cancelled the verification.",
-                )}</p>
-                <DialogButtons
-                    primaryButton={_t('OK')}
-                    hasCancel={false}
-                    onPrimaryButtonClick={this.props.onDone}
-                />
+            <p>{_t(
+                "The other party cancelled the verification.",
+            )}</p>
+            <DialogButtons
+                primaryButton={_t('OK')}
+                hasCancel={false}
+                onPrimaryButtonClick={this.props.onDone}
+            />
         </div>;
     }
 }

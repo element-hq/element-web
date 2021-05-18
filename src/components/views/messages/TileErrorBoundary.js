@@ -19,7 +19,10 @@ import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
+import SdkConfig from "../../../SdkConfig";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.TileErrorBoundary")
 export default class TileErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
@@ -54,14 +57,20 @@ export default class TileErrorBoundary extends React.Component {
                 mx_EventTile_content: true,
                 mx_EventTile_tileError: true,
             };
+
+            let submitLogsButton;
+            if (SdkConfig.get().bug_report_endpoint_url) {
+                submitLogsButton = <a onClick={this._onBugReport} href="#">
+                    {_t("Submit logs")}
+                </a>;
+            }
+
             return (<div className={classNames(classes)}>
                 <div className="mx_EventTile_line">
                     <span>
                         {_t("Can't load this message")}
                         { mxEvent && ` (${mxEvent.getType()})` }
-                        <a onClick={this._onBugReport} href="#">
-                            {_t("Submit logs")}
-                        </a>
+                        { submitLogsButton }
                     </span>
                 </div>
             </div>);

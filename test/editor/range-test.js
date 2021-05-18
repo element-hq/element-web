@@ -88,4 +88,19 @@ describe('editor/range', function() {
         expect(model.parts[1].text).toBe("man");
         expect(model.parts.length).toBe(2);
     });
+    it('range trim spaces off both ends', () => {
+        const renderer = createRenderer();
+        const pc = createPartCreator();
+        const model = new EditorModel([
+            pc.plain("abc abc abc"),
+        ], pc, renderer);
+        const range = model.startRange(
+            model.positionForOffset(3, false), // at end of first `abc`
+            model.positionForOffset(8, false), // at start of last `abc`
+        );
+
+        expect(range.parts[0].text).toBe(" abc ");
+        range.trim();
+        expect(range.parts[0].text).toBe("abc");
+    });
 });

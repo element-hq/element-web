@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { ActionPayload } from "../payloads";
@@ -34,4 +35,6 @@ export interface SetRightPanelPhaseRefireParams {
     groupRoomId?: string;
     // XXX: The type for event should 'view_3pid_invite' action's payload
     event?: any;
+    widgetId?: string;
+    space?: Room;
 }

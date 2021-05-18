@@ -21,18 +21,20 @@ import classNames from "classnames";
 
 type Data = Pick<IFieldState, "value" | "allowEmpty">;
 
-interface IRule<T> {
+interface IRule<T, D = void> {
     key: string;
     final?: boolean;
-    skip?(this: T, data: Data): boolean;
-    test(this: T, data: Data): boolean | Promise<boolean>;
-    valid?(this: T): string;
-    invalid?(this: T): string;
+    skip?(this: T, data: Data, derivedData: D): boolean;
+    test(this: T, data: Data, derivedData: D): boolean | Promise<boolean>;
+    valid?(this: T, derivedData: D): string;
+    invalid?(this: T, derivedData: D): string;
 }
 
-interface IArgs<T> {
-    rules: IRule<T>[];
-    description(this: T): React.ReactChild;
+interface IArgs<T, D = void> {
+    rules: IRule<T, D>[];
+    description?(this: T, derivedData: D): React.ReactChild;
+    hideDescriptionIfValid?: boolean;
+    deriveData?(data: Data): Promise<D>;
 }
 
 export interface IFieldState {
@@ -53,6 +55,12 @@ export interface IValidationResult {
  * @param {Function} description
  *     Function that returns a string summary of the kind of value that will
  *     meet the validation rules. Shown at the top of the validation feedback.
+ * @param {Boolean} hideDescriptionIfValid
+ *     If true, don't show the description if the validation passes validation.
+ * @param {Function} deriveData
+ *     Optional function that returns a Promise to an object of generic type D.
+ *     The result of this Promise is passed to rule methods `skip`, `test`, `valid`, and `invalid`.
+ *     Useful for doing calculations per-value update once rather than in each of the above rule methods.
  * @param {Object} rules
  *     An array of rules describing how to check to input value. Each rule in an object
  *     and may have the following properties:
@@ -66,7 +74,9 @@ export interface IValidationResult {
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
-export default function withValidation<T = undefined>({ description, rules }: IArgs<T>) {
+export default function withValidation<T = undefined, D = void>({
+    description, hideDescriptionIfValid, deriveData, rules,
+}: IArgs<T, D>) {
     return async function onValidate({ value, focused, allowEmpty = true }: IFieldState): Promise<IValidationResult> {
         if (!value && allowEmpty) {
             return {
@@ -74,6 +84,9 @@ export default function withValidation<T = undefined>({ description, rules }: IA
                 feedback: null,
             };
         }
+
+        const data = { value, allowEmpty };
+        const derivedData = deriveData ? await deriveData(data) : undefined;
 
         const results = [];
         let valid = true;
@@ -87,20 +100,18 @@ export default function withValidation<T = undefined>({ description, rules }: IA
                     continue;
                 }
 
-                const data = { value, allowEmpty };
-
-                if (rule.skip && rule.skip.call(this, data)) {
+                if (rule.skip && rule.skip.call(this, data, derivedData)) {
                     continue;
                 }
 
                 // We're setting `this` to whichever component holds the validation
                 // function. That allows rules to access the state of the component.
-                const ruleValid = await rule.test.call(this, data);
+                const ruleValid = await rule.test.call(this, data, derivedData);
                 valid = valid && ruleValid;
                 if (ruleValid && rule.valid) {
                     // If the rule's result is valid and has text to show for
                     // the valid state, show it.
-                    const text = rule.valid.call(this);
+                    const text = rule.valid.call(this, derivedData);
                     if (!text) {
                         continue;
                     }
@@ -112,7 +123,7 @@ export default function withValidation<T = undefined>({ description, rules }: IA
                 } else if (!ruleValid && rule.invalid) {
                     // If the rule's result is invalid and has text to show for
                     // the invalid state, show it.
-                    const text = rule.invalid.call(this);
+                    const text = rule.invalid.call(this, derivedData);
                     if (!text) {
                         continue;
                     }
@@ -150,10 +161,10 @@ export default function withValidation<T = undefined>({ description, rules }: IA
         }
 
         let summary;
-        if (description) {
+        if (description && (details || !hideDescriptionIfValid)) {
             // We're setting `this` to whichever component holds the validation
             // function. That allows rules to access the state of the component.
-            const content = description.call(this);
+            const content = description.call(this, derivedData);
             summary = <div className="mx_Validation_description">{content}</div>;
         }
 

@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
@@ -26,11 +25,11 @@ import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
 import {SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'InteractiveAuthDialog',
-
-    propTypes: {
+@replaceableComponent("views.dialogs.InteractiveAuthDialog")
+export default class InteractiveAuthDialog extends React.Component {
+    static propTypes = {
         // matrix client to use for UI auth requests
         matrixClient: PropTypes.object.isRequired,
 
@@ -70,19 +69,17 @@ export default createReactClass({
         //
         // Default is defined in _getDefaultDialogAesthetics()
         aestheticsForStagePhases: PropTypes.object,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            authError: null,
+    state = {
+        authError: null,
 
-            // See _onUpdateStagePhase()
-            uiaStage: null,
-            uiaStagePhase: null,
-        };
-    },
+        // See _onUpdateStagePhase()
+        uiaStage: null,
+        uiaStagePhase: null,
+    };
 
-    _getDefaultDialogAesthetics: function() {
+    _getDefaultDialogAesthetics() {
         const ssoAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("Use Single Sign On to continue"),
@@ -102,9 +99,9 @@ export default createReactClass({
             [SSOAuthEntry.LOGIN_TYPE]: ssoAesthetics,
             [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: ssoAesthetics,
         };
-    },
+    }
 
-    _onAuthFinished: function(success, result) {
+    _onAuthFinished = (success, result) => {
         if (success) {
             this.props.onFinished(true, result);
         } else {
@@ -116,18 +113,18 @@ export default createReactClass({
                 });
             }
         }
-    },
+    };
 
-    _onUpdateStagePhase: function(newStage, newPhase) {
+    _onUpdateStagePhase = (newStage, newPhase) => {
         // We copy the stage and stage phase params into state for title selection in render()
         this.setState({uiaStage: newStage, uiaStagePhase: newPhase});
-    },
+    };
 
-    _onDismissClick: function() {
+    _onDismissClick = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
@@ -190,5 +187,5 @@ export default createReactClass({
                 { content }
             </BaseDialog>
         );
-    },
-});
+    }
+}

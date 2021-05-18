@@ -22,6 +22,7 @@ import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
+import SpellCheckSettings from "../../SpellCheckSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
@@ -31,13 +32,16 @@ import * as sdk from "../../../../..";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import {Service, startTermsFlow} from "../../../../../Terms";
-import {SERVICE_TYPES} from "matrix-js-sdk";
+import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 import Spinner from "../../../elements/Spinner";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {UIFeature} from "../../../../../settings/UIFeature";
+import {replaceableComponent} from "../../../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.tabs.user.GeneralUserSettingsTab")
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
         closeSettingsFn: PropTypes.func.isRequired,
@@ -48,6 +52,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
+            spellCheckLanguages: [],
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
@@ -82,6 +87,15 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.setState({serverSupportsSeparateAddAndBind, canChangePassword});
 
         this._getThreepidState();
+    }
+
+    async componentDidMount() {
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            this.setState({
+                spellCheckLanguages: await plaf.getSpellCheckLanguages(),
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -178,15 +192,28 @@ export default class GeneralUserSettingsTab extends React.Component {
 
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
         this.setState({language: newLanguage});
-        PlatformPeg.get().reload();
+        const platform = PlatformPeg.get();
+        if (platform) {
+            platform.setLanguage(newLanguage);
+            platform.reload();
+        }
+    };
+
+    _onSpellCheckLanguagesChange = (languages) => {
+        this.setState({spellCheckLanguages: languages});
+
+        const plaf = PlatformPeg.get();
+        if (plaf) {
+            plaf.setSpellCheckLanguages(languages);
+        }
     };
 
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
-        let errMsg = err.error || "";
+        let errMsg = err.error || err.message || "";
         if (err.httpStatus === 403) {
             errMsg = _t("Failed to change password. Is your password correct?");
-        } else if (err.httpStatus) {
+        } else if (!errMsg) {
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -220,7 +247,6 @@ export default class GeneralUserSettingsTab extends React.Component {
     _renderProfileSection() {
         return (
             <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Profile")}</span>
                 <ProfileSettings />
             </div>
         );
@@ -247,7 +273,9 @@ export default class GeneralUserSettingsTab extends React.Component {
         // validate 3PID ownership even if we're just adding to the homeserver only.
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
-        if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
+        if (SettingsStore.getValue(UIFeature.ThirdPartyID) &&
+            (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true)
+        ) {
             const emails = this.state.loading3pids
                 ? <Spinner />
                 : <EmailAddresses
@@ -295,8 +323,23 @@ export default class GeneralUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
-                <LanguageDropdown className="mx_GeneralUserSettingsTab_languageInput"
-                                  onOptionChange={this._onLanguageChange} value={this.state.language} />
+                <LanguageDropdown
+                    className="mx_GeneralUserSettingsTab_languageInput"
+                    onOptionChange={this._onLanguageChange}
+                    value={this.state.language}
+                />
+            </div>
+        );
+    }
+
+    _renderSpellCheckSection() {
+        return (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Spell check dictionaries")}</span>
+                <SpellCheckSettings
+                    languages={this.state.spellCheckLanguages}
+                    onLanguagesChange={this._onSpellCheckLanguagesChange}
+                />
             </div>
         );
     }
@@ -366,6 +409,8 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderIntegrationManagerSection() {
+        if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
+
         const SetIntegrationManager = sdk.getComponent("views.settings.SetIntegrationManager");
 
         return (
@@ -377,11 +422,30 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     render() {
+        const plaf = PlatformPeg.get();
+        const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
+
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img className='mx_GeneralUserSettingsTab_warningIcon'
                 src={require("../../../../../../res/img/feather-customised/warning-triangle.svg")}
                 width="18" height="18" alt={_t("Warning")} />
             : null;
+
+        let accountManagementSection;
+        if (SettingsStore.getValue(UIFeature.Deactivate)) {
+            accountManagementSection = <>
+                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
+                {this._renderManagementSection()}
+            </>;
+        }
+
+        let discoverySection;
+        if (SettingsStore.getValue(UIFeature.IdentityServer)) {
+            discoverySection = <>
+                <div className="mx_SettingsTab_heading">{discoWarning} {_t("Discovery")}</div>
+                {this._renderDiscoverySection()}
+            </>;
+        }
 
         return (
             <div className="mx_SettingsTab">
@@ -389,11 +453,10 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderProfileSection()}
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
-                <div className="mx_SettingsTab_heading">{discoWarning} {_t("Discovery")}</div>
-                {this._renderDiscoverySection()}
+                {supportsMultiLanguageSpellCheck ? this._renderSpellCheckSection() : null}
+                { discoverySection }
                 {this._renderIntegrationManagerSection() /* Has its own title */}
-                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
-                {this._renderManagementSection()}
+                { accountManagementSection }
             </div>
         );
     }

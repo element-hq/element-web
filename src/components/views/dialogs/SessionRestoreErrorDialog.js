@@ -17,28 +17,26 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-
-export default createReactClass({
-    displayName: 'SessionRestoreErrorDialog',
-
-    propTypes: {
+@replaceableComponent("views.dialogs.SessionRestoreErrorDialog")
+export default class SessionRestoreErrorDialog extends React.Component {
+    static propTypes = {
         error: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    _sendBugReport: function() {
+    _sendBugReport = () => {
         const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
         Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
-    },
+    };
 
-    _onClearStorageClick: function() {
+    _onClearStorageClick = () => {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Session Restore Confirm Logout', '', QuestionDialog, {
             title: _t("Sign out"),
@@ -48,15 +46,15 @@ export default createReactClass({
             danger: true,
             onFinished: this.props.onFinished,
         });
-    },
+    };
 
-    _onRefreshClick: function() {
+    _onRefreshClick = () => {
         // Is this likely to help? Probably not, but giving only one button
         // that clears your storage seems awful.
         window.location.reload(true);
-    },
+    };
 
-    render: function() {
+    render() {
         const brand = SdkConfig.get().brand;
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -100,7 +98,7 @@ export default createReactClass({
                         "may be incompatible with this version. Close this window and return " +
                         "to the more recent version.",
                         { brand },
-                     ) }</p>
+                    ) }</p>
 
                     <p>{ _t(
                         "Clearing your browser's storage may fix the problem, but will sign you " +
@@ -110,5 +108,5 @@ export default createReactClass({
                 { dialogButtons }
             </BaseDialog>
         );
-    },
-});
+    }
+}

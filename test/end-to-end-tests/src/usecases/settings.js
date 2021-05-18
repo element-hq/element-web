@@ -18,9 +18,9 @@ limitations under the License.
 const assert = require('assert');
 
 async function openSettings(session, section) {
-    const menuButton = await session.query(".mx_TopLeftMenuButton_name");
+    const menuButton = await session.query(".mx_UserMenu");
     await menuButton.click();
-    const settingsItem = await session.query(".mx_TopLeftMenu_icon_settings");
+    const settingsItem = await session.query(".mx_UserMenu_iconSettings");
     await settingsItem.click();
     if (section) {
         const sectionButton = await session.query(

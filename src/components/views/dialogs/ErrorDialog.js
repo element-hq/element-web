@@ -26,14 +26,14 @@ limitations under the License.
  */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'ErrorDialog',
-    propTypes: {
+@replaceableComponent("views.dialogs.ErrorDialog")
+export default class ErrorDialog extends React.Component {
+    static propTypes = {
         title: PropTypes.string,
         description: PropTypes.oneOfType([
             PropTypes.element,
@@ -43,18 +43,20 @@ export default createReactClass({
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
         headerImage: PropTypes.string,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            focus: true,
-            title: null,
-            description: null,
-            button: null,
-        };
-    },
+    static defaultProps = {
+        focus: true,
+        title: null,
+        description: null,
+        button: null,
+    };
 
-    render: function() {
+    onClick = () => {
+        this.props.onFinished(true);
+    };
+
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog
@@ -68,11 +70,11 @@ export default createReactClass({
                     { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                    <button className="mx_Dialog_primary" onClick={this.onClick} autoFocus={this.props.focus}>
                         { this.props.button || _t('OK') }
                     </button>
                 </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

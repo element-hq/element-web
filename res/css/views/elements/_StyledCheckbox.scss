@@ -80,5 +80,11 @@ limitations under the License.
             background-color: $accent-color;
             border-color: $accent-color;
         }
+
+        &.focus-visible {
+            & + label .mx_Checkbox_background {
+                @mixin unreal-focus;
+            }
+        }
     }
 }

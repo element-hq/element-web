@@ -168,7 +168,13 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 key: Key.U,
             }],
             description: _td("Upload a file"),
-        }
+        }, {
+            keybinds: [{
+                modifiers: [CMD_OR_CTRL],
+                key: Key.F,
+            }],
+            description: _td("Search (must be enabled)"),
+        },
     ],
 
     [Categories.ROOM_LIST]: [
@@ -257,6 +263,12 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 key: Key.SLASH,
             }],
             description: _td("Toggle this dialog"),
+        }, {
+            keybinds: [{
+                modifiers: [Modifiers.CONTROL, isMac ? Modifiers.SHIFT : Modifiers.ALT],
+                key: Key.H,
+            }],
+            description: _td("Go to Home View"),
         },
     ],
 

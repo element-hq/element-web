@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from "react";
-import extend from './extend';
 import dis from './dispatcher/dispatcher';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {MatrixClient} from "matrix-js-sdk/src/client";
@@ -32,6 +31,15 @@ import Spinner from "./components/views/elements/Spinner";
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 import "blueimp-canvas-to-blob";
 import { Action } from "./dispatcher/actions";
+import CountlyAnalytics from "./CountlyAnalytics";
+import {
+    UploadCanceledPayload,
+    UploadErrorPayload,
+    UploadFinishedPayload,
+    UploadProgressPayload,
+    UploadStartedPayload,
+} from "./dispatcher/payloads/UploadPayload";
+import {IUpload} from "./models/IUpload";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -43,15 +51,6 @@ const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 export class UploadCanceledError extends Error {}
 
 type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
-
-interface IUpload {
-    fileName: string;
-    roomId: string;
-    total: number;
-    loaded: number;
-    promise: Promise<any>;
-    canceled?: boolean;
-}
 
 interface IMediaConfig {
     "m.upload.size"?: number;
@@ -70,6 +69,7 @@ interface IContent {
 
 interface IThumbnail {
     info: {
+        // eslint-disable-next-line camelcase
         thumbnail_info: {
             w: number;
             h: number;
@@ -104,7 +104,12 @@ interface IAbortablePromise<T> extends Promise<T> {
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-function createThumbnail(element: ThumbnailableElement, inputWidth: number, inputHeight: number, mimeType: string): Promise<IThumbnail> {
+function createThumbnail(
+    element: ThumbnailableElement,
+    inputWidth: number,
+    inputHeight: number,
+    mimeType: string,
+): Promise<IThumbnail> {
     return new Promise((resolve) => {
         let targetWidth = inputWidth;
         let targetHeight = inputHeight;
@@ -368,10 +373,13 @@ export default class ContentMessages {
     private mediaConfig: IMediaConfig = null;
 
     sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
-        return MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
+        const startTime = CountlyAnalytics.getTimestamp();
+        const prom = MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
+        CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, {msgtype: "m.sticker"});
+        return prom;
     }
 
     getUploadLimit() {
@@ -442,11 +450,13 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                const {finished} = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation', '', UploadConfirmDialog, {
-                    file,
-                    currentIndex: i,
-                    totalFiles: okFiles.length,
-                });
+                const {finished} = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
+                    '', UploadConfirmDialog, {
+                        file,
+                        currentIndex: i,
+                        totalFiles: okFiles.length,
+                    },
+                );
                 const [shouldContinue, shouldUploadAll] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
@@ -472,11 +482,12 @@ export default class ContentMessages {
         if (upload) {
             upload.canceled = true;
             MatrixClientPeg.get().cancelUpload(upload.promise);
-            dis.dispatch({action: 'upload_canceled', upload});
+            dis.dispatch<UploadCanceledPayload>({action: Action.UploadCanceled, upload});
         }
     }
 
     private sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
+        const startTime = CountlyAnalytics.getTimestamp();
         const content: IContent = {
             body: file.name || 'Attachment',
             info: {
@@ -490,11 +501,11 @@ export default class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const prom = new Promise((resolve) => {
+        const prom = new Promise<void>((resolve) => {
             if (file.type.indexOf('image/') === 0) {
                 content.msgtype = 'm.image';
                 infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
-                    extend(content.info, imageInfo);
+                    Object.assign(content.info, imageInfo);
                     resolve();
                 }, (e) => {
                     console.error(e);
@@ -507,7 +518,7 @@ export default class ContentMessages {
             } else if (file.type.indexOf('video/') === 0) {
                 content.msgtype = 'm.video';
                 infoForVideoFile(matrixClient, roomId, file).then((videoInfo) => {
-                    extend(content.info, videoInfo);
+                    Object.assign(content.info, videoInfo);
                     resolve();
                 }, (e) => {
                     content.msgtype = 'm.file';
@@ -532,7 +543,7 @@ export default class ContentMessages {
             promise: prom,
         };
         this.inprogress.push(upload);
-        dis.dispatch({action: 'upload_started'});
+        dis.dispatch<UploadStartedPayload>({action: Action.UploadStarted, upload});
 
         // Focus the composer view
         dis.fire(Action.FocusComposer);
@@ -540,7 +551,7 @@ export default class ContentMessages {
         function onProgress(ev) {
             upload.total = ev.total;
             upload.loaded = ev.loaded;
-            dis.dispatch({action: 'upload_progress', upload: upload});
+            dis.dispatch<UploadProgressPayload>({action: Action.UploadProgress, upload});
         }
 
         let error;
@@ -562,7 +573,9 @@ export default class ContentMessages {
             return promBefore;
         }).then(function() {
             if (upload.canceled) throw new UploadCanceledError();
-            return matrixClient.sendMessage(roomId, content);
+            const prom = matrixClient.sendMessage(roomId, content);
+            CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, content);
+            return prom;
         }, function(err) {
             error = err;
             if (!upload.canceled) {
@@ -593,9 +606,9 @@ export default class ContentMessages {
                 if (error && error.http_status === 413) {
                     this.mediaConfig = null;
                 }
-                dis.dispatch({action: 'upload_failed', upload, error});
+                dis.dispatch<UploadErrorPayload>({action: Action.UploadFailed, upload, error});
             } else {
-                dis.dispatch({action: 'upload_finished', upload});
+                dis.dispatch<UploadFinishedPayload>({action: Action.UploadFinished, upload});
                 dis.dispatch({action: 'message_sent'});
             }
         });

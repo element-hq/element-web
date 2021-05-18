@@ -52,7 +52,7 @@ const EncryptionInfo: React.FC<IProps> = ({
         let text: string;
         if (waitingForOtherParty) {
             if (isSelfVerification) {
-                text = _t("Waiting for you to accept on your other session…");
+                text = _t("Accept on your other login…");
             } else {
                 text = _t("Waiting for %(displayName)s to accept…", {
                     displayName: member.displayName || member.name || member.userId,
@@ -76,14 +76,16 @@ const EncryptionInfo: React.FC<IProps> = ({
         description = (
             <div>
                 <p>{_t("Messages in this room are end-to-end encrypted.")}</p>
-                <p>{_t("Your messages are secured and only you and the recipient have the unique keys to unlock them.")}</p>
+                <p>{_t("Your messages are secured and only you and the recipient have " +
+                    "the unique keys to unlock them.")}</p>
             </div>
         );
     } else {
         description = (
             <div>
                 <p>{_t("Messages in this room are not end-to-end encrypted.")}</p>
-                <p>{_t("In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.")}</p>
+                <p>{_t("In encrypted rooms, your messages are secured and only you and the recipient have " +
+                    "the unique keys to unlock them.")}</p>
             </div>
         );
     }

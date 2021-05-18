@@ -24,6 +24,7 @@ export enum DefaultTagID {
     Favourite = "m.favourite",
     DM = "im.vector.fake.direct",
     ServerNotice = "m.server_notice",
+    Suggested = "im.vector.fake.suggested",
 }
 
 export const OrderedDefaultTagIDs = [
@@ -33,6 +34,7 @@ export const OrderedDefaultTagIDs = [
     DefaultTagID.Untagged,
     DefaultTagID.LowPriority,
     DefaultTagID.ServerNotice,
+    DefaultTagID.Suggested,
     DefaultTagID.Archived,
 ];
 

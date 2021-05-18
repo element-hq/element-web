@@ -16,13 +16,8 @@ limitations under the License.
 
 // TODO: Update design for custom tags to match new designs
 
-.mx_LeftPanel_tagPanelContainer {
-    display: flex;
-    flex-direction: column;
-}
-
 .mx_CustomRoomTagPanel {
-    background-color: $tagpanel-bg-color;
+    background-color: $groupFilterPanel-bg-color;
     max-height: 40vh;
 }
 

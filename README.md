@@ -18,7 +18,7 @@ are currently filed against vector-im/element-web rather than this project).
 
 Translation Status
 ==================
-[![Translation status](https://translate.riot.im/widgets/element-web/-/multi-auto.svg)](https://translate.riot.im/engage/element-web/?utm_source=widget)
+[![Translation status](https://translate.element.io/widgets/element-web/-/multi-auto.svg)](https://translate.element.io/engage/element-web/?utm_source=widget)
 
 Developer Guide
 ===============
@@ -28,7 +28,7 @@ Platform Targets:
  * WebRTC features (VoIP and Video calling) are only available in Chrome & Firefox.
  * Mobile Web is not currently a target platform - instead please use the native
    iOS (https://github.com/matrix-org/matrix-ios-kit) and Android
-   (https://github.com/matrix-org/matrix-android-sdk) SDKs.
+   (https://github.com/matrix-org/matrix-android-sdk2) SDKs.
 
 All code lands on the `develop` branch - `master` is only used for stable releases.
 **Please file PRs against `develop`!!**
@@ -160,8 +160,8 @@ yarn link matrix-js-sdk
 yarn install
 ```
 
-See the [help for `yarn link`](https://yarnpkg.com/docs/cli/link) for more
-details about this.
+See the [help for `yarn link`](https://classic.yarnpkg.com/docs/cli/link) for
+more details about this.
 
 Running tests
 =============

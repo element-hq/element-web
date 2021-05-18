@@ -28,8 +28,12 @@ interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {
 const Toolbar: React.FC<IProps> = ({children, ...props}) => {
     const onKeyDown = (ev: React.KeyboardEvent, state: IState) => {
         const target = ev.target as HTMLElement;
+        // Don't interfere with input default keydown behaviour
+        if (target.tagName === "INPUT") return;
+
         let handled = true;
 
+        // HOME and END are handled by RovingTabIndexProvider
         switch (ev.key) {
             case Key.ARROW_UP:
             case Key.ARROW_DOWN:
@@ -46,8 +50,6 @@ const Toolbar: React.FC<IProps> = ({children, ...props}) => {
                     state.refs.slice((i + delta) % state.refs.length)[0].current.focus();
                 }
                 break;
-
-            // HOME and END are handled by RovingTabIndexProvider
 
             default:
                 handled = false;

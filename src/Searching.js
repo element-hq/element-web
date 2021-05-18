@@ -360,7 +360,7 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
     let oldestEventFrom = previousSearchResult.oldestEventFrom;
     response.highlights = previousSearchResult.highlights;
 
-    if (localEvents && serverEvents) {
+    if (localEvents && serverEvents && serverEvents.results) {
         // This is a first search call, combine the events from the server and
         // the local index. Note where our oldest event came from, we shall
         // fetch the next batch of events from the other source.
@@ -379,7 +379,7 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
             oldestEventFrom = "local";
         }
         combineEventSources(previousSearchResult, response, localEvents.results, cachedEvents);
-    } else if (serverEvents) {
+    } else if (serverEvents && serverEvents.results) {
         // This is a pagination call fetching more events from the server,
         // meaning that our oldest event was in the local index.
         // Change the source of the oldest event if our server event is older
@@ -454,7 +454,7 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
     return response;
 }
 
-function restoreEncryptionInfo(searchResultSlice) {
+function restoreEncryptionInfo(searchResultSlice = []) {
     for (let i = 0; i < searchResultSlice.length; i++) {
         const timeline = searchResultSlice[i].context.getTimeline();
 
@@ -517,7 +517,7 @@ async function combinedPagination(searchResult) {
         },
     };
 
-    const oldResultCount = searchResult.results.length;
+    const oldResultCount = searchResult.results ? searchResult.results.length : 0;
 
     // Let the client process the combined result.
     const result = client._processRoomEventsSearch(searchResult, response);

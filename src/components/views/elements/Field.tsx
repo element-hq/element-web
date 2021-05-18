@@ -17,7 +17,7 @@ limitations under the License.
 import React, {InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes} from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
-import { debounce } from 'lodash';
+import {debounce} from "lodash";
 import {IFieldState, IValidationResult} from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
@@ -61,10 +61,14 @@ interface IProps {
     tooltipClassName?: string;
     // If specified, an additional class name to apply to the field container
     className?: string;
+    // On what events should validation occur; by default on all
+    validateOnFocus?: boolean;
+    validateOnBlur?: boolean;
+    validateOnChange?: boolean;
     // All other props pass through to the <input>.
 }
 
-interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
+export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The element to create. Defaults to "input".
     element?: "input";
     // The input's value. This is a controlled component, so the value is required.
@@ -100,6 +104,9 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
     public static readonly defaultProps = {
         element: "input",
         type: "text",
+        validateOnFocus: true,
+        validateOnBlur: true,
+        validateOnChange: true,
     };
 
     /*
@@ -137,9 +144,11 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         this.setState({
             focused: true,
         });
-        this.validate({
-            focused: true,
-        });
+        if (this.props.validateOnFocus) {
+            this.validate({
+                focused: true,
+            });
+        }
         // Parent component may have supplied its own `onFocus` as well
         if (this.props.onFocus) {
             this.props.onFocus(ev);
@@ -147,7 +156,9 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
     };
 
     private onChange = (ev) => {
-        this.validateOnChange();
+        if (this.props.validateOnChange) {
+            this.validateOnChange();
+        }
         // Parent component may have supplied its own `onChange` as well
         if (this.props.onChange) {
             this.props.onChange(ev);
@@ -158,16 +169,18 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         this.setState({
             focused: false,
         });
-        this.validate({
-            focused: false,
-        });
+        if (this.props.validateOnBlur) {
+            this.validate({
+                focused: false,
+            });
+        }
         // Parent component may have supplied its own `onBlur` as well
         if (this.props.onBlur) {
             this.props.onBlur(ev);
         }
     };
 
-    private async validate({ focused, allowEmpty = true }: {focused: boolean, allowEmpty?: boolean}) {
+    public async validate({ focused, allowEmpty = true }: {focused?: boolean, allowEmpty?: boolean}) {
         if (!this.props.onValidate) {
             return;
         }
@@ -196,14 +209,15 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                 feedbackVisible: false,
             });
         }
+
+        return valid;
     }
 
-
-
     public render() {
-        const {
-            element, prefixComponent, postfixComponent, className, onValidate, children,
-            tooltipContent, forceValidity, tooltipClassName, list, ...inputProps} = this.props;
+        /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
+        const { element, prefixComponent, postfixComponent, className, onValidate, children,
+            tooltipContent, forceValidity, tooltipClassName, list, validateOnBlur, validateOnChange, validateOnFocus,
+            ...inputProps} = this.props;
 
         // Set some defaults for the <input> element
         const ref = input => this.input = input;
@@ -248,7 +262,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
                 tooltipClassName={classNames("mx_Field_tooltip", tooltipClassName)}
                 visible={(this.state.focused && this.props.forceTooltipVisible) || this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
-                forceOnRight
+                alignment={Tooltip.Alignment.Right}
             />;
         }
 

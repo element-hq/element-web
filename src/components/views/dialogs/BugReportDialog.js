@@ -23,8 +23,11 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import sendBugReport from '../../../rageshake/submit-rageshake';
+import sendBugReport, {downloadBugReport} from '../../../rageshake/submit-rageshake';
+import AccessibleButton from "../elements/AccessibleButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.BugReportDialog")
 export default class BugReportDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -33,8 +36,10 @@ export default class BugReportDialog extends React.Component {
             busy: false,
             err: null,
             issueUrl: "",
-            text: "",
+            text: props.initialText || "",
             progress: null,
+            downloadBusy: false,
+            downloadProgress: null,
         };
         this._unmounted = false;
         this._onSubmit = this._onSubmit.bind(this);
@@ -43,6 +48,7 @@ export default class BugReportDialog extends React.Component {
         this._onIssueUrlChange = this._onIssueUrlChange.bind(this);
         this._onSendLogsChange = this._onSendLogsChange.bind(this);
         this._sendProgressCallback = this._sendProgressCallback.bind(this);
+        this._downloadProgressCallback = this._downloadProgressCallback.bind(this);
     }
 
     componentWillUnmount() {
@@ -95,6 +101,31 @@ export default class BugReportDialog extends React.Component {
         });
     }
 
+    _onDownload = async (ev) => {
+        this.setState({ downloadBusy: true });
+        this._downloadProgressCallback(_t("Preparing to download logs"));
+
+        try {
+            await downloadBugReport({
+                sendLogs: true,
+                progressCallback: this._downloadProgressCallback,
+                label: this.props.label,
+            });
+
+            this.setState({
+                downloadBusy: false,
+                downloadProgress: null,
+            });
+        } catch (err) {
+            if (!this._unmounted) {
+                this.setState({
+                    downloadBusy: false,
+                    downloadProgress: _t("Failed to send logs: ") + `${err.message}`,
+                });
+            }
+        }
+    };
+
     _onTextChange(ev) {
         this.setState({ text: ev.target.value });
     }
@@ -112,6 +143,13 @@ export default class BugReportDialog extends React.Component {
             return;
         }
         this.setState({progress: progress});
+    }
+
+    _downloadProgressCallback(downloadProgress) {
+        if (this._unmounted) {
+            return;
+        }
+        this.setState({ downloadProgress });
     }
 
     render() {
@@ -146,7 +184,7 @@ export default class BugReportDialog extends React.Component {
 
         return (
             <BaseDialog className="mx_BugReportDialog" onFinished={this._onCancel}
-                    title={_t('Submit debug logs')}
+                title={_t('Submit debug logs')}
                 contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
@@ -173,6 +211,14 @@ export default class BugReportDialog extends React.Component {
                             },
                         ) }
                     </b></p>
+
+                    <div className="mx_BugReportDialog_download">
+                        <AccessibleButton onClick={this._onDownload} kind="link" disabled={this.state.downloadBusy}>
+                            { _t("Download logs") }
+                        </AccessibleButton>
+                        {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
+                    </div>
+
                     <Field
                         type="text"
                         className="mx_BugReportDialog_field_input"
@@ -211,4 +257,5 @@ export default class BugReportDialog extends React.Component {
 
 BugReportDialog.propTypes = {
     onFinished: PropTypes.func.isRequired,
+    initialText: PropTypes.string,
 };

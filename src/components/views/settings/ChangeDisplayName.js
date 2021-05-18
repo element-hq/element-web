@@ -17,15 +17,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'ChangeDisplayName',
-
-    _getDisplayName: async function() {
+@replaceableComponent("views.settings.ChangeDisplayName")
+export default class ChangeDisplayName extends React.Component {
+    _getDisplayName = async () => {
         const cli = MatrixClientPeg.get();
         try {
             const res = await cli.getProfileInfo(cli.getUserId());
@@ -33,16 +32,16 @@ export default createReactClass({
         } catch (e) {
             throw new Error("Failed to fetch display name");
         }
-    },
+    };
 
-    _changeDisplayName: function(newDisplayname) {
+    _changeDisplayName = (newDisplayname) => {
         const cli = MatrixClientPeg.get();
         return cli.setDisplayName(newDisplayname).catch(function(e) {
             throw new Error("Failed to set display name", e);
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
         return (
             <EditableTextContainer
@@ -51,5 +50,5 @@ export default createReactClass({
                 blurToSubmit={true}
                 onSubmit={this._changeDisplayName} />
         );
-    },
-});
+    }
+}

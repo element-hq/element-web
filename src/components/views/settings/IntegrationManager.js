@@ -21,7 +21,9 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import {Key} from "../../../Keyboard";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.IntegrationManager")
 export default class IntegrationManager extends React.Component {
     static propTypes = {
         // false to display an error saying that we couldn't connect to the integration manager
@@ -41,6 +43,14 @@ export default class IntegrationManager extends React.Component {
         connected: true,
         loading: false,
     };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            errored: false,
+        };
+    }
 
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
@@ -66,6 +76,10 @@ export default class IntegrationManager extends React.Component {
         }
     };
 
+    onError = () => {
+        this.setState({ errored: true });
+    };
+
     render() {
         if (this.props.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
@@ -77,7 +91,7 @@ export default class IntegrationManager extends React.Component {
             );
         }
 
-        if (!this.props.connected) {
+        if (!this.props.connected || this.state.errored) {
             return (
                 <div className='mx_IntegrationManager_error'>
                     <h3>{_t("Cannot connect to integration manager")}</h3>
@@ -86,6 +100,6 @@ export default class IntegrationManager extends React.Component {
             );
         }
 
-        return <iframe src={this.props.url}></iframe>;
+        return <iframe src={this.props.url} onError={this.onError} />;
     }
 }

@@ -75,6 +75,11 @@ limitations under the License.
                 background-color: $menu-selected-color;
             }
 
+            &.mx_AccessibleButton_disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
             img, .mx_IconizedContextMenu_icon { // icons
                 width: 16px;
                 min-width: 16px;
@@ -82,7 +87,6 @@ limitations under the License.
             }
 
             span.mx_IconizedContextMenu_label { // labels
-                padding-left: 14px;
                 width: 100%;
                 flex: 1;
 
@@ -90,6 +94,10 @@ limitations under the License.
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
+            }
+
+            .mx_IconizedContextMenu_icon + .mx_IconizedContextMenu_label {
+                padding-left: 14px;
             }
         }
     }

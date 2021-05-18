@@ -27,37 +27,29 @@ limitations under the License.
         padding-left: 8px;
         overflow-x: hidden;
         overflow-y: auto;
+        display: flex;
+        flex-wrap: wrap;
 
         .mx_InviteDialog_userTile {
+            margin: 6px 6px 0 0;
             display: inline-block;
-            float: left;
-            position: relative;
-            top: 7px;
+            min-width: max-content; // prevent manipulation by flexbox
         }
 
-        // Using a textarea for this element, to circumvent autofill
-        // Mostly copied from AddressPickerDialog
-        textarea,
-        textarea:focus {
-            height: 34px;
-            line-height: $font-34px;
+        // Mostly copied from AddressPickerDialog; overrides bunch of our default text input styles
+        > input[type="text"] {
+            margin: 6px 0 !important;
+            height: 24px;
+            line-height: $font-24px;
             font-size: $font-14px;
             padding-left: 12px;
-            margin: 0 !important;
             border: 0 !important;
             outline: 0 !important;
             resize: none;
-            overflow: hidden;
             box-sizing: border-box;
-            word-wrap: nowrap;
-
-            // Roughly fill about 2/5ths of the available space. This is to try and 'fill' the
-            // remaining space after a bunch of pills, but is a bit hacky. Ideally we'd have
-            // support for "fill remaining width", but traditional tricks don't work with what
-            // we're pushing into this "field". Flexbox just makes things worse. The theory is
-            // that users won't need more than about 2/5ths of the input to find the person
-            // they're looking for.
-            width: 40%;
+            min-width: 40%;
+            flex: 1 !important;
+            color: $primary-fg-color !important;
         }
     }
 
@@ -88,6 +80,13 @@ limitations under the License.
         color: $muted-fg-color;
         font-weight: bold;
         text-transform: uppercase;
+    }
+
+    .mx_InviteDialog_subname {
+        margin-bottom: 10px;
+        margin-top: -10px; // HACK: Positioning with margins is bad
+        font-size: $font-12px;
+        color: $muted-fg-color;
     }
 }
 
@@ -139,6 +138,10 @@ limitations under the License.
             left: 6px; // 50%
             background-color: #ffffff; // this is fine without a var because it's for both themes
         }
+    }
+
+    .mx_InviteDialog_roomTile_nameStack {
+        display: inline-block;
     }
 
     .mx_InviteDialog_roomTile_name {
@@ -225,4 +228,8 @@ limitations under the License.
 .mx_InviteDialog_helpText,
 .mx_InviteDialog_addressBar {
     margin-right: 45px;
+}
+
+.mx_InviteDialog_helpText .mx_AccessibleButton_kind_link {
+    padding: 0;
 }

@@ -16,57 +16,55 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Key } from '../../Keyboard';
 import dis from '../../dispatcher/dispatcher';
-import { throttle } from 'lodash';
+import {throttle} from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'SearchBox',
-
-    propTypes: {
+@replaceableComponent("structures.SearchBox")
+export default class SearchBox extends React.Component {
+    static propTypes = {
         onSearch: PropTypes.func,
         onCleared: PropTypes.func,
         onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
+        autoFocus: PropTypes.bool,
+        initialValue: PropTypes.string,
 
         // If true, the search box will focus and clear itself
         // on room search focus action (it would be nicer to take
         // this functionality out, but not obvious how that would work)
         enableRoomSearchFocus: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            enableRoomSearchFocus: false,
-        };
-    },
+    static defaultProps = {
+        enableRoomSearchFocus: false,
+    };
 
-    getInitialState: function() {
-        return {
-            searchTerm: "",
+    constructor(props) {
+        super(props);
+
+        this._search = createRef();
+
+        this.state = {
+            searchTerm: this.props.initialValue || "",
             blurred: true,
         };
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._search = createRef();
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-    },
+    }
 
-    onAction: function(payload) {
+    onAction = payload => {
         if (!this.props.enableRoomSearchFocus) return;
 
         switch (payload.action) {
@@ -81,51 +79,51 @@ export default createReactClass({
                 }
                 break;
         }
-    },
+    };
 
-    onChange: function() {
+    onChange = () => {
         if (!this._search.current) return;
         this.setState({ searchTerm: this._search.current.value });
         this.onSearch();
-    },
+    };
 
-    onSearch: throttle(function() {
+    onSearch = throttle(() => {
         this.props.onSearch(this._search.current.value);
-    }, 200, {trailing: true, leading: true}),
+    }, 200, {trailing: true, leading: true});
 
-    _onKeyDown: function(ev) {
+    _onKeyDown = ev => {
         switch (ev.key) {
             case Key.ESCAPE:
                 this._clearSearch("keyboard");
                 break;
         }
         if (this.props.onKeyDown) this.props.onKeyDown(ev);
-    },
+    };
 
-    _onFocus: function(ev) {
+    _onFocus = ev => {
         this.setState({blurred: false});
         ev.target.select();
         if (this.props.onFocus) {
             this.props.onFocus(ev);
         }
-    },
+    };
 
-    _onBlur: function(ev) {
+    _onBlur = ev => {
         this.setState({blurred: true});
         if (this.props.onBlur) {
             this.props.onBlur(ev);
         }
-    },
+    };
 
-    _clearSearch: function(source) {
+    _clearSearch(source) {
         this._search.current.value = "";
         this.onChange();
         if (this.props.onCleared) {
             this.props.onCleared(source);
         }
-    },
+    }
 
-    render: function() {
+    render() {
         // check for collapsed here and
         // not at parent so we keep
         // searchTerm in our state
@@ -162,9 +160,10 @@ export default createReactClass({
                     onBlur={this._onBlur}
                     placeholder={ placeholder }
                     autoComplete="off"
+                    autoFocus={this.props.autoFocus}
                 />
                 { clearButton }
             </div>
         );
-    },
-});
+    }
+}

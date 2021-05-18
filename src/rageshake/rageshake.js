@@ -73,7 +73,9 @@ class ConsoleLogger {
 
         // Convert objects and errors to helpful things
         args = args.map((arg) => {
-            if (arg instanceof Error) {
+            if (arg instanceof DOMException) {
+                return arg.message + ` (${arg.name} | ${arg.code}) ` + (arg.stack ? `\n${arg.stack}` : '');
+            } else if (arg instanceof Error) {
                 return arg.message + (arg.stack ? `\n${arg.stack}` : '');
             } else if (typeof (arg) === 'object') {
                 try {
@@ -371,7 +373,6 @@ class IndexedDBLogStore {
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
-
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
@@ -435,14 +436,36 @@ function selectQuery(store, keyRange, resultMapper) {
 /**
  * Configure rage shaking support for sending bug reports.
  * Modifies globals.
+ * @param {boolean} setUpPersistence When true (default), the persistence will
+ * be set up immediately for the logs.
  * @return {Promise} Resolves when set up.
  */
-export function init() {
+export function init(setUpPersistence = true) {
     if (global.mx_rage_initPromise) {
         return global.mx_rage_initPromise;
     }
     global.mx_rage_logger = new ConsoleLogger();
     global.mx_rage_logger.monkeyPatch(window.console);
+
+    if (setUpPersistence) {
+        return tryInitStorage();
+    }
+
+    global.mx_rage_initPromise = Promise.resolve();
+    return global.mx_rage_initPromise;
+}
+
+/**
+ * Try to start up the rageshake storage for logs. If not possible (client unsupported)
+ * then this no-ops.
+ * @return {Promise} Resolves when complete.
+ */
+export function tryInitStorage() {
+    if (global.mx_rage_initStoragePromise) {
+        return global.mx_rage_initStoragePromise;
+    }
+
+    console.log("Configuring rageshake persistence...");
 
     // just *accessing* indexedDB throws an exception in firefox with
     // indexeddb disabled.
@@ -453,11 +476,11 @@ export function init() {
 
     if (indexedDB) {
         global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
-        global.mx_rage_initPromise = global.mx_rage_store.connect();
-        return global.mx_rage_initPromise;
+        global.mx_rage_initStoragePromise = global.mx_rage_store.connect();
+        return global.mx_rage_initStoragePromise;
     }
-    global.mx_rage_initPromise = Promise.resolve();
-    return global.mx_rage_initPromise;
+    global.mx_rage_initStoragePromise = Promise.resolve();
+    return global.mx_rage_initStoragePromise;
 }
 
 export function flush() {
@@ -469,7 +492,7 @@ export function flush() {
 
 /**
  * Clean up old logs.
- * @return Promise Resolves if cleaned logs.
+ * @return {Promise} Resolves if cleaned logs.
  */
 export async function cleanup() {
     if (!global.mx_rage_store) {

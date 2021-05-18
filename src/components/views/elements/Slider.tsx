@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as React from 'react';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     // A callback for the selected value
@@ -34,6 +35,7 @@ interface IProps {
     disabled: boolean;
 }
 
+@replaceableComponent("views.elements.Slider")
 export default class Slider extends React.Component<IProps> {
     // offset is a terrible inverse approximation.
     // if the values represents some function f(x) = y where x is the
@@ -45,7 +47,7 @@ export default class Slider extends React.Component<IProps> {
     // non linear slider.
     private offset(values: number[], value: number): number {
         // the index of the first number greater than value.
-        let closest = values.reduce((prev, curr) => {
+        const closest = values.reduce((prev, curr) => {
             return (value > curr ? prev + 1 : prev);
         }, 0);
 
@@ -68,17 +70,16 @@ export default class Slider extends React.Component<IProps> {
         const linearInterpolation = (value - closestLessValue) / (closestGreaterValue - closestLessValue);
 
         return 100 * (closest - 1 + linearInterpolation) * intervalWidth;
-
     }
 
     render(): React.ReactNode {
-        const dots = this.props.values.map(v =>
-            <Dot active={v <= this.props.value}
-                 label={this.props.displayFunc(v)}
-                 onClick={this.props.disabled ? () => {} : () => this.props.onSelectionChange(v)}
-                 key={v}
-                 disabled={this.props.disabled}
-            />);
+        const dots = this.props.values.map(v => <Dot
+            active={v <= this.props.value}
+            label={this.props.displayFunc(v)}
+            onClick={this.props.disabled ? () => {} : () => this.props.onSelectionChange(v)}
+            key={v}
+            disabled={this.props.disabled}
+        />);
 
         let selection = null;
 
@@ -93,7 +94,7 @@ export default class Slider extends React.Component<IProps> {
         return <div className="mx_Slider">
             <div>
                 <div className="mx_Slider_bar">
-                    <hr onClick={this.props.disabled ? () => {} : this.onClick.bind(this)}/>
+                    <hr onClick={this.props.disabled ? () => {} : this.onClick.bind(this)} />
                     { selection }
                 </div>
                 <div className="mx_Slider_dotContainer">

@@ -129,7 +129,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
 
     public isSupported(): boolean {
         const cli = MatrixClientPeg.get();
-        return cli !== undefined && cli !== null;
+        return cli !== undefined && cli !== null && !cli.isGuest();
     }
 
     private getSettings(roomId: string, eventType = "im.vector.web.settings"): any { // TODO: [TS] Type return

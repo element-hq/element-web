@@ -17,7 +17,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { AllHtmlEntities } from 'html-entities';
 import {linkifyElement} from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -26,25 +25,25 @@ import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
-export default createReactClass({
-    displayName: 'LinkPreviewWidget',
-
-    propTypes: {
+@replaceableComponent("views.rooms.LinkPreviewWidget")
+export default class LinkPreviewWidget extends React.Component {
+    static propTypes = {
         link: PropTypes.string.isRequired, // the URL being previewed
         mxEvent: PropTypes.object.isRequired, // the Event associated with the preview
         onCancelClick: PropTypes.func, // called when the preview's cancel ('hide') button is clicked
         onHeightChanged: PropTypes.func, // called when the preview's contents has loaded
-    },
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             preview: null,
         };
-    },
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         this.unmounted = false;
         MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.mxEvent.getTs()).then((res)=>{
             if (this.unmounted) {
@@ -59,25 +58,25 @@ export default createReactClass({
         });
 
         this._description = createRef();
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         if (this._description.current) {
             linkifyElement(this._description.current);
         }
-    },
+    }
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         if (this._description.current) {
             linkifyElement(this._description.current);
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.unmounted = true;
-    },
+    }
 
-    onImageClick: function(ev) {
+    onImageClick = ev => {
         const p = this.state.preview;
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
@@ -85,7 +84,7 @@ export default createReactClass({
 
         let src = p["og:image"];
         if (src && src.startsWith("mxc://")) {
-            src = MatrixClientPeg.get().mxcUrlToHttp(src);
+            src = mediaFromMxc(src).srcHttp;
         }
 
         const params = {
@@ -97,10 +96,10 @@ export default createReactClass({
             link: this.props.link,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    },
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
+    };
 
-    render: function() {
+    render() {
         const p = this.state.preview;
         if (!p || Object.keys(p).length === 0) {
             return <div />;
@@ -111,21 +110,26 @@ export default createReactClass({
         if (!SettingsStore.getValue("showImages")) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
-        const imageMaxWidth = 100; const imageMaxHeight = 100;
+        const imageMaxWidth = 100;
+        const imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
-            image = MatrixClientPeg.get().mxcUrlToHttp(image, imageMaxWidth, imageMaxHeight);
+            // We deliberately don't want a square here, so use the source HTTP thumbnail function
+            image = mediaFromMxc(image).getThumbnailOfSourceHttp(imageMaxWidth, imageMaxHeight, 'scale');
         }
 
         let thumbHeight = imageMaxHeight;
         if (p["og:image:width"] && p["og:image:height"]) {
-            thumbHeight = ImageUtils.thumbHeight(p["og:image:width"], p["og:image:height"], imageMaxWidth, imageMaxHeight);
+            thumbHeight = ImageUtils.thumbHeight(
+                p["og:image:width"], p["og:image:height"],
+                imageMaxWidth, imageMaxHeight,
+            );
         }
 
         let img;
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                    <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
-                  </div>;
+                <img style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
+            </div>;
         }
 
         // The description includes &-encoded HTML entities, we decode those as React treats the thing as an
@@ -134,7 +138,7 @@ export default createReactClass({
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
-            <div className="mx_LinkPreviewWidget" >
+            <div className="mx_LinkPreviewWidget">
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
                     <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a></div>
@@ -149,5 +153,5 @@ export default createReactClass({
                 </AccessibleButton>
             </div>
         );
-    },
-});
+    }
+}

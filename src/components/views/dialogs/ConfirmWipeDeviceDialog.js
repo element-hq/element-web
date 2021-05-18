@@ -18,7 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.ConfirmWipeDeviceDialog")
 export default class ConfirmWipeDeviceDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -37,9 +39,12 @@ export default class ConfirmWipeDeviceDialog extends React.Component {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
-            <BaseDialog className='mx_ConfirmWipeDeviceDialog' hasCancel={true}
-                        onFinished={this.props.onFinished}
-                        title={_t("Clear all data in this session?")}>
+            <BaseDialog
+                className='mx_ConfirmWipeDeviceDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Clear all data in this session?")}
+            >
                 <div className='mx_ConfirmWipeDeviceDialog_content'>
                     <p>
                         {_t(

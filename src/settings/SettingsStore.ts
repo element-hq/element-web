@@ -23,7 +23,6 @@ import AccountSettingsHandler from "./handlers/AccountSettingsHandler";
 import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import { _t } from '../languageHandler';
-import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher/dispatcher';
 import { ISetting, SETTINGS } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
@@ -43,7 +42,7 @@ for (const key of Object.keys(SETTINGS)) {
     if (SETTINGS[key].invertedSettingName) {
         // Invert now so that the rest of the system will invert it back
         // to what was intended.
-        invertedDefaultSettings[key] = !SETTINGS[key].default;
+        invertedDefaultSettings[SETTINGS[key].invertedSettingName] = !SETTINGS[key].default;
     }
 }
 
@@ -53,7 +52,7 @@ const LEVEL_HANDLERS = {
     [SettingLevel.ROOM_ACCOUNT]: new RoomAccountSettingsHandler(defaultWatchManager),
     [SettingLevel.ACCOUNT]: new AccountSettingsHandler(defaultWatchManager),
     [SettingLevel.ROOM]: new RoomSettingsHandler(defaultWatchManager),
-    [SettingLevel.CONFIG]: new ConfigSettingsHandler(),
+    [SettingLevel.CONFIG]: new ConfigSettingsHandler(featureNames),
     [SettingLevel.DEFAULT]: new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
 };
 
@@ -62,7 +61,7 @@ for (const key of Object.keys(LEVEL_HANDLERS)) {
     LEVEL_HANDLERS[key] = new LocalEchoWrapper(LEVEL_HANDLERS[key]);
 }
 
-const LEVEL_ORDER = [
+export const LEVEL_ORDER = [
     SettingLevel.DEVICE,
     SettingLevel.ROOM_DEVICE,
     SettingLevel.ROOM_ACCOUNT,
@@ -123,6 +122,14 @@ export default class SettingsStore {
 
     // Counter used for generation of watcher IDs
     private static watcherCount = 1;
+
+    /**
+     * Gets all the feature-style setting names.
+     * @returns {string[]} The names of the feature settings.
+     */
+    public static getFeatureSettingNames(): string[] {
+        return Object.keys(SETTINGS).filter(n => SettingsStore.isFeature(n));
+    }
 
     /**
      * Watches for changes in a particular setting. This is done without any local echo
@@ -241,19 +248,6 @@ export default class SettingsStore {
     }
 
     /**
-     * Returns a list of all available labs feature names
-     * @returns {string[]} The list of available feature names
-     */
-    public static getLabsFeatures(): string[] {
-        const possibleFeatures = Object.keys(SETTINGS).filter((s) => SettingsStore.isFeature(s));
-
-        const enableLabs = SdkConfig.get()["enableLabs"];
-        if (enableLabs) return possibleFeatures;
-
-        return possibleFeatures.filter((s) => SettingsStore.getFeatureState(s) === "labs");
-    }
-
-    /**
      * Determines if a setting is also a feature.
      * @param {string} settingName The setting to look up.
      * @return {boolean} True if the setting is a feature.
@@ -263,37 +257,24 @@ export default class SettingsStore {
         return SETTINGS[settingName].isFeature;
     }
 
-    /**
-     * Determines if a given feature is enabled. The feature given must be a known
-     * feature.
-     * @param {string} settingName The name of the setting that is a feature.
-     * @param {String} roomId The optional room ID to validate in, may be null.
-     * @return {boolean} True if the feature is enabled, false otherwise
-     */
-    public static isFeatureEnabled(settingName: string, roomId: string = null) {
-        if (!SettingsStore.isFeature(settingName)) {
-            throw new Error("Setting " + settingName + " is not a feature");
+    public static getBetaInfo(settingName: string) {
+        // consider a beta disabled if the config is explicitly set to false, in which case treat as normal Labs flag
+        if (SettingsStore.isFeature(settingName)
+            && SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
+        ) {
+            return SETTINGS[settingName]?.betaInfo;
         }
-
-        return SettingsStore.getValue(settingName, roomId);
     }
 
     /**
-     * Sets a feature as enabled or disabled on the current device.
-     * @param {string} settingName The name of the setting.
-     * @param {boolean} value True to enable the feature, false otherwise.
-     * @returns {Promise} Resolves when the setting has been set.
+     * Determines if a setting is enabled.
+     * If a setting is disabled then it should be hidden from the user.
+     * @param {string} settingName The setting to look up.
+     * @return {boolean} True if the setting is enabled.
      */
-    public static setFeatureEnabled(settingName: string, value: any): Promise<void> {
-        // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
-        if (!SettingsStore.isFeature(settingName)) {
-            throw new Error("Setting " + settingName + " is not a feature");
-        }
-
-        return SettingsStore.setValue(settingName, null, SettingLevel.DEVICE, value);
+    public static isEnabled(settingName: string): boolean {
+        if (!SETTINGS[settingName]) return false;
+        return SETTINGS[settingName].controller ? !SETTINGS[settingName].controller.settingDisabled : true;
     }
 
     /**
@@ -304,7 +285,7 @@ export default class SettingsStore {
      * @param {boolean} excludeDefault True to disable using the default value.
      * @return {*} The value, or null if not found
      */
-    public static getValue(settingName: string, roomId: string = null, excludeDefault = false): any {
+    public static getValue<T = any>(settingName: string, roomId: string = null, excludeDefault = false): T {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
@@ -345,13 +326,6 @@ export default class SettingsStore {
 
         const minIndex = levelOrder.indexOf(level);
         if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
-
-        if (SettingsStore.isFeature(settingName)) {
-            const configValue = SettingsStore.getFeatureState(settingName);
-            if (configValue === "enable") return true;
-            if (configValue === "disable") return false;
-            // else let it fall through the default process
-        }
 
         const handlers = SettingsStore.getHandlers(settingName);
 
@@ -480,6 +454,12 @@ export default class SettingsStore {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
+        // When non-beta features are specified in the config.json, we force them as enabled or disabled.
+        if (SettingsStore.isFeature(settingName) && !SETTINGS[settingName]?.betaInfo) {
+            const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);
+            if (configVal === true || configVal === false) return false;
+        }
+
         const handler = SettingsStore.getHandler(settingName, level);
         if (!handler) return false;
         return handler.canSetValue(settingName, roomId);
@@ -494,6 +474,32 @@ export default class SettingsStore {
     public static isLevelSupported(level: SettingLevel): boolean {
         if (!LEVEL_HANDLERS[level]) return false;
         return LEVEL_HANDLERS[level].isSupported();
+    }
+
+    /**
+     * Determines the first supported level out of all the levels that can be used for a
+     * specific setting.
+     * @param {string} settingName The setting name.
+     * @return {SettingLevel}
+     */
+    public static firstSupportedLevel(settingName: string): SettingLevel {
+        // Verify that the setting is actually a setting
+        const setting = SETTINGS[settingName];
+        if (!setting) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
+
+        const handlers = SettingsStore.getHandlers(settingName);
+
+        for (const level of levelOrder) {
+            const handler = handlers[level];
+            if (!handler) continue;
+            return level;
+        }
+        return null;
     }
 
     /**
@@ -610,24 +616,6 @@ export default class SettingsStore {
         if (!handlers['default']) handlers['default'] = LEVEL_HANDLERS['default'];
 
         return handlers;
-    }
-
-    private static getFeatureState(settingName: string): LabsFeatureState {
-        const featuresConfig = SdkConfig.get()['features'];
-        const enableLabs = SdkConfig.get()['enableLabs']; // we'll honour the old flag
-
-        let featureState = enableLabs ? "labs" : "disable";
-        if (featuresConfig && featuresConfig[settingName] !== undefined) {
-            featureState = featuresConfig[settingName];
-        }
-
-        const allowedStates = ['enable', 'disable', 'labs'];
-        if (!allowedStates.includes(featureState)) {
-            console.warn("Feature state '" + featureState + "' is invalid for " + settingName);
-            featureState = "disable"; // to prevent accidental features.
-        }
-
-        return featureState;
     }
 }
 

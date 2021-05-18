@@ -17,6 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { ICreateClientOpts } from 'matrix-js-sdk/src/matrix';
 import {MatrixClient} from 'matrix-js-sdk/src/client';
 import {MemoryStore} from 'matrix-js-sdk/src/store/memory';
 import * as utils from 'matrix-js-sdk/src/utils';
@@ -31,17 +32,19 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import { crossSigningCallbacks } from './CrossSigningManager';
+import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
+import SecurityCustomisations from "./customisations/Security";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
     identityServerUrl: string;
     userId: string;
-    deviceId: string;
+    deviceId?: string;
     accessToken: string;
-    guest: boolean;
+    guest?: boolean;
     pickleKey?: string;
+    freshLogin?: boolean;
 }
 
 // TODO: Move this to the js-sdk
@@ -99,6 +102,12 @@ export interface IMatrixClientPeg {
     currentUserIsJustRegistered(): boolean;
 
     /**
+     * If the current user has been registered by this device then this
+     * returns a boolean of whether it was within the last N hours given.
+     */
+    userRegisteredWithinLastHours(hours: number): boolean;
+
+    /**
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      *
@@ -148,6 +157,9 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
     public setJustRegisteredUserId(uid: string): void {
         this.justRegisteredUserId = uid;
+        if (uid) {
+            window.localStorage.setItem("mx_registration_time", String(new Date().getTime()));
+        }
     }
 
     public currentUserIsJustRegistered(): boolean {
@@ -155,6 +167,15 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             this.matrixClient &&
             this.matrixClient.credentials.userId === this.justRegisteredUserId
         );
+    }
+
+    public userRegisteredWithinLastHours(hours: number): boolean {
+        try {
+            const date = new Date(window.localStorage.getItem("mx_registration_time"));
+            return ((new Date().getTime() - date.getTime()) / 36e5) <= hours;
+        } catch (e) {
+            return false;
+        }
     }
 
     public replaceUsingCreds(creds: IMatrixClientCreds): void {
@@ -192,6 +213,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
                 this.matrixClient.setCryptoTrustCrossSignedDevices(
                     !SettingsStore.getValue('e2ee.manuallyVerifyAllSessions'),
                 );
+                await tryToUnlockSecretStorageWithDehydrationKey(this.matrixClient);
                 StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {
@@ -239,7 +261,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
     }
 
     public getHomeserverName(): string {
-        const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
+        const matches = /^@[^:]+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
         }
@@ -247,8 +269,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
     }
 
     private createClient(creds: IMatrixClientCreds): void {
-        // TODO: Make these opts typesafe with the js-sdk
-        const opts = {
+        const opts: ICreateClientOpts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
             accessToken: creds.accessToken,
@@ -258,6 +279,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer'),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
+            // Gather up to 20 ICE candidates when a call arrives: this should be more than we'd
+            // ever normally need, so effectively this should make all the gathering happen when
+            // the call arrives.
+            iceCandidatePoolSize: 20,
             verificationMethods: [
                 verificationMethods.SAS,
                 SHOW_QR_CODE_METHOD,
@@ -272,6 +297,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
         Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
+        if (SecurityCustomisations.getDehydrationKey) {
+            opts.cryptoCallbacks.getDehydrationKey =
+                SecurityCustomisations.getDehydrationKey;
+        }
 
         this.matrixClient = createMatrixClient(opts);
 

@@ -39,7 +39,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     tabIndex?: number;
     disabled?: boolean;
     className?: string;
-    onClick?(e?: ButtonEvent): void;
+    onClick(e?: ButtonEvent): void;
 }
 
 interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {

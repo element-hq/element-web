@@ -38,7 +38,12 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force?: boolean): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force?: boolean,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
@@ -47,7 +52,7 @@ export default class CommandProvider extends AutocompleteProvider {
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].substr(1); // strip leading `/`
-            if (CommandMap.has(name)) {
+            if (CommandMap.has(name) && CommandMap.get(name).isEnabled()) {
                 // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name).hideCompletionAfterSpace) return [];
                 matches = [CommandMap.get(name)];
@@ -55,15 +60,16 @@ export default class CommandProvider extends AutocompleteProvider {
         } else {
             if (query === '/') {
                 // If they have just entered `/` show everything
+                // We exclude the limit on purpose to have a comprehensive list
                 matches = Commands;
             } else {
                 // otherwise fuzzy match against all of the fields
-                matches = this.matcher.match(command[1]);
+                matches = this.matcher.match(command[1], limit);
             }
         }
 
 
-        return matches.map((result) => {
+        return matches.filter(cmd => cmd.isEnabled()).map((result) => {
             let completion = result.getCommand() + ' ';
             const usedAlias = result.aliases.find(alias => `/${alias}` === command[1]);
             // If the command (or an alias) is the same as the one they entered, we don't want to discard their arguments
@@ -89,7 +95,11 @@ export default class CommandProvider extends AutocompleteProvider {
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
-            <div className="mx_Autocomplete_Completion_container_block" role="listbox" aria-label={_t("Command Autocomplete")}>
+            <div
+                className="mx_Autocomplete_Completion_container_block"
+                role="listbox"
+                aria-label={_t("Command Autocomplete")}
+            >
                 { completions }
             </div>
         );

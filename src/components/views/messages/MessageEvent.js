@@ -16,17 +16,16 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export default createReactClass({
-    displayName: 'MessageEvent',
-
-    propTypes: {
+@replaceableComponent("views.messages.MessageEvent")
+export default class MessageEvent extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
 
@@ -47,29 +46,33 @@ export default createReactClass({
 
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
-    },
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
+        /* the permalinkCreator */
+        permalinkCreator: PropTypes.object,
+    };
+
+    constructor(props) {
+        super(props);
+
         this._body = createRef();
-    },
+    }
 
-    getEventTileOps: function() {
+    getEventTileOps = () => {
         return this._body.current && this._body.current.getEventTileOps ? this._body.current.getEventTileOps() : null;
-    },
+    };
 
-    onTileUpdate: function() {
+    onTileUpdate = () => {
         this.forceUpdate();
-    },
+    };
 
-    render: function() {
+    render() {
         const bodyTypes = {
             'm.text': sdk.getComponent('messages.TextualBody'),
             'm.notice': sdk.getComponent('messages.TextualBody'),
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
-            'm.audio': sdk.getComponent('messages.MAudioBody'),
+            'm.audio': sdk.getComponent('messages.MVoiceOrAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
         };
         const evTypes = {
@@ -95,7 +98,7 @@ export default createReactClass({
             }
         }
 
-        if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
+        if (SettingsStore.getValue("feature_mjolnir")) {
             const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
             const allowRender = localStorage.getItem(key) === "true";
 
@@ -122,6 +125,7 @@ export default createReactClass({
             editState={this.props.editState}
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
+            permalinkCreator={this.props.permalinkCreator}
         />;
-    },
-});
+    }
+}

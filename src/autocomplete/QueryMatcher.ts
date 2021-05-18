@@ -16,15 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import _at from 'lodash/at';
-import _uniq from 'lodash/uniq';
+import {at, uniq} from 'lodash';
 import {removeHiddenChars} from "matrix-js-sdk/src/utils";
 
 interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
     funcs?: Array<(T) => string>;
     shouldMatchWordsOnly?: boolean;
-    shouldMatchPrefix?: boolean;
     // whether to apply unhomoglyph and strip diacritics to fuzz up the search. Defaults to true
     fuzzy?: boolean;
 }
@@ -57,12 +55,6 @@ export default class QueryMatcher<T extends Object> {
         if (this._options.shouldMatchWordsOnly === undefined) {
             this._options.shouldMatchWordsOnly = true;
         }
-
-        // By default, match anywhere in the string being searched. If enabled, only return
-        // matches that are prefixed with the query.
-        if (this._options.shouldMatchPrefix === undefined) {
-            this._options.shouldMatchPrefix = false;
-        }
     }
 
     setObjects(objects: T[]) {
@@ -73,7 +65,7 @@ export default class QueryMatcher<T extends Object> {
             // type for their values. We assume that those values who's keys have
             // been specified will be string. Also, we cannot infer all the
             // types of the keys of the objects at compile.
-            const keyValues = _at<string>(<any>object, this._options.keys);
+            const keyValues = at<string>(<any>object, this._options.keys);
 
             if (this._options.funcs) {
                 for (const f of this._options.funcs) {
@@ -95,7 +87,7 @@ export default class QueryMatcher<T extends Object> {
         }
     }
 
-    match(query: string): T[] {
+    match(query: string, limit = -1): T[] {
         query = this.processQuery(query);
         if (this._options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
@@ -113,7 +105,7 @@ export default class QueryMatcher<T extends Object> {
                 resultKey = resultKey.replace(/[^\w]/g, '');
             }
             const index = resultKey.indexOf(query);
-            if (index !== -1 && (!this._options.shouldMatchPrefix || index === 0)) {
+            if (index !== -1) {
                 matches.push(
                     ...candidates.map((candidate) => ({index, ...candidate})),
                 );
@@ -137,7 +129,10 @@ export default class QueryMatcher<T extends Object> {
         });
 
         // Now map the keys to the result objects. Also remove any duplicates.
-        return _uniq(matches.map((match) => match.object));
+        const dedupped = uniq(matches.map((match) => match.object));
+        const maxLength = limit === -1 ? dedupped.length : limit;
+
+        return dedupped.slice(0, maxLength);
     }
 
     private processQuery(query: string): string {

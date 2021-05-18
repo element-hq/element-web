@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -32,6 +31,8 @@ import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -65,46 +66,45 @@ function portLegacyActions(actions) {
     }
 }
 
-export default createReactClass({
-    displayName: 'Notifications',
-
-    phases: {
+@replaceableComponent("views.settings.Notifications")
+export default class Notifications extends React.Component {
+    static phases = {
         LOADING: "LOADING", // The component is loading or sending data to the hs
         DISPLAY: "DISPLAY", // The component is ready and display data
         ERROR: "ERROR", // There was an error
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            phase: this.phases.LOADING,
-            masterPushRule: undefined, // The master rule ('.m.rule.master')
-            vectorPushRules: [], // HS default push rules displayed in Vector UI
-            vectorContentRules: { // Keyword push rules displayed in Vector UI
-                vectorState: PushRuleVectorState.ON,
-                rules: [],
-            },
-            externalPushRules: [], // Push rules (except content rule) that have been defined outside Vector UI
-            externalContentRules: [], // Keyword push rules that have been defined outside Vector UI
-            threepids: [], // used for email notifications
-        };
-    },
+    state = {
+        phase: Notifications.phases.LOADING,
+        masterPushRule: undefined, // The master rule ('.m.rule.master')
+        vectorPushRules: [], // HS default push rules displayed in Vector UI
+        vectorContentRules: { // Keyword push rules displayed in Vector UI
+            vectorState: PushRuleVectorState.ON,
+            rules: [],
+        },
+        externalPushRules: [], // Push rules (except content rule) that have been defined outside Vector UI
+        externalContentRules: [], // Keyword push rules that have been defined outside Vector UI
+        threepids: [], // used for email notifications
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._refreshFromServer();
-    },
+    }
 
-    onEnableNotificationsChange: function(checked) {
+    onEnableNotificationsChange = (checked) => {
         const self = this;
         this.setState({
-            phase: this.phases.LOADING,
+            phase: Notifications.phases.LOADING,
         });
 
-        MatrixClientPeg.get().setPushRuleEnabled('global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked).then(function() {
-           self._refreshFromServer();
+        MatrixClientPeg.get().setPushRuleEnabled(
+            'global', self.state.masterPushRule.kind, self.state.masterPushRule.rule_id, !checked,
+        ).then(function() {
+            self._refreshFromServer();
         });
-    },
+    };
 
-    onEnableDesktopNotificationsChange: function(checked) {
+    onEnableDesktopNotificationsChange = (checked) => {
         SettingsStore.setValue(
             "notificationsEnabled", null,
             SettingLevel.DEVICE,
@@ -112,9 +112,9 @@ export default createReactClass({
         ).finally(() => {
             this.forceUpdate();
         });
-    },
+    };
 
-    onEnableDesktopNotificationBodyChange: function(checked) {
+    onEnableDesktopNotificationBodyChange = (checked) => {
         SettingsStore.setValue(
             "notificationBodyEnabled", null,
             SettingLevel.DEVICE,
@@ -122,9 +122,9 @@ export default createReactClass({
         ).finally(() => {
             this.forceUpdate();
         });
-    },
+    };
 
-    onEnableAudioNotificationsChange: function(checked) {
+    onEnableAudioNotificationsChange = (checked) => {
         SettingsStore.setValue(
             "audioNotificationsEnabled", null,
             SettingLevel.DEVICE,
@@ -132,7 +132,7 @@ export default createReactClass({
         ).finally(() => {
             this.forceUpdate();
         });
-    },
+    };
 
     /*
      * Returns the email pusher (pusher of type 'email') for a given
@@ -140,7 +140,7 @@ export default createReactClass({
      * pushers are unique over (app ID, pushkey), there will be at most
      * one such pusher.
      */
-    getEmailPusher: function(pushers, address) {
+    getEmailPusher(pushers, address) {
         if (pushers === undefined) {
             return undefined;
         }
@@ -150,9 +150,9 @@ export default createReactClass({
             }
         }
         return undefined;
-    },
+    }
 
-    onEnableEmailNotificationsChange: function(address, checked) {
+    onEnableEmailNotificationsChange = (address, checked) => {
         let emailPusherPromise;
         if (checked) {
             const data = {};
@@ -181,9 +181,9 @@ export default createReactClass({
                 description: _t('An error occurred whilst saving your email notification preferences.'),
             });
         });
-    },
+    };
 
-    onNotifStateButtonClicked: function(event) {
+    onNotifStateButtonClicked = (event) => {
         // FIXME: use .bind() rather than className metadata here surely
         const vectorRuleId = event.target.className.split("-")[0];
         const newPushRuleVectorState = event.target.className.split("-")[1];
@@ -196,11 +196,9 @@ export default createReactClass({
                 this._setPushRuleVectorState(rule, newPushRuleVectorState);
             }
         }
-    },
+    };
 
-    onKeywordsClicked: function(event) {
-        const self = this;
-
+    onKeywordsClicked = (event) => {
         // Compute the keywords list to display
         let keywords = [];
         for (const i in this.state.vectorContentRules.rules) {
@@ -223,8 +221,8 @@ export default createReactClass({
             description: _t('Enter keywords separated by a comma:'),
             button: _t('OK'),
             value: keywords,
-            onFinished: function onFinished(should_leave, newValue) {
-                if (should_leave && newValue !== keywords) {
+            onFinished: (shouldLeave, newValue) => {
+                if (shouldLeave && newValue !== keywords) {
                     let newKeywords = newValue.split(',');
                     for (const i in newKeywords) {
                         newKeywords[i] = newKeywords[i].trim();
@@ -238,25 +236,25 @@ export default createReactClass({
                         return array;
                     }, []);
 
-                    self._setKeywords(newKeywords);
+                    this._setKeywords(newKeywords);
                 }
             },
         });
-    },
+    };
 
-    getRule: function(vectorRuleId) {
+    getRule(vectorRuleId) {
         for (const i in this.state.vectorPushRules) {
             const rule = this.state.vectorPushRules[i];
             if (rule.vectorRuleId === vectorRuleId) {
                 return rule;
             }
         }
-    },
+    }
 
-    _setPushRuleVectorState: function(rule, newPushRuleVectorState) {
+    _setPushRuleVectorState(rule, newPushRuleVectorState) {
         if (rule && rule.vectorState !== newPushRuleVectorState) {
             this.setState({
-                phase: this.phases.LOADING,
+                phase: Notifications.phases.LOADING,
             });
 
             const self = this;
@@ -288,9 +286,9 @@ export default createReactClass({
                 });
             });
         }
-    },
+    }
 
-    _setKeywordsPushRuleVectorState: function(newPushRuleVectorState) {
+    _setKeywordsPushRuleVectorState(newPushRuleVectorState) {
         // Is there really a change?
         if (this.state.vectorContentRules.vectorState === newPushRuleVectorState
             || this.state.vectorContentRules.rules.length === 0) {
@@ -301,7 +299,7 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
 
         this.setState({
-            phase: this.phases.LOADING,
+            phase: Notifications.phases.LOADING,
         });
 
         // Update all rules in self.state.vectorContentRules
@@ -356,11 +354,11 @@ export default createReactClass({
                 onFinished: self._refreshFromServer,
             });
         });
-    },
+    }
 
-    _setKeywords: function(newKeywords) {
+    _setKeywords(newKeywords) {
         this.setState({
-            phase: this.phases.LOADING,
+            phase: Notifications.phases.LOADING,
         });
 
         const self = this;
@@ -410,7 +408,9 @@ export default createReactClass({
                 // when creating the new rule.
                 // Thus, this new rule will join the 'vectorContentRules' set.
                 if (self.state.vectorContentRules.rules.length) {
-                    pushRuleVectorStateKind = PushRuleVectorState.contentRuleVectorStateKind(self.state.vectorContentRules.rules[0]);
+                    pushRuleVectorStateKind = PushRuleVectorState.contentRuleVectorStateKind(
+                        self.state.vectorContentRules.rules[0],
+                    );
                 } else {
                     // ON is default
                     pushRuleVectorStateKind = PushRuleVectorState.ON;
@@ -422,10 +422,9 @@ export default createReactClass({
 
                 if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
                     if (self.state.vectorContentRules.vectorState !== PushRuleVectorState.OFF) {
-                        deferreds.push(cli.addPushRule
-                        ('global', 'content', keyword, {
-                           actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
-                           pattern: keyword,
+                        deferreds.push(cli.addPushRule('global', 'content', keyword, {
+                            actions: PushRuleVectorState.actionsFor(pushRuleVectorStateKind),
+                            pattern: keyword,
                         }));
                     } else {
                         deferreds.push(self._addDisabledPushRule('global', 'content', keyword, {
@@ -440,19 +439,19 @@ export default createReactClass({
                 self._refreshFromServer();
             }, onError);
         }, onError);
-    },
+    }
 
     // Create a push rule but disabled
-    _addDisabledPushRule: function(scope, kind, ruleId, body) {
+    _addDisabledPushRule(scope, kind, ruleId, body) {
         const cli = MatrixClientPeg.get();
         return cli.addPushRule(scope, kind, ruleId, body).then(() =>
             cli.setPushRuleEnabled(scope, kind, ruleId, false),
         );
-    },
+    }
 
     // Check if any legacy im.vector rules need to be ported to the new API
     // for overriding the actions of default rules.
-    _portRulesToNewAPI: function(rulesets) {
+    _portRulesToNewAPI(rulesets) {
         const needsUpdate = [];
         const cli = MatrixClientPeg.get();
 
@@ -485,16 +484,18 @@ export default createReactClass({
             // Otherwise return the rules that we already have.
             return rulesets;
         }
-    },
+    }
 
-    _refreshFromServer: function() {
+    _refreshFromServer = () => {
         const self = this;
-        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).then(function(rulesets) {
+        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(
+            self._portRulesToNewAPI,
+        ).then(function(rulesets) {
             /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
-            const rule_categories = {
+            const ruleCategories = {
                 // The master rule (all notifications disabling)
                 '.m.rule.master': 'master',
 
@@ -521,7 +522,7 @@ export default createReactClass({
             for (const kind in rulesets.global) {
                 for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
                     const r = rulesets.global[kind][i];
-                    const cat = rule_categories[r.rule_id];
+                    const cat = ruleCategories[r.rule_id];
                     r.kind = kind;
 
                     if (r.rule_id[0] === '.') {
@@ -579,12 +580,12 @@ export default createReactClass({
                         "vectorRuleId": "_keywords",
                         "description": (
                             <span>
-                            { _t('Messages containing <span>keywords</span>',
-                                {},
-                                { 'span': (sub) =>
-                                    <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
-                                },
-                            )}
+                                { _t('Messages containing <span>keywords</span>',
+                                    {},
+                                    { 'span': (sub) =>
+                                        <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>,
+                                    },
+                                )}
                             </span>
                         ),
                         "vectorState": self.state.vectorContentRules.vectorState,
@@ -636,12 +637,12 @@ export default createReactClass({
 
         Promise.all([pushRulesPromise, pushersPromise]).then(function() {
             self.setState({
-                phase: self.phases.DISPLAY,
+                phase: Notifications.phases.DISPLAY,
             });
         }, function(error) {
             console.error(error);
             self.setState({
-                phase: self.phases.ERROR,
+                phase: Notifications.phases.ERROR,
             });
         }).finally(() => {
             // actually explicitly update our state  having been deep-manipulating it
@@ -655,9 +656,9 @@ export default createReactClass({
         });
 
         MatrixClientPeg.get().getThreePids().then((r) => this.setState({threepids: r.threepids}));
-    },
+    };
 
-    _onClearNotifications: function() {
+    _onClearNotifications = () => {
         const cli = MatrixClientPeg.get();
 
         cli.getRooms().forEach(r => {
@@ -666,9 +667,9 @@ export default createReactClass({
                 if (events.length) cli.sendReadReceipt(events.pop());
             }
         });
-    },
+    };
 
-    _updatePushRuleActions: function(rule, actions, enabled) {
+    _updatePushRuleActions(rule, actions, enabled) {
         const cli = MatrixClientPeg.get();
 
         return cli.setPushRuleActions(
@@ -681,9 +682,9 @@ export default createReactClass({
                 );
             }
         });
-    },
+    }
 
-    renderNotifRulesTableRow: function(title, className, pushRuleVectorState) {
+    renderNotifRulesTableRow(title, className, pushRuleVectorState) {
         return (
             <tr key={ className }>
                 <th>
@@ -712,9 +713,9 @@ export default createReactClass({
                 </th>
             </tr>
         );
-    },
+    }
 
-    renderNotifRulesTableRows: function() {
+    renderNotifRulesTableRows() {
         const rows = [];
         for (const i in this.state.vectorPushRules) {
             const rule = this.state.vectorPushRules[i];
@@ -726,9 +727,9 @@ export default createReactClass({
             rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
         }
         return rows;
-    },
+    }
 
-    hasEmailPusher: function(pushers, address) {
+    hasEmailPusher(pushers, address) {
         if (pushers === undefined) {
             return false;
         }
@@ -738,17 +739,17 @@ export default createReactClass({
             }
         }
         return false;
-    },
+    }
 
-    emailNotificationsRow: function(address, label) {
+    emailNotificationsRow(address, label) {
         return <LabelledToggleSwitch value={this.hasEmailPusher(this.state.pushers, address)}
-                                     onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
-                                     label={label} key={`emailNotif_${label}`} />;
-    },
+            onChange={this.onEnableEmailNotificationsChange.bind(this, address)}
+            label={label} key={`emailNotif_${label}`} />;
+    }
 
-    render: function() {
+    render() {
         let spinner;
-        if (this.state.phase === this.phases.LOADING) {
+        if (this.state.phase === Notifications.phases.LOADING) {
             const Loader = sdk.getComponent("elements.Spinner");
             spinner = <Loader />;
         }
@@ -756,8 +757,8 @@ export default createReactClass({
         let masterPushRuleDiv;
         if (this.state.masterPushRule) {
             masterPushRuleDiv = <LabelledToggleSwitch value={!this.state.masterPushRule.enabled}
-                                                      onChange={this.onEnableNotificationsChange}
-                                                      label={_t('Enable notifications for this account')}/>;
+                onChange={this.onEnableNotificationsChange}
+                label={_t('Enable notifications for this account')} />;
         }
 
         let clearNotificationsButton;
@@ -785,14 +786,14 @@ export default createReactClass({
 
         const emailThreepids = this.state.threepids.filter((tp) => tp.medium === "email");
         let emailNotificationsRows;
-        if (emailThreepids.length === 0) {
-            emailNotificationsRows = <div>
-                { _t('Add an email address to configure email notifications') }
-            </div>;
-        } else {
+        if (emailThreepids.length > 0) {
             emailNotificationsRows = emailThreepids.map((threePid) => this.emailNotificationsRow(
                 threePid.address, `${_t('Enable email notifications')} (${threePid.address})`,
             ));
+        } else if (SettingsStore.getValue(UIFeature.ThirdPartyID)) {
+            emailNotificationsRows = <div>
+                { _t('Add an email address to configure email notifications') }
+            </div>;
         }
 
         // Build external push rules
@@ -810,7 +811,10 @@ export default createReactClass({
         }
         if (externalKeywords.length) {
             externalKeywords = externalKeywords.join(", ");
-            externalRules.push(<li>{ _t('Notifications on the following keywords follow rules which can’t be displayed here:') } { externalKeywords }</li>);
+            externalRules.push(<li>
+                {_t('Notifications on the following keywords follow rules which can’t be displayed here:') }
+                { externalKeywords }
+            </li>);
         }
 
         let devicesSection;
@@ -870,16 +874,16 @@ export default createReactClass({
                     { spinner }
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
-                                          onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications for this session')} />
+                        onChange={this.onEnableDesktopNotificationsChange}
+                        label={_t('Enable desktop notifications for this session')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
-                                          onChange={this.onEnableDesktopNotificationBodyChange}
-                                          label={_t('Show message in desktop notification')} />
+                        onChange={this.onEnableDesktopNotificationBodyChange}
+                        label={_t('Show message in desktop notification')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
-                                          onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications for this session')} />
+                        onChange={this.onEnableAudioNotificationsChange}
+                        label={_t('Enable audible notifications for this session')} />
 
                     { emailNotificationsRows }
 
@@ -910,5 +914,5 @@ export default createReactClass({
 
             </div>
         );
-    },
-});
+    }
+}

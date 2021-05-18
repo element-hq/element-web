@@ -17,9 +17,27 @@ limitations under the License.
 */
 
 @import "./_font-sizes.scss";
+@import "./_font-weights.scss";
+
+$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
+
+$EventTile_e2e_state_indicator_width: 4px;
+
+$MessageTimestamp_width: 46px; /* 8 + 30 (avatar) + 8 */
+$MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $EventTile_e2e_state_indicator_width);
 
 :root {
     font-size: 10px;
+
+    --transition-short: .1s;
+    --transition-standard: .3s;
+}
+
+@media (prefers-reduced-motion) {
+    :root {
+        --transition-short: 0;
+        --transition-standard: 0;
+    }
 }
 
 html {
@@ -55,6 +73,10 @@ pre, code {
 
 .text-success {
     color: $accent-color;
+}
+
+.text-muted {
+    color: $muted-fg-color;
 }
 
 b {
@@ -163,7 +185,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         border: 1px solid rgba($primary-fg-color, .1);
         // these things should probably not be defined globally
         margin: 9px;
-        flex: 0 0 auto;
     }
 
     .mx_textinput {
@@ -204,12 +225,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 /* Prevent ugly dotted highlight around selected elements in Firefox */
 ::-moz-focus-inner {
     border: 0;
-}
-
-/* applied to side-panels and messagepanel when in RoomSettings */
-.mx_fadable {
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
 }
 
 // These are magic constants which are excluded from tinting, to let themes
@@ -260,7 +275,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     font-weight: 300;
     font-size: $font-15px;
     position: relative;
-    padding: 25px 30px 30px 30px;
+    padding: 24px;
     max-height: 80%;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
     border-radius: 8px;
@@ -298,7 +313,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_lightbox .mx_Dialog_background {
-    opacity: 0.85;
+    opacity: $lightbox-background-bg-opacity;
     background-color: $lightbox-background-bg-color;
 }
 
@@ -310,6 +325,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     max-width: 100%;
     max-height: 100%;
     pointer-events: none;
+    padding: 0;
 }
 
 .mx_Dialog_header {
@@ -327,6 +343,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_title {
     font-size: $font-22px;
+    font-weight: $font-semi-bold;
     line-height: $font-36px;
     color: $dialog-title-fg-color;
 }
@@ -352,8 +369,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     background-color: $dialog-close-fg-color;
     cursor: pointer;
     position: absolute;
-    top: 4px;
-    right: 0px;
+    top: 10px;
+    right: 0;
 }
 
 .mx_Dialog_content {
@@ -366,6 +383,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_Dialog_buttons {
     margin-top: 20px;
     text-align: right;
+
+    .mx_Dialog_buttons_additive {
+        // The consumer is responsible for positioning their elements.
+        float: left;
+    }
 }
 
 /* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
@@ -384,6 +406,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 1px solid $accent-color;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
+    font-family: inherit;
 }
 
 .mx_Dialog button:last-child {
@@ -478,54 +501,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     margin-top: 69px;
 }
 
-.mx_Beta {
-    color: red;
-    margin-right: 10px;
-    position: relative;
-    top: -3px;
-    background-color: white;
-    padding: 0 4px;
-    border-radius: 3px;
-    border: 1px solid darkred;
-    cursor: help;
-    transition-duration: 200ms;
-    font-size: smaller;
-    filter: opacity(0.5);
-}
-
-.mx_Beta:hover {
-    color: white;
-    border: 1px solid gray;
-    background-color: darkred;
-}
-
-.mx_TintableSvgButton {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-content: center;
-}
-
-.mx_TintableSvgButton object {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.mx_TintableSvgButton span {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-
 // username colors
 // used by SenderProfile & RoomPreviewBar
 .mx_Username_color1 {
@@ -595,6 +570,13 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     }
 }
 
+@define-mixin ProgressBarBgColour $colour {
+    background-color: $colour;
+    &::-webkit-progress-bar {
+        background-color: $colour;
+    }
+}
+
 @define-mixin ProgressBarBorderRadius $radius {
     border-radius: $radius;
     &::-moz-progress-bar {
@@ -603,5 +585,17 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     &::-webkit-progress-bar,
     &::-webkit-progress-value {
         border-radius: $radius;
+    }
+}
+
+@define-mixin unreal-focus {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+
+    /* WebKit gets its native focus styles. */
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto;
     }
 }

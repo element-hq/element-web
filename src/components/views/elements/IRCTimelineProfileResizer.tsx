@@ -18,6 +18,7 @@ import React from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
 import Draggable, {ILocationState} from './Draggable';
 import { SettingLevel } from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     // Current room
@@ -31,6 +32,7 @@ interface IState {
     IRCLayoutRoot: HTMLElement;
 }
 
+@replaceableComponent("views.elements.IRCTimelineProfileResizer")
 export default class IRCTimelineProfileResizer extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -78,7 +80,12 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
 
     private onMoueUp(event: MouseEvent) {
         if (this.props.roomId) {
-            SettingsStore.setValue("ircDisplayNameWidth", this.props.roomId, SettingLevel.ROOM_DEVICE, this.state.width);
+            SettingsStore.setValue(
+                "ircDisplayNameWidth",
+                this.props.roomId,
+                SettingLevel.ROOM_DEVICE,
+                this.state.width,
+            );
         }
     }
 

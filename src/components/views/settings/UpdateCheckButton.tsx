@@ -42,7 +42,7 @@ function getStatusText(status: UpdateCheckStatus, errorDetail?: string) {
             return _t('Downloading update...');
         case UpdateCheckStatus.Ready:
             return _t("New version available. <a>Update now.</a>", {}, {
-                a: sub => <AccessibleButton kind="link" onClick={installUpdate}>{sub}</AccessibleButton>
+                a: sub => <AccessibleButton kind="link" onClick={installUpdate}>{sub}</AccessibleButton>,
             });
     }
 }

@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {forwardRef} from "react";
 
-export default ({mxEvent}) => {
+export default forwardRef(({mxEvent}, ref) => {
     const text = mxEvent.getContent().body;
     return (
-        <span className="mx_UnknownBody">
+        <span className="mx_UnknownBody" ref={ref}>
             { text }
         </span>
     );
-};
+});

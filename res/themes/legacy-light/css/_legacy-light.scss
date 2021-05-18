@@ -23,6 +23,8 @@ $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #2e2f32;
+$secondary-fg-color: $primary-fg-color;
+$tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
@@ -65,8 +67,8 @@ $preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #f2f5f8;
 $tertiary-accent-color: #d3efe1;
 
-$tagpanel-bg-color: #27303a;
-$inverted-bg-color: $tagpanel-bg-color;
+$groupFilterPanel-bg-color: #27303a;
+$inverted-bg-color: $groupFilterPanel-bg-color;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -94,6 +96,8 @@ $input-valid-border-color: $accent-color;
 $input-invalid-border-color: $warning-color;
 
 $field-focused-label-bg-color: #ffffff;
+
+$resend-button-divider-color: $input-darker-bg-color;
 
 $button-bg-color: $accent-color;
 $button-fg-color: white;
@@ -125,6 +129,7 @@ $dialog-close-fg-color: #c1c1c1;
 
 $dialog-background-bg-color: #e9e9e9;
 $lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.95;
 
 $imagebody-giflabel: rgba(0, 0, 0, 0.7);
 $imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
@@ -142,10 +147,9 @@ $blockquote-fg-color: #777;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #e7e7e7;
-$settings-profile-overlay-bg-color: #000;
-$settings-profile-overlay-placeholder-bg-color: transparent;
-$settings-profile-overlay-fg-color: #fff;
 $settings-profile-overlay-placeholder-fg-color: #2e2f32;
+$settings-profile-button-bg-color: #e7e7e7;
+$settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
 $settings-subsection-fg-color: #61708b;
 
 $voip-decline-color: #f48080;
@@ -161,25 +165,31 @@ $roomheader-color: #45474a;
 $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
-$tagpanel-button-color: #91a1c0;
-$roomheader-button-color: #91a1c0;
+$groupFilterPanel-button-color: #91a1c0;
 $groupheader-button-color: #91a1c0;
 $rightpanel-button-color: #91a1c0;
-$composer-button-color: #91a1c0;
+$icon-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #91a1c0;
 $header-divider-color: #91a1c0;
 
+// this probably shouldn't have it's own colour
+$voipcall-plinth-color: #F4F6FA;
+
 // ********************
 
 $theme-button-bg-color: #e3e8f0;
 
 $roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
 $roomlist-header-color: $primary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
+
+$groupFilterPanel-divider-color: $roomlist-header-color;
 
 $roomtile-preview-color: #9e9e9e;
 $roomtile-default-badge-bg-color: #61708b;
@@ -205,6 +215,7 @@ $panel-divider-color: #dee1f3;
 // ********************
 
 $widget-menu-bar-bg-color: $secondary-accent-color;
+$widget-body-bg-color: #fff;
 
 // ********************
 
@@ -214,8 +225,6 @@ $widget-menu-bar-bg-color: $secondary-accent-color;
 $yellow-background: #fff8e3;
 
 // event tile lifecycle
-$event-encrypting-color: #abddbc;
-$event-sending-color: #ddd;
 $event-notsent-color: #f44;
 
 $event-highlight-fg-color: $warning-color;
@@ -228,7 +237,9 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$copy-button-url: "$(res)/img/icon_copy_message.svg";
+$copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
+$collapse-button-url: "$(res)/img/feather-customised/minimise.svg";
+$expand-button-url: "$(res)/img/feather-customised/maximise.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
@@ -271,7 +282,8 @@ $togglesw-ball-color: #fff;
 $slider-selection-color: $accent-color;
 $slider-background-color: #c1c9d6;
 
-$progressbar-color: #000;
+$progressbar-fg-color: $accent-color;
+$progressbar-bg-color: rgba(141, 151, 165, 0.2);
 
 $room-warning-bg-color: $yellow-background;
 
@@ -301,7 +313,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: $reaction-row-button-border-color;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: #27303a;
@@ -310,6 +322,22 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #E3E8F0;
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: $primary-bg-color;
+
+// See non-legacy _light for variable information
+$voice-record-stop-symbol-color: #ff4b55;
+$voice-record-live-circle-color: #ff4b55;
+$voice-record-stop-border-color: #E3E8F0;
+$voice-record-waveform-bg-color: $message-body-panel-bg-color;
+$voice-record-waveform-fg-color: $message-body-panel-fg-color;
+$voice-record-waveform-incomplete-fg-color: #C1C6CD;
+$voice-record-icon-color: $tertiary-fg-color;
+$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
+$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
@@ -322,7 +350,7 @@ $composer-shadow-color: tranparent;
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: $font-family;
     font-size: $font-14px;
     color: $button-fg-color;

@@ -18,10 +18,9 @@ import * as sdk from '../../../index';
 import React, {createRef} from 'react';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 export function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -40,71 +39,74 @@ export const roomShape = PropTypes.shape({
     guestCanJoin: PropTypes.bool,
 });
 
-export default createReactClass({
-    propTypes: {
+@replaceableComponent("views.rooms.RoomDetailRow")
+export default class RoomDetailRow extends React.Component {
+    static propTypes = {
         room: roomShape,
         // passes ev, room as args
         onClick: PropTypes.func,
         onMouseDown: PropTypes.func,
-    },
+    };
 
-    _linkifyTopic: function() {
+    constructor(props) {
+        super(props);
+
+        this._topic = createRef();
+    }
+
+    componentDidMount() {
+        this._linkifyTopic();
+    }
+
+    componentDidUpdate() {
+        this._linkifyTopic();
+    }
+
+    _linkifyTopic() {
         if (this._topic.current) {
             linkifyElement(this._topic.current);
         }
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._topic = createRef();
-    },
-
-    componentDidMount: function() {
-        this._linkifyTopic();
-    },
-
-    componentDidUpdate: function() {
-        this._linkifyTopic();
-    },
-
-    onClick: function(ev) {
+    onClick = (ev) => {
         ev.preventDefault();
         if (this.props.onClick) {
             this.props.onClick(ev, this.props.room);
         }
-    },
+    };
 
-    onTopicClick: function(ev) {
+    onTopicClick = (ev) => {
         // When clicking a link in the topic, prevent the event being propagated
         // to `onClick`.
         ev.stopPropagation();
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const room = this.props.room;
         const name = room.name || getDisplayAliasForRoom(room) || _t('Unnamed room');
 
         const guestRead = room.worldReadable ? (
-                <div className="mx_RoomDirectory_perm">{ _t('World readable') }</div>
-            ) : <div />;
+            <div className="mx_RoomDirectory_perm">{ _t('World readable') }</div>
+        ) : <div />;
         const guestJoin = room.guestCanJoin ? (
-                <div className="mx_RoomDirectory_perm">{ _t('Guests can join') }</div>
-            ) : <div />;
+            <div className="mx_RoomDirectory_perm">{ _t('Guests can join') }</div>
+        ) : <div />;
 
         const perms = (guestRead || guestJoin) ? (<div className="mx_RoomDirectory_perms">
             { guestRead }&nbsp;
             { guestJoin }
         </div>) : <div />;
 
+        let avatarUrl = null;
+        if (room.avatarUrl) avatarUrl = mediaFromMxc(room.avatarUrl).getSquareThumbnailHttp(24);
+
         return <tr key={room.roomId} onClick={this.onClick} onMouseDown={this.props.onMouseDown}>
             <td className="mx_RoomDirectory_roomAvatar">
                 <BaseAvatar width={24} height={24} resizeMethod='crop'
                     name={name} idName={name}
-                    url={getHttpUriForMxc(
-                            MatrixClientPeg.get().getHomeserverUrl(),
-                            room.avatarUrl, 24, 24, "crop")} />
+                    url={avatarUrl} />
             </td>
             <td className="mx_RoomDirectory_roomDescription">
                 <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
@@ -118,5 +120,5 @@ export default createReactClass({
                 { room.numJoinedMembers }
             </td>
         </tr>;
-    },
-});
+    }
+}

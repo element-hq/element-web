@@ -18,16 +18,15 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /**
  * Basic container for buttons in modal dialogs.
  */
-export default createReactClass({
-    displayName: "DialogButtons",
-
-    propTypes: {
+@replaceableComponent("views.elements.DialogButtons")
+export default class DialogButtons extends React.Component {
+    static propTypes = {
         // The primary button which is styled differently and has default focus.
         primaryButton: PropTypes.node.isRequired,
 
@@ -57,20 +56,21 @@ export default createReactClass({
 
         // disables only the primary button
         primaryDisabled: PropTypes.bool,
-    },
 
-    getDefaultProps: function() {
-        return {
-            hasCancel: true,
-            disabled: false,
-        };
-    },
+        // something to stick next to the buttons, optionally
+        additive: PropTypes.element,
+    };
 
-    _onCancelClick: function() {
+    static defaultProps = {
+        hasCancel: true,
+        disabled: false,
+    };
+
+    _onCancelClick = () => {
         this.props.onCancel();
-    },
+    };
 
-    render: function() {
+    render() {
         let primaryButtonClassName = "mx_Dialog_primary";
         if (this.props.primaryButtonClass) {
             primaryButtonClassName += " " + this.props.primaryButtonClass;
@@ -90,8 +90,14 @@ export default createReactClass({
             </button>;
         }
 
+        let additive = null;
+        if (this.props.additive) {
+            additive = <div className="mx_Dialog_buttons_additive">{this.props.additive}</div>;
+        }
+
         return (
             <div className="mx_Dialog_buttons">
+                { additive }
                 { cancelButton }
                 { this.props.children }
                 <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
@@ -104,5 +110,5 @@ export default createReactClass({
                 </button>
             </div>
         );
-    },
-});
+    }
+}

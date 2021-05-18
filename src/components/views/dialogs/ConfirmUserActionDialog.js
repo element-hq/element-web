@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 /*
  * A dialog for confirming an operation on another user.
@@ -30,9 +31,9 @@ import { GroupMemberType } from '../../../groups';
  * to make it obvious what is going to happen.
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
  */
-export default createReactClass({
-    displayName: 'ConfirmUserActionDialog',
-    propTypes: {
+@replaceableComponent("views.dialogs.ConfirmUserActionDialog")
+export default class ConfirmUserActionDialog extends React.Component {
+    static propTypes = {
         // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
         member: PropTypes.object,
         // group member object. Supply either this or 'member'
@@ -48,35 +49,36 @@ export default createReactClass({
         askReason: PropTypes.bool,
         danger: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    getDefaultProps: () => ({
+    static defaultProps = {
         danger: false,
         askReason: false,
-    }),
+    };
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount: function() {
+    constructor(props) {
+        super(props);
+
         this._reasonField = null;
-    },
+    }
 
-    onOk: function() {
+    onOk = () => {
         let reason;
         if (this._reasonField) {
             reason = this._reasonField.value;
         }
         this.props.onFinished(true, reason);
-    },
+    };
 
-    onCancel: function() {
+    onCancel = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    _collectReasonField: function(e) {
+    _collectReasonField = e => {
         this._reasonField = e;
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
@@ -107,8 +109,9 @@ export default createReactClass({
             name = this.props.member.name;
             userId = this.props.member.userId;
         } else {
-            const httpAvatarUrl = this.props.groupMember.avatarUrl ?
-                this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl, 48, 48) : null;
+            const httpAvatarUrl = this.props.groupMember.avatarUrl
+                ? mediaFromMxc(this.props.groupMember.avatarUrl).getSquareThumbnailHttp(48)
+                : null;
             name = this.props.groupMember.displayname || this.props.groupMember.userId;
             userId = this.props.groupMember.userId;
             avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
@@ -134,5 +137,5 @@ export default createReactClass({
                     onCancel={this.onCancel} />
             </BaseDialog>
         );
-    },
-});
+    }
+}

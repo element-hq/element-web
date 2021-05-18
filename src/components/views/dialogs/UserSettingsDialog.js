@@ -32,6 +32,8 @@ import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
+import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export const USER_GENERAL_TAB = "USER_GENERAL_TAB";
 export const USER_APPEARANCE_TAB = "USER_APPEARANCE_TAB";
@@ -44,6 +46,7 @@ export const USER_LABS_TAB = "USER_LABS_TAB";
 export const USER_MJOLNIR_TAB = "USER_MJOLNIR_TAB";
 export const USER_HELP_TAB = "USER_HELP_TAB";
 
+@replaceableComponent("views.dialogs.UserSettingsDialog")
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -54,7 +57,7 @@ export default class UserSettingsDialog extends React.Component {
         super();
 
         this.state = {
-            mjolnirEnabled: SettingsStore.isFeatureEnabled("feature_mjolnir"),
+            mjolnirEnabled: SettingsStore.getValue("feature_mjolnir"),
         };
     }
 
@@ -86,12 +89,14 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_appearanceIcon",
             <AppearanceUserSettingsTab />,
         ));
-        tabs.push(new Tab(
-            USER_FLAIR_TAB,
-            _td("Flair"),
-            "mx_UserSettingsDialog_flairIcon",
-            <FlairUserSettingsTab />,
-        ));
+        if (SettingsStore.getValue(UIFeature.Flair)) {
+            tabs.push(new Tab(
+                USER_FLAIR_TAB,
+                _td("Flair"),
+                "mx_UserSettingsDialog_flairIcon",
+                <FlairUserSettingsTab />,
+            ));
+        }
         tabs.push(new Tab(
             USER_NOTIFICATIONS_TAB,
             _td("Notifications"),
@@ -104,19 +109,26 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_preferencesIcon",
             <PreferencesUserSettingsTab />,
         ));
-        tabs.push(new Tab(
-            USER_VOICE_TAB,
-            _td("Voice & Video"),
-            "mx_UserSettingsDialog_voiceIcon",
-            <VoiceUserSettingsTab />,
-        ));
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            tabs.push(new Tab(
+                USER_VOICE_TAB,
+                _td("Voice & Video"),
+                "mx_UserSettingsDialog_voiceIcon",
+                <VoiceUserSettingsTab />,
+            ));
+        }
+
         tabs.push(new Tab(
             USER_SECURITY_TAB,
             _td("Security & Privacy"),
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
-        if (SdkConfig.get()['showLabsSettings'] || SettingsStore.getLabsFeatures().length > 0) {
+        // Show the Labs tab if enabled or if there are any active betas
+        if (SdkConfig.get()['showLabsSettings']
+            || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
+        ) {
             tabs.push(new Tab(
                 USER_LABS_TAB,
                 _td("Labs"),
@@ -146,9 +158,13 @@ export default class UserSettingsDialog extends React.Component {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         return (
-            <BaseDialog className='mx_UserSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Settings")}>
-                <div className='ms_SettingsDialog_content'>
+            <BaseDialog
+                className='mx_UserSettingsDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Settings")}
+            >
+                <div className='mx_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} initialTabId={this.props.initialTabId} />
                 </div>
             </BaseDialog>

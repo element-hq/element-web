@@ -29,7 +29,15 @@ interface IProps extends IGenericToastProps {
 
 const SECOND = 1000;
 
-const GenericExpiringToast: React.FC<IProps> = ({description, acceptLabel, dismissLabel, onAccept, onDismiss, toastKey, numSeconds}) => {
+const GenericExpiringToast: React.FC<IProps> = ({
+    description,
+    acceptLabel,
+    dismissLabel,
+    onAccept,
+    onDismiss,
+    toastKey,
+    numSeconds,
+}) => {
     const onReject = () => {
         if (onDismiss) onDismiss();
         ToastStore.sharedInstance().dismissToast(toastKey);

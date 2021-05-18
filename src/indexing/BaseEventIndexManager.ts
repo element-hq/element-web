@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -105,10 +105,13 @@ export default abstract class BaseEventIndexManager {
     /**
      * Initialize the event index for the given user.
      *
+     * @param {string} userId The event that should be added to the index.
+     * @param {string} deviceId The profile of the event sender at the
+     *
      * @return {Promise} A promise that will resolve when the event index is
      * initialized.
      */
-    async initEventIndex(): Promise<void> {
+    async initEventIndex(userId: string, deviceId: string): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -127,6 +130,10 @@ export default abstract class BaseEventIndexManager {
     }
 
     async deleteEvent(eventId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    async isEventIndexEmpty(): Promise<boolean> {
         throw new Error("Unimplemented");
     }
 

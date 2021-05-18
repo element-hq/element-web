@@ -16,9 +16,11 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef } from "react";
-import TagPanel from "./TagPanel";
-import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import classNames from "classnames";
+import { Room } from "matrix-js-sdk/src/models/room";
+
+import GroupFilterPanel from "./GroupFilterPanel";
+import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
@@ -32,11 +34,15 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
-import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
+import RoomListNumResults from "../views/rooms/RoomListNumResults";
+import LeftPanelWidget from "./LeftPanelWidget";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
+import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
+import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 
 interface IProps {
     isMinimized: boolean;
@@ -45,21 +51,23 @@ interface IProps {
 
 interface IState {
     showBreadcrumbs: boolean;
-    showTagPanel: boolean;
+    showGroupFilterPanel: boolean;
+    activeSpace?: Room;
 }
 
 // List of CSS classes which should be included in keyboard navigation within the room list
 const cssClasses = [
     "mx_RoomSearch_input",
-    "mx_RoomSearch_icon", // minimized <RoomSearch />
+    "mx_RoomSearch_minimizedHandle", // minimized <RoomSearch />
     "mx_RoomSublist_headerText",
     "mx_RoomTile",
     "mx_RoomSublist_showNButton",
 ];
 
+@replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
-    private tagPanelWatcherRef: string;
+    private groupFilterPanelWatcherRef: string;
     private bgImageWatcherRef: string;
     private focusedElement = null;
     private isDoingStickyHeaders = false;
@@ -69,16 +77,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         this.state = {
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
-            showTagPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
+            showGroupFilterPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
+            activeSpace: SpaceStore.instance.activeSpace,
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onBackgroundImageUpdate);
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         this.bgImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage", null, this.onBackgroundImageUpdate);
-        this.tagPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
-            this.setState({showTagPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
+        this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
+            this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
 
         // We watch the middle panel because we don't actually get resized, the middle panel does.
@@ -87,13 +97,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        SettingsStore.unwatchSetting(this.tagPanelWatcherRef);
+        SettingsStore.unwatchSetting(this.groupFilterPanelWatcherRef);
         SettingsStore.unwatchSetting(this.bgImageWatcherRef);
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
+        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
+
+    private updateActiveSpace = (activeSpace: Room) => {
+        this.setState({ activeSpace });
+    };
 
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
@@ -116,10 +131,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
         const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
         if (settingBgMxc) {
-            avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(settingBgMxc, avatarSize, avatarSize);
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
         }
+
         const avatarUrlProp = `url(${avatarUrl})`;
-        if (document.body.style.getPropertyValue("--avatar-url") !== avatarUrlProp) {
+        if (!avatarUrl) {
+            document.body.style.removeProperty("--avatar-url");
+        } else if (document.body.style.getPropertyValue("--avatar-url") !== avatarUrlProp) {
             document.body.style.setProperty("--avatar-url", avatarUrlProp);
         }
     };
@@ -136,9 +154,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private doStickyHeaders(list: HTMLDivElement) {
         const topEdge = list.scrollTop;
         const bottomEdge = list.offsetHeight + list.scrollTop;
-        const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist");
+        const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist:not(.mx_RoomSublist_hidden)");
 
-        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
         const headerStickyWidth = list.clientWidth - headerRightMargin;
 
         // We track which styles we want on a target before making the changes to avoid
@@ -209,9 +227,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
+
+                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const newBottom = `${offset}px`;
+                if (header.style.bottom !== newBottom) {
+                    header.style.bottom = newBottom;
+                }
             } else {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
+                }
+                if (header.style.bottom) {
+                    header.style.removeProperty('bottom');
                 }
             }
 
@@ -270,17 +297,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private onKeyDown = (ev: React.KeyboardEvent) => {
         if (!this.focusedElement) return;
 
-        switch (ev.key) {
-            case Key.ARROW_UP:
-            case Key.ARROW_DOWN:
+        const action = getKeyBindingsManager().getRoomListAction(ev);
+        switch (action) {
+            case RoomListAction.NextRoom:
+            case RoomListAction.PrevRoom:
                 ev.stopPropagation();
                 ev.preventDefault();
-                this.onMoveFocus(ev.key === Key.ARROW_UP);
+                this.onMoveFocus(action === RoomListAction.PrevRoom);
                 break;
         }
     };
 
-    private onEnter = () => {
+    private selectRoom = () => {
         const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile");
         if (firstRoom) {
             firstRoom.click();
@@ -319,7 +347,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             if (element) {
                 classes = element.classList;
             }
-        } while (element && !cssClasses.some(c => classes.contains(c)));
+        } while (element && (!cssClasses.some(c => classes.contains(c)) || element.offsetParent === null));
 
         if (element) {
             element.focus();
@@ -361,11 +389,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             >
                 <RoomSearch
                     isMinimized={this.props.isMinimized}
-                    onVerticalArrow={this.onKeyDown}
-                    onEnter={this.onEnter}
+                    onKeyDown={this.onKeyDown}
+                    onSelectRoom={this.selectRoom}
                 />
                 <AccessibleTooltipButton
-                    className="mx_LeftPanel_exploreButton"
+                    className={classNames("mx_LeftPanel_exploreButton", {
+                        mx_LeftPanel_exploreButton_space: !!this.state.activeSpace,
+                    })}
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
                 />
@@ -374,26 +404,28 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const tagPanel = !this.state.showTagPanel ? null : (
-            <div className="mx_LeftPanel_tagPanelContainer">
-                <TagPanel/>
-                {SettingsStore.isFeatureEnabled("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
-            </div>
-        );
+        let leftLeftPanel;
+        if (this.state.showGroupFilterPanel) {
+            leftLeftPanel = (
+                <div className="mx_LeftPanel_GroupFilterPanelContainer">
+                    <GroupFilterPanel />
+                    {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
+                </div>
+            );
+        }
 
         const roomList = <RoomList
             onKeyDown={this.onKeyDown}
-            resizeNotifier={null}
-            collapsed={false}
+            resizeNotifier={this.props.resizeNotifier}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
             onResize={this.onResize}
+            activeSpace={this.state.activeSpace}
         />;
 
         const containerClasses = classNames({
             "mx_LeftPanel": true,
-            "mx_LeftPanel_hasTagPanel": !!tagPanel,
             "mx_LeftPanel_minimized": this.props.isMinimized,
         });
 
@@ -404,11 +436,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses}>
-                {tagPanel}
+                {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     {this.renderBreadcrumbs()}
+                    <RoomListNumResults />
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
@@ -421,6 +454,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
+                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
                 </aside>
             </div>
         );

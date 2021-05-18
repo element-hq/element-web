@@ -22,7 +22,9 @@ import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
+import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
 /**
  * Invites multiple addresses to a room
@@ -38,22 +40,42 @@ export function inviteMultipleToRoom(roomId, addrs) {
     return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
 }
 
-export function showStartChatInviteDialog() {
+export function showStartChatInviteDialog(initialText) {
     // This dialog handles the room creation internally - we don't need to worry about it.
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Start DM', '', InviteDialog, {kind: KIND_DM},
+        'Start DM', '', InviteDialog, {kind: KIND_DM, initialText},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }
 
-export function showRoomInviteDialog(roomId) {
+export function showRoomInviteDialog(roomId, initialText = "") {
     // This dialog handles the room creation internally - we don't need to worry about it.
-    const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
-        'Invite Users', '', InviteDialog, {kind: KIND_INVITE, roomId},
+        "Invite Users", "", InviteDialog, {
+            kind: KIND_INVITE,
+            initialText,
+            roomId,
+        },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
+}
+
+export function showCommunityRoomInviteDialog(roomId, communityName) {
+    Modal.createTrackedDialog(
+        'Invite Users to Community', '', CommunityPrototypeInviteDialog, {communityName, roomId},
+        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+    );
+}
+
+export function showCommunityInviteDialog(communityId) {
+    const chat = CommunityPrototypeStore.instance.getGeneralChat(communityId);
+    if (chat) {
+        const name = CommunityPrototypeStore.instance.getCommunityName(communityId);
+        showCommunityRoomInviteDialog(chat.roomId, name);
+    } else {
+        throw new Error("Failed to locate appropriate room to start an invite in");
+    }
 }
 
 /**
@@ -77,7 +99,7 @@ export function isValid3pidInvite(event) {
 export function inviteUsersToRoom(roomId, userIds) {
     return inviteMultipleToRoom(roomId, userIds).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
-        return _showAnyInviteErrors(result.states, room, result.inviter);
+        showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
         console.error(err.stack);
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -88,7 +110,7 @@ export function inviteUsersToRoom(roomId, userIds) {
     });
 }
 
-function _showAnyInviteErrors(addrs, room, inviter) {
+export function showAnyInviteErrors(addrs, room, inviter) {
     // Show user any errors
     const failedUsers = Object.keys(addrs).filter(a => addrs[a] === 'error');
     if (failedUsers.length === 1 && inviter.fatal) {
@@ -100,6 +122,7 @@ function _showAnyInviteErrors(addrs, room, inviter) {
             title: _t("Failed to invite users to the room:", {roomName: room.name}),
             description: inviter.getErrorText(failedUsers[0]),
         });
+        return false;
     } else {
         const errorList = [];
         for (const addr of failedUsers) {
@@ -118,8 +141,9 @@ function _showAnyInviteErrors(addrs, room, inviter) {
                 title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
                 description,
             });
+            return false;
         }
     }
 
-    return addrs;
+    return true;
 }

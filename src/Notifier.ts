@@ -33,6 +33,10 @@ import Modal from './Modal';
 import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import {SettingLevel} from "./settings/SettingLevel";
+import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
+import RoomViewStore from "./stores/RoomViewStore";
+import UserActivity from "./UserActivity";
+import {mediaFromMxc} from "./customisations/Media";
 
 /*
  * Dispatches:
@@ -147,7 +151,7 @@ export const Notifier = {
         // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
 
         return {
-            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            url: mediaFromMxc(content.url).srcHttp,
             name: content.name,
             type: content.type,
             size: content.size,
@@ -217,7 +221,7 @@ export const Notifier = {
         // calculated value. It is determined based upon whether or not the master rule is enabled
         // and other flags. Setting it here would cause a circular reference.
 
-        Analytics.trackEvent('Notifier', 'Set Enabled', enable);
+        Analytics.trackEvent('Notifier', 'Set Enabled', String(enable));
 
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
@@ -258,7 +262,7 @@ export const Notifier = {
         }
         // set the notifications_hidden flag, as the user has knowingly interacted
         // with the setting we shouldn't nag them any further
-        this.setToolbarHidden(true);
+        this.setPromptHidden(true);
     },
 
     isEnabled: function() {
@@ -283,10 +287,10 @@ export const Notifier = {
         return SettingsStore.getValue("audioNotificationsEnabled");
     },
 
-    setToolbarHidden: function(hidden: boolean, persistent = true) {
+    setPromptHidden: function(hidden: boolean, persistent = true) {
         this.toolbarHidden = hidden;
 
-        Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
+        Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', String(hidden));
 
         hideNotificationsToast();
 
@@ -296,17 +300,17 @@ export const Notifier = {
         }
     },
 
-    shouldShowToolbar: function() {
+    shouldShowPrompt: function() {
         const client = MatrixClientPeg.get();
         if (!client) {
             return false;
         }
         const isGuest = client.isGuest();
-        return !isGuest && this.supportsDesktopNotifications() &&
-            !this.isEnabled() && !this._isToolbarHidden();
+        return !isGuest && this.supportsDesktopNotifications() && !isPushNotifyDisabled() &&
+            !this.isEnabled() && !this._isPromptHidden();
     },
 
-    _isToolbarHidden: function() {
+    _isPromptHidden: function() {
         // Check localStorage for any such meta data
         if (global.localStorage) {
             return global.localStorage.getItem("notifications_hidden") === "true";
@@ -375,6 +379,15 @@ export const Notifier = {
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions && actions.notify) {
+            if (RoomViewStore.getRoomId() === room.roomId && UserActivity.sharedInstance().userActiveRecently()) {
+                // don't bother notifying as user was recently active in this room
+                return;
+            }
+            if (SettingsStore.getValue("doNotDisturb")) {
+                // Don't bother the user if they didn't ask to be bothered
+                return;
+            }
+
             if (this.isEnabled()) {
                 this._displayPopupNotification(ev, room);
             }

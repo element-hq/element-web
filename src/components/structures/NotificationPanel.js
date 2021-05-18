@@ -17,53 +17,55 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
+import PropTypes from "prop-types";
+
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as sdk from "../../index";
+import BaseCard from "../views/right_panel/BaseCard";
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
-const NotificationPanel = createReactClass({
-    displayName: 'NotificationPanel',
+@replaceableComponent("structures.NotificationPanel")
+class NotificationPanel extends React.Component {
+    static propTypes = {
+        onClose: PropTypes.func.isRequired,
+    };
 
-    propTypes: {
-    },
-
-    render: function() {
+    render() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const Loader = sdk.getComponent("elements.Spinner");
 
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
             <h2>{_t('You’re all caught up')}</h2>
-            <p>{_t('You have no visible notifications in this room.')}</p>
+            <p>{_t('You have no visible notifications.')}</p>
         </div>);
 
+        let content;
         const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
         if (timelineSet) {
-            return (
-                <div className="mx_NotificationPanel" role="tabpanel">
-                    <TimelinePanel key={"NotificationPanel_" + this.props.roomId}
-                        manageReadReceipts={false}
-                        manageReadMarkers={false}
-                        timelineSet={timelineSet}
-                        showUrlPreview={false}
-                        tileShape="notif"
-                        empty={emptyState}
-                    />
-                </div>
+            content = (
+                <TimelinePanel
+                    manageReadReceipts={false}
+                    manageReadMarkers={false}
+                    timelineSet={timelineSet}
+                    showUrlPreview={false}
+                    tileShape="notif"
+                    empty={emptyState}
+                />
             );
         } else {
             console.error("No notifTimelineSet available!");
-            return (
-                <div className="mx_NotificationPanel" role="tabpanel">
-                    <Loader />
-                </div>
-            );
+            content = <Loader />;
         }
-    },
-});
+
+        return <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
+            { content }
+        </BaseCard>;
+    }
+}
 
 export default NotificationPanel;

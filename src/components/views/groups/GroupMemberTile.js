@@ -18,45 +18,38 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
-export default createReactClass({
-    displayName: 'GroupMemberTile',
-
-    propTypes: {
+@replaceableComponent("views.groups.GroupMemberTile")
+export default class GroupMemberTile extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
         member: GroupMemberType.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {};
-    },
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
-
-    onClick: function(e) {
+    onClick = e => {
         dis.dispatch({
             action: 'view_group_user',
             member: this.props.member,
             groupId: this.props.groupId,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
         const name = this.props.member.displayname || this.props.member.userId;
-        const avatarUrl = this.context.mxcUrlToHttp(
-            this.props.member.avatarUrl,
-            36, 36, 'crop',
-        );
+        const avatarUrl = this.props.member.avatarUrl
+            ? mediaFromMxc(this.props.member.avatarUrl).getSquareThumbnailHttp(36)
+            : null;
 
         const av = (
             <BaseAvatar
@@ -74,5 +67,5 @@ export default createReactClass({
                 powerStatus={this.props.member.isPrivileged ? EntityTile.POWER_STATUS_ADMIN : null}
             />
         );
-    },
-});
+    }
+}

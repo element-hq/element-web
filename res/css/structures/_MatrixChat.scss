@@ -66,7 +66,7 @@ limitations under the License.
 }
 
 /* not the left panel, and not the resize handle, so the roomview/groupview/... */
-.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_ResizeHandle) {
+.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle) {
     background-color: $primary-bg-color;
 
     flex: 1 1 0;
@@ -79,7 +79,6 @@ limitations under the License.
     height: 100%;
 }
 
-.mx_MatrixChat > .mx_LeftPanel2:hover + .mx_ResizeHandle_horizontal,
 .mx_MatrixChat > .mx_ResizeHandle_horizontal:hover {
     position: relative;
 

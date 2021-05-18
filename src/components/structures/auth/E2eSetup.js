@@ -16,32 +16,27 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import AsyncWrapper from '../../../AsyncWrapper';
-import * as sdk from '../../../index';
+import AuthPage from '../../views/auth/AuthPage';
+import CompleteSecurityBody from '../../views/auth/CompleteSecurityBody';
+import CreateCrossSigningDialog from '../../views/dialogs/security/CreateCrossSigningDialog';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("structures.auth.E2eSetup")
 export default class E2eSetup extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
         accountPassword: PropTypes.string,
+        tokenLogin: PropTypes.bool,
     };
 
-    constructor() {
-        super();
-        // awkwardly indented because https://github.com/eslint/eslint/issues/11310
-        this._createStorageDialogPromise =
-            import("../../../async-components/views/dialogs/secretstorage/CreateSecretStorageDialog");
-    }
-
     render() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
-        const CompleteSecurityBody = sdk.getComponent("auth.CompleteSecurityBody");
         return (
             <AuthPage>
                 <CompleteSecurityBody>
-                    <AsyncWrapper prom={this._createStorageDialogPromise}
-                        hasCancel={false}
+                    <CreateCrossSigningDialog
                         onFinished={this.props.onFinished}
                         accountPassword={this.props.accountPassword}
+                        tokenLogin={this.props.tokenLogin}
                     />
                 </CompleteSecurityBody>
             </AuthPage>

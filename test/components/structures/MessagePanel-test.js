@@ -18,9 +18,7 @@ limitations under the License.
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 const TestUtils = require('react-dom/test-utils');
 const expect = require('expect');
 import { EventEmitter } from "events";
@@ -37,9 +35,9 @@ const mockclock = require('../../mock-clock');
 import Adapter from "enzyme-adapter-react-16";
 import { configure, mount } from "enzyme";
 
-import Velocity from 'velocity-animate';
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
 
 configure({ adapter: new Adapter() });
 
@@ -47,21 +45,19 @@ let client;
 const room = new Matrix.Room();
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
-const WrappedMessagePanel = createReactClass({
-    getInitialState: function() {
-        return {
-            resizeNotifier: new EventEmitter(),
-        };
-    },
+class WrappedMessagePanel extends React.Component {
+    state = {
+        resizeNotifier: new EventEmitter(),
+    };
 
-    render: function() {
+    render() {
         return <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ canReact: true, canReply: true }}>
+            <RoomContext.Provider value={{ canReact: true, canReply: true, room, roomId: room.roomId }}>
                 <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>;
-    },
-});
+    }
+}
 
 describe('MessagePanel', function() {
     const clock = mockclock.clock();
@@ -78,16 +74,10 @@ describe('MessagePanel', function() {
             return arg === "showDisplaynameChanges";
         });
 
-        // This option clobbers the duration of all animations to be 1ms
-        // which makes unit testing a lot simpler (the animation doesn't
-        // complete without this even if we mock the clock and tick it
-        // what should be the correct amount of time).
-        Velocity.mock = true;
+        DMRoomMap.makeShared();
     });
 
-    afterEach(function() {
-        delete Velocity.mock;
-
+    afterEach(function () {
         clock.uninstall();
     });
 
@@ -98,7 +88,21 @@ describe('MessagePanel', function() {
             events.push(test_utils.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
-                    ts: ts0 + i*1000,
+                    ts: ts0 + i * 1000,
+                }));
+        }
+        return events;
+    }
+
+    // Just to avoid breaking Dateseparator tests that might run at 00hrs
+    function mkOneDayEvents() {
+        const events = [];
+        const ts0 = Date.parse('09 May 2004 00:12:00 GMT');
+        for (let i = 0; i < 10; i++) {
+            events.push(test_utils.mkMessage(
+                {
+                    event: true, room: "!room:id", user: "@user:id",
+                    ts: ts0 + i * 1000,
                 }));
         }
         return events;
@@ -114,7 +118,7 @@ describe('MessagePanel', function() {
         let i = 0;
         events.push(test_utils.mkMessage({
             event: true, room: "!room:id", user: "@user:id",
-            ts: ts0 + ++i*1000,
+            ts: ts0 + ++i * 1000,
         }));
 
         for (i = 0; i < 10; i++) {
@@ -126,6 +130,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + i*1000,
                 mship: 'join',
@@ -158,8 +163,9 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
-                ts: ts0 + i*1000,
+                ts: ts0 + i * 1000,
                 mship: 'join',
                 prevMship: 'join',
                 name: 'A user',
@@ -203,6 +209,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 1,
                 mship: 'join',
@@ -214,7 +221,7 @@ describe('MessagePanel', function() {
                 room: roomId,
                 user: alice,
                 content: {
-                    "join_rule": "invite"
+                    "join_rule": "invite",
                 },
                 ts: ts0 + 2,
             }),
@@ -249,6 +256,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 5,
                 mship: 'invite',
@@ -256,7 +264,6 @@ describe('MessagePanel', function() {
             }),
         ];
     }
-
     function isReadMarkerVisible(rmContainer) {
         return rmContainer && rmContainer.children.length > 0;
     }
@@ -437,10 +444,23 @@ describe('MessagePanel', function() {
         const rm = res.find('.mx_RoomView_myReadMarker_container').getDOMNode();
 
         const rows = res.find('.mx_RoomView_MessageList').children();
-        expect(rows.length).toEqual(6);
-        expect(rm.previousSibling).toEqual(rows.at(4).getDOMNode());
+        expect(rows.length).toEqual(7); // 6 events + the NewRoomIntro
+        expect(rm.previousSibling).toEqual(rows.at(5).getDOMNode());
 
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+
+    it('should render Date separators for the events', function () {
+        const events = mkOneDayEvents();
+        const res = mount(
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+            />,
+        );
+        const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
+       
+        expect(Dates.length).toEqual(1);
     });
 });

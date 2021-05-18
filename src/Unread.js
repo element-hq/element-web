@@ -16,12 +16,14 @@ limitations under the License.
 
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
-import * as sdk from "./index";
 import {haveTileForEvent} from "./components/views/rooms/EventTile";
 
 /**
  * Returns true iff this event arriving in a room should affect the room's
  * count of unread messages
+ *
+ * @param {Object} ev The event
+ * @returns {boolean} True if the given event should affect the unread message count
  */
 export function eventTriggersUnreadCount(ev) {
     if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
@@ -38,12 +40,14 @@ export function eventTriggersUnreadCount(ev) {
         return false;
     } else if (ev.getType() == 'm.room.server_acl') {
         return false;
+    } else if (ev.isRedacted()) {
+        return false;
     }
     return haveTileForEvent(ev);
 }
 
 export function doesRoomHaveUnreadMessages(room) {
-    const myUserId = MatrixClientPeg.get().credentials.userId;
+    const myUserId = MatrixClientPeg.get().getUserId();
 
     // get the most recent read receipt sent by our account.
     // N.B. this is NOT a read marker (RM, aka "read up to marker"),

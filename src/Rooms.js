@@ -21,61 +21,12 @@ import {MatrixClientPeg} from './MatrixClientPeg';
  * if any. This could be the canonical alias if one exists, otherwise
  * an alias selected arbitrarily but deterministically from the list
  * of aliases. Otherwise return null;
+ *
+ * @param {Object} room The room object
+ * @returns {string} A display alias for the given room
  */
 export function getDisplayAliasForRoom(room) {
     return room.getCanonicalAlias() || room.getAltAliases()[0];
-}
-
-/**
- * If the room contains only two members including the logged-in user,
- * return the other one. Otherwise, return null.
- */
-export function getOnlyOtherMember(room, myUserId) {
-    if (room.currentState.getJoinedMemberCount() === 2) {
-        return room.getJoinedMembers().filter(function(m) {
-            return m.userId !== myUserId;
-        })[0];
-    }
-
-    return null;
-}
-
-function _isConfCallRoom(room, myUserId, conferenceHandler) {
-    if (!conferenceHandler) return false;
-
-    const myMembership = room.getMyMembership();
-    if (myMembership != "join") {
-        return false;
-    }
-
-    const otherMember = getOnlyOtherMember(room, myUserId);
-    if (!otherMember) {
-        return false;
-    }
-
-    if (conferenceHandler.isConferenceUser(otherMember.userId)) {
-        return true;
-    }
-
-    return false;
-}
-
-// Cache whether a room is a conference call. Assumes that rooms will always
-// either will or will not be a conference call room.
-const isConfCallRoomCache = {
-    // $roomId: bool
-};
-
-export function isConfCallRoom(room, myUserId, conferenceHandler) {
-    if (isConfCallRoomCache[room.roomId] !== undefined) {
-        return isConfCallRoomCache[room.roomId];
-    }
-
-    const result = _isConfCallRoom(room, myUserId, conferenceHandler);
-
-    isConfCallRoomCache[room.roomId] = result;
-
-    return result;
 }
 
 export function looksLikeDirectMessageRoom(room, myUserId) {
