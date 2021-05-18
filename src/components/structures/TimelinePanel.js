@@ -1150,7 +1150,8 @@ class TimelinePanel extends React.Component {
             .reverse()
             .forEach(event => {
                 if (event.shouldAttemptDecryption()) {
-                    event.attemptDecryption(MatrixClientPeg.get()._crypto);
+                    const client = MatrixClientPeg.get();
+                    client.decryptEvent(event);
                 }
             });
 

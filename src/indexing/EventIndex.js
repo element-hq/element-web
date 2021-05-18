@@ -177,8 +177,10 @@ export default class EventIndex extends EventEmitter {
      * listener.
      */
     onRoomTimeline = async (ev, room, toStartOfTimeline, removed, data) => {
+        const client = MatrixClientPeg.get();
+
         // We only index encrypted rooms locally.
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+        if (!client.isRoomEncrypted(room.roomId)) return;
 
         // If it isn't a live event or if it's redacted there's nothing to
         // do.
@@ -187,14 +189,7 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
-        if (ev.shouldAttemptDecryption()) {
-            ev.attemptDecryption(room._client._crypto);
-        }
-
-        if (ev.isBeingDecrypted()) {
-            // XXX: Private member access
-            await ev._decryptionPromise;
-        }
+        await client.decryptEvent(ev);
 
         await this.addLiveEventToIndex(ev);
     }
@@ -522,19 +517,10 @@ export default class EventIndex extends EventEmitter {
             const decryptionPromises = matrixEvents
                 .filter(event => event.isEncrypted())
                 .map(event => {
-                    if (event.shouldAttemptDecryption()) {
-                        return event.attemptDecryption(client._crypto, {
-                            isRetry: true,
-                            emit: false,
-                        });
-                    } else {
-                        // TODO the decryption promise is a private property, this
-                        // should either be made public or we should convert the
-                        // event that gets fired when decryption is done into a
-                        // promise using the once event emitter method:
-                        // https://nodejs.org/api/events.html#events_events_once_emitter_name
-                        return event._decryptionPromise;
-                    }
+                    return client.decryptEvent(event, {
+                        isRetry: true,
+                        emit: false,
+                    });
                 });
 
             // Let us wait for all the events to get decrypted.
