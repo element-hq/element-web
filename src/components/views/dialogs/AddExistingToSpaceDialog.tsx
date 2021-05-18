@@ -92,7 +92,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         if (lcQuery) {
             const matcher = new QueryMatcher<Room>(visibleRooms, {
                 keys: ["name"],
-                funcs: [r => r.getCanonicalAlias() ?? r.getAltAliases()?.[0]],
+                funcs: [r => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
                 shouldMatchWordsOnly: false,
             });
 
