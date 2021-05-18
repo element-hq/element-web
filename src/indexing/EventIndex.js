@@ -187,6 +187,10 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
+        if (ev.shouldAttemptDecryption()) {
+            ev.attemptDecryption(room._client._crypto);
+        }
+
         if (ev.isBeingDecrypted()) {
             // XXX: Private member access
             await ev._decryptionPromise;
