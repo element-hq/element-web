@@ -62,6 +62,17 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
             maxDrift: 5,
         },
     } as Effect<SnowfallOptions>,
+    {
+        emojis: ["👾", "🌌"],
+        msgType: "io.element.effects.space_invaders",
+        command: "spaceinvaders",
+        description: () => _td("Sends the given message with a space themed effect"),
+        fallbackMessage: () => _t("sends space invaders") + " 👾",
+        options: {
+            maxCount: 50,
+            gravity: 0.01,
+        },
+    } as Effect<SpaceInvadersOptions>,
 ];
 
 
