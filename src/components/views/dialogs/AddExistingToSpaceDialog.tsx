@@ -38,6 +38,7 @@ import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/Recent
 import ProgressBar from "../elements/ProgressBar";
 import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
+import QueryMatcher from "../../../autocomplete/QueryMatcher";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -74,37 +75,47 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     onFinished,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const visibleRooms = useMemo(() => sortRooms(cli.getVisibleRooms()), [cli]);
+    const visibleRooms = useMemo(() => cli.getVisibleRooms().filter(r => r.getMyMembership() === "join"), [cli]);
 
     const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
     const [progress, setProgress] = useState<number>(null);
     const [error, setError] = useState<Error>(null);
     const [query, setQuery] = useState("");
-    const lcQuery = query.toLowerCase();
+    const lcQuery = query.toLowerCase().trim();
 
-    const existingSubspaces = SpaceStore.instance.getChildSpaces(space.roomId);
-    const existingSubspacesSet = new Set(existingSubspaces);
-    const existingRoomsSet = new Set(SpaceStore.instance.getChildRooms(space.roomId));
+    const existingSubspacesSet = useMemo(() => new Set(SpaceStore.instance.getChildSpaces(space.roomId)), [space]);
+    const existingRoomsSet = useMemo(() => new Set(SpaceStore.instance.getChildRooms(space.roomId)), [space]);
 
-    const joinRule = space.getJoinRule();
-    const [spaces, rooms, dms] = visibleRooms.reduce((arr, room) => {
-        if (room.getMyMembership() !== "join") return arr;
-        if (!room.name.toLowerCase().includes(lcQuery)) return arr;
+    const [spaces, rooms, dms] = useMemo(() => {
+        let rooms = visibleRooms;
 
-        if (room.isSpaceRoom()) {
-            if (room !== space && !existingSubspacesSet.has(room)) {
-                arr[0].push(room);
-            }
-        } else if (!existingRoomsSet.has(room)) {
-            if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
-                arr[1].push(room);
-            } else if (joinRule !== "public") {
-                // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
-                arr[2].push(room);
-            }
+        if (lcQuery) {
+            const matcher = new QueryMatcher<Room>(visibleRooms, {
+                keys: ["name"],
+                funcs: [r => r.getCanonicalAlias() ?? r.getAltAliases()?.[0]],
+                shouldMatchWordsOnly: false,
+            });
+
+            rooms = matcher.match(lcQuery);
         }
-        return arr;
-    }, [[], [], []]);
+
+        const joinRule = space.getJoinRule();
+        return sortRooms(rooms).reduce((arr, room) => {
+            if (room.isSpaceRoom()) {
+                if (room !== space && !existingSubspacesSet.has(room)) {
+                    arr[0].push(room);
+                }
+            } else if (!existingRoomsSet.has(room)) {
+                if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                    arr[1].push(room);
+                } else if (joinRule !== "public") {
+                    // Only show DMs for non-public spaces as they make very little sense in spaces other than "Just Me" ones.
+                    arr[2].push(room);
+                }
+            }
+            return arr;
+        }, [[], [], []]);
+    }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet]);
 
     const addRooms = async () => {
         setError(null);
