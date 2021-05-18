@@ -98,9 +98,7 @@ export default abstract class AutocompleteProvider {
         selection: ISelectionRange,
         force: boolean,
         limit: number,
-    ): Promise<ICompletion[]> {
-        return [];
-    }
+    ): Promise<ICompletion[]>;
 
     abstract getName(): string;
 
