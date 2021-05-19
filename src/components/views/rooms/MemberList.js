@@ -136,11 +136,13 @@ export default class MemberList extends React.Component {
     _getMembersState(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
+        const cli = MatrixClientPeg.get();
         return {
             loading: false,
             members: members,
             filteredJoinedMembers: this._filterMembers(members, 'join'),
             filteredInvitedMembers: this._filterMembers(members, 'invite'),
+            canInvite: cli.getRoom(this.props.roomId).canInvite(cli.getUserId()),
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
@@ -196,9 +198,10 @@ export default class MemberList extends React.Component {
             event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
-        if (event.getContent().invite !== event.getPrevContent().invite) {
-            this.forceUpdate();
-        }
+
+        const cli = MatrixClientPeg.get();
+        const canInvite = cli.getRoom(this.props.roomId).canInvite(cli.getUserId());
+        if (canInvite !== this.state.canInvite) this.setState({canInvite});
     };
 
     _updateList = rate_limited_func(() => {
@@ -458,8 +461,6 @@ export default class MemberList extends React.Component {
         let inviteButton;
 
         if (room && room.getMyMembership() === 'join') {
-            const canInvite = room.canInvite(cli.getUserId());
-
             let inviteButtonText = _t("Invite to this room");
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
@@ -470,7 +471,7 @@ export default class MemberList extends React.Component {
 
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
-                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!this.state.canInvite}>
                     <span>{ inviteButtonText }</span>
                 </AccessibleButton>;
         }
