@@ -811,7 +811,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() || ev.shouldAttemptDecryption()) return;
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
 
@@ -831,14 +831,14 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onRoomName = (room: Room) => {
         if (this.state.room && room.roomId == this.state.room.roomId) {
-            this.forceUpdate();
+            // this.forceUpdate();
         }
     };
 
     private onKeyBackupStatus = () => {
         // Key backup status changes affect whether the in-room recovery
         // reminder is displayed.
-        this.forceUpdate();
+        // this.forceUpdate();
     };
 
     public canResetTimeline = () => {
@@ -1598,33 +1598,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
     };
 
-    private onFullscreenClick = () => {
-        dis.dispatch({
-            action: 'video_fullscreen',
-            fullscreen: true,
-        }, true);
-    };
-
-    private onMuteAudioClick = () => {
-        const call = this.getCallForRoom();
-        if (!call) {
-            return;
-        }
-        const newState = !call.isMicrophoneMuted();
-        call.setMicrophoneMuted(newState);
-        this.forceUpdate(); // TODO: just update the voip buttons
-    };
-
-    private onMuteVideoClick = () => {
-        const call = this.getCallForRoom();
-        if (!call) {
-            return;
-        }
-        const newState = !call.isLocalVideoMuted();
-        call.setLocalVideoMuted(newState);
-        this.forceUpdate(); // TODO: just update the voip buttons
-    };
-
     private onStatusBarVisible = () => {
         if (this.unmounted) return;
         this.setState({
@@ -1638,24 +1611,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.setState({
             statusBarVisible: false,
         });
-    };
-
-    /**
-     * called by the parent component when PageUp/Down/etc is pressed.
-     *
-     * We pass it down to the scroll panel.
-     */
-    private handleScrollKey = ev => {
-        let panel;
-        if (this.searchResultsPanel.current) {
-            panel = this.searchResultsPanel.current;
-        } else if (this.messagePanel) {
-            panel = this.messagePanel;
-        }
-
-        if (panel) {
-            panel.handleScrollKey(ev);
-        }
     };
 
     /**
