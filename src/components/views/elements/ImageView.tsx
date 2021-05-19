@@ -207,6 +207,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         a.href = this.props.src;
         a.download = this.props.name;
         a.target = "_blank";
+        a.rel = "noreferrer noopener";
         a.click();
     };
 
