@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 @replaceableComponent("views.messages.ViewSourceEvent")
 export default class ViewSourceEvent extends React.PureComponent {
@@ -36,6 +37,10 @@ export default class ViewSourceEvent extends React.PureComponent {
 
     componentDidMount() {
         const {mxEvent} = this.props;
+
+        const client = MatrixClientPeg.get();
+        client.decryptEventIfNeeded(mxEvent);
+
         if (mxEvent.isBeingDecrypted()) {
             mxEvent.once("Event.decrypted", () => this.forceUpdate());
         }

@@ -665,5 +665,6 @@
     "Unrecognised command: %(commandText)s": "Unrecognized command: %(commandText)s",
     "Add some details to help people recognise it.": "Add some details to help people recognize it.",
     "Unrecognised room address:": "Unrecognized room address:",
-    "A private space to organise your rooms": "A private space to organize your rooms"
+    "A private space to organise your rooms": "A private space to organize your rooms",
+    "Message search initialisation failed": "Message search initialization failed"
 }

@@ -26,6 +26,8 @@ import EmojiProvider from './EmojiProvider';
 import NotifProvider from './NotifProvider';
 import {timeout} from "../utils/promise";
 import AutocompleteProvider, {ICommand} from "./AutocompleteProvider";
+import SettingsStore from "../settings/SettingsStore";
+import SpaceProvider from "./SpaceProvider";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
@@ -55,6 +57,11 @@ const PROVIDERS = [
     CommunityProvider,
     DuckDuckGoProvider,
 ];
+
+// as the spaces feature is device configurable only, and toggling it refreshes the page, we can do this here
+if (SettingsStore.getValue("feature_spaces")) {
+    PROVIDERS.push(SpaceProvider);
+}
 
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;

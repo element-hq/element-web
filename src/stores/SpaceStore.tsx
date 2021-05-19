@@ -361,7 +361,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const space = this.matrixClient?.getRoom(spaceId);
 
                 // Add relevant DMs
-                space?.getJoinedMembers().forEach(member => {
+                space?.getMembers().forEach(member => {
+                    if (member.membership !== "join" && member.membership !== "invite") return;
                     DMRoomMap.shared().getDMRoomsForUserId(member.userId).forEach(roomId => {
                         roomIds.add(roomId);
                     });

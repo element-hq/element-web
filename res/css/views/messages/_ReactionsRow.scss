@@ -20,7 +20,8 @@ limitations under the License.
 
     .mx_ReactionsRow_addReactionButton {
         position: relative;
-        display: none; // show on hover of the .mx_EventTile
+        display: inline-block;
+        visibility: hidden; // show on hover of the .mx_EventTile
         width: 24px;
         height: 24px;
         vertical-align: middle;
@@ -39,7 +40,7 @@ limitations under the License.
         }
 
         &.mx_ReactionsRow_addReactionButton_active {
-            display: inline-block; // keep showing whilst the context menu is shown
+            visibility: visible; // keep showing whilst the context menu is shown
         }
 
         &:hover, &.mx_ReactionsRow_addReactionButton_active {
@@ -51,7 +52,7 @@ limitations under the License.
 }
 
 .mx_EventTile:hover .mx_ReactionsRow_addReactionButton {
-    display: inline-block;
+    visibility: visible;
 }
 
 .mx_ReactionsRow_showAll {

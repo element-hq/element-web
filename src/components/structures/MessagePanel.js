@@ -473,7 +473,7 @@ export default class MessagePanel extends React.Component {
     }
 
     get _roomHasPendingEdit() {
-        return localStorage.getItem(`mx_edit_room_${this.props.room.roomId}`);
+        return this.props.room && localStorage.getItem(`mx_edit_room_${this.props.room.roomId}`);
     }
 
     _getEventTiles() {
