@@ -471,8 +471,12 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         try {
                             for (const [parentId, childId] of selectedRelations) {
                                 await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
-                                parentChildMap.get(parentId).get(childId).content = {};
-                                parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                parentChildMap.get(parentId).delete(childId);
+                                if (parentChildMap.get(parentId).size > 0) {
+                                    parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                } else {
+                                    parentChildMap.delete(parentId);
+                                }
                             }
                         } catch (e) {
                             setError(_t("Failed to remove some rooms. Try again later"));
