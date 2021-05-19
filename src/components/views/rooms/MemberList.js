@@ -196,6 +196,9 @@ export default class MemberList extends React.Component {
             event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
+        if (event.getContent().invite !== event.getPrevContent().invite) {
+            this.forceUpdate();
+        }
     };
 
     _updateList = rate_limited_func(() => {
