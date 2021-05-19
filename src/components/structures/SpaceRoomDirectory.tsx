@@ -152,7 +152,7 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     let description = _t("%(count)s members", { count: room.num_joined_members });
-    if (numChildRooms) {
+    if (numChildRooms !== undefined) {
         description += " · " + _t("%(count)s rooms", { count: numChildRooms });
     }
     if (room.topic) {
