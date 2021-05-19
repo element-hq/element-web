@@ -106,19 +106,21 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         CountlyAnalytics.instance.trackRoomDirectoryBegin();
         this.startTime = CountlyAnalytics.getTimestamp();
 
-        const selectedCommunityId = GroupFilterOrderStore.getSelectedTags()[0];
+        const selectedCommunityId = SettingsStore.getValue("feature_communities_v2_prototypes")
+            ? GroupFilterOrderStore.getSelectedTags()[0]
+            : null;
 
         let protocolsLoading = true;
         if (!MatrixClientPeg.get()) {
             // We may not have a client yet when invoked from welcome page
             protocolsLoading = false;
-        } else if (!this.state.selectedCommunityId) {
+        } else if (!selectedCommunityId) {
             MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
                 this.protocols = response;
-                this.setState({protocolsLoading: false});
+                this.setState({ protocolsLoading: false });
             }, (err) => {
                 console.warn(`error loading third party protocols: ${err}`);
-                this.setState({protocolsLoading: false});
+                this.setState({ protocolsLoading: false });
                 if (MatrixClientPeg.get().isGuest()) {
                     // Guests currently aren't allowed to use this API, so
                     // ignore this as otherwise this error is literally the
@@ -131,7 +133,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     error: _t(
                         '%(brand)s failed to get the protocol list from the homeserver. ' +
                         'The homeserver may be too old to support third party networks.',
-                        {brand},
+                        { brand },
                     ),
                 });
             });
@@ -141,7 +143,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
             // Grab the profile info async
             FlairStore.getGroupProfileCached(MatrixClientPeg.get(), this.state.selectedCommunityId).then(profile => {
-                this.setState({communityName: profile.name});
+                this.setState({ communityName: profile.name });
             });
         }
 
@@ -152,9 +154,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             instanceId: undefined,
             roomServer: MatrixClientPeg.getHomeserverName(),
             filterString: this.props.initialText || "",
-            selectedCommunityId: SettingsStore.getValue("feature_communities_v2_prototypes")
-                ? selectedCommunityId
-                : null,
+            selectedCommunityId,
             communityName: null,
             protocolsLoading,
         };
