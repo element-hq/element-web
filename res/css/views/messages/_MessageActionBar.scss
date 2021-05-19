@@ -80,7 +80,7 @@ limitations under the License.
     background-color: $secondary-fg-color;
 }
 
-.mx_MessageActionBar_maskButton:hover:after {
+.mx_MessageActionBar_maskButton:hover::after {
     background-color: $primary-fg-color;
 }
 
