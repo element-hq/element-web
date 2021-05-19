@@ -34,7 +34,6 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 
@@ -162,26 +161,15 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
         getMxcAvatarUrl: () => profileInfo.avatar_url,
     };
 
-    const visibleRooms = useMemo(() => sortRooms(
+    const [query, setQuery] = useState("");
+    const lcQuery = query.toLowerCase();
+
+    const rooms = useMemo(() => sortRooms(
         cli.getVisibleRooms().filter(
             room => room.getMyMembership() === "join" &&
                 !(SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()),
         ),
-    ), [cli]);
-
-    const [query, setQuery] = useState("");
-    const lcQuery = query.toLowerCase();
-
-    const [rooms, dms] = visibleRooms.reduce((arr, room) => {
-        if (room.name.toLowerCase().includes(lcQuery)) {
-            if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
-                arr[1].push(room);
-            } else {
-                arr[0].push(room);
-            }
-        }
-        return arr;
-    }, [[], []]);
+    ), [cli]).filter(room => room.name.toLowerCase().includes(lcQuery));
 
     const previewLayout = SettingsStore.getValue("layout");
 
@@ -214,8 +202,7 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
             />
             <AutoHideScrollbar className="mx_ForwardList_content" id="mx_ForwardList">
                 { rooms.length > 0 ? (
-                    <div className="mx_ForwardList_section">
-                        <h3>{ _t("Rooms") }</h3>
+                    <div className="mx_ForwardList_results">
                         { rooms.map(room =>
                             <Entry
                                 key={room.roomId}
@@ -226,26 +213,9 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
                             />,
                         ) }
                     </div>
-                ) : undefined }
-
-                { dms.length > 0 ? (
-                    <div className="mx_ForwardList_section">
-                        <h3>{ _t("Direct Messages") }</h3>
-                        { dms.map(room =>
-                            <Entry
-                                key={room.roomId}
-                                room={room}
-                                event={event}
-                                cli={cli}
-                                onFinished={onFinished}
-                            />,
-                        ) }
-                    </div>
-                ) : undefined }
-
-                { rooms.length + dms.length < 1 ? <span className="mx_ForwardList_noResults">
+                ) : <span className="mx_ForwardList_noResults">
                     { _t("No results") }
-                </span> : undefined }
+                </span> }
             </AutoHideScrollbar>
         </div>
     </BaseDialog>;
