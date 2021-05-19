@@ -56,7 +56,7 @@ export default class PerformanceMonitor {
         }
         const key = this.buildKey(name, id);
 
-        if (performance.getEntriesByName(key).length > 0) {
+        if (performance.getEntriesByName(this.START_PREFIX + key).length > 0) {
             console.warn(`Recording already started for: ${name}`);
             return;
         }
