@@ -32,6 +32,8 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import {PlaceCallType} from "../../../CallHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import exportConversationalHistory from '../../../utils/exportUtils';
+
 
 @replaceableComponent("views.rooms.RoomHeader")
 export default class RoomHeader extends React.Component {
@@ -115,6 +117,10 @@ export default class RoomHeader extends React.Component {
         if (!currentPinEvent) return false;
 
         return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
+    }
+
+    _exportConvertionalHistory = async () => {
+        exportConversationalHistory(this.props.room);
     }
 
     render() {
@@ -244,8 +250,14 @@ export default class RoomHeader extends React.Component {
                     title={_t("Video call")} />;
         }
 
+        const exportButton = <AccessibleTooltipButton
+            className="mx_RoomHeader_button mx_ImageView_button_download"
+            onClick={this._exportConvertionalHistory}
+            title={_t("Export conversation")} />;
+
         const rightRow =
             <div className="mx_RoomHeader_buttons">
+                { exportButton }
                 { videoCallButton }
                 { voiceCallButton }
                 { pinnedEventsButton }
