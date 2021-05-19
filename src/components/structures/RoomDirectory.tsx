@@ -672,22 +672,43 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 spinner = <Spinner />;
             }
 
+            const createNewButton = <>
+                <hr />
+                <AccessibleButton kind="primary" onClick={this.onCreateRoomClick} className="mx_RoomDirectory_newRoom">
+                    { _t("Create new room") }
+                </AccessibleButton>
+            </>;
+
             let scrollPanelContent;
+            let footer;
             if (cells.length === 0 && !this.state.loading) {
-                scrollPanelContent = <i>{ _t('No rooms to show') }</i>;
+                footer = <>
+                    <h5>{ _t('No results for "%(query)s"', { query: this.state.filterString.trim() }) }</h5>
+                    <p>
+                        { _t("Try different words or check for typos. " +
+                            "Some results may not be visible as they're private and you need an invite to see them.") }
+                    </p>
+                    { createNewButton }
+                </>;
             } else {
                 scrollPanelContent = <div className="mx_RoomDirectory_table">
                     { cells }
                 </div>;
+                if (!this.state.loading && !this.nextBatch) {
+                    footer = createNewButton;
+                }
             }
             content = <ScrollPanel
                 className="mx_RoomDirectory_tableWrapper"
-                onFillRequest={ this.onFillRequest }
+                onFillRequest={this.onFillRequest}
                 stickyBottom={false}
                 startAtBottom={false}
             >
                 { scrollPanelContent }
                 { spinner }
+                { footer && <div className="mx_RoomDirectory_footer">
+                    { footer }
+                </div> }
             </ScrollPanel>;
         }
 
