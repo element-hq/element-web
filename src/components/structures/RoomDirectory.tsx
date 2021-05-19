@@ -462,6 +462,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         dis.dispatch({
             action: 'view_create_room',
             public: true,
+            defaultName: this.state.filterString.trim(),
         });
     };
 

@@ -34,6 +34,7 @@ import BaseDialog from "../dialogs/BaseDialog";
 
 interface IProps {
     defaultPublic?: boolean;
+    defaultName?: string;
     parentSpace?: Room;
     onFinished(proceed: boolean, opts?: IOpts): void;
 }
@@ -62,7 +63,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.state = {
             isPublic: this.props.defaultPublic || false,
             isEncrypted: privateShouldBeEncrypted(),
-            name: "",
+            name: this.props.defaultName || "",
             topic: "",
             alias: "",
             detailsOpen: false,
