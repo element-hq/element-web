@@ -118,7 +118,7 @@ export default class SettingsStore {
     // when the setting changes. We track which rooms we're monitoring though to ensure we
     // don't duplicate updates on the bus.
     private static watchers = new Map<string, WatchCallbackFn>();
-    private static monitors = {}; // { settingName => { roomId => callbackRef } }
+    private static monitors = new Map<string, Map<string, string>>(); // { settingName => { roomId => callbackRef } }
 
     // Counter used for generation of watcher IDs
     private static watcherCount = 1;
@@ -196,10 +196,10 @@ export default class SettingsStore {
     public static monitorSetting(settingName: string, roomId: string) {
         roomId = roomId || null; // the thing wants null specifically to work, so appease it.
 
-        if (!this.monitors[settingName]) this.monitors[settingName] = {};
+        if (!this.monitors.has(settingName)) this.monitors.set(settingName, new Map());
 
         const registerWatcher = () => {
-            this.monitors[settingName][roomId] = SettingsStore.watchSetting(
+            this.monitors.get(settingName).set(roomId, SettingsStore.watchSetting(
                 settingName, roomId, (settingName, inRoomId, level, newValueAtLevel, newValue) => {
                     dis.dispatch({
                         action: 'setting_updated',
@@ -210,19 +210,20 @@ export default class SettingsStore {
                         newValue,
                     });
                 },
-            );
+            ));
         };
 
-        const hasRoom = Object.keys(this.monitors[settingName]).find((r) => r === roomId || r === null);
+        const rooms = Array.from(this.monitors.get(settingName).keys());
+        const hasRoom = rooms.find((r) => r === roomId || r === null);
         if (!hasRoom) {
             registerWatcher();
         } else {
             if (roomId === null) {
                 // Unregister all existing watchers and register the new one
-                for (const roomId of Object.keys(this.monitors[settingName])) {
-                    SettingsStore.unwatchSetting(this.monitors[settingName][roomId]);
-                }
-                this.monitors[settingName] = {};
+                rooms.forEach(roomId => {
+                    SettingsStore.unwatchSetting(this.monitors.get(settingName).get(roomId));
+                });
+                this.monitors.get(settingName).clear();
                 registerWatcher();
             } // else a watcher is already registered for the room, so don't bother registering it again
         }
