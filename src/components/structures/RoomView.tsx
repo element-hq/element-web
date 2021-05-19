@@ -811,7 +811,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() || ev.shouldAttemptDecryption()) return;
         this.handleEffects(ev);
     };
 
@@ -1750,7 +1750,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
-        if (myMembership === "invite" && !this.state.room.isSpaceRoom()) { // SpaceRoomView handles invites itself
+        if (myMembership === "invite"
+            // SpaceRoomView handles invites itself
+            && (!SettingsStore.getValue("feature_spaces") || !this.state.room.isSpaceRoom())
+        ) {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <ErrorBoundary>
@@ -1892,7 +1895,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     room={this.state.room}
                 />
             );
-            if (!this.state.canPeek && !this.state.room?.isSpaceRoom()) {
+            if (!this.state.canPeek && (!SettingsStore.getValue("feature_spaces") || !this.state.room?.isSpaceRoom())) {
                 return (
                     <div className="mx_RoomView">
                         { previewBar }
@@ -1914,7 +1917,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
-        if (SettingsStore.getValue("feature_spaces") && this.state.room?.isSpaceRoom()) {
+        if (this.state.room?.isSpaceRoom()) {
             return <SpaceRoomView
                 space={this.state.room}
                 justCreatedOpts={this.props.justCreatedOpts}

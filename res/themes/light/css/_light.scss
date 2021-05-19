@@ -183,19 +183,6 @@ $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%)
 
 $groupFilterPanel-divider-color: $roomlist-header-color;
 
-// These two don't change between themes. They are the $warning-color, but we don't
-// want custom themes to affect them by accident.
-$voice-record-stop-symbol-color: #ff4b55;
-$voice-record-live-circle-color: #ff4b55;
-
-$voice-record-stop-border-color: #E3E8F0; // "Separator"
-$voice-record-waveform-bg-color: #E3E8F0; // "Separator"
-$voice-record-waveform-fg-color: $secondary-fg-color;
-$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
-$voice-record-icon-color: $tertiary-fg-color;
-$voice-playback-button-bg-color: $primary-bg-color;
-$voice-playback-button-fg-color: $secondary-fg-color;
-
 $roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: #FFF;
@@ -335,9 +322,23 @@ $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
 
-$message-body-panel-bg-color: #e3e8f082;
-$message-body-panel-icon-bg-color: #ffffff;
-$message-body-panel-fg-color: $muted-fg-color;
+$message-body-panel-fg-color: $secondary-fg-color;
+$message-body-panel-bg-color: #E3E8F0; // "Separator"
+$message-body-panel-icon-fg-color: $secondary-fg-color;
+$message-body-panel-icon-bg-color: $primary-bg-color;
+
+// These two don't change between themes. They are the $warning-color, but we don't
+// want custom themes to affect them by accident.
+$voice-record-stop-symbol-color: #ff4b55;
+$voice-record-live-circle-color: #ff4b55;
+
+$voice-record-stop-border-color: #E3E8F0; // "Separator"
+$voice-record-waveform-bg-color: $message-body-panel-bg-color;
+$voice-record-waveform-fg-color: $message-body-panel-fg-color;
+$voice-record-waveform-incomplete-fg-color: $quaternary-fg-color;
+$voice-record-icon-color: $tertiary-fg-color;
+$voice-playback-button-bg-color: $message-body-panel-icon-bg-color;
+$voice-playback-button-fg-color: $message-body-panel-icon-fg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;

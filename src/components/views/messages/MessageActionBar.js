@@ -31,6 +31,7 @@ import {RovingAccessibleTooltipButton, useRovingTabIndex} from "../../../accessi
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {canCancel} from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -122,6 +123,10 @@ export default class MessageActionBar extends React.PureComponent {
         if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
             this.props.mxEvent.on("Event.status", this.onSent);
         }
+
+        const client = MatrixClientPeg.get();
+        client.decryptEventIfNeeded(this.props.mxEvent);
+
         if (this.props.mxEvent.isBeingDecrypted()) {
             this.props.mxEvent.once("Event.decrypted", this.onDecrypted);
         }

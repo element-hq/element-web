@@ -14,18 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import classNames from "classnames";
 import {EventType, RoomType, RoomCreateTypeField} from "matrix-js-sdk/src/@types/event";
+import FocusLock from "react-focus-lock";
 
 import {_t} from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {ChevronFace, ContextMenu} from "../../structures/ContextMenu";
 import createRoom, {IStateEvent, Preset} from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import SpaceBasicSettings from "./SpaceBasicSettings";
+import {SpaceAvatar} from "./SpaceBasicSettings";
 import AccessibleButton from "../elements/AccessibleButton";
-import FocusLock from "react-focus-lock";
+import {BetaPill} from "../beta/BetaCard";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import {Action} from "../../../dispatcher/actions";
+import {USER_LABS_TAB} from "../dialogs/UserSettingsDialog";
+import Field from "../elements/Field";
+import withValidation from "../elements/Validation";
+import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -41,17 +48,39 @@ enum Visibility {
     Private,
 }
 
+const spaceNameValidator = withValidation({
+    rules: [
+        {
+            key: "required",
+            test: async ({ value }) => !!value,
+            invalid: () => _t("Please enter a name for the space"),
+        },
+    ],
+});
+
 const SpaceCreateMenu = ({ onFinished }) => {
     const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
-    const [name, setName] = useState("");
-    const [avatar, setAvatar] = useState<File>(null);
-    const [topic, setTopic] = useState<string>("");
     const [busy, setBusy] = useState<boolean>(false);
 
-    const onSpaceCreateClick = async () => {
+    const [name, setName] = useState("");
+    const spaceNameField = useRef<Field>();
+    const [avatar, setAvatar] = useState<File>(null);
+    const [topic, setTopic] = useState<string>("");
+
+    const onSpaceCreateClick = async (e) => {
+        e.preventDefault();
         if (busy) return;
+
         setBusy(true);
+        // require & validate the space name field
+        if (!await spaceNameField.current.validate({ allowEmpty: false })) {
+            spaceNameField.current.focus();
+            spaceNameField.current.validate({ allowEmpty: false, focused: true });
+            setBusy(false);
+            return;
+        }
+
         const initialState: IStateEvent[] = [
             {
                 type: EventType.RoomHistoryVisibility,
@@ -107,7 +136,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     if (visibility === null) {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
-            <p>{ _t("Spaces are new ways to group rooms and people. " +
+            <p>{ _t("Spaces are a new way to group rooms and people. " +
                 "To join an existing space you'll need an invite.") }</p>
 
             <SpaceCreateMenuType
@@ -124,6 +153,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
             />
 
             <p>{ _t("You can change this later") }</p>
+
+            <SpaceFeedbackPrompt onClick={onFinished} />
         </React.Fragment>;
     } else {
         body = <React.Fragment>
@@ -146,9 +177,32 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 }
             </p>
 
-            <SpaceBasicSettings setAvatar={setAvatar} name={name} setName={setName} topic={topic} setTopic={setTopic} />
+            <form className="mx_SpaceBasicSettings" onSubmit={onSpaceCreateClick}>
+                <SpaceAvatar setAvatar={setAvatar} avatarDisabled={busy} />
 
-            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={!name || busy}>
+                <Field
+                    name="spaceName"
+                    label={_t("Name")}
+                    autoFocus={true}
+                    value={name}
+                    onChange={ev => setName(ev.target.value)}
+                    ref={spaceNameField}
+                    onValidate={spaceNameValidator}
+                    disabled={busy}
+                />
+
+                <Field
+                    name="spaceTopic"
+                    element="textarea"
+                    label={_t("Description")}
+                    value={topic}
+                    onChange={ev => setTopic(ev.target.value)}
+                    rows={3}
+                    disabled={busy}
+                />
+            </form>
+
+            <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={busy}>
                 { busy ? _t("Creating...") : _t("Create") }
             </AccessibleButton>
         </React.Fragment>;
@@ -164,6 +218,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
         managed={false}
     >
         <FocusLock returnFocus={true}>
+            <BetaPill onClick={() => {
+                onFinished();
+                defaultDispatcher.dispatch({
+                    action: Action.ViewUserSettings,
+                    initialTabId: USER_LABS_TAB,
+                });
+            }} />
             { body }
         </FocusLock>
     </ContextMenu>;

@@ -95,6 +95,7 @@ export function createTestClient() {
                 getItem: jest.fn(),
             },
         },
+        decryptEventIfNeeded: () => Promise.resolve(),
     };
 }
 
