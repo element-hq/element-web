@@ -26,7 +26,7 @@ import { _t } from '../languageHandler';
 import dis from '../dispatcher/dispatcher';
 import { ISetting, SETTINGS } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
-import { WatchManager } from "./WatchManager";
+import { WatchManager, CallbackFn as WatchCallbackFn } from "./WatchManager";
 import { SettingLevel } from "./SettingLevel";
 import SettingsHandler from "./handlers/SettingsHandler";
 
@@ -117,7 +117,7 @@ export default class SettingsStore {
     // We also maintain a list of monitors which are special watchers: they cause dispatches
     // when the setting changes. We track which rooms we're monitoring though to ensure we
     // don't duplicate updates on the bus.
-    private static watchers = {}; // { callbackRef => { callbackFn } }
+    private static watchers = new Map<string, WatchCallbackFn>();
     private static monitors = {}; // { settingName => { roomId => callbackRef } }
 
     // Counter used for generation of watcher IDs
@@ -163,7 +163,7 @@ export default class SettingsStore {
             callbackFn(originalSettingName, changedInRoomId, atLevel, newValAtLevel, newValue);
         };
 
-        SettingsStore.watchers[watcherId] = localizedCallback;
+        SettingsStore.watchers.set(watcherId, localizedCallback);
         defaultWatchManager.watchSetting(settingName, roomId, localizedCallback);
 
         return watcherId;
@@ -176,13 +176,13 @@ export default class SettingsStore {
      * to cancel.
      */
     public static unwatchSetting(watcherReference: string) {
-        if (!SettingsStore.watchers[watcherReference]) {
+        if (!SettingsStore.watchers.has(watcherReference)) {
             console.warn(`Ending non-existent watcher ID ${watcherReference}`);
             return;
         }
 
-        defaultWatchManager.unwatchSetting(SettingsStore.watchers[watcherReference]);
-        delete SettingsStore.watchers[watcherReference];
+        defaultWatchManager.unwatchSetting(SettingsStore.watchers.get(watcherReference));
+        SettingsStore.watchers.delete(watcherReference);
     }
 
     /**
