@@ -575,10 +575,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.props.model.autoComplete.onComponentConfirm(completion);
     };
 
-    private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
+    private onAutoCompleteSelectionChange = (completionIndex: number) => {
         this.modifiedFlag = true;
-        // this.props.model.autoComplete.onComponentSelectionChange(completion);
-        this.setState({completionIndex});
+        this.setState({ completionIndex });
     };
 
     private configureEmoticonAutoReplace = () => {

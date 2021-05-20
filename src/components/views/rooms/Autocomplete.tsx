@@ -33,9 +33,9 @@ interface IProps {
     // the query string for which to show autocomplete suggestions
     query: string;
     // method invoked with range and text content when completion is confirmed
-    onConfirm: (ICompletion) => void;
+    onConfirm: (completion: ICompletion) => void;
     // method invoked when selected (if any) completion changes
-    onSelectionChange?: (ICompletion, number) => void;
+    onSelectionChange?: (partIndex: number) => void;
     selection: ISelectionRange;
     // The room in which we're autocompleting
     room: Room;
@@ -172,7 +172,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         if (anyMatches) {
             hide = false;
             if (this.props.onSelectionChange) {
-                this.props.onSelectionChange(this.state.completionList[selectionOffset - 1], selectionOffset - 1);
+                this.props.onSelectionChange(selectionOffset - 1);
             }
         }
 
@@ -258,7 +258,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     setSelection(selectionOffset: number) {
         this.setState({selectionOffset, hide: false});
         if (this.props.onSelectionChange) {
-            this.props.onSelectionChange(this.state.completionList[selectionOffset - 1], selectionOffset - 1);
+            this.props.onSelectionChange(selectionOffset - 1);
         }
     }
 

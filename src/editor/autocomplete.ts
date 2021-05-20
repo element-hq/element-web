@@ -32,7 +32,6 @@ export type GetAutocompleterComponent = () => Autocomplete;
 export type UpdateQuery = (test: string) => Promise<void>;
 
 export default class AutocompleteWrapperModel {
-    private queryPart: Part;
     private partIndex: number;
 
     constructor(
@@ -45,10 +44,6 @@ export default class AutocompleteWrapperModel {
 
     public onEscape(e: KeyboardEvent) {
         this.getAutocompleterComponent().onEscape(e);
-        this.updateCallback({
-            replaceParts: [this.partCreator.plain(this.queryPart.text)],
-            close: true,
-        });
     }
 
     public close() {
@@ -89,23 +84,8 @@ export default class AutocompleteWrapperModel {
     }
 
     public onPartUpdate(part: Part, pos: DocumentPosition) {
-        // cache the typed value and caret here
-        // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
-        this.queryPart = part;
         this.partIndex = pos.index;
         return this.updateQuery(part.text);
-    }
-
-    public onComponentSelectionChange(completion: ICompletion) {
-        if (!completion) {
-            this.updateCallback({
-                replaceParts: [this.queryPart],
-            });
-        } else {
-            this.updateCallback({
-                replaceParts: this.partForCompletion(completion),
-            });
-        }
     }
 
     public onComponentConfirm(completion: ICompletion) {
