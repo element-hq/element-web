@@ -649,6 +649,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         let left = 0;
 
         const receipts = this.props.readReceipts || [];
+
+        if (receipts.length === 0) {
+            return null;
+        }
+
         for (let i = 0; i < receipts.length; ++i) {
             const receipt = receipts[i];
 
@@ -699,10 +704,14 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
         }
 
-        return <span className="mx_EventTile_readAvatars">
-            { remText }
-            { avatars }
-        </span>;
+        return (
+            <div className="mx_EventTile_msgOption">
+                <span className="mx_EventTile_readAvatars">
+                    { remText }
+                    { avatars }
+                </span>;
+            </div>
+        )
     }
 
     onSenderProfileClick = event => {
@@ -1032,11 +1041,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let msgOption;
         if (this.props.showReadReceipts) {
             const readAvatars = this.getReadAvatars();
-            msgOption = (
-                <div className="mx_EventTile_msgOption">
-                    { readAvatars }
-                </div>
-            );
+            msgOption = readAvatars;
         }
 
         switch (this.props.tileShape) {

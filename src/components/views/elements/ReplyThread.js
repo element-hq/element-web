@@ -214,7 +214,7 @@ export default class ReplyThread extends React.Component {
 
     static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout) {
         if (!ReplyThread.getParentEventId(parentEv)) {
-            return <div className="mx_ReplyThread_wrapper_empty" />;
+            return null;
         }
         return <ReplyThread
             parentEv={parentEv}
