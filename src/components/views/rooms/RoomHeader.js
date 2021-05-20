@@ -257,16 +257,14 @@ export default class RoomHeader extends React.Component {
         const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
 
         return (
-            <div className="mx_RoomHeader light-panel">
-                <div className="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
-                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
-                    <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
-                    { name }
-                    { topicElement }
-                    { cancelButton }
-                    { rightRow }
-                    <RoomHeaderButtons />
-                </div>
+            <div className="mx_RoomHeader mx_RoomHeader_wrapper light-panel" aria-owns="mx_RightPanel">
+                <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
+                <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
+                { name }
+                { topicElement }
+                { cancelButton }
+                { rightRow }
+                <RoomHeaderButtons />
             </div>
         );
     }
