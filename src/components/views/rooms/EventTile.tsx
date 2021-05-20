@@ -709,7 +709,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                 <span className="mx_EventTile_readAvatars">
                     { remText }
                     { avatars }
-                </span>;
+                </span>
             </div>
         )
     }
