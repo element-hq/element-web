@@ -108,6 +108,24 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._suggestedRooms;
     }
 
+    public async setActiveRoomInSpace(space: Room | null) {
+        if (space && !space.isSpaceRoom()) return;
+        if (space !== this.activeSpace) await this.setActiveSpace(space);
+
+        const notificationState = space
+            ? this.getNotificationState(space.roomId)
+            : RoomNotificationStateStore.instance.globalState;
+
+        if (notificationState.count) {
+            const roomId = notificationState.getFirstRoomWithNotifications();
+            defaultDispatcher.dispatch({
+                    action: "view_room",
+                    room_id: roomId,
+                    context_switch: true,
+            });
+        }
+    }
+
     /**
      * Sets the active space, updates room list filters,
      * optionally switches the user's room back to where they were when they last viewed that space.
@@ -116,22 +134,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
      * should not be done when the space switch is done implicitly due to another event like switching room.
      */
     public async setActiveSpace(space: Room | null, contextSwitch = true) {
-        if (space && !space.isSpaceRoom()) return;
-        if (space === this.activeSpace) {
-            const notificationState = space
-                ? this.getNotificationState(space.roomId)
-                : RoomNotificationStateStore.instance.globalState;
-
-            if (notificationState.count) {
-                const roomId = notificationState.getRoomWithMaxNotifications();
-                defaultDispatcher.dispatch({
-                    action: "view_room",
-                    room_id: roomId,
-                    context_switch: true,
-                });
-            }
-            return;
-        }
+        if (space === this.activeSpace || (space && !space.isSpaceRoom())) return;
 
         this._activeSpace = space;
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);

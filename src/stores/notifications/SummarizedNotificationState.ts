@@ -16,7 +16,6 @@ limitations under the License.
 
 import { NotificationColor } from "./NotificationColor";
 import { NotificationState } from "./NotificationState";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
 
 /**
@@ -27,13 +26,13 @@ import { RoomNotificationState } from "./RoomNotificationState";
  */
 export class SummarizedNotificationState extends NotificationState {
     private totalStatesWithUnread = 0;
-    unreadRooms: Room[];
+    private unreadRoomId: string;
 
     constructor() {
         super();
         this._symbol = null;
         this._count = 0;
-        this.unreadRooms = [];
+        this.unreadRoomId = null;
         this._color = NotificationColor.None;
     }
 
@@ -41,9 +40,8 @@ export class SummarizedNotificationState extends NotificationState {
         return this.totalStatesWithUnread;
     }
 
-    public getRoomWithMaxNotifications() {
-        return this.unreadRooms.reduce((prev, curr) =>
-            (prev._notificationCounts.total > curr._notificationCounts.total ? prev : curr)).roomId;
+    public getFirstRoomWithNotifications() {
+        return this.unreadRoomId;
     }
 
     /**
@@ -65,7 +63,7 @@ export class SummarizedNotificationState extends NotificationState {
             this._color = other.color;
         }
         if (other.hasUnreadCount) {
-            this.unreadRooms.push(other.room);
+            this.unreadRoomId = !this.unreadRoomId ? other.room.roomId : this.unreadRoomId;
             this.totalStatesWithUnread++;
         }
     }
