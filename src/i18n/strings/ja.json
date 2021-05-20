@@ -351,7 +351,7 @@
     "Mirror local video feed": "ローカルビデオ映像送信",
     "Send analytics data": "分析データを送信する",
     "Enable inline URL previews by default": "デフォルトでインライン URL プレビューを有効にする",
-    "Enable URL previews for this room (only affects you)": "この部屋の URL プレビューを有効にする (あなたにのみ影響する)",
+    "Enable URL previews for this room (only affects you)": "この部屋の URL プレビューを有効にする (あなたにのみ適用)",
     "Enable URL previews by default for participants in this room": "この部屋の参加者のためにデフォルトで URL プレビューを有効にする",
     "Room Colour": "部屋の色",
     "Enable widget screenshots on supported widgets": "サポートされているウィジェットでウィジェットのスクリーンショットを有効にする",
@@ -502,10 +502,10 @@
     "You have <a>disabled</a> URL previews by default.": "デフォルトで URL プレビューが<a>無効</a>です。",
     "URL previews are enabled by default for participants in this room.": "この部屋の参加者は、デフォルトで URL プレビューが有効です。",
     "URL previews are disabled by default for participants in this room.": "この部屋の参加者は、デフォルトで URL プレビューが無効です。",
-    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "このような暗号化された部屋では、URL プレビューはデフォルトで無効になっており、あなたのホームサーバー(プレビューを作成する場所)がこの部屋に表示されているリンクに関する情報を収集できないようにしています。",
+    "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "この部屋のように暗号化された部屋では、URL プレビューはデフォルトで無効になっています。あなたのホームサーバー (プレビューを作成する) にこの部屋でやり取りされたリンクの情報を収集されないようにするためです。",
     "URL Previews": "URL プレビュー",
     "Historical": "履歴のある",
-    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "メッセージにURLを入力すると、URLプレビューが表示され、タイトル、説明、ウェブサイトからの画像など、そのリンクに関する詳細情報が表示されます。",
+    "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "メッセージに URL が含まれる場合、タイトル、説明、ウェブサイトの画像などが URL プレビューとして表示されます。",
     "Error decrypting audio": "オーディオの復号化エラー",
     "Error decrypting attachment": "添付ファイルの復号化エラー",
     "Decrypt %(text)s": "%(text)s を復号",
@@ -2477,5 +2477,9 @@
     "Beta": "Beta",
     "Tap for more info": "タップして詳細を表示",
     "Spaces are a new way to group rooms and people. To join an existing space you'll need an invite.": "スペースは、部屋や人をグループ化する新しい方法です。既存のスペースに参加するには、招待が必要です。",
-    "Check your devices": "デバイスを確認"
+    "Check your devices": "デバイスを確認",
+    "Invite to %(roomName)s": "%(roomName)s へ招待",
+    "Beta available for web, desktop and Android. Some features may be unavailable on your homeserver.": "Beta は、ウェブ、デスクトップ、Android で利用可能です。お使いのホームサーバーによっては一部機能が利用できない場合があります。",
+    "%(brand)s will reload with Spaces enabled. Communities and custom tags will be hidden.": "%(brand)s はスペースが有効な状態で再読み込みされます。コミュニティとカスタムタグは非表示になります。",
+    "Communities are changing to Spaces": "コミュニティはスペースに生まれ変わります"
 }
