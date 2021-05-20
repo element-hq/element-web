@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from "react";
 import dis from './dispatcher/dispatcher';
-import {MatrixClientPeg} from './MatrixClientPeg';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import * as sdk from './index';
 import { _t } from './languageHandler';
@@ -344,7 +343,7 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
         });
         (prom as IAbortablePromise<any>).abort = () => {
             canceled = true;
-            if (uploadPromise) MatrixClientPeg.get().cancelUpload(uploadPromise);
+            if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
         };
         return prom;
     } else {
@@ -362,7 +361,7 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
         });
         promise1.abort = () => {
             canceled = true;
-            MatrixClientPeg.get().cancelUpload(basePromise);
+            matrixClient.cancelUpload(basePromise);
         };
         return promise1;
     }
@@ -372,9 +371,9 @@ export default class ContentMessages {
     private inprogress: IUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
-    sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
+    sendStickerContentToRoom(url: string, roomId: string, info: object, text: string, matrixClient: MatrixClient) {
         const startTime = CountlyAnalytics.getTimestamp();
-        const prom = MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
+        const prom = matrixClient.sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
@@ -416,7 +415,7 @@ export default class ContentMessages {
 
         if (!this.mediaConfig) { // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
-            await this.ensureMediaConfigFetched();
+            await this.ensureMediaConfigFetched(matrixClient);
             modal.close();
         }
 
@@ -471,7 +470,7 @@ export default class ContentMessages {
         return this.inprogress.filter(u => !u.canceled);
     }
 
-    cancelUpload(promise: Promise<any>) {
+    cancelUpload(promise: Promise<any>, matrixClient: MatrixClient) {
         let upload: IUpload;
         for (let i = 0; i < this.inprogress.length; ++i) {
             if (this.inprogress[i].promise === promise) {
@@ -481,7 +480,7 @@ export default class ContentMessages {
         }
         if (upload) {
             upload.canceled = true;
-            MatrixClientPeg.get().cancelUpload(upload.promise);
+            matrixClient.cancelUpload(upload.promise);
             dis.dispatch<UploadCanceledPayload>({action: Action.UploadCanceled, upload});
         }
     }
@@ -623,11 +622,11 @@ export default class ContentMessages {
         return true;
     }
 
-    private ensureMediaConfigFetched() {
+    private ensureMediaConfigFetched(matrixClient: MatrixClient) {
         if (this.mediaConfig !== null) return;
 
         console.log("[Media Config] Fetching");
-        return MatrixClientPeg.get().getMediaConfig().then((config) => {
+        return matrixClient.getMediaConfig().then((config) => {
             console.log("[Media Config] Fetched config:", config);
             return config;
         }).catch(() => {
