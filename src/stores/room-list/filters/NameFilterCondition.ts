@@ -62,7 +62,7 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
         if (!room.name) return false; // should realistically not happen: the js-sdk always calculates a name
 
-        return this.matches(room.name);
+        return this.matches(room.normalizedName);
     }
 
     public matches(normalizedName: string): boolean {
