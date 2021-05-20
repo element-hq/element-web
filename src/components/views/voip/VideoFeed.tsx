@@ -87,7 +87,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            element.play()
+            element.play();
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }
