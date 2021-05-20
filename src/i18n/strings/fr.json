@@ -936,7 +936,7 @@
     "Failed to load group members": "Échec du chargement des membres du groupe",
     "Failed to invite users to the room:": "Échec de l’invitation d'utilisateurs dans le salon :",
     "There was an error joining the room": "Une erreur est survenue en rejoignant le salon",
-    "You do not have permission to invite people to this room.": "Vous n’avez pas la permission d’envoyer des invitations dans ce salon.",
+    "You do not have permission to invite people to this room.": "Vous n'avez pas la permission d'inviter des personnes dans ce salon.",
     "User %(user_id)s does not exist": "L’utilisateur %(user_id)s n’existe pas",
     "Unknown server error": "Erreur de serveur inconnue",
     "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Afficher un rappel pour activer la récupération de messages sécurisée dans les salons chiffrés",
