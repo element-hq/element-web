@@ -177,16 +177,13 @@ $irc-line-height: $font-18px;
     .mx_SenderProfile_hover {
         background-color: $primary-bg-color;
         overflow: hidden;
+        display: flex;
 
-        > span {
-            display: flex;
-
-            > .mx_SenderProfile_name {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                min-width: var(--name-width);
-                text-align: end;
-            }
+        > .mx_SenderProfile_name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: var(--name-width);
+            text-align: end;
         }
     }
 
