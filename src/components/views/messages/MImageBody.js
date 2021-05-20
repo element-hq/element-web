@@ -60,7 +60,6 @@ export default class MImageBody extends React.Component {
         this.onClick = this.onClick.bind(this);
         this._isGif = this._isGif.bind(this);
 
-        const imageInfo = this.props.mxEvent.getContent().info;
 
         this.state = {
             decryptedUrl: null,
@@ -72,7 +71,6 @@ export default class MImageBody extends React.Component {
             loadedImageDimensions: null,
             hover: false,
             showImage: SettingsStore.getValue("showImages"),
-            blurhash: imageInfo ? imageInfo['xyz.amorgan.blurhash'] : null, // TODO: Use `blurhash` when MSC2448 lands.
         };
 
         this._image = createRef();
@@ -442,8 +440,9 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     getPlaceholder(width, height) {
-        if (!this.state.blurhash) return null;
-        return <BlurhashPlaceholder blurhash={this.state.blurhash} width={width} height={height} />;
+        const blurhash = this.props.mxEvent.getContent().info['xyz.amorgan.blurhash'];
+        if (!blurhash) return null;
+        return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
     }
 
     // Overidden by MStickerBody
