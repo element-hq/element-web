@@ -197,12 +197,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new IncompatibleController("feature_spaces"),
     },
-    "feature_new_spinner": {
-        isFeature: true,
-        displayName: _td("New spinner design"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
