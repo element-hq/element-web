@@ -76,7 +76,7 @@ export interface ISpaceSummaryEvent {
         order?: string;
         suggested?: boolean;
         auto_join?: boolean;
-        via?: string;
+        via?: string[];
     };
 }
 /* eslint-enable camelcase */
@@ -356,9 +356,9 @@ export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: a
                     parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
                     childParentRelations.getOrCreate(ev.state_key, new Set()).add(ev.room_id);
                 }
-                if (Array.isArray(ev.content["via"])) {
+                if (Array.isArray(ev.content.via)) {
                     const set = viaMap.getOrCreate(ev.state_key, new Set());
-                    ev.content["via"].forEach(via => set.add(via));
+                    ev.content.via.forEach(via => set.add(via));
                 }
             });
 
