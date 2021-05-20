@@ -645,39 +645,36 @@ export default class MessagePanel extends React.Component {
 
         // use txnId as key if available so that we don't remount during sending
         ret.push(
-            <li
-                key={mxEv.getTxnId() || eventId}
-                ref={this._collectEventNode.bind(this, eventId)}
-                data-scroll-tokens={scrollToken}
-            >
-                <TileErrorBoundary mxEvent={mxEv}>
-                    <EventTile
-                        mxEvent={mxEv}
-                        continuation={continuation}
-                        isRedacted={mxEv.isRedacted()}
-                        replacingEventId={mxEv.replacingEventId()}
-                        editState={isEditing && this.props.editState}
-                        onHeightChanged={this._onHeightChanged}
-                        readReceipts={readReceipts}
-                        readReceiptMap={this._readReceiptMap}
-                        showUrlPreview={this.props.showUrlPreview}
-                        checkUnmounting={this._isUnmounting}
-                        eventSendStatus={mxEv.getAssociatedStatus()}
-                        tileShape={this.props.tileShape}
-                        isTwelveHour={this.props.isTwelveHour}
-                        permalinkCreator={this.props.permalinkCreator}
-                        last={last}
-                        lastInSection={willWantDateSeparator}
-                        lastSuccessful={isLastSuccessful}
-                        isSelectedEvent={highlight}
-                        getRelationsForEvent={this.props.getRelationsForEvent}
-                        showReactions={this.props.showReactions}
-                        layout={this.props.layout}
-                        enableFlair={this.props.enableFlair}
-                        showReadReceipts={this.props.showReadReceipts}
-                    />
-                </TileErrorBoundary>
-            </li>,
+            <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>
+                <EventTile
+                    as="li"
+                    data-scroll-tokens={scrollToken}
+                    ref={this._collectEventNode.bind(this, eventId)}
+                    mxEvent={mxEv}
+                    continuation={continuation}
+                    isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
+                    editState={isEditing && this.props.editState}
+                    onHeightChanged={this._onHeightChanged}
+                    readReceipts={readReceipts}
+                    readReceiptMap={this._readReceiptMap}
+                    showUrlPreview={this.props.showUrlPreview}
+                    checkUnmounting={this._isUnmounting}
+                    eventSendStatus={mxEv.getAssociatedStatus()}
+                    tileShape={this.props.tileShape}
+                    isTwelveHour={this.props.isTwelveHour}
+                    permalinkCreator={this.props.permalinkCreator}
+                    last={last}
+                    lastInSection={willWantDateSeparator}
+                    lastSuccessful={isLastSuccessful}
+                    isSelectedEvent={highlight}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
+                    showReactions={this.props.showReactions}
+                    layout={this.props.layout}
+                    enableFlair={this.props.enableFlair}
+                    showReadReceipts={this.props.showReadReceipts}
+                />
+            </TileErrorBoundary>,
         );
 
         return ret;
@@ -779,7 +776,7 @@ export default class MessagePanel extends React.Component {
     }
 
     _collectEventNode = (eventId, node) => {
-        this.eventNodes[eventId] = node;
+        this.eventNodes[eventId] = node?.ref?.current;
     }
 
     // once dynamic content in the events load, make the scrollPanel check the
