@@ -26,23 +26,29 @@ export default class InlineSpinner extends React.Component {
         const h = this.props.h || 16;
         const imgClass = this.props.imgClassName || "";
 
-        let imageSource;
+        let icon;
         if (SettingsStore.getValue('feature_new_spinner')) {
-            imageSource = require("../../../../res/img/spinner.svg");
-        } else {
-            imageSource = require("../../../../res/img/spinner.gif");
-        }
-
-        return (
-            <div className="mx_InlineSpinner">
+            icon = (
                 <img
-                    src={imageSource}
+                    src={require("../../../../res/img/logo-spinner.svg")}
                     width={w}
                     height={h}
                     className={imgClass}
                     aria-label={_t("Loading...")}
                 />
-            </div>
+            );
+        } else {
+            icon = (
+                <div
+                    className="mx_InlineSpinner_icon mx_Spinner_icon"
+                    style={{width: w, height: h}}
+                    aria-label={_t("Loading...")}
+                ></div>
+            );
+        }
+
+        return (
+            <div className="mx_InlineSpinner">{ icon }</div>
         );
     }
 }
