@@ -197,12 +197,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new IncompatibleController("feature_spaces"),
     },
-    "feature_new_spinner": {
-        isFeature: true,
-        displayName: _td("New spinner design"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -730,7 +724,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: Layout.Group,
     },
     "showChatEffects": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: _td("Show chat effects (animations when receiving e.g. confetti)"),
         default: true,
         controller: new ReducedMotionController(),

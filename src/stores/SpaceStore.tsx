@@ -45,6 +45,10 @@ export const UPDATE_INVITED_SPACES = Symbol("invited-spaces");
 export const UPDATE_SELECTED_SPACE = Symbol("selected-space");
 // Space Room ID will be emitted when a Space's children change
 
+export interface ISuggestedRoom extends ISpaceSummaryRoom {
+    viaServers: string[];
+}
+
 const MAX_SUGGESTED_ROOMS = 20;
 
 const getSpaceContextKey = (space?: Room) => `mx_space_context_${space?.roomId || "ALL_ROOMS"}`;
@@ -89,7 +93,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private spaceFilteredRooms = new Map<string, Set<string>>();
     // The space currently selected in the Space Panel - if null then All Rooms is selected
     private _activeSpace?: Room = null;
-    private _suggestedRooms: ISpaceSummaryRoom[] = [];
+    private _suggestedRooms: ISuggestedRoom[] = [];
     private _invitedSpaces = new Set<Room>();
 
     public get invitedSpaces(): Room[] {
@@ -104,7 +108,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this._activeSpace || null;
     }
 
-    public get suggestedRooms(): ISpaceSummaryRoom[] {
+    public get suggestedRooms(): ISuggestedRoom[] {
         return this._suggestedRooms;
     }
 
@@ -158,31 +162,41 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         if (space) {
-            const data = await this.fetchSuggestedRooms(space);
+            const suggestedRooms = await this.fetchSuggestedRooms(space);
             if (this._activeSpace === space) {
-                this._suggestedRooms = data.rooms.filter(roomInfo => {
-                    return roomInfo.room_type !== RoomType.Space
-                        && this.matrixClient.getRoom(roomInfo.room_id)?.getMyMembership() !== "join";
-                });
+                this._suggestedRooms = suggestedRooms;
                 this.emit(SUGGESTED_ROOMS, this._suggestedRooms);
             }
         }
     }
 
-    public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS) => {
+    public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS): Promise<ISuggestedRoom[]> => {
         try {
             const data: {
                 rooms: ISpaceSummaryRoom[];
                 events: ISpaceSummaryEvent[];
             } = await this.matrixClient.getSpaceSummary(space.roomId, 0, true, false, limit);
-            return data;
+
+            const viaMap = new EnhancedMap<string, Set<string>>();
+            data.events.forEach(ev => {
+                if (ev.type === EventType.SpaceChild && ev.content.via?.length) {
+                    ev.content.via.forEach(via => {
+                        viaMap.getOrCreate(ev.state_key, new Set()).add(via);
+                    });
+                }
+            });
+
+            return data.rooms.filter(roomInfo => {
+                return roomInfo.room_type !== RoomType.Space
+                    && this.matrixClient.getRoom(roomInfo.room_id)?.getMyMembership() !== "join";
+            }).map(roomInfo => ({
+                ...roomInfo,
+                viaServers: Array.from(viaMap.get(roomInfo.room_id) || []),
+            }));
         } catch (e) {
             console.error(e);
         }
-        return {
-            rooms: [],
-            events: [],
-        };
+        return [];
     };
 
     public addRoomToSpace(space: Room, roomId: string, via: string[], suggested = false, autoJoin = false) {
@@ -222,7 +236,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return room?.currentState.getStateEvents(EventType.SpaceParent)
             .filter(ev => {
                 const content = ev.getContent();
-                if (!content?.via) return false;
+                if (!content?.via?.length) return false;
                 // TODO apply permissions check to verify that the parent mapping is valid
                 if (canonicalOnly && !content?.canonical) return false;
                 return true;

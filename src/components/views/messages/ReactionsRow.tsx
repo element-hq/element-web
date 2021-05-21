@@ -198,7 +198,8 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         const cli = this.context;
 
         let addReactionButton;
-        if (cli.getRoom(mxEvent.getRoomId()).currentState.maySendEvent(EventType.Reaction, cli.getUserId())) {
+        const room = cli.getRoom(mxEvent.getRoomId());
+        if (room.getMyMembership() === "join" && room.currentState.maySendEvent(EventType.Reaction, cli.getUserId())) {
             addReactionButton = <ReactButton mxEvent={mxEvent} reactions={reactions} />;
         }
 

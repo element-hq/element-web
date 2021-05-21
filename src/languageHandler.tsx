@@ -344,7 +344,10 @@ export function setLanguage(preferredLangs: string | string[]) {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
-        console.log("set language to " + langToUse);
+        // Adds a lot of noise to test runs, so disable logging there.
+        if (process.env.NODE_ENV !== "test") {
+            console.log("set language to " + langToUse);
+        }
 
         // Set 'en' as fallback language:
         if (langToUse !== "en") {

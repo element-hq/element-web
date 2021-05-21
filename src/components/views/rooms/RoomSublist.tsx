@@ -18,6 +18,7 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef, ReactComponentElement } from "react";
+import { normalize } from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -259,7 +260,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             const nameCondition = RoomListStore.instance.getFirstNameFilterCondition();
             if (nameCondition) {
                 stateUpdates.filteredExtraTiles = this.props.extraTiles
-                    .filter(t => nameCondition.matches(t.props.displayName || ""));
+                    .filter(t => nameCondition.matches(normalize(t.props.displayName || "")));
             } else if (this.state.filteredExtraTiles) {
                 stateUpdates.filteredExtraTiles = null;
             }
