@@ -17,6 +17,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { encode } from "blurhash";
+
 import dis from './dispatcher/dispatcher';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import * as sdk from './index';
@@ -46,6 +48,10 @@ const MAX_HEIGHT = 600;
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
+
+const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC 2448
+const BLURHASH_X_COMPONENTS = 8;
+const BLURHASH_Y_COMPONENTS = 8;
 
 export class UploadCanceledError extends Error {}
 
@@ -77,6 +83,7 @@ interface IThumbnail {
         };
         w: number;
         h: number;
+        [BLURHASH_FIELD]: string;
     };
     thumbnail: Blob;
 }
@@ -124,7 +131,16 @@ function createThumbnail(
         const canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-        canvas.getContext("2d").drawImage(element, 0, 0, targetWidth, targetHeight);
+        const context = canvas.getContext("2d");
+        context.drawImage(element, 0, 0, targetWidth, targetHeight);
+        const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
+        const blurhash = encode(
+            imageData.data,
+            imageData.width,
+            imageData.height,
+            BLURHASH_X_COMPONENTS,
+            BLURHASH_Y_COMPONENTS,
+        );
         canvas.toBlob(function(thumbnail) {
             resolve({
                 info: {
@@ -136,8 +152,9 @@ function createThumbnail(
                     },
                     w: inputWidth,
                     h: inputHeight,
+                    [BLURHASH_FIELD]: blurhash,
                 },
-                thumbnail: thumbnail,
+                thumbnail,
             });
         }, mimeType);
     });
@@ -338,7 +355,6 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
             if (file.type) {
                 encryptInfo.mimetype = file.type;
             }
-            // TODO: Blurhash for encrypted media?
             return {"file": encryptInfo};
         });
         (prom as IAbortablePromise<any>).abort = () => {
@@ -349,15 +365,11 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
     } else {
         const basePromise = matrixClient.uploadContent(file, {
             progressHandler: progressHandler,
-            onlyContentUri: false,
         });
-        const promise1 = basePromise.then(function(body) {
+        const promise1 = basePromise.then(function(url) {
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
-            return {
-                "url": body.content_uri,
-                "blurhash": body["xyz.amorgan.blurhash"], // TODO: Use `body.blurhash` when MSC2448 lands
-            };
+            return { url };
         });
         promise1.abort = () => {
             canceled = true;
@@ -565,7 +577,6 @@ export default class ContentMessages {
             return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;
-                content.info['xyz.amorgan.blurhash'] = result.blurhash; // TODO: Use `blurhash` when MSC2448 lands
             });
         }).then(() => {
             // Await previous message being sent into the room
