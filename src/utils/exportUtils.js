@@ -281,7 +281,7 @@ const getTimelineConversation = (room) => {
         cli, timelineSet,
         {windowLimit: Number.MAX_VALUE});
 
-    timelineWindow.load(null, 20);
+    timelineWindow.load(null, 30);
 
     const events = timelineWindow.getEvents();
 
@@ -347,7 +347,7 @@ const getUserPic = async (event) => {
 };
 
 //Gets the event_id of an event to which an event is replied
-const baseEventId = (event) => {
+const getBaseEventId = (event) => {
     const isEncrypted = event.isEncrypted();
 
     // If encrypted, in_reply_to lies in event.event.content
@@ -401,7 +401,7 @@ const createMessageBody = async (event, joined = false, isReply = false, replyId
             break;
         case "m.image": {
             messageBody = `<a class="photo_wrap clearfix pull_left" href="images/${event.getId()}.png">
-                            <img class="photo" src="images/${event.getId()}.png" style="width: 260px; height: 156px">
+                            <img class="photo" src="images/${event.getId()}.png" style="max-width: 600px; max-height: 500px;">
                         </a>`;
             const blob = await getImageData(event);
             zip.file(`images/${event.getId()}.png`, blob);
@@ -437,20 +437,21 @@ const createHTML = async (events, room) => {
         content += dateSeparator(event, prevEvent);
 
         if (event.getType() === "m.room.message") {
-            const replyTo = baseEventId(event);
+            const replyTo = getBaseEventId(event);
             const shouldBeJoined = prevEvent && prevEvent.getContent().msgtype === "m.text"
             && event.sender.userId === prevEvent.sender.userId && !dateSeparator(event, prevEvent) && !replyTo;
 
             const body = await createMessageBody(event, shouldBeJoined, !!replyTo, replyTo);
             content += body;
         } else {
-            content += `
+            const eventText = textForEvent(event);
+            content += eventText ? `
             <div class="message service" id="${event.getId()}">
                 <div class="body details">
                     ${textForEvent(event)}
                 </div>
             </div>
-            `;
+            ` : "";
         }
         prevEvent = event;
     }
