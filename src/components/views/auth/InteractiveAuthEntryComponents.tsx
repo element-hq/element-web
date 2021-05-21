@@ -351,7 +351,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
-    tryContinue = () => {
+    public tryContinue = () => {
         this.trySubmit();
     };
 
