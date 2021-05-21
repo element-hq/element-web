@@ -3344,5 +3344,7 @@
     "To leave the beta, visit your settings.": "Pour quitter la bêta, consultez les paramètres.",
     "Your platform and username will be noted to help us use your feedback as much as we can.": "Votre plateforme et nom d’utilisateur seront consignés pour nous aider à tirer le maximum de vos retours.",
     "Add reaction": "Ajouter une réaction",
-    "Send and receive voice messages": "Envoyer et recevoir des messages vocaux"
+    "Send and receive voice messages": "Envoyer et recevoir des messages vocaux",
+    "See when people join, leave, or are invited to this room": "Voir quand une personne rejoint, quitte ou est invitée sur ce salon",
+    "Kick, ban, or invite people to this room, and make you leave": "Exclure, bannir ou inviter une personne dans ce salon et vous permettre de partir"
 }
