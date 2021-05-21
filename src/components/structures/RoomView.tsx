@@ -844,14 +844,14 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     private onRoomName = (room: Room) => {
         if (this.state.room && room.roomId == this.state.room.roomId) {
-            // this.forceUpdate();
+            this.forceUpdate();
         }
     };
 
     private onKeyBackupStatus = () => {
         // Key backup status changes affect whether the in-room recovery
         // reminder is displayed.
-        // this.forceUpdate();
+        this.forceUpdate();
     };
 
     public canResetTimeline = () => {
