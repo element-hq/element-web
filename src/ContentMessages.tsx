@@ -237,7 +237,8 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
 }
 
 /**
- * Load a file into a newly created video element.
+ * Load a file into a newly created video element and pull some strings
+ * in an attempt to guarantee the first frame will be showing.
  *
  * @param {File} videoFile The file to load in an video element.
  * @return {Promise} A promise that resolves with the video image element.
@@ -246,20 +247,25 @@ function loadVideoElement(videoFile): Promise<HTMLVideoElement> {
     return new Promise((resolve, reject) => {
         // Load the file into an html element
         const video = document.createElement("video");
+        video.preload = "metadata";
+        video.playsInline = true;
+        video.muted = true;
 
         const reader = new FileReader();
 
         reader.onload = function(ev) {
-            video.src = ev.target.result as string;
-
-            // Once ready, returns its size
             // Wait until we have enough data to thumbnail the first frame.
-            video.onloadeddata = function() {
+            video.onloadeddata = async function() {
                 resolve(video);
+                video.pause();
             };
             video.onerror = function(e) {
                 reject(e);
             };
+
+            video.src = ev.target.result as string;
+            video.load();
+            video.play();
         };
         reader.onerror = function(e) {
             reject(e);
