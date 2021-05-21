@@ -689,7 +689,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         }
     }
 
-    attemptFailed = () => {
+    public attemptFailed = () => {
         this.setState({
             attemptFailed: true,
         });
@@ -704,7 +704,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         }
     };
 
-    onStartAuthClick = () => {
+    private onStartAuthClick = () => {
         // Note: We don't use PlatformPeg's startSsoAuth functions because we almost
         // certainly will need to open the thing in a new tab to avoid losing application
         // context.
@@ -714,7 +714,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         this.props.onPhaseChange(SSOAuthEntry.PHASE_POSTAUTH);
     };
 
-    onConfirmClick = () => {
+    private onConfirmClick = () => {
         this.props.submitAuthDict({});
     };
 
@@ -792,7 +792,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
         }
     }
 
-    focus = () => {
+    public focus = () => {
         if (this.fallbackButton.current) {
             this.fallbackButton.current.focus();
         }
