@@ -372,10 +372,7 @@ export default class MImageBody extends React.Component {
         let placeholder = null;
         let gifLabel = null;
 
-        // e2e image hasn't been decrypted yet
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
-            placeholder = <InlineSpinner w={32} h={32} />;
-        } else if (!this.state.imgLoaded) {
+        if (!this.state.imgLoaded) {
             placeholder = this.getPlaceholder(maxWidth, maxHeight);
         }
 
@@ -414,9 +411,7 @@ export default class MImageBody extends React.Component {
                         // Constrain width here so that spinner appears central to the loaded thumbnail
                         maxWidth: infoWidth + "px",
                     }}>
-                        <div className="mx_MImageBody_thumbnail_spinner">
-                            { placeholder }
-                        </div>
+                        { placeholder }
                     </div>
                 }
 
@@ -442,8 +437,10 @@ export default class MImageBody extends React.Component {
     // Overidden by MStickerBody
     getPlaceholder(width, height) {
         const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
-        if (!blurhash) return null;
-        return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
+        if (blurhash) return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
+        return <div className="mx_MImageBody_thumbnail_spinner">
+            <InlineSpinner w={32} h={32} />
+        </div>;
     }
 
     // Overidden by MStickerBody
