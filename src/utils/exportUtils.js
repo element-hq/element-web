@@ -58,7 +58,7 @@ const getTimelineConversation = (room) => {
     if (!timelineWindow.canPaginate('f')) {
         events.push(...timelineSet.getPendingEvents());
     }
-
+    console.log(events);
     return events;
 };
 
@@ -307,19 +307,13 @@ const userColors = [
     "#ff8c44",
 ];
 
-const createDiv = (content, id, ...classNames) => {
-    return `<div class = "${classNames.join(" ")}" id = "${id}" >
-        ${content}
-    </div>`;
-};
-
 
 //Get a color associated with a string. This is to map userId to a specific color
 const getUserColor = (userId) => {
     return userColors[userId.length % 4];
 };
 
-const createBody = (event, joined = false) => {
+const createMessageBody = (event, joined = false, isReply = false, replyId = null) => {
     return `
     <div class="message default clearfix ${joined ? `joined` : ``}" id="message2680">
       ${!joined ? `<div class="pull_left userpic_wrap">
@@ -328,35 +322,35 @@ const createBody = (event, joined = false) => {
        </div>
       </div>` : ``}
       <div class="body">
-       <div class="pull_right date details" title="${new Date(event._localTimestamp)}">${new Date(event._localTimestamp).toLocaleTimeString().slice(0, -3)}</div>
+       <div class="pull_right date details" title="${new Date(event.getTs())}">${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}</div>
        ${!joined ? `<div class="from_name" style="color:${getUserColor(event.sender.name)}">
             ${event.sender.name}
        </div>`: ``}
+        ${isReply ?
+        `<div class="reply_to details">
+            In reply to <a href="#${replyId}">this message</a>
+         </div>`: ``}
        <div class="text"> ${event.getContent().body} </div>
       </div>
      </div>
     `;
 };
 
-const replyAnchor = (eventId) => {
-    return `<a href = "#${eventId}">this message</a>}`;
-};
-
-const _isReply = (event) => {
+const replyId = (event) => {
     const relatesTo = event.getContent()["m.relates_to"];
-    const isReply = !!(relatesTo && relatesTo["m.in_reply_to"]);
-    return isReply;
+    const replyId = relatesTo ? relatesTo["m.in_reply_to"].event_id : null;
+    return replyId;
 };
 
 
 const dateSeparator = (event, prevEvent) => {
-    const prevDate = prevEvent ? new Date(prevEvent._localTimestamp) : null;
-    const currDate = new Date(event._localTimestamp);
+    const prevDate = prevEvent ? new Date(prevEvent.getTs()) : null;
+    const currDate = new Date(event.getTs());
     if (!prevDate || currDate.setHours(0, 0, 0, 0) !== prevDate.setHours(0, 0, 0, 0)) {
         return `
             <div class="message service">
                 <div class="body details">
-                    ${new Date(event._localTimestamp)
+                    ${new Date(event.getTs())
         .toLocaleString("en-us", {year: "numeric", month: "long", day: "numeric" })}
                 </div>
             </div>
@@ -370,11 +364,11 @@ const createHTML = (events, room) => {
     let prevEvent = null;
     for (const event of events) {
         content += dateSeparator(event, prevEvent);
-        if (event.getContent().msgtype === "m.text") {
+        if (event.getType() === "m.room.message") {
             const shouldBeJoined = prevEvent && prevEvent.getContent().msgtype === "m.text"
             && event.sender.userId === prevEvent.sender.userId && !dateSeparator(event, prevEvent);
 
-            const body = createBody(event, shouldBeJoined);
+            const body = createMessageBody(event, shouldBeJoined, !!replyId(event), replyId(event));
 
             content += body;
         } else {
@@ -394,8 +388,8 @@ const createHTML = (events, room) => {
 
 const exportConversationalHistory = async (room) => {
     const res = getTimelineConversation(room);
-    const html = createHTML(res, room);
     const zip = new JSZip();
+    const html = createHTML(res, room);
     zip.file("css/style.css", css);
     zip.file("index.html", html);
     const filename = `matrix-export-${new Date().toISOString()}.zip`;
