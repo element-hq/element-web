@@ -1325,6 +1325,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.2.tgz":
+  version "3.2.2"
+  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.2.tgz#5e3d784461ca3bbeb791ac8f3c175375aeb81318"
+
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents":
   version "2.1.8-no-fsevents"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.tgz#da7c3996b8e6e19ebd14d82eaced2313e7769f9b"
@@ -6143,10 +6147,6 @@ object.values@^1.1.1, object.values@^1.1.2:
     define-properties "^1.1.3"
     es-abstract "^1.18.0-next.1"
     has "^1.0.3"
-
-"olm@https://packages.matrix.org/npm/olm/olm-3.2.1.tgz":
-  version "3.2.1"
-  resolved "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz#d623d76f99c3518dde68be8c86618d68bc7b004a"
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
