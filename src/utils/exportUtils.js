@@ -175,7 +175,7 @@ pre {
 
 .page_body {
     padding-top: 64px;
-    width: 480px;
+    width: 700px;
     margin: 0 auto;
 }
 
@@ -239,7 +239,6 @@ div.selected {
 }
 
 .default .from_name {
-    color: #3892db;
     font-weight: 700;
     padding-bottom: 5px;
 }
@@ -336,10 +335,13 @@ const createMessageBody = (event, joined = false, isReply = false, replyId = nul
     `;
 };
 
-const replyId = (event) => {
-    const relatesTo = event.getContent()["m.relates_to"];
-    const replyId = relatesTo ? relatesTo["m.in_reply_to"].event_id : null;
-    return replyId;
+
+const baseEventId = (event) => {
+    const isEncrypted = event.isEncrypted();
+    // If encrypted, in_reply_to lies in event.event.content
+    const content = isEncrypted ? event.event.content : event.getContent();
+    const relatesTo = content["m.relates_to"];
+    return relatesTo ? relatesTo["m.in_reply_to"].event_id : null;
 };
 
 
@@ -365,11 +367,10 @@ const createHTML = (events, room) => {
     for (const event of events) {
         content += dateSeparator(event, prevEvent);
         if (event.getType() === "m.room.message") {
+            const replyTo = baseEventId(event);
             const shouldBeJoined = prevEvent && prevEvent.getContent().msgtype === "m.text"
-            && event.sender.userId === prevEvent.sender.userId && !dateSeparator(event, prevEvent);
-
-            const body = createMessageBody(event, shouldBeJoined, !!replyId(event), replyId(event));
-
+            && event.sender.userId === prevEvent.sender.userId && !dateSeparator(event, prevEvent) && !replyTo;
+            const body = createMessageBody(event, shouldBeJoined, !!replyTo, replyTo);
             content += body;
         } else {
             content += `
@@ -395,9 +396,7 @@ const exportConversationalHistory = async (room) => {
     const filename = `matrix-export-${new Date().toISOString()}.zip`;
 
     //Generate the zip file asynchronously
-
     const blob = await zip.generateAsync({ type: "blob" });
-
     //Create a writable stream to the directory
     const fileStream = streamSaver.createWriteStream(filename, blob.size);
     const writer = fileStream.getWriter();
