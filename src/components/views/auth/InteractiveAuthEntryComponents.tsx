@@ -89,14 +89,14 @@ interface IAuthDict {
     // TODO: Remove `user` once servers support proper UIA
     // See https://github.com/vector-im/element-web/issues/10312
     user?: string;
-    identifier?: object;
+    identifier?: any;
     password?: string;
     response?: string;
     // TODO: Remove `threepid_creds` once servers support proper UIA
     // See https://github.com/vector-im/element-web/issues/10312
     // See https://github.com/matrix-org/matrix-doc/issues/2220
-    threepid_creds?: object;
-    threepidCreds?: object;
+    threepid_creds?: any;
+    threepidCreds?: any;
 }
 /* eslint-enable camelcase */
 
