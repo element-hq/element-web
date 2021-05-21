@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+$timelineImageBorderRadius: 4px;
+
 .mx_MImageBody {
     display: block;
     margin-right: 34px;
@@ -25,7 +27,11 @@ limitations under the License.
     height: 100%;
     left: 0;
     top: 0;
-    border-radius: 4px;
+    border-radius: $timelineImageBorderRadius;
+
+    > canvas {
+        border-radius: $timelineImageBorderRadius;
+    }
 }
 
 .mx_MImageBody_thumbnail_container {
