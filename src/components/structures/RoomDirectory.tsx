@@ -1,6 +1,6 @@
 /*
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2015, 2016, 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016, 2019, 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -686,7 +686,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     <h5>{ _t('No results for "%(query)s"', { query: this.state.filterString.trim() }) }</h5>
                     <p>
                         { _t("Try different words or check for typos. " +
-                            "Some results may not be visible as they're private and you need an invite to see them.") }
+                            "Some results may not be visible as they're private and you need an invite to join them.") }
                     </p>
                     { createNewButton }
                 </>;
