@@ -73,7 +73,7 @@ abstract class GenericEditor<
     protected abstract send();
 
     protected buttons(): React.ReactNode {
-        return <div className="mx_Dialogbuttons">
+        return <div className="mx_Dialog_buttons">
             <button onClick={this.onBack}>{ _t('Back') }</button>
             { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
         </div>;
@@ -184,7 +184,7 @@ export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendC
                 <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
                     autoComplete="off" value={this.state.evContent} onChange={this.onChange} element="textarea" />
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
                 { showTglFlip && <div style={{float: "right"}}>
@@ -284,7 +284,7 @@ class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountD
                 <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
                     autoComplete="off" value={this.state.evContent} onChange={this.onChange} element="textarea" />
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
                 { !this.state.message && <div style={{float: "right"}}>
@@ -472,7 +472,7 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
                         { JSON.stringify(this.state.event.event, null, 2) }
                     </SyntaxHighlight>
                 </div>
-                <div className="mx_Dialogbuttons">
+                <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
                     <button onClick={this.editEv}>{ _t('Edit') }</button>
                 </div>
@@ -517,7 +517,7 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
             <div className="mx_Dialog_content">
                 { list }
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
             </div>
         </div>;
@@ -603,7 +603,7 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
                         { JSON.stringify(this.state.event.event, null, 2) }
                     </SyntaxHighlight>
                 </div>
-                <div className="mx_Dialogbuttons">
+                <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
                     <button onClick={this.editEv}>{ _t('Edit') }</button>
                 </div>
@@ -628,7 +628,7 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
                     { rows }
                 </FilteredList>
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 <div style={{float: "right"}}>
                     <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
@@ -685,7 +685,7 @@ class ServersInRoomList extends React.PureComponent<IExplorerProps, IServersInRo
                     { this.servers }
                 </FilteredList>
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.props.onBack}>{ _t('Back') }</button>
             </div>
         </div>;
@@ -775,7 +775,7 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
                     <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
                 )}
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.props.onBack}>{_t("Back")}</button>
             </div>
         </div>);
@@ -845,7 +845,7 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
             if (!stateEv) { // "should never happen"
                 return <div>
                     {_t("There was an error finding this widget.")}
-                    <div className="mx_Dialogbuttons">
+                    <div className="mx_Dialog_buttons">
                         <button onClick={this.onBack}>{_t("Back")}</button>
                     </div>
                 </div>;
@@ -874,7 +874,7 @@ class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerStat
                     })}
                 </FilteredList>
             </div>
-            <div className="mx_Dialogbuttons">
+            <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{_t("Back")}</button>
             </div>
         </div>);
@@ -1059,7 +1059,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                             </tbody>
                         </table>
                     </div>
-                    <div className="mx_Dialogbuttons">
+                    <div className="mx_Dialog_buttons">
                         <button onClick={this.onBack}>{_t("Back")}</button>
                     </div>
                 </div>
@@ -1121,7 +1121,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                         </div>
 
                     </div>
-                    <div className="mx_Dialogbuttons">
+                    <div className="mx_Dialog_buttons">
                         <button onClick={this.onSaveClick}>{_t("Save setting values")}</button>
                         <button onClick={this.onBack}>{_t("Back")}</button>
                     </div>
@@ -1167,7 +1167,7 @@ class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExpl
                         </div>
 
                     </div>
-                    <div className="mx_Dialogbuttons">
+                    <div className="mx_Dialog_buttons">
                         <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{
                             _t("Edit Values")
                         }</button>
@@ -1255,7 +1255,7 @@ export default class DevtoolsDialog extends React.PureComponent<IProps, IState> 
                         }) }
                     </div>
                 </div>
-                <div className="mx_Dialogbuttons">
+                <div className="mx_Dialog_buttons">
                     <button onClick={this.onCancel}>{ _t('Cancel') }</button>
                 </div>
             </React.Fragment>;
