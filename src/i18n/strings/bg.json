@@ -32,5 +32,6 @@
     "Open": "Отвори",
     "Your browser can't run %(brand)s": "Браузърът ви не може да изпълни %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
-    "Powered by Matrix": "Базирано на Matrix"
+    "Powered by Matrix": "Базирано на Matrix",
+    "Use %(brand)s on mobile": "Използвайте %(brand)s на мобилен телефон"
 }

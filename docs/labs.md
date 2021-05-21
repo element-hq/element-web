@@ -19,10 +19,6 @@ Still in heavy development.
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
 
-## New spinner design (`feature_new_spinner`)
-
-Replaces the old spinner image with a new, svg-based one featuring a sleeker design.
-
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message

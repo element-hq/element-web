@@ -386,7 +386,7 @@ module.exports = (env, argv) => {
                 // of the themes and which chunks we actually care about.
                 inject: false,
                 excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
-                minify: argv.mode === 'production',
+                minify: false,
                 templateParameters: {
                     og_image_url: ogImageUrl,
                 },
@@ -396,7 +396,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './src/vector/jitsi/index.html',
                 filename: 'jitsi.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: ['jitsi'],
             }),
 
@@ -404,7 +404,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './src/vector/mobile_guide/index.html',
                 filename: 'mobile_guide/index.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: ['mobileguide'],
             }),
 
@@ -412,13 +412,13 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './src/vector/static/unable-to-load.html',
                 filename: 'static/unable-to-load.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: [],
             }),
             new HtmlWebpackPlugin({
                 template: './src/vector/static/incompatible-browser.html',
                 filename: 'static/incompatible-browser.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: [],
             }),
 
@@ -426,7 +426,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './node_modules/matrix-react-sdk/src/usercontent/index.html',
                 filename: 'usercontent/index.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: ['usercontent'],
             }),
 

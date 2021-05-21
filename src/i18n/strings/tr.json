@@ -8,9 +8,9 @@
     "Sign In": "Giriş Yap",
     "Create Account": "Hesap Oluştur",
     "Explore rooms": "Odaları keşfet",
-    "Invalid JSON": "Geçersiz JSON",
+    "Invalid JSON": "JSON geçersiz",
     "Unexpected error preparing the app. See console for details.": "Uygulama hazırlanırken beklenmeyen bir hata oldu. Detaylar için konsola bakın.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Geçersiz yapılandırma: default_server_config, default_server_name, yada default_hs_url den sadece birisi seçilebilir.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Hatalı ayarlar: default_server_config, default_server_name ve default_hs_url ayarlarından en fazla biri girilebilir.",
     "Invalid configuration: no default server specified.": "Geçersiz yapılandırma: varsayılan sunucu seçilmemiş.",
     "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s",
     "Go to your browser to complete Sign In": "Oturum açmayı tamamlamak için tarayıcınıza gidin",
@@ -28,9 +28,10 @@
     "Go to element.io": "element.io adresine git",
     "Failed to start": "Başlatılamadı",
     "Previous/next recently visited room or community": "Yakında ziyaret edilen önceki/sonraki oda veya topluluk",
-    "Powered by Matrix": "Matrix tarafından güçlendirildi",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Powered by Matrix": "Gücünü Matrix'ten alır",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)  (%(browserName), %(osName))",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Masaüstü (%(platformName)s)",
     "Open": "Aç",
-    "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!"
+    "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!",
+    "Use %(brand)s on mobile": "Mobilde %(brand)s kullan"
 }
