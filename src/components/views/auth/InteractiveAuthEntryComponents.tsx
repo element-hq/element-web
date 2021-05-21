@@ -113,17 +113,25 @@ interface IAuthEntryProps {
     onPhaseChange: (phase: number) => void;
 }
 
+interface IPasswordAuthEntryState {
+    password: string;
+}
+
 @replaceableComponent("views.auth.PasswordAuthEntry")
-export class PasswordAuthEntry extends React.Component<IAuthEntryProps> {
+export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswordAuthEntryState> {
     static LOGIN_TYPE = AuthType.Password;
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            password: "",
+        };
+    }
 
     componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
-
-    state = {
-        password: "",
-    };
 
     private onSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -483,19 +491,29 @@ interface IMsisdnAuthEntryProps extends IAuthEntryProps {
     fail: (error: Error) => void;
 }
 
+interface IMsisdnAuthEntryState {
+    token: string;
+    requestingToken: boolean;
+    errorText: string;
+}
+
 @replaceableComponent("views.auth.MsisdnAuthEntry")
-export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps> {
+export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsisdnAuthEntryState> {
     static LOGIN_TYPE = AuthType.Msisdn;
 
     private submitUrl: string;
     private sid: string;
     private msisdn: string;
 
-    state = {
-        token: '',
-        requestingToken: false,
-        errorText: '',
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            token: '',
+            requestingToken: false,
+            errorText: '',
+        };
+    }
 
     componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
