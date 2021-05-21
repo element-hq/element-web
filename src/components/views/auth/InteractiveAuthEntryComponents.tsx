@@ -106,11 +106,11 @@ interface IAuthEntryProps {
     matrixClient: MatrixClient;
     loginType: string;
     authSessionId: string;
-    submitAuthDict: (auth: IAuthDict) => void;
     errorText?: string;
     // Is the auth logic currently waiting for something to happen?
     busy?: boolean;
     onPhaseChange: (phase: number) => void;
+    submitAuthDict: (auth: IAuthDict) => void;
 }
 
 interface IPasswordAuthEntryState {
