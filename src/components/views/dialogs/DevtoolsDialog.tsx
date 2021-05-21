@@ -662,7 +662,7 @@ class ServersInRoomList extends React.PureComponent<IExplorerProps, IServersInRo
         super(props);
 
         const room = this.props.room;
-        const servers: Set<string> = new Set();
+        const servers = new Set<string>();
         room.currentState.getStateEvents("m.room.member").forEach(ev => servers.add(ev.getSender().split(":")[1]));
         this.servers = Array.from(servers).map(s =>
             <button key={s} className="mx_DevTools_ServersInRoomList_button">
