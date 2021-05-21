@@ -4,6 +4,8 @@ import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import JSZip from "jszip";
 import { textForEvent } from "../TextForEvent";
 import streamSaver from "streamsaver";
+import { decryptFile } from "./DecryptFile";
+import { mediaFromContent, mediaFromMxc } from "../customisations/Media";
 
 const wrapHTML = (content, room) => (`
     <!DOCTYPE html>
@@ -31,36 +33,6 @@ const wrapHTML = (content, room) => (`
         </body>
         </html>
 `);
-
-
-const getTimelineConversation = (room) => {
-    if (!room) return;
-
-    const cli = MatrixClientPeg.get();
-
-    const timelineSet = room.getUnfilteredTimelineSet();
-
-    const timelineWindow = new TimelineWindow(
-        cli, timelineSet,
-        {windowLimit: Number.MAX_VALUE});
-
-    timelineWindow.load(null, 20);
-
-    const events = timelineWindow.getEvents();
-
-    // Clone and reverse the events so that we preserve the order
-    arrayFastClone(events)
-        .reverse()
-        .forEach(event => {
-            cli.decryptEventIfNeeded(event);
-        });
-
-    if (!timelineWindow.canPaginate('f')) {
-        events.push(...timelineSet.getPendingEvents());
-    }
-    console.log(events);
-    return events;
-};
 
 
 const css = `
@@ -297,6 +269,37 @@ div.selected {
 }
 `;
 
+
+const getTimelineConversation = (room) => {
+    if (!room) return;
+
+    const cli = MatrixClientPeg.get();
+
+    const timelineSet = room.getUnfilteredTimelineSet();
+
+    const timelineWindow = new TimelineWindow(
+        cli, timelineSet,
+        {windowLimit: Number.MAX_VALUE});
+
+    timelineWindow.load(null, 20);
+
+    const events = timelineWindow.getEvents();
+
+    // Clone and reverse the events so that we preserve the order
+    arrayFastClone(events)
+        .reverse()
+        .forEach(event => {
+            cli.decryptEventIfNeeded(event);
+        });
+
+    if (!timelineWindow.canPaginate('f')) {
+        events.push(...timelineSet.getPendingEvents());
+    }
+    console.log(events);
+    return events;
+};
+
+
 const userColors = [
     "#64bf47",
     "#4f9cd9",
@@ -307,41 +310,50 @@ const userColors = [
 ];
 
 
-//Get a color associated with a string. This is to map userId to a specific color
+//Get a color associated with string length. This is to map userId to a specific color
 const getUserColor = (userId) => {
     return userColors[userId.length % 4];
 };
 
-const createMessageBody = (event, joined = false, isReply = false, replyId = null) => {
-    return `
-    <div class="message default clearfix ${joined ? `joined` : ``}" id="message2680">
-      ${!joined ? `<div class="pull_left userpic_wrap">
-       <div class="userpic" style="width: 42px; height: 42px; background-color: ${getUserColor(event.sender.name)}">
-        <div class="initials" style="line-height: 42px">${event.sender.name[0]}</div>
-       </div>
-      </div>` : ``}
-      <div class="body">
-       <div class="pull_right date details" title="${new Date(event.getTs())}">${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}</div>
-       ${!joined ? `<div class="from_name" style="color:${getUserColor(event.sender.name)}">
-            ${event.sender.name}
-       </div>`: ``}
-        ${isReply ?
-        `<div class="reply_to details">
-            In reply to <a href="#${replyId}">this message</a>
-         </div>`: ``}
-       <div class="text"> ${event.getContent().body} </div>
-      </div>
-     </div>
-    `;
+
+const getUserPic = async (event) => {
+    const member = event.sender;
+    if (!member.getMxcAvatarUrl()) {
+        return `
+        <div class="pull_left userpic_wrap">
+            <div class="userpic" style="width: 42px;height: 42px;background-color: ${getUserColor(member.userId)}">
+                <div class="initials" style="line-height: 42px;" src="users/${member.userId}">${event.sender.name[0]}</div>
+            </div>
+        </div>
+           `;
+    } else {
+        const imageUrl = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(42, 42, "crop");
+
+        if (!avatars.has(member.userId)) {
+            avatars.set(member.userId, true);
+            const image = await fetch(imageUrl);
+            const blob = await image.blob();
+            zip.file(`users/${member.userId}`, blob);
+        }
+
+        return `
+        <div class="pull_left userpic_wrap">
+            <div class="userpic" style="width: 42px; height: 42px;">
+                <img class="initials" style="width: 42px;height: 42px;line-height:42px;" src="users/${member.userId}"/>
+            </div>
+        </div>
+           `;
+    }
 };
 
-
+//Gets the event_id of an event to which an event is replied
 const baseEventId = (event) => {
     const isEncrypted = event.isEncrypted();
+
     // If encrypted, in_reply_to lies in event.event.content
     const content = isEncrypted ? event.event.content : event.getContent();
     const relatesTo = content["m.relates_to"];
-    return relatesTo ? relatesTo["m.in_reply_to"].event_id : null;
+    return (relatesTo && relatesTo["m.in_reply_to"]) ? relatesTo["m.in_reply_to"]["event_id"] : null;
 };
 
 
@@ -361,16 +373,75 @@ const dateSeparator = (event, prevEvent) => {
     return "";
 };
 
-const createHTML = (events, room) => {
+const getImageData = async (event) => {
+    let blob;
+    try {
+        const isEncrypted = event.isEncrypted();
+        const content = event.getContent();
+        if (isEncrypted) {
+            blob = await decryptFile(content.file);
+        } else {
+            const media = mediaFromContent(event.getContent());
+            const image = await fetch(media.srcHttp);
+            blob = image.blob();
+        }
+    } catch (err) {
+        console.log("Error decrypting image");
+    }
+    return blob;
+};
+
+
+const createMessageBody = async (event, joined = false, isReply = false, replyId = null) => {
+    const userPic = await getUserPic(event);
+    let messageBody = "";
+    switch (event.getContent().msgtype) {
+        case "m.text":
+            messageBody = `<div class="text"> ${event.getContent().body} </div>`;
+            break;
+        case "m.image": {
+            messageBody = `<a class="photo_wrap clearfix pull_left" href="images/${event.getId()}.png">
+                            <img class="photo" src="images/${event.getId()}.png" style="width: 260px; height: 156px">
+                        </a>`;
+            const blob = await getImageData(event);
+            zip.file(`images/${event.getId()}.png`, blob);
+        }
+            break;
+        default:
+            break;
+    }
+
+    return `
+    <div class="message default clearfix ${joined ? `joined` : ``}" id="message2680">
+      ${!joined ? userPic : ``}
+      <div class="body">
+       <div class="pull_right date details" title="${new Date(event.getTs())}">${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}</div>
+       ${!joined ? `<div class="from_name" style="color:${getUserColor(event.sender.name)}">
+            ${event.sender.name}
+       </div>`: ``}
+        ${isReply ?
+        `<div class="reply_to details">
+            In reply to <a href="#${replyId}">this message</a>
+         </div>`: ``}
+        ${messageBody}
+      </div>
+     </div>
+    `;
+};
+
+
+const createHTML = async (events, room) => {
     let content = "";
     let prevEvent = null;
     for (const event of events) {
         content += dateSeparator(event, prevEvent);
+
         if (event.getType() === "m.room.message") {
             const replyTo = baseEventId(event);
             const shouldBeJoined = prevEvent && prevEvent.getContent().msgtype === "m.text"
             && event.sender.userId === prevEvent.sender.userId && !dateSeparator(event, prevEvent) && !replyTo;
-            const body = createMessageBody(event, shouldBeJoined, !!replyTo, replyTo);
+
+            const body = await createMessageBody(event, shouldBeJoined, !!replyTo, replyTo);
             content += body;
         } else {
             content += `
@@ -387,21 +458,26 @@ const createHTML = (events, room) => {
 };
 
 
+const avatars = new Map();
+let zip;
 const exportConversationalHistory = async (room) => {
     const res = getTimelineConversation(room);
-    const zip = new JSZip();
-    const html = createHTML(res, room);
-    zip.file("css/style.css", css);
+    zip = new JSZip();
+
+    const html = await createHTML(res, room, avatars);
+
     zip.file("index.html", html);
+    zip.file("css/style.css", css);
+
+    avatars.clear();
     const filename = `matrix-export-${new Date().toISOString()}.zip`;
 
     //Generate the zip file asynchronously
     const blob = await zip.generateAsync({ type: "blob" });
+
     //Create a writable stream to the directory
     const fileStream = streamSaver.createWriteStream(filename, blob.size);
     const writer = fileStream.getWriter();
-
-    // console.log(blob.size);
 
     // Here we chunk the blob into pieces of 10 MiB
     const sliceSize = 10 * 1e6;
