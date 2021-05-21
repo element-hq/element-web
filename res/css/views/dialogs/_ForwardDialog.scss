@@ -23,7 +23,15 @@ limitations under the License.
     min-height: 0;
     height: 80vh;
 
-    .mx_ForwardDialog_preview {
+    > h3 {
+        margin: 0 0 6px;
+        color: $secondary-fg-color;
+        font-size: $font-12px;
+        font-weight: $font-semi-bold;
+        line-height: $font-15px;
+    }
+
+    > .mx_ForwardDialog_preview {
         max-height: 30%;
         flex-shrink: 0;
         overflow: scroll;
@@ -43,7 +51,14 @@ limitations under the License.
         }
     }
 
-    .mx_ForwardList {
+    > hr {
+        width: 100%;
+        border: none;
+        border-top: 1px solid $input-border-color;
+        margin: 12px 0;
+    }
+
+    > .mx_ForwardList {
         display: contents;
 
         .mx_SearchBox {
@@ -54,8 +69,6 @@ limitations under the License.
 
         .mx_ForwardList_content {
             flex-grow: 1;
-            // Push the scrollbar into the gutter
-            margin-right: -6px;
         }
 
         .mx_ForwardList_noResults {
@@ -64,30 +77,24 @@ limitations under the License.
         }
 
         .mx_ForwardList_results {
-            margin-right: 6px;
-
             &:not(:first-child) {
                 margin-top: 24px;
-            }
-
-            > h3 {
-                margin: 0;
-                color: $secondary-fg-color;
-                font-size: $font-12px;
-                font-weight: $font-semi-bold;
-                line-height: $font-15px;
             }
 
             .mx_ForwardList_entry {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 12px;
                 height: 32px;
+                padding: 6px;
+                border-radius: 8px;
+
+                &:hover {
+                    background-color: $groupFilterPanel-bg-color;
+                }
 
                 .mx_ForwardList_roomButton {
                     display: flex;
                     margin-right: 12px;
-                    flex-grow: 1;
                     min-width: 0;
 
                     .mx_DecoratedRoomAvatar {
@@ -105,26 +112,39 @@ limitations under the License.
                 }
 
                 .mx_ForwardList_sendButton {
-                    &.mx_ForwardList_sending, &.mx_ForwardList_sent {
-                        &::before {
-                            content: '';
-                            display: inline-block;
-                            background-color: $button-primary-bg-color;
-                            mask-position: center;
-                            mask-repeat: no-repeat;
-                            mask-size: 14px;
-                            width: 14px;
-                            height: 14px;
-                            margin-right: 5px;
-                        }
+                    position: relative;
+
+                    &:not(.mx_ForwardList_canSend) .mx_ForwardList_sendLabel {
+                        // Hide the "Send" label while preserving button size
+                        visibility: hidden;
                     }
 
-                    &.mx_ForwardList_sending::before {
+                    .mx_ForwardList_sendIcon, .mx_NotificationBadge {
+                        position: absolute;
+                    }
+
+                    .mx_NotificationBadge {
+                        opacity: 0.4;
+                    }
+
+                    &.mx_ForwardList_sending .mx_ForwardList_sendIcon {
+                        background-color: $button-primary-bg-color;
                         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
+                        mask-position: center;
+                        mask-repeat: no-repeat;
+                        mask-size: 14px;
+                        width: 14px;
+                        height: 14px;
                     }
 
-                    &.mx_ForwardList_sent::before {
+                    &.mx_ForwardList_sent .mx_ForwardList_sendIcon {
+                        background-color: $button-primary-bg-color;
                         mask-image: url('$(res)/img/element-icons/circle-sent.svg');
+                        mask-position: center;
+                        mask-repeat: no-repeat;
+                        mask-size: 14px;
+                        width: 14px;
+                        height: 14px;
                     }
                 }
             }

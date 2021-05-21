@@ -31,9 +31,11 @@ import {avatarUrlForUser} from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import AccessibleButton from "../elements/AccessibleButton";
+import {Alignment} from '../elements/Tooltip';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import NotificationBadge from "../rooms/NotificationBadge";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 
@@ -82,52 +84,60 @@ const Entry: React.FC<IEntryProps> = ({ room, event, cli, onFinished }) => {
         }
     };
 
-    let button;
-    if (room.maySendMessage()) {
-        let label;
-        let className;
-        if (sendState === SendState.CanSend) {
-            label = _t("Send");
-            className = "mx_ForwardList_canSend";
-        } else if (sendState === SendState.Sending) {
-            label = _t("Sending…");
-            className = "mx_ForwardList_sending";
-        } else if (sendState === SendState.Sent) {
-            label = _t("Sent");
-            className = "mx_ForwardList_sent";
+    let className;
+    let disabled = false;
+    let title;
+    let icon;
+    if (sendState === SendState.CanSend) {
+        className = "mx_ForwardList_canSend";
+        if (room.maySendMessage()) {
+            title = _t("Send");
         } else {
-            label = _t("Failed to send");
-            className = "mx_ForwardList_sendFailed";
+            disabled = true;
+            title = _t("You do not have permission to do this");
         }
-
-        button =
-            <AccessibleButton
-                kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
-                className={`mx_ForwardList_sendButton ${className}`}
-                onClick={send}
-                disabled={sendState !== SendState.CanSend}
-            >
-                { label }
-            </AccessibleButton>;
+    } else if (sendState === SendState.Sending) {
+        className = "mx_ForwardList_sending";
+        disabled = true;
+        title = _t("Sending…");
+        icon = <div className="mx_ForwardList_sendIcon"></div>;
+    } else if (sendState === SendState.Sent) {
+        className = "mx_ForwardList_sent";
+        disabled = true;
+        title = _t("Sent");
+        icon = <div className="mx_ForwardList_sendIcon"></div>;
     } else {
-        button =
-            <AccessibleTooltipButton
-                kind="primary_outline"
-                className="mx_ForwardList_sendButton mx_ForwardList_canSend"
-                onClick={() => {}}
-                disabled={true}
-                title={_t("You do not have permission to post to this room")}
-            >
-                { _t("Send") }
-            </AccessibleTooltipButton>;
+        className = "mx_ForwardList_sendFailed";
+        disabled = true;
+        title = _t("Failed to send");
+        icon = <NotificationBadge
+            notification={StaticNotificationState.RED_EXCLAMATION}
+        />;
     }
 
     return <div className="mx_ForwardList_entry">
-        <AccessibleButton className="mx_ForwardList_roomButton" onClick={jumpToRoom}>
+        <AccessibleTooltipButton
+            className="mx_ForwardList_roomButton"
+            onClick={jumpToRoom}
+            title={_t("Open link")}
+            yOffset={-20}
+            alignment={Alignment.Top}
+        >
             <DecoratedRoomAvatar room={room} avatarSize={32} />
             <span className="mx_ForwardList_entry_name">{ room.name }</span>
-        </AccessibleButton>
-        { button }
+        </AccessibleTooltipButton>
+        <AccessibleTooltipButton
+            kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
+            className={`mx_ForwardList_sendButton ${className}`}
+            onClick={send}
+            disabled={disabled}
+            title={title}
+            yOffset={-20}
+            alignment={Alignment.Top}
+        >
+            <div className="mx_ForwardList_sendLabel">{ _t("Send") }</div>
+            { icon }
+        </AccessibleTooltipButton>
     </div>;
 };
 
@@ -180,6 +190,7 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
         onFinished={onFinished}
         fixedWidth={false}
     >
+        <h3>{ _t("Message preview") }</h3>
         <div className={classnames("mx_ForwardDialog_preview", {
             "mx_IRCLayout": previewLayout == Layout.IRC,
             "mx_GroupLayout": previewLayout == Layout.Group,
@@ -191,11 +202,11 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
                 permalinkCreator={permalinkCreator}
             />
         </div>
+        <hr />
         <div className="mx_ForwardList">
-            <h2>{ _t("Forward to") }</h2>
             <SearchBox
                 className="mx_textinput_icon mx_textinput_search"
-                placeholder={ _t("Filter your rooms and DMs") }
+                placeholder={ _t("Search for rooms or people") }
                 onSearch={setQuery}
                 autoComplete={true}
                 autoFocus={true}
