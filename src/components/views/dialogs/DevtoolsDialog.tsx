@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState, useEffect, ChangeEvent, MouseEvent} from 'react';
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 
 import {
     PHASE_UNSENT,
@@ -33,14 +33,14 @@ import {
     VerificationRequest,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import {SETTINGS} from "../../../settings/Settings";
-import SettingsStore, {LEVEL_ORDER} from "../../../settings/SettingsStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import { SETTINGS } from "../../../settings/Settings";
+import SettingsStore, { LEVEL_ORDER } from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from '../../../settings/SettingLevel';
 
 interface IGenericEditorProps {
