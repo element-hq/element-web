@@ -30,6 +30,7 @@ import InlineSpinner from '../elements/InlineSpinner';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromContent} from "../../../customisations/Media";
 import BlurhashPlaceholder from "../elements/BlurhashPlaceholder";
+import {BLURHASH_FIELD} from "../../../ContentMessages";
 
 @replaceableComponent("views.messages.MImageBody")
 export default class MImageBody extends React.Component {
@@ -440,7 +441,7 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     getPlaceholder(width, height) {
-        const blurhash = this.props.mxEvent.getContent().info['xyz.amorgan.blurhash'];
+        const blurhash = this.props.mxEvent.getContent().info[BLURHASH_FIELD];
         if (!blurhash) return null;
         return <BlurhashPlaceholder blurhash={blurhash} width={width} height={height} />;
     }
