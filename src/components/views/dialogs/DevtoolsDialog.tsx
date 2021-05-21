@@ -701,7 +701,7 @@ const PHASE_MAP = {
     [PHASE_CANCELLED]: "cancelled",
 };
 
-const VerificationRequest: React.FC<{
+const VerificationRequestExplorer: React.FC<{
     txnId: string;
     request: VerificationRequest;
 }> = ({txnId, request}) => {
@@ -772,7 +772,7 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
         return (<div>
             <div className="mx_Dialog_content">
                 {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
-                    <VerificationRequest txnId={txnId} request={request} key={txnId} />,
+                    <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
                 )}
             </div>
             <div className="mx_Dialogbuttons">
