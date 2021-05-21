@@ -2202,7 +2202,7 @@
     "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.",
     "Report a bug": "Report a bug",
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.",
-    "You do not have permission to do this": "You do not have permission to do this",
+    "You don't have permission to do this": "You don't have permission to do this",
     "Sending…": "Sending…",
     "Sent": "Sent",
     "Open link": "Open link",

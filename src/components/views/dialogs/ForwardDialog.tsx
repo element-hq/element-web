@@ -94,7 +94,7 @@ const Entry: React.FC<IEntryProps> = ({ room, event, cli, onFinished }) => {
             title = _t("Send");
         } else {
             disabled = true;
-            title = _t("You do not have permission to do this");
+            title = _t("You don't have permission to do this");
         }
     } else if (sendState === SendState.Sending) {
         className = "mx_ForwardList_sending";
