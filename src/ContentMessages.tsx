@@ -50,8 +50,8 @@ const MAX_HEIGHT = 600;
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
-const BLURHASH_X_COMPONENTS = 8;
-const BLURHASH_Y_COMPONENTS = 8;
+const BLURHASH_X_COMPONENTS = 6;
+const BLURHASH_Y_COMPONENTS = 6;
 
 export class UploadCanceledError extends Error {}
 
