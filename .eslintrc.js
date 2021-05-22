@@ -15,7 +15,6 @@ module.exports = {
         "prefer-promise-reject-errors": "off",
         "no-async-promise-executor": "off",
         "quotes": "off",
-        "indent": "off",
     },
 
     overrides: [{

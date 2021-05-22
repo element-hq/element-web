@@ -187,8 +187,7 @@ export default class ReadReceiptMarker extends React.PureComponent {
         }
 
         return (
-            <NodeAnimator
-                    startStyles={this.state.startStyles} >
+            <NodeAnimator startStyles={this.state.startStyles}>
                 <MemberAvatar
                     member={this.props.member}
                     fallbackUserId={this.props.fallbackUserId}

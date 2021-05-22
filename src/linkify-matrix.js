@@ -254,11 +254,15 @@ matrixLinkify.options = {
 
     target: function(href, type) {
         if (type === 'url') {
-            const transformed = tryTransformPermalinkToLocalHref(href);
-            if (transformed !== href || decodeURIComponent(href).match(matrixLinkify.ELEMENT_URL_PATTERN)) {
-                return null;
-            } else {
-                return '_blank';
+            try {
+                const transformed = tryTransformPermalinkToLocalHref(href);
+                if (transformed !== href || decodeURIComponent(href).match(matrixLinkify.ELEMENT_URL_PATTERN)) {
+                    return null;
+                } else {
+                    return '_blank';
+                }
+            } catch (e) {
+                // malformed URI
             }
         }
         return null;

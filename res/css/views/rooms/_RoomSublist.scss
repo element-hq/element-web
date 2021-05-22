@@ -98,7 +98,7 @@ limitations under the License.
             position: relative;
             width: 24px;
             height: 24px;
-            border-radius: 32px;
+            border-radius: 8px;
 
             &::before {
                 content: '';
@@ -112,6 +112,11 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 background: $muted-fg-color;
             }
+        }
+
+        .mx_RoomSublist_auxButton:hover,
+        .mx_RoomSublist_menuButton:hover {
+            background: $roomlist-button-bg-color;
         }
 
         // Hide the menu button by default

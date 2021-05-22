@@ -178,9 +178,15 @@ export default class GroupMemberList extends React.Component {
         }
 
         const inputBox = (
-            <input className="mx_GroupMemberList_query mx_textinput" id="mx_GroupMemberList_query" type="text"
-                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder={_t('Filter community members')} autoComplete="off" />
+            <input
+                className="mx_GroupMemberList_query mx_textinput"
+                id="mx_GroupMemberList_query"
+                type="text"
+                onChange={this.onSearchQueryChanged}
+                value={this.state.searchQuery}
+                placeholder={_t('Filter community members')}
+                autoComplete="off"
+            />
         );
 
         const joined = this.state.members ? <div className="mx_MemberList_joined">

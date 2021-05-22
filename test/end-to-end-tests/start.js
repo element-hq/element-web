@@ -79,8 +79,26 @@ async function runTests() {
         await new Promise((resolve) => setTimeout(resolve, 5 * 60 * 1000));
     }
 
-    await Promise.all(sessions.map((session) => session.close()));
+    const performanceEntries = {};
 
+    await Promise.all(sessions.map(async (session) => {
+        // Collecting all performance monitoring data before closing the session
+        const measurements = await session.page.evaluate(() => {
+            let measurements = [];
+            window.mxPerformanceMonitor.addPerformanceDataCallback({
+                entryNames: [
+                    window.mxPerformanceEntryNames.REGISTER,
+                ],
+                callback: (events) => {
+                    measurements = JSON.stringify(events);
+                },
+            }, true);
+            return measurements;
+        });
+        performanceEntries[session.username] = JSON.parse(measurements);
+        return session.close();
+    }));
+    fs.writeFileSync(`performance-entries.json`, JSON.stringify(performanceEntries));
     if (failure) {
         process.exit(-1);
     } else {

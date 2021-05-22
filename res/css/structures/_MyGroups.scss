@@ -17,6 +17,11 @@ limitations under the License.
 .mx_MyGroups {
     display: flex;
     flex-direction: column;
+
+    .mx_BetaCard {
+        margin: 0 72px;
+        max-width: 760px;
+    }
 }
 
 .mx_MyGroups .mx_RoomHeader_simpleHeader {
@@ -30,7 +35,7 @@ limitations under the License.
     flex-wrap: wrap;
 }
 
-.mx_MyGroups > :not(.mx_RoomHeader) {
+.mx_MyGroups > :not(.mx_RoomHeader):not(.mx_BetaCard) {
     max-width: 960px;
     margin: 40px;
 }

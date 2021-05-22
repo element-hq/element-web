@@ -62,6 +62,8 @@ const INITIAL_STATE = {
     shouldPeek: false,
 
     viaServers: [],
+
+    wasContextSwitch: false,
 };
 
 /**
@@ -116,6 +118,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     roomId: null,
                     roomAlias: null,
                     viaServers: [],
+                    wasContextSwitch: false,
                 });
                 break;
             case 'view_room_error':
@@ -195,6 +198,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 // pull the user out of Room Settings
                 isEditingSettings: false,
                 viaServers: payload.via_servers,
+                wasContextSwitch: payload.context_switch,
             };
 
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
@@ -231,6 +235,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     roomLoading: true,
                     roomLoadError: null,
                     viaServers: payload.via_servers,
+                    wasContextSwitch: payload.context_switch,
                 });
                 try {
                     const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
@@ -256,6 +261,8 @@ class RoomViewStore extends Store<ActionPayload> {
                 room_alias: payload.room_alias,
                 auto_join: payload.auto_join,
                 oob_data: payload.oob_data,
+                viaServers: payload.via_servers,
+                wasContextSwitch: payload.context_switch,
             });
         }
     }
@@ -266,7 +273,6 @@ class RoomViewStore extends Store<ActionPayload> {
             roomAlias: payload.room_alias,
             roomLoading: false,
             roomLoadError: payload.err,
-            viaServers: [],
         });
     }
 
@@ -425,6 +431,10 @@ class RoomViewStore extends Store<ActionPayload> {
 
     public shouldPeek() {
         return this.state.shouldPeek;
+    }
+
+    public getWasContextSwitch() {
+        return this.state.wasContextSwitch;
     }
 }
 

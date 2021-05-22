@@ -20,7 +20,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { User } from "matrix-js-sdk/src/models/user";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import { TagID } from '../../../stores/room-list/models';
 import RoomAvatar from "./RoomAvatar";
 import NotificationBadge from '../rooms/NotificationBadge';
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
@@ -35,7 +34,6 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 interface IProps {
     room: Room;
     avatarSize: number;
-    tag: TagID;
     displayBadge?: boolean;
     forceCount?: boolean;
     oobData?: object;

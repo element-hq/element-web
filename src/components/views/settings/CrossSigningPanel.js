@@ -259,7 +259,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                             <td>{_t("Homeserver feature support:")}</td>
                             <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
                         </tr>
-                   </tbody></table>
+                    </tbody></table>
                 </details>
                 {errorSection}
                 {actionRow}

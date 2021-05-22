@@ -84,22 +84,22 @@ describe('MegolmExportEncryption', function() {
         it('should handle missing header', function() {
             const input=stringToArray(`-----`);
             return MegolmExportEncryption.decryptMegolmKeyFile(input, '')
-            .then((res) => {
-                throw new Error('expected to throw');
-            }, (error) => {
-                expect(error.message).toEqual('Header line not found');
-            });
+                .then((res) => {
+                    throw new Error('expected to throw');
+                }, (error) => {
+                    expect(error.message).toEqual('Header line not found');
+                });
         });
 
         it('should handle missing trailer', function() {
             const input=stringToArray(`-----BEGIN MEGOLM SESSION DATA-----
 -----`);
             return MegolmExportEncryption.decryptMegolmKeyFile(input, '')
-            .then((res) => {
-                throw new Error('expected to throw');
-            }, (error) => {
-                expect(error.message).toEqual('Trailer line not found');
-            });
+                .then((res) => {
+                    throw new Error('expected to throw');
+                }, (error) => {
+                    expect(error.message).toEqual('Trailer line not found');
+                });
         });
 
         it('should handle a too-short body', function() {
@@ -109,11 +109,11 @@ cissyYBxjsfsAn
 -----END MEGOLM SESSION DATA-----
 `);
             return MegolmExportEncryption.decryptMegolmKeyFile(input, '')
-            .then((res) => {
-                throw new Error('expected to throw');
-            }, (error) => {
-                expect(error.message).toEqual('Invalid file: too short');
-            });
+                .then((res) => {
+                    throw new Error('expected to throw');
+                }, (error) => {
+                    expect(error.message).toEqual('Invalid file: too short');
+                });
         });
 
         // TODO find a subtlecrypto shim which doesn't break this test

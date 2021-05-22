@@ -214,7 +214,7 @@ export default class DevicesPanel extends React.Component {
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
             <AccessibleButton onClick={this._onDeleteClick} kind="danger_sm">
-               { _t("Delete %(count)s sessions", {count: this.state.selectedDevices.length}) }
+                { _t("Delete %(count)s sessions", {count: this.state.selectedDevices.length})}
             </AccessibleButton>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");
