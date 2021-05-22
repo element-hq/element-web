@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from 'prop-types';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 class ItemRange {
     constructor(topCount, renderCount, bottomCount) {
@@ -55,6 +56,7 @@ class ItemRange {
     }
 }
 
+@replaceableComponent("views.elements.LazyRenderList")
 export default class LazyRenderList extends React.Component {
     constructor(props) {
         super(props);

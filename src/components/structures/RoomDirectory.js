@@ -27,13 +27,14 @@ import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {ALL_ROOMS} from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
 import CountlyAnalytics from "../../CountlyAnalytics";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../customisations/Media";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -42,6 +43,7 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
+@replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component {
     static propTypes = {
         initialText: PropTypes.string,
@@ -519,10 +521,9 @@ export default class RoomDirectory extends React.Component {
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
         topic = linkifyAndSanitizeHtml(topic);
-        const avatarUrl = getHttpUriForMxc(
-                                MatrixClientPeg.get().getHomeserverUrl(),
-                                room.avatar_url, 32, 32, "crop",
-                            );
+        let avatarUrl = null;
+        if (room.avatar_url) avatarUrl = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(32);
+
         return [
             <div key={ `${room.room_id}_avatar` }
                 onClick={(ev) => this.onRoomClicked(room, ev)}

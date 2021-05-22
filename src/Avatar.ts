@@ -14,28 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import {User} from "matrix-js-sdk/src/models/user";
 import {Room} from "matrix-js-sdk/src/models/room";
 
-import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
+import {mediaFromMxc} from "./customisations/Media";
+import SettingsStore from "./settings/SettingsStore";
 
 export type ResizeMethod = "crop" | "scale";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(member: RoomMember, width: number, height: number, resizeMethod: ResizeMethod) {
     let url: string;
-    if (member && member.getAvatarUrl) {
-        url = member.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            Math.floor(width * window.devicePixelRatio),
-            Math.floor(height * window.devicePixelRatio),
-            resizeMethod,
-            false,
-            false,
-        );
+    if (member?.getMxcAvatarUrl()) {
+        url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
     if (!url) {
         // member can be null here currently since on invites, the JS SDK
@@ -47,16 +40,8 @@ export function avatarUrlForMember(member: RoomMember, width: number, height: nu
 }
 
 export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
-    const url = getHttpUriForMxc(
-        MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
-        Math.floor(width * window.devicePixelRatio),
-        Math.floor(height * window.devicePixelRatio),
-        resizeMethod,
-    );
-    if (!url || url.length === 0) {
-        return null;
-    }
-    return url;
+    if (!user.avatarUrl) return null;
+    return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(width, height, resizeMethod);
 }
 
 function isValidHexColor(color: string): boolean {
@@ -154,16 +139,12 @@ export function getInitialLetter(name: string): string {
 export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod?: ResizeMethod) {
     if (!room) return null; // null-guard
 
-    const explicitRoomAvatar = room.getAvatarUrl(
-        MatrixClientPeg.get().getHomeserverUrl(),
-        width,
-        height,
-        resizeMethod,
-        false,
-    );
-    if (explicitRoomAvatar) {
-        return explicitRoomAvatar;
+    if (room.getMxcAvatarUrl()) {
+        return mediaFromMxc(room.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
+
+    // space rooms cannot be DMs so skip the rest
+    if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
 
     let otherMember = null;
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
@@ -174,14 +155,8 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
         // then still try to show any avatar (pref. other member)
         otherMember = room.getAvatarFallbackMember();
     }
-    if (otherMember) {
-        return otherMember.getAvatarUrl(
-            MatrixClientPeg.get().getHomeserverUrl(),
-            width,
-            height,
-            resizeMethod,
-            false,
-        );
+    if (otherMember?.getMxcAvatarUrl()) {
+        return mediaFromMxc(otherMember.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
     return null;
 }

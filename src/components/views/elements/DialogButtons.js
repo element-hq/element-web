@@ -19,10 +19,12 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import { _t } from '../../../languageHandler';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 /**
  * Basic container for buttons in modal dialogs.
  */
+@replaceableComponent("views.elements.DialogButtons")
 export default class DialogButtons extends React.Component {
     static propTypes = {
         // The primary button which is styled differently and has default focus.

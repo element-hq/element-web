@@ -25,7 +25,9 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import sendBugReport, {downloadBugReport} from '../../../rageshake/submit-rageshake';
 import AccessibleButton from "../elements/AccessibleButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.BugReportDialog")
 export default class BugReportDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -182,7 +184,7 @@ export default class BugReportDialog extends React.Component {
 
         return (
             <BaseDialog className="mx_BugReportDialog" onFinished={this._onCancel}
-                    title={_t('Submit debug logs')}
+                title={_t('Submit debug logs')}
                 contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>

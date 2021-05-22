@@ -21,7 +21,9 @@ import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
 import {wantsDateSeparator} from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.MessageEditHistoryDialog")
 export default class MessageEditHistoryDialog extends React.PureComponent {
     static propTypes = {
         mxEvent: PropTypes.object.isRequired,
@@ -162,8 +164,12 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
         }
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <BaseDialog className='mx_MessageEditHistoryDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Message edits")}>
+            <BaseDialog
+                className='mx_MessageEditHistoryDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Message edits")}
+            >
                 {content}
             </BaseDialog>
         );

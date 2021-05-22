@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-"use strict";
-
 // polyfill textencoder if necessary
 import * as TextEncodingUtf8 from 'text-encoding-utf-8';
 let TextEncoder = window.TextEncoder;
@@ -312,8 +310,7 @@ function unpackMegolmKeyFile(data) {
     // look for the end line
     while (1) {
         const lineEnd = fileStr.indexOf('\n', lineStart);
-        const line = fileStr.slice(lineStart, lineEnd < 0 ? undefined : lineEnd)
-              .trim();
+        const line = fileStr.slice(lineStart, lineEnd < 0 ? undefined : lineEnd).trim();
         if (line === TRAILER_LINE) {
             break;
         }

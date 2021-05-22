@@ -22,11 +22,15 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { throttle } from "lodash";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
+import {mediaFromMxc} from "../customisations/Media";
 
 interface IState {
     displayName?: string;
     avatarUrl?: string;
 }
+
+const KEY_DISPLAY_NAME = "mx_profile_displayname";
+const KEY_AVATAR_URL = "mx_profile_avatar_url";
 
 export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new OwnProfileStore();
@@ -34,7 +38,13 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     private monitoredUser: User;
 
     private constructor() {
-        super(defaultDispatcher, {});
+        // seed from localstorage because otherwise we won't get these values until a whole network
+        // round-trip after the client is ready, and we often load widgets in that time, and we'd
+        // and up passing them an incorrect display name
+        super(defaultDispatcher, {
+            displayName: window.localStorage.getItem(KEY_DISPLAY_NAME),
+            avatarUrl: window.localStorage.getItem(KEY_AVATAR_URL),
+        });
     }
 
     public static get instance(): OwnProfileStore {
@@ -72,8 +82,12 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
      */
     public getHttpAvatarUrl(size = 0): string {
         if (!this.avatarMxc) return null;
-        const adjustedSize = size > 1 ? size : undefined; // don't let negatives or zero through
-        return this.matrixClient.mxcUrlToHttp(this.avatarMxc, adjustedSize, adjustedSize);
+        const media = mediaFromMxc(this.avatarMxc);
+        if (!size || size <= 0) {
+            return media.srcHttp;
+        } else {
+            return media.getSquareThumbnailHttp(size);
+        }
     }
 
     protected async onNotReady() {
@@ -110,6 +124,16 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         // We specifically do not use the User object we stored for profile info as it
         // could easily be wrong (such as per-room instead of global profile).
         const profileInfo = await this.matrixClient.getProfileInfo(this.matrixClient.getUserId());
+        if (profileInfo.displayname) {
+            window.localStorage.setItem(KEY_DISPLAY_NAME, profileInfo.displayname);
+        } else {
+            window.localStorage.removeItem(KEY_DISPLAY_NAME);
+        }
+        if (profileInfo.avatar_url) {
+            window.localStorage.setItem(KEY_AVATAR_URL, profileInfo.avatar_url);
+        } else {
+            window.localStorage.removeItem(KEY_AVATAR_URL);
+        }
         await this.updateState({displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url});
     };
 

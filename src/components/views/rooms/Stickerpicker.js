@@ -30,6 +30,7 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {Action} from "../../../dispatcher/actions";
 import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -38,6 +39,7 @@ const STICKERPICKER_Z_INDEX = 3500;
 // Key to store the widget's AppTile under in PersistedElement
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
+@replaceableComponent("views.rooms.Stickerpicker")
 export default class Stickerpicker extends React.Component {
     static currentWidget;
 
@@ -264,25 +266,25 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
-                        <AppTile
-                            app={stickerApp}
-                            room={this.props.room}
-                            fullWidth={true}
-                            userId={MatrixClientPeg.get().credentials.userId}
-                            creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
-                            waitForIframeLoad={true}
-                            showMenubar={true}
-                            onEditClick={this._launchManageIntegrations}
-                            onDeleteClick={this._removeStickerpickerWidgets}
-                            showTitle={false}
-                            showCancel={false}
-                            showPopout={false}
-                            onMinimiseClick={this._onHideStickersClick}
-                            handleMinimisePointerEvents={true}
-                            userWidget={true}
-                        />
-                    </PersistedElement>
+                        <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
+                            <AppTile
+                                app={stickerApp}
+                                room={this.props.room}
+                                fullWidth={true}
+                                userId={MatrixClientPeg.get().credentials.userId}
+                                creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
+                                waitForIframeLoad={true}
+                                showMenubar={true}
+                                onEditClick={this._launchManageIntegrations}
+                                onDeleteClick={this._removeStickerpickerWidgets}
+                                showTitle={false}
+                                showCancel={false}
+                                showPopout={false}
+                                onMinimiseClick={this._onHideStickersClick}
+                                handleMinimisePointerEvents={true}
+                                userWidget={true}
+                            />
+                        </PersistedElement>
                     </div>
                 </div>
             );

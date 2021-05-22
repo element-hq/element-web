@@ -26,6 +26,8 @@ import EmojiProvider from './EmojiProvider';
 import NotifProvider from './NotifProvider';
 import {timeout} from "../utils/promise";
 import AutocompleteProvider, {ICommand} from "./AutocompleteProvider";
+import SettingsStore from "../settings/SettingsStore";
+import SpaceProvider from "./SpaceProvider";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
@@ -56,6 +58,11 @@ const PROVIDERS = [
     DuckDuckGoProvider,
 ];
 
+// as the spaces feature is device configurable only, and toggling it refreshes the page, we can do this here
+if (SettingsStore.getValue("feature_spaces")) {
+    PROVIDERS.push(SpaceProvider);
+}
+
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;
 
@@ -82,15 +89,24 @@ export default class Autocompleter {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<IProviderCompletions[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<IProviderCompletions[]> {
         /* Note: This intentionally waits for all providers to return,
          otherwise, we run into a condition where new completions are displayed
          while the user is interacting with the list, which makes it difficult
          to predict whether an action will actually do what is intended
         */
         // list of results from each provider, each being a list of completions or null if it times out
-        const completionsList: ICompletion[][] = await Promise.all(this.providers.map(provider => {
-            return timeout(provider.getCompletions(query, selection, force), null, PROVIDER_COMPLETION_TIMEOUT);
+        const completionsList: ICompletion[][] = await Promise.all(this.providers.map(async provider => {
+            return await timeout(
+                provider.getCompletions(query, selection, force, limit),
+                null,
+                PROVIDER_COMPLETION_TIMEOUT,
+            );
         }));
 
         // map then filter to maintain the index for the map-operation, for this.providers to line up

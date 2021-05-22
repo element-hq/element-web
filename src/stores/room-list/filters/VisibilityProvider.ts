@@ -18,6 +18,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
 import VoipUserMapper from "../../../VoipUserMapper";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
@@ -36,23 +37,28 @@ export class VisibilityProvider {
         await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
     }
 
-    public isRoomVisible(room: Room): boolean {
-        let isVisible = true; // Returned at the end of this function
-        let forced = false; // When true, this function won't bother calling the customisation points
+    public isRoomVisible(room?: Room): boolean {
+        if (!room) {
+            return false;
+        }
 
         if (
             CallHandler.sharedInstance().getSupportsVirtualRooms() &&
             VoipUserMapper.sharedInstance().isVirtualRoom(room)
         ) {
-            isVisible = false;
-            forced = true;
+            return false;
+        }
+
+        // hide space rooms as they'll be shown in the SpacePanel
+        if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
+            return false;
         }
 
         const isVisibleFn = RoomListCustomisations.isRoomVisible;
-        if (!forced && isVisibleFn) {
-            isVisible = isVisibleFn(room);
+        if (isVisibleFn) {
+            return isVisibleFn(room);
         }
 
-        return isVisible;
+        return true; // default
     }
 }

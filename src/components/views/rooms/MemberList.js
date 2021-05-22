@@ -27,6 +27,10 @@ import * as sdk from "../../../index";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import RoomAvatar from "../avatars/RoomAvatar";
+import RoomName from "../elements/RoomName";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -36,6 +40,7 @@ const SHOW_MORE_INCREMENT = 100;
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
+@replaceableComponent("views.rooms.MemberList")
 export default class MemberList extends React.Component {
     constructor(props) {
         super(props);
@@ -128,6 +133,12 @@ export default class MemberList extends React.Component {
         }
     }
 
+    get canInvite() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        return room && room.canInvite(cli.getUserId());
+    }
+
     _getMembersState(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
@@ -136,6 +147,7 @@ export default class MemberList extends React.Component {
             members: members,
             filteredJoinedMembers: this._filterMembers(members, 'join'),
             filteredInvitedMembers: this._filterMembers(members, 'invite'),
+            canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
@@ -191,6 +203,8 @@ export default class MemberList extends React.Component {
             event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
+
+        if (this.canInvite !== this.state.canInvite) this.setState({ canInvite: this.canInvite });
     };
 
     _updateList = rate_limited_func(() => {
@@ -450,27 +464,17 @@ export default class MemberList extends React.Component {
         let inviteButton;
 
         if (room && room.getMyMembership() === 'join') {
-            // assume we can invite until proven false
-            let canInvite = true;
-
-            const plEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-            const me = room.getMember(cli.getUserId());
-            if (plEvent && me) {
-                const content = plEvent.getContent();
-                if (content && content.invite > me.powerLevel) {
-                    canInvite = false;
-                }
-            }
-
             let inviteButtonText = _t("Invite to this room");
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
+            } else if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
+                inviteButtonText = _t("Invite to this space");
             }
 
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
-                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!this.state.canInvite}>
                     <span>{ inviteButtonText }</span>
                 </AccessibleButton>;
         }
@@ -493,12 +497,26 @@ export default class MemberList extends React.Component {
                 onSearch={ this.onSearchQueryChanged } />
         );
 
+        let previousPhase = RightPanelPhases.RoomSummary;
+        // We have no previousPhase for when viewing a MemberList from a Space
+        let scopeHeader;
+        if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
+            previousPhase = undefined;
+            scopeHeader = <div className="mx_RightPanel_scopeHeader">
+                <RoomAvatar room={room} height={32} width={32} />
+                <RoomName room={room} />
+            </div>;
+        }
+
         return <BaseCard
             className="mx_MemberList"
-            header={inviteButton}
+            header={<React.Fragment>
+                { scopeHeader }
+                { inviteButton }
+            </React.Fragment>}
             footer={footer}
             onClose={this.props.onClose}
-            previousPhase={RightPanelPhases.RoomSummary}
+            previousPhase={previousPhase}
         >
             <div className="mx_MemberList_wrapper">
                 <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}

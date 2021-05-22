@@ -52,7 +52,7 @@ const EncryptionInfo: React.FC<IProps> = ({
         let text: string;
         if (waitingForOtherParty) {
             if (isSelfVerification) {
-                text = _t("Waiting for you to accept on your other session…");
+                text = _t("Accept on your other login…");
             } else {
                 text = _t("Waiting for %(displayName)s to accept…", {
                     displayName: member.displayName || member.name || member.userId,

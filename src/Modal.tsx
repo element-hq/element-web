@@ -36,6 +36,7 @@ export interface IModal<T extends any[]> {
     onBeforeClose?(reason?: string): Promise<boolean>;
     onFinished(...args: T): void;
     close(...args: T): void;
+    hidden?: boolean;
 }
 
 export interface IHandle<T extends any[]> {
@@ -91,6 +92,12 @@ export class ModalManager {
         }
 
         return container;
+    }
+
+    public toggleCurrentDialogVisibility() {
+        const modal = this.getCurrentModal();
+        if (!modal) return;
+        modal.hidden = !modal.hidden;
     }
 
     public hasDialogs() {
@@ -364,7 +371,7 @@ export class ModalManager {
         }
 
         const modal = this.getCurrentModal();
-        if (modal !== this.staticModal) {
+        if (modal !== this.staticModal && !modal.hidden) {
             const classes = classNames("mx_Dialog_wrapper", modal.className, {
                 mx_Dialog_wrapperWithStaticUnder: this.staticModal,
             });

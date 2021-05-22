@@ -20,7 +20,9 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.CreateGroupDialog")
 export default class CreateGroupDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

@@ -25,6 +25,8 @@ import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
+import {ResizeMethod} from "../../../Avatar";
+import { _t } from '../../../languageHandler';
 
 interface IProps {
     name: string; // The name (first initial used as default)
@@ -35,7 +37,7 @@ interface IProps {
     width?: number;
     height?: number;
     // XXX: resizeMethod not actually used.
-    resizeMethod?: string;
+    resizeMethod?: ResizeMethod;
     defaultToInitialLetter?: boolean; // true to add default url
     onClick?: React.MouseEventHandler;
     inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
@@ -139,6 +141,7 @@ const BaseAvatar = (props: IProps) => {
         if (onClick) {
             return (
                 <AccessibleButton
+                    aria-label={_t("Avatar")}
                     {...otherProps}
                     element="span"
                     className={classNames("mx_BaseAvatar", className)}
@@ -176,7 +179,7 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                title={title} alt=""
+                title={title} alt={_t("Avatar")}
                 inputRef={inputRef}
                 {...otherProps} />
         );

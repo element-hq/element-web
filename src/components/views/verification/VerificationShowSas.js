@@ -21,11 +21,13 @@ import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import DialogButtons from "../elements/DialogButtons";
 import { fixupColorFonts } from '../../../utils/FontManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+@replaceableComponent("views.verification.VerificationShowSas")
 export default class VerificationShowSas extends React.Component {
     static propTypes = {
         pending: PropTypes.bool,

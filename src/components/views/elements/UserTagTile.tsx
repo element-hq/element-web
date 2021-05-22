@@ -21,6 +21,7 @@ import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import classNames from "classnames";
 import { _t } from "../../../languageHandler";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -29,6 +30,7 @@ interface IState {
     selected: boolean;
 }
 
+@replaceableComponent("views.elements.UserTagTile")
 export default class UserTagTile extends React.PureComponent<IProps, IState> {
     private tagStoreRef: fbEmitter.EventSubscription;
 

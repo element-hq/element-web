@@ -20,7 +20,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { User } from "matrix-js-sdk/src/models/user";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import { TagID } from '../../../stores/room-list/models';
 import RoomAvatar from "./RoomAvatar";
 import NotificationBadge from '../rooms/NotificationBadge';
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
@@ -30,11 +29,11 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {_t} from "../../../languageHandler";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     room: Room;
     avatarSize: number;
-    tag: TagID;
     displayBadge?: boolean;
     forceCount?: boolean;
     oobData?: object;
@@ -68,6 +67,7 @@ function tooltipText(variant: Icon) {
     }
 }
 
+@replaceableComponent("views.avatars.DecoratedRoomAvatar")
 export default class DecoratedRoomAvatar extends React.PureComponent<IProps, IState> {
     private _dmUser: User;
     private isUnmounted = false;

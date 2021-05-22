@@ -17,7 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import { Resizable } from 're-resizable';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.MainSplit")
 export default class MainSplit extends React.Component {
     _onResizeStart = () => {
         this.props.resizeNotifier.startResizing();

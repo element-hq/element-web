@@ -33,6 +33,7 @@ import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export const USER_GENERAL_TAB = "USER_GENERAL_TAB";
 export const USER_APPEARANCE_TAB = "USER_APPEARANCE_TAB";
@@ -45,6 +46,7 @@ export const USER_LABS_TAB = "USER_LABS_TAB";
 export const USER_MJOLNIR_TAB = "USER_MJOLNIR_TAB";
 export const USER_HELP_TAB = "USER_HELP_TAB";
 
+@replaceableComponent("views.dialogs.UserSettingsDialog")
 export default class UserSettingsDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -123,7 +125,10 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
-        if (SdkConfig.get()['showLabsSettings']) {
+        // Show the Labs tab if enabled or if there are any active betas
+        if (SdkConfig.get()['showLabsSettings']
+            || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
+        ) {
             tabs.push(new Tab(
                 USER_LABS_TAB,
                 _td("Labs"),
@@ -153,9 +158,13 @@ export default class UserSettingsDialog extends React.Component {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         return (
-            <BaseDialog className='mx_UserSettingsDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Settings")}>
-                <div className='ms_SettingsDialog_content'>
+            <BaseDialog
+                className='mx_UserSettingsDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Settings")}
+            >
+                <div className='mx_SettingsDialog_content'>
                     <TabbedView tabs={this._getTabs()} initialTabId={this.props.initialTabId} />
                 </div>
             </BaseDialog>

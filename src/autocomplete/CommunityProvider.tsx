@@ -27,6 +27,7 @@ import {sortBy} from "lodash";
 import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
+import {mediaFromMxc} from "../customisations/Media";
 
 const COMMUNITY_REGEX = /\B\+\S*/g;
 
@@ -49,7 +50,12 @@ export default class CommunityProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
@@ -80,7 +86,7 @@ export default class CommunityProvider extends AutocompleteProvider {
             this.matcher.setObjects(groups);
 
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString);
+            completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
                 (c) => score(matchedString, c.groupId),
                 (c) => c.groupId.length,
@@ -95,7 +101,7 @@ export default class CommunityProvider extends AutocompleteProvider {
                             name={name || groupId}
                             width={24}
                             height={24}
-                            url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
+                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24) : null} />
                     </PillCompletion>
                 ),
                 range,

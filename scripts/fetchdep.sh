@@ -22,15 +22,26 @@ clone() {
 }
 
 # Try the PR author's branch in case it exists on the deps as well.
-# If BUILDKITE_BRANCH is set, it will contain either:
+# First we check if BUILDKITE_BRANCH is defined,
+# if it isn't we can assume this is a Netlify build
+if [ -z ${BUILDKITE_BRANCH+x} ]; then 
+	# Netlify doesn't give us info about the fork so we have to get it from GitHub API
+	apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
+	apiEndpoint+=$REVIEW_ID
+	head=$(curl $apiEndpoint | jq -r '.head.label')
+else 
+	head=$BUILDKITE_BRANCH
+fi
+
+# If head is set, it will contain either:
 #   * "branch" when the author's branch and target branch are in the same repo
-#   * "author:branch" when the author's branch is in their fork
+#   * "fork:branch" when the author's branch is in their fork or if this is a Netlify build
 # We can split on `:` into an array to check.
-BUILDKITE_BRANCH_ARRAY=(${BUILDKITE_BRANCH//:/ })
-if [[ "${#BUILDKITE_BRANCH_ARRAY[@]}" == "1" ]]; then
+BRANCH_ARRAY=(${head//:/ })
+if [[ "${#BRANCH_ARRAY[@]}" == "1" ]]; then
     clone $deforg $defrepo $BUILDKITE_BRANCH
-elif [[ "${#BUILDKITE_BRANCH_ARRAY[@]}" == "2" ]]; then
-    clone ${BUILDKITE_BRANCH_ARRAY[0]} $defrepo ${BUILDKITE_BRANCH_ARRAY[1]}
+elif [[ "${#BRANCH_ARRAY[@]}" == "2" ]]; then
+    clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
 fi
 # Try the target branch of the push or PR.
 clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH

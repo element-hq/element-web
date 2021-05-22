@@ -22,11 +22,10 @@ import {LayoutPropType} from "../../settings/Layout";
 import React, {createRef} from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import {EventTimeline} from "matrix-js-sdk";
-import * as Matrix from "matrix-js-sdk";
+import {EventTimeline} from "matrix-js-sdk/src/models/event-timeline";
+import {TimelineWindow} from "matrix-js-sdk/src/timeline-window";
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
-import * as ObjectUtils from "../../ObjectUtils";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
@@ -37,6 +36,9 @@ import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {UIFeature} from "../../settings/UIFeature";
+import {objectHasDiff} from "../../utils/objects";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import { arrayFastClone } from "../../utils/arrays";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -55,6 +57,7 @@ if (DEBUG) {
  *
  * Also responsible for handling and sending read receipts.
  */
+@replaceableComponent("structures.TimelinePanel")
 class TimelinePanel extends React.Component {
     static propTypes = {
         // The js-sdk EventTimelineSet object for the timeline sequence we are
@@ -66,6 +69,7 @@ class TimelinePanel extends React.Component {
         showReadReceipts: PropTypes.bool,
         // Enable managing RRs and RMs. These require the timelineSet to have a room.
         manageReadReceipts: PropTypes.bool,
+        sendReadReceiptOnLoad: PropTypes.bool,
         manageReadMarkers: PropTypes.bool,
 
         // true to give the component a 'display: none' style.
@@ -124,6 +128,7 @@ class TimelinePanel extends React.Component {
         // event tile heights. (See _unpaginateEvents)
         timelineCap: Number.MAX_VALUE,
         className: 'mx_RoomView_messagePanel',
+        sendReadReceiptOnLoad: true,
     };
 
     constructor(props) {
@@ -261,7 +266,7 @@ class TimelinePanel extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!ObjectUtils.shallowEqual(this.props, nextProps)) {
+        if (objectHasDiff(this.props, nextProps)) {
             if (DEBUG) {
                 console.group("Timeline.shouldComponentUpdate: props change");
                 console.log("props before:", this.props);
@@ -271,7 +276,7 @@ class TimelinePanel extends React.Component {
             return true;
         }
 
-        if (!ObjectUtils.shallowEqual(this.state, nextState)) {
+        if (objectHasDiff(this.state, nextState)) {
             if (DEBUG) {
                 console.group("Timeline.shouldComponentUpdate: state change");
                 console.log("state before:", this.state);
@@ -460,6 +465,9 @@ class TimelinePanel extends React.Component {
                     );
                 }
             });
+        }
+        if (payload.action === "scroll_to_bottom") {
+            this.jumpToLiveTimeline();
         }
     };
 
@@ -780,8 +788,10 @@ class TimelinePanel extends React.Component {
             return;
         }
         const lastDisplayedEvent = this.state.events[lastDisplayedIndex];
-        this._setReadMarker(lastDisplayedEvent.getId(),
-                            lastDisplayedEvent.getTs());
+        this._setReadMarker(
+            lastDisplayedEvent.getId(),
+            lastDisplayedEvent.getTs(),
+        );
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
@@ -867,7 +877,7 @@ class TimelinePanel extends React.Component {
             // The messagepanel knows where the RM is, so we must have loaded
             // the relevant event.
             this._messagePanel.current.scrollToEvent(this.state.readMarkerEventId,
-                                                 0, 1/3);
+                0, 1/3);
             return;
         }
 
@@ -1005,7 +1015,7 @@ class TimelinePanel extends React.Component {
      * returns a promise which will resolve when the load completes.
      */
     _loadTimeline(eventId, pixelOffset, offsetBase) {
-        this._timelineWindow = new Matrix.TimelineWindow(
+        this._timelineWindow = new TimelineWindow(
             MatrixClientPeg.get(), this.props.timelineSet,
             {windowLimit: this.props.timelineCap});
 
@@ -1039,12 +1049,14 @@ class TimelinePanel extends React.Component {
                 }
                 if (eventId) {
                     this._messagePanel.current.scrollToEvent(eventId, pixelOffset,
-                                                         offsetBase);
+                        offsetBase);
                 } else {
                     this._messagePanel.current.scrollToBottom();
                 }
 
-                this.sendReadReceipt();
+                if (this.props.sendReadReceiptOnLoad) {
+                    this.sendReadReceipt();
+                }
             });
         };
 
@@ -1130,6 +1142,17 @@ class TimelinePanel extends React.Component {
     // get the list of events from the timeline window and the pending event list
     _getEvents() {
         const events = this._timelineWindow.getEvents();
+
+        // `arrayFastClone` performs a shallow copy of the array
+        // we want the last event to be decrypted first but displayed last
+        // `reverse` is destructive and unfortunately mutates the "events" array
+        arrayFastClone(events)
+            .reverse()
+            .forEach(event => {
+                const client = MatrixClientPeg.get();
+                client.decryptEventIfNeeded(event);
+            });
+
         const firstVisibleEventIndex = this._checkForPreJoinUISI(events);
 
         // Hold onto the live events separately. The read receipt and read marker
@@ -1413,8 +1436,8 @@ class TimelinePanel extends React.Component {
             ['PREPARED', 'CATCHUP'].includes(this.state.clientSyncState)
         );
         const events = this.state.firstVisibleEventIndex
-              ? this.state.events.slice(this.state.firstVisibleEventIndex)
-              : this.state.events;
+            ? this.state.events.slice(this.state.firstVisibleEventIndex)
+            : this.state.events;
         return (
             <MessagePanel
                 ref={this._messagePanel}

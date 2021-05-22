@@ -18,12 +18,14 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CountlyAnalytics from "../../../CountlyAnalytics";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const DIV_ID = 'mx_recaptcha';
 
 /**
  * A pure UI component which displays a captcha form.
  */
+@replaceableComponent("views.auth.CaptchaForm")
 export default class CaptchaForm extends React.Component {
     static propTypes = {
         sitePublicKey: PropTypes.string,

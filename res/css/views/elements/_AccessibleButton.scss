@@ -26,7 +26,9 @@ limitations under the License.
     padding: 7px 18px;
     text-align: center;
     border-radius: 8px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: $font-14px;
 }
 
@@ -74,10 +76,14 @@ limitations under the License.
     border: 1px solid $button-danger-bg-color;
 }
 
-.mx_AccessibleButton_kind_danger.mx_AccessibleButton_disabled,
-.mx_AccessibleButton_kind_danger_outline.mx_AccessibleButton_disabled {
+.mx_AccessibleButton_kind_danger.mx_AccessibleButton_disabled {
     color: $button-danger-disabled-fg-color;
     background-color: $button-danger-disabled-bg-color;
+}
+
+.mx_AccessibleButton_kind_danger_outline.mx_AccessibleButton_disabled {
+    color: $button-danger-disabled-bg-color;
+    border-color: $button-danger-disabled-bg-color;
 }
 
 .mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_danger_sm {

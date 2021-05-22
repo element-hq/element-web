@@ -33,4 +33,10 @@ limitations under the License.
         color: $notice-primary-color;
         background-color: $notice-primary-bg-color;
     }
+
+    &.mx_AccessibleButton_kind_secondary {
+        color: $secondary-fg-color;
+        border: 1px solid $secondary-fg-color;
+        background-color: unset;
+    }
 }

@@ -56,7 +56,6 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher = new QueryMatcher([], {
             keys: ['name'],
             funcs: [obj => obj.userId.slice(1)], // index by user id minus the leading '@'
-            shouldMatchPrefix: true,
             shouldMatchWordsOnly: false,
         });
 
@@ -103,7 +102,12 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     };
 
-    async getCompletions(rawQuery: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        rawQuery: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // lazy-load user list into matcher
@@ -119,7 +123,7 @@ export default class UserProvider extends AutocompleteProvider {
         if (fullMatch && fullMatch !== '@') {
             // Don't include the '@' in our search query - it's only used as a way to trigger completion
             const query = fullMatch.startsWith('@') ? fullMatch.substring(1) : fullMatch;
-            completions = this.matcher.match(query).map((user) => {
+            completions = this.matcher.match(query, limit).map((user) => {
                 const displayName = (user.name || user.userId || '');
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
@@ -155,6 +159,7 @@ export default class UserProvider extends AutocompleteProvider {
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
+        this.users = this.users.concat(this.room.getMembersWithMembership("invite"));
 
         this.users = sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 

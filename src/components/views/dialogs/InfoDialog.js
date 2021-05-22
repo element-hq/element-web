@@ -27,7 +27,7 @@ export default class InfoDialog extends React.Component {
         className: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.node,
-        button: PropTypes.string,
+        button: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
         onFinished: PropTypes.func,
         hasCloseButton: PropTypes.bool,
         onKeyDown: PropTypes.func,
@@ -60,11 +60,11 @@ export default class InfoDialog extends React.Component {
                 <div className={classNames("mx_Dialog_content", this.props.className)} id="mx_Dialog_content">
                     { this.props.description }
                 </div>
-                <DialogButtons primaryButton={this.props.button || _t('OK')}
+                { this.props.button !== false && <DialogButtons primaryButton={this.props.button || _t('OK')}
                     onPrimaryButtonClick={this.onFinished}
                     hasCancel={false}
                 >
-                </DialogButtons>
+                </DialogButtons> }
             </BaseDialog>
         );
     }

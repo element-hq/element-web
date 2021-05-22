@@ -16,30 +16,21 @@ limitations under the License.
 
 import React from "react";
 import {_t} from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.InlineSpinner")
 export default class InlineSpinner extends React.Component {
     render() {
         const w = this.props.w || 16;
         const h = this.props.h || 16;
-        const imgClass = this.props.imgClassName || "";
-
-        let imageSource;
-        if (SettingsStore.getValue('feature_new_spinner')) {
-            imageSource = require("../../../../res/img/spinner.svg");
-        } else {
-            imageSource = require("../../../../res/img/spinner.gif");
-        }
 
         return (
             <div className="mx_InlineSpinner">
-                <img
-                    src={imageSource}
-                    width={w}
-                    height={h}
-                    className={imgClass}
+                <div
+                    className="mx_InlineSpinner_icon mx_Spinner_icon"
+                    style={{width: w, height: h}}
                     aria-label={_t("Loading...")}
-                />
+                ></div>
             </div>
         );
     }

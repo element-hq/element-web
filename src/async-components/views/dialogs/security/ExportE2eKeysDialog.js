@@ -19,7 +19,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 
-import { MatrixClient } from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import * as sdk from '../../../../index';
 
@@ -170,8 +170,11 @@ export default class ExportE2eKeysDialog extends React.Component {
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value={_t('Export')}
-                             disabled={disableForm}
+                        <input
+                            className='mx_Dialog_primary'
+                            type='submit'
+                            value={_t('Export')}
+                            disabled={disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
                             { _t("Cancel") }

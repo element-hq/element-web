@@ -21,7 +21,9 @@ import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.PersistentApp")
 export default class PersistentApp extends React.Component {
     state = {
         roomId: RoomViewStore.getRoomId(),
@@ -31,6 +33,7 @@ export default class PersistentApp extends React.Component {
     componentDidMount() {
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         ActiveWidgetStore.on('update', this._onActiveWidgetStoreUpdate);
+        MatrixClientPeg.get().on("Room.myMembership", this._onMyMembership);
     }
 
     componentWillUnmount() {
@@ -38,6 +41,9 @@ export default class PersistentApp extends React.Component {
             this._roomStoreToken.remove();
         }
         ActiveWidgetStore.removeListener('update', this._onActiveWidgetStoreUpdate);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room.myMembership", this._onMyMembership);
+        }
     }
 
     _onRoomViewStoreUpdate = payload => {
@@ -53,16 +59,28 @@ export default class PersistentApp extends React.Component {
         });
     };
 
+    _onMyMembership = async (room, membership) => {
+        const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
+        if (membership !== "join") {
+            // we're not in the room anymore - delete
+            if (room.roomId === persistentWidgetInRoomId) {
+                ActiveWidgetStore.destroyPersistentWidget(this.state.persistentWidgetId);
+            }
+        }
+    };
+
     render() {
         if (this.state.persistentWidgetId) {
             const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
-            if (this.state.roomId !== persistentWidgetInRoomId) {
-                const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
 
-                // Sanity check the room - the widget may have been destroyed between render cycles, and
-                // thus no room is associated anymore.
-                if (!persistentWidgetInRoom) return null;
+            const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
 
+            // Sanity check the room - the widget may have been destroyed between render cycles, and
+            // thus no room is associated anymore.
+            if (!persistentWidgetInRoom) return null;
+
+            const myMembership = persistentWidgetInRoom.getMyMembership();
+            if (this.state.roomId !== persistentWidgetInRoomId && myMembership === "join") {
                 // get the widget data
                 const appEvent = WidgetUtils.getRoomWidgets(persistentWidgetInRoom).find((ev) => {
                     return ev.getStateKey() === ActiveWidgetStore.getPersistentWidgetId();

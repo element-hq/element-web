@@ -23,7 +23,9 @@ import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.PinnedEventTile")
 export default class PinnedEventTile extends React.Component {
     static propTypes = {
         mxRoom: PropTypes.object.isRequired,
@@ -51,9 +53,9 @@ export default class PinnedEventTile extends React.Component {
             if (index !== -1) {
                 pinned.splice(index, 1);
                 MatrixClientPeg.get().sendStateEvent(this.props.mxRoom.roomId, 'm.room.pinned_events', {pinned}, '')
-                .then(() => {
-                    if (this.props.onUnpinned) this.props.onUnpinned();
-                });
+                    .then(() => {
+                        if (this.props.onUnpinned) this.props.onUnpinned();
+                    });
             } else if (this.props.onUnpinned) this.props.onUnpinned();
         }
     };
@@ -96,8 +98,11 @@ export default class PinnedEventTile extends React.Component {
                     { formatFullDate(new Date(this.props.mxEvent.getTs())) }
                 </span>
                 <div className="mx_PinnedEventTile_message">
-                    <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" maxImageHeight={150}
-                                  onHeightChanged={() => {}} // we need to give this, apparently
+                    <MessageEvent
+                        mxEvent={this.props.mxEvent}
+                        className="mx_PinnedEventTile_body"
+                        maxImageHeight={150}
+                        onHeightChanged={() => {}} // we need to give this, apparently
                     />
                 </div>
             </div>

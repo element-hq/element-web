@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     className: string;
@@ -33,6 +34,7 @@ export interface ILocationState {
     currentY: number;
 }
 
+@replaceableComponent("views.elements.Draggable")
 export default class Draggable extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

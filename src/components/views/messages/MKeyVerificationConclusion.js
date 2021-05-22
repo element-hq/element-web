@@ -22,7 +22,9 @@ import { _t } from '../../../languageHandler';
 import {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';
 import EventTileBubble from "./EventTileBubble";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.messages.MKeyVerificationConclusion")
 export default class MKeyVerificationConclusion extends React.Component {
     constructor(props) {
         super(props);
@@ -80,9 +82,7 @@ export default class MKeyVerificationConclusion extends React.Component {
         }
 
         // User isn't actually verified
-        if (!MatrixClientPeg.get()
-                            .checkUserTrust(request.otherUserId)
-                            .isCrossSigningVerified()) {
+        if (!MatrixClientPeg.get().checkUserTrust(request.otherUserId).isCrossSigningVerified()) {
             return false;
         }
 

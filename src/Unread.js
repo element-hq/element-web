@@ -40,12 +40,14 @@ export function eventTriggersUnreadCount(ev) {
         return false;
     } else if (ev.getType() == 'm.room.server_acl') {
         return false;
+    } else if (ev.isRedacted()) {
+        return false;
     }
     return haveTileForEvent(ev);
 }
 
 export function doesRoomHaveUnreadMessages(room) {
-    const myUserId = MatrixClientPeg.get().credentials.userId;
+    const myUserId = MatrixClientPeg.get().getUserId();
 
     // get the most recent read receipt sent by our account.
     // N.B. this is NOT a read marker (RM, aka "read up to marker"),

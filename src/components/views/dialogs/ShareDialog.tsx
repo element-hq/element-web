@@ -34,6 +34,7 @@ import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const socials = [
     {
@@ -73,6 +74,7 @@ interface IState {
     permalinkCreator: RoomPermalinkCreator;
 }
 
+@replaceableComponent("views.dialogs.ShareDialog")
 export default class ShareDialog extends React.PureComponent<IProps, IState> {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,

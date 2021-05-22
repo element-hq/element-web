@@ -23,6 +23,7 @@ import {MatrixClientPeg} from "../../../../MatrixClientPeg";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -202,6 +203,7 @@ export class EmailAddress extends React.Component {
                     className="mx_ExistingEmailAddress_confirmBtn"
                     kind="primary_sm"
                     onClick={this.onContinueClick}
+                    disabled={this.state.continueDisabled}
                 >
                     {_t("Complete")}
                 </AccessibleButton>
@@ -233,6 +235,7 @@ export class EmailAddress extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.discovery.EmailAddresses")
 export default class EmailAddresses extends React.Component {
     static propTypes = {
         emails: PropTypes.array.isRequired,

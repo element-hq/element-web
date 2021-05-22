@@ -223,3 +223,54 @@ limitations under the License.
         content: ":";
     }
 }
+
+.mx_DevTools_SettingsExplorer {
+    table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+
+        th {
+            // Colour choice: first one autocomplete gave me.
+            border-bottom: 1px solid $accent-color;
+            text-align: left;
+        }
+
+        td, th {
+            width: 360px; // "feels right" number
+
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        td + td, th + th {
+            width: auto;
+        }
+
+        tr:hover {
+            // Colour choice: first one autocomplete gave me.
+            background-color: $accent-color-50pct;
+        }
+    }
+
+    .mx_DevTools_SettingsExplorer_mutable {
+        background-color: $accent-color;
+    }
+
+    .mx_DevTools_SettingsExplorer_immutable {
+        background-color: $warning-color;
+    }
+
+    .mx_DevTools_SettingsExplorer_edit {
+        float: right;
+        margin-right: 16px;
+    }
+
+    .mx_DevTools_SettingsExplorer_warning {
+        border: 2px solid $warning-color;
+        border-radius: 4px;
+        padding: 4px;
+        margin-bottom: 8px;
+    }
+}

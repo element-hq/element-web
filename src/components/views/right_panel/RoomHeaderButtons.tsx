@@ -26,6 +26,7 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
 import RightPanelStore from "../../../stores/RightPanelStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -37,6 +38,7 @@ const ROOM_INFO_PHASES = [
     RightPanelPhases.Room3pidMemberInfo,
 ];
 
+@replaceableComponent("views.right_panel.RoomHeaderButtons")
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, HeaderKind.Room);

@@ -20,7 +20,9 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.AskInviteAnywayDialog")
 export default class AskInviteAnywayDialog extends React.Component {
     static propTypes = {
         unknownProfileUsers: PropTypes.array.isRequired, // [ {userId, errorText}... ]

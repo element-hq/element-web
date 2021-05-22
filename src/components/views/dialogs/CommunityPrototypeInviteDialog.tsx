@@ -26,11 +26,12 @@ import SdkConfig from "../../../SdkConfig";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import InviteDialog from "./InviteDialog";
 import BaseAvatar from "../avatars/BaseAvatar";
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {inviteMultipleToRoom, showAnyInviteErrors} from "../../../RoomInvite";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface IProps extends IDialogProps {
     roomId: string;
@@ -52,6 +53,7 @@ interface IState {
     busy: boolean;
 }
 
+@replaceableComponent("views.dialogs.CommunityPrototypeInviteDialog")
 export default class CommunityPrototypeInviteDialog extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -140,12 +142,14 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
 
     private renderPerson(person: IPerson, key: any) {
         const avatarSize = 36;
+        let avatarUrl = null;
+        if (person.user.getMxcAvatarUrl()) {
+            avatarUrl = mediaFromMxc(person.user.getMxcAvatarUrl()).getSquareThumbnailHttp(avatarSize);
+        }
         return (
             <div className="mx_CommunityPrototypeInviteDialog_person" key={key}>
                 <BaseAvatar
-                    url={getHttpUriForMxc(
-                        MatrixClientPeg.get().getHomeserverUrl(), person.user.getMxcAvatarUrl(),
-                        avatarSize, avatarSize, "crop")}
+                    url={avatarUrl}
                     name={person.user.name}
                     idName={person.user.userId}
                     width={avatarSize}

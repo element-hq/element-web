@@ -16,7 +16,8 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
-import {EventTimeline, RoomMember} from 'matrix-js-sdk';
+import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
+import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
 import {sleep} from "../utils/promise";
 import SettingsStore from "../settings/SettingsStore";
 import {EventEmitter} from "events";
@@ -37,7 +38,6 @@ export default class EventIndex extends EventEmitter {
         this._eventsPerCrawl = 100;
         this._crawler = null;
         this._currentCheckpoint = null;
-        this.liveEventsForIndex = new Set();
     }
 
     async init() {
@@ -126,8 +126,13 @@ export default class EventIndex extends EventEmitter {
                     this.crawlerCheckpoints.push(forwardCheckpoint);
                 }
             } catch (e) {
-                console.log("EventIndex: Error adding initial checkpoints for room",
-                            room.roomId, backCheckpoint, forwardCheckpoint, e);
+                console.log(
+                    "EventIndex: Error adding initial checkpoints for room",
+                    room.roomId,
+                    backCheckpoint,
+                    forwardCheckpoint,
+                    e,
+                );
             }
         }));
     }
@@ -172,8 +177,10 @@ export default class EventIndex extends EventEmitter {
      * listener.
      */
     onRoomTimeline = async (ev, room, toStartOfTimeline, removed, data) => {
+        const client = MatrixClientPeg.get();
+
         // We only index encrypted rooms locally.
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+        if (!client.isRoomEncrypted(room.roomId)) return;
 
         // If it isn't a live event or if it's redacted there's nothing to
         // do.
@@ -182,16 +189,9 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
-        // If the event is not yet decrypted mark it for the
-        // Event.decrypted callback.
-        if (ev.isBeingDecrypted()) {
-            const eventId = ev.getId();
-            this.liveEventsForIndex.add(eventId);
-        } else {
-            // If the event is decrypted or is unencrypted add it to the
-            // index now.
-            await this.addLiveEventToIndex(ev);
-        }
+        await client.decryptEventIfNeeded(ev);
+
+        await this.addLiveEventToIndex(ev);
     }
 
     onRoomStateEvent = async (ev, state) => {
@@ -210,10 +210,7 @@ export default class EventIndex extends EventEmitter {
      * listener, if so queues it up to be added to the index.
      */
     onEventDecrypted = async (ev, err) => {
-        const eventId = ev.getId();
-
         // If the event isn't in our live event set, ignore it.
-        if (!this.liveEventsForIndex.delete(eventId)) return;
         if (err) return;
         await this.addLiveEventToIndex(ev);
     }
@@ -378,8 +375,12 @@ export default class EventIndex extends EventEmitter {
         try {
             await indexManager.addCrawlerCheckpoint(checkpoint);
         } catch (e) {
-            console.log("EventIndex: Error adding new checkpoint for room",
-                        room.roomId, checkpoint, e);
+            console.log(
+                "EventIndex: Error adding new checkpoint for room",
+                room.roomId,
+                checkpoint,
+                e,
+            );
         }
 
         this.crawlerCheckpoints.push(checkpoint);
@@ -458,7 +459,7 @@ export default class EventIndex extends EventEmitter {
             } catch (e) {
                 if (e.httpStatus === 403) {
                     console.log("EventIndex: Removing checkpoint as we don't have ",
-                                "permissions to fetch messages from this room.", checkpoint);
+                        "permissions to fetch messages from this room.", checkpoint);
                     try {
                         await indexManager.removeCrawlerCheckpoint(checkpoint);
                     } catch (e) {
@@ -513,18 +514,14 @@ export default class EventIndex extends EventEmitter {
                 }
             });
 
-            const decryptionPromises = [];
-
-            matrixEvents.forEach(ev => {
-                if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
-                    // TODO the decryption promise is a private property, this
-                    // should either be made public or we should convert the
-                    // event that gets fired when decryption is done into a
-                    // promise using the once event emitter method:
-                    // https://nodejs.org/api/events.html#events_events_once_emitter_name
-                    decryptionPromises.push(ev._decryptionPromise);
-                }
-            });
+            const decryptionPromises = matrixEvents
+                .filter(event => event.isEncrypted())
+                .map(event => {
+                    return client.decryptEventIfNeeded(event, {
+                        isRetry: true,
+                        emit: false,
+                    });
+                });
 
             // Let us wait for all the events to get decrypted.
             await Promise.all(decryptionPromises);
@@ -588,7 +585,7 @@ export default class EventIndex extends EventEmitter {
                 // to do here anymore.
                 if (!newCheckpoint) {
                     console.log("EventIndex: The server didn't return a valid ",
-                                "new checkpoint, not continuing the crawl.", checkpoint);
+                        "new checkpoint, not continuing the crawl.", checkpoint);
                     continue;
                 }
 
@@ -598,12 +595,12 @@ export default class EventIndex extends EventEmitter {
                 // the new checkpoint to be used by the crawler.
                 if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
                     console.log("EventIndex: Checkpoint had already all events",
-                                "added, stopping the crawl", checkpoint);
+                        "added, stopping the crawl", checkpoint);
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
                     if (eventsAlreadyAdded === true) {
                         console.log("EventIndex: Checkpoint had already all events",
-                                    "added, but continuing due to a full crawl", checkpoint);
+                            "added, but continuing due to a full crawl", checkpoint);
                     }
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
@@ -775,8 +772,14 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to true if events were added to the
      * timeline, false otherwise.
      */
-    async populateFileTimeline(timelineSet, timeline, room, limit = 10,
-                               fromEvent = null, direction = EventTimeline.BACKWARDS) {
+    async populateFileTimeline(
+        timelineSet,
+        timeline,
+        room,
+        limit = 10,
+        fromEvent = null,
+        direction = EventTimeline.BACKWARDS,
+    ) {
         const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
 
         // If this is a normal fill request, not a pagination request, we need
@@ -806,7 +809,7 @@ export default class EventIndex extends EventEmitter {
         }
 
         console.log("EventIndex: Populating file panel with", matrixEvents.length,
-                    "events and setting the pagination token to", paginationToken);
+            "events and setting the pagination token to", paginationToken);
 
         timeline.setPaginationToken(paginationToken, EventTimeline.BACKWARDS);
         return ret;

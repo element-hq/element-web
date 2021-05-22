@@ -22,7 +22,9 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {formatDate} from '../../../DateUtils';
 import StyledCheckbox from '../elements/StyledCheckbox';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.DevicesPanelEntry")
 export default class DevicesPanelEntry extends React.Component {
     constructor(props) {
         super(props);
