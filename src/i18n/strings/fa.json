@@ -738,5 +738,12 @@
     "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s آدرس های جایگزین %(addresses)s را برای این اتاق اضافه کرد.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s آدرس اصلی این اتاق را حذف کرد.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s آدرس اصلی این اتاق را روی %(address)s تنظیم کرد.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s تصویری ارسال کرد."
+    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s تصویری ارسال کرد.",
+    "(no answer)": "(بدون پاسخ)",
+    "(an error occurred)": "(خطایی رخ داده است)",
+    "(their device couldn't start the camera / microphone)": "(دستگاه آنها نمی تواند دوربین / میکروفون را راه اندازی کند)",
+    "(connection failed)": "(ارتباط ناموفق بود)",
+    "(could not connect media)": "(امکان اتصال رسانه وجود ندارد)",
+    "(not supported by this browser)": "(توسط این مرورگر پشتیبانی نمی شود)",
+    "Someone": "کسی"
 }
