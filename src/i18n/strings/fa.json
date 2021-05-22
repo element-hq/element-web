@@ -666,5 +666,11 @@
     "Displays information about a user": "اطلاعات مربوط به کاربر را نمایش می دهد",
     "Displays list of commands with usages and descriptions": "لیست دستورات را با کاربردها و توضیحات نمایش می دهد",
     "Sends the given message coloured as a rainbow": "پیام داده شده را به صورت رنگین کمان ارسال می کند",
-    "Forces the current outbound group session in an encrypted room to be discarded": "جلسه گروه خروجی فعلی را در یک اتاق رمزگذاری شده مجبور می کند که کنار گذاشته شود"
+    "Forces the current outbound group session in an encrypted room to be discarded": "جلسه گروه خروجی فعلی را در یک اتاق رمزگذاری شده مجبور می کند که کنار گذاشته شود",
+    "%(targetName)s accepted the invitation for %(displayName)s.": "٪ (targetName) s دعوتنامه٪ (displayName) s را پذیرفت.",
+    "Reason": "دلیل",
+    "Displays action": "عملکرد را نمایش می دهد",
+    "Places the call in the current room on hold": "تماس را در اتاق فعلی در حالت تعلیق قرار می دهد",
+    "Sends a message to the given user": "برای کاربر داده شده پیامی ارسال می کند",
+    "Opens chat with the given user": "گپ با کاربر داده شده را باز می کند"
 }
