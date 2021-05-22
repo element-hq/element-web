@@ -290,7 +290,7 @@ const getUserPic = async (event: MatrixEvent) => {
             <div class="userpic" style="width: 42px;height: 42px;background-color: ${getUserColor(member.userId)}">
                 <div class="initials" style="line-height: 42px;" src="users/${member.userId}">
                     ${event.sender.name[0]}
-                </div>;
+                </div>
             </div>
         </div>
            `;
@@ -386,7 +386,7 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
       <div class="body">
         <div class="pull_right date details" title="${new Date(event.getTs())}">
             ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
-        </div>;
+        </div>
        ${!joined ? `<div class="from_name" style="color:${getUserColor(event.sender.name)}">
             ${event.sender.name}
        </div>`: ``}
