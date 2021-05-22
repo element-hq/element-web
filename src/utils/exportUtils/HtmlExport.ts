@@ -240,11 +240,14 @@ const userColors = [
     "#64bf47",
     "#4f9cd9",
     "#9884e8",
+    "#fb6238",
+    "#00cdac",
+    "#ff5eaa",
 ];
 
 //Get a color associated with string length. This is to map userId to a specific color
 const getUserColor = (userId: string) => {
-    return userColors[userId.length % 4];
+    return userColors[userId.length % userColors.length];
 };
 
 

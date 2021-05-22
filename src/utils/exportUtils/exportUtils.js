@@ -24,7 +24,7 @@ const getTimelineConversation = (room) => {
         cli, timelineSet,
         {windowLimit: Number.MAX_VALUE});
 
-    timelineWindow.load(null, 20);
+    timelineWindow.load(null, 30);
 
     const events = timelineWindow.getEvents();
 
