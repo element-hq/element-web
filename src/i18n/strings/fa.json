@@ -662,7 +662,7 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "کلید امضای ارائه شده با کلید امضای دریافت شده از جلسه٪ (userId) s٪ (deviceId) s مطابقت دارد. نشست به عنوان تأیید شده علامت گذاری شد.",
     "Verified key": "کلید تأیید شده",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "هشدار: تایید کلید ناموفق بود! کلید امضا کننده %(userId)s در نشست %(deviceId)s برابر %(fprint)s است که با کلید %(fingerprint)s تطابق ندارد. این می تواند به معنی رهگیری ارتباطات شما باشد!",
-    "Send a bug report with logs": "گزارش یک اشکال با سیاهههای مربوط ارسال کنید",
+    "Send a bug report with logs": "گزارش یک اشکال به همراه سیاهه‌های مربوط",
     "Displays information about a user": "اطلاعات مربوط به کاربر را نمایش می دهد",
     "Displays list of commands with usages and descriptions": "لیست دستورات را با کاربردها و توضیحات نمایش می دهد",
     "Sends the given message coloured as a rainbow": "پیام داده شده را به صورت رنگین کمان ارسال می کند",
