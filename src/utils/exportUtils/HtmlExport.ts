@@ -1,13 +1,13 @@
-import { MatrixClientPeg } from "../MatrixClientPeg";
-import { arrayFastClone } from "./arrays";
-import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
-import JSZip from "jszip";
-import { textForEvent } from "../TextForEvent";
-import streamSaver from "streamsaver";
-import { decryptFile } from "./DecryptFile";
-import { mediaFromContent, mediaFromMxc } from "../customisations/Media";
 
-const wrapHTML = (content, room) => (`
+import streamSaver from "streamsaver";
+import JSZip from "jszip";
+import { decryptFile } from "../DecryptFile";
+import { mediaFromContent, mediaFromMxc } from "../../customisations/Media";
+import { textForEvent } from "../../TextForEvent";
+import Room from 'matrix-js-sdk/src/models/room';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+const wrapHTML = (content: string, room: Room) => (`
     <!DOCTYPE html>
         <html>
         <head>
@@ -270,59 +270,27 @@ div.selected {
 `;
 
 
-const getTimelineConversation = (room) => {
-    if (!room) return;
-
-    const cli = MatrixClientPeg.get();
-
-    const timelineSet = room.getUnfilteredTimelineSet();
-
-    const timelineWindow = new TimelineWindow(
-        cli, timelineSet,
-        {windowLimit: Number.MAX_VALUE});
-
-    timelineWindow.load(null, 30);
-
-    const events = timelineWindow.getEvents();
-
-    // Clone and reverse the events so that we preserve the order
-    arrayFastClone(events)
-        .reverse()
-        .forEach(event => {
-            cli.decryptEventIfNeeded(event);
-        });
-
-    if (!timelineWindow.canPaginate('f')) {
-        events.push(...timelineSet.getPendingEvents());
-    }
-    console.log(events);
-    return events;
-};
-
-
 const userColors = [
     "#64bf47",
     "#4f9cd9",
     "#9884e8",
-    "#e671a5",
-    "#47bcd1",
-    "#ff8c44",
 ];
 
-
 //Get a color associated with string length. This is to map userId to a specific color
-const getUserColor = (userId) => {
+const getUserColor = (userId: string) => {
     return userColors[userId.length % 4];
 };
 
 
-const getUserPic = async (event) => {
+const getUserPic = async (event: MatrixEvent) => {
     const member = event.sender;
     if (!member.getMxcAvatarUrl()) {
         return `
         <div class="pull_left userpic_wrap">
             <div class="userpic" style="width: 42px;height: 42px;background-color: ${getUserColor(member.userId)}">
-                <div class="initials" style="line-height: 42px;" src="users/${member.userId}">${event.sender.name[0]}</div>
+                <div class="initials" style="line-height: 42px;" src="users/${member.userId}">
+                    ${event.sender.name[0]}
+                </div>;
             </div>
         </div>
            `;
@@ -347,7 +315,7 @@ const getUserPic = async (event) => {
 };
 
 //Gets the event_id of an event to which an event is replied
-const getBaseEventId = (event) => {
+const getBaseEventId = (event: MatrixEvent) => {
     const isEncrypted = event.isEncrypted();
 
     // If encrypted, in_reply_to lies in event.event.content
@@ -357,7 +325,7 @@ const getBaseEventId = (event) => {
 };
 
 
-const dateSeparator = (event, prevEvent) => {
+const dateSeparator = (event: MatrixEvent, prevEvent: MatrixEvent) => {
     const prevDate = prevEvent ? new Date(prevEvent.getTs()) : null;
     const currDate = new Date(event.getTs());
     if (!prevDate || currDate.setHours(0, 0, 0, 0) !== prevDate.setHours(0, 0, 0, 0)) {
@@ -373,8 +341,8 @@ const dateSeparator = (event, prevEvent) => {
     return "";
 };
 
-const getImageData = async (event) => {
-    let blob;
+const getImageData = async (event: MatrixEvent) => {
+    let blob: Blob;
     try {
         const isEncrypted = event.isEncrypted();
         const content = event.getContent();
@@ -383,7 +351,7 @@ const getImageData = async (event) => {
         } else {
             const media = mediaFromContent(event.getContent());
             const image = await fetch(media.srcHttp);
-            blob = image.blob();
+            blob = await image.blob();
         }
     } catch (err) {
         console.log("Error decrypting image");
@@ -392,7 +360,7 @@ const getImageData = async (event) => {
 };
 
 
-const createMessageBody = async (event, joined = false, isReply = false, replyId = null) => {
+const createMessageBody = async (event: MatrixEvent, joined = false, isReply = false, replyId = null) => {
     const userPic = await getUserPic(event);
     let messageBody = "";
     switch (event.getContent().msgtype) {
@@ -400,9 +368,10 @@ const createMessageBody = async (event, joined = false, isReply = false, replyId
             messageBody = `<div class="text"> ${event.getContent().body} </div>`;
             break;
         case "m.image": {
-            messageBody = `<a class="photo_wrap clearfix pull_left" href="images/${event.getId()}.png">
-                            <img class="photo" src="images/${event.getId()}.png" style="max-width: 600px; max-height: 500px;">
-                        </a>`;
+            messageBody = `
+                <a class="photo_wrap clearfix pull_left" href="images/${event.getId()}.png">
+                    <img class="photo" src="images/${event.getId()}.png" style="max-width: 600px; max-height: 500px;">
+                </a>`;
             const blob = await getImageData(event);
             zip.file(`images/${event.getId()}.png`, blob);
         }
@@ -412,10 +381,12 @@ const createMessageBody = async (event, joined = false, isReply = false, replyId
     }
 
     return `
-    <div class="message default clearfix ${joined ? `joined` : ``}" id="message2680">
+    <div class="message default clearfix ${joined ? `joined` : ``}" id="${event.getId()}">
       ${!joined ? userPic : ``}
       <div class="body">
-       <div class="pull_right date details" title="${new Date(event.getTs())}">${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}</div>
+        <div class="pull_right date details" title="${new Date(event.getTs())}">
+            ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
+        </div>;
        ${!joined ? `<div class="from_name" style="color:${getUserColor(event.sender.name)}">
             ${event.sender.name}
        </div>`: ``}
@@ -430,7 +401,7 @@ const createMessageBody = async (event, joined = false, isReply = false, replyId
 };
 
 
-const createHTML = async (events, room) => {
+const createHTML = async (events: MatrixEvent[], room: Room) => {
     let content = "";
     let prevEvent = null;
     for (const event of events) {
@@ -458,19 +429,19 @@ const createHTML = async (events, room) => {
     return wrapHTML(content, room);
 };
 
-
 const avatars = new Map();
 let zip;
-const exportConversationalHistory = async (room) => {
-    const res = getTimelineConversation(room);
+
+const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
     zip = new JSZip();
 
-    const html = await createHTML(res, room, avatars);
+    const html = await createHTML(res, room);
 
     zip.file("index.html", html);
     zip.file("css/style.css", css);
 
     avatars.clear();
+
     const filename = `matrix-export-${new Date().toISOString()}.zip`;
 
     //Generate the zip file asynchronously
@@ -480,16 +451,17 @@ const exportConversationalHistory = async (room) => {
     const fileStream = streamSaver.createWriteStream(filename, blob.size);
     const writer = fileStream.getWriter();
 
-    // Here we chunk the blob into pieces of 10 MiB
+    // Here we chunk the blob into pieces of 10 MB, the size might be dynamically generated.
+    // This can be used to keep track of the progress
     const sliceSize = 10 * 1e6;
     for (let fPointer = 0; fPointer < blob.size; fPointer += sliceSize) {
         // console.log(fPointer);
         const blobPiece = blob.slice(fPointer, fPointer + sliceSize);
         const reader = new FileReader();
 
-        const waiter = new Promise((resolve, reject) => {
+        const waiter = new Promise<void>((resolve, reject) => {
             reader.onloadend = evt => {
-                const arrayBufferNew = evt.target.result;
+                const arrayBufferNew: any = evt.target.result;
                 const uint8ArrayNew = new Uint8Array(arrayBufferNew);
                 // Buffer.from(reader.result)
                 writer.write(uint8ArrayNew);
@@ -500,6 +472,6 @@ const exportConversationalHistory = async (room) => {
         await waiter;
     }
     writer.close();
-};
+}
 
-export default exportConversationalHistory;
+export default exportAsHTML;
