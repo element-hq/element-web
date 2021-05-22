@@ -10,27 +10,26 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 const wrapHTML = (content: string, room: Room) => (`
     <!DOCTYPE html>
         <html>
-        <head>
-            <meta charset="utf-8" />
-            <title>Exported Data</title>
-            <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-            <link href="css/style.css" rel="stylesheet" />
-            <script src="js/script.js" type="text/javascript"></script>
-        </head>
-        <body>
-            <div class="page_wrap">
-            <div class="page_header">
-                <div class="content">
-                <div class="text bold">${room.name}</div>
+            <head>
+                <meta charset="utf-8" />
+                <title>Exported Data</title>
+                <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+                <link href="css/style.css" rel="stylesheet" />
+            </head>
+            <body>
+                <div class="mx_page_wrap">
+                    <div class="mx_page_header">
+                        <div class="mx_content">
+                            <div class="mx_text mx_bold">${room.name}</div>
+                        </div>
+                    </div>
+                    <div class="mx_page_body mx_chat_page">
+                        <div class="mx_history">
+                            ${content}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="page_body chat_page">
-                <div class="history">
-                    ${content}
-                </div>
-            </div>
-            </div>
-        </body>
+            </body>
         </html>
 `);
 
@@ -41,39 +40,7 @@ body {
     font: 12px/18px 'Inter', 'Open Sans',"Lucida Grande","Lucida Sans Unicode",Arial,Helvetica,Verdana,sans-serif;
 }
 
-strong {
-    font-weight: 700;
-}
-
-code, kbd, pre, samp {
-    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
-}
-
-code {
-    padding: 2px 4px;
-    font-size: 90%;
-    color: #c7254e;
-    background-color: #f9f2f4;
-    border-radius: 4px;
-}
-
-pre {
-    display: block;
-    margin: 0;
-    line-height: 1.42857143;
-    word-break: break-all;
-    word-wrap: break-word;
-    color: #333;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    overflow: auto;
-    padding: 3px;
-    border: 1px solid #eee;
-    max-height: none;
-    font-size: inherit;
-}
-
-.clearfix:after {
+.mx_clearfix:after {
     content: " ";
     visibility: hidden;
     display: block;
@@ -81,29 +48,29 @@ pre {
     clear: both;
 }
 
-.pull_left {
+.mx_pull_left {
     float: left;
 }
 
-.pull_right {
+.mx_pull_right {
     float: right;
 }
 
-.page_wrap {
+.mx_page_wrap {
     background-color: #ffffff;
     color: #000000;
 }
 
-.page_wrap a {
+.mx_page_wrap a {
     color: #168acd;
     text-decoration: none;
 }
 
-.page_wrap a:hover {
+.mx_page_wrap a:hover {
     text-decoration: underline;
 }
 
-.page_header {
+.mx_page_header {
     position: fixed;
     z-index: 10;
     background-color: #ffffff;
@@ -111,28 +78,28 @@ pre {
     border-bottom: 1px solid #e3e6e8;
 }
 
-.page_header .content {
+.mx_page_header .mx_content {
     width: 480px;
     margin: 0 auto;
     border-radius: 0 !important;
 }
 
-.page_header a.content {
+.mx_page_header a.mx_content {
     background-repeat: no-repeat;
     background-position: 24px 21px;
     background-size: 24px 24px;
 }
 
-.bold {
+.mx_bold {
     color: #212121;
     font-weight: 700;
 }
 
-.details {
+.mx_details {
     color: #70777b;
 }
 
-.page_header .content .text {
+.mx_page_header .mx_content .mx_text {
     padding: 24px 24px 22px 24px;
     font-size: 22px;
     overflow: hidden;
@@ -141,23 +108,23 @@ pre {
     text-align: center;
 }
 
-.page_header a.content .text {
+.mx_page_header a.mx_content .mx_text {
     padding: 24px 24px 22px 82px;
 }
 
-.page_body {
+.mx_page_body {
     padding-top: 64px;
     width: 700px;
     margin: 0 auto;
 }
 
-.userpic {
+.mx_userpic {
     display: block;
     border-radius: 50%;
     overflow: hidden;
 }
 
-.userpic .initials {
+.mx_userpic .mx_initials {
     display: block;
     color: #fff;
     text-align: center;
@@ -165,106 +132,105 @@ pre {
     user-select: none;
 }
 
-a.block_link {
+a.mx_block_link {
     display: block;
     text-decoration: none !important;
     border-radius: 4px;
 }
 
-a.block_link:hover {
+a.mx_block_link:hover {
     text-decoration: none !important;
     background-color: #f5f7f8;
 }
 
-.history {
+.mx_history {
     padding: 16px 0;
 }
 
-.message {
+.mx_message {
     margin: 0 -10px;
     transition: background-color 2.0s ease;
 }
 
-div.selected {
+div.mx_selected {
     background-color: rgba(242,246,250,255);
     transition: background-color 0.5s ease;
 }
 
-.service {
+.mx_service {
     padding: 10px 24px;
 }
 
-.service .body {
+.mx_service .mx_body {
     text-align: center;
 }
 
-.message .userpic .initials {
+.mx_message .mx_userpic .mx_initials {
     font-size: 16px;
 }
 
-.default {
+.mx_default {
     padding: 10px;
 }
 
-.default.joined {
+.mx_default.mx_joined {
     margin-top: -10px;
 }
 
-.default .from_name {
+.mx_default .mx_from_name {
     font-weight: 700;
     padding-bottom: 5px;
 }
 
-.default .body {
+.mx_default .mx_body {
     margin-left: 60px;
 }
 
-.default .text {
+.mx_default .mx_text {
     word-wrap: break-word;
     line-height: 150%;
 }
 
-.default .reply_to,
-.default .media_wrap {
+.mx_default .mx_reply_to,
+.mx_default .mx_media_wrap {
     padding-bottom: 5px;
 }
 
-.default .media {
+.mx_default .mx_media {
     margin: 0 -10px;
     padding: 5px 10px;
 }
 
-.default .media .fill,
-.default .media .thumb {
+.mx_default .mx_media .mx_fill,
+.mx_default .mx_media .mx_thumb {
     width: 48px;
     height: 48px;
     border-radius: 50%;
 }
 
-.default .media .fill {
+.mx_default .mx_media .mx_fill {
     background-repeat: no-repeat;
     background-position: 12px 12px;
     background-size: 24px 24px;
 }
 
-.default .media .title,
-.default .media_poll .question {
+.mx_default .mx_media .mx_title {
     padding-top: 4px;
     font-size: 14px;
 }
 
-.default .media .description {
+.mx_default .mx_media .mx_description {
     color: #000000;
     padding-top: 4px;
     font-size: 13px;
 }
 
-.default .media .status {
+.mx_default .mx_media .mx_status {
     padding-top: 4px;
     font-size: 13px;
 }
 
-.default .photo {
+.mx_default .mx_photo {
     display: block;
 }
 `;
@@ -286,9 +252,9 @@ const getUserPic = async (event: MatrixEvent) => {
     const member = event.sender;
     if (!member.getMxcAvatarUrl()) {
         return `
-        <div class="pull_left userpic_wrap">
-            <div class="userpic" style="width: 42px;height: 42px;background-color: ${getUserColor(member.userId)}">
-                <div class="initials" style="line-height: 42px;" src="users/${member.userId}">
+        <div class="mx_pull_left mx_userpic_wrap">
+            <div class="mx_userpic" style="width: 42px;height: 42px;background-color: ${getUserColor(member.userId)}">
+                <div class="mx_initials" style="line-height: 42px;" src="users/${member.userId}">
                     ${event.sender.name[0]}
                 </div>
             </div>
@@ -305,9 +271,13 @@ const getUserPic = async (event: MatrixEvent) => {
         }
 
         return `
-        <div class="pull_left userpic_wrap">
-            <div class="userpic" style="width: 42px; height: 42px;">
-                <img class="initials" style="width: 42px;height: 42px;line-height:42px;" src="users/${member.userId}"/>
+        <div class="mx_pull_left mx_userpic_wrap">
+            <div class="mx_userpic" style="width: 42px; height: 42px;">
+                <img
+                  class="mx_initials"
+                  style="width: 42px;height: 42px;line-height:42px;"
+                  src="users/${member.userId}"
+                />
             </div>
         </div>
            `;
@@ -334,8 +304,8 @@ const dateSeparator = (event: MatrixEvent, prevEvent: MatrixEvent) => {
     const currDate = new Date(event.getTs());
     if (!prevDate || currDate.setHours(0, 0, 0, 0) !== prevDate.setHours(0, 0, 0, 0)) {
         return `
-            <div class="message service">
-                <div class="body details">
+            <div class="mx_message mx_service">
+                <div class="mx_body mx_details">
                     ${new Date(event.getTs())
         .toLocaleString("en-us", {year: "numeric", month: "long", day: "numeric" })}
                 </div>
@@ -369,12 +339,16 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
     let messageBody = "";
     switch (event.getContent().msgtype) {
         case "m.text":
-            messageBody = `<div class="text"> ${event.getContent().body} </div>`;
+            messageBody = `<div class="mx_text"> ${event.getContent().body} </div>`;
             break;
         case "m.image": {
             messageBody = `
-                <a class="photo_wrap clearfix pull_left" href="images/${event.getId()}.png">
-                    <img class="photo" src="images/${event.getId()}.png" style="max-width: 600px; max-height: 500px;">
+                <a class="mx_photo_wrap mx_clearfix mx_pull_left" href="images/${event.getId()}.png">
+                    <img 
+                      class="mx_photo"
+                      style="max-width: 600px; max-height: 500px;"
+                      src="images/${event.getId()}.png"
+                    />
                 </a>`;
             const blob = await getImageData(event);
             zip.file(`images/${event.getId()}.png`, blob);
@@ -385,18 +359,18 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
     }
 
     return `
-    <div class="message default clearfix ${joined ? `joined` : ``}" id="${event.getId()}">
+    <div class="mx_message mx_default mx_clearfix ${joined ? `mx_joined` : ``}" id="${event.getId()}">
       ${!joined ? userPic : ``}
-        <div class="body">
-            <div class="pull_right date details" title="${new Date(event.getTs())}">
+        <div class="mx_body">
+            <div class="mx_pull_right mx_date mx_details" title="${new Date(event.getTs())}">
                 ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
             </div>
        ${!joined ? `
-            <div class="from_name" style="color:${getUserColor(event.sender.name)}">
+            <div class="mx_from_name" style="color:${getUserColor(event.sender.name)}">
                 ${event.sender.name}
             </div>`: ``}
         ${isReply ?
-        `   <div class="reply_to details">
+        `   <div class="mx_reply_to mx_details">
                 In reply to <a href="#${replyId}">this message</a>
             </div>`: ``}
         ${messageBody}
@@ -424,8 +398,8 @@ const createHTML = async (events: MatrixEvent[], room: Room) => {
         } else {
             const eventText = textForEvent(event);
             content += eventText ? `
-            <div class="message service" id="${event.getId()}">
-                <div class="body details">
+            <div class="mx_message mx_service" id="${event.getId()}">
+                <div class="mx_body mx_details">
                     ${textForEvent(event)}
                 </div>
             </div>
@@ -462,7 +436,6 @@ const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
     // This can be used to keep track of the progress
     const sliceSize = 10 * 1e6;
     for (let fPointer = 0; fPointer < blob.size; fPointer += sliceSize) {
-        // console.log(fPointer);
         const blobPiece = blob.slice(fPointer, fPointer + sliceSize);
         const reader = new FileReader();
 
@@ -470,7 +443,6 @@ const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
             reader.onloadend = evt => {
                 const arrayBufferNew: any = evt.target.result;
                 const uint8ArrayNew = new Uint8Array(arrayBufferNew);
-                // Buffer.from(reader.result)
                 writer.write(uint8ArrayNew);
                 resolve();
             };

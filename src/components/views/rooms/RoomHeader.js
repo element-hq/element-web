@@ -121,7 +121,7 @@ export default class RoomHeader extends React.Component {
     }
 
     _exportConvertionalHistory = async () => {
-        exportConversationalHistory(this.props.room, exportFormats.HTML, exportOptions.TIMELINE);
+        await exportConversationalHistory(this.props.room, exportFormats.HTML, exportOptions.TIMELINE);
     }
 
     render() {
