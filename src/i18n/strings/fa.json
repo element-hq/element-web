@@ -673,6 +673,6 @@
     "Places the call in the current room on hold": "تماس را در اتاق فعلی در حالت تعلیق قرار می دهد",
     "Sends a message to the given user": "برای کاربر داده شده پیامی ارسال می کند",
     "Opens chat with the given user": "گپ با کاربر داده شده را باز می کند",
-    "%(targetName)s accepted an invitation.": "٪ (targetName) s دعوتنامه را پذیرفت.",
+    "%(targetName)s accepted an invitation.": "%(targetName)s دعوتنامه را پذیرفت.",
     "%(senderName)s invited %(targetName)s.": "٪ (senderName) s٪ (targetName) s دعوت شده است."
 }
