@@ -121,7 +121,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (refreshWhenTypes.includes(e.getType())) this.forceUpdate();
     };
 
-    private _onEncryptionChange = async (e: React.ChangeEvent) => {
+    private onEncryptionChange = async (e: React.ChangeEvent) => {
         if (this.state.joinRule == "public") {
             const {finished} = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
                 title: _t('Enable encryption in a public room?'),
@@ -239,7 +239,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     }
 
-    _onRoomAccessRadioToggle = (roomAccess) => {
+    private onRoomAccessRadioToggle = (roomAccess) => {
         if (
             this.state.encrypted &&
             this.state.joinRule != "public" &&
