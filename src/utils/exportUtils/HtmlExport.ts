@@ -324,6 +324,10 @@ const getBaseEventId = (event: MatrixEvent) => {
     return (relatesTo && relatesTo["m.in_reply_to"]) ? relatesTo["m.in_reply_to"]["event_id"] : null;
 };
 
+const isEdit = (event: MatrixEvent) => {
+    if (event.getType() === "m.room.message" && event.getContent().hasOwnProperty("m.new_content")) return true;
+    return false;
+}
 
 const dateSeparator = (event: MatrixEvent, prevEvent: MatrixEvent) => {
     const prevDate = prevEvent ? new Date(prevEvent.getTs()) : null;
@@ -383,20 +387,21 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
     return `
     <div class="message default clearfix ${joined ? `joined` : ``}" id="${event.getId()}">
       ${!joined ? userPic : ``}
-      <div class="body">
-        <div class="pull_right date details" title="${new Date(event.getTs())}">
-            ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
-        </div>
-       ${!joined ? `<div class="from_name" style="color:${getUserColor(event.sender.name)}">
-            ${event.sender.name}
-       </div>`: ``}
+        <div class="body">
+            <div class="pull_right date details" title="${new Date(event.getTs())}">
+                ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
+            </div>
+       ${!joined ? `
+            <div class="from_name" style="color:${getUserColor(event.sender.name)}">
+                ${event.sender.name}
+            </div>`: ``}
         ${isReply ?
-        `<div class="reply_to details">
-            In reply to <a href="#${replyId}">this message</a>
-         </div>`: ``}
+        `   <div class="reply_to details">
+                In reply to <a href="#${replyId}">this message</a>
+            </div>`: ``}
         ${messageBody}
-      </div>
-     </div>
+        </div>
+    </div>
     `;
 };
 
@@ -405,6 +410,8 @@ const createHTML = async (events: MatrixEvent[], room: Room) => {
     let content = "";
     let prevEvent = null;
     for (const event of events) {
+        // As the getContent of the edited event fetches the latest edit, there is no need to process edit events
+        if (isEdit(event)) continue;
         content += dateSeparator(event, prevEvent);
 
         if (event.getType() === "m.room.message") {
@@ -430,7 +437,7 @@ const createHTML = async (events: MatrixEvent[], room: Room) => {
 };
 
 const avatars = new Map();
-let zip;
+let zip: any;
 
 const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
     zip = new JSZip();
