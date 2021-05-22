@@ -696,5 +696,10 @@
     "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s نام نمایشی خود را به %(displayName)s تنظیم کرد.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s نام نمایشی خود را به %(displayName)s تغییر داد.",
     "Repeats like \"aaa\" are easy to guess": "تکرارهایی مانندبه راحتی قابل حدس هستند",
-    "with an empty state key": "با یک کلید حالت خالی"
+    "with an empty state key": "با یک کلید حالت خالی",
+    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 شرکت در همه سرورها ممنوع است! دیگر نمی توان از این اتاق استفاده کرد.",
+    "Converts the DM to a room": "DM را به اتاق تبدیل می کند",
+    "Converts the room to a DM": "اتاق را به DM تبدیل می کند",
+    "Takes the call in the current room off hold": "تماس را در اتاق فعلی خاموش نگه می دارد",
+    "Sends the given emote coloured as a rainbow": "emote داده شده را به صورت رنگین کمان می فرستد"
 }
