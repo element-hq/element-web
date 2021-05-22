@@ -675,5 +675,8 @@
     "Opens chat with the given user": "گپ با کاربر داده شده را باز می کند",
     "%(targetName)s accepted an invitation.": "%(targetName)s دعوتنامه را پذیرفت.",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s %(targetName)s را دعوت کرد.",
-    "%(senderName)s banned %(targetName)s.": "٪ (senderName) s٪ (targetName) s ممنوع است."
+    "%(senderName)s banned %(targetName)s.": "٪ (senderName) s٪ (targetName) s ممنوع است.",
+    "See when anyone posts a sticker to your active room": "ببینید چه کسی برچسب را به اتاق فعال شما ارسال می کند",
+    "Send stickers to your active room as you": "همانطور که هستید ، برچسب ها را به اتاق فعال خود ارسال کنید",
+    "See when a sticker is posted in this room": "زمان نصب برچسب در این اتاق را ببینید"
 }
