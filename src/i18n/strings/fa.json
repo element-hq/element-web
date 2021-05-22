@@ -694,5 +694,7 @@
     "%(senderName)s removed their profile picture.": "%(senderName)s عکس نمایه خود را حذف کرد.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s نام نمایشی خود %(oldDisplayName)s را حذف کرد.",
     "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s نام نمایشی خود را به %(displayName)s تنظیم کرد.",
-    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s نام نمایشی خود را به %(displayName)s تغییر داد."
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s نام نمایشی خود را به %(displayName)s تغییر داد.",
+    "Repeats like \"aaa\" are easy to guess": "تکرارهایی مانندبه راحتی قابل حدس هستند",
+    "with an empty state key": "با یک کلید حالت خالی"
 }
