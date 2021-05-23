@@ -665,7 +665,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case 'view_create_room':
-                this.createRoom(payload.public);
+                this.createRoom(payload.public, payload.defaultName);
                 break;
             case 'view_create_group': {
                 let CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog")
@@ -1011,7 +1011,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private async createRoom(defaultPublic = false) {
+    private async createRoom(defaultPublic = false, defaultName?: string) {
         const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
         if (communityId) {
             // double check the user will have permission to associate this room with the community
@@ -1025,7 +1025,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
-        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, { defaultPublic });
+        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
+            defaultPublic,
+            defaultName,
+        });
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {

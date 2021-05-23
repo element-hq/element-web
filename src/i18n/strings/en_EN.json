@@ -2645,6 +2645,8 @@
     "Unable to look up room ID from server": "Unable to look up room ID from server",
     "Preview": "Preview",
     "View": "View",
+    "No results for \"%(query)s\"": "No results for \"%(query)s\"",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.",
     "Find a room…": "Find a room…",
     "Find a room… (e.g. %(exampleRoom)s)": "Find a room… (e.g. %(exampleRoom)s)",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.",
