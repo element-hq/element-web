@@ -99,13 +99,13 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
     } else if (sendState === SendState.Sending) {
         className = "mx_ForwardList_sending";
         disabled = true;
-        title = _t("Sending…");
-        icon = <div className="mx_ForwardList_sendIcon"></div>;
+        title = _t("Sending");
+        icon = <div className="mx_ForwardList_sendIcon" aria-label={title}></div>;
     } else if (sendState === SendState.Sent) {
         className = "mx_ForwardList_sent";
         disabled = true;
         title = _t("Sent");
-        icon = <div className="mx_ForwardList_sendIcon"></div>;
+        icon = <div className="mx_ForwardList_sendIcon" aria-label={title}></div>;
     } else {
         className = "mx_ForwardList_sendFailed";
         disabled = true;
