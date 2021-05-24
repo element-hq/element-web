@@ -511,6 +511,8 @@ public async export() {
         await waiter;
     }
     writer.close();
+
+    return blob;
 }
 }
 
