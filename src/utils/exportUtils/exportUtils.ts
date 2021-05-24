@@ -44,7 +44,7 @@ const exportConversationalHistory = async (room: Room, format: string, options) 
     const res = getTimelineConversation(room);
     switch (format) {
         case exportFormats.HTML:
-            new HTMLExporter(res, room).export();
+            await new HTMLExporter(res, room).export();
             break;
         case exportFormats.JSON:
             break;
