@@ -38,7 +38,6 @@ export default class EventIndex extends EventEmitter {
         this._eventsPerCrawl = 100;
         this._crawler = null;
         this._currentCheckpoint = null;
-        this.liveEventsForIndex = new Set();
     }
 
     async init() {
@@ -178,8 +177,10 @@ export default class EventIndex extends EventEmitter {
      * listener.
      */
     onRoomTimeline = async (ev, room, toStartOfTimeline, removed, data) => {
+        const client = MatrixClientPeg.get();
+
         // We only index encrypted rooms locally.
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+        if (!client.isRoomEncrypted(room.roomId)) return;
 
         // If it isn't a live event or if it's redacted there's nothing to
         // do.
@@ -188,16 +189,9 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
-        // If the event is not yet decrypted mark it for the
-        // Event.decrypted callback.
-        if (ev.isBeingDecrypted()) {
-            const eventId = ev.getId();
-            this.liveEventsForIndex.add(eventId);
-        } else {
-            // If the event is decrypted or is unencrypted add it to the
-            // index now.
-            await this.addLiveEventToIndex(ev);
-        }
+        await client.decryptEventIfNeeded(ev);
+
+        await this.addLiveEventToIndex(ev);
     }
 
     onRoomStateEvent = async (ev, state) => {
@@ -216,10 +210,7 @@ export default class EventIndex extends EventEmitter {
      * listener, if so queues it up to be added to the index.
      */
     onEventDecrypted = async (ev, err) => {
-        const eventId = ev.getId();
-
         // If the event isn't in our live event set, ignore it.
-        if (!this.liveEventsForIndex.delete(eventId)) return;
         if (err) return;
         await this.addLiveEventToIndex(ev);
     }
@@ -523,18 +514,14 @@ export default class EventIndex extends EventEmitter {
                 }
             });
 
-            const decryptionPromises = [];
-
-            matrixEvents.forEach(ev => {
-                if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
-                    // TODO the decryption promise is a private property, this
-                    // should either be made public or we should convert the
-                    // event that gets fired when decryption is done into a
-                    // promise using the once event emitter method:
-                    // https://nodejs.org/api/events.html#events_events_once_emitter_name
-                    decryptionPromises.push(ev._decryptionPromise);
-                }
-            });
+            const decryptionPromises = matrixEvents
+                .filter(event => event.isEncrypted())
+                .map(event => {
+                    return client.decryptEventIfNeeded(event, {
+                        isRetry: true,
+                        emit: false,
+                    });
+                });
 
             // Let us wait for all the events to get decrypted.
             await Promise.all(decryptionPromises);

@@ -41,6 +41,7 @@ import TextWithTooltip from "../views/elements/TextWithTooltip";
 import {useStateToggle} from "../../hooks/useStateToggle";
 import {getOrder} from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
+import {linkifyElement} from "../../HtmlUtils";
 
 interface IHierarchyProps {
     space: Room;
@@ -172,7 +173,16 @@ const Tile: React.FC<ITileProps> = ({
             { suggestedSection }
         </div>
 
-        <div className="mx_SpaceRoomDirectory_roomTile_info">
+        <div
+            className="mx_SpaceRoomDirectory_roomTile_info"
+            ref={e => e && linkifyElement(e)}
+            onClick={ev => {
+                // prevent clicks on links from bubbling up to the room tile
+                if ((ev.target as HTMLElement).tagName === "A") {
+                    ev.stopPropagation();
+                }
+            }}
+        >
             { description }
         </div>
         <div className="mx_SpaceRoomDirectory_actions">
@@ -461,8 +471,12 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         try {
                             for (const [parentId, childId] of selectedRelations) {
                                 await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
-                                parentChildMap.get(parentId).get(childId).content = {};
-                                parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                parentChildMap.get(parentId).delete(childId);
+                                if (parentChildMap.get(parentId).size > 0) {
+                                    parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                } else {
+                                    parentChildMap.delete(parentId);
+                                }
                             }
                         } catch (e) {
                             setError(_t("Failed to remove some rooms. Try again later"));

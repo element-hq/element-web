@@ -62,7 +62,7 @@ export const getOrder = (order: string, creationTs: number, roomId: string): Arr
 
     if (typeof order === "string" && Array.from(order).every((c: string) => {
         const charCode = c.charCodeAt(0);
-        return charCode >= 0x20 && charCode <= 0x7F;
+        return charCode >= 0x20 && charCode <= 0x7E;
     })) {
         validatedOrder = order;
     }
@@ -361,7 +361,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const space = this.matrixClient?.getRoom(spaceId);
 
                 // Add relevant DMs
-                space?.getJoinedMembers().forEach(member => {
+                space?.getMembers().forEach(member => {
+                    if (member.membership !== "join" && member.membership !== "invite") return;
                     DMRoomMap.shared().getDMRoomsForUserId(member.userId).forEach(roomId => {
                         roomIds.add(roomId);
                     });

@@ -56,6 +56,15 @@ export function newTranslatableError(message: string) {
     return error;
 }
 
+export function getUserLanguage(): string {
+    const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
+    if (language) {
+        return language;
+    } else {
+        return normalizeLanguageKey(getLanguageFromBrowser());
+    }
+}
+
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
 export function _td(s: string): string {
@@ -455,8 +464,12 @@ function getLangsJson(): Promise<object> {
         request(
             { method: "GET", url },
             (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
+                if (err) {
                     reject(err);
+                    return;
+                }
+                if (response.status < 200 || response.status >= 300) {
+                    reject(new Error(`Failed to load ${url}, got ${response.status}`));
                     return;
                 }
                 resolve(JSON.parse(body));
@@ -498,8 +511,12 @@ function getLanguage(langPath: string): Promise<object> {
         request(
             { method: "GET", url: langPath },
             (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
+                if (err) {
                     reject(err);
+                    return;
+                }
+                if (response.status < 200 || response.status >= 300) {
+                    reject(new Error(`Failed to load ${langPath}, got ${response.status}`));
                     return;
                 }
                 resolve(weblateToCounterpart(JSON.parse(body)));

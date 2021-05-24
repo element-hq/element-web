@@ -1325,6 +1325,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz":
+  version "3.2.3"
+  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz#cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4"
+
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents":
   version "2.1.8-no-fsevents"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.tgz#da7c3996b8e6e19ebd14d82eaced2313e7769f9b"
@@ -5669,10 +5673,10 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-11.0.0.tgz#66428b3d7606acd0d566ebc7cc7333e15f25b2a8"
-  integrity sha512-54yhqGRlogNv1QKpnn5kDAJ6z5MwoXH/Yqv0cFpq0lS1mzVJUIg4urpNPQBDidcA0IqGhu4aYUuy5s1cwHyTsg==
+matrix-js-sdk@11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-11.1.0.tgz#59119f9fe76adbc38b309947c5532baea8499bf1"
+  integrity sha512-yBvSGb33MDz9mfbjtVGO7557kgtY/kJcrFyhtN7LwSyi/TDhhYleq5xAqsi7MJrmIb/E0JIF10JIwlF9dAW64Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -5705,10 +5709,10 @@ matrix-react-test-utils@^0.2.2:
     "@babel/traverse" "^7.13.17"
     walk "^2.3.14"
 
-matrix-widget-api@^0.1.0-beta.13:
-  version "0.1.0-beta.13"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.13.tgz#ebddc83eaef39bbb87b621a02a35902e1a29b9ef"
-  integrity sha512-DJAvuX2E7gxc/a9rtJPDh17ba9xGIOAoBHcWirNTN3KGodzsrZ+Ns+M/BREFWMwGS5yEBZko5eq7uhXStEbnyQ==
+matrix-widget-api@^0.1.0-beta.14:
+  version "0.1.0-beta.14"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.14.tgz#e38beed71c5ebd62c1ac1d79ef262d7150b42c70"
+  integrity sha512-5tC6LO1vCblKg/Hfzf5U1eHPz1nHUZIobAm3gkEKV5vpYPgRpr8KdkLiGB78VZid0tB17CVtAb4VKI8CQ3lhAQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
@@ -6144,10 +6148,6 @@ object.values@^1.1.1, object.values@^1.1.2:
     define-properties "^1.1.3"
     es-abstract "^1.18.0-next.1"
     has "^1.0.3"
-
-"olm@https://packages.matrix.org/npm/olm/olm-3.2.1.tgz":
-  version "3.2.1"
-  resolved "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz#d623d76f99c3518dde68be8c86618d68bc7b004a"
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"

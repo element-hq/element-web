@@ -52,8 +52,6 @@ import {useStateToggle} from "../../hooks/useStateToggle";
 import SpaceStore from "../../stores/SpaceStore";
 import FacePile from "../views/elements/FacePile";
 import {AddExistingToSpace} from "../views/dialogs/AddExistingToSpaceDialog";
-import {sleep} from "../../utils/promise";
-import {calculateRoomVia} from "../../utils/permalinks/Permalinks";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "./ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -78,6 +76,7 @@ interface IProps {
 
 interface IState {
     phase: Phase;
+    createdRooms?: boolean; // internal state for the creation wizard
     showRightPanel: boolean;
     myMembership: string;
 }
@@ -451,6 +450,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
             value={roomNames[i]}
             onChange={ev => setRoomName(i, ev.target.value)}
             autoFocus={i === 2}
+            disabled={busy}
         />;
     });
 
@@ -460,7 +460,8 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setError("");
         setBusy(true);
         try {
-            await Promise.all(roomNames.map(name => name.trim()).filter(Boolean).map(name => {
+            const filteredRoomNames = roomNames.map(name => name.trim()).filter(Boolean);
+            await Promise.all(filteredRoomNames.map(name => {
                 return createRoom({
                     createOpts: {
                         preset: space.getJoinRule() === "public" ? Preset.PublicChat : Preset.PrivateChat,
@@ -473,7 +474,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
                     parentSpace: space,
                 });
             }));
-            onFinished();
+            onFinished(filteredRoomNames.length > 0);
         } catch (e) {
             console.error("Failed to create initial space rooms", e);
             setError(_t("Failed to create initial space rooms"));
@@ -483,7 +484,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 
     let onClick = (ev) => {
         ev.preventDefault();
-        onFinished();
+        onFinished(false);
     };
     let buttonLabel = _t("Skip for now");
     if (roomNames.some(name => name.trim())) {
@@ -516,39 +517,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
 };
 
 const SpaceAddExistingRooms = ({ space, onFinished }) => {
-    const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
-
-    const [busy, setBusy] = useState(false);
-    const [error, setError] = useState("");
-
-    let onClick = onFinished;
-    let buttonLabel = _t("Skip for now");
-    if (selectedToAdd.size > 0) {
-        onClick = async () => {
-            setBusy(true);
-
-            for (const room of selectedToAdd) {
-                const via = calculateRoomVia(room);
-                try {
-                    await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async e => {
-                        if (e.errcode === "M_LIMIT_EXCEEDED") {
-                            await sleep(e.data.retry_after_ms);
-                            return SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
-                        }
-
-                        throw e;
-                    });
-                } catch (e) {
-                    console.error("Failed to add rooms to space", e);
-                    setError(_t("Failed to add rooms to space"));
-                    break;
-                }
-            }
-            setBusy(false);
-        };
-        buttonLabel = busy ? _t("Adding...") : _t("Add");
-    }
-
     return <div>
         <h1>{ _t("What do you want to organise?") }</h1>
         <div className="mx_SpaceRoomView_description">
@@ -556,35 +524,24 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
                 "no one will be informed. You can add more later.") }
         </div>
 
-        { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-
         <AddExistingToSpace
             space={space}
-            selected={selectedToAdd}
-            onChange={(checked, room) => {
-                if (checked) {
-                    selectedToAdd.add(room);
-                } else {
-                    selectedToAdd.delete(room);
-                }
-                setSelectedToAdd(new Set(selectedToAdd));
-            }}
+            emptySelectionButton={
+                <AccessibleButton kind="primary" onClick={onFinished}>
+                    { _t("Skip for now") }
+                </AccessibleButton>
+            }
+            onFinished={onFinished}
         />
 
         <div className="mx_SpaceRoomView_buttons">
-            <AccessibleButton
-                kind="primary"
-                disabled={busy}
-                onClick={onClick}
-            >
-                { buttonLabel }
-            </AccessibleButton>
+
         </div>
         <SpaceFeedbackPrompt />
     </div>;
 };
 
-const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished }) => {
+const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished, createdRooms }) => {
     return <div className="mx_SpaceRoomView_publicShare">
         <h1>{ _t("Share %(name)s", {
             name: justCreatedOpts?.createOpts?.name || space.name,
@@ -597,7 +554,7 @@ const SpaceSetupPublicShare = ({ justCreatedOpts, space, onFinished }) => {
 
         <div className="mx_SpaceRoomView_buttons">
             <AccessibleButton kind="primary" onClick={onFinished}>
-                { _t("Go to my first room") }
+                { createdRooms ? _t("Go to my first room") : _t("Go to my space") }
             </AccessibleButton>
         </div>
         <SpaceFeedbackPrompt />
@@ -658,6 +615,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
             ref={fieldRefs[i]}
             onValidate={validateEmailRules}
             autoFocus={i === 0}
+            disabled={busy}
         />;
     });
 
@@ -889,13 +847,14 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                         _t("Let's create a room for each of them.") + "\n" +
                         _t("You can add more later too, including already existing ones.")
                     }
-                    onFinished={() => this.setState({ phase: Phase.PublicShare })}
+                    onFinished={(createdRooms: boolean) => this.setState({ phase: Phase.PublicShare, createdRooms })}
                 />;
             case Phase.PublicShare:
                 return <SpaceSetupPublicShare
                     justCreatedOpts={this.props.justCreatedOpts}
                     space={this.props.space}
                     onFinished={this.goToFirstRoom}
+                    createdRooms={this.state.createdRooms}
                 />;
 
             case Phase.PrivateScope:
@@ -917,7 +876,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     title={_t("What projects are you working on?")}
                     description={_t("We'll create rooms for each of them. " +
                         "You can add more later too, including already existing ones.")}
-                    onFinished={() => this.setState({ phase: Phase.Landing })}
+                    onFinished={(createdRooms: boolean) => this.setState({ phase: Phase.Landing, createdRooms })}
                 />;
             case Phase.PrivateExistingRooms:
                 return <SpaceAddExistingRooms

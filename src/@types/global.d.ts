@@ -42,6 +42,7 @@ import {SpaceStoreClass} from "../stores/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
 import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
+import PerformanceMonitor from "../performance";
 
 declare global {
     interface Window {
@@ -51,6 +52,9 @@ declare global {
         Olm: {
             init: () => Promise<void>;
         };
+
+        // Needed for Safari, unknown to TypeScript
+        webkitAudioContext: typeof AudioContext;
 
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
@@ -76,6 +80,8 @@ declare global {
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
+        mxPerformanceMonitor: PerformanceMonitor;
+        mxPerformanceEntryNames: any;
     }
 
     interface Document {

@@ -38,6 +38,7 @@ import {haveTileForEvent} from "../views/rooms/EventTile";
 import {UIFeature} from "../../settings/UIFeature";
 import {objectHasDiff} from "../../utils/objects";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import { arrayFastClone } from "../../utils/arrays";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1141,6 +1142,17 @@ class TimelinePanel extends React.Component {
     // get the list of events from the timeline window and the pending event list
     _getEvents() {
         const events = this._timelineWindow.getEvents();
+
+        // `arrayFastClone` performs a shallow copy of the array
+        // we want the last event to be decrypted first but displayed last
+        // `reverse` is destructive and unfortunately mutates the "events" array
+        arrayFastClone(events)
+            .reverse()
+            .forEach(event => {
+                const client = MatrixClientPeg.get();
+                client.decryptEventIfNeeded(event);
+            });
+
         const firstVisibleEventIndex = this._checkForPreJoinUISI(events);
 
         // Hold onto the live events separately. The read receipt and read marker

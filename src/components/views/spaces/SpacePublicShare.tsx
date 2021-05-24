@@ -23,6 +23,7 @@ import {copyPlaintext} from "../../../utils/strings";
 import {sleep} from "../../../utils/promise";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import {showRoomInviteDialog} from "../../../RoomInvite";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 interface IProps {
     space: Room;
@@ -50,7 +51,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
             <h3>{ _t("Share invite link") }</h3>
             <span>{ copiedText }</span>
         </AccessibleButton>
-        <AccessibleButton
+        { space.canInvite(MatrixClientPeg.get()?.getUserId()) ? <AccessibleButton
             className="mx_SpacePublicShare_inviteButton"
             onClick={() => {
                 showRoomInviteDialog(space.roomId);
@@ -59,7 +60,7 @@ const SpacePublicShare = ({ space, onFinished }: IProps) => {
         >
             <h3>{ _t("Invite people") }</h3>
             <span>{ _t("Invite with email or username") }</span>
-        </AccessibleButton>
+        </AccessibleButton> : null }
     </div>;
 };
 

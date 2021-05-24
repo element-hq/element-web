@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.21.0",
+  "version": "3.22.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -79,8 +79,8 @@
     "katex": "^0.12.0",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.20",
-    "matrix-js-sdk": "11.0.0",
-    "matrix-widget-api": "^0.1.0-beta.13",
+    "matrix-js-sdk": "11.1.0",
+    "matrix-widget-api": "^0.1.0-beta.14",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
     "pako": "^2.0.3",
@@ -121,6 +121,7 @@
     "@babel/preset-typescript": "^7.12.7",
     "@babel/register": "^7.12.10",
     "@babel/traverse": "^7.12.12",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
     "@peculiar/webcrypto": "^1.1.4",
     "@sinonjs/fake-timers": "^7.0.2",
     "@types/classnames": "^2.2.11",
@@ -161,7 +162,6 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
-    "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
     "react-test-renderer": "^16.14.0",
     "rimraf": "^3.0.2",
     "stylelint": "^13.9.0",
@@ -186,7 +186,10 @@
     ],
     "moduleNameMapper": {
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
-      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json"
+      "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
+      "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
+      "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
+      "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"

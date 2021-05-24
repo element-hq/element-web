@@ -54,7 +54,8 @@ limitations under the License.
             display: flex;
             margin-top: 12px;
 
-            .mx_BaseAvatar {
+            // we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling
+            .mx_DecoratedRoomAvatar {
                 margin-right: 12px;
             }
 
@@ -75,6 +76,10 @@ limitations under the License.
     }
 
     .mx_AddExistingToSpace_section_spaces {
+        .mx_BaseAvatar {
+            margin-right: 12px;
+        }
+
         .mx_BaseAvatar_image {
             border-radius: 8px;
         }
@@ -103,6 +108,90 @@ limitations under the License.
             mask-size: contain;
             mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
             mask-position: center;
+        }
+    }
+
+    .mx_AddExistingToSpace_footer {
+        display: flex;
+        margin-top: 20px;
+
+        > span {
+            flex-grow: 1;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-fg-color;
+
+            .mx_ProgressBar {
+                height: 8px;
+                width: 100%;
+
+                @mixin ProgressBarBorderRadius 8px;
+            }
+
+            .mx_AddExistingToSpace_progressText {
+                margin-top: 8px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-fg-color;
+            }
+
+            > * {
+                vertical-align: middle;
+            }
+        }
+
+        .mx_AddExistingToSpace_error {
+            padding-left: 12px;
+
+            > img {
+                align-self: center;
+            }
+
+            .mx_AddExistingToSpace_errorHeading {
+                font-weight: $font-semi-bold;
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $notice-primary-color;
+            }
+
+            .mx_AddExistingToSpace_errorCaption {
+                margin-top: 4px;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $primary-fg-color;
+            }
+        }
+
+        .mx_AccessibleButton {
+            display: inline-block;
+            align-self: center;
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            padding: 8px 36px;
+        }
+
+        .mx_AddExistingToSpace_retryButton {
+            margin-left: 12px;
+            padding-left: 24px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                background-color: $primary-fg-color;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/retry.svg');
+                width: 18px;
+                height: 18px;
+                left: 0;
+            }
+        }
+
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
         }
     }
 }
@@ -188,89 +277,5 @@ limitations under the License.
 
     .mx_AddExistingToSpace {
         display: contents;
-    }
-
-    .mx_AddExistingToSpaceDialog_footer {
-        display: flex;
-        margin-top: 20px;
-
-        > span {
-            flex-grow: 1;
-            font-size: $font-12px;
-            line-height: $font-15px;
-            color: $secondary-fg-color;
-
-            .mx_ProgressBar {
-                height: 8px;
-                width: 100%;
-
-                @mixin ProgressBarBorderRadius 8px;
-            }
-
-            .mx_AddExistingToSpaceDialog_progressText {
-                margin-top: 8px;
-                font-size: $font-15px;
-                line-height: $font-24px;
-                color: $primary-fg-color;
-            }
-
-            > * {
-                vertical-align: middle;
-            }
-        }
-
-        .mx_AddExistingToSpaceDialog_error {
-            padding-left: 12px;
-
-            > img {
-                align-self: center;
-            }
-
-            .mx_AddExistingToSpaceDialog_errorHeading {
-                font-weight: $font-semi-bold;
-                font-size: $font-15px;
-                line-height: $font-18px;
-                color: $notice-primary-color;
-            }
-
-            .mx_AddExistingToSpaceDialog_errorCaption {
-                margin-top: 4px;
-                font-size: $font-12px;
-                line-height: $font-15px;
-                color: $primary-fg-color;
-            }
-        }
-
-        .mx_AccessibleButton {
-            display: inline-block;
-            align-self: center;
-        }
-
-        .mx_AccessibleButton_kind_primary {
-            padding: 8px 36px;
-        }
-
-        .mx_AddExistingToSpaceDialog_retryButton {
-            margin-left: 12px;
-            padding-left: 24px;
-            position: relative;
-
-            &::before {
-                content: '';
-                position: absolute;
-                background-color: $primary-fg-color;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
-                mask-image: url('$(res)/img/element-icons/retry.svg');
-                width: 18px;
-                height: 18px;
-                left: 0;
-            }
-        }
-
-        .mx_AccessibleButton_kind_link {
-            padding: 0;
-        }
     }
 }

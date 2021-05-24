@@ -26,6 +26,7 @@ import Autocompleter from '../../../autocomplete/Autocompleter';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const COMPOSER_SELECTED = 0;
+const MAX_PROVIDER_MATCHES = 20;
 
 export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
 
@@ -136,7 +137,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
 
     processQuery(query: string, selection: ISelectionRange) {
         return this.autocompleter.getCompletions(
-            query, selection, this.state.forceComplete,
+            query, selection, this.state.forceComplete, MAX_PROVIDER_MATCHES,
         ).then((completions) => {
             // Only ever process the completions for the most recent query being processed
             if (query !== this.queryRequested) {
