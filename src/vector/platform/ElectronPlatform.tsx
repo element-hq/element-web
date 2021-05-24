@@ -37,8 +37,8 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import Modal from "matrix-react-sdk/src/Modal";
 import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
 import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
-import {Categories, Modifiers, registerShortcut} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
-import {Key} from "matrix-react-sdk/src/Keyboard";
+import {Categories, CMD_OR_CTRL, DIGITS, Modifiers, registerShortcut} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
+import {isOnlyCtrlOrCmdKeyEvent, Key} from "matrix-react-sdk/src/Keyboard";
 import React from "react";
 import {randomString} from "matrix-js-sdk/src/randomstring";
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
@@ -47,6 +47,8 @@ import {showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateTo
 import {CheckUpdatesPayload} from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
+import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
+import SpaceStore from 'matrix-react-sdk/src/stores/SpaceStore';
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -270,6 +272,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         // register OS-specific shortcuts
+        registerShortcut(Categories.NAVIGATION, {
+            keybinds: [{
+                modifiers: [CMD_OR_CTRL],
+                key: DIGITS,
+            }],
+            description: _td("Switch to space by number"),
+        });
+
         if (isMac) {
             registerShortcut(Categories.NAVIGATION, {
                 keybinds: [{
@@ -545,8 +555,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    _navigateForwardBack(back: boolean) {
+    private navigateForwardBack(back: boolean) {
         this._ipcCall(back ? "navigateBack" : "navigateForward");
+    }
+    private navigateToSpace(num: number) {
+        if (num === 0) {
+            SpaceStore.instance.setActiveSpace(null);
+        } else if (SpaceStore.instance.spacePanelSpaces.length >= num) {
+            SpaceStore.instance.setActiveSpace(SpaceStore.instance.spacePanelSpaces[num - 1]);
+        }
     }
 
     onKeyDown(ev: KeyboardEvent): boolean {
@@ -556,7 +573,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             case Key.SQUARE_BRACKET_LEFT:
             case Key.SQUARE_BRACKET_RIGHT:
                 if (isMac && ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey) {
-                    this._navigateForwardBack(ev.key === Key.SQUARE_BRACKET_LEFT);
+                    this.navigateForwardBack(ev.key === Key.SQUARE_BRACKET_LEFT);
                     handled = true;
                 }
                 break;
@@ -564,7 +581,25 @@ export default class ElectronPlatform extends VectorBasePlatform {
             case Key.ARROW_LEFT:
             case Key.ARROW_RIGHT:
                 if (!isMac && ev.altKey && !ev.metaKey && !ev.ctrlKey && !ev.shiftKey) {
-                    this._navigateForwardBack(ev.key === Key.ARROW_LEFT);
+                    this.navigateForwardBack(ev.key === Key.ARROW_LEFT);
+                    handled = true;
+                }
+                break;
+
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+            case "0":
+                if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
+                    const keyNum = parseInt(ev.key, 10);
+                    // map keyNum {1..0} to a {0..9} where key 1 is the home space
+                    this.navigateToSpace((keyNum + 9) % 10);
                     handled = true;
                 }
                 break;
