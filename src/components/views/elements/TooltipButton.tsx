@@ -29,17 +29,20 @@ interface IState {
 
 @replaceableComponent("views.elements.TooltipButton")
 export default class TooltipButton extends React.Component<IProps, IState> {
-    state = {
-        hover: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            hover: false,
+        };
+    }
 
-    onMouseOver = () => {
+    private onMouseOver = () => {
         this.setState({
             hover: true,
         });
     };
 
-    onMouseLeave = () => {
+    private onMouseLeave = () => {
         this.setState({
             hover: false,
         });
