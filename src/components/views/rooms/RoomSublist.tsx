@@ -530,7 +530,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 tiles.push(<RoomTile
                     room={room}
                     key={`room-${room.roomId}`}
-                    resizeNotifier={this.props.resizeNotifier}
                     showMessagePreview={this.layout.showPreviews}
                     isMinimized={this.props.isMinimized}
                     tag={this.props.tagId}
