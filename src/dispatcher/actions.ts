@@ -138,4 +138,9 @@ export enum Action {
      * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
      */
     UploadCanceled = "upload_canceled",
+
+    /**
+     * Switches space. Should be used with SwitchSpacePayload.
+     */
+    SwitchSpace = "switch_space",
 }
