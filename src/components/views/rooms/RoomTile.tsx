@@ -53,14 +53,12 @@ import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/Community
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getUnsentMessages } from "../../structures/RoomStatusBar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-    resizeNotifier: ResizeNotifier;
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
