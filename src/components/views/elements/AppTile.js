@@ -109,7 +109,7 @@ export default class AppTile extends React.Component {
         const childContentProtocol = u.protocol;
         if (parentContentProtocol === 'https:' && childContentProtocol !== 'https:') {
             console.warn("Refusing to load mixed-content app:",
-            parentContentProtocol, childContentProtocol, window.location, this.props.app.url);
+                parentContentProtocol, childContentProtocol, window.location, this.props.app.url);
             return true;
         }
         return false;

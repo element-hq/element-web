@@ -216,6 +216,25 @@ $irc-line-height: $font-18px;
                 }
             }
         }
+
+        .mx_EventTile_emote {
+            > .mx_EventTile_avatar {
+                margin-left: initial;
+            }
+        }
+
+        .mx_MessageTimestamp {
+            width: initial;
+        }
+
+        /**
+         * adding the icon back in the document flow
+         * if it's not present, there's no unwanted wasted space
+         */
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            order: -1;
+        }
     }
 
     .mx_ProfileResizer {

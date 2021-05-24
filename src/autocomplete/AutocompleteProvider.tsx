@@ -93,7 +93,12 @@ export default class AutocompleteProvider {
         };
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         return [];
     }
 

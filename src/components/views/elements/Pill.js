@@ -225,19 +225,19 @@ class Pill extends React.Component {
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                    // If this user is not a member of this room, default to the empty member
-                    const member = this.state.member;
-                    if (member) {
-                        userId = member.userId;
-                        member.rawDisplayName = member.rawDisplayName || '';
-                        linkText = member.rawDisplayName;
-                        if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
-                        }
-                        pillClass = 'mx_UserPill';
-                        href = null;
-                        onClick = this.onUserPillClicked;
+                // If this user is not a member of this room, default to the empty member
+                const member = this.state.member;
+                if (member) {
+                    userId = member.userId;
+                    member.rawDisplayName = member.rawDisplayName || '';
+                    linkText = member.rawDisplayName;
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
                     }
+                    pillClass = 'mx_UserPill';
+                    href = null;
+                    onClick = this.onUserPillClicked;
+                }
             }
                 break;
             case Pill.TYPE_ROOM_MENTION: {

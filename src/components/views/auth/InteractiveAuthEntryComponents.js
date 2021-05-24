@@ -169,7 +169,7 @@ export class PasswordAuthEntry extends React.Component {
                         { submitButtonOrSpinner }
                     </div>
                 </form>
-            { errorSection }
+                { errorSection }
             </div>
         );
     }
@@ -375,7 +375,7 @@ export class TermsAuthEntry extends React.Component {
         if (this.props.showContinue !== false) {
             // XXX: button classes
             submitButton = <button className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
-                                   onClick={this._trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
+                onClick={this._trySubmit} disabled={!allChecked}>{_t("Accept")}</button>;
         }
 
         return (

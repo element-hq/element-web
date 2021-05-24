@@ -74,6 +74,7 @@ interface IState {
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;
+    private dndWatcherRef: string;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
     private tagStoreRef: fbEmitter.EventSubscription;
 
@@ -89,6 +90,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (SettingsStore.getValue("feature_spaces")) {
             SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
+
+        // Force update is the easiest way to trigger the UI update (we don't store state for this)
+        this.dndWatcherRef = SettingsStore.watchSetting("doNotDisturb", null, () => this.forceUpdate());
     }
 
     private get hasHomePage(): boolean {
@@ -103,6 +107,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
     public componentWillUnmount() {
         if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
+        if (this.dndWatcherRef) SettingsStore.unwatchSetting(this.dndWatcherRef);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         this.tagStoreRef.remove();
@@ -286,6 +291,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
         this.setState({contextMenuPosition: null}); // also close the menu
+    };
+
+    private onDndToggle = (ev) => {
+        ev.stopPropagation();
+        const current = SettingsStore.getValue("doNotDisturb");
+        SettingsStore.setValue("doNotDisturb", null, SettingLevel.DEVICE, !current);
     };
 
     private renderContextMenu = (): React.ReactNode => {
@@ -534,6 +545,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 {/* masked image in CSS */}
             </span>
         );
+        let dnd;
         if (this.state.selectedSpace) {
             name = (
                 <div className="mx_UserMenu_doubleName">
@@ -560,6 +572,16 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </div>
             );
             isPrototype = true;
+        } else if (SettingsStore.getValue("feature_dnd")) {
+            const isDnd = SettingsStore.getValue("doNotDisturb");
+            dnd = <AccessibleButton
+                onClick={this.onDndToggle}
+                className={classNames({
+                    "mx_UserMenu_dnd": true,
+                    "mx_UserMenu_dnd_noisy": !isDnd,
+                    "mx_UserMenu_dnd_muted": isDnd,
+                })}
+            />;
         }
         if (this.props.isMinimized) {
             name = null;
@@ -595,6 +617,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             />
                         </span>
                         {name}
+                        {dnd}
                         {buttons}
                     </div>
                 </ContextMenuButton>

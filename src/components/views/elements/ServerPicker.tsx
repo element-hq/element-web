@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }
         </AccessibleButton>;
     }
 
-    let serverName = serverConfig.isNameResolvable ? serverConfig.hsName : serverConfig.hsUrl;
+    let serverName: React.ReactNode = serverConfig.isNameResolvable ? serverConfig.hsName : serverConfig.hsUrl;
     if (serverConfig.hsNameIsDifferent) {
         serverName = <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={serverConfig.hsUrl}>
             {serverConfig.hsName}

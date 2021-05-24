@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ interface IState {
     // be seeing.
     serverIsAlive: boolean;
     serverErrorIsFatal: boolean;
-    serverDeadError: string;
+    serverDeadError?: ReactNode;
 
     // Our matrix client - part of state because we can't render the UI auth
     // component without it.
@@ -436,6 +436,8 @@ export default class Registration extends React.Component<IProps, IState> {
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();
         }
+
+        return sessionLoaded;
     };
 
     private renderRegisterComponent() {
@@ -557,7 +559,12 @@ export default class Registration extends React.Component<IProps, IState> {
                             loggedInUserId: this.state.differentLoggedInUserId,
                         },
                     )}</p>
-                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={this.onLoginClickWithCheck}>
+                    <p><AccessibleButton element="span" className="mx_linkButton" onClick={async event => {
+                        const sessionLoaded = await this.onLoginClickWithCheck(event);
+                        if (sessionLoaded) {
+                            dis.dispatch({action: "view_welcome_page"});
+                        }
+                    }}>
                         {_t("Continue with previous account")}
                     </AccessibleButton></p>
                 </div>;

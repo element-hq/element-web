@@ -32,6 +32,7 @@ import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {allSettled} from "../../../utils/promise";
 import {useDispatcher} from "../../../hooks/useDispatcher";
+import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -111,15 +112,17 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
 
             { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
 
+            <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
+
             <SpaceBasicSettings
                 avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
-                avatarDisabled={!canSetAvatar}
+                avatarDisabled={busy || !canSetAvatar}
                 setAvatar={setNewAvatar}
                 name={name}
-                nameDisabled={!canSetName}
+                nameDisabled={busy || !canSetName}
                 setName={setName}
                 topic={topic}
-                topicDisabled={!canSetTopic}
+                topicDisabled={busy || !canSetTopic}
                 setTopic={setTopic}
             />
 

@@ -222,10 +222,12 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
+        // don't let keyboard handling escape the context menu
+        ev.stopPropagation();
+
         if (!this.props.managed) {
             if (ev.key === Key.ESCAPE) {
                 this.props.onFinished();
-                ev.stopPropagation();
                 ev.preventDefault();
             }
             return;
@@ -258,7 +260,6 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         if (handled) {
             // consume all other keys in context menu
-            ev.stopPropagation();
             ev.preventDefault();
         }
     };

@@ -73,7 +73,9 @@ class ConsoleLogger {
 
         // Convert objects and errors to helpful things
         args = args.map((arg) => {
-            if (arg instanceof Error) {
+            if (arg instanceof DOMException) {
+                return arg.message + ` (${arg.name} | ${arg.code}) ` + (arg.stack ? `\n${arg.stack}` : '');
+            } else if (arg instanceof Error) {
                 return arg.message + (arg.stack ? `\n${arg.stack}` : '');
             } else if (typeof (arg) === 'object') {
                 try {

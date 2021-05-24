@@ -39,7 +39,7 @@ import { makeSpaceParentEvent } from "./utils/space";
 /* eslint-disable camelcase */
 
 // TODO move these interfaces over to js-sdk once it has been typescripted enough to accept them
-enum Visibility {
+export enum Visibility {
     Public = "public",
     Private = "private",
 }
@@ -88,6 +88,12 @@ export interface IOpts {
     andView?: boolean;
     associatedWithCommunity?: string;
     parentSpace?: Room;
+}
+
+export interface IInvite3PID {
+    id_server: string,
+    medium: 'email',
+    address: string,
 }
 
 /**

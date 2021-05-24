@@ -117,6 +117,32 @@ limitations under the License.
         .mx_UserMenu_headerButtons {
             // No special styles: the rest of the layout happens to make it work.
         }
+
+        .mx_UserMenu_dnd {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                width: 24px;
+                height: 24px;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                background: $muted-fg-color;
+            }
+
+            &.mx_UserMenu_dnd_noisy::before {
+                mask-image: url('$(res)/img/element-icons/notifications.svg');
+            }
+
+            &.mx_UserMenu_dnd_muted::before {
+                mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+            }
+        }
     }
 
     &.mx_UserMenu_minimized {

@@ -88,6 +88,7 @@ describe('MemberList', () => {
         };
         memberListRoom.currentState = {
             members: {},
+            getMember: jest.fn(),
             getStateEvents: (eventType, stateKey) => stateKey === undefined ? [] : null, // ignore 3pid invites
         };
         for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
@@ -100,7 +101,7 @@ describe('MemberList', () => {
             memberList = r;
         };
         root = ReactDOM.render(<WrappedMemberList roomId={memberListRoom.roomId}
-                                                  wrappedRef={gatherWrappedRef} />, parentDiv);
+            wrappedRef={gatherWrappedRef} />, parentDiv);
     });
 
     afterEach((done) => {

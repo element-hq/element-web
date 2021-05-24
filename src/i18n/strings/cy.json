@@ -8,5 +8,8 @@
     "The version of %(brand)s": "Fersiwn %(brand)s",
     "Whether or not you're logged in (we don't record your username)": "Os ydych wedi mewngofnodi ai peidio (nid ydym yn cofnodi'ch enw defnyddiwr)",
     "Your language of choice": "Eich iaith o ddewis",
-    "The version of %(brand)s": "Fersiwn %(brand)s"
+    "Sign In": "Mewngofnodi",
+    "Create Account": "Creu Cyfrif",
+    "Dismiss": "Wfftio",
+    "Explore rooms": "Archwilio Ystafelloedd"
 }

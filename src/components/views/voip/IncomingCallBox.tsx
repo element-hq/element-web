@@ -72,7 +72,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         e.stopPropagation();
         dis.dispatch({
             action: 'answer',
-            room_id: CallHandler.roomIdForCall(this.state.incomingCall),
+            room_id: CallHandler.sharedInstance().roomIdForCall(this.state.incomingCall),
         });
     };
 
@@ -80,7 +80,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
         e.stopPropagation();
         dis.dispatch({
             action: 'reject',
-            room_id: CallHandler.roomIdForCall(this.state.incomingCall),
+            room_id: CallHandler.sharedInstance().roomIdForCall(this.state.incomingCall),
         });
     };
 
@@ -91,7 +91,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
 
         let room = null;
         if (this.state.incomingCall) {
-            room = MatrixClientPeg.get().getRoom(CallHandler.roomIdForCall(this.state.incomingCall));
+            room = MatrixClientPeg.get().getRoom(CallHandler.sharedInstance().roomIdForCall(this.state.incomingCall));
         }
 
         const caller = room ? room.name : _t("Unknown caller");
