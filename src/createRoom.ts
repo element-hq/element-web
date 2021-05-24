@@ -34,6 +34,7 @@ import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
+import { Action } from "./dispatcher/actions"
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -243,7 +244,8 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
 
         // We also failed to join the room (this sets joining to false in RoomViewStore)
         dis.dispatch({
-            action: 'join_room_error',
+            action: Action.JoinRoomError,
+            roomId,
         });
         console.error("Failed to create room " + roomId + " " + err);
         let description = _t("Server may be unavailable, overloaded, or you hit a bug.");

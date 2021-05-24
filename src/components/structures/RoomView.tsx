@@ -1114,7 +1114,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             Promise.resolve().then(() => {
                 const signUrl = this.props.threepidInvite?.signUrl;
                 dis.dispatch({
-                    action: 'join_room',
+                    action: Action.JoinRoom,
+                    roomId: this.getRoomId(),
                     opts: { inviteSignUrl: signUrl },
                     _type: "unknown", // TODO: instrumentation
                 });
