@@ -6,7 +6,7 @@ import { textForEvent } from "../../TextForEvent";
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { getUserNameColorClass } from "../FormattingUtils";
-
+import { Exporter } from "./Exporter";
 
 const css = `
 body {
@@ -273,16 +273,12 @@ div.mx_selected {
 }
 `;
 
-
-export default class HTMLExporter {
+export default class HTMLExporter extends Exporter {
 protected zip: JSZip;
-protected res: MatrixEvent[];
-protected room: Room;
 protected avatars: Map<string, boolean>;
 
 constructor(res: MatrixEvent[], room: Room) {
-    this.res = res;
-    this.room = room;
+    super(res, room);
     this.zip = new JSZip();
     this.avatars = new Map<string, boolean>();
 }
