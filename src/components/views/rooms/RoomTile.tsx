@@ -54,7 +54,6 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getUnsentMessages } from "../../structures/RoomStatusBar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
-import { checkObjectHasNoAdditionalKeys } from "matrix-js-sdk/src/utils";
 
 interface IProps {
     room: Room;
