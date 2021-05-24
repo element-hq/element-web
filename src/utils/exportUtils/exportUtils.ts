@@ -2,7 +2,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { arrayFastClone } from "../arrays";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import Room from 'matrix-js-sdk/src/models/room';
-import exportAsHTML from "./HtmlExport";
+import HTMLExporter from "./HtmlExport";
 
 export enum exportFormats {
     HTML = "HTML",
@@ -44,7 +44,7 @@ const exportConversationalHistory = async (room: Room, format: string, options) 
     const res = getTimelineConversation(room);
     switch (format) {
         case exportFormats.HTML:
-            await exportAsHTML(res, room);
+            new HTMLExporter(res, room).export();
             break;
         case exportFormats.JSON:
             break;

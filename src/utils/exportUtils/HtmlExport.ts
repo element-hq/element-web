@@ -5,32 +5,7 @@ import { mediaFromContent, mediaFromMxc } from "../../customisations/Media";
 import { textForEvent } from "../../TextForEvent";
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-
-const wrapHTML = (content: string, room: Room) => (`
-    <!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="utf-8" />
-                <title>Exported Data</title>
-                <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-                <link href="css/style.css" rel="stylesheet" />
-            </head>
-            <body>
-                <div class="mx_page_wrap">
-                    <div class="mx_page_header">
-                        <div class="mx_content">
-                            <div class="mx_text mx_bold">${room.name}</div>
-                        </div>
-                    </div>
-                    <div class="mx_page_body mx_chat_page">
-                        <div class="mx_history">
-                            ${content}
-                        </div>
-                    </div>
-                </div>
-            </body>
-        </html>
-`);
+import { getUserNameColorClass } from "../FormattingUtils";
 
 
 const css = `
@@ -232,34 +207,128 @@ div.mx_selected {
 .mx_default .mx_photo {
     display: block;
 }
+
+.mx_from_name.mx_Username_color1{
+    color: #368bd6;
+}
+
+.mx_initials_wrap.mx_Username_color1{
+    background-color: #368bd6;
+}
+
+.mx_from_name.mx_Username_color2{
+    color: #ac3ba8;
+}
+
+.mx_initials_wrap.mx_Username_color2{
+    background-color: #ac3ba8;
+}
+
+.mx_from_name.mx_Username_color3{
+    color: #03b381;
+}
+
+.mx_initials_wrap.mx_Username_color3{
+    background-color: #03b381;
+}
+
+.mx_from_name.mx_Username_color4{
+    color: #e64f7a;
+}
+
+.mx_initials_wrap.mx_Username_color4{
+    background-color: #e64f7a;
+}
+
+.mx_from_name.mx_Username_color5{
+    color: #ff812d;
+}
+
+.mx_initials_wrap.mx_Username_color5{
+    background-color: #ff812d;
+}
+
+.mx_from_name.mx_Username_color6{
+    color: #2dc2c5;
+}
+
+.mx_initials_wrap.mx_Username_color6{
+    background-color: #2dc2c5;
+}
+
+.mx_from_name.mx_Username_color7{
+    color: #5c56f5;
+}
+
+.mx_initials_wrap.mx_Username_color7{
+    background-color: #5c56f5;
+}
+
+.mx_from_name.mx_Username_color8{
+    color: #74d12c;
+}
+
+.mx_initials_wrap.mx_Username_color8{
+    background-color: #74d12c;
+}
 `;
 
 
-const userColors = [
-    "#368bd6",
-    "#ac3ba8",
-    "#03b381",
-    "#e64f7a",
-    "#ff812d",
-    "#2dc2c5",
-    "#5c56f5",
-    "#74d12c",
-];
+export default class HTMLExporter {
+protected zip: JSZip;
+protected res: MatrixEvent[];
+protected room: Room;
+protected avatars: Map<string, boolean>;
 
-//Get a color associated with string length. This is to map userId to a specific color
-const getUserNameColorClass = (userId: string) => {
-    return userColors[userId.length % userColors.length];
-};
+constructor(res: MatrixEvent[], room: Room) {
+    this.res = res;
+    this.room = room;
+    this.zip = new JSZip();
+    this.avatars = new Map<string, boolean>();
+}
+
+protected wrapHTML(content: string, room: Room) {
+    return `
+    <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <title>Exported Data</title>
+                <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+                <link href="css/style.css" rel="stylesheet" />
+            </head>
+            <body>
+                <div class="mx_page_wrap">
+                    <div class="mx_page_header">
+                        <div class="mx_content">
+                            <div class="mx_text mx_bold">${room.name}</div>
+                        </div>
+                    </div>
+                    <div class="mx_page_body mx_chat_page">
+                        <div class="mx_history">
+                            ${content}
+                        </div>
+                    </div>
+                </div>
+            </body>
+        </html>
+`
+}
 
 
-const getUserPic = async (event: MatrixEvent) => {
+protected isEdit(event: MatrixEvent) {
+    if (event.getType() === "m.room.message" && event.getContent().hasOwnProperty("m.new_content")) return true;
+    return false;
+}
+
+protected async getUserAvatar(event: MatrixEvent) {
     const member = event.sender;
     if (!member.getMxcAvatarUrl()) {
         return `
         <div class="mx_pull_left mx_userpic_wrap">
             <div 
-                class="mx_userpic" 
-                style="width: 42px;height: 42px;background-color: ${getUserNameColorClass(member.userId)}"
+                class="mx_userpic mx_initials_wrap ${getUserNameColorClass(event.getSender())}" 
+                style="width: 42px;height: 42px;"
             >
                 <div class="mx_initials" style="line-height: 42px;" src="users/${member.userId}">
                     ${event.sender.name[0]}
@@ -270,11 +339,11 @@ const getUserPic = async (event: MatrixEvent) => {
     } else {
         const imageUrl = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(42, 42, "crop");
 
-        if (!avatars.has(member.userId)) {
-            avatars.set(member.userId, true);
+        if (!this.avatars.has(member.userId)) {
+            this.avatars.set(member.userId, true);
             const image = await fetch(imageUrl);
             const blob = await image.blob();
-            zip.file(`users/${member.userId}`, blob);
+            this.zip.file(`users/${member.userId}`, blob);
         }
 
         return `
@@ -289,40 +358,10 @@ const getUserPic = async (event: MatrixEvent) => {
         </div>
            `;
     }
-};
-
-//Gets the event_id of an event to which an event is replied
-const getBaseEventId = (event: MatrixEvent) => {
-    const isEncrypted = event.isEncrypted();
-
-    // If encrypted, in_reply_to lies in event.event.content
-    const content = isEncrypted ? event.event.content : event.getContent();
-    const relatesTo = content["m.relates_to"];
-    return (relatesTo && relatesTo["m.in_reply_to"]) ? relatesTo["m.in_reply_to"]["event_id"] : null;
-};
-
-const isEdit = (event: MatrixEvent) => {
-    if (event.getType() === "m.room.message" && event.getContent().hasOwnProperty("m.new_content")) return true;
-    return false;
 }
 
-const dateSeparator = (event: MatrixEvent, prevEvent: MatrixEvent) => {
-    const prevDate = prevEvent ? new Date(prevEvent.getTs()) : null;
-    const currDate = new Date(event.getTs());
-    if (!prevDate || currDate.setHours(0, 0, 0, 0) !== prevDate.setHours(0, 0, 0, 0)) {
-        return `
-            <div class="mx_message mx_service">
-                <div class="mx_body mx_details">
-                    ${new Date(event.getTs())
-        .toLocaleString("en-us", {year: "numeric", month: "long", day: "numeric" })}
-                </div>
-            </div>
-            `;
-    }
-    return "";
-};
 
-const getImageData = async (event: MatrixEvent) => {
+protected async getImageData(event: MatrixEvent) {
     let blob: Blob;
     try {
         const isEncrypted = event.isEncrypted();
@@ -338,11 +377,36 @@ const getImageData = async (event: MatrixEvent) => {
         console.log("Error decrypting image");
     }
     return blob;
+}
+
+//Gets the event_id of an event to which an event is replied
+protected getBaseEventId = (event: MatrixEvent) => {
+    const isEncrypted = event.isEncrypted();
+
+    // If encrypted, in_reply_to lies in event.event.content
+    const content = isEncrypted ? event.event.content : event.getContent();
+    const relatesTo = content["m.relates_to"];
+    return (relatesTo && relatesTo["m.in_reply_to"]) ? relatesTo["m.in_reply_to"]["event_id"] : null;
 };
 
+protected dateSeparator(event: MatrixEvent, prevEvent: MatrixEvent) {
+    const prevDate = prevEvent ? new Date(prevEvent.getTs()) : null;
+    const currDate = new Date(event.getTs());
+    if (!prevDate || currDate.setHours(0, 0, 0, 0) !== prevDate.setHours(0, 0, 0, 0)) {
+        return `
+            <div class="mx_message mx_service">
+                <div class="mx_body mx_details">
+                    ${new Date(event.getTs())
+        .toLocaleString("en-us", {year: "numeric", month: "long", day: "numeric" })}
+                </div>
+            </div>
+            `;
+    }
+    return "";
+}
 
-const createMessageBody = async (event: MatrixEvent, joined = false, isReply = false, replyId = null) => {
-    const userPic = await getUserPic(event);
+protected async createMessageBody(event: MatrixEvent, joined = false, isReply = false, replyId = null) {
+    const userPic = await this.getUserAvatar(event);
     let messageBody = "";
     switch (event.getContent().msgtype) {
         case "m.text":
@@ -357,8 +421,8 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
                       src="images/${event.getId()}.png"
                     />
                 </a>`;
-            const blob = await getImageData(event);
-            zip.file(`images/${event.getId()}.png`, blob);
+            const blob = await this.getImageData(event);
+            this.zip.file(`images/${event.getId()}.png`, blob);
         }
             break;
         default:
@@ -373,7 +437,7 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
                 ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
             </div>
        ${!joined ? `
-            <div class="mx_from_name" style="color:${getUserNameColorClass(event.sender.name)}">
+            <div class="mx_from_name ${getUserNameColorClass(event.getSender())}">
                 ${event.sender.name}
             </div>`: ``}
         ${isReply ?
@@ -384,23 +448,22 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
         </div>
     </div>
     `;
-};
+}
 
-
-const createHTML = async (events: MatrixEvent[], room: Room) => {
+protected async createHTML(events: MatrixEvent[], room: Room) {
     let content = "";
     let prevEvent = null;
     for (const event of events) {
         // As the getContent of the edited event fetches the latest edit, there is no need to process edit events
-        if (isEdit(event)) continue;
-        content += dateSeparator(event, prevEvent);
+        if (this.isEdit(event)) continue;
+        content += this.dateSeparator(event, prevEvent);
 
         if (event.getType() === "m.room.message") {
-            const replyTo = getBaseEventId(event);
+            const replyTo = this.getBaseEventId(event);
             const shouldBeJoined = prevEvent && prevEvent.getContent().msgtype === "m.text"
-            && event.sender.userId === prevEvent.sender.userId && !dateSeparator(event, prevEvent) && !replyTo;
+            && event.sender.userId === prevEvent.sender.userId && !this.dateSeparator(event, prevEvent) && !replyTo;
 
-            const body = await createMessageBody(event, shouldBeJoined, !!replyTo, replyTo);
+            const body = await this.createMessageBody(event, shouldBeJoined, !!replyTo, replyTo);
             content += body;
         } else {
             const eventText = textForEvent(event);
@@ -414,26 +477,20 @@ const createHTML = async (events: MatrixEvent[], room: Room) => {
         }
         prevEvent = event;
     }
-    return wrapHTML(content, room);
-};
+    return this.wrapHTML(content, room);
+}
 
-const avatars = new Map();
-let zip: JSZip;
 
-const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
-    zip = new JSZip();
+public async export() {
+    const html = await this.createHTML(this.res, this.room);
 
-    const html = await createHTML(res, room);
-
-    zip.file("index.html", html);
-    zip.file("css/style.css", css);
-
-    avatars.clear();
+    this.zip.file("index.html", html);
+    this.zip.file("css/style.css", css);
 
     const filename = `matrix-export-${new Date().toISOString()}.zip`;
 
     //Generate the zip file asynchronously
-    const blob = await zip.generateAsync({ type: "blob" });
+    const blob = await this.zip.generateAsync({ type: "blob" });
 
     //Create a writable stream to the directory
     const fileStream = streamSaver.createWriteStream(filename, { size: blob.size });
@@ -459,5 +516,5 @@ const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
     }
     writer.close();
 }
+}
 
-export default exportAsHTML;
