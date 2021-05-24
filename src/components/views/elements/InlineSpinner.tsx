@@ -19,8 +19,9 @@ import {_t} from "../../../languageHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
-    w?: number,
-    h?: number,
+    w?: number;
+    h?: number;
+    children?: React.ReactNode;
 }
 
 @replaceableComponent("views.elements.InlineSpinner")
@@ -37,7 +38,9 @@ export default class InlineSpinner extends React.PureComponent<IProps> {
                     className="mx_InlineSpinner_icon mx_Spinner_icon"
                     style={{width: this.props.w, height: this.props.h}}
                     aria-label={_t("Loading...")}
-                />
+                >
+                    {this.props.children}
+                </div>
             </div>
         );
     }

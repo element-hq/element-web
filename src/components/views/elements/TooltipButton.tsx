@@ -19,8 +19,16 @@ import React from 'react';
 import * as sdk from '../../../index';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    helpText: string;
+}
+
+interface IState {
+    hover: boolean;
+}
+
 @replaceableComponent("views.elements.TooltipButton")
-export default class TooltipButton extends React.Component {
+export default class TooltipButton extends React.Component<IProps, IState> {
     state = {
         hover: false,
     };
