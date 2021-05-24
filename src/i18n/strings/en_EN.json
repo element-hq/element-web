@@ -2753,6 +2753,8 @@
     "Switch theme": "Switch theme",
     "User menu": "User menu",
     "Community and user menu": "Community and user menu",
+    "Currently joining %(count)s rooms|one": "Currently joining %(count)s room",
+    "Currently joining %(count)s rooms|other": "Currently joining %(count)s rooms",
     "Could not load user profile": "Could not load user profile",
     "Decrypted event source": "Decrypted event source",
     "Original event source": "Original event source",
