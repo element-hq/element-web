@@ -161,7 +161,7 @@
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
-    "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
     "react-test-renderer": "^16.14.0",
     "rimraf": "^3.0.2",
     "stylelint": "^13.9.0",
