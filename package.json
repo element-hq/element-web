@@ -62,7 +62,7 @@
     "matrix-js-sdk": "11.1.0-rc.1",
     "matrix-react-sdk": "3.22.0-rc.1",
     "matrix-widget-api": "^0.1.0-beta.14",
-    "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
