@@ -1313,9 +1313,9 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.2.tgz":
-  version "3.2.2"
-  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.2.tgz#5e3d784461ca3bbeb791ac8f3c175375aeb81318"
+"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz":
+  version "3.2.3"
+  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz#cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
