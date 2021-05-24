@@ -1,19 +1,20 @@
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { arrayFastClone } from "../arrays";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
+import Room from 'matrix-js-sdk/src/models/room';
 import exportAsHTML from "./HtmlExport";
 
-export const exportFormats = Object.freeze({
-    "HTML": "HTML",
-    "JSON": "JSON",
-    "LOGS": "LOGS",
-});
+export enum exportFormats {
+    HTML = "HTML",
+    JSON = "JSON",
+    LOGS = "LOGS",
+}
 
-export const exportOptions = Object.freeze({
-    "TIMELINE": "TIMELINE",
-});
+export enum exportOptions {
+    TIMELINE = "TIMELINE",
+}
 
-const getTimelineConversation = (room) => {
+const getTimelineConversation = (room: Room) => {
     if (!room) return;
 
     const cli = MatrixClientPeg.get();
@@ -35,12 +36,11 @@ const getTimelineConversation = (room) => {
             cli.decryptEventIfNeeded(event);
         });
 
-    console.log(events);
     return events;
 };
 
 
-const exportConversationalHistory = async (room, format, options) => {
+const exportConversationalHistory = async (room: Room, format: string, options) => {
     const res = getTimelineConversation(room);
     switch (format) {
         case exportFormats.HTML:

@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@types/streamsaver": "^2.0.0",
     "await-lock": "^2.1.0",
     "blueimp-canvas-to-blob": "^3.28.0",
     "browser-encrypt-attachment": "^0.3.0",

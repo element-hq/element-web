@@ -1,4 +1,3 @@
-
 import streamSaver from "streamsaver";
 import JSZip from "jszip";
 import { decryptFile } from "../DecryptFile";
@@ -237,16 +236,18 @@ div.mx_selected {
 
 
 const userColors = [
-    "#64bf47",
-    "#4f9cd9",
-    "#9884e8",
-    "#fb6238",
-    "#00cdac",
-    "#ff5eaa",
+    "#368bd6",
+    "#ac3ba8",
+    "#03b381",
+    "#e64f7a",
+    "#ff812d",
+    "#2dc2c5",
+    "#5c56f5",
+    "#74d12c",
 ];
 
 //Get a color associated with string length. This is to map userId to a specific color
-const getUserColor = (userId: string) => {
+const getUserNameColorClass = (userId: string) => {
     return userColors[userId.length % userColors.length];
 };
 
@@ -256,7 +257,10 @@ const getUserPic = async (event: MatrixEvent) => {
     if (!member.getMxcAvatarUrl()) {
         return `
         <div class="mx_pull_left mx_userpic_wrap">
-            <div class="mx_userpic" style="width: 42px;height: 42px;background-color: ${getUserColor(member.userId)}">
+            <div 
+                class="mx_userpic" 
+                style="width: 42px;height: 42px;background-color: ${getUserNameColorClass(member.userId)}"
+            >
                 <div class="mx_initials" style="line-height: 42px;" src="users/${member.userId}">
                     ${event.sender.name[0]}
                 </div>
@@ -369,7 +373,7 @@ const createMessageBody = async (event: MatrixEvent, joined = false, isReply = f
                 ${new Date(event.getTs()).toLocaleTimeString().slice(0, -3)}
             </div>
        ${!joined ? `
-            <div class="mx_from_name" style="color:${getUserColor(event.sender.name)}">
+            <div class="mx_from_name" style="color:${getUserNameColorClass(event.sender.name)}">
                 ${event.sender.name}
             </div>`: ``}
         ${isReply ?
@@ -414,7 +418,7 @@ const createHTML = async (events: MatrixEvent[], room: Room) => {
 };
 
 const avatars = new Map();
-let zip: any;
+let zip: JSZip;
 
 const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
     zip = new JSZip();
@@ -432,7 +436,7 @@ const exportAsHTML = async (res: MatrixEvent[], room: Room) => {
     const blob = await zip.generateAsync({ type: "blob" });
 
     //Create a writable stream to the directory
-    const fileStream = streamSaver.createWriteStream(filename, blob.size);
+    const fileStream = streamSaver.createWriteStream(filename, { size: blob.size });
     const writer = fileStream.getWriter();
 
     // Here we chunk the blob into pieces of 10 MB, the size might be dynamically generated.
