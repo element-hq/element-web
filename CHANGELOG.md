@@ -1,3 +1,40 @@
+Changes in [1.7.29](https://github.com/vector-im/element-web/releases/tag/v1.7.29) (2021-05-24)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.29-rc.1...v1.7.29)
+
+## Security notice
+
+Element Web 1.7.29 fixes (by upgrading to olm 3.2.3) an issue in code used for
+decrypting server-side stored secrets. The issue could potentially allow a
+malicious homeserver to cause a stack buffer overflow in the affected function
+and to control that function's local variables.
+
+## All changes
+
+ * Upgrade to React SDK 3.22.0 and JS SDK 11.1.0
+ * [Release] Bump libolm dependency, and update package name
+   [\#17456](https://github.com/vector-im/element-web/pull/17456)
+
+Changes in [1.7.29-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.29-rc.1) (2021-05-19)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.28...v1.7.29-rc.1)
+
+ * Upgrade to React SDK 3.22.0-rc.1 and JS SDK 11.1.0-rc.1
+ * Translations update from Weblate
+   [\#17384](https://github.com/vector-im/element-web/pull/17384)
+ * Prevent minification of `.html` files
+   [\#17349](https://github.com/vector-im/element-web/pull/17349)
+ * Update matrix-widget-api/react-sdk dependency reference
+   [\#17346](https://github.com/vector-im/element-web/pull/17346)
+ * Add `yarn start:https`
+   [\#16989](https://github.com/vector-im/element-web/pull/16989)
+ * Translations update from Weblate
+   [\#17239](https://github.com/vector-im/element-web/pull/17239)
+ * Remove "in development" flag from voice messages labs documentation
+   [\#17204](https://github.com/vector-im/element-web/pull/17204)
+ * Add required webpack+jest config to load Safari support modules
+   [\#17193](https://github.com/vector-im/element-web/pull/17193)
+
 Changes in [1.7.28](https://github.com/vector-im/element-web/releases/tag/v1.7.28) (2021-05-17)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.28-rc.1...v1.7.28)
