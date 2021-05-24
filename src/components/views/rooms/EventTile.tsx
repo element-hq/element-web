@@ -280,6 +280,9 @@ interface IProps {
 
     // Symbol of the root node
     as?: string
+
+    // whether or not to always show timestamps
+    alwaysShowTimestamps?: boolean
 }
 
 interface IState {
@@ -979,7 +982,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const timestamp = this.props.mxEvent.getTs() && this.state.hover ?
+        const showTimestamp = this.props.mxEvent.getTs() && (this.props.alwaysShowTimestamps || this.state.hover);
+        const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
         const keyRequestHelpText =

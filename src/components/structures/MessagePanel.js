@@ -650,6 +650,7 @@ export default class MessagePanel extends React.Component {
                     as="li"
                     data-scroll-tokens={scrollToken}
                     ref={this._collectEventNode.bind(this, eventId)}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                     mxEvent={mxEv}
                     continuation={continuation}
                     isRedacted={mxEv.isRedacted()}
