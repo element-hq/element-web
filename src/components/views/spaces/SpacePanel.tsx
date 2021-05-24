@@ -221,14 +221,20 @@ const SpacePanel = () => {
                             space={s}
                             activeSpaces={activeSpaces}
                             isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => setPanelCollapsed(false)}
+                            onExpand={() => {
+                                closeMenu();
+                                setPanelCollapsed(false);
+                            }}
                         />) }
                         { spaces.map(s => <SpaceItem
                             key={s.roomId}
                             space={s}
                             activeSpaces={activeSpaces}
                             isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => setPanelCollapsed(false)}
+                            onExpand={() => {
+                                closeMenu();
+                                setPanelCollapsed(false);
+                            }}
                         />) }
                     </div>
                     <SpaceButton
