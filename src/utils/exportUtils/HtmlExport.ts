@@ -3,7 +3,7 @@ import JSZip from "jszip";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent, mediaFromMxc } from "../../customisations/Media";
 import { textForEvent } from "../../TextForEvent";
-import Room from 'matrix-js-sdk/src/models/room';
+import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 const wrapHTML = (content: string, room: Room) => (`
