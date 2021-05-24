@@ -47,7 +47,7 @@ describe("ForwardDialog", () => {
         await act(async () => {
             wrapper = mount(
                 <ForwardDialog
-                    cli={client}
+                    matrixClient={client}
                     event={message}
                     permalinkCreator={new RoomPermalinkCreator(undefined, sourceRoom)}
                     onFinished={jest.fn()}

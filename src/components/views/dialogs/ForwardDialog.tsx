@@ -42,7 +42,7 @@ import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/Recent
 const AVATAR_SIZE = 30;
 
 interface IProps extends IDialogProps {
-    cli: MatrixClient;
+    matrixClient: MatrixClient;
     // The event to forward
     event: MatrixEvent;
     // We need a permalink creator for the source room to pass through to EventTile
@@ -53,7 +53,7 @@ interface IProps extends IDialogProps {
 interface IEntryProps {
     room: Room;
     event: MatrixEvent;
-    cli: MatrixClient;
+    matrixClient: MatrixClient;
     onFinished(success: boolean): void;
 }
 
@@ -64,7 +64,7 @@ enum SendState {
     Failed,
 }
 
-const Entry: React.FC<IEntryProps> = ({ room, event, cli, onFinished }) => {
+const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
 
     const jumpToRoom = () => {
@@ -141,7 +141,7 @@ const Entry: React.FC<IEntryProps> = ({ room, event, cli, onFinished }) => {
     </div>;
 };
 
-const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinished }) => {
+const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCreator, onFinished }) => {
     const userId = cli.getUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
@@ -219,7 +219,7 @@ const ForwardDialog: React.FC<IProps> = ({ cli, event, permalinkCreator, onFinis
                                 key={room.roomId}
                                 room={room}
                                 event={event}
-                                cli={cli}
+                                matrixClient={cli}
                                 onFinished={onFinished}
                             />,
                         ) }
