@@ -39,6 +39,7 @@ import {UIFeature} from "../../settings/UIFeature";
 import {objectHasDiff} from "../../utils/objects";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
+import {Action} from "../../dispatcher/actions";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -470,7 +471,7 @@ class TimelinePanel extends React.Component {
                 break;
             }
 
-            case "composer_insert": {
+            case Action.ComposerInsert: {
                 // re-dispatch to the correct composer
                 if (this.state.editState) {
                     dis.dispatch({

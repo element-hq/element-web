@@ -36,6 +36,8 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
+import {Action} from "../../../dispatcher/actions";
 
 @replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
@@ -389,8 +391,8 @@ export default class TextualBody extends React.Component {
 
     onEmoteSenderClick = event => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch({
-            action: "composer_insert",
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
             userId: mxEvent.getSender(),
         });
     };

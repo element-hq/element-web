@@ -15,16 +15,16 @@ limitations under the License.
 */
 import React from 'react';
 import classNames from 'classnames';
-import { _t } from '../../../languageHandler';
+import {_t} from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import dis from '../../../dispatcher/dispatcher';
-import { ActionPayload } from "../../../dispatcher/payloads";
+import {ActionPayload} from "../../../dispatcher/payloads";
 import Stickerpicker from './Stickerpicker';
-import { makeRoomPermalink, RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
+import {makeRoomPermalink, RoomPermalinkCreator} from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -39,8 +39,10 @@ import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
 import {RecordingState} from "../../../voice/VoiceRecording";
 import Tooltip, {Alignment} from "../elements/Tooltip";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import { E2EStatus } from '../../../utils/ShieldUtils';
+import {E2EStatus} from '../../../utils/ShieldUtils';
 import SendMessageComposer from "./SendMessageComposer";
+import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
+import {Action} from "../../../dispatcher/actions";
 
 interface IComposerAvatarProps {
     me: object;
@@ -317,8 +319,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     }
 
     addEmoji(emoji) {
-        dis.dispatch({
-            action: "composer_insert",
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
             text: emoji,
         });
     }

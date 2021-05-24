@@ -66,6 +66,7 @@ import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRight
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {mediaFromMxc} from "../../../customisations/Media";
+import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
 
 export interface IDevice {
     deviceId: string;
@@ -366,8 +367,8 @@ const UserOptionsSection: React.FC<{
             };
 
             const onInsertPillButton = function() {
-                dis.dispatch({
-                    action: "composer_insert",
+                dis.dispatch<ComposerInsertPayload>({
+                    action: Action.ComposerInsert,
                     userId: member.userId,
                 });
             };

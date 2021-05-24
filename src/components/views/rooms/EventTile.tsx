@@ -46,6 +46,8 @@ import { EditorStateTransfer } from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "./NotificationBadge";
+import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from '../../../dispatcher/actions';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -698,8 +700,8 @@ export default class EventTile extends React.Component<IProps, IState> {
 
     onSenderProfileClick = event => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch({
-            action: "composer_insert",
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
             userId: mxEvent.getSender(),
         });
     };

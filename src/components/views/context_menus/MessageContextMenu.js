@@ -31,6 +31,8 @@ import { isContentActionable } from '../../../utils/EventUtils';
 import {MenuItem} from "../../structures/ContextMenu";
 import {EventType} from "matrix-js-sdk/src/@types/event";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
+import {Action} from "../../../dispatcher/actions";
 
 export function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -199,8 +201,8 @@ export default class MessageContextMenu extends React.Component {
     };
 
     onQuoteClick = () => {
-        dis.dispatch({
-            action: "composer_insert",
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
             event: this.props.mxEvent,
         });
         this.closeMenu();
