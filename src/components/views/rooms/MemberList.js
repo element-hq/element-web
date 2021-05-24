@@ -30,6 +30,7 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -132,6 +133,12 @@ export default class MemberList extends React.Component {
         }
     }
 
+    get canInvite() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        return room && room.canInvite(cli.getUserId());
+    }
+
     _getMembersState(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
@@ -140,6 +147,7 @@ export default class MemberList extends React.Component {
             members: members,
             filteredJoinedMembers: this._filterMembers(members, 'join'),
             filteredInvitedMembers: this._filterMembers(members, 'invite'),
+            canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
@@ -195,6 +203,8 @@ export default class MemberList extends React.Component {
             event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
+
+        if (this.canInvite !== this.state.canInvite) this.setState({ canInvite: this.canInvite });
     };
 
     _updateList = rate_limited_func(() => {
@@ -454,19 +464,17 @@ export default class MemberList extends React.Component {
         let inviteButton;
 
         if (room && room.getMyMembership() === 'join') {
-            const canInvite = room.canInvite(cli.getUserId());
-
             let inviteButtonText = _t("Invite to this room");
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
-            } else if (room.isSpaceRoom()) {
+            } else if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
                 inviteButtonText = _t("Invite to this space");
             }
 
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
-                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!this.state.canInvite}>
                     <span>{ inviteButtonText }</span>
                 </AccessibleButton>;
         }
@@ -492,7 +500,7 @@ export default class MemberList extends React.Component {
         let previousPhase = RightPanelPhases.RoomSummary;
         // We have no previousPhase for when viewing a MemberList from a Space
         let scopeHeader;
-        if (room?.isSpaceRoom()) {
+        if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
             previousPhase = undefined;
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={room} height={32} width={32} />

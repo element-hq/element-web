@@ -41,6 +41,9 @@ export default class MImageBody extends React.Component {
 
         /* the maximum image height to use */
         maxImageHeight: PropTypes.number,
+
+        /* the permalinkCreator */
+        permalinkCreator: PropTypes.object,
     };
 
     static contextType = MatrixClientContext;
@@ -106,6 +109,7 @@ export default class MImageBody extends React.Component {
                 src: httpUrl,
                 name: content.body && content.body.length > 0 ? content.body : _t('Attachment'),
                 mxEvent: this.props.mxEvent,
+                permalinkCreator: this.props.permalinkCreator,
             };
 
             if (content.info) {
@@ -114,16 +118,16 @@ export default class MImageBody extends React.Component {
                 params.fileSize = content.info.size;
             }
 
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
+            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
         }
     }
 
     _isGif() {
         const content = this.props.mxEvent.getContent();
         return (
-          content &&
-          content.info &&
-          content.info.mimetype === "image/gif"
+            content &&
+            content.info &&
+            content.info.mimetype === "image/gif"
         );
     }
 
@@ -181,9 +185,8 @@ export default class MImageBody extends React.Component {
         // So either we need to support custom timeline widths here, or reimpose the cap, otherwise the
         // thumbnail resolution will be unnecessarily reduced.
         // custom timeline widths seems preferable.
-        const pixelRatio = window.devicePixelRatio;
-        const thumbWidth = Math.round(800 * pixelRatio);
-        const thumbHeight = Math.round(600 * pixelRatio);
+        const thumbWidth = 800;
+        const thumbHeight = 600;
 
         const content = this.props.mxEvent.getContent();
         const media = mediaFromContent(content);
@@ -214,7 +217,7 @@ export default class MImageBody extends React.Component {
             const info = content.info;
             if (
                 this._isGif() ||
-                pixelRatio === 1.0 ||
+                window.devicePixelRatio === 1.0 ||
                 (!info || !info.w || !info.h || !info.size)
             ) {
                 return media.getThumbnailOfSourceHttp(thumbWidth, thumbHeight);
@@ -343,9 +346,9 @@ export default class MImageBody extends React.Component {
                 } else {
                     imageElement = (
                         <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
-                             alt={content.body}
-                             onError={this.onImageError}
-                             onLoad={this.onImageLoad}
+                            alt={content.body}
+                            onError={this.onImageError}
+                            onLoad={this.onImageLoad}
                         />
                     );
                 }
@@ -381,12 +384,12 @@ export default class MImageBody extends React.Component {
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
                 <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this._image}
-                     style={{ maxWidth: maxWidth + "px" }}
-                     alt={content.body}
-                     onError={this.onImageError}
-                     onLoad={this.onImageLoad}
-                     onMouseEnter={this.onImageEnter}
-                     onMouseLeave={this.onImageLeave} />
+                    style={{ maxWidth: maxWidth + "px" }}
+                    alt={content.body}
+                    onError={this.onImageError}
+                    onLoad={this.onImageLoad}
+                    onMouseEnter={this.onImageEnter}
+                    onMouseLeave={this.onImageLeave} />
             );
         }
 
@@ -464,9 +467,9 @@ export default class MImageBody extends React.Component {
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
-          thumbUrl = contentUrl;
+            thumbUrl = contentUrl;
         } else {
-          thumbUrl = this._getThumbUrl();
+            thumbUrl = this._getThumbUrl();
         }
 
         const thumbnail = this._messageContent(contentUrl, thumbUrl, content);

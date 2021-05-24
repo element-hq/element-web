@@ -25,6 +25,14 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const MIN_TOOLTIP_HEIGHT = 25;
 
+export enum Alignment {
+    Natural, // Pick left or right
+    Left,
+    Right,
+    Top, // Centered
+    Bottom, // Centered
+}
+
 interface IProps {
         // Class applied to the element used to position the tooltip
         className?: string;
@@ -36,7 +44,7 @@ interface IProps {
         visible?: boolean;
         // the react element to put into the tooltip
         label: React.ReactNode;
-        forceOnRight?: boolean;
+        alignment?: Alignment; // defaults to Natural
         yOffset?: number;
 }
 
@@ -46,10 +54,14 @@ export default class Tooltip extends React.Component<IProps> {
     private tooltip: void | Element | Component<Element, any, any>;
     private parent: Element;
 
+    // XXX: This is because some components (Field) are unable to `import` the Tooltip class,
+    // so we expose the Alignment options off of us statically.
+    public static readonly Alignment = Alignment;
 
     public static readonly defaultProps = {
         visible: true,
         yOffset: 0,
+        alignment: Alignment.Natural,
     };
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
@@ -86,11 +98,35 @@ export default class Tooltip extends React.Component<IProps> {
             offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
         }
 
-        style.top = (parentBox.top - 2 + this.props.yOffset) + window.pageYOffset + offset;
-        if (!this.props.forceOnRight && parentBox.right > window.innerWidth / 2) {
-            style.right = window.innerWidth - parentBox.right - window.pageXOffset - 16;
-        } else {
-            style.left = parentBox.right + window.pageXOffset + 6;
+        const baseTop = (parentBox.top - 2 + this.props.yOffset) + window.pageYOffset;
+        const top = baseTop + offset;
+        const right = window.innerWidth - parentBox.right - window.pageXOffset - 16;
+        const left = parentBox.right + window.pageXOffset + 6;
+        const horizontalCenter = parentBox.right - window.pageXOffset - (parentBox.width / 2);
+        switch (this.props.alignment) {
+            case Alignment.Natural:
+                if (parentBox.right > window.innerWidth / 2) {
+                    style.right = right;
+                    style.top = top;
+                    break;
+                }
+                // fall through to Right
+            case Alignment.Right:
+                style.left = left;
+                style.top = top;
+                break;
+            case Alignment.Left:
+                style.right = right;
+                style.top = top;
+                break;
+            case Alignment.Top:
+                style.top = baseTop - 16;
+                style.left = horizontalCenter;
+                break;
+            case Alignment.Bottom:
+                style.top = baseTop + parentBox.height;
+                style.left = horizontalCenter;
+                break;
         }
 
         return style;

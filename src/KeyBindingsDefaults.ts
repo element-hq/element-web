@@ -360,11 +360,11 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
             action: NavigationAction.GoToHome,
             keyCombo: {
                 key: Key.H,
-                ctrlOrCmd: true,
-                altKey: true,
+                ctrlKey: true,
+                altKey: !isMac,
+                shiftKey: isMac,
             },
         },
-
         {
             action: NavigationAction.SelectPrevRoom,
             keyCombo: {

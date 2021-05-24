@@ -521,11 +521,12 @@ export default class TextualBody extends React.Component {
             const LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget
-                            key={link}
-                            link={link}
-                            mxEvent={this.props.mxEvent}
-                            onCancelClick={this.onCancelClick}
-                            onHeightChanged={this.props.onHeightChanged} />;
+                    key={link}
+                    link={link}
+                    mxEvent={this.props.mxEvent}
+                    onCancelClick={this.onCancelClick}
+                    onHeightChanged={this.props.onHeightChanged}
+                />;
             });
         }
 

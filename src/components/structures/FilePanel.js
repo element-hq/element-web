@@ -50,6 +50,9 @@ class FilePanel extends React.Component {
         if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
+        const client = MatrixClientPeg.get();
+        client.decryptEventIfNeeded(ev);
+
         if (ev.isBeingDecrypted()) {
             this.decryptingEvents.add(ev.getId());
         } else {
@@ -200,10 +203,10 @@ class FilePanel extends React.Component {
                 previousPhase={RightPanelPhases.RoomSummary}
             >
                 <div className="mx_RoomView_empty">
-                { _t("You must <a>register</a> to use this functionality",
-                    {},
-                    { 'a': (sub) => <a href="#/register" key="sub">{ sub }</a> })
-                }
+                    { _t("You must <a>register</a> to use this functionality",
+                        {},
+                        { 'a': (sub) => <a href="#/register" key="sub">{ sub }</a> })
+                    }
                 </div>
             </BaseCard>;
         } else if (this.noRoom) {

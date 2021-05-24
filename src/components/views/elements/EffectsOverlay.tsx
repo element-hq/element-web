@@ -37,7 +37,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
                 effect = new Effect(options);
                 effectsRef.current[name] = effect;
             } catch (err) {
-                console.warn('Unable to load effect module at \'../../../effects/${name}\'.', err);
+                console.warn(`Unable to load effect module at '../../../effects/${name}.`, err);
             }
         }
         return effect;

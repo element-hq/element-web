@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,10 +23,10 @@ import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
-import SettingsStore from "../../../settings/SettingsStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import InviteReason from "../elements/InviteReason";
 
 const MessageCase = Object.freeze({
     NotLoggedIn: "NotLoggedIn",
@@ -303,7 +301,6 @@ export default class RoomPreviewBar extends React.Component {
         const brand = SdkConfig.get().brand;
         const Spinner = sdk.getComponent('elements.Spinner');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const EventTilePreview = sdk.getComponent('elements.EventTilePreview');
 
         let showSpinner = false;
         let title;
@@ -497,24 +494,7 @@ export default class RoomPreviewBar extends React.Component {
                 const myUserId = MatrixClientPeg.get().getUserId();
                 const reason = this.props.room.currentState.getMember(myUserId).events.member.event.content.reason;
                 if (reason) {
-                    this.reasonElement = React.createRef();
-                    // We hide the reason for invitation by default, since it can be a
-                    // vector for spam/harassment.
-                    const showReason = () => {
-                        this.reasonElement.current.unfade();
-                        this.reasonElement.current.changeMessage(reason);
-                    };
-                    reasonElement = <EventTilePreview
-                        ref={this.reasonElement}
-                        onClick={showReason}
-                        className="mx_RoomPreviewBar_reason"
-                        message={_t("Invite messages are hidden by default. Click to show the message.")}
-                        layout={SettingsStore.getValue("layout")}
-                        userId={inviteMember.userId}
-                        displayName={inviteMember.rawDisplayName}
-                        avatarUrl={inviteMember.events.member.event.content.avatar_url}
-                        faded={true}
-                    />;
+                    reasonElement = <InviteReason reason={reason} />;
                 }
 
                 primaryActionHandler = this.props.onJoinClick;

@@ -97,7 +97,7 @@ export function formatFullDateNoTime(date: Date): string {
     });
 }
 
-export function formatFullDate(date: Date, showTwelveHour = false): string {
+export function formatFullDate(date: Date, showTwelveHour = false, showSeconds = true): string {
     const days = getDaysArray();
     const months = getMonthsArray();
     return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s', {
@@ -105,7 +105,7 @@ export function formatFullDate(date: Date, showTwelveHour = false): string {
         monthName: months[date.getMonth()],
         day: date.getDate(),
         fullYear: date.getFullYear(),
-        time: formatFullTime(date, showTwelveHour),
+        time: showSeconds ? formatFullTime(date, showTwelveHour) : formatTime(date, showTwelveHour),
     });
 }
 

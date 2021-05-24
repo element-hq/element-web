@@ -24,16 +24,34 @@ import SpaceStore, { UPDATE_SELECTED_SPACE } from "../SpaceStore";
  * Watches for changes in spaces to manage the filter on the provided RoomListStore
  */
 export class SpaceWatcher {
-    private filter = new SpaceFilterCondition();
+    private filter: SpaceFilterCondition;
     private activeSpace: Room = SpaceStore.instance.activeSpace;
 
     constructor(private store: RoomListStoreClass) {
-        this.filter.updateSpace(this.activeSpace); // get the filter into a consistent state
-        store.addFilter(this.filter);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
     }
 
-    private onSelectedSpaceUpdated = (activeSpace) => {
-        this.filter.updateSpace(this.activeSpace = activeSpace);
+    private onSelectedSpaceUpdated = (activeSpace?: Room) => {
+        this.activeSpace = activeSpace;
+
+        if (this.filter) {
+            if (activeSpace) {
+                this.updateFilter();
+            } else {
+                this.store.removeFilter(this.filter);
+                this.filter = null;
+            }
+        } else if (activeSpace) {
+            this.filter = new SpaceFilterCondition();
+            this.updateFilter();
+            this.store.addFilter(this.filter);
+        }
+    };
+
+    private updateFilter = () => {
+        SpaceStore.instance.traverseSpace(this.activeSpace.roomId, roomId => {
+            this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+        });
+        this.filter.updateSpace(this.activeSpace);
     };
 }

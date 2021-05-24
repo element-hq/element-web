@@ -529,7 +529,7 @@ export default class ScrollPanel extends React.Component {
      */
     scrollRelative = mult => {
         const scrollNode = this._getScrollNode();
-        const delta = mult * scrollNode.clientHeight * 0.5;
+        const delta = mult * scrollNode.clientHeight * 0.9;
         scrollNode.scrollBy(0, delta);
         this._saveScrollState();
     };
@@ -896,7 +896,9 @@ export default class ScrollPanel extends React.Component {
 
         // give the <ol> an explicit role=list because Safari+VoiceOver seems to think an ordered-list with
         // list-style-type: none; is no longer a list
-        return (<AutoHideScrollbar wrappedRef={this._collectScroll}
+        return (
+            <AutoHideScrollbar
+                wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
                 onWheel={this.props.onUserScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>

@@ -96,6 +96,9 @@ export class Media {
      */
     public getThumbnailHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null | undefined {
         if (!this.hasThumbnail) return null;
+        // scale using the device pixel ratio to keep images clear
+        width = Math.floor(width * window.devicePixelRatio);
+        height = Math.floor(height * window.devicePixelRatio);
         return this.client.mxcUrlToHttp(this.thumbnailMxc, width, height, mode);
     }
 
@@ -107,6 +110,9 @@ export class Media {
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
     public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string {
+        // scale using the device pixel ratio to keep images clear
+        width = Math.floor(width * window.devicePixelRatio);
+        height = Math.floor(height * window.devicePixelRatio);
         return this.client.mxcUrlToHttp(this.srcMxc, width, height, mode);
     }
 
@@ -117,6 +123,7 @@ export class Media {
      * @returns {string} An HTTP URL for the thumbnail.
      */
     public getSquareThumbnailHttp(dim: number): string {
+        dim = Math.floor(dim * window.devicePixelRatio); // scale using the device pixel ratio to keep images clear
         if (this.hasThumbnail) {
             return this.getThumbnailHttp(dim, dim, 'crop');
         }

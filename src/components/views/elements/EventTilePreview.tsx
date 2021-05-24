@@ -55,22 +55,10 @@ interface IProps {
      * The mxc:// avatar URL of the displayed user
      */
     avatarUrl?: string;
-
-    /**
-     * Whether the EventTile should appear faded
-     */
-    faded?: boolean;
-
-    /**
-     * Callback for when the component is clicked
-     */
-    onClick?: () => void;
 }
 
 interface IState {
     message: string;
-    faded: boolean;
-    eventTileKey: number;
 }
 
 const AVATAR_SIZE = 32;
@@ -81,21 +69,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             message: props.message,
-            faded: !!props.faded,
-            eventTileKey: 0,
         };
-    }
-
-    changeMessage(message: string) {
-        this.setState({
-            message,
-            // Change the EventTile key to force React to create a new instance
-            eventTileKey: this.state.eventTileKey + 1,
-        });
-    }
-
-    unfade() {
-        this.setState({ faded: false });
     }
 
     private fakeEvent({message}: IState) {
@@ -147,12 +121,10 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const className = classnames(this.props.className, {
             "mx_IRCLayout": this.props.layout == Layout.IRC,
             "mx_GroupLayout": this.props.layout == Layout.Group,
-            "mx_EventTilePreview_faded": this.state.faded,
         });
 
-        return <div className={className} onClick={this.props.onClick}>
+        return <div className={className}>
             <EventTile
-                key={this.state.eventTileKey}
                 mxEvent={event}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}

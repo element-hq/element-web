@@ -16,9 +16,11 @@ limitations under the License.
 
 import React from "react";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import classNames from "classnames";
 
 interface IProps {
     relHeights: number[]; // relative heights (0-1)
+    progress: number; // percent complete, 0-1, default 100%
 }
 
 interface IState {
@@ -28,9 +30,16 @@ interface IState {
  * A simple waveform component. This renders bars (centered vertically) for each
  * height provided in the component properties. Updating the properties will update
  * the rendered waveform.
+ *
+ * For CSS purposes, a mx_Waveform_bar_100pct class is added when the bar should be
+ * "filled", as a demonstration of the progress property.
  */
 @replaceableComponent("views.voice_messages.Waveform")
 export default class Waveform extends React.PureComponent<IProps, IState> {
+    public static defaultProps = {
+        progress: 1,
+    };
+
     public constructor(props) {
         super(props);
     }
@@ -38,7 +47,13 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
     public render() {
         return <div className='mx_Waveform'>
             {this.props.relHeights.map((h, i) => {
-                return <span key={i} style={{height: (h * 100) + '%'}} className='mx_Waveform_bar' />;
+                const progress = this.props.progress;
+                const isCompleteBar = (i / this.props.relHeights.length) <= progress && progress > 0;
+                const classes = classNames({
+                    'mx_Waveform_bar': true,
+                    'mx_Waveform_bar_100pct': isCompleteBar,
+                });
+                return <span key={i} style={{height: (h * 100) + '%'}} className={classes} />;
             })}
         </div>;
     }
