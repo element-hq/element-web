@@ -37,18 +37,24 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import Modal from "matrix-react-sdk/src/Modal";
 import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
 import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
-import {Categories, CMD_OR_CTRL, DIGITS, Modifiers, registerShortcut} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
+import {
+    Categories,
+    CMD_OR_CTRL,
+    DIGITS,
+    Modifiers,
+    registerShortcut,
+} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
 import {isOnlyCtrlOrCmdKeyEvent, Key} from "matrix-react-sdk/src/Keyboard";
 import React from "react";
 import {randomString} from "matrix-js-sdk/src/randomstring";
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
 import {ActionPayload} from "matrix-react-sdk/src/dispatcher/payloads";
+import {SwitchSpacePayload} from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
 import {showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
 import {CheckUpdatesPayload} from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
-import SpaceStore from 'matrix-react-sdk/src/stores/SpaceStore';
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -559,11 +565,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this._ipcCall(back ? "navigateBack" : "navigateForward");
     }
     private navigateToSpace(num: number) {
-        if (num === 0) {
-            SpaceStore.instance.setActiveSpace(null);
-        } else if (SpaceStore.instance.spacePanelSpaces.length >= num) {
-            SpaceStore.instance.setActiveSpace(SpaceStore.instance.spacePanelSpaces[num - 1]);
-        }
+        dis.dispatch<SwitchSpacePayload>({
+            action: Action.SwitchSpace,
+            num,
+        });
     }
 
     onKeyDown(ev: KeyboardEvent): boolean {
