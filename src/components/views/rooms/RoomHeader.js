@@ -110,13 +110,6 @@ export default class RoomHeader extends React.Component {
         return true;
     }
 
-    _hasPins() {
-        const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
-        if (!currentPinEvent) return false;
-
-        return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
-    }
-
     render() {
         let searchStatus = null;
         let cancelButton = null;
@@ -184,9 +177,7 @@ export default class RoomHeader extends React.Component {
         if (this.props.onPinnedClick && SettingsStore.getValue('feature_pinning')) {
             let pinsIndicator = null;
             if (this._hasUnreadPins()) {
-                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator mx_RoomHeader_pinsIndicatorUnread" />);
-            } else if (this._hasPins()) {
-                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator" />);
+                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicatorUnread" />);
             }
 
             pinnedEventsButton =
