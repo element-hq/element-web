@@ -31,7 +31,6 @@ const RoomContext = createContext<IState>({
     canPeek: false,
     showApps: false,
     isPeeking: false,
-    showingPinned: false,
     showReadReceipts: true,
     showRightPanel: true,
     joining: false,

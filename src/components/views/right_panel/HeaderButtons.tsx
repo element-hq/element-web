@@ -43,7 +43,7 @@ interface IState {
 interface IProps {}
 
 @replaceableComponent("views.right_panel.HeaderButtons")
-export default abstract class HeaderButtons<P> extends React.Component<IProps & P, IState> {
+export default abstract class HeaderButtons<P = {}> extends React.Component<IProps & P, IState> {
     private storeToken: EventSubscription;
     private dispatcherRef: string;
 
