@@ -110,6 +110,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         dis.fire(Action.ViewRoomDirectory);
     };
 
+    private refreshStickyHeaders = () => {
+        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
+        this.handleStickyHeaders(this.listContainerRef.current);
+    }
+
     private onBreadcrumbsUpdate = () => {
         const newVal = BreadcrumbsStore.instance.visible;
         if (newVal !== this.state.showBreadcrumbs) {
@@ -151,9 +156,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const topEdge = list.scrollTop;
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist:not(.mx_RoomSublist_hidden)");
-
-        const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
-        const headerStickyWidth = list.clientWidth - headerRightMargin;
 
         // We track which styles we want on a target before making the changes to avoid
         // excessive layout updates.
@@ -243,17 +245,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.add("mx_RoomSublist_headerContainer_sticky");
                 }
-
-                const newWidth = `${headerStickyWidth}px`;
-                if (header.style.width !== newWidth) {
-                    header.style.width = newWidth;
-                }
             } else if (!style.stickyTop && !style.stickyBottom) {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_sticky");
-                }
-                if (header.style.width) {
-                    header.style.removeProperty('width');
                 }
             }
         }
@@ -432,7 +426,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     {this.renderBreadcrumbs()}
-                    <RoomListNumResults />
+                    <RoomListNumResults onVisibilityChange={this.refreshStickyHeaders} />
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
