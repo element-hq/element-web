@@ -7,7 +7,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { getUserNameColorClass } from "../FormattingUtils";
 import { Exporter } from "./Exporter";
-import * as ponyfill from 'web-streams-polyfill/ponyfill'
+import * as ponyfill from "web-streams-polyfill/ponyfill"
 
 const css = `
 body {
