@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useEffect, useMemo} from "react";
+import React, {useContext, useMemo} from "react";
 import {Resizable} from "re-resizable";
 import classNames from "classnames";
 
@@ -28,15 +28,11 @@ import {useAccountData} from "../../hooks/useAccountData";
 import AppTile from "../views/elements/AppTile";
 import {useSettingValue} from "../../hooks/useSettings";
 
-interface IProps {
-    onResize(): void;
-}
-
 const MIN_HEIGHT = 100;
 const MAX_HEIGHT = 500; // or 50% of the window height
 const INITIAL_HEIGHT = 280;
 
-const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
+const LeftPanelWidget: React.FC = () => {
     const cli = useContext(MatrixClientContext);
 
     const mWidgetsEvent = useAccountData<Record<string, IWidgetEvent>>(cli, "m.widgets");
@@ -56,7 +52,6 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
 
     const [height, setHeight] = useLocalStorageState("left-panel-widget-height", INITIAL_HEIGHT);
     const [expanded, setExpanded] = useLocalStorageState("left-panel-widget-expanded", true);
-    useEffect(onResize, [expanded, onResize]);
 
     const [onFocus, isActive, ref] = useRovingTabIndex();
     const tabIndex = isActive ? 0 : -1;
@@ -69,7 +64,6 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
             size={{height} as any}
             minHeight={MIN_HEIGHT}
             maxHeight={Math.min(window.innerHeight / 2, MAX_HEIGHT)}
-            onResize={onResize}
             onResizeStop={(e, dir, ref, d) => {
                 setHeight(height + d.height);
             }}

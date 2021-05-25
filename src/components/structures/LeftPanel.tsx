@@ -90,10 +90,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
             this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
-
-        // We watch the middle panel because we don't actually get resized, the middle panel does.
-        // We listen to the noisy channel to avoid choppy reaction times.
-        this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
     }
 
     public componentWillUnmount() {
@@ -103,7 +99,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
 
     private updateActiveSpace = (activeSpace: Room) => {
@@ -281,11 +276,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.handleStickyHeaders(list);
     };
 
-    private onResize = () => {
-        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
-        this.handleStickyHeaders(this.listContainerRef.current);
-    };
-
     private onFocus = (ev: React.FocusEvent) => {
         this.focusedElement = ev.target;
     };
@@ -420,7 +410,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
-            onResize={this.onResize}
             activeSpace={this.state.activeSpace}
         />;
 
@@ -454,7 +443,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
-                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
+                    { !this.props.isMinimized && <LeftPanelWidget /> }
                 </aside>
             </div>
         );
