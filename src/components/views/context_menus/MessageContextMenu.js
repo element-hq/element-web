@@ -287,7 +287,7 @@ export default class MessageContextMenu extends React.Component {
             forwardButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconForward"
-                    label={_t("Forward Message")}
+                    label={_t("Forward")}
                     onClick={this.onForwardClick}
                 />
             );
@@ -296,7 +296,7 @@ export default class MessageContextMenu extends React.Component {
                 pinButton = (
                     <IconizedContextMenuOption
                         iconClassName="mx_MessageContextMenu_iconPin"
-                        label={ this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
+                        label={ this._isPinned() ? _t('Unpin') : _t('Pin') }
                         onClick={this.onPinClick}
                     />
                 );
@@ -332,8 +332,7 @@ export default class MessageContextMenu extends React.Component {
             <IconizedContextMenuOption
                 iconClassName="mx_MessageContextMenu_iconPermalink"
                 onClick={this.onPermalinkClick}
-                label= { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
-                    ? _t('Share Permalink') : _t('Share Message') }
+                label= {_t('Share')}
                 element="a"
                 href={permalink}
                 target="_blank"
@@ -352,7 +351,7 @@ export default class MessageContextMenu extends React.Component {
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        if (
+        if (true ||
             typeof (mxEvent.event.content.external_url) === "string" &&
             isUrlPermitted(mxEvent.event.content.external_url)
         ) {
