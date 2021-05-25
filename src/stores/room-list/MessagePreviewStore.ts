@@ -176,7 +176,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher
-            if (!this.previews.has(event.getRoomId())) return; // not important
+            if (!this.previews.has(event.getRoomId()) || !event.isLiveEvent) return; // not important
             await this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
         }
     }
