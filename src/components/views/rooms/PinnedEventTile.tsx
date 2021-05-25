@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +16,9 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from 'prop-types';
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -25,15 +28,15 @@ import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.rooms.PinnedEventTile")
-export default class PinnedEventTile extends React.Component {
-    static propTypes = {
-        mxRoom: PropTypes.object.isRequired,
-        mxEvent: PropTypes.object.isRequired,
-        onUnpinned: PropTypes.func,
-    };
+interface IProps {
+    mxRoom: Room;
+    mxEvent: MatrixEvent;
+    onUnpinned?(): void;
+}
 
-    onTileClicked = () => {
+@replaceableComponent("views.rooms.PinnedEventTile")
+export default class PinnedEventTile extends React.Component<IProps> {
+    private onTileClicked = () => {
         dis.dispatch({
             action: 'view_room',
             event_id: this.props.mxEvent.getId(),
@@ -42,7 +45,7 @@ export default class PinnedEventTile extends React.Component {
         });
     };
 
-    onUnpinClicked = () => {
+    private onUnpinClicked = () => {
         const pinnedEvents = this.props.mxRoom.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents || !pinnedEvents.getContent().pinned) {
             // Nothing to do: already unpinned
@@ -60,7 +63,7 @@ export default class PinnedEventTile extends React.Component {
         }
     };
 
-    _canUnpin() {
+    private canUnpin() {
         return this.props.mxRoom.currentState.mayClientSendStateEvent('m.room.pinned_events', MatrixClientPeg.get());
     }
 
@@ -71,10 +74,16 @@ export default class PinnedEventTile extends React.Component {
         const avatarSize = 40;
 
         let unpinButton = null;
-        if (this._canUnpin()) {
+        if (this.canUnpin()) {
             unpinButton = (
                 <AccessibleButton onClick={this.onUnpinClicked} className="mx_PinnedEventTile_unpinButton">
-                    <img src={require("../../../../res/img/cancel-red.svg")} width="8" height="8" alt={_t('Unpin Message')} title={_t('Unpin Message')} />
+                    <img
+                        src={require("../../../../res/img/cancel-red.svg")}
+                        width="8"
+                        height="8"
+                        alt={_t('Unpin Message')}
+                        title={_t('Unpin Message')}
+                    />
                 </AccessibleButton>
             );
         }
@@ -82,14 +91,22 @@ export default class PinnedEventTile extends React.Component {
         return (
             <div className="mx_PinnedEventTile">
                 <div className="mx_PinnedEventTile_actions">
-                    <AccessibleButton className="mx_PinnedEventTile_gotoButton mx_textButton" onClick={this.onTileClicked}>
+                    <AccessibleButton
+                        className="mx_PinnedEventTile_gotoButton mx_textButton"
+                        onClick={this.onTileClicked}
+                    >
                         { _t("Jump to message") }
                     </AccessibleButton>
                     { unpinButton }
                 </div>
 
                 <span className="mx_PinnedEventTile_senderAvatar">
-                    <MemberAvatar member={senderProfile} width={avatarSize} height={avatarSize} fallbackUserId={sender} />
+                    <MemberAvatar
+                        member={senderProfile}
+                        width={avatarSize}
+                        height={avatarSize}
+                        fallbackUserId={sender}
+                    />
                 </span>
                 <span className="mx_PinnedEventTile_sender">
                     { senderProfile ? senderProfile.name : sender }
