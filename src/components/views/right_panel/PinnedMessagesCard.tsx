@@ -137,7 +137,11 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
         </div>;
     }
 
-    return <BaseCard className="mx_NotificationPanel" onClose={onClose} withoutScrollContainer>
+    return <BaseCard
+        header={<h2>{ _t("Pinned") }</h2>}
+        className="mx_NotificationPanel"
+        onClose={onClose}
+    >
         { content }
     </BaseCard>;
 };
