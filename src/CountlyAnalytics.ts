@@ -684,7 +684,9 @@ export default class CountlyAnalytics {
     }
 
     private getOrientation = (): Orientation => {
-        return window.innerWidth > window.innerHeight ? Orientation.Landscape : Orientation.Portrait;
+        return window.matchMedia("(orientation: landscape)").matches
+            ? Orientation.Landscape
+            : Orientation.Portrait
     };
 
     private reportOrientation = () => {
