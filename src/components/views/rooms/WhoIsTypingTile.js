@@ -87,7 +87,9 @@ export default class WhoIsTypingTile extends React.Component {
             const userId = event.getSender();
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);
-            this.setState({usersTyping});
+            if (usersTyping.length !== this.state.usersTyping.length) {
+                this.setState({usersTyping});
+            }
             // abort timer if any
             this._abortUserTimer(userId);
         }
