@@ -26,9 +26,9 @@ import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import GroupStore from '../../stores/GroupStore';
 import {
-    RightPanelPhases,
     RIGHT_PANEL_PHASES_NO_ARGS,
     RIGHT_PANEL_SPACE_PHASES,
+    RightPanelPhases,
 } from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -47,6 +47,7 @@ import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
 import NotificationPanel from "./NotificationPanel";
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -294,7 +295,13 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 break;
 
             case RightPanelPhases.NotificationPanel:
-                panel = <NotificationPanel onClose={this.onClose} />;
+                if (SettingsStore.getValue("feature_pinning")) {
+                    panel = <NotificationPanel onClose={this.onClose} />;
+                }
+                break;
+
+            case RightPanelPhases.PinnedMessages:
+                panel = <PinnedMessagesCard room={this.props.room} onClose={this.onClose} />;
                 break;
 
             case RightPanelPhases.FilePanel:

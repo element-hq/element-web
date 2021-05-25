@@ -514,9 +514,6 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
         } else {
             setPowerLevels({});
         }
-        return () => {
-            setPowerLevels({});
-        };
     }, [room]);
 
     useEventEmitter(cli, "RoomState.events", update);

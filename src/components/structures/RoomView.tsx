@@ -155,7 +155,6 @@ export interface IState {
     canPeek: boolean;
     showApps: boolean;
     isPeeking: boolean;
-    showingPinned: boolean;
     showReadReceipts: boolean;
     showRightPanel: boolean;
     // error object, as from the matrix client/server API
@@ -232,7 +231,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             canPeek: false,
             showApps: false,
             isPeeking: false,
-            showingPinned: false,
             showReadReceipts: true,
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
             joining: false,
@@ -327,7 +325,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
-            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             wasContextSwitch: RoomViewStore.getWasContextSwitch(),
         };
@@ -1375,13 +1372,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         return ret;
     }
 
-    private onPinnedClick = () => {
-        const nowShowingPinned = !this.state.showingPinned;
-        const roomId = this.state.room.roomId;
-        this.setState({showingPinned: nowShowingPinned, searching: false});
-        SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
-    };
-
     private onCallPlaced = (type: PlaceCallType) => {
         dis.dispatch({
             action: 'place_call',
@@ -1498,7 +1488,6 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onSearchClick = () => {
         this.setState({
             searching: !this.state.searching,
-            showingPinned: false,
         });
     };
 
@@ -1825,9 +1814,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
             hideCancel = true;
-        } else if (this.state.showingPinned) {
-            hideCancel = true; // has own cancel
-            aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;
         } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -2045,7 +2031,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                             inRoom={myMembership === 'join'}
                             onSearchClick={this.onSearchClick}
                             onSettingsClick={this.onSettingsClick}
-                            onPinnedClick={this.onPinnedClick}
                             onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
