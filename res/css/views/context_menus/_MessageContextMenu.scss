@@ -38,7 +38,7 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconReport::before {
-        mask-image: url('$(res)/img/feather-customised/warning-triangle.svg');
+        mask-image: url('$(res)/img/element-icons/warning-badge.svg');
     }
 
     .mx_MessageContextMenu_iconLink::before {
@@ -46,7 +46,7 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconPermalink::before {
-        mask-image: url('$(res)/img/element-icons/message/share.svg');
+        mask-image: url('$(res)/img/element-icons/room/share.svg');
     }
 
     .mx_MessageContextMenu_iconUnhidePreview::before {
@@ -54,20 +54,11 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconForward::before {
-        mask-image: url('$(res)/img/element-icons/message/corner-up-right.svg');
-    }
-
-    .mx_MessageContextMenu_iconCancel::before {
-        height: 12px;
-        left: 2px;
-        mask-image: url('$(res)/img/cancel.svg');
-        position: relative;
-        top: 2px;
-        width: 12px;
+        mask-image: url('$(res)/img/element-icons/message/fwd.svg');
     }
 
     .mx_MessageContextMenu_iconRedact::before {
-        mask-image: url('$(res)/img/feather-customised/trash.custom.svg');
+        mask-image: url('$(res)/img/element-icons/trashcan.svg');
     }
 
     .mx_MessageContextMenu_iconResend::before {
@@ -79,7 +70,7 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconQuote::before {
-        mask-image: url('$(res)/img/format/quote.svg');
+        mask-image: url('$(res)/img/element-icons/room/format-bar/quote.svg');
     }
 
     .mx_MessageContextMenu_iconPin::before {
