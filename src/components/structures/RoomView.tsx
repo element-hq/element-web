@@ -83,6 +83,7 @@ import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -1586,7 +1587,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         // a maxHeight on the underlying remote video tag.
 
         // header + footer + status + give us at least 120px of scrollback at all times.
-        let auxPanelMaxHeight = window.innerHeight -
+        let auxPanelMaxHeight = UIStore.instance.windowHeight -
                 (54 + // height of RoomHeader
                  36 + // height of the status area
                  51 + // minimum height of the message compmoser

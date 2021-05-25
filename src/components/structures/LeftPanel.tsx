@@ -43,6 +43,7 @@ import {replaceableComponent} from "../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../customisations/Media";
 import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
+import UIStore from "../../stores/UIStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -90,10 +91,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
             this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
-
-        // We watch the middle panel because we don't actually get resized, the middle panel does.
-        // We listen to the noisy channel to avoid choppy reaction times.
-        this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
     }
 
     public componentWillUnmount() {
@@ -103,7 +100,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
 
     private updateActiveSpace = (activeSpace: Room) => {
@@ -228,7 +224,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
 
-                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const offset = UIStore.instance.windowHeight -
+                    (list.parentElement.offsetTop + list.parentElement.offsetHeight);
                 const newBottom = `${offset}px`;
                 if (header.style.bottom !== newBottom) {
                     header.style.bottom = newBottom;
@@ -279,11 +276,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
-    };
-
-    private onResize = () => {
-        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
-        this.handleStickyHeaders(this.listContainerRef.current);
     };
 
     private onFocus = (ev: React.FocusEvent) => {
@@ -420,7 +412,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
-            onResize={this.onResize}
             activeSpace={this.state.activeSpace}
         />;
 
@@ -454,7 +445,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
-                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
+                    { !this.props.isMinimized && <LeftPanelWidget /> }
                 </aside>
             </div>
         );
