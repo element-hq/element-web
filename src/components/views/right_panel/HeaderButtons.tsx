@@ -43,11 +43,11 @@ interface IState {
 interface IProps {}
 
 @replaceableComponent("views.right_panel.HeaderButtons")
-export default abstract class HeaderButtons extends React.Component<IProps, IState> {
+export default abstract class HeaderButtons<P> extends React.Component<IProps & P, IState> {
     private storeToken: EventSubscription;
     private dispatcherRef: string;
 
-    constructor(props: IProps, kind: HeaderKind) {
+    constructor(props: IProps & P, kind: HeaderKind) {
         super(props);
 
         const rps = RightPanelStore.getSharedInstance();
