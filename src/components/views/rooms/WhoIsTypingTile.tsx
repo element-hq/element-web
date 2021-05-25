@@ -16,36 +16,44 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+import Room from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+interface IProps {
+    // the room this statusbar is representing.
+    room: Room,
+    onShown?: () => void,
+    onHidden?: () => void,
+    // Number of names to display in typing indication. E.g. set to 3, will
+    // result in "X, Y, Z and 100 others are typing."
+    whoIsTypingLimit: number,
+}
+
+interface IState {
+    usersTyping: RoomMember[],
+    // a map with userid => Timer to delay
+    // hiding the "x is typing" message for a
+    // user so hiding it can coincide
+    // with the sent message by the other side
+    // resulting in less timeline jumpiness
+    delayedStopTypingTimers: any
+}
 
 @replaceableComponent("views.rooms.WhoIsTypingTile")
-export default class WhoIsTypingTile extends React.Component {
-    static propTypes = {
-        // the room this statusbar is representing.
-        room: PropTypes.object.isRequired,
-        onShown: PropTypes.func,
-        onHidden: PropTypes.func,
-        // Number of names to display in typing indication. E.g. set to 3, will
-        // result in "X, Y, Z and 100 others are typing."
-        whoIsTypingLimit: PropTypes.number,
-    };
-
+export default class WhoIsTypingTile extends React.Component<IProps, IState> {
     static defaultProps = {
         whoIsTypingLimit: 3,
     };
 
     state = {
         usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
-        // a map with userid => Timer to delay
-        // hiding the "x is typing" message for a
-        // user so hiding it can coincide
-        // with the sent message by the other side
-        // resulting in less timeline jumpiness
         delayedStopTypingTimers: {},
     };
 
@@ -74,15 +82,15 @@ export default class WhoIsTypingTile extends React.Component {
         Object.values(this.state.delayedStopTypingTimers).forEach((t) => t.abort());
     }
 
-    _isVisible(state) {
+    _isVisible(state: IState): boolean {
         return state.usersTyping.length !== 0 || Object.keys(state.delayedStopTypingTimers).length !== 0;
     }
 
-    isVisible = () => {
+    isVisible: () => boolean = () => {
         return this._isVisible(this.state);
     };
 
-    onRoomTimeline = (event, room) => {
+    onRoomTimeline = (event: MatrixEvent, room: Room): void => {
         if (room?.roomId === this.props.room?.roomId) {
             const userId = event.getSender();
             // remove user from usersTyping
@@ -95,7 +103,7 @@ export default class WhoIsTypingTile extends React.Component {
         }
     };
 
-    onRoomMemberTyping = (ev, member) => {
+    onRoomMemberTyping = (): void => {
         const usersTyping = WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room);
         this.setState({
             delayedStopTypingTimers: this._updateDelayedStopTypingTimers(usersTyping),
@@ -103,7 +111,7 @@ export default class WhoIsTypingTile extends React.Component {
         });
     };
 
-    _updateDelayedStopTypingTimers(usersTyping) {
+    _updateDelayedStopTypingTimers(usersTyping: RoomMember[]): void {
         const usersThatStoppedTyping = this.state.usersTyping.filter((a) => {
             return !usersTyping.some((b) => a.userId === b.userId);
         });
@@ -141,7 +149,7 @@ export default class WhoIsTypingTile extends React.Component {
         return delayedStopTypingTimers;
     }
 
-    _abortUserTimer(userId) {
+    _abortUserTimer(userId: string): void {
         const timer = this.state.delayedStopTypingTimers[userId];
         if (timer) {
             timer.abort();
@@ -149,7 +157,7 @@ export default class WhoIsTypingTile extends React.Component {
         }
     }
 
-    _removeUserTimer(userId) {
+    _removeUserTimer(userId: string): void {
         const timer = this.state.delayedStopTypingTimers[userId];
         if (timer) {
             const delayedStopTypingTimers = Object.assign({}, this.state.delayedStopTypingTimers);
@@ -158,7 +166,7 @@ export default class WhoIsTypingTile extends React.Component {
         }
     }
 
-    _renderTypingIndicatorAvatars(users, limit) {
+    _renderTypingIndicatorAvatars(users: RoomMember[], limit: number): void {
         let othersCount = 0;
         if (users.length > limit) {
             othersCount = users.length - limit + 1;
