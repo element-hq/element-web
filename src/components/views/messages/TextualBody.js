@@ -36,6 +36,7 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
 @replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
@@ -143,7 +144,7 @@ export default class TextualBody extends React.Component {
     _addCodeExpansionButton(div, pre) {
         // Calculate how many percent does the pre element take up.
         // If it's less than 30% we don't add the expansion button.
-        const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
+        const percentageOfViewport = pre.offsetHeight / UIStore.instance.windowHeight * 100;
         if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");

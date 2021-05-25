@@ -43,6 +43,7 @@ import {replaceableComponent} from "../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../customisations/Media";
 import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
+import UIStore from "../../stores/UIStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -223,7 +224,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
 
-                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const offset = UIStore.instance.windowHeight -
+                    (list.parentElement.offsetTop + list.parentElement.offsetHeight);
                 const newBottom = `${offset}px`;
                 if (header.style.bottom !== newBottom) {
                     header.style.bottom = newBottom;

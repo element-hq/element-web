@@ -27,6 +27,7 @@ import WidgetUtils, {IWidgetEvent} from "../../utils/WidgetUtils";
 import {useAccountData} from "../../hooks/useAccountData";
 import AppTile from "../views/elements/AppTile";
 import {useSettingValue} from "../../hooks/useSettings";
+import UIStore from "../../stores/UIStore";
 
 const MIN_HEIGHT = 100;
 const MAX_HEIGHT = 500; // or 50% of the window height
@@ -63,7 +64,7 @@ const LeftPanelWidget: React.FC = () => {
         content = <Resizable
             size={{height} as any}
             minHeight={MIN_HEIGHT}
-            maxHeight={Math.min(window.innerHeight / 2, MAX_HEIGHT)}
+            maxHeight={Math.min(UIStore.instance.windowHeight / 2, MAX_HEIGHT)}
             onResizeStop={(e, dir, ref, d) => {
                 setHeight(height + d.height);
             }}

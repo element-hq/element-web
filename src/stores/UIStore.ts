@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
+import ResizeObserver from 'resize-observer-polyfill';
+import ResizeObserverEntry from 'resize-observer-polyfill/src/ResizeObserverEntry';
 
 export enum UI_EVENTS {
     Resize = "resize"
@@ -28,13 +30,15 @@ export default class UIStore extends EventEmitter {
 
     private resizeObserver: ResizeObserver;
 
-    public windowWith: number;
+    public windowWidth: number;
     public windowHeight: number;
 
     constructor() {
         super();
 
-        this.windowWith = window.innerWidth;
+        // eslint-disable-next-line no-restricted-properties
+        this.windowWidth = window.innerWidth;
+        // eslint-disable-next-line no-restricted-properties
         this.windowHeight = window.innerHeight;
 
         this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
@@ -61,7 +65,7 @@ export default class UIStore extends EventEmitter {
             .find(entry => entry.target === document.body)
             .contentRect;
 
-        this.windowWith = width;
+        this.windowWidth = width;
         this.windowHeight = height;
 
         this.emit(UI_EVENTS.Resize, entries);
