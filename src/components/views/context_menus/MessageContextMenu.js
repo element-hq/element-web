@@ -392,7 +392,7 @@ export default class MessageContextMenu extends React.Component {
 
         if (forwardButton || quoteButton || collapseReplyThread) {
             optionLists.push((
-                <IconizedContextMenuOptionList>
+                <IconizedContextMenuOptionList key={'group1'}>
                     {quoteButton}
                     {forwardButton}
                     {collapseReplyThread}
@@ -402,7 +402,7 @@ export default class MessageContextMenu extends React.Component {
 
         if (resendReactionsButton) {
             optionLists.push((
-                <IconizedContextMenuOptionList>
+                <IconizedContextMenuOptionList key={'group2'}>
                     {resendReactionsButton}
                 </IconizedContextMenuOptionList>
             ));
@@ -410,25 +410,16 @@ export default class MessageContextMenu extends React.Component {
 
         if (externalURLButton || permalinkButton) {
             optionLists.push((
-                <IconizedContextMenuOptionList>
+                <IconizedContextMenuOptionList key={'group3'}>
                     {externalURLButton}
                     {permalinkButton}
                 </IconizedContextMenuOptionList>
             ));
         }
 
-        if (pinButton || unhidePreviewButton) {
-            optionLists.push((
-                <IconizedContextMenuOptionList>
-                    {pinButton}
-                    {unhidePreviewButton}
-                </IconizedContextMenuOptionList>
-            ));
-        }
-
         if (reportEventButton) {
             optionLists.push((
-                <IconizedContextMenuOptionList>
+                <IconizedContextMenuOptionList key={'group4'}>
                     {reportEventButton}
                 </IconizedContextMenuOptionList>
             ));
@@ -436,15 +427,24 @@ export default class MessageContextMenu extends React.Component {
 
         if (viewSourceButton) {
             optionLists.push((
-                <IconizedContextMenuOptionList>
+                <IconizedContextMenuOptionList key={'group5'}>
                     {viewSourceButton}
+                </IconizedContextMenuOptionList>
+            ));
+        }
+
+        if (pinButton || unhidePreviewButton) {
+            optionLists.push((
+                <IconizedContextMenuOptionList key={'group6'}>
+                    {pinButton}
+                    {unhidePreviewButton}
                 </IconizedContextMenuOptionList>
             ));
         }
 
         if (redactButton) {
             optionLists.push((
-                <IconizedContextMenuOptionList red>
+                <IconizedContextMenuOptionList key={'group7'} red>
                     {redactButton}
                 </IconizedContextMenuOptionList>
             ));
