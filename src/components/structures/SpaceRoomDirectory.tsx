@@ -102,7 +102,7 @@ const Tile: React.FC<ITileProps> = ({
     children,
 }) => {
     const cli = MatrixClientPeg.get();
-    const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" && cli.getRoom(room.room_id);
+    const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" ? cli.getRoom(room.room_id) : null;
     const name = joinedRoom?.name || room.name || room.canonical_alias || room.aliases?.[0]
         || (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
 
@@ -162,7 +162,7 @@ const Tile: React.FC<ITileProps> = ({
         description += " · " + _t("%(count)s rooms", { count: numChildRooms });
     }
 
-    const topic = joinedRoom?.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || room.topic;
+    const topic = joinedRoom?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || room.topic;
     if (topic) {
         description += " · " + topic;
     }
