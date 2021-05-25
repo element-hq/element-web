@@ -95,7 +95,7 @@ export default abstract class HeaderButtons extends React.Component<IProps, ISta
     }
 
     // XXX: Make renderButtons a prop
-    public abstract renderButtons(): JSX.Element[];
+    public abstract renderButtons(): JSX.Element;
 
     public render() {
         return <div className="mx_HeaderButtons">

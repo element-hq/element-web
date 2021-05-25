@@ -84,19 +84,21 @@ export default class GroupHeaderButtons extends HeaderButtons {
     };
 
     renderButtons() {
-        return [
-            <HeaderButton key="groupMembersButton" name="groupMembersButton"
+        return <>
+            <HeaderButton
+                name="groupMembersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(GROUP_PHASES)}
                 onClick={this.onMembersClicked}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
-            />,
-            <HeaderButton key="roomsButton" name="roomsButton"
+            />
+            <HeaderButton
+                name="roomsButton"
                 title={_t('Rooms')}
                 isHighlighted={this.isPhase(ROOM_PHASES)}
                 onClick={this.onRoomsClicked}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
-            />,
-        ];
+            />
+        </>;
     }
 }
