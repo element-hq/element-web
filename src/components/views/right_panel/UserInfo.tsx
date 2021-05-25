@@ -25,6 +25,7 @@ import {User} from 'matrix-js-sdk/src/models/user';
 import {Room} from 'matrix-js-sdk/src/models/room';
 import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
 import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
+import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
@@ -1529,21 +1530,16 @@ interface IProps {
     user: Member;
     groupId?: string;
     room?: Room;
-    phase: RightPanelPhases.RoomMemberInfo | RightPanelPhases.GroupMemberInfo | RightPanelPhases.SpaceMemberInfo;
+    phase: RightPanelPhases.RoomMemberInfo
+        | RightPanelPhases.GroupMemberInfo
+        | RightPanelPhases.SpaceMemberInfo
+        | RightPanelPhases.EncryptionPanel;
     onClose(): void;
+    verificationRequest?: VerificationRequest;
+    verificationRequestPromise?: Promise<VerificationRequest>;
 }
 
-interface IPropsWithEncryptionPanel extends React.ComponentProps<typeof EncryptionPanel> {
-    user: Member;
-    groupId: void;
-    room: Room;
-    phase: RightPanelPhases.EncryptionPanel;
-    onClose(): void;
-}
-
-type Props = IProps | IPropsWithEncryptionPanel;
-
-const UserInfo: React.FC<Props> = ({
+const UserInfo: React.FC<IProps> = ({
     user,
     groupId,
     room,
