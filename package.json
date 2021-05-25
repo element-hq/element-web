@@ -104,6 +104,7 @@
     "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.2",
     "url": "^0.11.0",
+    "web-streams-polyfill": "^3.0.3",
     "what-input": "^5.2.10",
     "zxcvbn": "^4.4.2"
   },

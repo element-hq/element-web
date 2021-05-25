@@ -7,6 +7,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { getUserNameColorClass } from "../FormattingUtils";
 import { Exporter } from "./Exporter";
+import * as ponyfill from 'web-streams-polyfill/ponyfill'
 
 const css = `
 body {
@@ -485,6 +486,8 @@ export default class HTMLExporter extends Exporter {
         //Generate the zip file asynchronously
         const blob = await this.zip.generateAsync({ type: "blob" });
 
+        //Support for firefox browser
+        streamSaver.WritableStream = ponyfill.WritableStream
         //Create a writable stream to the directory
         const fileStream = streamSaver.createWriteStream(filename, { size: blob.size });
         const writer = fileStream.getWriter();
