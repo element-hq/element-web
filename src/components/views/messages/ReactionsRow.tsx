@@ -113,7 +113,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: IProps) {
         if (prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on("Relations.add", this.onReactionsChange);
             this.props.reactions.on("Relations.remove", this.onReactionsChange);
@@ -127,7 +127,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         this.forceUpdate();
     }
 
-    onReactionsChange = () => {
+    private onReactionsChange = () => {
         // TODO: Call `onHeightChanged` as needed
         this.setState({
             myReactions: this.getMyReactions(),
@@ -138,7 +138,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         this.forceUpdate();
     }
 
-    getMyReactions() {
+    private getMyReactions() {
         const reactions = this.props.reactions;
         if (!reactions) {
             return null;
@@ -151,7 +151,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         return [...myReactions.values()];
     }
 
-    onShowAllClick = () => {
+    private onShowAllClick = () => {
         this.setState({
             showAll: true,
         });
