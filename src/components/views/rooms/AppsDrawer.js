@@ -36,6 +36,7 @@ import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayout
 import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
 import {useStateCallback} from "../../../hooks/useStateCallback";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
 @replaceableComponent("views.rooms.AppsDrawer")
 export default class AppsDrawer extends React.Component {
@@ -290,7 +291,7 @@ const PersistentVResizer = ({
 
     // Arbitrary defaults to avoid NaN problems. 100 px or 3/4 of the visible window.
     if (!minHeight) minHeight = 100;
-    if (!maxHeight) maxHeight = (window.innerHeight / 4) * 3;
+    if (!maxHeight) maxHeight = (UIStore.instance.windowHeight / 4) * 3;
 
     // Convert from percentage to height. Note that the default height is 280px.
     if (defaultHeight) {

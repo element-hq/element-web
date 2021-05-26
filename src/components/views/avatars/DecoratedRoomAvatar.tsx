@@ -119,7 +119,10 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         if (this.props.room.roomId !== room.roomId) return;
 
         if (ev.getType() === 'm.room.join_rules' || ev.getType() === 'm.room.member') {
-            this.setState({icon: this.calculateIcon()});
+            const newIcon = this.calculateIcon();
+            if (newIcon !== this.state.icon) {
+                this.setState({icon: newIcon});
+            }
         }
     };
 

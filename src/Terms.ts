@@ -36,14 +36,18 @@ export class Service {
     }
 }
 
-interface Policy {
+export interface LocalisedPolicy {
+    name: string;
+    url: string;
+}
+
+export interface Policy {
     // @ts-ignore: No great way to express indexed types together with other keys
     version: string;
-    [lang: string]: {
-        url: string;
-    };
+    [lang: string]: LocalisedPolicy;
 }
-type Policies = {
+
+export type Policies = {
     [policy: string]: Policy,
 };
 

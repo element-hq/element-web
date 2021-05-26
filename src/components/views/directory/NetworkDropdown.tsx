@@ -38,13 +38,14 @@ import withValidation from "../elements/Validation";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import TextInputDialog from "../dialogs/TextInputDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import UIStore from "../../../stores/UIStore";
 
 export const ALL_ROOMS = Symbol("ALL_ROOMS");
 
 const SETTING_NAME = "room_directory_servers";
 
 const inPlaceOf = (elementRect: Pick<DOMRect, "right" | "top">) => ({
-    right: window.innerWidth - elementRect.right,
+    right: UIStore.instance.windowWidth - elementRect.right,
     top: elementRect.top,
     chevronOffset: 0,
     chevronFace: ChevronFace.None,
