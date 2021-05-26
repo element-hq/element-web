@@ -71,8 +71,14 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
 
         // We should have a buffer to work with now: let's set it up
         const playback = new Playback(buffer, waveform);
-        this.setState({playback});
+        this.setState({ playback });
         // Note: the RecordingPlayback component will handle preparing the Playback class for us.
+    }
+
+    public componentWillUnmount() {
+        if (this.state.playback) {
+            this.state.playback.destroy();
+        }
     }
 
     public render() {
