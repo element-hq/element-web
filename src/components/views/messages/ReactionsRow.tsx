@@ -81,16 +81,36 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     constructor(props, context) {
         super(props, context);
 
-        if (props.reactions) {
-            props.reactions.on("Relations.add", this.onReactionsChange);
-            props.reactions.on("Relations.remove", this.onReactionsChange);
-            props.reactions.on("Relations.redaction", this.onReactionsChange);
-        }
-
         this.state = {
             myReactions: this.getMyReactions(),
             showAll: false,
         };
+    }
+
+    componentDidMount() {
+        const { mxEvent, reactions } = this.props;
+
+        if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
+            mxEvent.once("Event.decrypted", this.onDecrypted);
+        }
+
+        if (reactions) {
+            reactions.on("Relations.add", this.onReactionsChange);
+            reactions.on("Relations.remove", this.onReactionsChange);
+            reactions.on("Relations.redaction", this.onReactionsChange);
+        }
+    }
+
+    componentWillUnmount() {
+        const { mxEvent, reactions } = this.props;
+
+        mxEvent.off("Event.decrypted", this.onDecrypted);
+
+        if (reactions) {
+            reactions.off("Relations.add", this.onReactionsChange);
+            reactions.off("Relations.remove", this.onReactionsChange);
+            reactions.off("Relations.redaction", this.onReactionsChange);
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -102,21 +122,9 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
-        if (this.props.reactions) {
-            this.props.reactions.removeListener(
-                "Relations.add",
-                this.onReactionsChange,
-            );
-            this.props.reactions.removeListener(
-                "Relations.remove",
-                this.onReactionsChange,
-            );
-            this.props.reactions.removeListener(
-                "Relations.redaction",
-                this.onReactionsChange,
-            );
-        }
+    private onDecrypted = () => {
+        // Decryption changes whether the event is actionable
+        this.forceUpdate();
     }
 
     onReactionsChange = () => {
