@@ -351,6 +351,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     _debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
     _editorRef: any = null;
+    private unmounted = false;
 
     constructor(props) {
         super(props);
@@ -398,6 +399,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.props.initialText) {
             this._updateSuggestions(this.props.initialText);
         }
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
     }
 
     private onConsultFirstChange = (ev) => {
@@ -1027,6 +1032,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 failed.push(address);
             }
         }
+        if (this.unmounted) return;
 
         if (failed.length > 0) {
             const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
