@@ -76,9 +76,7 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
     }
 
     public componentWillUnmount() {
-        if (this.state.playback) {
-            this.state.playback.destroy();
-        }
+        this.state.playback?.destroy();
     }
 
     public render() {
