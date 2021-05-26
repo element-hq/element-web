@@ -44,6 +44,7 @@ export enum RightPanelPhases {
 export const RIGHT_PANEL_PHASES_NO_ARGS = [
     RightPanelPhases.RoomSummary,
     RightPanelPhases.NotificationPanel,
+    RightPanelPhases.PinnedMessages,
     RightPanelPhases.FilePanel,
     RightPanelPhases.RoomMemberList,
     RightPanelPhases.GroupMemberList,

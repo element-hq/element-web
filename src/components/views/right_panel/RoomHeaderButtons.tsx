@@ -55,7 +55,7 @@ const PinnedMessagesHeaderButton = ({ room, isHighlighted, onClick }) => {
 
     return <HeaderButton
         name="pinnedMessagesButton"
-        title={_t("Pinned Messages")}
+        title={_t("Pinned messages")}
         isHighlighted={isHighlighted}
         onClick={onClick}
         analytics={["Right Panel", "Pinned Messages Button", "click"]}

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
@@ -42,7 +43,7 @@ export const usePinnedEvents = (room: Room): string[] => {
         setPinnedEvents(room.currentState.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent()?.pinned || []);
     }, [room]);
 
-    useEventEmitter(room.currentState, "RoomState.events", update);
+    useEventEmitter(room?.currentState, "RoomState.events", update);
     useEffect(() => {
         update();
         return () => {
@@ -53,7 +54,6 @@ export const usePinnedEvents = (room: Room): string[] => {
 };
 
 const ReadPinsEventId = "im.vector.room.read_pins";
-const ReadPinsNumIds = 10;
 
 export const useReadPinnedEvents = (room: Room): Set<string> => {
     const [readPinnedEvents, setReadPinnedEvents] = useState<Set<string>>(new Set());
@@ -75,20 +75,36 @@ export const useReadPinnedEvents = (room: Room): Set<string> => {
     return readPinnedEvents;
 };
 
+const useRoomState = <T extends any>(room: Room, mapper: (state: RoomState) => T): T => {
+    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);
+
+    const update = useCallback(() => {
+        if (!room) return;
+        setValue(mapper(room.currentState));
+    }, [room, mapper]);
+
+    useEventEmitter(room?.currentState, "RoomState.events", update);
+    useEffect(() => {
+        update();
+        return () => {
+            setValue(undefined);
+        };
+    }, [update]);
+    return value;
+};
+
 const PinnedMessagesCard = ({ room, onClose }: IProps) => {
     const cli = useContext(MatrixClientContext);
+    const canUnpin = useRoomState(room, state => state.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli));
     const pinnedEventIds = usePinnedEvents(room);
     const readPinnedEvents = useReadPinnedEvents(room);
 
     useEffect(() => {
         const newlyRead = pinnedEventIds.filter(id => !readPinnedEvents.has(id));
         if (newlyRead.length > 0) {
-            // Only keep the last N event IDs to avoid infinite growth
+            // clear out any read pinned events which no longer are pinned
             cli.setRoomAccountData(room.roomId, ReadPinsEventId, {
-                event_ids: [
-                    ...newlyRead.reverse(),
-                    ...readPinnedEvents,
-                ].splice(0, ReadPinsNumIds),
+                event_ids: pinnedEventIds,
             });
         }
     }, [cli, room.roomId, pinnedEventIds, readPinnedEvents]);
@@ -122,24 +138,35 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
     if (!pinnedEvents) {
         content = <Spinner />;
     } else if (pinnedEvents.length > 0) {
-        content = pinnedEvents.filter(Boolean).map(ev => (
-            <PinnedEventTile
-                key={ev.getId()}
-                mxRoom={room}
-                mxEvent={ev}
-                onUnpinned={() => {}}
-            />
+        let onUnpinClicked;
+        if (canUnpin) {
+            onUnpinClicked = async (event: MatrixEvent) => {
+                const pinnedEvents = room.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
+                if (pinnedEvents?.getContent()?.pinned) {
+                    const pinned = pinnedEvents.getContent().pinned;
+                    const index = pinned.indexOf(event.getId());
+                    if (index !== -1) {
+                        pinned.splice(index, 1);
+                        await cli.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned }, "");
+                    }
+                }
+            };
+        }
+
+        // show them in reverse, with latest pinned at the top
+        content = pinnedEvents.filter(Boolean).reverse().map(ev => (
+            <PinnedEventTile key={ev.getId()} room={room} event={ev} onUnpinClicked={onUnpinClicked} />
         ));
     } else {
-        content = <div className="mx_RightPanel_empty mx_NotificationPanel_empty">
+        content = <div className="mx_RightPanel_empty mx_PinnedMessagesCard_empty">
             <h2>{_t("You’re all caught up")}</h2>
             <p>{_t("You have no visible notifications.")}</p>
         </div>;
     }
 
     return <BaseCard
-        header={<h2>{ _t("Pinned") }</h2>}
-        className="mx_NotificationPanel"
+        header={<h2>{ _t("Pinned messages") }</h2>}
+        className="mx_PinnedMessagesCard"
         onClose={onClose}
     >
         { content }
