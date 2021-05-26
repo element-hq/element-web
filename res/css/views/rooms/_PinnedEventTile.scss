@@ -20,9 +20,10 @@ limitations under the License.
     padding: 0 4px 12px;
 
     display: grid;
-    grid-template-areas: "avatar name remove"
-                         "content content content"
-                         "footer footer footer";
+    grid-template-areas:
+        "avatar name remove"
+        "content content content"
+        "footer footer footer";
     grid-template-rows: max-content auto max-content;
     grid-template-columns: 24px auto 24px;
     grid-row-gap: 12px;
