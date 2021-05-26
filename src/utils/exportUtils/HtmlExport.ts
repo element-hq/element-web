@@ -8,6 +8,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { getUserNameColorClass } from "../FormattingUtils";
 import { Exporter } from "./Exporter";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
+import { sanitizeHtmlParams } from "../../HtmlUtils";
+import sanitizeHtml from "sanitize-html";
 
 const css = `
 body {
@@ -356,7 +358,7 @@ export default class HTMLExporter extends Exporter {
         }
     }
 
-    protected async getImageData(event: MatrixEvent) {
+    protected async getMediaBlob(event: MatrixEvent) {
         let blob: Blob;
         try {
             const isEncrypted = event.isEncrypted();
@@ -369,7 +371,7 @@ export default class HTMLExporter extends Exporter {
                 blob = await image.blob();
             }
         } catch (err) {
-            console.log("Error decrypting image");
+            console.log("Error decrypting media");
         }
         return blob;
     }
@@ -405,21 +407,54 @@ export default class HTMLExporter extends Exporter {
         let messageBody = "";
         switch (event.getContent().msgtype) {
             case "m.text":
-                messageBody = `<div class="mx_text"> ${event.getContent().body} </div>`;
+                messageBody = `
+                <div class="mx_text"> 
+                    ${sanitizeHtml(event.getContent().body, sanitizeHtmlParams)} 
+                </div>`;
                 break;
             case "m.image": {
+                const blob = await this.getMediaBlob(event);
+                const fileName = `${event.getId()}.${blob.type.replace("image/", "")}`;
                 messageBody = `
                     <a class="mx_photo_wrap mx_clearfix mx_pull_left" href="images/${event.getId()}.png">
                         <img 
                         class="mx_photo"
                         style="max-width: 600px; max-height: 500px;"
-                        src="images/${event.getId()}.png"
+                        src="images/${fileName}"
                         />
                     </a>`;
-                const blob = await this.getImageData(event);
-                this.zip.file(`images/${event.getId()}.png`, blob);
-            }
+                this.zip.file(`images/${fileName}`, blob);
                 break;
+            }
+            case "m.video": {
+                const blob = await this.getMediaBlob(event);
+                const fileName = `${event.getId()}.${blob.type.replace("video/", "")}`;
+                messageBody = `
+                <div class="mx_media_wrap mx_clearfix">
+                    <video 
+                        class="mx_video_file" 
+                        src="videos/${fileName}" 
+                        style="max-height: 400px; max-width: 600px;" 
+                        controls 
+                    />
+                </div>`;
+                this.zip.file(`videos/${fileName}`, blob);
+                break;
+            }
+            case "m.audio": {
+                const blob = await this.getMediaBlob(event);
+                const fileName = `${event.getId()}.${blob.type.replace("audio/", "")}`;
+                messageBody = `
+                <div class="mx_media_wrap mx_clearfix">
+                    <audio
+                        class="mx_audio_file"
+                        src="audio/${fileName}"
+                        controls
+                    />
+                </div>`;
+                this.zip.file(`audio/${fileName}`, blob);
+                break;
+            }
             default:
                 break;
         }

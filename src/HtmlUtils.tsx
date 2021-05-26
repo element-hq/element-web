@@ -233,7 +233,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
     },
 };
 
-const sanitizeHtmlParams: IExtendedSanitizeOptions = {
+export const sanitizeHtmlParams: IExtendedSanitizeOptions = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
