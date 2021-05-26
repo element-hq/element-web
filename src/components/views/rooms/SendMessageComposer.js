@@ -27,26 +27,26 @@ import {
     startsWith,
     stripPrefix,
 } from '../../../editor/serialize';
-import {CommandPartCreator} from '../../../editor/parts';
+import { CommandPartCreator } from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
-import {findEditableEvent} from '../../../utils/EventUtils';
+import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import {CommandCategories, getCommand} from '../../../SlashCommands';
+import { CommandCategories, getCommand } from '../../../SlashCommands';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
-import {Action} from "../../../dispatcher/actions";
-import {containsEmoji} from "../../../effects/utils";
-import {CHAT_EFFECTS} from '../../../effects';
+import { Action } from "../../../dispatcher/actions";
+import { containsEmoji } from "../../../effects/utils";
+import { CHAT_EFFECTS } from '../../../effects';
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
-import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from '../../../settings/SettingsStore';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {

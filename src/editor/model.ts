@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {diffAtCaret, diffDeletion, IDiff} from "./diff";
-import DocumentPosition, {IPosition} from "./position";
+import { diffAtCaret, diffDeletion, IDiff } from "./diff";
+import DocumentPosition, { IPosition } from "./position";
 import Range from "./range";
-import {SerializedPart, Part, PartCreator} from "./parts";
-import AutocompleteWrapperModel, {ICallback} from "./autocomplete";
+import { SerializedPart, Part, PartCreator } from "./parts";
+import AutocompleteWrapperModel, { ICallback } from "./autocomplete";
 import DocumentOffset from "./offset";
-import {Caret} from "./caret";
+import { Caret } from "./caret";
 
 /**
  * @callback ModelCallback

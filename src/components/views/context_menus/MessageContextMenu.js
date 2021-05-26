@@ -17,9 +17,9 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {EventStatus} from 'matrix-js-sdk/src/models/event';
+import { EventStatus } from 'matrix-js-sdk/src/models/event';
 
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -28,11 +28,11 @@ import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
-import {MenuItem} from "../../structures/ContextMenu";
-import {EventType} from "matrix-js-sdk/src/@types/event";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
-import {Action} from "../../../dispatcher/actions";
+import { MenuItem } from "../../structures/ContextMenu";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from "../../../dispatcher/actions";
 
 export function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;

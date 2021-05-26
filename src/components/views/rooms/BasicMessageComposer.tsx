@@ -16,39 +16,39 @@ limitations under the License.
 */
 
 import classNames from 'classnames';
-import React, {createRef, ClipboardEvent} from 'react';
-import {Room} from 'matrix-js-sdk/src/models/room';
-import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
+import React, { createRef, ClipboardEvent } from 'react';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
-import {Caret, setSelection} from '../../../editor/caret';
+import { Caret, setSelection } from '../../../editor/caret';
 import {
     formatRangeAsQuote,
     formatRangeAsCode,
     toggleInlineFormat,
     replaceRangeAndMoveCaret,
 } from '../../../editor/operations';
-import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
-import Autocomplete, {generateCompletionDomId} from '../rooms/Autocomplete';
-import {getAutoCompleteCreator} from '../../../editor/parts';
-import {parseEvent, parsePlainTextMessage} from '../../../editor/deserialize';
-import {renderModel} from '../../../editor/render';
+import { getCaretOffsetAndText, getRangeForSelection } from '../../../editor/dom';
+import Autocomplete, { generateCompletionDomId } from '../rooms/Autocomplete';
+import { getAutoCompleteCreator } from '../../../editor/parts';
+import { parseEvent, parsePlainTextMessage } from '../../../editor/deserialize';
+import { renderModel } from '../../../editor/render';
 import TypingStore from "../../../stores/TypingStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import {Key} from "../../../Keyboard";
-import {EMOTICON_TO_EMOJI} from "../../../emoji";
-import {CommandCategories, CommandMap, parseCommandString} from "../../../SlashCommands";
+import { Key } from "../../../Keyboard";
+import { EMOTICON_TO_EMOJI } from "../../../emoji";
+import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
 import MessageComposerFormatBar from "./MessageComposerFormatBar";
 import DocumentOffset from "../../../editor/offset";
-import {IDiff} from "../../../editor/diff";
+import { IDiff } from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
-import {ICompletion} from "../../../autocomplete/Autocompleter";
+import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent}  from "../../../utils/replaceableComponent";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');

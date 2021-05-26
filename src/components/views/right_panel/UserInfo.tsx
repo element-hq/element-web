@@ -17,18 +17,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import {MatrixClient} from 'matrix-js-sdk/src/client';
-import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
-import {User} from 'matrix-js-sdk/src/models/user';
-import {Room} from 'matrix-js-sdk/src/models/room';
-import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
-import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { User } from 'matrix-js-sdk/src/models/user';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import createRoom, { findDMForUser, privateShouldBeEncrypted } from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -37,20 +37,20 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {textualPowerLevel} from '../../../Roles';
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { textualPowerLevel } from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
-import {useAsyncMemo} from '../../../hooks/useAsyncMemo';
-import {legacyVerifyUser, verifyDevice, verifyUser} from '../../../verification';
-import {Action} from "../../../dispatcher/actions";
+import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
+import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
+import { Action } from "../../../dispatcher/actions";
 import { USER_SECURITY_TAB } from "../dialogs/UserSettingsDialog";
-import {useIsEncrypted} from "../../../hooks/useIsEncrypted";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
-import {E2EStatus} from "../../../utils/ShieldUtils";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 import ImageView from "../elements/ImageView";
 import Spinner from "../elements/Spinner";
 import PowerSelector from "../elements/PowerSelector";
@@ -65,9 +65,9 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { mediaFromMxc } from "../../../customisations/Media";
 import UIStore from "../../../stores/UIStore";
-import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 
 export interface IDevice {
     deviceId: string;

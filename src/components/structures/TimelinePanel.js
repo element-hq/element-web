@@ -18,14 +18,14 @@ limitations under the License.
 */
 
 import SettingsStore from "../../settings/SettingsStore";
-import {LayoutPropType} from "../../settings/Layout";
-import React, {createRef} from 'react';
+import { LayoutPropType } from "../../settings/Layout";
+import React, { createRef } from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import {EventTimeline} from "matrix-js-sdk/src/models/event-timeline";
-import {TimelineWindow} from "matrix-js-sdk/src/timeline-window";
+import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { _t } from '../../languageHandler';
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
@@ -34,12 +34,12 @@ import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
-import {haveTileForEvent} from "../views/rooms/EventTile";
-import {UIFeature} from "../../settings/UIFeature";
-import {objectHasDiff} from "../../utils/objects";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { haveTileForEvent } from "../views/rooms/EventTile";
+import { UIFeature } from "../../settings/UIFeature";
+import { objectHasDiff } from "../../utils/objects";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
-import {Action} from "../../dispatcher/actions";
+import { Action } from "../../dispatcher/actions";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
