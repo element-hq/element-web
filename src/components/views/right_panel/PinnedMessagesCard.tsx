@@ -53,7 +53,7 @@ export const usePinnedEvents = (room: Room): string[] => {
     return pinnedEvents;
 };
 
-const ReadPinsEventId = "im.vector.room.read_pins";
+export const ReadPinsEventId = "im.vector.room.read_pins";
 
 export const useReadPinnedEvents = (room: Room): Set<string> => {
     const [readPinnedEvents, setReadPinnedEvents] = useState<Set<string>>(new Set());
