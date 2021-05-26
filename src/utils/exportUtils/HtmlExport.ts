@@ -39,7 +39,7 @@ body {
 }
 
 .mx_page_wrap a {
-    color: #168acd;
+    color: #238CF5;
     text-decoration: none;
 }
 
@@ -126,11 +126,11 @@ a.mx_block_link:hover {
 
 .mx_message {
     margin: 0 -10px;
-    transition: background-color 2.0s ease;
+    transition: background-color 1.3s ease;
 }
 
 div.mx_selected {
-    background-color: rgba(242,246,250,255);
+    background-color: #eeeeee;
     transition: background-color 0.5s ease;
 }
 
@@ -276,6 +276,20 @@ div.mx_selected {
 }
 `;
 
+const js = `
+function scrollToElement(replyId){
+    let el = document.getElementById(replyId);
+    el.scrollIntoViewIfNeeded({
+        behaviour: "smooth",
+        block: "start",
+    });
+    el.classList.add("mx_selected");
+    setTimeout(() => {
+        el.classList.remove("mx_selected");
+    }, 1000);
+}
+`
+
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
     protected avatars: Map<string, boolean>;
@@ -295,6 +309,7 @@ export default class HTMLExporter extends Exporter {
                     <title>Exported Data</title>
                     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
                     <link href="css/style.css" rel="stylesheet" />
+                    <script src="js/script.js"></script>
                 </head>
                 <body>
                     <div class="mx_page_wrap">
@@ -459,6 +474,10 @@ export default class HTMLExporter extends Exporter {
                 break;
         }
 
+        if (isReply) {
+            messageBody = event.getContent().formatted_body.replace(/<mx-reply>.*<\/mx-reply>/, '')
+        }
+
         return `
         <div class="mx_message mx_default mx_clearfix ${joined ? `mx_joined` : ``}" id="${event.getId()}">
         ${!joined ? userPic : ``}
@@ -472,7 +491,7 @@ export default class HTMLExporter extends Exporter {
                 </div>`: ``}
             ${isReply ?
         `   <div class="mx_reply_to mx_details">
-                    In reply to <a href="#${replyId}">this message</a>
+                    In reply to <a href="#${replyId}" onclick="scrollToElement('${replyId}')">this message</a>
                 </div>`: ``}
             ${messageBody}
             </div>
@@ -515,7 +534,7 @@ export default class HTMLExporter extends Exporter {
 
         this.zip.file("index.html", html);
         this.zip.file("css/style.css", css);
-
+        this.zip.file("js/script.js", js);
         const filename = `matrix-export-${new Date().toISOString()}.zip`;
 
         //Generate the zip file asynchronously
