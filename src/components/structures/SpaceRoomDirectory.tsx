@@ -76,7 +76,7 @@ export interface ISpaceSummaryEvent {
         order?: string;
         suggested?: boolean;
         auto_join?: boolean;
-        via?: string;
+        via?: string[];
     };
 }
 /* eslint-enable camelcase */
@@ -101,14 +101,12 @@ const Tile: React.FC<ITileProps> = ({
     numChildRooms,
     children,
 }) => {
-    const name = room.name || room.canonical_alias || room.aliases?.[0]
+    const cli = MatrixClientPeg.get();
+    const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" ? cli.getRoom(room.room_id) : null;
+    const name = joinedRoom?.name || room.name || room.canonical_alias || room.aliases?.[0]
         || (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
 
     const [showChildren, toggleShowChildren] = useStateToggle(true);
-
-    const cli = MatrixClientPeg.get();
-    const cliRoom = cli.getRoom(room.room_id);
-    const myMembership = cliRoom?.getMyMembership();
 
     const onPreviewClick = (ev: ButtonEvent) => {
         ev.preventDefault();
@@ -122,7 +120,7 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     let button;
-    if (myMembership === "join") {
+    if (joinedRoom) {
         button = <AccessibleButton onClick={onPreviewClick} kind="primary_outline">
             { _t("View") }
         </AccessibleButton>;
@@ -146,17 +144,27 @@ const Tile: React.FC<ITileProps> = ({
         }
     }
 
-    let url: string;
-    if (room.avatar_url) {
-        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20);
+    let avatar;
+    if (joinedRoom) {
+        avatar = <RoomAvatar room={joinedRoom} width={20} height={20} />;
+    } else {
+        avatar = <BaseAvatar
+            name={name}
+            idName={room.room_id}
+            url={room.avatar_url ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20) : null}
+            width={20}
+            height={20}
+        />;
     }
 
     let description = _t("%(count)s members", { count: room.num_joined_members });
-    if (numChildRooms) {
+    if (numChildRooms !== undefined) {
         description += " · " + _t("%(count)s rooms", { count: numChildRooms });
     }
-    if (room.topic) {
-        description += " · " + room.topic;
+
+    const topic = joinedRoom?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || room.topic;
+    if (topic) {
+        description += " · " + topic;
     }
 
     let suggestedSection;
@@ -167,7 +175,7 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     const content = <React.Fragment>
-        <BaseAvatar name={name} idName={room.room_id} url={url} width={20} height={20} />
+        { avatar }
         <div className="mx_SpaceRoomDirectory_roomTile_name">
             { name }
             { suggestedSection }
@@ -356,9 +364,9 @@ export const useSpaceSummary = (cli: MatrixClient, space: Room, refreshToken?: a
                     parentChildRelations.getOrCreate(ev.room_id, new Map()).set(ev.state_key, ev);
                     childParentRelations.getOrCreate(ev.state_key, new Set()).add(ev.room_id);
                 }
-                if (Array.isArray(ev.content["via"])) {
+                if (Array.isArray(ev.content.via)) {
                     const set = viaMap.getOrCreate(ev.state_key, new Set());
-                    ev.content["via"].forEach(via => set.add(via));
+                    ev.content.via.forEach(via => set.add(via));
                 }
             });
 
@@ -471,8 +479,12 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                         try {
                             for (const [parentId, childId] of selectedRelations) {
                                 await cli.sendStateEvent(parentId, EventType.SpaceChild, {}, childId);
-                                parentChildMap.get(parentId).get(childId).content = {};
-                                parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                parentChildMap.get(parentId).delete(childId);
+                                if (parentChildMap.get(parentId).size > 0) {
+                                    parentChildMap.set(parentId, new Map(parentChildMap.get(parentId)));
+                                } else {
+                                    parentChildMap.delete(parentId);
+                                }
                             }
                         } catch (e) {
                             setError(_t("Failed to remove some rooms. Try again later"));

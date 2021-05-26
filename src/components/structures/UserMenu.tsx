@@ -57,7 +57,8 @@ import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import RoomName from "../views/elements/RoomName";
 import {replaceableComponent} from "../../utils/replaceableComponent";
-
+import InlineSpinner from "../views/elements/InlineSpinner";
+import TooltipButton from "../views/elements/TooltipButton";
 interface IProps {
     isMinimized: boolean;
 }
@@ -68,6 +69,7 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
     selectedSpace?: Room;
+    pendingRoomJoin: string[]
 }
 
 @replaceableComponent("structures.UserMenu")
@@ -84,6 +86,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
+            pendingRoomJoin: [],
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -147,14 +150,47 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private onAction = (ev: ActionPayload) => {
-        if (ev.action !== Action.ToggleUserMenu) return; // not interested
-
-        if (this.state.contextMenuPosition) {
-            this.setState({contextMenuPosition: null});
-        } else {
-            if (this.buttonRef.current) this.buttonRef.current.click();
+        switch (ev.action) {
+            case Action.ToggleUserMenu:
+                if (this.state.contextMenuPosition) {
+                    this.setState({contextMenuPosition: null});
+                } else {
+                    if (this.buttonRef.current) this.buttonRef.current.click();
+                }
+                break;
+            case Action.JoinRoom:
+                this.addPendingJoinRoom(ev.roomId);
+                break;
+            case Action.JoinRoomReady:
+            case Action.JoinRoomError:
+                this.removePendingJoinRoom(ev.roomId);
+                break;
         }
     };
+
+    private addPendingJoinRoom(roomId) {
+        this.setState({
+            pendingRoomJoin: [
+                ...this.state.pendingRoomJoin,
+                roomId,
+            ],
+        });
+    }
+
+    private removePendingJoinRoom(roomId) {
+        const newPendingRoomJoin = this.state.pendingRoomJoin.filter(pendingJoinRoomId => {
+            return pendingJoinRoomId !== roomId;
+        });
+        if (newPendingRoomJoin.length !== this.state.pendingRoomJoin.length) {
+            this.setState({
+                pendingRoomJoin: newPendingRoomJoin,
+            })
+        }
+    }
+
+    get hasPendingActions(): boolean {
+        return this.state.pendingRoomJoin.length > 0;
+    }
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
@@ -617,6 +653,14 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             />
                         </span>
                         {name}
+                        {this.hasPendingActions && (
+                            <InlineSpinner>
+                                <TooltipButton helpText={_t(
+                                    "Currently joining %(count)s rooms",
+                                    { count: this.state.pendingRoomJoin.length },
+                                )} />
+                            </InlineSpinner>
+                        )}
                         {dnd}
                         {buttons}
                     </div>

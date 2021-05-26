@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,27 +15,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {ChangeEvent, createRef, KeyboardEvent, SyntheticEvent} from "react";
 import {Room} from "matrix-js-sdk/src/models/room";
 
-import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
-import withValidation from '../elements/Validation';
-import { _t } from '../../../languageHandler';
+import withValidation, {IFieldState} from '../elements/Validation';
+import {_t} from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
-import {privateShouldBeEncrypted} from "../../../createRoom";
+import {IOpts, Preset, privateShouldBeEncrypted, Visibility} from "../../../createRoom";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import Field from "../elements/Field";
+import RoomAliasField from "../elements/RoomAliasField";
+import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
+import DialogButtons from "../elements/DialogButtons";
+import BaseDialog from "../dialogs/BaseDialog";
+
+interface IProps {
+    defaultPublic?: boolean;
+    defaultName?: string;
+    parentSpace?: Room;
+    onFinished(proceed: boolean, opts?: IOpts): void;
+}
+
+interface IState {
+    isPublic: boolean;
+    isEncrypted: boolean;
+    name: string;
+    topic: string;
+    alias: string;
+    detailsOpen: boolean;
+    noFederate: boolean;
+    nameIsValid: boolean;
+    canChangeEncryption: boolean;
+}
 
 @replaceableComponent("views.dialogs.CreateRoomDialog")
-export default class CreateRoomDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-        defaultPublic: PropTypes.bool,
-        parentSpace: PropTypes.instanceOf(Room),
-    };
+export default class CreateRoomDialog extends React.Component<IProps, IState> {
+    private nameField = createRef<Field>();
+    private aliasField = createRef<RoomAliasField>();
 
     constructor(props) {
         super(props);
@@ -44,7 +63,7 @@ export default class CreateRoomDialog extends React.Component {
         this.state = {
             isPublic: this.props.defaultPublic || false,
             isEncrypted: privateShouldBeEncrypted(),
-            name: "",
+            name: this.props.defaultName || "",
             topic: "",
             alias: "",
             detailsOpen: false,
@@ -54,26 +73,25 @@ export default class CreateRoomDialog extends React.Component {
         };
 
         MatrixClientPeg.get().doesServerForceEncryptionForPreset("private")
-            .then(isForced => this.setState({canChangeEncryption: !isForced}));
+            .then(isForced => this.setState({ canChangeEncryption: !isForced }));
     }
 
-    _roomCreateOptions() {
-        const opts = {};
-        const createOpts = opts.createOpts = {};
+    private roomCreateOptions() {
+        const opts: IOpts = {};
+        const createOpts: IOpts["createOpts"] = opts.createOpts = {};
         createOpts.name = this.state.name;
         if (this.state.isPublic) {
-            createOpts.visibility = "public";
-            createOpts.preset = "public_chat";
+            createOpts.visibility = Visibility.Public;
+            createOpts.preset = Preset.PublicChat;
             opts.guestAccess = false;
-            const {alias} = this.state;
-            const localPart = alias.substr(1, alias.indexOf(":") - 1);
-            createOpts['room_alias_name'] = localPart;
+            const { alias } = this.state;
+            createOpts.room_alias_name = alias.substr(1, alias.indexOf(":") - 1);
         }
         if (this.state.topic) {
             createOpts.topic = this.state.topic;
         }
         if (this.state.noFederate) {
-            createOpts.creation_content = {'m.federate': false};
+            createOpts.creation_content = { 'm.federate': false };
         }
 
         if (!this.state.isPublic) {
@@ -98,16 +116,14 @@ export default class CreateRoomDialog extends React.Component {
     }
 
     componentDidMount() {
-        this._detailsRef.addEventListener("toggle", this.onDetailsToggled);
         // move focus to first field when showing dialog
-        this._nameFieldRef.focus();
+        this.nameField.current.focus();
     }
 
     componentWillUnmount() {
-        this._detailsRef.removeEventListener("toggle", this.onDetailsToggled);
     }
 
-    _onKeyDown = event => {
+    private onKeyDown = (event: KeyboardEvent) => {
         if (event.key === Key.ENTER) {
             this.onOk();
             event.preventDefault();
@@ -115,26 +131,26 @@ export default class CreateRoomDialog extends React.Component {
         }
     };
 
-    onOk = async () => {
-        const activeElement = document.activeElement;
+    private onOk = async () => {
+        const activeElement = document.activeElement as HTMLElement;
         if (activeElement) {
             activeElement.blur();
         }
-        await this._nameFieldRef.validate({allowEmpty: false});
-        if (this._aliasFieldRef) {
-            await this._aliasFieldRef.validate({allowEmpty: false});
+        await this.nameField.current.validate({allowEmpty: false});
+        if (this.aliasField.current) {
+            await this.aliasField.current.validate({allowEmpty: false});
         }
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
-        await new Promise(resolve => this.setState({}, resolve));
-        if (this.state.nameIsValid && (!this._aliasFieldRef || this._aliasFieldRef.isValid)) {
-            this.props.onFinished(true, this._roomCreateOptions());
+        await new Promise<void>(resolve => this.setState({}, resolve));
+        if (this.state.nameIsValid && (!this.aliasField.current || this.aliasField.current.isValid)) {
+            this.props.onFinished(true, this.roomCreateOptions());
         } else {
             let field;
             if (!this.state.nameIsValid) {
-                field = this._nameFieldRef;
-            } else if (this._aliasFieldRef && !this._aliasFieldRef.isValid) {
-                field = this._aliasFieldRef;
+                field = this.nameField.current;
+            } else if (this.aliasField.current && !this.aliasField.current.isValid) {
+                field = this.aliasField.current;
             }
             if (field) {
                 field.focus();
@@ -143,49 +159,45 @@ export default class CreateRoomDialog extends React.Component {
         }
     };
 
-    onCancel = () => {
+    private onCancel = () => {
         this.props.onFinished(false);
     };
 
-    onNameChange = ev => {
-        this.setState({name: ev.target.value});
+    private onNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        this.setState({ name: ev.target.value });
     };
 
-    onTopicChange = ev => {
-        this.setState({topic: ev.target.value});
+    private onTopicChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        this.setState({ topic: ev.target.value });
     };
 
-    onPublicChange = isPublic => {
-        this.setState({isPublic});
+    private onPublicChange = (isPublic: boolean) => {
+        this.setState({ isPublic });
     };
 
-    onEncryptedChange = isEncrypted => {
-        this.setState({isEncrypted});
+    private onEncryptedChange = (isEncrypted: boolean) => {
+        this.setState({ isEncrypted });
     };
 
-    onAliasChange = alias => {
-        this.setState({alias});
+    private onAliasChange = (alias: string) => {
+        this.setState({ alias });
     };
 
-    onDetailsToggled = ev => {
-        this.setState({detailsOpen: ev.target.open});
+    private onDetailsToggled = (ev: SyntheticEvent<HTMLDetailsElement>) => {
+        this.setState({ detailsOpen: (ev.target as HTMLDetailsElement).open });
     };
 
-    onNoFederateChange = noFederate => {
-        this.setState({noFederate});
+    private onNoFederateChange = (noFederate: boolean) => {
+        this.setState({ noFederate });
     };
 
-    collectDetailsRef = ref => {
-        this._detailsRef = ref;
-    };
-
-    onNameValidate = async fieldState => {
-        const result = await CreateRoomDialog._validateRoomName(fieldState);
+    private onNameValidate = async (fieldState: IFieldState) => {
+        const result = await CreateRoomDialog.validateRoomName(fieldState);
         this.setState({nameIsValid: result.valid});
         return result;
     };
 
-    static _validateRoomName = withValidation({
+    private static validateRoomName = withValidation({
         rules: [
             {
                 key: "required",
@@ -196,18 +208,17 @@ export default class CreateRoomDialog extends React.Component {
     });
 
     render() {
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const Field = sdk.getComponent('views.elements.Field');
-        const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
-        const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
-
         let aliasField;
         if (this.state.isPublic) {
             const domain = MatrixClientPeg.get().getDomain();
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
-                    <RoomAliasField ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
+                    <RoomAliasField
+                        ref={this.aliasField}
+                        onChange={this.onAliasChange}
+                        domain={domain}
+                        value={this.state.alias}
+                    />
                 </div>
             );
         }
@@ -270,16 +281,34 @@ export default class CreateRoomDialog extends React.Component {
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
                 title={title}
             >
-                <form onSubmit={this.onOk} onKeyDown={this._onKeyDown}>
+                <form onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
                     <div className="mx_Dialog_content">
-                        <Field ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
-                        <Field label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} className="mx_CreateRoomDialog_topic" />
-                        <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
+                        <Field
+                            ref={this.nameField}
+                            label={_t('Name')}
+                            onChange={this.onNameChange}
+                            onValidate={this.onNameValidate}
+                            value={this.state.name}
+                            className="mx_CreateRoomDialog_name"
+                        />
+                        <Field
+                            label={_t('Topic (optional)')}
+                            onChange={this.onTopicChange}
+                            value={this.state.topic}
+                            className="mx_CreateRoomDialog_topic"
+                        />
+                        <LabelledToggleSwitch
+                            label={_t("Make this room public")}
+                            onChange={this.onPublicChange}
+                            value={this.state.isPublic}
+                        />
                         { publicPrivateLabel }
                         { e2eeSection }
                         { aliasField }
-                        <details ref={this.collectDetailsRef} className="mx_CreateRoomDialog_details">
-                            <summary className="mx_CreateRoomDialog_details_summary">{ this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }</summary>
+                        <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
+                            <summary className="mx_CreateRoomDialog_details_summary">
+                                { this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }
+                            </summary>
                             <LabelledToggleSwitch
                                 label={_t(
                                     "Block anyone not part of %(serverName)s from ever joining this room.",

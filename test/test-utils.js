@@ -234,6 +234,7 @@ export function mkStubRoom(roomId = null) {
         }),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getJoinedMembers: jest.fn().mockReturnValue([]),
+        getMembers: jest.fn().mockReturnValue([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
         getUnfilteredTimelineSet: () => null,
@@ -245,6 +246,7 @@ export function mkStubRoom(roomId = null) {
         maySendMessage: jest.fn().mockReturnValue(true),
         currentState: {
             getStateEvents: jest.fn(),
+            getMember: jest.fn(),
             mayClientSendStateEvent: jest.fn().mockReturnValue(true),
             maySendStateEvent: jest.fn().mockReturnValue(true),
             maySendEvent: jest.fn().mockReturnValue(true),

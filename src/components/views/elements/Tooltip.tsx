@@ -22,6 +22,7 @@ import React, {Component, CSSProperties} from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
 const MIN_TOOLTIP_HEIGHT = 25;
 
@@ -97,15 +98,15 @@ export default class Tooltip extends React.Component<IProps> {
             // we need so that we're still centered.
             offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
         }
-
+        const width = UIStore.instance.windowWidth;
         const baseTop = (parentBox.top - 2 + this.props.yOffset) + window.pageYOffset;
         const top = baseTop + offset;
-        const right = window.innerWidth - parentBox.right - window.pageXOffset - 16;
+        const right = width - parentBox.right - window.pageXOffset - 16;
         const left = parentBox.right + window.pageXOffset + 6;
         const horizontalCenter = parentBox.right - window.pageXOffset - (parentBox.width / 2);
         switch (this.props.alignment) {
             case Alignment.Natural:
-                if (parentBox.right > window.innerWidth / 2) {
+                if (parentBox.right > width / 2) {
                     style.right = right;
                     style.top = top;
                     break;

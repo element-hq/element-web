@@ -88,6 +88,7 @@ describe('MemberList', () => {
         };
         memberListRoom.currentState = {
             members: {},
+            getMember: jest.fn(),
             getStateEvents: (eventType, stateKey) => stateKey === undefined ? [] : null, // ignore 3pid invites
         };
         for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {

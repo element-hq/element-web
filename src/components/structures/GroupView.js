@@ -36,7 +36,7 @@ import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
 import {Group} from "matrix-js-sdk/src/models/group";
-import {allSettled, sleep} from "../../utils/promise";
+import {sleep} from "../../utils/promise";
 import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import {mediaFromMxc} from "../../customisations/Media";
@@ -99,7 +99,7 @@ class CategoryRoomList extends React.Component {
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                allSettled(addrs.map((addr) => {
+                Promise.allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addRoomToGroupSummary(this.props.groupId, addr.address)
                         .catch(() => { errorList.push(addr.address); });
@@ -274,7 +274,7 @@ class RoleUserList extends React.Component {
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
-                allSettled(addrs.map((addr) => {
+                Promise.allSettled(addrs.map((addr) => {
                     return GroupStore
                         .addUserToGroupSummary(addr.address)
                         .catch(() => { errorList.push(addr.address); });

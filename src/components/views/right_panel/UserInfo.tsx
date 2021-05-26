@@ -66,6 +66,7 @@ import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRight
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {mediaFromMxc} from "../../../customisations/Media";
+import UIStore from "../../../stores/UIStore";
 
 export interface IDevice {
     deviceId: string;
@@ -1307,7 +1308,7 @@ const BasicUserInfo: React.FC<{
     }
 
     if (pendingUpdateCount > 0) {
-        spinner = <Spinner imgClassName="mx_ContextualMenu_spinner" />;
+        spinner = <Spinner />;
     }
 
     let memberDetails;
@@ -1448,8 +1449,8 @@ const UserInfoHeader: React.FC<{
                     <MemberAvatar
                         key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member}
-                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        width={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
+                        height={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
                         resizeMethod="scale"
                         fallbackUserId={member.userId}
                         onClick={onMemberAvatarClick}
