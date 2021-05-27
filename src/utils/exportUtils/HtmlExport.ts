@@ -41,6 +41,7 @@ body {
 .mx_page_wrap a {
     color: #238CF5;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .mx_page_wrap a:hover {
@@ -274,19 +275,77 @@ div.mx_selected {
 .mx_initials_wrap.mx_Username_color8{
     background-color: #74d12c;
 }
+
+#snackbar {
+  display: flex;
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  border-radius: 4px;
+  letter-spacing: 0.01071em;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
 `;
 
 const js = `
 function scrollToElement(replyId){
     let el = document.getElementById(replyId);
-    el.scrollIntoViewIfNeeded({
-        behaviour: "smooth",
-        block: "start",
-    });
+    if(!el) { 
+        showToast("The message you're looking for wasn't exported");
+        return;
+    };
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     el.classList.add("mx_selected");
     setTimeout(() => {
         el.classList.remove("mx_selected");
     }, 1000);
+}
+
+function showToast(text) {
+  let el = document.getElementById("snackbar");
+  el.innerHTML = text;
+  el.className = "show";
+  setTimeout(() => {
+      el.className = el.className.replace("show", "");
+  }, 2000);
 }
 `
 
@@ -324,6 +383,7 @@ export default class HTMLExporter extends Exporter {
                             </div>
                         </div>
                     </div>
+                    <div id="snackbar"/>
                 </body>
             </html>
     `
@@ -427,6 +487,13 @@ export default class HTMLExporter extends Exporter {
                     ${sanitizeHtml(event.getContent().body, sanitizeHtmlParams)} 
                 </div>`;
                 break;
+            case "m.emote":
+                messageBody = `
+                <div class="mx_text"> 
+                    * ${event.sender ? event.sender.name : event.getSender()} 
+                    ${sanitizeHtml(event.getContent().body, sanitizeHtmlParams)} 
+                </div>`;
+                break;
             case "m.image": {
                 const blob = await this.getMediaBlob(event);
                 const fileName = `${event.getId()}.${blob.type.replace("image/", "")}`;
@@ -491,7 +558,7 @@ export default class HTMLExporter extends Exporter {
                 </div>`: ``}
             ${isReply ?
         `   <div class="mx_reply_to mx_details">
-                    In reply to <a href="#${replyId}" onclick="scrollToElement('${replyId}')">this message</a>
+                    In reply to <a onclick="scrollToElement('${replyId}')">this message</a>
                 </div>`: ``}
             ${messageBody}
             </div>
