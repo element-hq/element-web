@@ -152,5 +152,5 @@ export enum Action {
     /**
      * Fired when joining a room failed
      */
-    JoinRoomError = "join_room",
+    JoinRoomError = "join_room_error",
 }
