@@ -53,6 +53,12 @@ import AccessibleButton from '../elements/AccessibleButton';
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
 
+interface IRecentUser {
+    userId: string,
+    user: RoomMember,
+    lastActive: number,
+}
+
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
 export const KIND_CALL_TRANSFER = "call_transfer";
@@ -402,11 +408,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         this.setState({consultFirst: ev.target.checked});
     }
 
-    public static buildRecents(excludedTargetIds: Set<string>): {
-        userId: string,
-        user: RoomMember,
-        lastActive: number,
-    }[] {
+    public static buildRecents(excludedTargetIds: Set<string>): IRecentUser[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
