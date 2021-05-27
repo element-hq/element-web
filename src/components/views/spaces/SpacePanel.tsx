@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
 
@@ -127,6 +127,10 @@ const SpacePanel = () => {
     const [invites, spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 
+    useEffect(() => {
+        closeMenu();
+    }, [isPanelCollapsed]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const newClasses = classNames("mx_SpaceButton_new", {
         mx_SpaceButton_newCancel: menuDisplayed,
     });
@@ -221,20 +225,14 @@ const SpacePanel = () => {
                             space={s}
                             activeSpaces={activeSpaces}
                             isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => {
-                                closeMenu();
-                                setPanelCollapsed(false);
-                            }}
+                            onExpand={() => setPanelCollapsed(false)}
                         />) }
                         { spaces.map(s => <SpaceItem
                             key={s.roomId}
                             space={s}
                             activeSpaces={activeSpaces}
                             isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => {
-                                closeMenu();
-                                setPanelCollapsed(false);
-                            }}
+                            onExpand={() => setPanelCollapsed(false)}
                         />) }
                     </div>
                     <SpaceButton
@@ -249,10 +247,7 @@ const SpacePanel = () => {
                 </AutoHideScrollbar>
                 <AccessibleTooltipButton
                     className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
-                    onClick={() => {
-                        setPanelCollapsed(!isPanelCollapsed);
-                        if (menuDisplayed) closeMenu();
-                    }}
+                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
                     title={expandCollapseButtonTitle}
                 />
                 { contextMenu }
