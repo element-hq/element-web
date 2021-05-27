@@ -190,8 +190,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
     }
 
-    get hasPendingActions(): boolean {
-        return Array.from(this.state.pendingRoomJoin).length > 0;
+    get pendingActionsCount(): number {
+        return Array.from(this.state.pendingRoomJoin).length;
     }
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
@@ -655,11 +655,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             />
                         </span>
                         {name}
-                        {this.hasPendingActions && (
+                        {this.pendingActionsCount > 0 && (
                             <InlineSpinner>
                                 <TooltipButton helpText={_t(
                                     "Currently joining %(count)s rooms",
-                                    { count: this.state.pendingRoomJoin.length },
+                                    { count: this.pendingActionsCount },
                                 )} />
                             </InlineSpinner>
                         )}
