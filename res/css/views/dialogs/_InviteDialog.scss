@@ -82,11 +82,62 @@ limitations under the License.
         text-transform: uppercase;
     }
 
+    > p {
+        margin: 0;
+    }
+
+    > span {
+        color: $primary-fg-color;
+    }
+
     .mx_InviteDialog_subname {
         margin-bottom: 10px;
         margin-top: -10px; // HACK: Positioning with margins is bad
         font-size: $font-12px;
         color: $muted-fg-color;
+    }
+}
+
+.mx_InviteDialog_footer {
+    border-top: 1px solid $input-border-color;
+
+    > h3 {
+        margin: 8px 0;
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .mx_InviteDialog_footer_link {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 4px;
+        border: solid 1px $input-border-color;
+        padding: 8px;
+
+        > a {
+            text-decoration: none;
+            flex-shrink: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .mx_InviteDialog_footer_link_copy {
+        flex-shrink: 0;
+        cursor: pointer;
+        margin-left: 20px;
+        display: inherit;
+
+        > div {
+            mask-image: url($copy-button-url);
+            background-color: $message-action-bar-fg-color;
+            margin-left: 5px;
+            width: 20px;
+            height: 20px;
+            background-repeat: no-repeat;
+        }
     }
 }
 
@@ -212,15 +263,21 @@ limitations under the License.
 
 .mx_InviteDialog {
     // Prevent the dialog from jumping around randomly when elements change.
-    height: 590px;
+    height: 600px;
     padding-left: 20px; // the design wants some padding on the left
+    display: flex;
+    flex-direction: column;
+
+    .mx_InviteDialog_content {
+        overflow: hidden;
+    }
 }
 
 .mx_InviteDialog_userSections {
     margin-top: 10px;
     overflow-y: auto;
     padding-right: 45px;
-    height: 455px; // mx_InviteDialog's height minus some for the upper elements
+    height: calc(100% - 190px); // mx_InviteDialog's height minus some for the upper elements
 }
 
 // Right margin for the design. We could apply this to the whole dialog, but then the scrollbar

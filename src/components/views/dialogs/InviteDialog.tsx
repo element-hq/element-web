@@ -47,6 +47,11 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../../customisations/Media";
 import {getAddressType} from "../../../UserAddress";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import {copyPlaintext, selectText} from "../../../utils/strings";
+import * as ContextMenu from "../../structures/ContextMenu";
+import {toRightOf} from "../../structures/ContextMenu";
+import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -349,6 +354,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         initialText: "",
     };
 
+    private closeCopiedTooltip: () => void;
     _debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
     _editorRef: any = null;
 
@@ -398,6 +404,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.props.initialText) {
             this._updateSuggestions(this.props.initialText);
         }
+    }
+
+    componentWillUnmount() {
+        // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
+        // the tooltip otherwise, such as pressing Escape or clicking X really quickly
+        if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
     private onConsultFirstChange = (ev) => {
@@ -1232,6 +1244,25 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     }
 
+    async onLinkClick(e) {
+        e.preventDefault();
+        selectText(e.target);
+    }
+
+    async onCopyClick(e) {
+        e.preventDefault();
+        const target = e.target; // copy target before we go async and React throws it away
+
+        const successful = await copyPlaintext(makeUserPermalink(MatrixClientPeg.get().getUserId()));
+        const buttonRect = target.getBoundingClientRect();
+        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
+            ...toRightOf(buttonRect, 2),
+            message: successful ? _t("Copied!") : _t("Failed to copy"),
+        });
+        // Drop a reference to this close handler for componentWillUnmount
+        this.closeCopiedTooltip = target.onmouseleave = close;
+    }
+
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
@@ -1242,12 +1273,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             spinner = <Spinner w={20} h={20} />;
         }
 
-
         let title;
         let helpText;
         let buttonText;
         let goButtonFn;
-        let consultSection;
+        let extraSection;
+        let footer;
         let keySharingWarning = <span />;
 
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
@@ -1310,6 +1341,24 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
+            extraSection = <div className="mx_InviteDialog_section">
+                <span>{ _t("Some results may be hidden for privacy.") }</span>
+                <p>{ _t("If you can’t see who you’re looking for, send them your invite link below.") }</p>
+            </div>;
+            const link = makeUserPermalink(MatrixClientPeg.get().getUserId());
+            footer = <div className="mx_InviteDialog_footer">
+                <h3>{ _t("Or send invite link") }</h3>
+                <div className="mx_InviteDialog_footer_link">
+                    <a href={link} onClick={this.onLinkClick}>
+                        { link }
+                    </a>
+                    <AccessibleTooltipButton
+                        title={_t("Copy")}
+                        onClick={this.onCopyClick}
+                        className="mx_InviteDialog_footer_link_copy"
+                    />
+                </div>
+            </div>
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
             const isSpace = SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom();
@@ -1371,7 +1420,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             title = _t("Transfer");
             buttonText = _t("Transfer");
             goButtonFn = this._transferCall;
-            consultSection = <div>
+            footer = <div>
                 <label>
                     <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
                     {_t("Consult first")}
@@ -1412,8 +1461,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     <div className='mx_InviteDialog_userSections'>
                         {this._renderSection('recents')}
                         {this._renderSection('suggestions')}
+                        {extraSection}
                     </div>
-                    {consultSection}
+                    {footer}
                 </div>
             </BaseDialog>
         );
