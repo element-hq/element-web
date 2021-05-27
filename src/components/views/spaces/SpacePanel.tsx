@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
 
@@ -127,6 +127,12 @@ const SpacePanel = () => {
     const [invites, spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 
+    useEffect(() => {
+        if (!isPanelCollapsed && menuDisplayed) {
+            closeMenu();
+        }
+    }, [isPanelCollapsed]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const newClasses = classNames("mx_SpaceButton_new", {
         mx_SpaceButton_newCancel: menuDisplayed,
     });
@@ -235,18 +241,15 @@ const SpacePanel = () => {
                         className={newClasses}
                         tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
                         onClick={menuDisplayed ? closeMenu : () => {
-                            openMenu();
                             if (!isPanelCollapsed) setPanelCollapsed(true);
+                            openMenu();
                         }}
                         isNarrow={isPanelCollapsed}
                     />
                 </AutoHideScrollbar>
                 <AccessibleTooltipButton
                     className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
-                    onClick={() => {
-                        setPanelCollapsed(!isPanelCollapsed);
-                        if (menuDisplayed) closeMenu();
-                    }}
+                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
                     title={expandCollapseButtonTitle}
                 />
                 { contextMenu }
