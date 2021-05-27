@@ -69,7 +69,7 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
     selectedSpace?: Room;
-    pendingRoomJoin: string[]
+    pendingRoomJoin: Set<string>
 }
 
 @replaceableComponent("structures.UserMenu")
@@ -86,7 +86,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
-            pendingRoomJoin: [],
+            pendingRoomJoin: new Set<string>(),
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -168,28 +168,24 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
     };
 
-    private addPendingJoinRoom(roomId) {
+    private addPendingJoinRoom(roomId: string): void {
         this.setState({
-            pendingRoomJoin: [
-                ...this.state.pendingRoomJoin,
-                roomId,
-            ],
+            pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin)
+                .add(roomId),
         });
     }
 
-    private removePendingJoinRoom(roomId) {
-        const newPendingRoomJoin = this.state.pendingRoomJoin.filter(pendingJoinRoomId => {
-            return pendingJoinRoomId !== roomId;
-        });
-        if (newPendingRoomJoin.length !== this.state.pendingRoomJoin.length) {
+    private removePendingJoinRoom(roomId: string): void {
+        if (this.state.pendingRoomJoin.has(roomId)) {
+            this.state.pendingRoomJoin.delete(roomId);
             this.setState({
-                pendingRoomJoin: newPendingRoomJoin,
+                pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin),
             })
         }
     }
 
     get hasPendingActions(): boolean {
-        return this.state.pendingRoomJoin.length > 0;
+        return Array.from(this.state.pendingRoomJoin).length > 0;
     }
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
