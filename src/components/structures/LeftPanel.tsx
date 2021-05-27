@@ -67,6 +67,7 @@ const cssClasses = [
 
 @replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
+    private ref: React.RefObject<HTMLDivElement> = createRef();
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
     private bgImageWatcherRef: string;
@@ -93,6 +94,10 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         });
     }
 
+    public componentDidMount() {
+        UIStore.instance.trackElementDimensions("LeftPanel", this.ref.current);
+    }
+
     public componentWillUnmount() {
         SettingsStore.unwatchSetting(this.groupFilterPanelWatcherRef);
         SettingsStore.unwatchSetting(this.bgImageWatcherRef);
@@ -100,6 +105,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        UIStore.instance.stopTrackingElementDimensions("LeftPanel");
     }
 
     private updateActiveSpace = (activeSpace: Room) => {
@@ -420,7 +426,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         );
 
         return (
-            <div className={containerClasses}>
+            <div className={containerClasses} ref={this.ref}>
                 {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}

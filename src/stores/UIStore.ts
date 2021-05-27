@@ -24,11 +24,13 @@ export enum UI_EVENTS {
 
 export type ResizeObserverCallbackFunction = (entries: ResizeObserverEntry[]) => void;
 
-
 export default class UIStore extends EventEmitter {
     private static _instance: UIStore = null;
 
     private resizeObserver: ResizeObserver;
+
+    private uiElementDimensions = new Map<string, DOMRectReadOnly>();
+    private trackedUiElements = new Map<Element, string>();
 
     public windowWidth: number;
     public windowHeight: number;
@@ -60,14 +62,51 @@ export default class UIStore extends EventEmitter {
         }
     }
 
-    private resizeObserverCallback = (entries: ResizeObserverEntry[]) => {
-        const { width, height } = entries
-            .find(entry => entry.target === document.body)
-            .contentRect;
+    public getElementDimensions(name: string): DOMRectReadOnly {
+        return this.uiElementDimensions.get(name);
+    }
 
-        this.windowWidth = width;
-        this.windowHeight = height;
+    public trackElementDimensions(name: string, element: Element): void {
+        this.trackedUiElements.set(element, name);
+        this.resizeObserver.observe(element);
+    }
+
+    public stopTrackingElementDimensions(name: string): void {
+        let trackedElement: Element;
+        this.trackedUiElements.forEach((trackedElementName, element) => {
+            if (trackedElementName === name) {
+                trackedElement = element;
+            }
+        });
+        if (trackedElement) {
+            this.resizeObserver.unobserve(trackedElement);
+            this.uiElementDimensions.delete(name);
+            this.trackedUiElements.delete(trackedElement);
+        }
+    }
+
+    public isTrackingElementDimensions(name: string): boolean {
+        return this.uiElementDimensions.has(name);
+    }
+
+    private resizeObserverCallback = (entries: ResizeObserverEntry[]) => {
+        const windowEntry = entries.find(entry => entry.target === document.body);
+
+        if (windowEntry) {
+            this.windowWidth = windowEntry.contentRect.width;
+            this.windowHeight = windowEntry.contentRect.height;
+        }
+
+        entries.forEach(entry => {
+            const trackedElementName = this.trackedUiElements.get(entry.target);
+            if (trackedElementName) {
+                this.uiElementDimensions.set(trackedElementName, entry.contentRect);
+                this.emit(trackedElementName, UI_EVENTS.Resize, entry);
+            }
+        });
 
         this.emit(UI_EVENTS.Resize, entries);
     }
 }
+
+window.mxUIStore = UIStore.instance;
