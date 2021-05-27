@@ -128,7 +128,9 @@ const SpacePanel = () => {
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 
     useEffect(() => {
-        closeMenu();
+        if (!isPanelCollapsed && menuDisplayed) {
+            closeMenu();
+        }
     }, [isPanelCollapsed]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const newClasses = classNames("mx_SpaceButton_new", {
@@ -239,8 +241,8 @@ const SpacePanel = () => {
                         className={newClasses}
                         tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
                         onClick={menuDisplayed ? closeMenu : () => {
-                            openMenu();
                             if (!isPanelCollapsed) setPanelCollapsed(true);
+                            openMenu();
                         }}
                         isNarrow={isPanelCollapsed}
                     />
