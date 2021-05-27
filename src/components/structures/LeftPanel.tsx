@@ -95,7 +95,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
-        UIStore.instance.trackElementDimensions("LeftPanel", this.ref.current);
+        UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
+        UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
     }
 
     public componentWillUnmount() {
@@ -105,7 +106,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        UIStore.instance.stopTrackingElementDimensions("LeftPanel");
+        UIStore.instance.stopTrackingElementDimensions("ListContainer");
+        UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
     }
 
     private updateActiveSpace = (activeSpace: Room) => {
@@ -251,9 +253,23 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.add("mx_RoomSublist_headerContainer_sticky");
                 }
+
+                const listDimensions = UIStore.instance.getElementDimensions("ListContainer");
+                if (listDimensions) {
+                    const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
+                    const headerStickyWidth = listDimensions.width - headerRightMargin;
+                    const newWidth = `${headerStickyWidth}px`;
+                    if (header.style.width !== newWidth) {
+                        header.style.width = newWidth;
+                    }
+                }
             } else if (!style.stickyTop && !style.stickyBottom) {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_sticky");
+                }
+
+                if (header.style.width) {
+                    header.style.removeProperty('width');
                 }
             }
         }
