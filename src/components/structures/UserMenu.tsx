@@ -69,7 +69,7 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
     selectedSpace?: Room;
-    pendingRoomJoin: Set<string>
+    pendingRoomJoin: Set<string>;
 }
 
 @replaceableComponent("structures.UserMenu")
@@ -182,8 +182,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     }
 
     private removePendingJoinRoom(roomId: string): void {
-        if (this.state.pendingRoomJoin.has(roomId)) {
-            this.state.pendingRoomJoin.delete(roomId);
+        if (this.state.pendingRoomJoin.delete(roomId)) {
             this.setState({
                 pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin),
             })
