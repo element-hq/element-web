@@ -23,6 +23,20 @@ export default class AutoHideScrollbar extends React.Component {
         this._collectContainerRef = this._collectContainerRef.bind(this);
     }
 
+    componentDidMount() {
+        if (this.containerRef && this.props.onScroll) {
+            // Using the passive option to not block the main thread
+            // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+            this.containerRef.addEventListener("scroll", this.props.onScroll, { passive: true });
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.containerRef && this.props.onScroll) {
+            this.containerRef.removeEventListener("scroll", this.props.onScroll);
+        }
+    }
+
     _collectContainerRef(ref) {
         if (ref && !this.containerRef) {
             this.containerRef = ref;
@@ -41,7 +55,6 @@ export default class AutoHideScrollbar extends React.Component {
             ref={this._collectContainerRef}
             style={this.props.style}
             className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
-            onScroll={this.props.onScroll}
             onWheel={this.props.onWheel}
             tabIndex={this.props.tabIndex}
         >
