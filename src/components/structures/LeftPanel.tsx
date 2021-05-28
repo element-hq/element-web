@@ -110,6 +110,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
     }
 
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
+        if (prevState.activeSpace !== this.state.activeSpace) {
+            this.refreshStickyHeaders();
+        }
+    }
+
     private updateActiveSpace = (activeSpace: Room) => {
         this.setState({ activeSpace });
     };
@@ -429,6 +435,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
             activeSpace={this.state.activeSpace}
+            onListCollapse={this.refreshStickyHeaders}
         />;
 
         const containerClasses = classNames({
