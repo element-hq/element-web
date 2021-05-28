@@ -1341,8 +1341,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
-            extraSection = <div className="mx_InviteDialog_section">
-                <span>{ _t("Some results may be hidden for privacy.") }</span>
+            extraSection = <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
+                <span>{ _t("Some suggestions may be hidden for privacy.") }</span>
                 <p>{ _t("If you can’t see who you’re looking for, send them your invite link below.") }</p>
             </div>;
             const link = makeUserPermalink(MatrixClientPeg.get().getUserId());
