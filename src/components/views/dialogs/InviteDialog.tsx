@@ -408,9 +408,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     componentWillUnmount() {
         this.unmounted = true;
-    }
-
-    componentWillUnmount() {
         // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
         // the tooltip otherwise, such as pressing Escape or clicking X really quickly
         if (this.closeCopiedTooltip) this.closeCopiedTooltip();
