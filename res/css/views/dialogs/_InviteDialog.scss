@@ -73,7 +73,7 @@ limitations under the License.
 }
 
 .mx_InviteDialog_section {
-    padding-bottom: 10px;
+    padding-bottom: 4px;
 
     h3 {
         font-size: $font-12px;
@@ -98,11 +98,25 @@ limitations under the License.
     }
 }
 
+.mx_InviteDialog_section_hidden_suggestions_disclaimer {
+    padding: 8px 0 16px 0;
+    font-size: $font-14px;
+
+    > span {
+        color: $primary-fg-color;
+        font-weight: 600;
+    }
+
+    > p {
+        margin:0;
+    }
+}
+
 .mx_InviteDialog_footer {
     border-top: 1px solid $input-border-color;
 
     > h3 {
-        margin: 8px 0;
+        margin: 12px 0;
         font-size: $font-12px;
         color: $muted-fg-color;
         font-weight: bold;
@@ -113,7 +127,7 @@ limitations under the License.
         display: flex;
         justify-content: space-between;
         border-radius: 4px;
-        border: solid 1px $input-border-color;
+        border: solid 1px $light-fg-color;  
         padding: 8px;
 
         > a {
@@ -274,17 +288,21 @@ limitations under the License.
 }
 
 .mx_InviteDialog_userSections {
-    margin-top: 10px;
+    margin-top: 4px;
     overflow-y: auto;
-    padding-right: 45px;
-    height: calc(100% - 190px); // mx_InviteDialog's height minus some for the upper elements
+    padding: 0px 45px 4px 0px;
+    height: calc(100% - 175px); // mx_InviteDialog's height minus some for the upper  and lower elements
 }
+
 
 // Right margin for the design. We could apply this to the whole dialog, but then the scrollbar
 // for the user section gets weird.
-.mx_InviteDialog_helpText,
 .mx_InviteDialog_addressBar {
-    margin-right: 45px;
+    margin: 8px 45px 0px 0px;
+}
+
+.mx_InviteDialog_helpText {
+    margin:0px;
 }
 
 .mx_InviteDialog_helpText .mx_AccessibleButton_kind_link {
