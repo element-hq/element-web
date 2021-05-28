@@ -390,7 +390,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     }
 
     render(): React.ReactChild {
-        return ReactDOM.createPortal(this.renderMenu(), document.body);
+        return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
     }
 }
 
