@@ -319,7 +319,7 @@ export const HierarchyLevel = ({
                     key={roomId}
                     room={rooms.get(roomId)}
                     numChildRooms={Array.from(relations.get(roomId)?.values() || [])
-                        .filter(ev => rooms.get(ev.state_key)?.room_type !== RoomType.Space).length}
+                        .filter(ev => rooms.has(ev.state_key) && !rooms.get(ev.state_key).room_type).length}
                     suggested={relations.get(spaceId)?.get(roomId)?.content.suggested}
                     selected={selectedMap?.get(spaceId)?.has(roomId)}
                     onViewRoomClick={(autoJoin) => {
@@ -437,7 +437,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     let content;
     if (roomsMap) {
-        const numRooms = Array.from(roomsMap.values()).filter(r => r.room_type !== RoomType.Space).length;
+        const numRooms = Array.from(roomsMap.values()).filter(r => !r.room_type).length;
         const numSpaces = roomsMap.size - numRooms - 1; // -1 at the end to exclude the space we are looking at
 
         let countsStr;
