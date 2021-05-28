@@ -193,6 +193,7 @@ limitations under the License.
 
     .mx_InviteDialog_roomTile_nameStack {
         display: inline-block;
+        overflow: hidden;
     }
 
     .mx_InviteDialog_roomTile_name {
@@ -206,6 +207,13 @@ limitations under the License.
         font-size: $font-12px;
         color: $muted-fg-color;
         margin-left: 7px;
+    }
+
+    .mx_InviteDialog_roomTile_name,
+    .mx_InviteDialog_roomTile_userId {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .mx_InviteDialog_roomTile_time {
