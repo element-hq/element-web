@@ -232,6 +232,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private accountPasswordTimer?: NodeJS.Timeout;
     private focusComposer: boolean;
     private subTitleStatus: string;
+    private prevWindowWidth: number;
 
     private readonly loggedInView: React.RefObject<LoggedInViewType>;
     private readonly dispatcherRef: any;
@@ -277,6 +278,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
+        this.prevWindowWidth = UIStore.instance.windowWidth || 1000;
         UIStore.instance.on(UI_EVENTS.Resize, this.handleResize);
 
         this.pageChanging = false;
@@ -1821,13 +1823,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const LHS_THRESHOLD = 1000;
         const width = UIStore.instance.windowWidth;
 
-        if (width <= LHS_THRESHOLD && !this.state.collapseLhs) {
-            dis.dispatch({ action: 'hide_left_panel' });
-        }
-        if (width > LHS_THRESHOLD && this.state.collapseLhs) {
+        if (this.prevWindowWidth < LHS_THRESHOLD && width >= LHS_THRESHOLD) {
             dis.dispatch({ action: 'show_left_panel' });
         }
 
+        if (this.prevWindowWidth >= LHS_THRESHOLD && width < LHS_THRESHOLD) {
+            dis.dispatch({ action: 'hide_left_panel' });
+        }
+
+        this.prevWindowWidth = width;
         this.state.resizeNotifier.notifyWindowResized();
     };
 

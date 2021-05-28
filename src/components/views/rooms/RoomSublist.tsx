@@ -78,6 +78,7 @@ interface IProps {
     alwaysVisible?: boolean;
     resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
+    onListCollapse?: (isExpanded: boolean) => void;
 
     // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
@@ -472,6 +473,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private toggleCollapsed = () => {
         this.layout.isCollapsed = this.state.isExpanded;
         this.setState({isExpanded: !this.layout.isCollapsed});
+        if (this.props.onListCollapse) {
+            this.props.onListCollapse(!this.layout.isCollapsed)
+        }
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {

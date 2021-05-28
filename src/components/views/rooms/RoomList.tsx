@@ -55,6 +55,7 @@ interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
+    onListCollapse?: (isExpanded: boolean) => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
     activeSpace: Room;
@@ -538,6 +539,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     extraTiles={extraTiles}
                     resizeNotifier={this.props.resizeNotifier}
                     alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
+                    onListCollapse={this.props.onListCollapse}
                 />
             });
     }
