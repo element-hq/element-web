@@ -249,13 +249,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
         // Using the passive option to not block the main thread
         // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
-        this.tilesRef.current.addEventListener("scroll", this.onScrollPrevent, { passive: true });
+        this.tilesRef.current?.addEventListener("scroll", this.onScrollPrevent, { passive: true });
     }
 
     public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
-        this.tilesRef.current.removeEventListener("scroll", this.onScrollPrevent);
+        this.tilesRef.current?.removeEventListener("scroll", this.onScrollPrevent);
     }
 
     private onListsUpdated = () => {

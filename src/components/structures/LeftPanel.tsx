@@ -99,7 +99,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
         // Using the passive option to not block the main thread
         // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
-        this.listContainerRef.current.addEventListener("scroll", this.onScroll, { passive: true });
+        this.listContainerRef.current?.addEventListener("scroll", this.onScroll, { passive: true });
     }
 
     public componentWillUnmount() {
@@ -111,7 +111,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         UIStore.instance.stopTrackingElementDimensions("ListContainer");
         UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
-        this.listContainerRef.current.removeEventListener("scroll", this.onScroll);
+        this.listContainerRef.current?.removeEventListener("scroll", this.onScroll);
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
