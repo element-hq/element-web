@@ -3310,5 +3310,10 @@
     "Go to my space": "Ir a mi espacio",
     "sends space invaders": "enviar space invaders",
     "Sends the given message with a space themed effect": "Envía un mensaje con efectos espaciales",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Si sales, %(brand)s volverá a cargarse con los espacios desactivados. Las comunidades y las etiquetas personalizadas serán visibles de nuevo."
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Si sales, %(brand)s volverá a cargarse con los espacios desactivados. Las comunidades y las etiquetas personalizadas serán visibles de nuevo.",
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Permitir conexión directa (peer-to-peer) en las llamadas individuales (si lo activas, la otra parte podría ver tu dirección IP)",
+    "See when people join, leave, or are invited to your active room": "Ver cuando alguien se una, salga o se le invite a tu sala activa",
+    "Kick, ban, or invite people to this room, and make you leave": "Expulsar, vetar o invitar personas a esta sala, y hacerte salir de ella",
+    "Kick, ban, or invite people to your active room, and make you leave": "Expulsar, vetar o invitar a gente a tu sala activa, o hacerte salir",
+    "See when people join, leave, or are invited to this room": "Ver cuando alguien se une, sale o se le invita a la sala"
 }
