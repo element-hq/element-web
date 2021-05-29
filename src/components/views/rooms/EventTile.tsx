@@ -52,10 +52,7 @@ const eventTileTypes = {
     [EventType.Sticker]: 'messages.MessageEvent',
     [EventType.KeyVerificationCancel]: 'messages.MKeyVerificationConclusion',
     [EventType.KeyVerificationDone]: 'messages.MKeyVerificationConclusion',
-    [EventType.CallInvite]: 'messages.TextualEvent',
-    [EventType.CallAnswer]: 'messages.TextualEvent',
-    [EventType.CallHangup]: 'messages.TextualEvent',
-    [EventType.CallReject]: 'messages.TextualEvent',
+    [EventType.CallInvite]: 'messages.CallEvent',
 };
 
 const stateEventTileTypes = {
@@ -821,6 +818,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
             (eventType === EventType.RoomCreate) ||
             (eventType === EventType.RoomEncryption) ||
+            (eventType === EventType.CallInvite) ||
             (tileHandler === "messages.MJitsiWidgetEvent");
         let isInfoMessage = (
             !isBubbleMessage && eventType !== EventType.RoomMessage &&
