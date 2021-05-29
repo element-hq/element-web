@@ -46,7 +46,7 @@ export default class RoomCreate extends React.Component<IProps, IState> {
         const sender = event.sender ? event.sender.name : event.getSender();
 
         return (
-            <div className={"mx_EventTileBubble mx_CallEvent"}>
+            <div className={"mx_CallEvent"}>
                 <div className="mx_CallEvent_sender">
                     {sender}
                 </div>
