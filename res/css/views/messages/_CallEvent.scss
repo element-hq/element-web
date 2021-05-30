@@ -16,7 +16,8 @@ limitations under the License.
 
 .mx_CallEvent {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
 
     background-color: $dark-panel-bg-color;
     padding: 10px;
@@ -25,9 +26,16 @@ limitations under the License.
     max-width: 75%;
     box-sizing: border-box;
 
-    .mx_CallEvent_sender {}
+    .mx_CallEvent_content {
+        display: flex;
+        flex-direction: column;
 
-    .mx_CallEvent_type {
+        .mx_CallEvent_sender {
 
+        }
+
+        .mx_CallEvent_type {
+
+        }
     }
 }

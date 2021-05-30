@@ -26,6 +26,7 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import TimelineCallEventStore from "../../stores/TimelineCallEventStore";
 import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -528,6 +529,8 @@ export default class MessagePanel extends React.Component {
             const eventId = mxEv.getId();
             const last = (mxEv === lastShownEvent);
             const {nextEvent, nextTile} = this._getNextEventInfo(this.props.events, i);
+
+            TimelineCallEventStore.instance.addEvent(mxEv);
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
