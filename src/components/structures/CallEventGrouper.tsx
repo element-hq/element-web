@@ -19,12 +19,13 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 export interface TimelineCallState {
-    callId?: string;
+    callId: string;
     isVoice: boolean;
 }
 
 export default class CallEventGrouper {
     invite: MatrixEvent;
+    callId: string;
 
     private isVoice(): boolean {
         const invite = this.invite;
@@ -43,11 +44,13 @@ export default class CallEventGrouper {
 
     public add(event: MatrixEvent) {
         if (event.getType() === EventType.CallInvite) this.invite = event;
+        this.callId = event.getContent().call_id;
     }
 
     public getState(): TimelineCallState {
         return {
             isVoice: this.isVoice(),
+            callId: this.callId,
         }
     }
 }
