@@ -26,7 +26,6 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
-import TimelineCallEventStore from "../../stores/TimelineCallEventStore";
 import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -36,6 +35,7 @@ import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import defaultDispatcher from '../../dispatcher/dispatcher';
+import CallEventGrouper from "./CallEventGrouper";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -210,6 +210,9 @@ export default class MessagePanel extends React.Component {
 
         this._showTypingNotificationsWatcherRef =
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
+
+        // A map of <callId, CallEventGrouper>
+        this._callEventGroupers = new Map();
     }
 
     componentDidMount() {
@@ -530,7 +533,20 @@ export default class MessagePanel extends React.Component {
             const last = (mxEv === lastShownEvent);
             const {nextEvent, nextTile} = this._getNextEventInfo(this.props.events, i);
 
-            TimelineCallEventStore.instance.addEvent(mxEv);
+            if (
+                mxEv.getType().indexOf("m.call.") === 0 ||
+                mxEv.getType().indexOf("org.matrix.call.") === 0
+            ) {
+                const callId = mxEv.getContent().call_id;
+                if (this._callEventGroupers.has(callId)) {
+                    this._callEventGroupers.get(callId).add(mxEv);
+                } else {
+                    const callEventGrouper = new CallEventGrouper();
+                    callEventGrouper.add(mxEv);
+
+                    this._callEventGroupers.set(callId, callEventGrouper);
+                }
+            }
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
@@ -646,6 +662,8 @@ export default class MessagePanel extends React.Component {
         // it's successful: we received it.
         isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
 
+        const callState = this._callEventGroupers.get(mxEv.getContent().call_id)?.getState();
+
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <li
@@ -678,6 +696,7 @@ export default class MessagePanel extends React.Component {
                         layout={this.props.layout}
                         enableFlair={this.props.enableFlair}
                         showReadReceipts={this.props.showReadReceipts}
+                        callState={callState}
                     />
                 </TileErrorBoundary>
             </li>,
