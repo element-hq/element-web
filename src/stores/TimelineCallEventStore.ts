@@ -18,11 +18,6 @@ import EventEmitter from "events";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-const IGNORED_EVENTS = [
-    EventType.CallNegotiate,
-    EventType.CallCandidates,
-];
-
 export enum TimelineCallEventStoreEvent {
     CallsChanged = "calls_changed"
 }
@@ -75,7 +70,7 @@ export default class TimelineCallEventStore extends EventEmitter {
     }
 
     public addEvent(event: MatrixEvent) {
-        if (IGNORED_EVENTS.includes(event.getType())) return;
+        if (!Array.from(EVENT_TYPE_TO_TIMELINE_CALL_STATE.keys()).includes(event.getType())) return;
 
         const callId = event.getContent().call_id;
         const date = event.getDate();
