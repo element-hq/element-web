@@ -29,13 +29,12 @@ limitations under the License.
     .mx_CallEvent_content {
         display: flex;
         flex-direction: column;
-
-        .mx_CallEvent_sender {
-
-        }
+        margin-right: 10px; // To match mx_CallEvent
 
         .mx_CallEvent_type {
-
+            font-weight: 400;
+            color: gray;
+            line-height: $font-14px;
         }
     }
 }

@@ -39,7 +39,7 @@ export default class CallEvent extends React.Component<IProps> {
                     height={32}
                 />
                 <div className="mx_CallEvent_content">
-                    <div className="mx_CallEvent_sender">
+                    <div>
                         {sender}
                     </div>
                     <div className="mx_CallEvent_type">
