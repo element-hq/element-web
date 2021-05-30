@@ -301,6 +301,12 @@ export default class CallHandler extends EventEmitter {
         }, true);
     }
 
+    public getCallById(callId: string): MatrixCall {
+        for (const call of this.calls.values()) {
+            if (call.callId === callId) return call;
+        }
+    }
+
     getCallForRoom(roomId: string): MatrixCall {
         return this.calls.get(roomId) || null;
     }
