@@ -47,9 +47,17 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../../customisations/Media";
 import {getAddressType} from "../../../UserAddress";
+import BaseAvatar from '../avatars/BaseAvatar';
+import AccessibleButton from '../elements/AccessibleButton';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
+
+interface IRecentUser {
+    userId: string,
+    user: RoomMember,
+    lastActive: number,
+}
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -61,43 +69,41 @@ const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is c
 // This is the interface that is expected by various components in this file. It is a bit
 // awkward because it also matches the RoomMember class from the js-sdk with some extra support
 // for 3PIDs/email addresses.
-//
-// XXX: We should use TypeScript interfaces instead of this weird "abstract" class.
-class Member {
+abstract class Member {
     /**
      * The display name of this Member. For users this should be their profile's display
      * name or user ID if none set. For 3PIDs this should be the 3PID address (email).
      */
-    get name(): string { throw new Error("Member class not implemented"); }
+    public abstract get name(): string;
 
     /**
      * The ID of this Member. For users this should be their user ID. For 3PIDs this should
      * be the 3PID address (email).
      */
-    get userId(): string { throw new Error("Member class not implemented"); }
+    public abstract get userId(): string;
 
     /**
      * Gets the MXC URL of this Member's avatar. For users this should be their profile's
      * avatar MXC URL or null if none set. For 3PIDs this should always be null.
      */
-    getMxcAvatarUrl(): string { throw new Error("Member class not implemented"); }
+    public abstract getMxcAvatarUrl(): string;
 }
 
 class DirectoryMember extends Member {
-    _userId: string;
-    _displayName: string;
-    _avatarUrl: string;
+    private readonly _userId: string;
+    private readonly displayName: string;
+    private readonly avatarUrl: string;
 
     constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string}) {
         super();
         this._userId = userDirResult.user_id;
-        this._displayName = userDirResult.display_name;
-        this._avatarUrl = userDirResult.avatar_url;
+        this.displayName = userDirResult.display_name;
+        this.avatarUrl = userDirResult.avatar_url;
     }
 
     // These next class members are for the Member interface
     get name(): string {
-        return this._displayName || this._userId;
+        return this.displayName || this._userId;
     }
 
     get userId(): string {
@@ -105,32 +111,32 @@ class DirectoryMember extends Member {
     }
 
     getMxcAvatarUrl(): string {
-        return this._avatarUrl;
+        return this.avatarUrl;
     }
 }
 
 class ThreepidMember extends Member {
-    _id: string;
+    private readonly id: string;
 
     constructor(id: string) {
         super();
-        this._id = id;
+        this.id = id;
     }
 
     // This is a getter that would be falsey on all other implementations. Until we have
     // better type support in the react-sdk we can use this trick to determine the kind
     // of 3PID we're dealing with, if any.
     get isEmail(): boolean {
-        return this._id.includes('@');
+        return this.id.includes('@');
     }
 
     // These next class members are for the Member interface
     get name(): string {
-        return this._id;
+        return this.id;
     }
 
     get userId(): string {
-        return this._id;
+        return this.id;
     }
 
     getMxcAvatarUrl(): string {
@@ -140,11 +146,11 @@ class ThreepidMember extends Member {
 
 interface IDMUserTileProps {
     member: RoomMember;
-    onRemove: (RoomMember) => any;
+    onRemove(member: RoomMember): void;
 }
 
 class DMUserTile extends React.PureComponent<IDMUserTileProps> {
-    _onRemove = (e) => {
+    private onRemove = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -153,9 +159,6 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
     };
 
     render() {
-        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         const avatarSize = 20;
         const avatar = this.props.member.isEmail
             ? <img
@@ -177,7 +180,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
             closeButton = (
                 <AccessibleButton
                     className='mx_InviteDialog_userTile_remove'
-                    onClick={this._onRemove}
+                    onClick={this.onRemove}
                 >
                     <img src={require("../../../../res/img/icon-pill-remove.svg")}
                         alt={_t('Remove')} width={8} height={8}
@@ -201,13 +204,13 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
 interface IDMRoomTileProps {
     member: RoomMember;
     lastActiveTs: number;
-    onToggle: (RoomMember) => any;
+    onToggle(member: RoomMember): void;
     highlightWord: string;
     isSelected: boolean;
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-    _onClick = (e) => {
+    private onClick = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -215,7 +218,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         this.props.onToggle(this.props.member);
     };
 
-    _highlightName(str: string) {
+    private highlightName(str: string) {
         if (!this.props.highlightWord) return str;
 
         // We convert things to lowercase for index searching, but pull substrings from
@@ -252,8 +255,6 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
     }
 
     render() {
-        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
-
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
@@ -291,13 +292,13 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
         const caption = this.props.member.isEmail
             ? _t("Invite by email")
-            : this._highlightName(this.props.member.userId);
+            : this.highlightName(this.props.member.userId);
 
         return (
-            <div className='mx_InviteDialog_roomTile' onClick={this._onClick}>
+            <div className='mx_InviteDialog_roomTile' onClick={this.onClick}>
                 {stackedAvatar}
                 <span className="mx_InviteDialog_roomTile_nameStack">
-                    <div className='mx_InviteDialog_roomTile_name'>{this._highlightName(this.props.member.name)}</div>
+                    <div className='mx_InviteDialog_roomTile_name'>{this.highlightName(this.props.member.name)}</div>
                     <div className='mx_InviteDialog_roomTile_userId'>{caption}</div>
                 </span>
                 {timestamp}
@@ -308,7 +309,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
 interface IInviteDialogProps {
     // Takes an array of user IDs/emails to invite.
-    onFinished: (toInvite?: string[]) => any;
+    onFinished: (toInvite?: string[]) => void;
 
     // The kind of invite being performed. Assumed to be KIND_DM if
     // not provided.
@@ -349,8 +350,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         initialText: "",
     };
 
-    _debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
-    _editorRef: any = null;
+    private debounceTimer: NodeJS.Timeout = null; // actually number because we're in the browser
+    private editorRef = createRef<HTMLInputElement>();
+    private unmounted = false;
 
     constructor(props) {
         super(props);
@@ -378,7 +380,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             filterText: this.props.initialText,
             recents: InviteDialog.buildRecents(alreadyInvited),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
-            suggestions: this._buildSuggestions(alreadyInvited),
+            suggestions: this.buildSuggestions(alreadyInvited),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
             serverResultsMixin: [],
             threepidResultsMixin: [],
@@ -390,21 +392,23 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             busy: false,
             errorText: null,
         };
-
-        this._editorRef = createRef();
     }
 
     componentDidMount() {
         if (this.props.initialText) {
-            this._updateSuggestions(this.props.initialText);
+            this.updateSuggestions(this.props.initialText);
         }
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true;
     }
 
     private onConsultFirstChange = (ev) => {
         this.setState({consultFirst: ev.target.checked});
     }
 
-    static buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number}[] {
+    public static buildRecents(excludedTargetIds: Set<string>): IRecentUser[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -467,7 +471,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return recents;
     }
 
-    _buildSuggestions(excludedTargetIds: Set<string>): {userId: string, user: RoomMember}[] {
+    private buildSuggestions(excludedTargetIds: Set<string>): {userId: string, user: RoomMember}[] {
         const maxConsideredMembers = 200;
         const joinedRooms = MatrixClientPeg.get().getRooms()
             .filter(r => r.getMyMembership() === 'join' && r.getJoinedMemberCount() <= maxConsideredMembers);
@@ -585,7 +589,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 
-    _shouldAbortAfterInviteError(result): boolean {
+    private shouldAbortAfterInviteError(result): boolean {
         const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
         if (failedUsers.length > 0) {
             console.log("Failed to invite users: ", result);
@@ -600,7 +604,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return false;
     }
 
-    _convertFilter(): Member[] {
+    private convertFilter(): Member[] {
         // Check to see if there's anything to convert first
         if (!this.state.filterText || !this.state.filterText.includes('@')) return this.state.targets || [];
 
@@ -617,10 +621,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return newTargets;
     }
 
-    _startDm = async () => {
+    private startDm = async () => {
         this.setState({busy: true});
         const client = MatrixClientPeg.get();
-        const targets = this._convertFilter();
+        const targets = this.convertFilter();
         const targetIds = targets.map(t => t.userId);
 
         // Check if there is already a DM with these people and reuse it if possible.
@@ -694,11 +698,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     };
 
-    _inviteUsers = async () => {
+    private inviteUsers = async () => {
         const startTime = CountlyAnalytics.getTimestamp();
         this.setState({busy: true});
-        this._convertFilter();
-        const targets = this._convertFilter();
+        this.convertFilter();
+        const targets = this.convertFilter();
         const targetIds = targets.map(t => t.userId);
 
         const cli = MatrixClientPeg.get();
@@ -715,7 +719,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         try {
             const result = await inviteMultipleToRoom(this.props.roomId, targetIds)
             CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
-            if (!this._shouldAbortAfterInviteError(result)) { // handles setting error message too
+            if (!this.shouldAbortAfterInviteError(result)) { // handles setting error message too
                 this.props.onFinished();
             }
 
@@ -749,9 +753,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     };
 
-    _transferCall = async () => {
-        this._convertFilter();
-        const targets = this._convertFilter();
+    private transferCall = async () => {
+        this.convertFilter();
+        const targets = this.convertFilter();
         const targetIds = targets.map(t => t.userId);
         if (targetIds.length > 1) {
             this.setState({
@@ -790,26 +794,26 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     };
 
-    _onKeyDown = (e) => {
+    private onKeyDown = (e) => {
         if (this.state.busy) return;
         const value = e.target.value.trim();
         const hasModifiers = e.ctrlKey || e.shiftKey || e.metaKey;
         if (!value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !hasModifiers) {
             // when the field is empty and the user hits backspace remove the right-most target
             e.preventDefault();
-            this._removeMember(this.state.targets[this.state.targets.length - 1]);
+            this.removeMember(this.state.targets[this.state.targets.length - 1]);
         } else if (value && e.key === Key.ENTER && !hasModifiers) {
             // when the user hits enter with something in their field try to convert it
             e.preventDefault();
-            this._convertFilter();
+            this.convertFilter();
         } else if (value && e.key === Key.SPACE && !hasModifiers && value.includes("@") && !value.includes(" ")) {
             // when the user hits space and their input looks like an e-mail/MXID then try to convert it
             e.preventDefault();
-            this._convertFilter();
+            this.convertFilter();
         }
     };
 
-    _updateSuggestions = async (term) => {
+    private updateSuggestions = async (term) => {
         MatrixClientPeg.get().searchUserDirectory({term}).then(async r => {
             if (term !== this.state.filterText) {
                 // Discard the results - we were probably too slow on the server-side to make
@@ -918,30 +922,30 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
     };
 
-    _updateFilter = (e) => {
+    private updateFilter = (e) => {
         const term = e.target.value;
         this.setState({filterText: term});
 
         // Debounce server lookups to reduce spam. We don't clear the existing server
         // results because they might still be vaguely accurate, likewise for races which
         // could happen here.
-        if (this._debounceTimer) {
-            clearTimeout(this._debounceTimer);
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
         }
-        this._debounceTimer = setTimeout(() => {
-            this._updateSuggestions(term);
+        this.debounceTimer = setTimeout(() => {
+            this.updateSuggestions(term);
         }, 150); // 150ms debounce (human reaction time + some)
     };
 
-    _showMoreRecents = () => {
+    private showMoreRecents = () => {
         this.setState({numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN});
     };
 
-    _showMoreSuggestions = () => {
+    private showMoreSuggestions = () => {
         this.setState({numSuggestionsShown: this.state.numSuggestionsShown + INCREMENT_ROOMS_SHOWN});
     };
 
-    _toggleMember = (member: Member) => {
+    private toggleMember = (member: Member) => {
         if (!this.state.busy) {
             let filterText = this.state.filterText;
             const targets = this.state.targets.map(t => t); // cheap clone for mutation
@@ -954,13 +958,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             }
             this.setState({targets, filterText});
 
-            if (this._editorRef && this._editorRef.current) {
-                this._editorRef.current.focus();
+            if (this.editorRef && this.editorRef.current) {
+                this.editorRef.current.focus();
             }
         }
     };
 
-    _removeMember = (member: Member) => {
+    private removeMember = (member: Member) => {
         const targets = this.state.targets.map(t => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
         if (idx >= 0) {
@@ -968,12 +972,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             this.setState({targets});
         }
 
-        if (this._editorRef && this._editorRef.current) {
-            this._editorRef.current.focus();
+        if (this.editorRef && this.editorRef.current) {
+            this.editorRef.current.focus();
         }
     };
 
-    _onPaste = async (e) => {
+    private onPaste = async (e) => {
         if (this.state.filterText) {
             // if the user has already typed something, just let them
             // paste normally.
@@ -1027,6 +1031,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 failed.push(address);
             }
         }
+        if (this.unmounted) return;
 
         if (failed.length > 0) {
             const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
@@ -1043,17 +1048,17 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         this.setState({targets: [...this.state.targets, ...toAdd]});
     };
 
-    _onClickInputArea = (e) => {
+    private onClickInputArea = (e) => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
 
-        if (this._editorRef && this._editorRef.current) {
-            this._editorRef.current.focus();
+        if (this.editorRef && this.editorRef.current) {
+            this.editorRef.current.focus();
         }
     };
 
-    _onUseDefaultIdentityServerClick = (e) => {
+    private onUseDefaultIdentityServerClick = (e) => {
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
@@ -1062,21 +1067,21 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         this.setState({canUseIdentityServer: true, tryingIdentityServer: false});
     };
 
-    _onManageSettingsClick = (e) => {
+    private onManageSettingsClick = (e) => {
         e.preventDefault();
         dis.fire(Action.ViewUserSettings);
         this.props.onFinished();
     };
 
-    _onCommunityInviteClick = (e) => {
+    private onCommunityInviteClick = (e) => {
         this.props.onFinished();
         showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
     };
 
-    _renderSection(kind: "recents"|"suggestions") {
+    private renderSection(kind: "recents"|"suggestions") {
         let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
-        const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
+        const showMoreFn = kind === 'recents' ? this.showMoreRecents.bind(this) : this.showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
         let sectionSubname = null;
@@ -1156,7 +1161,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 member={r.user}
                 lastActiveTs={lastActive(r)}
                 key={r.userId}
-                onToggle={this._toggleMember}
+                onToggle={this.toggleMember}
                 highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some(t => t.userId === r.userId)}
             />
@@ -1171,32 +1176,32 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         );
     }
 
-    _renderEditor() {
+    private renderEditor() {
         const targets = this.state.targets.map(t => (
-            <DMUserTile member={t} onRemove={!this.state.busy && this._removeMember} key={t.userId} />
+            <DMUserTile member={t} onRemove={!this.state.busy && this.removeMember} key={t.userId} />
         ));
         const input = (
             <input
                 type="text"
-                onKeyDown={this._onKeyDown}
-                onChange={this._updateFilter}
+                onKeyDown={this.onKeyDown}
+                onChange={this.updateFilter}
                 value={this.state.filterText}
-                ref={this._editorRef}
-                onPaste={this._onPaste}
+                ref={this.editorRef}
+                onPaste={this.onPaste}
                 autoFocus={true}
                 disabled={this.state.busy}
                 autoComplete="off"
             />
         );
         return (
-            <div className='mx_InviteDialog_editor' onClick={this._onClickInputArea}>
+            <div className='mx_InviteDialog_editor' onClick={this.onClickInputArea}>
                 {targets}
                 {input}
             </div>
         );
     }
 
-    _renderIdentityServerWarning() {
+    private renderIdentityServerWarning() {
         if (!this.state.tryingIdentityServer || this.state.canUseIdentityServer ||
             !SettingsStore.getValue(UIFeature.IdentityServer)
         ) {
@@ -1214,8 +1219,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                     },
                     {
-                        default: sub => <a href="#" onClick={this._onUseDefaultIdentityServerClick}>{sub}</a>,
-                        settings: sub => <a href="#" onClick={this._onManageSettingsClick}>{sub}</a>,
+                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{sub}</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
                     },
                 )}</div>
             );
@@ -1225,7 +1230,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     "Use an identity server to invite by email. " +
                     "Manage in <settings>Settings</settings>.",
                     {}, {
-                        settings: sub => <a href="#" onClick={this._onManageSettingsClick}>{sub}</a>,
+                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{sub}</a>,
                     },
                 )}</div>
             );
@@ -1298,7 +1303,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                             return (
                                 <AccessibleButton
                                     kind="link"
-                                    onClick={this._onCommunityInviteClick}
+                                    onClick={this.onCommunityInviteClick}
                                 >{sub}</AccessibleButton>
                             );
                         },
@@ -1309,7 +1314,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 </React.Fragment>;
             }
             buttonText = _t("Go");
-            goButtonFn = this._startDm;
+            goButtonFn = this.startDm;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
             const isSpace = SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom();
@@ -1348,7 +1353,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             });
 
             buttonText = _t("Invite");
-            goButtonFn = this._inviteUsers;
+            goButtonFn = this.inviteUsers;
 
             if (cli.isRoomEncrypted(this.props.roomId)) {
                 const room = cli.getRoom(this.props.roomId);
@@ -1370,7 +1375,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         } else if (this.props.kind === KIND_CALL_TRANSFER) {
             title = _t("Transfer");
             buttonText = _t("Transfer");
-            goButtonFn = this._transferCall;
+            goButtonFn = this.transferCall;
             consultSection = <div>
                 <label>
                     <input type="checkbox" checked={this.state.consultFirst} onChange={this.onConsultFirstChange} />
@@ -1393,7 +1398,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 <div className='mx_InviteDialog_content'>
                     <p className='mx_InviteDialog_helpText'>{helpText}</p>
                     <div className='mx_InviteDialog_addressBar'>
-                        {this._renderEditor()}
+                        {this.renderEditor()}
                         <div className='mx_InviteDialog_buttonAndSpinner'>
                             <AccessibleButton
                                 kind="primary"
@@ -1407,11 +1412,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         </div>
                     </div>
                     {keySharingWarning}
-                    {this._renderIdentityServerWarning()}
+                    {this.renderIdentityServerWarning()}
                     <div className='error'>{this.state.errorText}</div>
                     <div className='mx_InviteDialog_userSections'>
-                        {this._renderSection('recents')}
-                        {this._renderSection('suggestions')}
+                        {this.renderSection('recents')}
+                        {this.renderSection('suggestions')}
                     </div>
                     {consultSection}
                 </div>

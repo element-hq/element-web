@@ -18,6 +18,7 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef, ReactComponentElement } from "react";
+import { normalize } from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -73,11 +74,11 @@ interface IProps {
     addRoomLabel: string;
     isMinimized: boolean;
     tagId: TagID;
-    onResize: () => void;
     showSkeleton?: boolean;
     alwaysVisible?: boolean;
     resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
+    onListCollapse?: (isExpanded: boolean) => void;
 
     // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
@@ -259,7 +260,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             const nameCondition = RoomListStore.instance.getFirstNameFilterCondition();
             if (nameCondition) {
                 stateUpdates.filteredExtraTiles = this.props.extraTiles
-                    .filter(t => nameCondition.matches(t.props.displayName || ""));
+                    .filter(t => nameCondition.matches(normalize(t.props.displayName || "")));
             } else if (this.state.filteredExtraTiles) {
                 stateUpdates.filteredExtraTiles = null;
             }
@@ -472,7 +473,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private toggleCollapsed = () => {
         this.layout.isCollapsed = this.state.isExpanded;
         this.setState({isExpanded: !this.layout.isCollapsed});
-        setImmediate(() => this.props.onResize()); // needs to happen when the DOM is updated
+        if (this.props.onListCollapse) {
+            this.props.onListCollapse(!this.layout.isCollapsed)
+        }
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
@@ -529,7 +532,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 tiles.push(<RoomTile
                     room={room}
                     key={`room-${room.roomId}`}
-                    resizeNotifier={this.props.resizeNotifier}
                     showMessagePreview={this.layout.showPreviews}
                     isMinimized={this.props.isMinimized}
                     tag={this.props.tagId}

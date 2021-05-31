@@ -53,14 +53,12 @@ import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/Community
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getUnsentMessages } from "../../structures/RoomStatusBar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-    resizeNotifier: ResizeNotifier;
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
@@ -100,13 +98,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             hasUnsentEvents: this.countUnsentEvents() > 0,
 
             // generatePreview() will return nothing if the user has previews disabled
-            messagePreview: this.generatePreview(),
+            messagePreview: "",
         };
+        this.generatePreview();
+
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
-        }
     }
 
     private countUnsentEvents(): number {
@@ -119,12 +116,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onNotificationUpdate = () => {
         this.forceUpdate(); // notification state changed - update
-    };
-
-    private onResize = () => {
-        if (this.showMessagePreview && !this.state.messagePreview) {
-            this.setState({messagePreview: this.generatePreview()});
-        }
     };
 
     private onLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
@@ -146,8 +137,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
-        if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
-            this.setState({messagePreview: this.generatePreview()});
+        const showMessageChanged = prevProps.showMessagePreview !== this.props.showMessagePreview;
+        const minimizedChanged = prevProps.isMinimized !== this.props.isMinimized;
+        if (showMessageChanged || minimizedChanged) {
+            this.generatePreview();
         }
         if (prevProps.room?.roomId !== this.props.room?.roomId) {
             MessagePreviewStore.instance.off(
@@ -206,9 +199,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             );
             this.props.room.off("Room.name", this.onRoomNameUpdate);
         }
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.off("middlePanelResized", this.onResize);
-        }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
@@ -236,17 +226,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onRoomPreviewChanged = (room: Room) => {
         if (this.props.room && room.roomId === this.props.room.roomId) {
-            // generatePreview() will return nothing if the user has previews disabled
-            this.setState({messagePreview: this.generatePreview()});
+            this.generatePreview();
         }
     };
 
-    private generatePreview(): string | null {
+    private async generatePreview() {
         if (!this.showMessagePreview) {
             return null;
         }
 
-        return MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+        const messagePreview = await MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+        this.setState({ messagePreview });
     }
 
     private scrollIntoView = () => {

@@ -105,12 +105,14 @@ function safeCounterpartTranslate(text: string, options?: object) {
     return translated;
 }
 
+type SubstitutionValue = number | string | React.ReactNode | ((sub: string) => React.ReactNode);
+
 export interface IVariables {
     count?: number;
-    [key: string]: number | string;
+    [key: string]: SubstitutionValue;
 }
 
-type Tags = Record<string, (sub: string) => React.ReactNode>;
+type Tags = Record<string, SubstitutionValue>;
 
 export type TranslatedString = string | React.ReactNode;
 
@@ -247,7 +249,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 let replaced;
                 // If substitution is a function, call it
                 if (mapping[regexpString] instanceof Function) {
-                    replaced = (mapping as Tags)[regexpString].apply(null, capturedGroups);
+                    replaced = ((mapping as Tags)[regexpString] as Function)(...capturedGroups);
                 } else {
                     replaced = mapping[regexpString];
                 }
@@ -344,7 +346,10 @@ export function setLanguage(preferredLangs: string | string[]) {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
-        console.log("set language to " + langToUse);
+        // Adds a lot of noise to test runs, so disable logging there.
+        if (process.env.NODE_ENV !== "test") {
+            console.log("set language to " + langToUse);
+        }
 
         // Set 'en' as fallback language:
         if (langToUse !== "en") {

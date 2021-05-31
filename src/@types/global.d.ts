@@ -42,6 +42,8 @@ import {SpaceStoreClass} from "../stores/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
 import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
+import PerformanceMonitor from "../performance";
+import UIStore from "../stores/UIStore";
 
 declare global {
     interface Window {
@@ -79,6 +81,9 @@ declare global {
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
+        mxPerformanceMonitor: PerformanceMonitor;
+        mxPerformanceEntryNames: any;
+        mxUIStore: UIStore;
     }
 
     interface Document {

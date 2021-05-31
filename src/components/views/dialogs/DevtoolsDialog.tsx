@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2018-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 
 import {
     PHASE_UNSENT,
@@ -30,27 +30,33 @@ import {
     PHASE_DONE,
     PHASE_STARTED,
     PHASE_CANCELLED,
+    VerificationRequest,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import WidgetStore from "../../../stores/WidgetStore";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import {SETTINGS} from "../../../settings/Settings";
-import SettingsStore, {LEVEL_ORDER} from "../../../settings/SettingsStore";
+import WidgetStore, { IApp } from "../../../stores/WidgetStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import { SETTINGS } from "../../../settings/Settings";
+import SettingsStore, { LEVEL_ORDER } from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SettingLevel } from '../../../settings/SettingLevel';
 
-class GenericEditor extends React.PureComponent {
-    // static propTypes = {onBack: PropTypes.func.isRequired};
+interface IGenericEditorProps {
+    onBack: () => void;
+}
 
-    constructor(props) {
-        super(props);
-        this._onChange = this._onChange.bind(this);
-        this.onBack = this.onBack.bind(this);
-    }
+interface IGenericEditorState {
+    message?: string;
+    [inputId: string]: boolean | string;
+}
 
-    onBack() {
+abstract class GenericEditor<
+    P extends IGenericEditorProps = IGenericEditorProps,
+    S extends IGenericEditorState = IGenericEditorState,
+> extends React.PureComponent<P, S> {
+    protected onBack = () => {
         if (this.state.message) {
             this.setState({ message: null });
         } else {
@@ -58,47 +64,60 @@ class GenericEditor extends React.PureComponent {
         }
     }
 
-    _onChange(e) {
+    protected onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        // @ts-ignore: Unsure how to convince TS this is okay when the state
+        // type can be extended.
         this.setState({[e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value});
     }
 
-    _buttons() {
+    protected abstract send();
+
+    protected buttons(): React.ReactNode {
         return <div className="mx_Dialog_buttons">
             <button onClick={this.onBack}>{ _t('Back') }</button>
-            { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
+            { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
         </div>;
     }
 
-    textInput(id, label) {
+    protected textInput(id: string, label: string): React.ReactNode {
         return <Field
             id={id}
             label={label}
-            size="42"
+            size={42}
             autoFocus={true}
             type="text"
             autoComplete="on"
-            value={this.state[id]}
-            onChange={this._onChange}
+            value={this.state[id] as string}
+            onChange={this.onChange}
         />;
     }
 }
 
-export class SendCustomEvent extends GenericEditor {
-    static getLabel() { return _t('Send Custom Event'); }
-
-    static propTypes = {
-        onBack: PropTypes.func.isRequired,
-        room: PropTypes.instanceOf(Room).isRequired,
-        forceStateEvent: PropTypes.bool,
-        forceGeneralEvent: PropTypes.bool,
-        inputs: PropTypes.object,
+interface ISendCustomEventProps extends IGenericEditorProps {
+    room: Room;
+    forceStateEvent?: boolean;
+    forceGeneralEvent?: boolean;
+    inputs?: {
+        eventType?: string;
+        stateKey?: string;
+        evContent?: string;
     };
+}
+
+interface ISendCustomEventState extends IGenericEditorState {
+    isStateEvent: boolean;
+    eventType: string;
+    stateKey: string;
+    evContent: string;
+}
+
+export class SendCustomEvent extends GenericEditor<ISendCustomEventProps, ISendCustomEventState> {
+    static getLabel() { return _t('Send Custom Event'); }
 
     static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
-        this._send = this._send.bind(this);
 
         const {eventType, stateKey, evContent} = Object.assign({
             eventType: '',
@@ -115,7 +134,7 @@ export class SendCustomEvent extends GenericEditor {
         };
     }
 
-    send(content) {
+    private doSend(content: object): Promise<void> {
         const cli = this.context;
         if (this.state.isStateEvent) {
             return cli.sendStateEvent(this.props.room.roomId, this.state.eventType, content, this.state.stateKey);
@@ -124,7 +143,7 @@ export class SendCustomEvent extends GenericEditor {
         }
     }
 
-    async _send() {
+    protected send = async () => {
         if (this.state.eventType === '') {
             this.setState({ message: _t('You must specify an event type!') });
             return;
@@ -133,7 +152,7 @@ export class SendCustomEvent extends GenericEditor {
         let message;
         try {
             const content = JSON.parse(this.state.evContent);
-            await this.send(content);
+            await this.doSend(content);
             message = _t('Event sent!');
         } catch (e) {
             message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
@@ -147,7 +166,7 @@ export class SendCustomEvent extends GenericEditor {
                 <div className="mx_Dialog_content">
                     { this.state.message }
                 </div>
-                { this._buttons() }
+                { this.buttons() }
             </div>;
         }
 
@@ -163,35 +182,51 @@ export class SendCustomEvent extends GenericEditor {
                 <br />
 
                 <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
-                    autoComplete="off" value={this.state.evContent} onChange={this._onChange} element="textarea" />
+                    autoComplete="off" value={this.state.evContent} onChange={this.onChange} element="textarea" />
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
-                { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
+                { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
                 { showTglFlip && <div style={{float: "right"}}>
-                    <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isStateEvent} />
-                    <label className="mx_DevTools_tgl-btn" data-tg-off="Event" data-tg-on="State Event" htmlFor="isStateEvent" />
+                    <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                        type="checkbox"
+                        checked={this.state.isStateEvent}
+                        onChange={this.onChange}
+                    />
+                    <label className="mx_DevTools_tgl-btn"
+                        data-tg-off="Event"
+                        data-tg-on="State Event"
+                        htmlFor="isStateEvent"
+                    />
                 </div> }
             </div>
         </div>;
     }
 }
 
-class SendAccountData extends GenericEditor {
-    static getLabel() { return _t('Send Account Data'); }
-
-    static propTypes = {
-        room: PropTypes.instanceOf(Room).isRequired,
-        isRoomAccountData: PropTypes.bool,
-        forceMode: PropTypes.bool,
-        inputs: PropTypes.object,
+interface ISendAccountDataProps extends IGenericEditorProps {
+    room: Room;
+    isRoomAccountData: boolean;
+    forceMode: boolean;
+    inputs?: {
+        eventType?: string;
+        evContent?: string;
     };
+}
+
+interface ISendAccountDataState extends IGenericEditorState {
+    isRoomAccountData: boolean;
+    eventType: string;
+    evContent: string;
+}
+
+class SendAccountData extends GenericEditor<ISendAccountDataProps, ISendAccountDataState> {
+    static getLabel() { return _t('Send Account Data'); }
 
     static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
-        this._send = this._send.bind(this);
 
         const {eventType, evContent} = Object.assign({
             eventType: '',
@@ -206,7 +241,7 @@ class SendAccountData extends GenericEditor {
         };
     }
 
-    send(content) {
+    private doSend(content: object): Promise<void> {
         const cli = this.context;
         if (this.state.isRoomAccountData) {
             return cli.setRoomAccountData(this.props.room.roomId, this.state.eventType, content);
@@ -214,7 +249,7 @@ class SendAccountData extends GenericEditor {
         return cli.setAccountData(this.state.eventType, content);
     }
 
-    async _send() {
+    protected send = async () => {
         if (this.state.eventType === '') {
             this.setState({ message: _t('You must specify an event type!') });
             return;
@@ -223,7 +258,7 @@ class SendAccountData extends GenericEditor {
         let message;
         try {
             const content = JSON.parse(this.state.evContent);
-            await this.send(content);
+            await this.doSend(content);
             message = _t('Event sent!');
         } catch (e) {
             message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
@@ -237,7 +272,7 @@ class SendAccountData extends GenericEditor {
                 <div className="mx_Dialog_content">
                     { this.state.message }
                 </div>
-                { this._buttons() }
+                { this.buttons() }
             </div>;
         }
 
@@ -247,14 +282,23 @@ class SendAccountData extends GenericEditor {
                 <br />
 
                 <Field id="evContent" label={_t("Event Content")} type="text" className="mx_DevTools_textarea"
-                    autoComplete="off" value={this.state.evContent} onChange={this._onChange} element="textarea" />
+                    autoComplete="off" value={this.state.evContent} onChange={this.onChange} element="textarea" />
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
-                { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
+                { !this.state.message && <button onClick={this.send}>{ _t('Send') }</button> }
                 { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} disabled={this.props.forceMode} />
-                    <label className="mx_DevTools_tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
+                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                        type="checkbox"
+                        checked={this.state.isRoomAccountData}
+                        disabled={this.props.forceMode}
+                        onChange={this.onChange}
+                    />
+                    <label className="mx_DevTools_tgl-btn"
+                        data-tg-off="Account Data"
+                        data-tg-on="Room Data"
+                        htmlFor="isRoomAccountData"
+                    />
                 </div> }
             </div>
         </div>;
@@ -264,17 +308,22 @@ class SendAccountData extends GenericEditor {
 const INITIAL_LOAD_TILES = 20;
 const LOAD_TILES_STEP_SIZE = 50;
 
-class FilteredList extends React.PureComponent {
-    static propTypes = {
-        children: PropTypes.any,
-        query: PropTypes.string,
-        onChange: PropTypes.func,
-    };
+interface IFilteredListProps {
+    children: React.ReactElement[];
+    query: string;
+    onChange: (value: string) => void;
+}
 
-    static filterChildren(children, query) {
+interface IFilteredListState {
+    filteredChildren: React.ReactElement[];
+    truncateAt: number;
+}
+
+class FilteredList extends React.PureComponent<IFilteredListProps, IFilteredListState> {
+    static filterChildren(children: React.ReactElement[], query: string): React.ReactElement[] {
         if (!query) return children;
         const lcQuery = query.toLowerCase();
-        return children.filter((child) => child.key.toLowerCase().includes(lcQuery));
+        return children.filter((child) => child.key.toString().toLowerCase().includes(lcQuery));
     }
 
     constructor(props) {
@@ -295,27 +344,27 @@ class FilteredList extends React.PureComponent {
         });
     }
 
-    showAll = () => {
+    private showAll = () => {
         this.setState({
             truncateAt: this.state.truncateAt + LOAD_TILES_STEP_SIZE,
         });
     };
 
-    createOverflowElement = (overflowCount: number, totalCount: number) => {
+    private createOverflowElement = (overflowCount: number, totalCount: number) => {
         return <button className="mx_DevTools_RoomStateExplorer_button" onClick={this.showAll}>
             { _t("and %(count)s others...", { count: overflowCount }) }
         </button>;
     };
 
-    onQuery = (ev) => {
+    private onQuery = (ev: ChangeEvent<HTMLInputElement>) => {
         if (this.props.onChange) this.props.onChange(ev.target.value);
     };
 
-    getChildren = (start: number, end: number) => {
+    private getChildren = (start: number, end: number): React.ReactElement[] => {
         return this.state.filteredChildren.slice(start, end);
     };
 
-    getChildCount = (): number => {
+    private getChildCount = (): number => {
         return this.state.filteredChildren.length;
     };
 
@@ -336,27 +385,30 @@ class FilteredList extends React.PureComponent {
     }
 }
 
-class RoomStateExplorer extends React.PureComponent {
-    static getLabel() { return _t('Explore Room State'); }
+interface IExplorerProps {
+    room: Room;
+    onBack: () => void;
+}
 
-    static propTypes = {
-        onBack: PropTypes.func.isRequired,
-        room: PropTypes.instanceOf(Room).isRequired,
-    };
+interface IRoomStateExplorerState {
+    eventType?: string;
+    event?: MatrixEvent;
+    editing: boolean;
+    queryEventType: string;
+    queryStateKey: string;
+}
+
+class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateExplorerState> {
+    static getLabel() { return _t('Explore Room State'); }
 
     static contextType = MatrixClientContext;
 
-    roomStateEvents: Map<string, Map<string, MatrixEvent>>;
+    private roomStateEvents: Map<string, Map<string, MatrixEvent>>;
 
     constructor(props) {
         super(props);
 
         this.roomStateEvents = this.props.room.currentState.events;
-
-        this.onBack = this.onBack.bind(this);
-        this.editEv = this.editEv.bind(this);
-        this.onQueryEventType = this.onQueryEventType.bind(this);
-        this.onQueryStateKey = this.onQueryStateKey.bind(this);
 
         this.state = {
             eventType: null,
@@ -368,19 +420,19 @@ class RoomStateExplorer extends React.PureComponent {
         };
     }
 
-    browseEventType(eventType) {
+    private browseEventType(eventType: string) {
         return () => {
             this.setState({ eventType });
         };
     }
 
-    onViewSourceClick(event) {
+    private onViewSourceClick(event: MatrixEvent) {
         return () => {
             this.setState({ event });
         };
     }
 
-    onBack() {
+    private onBack = () => {
         if (this.state.editing) {
             this.setState({ editing: false });
         } else if (this.state.event) {
@@ -392,15 +444,15 @@ class RoomStateExplorer extends React.PureComponent {
         }
     }
 
-    editEv() {
+    private editEv = () => {
         this.setState({ editing: true });
     }
 
-    onQueryEventType(filterEventType) {
+    private onQueryEventType = (filterEventType: string) => {
         this.setState({ queryEventType: filterEventType });
     }
 
-    onQueryStateKey(filterStateKey) {
+    private onQueryStateKey = (filterStateKey: string) => {
         this.setState({ queryStateKey: filterStateKey });
     }
 
@@ -472,23 +524,21 @@ class RoomStateExplorer extends React.PureComponent {
     }
 }
 
-class AccountDataExplorer extends React.PureComponent {
-    static getLabel() { return _t('Explore Account Data'); }
+interface IAccountDataExplorerState {
+    isRoomAccountData: boolean;
+    event?: MatrixEvent;
+    editing: boolean;
+    queryEventType: string;
+    [inputId: string]: boolean | string;
+}
 
-    static propTypes = {
-        onBack: PropTypes.func.isRequired,
-        room: PropTypes.instanceOf(Room).isRequired,
-    };
+class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDataExplorerState> {
+    static getLabel() { return _t('Explore Account Data'); }
 
     static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
-
-        this.onBack = this.onBack.bind(this);
-        this.editEv = this.editEv.bind(this);
-        this._onChange = this._onChange.bind(this);
-        this.onQueryEventType = this.onQueryEventType.bind(this);
 
         this.state = {
             isRoomAccountData: false,
@@ -499,20 +549,20 @@ class AccountDataExplorer extends React.PureComponent {
         };
     }
 
-    getData() {
+    private getData(): Record<string, MatrixEvent> {
         if (this.state.isRoomAccountData) {
             return this.props.room.accountData;
         }
         return this.context.store.accountData;
     }
 
-    onViewSourceClick(event) {
+    private onViewSourceClick(event: MatrixEvent) {
         return () => {
             this.setState({ event });
         };
     }
 
-    onBack() {
+    private onBack = () => {
         if (this.state.editing) {
             this.setState({ editing: false });
         } else if (this.state.event) {
@@ -522,15 +572,15 @@ class AccountDataExplorer extends React.PureComponent {
         }
     }
 
-    _onChange(e) {
+    private onChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({[e.target.id]: e.target.type === 'checkbox' ? e.target.checked : e.target.value});
     }
 
-    editEv() {
+    private editEv = () => {
         this.setState({ editing: true });
     }
 
-    onQueryEventType(queryEventType) {
+    private onQueryEventType = (queryEventType: string) => {
         this.setState({ queryEventType });
     }
 
@@ -580,30 +630,39 @@ class AccountDataExplorer extends React.PureComponent {
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
-                { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} />
-                    <label className="mx_DevTools_tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
-                </div> }
+                <div style={{float: "right"}}>
+                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip"
+                        type="checkbox"
+                        checked={this.state.isRoomAccountData}
+                        onChange={this.onChange}
+                    />
+                    <label className="mx_DevTools_tgl-btn"
+                        data-tg-off="Account Data"
+                        data-tg-on="Room Data"
+                        htmlFor="isRoomAccountData"
+                    />
+                </div>
             </div>
         </div>;
     }
 }
 
-class ServersInRoomList extends React.PureComponent {
+interface IServersInRoomListState {
+    query: string;
+}
+
+class ServersInRoomList extends React.PureComponent<IExplorerProps, IServersInRoomListState> {
     static getLabel() { return _t('View Servers in Room'); }
 
-    static propTypes = {
-        onBack: PropTypes.func.isRequired,
-        room: PropTypes.instanceOf(Room).isRequired,
-    };
-
     static contextType = MatrixClientContext;
+
+    private servers: React.ReactElement[];
 
     constructor(props) {
         super(props);
 
         const room = this.props.room;
-        const servers = new Set();
+        const servers = new Set<string>();
         room.currentState.getStateEvents("m.room.member").forEach(ev => servers.add(ev.getSender().split(":")[1]));
         this.servers = Array.from(servers).map(s =>
             <button key={s} className="mx_DevTools_ServersInRoomList_button">
@@ -615,7 +674,7 @@ class ServersInRoomList extends React.PureComponent {
         };
     }
 
-    onQuery = (query) => {
+    private onQuery = (query: string) => {
         this.setState({ query });
     }
 
@@ -642,7 +701,10 @@ const PHASE_MAP = {
     [PHASE_CANCELLED]: "cancelled",
 };
 
-function VerificationRequest({txnId, request}) {
+const VerificationRequestExplorer: React.FC<{
+    txnId: string;
+    request: VerificationRequest;
+}> = ({txnId, request}) => {
     const [, updateState] = useState();
     const [timeout, setRequestTimeout] = useState(request.timeout);
 
@@ -679,7 +741,7 @@ function VerificationRequest({txnId, request}) {
     </div>);
 }
 
-class VerificationExplorer extends React.Component {
+class VerificationExplorer extends React.PureComponent<IExplorerProps> {
     static getLabel() {
         return _t("Verification Requests");
     }
@@ -687,7 +749,7 @@ class VerificationExplorer extends React.Component {
     /* Ensure this.context is the cli */
     static contextType = MatrixClientContext;
 
-    onNewRequest = () => {
+    private onNewRequest = () => {
         this.forceUpdate();
     }
 
@@ -710,7 +772,7 @@ class VerificationExplorer extends React.Component {
         return (<div>
             <div className="mx_Dialog_content">
                 {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
-                    <VerificationRequest txnId={txnId} request={request} key={txnId} />,
+                    <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
                 )}
             </div>
             <div className="mx_Dialog_buttons">
@@ -720,7 +782,12 @@ class VerificationExplorer extends React.Component {
     }
 }
 
-class WidgetExplorer extends React.Component {
+interface IWidgetExplorerState {
+    query: string;
+    editWidget?: IApp;
+}
+
+class WidgetExplorer extends React.Component<IExplorerProps, IWidgetExplorerState> {
     static getLabel() {
         return _t("Active Widgets");
     }
@@ -734,19 +801,19 @@ class WidgetExplorer extends React.Component {
         };
     }
 
-    onWidgetStoreUpdate = () => {
+    private onWidgetStoreUpdate = () => {
         this.forceUpdate();
     };
 
-    onQueryChange = (query) => {
+    private onQueryChange = (query: string) => {
         this.setState({query});
     };
 
-    onEditWidget = (widget) => {
+    private onEditWidget = (widget: IApp) => {
         this.setState({editWidget: widget});
     };
 
-    onBack = () => {
+    private onBack = () => {
         const widgets = WidgetStore.instance.getApps(this.props.room.roomId);
         if (this.state.editWidget && widgets.includes(this.state.editWidget)) {
             this.setState({editWidget: null});
@@ -769,8 +836,11 @@ class WidgetExplorer extends React.Component {
         const editWidget = this.state.editWidget;
         const widgets = WidgetStore.instance.getApps(room.roomId);
         if (editWidget && widgets.includes(editWidget)) {
-            const allState = Array.from(Array.from(room.currentState.events.values()).map(e => e.values()))
-                .reduce((p, c) => {p.push(...c); return p;}, []);
+            const allState = Array.from(
+                Array.from(room.currentState.events.values()).map((e: Map<string, MatrixEvent>) => {
+                    return e.values();
+                }),
+            ).reduce((p, c) => { p.push(...c); return p; }, []);
             const stateEv = allState.find(ev => ev.getId() === editWidget.eventId);
             if (!stateEv) { // "should never happen"
                 return <div>
@@ -811,7 +881,15 @@ class WidgetExplorer extends React.Component {
     }
 }
 
-class SettingsExplorer extends React.Component {
+interface ISettingsExplorerState {
+    query: string;
+    editSetting?: string;
+    viewSetting?: string;
+    explicitValues?: string;
+    explicitRoomValues?: string;
+ }
+
+class SettingsExplorer extends React.PureComponent<IExplorerProps, ISettingsExplorerState> {
     static getLabel() {
         return _t("Settings Explorer");
     }
@@ -829,19 +907,19 @@ class SettingsExplorer extends React.Component {
         };
     }
 
-    onQueryChange = (ev) => {
+    private onQueryChange = (ev: ChangeEvent<HTMLInputElement>) => {
         this.setState({query: ev.target.value});
     };
 
-    onExplValuesEdit = (ev) => {
+    private onExplValuesEdit = (ev: ChangeEvent<HTMLTextAreaElement>) => {
         this.setState({explicitValues: ev.target.value});
     };
 
-    onExplRoomValuesEdit = (ev) => {
+    private onExplRoomValuesEdit = (ev: ChangeEvent<HTMLTextAreaElement>) => {
         this.setState({explicitRoomValues: ev.target.value});
     };
 
-    onBack = () => {
+    private onBack = () => {
         if (this.state.editSetting) {
             this.setState({editSetting: null});
         } else if (this.state.viewSetting) {
@@ -851,12 +929,12 @@ class SettingsExplorer extends React.Component {
         }
     };
 
-    onViewClick = (ev, settingId) => {
+    private onViewClick = (ev: MouseEvent, settingId: string) => {
         ev.preventDefault();
         this.setState({viewSetting: settingId});
     };
 
-    onEditClick = (ev, settingId) => {
+    private onEditClick = (ev: MouseEvent, settingId: string) => {
         ev.preventDefault();
         this.setState({
             editSetting: settingId,
@@ -865,7 +943,7 @@ class SettingsExplorer extends React.Component {
         });
     };
 
-    onSaveClick = async () => {
+    private onSaveClick = async () => {
         try {
             const settingId = this.state.editSetting;
             const parsedExplicit = JSON.parse(this.state.explicitValues);
@@ -874,7 +952,7 @@ class SettingsExplorer extends React.Component {
                 console.log(`[Devtools] Setting value of ${settingId} at ${level} from user input`);
                 try {
                     const val = parsedExplicit[level];
-                    await SettingsStore.setValue(settingId, null, level, val);
+                    await SettingsStore.setValue(settingId, null, level as SettingLevel, val);
                 } catch (e) {
                     console.warn(e);
                 }
@@ -884,7 +962,7 @@ class SettingsExplorer extends React.Component {
                 console.log(`[Devtools] Setting value of ${settingId} at ${level} in ${roomId} from user input`);
                 try {
                     const val = parsedExplicitRoom[level];
-                    await SettingsStore.setValue(settingId, roomId, level, val);
+                    await SettingsStore.setValue(settingId, roomId, level as SettingLevel, val);
                 } catch (e) {
                     console.warn(e);
                 }
@@ -901,7 +979,7 @@ class SettingsExplorer extends React.Component {
         }
     };
 
-    renderSettingValue(val) {
+    private renderSettingValue(val: any): string {
         // Note: we don't .toString() a string because we want JSON.stringify to inject quotes for us
         const toStringTypes = ['boolean', 'number'];
         if (toStringTypes.includes(typeof(val))) {
@@ -911,7 +989,7 @@ class SettingsExplorer extends React.Component {
         }
     }
 
-    renderExplicitSettingValues(setting, roomId) {
+    private renderExplicitSettingValues(setting: string, roomId: string): string {
         const vals = {};
         for (const level of LEVEL_ORDER) {
             try {
@@ -926,7 +1004,7 @@ class SettingsExplorer extends React.Component {
         return JSON.stringify(vals, null, 4);
     }
 
-    renderCanEditLevel(roomId, level) {
+    private renderCanEditLevel(roomId: string, level: SettingLevel): React.ReactNode {
         const canEdit = SettingsStore.canSetValue(this.state.editSetting, roomId, level);
         const className = canEdit ? 'mx_DevTools_SettingsExplorer_mutable' : 'mx_DevTools_SettingsExplorer_immutable';
         return <td className={className}><code>{canEdit.toString()}</code></td>;
@@ -1062,27 +1140,37 @@ class SettingsExplorer extends React.Component {
 
                         <div>
                             {_t("Value:")}&nbsp;
-                            <code>{this.renderSettingValue(SettingsStore.getValue(this.state.viewSetting))}</code>
+                            <code>{this.renderSettingValue(
+                                SettingsStore.getValue(this.state.viewSetting),
+                            )}</code>
                         </div>
 
                         <div>
                             {_t("Value in this room:")}&nbsp;
-                            <code>{this.renderSettingValue(SettingsStore.getValue(this.state.viewSetting, room.roomId))}</code>
+                            <code>{this.renderSettingValue(
+                                SettingsStore.getValue(this.state.viewSetting, room.roomId),
+                            )}</code>
                         </div>
 
                         <div>
                             {_t("Values at explicit levels:")}
-                            <pre><code>{this.renderExplicitSettingValues(this.state.viewSetting, null)}</code></pre>
+                            <pre><code>{this.renderExplicitSettingValues(
+                                this.state.viewSetting, null,
+                            )}</code></pre>
                         </div>
 
                         <div>
                             {_t("Values at explicit levels in this room:")}
-                            <pre><code>{this.renderExplicitSettingValues(this.state.viewSetting, room.roomId)}</code></pre>
+                            <pre><code>{this.renderExplicitSettingValues(
+                                this.state.viewSetting, room.roomId,
+                            )}</code></pre>
                         </div>
 
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{_t("Edit Values")}</button>
+                        <button onClick={(e) => this.onEditClick(e, this.state.viewSetting)}>{
+                            _t("Edit Values")
+                        }</button>
                         <button onClick={this.onBack}>{_t("Back")}</button>
                     </div>
                 </div>
@@ -1091,7 +1179,11 @@ class SettingsExplorer extends React.Component {
     }
 }
 
-const Entries = [
+type DevtoolsDialogEntry = React.JSXElementConstructor<any> & {
+    getLabel: () => string;
+};
+
+const Entries: DevtoolsDialogEntry[] = [
     SendCustomEvent,
     RoomStateExplorer,
     SendAccountData,
@@ -1102,43 +1194,36 @@ const Entries = [
     SettingsExplorer,
 ];
 
-@replaceableComponent("views.dialogs.DevtoolsDialog")
-export default class DevtoolsDialog extends React.PureComponent {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    roomId: string;
+    onFinished: (finished: boolean) => void;
+}
 
+interface IState {
+    mode?: DevtoolsDialogEntry;
+}
+
+@replaceableComponent("views.dialogs.DevtoolsDialog")
+export default class DevtoolsDialog extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
-        this.onBack = this.onBack.bind(this);
-        this.onCancel = this.onCancel.bind(this);
 
         this.state = {
             mode: null,
         };
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
-    }
-
-    _setMode(mode) {
+    private setMode(mode: DevtoolsDialogEntry) {
         return () => {
             this.setState({ mode });
         };
     }
 
-    onBack() {
-        if (this.prevMode) {
-            this.setState({ mode: this.prevMode });
-            this.prevMode = null;
-        } else {
-            this.setState({ mode: null });
-        }
+    private onBack = () => {
+        this.setState({ mode: null });
     }
 
-    onCancel() {
+    private onCancel = () => {
         this.props.onFinished(false);
     }
 
@@ -1165,7 +1250,7 @@ export default class DevtoolsDialog extends React.PureComponent {
                     <div className="mx_Dialog_content">
                         { Entries.map((Entry) => {
                             const label = Entry.getLabel();
-                            const onClick = this._setMode(Entry);
+                            const onClick = this.setMode(Entry);
                             return <button className={classes} key={label} onClick={onClick}>{ label }</button>;
                         }) }
                     </div>

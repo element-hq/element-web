@@ -21,7 +21,7 @@ import {removeHiddenChars} from "matrix-js-sdk/src/utils";
 
 interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
-    funcs?: Array<(T) => string>;
+    funcs?: Array<(T) => string | string[]>;
     shouldMatchWordsOnly?: boolean;
     // whether to apply unhomoglyph and strip diacritics to fuzz up the search. Defaults to true
     fuzzy?: boolean;
@@ -69,7 +69,12 @@ export default class QueryMatcher<T extends Object> {
 
             if (this._options.funcs) {
                 for (const f of this._options.funcs) {
-                    keyValues.push(f(object));
+                    const v = f(object);
+                    if (Array.isArray(v)) {
+                        keyValues.push(...v);
+                    } else {
+                        keyValues.push(v);
+                    }
                 }
             }
 

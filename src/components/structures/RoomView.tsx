@@ -83,6 +83,7 @@ import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -1114,7 +1115,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             Promise.resolve().then(() => {
                 const signUrl = this.props.threepidInvite?.signUrl;
                 dis.dispatch({
-                    action: 'join_room',
+                    action: Action.JoinRoom,
+                    roomId: this.getRoomId(),
                     opts: { inviteSignUrl: signUrl },
                     _type: "unknown", // TODO: instrumentation
                 });
@@ -1585,7 +1587,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         // a maxHeight on the underlying remote video tag.
 
         // header + footer + status + give us at least 120px of scrollback at all times.
-        let auxPanelMaxHeight = window.innerHeight -
+        let auxPanelMaxHeight = UIStore.instance.windowHeight -
                 (54 + // height of RoomHeader
                  36 + // height of the status area
                  51 + // minimum height of the message compmoser
@@ -1596,33 +1598,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
         this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
-    };
-
-    private onFullscreenClick = () => {
-        dis.dispatch({
-            action: 'video_fullscreen',
-            fullscreen: true,
-        }, true);
-    };
-
-    private onMuteAudioClick = () => {
-        const call = this.getCallForRoom();
-        if (!call) {
-            return;
-        }
-        const newState = !call.isMicrophoneMuted();
-        call.setMicrophoneMuted(newState);
-        this.forceUpdate(); // TODO: just update the voip buttons
-    };
-
-    private onMuteVideoClick = () => {
-        const call = this.getCallForRoom();
-        if (!call) {
-            return;
-        }
-        const newState = !call.isLocalVideoMuted();
-        call.setLocalVideoMuted(newState);
-        this.forceUpdate(); // TODO: just update the voip buttons
     };
 
     private onStatusBarVisible = () => {
@@ -1638,24 +1613,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.setState({
             statusBarVisible: false,
         });
-    };
-
-    /**
-     * called by the parent component when PageUp/Down/etc is pressed.
-     *
-     * We pass it down to the scroll panel.
-     */
-    private handleScrollKey = ev => {
-        let panel;
-        if (this.searchResultsPanel.current) {
-            panel = this.searchResultsPanel.current;
-        } else if (this.messagePanel) {
-            panel = this.messagePanel;
-        }
-
-        if (panel) {
-            panel.handleScrollKey(ev);
-        }
     };
 
     /**

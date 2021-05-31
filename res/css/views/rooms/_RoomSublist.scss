@@ -61,8 +61,8 @@ limitations under the License.
             &.mx_RoomSublist_headerContainer_sticky {
                 position: fixed;
                 height: 32px; // to match the header container
-                // width set by JS
-                width: calc(100% - 22px);
+                // width set by JS because of a compat issue between Firefox and Chrome
+                width: calc(100% - 15px);
             }
 
             // We don't have a top style because the top is dependent on the room list header's
