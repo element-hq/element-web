@@ -155,7 +155,7 @@ export default class HTMLExporter extends Exporter {
         try {
             const isEncrypted = event.isEncrypted();
             const content = event.getContent();
-            if (isEncrypted) {
+            if (isEncrypted && !content.hasOwnProperty("org.matrix.msc1767.file")) {
                 blob = await decryptFile(content.file);
             } else {
                 const media = mediaFromContent(event.getContent());
