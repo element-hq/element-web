@@ -187,13 +187,11 @@ export default class HTMLExporter extends Exporter {
             if (!haveTileForEvent(event)) continue;
 
             content += this._wantsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
-
-            if (event.getType() === "m.room.message") {
-                const shouldBeJoined = !this._wantsDateSeparator(event, prevEvent)
+            const shouldBeJoined = !this._wantsDateSeparator(event, prevEvent)
                                        && shouldFormContinuation(prevEvent, event);
-                const body = await this.createMessageBody(event, shouldBeJoined);
-                content += body;
-            }
+            const body = await this.createMessageBody(event, shouldBeJoined);
+
+            content += body;
             prevEvent = event;
         }
         return this.wrapHTML(content, room);
