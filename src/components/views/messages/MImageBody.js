@@ -407,7 +407,7 @@ export default class MImageBody extends React.Component {
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
                 <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }} />
-                { showPlaceholder &&
+                { !this.props.mediaSrc && showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
                         maxWidth: infoWidth + "px",
@@ -418,7 +418,7 @@ export default class MImageBody extends React.Component {
                     </div>
                 }
 
-                <div style={{display: !showPlaceholder ? undefined : 'none'}}>
+                <div style={{display: this.props.mediaSrc ? "block" : !showPlaceholder ? undefined : 'none'}}>
                     { img }
                     { gifLabel }
                 </div>

@@ -2,7 +2,7 @@ import React from "react"
 import streamSaver from "streamsaver";
 import JSZip from "jszip";
 import { decryptFile } from "../DecryptFile";
-import { mediaFromContent } from "../../customisations/Media";
+import { mediaFromContent, mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Exporter } from "./Exporter";
@@ -133,7 +133,23 @@ export default class HTMLExporter extends Exporter {
         </html>`
     }
 
-    // will be used in the future
+    protected hasAvatar(event: MatrixEvent): boolean {
+        const member = event.sender;
+        if (member.getMxcAvatarUrl()) return true;
+        return false;
+    }
+
+    protected async saveAvatarIfNeeded(event: MatrixEvent) {
+        const member = event.sender;
+        const avatarUrl = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(30, 30, "crop");
+        if (!this.avatars.has(member.userId)) {
+            this.avatars.set(member.userId, true);
+            const image = await fetch(avatarUrl);
+            const blob = await image.blob();
+            this.zip.file(`users/${member.userId}`, blob);
+        }
+    }
+
     protected async getMediaBlob(event: MatrixEvent) {
         let blob: Blob;
         try {
@@ -165,6 +181,9 @@ export default class HTMLExporter extends Exporter {
 
 
     protected getEventTile(mxEv: MatrixEvent, continuation: boolean, mediaSrc?: string) {
+        const hasAvatar = this.hasAvatar(mxEv);
+        if (hasAvatar) this.saveAvatarIfNeeded(mxEv);
+
         return <li id={mxEv.getId()}>
             <EventTile
                 mxEvent={mxEv}
@@ -179,6 +198,7 @@ export default class HTMLExporter extends Exporter {
                 isTwelveHour={false}
                 last={false}
                 mediaSrc={mediaSrc}
+                avatarSrc={hasAvatar ? `users/${mxEv.sender.userId}` : null}
                 lastInSection={false}
                 permalinkCreator={this.permalinkCreator}
                 lastSuccessful={false}

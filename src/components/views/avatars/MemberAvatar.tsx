@@ -36,6 +36,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
     viewUserOnClick?: boolean;
     title?: string;
+    avatarSrc?: string;
 }
 
 interface IState {
@@ -66,7 +67,8 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     private static getState(props: IProps): IState {
         if (props.member?.name) {
             let imageUrl = null;
-            if (props.member.getMxcAvatarUrl()) {
+            if (props.avatarSrc) imageUrl = props.avatarSrc;
+            else if (props.member.getMxcAvatarUrl()) {
                 imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
                     props.width,
                     props.height,
