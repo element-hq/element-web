@@ -102,6 +102,8 @@ export default class MFileBody extends React.Component {
         tileShape: PropTypes.string,
         /* whether or not to show the default placeholder for the file. Defaults to true. */
         showGenericPlaceholder: PropTypes.bool,
+        /* to set source to local file path during export */
+        mediaSrc: PropTypes.string,
     };
 
     static defaultProps = {
@@ -178,7 +180,13 @@ export default class MFileBody extends React.Component {
             );
         }
 
-        if (isEncrypted) {
+        if (this.props.mediaSrc) {
+            return <span className="mx_MFileBody">
+                <a href={this.props.mediaSrc}>
+                    { placeholder }
+                </a>
+            </span>;
+        } else if (isEncrypted) {
             if (this.state.decryptedBlob === null) {
                 // Need to decrypt the attachment
                 // Wait for the user to click on the link before downloading

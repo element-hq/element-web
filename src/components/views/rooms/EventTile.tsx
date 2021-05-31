@@ -936,7 +936,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             avatar = (
                 <div className="mx_EventTile_avatar">
                     <MemberAvatar
-                        avatarSrc = {this.props.avatarSrc}
+                        avatarSrc={this.props.avatarSrc}
                         member={member}
                         width={avatarSize}
                         height={avatarSize}

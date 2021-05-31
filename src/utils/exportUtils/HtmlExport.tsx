@@ -236,6 +236,14 @@ export default class HTMLExporter extends Exporter {
                 this.zip.file(filePath, blob);
                 break;
             }
+            case "m.file": {
+                const blob = await this.getMediaBlob(mxEv);
+                const fileName = mxEv.getContent().body;
+                const filePath = `files/${fileName}`;
+                eventTile = this.getEventTile(mxEv, joined, filePath);
+                this.zip.file(filePath, blob);
+                break;
+            }
             default:
                 eventTile = this.getEventTile(mxEv, joined);
                 break;
