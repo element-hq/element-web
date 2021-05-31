@@ -6,16 +6,18 @@ import { mediaFromContent } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Exporter } from "./Exporter";
-import * as ponyfill from "web-streams-polyfill/ponyfill"
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
+import * as ponyfill from "web-streams-polyfill/ponyfill"
+import * as Avatar from "../../Avatar";
 import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
 import exportCSS from "./exportCSS";
 import exportJS from "./exportJS";
+import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
@@ -29,7 +31,29 @@ export default class HTMLExporter extends Exporter {
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
     }
 
-    protected wrapHTML(content: string, room: Room) {
+    protected async getRoomAvatar() {
+        let blob: Blob;
+        const avatarUrl = Avatar.avatarUrlForRoom(this.room, 32, 32, "crop");
+        if (avatarUrl) {
+            const image = await fetch(avatarUrl);
+            blob = await image.blob();
+            this.zip.file("room.png", blob);
+        }
+        const avatar = (
+            <BaseAvatar
+                width={32}
+                height={32}
+                name={this.room.name}
+                title={this.room.name}
+                url={blob ? "room.png" : null}
+                resizeMethod={"crop"}
+            />
+        );
+        return renderToStaticMarkup(avatar);
+    }
+
+    protected async wrapHTML(content: string, room: Room) {
+        const roomAvatar = await this.getRoomAvatar();
         return `
           <!DOCTYPE html>
             <html lang="en">
@@ -54,22 +78,7 @@ export default class HTMLExporter extends Exporter {
                         <div class="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
                             <div class="mx_RoomHeader_avatar">
                             <div class="mx_DecoratedRoomAvatar">
-                                <span class="mx_BaseAvatar" role="presentation"
-                                ><span
-                                    class="mx_BaseAvatar_initial"
-                                    aria-hidden="true"
-                                    style="
-                                    font-size: 20.8px;
-                                    width: 32px;
-                                    line-height: 32px;
-                                    "
-                                    >G</span
-                                ><img
-                                    class="mx_BaseAvatar_image"
-                                    alt=""
-                                    aria-hidden="true"
-                                    style="width: 32px; height: 32px"
-                                /></span>
+                               ${roomAvatar} 
                             </div>
                             </div>
                             <div class="mx_RoomHeader_name">
@@ -228,7 +237,7 @@ export default class HTMLExporter extends Exporter {
             content += body;
             prevEvent = event;
         }
-        return this.wrapHTML(content, room);
+        return await this.wrapHTML(content, room);
     }
 
     public async export() {

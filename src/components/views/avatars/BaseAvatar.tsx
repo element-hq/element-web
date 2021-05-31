@@ -44,7 +44,7 @@ interface IProps {
     className?: string;
 }
 
-const calculateUrls = (url, urls) => {
+const calculateUrls = (url: string, urls: string[]) => {
     // work out the full set of urls to try to load. This is formed like so:
     // imageUrls: [ props.url, ...props.urls ]
 
