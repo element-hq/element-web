@@ -719,5 +719,6 @@
     "Show less": "Sýna minna",
     "%(count)s messages deleted.|one": "%(count)s skilaboð eytt.",
     "%(count)s messages deleted.|other": "%(count)s skilaboðum eytt.",
-    "Message deleted on %(date)s": "Skilaboð eytt á %(date)s"
+    "Message deleted on %(date)s": "Skilaboð eytt á %(date)s",
+    "Message edits": "Skilaboðs breytingar"
 }
