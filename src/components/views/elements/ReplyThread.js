@@ -46,6 +46,7 @@ export default class ReplyThread extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
         // Specifies which layout to use.
         layout: LayoutPropType,
+        isExporting: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -67,6 +68,9 @@ export default class ReplyThread extends React.Component {
         };
 
         this.unmounted = false;
+
+        if (this.props.isExporting) return;
+
         this.context.on("Event.replaced", this.onEventReplaced);
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
         this.room.on("Room.redaction", this.onRoomRedaction);
@@ -212,12 +216,13 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, isExporting) {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return <div className="mx_ReplyThread_wrapper_empty" />;
         }
         return <ReplyThread
             parentEv={parentEv}
+            isExporting={isExporting}
             onHeightChanged={onHeightChanged}
             ref={ref}
             permalinkCreator={permalinkCreator}
@@ -366,6 +371,11 @@ export default class ReplyThread extends React.Component {
                     })
                 }
             </blockquote>;
+        } else if (this.props.isExporting) {
+            const eventId = ReplyThread.getParentEventId(this.props.parentEv);
+            header = <p style={{ marginTop: -5, marginBottom: 5 }}>
+                In reply to <a className="mx_reply_anchor" scroll-to={`${eventId}`}>this message</a>
+            </p>;
         } else if (this.state.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
             header = <Spinner w={16} h={16} />;

@@ -37,10 +37,15 @@ function getdaysArray() {
 export default class DateSeparator extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,
+        isExporting: PropTypes.bool,
     };
 
     getLabel() {
         const date = new Date(this.props.ts);
+
+        // During the time the archive is being viewed, a specific day might not make sense, so we return the full date
+        if (this.props.isExporting) return formatFullDateNoTime(date);
+
         const today = new Date();
         const yesterday = new Date();
         const days = getdaysArray();

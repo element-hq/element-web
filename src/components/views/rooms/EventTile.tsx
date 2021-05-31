@@ -249,6 +249,8 @@ interface IProps {
     // for now.
     tileShape?: 'notif' | 'file_grid' | 'reply' | 'reply_preview';
 
+    isExporting?: boolean;
+
     // show twelve hour timestamps
     isTwelveHour?: boolean;
 
@@ -405,6 +407,8 @@ export default class EventTile extends React.Component<IProps, IState> {
     // TODO: [REACT-WARNING] Move into constructor
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
+        // Context isn't propagated through renderToStaticMarkup so we'll have to explicitly set it during export
+        if (this.props.isExporting) this.context = MatrixClientPeg.get();
         this.verifyEvent(this.props.mxEvent);
     }
 
@@ -607,6 +611,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     shouldHighlight() {
+        if (this.props.isExporting) return false;
         const actions = this.context.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
@@ -951,7 +956,8 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
-        const actionBar = !isEditing ? <MessageActionBar
+        const showMessageActionBar = !isEditing && !this.props.isExporting;
+        const actionBar = showMessageActionBar ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
             permalinkCreator={this.props.permalinkCreator}
@@ -1127,6 +1133,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.permalinkCreator,
                     this.replyThread,
                     this.props.layout,
+                    this.props.isExporting,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
@@ -1169,11 +1176,11 @@ export default class EventTile extends React.Component<IProps, IState> {
 
 // XXX this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = ['m.room.message', 'm.sticker'];
-function isMessageEvent(ev) {
+function isMessageEvent(ev: MatrixEvent): boolean {
     return (messageTypes.includes(ev.getType()));
 }
 
-export function haveTileForEvent(e) {
+export function haveTileForEvent(e: MatrixEvent): boolean {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && !isMessageEvent(e)) return false;
 
@@ -1244,11 +1251,11 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
     }
 
     onHoverStart = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
     onHoverEnd = () => {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     };
 
     render() {
@@ -1286,11 +1293,11 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
     }
 
     onHoverStart = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
     onHoverEnd = () => {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     };
 
     render() {
