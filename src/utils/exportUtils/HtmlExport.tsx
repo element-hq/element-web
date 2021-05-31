@@ -20,11 +20,13 @@ import exportJS from "./exportJS";
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
     protected avatars: Map<string, boolean>;
+    protected permalinkCreator: RoomPermalinkCreator;
 
     constructor(res: MatrixEvent[], room: Room) {
         super(res, room);
         this.zip = new JSZip();
         this.avatars = new Map<string, boolean>();
+        this.permalinkCreator = new RoomPermalinkCreator(this.room);
     }
 
     protected wrapHTML(content: string, room: Room) {
@@ -152,11 +154,12 @@ export default class HTMLExporter extends Exporter {
         return wantsDateSeparator(prevEvent.getDate(), event.getDate());
     }
 
-    protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
-        const eventTile = <li id={mxEv.getId()}>
+
+    protected getEventTile(mxEv: MatrixEvent, continuation: boolean, mediaSrc?: string) {
+        return <li id={mxEv.getId()}>
             <EventTile
                 mxEvent={mxEv}
-                continuation={joined}
+                continuation={continuation}
                 isRedacted={mxEv.isRedacted()}
                 replacingEventId={mxEv.replacingEventId()}
                 isExporting={true}
@@ -166,8 +169,9 @@ export default class HTMLExporter extends Exporter {
                 checkUnmounting={() => false}
                 isTwelveHour={false}
                 last={false}
+                mediaSrc={mediaSrc}
                 lastInSection={false}
-                permalinkCreator={new RoomPermalinkCreator(this.room)}
+                permalinkCreator={this.permalinkCreator}
                 lastSuccessful={false}
                 isSelectedEvent={false}
                 getRelationsForEvent={null}
@@ -177,6 +181,36 @@ export default class HTMLExporter extends Exporter {
                 showReadReceipts={false}
             />
         </li>
+    }
+
+    protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
+        let eventTile: JSX.Element;
+        switch (mxEv.getContent().msgtype) {
+            case "m.image": {
+                const blob = await this.getMediaBlob(mxEv);
+                const filePath = `images/${mxEv.getId()}.${blob.type.replace("image/", "")}`;
+                eventTile = this.getEventTile(mxEv, joined, filePath);
+                this.zip.file(filePath, blob);
+                break;
+            }
+            case "m.video": {
+                const blob = await this.getMediaBlob(mxEv);
+                const filePath = `videos/${mxEv.getId()}.${blob.type.replace("video/", "")}`;
+                eventTile = this.getEventTile(mxEv, joined, filePath);
+                this.zip.file(filePath, blob);
+                break;
+            }
+            case "m.audio": {
+                const blob = await this.getMediaBlob(mxEv);
+                const filePath = `audio/${mxEv.getId()}.${blob.type.replace("audio/", "")}`;
+                eventTile = this.getEventTile(mxEv, joined, filePath);
+                this.zip.file(filePath, blob);
+                break;
+            }
+            default:
+                eventTile = this.getEventTile(mxEv, joined);
+                break;
+        }
         return renderToStaticMarkup(eventTile);
     }
 

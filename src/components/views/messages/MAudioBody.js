@@ -34,6 +34,7 @@ export default class MAudioBody extends React.Component {
             error: null,
         };
     }
+
     onPlayToggle() {
         this.setState({
             playing: !this.state.playing,
@@ -41,12 +42,18 @@ export default class MAudioBody extends React.Component {
     }
 
     _getContentUrl() {
+        if (this.props.mediaSrc) return this.props.mediaSrc;
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {
             return media.srcHttp;
         }
+    }
+
+    getFileBody() {
+        if (this.props.mediaSrc) return null;
+        return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
     componentDidMount() {
@@ -101,11 +108,11 @@ export default class MAudioBody extends React.Component {
         }
 
         const contentUrl = this._getContentUrl();
-
+        const fileBody = this.getFileBody();
         return (
             <span className="mx_MAudioBody">
                 <audio src={contentUrl} controls />
-                <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
+                { fileBody }
             </span>
         );
     }

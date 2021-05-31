@@ -90,7 +90,7 @@ export default class MImageBody extends React.Component {
 
     showImage() {
         localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
-        this.setState({showImage: true});
+        this.setState({ showImage: true });
         this._downloadImage();
     }
 
@@ -172,6 +172,7 @@ export default class MImageBody extends React.Component {
     }
 
     _getContentUrl() {
+        if (this.props.mediaSrc) return this.props.mediaSrc;
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
@@ -296,7 +297,7 @@ export default class MImageBody extends React.Component {
         if (showImage) {
             // Don't download anything becaue we don't want to display anything.
             this._downloadImage();
-            this.setState({showImage: true});
+            this.setState({ showImage: true });
         }
 
         this._afterComponentDidMount();
@@ -345,7 +346,7 @@ export default class MImageBody extends React.Component {
                     imageElement = <HiddenImagePlaceholder />;
                 } else {
                     imageElement = (
-                        <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
+                        <img style={{ display: 'none' }} src={thumbUrl} ref={this._image}
                             alt={content.body}
                             onError={this.onImageError}
                             onLoad={this.onImageLoad}
@@ -449,6 +450,7 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     getFileBody() {
+        if (this.props.mediaSrc) return null;
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
@@ -466,7 +468,7 @@ export default class MImageBody extends React.Component {
 
         const contentUrl = this._getContentUrl();
         let thumbUrl;
-        if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
+        if ((this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) || this.props.mediaSrc) {
             thumbUrl = contentUrl;
         } else {
             thumbUrl = this._getThumbUrl();

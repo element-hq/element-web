@@ -103,7 +103,7 @@ for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
 }
 
-export function getHandlerTile(ev) {
+export function getHandlerTile(ev: MatrixEvent) {
     const type = ev.getType();
 
     // don't show verification requests we're not involved in,
@@ -251,6 +251,9 @@ interface IProps {
 
     isExporting?: boolean;
 
+    // Used while exporting to refer to the local source rather than the online one
+    mediaSrc?: string;
+
     // show twelve hour timestamps
     isTwelveHour?: boolean;
 
@@ -342,7 +345,7 @@ export default class EventTile extends React.Component<IProps, IState> {
      * or 'sent' receipt, for example.
      * @returns {boolean}
      */
-    private get isEligibleForSpecialReceipt() {
+    private get isEligibleForSpecialReceipt(): boolean {
         // First, if there are other read receipts then just short-circuit this.
         if (this.props.readReceipts && this.props.readReceipts.length > 0) return false;
         if (!this.props.mxEvent) return false;
@@ -1150,6 +1153,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 mxEvent={this.props.mxEvent}
                                 replacingEventId={this.props.replacingEventId}
                                 editState={this.props.editState}
+                                mediaSrc={this.props.mediaSrc}
                                 highlights={this.props.highlights}
                                 highlightLink={this.props.highlightLink}
                                 showUrlPreview={this.props.showUrlPreview}
@@ -1332,8 +1336,8 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
 
         return <span className="mx_EventTile_readAvatars">
             <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                {nonCssBadge}
-                {tooltip}
+                { nonCssBadge }
+                { tooltip }
             </span>
         </span>;
     }

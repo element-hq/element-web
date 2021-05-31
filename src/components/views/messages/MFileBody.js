@@ -242,7 +242,7 @@ export default class MFileBody extends React.Component {
                 <span className="mx_MFileBody">
                     {placeholder}
                     <div className="mx_MFileBody_download">
-                        <div style={{display: "none"}}>
+                        <div style={{ display: "none" }}>
                             { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
@@ -309,7 +309,7 @@ export default class MFileBody extends React.Component {
             if (this.props.tileShape === "file_grid") {
                 return (
                     <span className="mx_MFileBody">
-                        {placeholder}
+                        { placeholder }
                         <div className="mx_MFileBody_download">
                             <a className="mx_MFileBody_downloadLink" {...downloadProps}>
                                 { fileName }
@@ -323,7 +323,7 @@ export default class MFileBody extends React.Component {
             } else {
                 return (
                     <span className="mx_MFileBody">
-                        {placeholder}
+                        { placeholder }
                         <div className="mx_MFileBody_download">
                             <a {...downloadProps}>
                                 <span className="mx_MFileBody_download_icon" />
@@ -336,7 +336,7 @@ export default class MFileBody extends React.Component {
         } else {
             const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
-                {placeholder}
+                { placeholder }
                 { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;
         }
