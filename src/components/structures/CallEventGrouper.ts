@@ -30,7 +30,6 @@ export enum CallEventGrouperEvent {
 const SUPPORTED_STATES = [
     CallState.Connected,
     CallState.Connecting,
-    CallState.Ended,
     CallState.Ringing,
 ];
 
