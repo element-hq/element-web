@@ -33,9 +33,13 @@ const SUPPORTED_STATES = [
 ];
 
 export default class CallEventGrouper extends EventEmitter {
-    invite: MatrixEvent;
+    events: Array<MatrixEvent> = [];
     call: MatrixCall;
     state: CallState;
+
+    private get invite(): MatrixEvent {
+        return this.events.find((event) => event.getType() === EventType.CallInvite);
+    }
 
     public answerCall = () => {
         this.call?.answer();
@@ -80,10 +84,11 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     public add(event: MatrixEvent) {
-        if (event.getType() === EventType.CallInvite) this.invite = event;
-        if (event.getType() === EventType.CallHangup) this.state = CallState.Ended;
+        this.events.push(event);
+        const type = event.getType();
 
-        if (this.call) return;
+        if (type === EventType.CallHangup) this.state = CallState.Ended;
+        else if (type === EventType.CallReject) this.state = CallState.Ended;
         const callId = event.getContent().call_id;
         this.call = CallHandler.sharedInstance().getCallById(callId);
         if (!this.call) return;
