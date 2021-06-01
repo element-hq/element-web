@@ -26,15 +26,20 @@ limitations under the License.
     max-width: 75%;
     box-sizing: border-box;
 
-    .mx_CallEvent_content {
+    .mx_CallEvent_info {
         display: flex;
-        flex-direction: column;
-        margin-left: 10px; // To match mx_CallEvent
+        flex-direction: row;
 
-        .mx_CallEvent_type {
-            font-weight: 400;
-            color: gray;
-            line-height: $font-14px;
+        .mx_CallEvent_info_basic {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px; // To match mx_CallEvent
+
+            .mx_CallEvent_type {
+                font-weight: 400;
+                color: gray;
+                line-height: $font-14px;
+            }
         }
     }
 }

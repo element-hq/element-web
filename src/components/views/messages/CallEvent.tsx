@@ -31,21 +31,26 @@ export default class CallEvent extends React.Component<IProps> {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
 
+        let content;
+
         return (
             <div className="mx_CallEvent">
-                <MemberAvatar
-                    member={event.sender}
-                    width={32}
-                    height={32}
-                />
-                <div className="mx_CallEvent_content">
-                    <div>
-                        {sender}
-                    </div>
-                    <div className="mx_CallEvent_type">
-                        { this.props.callState.isVoice ? _t("Voice call") : _t("Video call") }
+                <div className="mx_CallEvent_info">
+                    <MemberAvatar
+                        member={event.sender}
+                        width={32}
+                        height={32}
+                    />
+                    <div className="mx_CallEvent_info_basic">
+                        <div>
+                            { sender }
+                        </div>
+                        <div className="mx_CallEvent_type">
+                            { this.props.callState.isVoice ? _t("Voice call") : _t("Video call") }
+                        </div>
                     </div>
                 </div>
+                { content }
             </div>
         );
     }
