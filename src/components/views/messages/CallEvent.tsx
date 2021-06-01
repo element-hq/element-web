@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
 import CallEventGrouper, { CallEventGrouperEvent } from '../../structures/CallEventGrouper';
 import FormButton from '../elements/FormButton';
@@ -33,9 +33,9 @@ interface IState {
 }
 
 const TEXTUAL_STATES = new Map([
-    [CallState.Connected, _t("Connected")],
-    [CallState.Connecting, _t("Connecting")],
-    [CallState.Ended, _t("This call has ended")],
+    [CallState.Connected, _td("Connected")],
+    [CallState.Connecting, _td("Connecting")],
+    [CallState.Ended, _td("This call has ended")],
 ]);
 
 export default class CallEvent extends React.Component<IProps, IState> {
@@ -92,7 +92,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         } else {
             content = (
                 <div className="mx_CallEvent_content">
-                    { _t("The call is in an unknown state!") }
+                    { "The call is in an unknown state!" }
                 </div>
             );
         }
