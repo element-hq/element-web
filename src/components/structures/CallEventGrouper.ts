@@ -18,7 +18,7 @@ limitations under the License.
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import CallHandler from '../../CallHandler';
+import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import { EventEmitter } from 'events';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -42,6 +42,12 @@ export default class CallEventGrouper extends EventEmitter {
     events: Array<MatrixEvent> = [];
     call: MatrixCall;
     state: CallState | CustomCallState;
+
+    constructor() {
+        super();
+
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallsChanged, this.setCall)
+    }
 
     private get invite(): MatrixEvent {
         return this.events.find((event) => event.getType() === EventType.CallInvite);
@@ -95,10 +101,10 @@ export default class CallEventGrouper extends EventEmitter {
 
     private setCallListeners() {
         if (!this.call) return;
-        this.call.addListener(CallEvent.State, this.setCallState);
+        this.call.addListener(CallEvent.State, this.setState);
     }
 
-    private setCallState = () => {
+    private setState = () => {
         if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
         } else {
@@ -113,13 +119,17 @@ export default class CallEventGrouper extends EventEmitter {
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }
 
-    public add(event: MatrixEvent) {
-        const callId = event.getContent().call_id;
-        this.events.push(event);
+    private setCall = () => {
+        const callId = this.events[0].getContent().call_id;
         if (!this.call) {
             this.call = CallHandler.sharedInstance().getCallById(callId);
             this.setCallListeners();
         }
-        this.setCallState();
+        this.setState();
+    }
+
+    public add(event: MatrixEvent) {
+        this.events.push(event);
+        this.setState();
     }
 }
