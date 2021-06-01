@@ -32,5 +32,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
     "Your browser can't run %(brand)s": "Via foliumilo ne povas ruli %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s uzas specialajn funkciojn de foliumilo, kiujn via nuna foliumilo ne subtenas.",
-    "Powered by Matrix": "Povigata de Matrix"
+    "Powered by Matrix": "Povigata de Matrix",
+    "Use %(brand)s on mobile": "Uzi %(brand)s telefone"
 }

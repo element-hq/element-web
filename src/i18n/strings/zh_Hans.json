@@ -11,7 +11,7 @@
     "The message from the parser is: %(message)s": "语法分析器的信息：%(message)s",
     "Invalid JSON": "无效的 JSON",
     "Unexpected error preparing the app. See console for details.": "软件准备时出错，详细信息请查看控制台。",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "无效的配置：只能设置 default_server_config，default_server_name，或 default_hs_url 中的一个。",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "无效的配置：只能设置 default_server_config，default_server_name 或 default_hs_url 中的一个。",
     "Invalid configuration: no default server specified.": "无效的配置：没有设置默认服务器。",
     "Missing indexeddb worker script!": "缺少 IndexedDB 辅助脚本！",
     "Unable to load config file: please refresh the page to try again.": "无法加载配置文件：请再次刷新页面。",
@@ -32,5 +32,6 @@
     "Open": "打开",
     "Your browser can't run %(brand)s": "浏览器无法运行 %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "当前浏览器不支持 %(brand)s 所需的高级浏览器特性。",
-    "Powered by Matrix": "由 Matrix 驱动"
+    "Powered by Matrix": "由 Matrix 驱动",
+    "Use %(brand)s on mobile": "在移动设备上使用 %(brand)s"
 }
