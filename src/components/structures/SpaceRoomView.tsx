@@ -417,9 +417,13 @@ const SpaceLanding = ({ space }) => {
             { inviteButton }
             { settingsButton }
         </div>
-        <div className="mx_SpaceRoomView_landing_topic">
-            <RoomTopic room={space} />
-        </div>
+        <RoomTopic room={space}>
+            {(topic, ref) => (
+                <div className="mx_SpaceRoomView_landing_topic" ref={ref}>
+                    { topic }
+                </div>
+            )}
+        </RoomTopic>
         <SpaceFeedbackPrompt />
         <hr />
 
