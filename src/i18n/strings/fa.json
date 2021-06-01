@@ -73,7 +73,7 @@
     "(HTTP status %(httpStatus)s)": "(HTTP وضعیت %(httpStatus)s)",
     "Failed to forget room %(errCode)s": "فراموش کردن اتاق با خطا مواجه شد %(errCode)s",
     "Wednesday": "چهارشنبه",
-    "Quote": "گفتآورد",
+    "Quote": "نقل قول",
     "Send": "ارسال",
     "Error": "خطا",
     "Send logs": "ارسال گزارش‌ها",
