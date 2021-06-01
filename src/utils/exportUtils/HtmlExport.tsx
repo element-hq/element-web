@@ -216,7 +216,7 @@ export default class HTMLExporter extends Exporter {
         const hasAvatar = this.hasAvatar(mxEv);
         if (hasAvatar) this.saveAvatarIfNeeded(mxEv);
 
-        return <li id={mxEv.getId()}>
+        return <li className="mx_Export_EventWrapper" id={mxEv.getId()}>
             <EventTile
                 mxEvent={mxEv}
                 continuation={continuation}

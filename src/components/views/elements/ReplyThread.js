@@ -374,7 +374,7 @@ export default class ReplyThread extends React.Component {
         } else if (this.props.isExporting) {
             const eventId = ReplyThread.getParentEventId(this.props.parentEv);
             header = <p style={{ marginTop: -5, marginBottom: 5 }}>
-                In reply to <a className="mx_reply_anchor" scroll-to={`${eventId}`}>this message</a>
+                In reply to <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}>this message</a>
             </p>;
         } else if (this.state.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");

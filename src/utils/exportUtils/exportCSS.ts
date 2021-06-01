@@ -69,6 +69,26 @@ a.mx_reply_anchor:hover{
   left: 9px;
 }
 
+* {
+  scroll-behavior: smooth !important;
+}
+
+
+li.mx_Export_EventWrapper:target {
+  background: white;
+  animation: mx_event_highlight_animation 2s linear;
+}
+
+
+@keyframes mx_event_highlight_animation {
+  0%,100% { 
+    background: white;
+  }
+  50% { 
+    background: #e3e2df; 
+  }
+}
+
 .mx_RedactedBody img.mx_export_trash_icon {
   height: 14px;
   width: 14px;
