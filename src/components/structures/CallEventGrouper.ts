@@ -73,26 +73,30 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setCallListeners() {
+        if (!this.call) return;
         this.call.addListener(CallEvent.State, this.setCallState);
     }
 
     private setCallState = () => {
-        if (SUPPORTED_STATES.includes(this.call.state)) {
+        if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
-            this.emit(CallEventGrouperEvent.StateChanged, this.state);
+        } else {
+            const lastEvent = this.events[this.events.length - 1];
+            const lastEventType = lastEvent.getType();
+
+            if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
+            else if (lastEventType === EventType.CallReject) this.state = CallState.Ended;
         }
+        this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }
 
     public add(event: MatrixEvent) {
-        this.events.push(event);
-        const type = event.getType();
-
-        if (type === EventType.CallHangup) this.state = CallState.Ended;
-        else if (type === EventType.CallReject) this.state = CallState.Ended;
         const callId = event.getContent().call_id;
-        this.call = CallHandler.sharedInstance().getCallById(callId);
-        if (!this.call) return;
-        this.setCallListeners();
+        this.events.push(event);
+        if (!this.call) {
+            this.call = CallHandler.sharedInstance().getCallById(callId);
+            this.setCallListeners();
+        }
         this.setCallState();
     }
 }
