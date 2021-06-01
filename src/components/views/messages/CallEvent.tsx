@@ -23,7 +23,8 @@ import { TimelineCallState } from '../../structures/CallEventGrouper';
 
 interface IProps {
     mxEvent: MatrixEvent;
-    callState: TimelineCallState;
+    timelineCallState: TimelineCallState;
+}
 }
 
 export default class CallEvent extends React.Component<IProps> {
@@ -46,7 +47,7 @@ export default class CallEvent extends React.Component<IProps> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
-                            { this.props.callState.isVoice ? _t("Voice call") : _t("Video call") }
+                            { this.props.timelineCallState.isVoice ? _t("Voice call") : _t("Video call") }
                         </div>
                     </div>
                 </div>
