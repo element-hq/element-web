@@ -82,6 +82,13 @@ export default class CallEventGrouper extends EventEmitter {
         return this.state;
     }
 
+    /**
+     * Returns true if there are only events from the other side - we missed the call
+     */
+    private wasThisCallMissed(): boolean {
+        return !this.events.some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
+    }
+
     private setCallListeners() {
         if (!this.call) return;
         this.call.addListener(CallEvent.State, this.setCallState);
@@ -94,12 +101,10 @@ export default class CallEventGrouper extends EventEmitter {
             const lastEvent = this.events[this.events.length - 1];
             const lastEventType = lastEvent.getType();
 
-            if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
+            if (this.wasThisCallMissed()) this.state = CustomCallState.Missed;
+            else if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
             else if (lastEventType === EventType.CallReject) this.state = CallState.Ended;
             else if (lastEventType === EventType.CallInvite && this.call) this.state = CallState.Connecting;
-            else if (this.invite?.sender?.userId !== MatrixClientPeg.get().getUserId()) {
-                this.state = CustomCallState.Missed;
-            }
         }
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }
