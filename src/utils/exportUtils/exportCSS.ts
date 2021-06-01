@@ -58,5 +58,26 @@ a.mx_reply_anchor:hover{
   from {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
 }
+
+.mx_MFileBody_info .mx_MFileBody_info_icon img.mx_export_attach_icon {
+  content: '';
+  background-color: #ffffff;
+  width: 13px;
+  height: 15px;
+  position: absolute;
+  top: 8px;
+  left: 9px;
+}
+
+.mx_RedactedBody img.mx_export_trash_icon {
+  height: 14px;
+  width: 14px;
+  background-color: #ffffff;
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 0;
+}
+
 `
 export default lightCSS + snackbarCSS;

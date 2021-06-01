@@ -370,9 +370,9 @@ export default class MImageBody extends React.Component {
         let gifLabel = null;
 
         // e2e image hasn't been decrypted yet
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
+        if (!this.props.mediaSrc && content.file !== undefined && this.state.decryptedUrl === null) {
             placeholder = <InlineSpinner w={32} h={32} />;
-        } else if (!this.state.imgLoaded) {
+        } else if (!this.props.mediaSrc && !this.state.imgLoaded) {
             // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
             placeholder = this.getPlaceholder();
         }
@@ -407,7 +407,7 @@ export default class MImageBody extends React.Component {
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight + "px" }} >
                 { /* Calculate aspect ratio, using %padding will size _container correctly */ }
                 <div style={{ paddingBottom: (100 * infoHeight / infoWidth) + '%' }} />
-                { !this.props.mediaSrc && showPlaceholder &&
+                {showPlaceholder &&
                     <div className="mx_MImageBody_thumbnail" style={{
                         // Constrain width here so that spinner appears central to the loaded thumbnail
                         maxWidth: infoWidth + "px",

@@ -311,6 +311,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
         onHeightChanged: function() {},
+        isExporting: false,
     };
 
     static contextType = MatrixClientContext;
@@ -1150,6 +1151,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { thread }
                             <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
+                                isExporting={this.props.isExporting}
                                 replacingEventId={this.props.replacingEventId}
                                 editState={this.props.editState}
                                 mediaSrc={this.props.mediaSrc}

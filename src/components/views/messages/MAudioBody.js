@@ -95,7 +95,7 @@ export default class MAudioBody extends React.Component {
             );
         }
 
-        if (content.file !== undefined && this.state.decryptedUrl === null) {
+        if (!this.props.mediaSrc && content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a 16x16 spinner.

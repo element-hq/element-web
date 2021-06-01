@@ -209,7 +209,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
 
         // Important: If we aren't autoplaying and we haven't decrypted it yet, show a video with a poster.
-        if (content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
+        if (!this.props.mediaSrc && content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.

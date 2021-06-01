@@ -24,9 +24,10 @@ import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     mxEvent: MatrixEvent;
+    isExporting: boolean;
 }
 
-const RedactedBody = React.forwardRef<any, IProps>(({mxEvent}, ref) => {
+const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, isExporting}, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);
 
     let text = _t("Message deleted");
@@ -44,6 +45,7 @@ const RedactedBody = React.forwardRef<any, IProps>(({mxEvent}, ref) => {
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>
+            { isExporting ? <img className="mx_export_trash_icon" src="icons/trash.svg" title="Redacted" /> : null }
             { text }
         </span>
     );

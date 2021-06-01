@@ -104,6 +104,7 @@ export default class MFileBody extends React.Component {
         showGenericPlaceholder: PropTypes.bool,
         /* to set source to local file path during export */
         mediaSrc: PropTypes.string,
+        isExporting: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -174,7 +175,9 @@ export default class MFileBody extends React.Component {
         if (this.props.showGenericPlaceholder) {
             placeholder = (
                 <div className="mx_MFileBody_info">
-                    <span className="mx_MFileBody_info_icon" />
+                    <span className="mx_MFileBody_info_icon" >
+                        {this.props.isExporting ? <img class="mx_export_attach_icon" src="icons/attach.svg" /> : null}
+                    </span>
                     <span className="mx_MFileBody_info_filename">{this.presentableTextForFile(content, false)}</span>
                 </div>
             );

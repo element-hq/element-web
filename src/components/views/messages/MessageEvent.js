@@ -47,6 +47,9 @@ export default class MessageEvent extends React.Component {
         /* to set source to local file path during export */
         mediaSrc: PropTypes.string,
 
+        /* to set source to local file path during export */
+        isExporting: PropTypes.bool,
+
         /* the maximum image height to use, if the event is an image */
         maxImageHeight: PropTypes.number,
 
@@ -124,6 +127,7 @@ export default class MessageEvent extends React.Component {
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
             mediaSrc={this.props.mediaSrc}
+            isExporting={this.props.isExporting}
             maxImageHeight={this.props.maxImageHeight}
             replacingEventId={this.props.replacingEventId}
             editState={this.props.editState}
