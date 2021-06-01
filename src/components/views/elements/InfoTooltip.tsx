@@ -24,6 +24,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface ITooltipProps {
     tooltip?: React.ReactNode;
+    className?: string,
     tooltipClassName?: string;
 }
 
@@ -53,7 +54,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
     };
 
     render() {
-        const {tooltip, children, tooltipClassName} = this.props;
+        const {tooltip, children, tooltipClassName, className} = this.props;
         const title = _t("Information");
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
@@ -64,7 +65,11 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
             alignment={Alignment.Right}
         /> : <div />;
         return (
-            <div onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className="mx_InfoTooltip">
+            <div
+                onMouseOver={this.onMouseOver}
+                onMouseLeave={this.onMouseLeave}
+                className={classNames("mx_InfoTooltip", className)}
+            >
                 <span className="mx_InfoTooltip_icon" aria-label={title} />
                 {children}
                 {tip}
