@@ -17,9 +17,11 @@ limitations under the License.
 
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import CallHandler from '../../CallHandler';
 import { EventEmitter } from 'events';
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import defaultDispatcher from "../../dispatcher/dispatcher";
 
 export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
@@ -32,10 +34,14 @@ const SUPPORTED_STATES = [
     CallState.Ringing,
 ];
 
+export enum CustomCallState {
+    Missed = "missed",
+}
+
 export default class CallEventGrouper extends EventEmitter {
     events: Array<MatrixEvent> = [];
     call: MatrixCall;
-    state: CallState;
+    state: CallState | CustomCallState;
 
     private get invite(): MatrixEvent {
         return this.events.find((event) => event.getType() === EventType.CallInvite);
@@ -50,7 +56,11 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     public callBack = () => {
-
+        defaultDispatcher.dispatch({
+            action: 'place_call',
+            type: this.isVoice ? CallType.Voice : CallType.Video,
+            room_id: this.events[0]?.getRoomId(),
+        });
     }
 
     public isVoice(): boolean {
@@ -68,7 +78,7 @@ export default class CallEventGrouper extends EventEmitter {
         return isVoice;
     }
 
-    public getState() {
+    public getState(): CallState | CustomCallState {
         return this.state;
     }
 
@@ -86,7 +96,10 @@ export default class CallEventGrouper extends EventEmitter {
 
             if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
             else if (lastEventType === EventType.CallReject) this.state = CallState.Ended;
-            else if (lastEventType === EventType.CallInvite) this.state = CallState.Connecting;
+            else if (lastEventType === EventType.CallInvite && this.call) this.state = CallState.Connecting;
+            else if (this.invite?.sender?.userId !== MatrixClientPeg.get().getUserId()) {
+                this.state = CustomCallState.Missed;
+            }
         }
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }

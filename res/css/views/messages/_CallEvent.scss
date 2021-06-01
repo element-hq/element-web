@@ -48,5 +48,10 @@ limitations under the License.
     .mx_CallEvent_content {
         display: flex;
         flex-direction: row;
+        align-items: center;
+
+        .mx_CallEvent_content_callBack {
+            margin-left: 10px; // To match mx_callEvent
+        }
     }
 }

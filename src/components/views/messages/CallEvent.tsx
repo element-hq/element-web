@@ -19,7 +19,7 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t, _td } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
-import CallEventGrouper, { CallEventGrouperEvent } from '../../structures/CallEventGrouper';
+import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../structures/CallEventGrouper';
 import FormButton from '../elements/FormButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 
@@ -29,10 +29,10 @@ interface IProps {
 }
 
 interface IState {
-    callState: CallState;
+    callState: CallState | CustomCallState;
 }
 
-const TEXTUAL_STATES = new Map([
+const TEXTUAL_STATES: Map<CallState | CustomCallState, string> = new Map([
     [CallState.Connected, _td("Connected")],
     [CallState.Connecting, _td("Connecting")],
     [CallState.Ended, _td("This call has ended")],
@@ -69,14 +69,11 @@ export default class CallEvent extends React.Component<IProps, IState> {
             content = (
                 <div className="mx_CallEvent_content">
                     <FormButton
-                        className={"mx_IncomingCallBox_decline"}
                         onClick={this.props.callEventGrouper.rejectCall}
                         kind="danger"
                         label={_t("Decline")}
                     />
-                    <div className="mx_IncomingCallBox_spacer" />
                     <FormButton
-                        className={"mx_IncomingCallBox_accept"}
                         onClick={this.props.callEventGrouper.answerCall}
                         kind="primary"
                         label={_t("Accept")}
@@ -87,6 +84,18 @@ export default class CallEvent extends React.Component<IProps, IState> {
             content = (
                 <div className="mx_CallEvent_content">
                     { TEXTUAL_STATES.get(state) }
+                </div>
+            );
+        } else if (state === CustomCallState.Missed) {
+            content = (
+                <div className="mx_CallEvent_content">
+                    { _t("You missed this call") }
+                    <FormButton
+                        className="mx_CallEvent_content_callBack"
+                        onClick={this.props.callEventGrouper.callBack}
+                        kind="primary"
+                        label={_t("Call back")}
+                    />
                 </div>
             );
         } else {
