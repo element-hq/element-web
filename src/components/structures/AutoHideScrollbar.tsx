@@ -17,42 +17,43 @@ limitations under the License.
 
 import React from "react";
 
-export default class AutoHideScrollbar extends React.Component {
-    constructor(props) {
-        super(props);
-        this._collectContainerRef = this._collectContainerRef.bind(this);
-    }
+interface IProps {
+    className?: string;
+    onScroll?: () => void;
+    onWheel?: () => void;
+    style?: React.CSSProperties
+    tabIndex?: number,
+    wrappedRef?: (ref: HTMLDivElement) => void;
+}
+
+export default class AutoHideScrollbar extends React.Component<IProps> {
+    private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
 
     componentDidMount() {
-        if (this.containerRef && this.props.onScroll) {
+        if (this.containerRef.current && this.props.onScroll) {
             // Using the passive option to not block the main thread
             // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
-            this.containerRef.addEventListener("scroll", this.props.onScroll, { passive: true });
+            this.containerRef.current.addEventListener("scroll", this.props.onScroll, { passive: true });
+        }
+
+        if (this.props.wrappedRef) {
+            this.props.wrappedRef(this.containerRef.current);
         }
     }
 
     componentWillUnmount() {
-        if (this.containerRef && this.props.onScroll) {
-            this.containerRef.removeEventListener("scroll", this.props.onScroll);
-        }
-    }
-
-    _collectContainerRef(ref) {
-        if (ref && !this.containerRef) {
-            this.containerRef = ref;
-        }
-        if (this.props.wrappedRef) {
-            this.props.wrappedRef(ref);
+        if (this.containerRef.current && this.props.onScroll) {
+            this.containerRef.current.removeEventListener("scroll", this.props.onScroll);
         }
     }
 
     getScrollTop() {
-        return this.containerRef.scrollTop;
+        return this.containerRef.current.scrollTop;
     }
 
     render() {
         return (<div
-            ref={this._collectContainerRef}
+            ref={this.containerRef}
             style={this.props.style}
             className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
             onWheel={this.props.onWheel}
