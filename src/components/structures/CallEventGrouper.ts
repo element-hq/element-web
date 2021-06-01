@@ -39,7 +39,7 @@ export enum CustomCallState {
 }
 
 export default class CallEventGrouper extends EventEmitter {
-    events: Array<MatrixEvent> = [];
+    events: Set<MatrixEvent> = new Set<MatrixEvent>();
     call: MatrixCall;
     state: CallState | CustomCallState;
 
@@ -50,7 +50,7 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private get invite(): MatrixEvent {
-        return this.events.find((event) => event.getType() === EventType.CallInvite);
+        return [...this.events].find((event) => event.getType() === EventType.CallInvite);
     }
 
     public answerCall = () => {
@@ -65,7 +65,7 @@ export default class CallEventGrouper extends EventEmitter {
         defaultDispatcher.dispatch({
             action: 'place_call',
             type: this.isVoice ? CallType.Voice : CallType.Video,
-            room_id: this.events[0]?.getRoomId(),
+            room_id: [...this.events][0]?.getRoomId(),
         });
     }
 
@@ -89,14 +89,14 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     public getHangupReason(): string | null {
-        return this.events.find((event) => event.getType() === EventType.CallHangup)?.getContent()?.reason;
+        return [...this.events].find((event) => event.getType() === EventType.CallHangup)?.getContent()?.reason;
     }
 
     /**
      * Returns true if there are only events from the other side - we missed the call
      */
     private wasThisCallMissed(): boolean {
-        return !this.events.some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
+        return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
     }
 
     private setCallListeners() {
@@ -108,7 +108,7 @@ export default class CallEventGrouper extends EventEmitter {
         if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
         } else {
-            const lastEvent = this.events[this.events.length - 1];
+            const lastEvent = [...this.events][this.events.size - 1];
             const lastEventType = lastEvent.getType();
 
             if (this.wasThisCallMissed()) this.state = CustomCallState.Missed;
@@ -120,7 +120,7 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setCall = () => {
-        const callId = this.events[0].getContent().call_id;
+        const callId = [...this.events][0].getContent().call_id;
         if (!this.call) {
             this.call = CallHandler.sharedInstance().getCallById(callId);
             this.setCallListeners();
@@ -129,7 +129,7 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     public add(event: MatrixEvent) {
-        this.events.push(event);
+        this.events.add(event);
         this.setState();
     }
 }
