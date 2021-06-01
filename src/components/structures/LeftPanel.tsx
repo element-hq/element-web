@@ -43,6 +43,7 @@ import {replaceableComponent} from "../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../customisations/Media";
 import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
+import UIStore from "../../stores/UIStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -66,6 +67,7 @@ const cssClasses = [
 
 @replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
+    private ref: React.RefObject<HTMLDivElement> = createRef();
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
     private bgImageWatcherRef: string;
@@ -90,10 +92,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.groupFilterPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
             this.setState({showGroupFilterPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
+    }
 
-        // We watch the middle panel because we don't actually get resized, the middle panel does.
-        // We listen to the noisy channel to avoid choppy reaction times.
-        this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
+    public componentDidMount() {
+        UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
+        UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
     }
 
     public componentWillUnmount() {
@@ -103,7 +106,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
+        UIStore.instance.stopTrackingElementDimensions("ListContainer");
+        UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
+    }
+
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
+        if (prevState.activeSpace !== this.state.activeSpace) {
+            this.refreshStickyHeaders();
+        }
     }
 
     private updateActiveSpace = (activeSpace: Room) => {
@@ -113,6 +123,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
     };
+
+    private refreshStickyHeaders = () => {
+        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
+        this.handleStickyHeaders(this.listContainerRef.current);
+    }
 
     private onBreadcrumbsUpdate = () => {
         const newVal = BreadcrumbsStore.instance.visible;
@@ -155,9 +170,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const topEdge = list.scrollTop;
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist:not(.mx_RoomSublist_hidden)");
-
-        const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
-        const headerStickyWidth = list.clientWidth - headerRightMargin;
 
         // We track which styles we want on a target before making the changes to avoid
         // excessive layout updates.
@@ -228,7 +240,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
 
-                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const offset = UIStore.instance.windowHeight -
+                    (list.parentElement.offsetTop + list.parentElement.offsetHeight);
                 const newBottom = `${offset}px`;
                 if (header.style.bottom !== newBottom) {
                     header.style.bottom = newBottom;
@@ -247,14 +260,20 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.add("mx_RoomSublist_headerContainer_sticky");
                 }
 
-                const newWidth = `${headerStickyWidth}px`;
-                if (header.style.width !== newWidth) {
-                    header.style.width = newWidth;
+                const listDimensions = UIStore.instance.getElementDimensions("ListContainer");
+                if (listDimensions) {
+                    const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
+                    const headerStickyWidth = listDimensions.width - headerRightMargin;
+                    const newWidth = `${headerStickyWidth}px`;
+                    if (header.style.width !== newWidth) {
+                        header.style.width = newWidth;
+                    }
                 }
             } else if (!style.stickyTop && !style.stickyBottom) {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_sticky");
                 }
+
                 if (header.style.width) {
                     header.style.removeProperty('width');
                 }
@@ -279,11 +298,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
-    };
-
-    private onResize = () => {
-        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
-        this.handleStickyHeaders(this.listContainerRef.current);
     };
 
     private onFocus = (ev: React.FocusEvent) => {
@@ -420,8 +434,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
-            onResize={this.onResize}
             activeSpace={this.state.activeSpace}
+            onListCollapse={this.refreshStickyHeaders}
         />;
 
         const containerClasses = classNames({
@@ -435,13 +449,13 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         );
 
         return (
-            <div className={containerClasses}>
+            <div className={containerClasses} ref={this.ref}>
                 {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     {this.renderBreadcrumbs()}
-                    <RoomListNumResults />
+                    <RoomListNumResults onVisibilityChange={this.refreshStickyHeaders} />
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
@@ -454,7 +468,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
-                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
+                    { !this.props.isMinimized && <LeftPanelWidget /> }
                 </aside>
             </div>
         );

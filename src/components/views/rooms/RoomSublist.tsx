@@ -74,11 +74,11 @@ interface IProps {
     addRoomLabel: string;
     isMinimized: boolean;
     tagId: TagID;
-    onResize: () => void;
     showSkeleton?: boolean;
     alwaysVisible?: boolean;
     resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
+    onListCollapse?: (isExpanded: boolean) => void;
 
     // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
@@ -473,7 +473,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private toggleCollapsed = () => {
         this.layout.isCollapsed = this.state.isExpanded;
         this.setState({isExpanded: !this.layout.isCollapsed});
-        setImmediate(() => this.props.onResize()); // needs to happen when the DOM is updated
+        if (this.props.onListCollapse) {
+            this.props.onListCollapse(!this.layout.isCollapsed)
+        }
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
@@ -530,7 +532,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 tiles.push(<RoomTile
                     room={room}
                     key={`room-${room.roomId}`}
-                    resizeNotifier={this.props.resizeNotifier}
                     showMessagePreview={this.layout.showPreviews}
                     isMinimized={this.props.isMinimized}
                     tag={this.props.tagId}

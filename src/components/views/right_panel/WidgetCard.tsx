@@ -30,6 +30,7 @@ import { Action } from "../../../dispatcher/actions";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import UIStore from "../../../stores/UIStore";
 
 interface IProps {
     room: Room;
@@ -65,7 +66,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         contextMenu = (
             <WidgetContextMenu
                 chevronFace={ChevronFace.None}
-                right={window.innerWidth - rect.right - 12}
+                right={UIStore.instance.windowWidth - rect.right - 12}
                 top={rect.bottom + 12}
                 onFinished={closeMenu}
                 app={app}
