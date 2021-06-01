@@ -9,7 +9,7 @@ import { Exporter } from "./Exporter";
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
-import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
+import { formatFullDateNoDay, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
 import * as Avatar from "../../Avatar";
@@ -205,7 +205,7 @@ export default class HTMLExporter extends Exporter {
                 fileDirectory = "files";
                 break;
         }
-        const fileDate = formatFullDateNoDayNoTime(new Date(event.getTs()));
+        const fileDate = formatFullDateNoDay(new Date(event.getTs()));
         const [fileName, fileExt] = this.splitFileName(event.getContent().body);
         const filePath = fileDirectory + "/" + fileName + '-' + fileDate + '.' + fileExt;
         return filePath;
@@ -283,7 +283,7 @@ export default class HTMLExporter extends Exporter {
         for (const iconName in exportIcons) {
             this.zip.file(`icons/${iconName}`, exportIcons[iconName]);
         }
-        const filename = `matrix-export-${formatFullDateNoDayNoTime(new Date())}.zip`;
+        const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         //Generate the zip file asynchronously
         const blob = await this.zip.generateAsync({ type: "blob" });

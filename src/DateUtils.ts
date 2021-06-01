@@ -138,7 +138,7 @@ export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): bo
 }
 
 
-export function formatFullDateNoDayNoTime(date: Date) {
+export function formatFullDateNoDay(date: Date) {
     return (
         date.getFullYear() +
         "-" +
