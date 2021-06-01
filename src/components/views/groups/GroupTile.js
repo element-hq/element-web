@@ -16,15 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../../customisations/Media";
-
-function nop() {}
 
 @replaceableComponent("views.groups.GroupTile")
 class GroupTile extends React.Component {
@@ -34,7 +31,6 @@ class GroupTile extends React.Component {
         showDescription: PropTypes.bool,
         // Height of the group avatar in pixels
         avatarHeight: PropTypes.number,
-        draggable: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -42,7 +38,6 @@ class GroupTile extends React.Component {
     static defaultProps = {
         showDescription: true,
         avatarHeight: 50,
-        draggable: true,
     };
 
     state = {
@@ -57,7 +52,7 @@ class GroupTile extends React.Component {
         });
     }
 
-    onMouseDown = e => {
+    onClick = e => {
         e.preventDefault();
         dis.dispatch({
             action: 'view_group',
@@ -78,7 +73,7 @@ class GroupTile extends React.Component {
             ? mediaFromMxc(profile.avatarUrl).getSquareThumbnailHttp(avatarHeight)
             : null;
 
-        let avatarElement = (
+        const avatarElement = (
             <div className="mx_GroupTile_avatar">
                 <BaseAvatar
                     name={name}
@@ -88,41 +83,8 @@ class GroupTile extends React.Component {
                     height={avatarHeight} />
             </div>
         );
-        if (this.props.draggable) {
-            const avatarClone = avatarElement;
-            avatarElement = (
-                <Droppable droppableId="my-groups-droppable" type="draggable-TagTile">
-                    { (droppableProvided, droppableSnapshot) => (
-                        <div ref={droppableProvided.innerRef}>
-                            <Draggable
-                                key={"GroupTile " + this.props.groupId}
-                                draggableId={"GroupTile " + this.props.groupId}
-                                index={this.props.groupId}
-                                type="draggable-TagTile"
-                            >
-                                { (provided, snapshot) => (
-                                    <div>
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                        >
-                                            {avatarClone}
-                                        </div>
-                                        { /* Instead of a blank placeholder, use a copy of the avatar itself. */ }
-                                        { provided.placeholder ? avatarClone : <div /> }
-                                    </div>
-                                ) }
-                            </Draggable>
-                        </div>
-                    ) }
-                </Droppable>
-            );
-        }
 
-        // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
-        // instead of onClick. Otherwise we experience https://github.com/vector-im/element-web/issues/6156
-        return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown} onClick={nop}>
+        return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
             { avatarElement }
             <div className="mx_GroupTile_profile">
                 <div className="mx_GroupTile_name">{ name }</div>

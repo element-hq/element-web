@@ -19,7 +19,6 @@ limitations under the License.
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { DragDropContext } from 'react-beautiful-dnd';
 
 import {Key} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
@@ -569,50 +568,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    _onDragEnd = (result) => {
-        // Dragged to an invalid destination, not onto a droppable
-        if (!result.destination) {
-            return;
-        }
-
-        const dest = result.destination.droppableId;
-
-        if (dest === 'tag-panel-droppable') {
-            // Could be "GroupTile +groupId:domain"
-            const draggableId = result.draggableId.split(' ').pop();
-
-            // Dispatch synchronously so that the GroupFilterPanel receives an
-            // optimistic update from GroupFilterOrderStore before the previous
-            // state is shown.
-            dis.dispatch(TagOrderActions.moveTag(
-                this._matrixClient,
-                draggableId,
-                result.destination.index,
-            ), true);
-        } else if (dest.startsWith('room-sub-list-droppable_')) {
-            this._onRoomTileEndDrag(result);
-        }
-    };
-
-    _onRoomTileEndDrag = (result) => {
-        let newTag = result.destination.droppableId.split('_')[1];
-        let prevTag = result.source.droppableId.split('_')[1];
-        if (newTag === 'undefined') newTag = undefined;
-        if (prevTag === 'undefined') prevTag = undefined;
-
-        const roomId = result.draggableId.split('_')[1];
-
-        const oldIndex = result.source.index;
-        const newIndex = result.destination.index;
-
-        dis.dispatch(RoomListActions.tagRoom(
-            this._matrixClient,
-            this._matrixClient.getRoom(roomId),
-            prevTag, newTag,
-            oldIndex, newIndex,
-        ), true);
-    };
-
     render() {
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
@@ -679,17 +634,15 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
-                    <DragDropContext onDragEnd={this._onDragEnd}>
-                        <div ref={this._resizeContainer} className={bodyClasses}>
-                            { SettingsStore.getValue("feature_spaces") ? <SpacePanel /> : null }
-                            <LeftPanel
-                                isMinimized={this.props.collapseLhs || false}
-                                resizeNotifier={this.props.resizeNotifier}
-                            />
-                            <ResizeHandle />
-                            { pageElement }
-                        </div>
-                    </DragDropContext>
+                    <div ref={this._resizeContainer} className={bodyClasses}>
+                        { SettingsStore.getValue("feature_spaces") ? <SpacePanel /> : null }
+                        <LeftPanel
+                            isMinimized={this.props.collapseLhs || false}
+                            resizeNotifier={this.props.resizeNotifier}
+                        />
+                        <ResizeHandle />
+                        { pageElement }
+                    </div>
                 </div>
                 <CallContainer />
                 <NonUrgentToastContainer />

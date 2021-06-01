@@ -24,7 +24,6 @@ import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import { _t } from '../../languageHandler';
 
-import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
@@ -83,7 +82,7 @@ class GroupFilterPanel extends React.Component {
         }
     };
 
-    onMouseDown = e => {
+    onClick = e => {
         // only dispatch if its not a no-op
         if (this.state.selectedTags.length > 0) {
             dis.dispatch({action: 'deselect_tags'});
@@ -151,28 +150,15 @@ class GroupFilterPanel extends React.Component {
         return <div className={classes} onClick={this.onClearFilterClick}>
             <AutoHideScrollbar
                 className="mx_GroupFilterPanel_scroller"
-                // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
-                // instead of onClick. Otherwise we experience https://github.com/vector-im/element-web/issues/6253
-                onMouseDown={this.onMouseDown}
+                onClick={this.onClick}
             >
-                <Droppable
-                    droppableId="tag-panel-droppable"
-                    type="draggable-TagTile"
-                >
-                    { (provided, snapshot) => (
-                        <div
-                            className="mx_GroupFilterPanel_tagTileContainer"
-                            ref={provided.innerRef}
-                        >
-                            { this.renderGlobalIcon() }
-                            { tags }
-                            <div>
-                                {createButton}
-                            </div>
-                            { provided.placeholder }
-                        </div>
-                    ) }
-                </Droppable>
+                <div className="mx_GroupFilterPanel_tagTileContainer">
+                    { this.renderGlobalIcon() }
+                    { tags }
+                    <div>
+                        { createButton }
+                    </div>
+                </div>
             </AutoHideScrollbar>
         </div>;
     }
