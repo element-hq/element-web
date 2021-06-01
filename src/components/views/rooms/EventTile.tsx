@@ -46,7 +46,7 @@ import { EditorStateTransfer } from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "./NotificationBadge";
-import { TimelineCallState } from "../../structures/CallEventGrouper";
+import CallEventGrouper from "../../structures/CallEventGrouper";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -277,7 +277,7 @@ interface IProps {
     permalinkCreator?: RoomPermalinkCreator;
 
     // CallEventGrouper for this event
-    callState?: TimelineCallState;
+    callEventGrouper?: CallEventGrouper;
 }
 
 interface IState {
@@ -1143,7 +1143,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 showUrlPreview={this.props.showUrlPreview}
                                 permalinkCreator={this.props.permalinkCreator}
                                 onHeightChanged={this.props.onHeightChanged}
-                                callState={this.props.callState}
+                                callEventGrouper={this.props.callEventGrouper}
                             />
                             { keyRequestInfo }
                             { reactionsRow }

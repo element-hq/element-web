@@ -19,15 +19,39 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
-import { TimelineCallState } from '../../structures/CallEventGrouper';
+import CallEventGrouper, { CallEventGrouperEvent, CallEventGrouperState } from '../../structures/CallEventGrouper';
+import FormButton from '../elements/FormButton';
 
 interface IProps {
     mxEvent: MatrixEvent;
-    timelineCallState: TimelineCallState;
-}
+    callEventGrouper: CallEventGrouper;
 }
 
-export default class CallEvent extends React.Component<IProps> {
+interface IState {
+    callState: CallEventGrouperState;
+}
+
+export default class CallEvent extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            callState: this.props.callEventGrouper.getState(),
+        }
+    }
+
+    componentDidMount() {
+        this.props.callEventGrouper.addListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
+    }
+
+    componentWillUnmount() {
+        this.props.callEventGrouper.removeListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
+    }
+
+    private onStateChanged = (newState: CallEventGrouperState) => {
+        this.setState({callState: newState});
+    }
+
     render() {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
@@ -47,7 +71,7 @@ export default class CallEvent extends React.Component<IProps> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
-                            { this.props.timelineCallState.isVoice ? _t("Voice call") : _t("Video call") }
+                            { this.props.callEventGrouper.isVoice() ? _t("Voice call") : _t("Video call") }
                         </div>
                     </div>
                 </div>

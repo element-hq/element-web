@@ -662,7 +662,7 @@ export default class MessagePanel extends React.Component {
         // it's successful: we received it.
         isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
 
-        const callState = this._callEventGroupers.get(mxEv.getContent().call_id)?.getState();
+        const callEventGrouper = this._callEventGroupers.get(mxEv.getContent().call_id);
 
         // use txnId as key if available so that we don't remount during sending
         ret.push(
@@ -696,7 +696,7 @@ export default class MessagePanel extends React.Component {
                         layout={this.props.layout}
                         enableFlair={this.props.enableFlair}
                         showReadReceipts={this.props.showReadReceipts}
-                        callState={callState}
+                        callEventGrouper={callEventGrouper}
                     />
                 </TileErrorBoundary>
             </li>,
