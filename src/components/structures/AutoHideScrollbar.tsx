@@ -29,7 +29,7 @@ interface IProps {
 export default class AutoHideScrollbar extends React.Component<IProps> {
     private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this.containerRef.current && this.props.onScroll) {
             // Using the passive option to not block the main thread
             // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
@@ -41,17 +41,17 @@ export default class AutoHideScrollbar extends React.Component<IProps> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         if (this.containerRef.current && this.props.onScroll) {
             this.containerRef.current.removeEventListener("scroll", this.props.onScroll);
         }
     }
 
-    getScrollTop() {
+    public getScrollTop(): number {
         return this.containerRef.current.scrollTop;
     }
 
-    render() {
+    public render() {
         return (<div
             ref={this.containerRef}
             style={this.props.style}
