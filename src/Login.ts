@@ -31,12 +31,12 @@ interface IPasswordFlow {
 }
 
 export enum IdentityProviderBrand {
-    Gitlab = "org.matrix.gitlab",
-    Github = "org.matrix.github",
-    Apple = "org.matrix.apple",
-    Google = "org.matrix.google",
-    Facebook = "org.matrix.facebook",
-    Twitter = "org.matrix.twitter",
+    Gitlab = "gitlab",
+    Github = "github",
+    Apple = "apple",
+    Google = "google",
+    Facebook = "facebook",
+    Twitter = "twitter",
 }
 
 export interface IIdentityProvider {
