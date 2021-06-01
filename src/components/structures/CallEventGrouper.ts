@@ -25,6 +25,13 @@ export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
 }
 
+const SUPPORTED_STATES = [
+    CallState.Connected,
+    CallState.Connecting,
+    CallState.Ended,
+    CallState.Ringing,
+];
+
 export default class CallEventGrouper extends EventEmitter {
     invite: MatrixEvent;
     call: MatrixCall;
@@ -66,12 +73,15 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setCallState = () => {
-        this.state = this.call.state
-        this.emit(CallEventGrouperEvent.StateChanged, this.state);
+        if (SUPPORTED_STATES.includes(this.call.state)) {
+            this.state = this.call.state;
+            this.emit(CallEventGrouperEvent.StateChanged, this.state);
+        }
     }
 
     public add(event: MatrixEvent) {
         if (event.getType() === EventType.CallInvite) this.invite = event;
+        if (event.getType() === EventType.CallHangup) this.state = CallState.Ended;
 
         if (this.call) return;
         const callId = event.getContent().call_id;

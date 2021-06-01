@@ -32,6 +32,12 @@ interface IState {
     callState: CallState;
 }
 
+const TEXTUAL_STATES = new Map([
+    [CallState.Connected, _t("Connected")],
+    [CallState.Connecting, _t("Connecting")],
+    [CallState.Ended, _t("This call has ended")],
+]);
+
 export default class CallEvent extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -49,7 +55,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         this.props.callEventGrouper.removeListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
     }
 
-    private onStateChanged = (newState: CallEventGrouperState) => {
+    private onStateChanged = (newState: CallState) => {
         this.setState({callState: newState});
     }
 
@@ -57,8 +63,9 @@ export default class CallEvent extends React.Component<IProps, IState> {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
 
+        const state = this.state.callState;
         let content;
-        if (this.state.callState === CallState.Ringing) {
+        if (state === CallState.Ringing) {
             content = (
                 <div className="mx_CallEvent_content">
                     <FormButton
@@ -74,6 +81,18 @@ export default class CallEvent extends React.Component<IProps, IState> {
                         kind="primary"
                         label={_t("Accept")}
                     />
+                </div>
+            );
+        } else if (Array.from(TEXTUAL_STATES.keys()).includes(state)) {
+            content = (
+                <div className="mx_CallEvent_content">
+                    { TEXTUAL_STATES.get(state) }
+                </div>
+            );
+        } else {
+            content = (
+                <div className="mx_CallEvent_content">
+                    { _t("The call is in an unknown state!") }
                 </div>
             );
         }
