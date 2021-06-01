@@ -86,6 +86,7 @@ export default class CallEventGrouper extends EventEmitter {
 
             if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
             else if (lastEventType === EventType.CallReject) this.state = CallState.Ended;
+            else if (lastEventType === EventType.CallInvite) this.state = CallState.Connecting;
         }
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }
