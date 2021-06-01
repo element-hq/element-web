@@ -1,3 +1,18 @@
+Changes in [1.7.30-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.30-rc.1) (2021-06-01)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.29...v1.7.30-rc.1)
+
+ * Upgrade to React SDK 3.23.0-rc.1 and JS SDK 11.2.0-rc.1
+ * Translations update from Weblate
+   [\#17526](https://github.com/vector-im/element-web/pull/17526)
+ * Add Modernizr test for Promise.allSettled given js-sdk and react-sdk depend
+   on it
+   [\#17464](https://github.com/vector-im/element-web/pull/17464)
+ * Bump libolm dependency, and update package name.
+   [\#17433](https://github.com/vector-im/element-web/pull/17433)
+ * Remove logo spinner
+   [\#17423](https://github.com/vector-im/element-web/pull/17423)
+
 Changes in [1.7.29](https://github.com/vector-im/element-web/releases/tag/v1.7.29) (2021-05-24)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.29-rc.1...v1.7.29)
