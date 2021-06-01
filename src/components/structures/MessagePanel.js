@@ -543,7 +543,6 @@ export default class MessagePanel extends React.Component {
                 } else {
                     const callEventGrouper = new CallEventGrouper();
                     callEventGrouper.add(mxEv);
-
                     this._callEventGroupers.set(callId, callEventGrouper);
                 }
             }
