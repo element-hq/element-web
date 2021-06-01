@@ -1873,7 +1873,7 @@
     "This user has not verified all of their sessions.": "Cet utilisateur n’a pas vérifié toutes ses sessions.",
     "You have verified this user. This user has verified all of their sessions.": "Vous avez vérifié cet utilisateur. Cet utilisateur a vérifié toutes ses sessions.",
     "Someone is using an unknown session": "Quelqu’un utilise une session inconnue",
-    "Mod": "Modo",
+    "Mod": "Modérateur",
     "Your key share request has been sent - please check your other sessions for key share requests.": "Votre demande de partage de clé a été envoyée − vérifiez les demandes de partage de clé sur vos autres sessions.",
     "Key share requests are sent to your other sessions automatically. If you rejected or dismissed the key share request on your other sessions, click here to request the keys for this session again.": "Les demandes de partage de clé sont envoyées à vos autres sessions automatiquement. Si vous avez rejeté ou ignoré la demande de partage de clé sur vos autres sessions, cliquez ici pour redemander les clés pour cette session.",
     "If your other sessions do not have the key for this message you will not be able to decrypt them.": "Si vos autres sessions n’ont pas la clé pour ce message vous ne pourrez pas le déchiffrer.",
@@ -3111,7 +3111,7 @@
     "No permissions": "Aucune permission",
     "Remove from Space": "Supprimer de l’espace",
     "Undo": "Annuler",
-    "Your message wasn't sent because this homeserver has been blocked by it's administrator. Please <a>contact your service administrator</a> to continue using the service.": "Votre message n’a pas été envoyé car ce serveur d’accueil a été banni par son administrateur. Merci de <a>contacter votre administrateur de service</a> pour poursuivre l’usage de ce service.",
+    "Your message wasn't sent because this homeserver has been blocked by it's administrator. Please <a>contact your service administrator</a> to continue using the service.": "Votre message n’a pas été envoyé car ce serveur d’accueil a été bloqué par son administrateur. Merci de <a>contacter votre administrateur de service</a> pour continuer à utiliser le service.",
     "Are you sure you want to leave the space '%(spaceName)s'?": "Êtes-vous sûr de vouloir quitter l’espace « %(spaceName)s » ?",
     "This space is not public. You will not be able to rejoin without an invite.": "Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.",
     "Start audio stream": "Démarrer une diffusion audio",
@@ -3352,5 +3352,11 @@
     "sends space invaders": "Envoie les Space Invaders",
     "Sends the given message with a space themed effect": "Envoyer le message avec un effet lié au thème de l’espace",
     "See when people join, leave, or are invited to your active room": "Afficher quand des personnes rejoignent, partent, ou sont invités dans votre salon actif",
-    "Kick, ban, or invite people to your active room, and make you leave": "Expulser, bannir ou inviter des personnes dans votre salon actif et en partir"
+    "Kick, ban, or invite people to your active room, and make you leave": "Expulser, bannir ou inviter des personnes dans votre salon actif et en partir",
+    "Currently joining %(count)s rooms|one": "Vous êtes en train de rejoindre %(count)s salon",
+    "Currently joining %(count)s rooms|other": "Vous êtes en train de rejoindre %(count)s salons",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Essayez d'autres mots ou vérifiez les fautes de frappe. Certains salons peuvent ne pas être visibles car ils sont privés et vous devez être invité pour les rejoindre.",
+    "No results for \"%(query)s\"": "Aucun résultat pour « %(query)s »",
+    "The user you called is busy.": "L’utilisateur que vous avez appelé est indisponible.",
+    "User Busy": "Utilisateur indisponible"
 }
