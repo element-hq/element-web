@@ -22,7 +22,7 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 
 import {_t} from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import SettingsStore from "../../../settings/SettingsStore";
+import {useSettingValue, useFeatureEnabled} from "../../../hooks/useSettings";
 import {UIFeature} from "../../../settings/UIFeature";
 import {Layout} from "../../../settings/Layout";
 import {IDialogProps} from "./IDialogProps";
@@ -174,14 +174,16 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
 
+    const spacesEnabled = useFeatureEnabled("feature_spaces");
+    const flairEnabled = useFeatureEnabled(UIFeature.Flair);
+    const previewLayout = useSettingValue("layout");
+
     const rooms = useMemo(() => sortRooms(
         cli.getVisibleRooms().filter(
             room => room.getMyMembership() === "join" &&
-                !(SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()),
+                !(spacesEnabled && room.isSpaceRoom()),
         ),
-    ), [cli]).filter(room => room.name.toLowerCase().includes(lcQuery));
-
-    const previewLayout = SettingsStore.getValue("layout");
+    ), [cli, spacesEnabled]).filter(room => room.name.toLowerCase().includes(lcQuery));
 
     return <BaseDialog
         title={_t("Forward message")}
@@ -198,7 +200,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <EventTile
                 mxEvent={mockEvent}
                 layout={previewLayout}
-                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                enableFlair={flairEnabled}
                 permalinkCreator={permalinkCreator}
             />
         </div>
