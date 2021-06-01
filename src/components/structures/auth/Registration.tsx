@@ -467,7 +467,7 @@ export default class Registration extends React.Component<IProps, IState> {
             let ssoSection;
             if (this.state.ssoFlow) {
                 let continueWithSection;
-                const providers = this.state.ssoFlow["org.matrix.msc2858.identity_providers"] || [];
+                const providers = this.state.ssoFlow.identity_providers || [];
                 // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
                 if (providers.length > 1) {
                     // i18n: ssoButtons is a placeholder to help translators understand context
