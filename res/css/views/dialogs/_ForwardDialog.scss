@@ -124,7 +124,8 @@ limitations under the License.
                     }
 
                     .mx_NotificationBadge {
-                        opacity: 0.4;
+                        // Match the failed to send indicator's color with the disabled button
+                        background-color: $button-danger-disabled-fg-color;
                     }
 
                     &.mx_ForwardList_sending .mx_ForwardList_sendIcon {
