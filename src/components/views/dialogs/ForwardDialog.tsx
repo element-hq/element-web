@@ -184,13 +184,13 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const previewLayout = SettingsStore.getValue("layout");
 
     return <BaseDialog
-        title={ _t("Forward message") }
+        title={_t("Forward message")}
         className="mx_ForwardDialog"
         contentId="mx_ForwardList"
         onFinished={onFinished}
         fixedWidth={false}
     >
-        <h3>{ _t("Message preview") }</h3>
+        <h3>{_t("Message preview")}</h3>
         <div className={classnames("mx_ForwardDialog_preview", {
             "mx_IRCLayout": previewLayout == Layout.IRC,
             "mx_GroupLayout": previewLayout == Layout.Group,
@@ -206,7 +206,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         <div className="mx_ForwardList">
             <SearchBox
                 className="mx_textinput_icon mx_textinput_search"
-                placeholder={ _t("Search for rooms or people") }
+                placeholder={_t("Search for rooms or people")}
                 onSearch={setQuery}
                 autoComplete={true}
                 autoFocus={true}
