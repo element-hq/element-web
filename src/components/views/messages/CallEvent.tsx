@@ -19,8 +19,9 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
-import CallEventGrouper, { CallEventGrouperEvent, CallEventGrouperState } from '../../structures/CallEventGrouper';
+import CallEventGrouper, { CallEventGrouperEvent } from '../../structures/CallEventGrouper';
 import FormButton from '../elements/FormButton';
+import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -28,7 +29,7 @@ interface IProps {
 }
 
 interface IState {
-    callState: CallEventGrouperState;
+    callState: CallState;
 }
 
 export default class CallEvent extends React.Component<IProps, IState> {
@@ -57,7 +58,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         const sender = event.sender ? event.sender.name : event.getSender();
 
         let content;
-        if (this.state.callState === CallEventGrouperState.Incoming) {
+        if (this.state.callState === CallState.Ringing) {
             content = (
                 <div className="mx_CallEvent_content">
                     <FormButton

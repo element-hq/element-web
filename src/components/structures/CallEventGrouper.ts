@@ -21,16 +21,6 @@ import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call"
 import CallHandler from '../../CallHandler';
 import { EventEmitter } from 'events';
 
-export enum CallEventGrouperState {
-    Incoming = "incoming",
-    Connecting = "connecting",
-    Connected = "connected",
-    Ringing = "ringing",
-    Missed = "missed",
-    Rejected = "rejected",
-    Ended = "ended",
-}
-
 export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
 }
@@ -38,7 +28,7 @@ export enum CallEventGrouperEvent {
 export default class CallEventGrouper extends EventEmitter {
     invite: MatrixEvent;
     call: MatrixCall;
-    state: CallEventGrouperState;
+    state: CallState;
 
     public answerCall = () => {
         this.call?.answer();
@@ -76,9 +66,7 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setCallState = () => {
-        if (this.call?.state === CallState.Ringing) {
-            this.state = CallEventGrouperState.Incoming;
-        }
+        this.state = this.call.state
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }
 
