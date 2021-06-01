@@ -288,78 +288,6 @@ function textForCanonicalAliasEvent(ev) {
     });
 }
 
-function textForCallAnswerEvent(event) {
-    const senderName = event.sender ? event.sender.name : _t('Someone');
-    const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
-    return _t('%(senderName)s answered the call.', {senderName}) + ' ' + supported;
-}
-
-function textForCallHangupEvent(event) {
-    const senderName = event.sender ? event.sender.name : _t('Someone');
-    const eventContent = event.getContent();
-    let reason = "";
-    if (!MatrixClientPeg.get().supportsVoip()) {
-        reason = _t('(not supported by this browser)');
-    } else if (eventContent.reason) {
-        if (eventContent.reason === "ice_failed") {
-            // We couldn't establish a connection at all
-            reason = _t('(could not connect media)');
-        } else if (eventContent.reason === "ice_timeout") {
-            // We established a connection but it died
-            reason = _t('(connection failed)');
-        } else if (eventContent.reason === "user_media_failed") {
-            // The other side couldn't open capture devices
-            reason = _t("(their device couldn't start the camera / microphone)");
-        } else if (eventContent.reason === "unknown_error") {
-            // An error code the other side doesn't have a way to express
-            // (as opposed to an error code they gave but we don't know about,
-            // in which case we show the error code)
-            reason = _t("(an error occurred)");
-        } else if (eventContent.reason === "invite_timeout") {
-            reason = _t('(no answer)');
-        } else if (eventContent.reason === "user hangup" || eventContent.reason === "user_hangup") {
-            // workaround for https://github.com/vector-im/element-web/issues/5178
-            // it seems Android randomly sets a reason of "user hangup" which is
-            // interpreted as an error code :(
-            // https://github.com/vector-im/riot-android/issues/2623
-            // Also the correct hangup code as of VoIP v1 (with underscore)
-            reason = '';
-        } else {
-            reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
-        }
-    }
-    return _t('%(senderName)s ended the call.', {senderName}) + ' ' + reason;
-}
-
-function textForCallRejectEvent(event) {
-    const senderName = event.sender ? event.sender.name : _t('Someone');
-    return _t('%(senderName)s declined the call.', {senderName});
-}
-
-function textForCallInviteEvent(event) {
-    const senderName = event.sender ? event.sender.name : _t('Someone');
-    // FIXME: Find a better way to determine this from the event?
-    let isVoice = true;
-    if (event.getContent().offer && event.getContent().offer.sdp &&
-            event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        isVoice = false;
-    }
-    const isSupported = MatrixClientPeg.get().supportsVoip();
-
-    // This ladder could be reduced down to a couple string variables, however other languages
-    // can have a hard time translating those strings. In an effort to make translations easier
-    // and more accurate, we break out the string-based variables to a couple booleans.
-    if (isVoice && isSupported) {
-        return _t("%(senderName)s placed a voice call.", {senderName});
-    } else if (isVoice && !isSupported) {
-        return _t("%(senderName)s placed a voice call. (not supported by this browser)", {senderName});
-    } else if (!isVoice && isSupported) {
-        return _t("%(senderName)s placed a video call.", {senderName});
-    } else if (!isVoice && !isSupported) {
-        return _t("%(senderName)s placed a video call. (not supported by this browser)", {senderName});
-    }
-}
-
 function textForThreePidInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
 
@@ -573,10 +501,6 @@ function textForMjolnirEvent(event) {
 
 const handlers = {
     'm.room.message': textForMessageEvent,
-    'm.call.invite': textForCallInviteEvent,
-    'm.call.answer': textForCallAnswerEvent,
-    'm.call.hangup': textForCallHangupEvent,
-    'm.call.reject': textForCallRejectEvent,
 };
 
 const stateHandlers = {
