@@ -22,6 +22,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../structures/CallEventGrouper';
 import FormButton from '../elements/FormButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
+import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -35,7 +36,6 @@ interface IState {
 const TEXTUAL_STATES: Map<CallState | CustomCallState, string> = new Map([
     [CallState.Connected, _td("Connected")],
     [CallState.Connecting, _td("Connecting")],
-    [CallState.Ended, _td("This call has ended")],
 ]);
 
 export default class CallEvent extends React.Component<IProps, IState> {
@@ -59,52 +59,106 @@ export default class CallEvent extends React.Component<IProps, IState> {
         this.setState({callState: newState});
     }
 
-    render() {
-        const event = this.props.mxEvent;
-        const sender = event.sender ? event.sender.name : event.getSender();
-
-        const state = this.state.callState;
-        let content;
+    private renderContent(state: CallState | CustomCallState): JSX.Element {
         if (state === CallState.Ringing) {
-            content = (
+            return (
                 <div className="mx_CallEvent_content">
                     <FormButton
-                        onClick={this.props.callEventGrouper.rejectCall}
+                        onClick={ this.props.callEventGrouper.rejectCall }
                         kind="danger"
-                        label={_t("Decline")}
+                        label={ _t("Decline") }
                     />
                     <FormButton
-                        onClick={this.props.callEventGrouper.answerCall}
+                        onClick={ this.props.callEventGrouper.answerCall }
                         kind="primary"
-                        label={_t("Accept")}
+                        label={ _t("Accept") }
                     />
                 </div>
             );
-        } else if (Array.from(TEXTUAL_STATES.keys()).includes(state)) {
-            content = (
+        }
+        if (state === CallState.Ended) {
+            const hangupReason = this.props.callEventGrouper.getHangupReason();
+
+            if (["user_hangup", "user hangup"].includes(hangupReason) || !hangupReason) {
+                // workaround for https://github.com/vector-im/element-web/issues/5178
+                // it seems Android randomly sets a reason of "user hangup" which is
+                // interpreted as an error code :(
+                // https://github.com/vector-im/riot-android/issues/2623
+                // Also the correct hangup code as of VoIP v1 (with underscore)
+                // Also, if we don't have a reason
+                return (
+                    <div className="mx_CallEvent_content">
+                        { _t("This call has ended") }
+                    </div>
+                );
+            }
+
+            let reason;
+            if (hangupReason === "ice_failed") {
+                // We couldn't establish a connection at all
+                reason = _t("Could not connect media");
+            } else if (hangupReason === "ice_timeout") {
+                // We established a connection but it died
+                reason = _t("Connection failed");
+            } else if (hangupReason === "user_media_failed") {
+                // The other side couldn't open capture devices
+                reason = _t("Their device couldn't start the camera or microphone");
+            } else if (hangupReason === "unknown_error") {
+                // An error code the other side doesn't have a way to express
+                // (as opposed to an error code they gave but we don't know about,
+                // in which case we show the error code)
+                reason = _t("An unknown error occurred");
+            } else if (hangupReason === "invite_timeout") {
+                reason = _t("No answer");
+            } else {
+                reason = _t('Unknown failure: %(reason)s)', {reason: hangupReason});
+            }
+
+            return (
+                <div className="mx_CallEvent_content">
+                    <InfoTooltip
+                        tooltip={reason}
+                        className="mx_CallEvent_content_tooltip"
+                        kind={InfoTooltipKind.Warning}
+                    />
+                    { _t("This call has failed") }
+                </div>
+            );
+        }
+        if (Array.from(TEXTUAL_STATES.keys()).includes(state)) {
+            return (
                 <div className="mx_CallEvent_content">
                     { TEXTUAL_STATES.get(state) }
                 </div>
             );
-        } else if (state === CustomCallState.Missed) {
-            content = (
+        }
+        if (state === CustomCallState.Missed) {
+            return (
                 <div className="mx_CallEvent_content">
                     { _t("You missed this call") }
                     <FormButton
                         className="mx_CallEvent_content_callBack"
-                        onClick={this.props.callEventGrouper.callBack}
+                        onClick={ this.props.callEventGrouper.callBack }
                         kind="primary"
-                        label={_t("Call back")}
+                        label={ _t("Call back") }
                     />
                 </div>
             );
-        } else {
-            content = (
-                <div className="mx_CallEvent_content">
-                    { "The call is in an unknown state!" }
-                </div>
-            );
         }
+
+        // XXX: Should we translate this?
+        return (
+            <div className="mx_CallEvent_content">
+                { "The call is in an unknown state!" }
+            </div>
+        );
+    }
+
+    render() {
+        const event = this.props.mxEvent;
+        const sender = event.sender ? event.sender.name : event.getSender();
+        const callType = this.props.callEventGrouper.isVoice() ? _t("Voice call") : _t("Video call");
+        const content = this.renderContent(this.state.callState);
 
         return (
             <div className="mx_CallEvent">
@@ -119,7 +173,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
-                            { this.props.callEventGrouper.isVoice() ? _t("Voice call") : _t("Video call") }
+                            { callType }
                         </div>
                     </div>
                 </div>

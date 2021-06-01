@@ -82,6 +82,10 @@ export default class CallEventGrouper extends EventEmitter {
         return this.state;
     }
 
+    public getHangupReason(): string | null {
+        return this.events.find((event) => event.getType() === EventType.CallHangup)?.getContent()?.reason;
+    }
+
     /**
      * Returns true if there are only events from the other side - we missed the call
      */
