@@ -441,7 +441,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const [error, setError] = useState("");
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
-    // TODO vary default prefills for "Just Me" spaces
     const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("Random"), ""]);
     const fields = new Array(numFields).fill(0).map((_, i) => {
         const name = "roomName" + i;
