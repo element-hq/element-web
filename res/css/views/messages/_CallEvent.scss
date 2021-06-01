@@ -18,6 +18,7 @@ limitations under the License.
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
 
     background-color: $dark-panel-bg-color;
     padding: 10px;
@@ -29,6 +30,7 @@ limitations under the License.
     .mx_CallEvent_info {
         display: flex;
         flex-direction: row;
+        align-items: center;
 
         .mx_CallEvent_info_basic {
             display: flex;
@@ -41,5 +43,10 @@ limitations under the License.
                 line-height: $font-14px;
             }
         }
+    }
+
+    .mx_CallEvent_content {
+        display: flex;
+        flex-direction: row;
     }
 }
