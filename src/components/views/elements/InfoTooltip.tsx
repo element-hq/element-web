@@ -22,10 +22,16 @@ import Tooltip, {Alignment} from './Tooltip';
 import {_t} from "../../../languageHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+export enum InfoTooltipKind {
+    Info = "info",
+    Warning = "warning",
+}
+
 interface ITooltipProps {
     tooltip?: React.ReactNode;
     className?: string,
     tooltipClassName?: string;
+    kind?: InfoTooltipKind;
 }
 
 interface IState {
@@ -54,8 +60,12 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
     };
 
     render() {
-        const {tooltip, children, tooltipClassName, className} = this.props;
+        const {tooltip, children, tooltipClassName, className, kind} = this.props;
         const title = _t("Information");
+        const iconClassName = (
+            (kind !== InfoTooltipKind.Warning) ?
+                "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning"
+        );
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
         const tip = this.state.hover ? <Tooltip
@@ -70,7 +80,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
                 onMouseLeave={this.onMouseLeave}
                 className={classNames("mx_InfoTooltip", className)}
             >
-                <span className="mx_InfoTooltip_icon" aria-label={title} />
+                <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
                 {children}
                 {tip}
             </div>
