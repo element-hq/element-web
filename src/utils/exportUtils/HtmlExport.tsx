@@ -246,21 +246,15 @@ export default class HTMLExporter extends Exporter {
 
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
         let eventTile: JSX.Element;
-        switch (mxEv.getContent().msgtype) {
-            case "m.image":
-            case "m.file":
-            case "m.video":
-            case "m.audio": {
-                const blob = await this.getMediaBlob(mxEv);
-                const filePath = this.getFilePath(mxEv);
-                eventTile = this.getEventTile(mxEv, joined, filePath);
-                this.zip.file(filePath, blob);
-                break;
-            }
-            default:
-                eventTile = this.getEventTile(mxEv, joined);
-                break;
-        }
+        const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"]
+
+        if (mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype)) {
+            const blob = await this.getMediaBlob(mxEv);
+            const filePath = this.getFilePath(mxEv);
+            eventTile = this.getEventTile(mxEv, joined, filePath);
+            this.zip.file(filePath, blob);
+        } else eventTile = this.getEventTile(mxEv, joined);
+
         return renderToStaticMarkup(eventTile);
     }
 
