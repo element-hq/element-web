@@ -139,16 +139,17 @@ export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): bo
 
 
 export function formatFullDateNoDayNoTime(date: Date) {
-    const dateTime = date.getFullYear() +
-                    "-" +
-                    pad(date.getMonth()) +
-                    "-" +
-                    pad(date.getDate()) +
-                    _t(" at ") +
-                    pad(date.getHours()) +
-                    "." +
-                    pad(date.getMinutes()) +
-                    "." +
-                    pad(date.getSeconds());
-    return dateTime;
+    return (
+        date.getFullYear() +
+        "-" +
+        pad(date.getMonth()) +
+        "-" +
+        pad(date.getDate()) +
+        _t(" at ") +
+        pad(date.getHours()) +
+        "." +
+        pad(date.getMinutes()) +
+        "." +
+        pad(date.getSeconds())
+    );
 }
