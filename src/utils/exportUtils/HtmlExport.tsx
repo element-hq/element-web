@@ -9,7 +9,7 @@ import { Exporter } from "./Exporter";
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
-import { wantsDateSeparator } from "../../DateUtils";
+import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
 import * as Avatar from "../../Avatar";
@@ -18,6 +18,7 @@ import DateSeparator from "../../components/views/messages/DateSeparator";
 import exportCSS from "./exportCSS";
 import exportJS from "./exportJS";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
+import exportIcons from "./exportIcons";
 
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
@@ -179,6 +180,37 @@ export default class HTMLExporter extends Exporter {
         return wantsDateSeparator(prevEvent.getDate(), event.getDate());
     }
 
+    protected splitFileName(file: string) {
+        const lastDot = file.lastIndexOf('.');
+        if (lastDot === -1) return [file, ""];
+        const fileName = file.slice(0, lastDot);
+        const ext = file.slice(lastDot + 1);
+        return [fileName, ext];
+    }
+
+    protected getFilePath(event: MatrixEvent) {
+        const mediaType = event.getContent().msgtype;
+        let fileDirectory: string;
+        switch (mediaType) {
+            case "m.image":
+                fileDirectory = "images";
+                break;
+            case "m.video":
+                fileDirectory = "videos";
+                break;
+            case "m.audio":
+                fileDirectory = "audio";
+                break;
+            default:
+                fileDirectory = "files";
+                break;
+        }
+        const fileDate = formatFullDateNoDayNoTime(new Date(event.getTs()));
+        const [fileName, fileExt] = this.splitFileName(event.getContent().body);
+        const filePath = fileDirectory + "/" + fileName + '-' + fileDate + '.' + fileExt;
+        return filePath;
+    }
+
 
     protected getEventTile(mxEv: MatrixEvent, continuation: boolean, mediaSrc?: string) {
         const hasAvatar = this.hasAvatar(mxEv);
@@ -215,31 +247,12 @@ export default class HTMLExporter extends Exporter {
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
         let eventTile: JSX.Element;
         switch (mxEv.getContent().msgtype) {
-            case "m.image": {
-                const blob = await this.getMediaBlob(mxEv);
-                const filePath = `images/${mxEv.getId()}.${blob.type.replace("image/", "")}`;
-                eventTile = this.getEventTile(mxEv, joined, filePath);
-                this.zip.file(filePath, blob);
-                break;
-            }
-            case "m.video": {
-                const blob = await this.getMediaBlob(mxEv);
-                const filePath = `videos/${mxEv.getId()}.${blob.type.replace("video/", "")}`;
-                eventTile = this.getEventTile(mxEv, joined, filePath);
-                this.zip.file(filePath, blob);
-                break;
-            }
+            case "m.image":
+            case "m.file":
+            case "m.video":
             case "m.audio": {
                 const blob = await this.getMediaBlob(mxEv);
-                const filePath = `audio/${mxEv.getId()}.${blob.type.replace("audio/", "")}`;
-                eventTile = this.getEventTile(mxEv, joined, filePath);
-                this.zip.file(filePath, blob);
-                break;
-            }
-            case "m.file": {
-                const blob = await this.getMediaBlob(mxEv);
-                const fileName = mxEv.getContent().body;
-                const filePath = `files/${fileName}`;
+                const filePath = this.getFilePath(mxEv);
                 eventTile = this.getEventTile(mxEv, joined, filePath);
                 this.zip.file(filePath, blob);
                 break;
@@ -273,8 +286,10 @@ export default class HTMLExporter extends Exporter {
         this.zip.file("index.html", html);
         this.zip.file("css/style.css", exportCSS);
         this.zip.file("js/script.js", exportJS);
-
-        const filename = `matrix-export-${new Date().toISOString()}.zip`;
+        for (const iconName in exportIcons) {
+            this.zip.file(`icons/${iconName}`, exportIcons[iconName]);
+        }
+        const filename = `matrix-export-${formatFullDateNoDayNoTime(new Date())}.zip`;
 
         //Generate the zip file asynchronously
         const blob = await this.zip.generateAsync({ type: "blob" });

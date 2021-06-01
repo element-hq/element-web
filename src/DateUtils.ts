@@ -136,3 +136,19 @@ export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): bo
     // Compare weekdays
     return prevEventDate.getDay() !== nextEventDate.getDay();
 }
+
+
+export function formatFullDateNoDayNoTime(date: Date) {
+    const dateTime = date.getFullYear() +
+                    "-" +
+                    pad(date.getMonth()) +
+                    "-" +
+                    pad(date.getDate()) +
+                    _t(" at ") +
+                    pad(date.getHours()) +
+                    "." +
+                    pad(date.getMinutes()) +
+                    "." +
+                    pad(date.getSeconds());
+    return dateTime;
+}
