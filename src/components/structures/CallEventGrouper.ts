@@ -35,15 +35,15 @@ export default class CallEventGrouper extends EventEmitter {
     call: MatrixCall;
     state: CallEventGrouperState;
 
-    public answerCall() {
+    public answerCall = () => {
         this.call?.answer();
     }
 
-    public rejectCall() {
+    public rejectCall = () => {
         this.call?.reject();
     }
 
-    public callBack() {
+    public callBack = () => {
 
     }
 

@@ -57,6 +57,25 @@ export default class CallEvent extends React.Component<IProps, IState> {
         const sender = event.sender ? event.sender.name : event.getSender();
 
         let content;
+        if (this.state.callState === CallEventGrouperState.Incoming) {
+            content = (
+                <div className="mx_CallEvent_content">
+                    <FormButton
+                        className={"mx_IncomingCallBox_decline"}
+                        onClick={this.props.callEventGrouper.rejectCall}
+                        kind="danger"
+                        label={_t("Decline")}
+                    />
+                    <div className="mx_IncomingCallBox_spacer" />
+                    <FormButton
+                        className={"mx_IncomingCallBox_accept"}
+                        onClick={this.props.callEventGrouper.answerCall}
+                        kind="primary"
+                        label={_t("Accept")}
+                    />
+                </div>
+            );
+        }
 
         return (
             <div className="mx_CallEvent">
