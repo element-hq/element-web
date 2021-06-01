@@ -23,6 +23,11 @@ import { EventEmitter } from 'events';
 
 export enum CallEventGrouperState {
     Incoming = "incoming",
+    Connecting = "connecting",
+    Connected = "connected",
+    Ringing = "ringing",
+    Missed = "missed",
+    Rejected = "rejected",
     Ended = "ended",
 }
 
