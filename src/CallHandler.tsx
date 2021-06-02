@@ -808,7 +808,10 @@ export default class CallHandler extends EventEmitter {
 
                     const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
                     if (this.getCallForRoom(mappedRoomId)) {
-                        // ignore multiple incoming calls to the same room
+                        console.log(
+                            "Got incoming call for room " + mappedRoomId +
+                            " but there's already a call for this room: ignoring",
+                        );
                         return;
                     }
 
