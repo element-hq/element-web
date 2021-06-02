@@ -38,6 +38,7 @@ import {StaticNotificationState} from "../../../stores/notifications/StaticNotif
 import NotificationBadge from "../rooms/NotificationBadge";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import QueryMatcher from "../../../autocomplete/QueryMatcher";
 
 const AVATAR_SIZE = 30;
 
@@ -176,14 +177,22 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
 
     const spacesEnabled = useFeatureEnabled("feature_spaces");
     const flairEnabled = useFeatureEnabled(UIFeature.Flair);
-    const previewLayout = useSettingValue("layout");
+    const previewLayout = useSettingValue<Layout>("layout");
 
-    const rooms = useMemo(() => sortRooms(
+    let rooms = useMemo(() => sortRooms(
         cli.getVisibleRooms().filter(
             room => room.getMyMembership() === "join" &&
                 !(spacesEnabled && room.isSpaceRoom()),
         ),
-    ), [cli, spacesEnabled]).filter(room => room.name.toLowerCase().includes(lcQuery));
+    ), [cli, spacesEnabled]);
+
+    if (lcQuery) {
+        rooms = new QueryMatcher<Room>(rooms, {
+            keys: ["name"],
+            funcs: [r => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+            shouldMatchWordsOnly: false,
+        }).match(lcQuery);
+    }
 
     return <BaseDialog
         title={_t("Forward message")}
