@@ -213,9 +213,9 @@ export default class HTMLExporter extends Exporter {
     }
 
 
-    protected getEventTile(mxEv: MatrixEvent, continuation: boolean, mediaSrc?: string) {
+    protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, mediaSrc?: string) {
         const hasAvatar = this.hasAvatar(mxEv);
-        if (hasAvatar) this.saveAvatarIfNeeded(mxEv);
+        if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
 
         return <li className="mx_Export_EventWrapper" id={mxEv.getId()}>
             <EventTile
@@ -252,9 +252,9 @@ export default class HTMLExporter extends Exporter {
         if (mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype)) {
             const blob = await this.getMediaBlob(mxEv);
             const filePath = this.getFilePath(mxEv);
-            eventTile = this.getEventTile(mxEv, joined, filePath);
+            eventTile = await this.getEventTile(mxEv, joined, filePath);
             this.zip.file(filePath, blob);
-        } else eventTile = this.getEventTile(mxEv, joined);
+        } else eventTile = await this.getEventTile(mxEv, joined);
 
         return renderToStaticMarkup(eventTile);
     }
