@@ -31,7 +31,6 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
-import { compare } from '../../../utils/strings';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
