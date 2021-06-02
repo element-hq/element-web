@@ -73,9 +73,13 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
         const promises = [];
 
         if (avatarChanged) {
-            promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {
-                url: await cli.uploadContent(newAvatar),
-            }, ""));
+            if (newAvatar) {
+                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {
+                    url: await cli.uploadContent(newAvatar),
+                }, ""));
+            } else {
+                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {}, ""));
+            }
         }
 
         if (nameChanged) {

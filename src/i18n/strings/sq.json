@@ -3356,5 +3356,10 @@
     "Beta available for web, desktop and Android. Thank you for trying the beta.": "Beta e gatshme për web, desktop dhe Android. Faleminderit që provoni beta-n.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Nëse ikni, %(brand)s-i do të ringarkohet me Hapësira të çaktivizuara. Bashkësitë dhe etiketat vetjake do të jenë sërish të dukshme.",
     "Spaces are a new way to group rooms and people.": "Hapësirat janë një rrugë e re për të grupuar dhoma dhe njerëz.",
-    "Message search initialisation failed": "Dështoi gatitje kërkimi mesazhesh"
+    "Message search initialisation failed": "Dështoi gatitje kërkimi mesazhesh",
+    "Go to my space": "Kalo te hapësira ime",
+    "sends space invaders": "dërgon pushtues hapësire",
+    "Sends the given message with a space themed effect": "E dërgon mesazhin e dhënë me një efekt teme hapësinore",
+    "See when people join, leave, or are invited to your active room": "Shihni kur persona vijnë, ikin ose janë ftuar në dhomën tuaj aktive",
+    "See when people join, leave, or are invited to this room": "Shihni kur persona vijnë, ikin ose janë ftuar në këtë dhomë"
 }
