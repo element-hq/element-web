@@ -267,8 +267,8 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s %(time)s",
     "Who would you like to add to this community?": "Кого ви хочете додати до цієї спільноти?",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Там, де ця сторінка містить ототожненну інформацію, як-от назва кімнати, користувача чи групи, ці дані будуть вилучені перед надсиланням на сервер.",
-    "Call in Progress": "Іде виклик",
-    "A call is currently being placed!": "Зараз іде виклик!",
+    "Call in Progress": "Триває виклик",
+    "A call is currently being placed!": "Зараз триває виклик!",
     "A call is already in progress!": "Вже здійснюється дзвінок!",
     "Permission Required": "Потрібен дозвіл",
     "You do not have permission to start a conference call in this room": "У вас немає дозволу, щоб розпочати дзвінок-конференцію в цій кімнаті",
@@ -1602,5 +1602,7 @@
     "Share Link to User": "Поділитися посиланням на користувача",
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Повідомлення тут захищено наскрізним шифруванням. Підтвердьте %(displayName)s у їхньому профілі — натиснувши на їх аватар.",
     "Open": "Відкрити",
-    "<a>In reply to</a> <pill>": "<a>У відповідь на</a> <pill>"
+    "<a>In reply to</a> <pill>": "<a>У відповідь на</a> <pill>",
+    "The user you called is busy.": "Користувач, якого ви викликаєте, зайнятий.",
+    "User Busy": "Користувач зайнятий"
 }
