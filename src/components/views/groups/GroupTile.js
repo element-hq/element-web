@@ -22,6 +22,9 @@ import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import {mediaFromMxc} from "../../../customisations/Media";
+import { _t } from "../../../languageHandler";
+import TagOrderActions from "../../../actions/TagOrderActions";
+import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
 
 @replaceableComponent("views.groups.GroupTile")
 class GroupTile extends React.Component {
@@ -60,6 +63,18 @@ class GroupTile extends React.Component {
         });
     };
 
+    onPinClick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dis.dispatch(TagOrderActions.moveTag(this.context, this.props.groupId, 0));
+    };
+
+    onUnpinClick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dis.dispatch(TagOrderActions.removeTag(this.context, this.props.groupId));
+    };
+
     render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -90,6 +105,14 @@ class GroupTile extends React.Component {
                 <div className="mx_GroupTile_name">{ name }</div>
                 { descElement }
                 <div className="mx_GroupTile_groupId">{ this.props.groupId }</div>
+                { !(GroupFilterOrderStore.getOrderedTags() || []).includes(this.props.groupId)
+                    ? <AccessibleButton kind="link" onClick={this.onPinClick}>
+                        { _t("Pin") }
+                    </AccessibleButton>
+                    : <AccessibleButton kind="link" onClick={this.onUnpinClick}>
+                        { _t("Unpin") }
+                    </AccessibleButton>
+                }
             </div>
         </AccessibleButton>;
     }

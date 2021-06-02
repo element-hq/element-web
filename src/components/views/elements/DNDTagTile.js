@@ -30,7 +30,7 @@ export default function DNDTagTile(props) {
         const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
         contextMenu = (
             <ContextMenu {...toRightOf(elementRect)} onFinished={closeMenu}>
-                <TagTileContextMenu tag={props.tag} onFinished={closeMenu} />
+                <TagTileContextMenu tag={props.tag} onFinished={closeMenu} index={props.index} />
             </ContextMenu>
         );
     }
