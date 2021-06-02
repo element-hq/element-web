@@ -462,6 +462,9 @@ export default class CallHandler extends EventEmitter {
                         if (call.hangupReason === CallErrorCode.UserHangup) {
                             title = _t("Call Declined");
                             description = _t("The other party declined the call.");
+                        } else if (call.hangupReason === CallErrorCode.UserBusy) {
+                            title = _t("User Busy");
+                            description = _t("The user you called is busy.");
                         } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
                             title = _t("Call Failed");
                             // XXX: full stop appended as some relic here, but these
@@ -799,7 +802,10 @@ export default class CallHandler extends EventEmitter {
 
                     const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
                     if (this.getCallForRoom(mappedRoomId)) {
-                        // ignore multiple incoming calls to the same room
+                        console.log(
+                            "Got incoming call for room " + mappedRoomId +
+                            " but there's already a call for this room: ignoring",
+                        );
                         return;
                     }
 

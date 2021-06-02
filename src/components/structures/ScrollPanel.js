@@ -902,13 +902,13 @@ export default class ScrollPanel extends React.Component {
                 onScroll={this.onScroll}
                 onWheel={this.props.onUserScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
-                    { this.props.fixedChildren }
-                    <div className="mx_RoomView_messageListWrapper">
-                        <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
-                            { this.props.children }
-                        </ol>
-                    </div>
-                </AutoHideScrollbar>
-            );
+                { this.props.fixedChildren }
+                <div className="mx_RoomView_messageListWrapper">
+                    <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
+                        { this.props.children }
+                    </ol>
+                </div>
+            </AutoHideScrollbar>
+        );
     }
 }

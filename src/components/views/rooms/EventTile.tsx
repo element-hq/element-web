@@ -790,13 +790,6 @@ export default class EventTile extends React.Component<IProps, IState> {
             return null;
         }
         const eventId = this.props.mxEvent.getId();
-        if (!eventId) {
-            // XXX: Temporary diagnostic logging for https://github.com/vector-im/element-web/issues/11120
-            console.error("EventTile attempted to get relations for an event without an ID");
-            // Use event's special `toJSON` method to log key data.
-            console.log(JSON.stringify(this.props.mxEvent, null, 4));
-            console.trace("Stacktrace for https://github.com/vector-im/element-web/issues/11120");
-        }
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
     };
 

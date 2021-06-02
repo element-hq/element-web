@@ -21,7 +21,6 @@ import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import GroupStore from './stores/GroupStore';
-import {allSettled} from "./utils/promise";
 import StyledCheckbox from './components/views/elements/StyledCheckbox';
 
 export function showGroupInviteDialog(groupId) {
@@ -120,7 +119,7 @@ function _onGroupInviteFinished(groupId, addrs) {
 function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
     const matrixClient = MatrixClientPeg.get();
     const errorList = [];
-    return allSettled(addrs.map((addr) => {
+    return Promise.allSettled(addrs.map((addr) => {
         return GroupStore
             .addRoomToGroup(groupId, addr.address, addRoomsPublicly)
             .catch(() => { errorList.push(addr.address); })

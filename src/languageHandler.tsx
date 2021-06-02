@@ -105,12 +105,14 @@ function safeCounterpartTranslate(text: string, options?: object) {
     return translated;
 }
 
+type SubstitutionValue = number | string | React.ReactNode | ((sub: string) => React.ReactNode);
+
 export interface IVariables {
     count?: number;
-    [key: string]: number | string;
+    [key: string]: SubstitutionValue;
 }
 
-type Tags = Record<string, (sub: string) => React.ReactNode>;
+type Tags = Record<string, SubstitutionValue>;
 
 export type TranslatedString = string | React.ReactNode;
 
@@ -247,7 +249,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 let replaced;
                 // If substitution is a function, call it
                 if (mapping[regexpString] instanceof Function) {
-                    replaced = (mapping as Tags)[regexpString].apply(null, capturedGroups);
+                    replaced = ((mapping as Tags)[regexpString] as Function)(...capturedGroups);
                 } else {
                     replaced = mapping[regexpString];
                 }
