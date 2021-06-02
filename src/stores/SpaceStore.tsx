@@ -33,6 +33,7 @@ import {EnhancedMap, mapDiff} from "../utils/maps";
 import {setHasDiff} from "../utils/sets";
 import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
 import RoomViewStore from "./RoomViewStore";
+import { arrayHasOrderChange } from "../utils/arrays";
 
 interface IState {}
 
@@ -60,8 +61,16 @@ const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces,
     }, [[], []]);
 };
 
+const SpaceTagOrderingField = "org.matrix.mscXXXX.space";
+
+const getSpaceTagOrdering = (space: Room): number | undefined => {
+    return space?.getAccountData(EventType.Tag)?.getContent()?.tags?.[SpaceTagOrderingField]?.order;
+};
+
+const sortRootSpaces = (spaces: Room[]): Room[] => sortBy(spaces, [getSpaceTagOrdering, "roomId"]);
+
 // For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
-export const getOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
+export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
     let validatedOrder: string = null;
 
     if (typeof order === "string" && Array.from(order).every((c: string) => {
@@ -214,7 +223,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             const roomId = ev.getStateKey();
             const childRoom = this.matrixClient?.getRoom(roomId);
             const createTs = childRoom?.currentState.getStateEvents(EventType.RoomCreate, "")?.getTs();
-            return getOrder(ev.getContent().order, createTs, roomId);
+            return getChildOrder(ev.getContent().order, createTs, roomId);
         }).map(ev => {
             return this.matrixClient.getRoom(ev.getStateKey());
         }).filter(room => {
@@ -326,7 +335,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         //     rootSpaces.push(space);
         // });
 
-        this.rootSpaces = rootSpaces;
+        this.rootSpaces = sortRootSpaces(rootSpaces);
         this.parentMap = backrefs;
 
         // if the currently selected space no longer exists, remove its selection
@@ -338,7 +347,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_TOP_LEVEL_SPACES, this.spacePanelSpaces);
 
         // build initial state of invited spaces as we would have missed the emitted events about the room at launch
-        this._invitedSpaces = new Set(invitedSpaces);
+        this._invitedSpaces = new Set(sortRootSpaces(invitedSpaces));
         this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
     }, 100, {trailing: true, leading: true});
 
@@ -472,6 +481,20 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
+    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEv?: MatrixEvent) => {
+        if (!room.isSpaceRoom() || ev.getType() !== EventType.Tag) return;
+
+        const order = ev.getContent()?.tags?.[SpaceTagOrderingField]?.order;
+        const lastOrder = lastEv?.getContent()?.tags?.[SpaceTagOrderingField]?.order;
+        if (order !== lastOrder) {
+            const rootSpaces = sortRootSpaces(this.rootSpaces);
+            if (arrayHasOrderChange(this.rootSpaces, rootSpaces)) {
+                this.rootSpaces = rootSpaces;
+                this.emit(UPDATE_TOP_LEVEL_SPACES, this.spacePanelSpaces);
+            }
+        }
+    };
+
     private onRoomState = (ev: MatrixEvent) => {
         const room = this.matrixClient.getRoom(ev.getRoomId());
         if (!room) return;
@@ -516,6 +539,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (this.matrixClient) {
             this.matrixClient.removeListener("Room", this.onRoom);
             this.matrixClient.removeListener("Room.myMembership", this.onRoom);
+            this.matrixClient.removeListener("Room.accountData", this.onRoomAccountData);
             this.matrixClient.removeListener("RoomState.events", this.onRoomState);
         }
         await this.reset();
@@ -525,6 +549,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!SettingsStore.getValue("feature_spaces")) return;
         this.matrixClient.on("Room", this.onRoom);
         this.matrixClient.on("Room.myMembership", this.onRoom);
+        this.matrixClient.on("Room.accountData", this.onRoomAccountData);
         this.matrixClient.on("RoomState.events", this.onRoomState);
 
         await this.onSpaceUpdate(); // trigger an initial update

@@ -39,7 +39,7 @@ import {mediaFromMxc} from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import {useStateToggle} from "../../hooks/useStateToggle";
-import {getOrder} from "../../stores/SpaceStore";
+import {getChildOrder} from "../../stores/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import {linkifyElement} from "../../HtmlUtils";
 
@@ -286,7 +286,7 @@ export const HierarchyLevel = ({
     const children = Array.from(relations.get(spaceId)?.values() || []);
     const sortedChildren = sortBy(children, ev => {
         // XXX: Space Summary API doesn't give the child origin_server_ts but once it does we should use it for sorting
-        return getOrder(ev.content.order, null, ev.state_key);
+        return getChildOrder(ev.content.order, null, ev.state_key);
     });
     const [subspaces, childRooms] = sortedChildren.reduce((result, ev: ISpaceSummaryEvent) => {
         const roomId = ev.state_key;
