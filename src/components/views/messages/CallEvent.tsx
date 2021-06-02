@@ -43,7 +43,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            callState: this.props.callEventGrouper.getState(),
+            callState: this.props.callEventGrouper.state,
         }
     }
 
@@ -77,7 +77,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
             );
         }
         if (state === CallState.Ended) {
-            const hangupReason = this.props.callEventGrouper.getHangupReason();
+            const hangupReason = this.props.callEventGrouper.hangupReason;
 
             if (["user_hangup", "user hangup"].includes(hangupReason) || !hangupReason) {
                 // workaround for https://github.com/vector-im/element-web/issues/5178
@@ -157,7 +157,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
     render() {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
-        const callType = this.props.callEventGrouper.isVoice() ? _t("Voice call") : _t("Video call");
+        const callType = this.props.callEventGrouper.isVoice ? _t("Voice call") : _t("Video call");
         const content = this.renderContent(this.state.callState);
 
         return (

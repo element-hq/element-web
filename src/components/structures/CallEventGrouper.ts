@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
@@ -38,9 +37,9 @@ export enum CustomCallState {
 }
 
 export default class CallEventGrouper extends EventEmitter {
-    events: Set<MatrixEvent> = new Set<MatrixEvent>();
-    call: MatrixCall;
-    state: CallState | CustomCallState;
+    private events: Set<MatrixEvent> = new Set<MatrixEvent>();
+    private call: MatrixCall;
+    public state: CallState | CustomCallState;
 
     constructor() {
         super();
@@ -50,6 +49,30 @@ export default class CallEventGrouper extends EventEmitter {
 
     private get invite(): MatrixEvent {
         return [...this.events].find((event) => event.getType() === EventType.CallInvite);
+    }
+
+    private get hangup(): MatrixEvent {
+        return [...this.events].find((event) => event.getType() === EventType.CallHangup);
+    }
+
+    public get isVoice(): boolean {
+        const invite = this.invite;
+        if (!invite) return;
+
+        // FIXME: Find a better way to determine this from the event?
+        if (invite.getContent()?.offer?.sdp?.indexOf('m=video') !== -1) return false;
+        return true;
+    }
+
+    public get hangupReason(): string | null {
+        return this.hangup?.getContent()?.reason;
+    }
+
+    /**
+     * Returns true if there are only events from the other side - we missed the call
+     */
+    private get callWasMissed(): boolean {
+        return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
     }
 
     public answerCall = () => {
@@ -68,35 +91,6 @@ export default class CallEventGrouper extends EventEmitter {
         });
     }
 
-    public isVoice(): boolean {
-        const invite = this.invite;
-
-        // FIXME: Find a better way to determine this from the event?
-        let isVoice = true;
-        if (
-            invite.getContent().offer && invite.getContent().offer.sdp &&
-            invite.getContent().offer.sdp.indexOf('m=video') !== -1
-        ) {
-            isVoice = false;
-        }
-
-        return isVoice;
-    }
-
-    public getState(): CallState | CustomCallState {
-        return this.state;
-    }
-
-    public getHangupReason(): string | null {
-        return [...this.events].find((event) => event.getType() === EventType.CallHangup)?.getContent()?.reason;
-    }
-
-    /**
-     * Returns true if there are only events from the other side - we missed the call
-     */
-    private wasThisCallMissed(): boolean {
-        return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
-    }
 
     private setCallListeners() {
         if (!this.call) return;
@@ -110,7 +104,7 @@ export default class CallEventGrouper extends EventEmitter {
             const lastEvent = [...this.events][this.events.size - 1];
             const lastEventType = lastEvent.getType();
 
-            if (this.wasThisCallMissed()) this.state = CustomCallState.Missed;
+            if (this.callWasMissed) this.state = CustomCallState.Missed;
             else if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
             else if (lastEventType === EventType.CallReject) this.state = CallState.Ended;
             else if (lastEventType === EventType.CallInvite && this.call) this.state = CallState.Connecting;
@@ -119,16 +113,16 @@ export default class CallEventGrouper extends EventEmitter {
     }
 
     private setCall = () => {
+        if (this.call) return;
+
         const callId = [...this.events][0].getContent().call_id;
-        if (!this.call) {
-            this.call = CallHandler.sharedInstance().getCallById(callId);
-            this.setCallListeners();
-        }
+        this.call = CallHandler.sharedInstance().getCallById(callId);
+        this.setCallListeners();
         this.setState();
     }
 
     public add(event: MatrixEvent) {
         this.events.add(event);
-        this.setState();
+        this.setCall();
     }
 }
