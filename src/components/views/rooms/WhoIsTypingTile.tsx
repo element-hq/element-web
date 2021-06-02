@@ -25,6 +25,7 @@ import Timer from '../../../utils/Timer';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { compare } from "../../../utils/strings";
 
 interface IProps {
     // the room this statusbar is representing.
@@ -207,7 +208,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         usersTyping = usersTyping.concat(stoppedUsersOnTimer);
         // sort them so the typing members don't change order when
         // moved to delayedStopTypingTimers
-        usersTyping.sort((a, b) => a.name.localeCompare(b.name));
+        usersTyping.sort((a, b) => compare(a.name, b.name));
 
         const typingString = WhoIsTyping.whoIsTypingString(
             usersTyping,
