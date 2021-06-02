@@ -21,7 +21,7 @@ import { _t, _td } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
 import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../structures/CallEventGrouper';
 import FormButton from '../elements/FormButton';
-import { CallState } from 'matrix-js-sdk/src/webrtc/call';
+import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 
 interface IProps {
@@ -79,7 +79,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
         if (state === CallState.Ended) {
             const hangupReason = this.props.callEventGrouper.hangupReason;
 
-            if (["user_hangup", "user hangup"].includes(hangupReason) || !hangupReason) {
+            if ([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason) {
                 // workaround for https://github.com/vector-im/element-web/issues/5178
                 // it seems Android randomly sets a reason of "user hangup" which is
                 // interpreted as an error code :(
@@ -94,13 +94,13 @@ export default class CallEvent extends React.Component<IProps, IState> {
             }
 
             let reason;
-            if (hangupReason === "ice_failed") {
+            if (hangupReason === CallErrorCode.IceFailed) {
                 // We couldn't establish a connection at all
                 reason = _t("Could not connect media");
             } else if (hangupReason === "ice_timeout") {
                 // We established a connection but it died
                 reason = _t("Connection failed");
-            } else if (hangupReason === "user_media_failed") {
+            } else if (hangupReason === CallErrorCode.NoUserMedia) {
                 // The other side couldn't open capture devices
                 reason = _t("Their device couldn't start the camera or microphone");
             } else if (hangupReason === "unknown_error") {
@@ -108,9 +108,9 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 // (as opposed to an error code they gave but we don't know about,
                 // in which case we show the error code)
                 reason = _t("An unknown error occurred");
-            } else if (hangupReason === "invite_timeout") {
+            } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 reason = _t("No answer");
-            } else if (hangupReason === "user_busy") {
+            } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
                 reason = _t('Unknown failure: %(reason)s)', {reason: hangupReason});
