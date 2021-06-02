@@ -3370,5 +3370,11 @@
     "See when people join, leave, or are invited to your active room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése az aktív szobájában",
     "Kick, ban, or invite people to your active room, and make you leave": "Kirúgni, kitiltani vagy meghívni embereket az aktív szobába és, hogy ön elhagyja a szobát",
     "See when people join, leave, or are invited to this room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése ebben a szobában",
-    "Kick, ban, or invite people to this room, and make you leave": "Kirúgni, kitiltani vagy meghívni embereket ebbe a szobába és, hogy ön elhagyja a szobát"
+    "Kick, ban, or invite people to this room, and make you leave": "Kirúgni, kitiltani vagy meghívni embereket ebbe a szobába és, hogy ön elhagyja a szobát",
+    "Currently joining %(count)s rooms|one": "%(count)s szobába lép be",
+    "Currently joining %(count)s rooms|other": "%(count)s szobába lép be",
+    "No results for \"%(query)s\"": "Nincs találat ehhez: %(query)s",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Próbáljon ki más szavakat vagy keressen elgépelést. Néhány találat azért nem látszik, mert privát és meghívóra van szüksége, hogy csatlakozhasson.",
+    "The user you called is busy.": "A hívott felhasználó foglalt.",
+    "User Busy": "Felhasználó foglalt"
 }
