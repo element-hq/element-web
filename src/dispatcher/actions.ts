@@ -101,6 +101,14 @@ export enum Action {
     OpenDialPad = "open_dial_pad",
 
     /**
+     * Dial the phone number in the payload
+     * payload: {
+     *     number: <phone number>,
+     * }
+     */
+    DialNumber = "dial_number",
+
+    /**
      * Fired when CallHandler has checked for PSTN protocol support
      * payload: none
      * XXX: Is an action the right thing for this?
