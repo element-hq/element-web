@@ -110,6 +110,8 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 reason = _t("An unknown error occurred");
             } else if (hangupReason === "invite_timeout") {
                 reason = _t("No answer");
+            } else if (hangupReason === "user_busy") {
+                reason = _t("The user you called is busy.");
             } else {
                 reason = _t('Unknown failure: %(reason)s)', {reason: hangupReason});
             }
