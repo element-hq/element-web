@@ -91,7 +91,6 @@
     "qs": "^6.9.6",
     "re-resizable": "^6.9.0",
     "react": "^16.14.0",
-    "react-beautiful-dnd": "^4.0.1",
     "react-dom": "^16.14.0",
     "react-focus-lock": "^2.5.0",
     "react-transition-group": "^4.4.1",

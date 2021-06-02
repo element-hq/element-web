@@ -6,7 +6,6 @@ import * as TestUtils from '../../../test-utils';
 
 import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import sdk from '../../../skinned-sdk';
-import { DragDropContext } from 'react-beautiful-dnd';
 
 import dis from '../../../../src/dispatcher/dispatcher';
 import DMRoomMap from '../../../../src/utils/DMRoomMap';
@@ -68,9 +67,7 @@ describe('RoomList', () => {
         const RoomList = sdk.getComponent('views.rooms.RoomList');
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
         root = ReactDOM.render(
-            <DragDropContext>
-                <WrappedRoomList searchFilter="" onResize={() => {}} />
-            </DragDropContext>,
+            <WrappedRoomList searchFilter="" onResize={() => {}} />,
             parentDiv,
         );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
