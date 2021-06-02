@@ -176,7 +176,9 @@ export default class MFileBody extends React.Component {
             placeholder = (
                 <div className="mx_MFileBody_info">
                     <span className="mx_MFileBody_info_icon" >
-                        {this.props.isExporting ? <img class="mx_export_attach_icon" src="icons/attach.svg" /> : null}
+                        {this.props.isExporting ?
+                            <img className="mx_export_attach_icon" src="icons/attach.svg" />
+                            : null}
                     </span>
                     <span className="mx_MFileBody_info_filename">{this.presentableTextForFile(content, false)}</span>
                 </div>

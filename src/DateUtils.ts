@@ -137,7 +137,6 @@ export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): bo
     return prevEventDate.getDay() !== nextEventDate.getDay();
 }
 
-
 export function formatFullDateNoDay(date: Date) {
     return (
         date.getFullYear() +

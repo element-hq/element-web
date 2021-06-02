@@ -156,7 +156,9 @@ export default class HTMLExporter extends Exporter {
         try {
             const isEncrypted = event.isEncrypted();
             const content = event.getContent();
-            if (isEncrypted && !content.hasOwnProperty("org.matrix.msc1767.file")) {
+            const shouldDecrypt = isEncrypted && !content.hasOwnProperty("org.matrix.msc1767.file")
+                                  && event.getType() !== "m.sticker";
+            if (shouldDecrypt) {
                 blob = await decryptFile(content.file);
             } else {
                 const media = mediaFromContent(event.getContent());
@@ -185,7 +187,7 @@ export default class HTMLExporter extends Exporter {
         if (lastDot === -1) return [file, ""];
         const fileName = file.slice(0, lastDot);
         const ext = file.slice(lastDot + 1);
-        return [fileName, ext];
+        return [fileName, '.' + ext];
     }
 
     protected getFilePath(event: MatrixEvent) {
@@ -202,12 +204,11 @@ export default class HTMLExporter extends Exporter {
                 fileDirectory = "audio";
                 break;
             default:
-                fileDirectory = "files";
-                break;
+                fileDirectory = event.getType() === "m.sticker" ? "stickers" : "files";
         }
         const fileDate = formatFullDateNoDay(new Date(event.getTs()));
         const [fileName, fileExt] = this.splitFileName(event.getContent().body);
-        const filePath = fileDirectory + "/" + fileName + '-' + fileDate + '.' + fileExt;
+        const filePath = fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
         return filePath;
     }
 
