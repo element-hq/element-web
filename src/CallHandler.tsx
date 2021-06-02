@@ -264,7 +264,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     public getSupportsVirtualRooms() {
-        return this.supportsPstnProtocol;
+        return this.supportsSipNativeVirtual;
     }
 
     public pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
@@ -883,10 +883,15 @@ export default class CallHandler extends EventEmitter {
 
         // Now check to see if this is a virtual user, in which case we should find the
         // native user
-        const nativeLookupResults = await this.sipNativeLookup(userId);
-        const lookupSuccess = nativeLookupResults.length > 0 && nativeLookupResults[0].fields.lookup_success;
-        const nativeUserId = lookupSuccess ? nativeLookupResults[0].userid : userId;
-        console.log("Looked up " + number + " to " + userId + " and mapped to native user " + nativeUserId);
+        let nativeUserId;
+        if (this.getSupportsVirtualRooms()) {
+            const nativeLookupResults = await this.sipNativeLookup(userId);
+            const lookupSuccess = nativeLookupResults.length > 0 && nativeLookupResults[0].fields.lookup_success;
+            nativeUserId = lookupSuccess ? nativeLookupResults[0].userid : userId;
+            console.log("Looked up " + number + " to " + userId + " and mapped to native user " + nativeUserId);
+        } else {
+            nativeUserId = userId;
+        }
 
         const roomId = await ensureDMExists(MatrixClientPeg.get(), nativeUserId);
 
