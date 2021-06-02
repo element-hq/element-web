@@ -265,6 +265,8 @@ export function mkStubRoom(roomId = null, name) {
         isSpaceRoom: jest.fn(() => false),
         getUnreadNotificationCount: jest.fn(() => 0),
         getEventReadUpTo: jest.fn(() => null),
+        getCanonicalAlias: jest.fn(),
+        getAltAliases: jest.fn().mockReturnValue([]),
         timeline: [],
     };
 }
