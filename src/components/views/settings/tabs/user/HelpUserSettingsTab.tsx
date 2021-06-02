@@ -227,7 +227,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
         const appVersion = this.state.appVersion || 'unknown';
 
-        let olmVersion = MatrixClientPeg.get().olmVersion;
+        let olmVersion: string = MatrixClientPeg.get().olmVersion?.toString();
         olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
 
         let updateButton = null;
