@@ -121,6 +121,9 @@ export default class MessagePanel extends React.Component {
         // callback which is called when the panel is scrolled.
         onScroll: PropTypes.func,
 
+        // callback which is called when the user interacts with the room timeline
+        onUserScroll: PropTypes.func,
+
         // callback which is called when more content is needed.
         onFillRequest: PropTypes.func,
 
@@ -885,6 +888,7 @@ export default class MessagePanel extends React.Component {
                     ref={this._scrollPanel}
                     className={className}
                     onScroll={this.props.onScroll}
+                    onUserScroll={this.props.onUserScroll}
                     onResize={this.onResize}
                     onFillRequest={this.props.onFillRequest}
                     onUnfillRequest={this.props.onUnfillRequest}

@@ -642,6 +642,17 @@ export default class RoomView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
     }
 
+    private onUserScroll = () => {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.room.roomId,
+                event_id: this.state.initialEventId,
+                highlighted: false,
+            });
+        }
+    }
+
     private onLayoutChange = () => {
         this.setState({
             layout: SettingsStore.getValue("layout"),
@@ -1513,8 +1524,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     // jump down to the bottom of this room, where new events are arriving
     private jumpToLiveTimeline = () => {
-        this.messagePanel.jumpToLiveTimeline();
-        dis.fire(Action.FocusComposer);
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.room.roomId,
+        });
     };
 
     // jump up to wherever our read marker is
@@ -1985,6 +1998,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 eventId={this.state.initialEventId}
                 eventPixelOffset={this.state.initialEventPixelOffset}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className={messagePanelClassNames}
@@ -2011,6 +2025,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 highlight={this.state.room.getUnreadNotificationCount('highlight') > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
+                roomId={this.state.roomId}
             />);
         }
 
