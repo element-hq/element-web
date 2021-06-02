@@ -55,6 +55,10 @@ export default class CallEventGrouper extends EventEmitter {
         return [...this.events].find((event) => event.getType() === EventType.CallHangup);
     }
 
+    private get reject(): MatrixEvent {
+        return [...this.events].find((event) => event.getType() === EventType.CallReject);
+    }
+
     public get isVoice(): boolean {
         const invite = this.invite;
         if (!invite) return;
@@ -101,13 +105,10 @@ export default class CallEventGrouper extends EventEmitter {
         if (SUPPORTED_STATES.includes(this.call?.state)) {
             this.state = this.call.state;
         } else {
-            const lastEvent = [...this.events][this.events.size - 1];
-            const lastEventType = lastEvent.getType();
-
             if (this.callWasMissed) this.state = CustomCallState.Missed;
-            else if (lastEventType === EventType.CallHangup) this.state = CallState.Ended;
-            else if (lastEventType === EventType.CallReject) this.state = CallState.Ended;
-            else if (lastEventType === EventType.CallInvite && this.call) this.state = CallState.Connecting;
+            else if (this.reject) this.state = CallState.Ended;
+            else if (this.hangup) this.state = CallState.Ended;
+            else if (this.invite && this.call) this.state = CallState.Connecting;
         }
         this.emit(CallEventGrouperEvent.StateChanged, this.state);
     }
