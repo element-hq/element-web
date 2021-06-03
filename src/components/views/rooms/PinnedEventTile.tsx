@@ -40,7 +40,7 @@ const AVATAR_SIZE = 24;
 
 @replaceableComponent("views.rooms.PinnedEventTile")
 export default class PinnedEventTile extends React.Component<IProps> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
 
     private onTileClicked = () => {
         dis.dispatch({
