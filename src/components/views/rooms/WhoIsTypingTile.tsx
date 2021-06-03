@@ -215,7 +215,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
             this.props.whoIsTypingLimit,
         );
         if (!typingString) {
-            return (<div className="mx_WhoIsTypingTile_empty" />);
+            return null;
         }
 
         return (
