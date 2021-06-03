@@ -223,7 +223,8 @@ export default class Registration extends React.Component<IProps, IState> {
                 this.setState({
                     flows: e.data.flows,
                 });
-            } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
+            } else if (e.httpStatus === 403 || e.errcode === "M_FORBIDDEN") {
+                // Check for 403 or M_FORBIDDEN, Synapse used to send 403 M_UNKNOWN but now sends 403 M_FORBIDDEN.
                 // At this point registration is pretty much disabled, but before we do that let's
                 // quickly check to see if the server supports SSO instead. If it does, we'll send
                 // the user off to the login page to figure their account out.
@@ -467,7 +468,7 @@ export default class Registration extends React.Component<IProps, IState> {
             let ssoSection;
             if (this.state.ssoFlow) {
                 let continueWithSection;
-                const providers = this.state.ssoFlow["org.matrix.msc2858.identity_providers"] || [];
+                const providers = this.state.ssoFlow.identity_providers || [];
                 // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
                 if (providers.length > 1) {
                     // i18n: ssoButtons is a placeholder to help translators understand context

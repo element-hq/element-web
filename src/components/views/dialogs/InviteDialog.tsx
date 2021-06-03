@@ -49,10 +49,11 @@ import {mediaFromMxc} from "../../../customisations/Media";
 import {getAddressType} from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
+import { compare } from '../../../utils/strings';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {copyPlaintext, selectText} from "../../../utils/strings";
+import { copyPlaintext, selectText } from "../../../utils/strings";
 import * as ContextMenu from "../../structures/ContextMenu";
-import {toRightOf} from "../../structures/ContextMenu";
+import { toRightOf } from "../../structures/ContextMenu";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
@@ -587,7 +588,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         members.sort((a, b) => {
             if (a.score === b.score) {
                 if (a.numRooms === b.numRooms) {
-                    return a.member.userId.localeCompare(b.member.userId);
+                    return compare(a.member.userId, b.member.userId);
                 }
 
                 return b.numRooms - a.numRooms;

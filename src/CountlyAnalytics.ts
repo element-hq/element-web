@@ -816,7 +816,9 @@ export default class CountlyAnalytics {
         window.addEventListener("mousemove", this.onUserActivity);
         window.addEventListener("click", this.onUserActivity);
         window.addEventListener("keydown", this.onUserActivity);
-        window.addEventListener("scroll", this.onUserActivity);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        window.addEventListener("scroll", this.onUserActivity, { passive: true });
 
         this.activityIntervalId = setInterval(() => {
             this.inactivityCounter++;

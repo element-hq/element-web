@@ -67,6 +67,7 @@ const cssClasses = [
 
 @replaceableComponent("structures.LeftPanel")
 export default class LeftPanel extends React.Component<IProps, IState> {
+    private ref: React.RefObject<HTMLDivElement> = createRef();
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private groupFilterPanelWatcherRef: string;
     private bgImageWatcherRef: string;
@@ -93,6 +94,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         });
     }
 
+    public componentDidMount() {
+        UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
+        UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        this.listContainerRef.current?.addEventListener("scroll", this.onScroll, { passive: true });
+    }
+
     public componentWillUnmount() {
         SettingsStore.unwatchSetting(this.groupFilterPanelWatcherRef);
         SettingsStore.unwatchSetting(this.bgImageWatcherRef);
@@ -100,6 +109,15 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        UIStore.instance.stopTrackingElementDimensions("ListContainer");
+        UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
+        this.listContainerRef.current?.removeEventListener("scroll", this.onScroll);
+    }
+
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
+        if (prevState.activeSpace !== this.state.activeSpace) {
+            this.refreshStickyHeaders();
+        }
     }
 
     private updateActiveSpace = (activeSpace: Room) => {
@@ -245,9 +263,23 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.add("mx_RoomSublist_headerContainer_sticky");
                 }
+
+                const listDimensions = UIStore.instance.getElementDimensions("ListContainer");
+                if (listDimensions) {
+                    const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
+                    const headerStickyWidth = listDimensions.width - headerRightMargin;
+                    const newWidth = `${headerStickyWidth}px`;
+                    if (header.style.width !== newWidth) {
+                        header.style.width = newWidth;
+                    }
+                }
             } else if (!style.stickyTop && !style.stickyBottom) {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_sticky");
+                }
+
+                if (header.style.width) {
+                    header.style.removeProperty('width');
                 }
             }
         }
@@ -267,7 +299,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
+    private onScroll = (ev: Event) => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
     };
@@ -407,6 +439,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
             activeSpace={this.state.activeSpace}
+            onListCollapse={this.refreshStickyHeaders}
         />;
 
         const containerClasses = classNames({
@@ -420,7 +453,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         );
 
         return (
-            <div className={containerClasses}>
+            <div className={containerClasses} ref={this.ref}>
                 {leftLeftPanel}
                 <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
@@ -430,7 +463,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
-                            onScroll={this.onScroll}
                             ref={this.listContainerRef}
                             // Firefox sometimes makes this element focusable due to
                             // overflow:scroll;, so force it out of tab order.

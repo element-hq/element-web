@@ -83,6 +83,7 @@ import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import { omit } from 'lodash';
 import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
@@ -176,6 +177,7 @@ export interface IState {
     statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
+
     upgradeRecommendation?: {
         version: string;
         needsUpgrade: boolean;
@@ -529,7 +531,20 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState));
+        const hasPropsDiff = objectHasDiff(this.props, nextProps);
+
+        // React only shallow comparison and we only want to trigger
+        // a component re-render if a room requires an upgrade
+        const newUpgradeRecommendation = nextState.upgradeRecommendation || {}
+
+        const state = omit(this.state, ['upgradeRecommendation']);
+        const newState = omit(nextState, ['upgradeRecommendation'])
+
+        const hasStateDiff =
+            objectHasDiff(state, newState) ||
+            (newUpgradeRecommendation.needsUpgrade === true)
+
+        return hasPropsDiff || hasStateDiff;
     }
 
     componentDidUpdate() {
@@ -640,6 +655,17 @@ export default class RoomView extends React.Component<IProps, IState> {
         // Tinter.tint(); // reset colourscheme
 
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
+    }
+
+    private onUserScroll = () => {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.room.roomId,
+                event_id: this.state.initialEventId,
+                highlighted: false,
+            });
+        }
     }
 
     private onLayoutChange = () => {
@@ -812,7 +838,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() || ev.shouldAttemptDecryption()) return;
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
 
@@ -1513,8 +1539,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     // jump down to the bottom of this room, where new events are arriving
     private jumpToLiveTimeline = () => {
-        this.messagePanel.jumpToLiveTimeline();
-        dis.fire(Action.FocusComposer);
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.room.roomId,
+        });
     };
 
     // jump up to wherever our read marker is
@@ -1985,6 +2013,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 eventId={this.state.initialEventId}
                 eventPixelOffset={this.state.initialEventPixelOffset}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className={messagePanelClassNames}
@@ -2011,6 +2040,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 highlight={this.state.room.getUnreadNotificationCount('highlight') > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
+                roomId={this.state.roomId}
             />);
         }
 
