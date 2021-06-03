@@ -79,8 +79,8 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { getKeyBindingsManager, RoomAction } from '../../KeyBindingsManager';
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
-import { IOpts } from "../../createRoom
-import { replaceableComponent } from "../../utils/replaceableComponent
+import { IOpts } from "../../createRoom";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 import { omit } from 'lodash';
 import UIStore from "../../stores/UIStore";
 
