@@ -1,11 +1,11 @@
 import React from "react"
 import streamSaver from "streamsaver";
 import JSZip from "jszip";
+import Exporter from "./Exporter";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent, mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Exporter } from "./Exporter";
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";

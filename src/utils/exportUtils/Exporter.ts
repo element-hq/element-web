@@ -4,10 +4,10 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { arrayFastClone } from "../arrays";
 
-export abstract class Exporter {
+export default abstract class Exporter {
     constructor(protected room: Room) {}
 
-    protected getTimelineConversation = () : MatrixEvent => {
+    protected getTimelineConversation = () : MatrixEvent[] => {
         if (!this.room) return;
 
         const cli = MatrixClientPeg.get();
