@@ -19,6 +19,10 @@ limitations under the License.
     margin-bottom: 4px;
     padding: 4px;
 
+    contain: strict;
+    height: 40px;
+    box-sizing: border-box;
+
     // The tile is also a flexbox row itself
     display: flex;
 
