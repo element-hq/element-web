@@ -11,25 +11,25 @@ import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { formatFullDateNoDay, formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
+import { _t } from "../../languageHandler";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
 import * as Avatar from "../../Avatar";
 import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
+import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import exportCSS from "./exportCSS";
 import exportJS from "./exportJS";
-import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import exportIcons from "./exportIcons";
-import { _t } from "../../languageHandler";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
     protected avatars: Map<string, boolean>;
     protected permalinkCreator: RoomPermalinkCreator;
 
-    constructor(res: MatrixEvent[], room: Room) {
-        super(res, room);
+    constructor(room: Room) {
+        super(room);
         this.zip = new JSZip();
         this.avatars = new Map<string, boolean>();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
@@ -57,16 +57,16 @@ export default class HTMLExporter extends Exporter {
         return renderToStaticMarkup(avatar);
     }
 
-    protected async wrapHTML(content: string, room: Room) {
+    protected async wrapHTML(content: string) {
         const roomAvatar32 = await this.getRoomAvatar(32);
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const cli = MatrixClientPeg.get();
-        const creator = room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
-        const creatorName = room?.getMember(creator)?.rawDisplayName || creator;
+        const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
+        const creatorName = this.room?.getMember(creator)?.rawDisplayName || creator;
         const exporter = cli.getUserId();
-        const exporterName = room?.getMember(exporter)?.rawDisplayName;
-        const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic
-                     || room.topic || "";
+        const exporterName = this.room?.getMember(exporter)?.rawDisplayName;
+        const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic
+                     || this.room.topic || "";
         const createdText = _t("%(creatorName)s created this room.", {
             creatorName,
         });
@@ -74,7 +74,7 @@ export default class HTMLExporter extends Exporter {
         const exportedText = _t(`This is the start of export of <b>%(roomName)s</b>.
          Exported by %(exporterDetails)s at %(exportDate)s. `, {
              exportDate,
-             roomName: room.name,
+             roomName: this.room.name,
              exporterDetails: `<a href="https://matrix.to/#/${exporter}" target="_blank" rel="noopener noreferrer">
                 ${exporterName ? `<b>${ exporterName }</b>(${ exporter })` : `<b>${ exporter }</b>`} 
              </a>`,
@@ -115,9 +115,9 @@ export default class HTMLExporter extends Exporter {
                             <div
                                 dir="auto"
                                 class="mx_RoomHeader_nametext"
-                                title="${room.name}"
+                                title="${this.room.name}"
                             >
-                                ${room.name}
+                                ${this.room.name}
                             </div>
                             </div>
                             <div class="mx_RoomHeader_topic" dir="auto"> ${topic} </div>
@@ -144,7 +144,7 @@ export default class HTMLExporter extends Exporter {
                                 >
                                 <div class="mx_NewRoomIntro">
                                     ${roomAvatar52}
-                                    <h2> ${room.name} </h2>
+                                    <h2> ${this.room.name} </h2>
                                     <p> ${createdText} <br/><br/> ${exportedText} </p>
                                     <p> ${topicText} </p>
                                 </div>
@@ -294,7 +294,7 @@ export default class HTMLExporter extends Exporter {
         return renderToStaticMarkup(eventTile);
     }
 
-    protected async createHTML(events: MatrixEvent[], room: Room) {
+    protected async createHTML(events: MatrixEvent[]) {
         let content = "";
         let prevEvent = null;
         for (const event of events) {
@@ -308,17 +308,21 @@ export default class HTMLExporter extends Exporter {
             content += body;
             prevEvent = event;
         }
-        return await this.wrapHTML(content, room);
+        return await this.wrapHTML(content);
     }
 
     public async export() {
-        const html = await this.createHTML(this.res, this.room);
+        const res = this.getTimelineConversation();
+        const html = await this.createHTML(res);
+
         this.zip.file("index.html", html);
         this.zip.file("css/style.css", exportCSS);
         this.zip.file("js/script.js", exportJS);
+
         for (const iconName in exportIcons) {
             this.zip.file(`icons/${iconName}`, exportIcons[iconName]);
         }
+
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         //Generate the zip file asynchronously
