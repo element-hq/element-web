@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React, { useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import {_t} from "../../../languageHandler";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -204,58 +205,89 @@ const SpacePanel = () => {
     };
 
     const activeSpaces = activeSpace ? [activeSpace] : [];
-    const expandCollapseButtonTitle = isPanelCollapsed ? _t("Expand space panel") : _t("Collapse space panel");
-    // TODO drag and drop for re-arranging order
-    return <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
-        {({onKeyDownHandler}) => (
-            <ul
-                className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
-                onKeyDown={onKeyDownHandler}
-            >
-                <AutoHideScrollbar className="mx_SpacePanel_spaceTreeWrapper">
-                    <div className="mx_SpaceTreeLevel">
-                        <SpaceButton
-                            className="mx_SpaceButton_home"
-                            onClick={() => SpaceStore.instance.setActiveSpace(null)}
-                            selected={!activeSpace}
-                            tooltip={_t("All rooms")}
-                            notificationState={RoomNotificationStateStore.instance.globalState}
-                            isNarrow={isPanelCollapsed}
+    return (
+        <DragDropContext onDragEnd={result => {
+            if (!result.destination) return; // dropped outside the list
+            SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
+        }}>
+            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+                {({onKeyDownHandler}) => (
+                    <ul
+                        className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
+                        onKeyDown={onKeyDownHandler}
+                    >
+                        <Droppable droppableId="top-level-spaces">
+                            {(provided, snapshot) => (
+                                <AutoHideScrollbar
+                                    {...provided.droppableProps}
+                                    wrappedRef={provided.innerRef}
+                                    className="mx_SpacePanel_spaceTreeWrapper"
+                                    style={snapshot.isDraggingOver ? {
+                                        pointerEvents: "none",
+                                    } : undefined}
+                                >
+                                    <div className="mx_SpaceTreeLevel">
+                                        <SpaceButton
+                                            className="mx_SpaceButton_home"
+                                            onClick={() => SpaceStore.instance.setActiveSpace(null)}
+                                            selected={!activeSpace}
+                                            tooltip={_t("All rooms")}
+                                            notificationState={RoomNotificationStateStore.instance.globalState}
+                                            isNarrow={isPanelCollapsed}
+                                        />
+                                        { invites.map(s => (
+                                            <SpaceItem
+                                                key={s.roomId}
+                                                space={s}
+                                                activeSpaces={activeSpaces}
+                                                isPanelCollapsed={isPanelCollapsed}
+                                                onExpand={() => setPanelCollapsed(false)}
+                                            />
+                                        )) }
+                                        { spaces.map((s, i) => (
+                                            <Draggable key={s.roomId} draggableId={s.roomId} index={i}>
+                                                {(provided, snapshot) => (
+                                                    <SpaceItem
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        key={s.roomId}
+                                                        innerRef={provided.innerRef}
+                                                        className={snapshot.isDragging
+                                                            ? "mx_SpaceItem_dragging"
+                                                            : undefined}
+                                                        space={s}
+                                                        activeSpaces={activeSpaces}
+                                                        isPanelCollapsed={isPanelCollapsed}
+                                                        onExpand={() => setPanelCollapsed(false)}
+                                                    />
+                                                )}
+                                            </Draggable>
+                                        )) }
+                                        { provided.placeholder }
+                                    </div>
+                                    <SpaceButton
+                                        className={newClasses}
+                                        tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
+                                        onClick={menuDisplayed ? closeMenu : () => {
+                                            if (!isPanelCollapsed) setPanelCollapsed(true);
+                                            openMenu();
+                                        }}
+                                        isNarrow={isPanelCollapsed}
+                                    />
+                                </AutoHideScrollbar>
+                            )}
+                        </Droppable>
+                        <AccessibleTooltipButton
+                            className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
+                            onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                            title={isPanelCollapsed ? _t("Expand space panel") : _t("Collapse space panel")}
                         />
-                        { invites.map(s => <SpaceItem
-                            key={s.roomId}
-                            space={s}
-                            activeSpaces={activeSpaces}
-                            isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => setPanelCollapsed(false)}
-                        />) }
-                        { spaces.map(s => <SpaceItem
-                            key={s.roomId}
-                            space={s}
-                            activeSpaces={activeSpaces}
-                            isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => setPanelCollapsed(false)}
-                        />) }
-                    </div>
-                    <SpaceButton
-                        className={newClasses}
-                        tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
-                        onClick={menuDisplayed ? closeMenu : () => {
-                            if (!isPanelCollapsed) setPanelCollapsed(true);
-                            openMenu();
-                        }}
-                        isNarrow={isPanelCollapsed}
-                    />
-                </AutoHideScrollbar>
-                <AccessibleTooltipButton
-                    className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
-                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                    title={expandCollapseButtonTitle}
-                />
-                { contextMenu }
-            </ul>
-        )}
-    </RovingTabIndexProvider>
+                        { contextMenu }
+                    </ul>
+                )}
+            </RovingTabIndexProvider>
+        </DragDropContext>
+    );
 };
 
 export default SpacePanel;

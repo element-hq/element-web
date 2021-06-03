@@ -63,12 +63,6 @@ const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces,
 
 const SpaceTagOrderingField = "org.matrix.mscXXXX.space";
 
-const getSpaceTagOrdering = (space: Room): number | undefined => {
-    return space?.getAccountData(EventType.Tag)?.getContent()?.tags?.[SpaceTagOrderingField]?.order;
-};
-
-const sortRootSpaces = (spaces: Room[]): Room[] => sortBy(spaces, [getSpaceTagOrdering, "roomId"]);
-
 // For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
 export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
     let validatedOrder: string = null;
@@ -104,6 +98,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private _activeSpace?: Room = null;
     private _suggestedRooms: ISuggestedRoom[] = [];
     private _invitedSpaces = new Set<Room>();
+    private spaceOrderLocalEchoMap = new Map<string, number>();
 
     public get invitedSpaces(): Room[] {
         return Array.from(this._invitedSpaces);
@@ -335,7 +330,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         //     rootSpaces.push(space);
         // });
 
-        this.rootSpaces = sortRootSpaces(rootSpaces);
+        this.rootSpaces = this.sortRootSpaces(rootSpaces);
         this.parentMap = backrefs;
 
         // if the currently selected space no longer exists, remove its selection
@@ -347,7 +342,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_TOP_LEVEL_SPACES, this.spacePanelSpaces);
 
         // build initial state of invited spaces as we would have missed the emitted events about the room at launch
-        this._invitedSpaces = new Set(sortRootSpaces(invitedSpaces));
+        this._invitedSpaces = new Set(this.sortRootSpaces(invitedSpaces));
         this.emit(UPDATE_INVITED_SPACES, this.invitedSpaces);
     }, 100, {trailing: true, leading: true});
 
@@ -484,16 +479,21 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEv?: MatrixEvent) => {
         if (!room.isSpaceRoom() || ev.getType() !== EventType.Tag) return;
 
+        this.spaceOrderLocalEchoMap.delete(room.roomId); // clear any local echo
         const order = ev.getContent()?.tags?.[SpaceTagOrderingField]?.order;
         const lastOrder = lastEv?.getContent()?.tags?.[SpaceTagOrderingField]?.order;
         if (order !== lastOrder) {
-            const rootSpaces = sortRootSpaces(this.rootSpaces);
-            if (arrayHasOrderChange(this.rootSpaces, rootSpaces)) {
-                this.rootSpaces = rootSpaces;
-                this.emit(UPDATE_TOP_LEVEL_SPACES, this.spacePanelSpaces);
-            }
+            this.notifyIfOrderChanged();
         }
     };
+
+    private notifyIfOrderChanged(): void {
+        const rootSpaces = this.sortRootSpaces(this.rootSpaces);
+        if (arrayHasOrderChange(this.rootSpaces, rootSpaces)) {
+            this.rootSpaces = rootSpaces;
+            this.emit(UPDATE_TOP_LEVEL_SPACES, this.spacePanelSpaces);
+        }
+    }
 
     private onRoomState = (ev: MatrixEvent) => {
         const room = this.matrixClient.getRoom(ev.getRoomId());
@@ -623,6 +623,51 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             childRooms.forEach(r => fn(r.roomId));
         }
         childSpaces.forEach(s => this.traverseSpace(s.roomId, fn, includeRooms, newPath));
+    }
+
+    private getSpaceTagOrdering = (space: Room): number | undefined => {
+        if (this.spaceOrderLocalEchoMap.has(space.roomId)) return this.spaceOrderLocalEchoMap.get(space.roomId);
+        return space.tags?.[SpaceTagOrderingField]?.order;
+    };
+
+    private sortRootSpaces(spaces: Room[]): Room[] {
+        return sortBy(spaces, [this.getSpaceTagOrdering, "roomId"]);
+    }
+
+    public moveRootSpace(fromIndex: number, toIndex: number): void {
+        if (
+            fromIndex < 0 || toIndex < 0 ||
+            fromIndex > this.rootSpaces.length || toIndex > this.rootSpaces.length ||
+            fromIndex === toIndex
+        ) {
+            return;
+        }
+        const space = this.rootSpaces[fromIndex];
+        const orders = this.rootSpaces.map(this.getSpaceTagOrdering);
+
+        let prevOrder = orders[toIndex - 1];
+        let nextOrder = orders[toIndex]; // accounts for downwards displacement of existing inhabitant of this index
+
+        if (prevOrder === undefined && nextOrder === undefined) {
+            // TODO WHAT A PAIN
+        }
+
+        prevOrder = prevOrder || 0.0;
+        nextOrder = nextOrder || 1.0;
+
+        if (prevOrder !== nextOrder) {
+            const order = prevOrder + ((nextOrder - prevOrder) / 2);
+            this.spaceOrderLocalEchoMap.set(space.roomId, order);
+            this.matrixClient.setRoomAccountData(space.roomId, EventType.Tag, {
+                tags: {
+                    ...space.tags,
+                    [SpaceTagOrderingField]: { order },
+                },
+            });
+            this.notifyIfOrderChanged();
+        } else {
+            // TODO REBUILD
+        }
     }
 }
 
