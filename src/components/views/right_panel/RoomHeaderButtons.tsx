@@ -21,15 +21,15 @@ limitations under the License.
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
-import HeaderButtons, {HeaderKind} from './HeaderButtons';
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {Action} from "../../../dispatcher/actions";
-import {ActionPayload} from "../../../dispatcher/payloads";
+import HeaderButtons, { HeaderKind } from './HeaderButtons';
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { Action } from "../../../dispatcher/actions";
+import { ActionPayload } from "../../../dispatcher/payloads";
 import RightPanelStore from "../../../stores/RightPanelStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {useSettingValue} from "../../../hooks/useSettings";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { useSettingValue } from "../../../hooks/useSettings";
 import { useReadPinnedEvents, usePinnedEvents } from './PinnedMessagesCard';
 
 const ROOM_INFO_PHASES = [

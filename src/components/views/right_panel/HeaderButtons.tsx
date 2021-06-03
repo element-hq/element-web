@@ -21,14 +21,14 @@ limitations under the License.
 import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {Action} from '../../../dispatcher/actions';
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { Action } from '../../../dispatcher/actions';
 import {
     SetRightPanelPhasePayload,
     SetRightPanelPhaseRefireParams,
 } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
-import {EventSubscription} from "fbemitter";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import type { EventSubscription } from "fbemitter";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export enum HeaderKind {
   Room = "room",
