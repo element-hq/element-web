@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
+import classNames from 'classnames';
+
 import {_t, _td} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -1252,7 +1254,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         selectText(e.target);
     }
 
-    async onCopyClick(e) {
+    onCopyClick = async e => {
         e.preventDefault();
         const target = e.target; // copy target before we go async and React throws it away
 
@@ -1264,7 +1266,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         });
         // Drop a reference to this close handler for componentWillUnmount
         this.closeCopiedTooltip = target.onmouseleave = close;
-    }
+    };
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
@@ -1359,7 +1361,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         title={_t("Copy")}
                         onClick={this.onCopyClick}
                         className="mx_InviteDialog_footer_link_copy"
-                    />
+                    >
+                        <div />
+                    </AccessibleTooltipButton>
                 </div>
             </div>
         } else if (this.props.kind === KIND_INVITE) {
@@ -1437,7 +1441,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             || (this.state.filterText && this.state.filterText.includes('@'));
         return (
             <BaseDialog
-                className='mx_InviteDialog'
+                className={classNames("mx_InviteDialog", {
+                    mx_InviteDialog_hasFooter: !!footer,
+                })}
                 hasCancel={true}
                 onFinished={this.props.onFinished}
                 title={title}

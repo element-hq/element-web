@@ -302,7 +302,11 @@ limitations under the License.
     margin-top: 4px;
     overflow-y: auto;
     padding: 0 45px 4px 0;
-    height: calc(100% - 175px); // mx_InviteDialog's height minus some for the upper  and lower elements
+    height: calc(100% - 115px); // mx_InviteDialog's height minus some for the upper and lower elements
+}
+
+.mx_InviteDialog_hasFooter .mx_InviteDialog_userSections {
+    height: calc(100% - 175px);
 }
 
 .mx_InviteDialog_helpText {
