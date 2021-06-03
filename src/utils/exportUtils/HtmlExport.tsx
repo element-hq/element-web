@@ -9,7 +9,7 @@ import { Exporter } from "./Exporter";
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
-import { formatFullDateNoDay, wantsDateSeparator } from "../../DateUtils";
+import { formatFullDateNoDay, formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
 import * as Avatar from "../../Avatar";
@@ -19,6 +19,9 @@ import exportCSS from "./exportCSS";
 import exportJS from "./exportJS";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
 import exportIcons from "./exportIcons";
+import { _t } from "../../languageHandler";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
@@ -32,21 +35,22 @@ export default class HTMLExporter extends Exporter {
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
     }
 
-    protected async getRoomAvatar() {
+    protected async getRoomAvatar(avatarSide: number) {
         let blob: Blob;
-        const avatarUrl = Avatar.avatarUrlForRoom(this.room, 32, 32, "crop");
+        const avatarUrl = Avatar.avatarUrlForRoom(this.room, avatarSide, avatarSide, "crop");
+        const avatarPath = `room/avatar${avatarSide}.png`;
         if (avatarUrl) {
             const image = await fetch(avatarUrl);
             blob = await image.blob();
-            this.zip.file("room.png", blob);
+            this.zip.file(avatarPath, blob);
         }
         const avatar = (
             <BaseAvatar
-                width={32}
-                height={32}
+                width={avatarSide}
+                height={avatarSide}
                 name={this.room.name}
                 title={this.room.name}
-                url={blob ? "room.png" : null}
+                url={blob ? avatarPath : null}
                 resizeMethod={"crop"}
             />
         );
@@ -54,7 +58,32 @@ export default class HTMLExporter extends Exporter {
     }
 
     protected async wrapHTML(content: string, room: Room) {
-        const roomAvatar = await this.getRoomAvatar();
+        const roomAvatar32 = await this.getRoomAvatar(32);
+        const exportDate = formatFullDateNoDayNoTime(new Date());
+        const cli = MatrixClientPeg.get();
+        const creator = room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
+        const creatorName = room?.getMember(creator)?.rawDisplayName || creator;
+        const exporter = cli.getUserId();
+        const exporterName = room?.getMember(exporter)?.rawDisplayName;
+        const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic
+                     || room.topic || "";
+        const createdText = _t("%(creatorName)s created this room.", {
+            creatorName,
+        });
+
+        const exportedText = _t(`This is the start of export of <b>%(roomName)s</b>.
+         Exported by %(exporterDetails)s at %(exportDate)s. `, {
+             exportDate,
+             roomName: room.name,
+             exporterDetails: `<a href="https://matrix.to/#/${exporter}" target="_blank" rel="noopener noreferrer">
+                ${exporterName ? `<b>${ exporterName }</b>(${ exporter })` : `<b>${ exporter }</b>`} 
+             </a>`,
+        });
+
+        const topicText = topic ? _t("Topic: %(topic)s", { topic }) : "";
+        const roomAvatar52 = await this.getRoomAvatar(52);
+
+
         return `
           <!DOCTYPE html>
             <html lang="en">
@@ -79,7 +108,7 @@ export default class HTMLExporter extends Exporter {
                         <div class="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
                             <div class="mx_RoomHeader_avatar">
                             <div class="mx_DecoratedRoomAvatar">
-                               ${roomAvatar} 
+                               ${roomAvatar32} 
                             </div>
                             </div>
                             <div class="mx_RoomHeader_name">
@@ -91,7 +120,7 @@ export default class HTMLExporter extends Exporter {
                                 ${room.name}
                             </div>
                             </div>
-                            <div class="mx_RoomHeader_topic" dir="auto"></div>
+                            <div class="mx_RoomHeader_topic" dir="auto"> ${topic} </div>
                         </div>
                         </div>
                         <div class="mx_MainSplit">
@@ -113,6 +142,12 @@ export default class HTMLExporter extends Exporter {
                                     aria-live="polite"
                                     role="list"
                                 >
+                                <div class="mx_NewRoomIntro">
+                                    ${roomAvatar52}
+                                    <h2> ${room.name} </h2>
+                                    <p> ${createdText} <br/><br/> ${exportedText} </p>
+                                    <p> ${topicText} </p>
+                                </div>
                                 ${content}
                                 </ol>
                                 </div>

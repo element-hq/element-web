@@ -141,7 +141,7 @@ export function formatFullDateNoDay(date: Date) {
     return (
         date.getFullYear() +
         "-" +
-        pad(date.getMonth()) +
+        pad(date.getMonth() + 1) +
         "-" +
         pad(date.getDate()) +
         _t(" at ") +
@@ -150,5 +150,15 @@ export function formatFullDateNoDay(date: Date) {
         pad(date.getMinutes()) +
         "." +
         pad(date.getSeconds())
+    );
+}
+
+export function formatFullDateNoDayNoTime(date: Date) {
+    return (
+        date.getFullYear() +
+        "/" +
+        pad(date.getMonth() + 1) +
+        "/" +
+        pad(date.getDate())
     );
 }
