@@ -295,13 +295,13 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 break;
 
             case RightPanelPhases.NotificationPanel:
-                if (SettingsStore.getValue("feature_pinning")) {
-                    panel = <NotificationPanel onClose={this.onClose} />;
-                }
+                panel = <NotificationPanel onClose={this.onClose} />;
                 break;
 
             case RightPanelPhases.PinnedMessages:
-                panel = <PinnedMessagesCard room={this.props.room} onClose={this.onClose} />;
+                if (SettingsStore.getValue("feature_pinning")) {
+                    panel = <PinnedMessagesCard room={this.props.room} onClose={this.onClose} />;
+                }
                 break;
 
             case RightPanelPhases.FilePanel:

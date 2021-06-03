@@ -31,7 +31,7 @@ interface IProps {
  * Component which shows the global notification list using a TimelinePanel
  */
 @replaceableComponent("structures.NotificationPanel")
-class NotificationPanel extends React.Component<IProps> {
+export default class NotificationPanel extends React.PureComponent<IProps> {
     render() {
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
             <h2>{_t('You’re all caught up')}</h2>
@@ -62,5 +62,3 @@ class NotificationPanel extends React.Component<IProps> {
         </BaseCard>;
     }
 }
-
-export default NotificationPanel;
