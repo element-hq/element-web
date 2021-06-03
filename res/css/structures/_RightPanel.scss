@@ -25,6 +25,7 @@ limitations under the License.
     padding: 4px 0;
     box-sizing: border-box;
     height: 100%;
+    contain: strict;
 
     .mx_RoomView_MessageList {
         padding: 14px 18px; // top and bottom is 4px smaller to balance with the padding set above

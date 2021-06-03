@@ -138,4 +138,19 @@ export enum Action {
      * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
      */
     UploadCanceled = "upload_canceled",
+
+    /**
+     * Fired when requesting to join a room
+     */
+    JoinRoom = "join_room",
+
+    /**
+     * Fired when successfully joining a room
+     */
+    JoinRoomReady = "join_room_ready",
+
+    /**
+     * Fired when joining a room failed
+     */
+    JoinRoomError = "join_room_error",
 }

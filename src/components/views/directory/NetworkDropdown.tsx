@@ -38,13 +38,15 @@ import withValidation from "../elements/Validation";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import TextInputDialog from "../dialogs/TextInputDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import UIStore from "../../../stores/UIStore";
+import { compare } from "../../../utils/strings";
 
 export const ALL_ROOMS = Symbol("ALL_ROOMS");
 
 const SETTING_NAME = "room_directory_servers";
 
 const inPlaceOf = (elementRect: Pick<DOMRect, "right" | "top">) => ({
-    right: window.innerWidth - elementRect.right,
+    right: UIStore.instance.windowWidth - elementRect.right,
     top: elementRect.top,
     chevronOffset: 0,
     chevronFace: ChevronFace.None,
@@ -186,7 +188,7 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
 
             protocolsList.forEach(({instances=[]}) => {
                 [...instances].sort((b, a) => {
-                    return a.desc.localeCompare(b.desc);
+                    return compare(a.desc, b.desc);
                 }).forEach(({desc, instance_id: instanceId}) => {
                     entries.push(
                         <MenuItemRadio

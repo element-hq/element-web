@@ -3367,5 +3367,13 @@
     "Send and receive voice messages": "Invia e ricevi messaggi vocali",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "La tua opinione aiuterà a migliorare gli spazi. Più dettagli dai, meglio è.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Se esci, %(brand)s si ricaricherà con gli spazi disattivati. Le comunità e le etichette personalizzate saranno di nuovo visibili.",
-    "Message search initialisation failed": "Inizializzazione ricerca messaggi fallita"
+    "Message search initialisation failed": "Inizializzazione ricerca messaggi fallita",
+    "Space Autocomplete": "Autocompletamento spazio",
+    "Go to my space": "Vai nel mio spazio",
+    "sends space invaders": "invia space invaders",
+    "Sends the given message with a space themed effect": "Invia il messaggio con un effetto a tema spaziale",
+    "Kick, ban, or invite people to your active room, and make you leave": "Buttare fuori, bandire o invitare persone nella tua stanza attiva e farti uscire",
+    "See when people join, leave, or are invited to this room": "Vedere quando le persone entrano, escono o sono invitate in questa stanza",
+    "Kick, ban, or invite people to this room, and make you leave": "Buttare fuori, bandire o invitare persone in questa stanza e farti uscire",
+    "See when people join, leave, or are invited to your active room": "Vedere quando le persone entrano, escono o sono invitate nella tua stanza attiva"
 }

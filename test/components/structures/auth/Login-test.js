@@ -133,7 +133,7 @@ describe('Login', function() {
         root.setState({
             flows: [{
                 "type": "m.login.sso",
-                "org.matrix.msc2858.identity_providers": [{
+                "identity_providers": [{
                     id: "a",
                     name: "Provider 1",
                 }, {

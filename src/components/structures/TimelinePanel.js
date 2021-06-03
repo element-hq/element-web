@@ -94,6 +94,9 @@ class TimelinePanel extends React.Component {
         // callback which is called when the panel is scrolled.
         onScroll: PropTypes.func,
 
+        // callback which is called when the user interacts with the room timeline
+        onUserScroll: PropTypes.func,
+
         // callback which is called when the read-up-to mark is updated.
         onReadMarkerUpdated: PropTypes.func,
 
@@ -258,7 +261,9 @@ class TimelinePanel extends React.Component {
             console.warn("Replacing timelineSet on a TimelinePanel - confusion may ensue");
         }
 
-        if (newProps.eventId != this.props.eventId) {
+        const differentEventId = newProps.eventId != this.props.eventId;
+        const differentHighlightedEventId = newProps.highlightedEventId != this.props.highlightedEventId;
+        if (differentEventId || differentHighlightedEventId) {
             console.log("TimelinePanel switching to eventId " + newProps.eventId +
                         " (was " + this.props.eventId + ")");
             return this._initTimeline(newProps);
@@ -1456,6 +1461,7 @@ class TimelinePanel extends React.Component {
                 ourUserId={MatrixClientPeg.get().credentials.userId}
                 stickyBottom={stickyBottom}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
                 isTwelveHour={this.state.isTwelveHour}
