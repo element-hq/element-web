@@ -19,7 +19,7 @@ limitations under the License.
     margin-bottom: 4px;
     padding: 4px;
 
-    contain: strict;
+    contain: content; // Not strict as it will break when resizing a sublist vertically
     height: 40px;
     box-sizing: border-box;
 

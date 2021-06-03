@@ -36,7 +36,6 @@ import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {UIFeature} from "../../settings/UIFeature";
-import {objectHasDiff} from "../../utils/objects";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
 
@@ -268,30 +267,6 @@ class TimelinePanel extends React.Component {
                         " (was " + this.props.eventId + ")");
             return this._initTimeline(newProps);
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (objectHasDiff(this.props, nextProps)) {
-            if (DEBUG) {
-                console.group("Timeline.shouldComponentUpdate: props change");
-                console.log("props before:", this.props);
-                console.log("props after:", nextProps);
-                console.groupEnd();
-            }
-            return true;
-        }
-
-        if (objectHasDiff(this.state, nextState)) {
-            if (DEBUG) {
-                console.group("Timeline.shouldComponentUpdate: state change");
-                console.log("state before:", this.state);
-                console.log("state after:", nextState);
-                console.groupEnd();
-            }
-            return true;
-        }
-
-        return false;
     }
 
     componentWillUnmount() {
