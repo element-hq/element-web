@@ -25,6 +25,8 @@ import DMRoomMap from '../src/utils/DMRoomMap';
 import EventEmitter from 'events';
 import SdkConfig from '../src/SdkConfig';
 import { ActionPayload } from '../src/dispatcher/payloads';
+import { Actions } from '../src/notifications/types';
+import { Action } from '../src/dispatcher/actions';
 
 const REAL_ROOM_ID = '$room1:example.org';
 const MAPPED_ROOM_ID = '$room2:example.org';
@@ -172,7 +174,7 @@ describe('CallHandler', () => {
         }]);
 
         dis.dispatch({
-            action: 'dial_number',
+            action: Action.DialNumber,
             number: '01818118181',
         }, true);
 

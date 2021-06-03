@@ -102,9 +102,7 @@ export enum Action {
 
     /**
      * Dial the phone number in the payload
-     * payload: {
-     *     number: <phone number>,
-     * }
+     * payload: DialNumberPayload
      */
     DialNumber = "dial_number",
 

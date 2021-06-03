@@ -21,6 +21,7 @@ import Field from "../elements/Field";
 import DialPad from './DialPad';
 import dis from '../../../dispatcher/dispatcher';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { DialNumberPayload } from "../../../dispatcher/payloads/DialNumberPayload";
 import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
@@ -63,10 +64,11 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     }
 
     onDialPress = async () => {
-        dis.dispatch({
+        const payload: DialNumberPayload = {
             action: Action.DialNumber,
             number: this.state.value,
-        })
+        };
+        dis.dispatch(payload);
 
         this.props.onFinished(true);
     }
