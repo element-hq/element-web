@@ -766,7 +766,7 @@ class VerificationExplorer extends React.PureComponent<IExplorerProps> {
     render() {
         const cli = this.context;
         const room = this.props.room;
-        const inRoomChannel = cli._crypto._inRoomVerificationRequests;
+        const inRoomChannel = cli.crypto._inRoomVerificationRequests;
         const inRoomRequests = (inRoomChannel._requestsByRoomId || new Map()).get(room.roomId) || new Map();
 
         return (<div>
