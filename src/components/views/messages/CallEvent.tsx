@@ -148,10 +148,9 @@ export default class CallEvent extends React.Component<IProps, IState> {
             );
         }
 
-        // XXX: Should we translate this?
         return (
             <div className="mx_CallEvent_content">
-                { "The call is in an unknown state!" }
+                { _t("The call is in an unknown state!") }
             </div>
         );
     }
