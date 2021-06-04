@@ -57,7 +57,8 @@ import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
 import RoomName from "../views/elements/RoomName";
 import {replaceableComponent} from "../../utils/replaceableComponent";
-
+import InlineSpinner from "../views/elements/InlineSpinner";
+import TooltipButton from "../views/elements/TooltipButton";
 interface IProps {
     isMinimized: boolean;
 }
@@ -68,6 +69,7 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
     selectedSpace?: Room;
+    pendingRoomJoin: Set<string>;
 }
 
 @replaceableComponent("structures.UserMenu")
@@ -84,6 +86,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
+            pendingRoomJoin: new Set<string>(),
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -103,6 +106,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
         this.tagStoreRef = GroupFilterOrderStore.addListener(this.onTagStoreUpdate);
+        MatrixClientPeg.get().on("Room", this.onRoom);
     }
 
     public componentWillUnmount() {
@@ -114,6 +118,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (SettingsStore.getValue("feature_spaces")) {
             SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
         }
+        MatrixClientPeg.get().removeListener("Room", this.onRoom);
+    }
+
+    private onRoom = (room: Room): void => {
+        this.removePendingJoinRoom(room.roomId);
     }
 
     private onTagStoreUpdate = () => {
@@ -147,14 +156,38 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private onAction = (ev: ActionPayload) => {
-        if (ev.action !== Action.ToggleUserMenu) return; // not interested
-
-        if (this.state.contextMenuPosition) {
-            this.setState({contextMenuPosition: null});
-        } else {
-            if (this.buttonRef.current) this.buttonRef.current.click();
+        switch (ev.action) {
+            case Action.ToggleUserMenu:
+                if (this.state.contextMenuPosition) {
+                    this.setState({contextMenuPosition: null});
+                } else {
+                    if (this.buttonRef.current) this.buttonRef.current.click();
+                }
+                break;
+            case Action.JoinRoom:
+                this.addPendingJoinRoom(ev.roomId);
+                break;
+            case Action.JoinRoomReady:
+            case Action.JoinRoomError:
+                this.removePendingJoinRoom(ev.roomId);
+                break;
         }
     };
+
+    private addPendingJoinRoom(roomId: string): void {
+        this.setState({
+            pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin)
+                .add(roomId),
+        });
+    }
+
+    private removePendingJoinRoom(roomId: string): void {
+        if (this.state.pendingRoomJoin.delete(roomId)) {
+            this.setState({
+                pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin),
+            })
+        }
+    }
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
@@ -617,6 +650,14 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             />
                         </span>
                         {name}
+                        {this.state.pendingRoomJoin.size > 0 && (
+                            <InlineSpinner>
+                                <TooltipButton helpText={_t(
+                                    "Currently joining %(count)s rooms",
+                                    { count: this.state.pendingRoomJoin.size },
+                                )} />
+                            </InlineSpinner>
+                        )}
                         {dnd}
                         {buttons}
                     </div>

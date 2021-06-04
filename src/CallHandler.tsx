@@ -257,7 +257,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     public getSupportsVirtualRooms() {
-        return this.supportsPstnProtocol;
+        return this.supportsSipNativeVirtual;
     }
 
     public pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
@@ -455,6 +455,9 @@ export default class CallHandler extends EventEmitter {
                         if (call.hangupReason === CallErrorCode.UserHangup) {
                             title = _t("Call Declined");
                             description = _t("The other party declined the call.");
+                        } else if (call.hangupReason === CallErrorCode.UserBusy) {
+                            title = _t("User Busy");
+                            description = _t("The user you called is busy.");
                         } else if (call.hangupReason === CallErrorCode.InviteTimeout) {
                             title = _t("Call Failed");
                             // XXX: full stop appended as some relic here, but these
@@ -511,7 +514,9 @@ export default class CallHandler extends EventEmitter {
             let newNativeAssertedIdentity = newAssertedIdentity;
             if (newAssertedIdentity) {
                 const response = await this.sipNativeLookup(newAssertedIdentity);
-                if (response.length) newNativeAssertedIdentity = response[0].userid;
+                if (response.length && response[0].fields.lookup_success) {
+                    newNativeAssertedIdentity = response[0].userid;
+                }
             }
             console.log(`Asserted identity ${newAssertedIdentity} mapped to ${newNativeAssertedIdentity}`);
 
@@ -773,7 +778,10 @@ export default class CallHandler extends EventEmitter {
 
                     const mappedRoomId = CallHandler.sharedInstance().roomIdForCall(call);
                     if (this.getCallForRoom(mappedRoomId)) {
-                        // ignore multiple incoming calls to the same room
+                        console.log(
+                            "Got incoming call for room " + mappedRoomId +
+                            " but there's already a call for this room: ignoring",
+                        );
                         return;
                     }
 
@@ -830,7 +838,41 @@ export default class CallHandler extends EventEmitter {
                 });
                 break;
             }
+            case Action.DialNumber:
+                this.dialNumber(payload.number);
+                break;
         }
+    }
+
+    private async dialNumber(number: string) {
+        const results = await this.pstnLookup(number);
+        if (!results || results.length === 0 || !results[0].userid) {
+            Modal.createTrackedDialog('', '', ErrorDialog, {
+                title: _t("Unable to look up phone number"),
+                description: _t("There was an error looking up the phone number"),
+            });
+            return;
+        }
+        const userId = results[0].userid;
+
+        // Now check to see if this is a virtual user, in which case we should find the
+        // native user
+        let nativeUserId;
+        if (this.getSupportsVirtualRooms()) {
+            const nativeLookupResults = await this.sipNativeLookup(userId);
+            const lookupSuccess = nativeLookupResults.length > 0 && nativeLookupResults[0].fields.lookup_success;
+            nativeUserId = lookupSuccess ? nativeLookupResults[0].userid : userId;
+            console.log("Looked up " + number + " to " + userId + " and mapped to native user " + nativeUserId);
+        } else {
+            nativeUserId = userId;
+        }
+
+        const roomId = await ensureDMExists(MatrixClientPeg.get(), nativeUserId);
+
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
     }
 
     setActiveCallRoomId(activeCallRoomId: string) {

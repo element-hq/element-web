@@ -179,6 +179,7 @@
 @import "./views/messages/_common_CryptoEvent.scss";
 @import "./views/right_panel/_BaseCard.scss";
 @import "./views/right_panel/_EncryptionInfo.scss";
+@import "./views/right_panel/_PinnedMessagesCard.scss";
 @import "./views/right_panel/_RoomSummaryCard.scss";
 @import "./views/right_panel/_UserInfo.scss";
 @import "./views/right_panel/_VerificationPanel.scss";
@@ -203,7 +204,6 @@
 @import "./views/rooms/_NewRoomIntro.scss";
 @import "./views/rooms/_NotificationBadge.scss";
 @import "./views/rooms/_PinnedEventTile.scss";
-@import "./views/rooms/_PinnedEventsPanel.scss";
 @import "./views/rooms/_PresenceLabel.scss";
 @import "./views/rooms/_ReplyPreview.scss";
 @import "./views/rooms/_RoomBreadcrumbs.scss";

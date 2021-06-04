@@ -14,14 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import { _t } from "../../../languageHandler";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/SpaceStore";
 
-const RoomListNumResults: React.FC = () => {
+interface IProps {
+    onVisibilityChange?: () => void
+}
+
+const RoomListNumResults: React.FC<IProps> = ({ onVisibilityChange }) => {
     const [count, setCount] = useState<number>(null);
     useEventEmitter(RoomListStore.instance, LISTS_UPDATE_EVENT, () => {
         if (RoomListStore.instance.getFirstNameFilterCondition()) {
@@ -31,6 +35,12 @@ const RoomListNumResults: React.FC = () => {
             setCount(null);
         }
     });
+
+    useEffect(() => {
+        if (onVisibilityChange) {
+            onVisibilityChange();
+        }
+    }, [count, onVisibilityChange]);
 
     if (typeof count !== "number") return null;
 

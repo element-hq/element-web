@@ -73,7 +73,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
             tooltipClassName={classNames("mx_AccessibleTooltipButton_tooltip", tooltipClassName)}
             label={tooltip || title}
             yOffset={yOffset}
-        /> : <div />;
+        /> : null;
         return (
             <AccessibleButton
                 {...props}

@@ -417,9 +417,13 @@ const SpaceLanding = ({ space }) => {
             { inviteButton }
             { settingsButton }
         </div>
-        <div className="mx_SpaceRoomView_landing_topic">
-            <RoomTopic room={space} />
-        </div>
+        <RoomTopic room={space}>
+            {(topic, ref) => (
+                <div className="mx_SpaceRoomView_landing_topic" ref={ref}>
+                    { topic }
+                </div>
+            )}
+        </RoomTopic>
         <SpaceFeedbackPrompt />
         <hr />
 
@@ -437,7 +441,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const [error, setError] = useState("");
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
-    // TODO vary default prefills for "Just Me" spaces
     const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("Random"), ""]);
     const fields = new Array(numFields).fill(0).map((_, i) => {
         const name = "roomName" + i;
@@ -806,7 +809,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         let suggestedRooms = SpaceStore.instance.suggestedRooms;
         if (SpaceStore.instance.activeSpace !== this.props.space) {
             // the space store has the suggested rooms loaded for a different space, fetch the right ones
-            suggestedRooms = (await SpaceStore.instance.fetchSuggestedRooms(this.props.space, 1)).rooms;
+            suggestedRooms = (await SpaceStore.instance.fetchSuggestedRooms(this.props.space, 1));
         }
 
         if (suggestedRooms.length) {
@@ -814,9 +817,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
             defaultDispatcher.dispatch({
                 action: "view_room",
                 room_id: room.room_id,
+                room_alias: room.canonical_alias || room.aliases?.[0],
+                via_servers: room.viaServers,
                 oobData: {
                     avatarUrl: room.avatar_url,
-                    name: room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room"),
+                    name: room.name || room.canonical_alias || room.aliases?.[0] || _t("Empty room"),
                 },
             });
             return;

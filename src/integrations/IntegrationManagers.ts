@@ -28,6 +28,7 @@ import WidgetUtils from "../utils/WidgetUtils";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import url from 'url';
+import { compare } from "../utils/strings";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
@@ -152,7 +153,7 @@ export class IntegrationManagers {
 
             if (kind === Kind.Account) {
                 // Order by state_keys (IDs)
-                managers.sort((a, b) => a.id.localeCompare(b.id));
+                managers.sort((a, b) => compare(a.id, b.id));
             }
 
             ordered.push(...managers);
