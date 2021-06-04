@@ -70,7 +70,10 @@ export default class Tooltip extends React.Component<IProps> {
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_Tooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
-        window.addEventListener('scroll', this.renderTooltip, true);
+        window.addEventListener('scroll', this.renderTooltip, {
+            passive: true,
+            capture: true,
+        });
 
         this.parent = ReactDOM.findDOMNode(this).parentNode as Element;
 
@@ -85,7 +88,9 @@ export default class Tooltip extends React.Component<IProps> {
     public componentWillUnmount() {
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
         document.body.removeChild(this.tooltipContainer);
-        window.removeEventListener('scroll', this.renderTooltip, true);
+        window.removeEventListener('scroll', this.renderTooltip, {
+            capture: true,
+        });
     }
 
     private updatePosition(style: CSSProperties) {

@@ -3359,5 +3359,16 @@
     "Send and receive voice messages": "Hangüzenet küldése, fogadása",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "A visszajelzése segítség a terek javításához. Minél részletesebb annál jobb.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Távozás után %(brand)s Terek nélkül lesz újra betöltve. A közösségek és egyedi címkék újra megjelennek.",
-    "Message search initialisation failed": "Üzenet keresés beállítása sikertelen"
+    "Message search initialisation failed": "Üzenet keresés beállítása sikertelen",
+    "Space Autocomplete": "Tér automatikus kiegészítése",
+    "Go to my space": "Irány a teréhez",
+    "Spaces are a beta feature.": "A terek béta állapotban van.",
+    "Search names and descriptions": "Nevek és leírások keresése",
+    "You may contact me if you have any follow up questions": "Ha további kérdés merülne fel, kapcsolatba léphetnek velem",
+    "sends space invaders": "space invaders küldése",
+    "Sends the given message with a space themed effect": "Üzenet küldése világűrös effekttel",
+    "See when people join, leave, or are invited to your active room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése az aktív szobájában",
+    "Kick, ban, or invite people to your active room, and make you leave": "Kirúgni, kitiltani vagy meghívni embereket az aktív szobába és, hogy ön elhagyja a szobát",
+    "See when people join, leave, or are invited to this room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése ebben a szobában",
+    "Kick, ban, or invite people to this room, and make you leave": "Kirúgni, kitiltani vagy meghívni embereket ebbe a szobába és, hogy ön elhagyja a szobát"
 }

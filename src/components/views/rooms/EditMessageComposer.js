@@ -168,6 +168,7 @@ export default class EditMessageComposer extends React.Component {
                 if (nextEvent) {
                     dis.dispatch({action: 'edit_event', event: nextEvent});
                 } else {
+                    this._clearStoredEditorState();
                     dis.dispatch({action: 'edit_event', event: null});
                     dis.fire(Action.FocusComposer);
                 }

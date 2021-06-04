@@ -3284,5 +3284,13 @@
     "Add reaction": "Přidat reakci",
     "Send and receive voice messages": "Odeslat a přijmout hlasové zprávy",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "Vaše zpětná vazba pomůže zlepšit prostory. Čím podrobnější bude, tím lépe.",
-    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Pokud odejdete, %(brand)s se znovu načte s vypnutými Prostory. Skupiny a vlastní značky budou opět viditelné."
+    "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Pokud odejdete, %(brand)s se znovu načte s vypnutými Prostory. Skupiny a vlastní značky budou opět viditelné.",
+    "Space Autocomplete": "Automatické dokončení prostoru",
+    "Go to my space": "Přejít do mého prostoru",
+    "sends space invaders": "pošle space invaders",
+    "Sends the given message with a space themed effect": "Odešle zadanou zprávu s efektem vesmíru",
+    "See when people join, leave, or are invited to your active room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do vaší aktivní místnosti",
+    "Kick, ban, or invite people to this room, and make you leave": "Vykopnout, vykázat, pozvat lidi do této místnosti nebo odejít",
+    "Kick, ban, or invite people to your active room, and make you leave": "Vykopnout, vykázat, pozvat lidi do vaší aktivní místnosti nebo odejít",
+    "See when people join, leave, or are invited to this room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do této místnosti"
 }

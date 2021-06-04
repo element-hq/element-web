@@ -25,6 +25,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
+import { compare } from "../../utils/strings";
 
 export const WIDGET_LAYOUT_EVENT_TYPE = "io.element.widgets.layout";
 
@@ -240,7 +241,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
             if (orderA === orderB) {
                 // We just need a tiebreak
-                return a.id.localeCompare(b.id);
+                return compare(a.id, b.id);
             }
 
             return orderA - orderB;
