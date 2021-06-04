@@ -32,8 +32,7 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import {PlaceCallType} from "../../../CallHandler";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import exportConversationalHistory from '../../../utils/exportUtils/exportUtils';
-import { exportFormats, exportOptions } from '../../../utils/exportUtils/exportUtils';
+import exportConversationalHistory, { exportTypes, exportFormats } from '../../../utils/exportUtils/exportUtils';
 
 
 @replaceableComponent("views.rooms.RoomHeader")
@@ -121,7 +120,7 @@ export default class RoomHeader extends React.Component {
     }
 
     _exportConvertionalHistory = async () => {
-        await exportConversationalHistory(this.props.room, exportFormats.HTML, exportOptions.TIMELINE);
+        await exportConversationalHistory(this.props.room, exportFormats.HTML, exportTypes.LAST_N_MESSAGES, 30);
     }
 
     render() {
