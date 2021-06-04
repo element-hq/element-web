@@ -212,7 +212,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             autoComplete={true}
             autoFocus={true}
         />
-        <AutoHideScrollbar className="mx_AddExistingToSpace_content" id="mx_AddExistingToSpace">
+        <AutoHideScrollbar className="mx_AddExistingToSpace_content">
             { rooms.length > 0 ? (
                 <div className="mx_AddExistingToSpace_section">
                     <h3>{ _t("Rooms") }</h3>

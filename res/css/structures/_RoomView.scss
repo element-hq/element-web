@@ -152,6 +152,7 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
+    contain: content;
 }
 
 .mx_RoomView_statusArea {
@@ -237,6 +238,7 @@ hr.mx_RoomView_myReadMarker {
     position: relative;
     top: -1px;
     z-index: 1;
+    will-change: width;
     transition: width 400ms easeinsine 1s, opacity 400ms easeinsine 1s;
     width: 99%;
     opacity: 1;

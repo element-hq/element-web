@@ -104,7 +104,7 @@ $left-gutter: 64px;
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
     padding-left: $left-gutter;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .mx_RoomView_timeline_rr_enabled,
@@ -280,6 +280,7 @@ $left-gutter: 64px;
     height: $font-14px;
     width: $font-14px;
 
+    will-change: left, top;
     transition:
         left var(--transition-short) ease-out,
         top var(--transition-standard) ease-out;
