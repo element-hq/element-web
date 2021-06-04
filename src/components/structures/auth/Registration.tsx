@@ -61,7 +61,7 @@ interface IProps {
         is_url?: string;
         session_id: string;
         /* eslint-enable camelcase */
-    }): void;
+    }): string;
     // registration shouldn't know or care how login is done.
     onLoginClick(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;

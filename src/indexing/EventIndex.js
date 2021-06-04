@@ -453,7 +453,7 @@ export default class EventIndex extends EventEmitter {
             let res;
 
             try {
-                res = await client._createMessagesRequest(
+                res = await client.createMessagesRequest(
                     checkpoint.roomId, checkpoint.token, this._eventsPerCrawl,
                     checkpoint.direction);
             } catch (e) {
