@@ -155,7 +155,7 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
 
         // show them in reverse, with latest pinned at the top
         content = pinnedEvents.filter(Boolean).reverse().map(ev => (
-            <PinnedEventTile key={ev.getId()} room={room} event={ev} onUnpinClicked={onUnpinClicked} />
+            <PinnedEventTile key={ev.getId()} room={room} event={ev} onUnpinClicked={() => onUnpinClicked(ev)} />
         ));
     } else {
         content = <div className="mx_RightPanel_empty mx_PinnedMessagesCard_empty">
