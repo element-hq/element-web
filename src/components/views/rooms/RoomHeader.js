@@ -85,9 +85,9 @@ export default class RoomHeader extends React.Component {
 
     _displayInfoDialogAboutScreensharing() {
         Modal.createDialog(InfoDialog, {
-            title: _t("Screensharing has changed"),
-            description: _t("You don't have to shift-click anymore! You can now share " +
-            "your screen in any video call and in voice calls if other side supports it."),
+            title: _t("Screen sharing is here!"),
+            description: _t("You can now share your screen by pressing the \"screen share\" " +
+            "button during a call. You can even do this in audio calls if both sides support it!"),
         });
     }
 
