@@ -305,6 +305,7 @@ export default class CallHandler extends EventEmitter {
         for (const call of this.calls.values()) {
             if (call.callId === callId) return call;
         }
+        return null;
     }
 
     getCallForRoom(roomId: string): MatrixCall {
