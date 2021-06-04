@@ -30,8 +30,8 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
-import {PlaceCallType} from "../../../CallHandler";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { PlaceCallType } from "../../../CallHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
 import InfoDialog from "../dialogs/InfoDialog";
 
