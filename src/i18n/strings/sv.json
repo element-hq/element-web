@@ -3297,5 +3297,13 @@
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Om du lämnar så kommer %(brand)s att ladda om med utrymmen inaktiverade. Gemenskaper och anpassade taggar kommer att synas igen.",
     "Spaces are a new way to group rooms and people.": "Utrymmen är nya sätt att gruppera rum och personer.",
     "<b>This is an experimental feature.</b> For now, new users receiving an invite will have to open the invite on <link/> to actually join.": "<b>Det här är en experimentell funktion.</b> För tillfället så behöver nya inbjudna användare öppna inbjudan på <link/> för att faktiskt gå med.",
-    "To join %(spaceName)s, turn on the <a>Spaces beta</a>": "För att gå med i %(spaceName)s, aktivera <a>utrymmesbetan</a>"
+    "To join %(spaceName)s, turn on the <a>Spaces beta</a>": "För att gå med i %(spaceName)s, aktivera <a>utrymmesbetan</a>",
+    "Space Autocomplete": "Utrymmesautokomplettering",
+    "Go to my space": "Gå till mitt utrymme",
+    "sends space invaders": "skickar Space Invaders",
+    "Sends the given message with a space themed effect": "Skickar det givna meddelandet med en effekt med rymdtema",
+    "See when people join, leave, or are invited to your active room": "Se när folk går med, lämnar eller bjuds in till ditt aktiva rum",
+    "Kick, ban, or invite people to your active room, and make you leave": "Kicka, banna eller bjuda in folk till ditt aktiva rum, och tvinga dig att lämna",
+    "See when people join, leave, or are invited to this room": "Se när folk går med, lämnar eller bjuds in till det här rummet",
+    "Kick, ban, or invite people to this room, and make you leave": "Kicka, banna eller bjuda in folk till det här rummet, och tvinga dig att lämna"
 }

@@ -35,9 +35,10 @@ import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import {UIFeature} from "../../../../../settings/UIFeature";
-import {Layout} from "../../../../../settings/Layout";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { UIFeature } from "../../../../../settings/UIFeature";
+import { Layout } from "../../../../../settings/Layout";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import { compare } from "../../../../../utils/strings";
 
 interface IProps {
 }
@@ -295,7 +296,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
         const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
         const customThemes = themes.filter(p => !builtInThemes.includes(p))
-            .sort((a, b) => a.name.localeCompare(b.name));
+            .sort((a, b) => compare(a.name, b.name));
         const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">

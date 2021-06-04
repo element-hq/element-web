@@ -19,10 +19,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
-import {CancelButton} from './SimpleRoomHeader';
+import { CancelButton } from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
@@ -30,8 +30,8 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
-import {PlaceCallType} from "../../../CallHandler";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { PlaceCallType } from "../../../CallHandler";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.RoomHeader")
 export default class RoomHeader extends React.Component {
@@ -40,7 +40,6 @@ export default class RoomHeader extends React.Component {
         oobData: PropTypes.object,
         inRoom: PropTypes.bool,
         onSettingsClick: PropTypes.func,
-        onPinnedClick: PropTypes.func,
         onSearchClick: PropTypes.func,
         onLeaveClick: PropTypes.func,
         onCancelClick: PropTypes.func,
@@ -59,14 +58,12 @@ export default class RoomHeader extends React.Component {
     componentDidMount() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
-        cli.on("Room.accountData", this._onRoomAccountData);
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.events", this._onRoomStateEvents);
-            cli.removeListener("Room.accountData", this._onRoomAccountData);
         }
     }
 
@@ -79,48 +76,14 @@ export default class RoomHeader extends React.Component {
         this._rateLimitedUpdate();
     };
 
-    _onRoomAccountData = (event, room) => {
-        if (!this.props.room || room.roomId !== this.props.room.roomId) return;
-        if (event.getType() !== "im.vector.room.read_pins") return;
-
-        this._rateLimitedUpdate();
-    };
-
     _rateLimitedUpdate = new RateLimitedFunc(function() {
         /* eslint-disable babel/no-invalid-this */
         this.forceUpdate();
     }, 500);
 
-    _hasUnreadPins() {
-        const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
-        if (!currentPinEvent) return false;
-        if (currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0) {
-            return false; // no pins == nothing to read
-        }
-
-        const readPinsEvent = this.props.room.getAccountData("im.vector.room.read_pins");
-        if (readPinsEvent && readPinsEvent.getContent()) {
-            const readStateEvents = readPinsEvent.getContent().event_ids || [];
-            if (readStateEvents) {
-                return !readStateEvents.includes(currentPinEvent.getId());
-            }
-        }
-
-        // There's pins, and we haven't read any of them
-        return true;
-    }
-
-    _hasPins() {
-        const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
-        if (!currentPinEvent) return false;
-
-        return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
-    }
-
     render() {
         let searchStatus = null;
         let cancelButton = null;
-        let pinnedEventsButton = null;
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
@@ -181,24 +144,6 @@ export default class RoomHeader extends React.Component {
             />;
         }
 
-        if (this.props.onPinnedClick && SettingsStore.getValue('feature_pinning')) {
-            let pinsIndicator = null;
-            if (this._hasUnreadPins()) {
-                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator mx_RoomHeader_pinsIndicatorUnread" />);
-            } else if (this._hasPins()) {
-                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator" />);
-            }
-
-            pinnedEventsButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_pinnedButton"
-                    onClick={this.props.onPinnedClick}
-                    title={_t("Pinned Messages")}
-                >
-                    { pinsIndicator }
-                </AccessibleTooltipButton>;
-        }
-
         let forgetButton;
         if (this.props.onForgetClick) {
             forgetButton =
@@ -248,7 +193,6 @@ export default class RoomHeader extends React.Component {
             <div className="mx_RoomHeader_buttons">
                 { videoCallButton }
                 { voiceCallButton }
-                { pinnedEventsButton }
                 { forgetButton }
                 { appsButton }
                 { searchButton }
@@ -265,7 +209,7 @@ export default class RoomHeader extends React.Component {
                     { topicElement }
                     { cancelButton }
                     { rightRow }
-                    <RoomHeaderButtons />
+                    <RoomHeaderButtons room={this.props.room} />
                 </div>
             </div>
         );
