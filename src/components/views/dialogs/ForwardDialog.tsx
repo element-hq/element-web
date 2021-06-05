@@ -214,7 +214,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             />
         </div>
         <hr />
-        <div className="mx_ForwardList">
+        <div className="mx_ForwardList" id="mx_ForwardList">
             <SearchBox
                 className="mx_textinput_icon mx_textinput_search"
                 placeholder={_t("Search for rooms or people")}
@@ -222,7 +222,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                 autoComplete={true}
                 autoFocus={true}
             />
-            <AutoHideScrollbar className="mx_ForwardList_content" id="mx_ForwardList">
+            <AutoHideScrollbar className="mx_ForwardList_content">
                 { rooms.length > 0 ? (
                     <div className="mx_ForwardList_results">
                         { rooms.map(room =>
