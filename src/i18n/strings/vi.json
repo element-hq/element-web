@@ -293,5 +293,7 @@
     "Enable URL previews by default for participants in this room": "Bật mặc định xem trước nội dung đường link cho mọi người trong phòng",
     "Room Colour": "Màu phòng chat",
     "Enable widget screenshots on supported widgets": "Bật widget chụp màn hình cho các widget có hỗ trợ",
-    "Sign In": "Đăng nhập"
+    "Sign In": "Đăng nhập",
+    "Explore rooms": "Khám phá phòng chat",
+    "Create Account": "Tạo tài khoản"
 }

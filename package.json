@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.18.0",
+  "version": "3.19.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -23,9 +23,7 @@
     "package.json"
   ],
   "bin": {
-    "reskindex": "scripts/reskindex.js",
-    "matrix-gen-i18n": "scripts/gen-i18n.js",
-    "matrix-prune-i18n": "scripts/prune-i18n.js"
+    "reskindex": "scripts/reskindex.js"
   },
   "main": "./src/index.js",
   "matrix_src_main": "./src/index.js",
@@ -35,7 +33,7 @@
     "prepublishOnly": "yarn build",
     "i18n": "matrix-gen-i18n",
     "prunei18n": "matrix-prune-i18n",
-    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && ./scripts/gen-i18n.js && node scripts/compare-file.js src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
+    "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && matrix-gen-i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "reskindex": "node scripts/reskindex.js -h header",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
     "rethemendex": "res/css/rethemendex.sh",
@@ -51,7 +49,8 @@
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest",
-    "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080"
+    "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080",
+    "coverage": "yarn test --coverage"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -133,6 +132,7 @@
     "@types/modernizr": "^3.5.3",
     "@types/node": "^14.14.22",
     "@types/pako": "^1.0.1",
+    "@types/parse5": "^6.0.0",
     "@types/qrcode": "^1.3.5",
     "@types/react": "^16.9",
     "@types/react-dom": "^16.9.10",
@@ -160,6 +160,7 @@
     "jest-fetch-mock": "^3.0.3",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
+    "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
     "react-test-renderer": "^16.14.0",
     "rimraf": "^3.0.2",
@@ -189,6 +190,12 @@
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.{js,ts,tsx}"
+    ],
+    "coverageReporters": [
+      "text"
     ]
   }
 }

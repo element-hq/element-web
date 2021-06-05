@@ -70,8 +70,8 @@ export default class ActionButton extends React.Component {
         }
 
         const icon = this.props.iconPath ?
-                (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
-                undefined;
+            (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+            undefined;
 
         const classNames = ["mx_RoleButton"];
         if (this.props.className) {

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 console.error(e);
 
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
-                if (stateForError.isFatalError) {
+                if (stateForError.serverErrorIsFatal) {
                     let error = _t("Unable to validate homeserver");
                     if (e.translatedMessage) {
                         error = e.translatedMessage;
@@ -168,7 +168,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             text = _t("Matrix.org is the biggest public homeserver in the world, so it’s a good place for many.");
         }
 
-        let defaultServerName = this.defaultServer.hsName;
+        let defaultServerName: React.ReactNode = this.defaultServer.hsName;
         if (this.defaultServer.hsNameIsDifferent) {
             defaultServerName = (
                 <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={this.defaultServer.hsUrl}>

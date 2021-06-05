@@ -45,7 +45,7 @@ export function eventTriggersUnreadCount(ev) {
 }
 
 export function doesRoomHaveUnreadMessages(room) {
-    const myUserId = MatrixClientPeg.get().credentials.userId;
+    const myUserId = MatrixClientPeg.get().getUserId();
 
     // get the most recent read receipt sent by our account.
     // N.B. this is NOT a read marker (RM, aka "read up to marker"),

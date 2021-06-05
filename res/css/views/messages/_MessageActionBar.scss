@@ -105,3 +105,11 @@ limitations under the License.
 .mx_MessageActionBar_optionsButton::after {
     mask-image: url('$(res)/img/element-icons/context-menu.svg');
 }
+
+.mx_MessageActionBar_resendButton::after {
+    mask-image: url('$(res)/img/element-icons/retry.svg');
+}
+
+.mx_MessageActionBar_cancelButton::after {
+    mask-image: url('$(res)/img/element-icons/trashcan.svg');
+}

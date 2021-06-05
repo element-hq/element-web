@@ -1,9 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -59,7 +56,7 @@ export type LoginFlow = ISSOFlow | IPasswordFlow;
 // TODO: Move this to JS SDK
 /* eslint-disable camelcase */
 interface ILoginParams {
-    identifier?: string;
+    identifier?: object;
     password?: string;
     token?: string;
     device_id?: string;

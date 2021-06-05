@@ -25,7 +25,12 @@ import SpaceCreateMenu from "./SpaceCreateMenu";
 import {SpaceItem} from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import SpaceStore, {HOME_SPACE, UPDATE_SELECTED_SPACE, UPDATE_TOP_LEVEL_SPACES} from "../../../stores/SpaceStore";
+import SpaceStore, {
+    HOME_SPACE,
+    UPDATE_INVITED_SPACES,
+    UPDATE_SELECTED_SPACE,
+    UPDATE_TOP_LEVEL_SPACES,
+} from "../../../stores/SpaceStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {SpaceNotificationState} from "../../../stores/notifications/SpaceNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
@@ -105,19 +110,21 @@ const SpaceButton: React.FC<IButtonProps> = ({
     </li>;
 }
 
-const useSpaces = (): [Room[], Room | null] => {
+const useSpaces = (): [Room[], Room[], Room | null] => {
+    const [invites, setInvites] = useState<Room[]>(SpaceStore.instance.invitedSpaces);
+    useEventEmitter(SpaceStore.instance, UPDATE_INVITED_SPACES, setInvites);
     const [spaces, setSpaces] = useState<Room[]>(SpaceStore.instance.spacePanelSpaces);
     useEventEmitter(SpaceStore.instance, UPDATE_TOP_LEVEL_SPACES, setSpaces);
     const [activeSpace, setActiveSpace] = useState<Room>(SpaceStore.instance.activeSpace);
     useEventEmitter(SpaceStore.instance, UPDATE_SELECTED_SPACE, setActiveSpace);
-    return [spaces, activeSpace];
+    return [invites, spaces, activeSpace];
 };
 
 const SpacePanel = () => {
     // We don't need the handle as we position the menu in a constant location
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
-    const [spaces, activeSpace] = useSpaces();
+    const [invites, spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 
     const newClasses = classNames("mx_SpaceButton_new", {
@@ -209,6 +216,13 @@ const SpacePanel = () => {
                             notificationState={SpaceStore.instance.getNotificationState(HOME_SPACE)}
                             isNarrow={isPanelCollapsed}
                         />
+                        { invites.map(s => <SpaceItem
+                            key={s.roomId}
+                            space={s}
+                            activeSpaces={activeSpaces}
+                            isPanelCollapsed={isPanelCollapsed}
+                            onExpand={() => setPanelCollapsed(false)}
+                        />) }
                         { spaces.map(s => <SpaceItem
                             key={s.roomId}
                             space={s}

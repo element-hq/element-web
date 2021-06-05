@@ -64,6 +64,11 @@ export function createTestClient() {
         getRoomIdForAlias: jest.fn().mockResolvedValue(undefined),
         getRoomDirectoryVisibility: jest.fn().mockResolvedValue(undefined),
         getProfileInfo: jest.fn().mockResolvedValue({}),
+        getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
+        getClientWellKnown: jest.fn().mockReturnValue(null),
+        supportsVoip: jest.fn().mockReturnValue(true),
+        getTurnServersExpiry: jest.fn().mockReturnValue(2^32),
+        getThirdpartyUser: jest.fn().mockResolvedValue([]),
         getAccountData: (type) => {
             return mkEvent({
                 type,
@@ -79,6 +84,17 @@ export function createTestClient() {
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
         isCryptoEnabled: () => false,
+        getSpaceSummary: jest.fn().mockReturnValue({
+            rooms: [],
+            events: [],
+        }),
+
+        // Used by various internal bits we aren't concerned with (yet)
+        _sessionStore: {
+            store: {
+                getItem: jest.fn(),
+            },
+        },
     };
 }
 
@@ -88,8 +104,8 @@ export function createTestClient() {
  * @param {string} opts.type The event.type
  * @param {string} opts.room The event.room_id
  * @param {string} opts.user The event.user_id
- * @param {string} opts.skey Optional. The state key (auto inserts empty string)
- * @param {Number} opts.ts   Optional. Timestamp for the event
+ * @param {string=} opts.skey Optional. The state key (auto inserts empty string)
+ * @param {number=} opts.ts   Optional. Timestamp for the event
  * @param {Object} opts.content The event.content
  * @param {boolean} opts.event True to make a MatrixEvent.
  * @return {Object} a JSON object representing this event.
@@ -224,7 +240,7 @@ export function mkStubRoom(roomId = null) {
         hasMembershipState: () => null,
         getVersion: () => '1',
         shouldUpgradeToVersion: () => null,
-        getMyMembership: () => "join",
+        getMyMembership: jest.fn().mockReturnValue("join"),
         maySendMessage: jest.fn().mockReturnValue(true),
         currentState: {
             getStateEvents: jest.fn(),
@@ -233,17 +249,17 @@ export function mkStubRoom(roomId = null) {
             maySendEvent: jest.fn().mockReturnValue(true),
             members: [],
         },
-        tags: {
-            "m.favourite": {
-                order: 0.5,
-            },
-        },
+        tags: {},
         setBlacklistUnverifiedDevices: jest.fn(),
         on: jest.fn(),
         removeListener: jest.fn(),
         getDMInviter: jest.fn(),
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
+        isSpaceRoom: jest.fn(() => false),
+        getUnreadNotificationCount: jest.fn(() => 0),
+        getEventReadUpTo: jest.fn(() => null),
+        timeline: [],
     };
 }
 

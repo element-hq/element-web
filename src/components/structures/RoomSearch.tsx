@@ -17,6 +17,8 @@ limitations under the License.
 import * as React from "react";
 import { createRef } from "react";
 import classNames from "classnames";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -26,7 +28,7 @@ import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
 import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
 import {replaceableComponent} from "../../utils/replaceableComponent";
-import SpaceStore, {UPDATE_SELECTED_SPACE} from "../../stores/SpaceStore";
+import SpaceStore, {UPDATE_SELECTED_SPACE, UPDATE_TOP_LEVEL_SPACES} from "../../stores/SpaceStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -40,6 +42,7 @@ interface IProps {
 interface IState {
     query: string;
     focused: boolean;
+    inSpaces: boolean;
 }
 
 @replaceableComponent("structures.RoomSearch")
@@ -54,11 +57,13 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         this.state = {
             query: "",
             focused: false,
+            inSpaces: false,
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         // clear filter when changing spaces, in future we may wish to maintain a filter per-space
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.clearInput);
+        SpaceStore.instance.on(UPDATE_TOP_LEVEL_SPACES, this.onSpaces);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
@@ -79,7 +84,14 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.clearInput);
+        SpaceStore.instance.off(UPDATE_TOP_LEVEL_SPACES, this.onSpaces);
     }
+
+    private onSpaces = (spaces: Room[]) => {
+        this.setState({
+            inSpaces: spaces.length > 0,
+        });
+    };
 
     private onAction = (payload: ActionPayload) => {
         if (payload.action === 'view_room' && payload.clear_search) {
@@ -152,6 +164,11 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             'mx_RoomSearch_inputExpanded': this.state.query || this.state.focused,
         });
 
+        let placeholder = _t("Filter");
+        if (this.state.inSpaces) {
+            placeholder = _t("Filter all spaces");
+        }
+
         let icon = (
             <div className='mx_RoomSearch_icon' />
         );
@@ -165,7 +182,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 onBlur={this.onBlur}
                 onChange={this.onChange}
                 onKeyDown={this.onKeyDown}
-                placeholder={_t("Filter")}
+                placeholder={placeholder}
                 autoComplete="off"
             />
         );

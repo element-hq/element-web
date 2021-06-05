@@ -29,6 +29,8 @@ import RoomContext from "../../../contexts/RoomContext";
 import Toolbar from "../../../accessibility/Toolbar";
 import {RovingAccessibleTooltipButton, useRovingTabIndex} from "../../../accessibility/RovingTabIndex";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {canCancel} from "../context_menus/MessageContextMenu";
+import Resend from "../../../Resend";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -169,45 +171,118 @@ export default class MessageActionBar extends React.PureComponent {
         });
     };
 
-    render() {
-        let reactButton;
-        let replyButton;
-        let editButton;
+    /**
+     * Runs a given fn on the set of possible events to test. The first event
+     * that passes the checkFn will have fn executed on it. Both functions take
+     * a MatrixEvent object. If no particular conditions are needed, checkFn can
+     * be null/undefined. If no functions pass the checkFn, no action will be
+     * taken.
+     * @param {Function} fn The execution function.
+     * @param {Function} checkFn The test function.
+     */
+    runActionOnFailedEv(fn, checkFn) {
+        if (!checkFn) checkFn = () => true;
 
-        if (isContentActionable(this.props.mxEvent)) {
-            if (this.context.canReact) {
-                reactButton = (
-                    <ReactButton mxEvent={this.props.mxEvent} reactions={this.props.reactions} onFocusChange={this.onFocusChange} />
-                );
-            }
-            if (this.context.canReply) {
-                replyButton = <RovingAccessibleTooltipButton
-                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
-                    title={_t("Reply")}
-                    onClick={this.onReplyClick}
-                />;
+        const mxEvent = this.props.mxEvent;
+        const editEvent = mxEvent.replacingEvent();
+        const redactEvent = mxEvent.localRedactionEvent();
+        const tryOrder = [redactEvent, editEvent, mxEvent];
+        for (const ev of tryOrder) {
+            if (ev && checkFn(ev)) {
+                fn(ev);
+                break;
             }
         }
+    }
+
+    onResendClick = (ev) => {
+        this.runActionOnFailedEv((tarEv) => Resend.resend(tarEv));
+    };
+
+    onCancelClick = (ev) => {
+        this.runActionOnFailedEv(
+            (tarEv) => Resend.removeFromQueue(tarEv),
+            (testEv) => canCancel(testEv.status),
+        );
+    };
+
+    render() {
+        const toolbarOpts = [];
         if (canEditContent(this.props.mxEvent)) {
-            editButton = <RovingAccessibleTooltipButton
+            toolbarOpts.push(<RovingAccessibleTooltipButton
                 className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
                 title={_t("Edit")}
                 onClick={this.onEditClick}
-            />;
+                key="edit"
+            />);
         }
 
-        // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
-        return <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
-            {reactButton}
-            {replyButton}
-            {editButton}
-            <OptionsButton
+        const cancelSendingButton = <RovingAccessibleTooltipButton
+            className="mx_MessageActionBar_maskButton mx_MessageActionBar_cancelButton"
+            title={_t("Delete")}
+            onClick={this.onCancelClick}
+            key="cancel"
+        />;
+
+        // We show a different toolbar for failed events, so detect that first.
+        const mxEvent = this.props.mxEvent;
+        const editStatus = mxEvent.replacingEvent() && mxEvent.replacingEvent().status;
+        const redactStatus = mxEvent.localRedactionEvent() && mxEvent.localRedactionEvent().status;
+        const allowCancel = canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus);
+        const isFailed = [mxEvent.status, editStatus, redactStatus].includes("not_sent");
+        if (allowCancel && isFailed) {
+            // The resend button needs to appear ahead of the edit button, so insert to the
+            // start of the opts
+            toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
+                className="mx_MessageActionBar_maskButton mx_MessageActionBar_resendButton"
+                title={_t("Retry")}
+                onClick={this.onResendClick}
+                key="resend"
+            />);
+
+            // The delete button should appear last, so we can just drop it at the end
+            toolbarOpts.push(cancelSendingButton);
+        } else {
+            if (isContentActionable(this.props.mxEvent)) {
+                // Like the resend button, the react and reply buttons need to appear before the edit.
+                // The only catch is we do the reply button first so that we can make sure the react
+                // button is the very first button without having to do length checks for `splice()`.
+                if (this.context.canReply) {
+                    toolbarOpts.splice(0, 0, <RovingAccessibleTooltipButton
+                        className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
+                        title={_t("Reply")}
+                        onClick={this.onReplyClick}
+                        key="reply"
+                    />);
+                }
+                if (this.context.canReact) {
+                    toolbarOpts.splice(0, 0, <ReactButton
+                        mxEvent={this.props.mxEvent}
+                        reactions={this.props.reactions}
+                        onFocusChange={this.onFocusChange}
+                        key="react"
+                    />);
+                }
+            }
+
+            if (allowCancel) {
+                toolbarOpts.push(cancelSendingButton);
+            }
+
+            // The menu button should be last, so dump it there.
+            toolbarOpts.push(<OptionsButton
                 mxEvent={this.props.mxEvent}
                 getReplyThread={this.props.getReplyThread}
                 getTile={this.props.getTile}
                 permalinkCreator={this.props.permalinkCreator}
                 onFocusChange={this.onFocusChange}
-            />
+                key="menu"
+            />);
+        }
+
+        // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
+        return <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
+            {toolbarOpts}
         </Toolbar>;
     }
 }

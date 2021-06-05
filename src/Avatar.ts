@@ -20,6 +20,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 
 import DMRoomMap from './utils/DMRoomMap';
 import {mediaFromMxc} from "./customisations/Media";
+import SettingsStore from "./settings/SettingsStore";
 
 export type ResizeMethod = "crop" | "scale";
 
@@ -27,11 +28,7 @@ export type ResizeMethod = "crop" | "scale";
 export function avatarUrlForMember(member: RoomMember, width: number, height: number, resizeMethod: ResizeMethod) {
     let url: string;
     if (member?.getMxcAvatarUrl()) {
-        url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
-            Math.floor(width * window.devicePixelRatio),
-            Math.floor(height * window.devicePixelRatio),
-            resizeMethod,
-        );
+        url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
     if (!url) {
         // member can be null here currently since on invites, the JS SDK
@@ -44,11 +41,7 @@ export function avatarUrlForMember(member: RoomMember, width: number, height: nu
 
 export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
     if (!user.avatarUrl) return null;
-    return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(
-        Math.floor(width * window.devicePixelRatio),
-        Math.floor(height * window.devicePixelRatio),
-        resizeMethod,
-    );
+    return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(width, height, resizeMethod);
 }
 
 function isValidHexColor(color: string): boolean {
@@ -151,7 +144,7 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     }
 
     // space rooms cannot be DMs so skip the rest
-    if (room.isSpaceRoom()) return null;
+    if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
 
     let otherMember = null;
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);

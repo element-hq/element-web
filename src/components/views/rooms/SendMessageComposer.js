@@ -477,6 +477,10 @@ export default class SendMessageComposer extends React.Component {
     }
 
     onAction = (payload) => {
+        // don't let the user into the composer if it is disabled - all of these branches lead
+        // to the cursor being in the composer
+        if (this.props.disabled) return;
+
         switch (payload.action) {
             case 'reply_to_event':
             case Action.FocusComposer:
@@ -502,9 +506,8 @@ export default class SendMessageComposer extends React.Component {
             member.rawDisplayName : userId;
         const caret = this._editorRef.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        // index is -1 if there are no parts but we only care for if this would be the part in position 0
-        const insertIndex = position.index > 0 ? position.index : 0;
-        const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
+        // Insert suffix only if the caret is at the start of the composer
+        const parts = partCreator.createMentionParts(caret.offset === 0, displayName, userId);
         model.transform(() => {
             const addedLen = model.insert(parts, position);
             return model.positionForOffset(caret.offset + addedLen, true);

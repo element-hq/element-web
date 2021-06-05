@@ -30,6 +30,7 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -460,7 +461,7 @@ export default class MemberList extends React.Component {
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
-            } else if (room.isSpaceRoom()) {
+            } else if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
                 inviteButtonText = _t("Invite to this space");
             }
 
@@ -492,7 +493,7 @@ export default class MemberList extends React.Component {
         let previousPhase = RightPanelPhases.RoomSummary;
         // We have no previousPhase for when viewing a MemberList from a Space
         let scopeHeader;
-        if (room?.isSpaceRoom()) {
+        if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
             previousPhase = undefined;
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={room} height={32} width={32} />

@@ -42,10 +42,16 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
 
     private onStoreUpdate = async (): Promise<void> => {
         const beforeRoomIds = this.roomIds;
-        this.roomIds = SpaceStore.instance.getSpaceFilteredRoomIds(this.space);
+        // clone the set as it may be mutated by the space store internally
+        this.roomIds = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(this.space));
 
         if (setHasDiff(beforeRoomIds, this.roomIds)) {
             this.emit(FILTER_CHANGED);
+            // XXX: Room List Store has a bug where updates to the pre-filter during a local echo of a
+            // tags transition seem to be ignored, so refire in the next tick to work around it
+            setImmediate(() => {
+                this.emit(FILTER_CHANGED);
+            });
         }
     };
 
