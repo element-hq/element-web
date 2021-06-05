@@ -62,9 +62,7 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
             "bug_report_endpoint_url": "https://element.io/bugreports/submit",
             "defaultCountryCode": "GB",
             "showLabsSettings": false,
-            "features": {
-                "feature_new_spinner": false
-            },
+            "features": { },
             "default_federate": true,
             "default_theme": "light",
             "roomDirectory": {

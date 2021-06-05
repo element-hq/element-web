@@ -19,8 +19,8 @@ limitations under the License.
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import olmWasmPath from "olm/olm.wasm";
-import Olm from 'olm';
+import olmWasmPath from "@matrix-org/olm/olm.wasm";
+import Olm from '@matrix-org/olm';
 import * as ReactDOM from "react-dom";
 import * as React from "react";
 

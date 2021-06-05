@@ -32,5 +32,6 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s używa zaawansowanych funkcji przeglądarki, które nie są dostępne w twojej przeglądarce.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Elementa zawiera niepoprawny JSON. Popraw konfiguracje i odśwież stronę.",
     "Your Element is misconfigured": "Element jest nieprawidłowo skonfigurowany",
-    "Powered by Matrix": "Zasilane przez Matrix"
+    "Powered by Matrix": "Zasilane przez Matrix",
+    "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie"
 }

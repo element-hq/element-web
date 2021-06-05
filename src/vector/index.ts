@@ -51,6 +51,9 @@ function checkBrowserFeatures() {
     // ES2018: http://262.ecma-international.org/9.0/#sec-promise.prototype.finally
     window.Modernizr.addTest("promiseprototypefinally", () =>
         typeof window.Promise?.prototype?.finally === "function");
+    // ES2020: http://262.ecma-international.org/#sec-promise.allsettled
+    window.Modernizr.addTest("promiseallsettled", () =>
+        typeof window.Promise?.allSettled === "function");
     // ES2018: https://262.ecma-international.org/9.0/#sec-get-regexp.prototype.dotAll
     window.Modernizr.addTest("regexpdotall", () => (
         window.RegExp?.prototype &&

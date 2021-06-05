@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.7.26",
+  "version": "1.7.29",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -44,6 +44,7 @@
     "build:bundle-stats": "webpack --progress --bail --mode production --json > webpack-stats.json",
     "dist": "scripts/package.sh",
     "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
+    "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js --https\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development --disable-host-check",
     "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
@@ -53,6 +54,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
     "highlight.js": "^10.5.0",
@@ -60,12 +62,11 @@
     "katex": "^0.12.0",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
-    "matrix-widget-api": "^0.1.0-beta.13",
-    "olm": "https://packages.matrix.org/npm/olm/olm-3.2.1.tgz",
+    "matrix-widget-api": "^0.1.0-beta.14",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "sanitize-html": "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db",
+    "sanitize-html": "^2.3.2",
     "ua-parser-js": "^0.7.24"
   },
   "devDependencies": {
@@ -92,7 +93,7 @@
     "@types/node": "^14.14.22",
     "@types/react": "^16.9",
     "@types/react-dom": "^16.9.10",
-    "@types/sanitize-html": "^1.27.1",
+    "@types/sanitize-html": "^2.3.1",
     "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
@@ -167,7 +168,10 @@
       "^react$": "<rootDir>/node_modules/react",
       "^react-dom$": "<rootDir>/node_modules/react-dom",
       "^matrix-js-sdk$": "<rootDir>/node_modules/matrix-js-sdk/src",
-      "^matrix-react-sdk$": "<rootDir>/node_modules/matrix-react-sdk/src"
+      "^matrix-react-sdk$": "<rootDir>/node_modules/matrix-react-sdk/src",
+      "decoderWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
+      "decoderWorker\\.min\\.wasm": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
+      "waveWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
