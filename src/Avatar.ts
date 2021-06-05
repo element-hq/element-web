@@ -146,11 +146,10 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     // space rooms cannot be DMs so skip the rest
     if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
 
-    const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    if (!otherUserId) return null;
+    if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) return null;
 
     // If there are only two members in the DM use the avatar of the other member
-    const otherMember = room.getAvatarFallbackMember(otherUserId);
+    const otherMember = room.getAvatarFallbackMember();
     if (otherMember?.getMxcAvatarUrl()) {
         return mediaFromMxc(otherMember.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
