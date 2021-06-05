@@ -62,7 +62,7 @@ export default abstract class Exporter {
         const stateRes: any[] = [];
         while (limit) {
             const eventsPerCrawl = Math.min(limit, 100);
-            const res = await client._createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
+            const res: any = await client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
 
             if (res.state) stateRes.push(...res.state);
             if (res.chunk.length === 0) break;

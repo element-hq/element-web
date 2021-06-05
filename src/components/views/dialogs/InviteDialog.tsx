@@ -49,6 +49,7 @@ import {mediaFromMxc} from "../../../customisations/Media";
 import {getAddressType} from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
+import { compare } from '../../../utils/strings';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -578,7 +579,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         members.sort((a, b) => {
             if (a.score === b.score) {
                 if (a.numRooms === b.numRooms) {
-                    return a.member.userId.localeCompare(b.member.userId);
+                    return compare(a.member.userId, b.member.userId);
                 }
 
                 return b.numRooms - a.numRooms;

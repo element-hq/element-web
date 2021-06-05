@@ -426,8 +426,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             return; // don't do anything on rooms that aren't visible
         }
 
-        if (cause === RoomUpdateCause.NewRoom && !this.prefilterConditions.every(c => c.isVisible(room))) {
-            return; // don't do anything on new rooms which ought not to be shown
+        if ((cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.PossibleTagChange) &&
+            !this.prefilterConditions.every(c => c.isVisible(room))
+        ) {
+            return; // don't do anything on new/moved rooms which ought not to be shown
         }
 
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);

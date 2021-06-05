@@ -46,7 +46,7 @@ import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
-import {Layout} from "../../settings/Layout";
+import { Layout } from "../../settings/Layout";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import { haveTileForEvent } from "../views/rooms/EventTile";
@@ -54,7 +54,6 @@ import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { E2EStatus, shieldStatusForRoom } from '../../utils/ShieldUtils';
 import { Action } from "../../dispatcher/actions";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
@@ -63,7 +62,6 @@ import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import ForwardMessage from "../views/rooms/ForwardMessage";
 import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
-import PinnedEventsPanel from "../views/rooms/PinnedEventsPanel";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import { XOR } from "../../@types/common";
@@ -82,7 +80,8 @@ import { getKeyBindingsManager, RoomAction } from '../../KeyBindingsManager';
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { omit } from 'lodash';
 import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
@@ -156,7 +155,6 @@ export interface IState {
     canPeek: boolean;
     showApps: boolean;
     isPeeking: boolean;
-    showingPinned: boolean;
     showReadReceipts: boolean;
     showRightPanel: boolean;
     // error object, as from the matrix client/server API
@@ -176,6 +174,7 @@ export interface IState {
     statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
+
     upgradeRecommendation?: {
         version: string;
         needsUpgrade: boolean;
@@ -233,7 +232,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             canPeek: false,
             showApps: false,
             isPeeking: false,
-            showingPinned: false,
             showReadReceipts: true,
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
             joining: false,
@@ -328,7 +326,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
-            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             wasContextSwitch: RoomViewStore.getWasContextSwitch(),
         };
@@ -529,7 +526,20 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState));
+        const hasPropsDiff = objectHasDiff(this.props, nextProps);
+
+        // React only shallow comparison and we only want to trigger
+        // a component re-render if a room requires an upgrade
+        const newUpgradeRecommendation = nextState.upgradeRecommendation || {}
+
+        const state = omit(this.state, ['upgradeRecommendation']);
+        const newState = omit(nextState, ['upgradeRecommendation'])
+
+        const hasStateDiff =
+            objectHasDiff(state, newState) ||
+            (newUpgradeRecommendation.needsUpgrade === true)
+
+        return hasPropsDiff || hasStateDiff;
     }
 
     componentDidUpdate() {
@@ -640,6 +650,17 @@ export default class RoomView extends React.Component<IProps, IState> {
         // Tinter.tint(); // reset colourscheme
 
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
+    }
+
+    private onUserScroll = () => {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.room.roomId,
+                event_id: this.state.initialEventId,
+                highlighted: false,
+            });
+        }
     }
 
     private onLayoutChange = () => {
@@ -812,7 +833,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onEvent = (ev) => {
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() || ev.shouldAttemptDecryption()) return;
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
 
@@ -1377,13 +1398,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         return ret;
     }
 
-    private onPinnedClick = () => {
-        const nowShowingPinned = !this.state.showingPinned;
-        const roomId = this.state.room.roomId;
-        this.setState({showingPinned: nowShowingPinned, searching: false});
-        SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
-    };
-
     private onCallPlaced = (type: PlaceCallType) => {
         dis.dispatch({
             action: 'place_call',
@@ -1500,7 +1514,6 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onSearchClick = () => {
         this.setState({
             searching: !this.state.searching,
-            showingPinned: false,
         });
     };
 
@@ -1513,8 +1526,10 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     // jump down to the bottom of this room, where new events are arriving
     private jumpToLiveTimeline = () => {
-        this.messagePanel.jumpToLiveTimeline();
-        dis.fire(Action.FocusComposer);
+        dis.dispatch({
+            action: 'view_room',
+            room_id: this.state.room.roomId,
+        });
     };
 
     // jump up to wherever our read marker is
@@ -1827,9 +1842,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
             hideCancel = true;
-        } else if (this.state.showingPinned) {
-            hideCancel = true; // has own cancel
-            aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;
         } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -1985,6 +1997,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 eventId={this.state.initialEventId}
                 eventPixelOffset={this.state.initialEventPixelOffset}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className={messagePanelClassNames}
@@ -2011,6 +2024,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 highlight={this.state.room.getUnreadNotificationCount('highlight') > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
+                roomId={this.state.roomId}
             />);
         }
 
@@ -2047,7 +2061,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                             inRoom={myMembership === 'join'}
                             onSearchClick={this.onSearchClick}
                             onSettingsClick={this.onSettingsClick}
-                            onPinnedClick={this.onPinnedClick}
                             onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}

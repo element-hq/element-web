@@ -285,6 +285,12 @@ interface IProps {
 
     // Helper to build permalinks for the room
     permalinkCreator?: RoomPermalinkCreator;
+
+    // Symbol of the root node
+    as?: string
+
+    // whether or not to always show timestamps
+    alwaysShowTimestamps?: boolean
 }
 
 interface IState {
@@ -299,12 +305,15 @@ interface IState {
     previouslyRequestedKeys: boolean;
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions: Relations;
+
+    hover: boolean;
 }
 
 @replaceableComponent("views.rooms.EventTile")
 export default class EventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
+    private ref: React.RefObject<unknown>;
     private tile = React.createRef();
     private replyThread = React.createRef();
 
@@ -331,6 +340,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             previouslyRequestedKeys: false,
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
+
+            hover: false,
         };
 
         // don't do RR animations until we are mounted
@@ -342,6 +353,8 @@ export default class EventTile extends React.Component<IProps, IState> {
         // to determine if we've already subscribed and use a combination of other flags to find
         // out if we should even be subscribed at all.
         this.isListeningForReceipts = false;
+
+        this.ref = React.createRef();
     }
 
     /**
@@ -643,7 +656,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            return (<span className="mx_EventTile_readAvatars" />);
+            return null;
         }
 
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
@@ -652,6 +665,11 @@ export default class EventTile extends React.Component<IProps, IState> {
         let left = 0;
 
         const receipts = this.props.readReceipts || [];
+
+        if (receipts.length === 0) {
+            return null;
+        }
+
         for (let i = 0; i < receipts.length; ++i) {
             const receipt = receipts[i];
 
@@ -702,10 +720,14 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
         }
 
-        return <span className="mx_EventTile_readAvatars">
-            { remText }
-            { avatars }
-        </span>;
+        return (
+            <div className="mx_EventTile_msgOption">
+                <span className="mx_EventTile_readAvatars">
+                    { remText }
+                    { avatars }
+                </span>
+            </div>
+        )
     }
 
     onSenderProfileClick = event => {
@@ -969,7 +991,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const timestamp = this.props.mxEvent.getTs() ?
+        const showTimestamp = this.props.mxEvent.getTs() && (this.props.alwaysShowTimestamps || this.state.hover);
+        const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
         const keyRequestHelpText =
@@ -1032,11 +1055,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let msgOption;
         if (this.props.showReadReceipts) {
             const readAvatars = this.getReadAvatars();
-            msgOption = (
-                <div className="mx_EventTile_msgOption">
-                    { readAvatars }
-                </div>
-            );
+            msgOption = readAvatars;
         }
 
         switch (this.props.tileShape) {
@@ -1141,11 +1160,20 @@ export default class EventTile extends React.Component<IProps, IState> {
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    <div className={classes} tabIndex={-1} aria-live={ariaLive} aria-atomic="true">
-                        { ircTimestamp }
-                        { sender }
-                        { ircPadlock }
-                        <div className="mx_EventTile_line">
+                    React.createElement(this.props.as || "div", {
+                        "ref": this.ref,
+                        "className": classes,
+                        "tabIndex": -1,
+                        "aria-live": ariaLive,
+                        "aria-atomic": "true",
+                        "data-scroll-tokens": this.props["data-scroll-tokens"],
+                        "onMouseEnter": () => this.setState({ hover: true }),
+                        "onMouseLeave": () => this.setState({ hover: false }),
+                    }, [
+                        ircTimestamp,
+                        sender,
+                        ircPadlock,
+                        <div className="mx_EventTile_line" key="mx_EventTile_line">
                             { groupTimestamp }
                             { groupPadlock }
                             { thread }
@@ -1164,16 +1192,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { keyRequestInfo }
                             { reactionsRow }
                             { actionBar }
-                        </div>
-                        {msgOption}
-                        {
-                            // The avatar goes after the event tile as it's absolutely positioned to be over the
-                            // event tile line, so needs to be later in the DOM so it appears on top (this avoids
-                            // the need for further z-indexing chaos)
-                        }
-                        { avatar }
-                    </div>
-                );
+                        </div>,
+                        msgOption,
+                        avatar,
+
+                    ])
+                )
             }
         }
     }
@@ -1335,11 +1359,15 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
             tooltip = <Tooltip className="mx_EventTile_readAvatars_receiptTooltip" label={label} yOffset={20} />;
         }
 
-        return <span className="mx_EventTile_readAvatars">
-            <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                { nonCssBadge }
-                { tooltip }
-            </span>
-        </span>;
+        return (
+            <div className="mx_EventTile_msgOption">
+                <span className="mx_EventTile_readAvatars">
+                    <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
+                        {nonCssBadge}
+                        {tooltip}
+                    </span>
+                </span>
+            </div>
+        );
     }
 }
