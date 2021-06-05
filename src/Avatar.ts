@@ -146,15 +146,11 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     // space rooms cannot be DMs so skip the rest
     if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) return null;
 
-    let otherMember = null;
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    if (otherUserId) {
-        otherMember = room.getMember(otherUserId);
-    } else {
-        // if the room is not marked as a 1:1, but only has max 2 members
-        // then still try to show any avatar (pref. other member)
-        otherMember = room.getAvatarFallbackMember();
-    }
+    if (!otherUserId) return null;
+
+    // If there are only two members in the DM use the avatar of the other member
+    const otherMember = room.getAvatarFallbackMember(otherUserId);
     if (otherMember?.getMxcAvatarUrl()) {
         return mediaFromMxc(otherMember.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
