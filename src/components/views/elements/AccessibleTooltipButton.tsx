@@ -75,7 +75,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
             label={tooltip || title}
             yOffset={yOffset}
             alignment={alignment}
-        /> : <div />;
+        /> : null;
         return (
             <AccessibleButton
                 {...props}

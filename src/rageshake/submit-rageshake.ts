@@ -92,8 +92,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append('cross_signing_key', client.getCrossSigningId());
 
             // add cross-signing status information
-            const crossSigning = client._crypto._crossSigningInfo;
-            const secretStorage = client._crypto._secretStorage;
+            const crossSigning = client.crypto._crossSigningInfo;
+            const secretStorage = client.crypto._secretStorage;
 
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
             body.append("cross_signing_supported_by_hs",
@@ -114,7 +114,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));
 
             body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
-            const sessionBackupKeyFromCache = await client._crypto.getSessionBackupPrivateKey();
+            const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
         }

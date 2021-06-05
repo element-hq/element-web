@@ -43,12 +43,10 @@ export default class SimpleRoomHeader extends React.Component {
         }
 
         return (
-            <div className="mx_RoomHeader" >
-                <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_simpleHeader">
-                        { icon }
-                        { this.props.title }
-                    </div>
+            <div className="mx_RoomHeader mx_RoomHeader_wrapper" >
+                <div className="mx_RoomHeader_simpleHeader">
+                    { icon }
+                    { this.props.title }
                 </div>
             </div>
         );

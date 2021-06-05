@@ -103,7 +103,7 @@ export async function startTermsFlow(
 
     // fetch the set of agreed policy URLs from account data
     const currentAcceptedTerms = await MatrixClientPeg.get().getAccountData('m.accepted_terms');
-    let agreedUrlSet;
+    let agreedUrlSet: Set<string>;
     if (!currentAcceptedTerms || !currentAcceptedTerms.getContent() || !currentAcceptedTerms.getContent().accepted) {
         agreedUrlSet = new Set();
     } else {
