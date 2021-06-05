@@ -155,7 +155,6 @@ export interface IState {
     canPeek: boolean;
     showApps: boolean;
     isPeeking: boolean;
-    showReadReceipts: boolean;
     showRightPanel: boolean;
     // error object, as from the matrix client/server API
     // If we failed to load information about the room,
@@ -183,6 +182,11 @@ export interface IState {
     canReact: boolean;
     canReply: boolean;
     layout: Layout;
+    showReadReceipts: boolean;
+    showRedactions: boolean;
+    showJoinLeaves: boolean;
+    showAvatarChanges: boolean;
+    showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
@@ -200,8 +204,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     private readonly dispatcherRef: string;
     private readonly roomStoreToken: EventSubscription;
     private readonly rightPanelStoreToken: EventSubscription;
-    private readonly showReadReceiptsWatchRef: string;
-    private readonly layoutWatcherRef: string;
+    private settingWatchers: string[];
 
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
@@ -232,7 +235,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             canPeek: false,
             showApps: false,
             isPeeking: false,
-            showReadReceipts: true,
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
             joining: false,
             atEndOfLiveTimeline: true,
@@ -242,6 +244,11 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReact: false,
             canReply: false,
             layout: SettingsStore.getValue("layout"),
+            showReadReceipts: true,
+            showRedactions: true,
+            showJoinLeaves: true,
+            showAvatarChanges: true,
+            showDisplaynameChanges: true,
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
             dragCounter: 0,
         };
@@ -268,9 +275,11 @@ export default class RoomView extends React.Component<IProps, IState> {
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        this.showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
-            this.onReadReceiptsChange);
-        this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, this.onLayoutChange);
+        this.settingWatchers = [
+            SettingsStore.watchSetting("layout", null, () =>
+                this.setState({ layout: SettingsStore.getValue("layout") }),
+            ),
+        ];
     }
 
     private onWidgetStoreUpdate = () => {
@@ -327,8 +336,41 @@ export default class RoomView extends React.Component<IProps, IState> {
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
+            showRedactions: SettingsStore.getValue("showRedactions", roomId),
+            showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
+            showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
+            showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
             wasContextSwitch: RoomViewStore.getWasContextSwitch(),
         };
+
+        // Add watchers for each of the settings we just looked up
+        this.settingWatchers = this.settingWatchers.concat([
+            SettingsStore.watchSetting("showReadReceipts", null, () =>
+                this.setState({
+                    showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showRedactions", null, () =>
+                this.setState({
+                    showRedactions: SettingsStore.getValue("showRedactions", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showJoinLeaves", null, () =>
+                this.setState({
+                    showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showAvatarChanges", null, () =>
+                this.setState({
+                    showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showDisplaynameChanges", null, () =>
+                this.setState({
+                    showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
+                }),
+            ),
+        ]);
 
         if (!initial && this.state.shouldPeek && !newState.shouldPeek) {
             // Stop peeking because we have joined this room now
@@ -638,10 +680,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
-        if (this.showReadReceiptsWatchRef) {
-            SettingsStore.unwatchSetting(this.showReadReceiptsWatchRef);
-        }
-
         // cancel any pending calls to the rate_limited_funcs
         this.updateRoomMembers.cancelPendingCall();
 
@@ -649,7 +687,9 @@ export default class RoomView extends React.Component<IProps, IState> {
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
 
-        SettingsStore.unwatchSetting(this.layoutWatcherRef);
+        for (const watcher of this.settingWatchers) {
+            SettingsStore.unwatchSetting(watcher);
+        }
     }
 
     private onUserScroll = () => {
