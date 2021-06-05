@@ -26,6 +26,7 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import RoomContext from "../../contexts/RoomContext";
 import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -151,6 +152,8 @@ export default class MessagePanel extends React.Component {
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
     };
+
+    static contextType = RoomContext;
 
     constructor(props) {
         super(props);
@@ -381,7 +384,7 @@ export default class MessagePanel extends React.Component {
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        return !shouldHideEvent(mxEv);
+        return !shouldHideEvent(mxEv, this.context);
     }
 
     _readMarkerForEvent(eventId, isLastEvent) {

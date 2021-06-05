@@ -859,7 +859,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            } else if (!shouldHideEvent(ev)) {
+            } else if (!shouldHideEvent(ev, this.state)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
