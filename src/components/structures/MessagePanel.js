@@ -34,6 +34,7 @@ import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResiz
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import defaultDispatcher from '../../dispatcher/dispatcher';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -119,6 +120,9 @@ export default class MessagePanel extends React.Component {
 
         // callback which is called when the panel is scrolled.
         onScroll: PropTypes.func,
+
+        // callback which is called when the user interacts with the room timeline
+        onUserScroll: PropTypes.func,
 
         // callback which is called when more content is needed.
         onFillRequest: PropTypes.func,
@@ -471,6 +475,10 @@ export default class MessagePanel extends React.Component {
         return {nextEvent, nextTile};
     }
 
+    get _roomHasPendingEdit() {
+        return this.props.room && localStorage.getItem(`mx_edit_room_${this.props.room.roomId}`);
+    }
+
     _getEventTiles() {
         this.eventNodes = {};
 
@@ -544,17 +552,26 @@ export default class MessagePanel extends React.Component {
             }
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
+                const isGrouped = false;
                 if (wantTile) {
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, nextEvent, nextTile));
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, isGrouped,
+                        nextEvent, nextTile));
                     prevEvent = mxEv;
                 }
 
                 const readMarker = this._readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
                 if (readMarker) ret.push(readMarker);
             }
+        }
+
+        if (!this.props.editState && this._roomHasPendingEdit) {
+            defaultDispatcher.dispatch({
+                action: "edit_event",
+                event: this.props.room.findEventById(this._roomHasPendingEdit),
+            });
         }
 
         if (grouper) {
@@ -564,7 +581,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last, nextEvent, nextEventWithTile) {
+    _getTilesForEvent(prevEvent, mxEv, last, isGrouped=false, nextEvent, nextEventWithTile) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -572,7 +589,6 @@ export default class MessagePanel extends React.Component {
 
         const isEditing = this.props.editState &&
             this.props.editState.getEvent().getId() === mxEv.getId();
-
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
         let ts1 = mxEv.getTs();
@@ -584,7 +600,7 @@ export default class MessagePanel extends React.Component {
 
         // do we need a date separator since the last event?
         const wantsDateSeparator = this._wantsDateSeparator(prevEvent, eventDate);
-        if (wantsDateSeparator) {
+        if (wantsDateSeparator && !isGrouped) {
             const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
         }
@@ -632,39 +648,37 @@ export default class MessagePanel extends React.Component {
 
         // use txnId as key if available so that we don't remount during sending
         ret.push(
-            <li
-                key={mxEv.getTxnId() || eventId}
-                ref={this._collectEventNode.bind(this, eventId)}
-                data-scroll-tokens={scrollToken}
-            >
-                <TileErrorBoundary mxEvent={mxEv}>
-                    <EventTile
-                        mxEvent={mxEv}
-                        continuation={continuation}
-                        isRedacted={mxEv.isRedacted()}
-                        replacingEventId={mxEv.replacingEventId()}
-                        editState={isEditing && this.props.editState}
-                        onHeightChanged={this._onHeightChanged}
-                        readReceipts={readReceipts}
-                        readReceiptMap={this._readReceiptMap}
-                        showUrlPreview={this.props.showUrlPreview}
-                        checkUnmounting={this._isUnmounting}
-                        eventSendStatus={mxEv.getAssociatedStatus()}
-                        tileShape={this.props.tileShape}
-                        isTwelveHour={this.props.isTwelveHour}
-                        permalinkCreator={this.props.permalinkCreator}
-                        last={last}
-                        lastInSection={willWantDateSeparator}
-                        lastSuccessful={isLastSuccessful}
-                        isSelectedEvent={highlight}
-                        getRelationsForEvent={this.props.getRelationsForEvent}
-                        showReactions={this.props.showReactions}
-                        layout={this.props.layout}
-                        enableFlair={this.props.enableFlair}
-                        showReadReceipts={this.props.showReadReceipts}
-                    />
-                </TileErrorBoundary>
-            </li>,
+            <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>
+                <EventTile
+                    as="li"
+                    data-scroll-tokens={scrollToken}
+                    ref={this._collectEventNode.bind(this, eventId)}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps}
+                    mxEvent={mxEv}
+                    continuation={continuation}
+                    isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
+                    editState={isEditing && this.props.editState}
+                    onHeightChanged={this._onHeightChanged}
+                    readReceipts={readReceipts}
+                    readReceiptMap={this._readReceiptMap}
+                    showUrlPreview={this.props.showUrlPreview}
+                    checkUnmounting={this._isUnmounting}
+                    eventSendStatus={mxEv.getAssociatedStatus()}
+                    tileShape={this.props.tileShape}
+                    isTwelveHour={this.props.isTwelveHour}
+                    permalinkCreator={this.props.permalinkCreator}
+                    last={last}
+                    lastInSection={willWantDateSeparator}
+                    lastSuccessful={isLastSuccessful}
+                    isSelectedEvent={highlight}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
+                    showReactions={this.props.showReactions}
+                    layout={this.props.layout}
+                    enableFlair={this.props.enableFlair}
+                    showReadReceipts={this.props.showReadReceipts}
+                />
+            </TileErrorBoundary>,
         );
 
         return ret;
@@ -766,7 +780,7 @@ export default class MessagePanel extends React.Component {
     }
 
     _collectEventNode = (eventId, node) => {
-        this.eventNodes[eventId] = node;
+        this.eventNodes[eventId] = node?.ref?.current;
     }
 
     // once dynamic content in the events load, make the scrollPanel check the
@@ -872,6 +886,7 @@ export default class MessagePanel extends React.Component {
                     ref={this._scrollPanel}
                     className={className}
                     onScroll={this.props.onScroll}
+                    onUserScroll={this.props.onUserScroll}
                     onResize={this.onResize}
                     onFillRequest={this.props.onFillRequest}
                     onUnfillRequest={this.props.onUnfillRequest}
@@ -968,9 +983,9 @@ class CreationGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-
         const panel = this.panel;
         const ret = [];
+        const isGrouped = true;
         const createEvent = this.createEvent;
         const lastShownEvent = this.lastShownEvent;
 
@@ -984,12 +999,12 @@ class CreationGrouper {
         // If this m.room.create event should be shown (room upgrade) then show it before the summary
         if (panel._shouldShowEvent(createEvent)) {
             // pass in the createEvent as prevEvent as well so no extra DateSeparator is rendered
-            ret.push(...panel._getTilesForEvent(createEvent, createEvent, false));
+            ret.push(...panel._getTilesForEvent(createEvent, createEvent));
         }
 
         for (const ejected of this.ejectedEvents) {
             ret.push(...panel._getTilesForEvent(
-                createEvent, ejected, createEvent === lastShownEvent,
+                createEvent, ejected, createEvent === lastShownEvent, isGrouped,
             ));
         }
 
@@ -998,7 +1013,7 @@ class CreationGrouper {
             // of EventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent);
+            return panel._getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
         }).reduce((a, b) => a.concat(b), []);
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1];
@@ -1083,7 +1098,7 @@ class RedactionGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
-
+        const isGrouped = true;
         const panel = this.panel;
         const ret = [];
         const lastShownEvent = this.lastShownEvent;
@@ -1103,7 +1118,8 @@ class RedactionGrouper {
         let eventTiles = this.events.map((e, i) => {
             senders.add(e.sender);
             const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
-            return panel._getTilesForEvent(prevEvent, e, e === lastShownEvent, this.nextEvent, this.nextEventTile);
+            return panel._getTilesForEvent(
+                prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
@@ -1182,7 +1198,7 @@ class MemberGrouper {
 
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
-
+        const isGrouped = true;
         const panel = this.panel;
         const lastShownEvent = this.lastShownEvent;
         const ret = [];
@@ -1215,7 +1231,7 @@ class MemberGrouper {
             // of MemberEventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel._getTilesForEvent(e, e, e === lastShownEvent);
+            return panel._getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {

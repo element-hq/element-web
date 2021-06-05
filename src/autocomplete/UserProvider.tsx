@@ -102,7 +102,12 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     };
 
-    async getCompletions(rawQuery: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(
+        rawQuery: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // lazy-load user list into matcher
@@ -118,7 +123,7 @@ export default class UserProvider extends AutocompleteProvider {
         if (fullMatch && fullMatch !== '@') {
             // Don't include the '@' in our search query - it's only used as a way to trigger completion
             const query = fullMatch.startsWith('@') ? fullMatch.substring(1) : fullMatch;
-            completions = this.matcher.match(query).map((user) => {
+            completions = this.matcher.match(query, limit).map((user) => {
                 const displayName = (user.name || user.userId || '');
                 return {
                     // Length of completion should equal length of text in decorator. draft-js

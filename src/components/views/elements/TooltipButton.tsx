@@ -19,19 +19,30 @@ import React from 'react';
 import * as sdk from '../../../index';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.elements.TooltipButton")
-export default class TooltipButton extends React.Component {
-    state = {
-        hover: false,
-    };
+interface IProps {
+    helpText: string;
+}
 
-    onMouseOver = () => {
+interface IState {
+    hover: boolean;
+}
+
+@replaceableComponent("views.elements.TooltipButton")
+export default class TooltipButton extends React.Component<IProps, IState> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hover: false,
+        };
+    }
+
+    private onMouseOver = () => {
         this.setState({
             hover: true,
         });
     };
 
-    onMouseLeave = () => {
+    private onMouseLeave = () => {
         this.setState({
             hover: false,
         });

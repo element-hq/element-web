@@ -101,6 +101,12 @@ export enum Action {
     OpenDialPad = "open_dial_pad",
 
     /**
+     * Dial the phone number in the payload
+     * payload: DialNumberPayload
+     */
+    DialNumber = "dial_number",
+
+    /**
      * Fired when CallHandler has checked for PSTN protocol support
      * payload: none
      * XXX: Is an action the right thing for this?
@@ -138,4 +144,19 @@ export enum Action {
      * Fired when an upload is cancelled by the user. Should be used with UploadCanceledPayload.
      */
     UploadCanceled = "upload_canceled",
+
+    /**
+     * Fired when requesting to join a room
+     */
+    JoinRoom = "join_room",
+
+    /**
+     * Fired when successfully joining a room
+     */
+    JoinRoomReady = "join_room_ready",
+
+    /**
+     * Fired when joining a room failed
+     */
+    JoinRoomError = "join_room_error",
 }
