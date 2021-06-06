@@ -19,20 +19,20 @@ limitations under the License.
 import React, { createRef } from 'react';
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
-import {Key} from "../../../Keyboard";
+import { Key } from "../../../Keyboard";
 import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
-import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
+import { aboveLeftOf, ContextMenu } from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
-import {formatFullDate} from "../../../DateUtils";
+import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks"
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {normalizeWheelEvent} from "../../../utils/Mouse";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { normalizeWheelEvent } from "../../../utils/Mouse";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -167,7 +167,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             return;
         }
         if (newZoom >= this.state.maxZoom) {
-            this.setState({zoom: this.state.maxZoom});
+            this.setState({ zoom: this.state.maxZoom });
             return;
         }
 
@@ -256,11 +256,11 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         // Zoom in if we are completely zoomed out
         if (this.state.zoom === this.state.minZoom) {
-            this.setState({zoom: this.state.maxZoom});
+            this.setState({ zoom: this.state.maxZoom });
             return;
         }
 
-        this.setState({moving: true});
+        this.setState({ moving: true });
         this.previousX = this.state.translationX;
         this.previousY = this.state.translationY;
         this.initX = ev.pageX - this.state.translationX;
@@ -294,7 +294,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             this.initX = 0;
             this.initY = 0;
         }
-        this.setState({moving: false});
+        this.setState({ moving: false });
     };
 
     private renderContextMenu() {
@@ -302,14 +302,14 @@ export default class ImageView extends React.Component<IProps, IState> {
         if (this.state.contextMenuDisplayed) {
             contextMenu = (
                 <ContextMenu
-                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
-                    onFinished={this.onCloseContextMenu}
+                    { ...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect()) }
+                    onFinished={ this.onCloseContextMenu }
                 >
                     <MessageContextMenu
-                        mxEvent={this.props.mxEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                        onFinished={this.onCloseContextMenu}
-                        onCloseDialog={this.props.onFinished}
+                        mxEvent={ this.props.mxEvent }
+                        permalinkCreator={ this.props.permalinkCreator }
+                        onFinished={ this.onCloseContextMenu }
+                        onCloseDialog={ this.props.onFinished }
                     />
                 </ContextMenu>
             );
@@ -347,10 +347,10 @@ export default class ImageView extends React.Component<IProps, IState> {
         const style = {
             cursor: cursor,
             transition: this.state.moving ? null : "transform 200ms ease 0s",
-            transform: `translateX(${translatePixelsX})
-                        translateY(${translatePixelsY})
-                        scale(${zoom})
-                        rotate(${rotationDegrees})`,
+            transform: `translateX(${ translatePixelsX })
+                        translateY(${ translatePixelsY })
+                        scale(${ zoom })
+                        rotate(${ rotationDegrees })`,
         };
 
         let info;
@@ -365,37 +365,38 @@ export default class ImageView extends React.Component<IProps, IState> {
             const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
             const sender = (
                 <div className="mx_ImageView_info_sender">
-                    {senderName}
+                    { senderName }
                 </div>
             );
             const messageTimestamp = (
                 <a
-                    href={permalink}
-                    onClick={this.onPermalinkClicked}
-                    aria-label={formatFullDate(new Date(this.props.mxEvent.getTs()), showTwelveHour, false)}
+                    href={ permalink }
+                    onClick={ this.onPermalinkClicked }
+                    aria-label={ formatFullDate(new Date(this.props.mxEvent.getTs()), showTwelveHour, false) }
                 >
                     <MessageTimestamp
-                        showFullDate={true}
-                        showTwelveHour={showTwelveHour}
-                        ts={mxEvent.getTs()}
-                        showSeconds={false}
+                        showFullDate={ true }
+                        showTwelveHour={ showTwelveHour }
+                        ts={ mxEvent.getTs() }
+                        showSeconds={ false }
                     />
                 </a>
             );
             const avatar = (
                 <MemberAvatar
-                    member={mxEvent.sender}
-                    width={32} height={32}
-                    viewUserOnClick={true}
+                    member={ mxEvent.sender }
+                    width={ 32 }
+                    height={ 32 }
+                    viewUserOnClick={ true }
                 />
             );
 
             info = (
                 <div className="mx_ImageView_info_wrapper">
-                    {avatar}
+                    { avatar }
                     <div className="mx_ImageView_info">
-                        {sender}
-                        {messageTimestamp}
+                        { sender }
+                        { messageTimestamp }
                     </div>
                 </div>
             );
@@ -413,10 +414,10 @@ export default class ImageView extends React.Component<IProps, IState> {
             contextMenuButton = (
                 <ContextMenuTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_more"
-                    title={_t("Options")}
-                    onClick={this.onOpenContextMenu}
-                    inputRef={this.contextMenuButton}
-                    isExpanded={this.state.contextMenuDisplayed}
+                    title={ _t("Options") }
+                    onClick={ this.onOpenContextMenu }
+                    inputRef={ this.contextMenuButton }
+                    isExpanded={ this.state.contextMenuDisplayed }
                 />
             );
         }
@@ -427,14 +428,14 @@ export default class ImageView extends React.Component<IProps, IState> {
             zoomOutButton = (
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomOut"
-                    title={_t("Zoom out")}
-                    onClick={this.onZoomOutClick}>
+                    title={ _t("Zoom out") }
+                    onClick={ this.onZoomOutClick }>
                 </AccessibleTooltipButton>
             );
             zoomInButton = (
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomIn"
-                    title={_t("Zoom in")}
+                    title={ _t("Zoom in") }
                     onClick={ this.onZoomInClick }>
                 </AccessibleTooltipButton>
             );
@@ -442,57 +443,57 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         return (
             <FocusLock
-                returnFocus={true}
+                returnFocus={ true }
                 lockProps={{
                     onKeyDown: this.onKeyDown,
                     role: "dialog",
                 }}
                 className="mx_ImageView"
-                ref={this.focusLock}
+                ref={ this.focusLock }
             >
                 <div className="mx_ImageView_panel">
-                    {info}
+                    { info }
                     <div className="mx_ImageView_toolbar">
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
-                            title={_t("Rotate Left")}
+                            title={ _t("Rotate Left") }
                             onClick={ this.onRotateCounterClockwiseClick }>
                         </AccessibleTooltipButton>
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCW"
-                            title={_t("Rotate Right")}
-                            onClick={this.onRotateClockwiseClick}>
+                            title={ _t("Rotate Right") }
+                            onClick={ this.onRotateClockwiseClick }>
                         </AccessibleTooltipButton>
-                        {zoomOutButton}
-                        {zoomInButton}
+                        { zoomOutButton }
+                        { zoomInButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
-                            title={_t("Download")}
+                            title={ _t("Download") }
                             onClick={ this.onDownloadClick }>
                         </AccessibleTooltipButton>
-                        {contextMenuButton}
+                        { contextMenuButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
-                            title={_t("Close")}
+                            title={ _t("Close") }
                             onClick={ this.props.onFinished }>
                         </AccessibleTooltipButton>
-                        {this.renderContextMenu()}
+                        { this.renderContextMenu() }
                     </div>
                 </div>
                 <div
                     className="mx_ImageView_image_wrapper"
-                    ref={this.imageWrapper}>
+                    ref={ this.imageWrapper }>
                     <img
-                        src={this.props.src}
-                        title={this.props.name}
-                        style={style}
-                        ref={this.image}
+                        src={ this.props.src }
+                        title={ this.props.name }
+                        style={ style }
+                        ref={ this.image }
                         className="mx_ImageView_image"
-                        draggable={true}
-                        onMouseDown={this.onStartMoving}
-                        onMouseMove={this.onMoving}
-                        onMouseUp={this.onEndMoving}
-                        onMouseLeave={this.onEndMoving}
+                        draggable={ true }
+                        onMouseDown={ this.onStartMoving }
+                        onMouseMove={ this.onMoving }
+                        onMouseUp={ this.onEndMoving }
+                        onMouseLeave={ this.onEndMoving }
                     />
                 </div>
             </FocusLock>
