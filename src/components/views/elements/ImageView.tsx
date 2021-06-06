@@ -97,29 +97,36 @@ export default class ImageView extends React.Component<IProps, IState> {
     private initY = 0;
     private previousX = 0;
     private previousY = 0;
+    private rotation = 0;
 
     componentDidMount() {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
         // We want to recalculate zoom whenever the window's size changes
-        window.addEventListener("resize", this.calculateZoom);
+        window.addEventListener("resize", this.calculateZoomAndRotate);
         // After the image loads for the first time we want to calculate the zoom
-        this.image.current.addEventListener("load", this.calculateZoom);
+        this.image.current.addEventListener("load", this.calculateZoomAndRotate);
     }
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
-        window.removeEventListener("resize", this.calculateZoom);
-        this.image.current.removeEventListener("load", this.calculateZoom);
+        window.removeEventListener("resize", this.calculateZoomAndRotate);
+        this.image.current.removeEventListener("load", this.calculateZoomAndRotate);
     }
 
-    private calculateZoom = () => {
+    private calculateZoomAndRotate = () => {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
-        const zoomX = imageWrapper.clientWidth / image.naturalWidth;
-        const zoomY = imageWrapper.clientHeight / image.naturalHeight;
+        const landscape = this.rotation % 180 === 0;
+
+        // If the image is rotated take it into account
+        const width = landscape ? image.naturalWidth : image.naturalHeight;
+        const height = landscape ? image.naturalHeight : image.naturalWidth;
+
+        const zoomX = imageWrapper.clientWidth / width;
+        const zoomY = imageWrapper.clientHeight / height;
 
         // If the image is smaller in both dimensions set its the zoom to 1 to
         // display it in its original size
@@ -128,6 +135,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 zoom: 1,
                 minZoom: 1,
                 maxZoom: 1,
+                rotation: this.rotation,
             });
             return;
         }
@@ -140,6 +148,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({
             minZoom: minZoom,
             maxZoom: 1,
+            rotation: this.rotation,
         });
     }
 
@@ -190,14 +199,14 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private onRotateCounterClockwiseClick = () => {
         const cur = this.state.rotation;
-        const rotationDegrees = cur - 90;
-        this.setState({ rotation: rotationDegrees });
+        this.rotation = cur - 90;
+        this.calculateZoomAndRotate();
     };
 
     private onRotateClockwiseClick = () => {
         const cur = this.state.rotation;
-        const rotationDegrees = cur + 90;
-        this.setState({ rotation: rotationDegrees });
+        this.rotation = cur + 90;
+        this.calculateZoomAndRotate();
     };
 
     private onDownloadClick = () => {
