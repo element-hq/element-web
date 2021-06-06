@@ -23,6 +23,7 @@ import classNames from "classnames";
 import {Key} from "../../Keyboard";
 import {Writeable} from "../../@types/common";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import UIStore from "../../stores/UIStore";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -222,10 +223,12 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
+        // don't let keyboard handling escape the context menu
+        ev.stopPropagation();
+
         if (!this.props.managed) {
             if (ev.key === Key.ESCAPE) {
                 this.props.onFinished();
-                ev.stopPropagation();
                 ev.preventDefault();
             }
             return;
@@ -258,7 +261,6 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
 
         if (handled) {
             // consume all other keys in context menu
-            ev.stopPropagation();
             ev.preventDefault();
         }
     };
@@ -409,12 +411,12 @@ export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None
     const buttonBottom = elementRect.bottom + window.pageYOffset;
     const buttonTop = elementRect.top + window.pageYOffset;
     // Align the right edge of the menu to the right edge of the button
-    menuOptions.right = window.innerWidth - buttonRight;
+    menuOptions.right = UIStore.instance.windowWidth - buttonRight;
     // Align the menu vertically on whichever side of the button has more space available.
-    if (buttonBottom < window.innerHeight / 2) {
+    if (buttonBottom < UIStore.instance.windowHeight / 2) {
         menuOptions.top = buttonBottom + vPadding;
     } else {
-        menuOptions.bottom = (window.innerHeight - buttonTop) + vPadding;
+        menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
     }
 
     return menuOptions;
@@ -429,12 +431,12 @@ export const alwaysAboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFac
     const buttonBottom = elementRect.bottom + window.pageYOffset;
     const buttonTop = elementRect.top + window.pageYOffset;
     // Align the right edge of the menu to the right edge of the button
-    menuOptions.right = window.innerWidth - buttonRight;
+    menuOptions.right = UIStore.instance.windowWidth - buttonRight;
     // Align the menu vertically on whichever side of the button has more space available.
-    if (buttonBottom < window.innerHeight / 2) {
+    if (buttonBottom < UIStore.instance.windowHeight / 2) {
         menuOptions.top = buttonBottom + vPadding;
     } else {
-        menuOptions.bottom = (window.innerHeight - buttonTop) + vPadding;
+        menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
     }
 
     return menuOptions;
@@ -450,7 +452,7 @@ export const alwaysAboveRightOf = (elementRect: DOMRect, chevronFace = ChevronFa
     // Align the left edge of the menu to the left edge of the button
     menuOptions.left = buttonLeft;
     // Align the menu vertically above the menu
-    menuOptions.bottom = (window.innerHeight - buttonTop) + vPadding;
+    menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
 
     return menuOptions;
 };

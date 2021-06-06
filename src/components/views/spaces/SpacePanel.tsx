@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import {Room} from "matrix-js-sdk/src/models/room";
 
@@ -26,13 +26,11 @@ import {SpaceItem} from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import SpaceStore, {
-    HOME_SPACE,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
 } from "../../../stores/SpaceStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {SpaceNotificationState} from "../../../stores/notifications/SpaceNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
 import {
     RovingAccessibleButton,
@@ -40,13 +38,15 @@ import {
     RovingTabIndexProvider,
 } from "../../../accessibility/RovingTabIndex";
 import {Key} from "../../../Keyboard";
+import {RoomNotificationStateStore} from "../../../stores/notifications/RoomNotificationStateStore";
+import {NotificationState} from "../../../stores/notifications/NotificationState";
 
 interface IButtonProps {
     space?: Room;
     className?: string;
     selected?: boolean;
     tooltip?: string;
-    notificationState?: SpaceNotificationState;
+    notificationState?: NotificationState;
     isNarrow?: boolean;
     onClick(): void;
 }
@@ -126,6 +126,12 @@ const SpacePanel = () => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
     const [invites, spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
+
+    useEffect(() => {
+        if (!isPanelCollapsed && menuDisplayed) {
+            closeMenu();
+        }
+    }, [isPanelCollapsed]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const newClasses = classNames("mx_SpaceButton_new", {
         mx_SpaceButton_newCancel: menuDisplayed,
@@ -212,8 +218,8 @@ const SpacePanel = () => {
                             className="mx_SpaceButton_home"
                             onClick={() => SpaceStore.instance.setActiveSpace(null)}
                             selected={!activeSpace}
-                            tooltip={_t("Home")}
-                            notificationState={SpaceStore.instance.getNotificationState(HOME_SPACE)}
+                            tooltip={_t("All rooms")}
+                            notificationState={RoomNotificationStateStore.instance.globalState}
                             isNarrow={isPanelCollapsed}
                         />
                         { invites.map(s => <SpaceItem
@@ -235,18 +241,15 @@ const SpacePanel = () => {
                         className={newClasses}
                         tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
                         onClick={menuDisplayed ? closeMenu : () => {
-                            openMenu();
                             if (!isPanelCollapsed) setPanelCollapsed(true);
+                            openMenu();
                         }}
                         isNarrow={isPanelCollapsed}
                     />
                 </AutoHideScrollbar>
                 <AccessibleTooltipButton
                     className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
-                    onClick={() => {
-                        setPanelCollapsed(!isPanelCollapsed);
-                        if (menuDisplayed) closeMenu();
-                    }}
+                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
                     title={expandCollapseButtonTitle}
                 />
                 { contextMenu }

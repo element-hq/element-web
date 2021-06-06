@@ -96,6 +96,16 @@ export class CapabilityText {
                 [EventDirection.Receive]: _td("See when the avatar changes in your active room"),
             },
         },
+        [EventType.RoomMember]: {
+            [WidgetKind.Room]: {
+                [EventDirection.Send]: _td("Kick, ban, or invite people to this room, and make you leave"),
+                [EventDirection.Receive]: _td("See when people join, leave, or are invited to this room"),
+            },
+            [GENERIC_WIDGET_KIND]: {
+                [EventDirection.Send]: _td("Kick, ban, or invite people to your active room, and make you leave"),
+                [EventDirection.Receive]: _td("See when people join, leave, or are invited to your active room"),
+            },
+        },
     };
 
     private static nonStateSendRecvCaps: ISendRecvStaticCapText = {

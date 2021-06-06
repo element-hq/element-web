@@ -1,7 +1,6 @@
 /*
-Copyright 2016 OpenMarket Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2016, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,39 +15,56 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {instanceForInstanceId} from '../../../utils/DirectoryUtils';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { instanceForInstanceId } from '../../../utils/DirectoryUtils';
 import {
+    ChevronFace,
     ContextMenu,
-    useContextMenu,
     ContextMenuButton,
-    MenuItemRadio,
-    MenuItem,
     MenuGroup,
+    MenuItem,
+    MenuItemRadio,
+    useContextMenu,
 } from "../../structures/ContextMenu";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import {useSettingValue} from "../../../hooks/useSettings";
-import * as sdk from "../../../index";
+import { useSettingValue } from "../../../hooks/useSettings";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
 import withValidation from "../elements/Validation";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import TextInputDialog from "../dialogs/TextInputDialog";
+import QuestionDialog from "../dialogs/QuestionDialog";
+import UIStore from "../../../stores/UIStore";
+import { compare } from "../../../utils/strings";
 
 export const ALL_ROOMS = Symbol("ALL_ROOMS");
 
 const SETTING_NAME = "room_directory_servers";
 
-const inPlaceOf = (elementRect) => ({
-    right: window.innerWidth - elementRect.right,
+const inPlaceOf = (elementRect: Pick<DOMRect, "right" | "top">) => ({
+    right: UIStore.instance.windowWidth - elementRect.right,
     top: elementRect.top,
     chevronOffset: 0,
-    chevronFace: "none",
+    chevronFace: ChevronFace.None,
 });
 
-const validServer = withValidation({
+const validServer = withValidation<undefined, { error?: MatrixError }>({
+    deriveData: async ({ value }) => {
+        try {
+            // check if we can successfully load this server's room directory
+            await MatrixClientPeg.get().publicRooms({
+                limit: 1,
+                server: value,
+            });
+            return {};
+        } catch (error) {
+            return { error };
+        }
+    },
     rules: [
         {
             key: "required",
@@ -57,24 +73,48 @@ const validServer = withValidation({
         }, {
             key: "available",
             final: true,
-            test: async ({ value }) => {
-                try {
-                    const opts = {
-                        limit: 1,
-                        server: value,
-                    };
-                    // check if we can successfully load this server's room directory
-                    await MatrixClientPeg.get().publicRooms(opts);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            },
+            test: async (_, { error }) => !error,
             valid: () => _t("Looks good"),
-            invalid: () => _t("Can't find this server or its room list"),
+            invalid: ({ error }) => error.errcode === "M_FORBIDDEN"
+                ? _t("You are not allowed to view this server's rooms list")
+                : _t("Can't find this server or its room list"),
         },
     ],
 });
+
+/* eslint-disable camelcase */
+export interface IFieldType {
+    regexp: string;
+    placeholder: string;
+}
+
+export interface IInstance {
+    desc: string;
+    icon?: string;
+    fields: object;
+    network_id: string;
+    // XXX: this is undocumented but we rely on it.
+    // we inject a fake entry with a symbolic instance_id.
+    instance_id: string | symbol;
+}
+
+export interface IProtocol {
+    user_fields: string[];
+    location_fields: string[];
+    icon: string;
+    field_types: Record<string, IFieldType>;
+    instances: IInstance[];
+}
+/* eslint-enable camelcase */
+
+export type Protocols = Record<string, IProtocol>;
+
+interface IProps {
+    protocols: Protocols;
+    selectedServerName: string;
+    selectedInstanceId: string | symbol;
+    onOptionChange(server: string, instanceId?: string | symbol): void;
+}
 
 // This dropdown sources homeservers from three places:
 // + your currently connected homeserver
@@ -82,9 +122,9 @@ const validServer = withValidation({
 // + homeservers in SettingsStore["room_directory_servers"]
 // if a server exists in multiple, only keep the top-most entry.
 
-const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, selectedInstanceId}) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
-    const _userDefinedServers = useSettingValue(SETTING_NAME);
+const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, selectedInstanceId }: IProps) => {
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+    const _userDefinedServers: string[] = useSettingValue(SETTING_NAME);
     const [userDefinedServers, _setUserDefinedServers] = useState(_userDefinedServers);
 
     const handlerFactory = (server, instanceId) => {
@@ -96,7 +136,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
 
     const setUserDefinedServers = servers => {
         _setUserDefinedServers(servers);
-        SettingsStore.setValue(SETTING_NAME, null, "account", servers);
+        SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, servers);
     };
     // keep local echo up to date with external changes
     useEffect(() => {
@@ -110,7 +150,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
         const roomDirectory = config.roomDirectory || {};
 
         const hsName = MatrixClientPeg.getHomeserverName();
-        const configServers = new Set(roomDirectory.servers);
+        const configServers = new Set<string>(roomDirectory.servers);
 
         // configured servers take preference over user-defined ones, if one occurs in both ignore the latter one.
         const removableServers = new Set(userDefinedServers.filter(s => !configServers.has(s) && s !== hsName));
@@ -134,15 +174,21 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                 // add a fake protocol with the ALL_ROOMS symbol
                 protocolsList.push({
                     instances: [{
+                        fields: [],
+                        network_id: "",
                         instance_id: ALL_ROOMS,
                         desc: _t("All rooms"),
                     }],
+                    location_fields: [],
+                    user_fields: [],
+                    field_types: {},
+                    icon: "",
                 });
             }
 
             protocolsList.forEach(({instances=[]}) => {
                 [...instances].sort((b, a) => {
-                    return a.desc.localeCompare(b.desc);
+                    return compare(a.desc, b.desc);
                 }).forEach(({desc, instance_id: instanceId}) => {
                     entries.push(
                         <MenuItemRadio
@@ -170,7 +216,6 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
             if (removableServers.has(server)) {
                 const onClick = async () => {
                     closeMenu();
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                     const {finished} = Modal.createTrackedDialog("Network Dropdown", "Remove server", QuestionDialog, {
                         title: _t("Are you sure?"),
                         description: _t("Are you sure you want to remove <b>%(serverName)s</b>", {
@@ -189,7 +234,7 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
                     setUserDefinedServers(servers.filter(s => s !== server));
 
                     // the selected server is being removed, reset to our HS
-                    if (serverSelected === server) {
+                    if (serverSelected) {
                         onOptionChange(hsName, undefined);
                     }
                 };
@@ -221,7 +266,6 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
 
         const onClick = async () => {
             closeMenu();
-            const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
             const { finished } = Modal.createTrackedDialog("Network Dropdown", "Add a new server", TextInputDialog, {
                 title: _t("Add a new server"),
                 description: _t("Enter the name of a new server you want to explore."),
@@ -280,11 +324,6 @@ const NetworkDropdown = ({onOptionChange, protocols = {}, selectedServerName, se
     return <div className="mx_NetworkDropdown" ref={handle}>
         {content}
     </div>;
-};
-
-NetworkDropdown.propTypes = {
-    onOptionChange: PropTypes.func.isRequired,
-    protocols: PropTypes.object,
 };
 
 export default NetworkDropdown;

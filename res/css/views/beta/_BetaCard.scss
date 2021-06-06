@@ -1,0 +1,114 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BetaCard {
+    margin-bottom: 20px;
+    padding: 24px;
+    background-color: $settings-profile-placeholder-bg-color;
+    border-radius: 8px;
+    display: flex;
+    box-sizing: border-box;
+
+    > div {
+        .mx_BetaCard_title {
+            font-weight: $font-semi-bold;
+            font-size: $font-18px;
+            line-height: $font-22px;
+            color: $primary-fg-color;
+            margin: 4px 0 14px;
+
+            .mx_BetaCard_betaPill {
+                margin-left: 12px;
+            }
+        }
+
+        .mx_BetaCard_caption {
+            font-size: $font-15px;
+            line-height: $font-20px;
+            color: $secondary-fg-color;
+            margin-bottom: 20px;
+        }
+
+        .mx_AccessibleButton {
+            display: block;
+            margin: 12px 0;
+            padding: 7px 40px;
+            width: auto;
+        }
+
+        .mx_BetaCard_disclaimer {
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-fg-color;
+            margin-top: 20px;
+        }
+    }
+
+    > img {
+        margin: auto 0 auto 20px;
+        width: 300px;
+        object-fit: contain;
+        height: 100%;
+    }
+}
+
+.mx_BetaCard_betaPill {
+    background-color: $accent-color-alt;
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FFFFFF;
+    display: inline-block;
+    vertical-align: text-bottom;
+
+    &.mx_BetaCard_betaPill_clickable {
+        cursor: pointer;
+    }
+}
+
+$pulse-color: $accent-color-alt;
+$dot-size: 12px;
+
+.mx_BetaDot {
+    border-radius: 50%;
+    margin: 10px;
+    height: $dot-size;
+    width: $dot-size;
+    transform: scale(1);
+    background: rgba($pulse-color, 1);
+    box-shadow: 0 0 0 0 rgba($pulse-color, 1);
+    animation: mx_Beta_bluePulse 2s infinite;
+    animation-iteration-count: 20;
+}
+
+@keyframes mx_Beta_bluePulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba($pulse-color, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba($pulse-color, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba($pulse-color, 0);
+    }
+}
