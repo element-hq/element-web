@@ -61,7 +61,7 @@ interface IState {
     message: string;
 }
 
-const AVATAR_SIZE = 30;
+const AVATAR_SIZE = 32;
 
 @replaceableComponent("views.elements.EventTilePreview")
 export default class EventTilePreview extends React.Component<IProps, IState> {
