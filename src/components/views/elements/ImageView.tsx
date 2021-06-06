@@ -144,11 +144,14 @@ export default class ImageView extends React.Component<IProps, IState> {
         // image by default
         const minZoom = Math.min(zoomX, zoomY) * MAX_SCALE;
 
-        if (this.state.zoom <= this.state.minZoom) this.setState({zoom: minZoom});
+        // If zoom is smaller than minZoom don't go beneath that value
+        const zoom = (this.state.zoom <= this.state.minZoom) ? minZoom : this.state.zoom;
+
         this.setState({
             minZoom: minZoom,
             maxZoom: 1,
             rotation: this.rotation,
+            zoom: zoom,
         });
     }
 
