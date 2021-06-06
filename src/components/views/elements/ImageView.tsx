@@ -283,6 +283,10 @@ export default class ImageView extends React.Component<IProps, IState> {
                 translationX: 0,
                 translationY: 0,
             });
+            this.lastX = 0;
+            this.lastY = 0;
+            this.initX = 0;
+            this.initY = 0;
         }
         this.setState({moving: false});
     };
