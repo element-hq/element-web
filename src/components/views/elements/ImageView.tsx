@@ -95,8 +95,6 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private initX = 0;
     private initY = 0;
-    private lastX = 0;
-    private lastY = 0;
     private previousX = 0;
     private previousY = 0;
 
@@ -253,8 +251,8 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({moving: true});
         this.previousX = this.state.translationX;
         this.previousY = this.state.translationY;
-        this.initX = ev.pageX - this.lastX;
-        this.initY = ev.pageY - this.lastY;
+        this.initX = ev.pageX - this.state.translationX;
+        this.initY = ev.pageY - this.state.translationY;
     };
 
     private onMoving = (ev: React.MouseEvent) => {
@@ -263,11 +261,9 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         if (!this.state.moving) return;
 
-        this.lastX = ev.pageX - this.initX;
-        this.lastY = ev.pageY - this.initY;
         this.setState({
-            translationX: this.lastX,
-            translationY: this.lastY,
+            translationX: ev.pageX - this.initX,
+            translationY: ev.pageY - this.initY,
         });
     };
 
@@ -283,8 +279,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                 translationX: 0,
                 translationY: 0,
             });
-            this.lastX = 0;
-            this.lastY = 0;
             this.initX = 0;
             this.initY = 0;
         }
