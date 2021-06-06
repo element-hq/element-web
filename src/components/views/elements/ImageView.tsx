@@ -471,7 +471,12 @@ export default class ImageView extends React.Component<IProps, IState> {
                 </div>
                 <div
                     className="mx_ImageView_image_wrapper"
-                    ref={this.imageWrapper}>
+                    ref={this.imageWrapper}
+                    onMouseDown={this.props.onFinished}
+                    onMouseMove={this.onMoving}
+                    onMouseUp={this.onEndMoving}
+                    onMouseLeave={this.onEndMoving}
+                >
                     <img
                         src={this.props.src}
                         title={this.props.name}
@@ -480,9 +485,6 @@ export default class ImageView extends React.Component<IProps, IState> {
                         className="mx_ImageView_image"
                         draggable={true}
                         onMouseDown={this.onStartMoving}
-                        onMouseMove={this.onMoving}
-                        onMouseUp={this.onEndMoving}
-                        onMouseLeave={this.onEndMoving}
                     />
                 </div>
             </FocusLock>
