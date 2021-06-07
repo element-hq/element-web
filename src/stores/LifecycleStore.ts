@@ -1,7 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
-Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import { Store } from 'flux/utils';
+
 import dis from '../dispatcher/dispatcher';
-import {Store} from 'flux/utils';
+import { ActionPayload } from "../dispatcher/payloads";
+
+interface IState {
+    deferredAction: any;
+}
 
 const INITIAL_STATE = {
-    deferred_action: null,
+    deferredAction: null,
 };
 
 /**
@@ -27,39 +32,38 @@ const INITIAL_STATE = {
  * store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
  */
-class LifecycleStore extends Store {
+class LifecycleStore extends Store<ActionPayload> {
+    private state: IState = INITIAL_STATE;
+
     constructor() {
         super(dis);
-
-        // Initialise state
-        this._state = INITIAL_STATE;
     }
 
-    _setState(newState) {
-        this._state = Object.assign(this._state, newState);
+    private setState(newState: Partial<IState>) {
+        this.state = Object.assign(this.state, newState);
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    protected __onDispatch(payload: ActionPayload) {
         switch (payload.action) {
             case 'do_after_sync_prepared':
-                this._setState({
-                    deferred_action: payload.deferred_action,
+                this.setState({
+                    deferredAction: payload.deferred_action,
                 });
                 break;
             case 'cancel_after_sync_prepared':
-                this._setState({
-                    deferred_action: null,
+                this.setState({
+                    deferredAction: null,
                 });
                 break;
-            case 'sync_state': {
+            case 'syncstate': {
                 if (payload.state !== 'PREPARED') {
                     break;
                 }
-                if (!this._state.deferred_action) break;
-                const deferredAction = Object.assign({}, this._state.deferred_action);
-                this._setState({
-                    deferred_action: null,
+                if (!this.state.deferredAction) break;
+                const deferredAction = Object.assign({}, this.state.deferredAction);
+                this.setState({
+                    deferredAction: null,
                 });
                 dis.dispatch(deferredAction);
                 break;
@@ -71,8 +75,8 @@ class LifecycleStore extends Store {
         }
     }
 
-    reset() {
-        this._state = Object.assign({}, INITIAL_STATE);
+    private reset() {
+        this.state = Object.assign({}, INITIAL_STATE);
     }
 }
 

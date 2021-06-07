@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { isKeyComboMatch, KeyCombo } from '../src/KeyBindingsManager';
-const assert = require('assert');
 
 function mockKeyEvent(key: string, modifiers?: {
     ctrlKey?: boolean,
@@ -28,7 +27,7 @@ function mockKeyEvent(key: string, modifiers?: {
         ctrlKey: modifiers?.ctrlKey ?? false,
         altKey: modifiers?.altKey ?? false,
         shiftKey: modifiers?.shiftKey ?? false,
-        metaKey: modifiers?.metaKey ?? false
+        metaKey: modifiers?.metaKey ?? false,
     } as KeyboardEvent;
 }
 
@@ -37,9 +36,8 @@ describe('KeyBindingsManager', () => {
         const combo1: KeyCombo = {
             key: 'k',
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k'), combo1, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n'), combo1, false), false);
-
+        expect(isKeyComboMatch(mockKeyEvent('k'), combo1, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n'), combo1, false)).toBe(false);
     });
 
     it('should match key + modifier key combo', () => {
@@ -47,38 +45,38 @@ describe('KeyBindingsManager', () => {
             key: 'k',
             ctrlKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true }), combo, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k'), combo, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true }), combo, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true, metaKey: true }), combo, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true }), combo, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k'), combo, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true }), combo, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true, metaKey: true }), combo, false)).toBe(false);
 
         const combo2: KeyCombo = {
             key: 'k',
             metaKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo2, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { metaKey: true }), combo2, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k'), combo2, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { altKey: true, metaKey: true }), combo2, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo2, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n', { metaKey: true }), combo2, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k'), combo2, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { altKey: true, metaKey: true }), combo2, false)).toBe(false);
 
         const combo3: KeyCombo = {
             key: 'k',
             altKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { altKey: true }), combo3, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { altKey: true }), combo3, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k'), combo3, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo3, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { altKey: true }), combo3, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n', { altKey: true }), combo3, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k'), combo3, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo3, false)).toBe(false);
 
         const combo4: KeyCombo = {
             key: 'k',
             shiftKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true }), combo4, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { shiftKey: true }), combo4, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k'), combo4, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true, ctrlKey: true }), combo4, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true }), combo4, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n', { shiftKey: true }), combo4, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k'), combo4, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { shiftKey: true, ctrlKey: true }), combo4, false)).toBe(false);
     });
 
     it('should match key + multiple modifiers key combo', () => {
@@ -87,11 +85,11 @@ describe('KeyBindingsManager', () => {
             ctrlKey: true,
             altKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, altKey: true }), combo, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true, altKey: true }), combo, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true, shiftKey: true }), combo,
-            false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, altKey: true }), combo, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true, altKey: true }), combo, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true, shiftKey: true }), combo,
+            false)).toBe(false);
 
         const combo2: KeyCombo = {
             key: 'k',
@@ -99,13 +97,13 @@ describe('KeyBindingsManager', () => {
             shiftKey: true,
             altKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, shiftKey: true, altKey: true }), combo2,
-            false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true, shiftKey: true, altKey: true }), combo2,
-            false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo2, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k',
-            { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo2, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, shiftKey: true, altKey: true }), combo2,
+            false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true, shiftKey: true, altKey: true }), combo2,
+            false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, metaKey: true }), combo2, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k',
+            { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo2, false)).toBe(false);
 
         const combo3: KeyCombo = {
             key: 'k',
@@ -114,12 +112,12 @@ describe('KeyBindingsManager', () => {
             altKey: true,
             metaKey: true,
         };
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k',
-            { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo3, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n',
-            { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo3, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k',
-            { ctrlKey: true, shiftKey: true, altKey: true }), combo3, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k',
+            { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo3, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('n',
+            { ctrlKey: true, shiftKey: true, altKey: true, metaKey: true }), combo3, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('k',
+            { ctrlKey: true, shiftKey: true, altKey: true }), combo3, false)).toBe(false);
     });
 
     it('should match ctrlOrMeta key combo', () => {
@@ -128,13 +126,13 @@ describe('KeyBindingsManager', () => {
             ctrlOrCmd: true,
         };
         // PC:
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo, false), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true }), combo, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo, false)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true }), combo, false)).toBe(false);
         // MAC:
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo, true), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, true), false);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true }), combo, true), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { metaKey: true }), combo, true)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, true)).toBe(false);
+        expect(isKeyComboMatch(mockKeyEvent('n', { ctrlKey: true }), combo, true)).toBe(false);
     });
 
     it('should match advanced ctrlOrMeta key combo', () => {
@@ -144,10 +142,10 @@ describe('KeyBindingsManager', () => {
             altKey: true,
         };
         // PC:
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, altKey: true }), combo, false), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { metaKey: true, altKey: true }), combo, false), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, altKey: true }), combo, false)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('k', { metaKey: true, altKey: true }), combo, false)).toBe(false);
         // MAC:
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { metaKey: true, altKey: true }), combo, true), true);
-        assert.strictEqual(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, altKey: true }), combo, true), false);
+        expect(isKeyComboMatch(mockKeyEvent('k', { metaKey: true, altKey: true }), combo, true)).toBe(true);
+        expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true, altKey: true }), combo, true)).toBe(false);
     });
 });

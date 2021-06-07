@@ -120,6 +120,9 @@ class TimelinePanel extends React.Component {
 
         // which layout to use
         layout: LayoutPropType,
+
+        // whether to always show timestamps for an event
+        alwaysShowTimestamps: PropTypes.bool,
     }
 
     // a map from room id to read marker event timestamp
@@ -1440,7 +1443,7 @@ class TimelinePanel extends React.Component {
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
                 isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.state.alwaysShowTimestamps}
+                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}

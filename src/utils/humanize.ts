@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {_t} from "../languageHandler";
+import { _t } from "../languageHandler";
+
+// These are the constants we use for when to break the text
+const MILLISECONDS_RECENT = 15000;
+const MILLISECONDS_1_MIN = 75000;
+const MINUTES_UNDER_1_HOUR = 45;
+const MINUTES_1_HOUR = 75;
+const HOURS_UNDER_1_DAY = 23;
+const HOURS_1_DAY = 26;
 
 /**
  * Converts a timestamp into human-readable, translated, text.
  * @param {number} timeMillis The time in millis to compare against.
  * @returns {string} The humanized time.
  */
-export function humanizeTime(timeMillis) {
-    // These are the constants we use for when to break the text
-    const MILLISECONDS_RECENT = 15000;
-    const MILLISECONDS_1_MIN = 75000;
-    const MINUTES_UNDER_1_HOUR = 45;
-    const MINUTES_1_HOUR = 75;
-    const HOURS_UNDER_1_DAY = 23;
-    const HOURS_1_DAY = 26;
-
+export function humanizeTime(timeMillis: number): string {
     const now = (new Date()).getTime();
     let msAgo = now - timeMillis;
     const minutes = Math.abs(Math.ceil(msAgo / 60000));
