@@ -23,8 +23,9 @@ import dis from '../src/dispatcher/dispatcher';
 import { CallEvent, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import DMRoomMap from '../src/utils/DMRoomMap';
 import EventEmitter from 'events';
-import { Action } from '../src/dispatcher/actions';
 import SdkConfig from '../src/SdkConfig';
+import { ActionPayload } from '../src/dispatcher/payloads';
+import { Action } from '../src/dispatcher/actions';
 
 const REAL_ROOM_ID = '$room1:example.org';
 const MAPPED_ROOM_ID = '$room2:example.org';
@@ -75,6 +76,18 @@ class FakeCall extends EventEmitter {
     }
 }
 
+function untilDispatch(waitForAction: string): Promise<ActionPayload> {
+    let dispatchHandle;
+    return new Promise<ActionPayload>(resolve => {
+        dispatchHandle = dis.register(payload => {
+            if (payload.action === waitForAction) {
+                dis.unregister(dispatchHandle);
+                resolve(payload);
+            }
+        });
+    });
+}
+
 describe('CallHandler', () => {
     let dmRoomMap;
     let callHandler;
@@ -93,6 +106,21 @@ describe('CallHandler', () => {
 
         callHandler = new CallHandler();
         callHandler.start();
+
+        const realRoom = mkStubDM(REAL_ROOM_ID, '@user1:example.org');
+        const mappedRoom = mkStubDM(MAPPED_ROOM_ID, '@user2:example.org');
+        const mappedRoom2 = mkStubDM(MAPPED_ROOM_ID_2, '@user3:example.org');
+
+        MatrixClientPeg.get().getRoom = roomId => {
+            switch (roomId) {
+                case REAL_ROOM_ID:
+                    return realRoom;
+                case MAPPED_ROOM_ID:
+                    return mappedRoom;
+                case MAPPED_ROOM_ID_2:
+                    return mappedRoom2;
+            }
+        };
 
         dmRoomMap = {
             getUserIdForRoomId: roomId => {
@@ -134,38 +162,34 @@ describe('CallHandler', () => {
         SdkConfig.unset();
     });
 
+    it('should look up the correct user and open the room when a phone number is dialled', async () => {
+        MatrixClientPeg.get().getThirdpartyUser = jest.fn().mockResolvedValue([{
+            userid: '@user2:example.org',
+            protocol: "im.vector.protocol.sip_native",
+            fields: {
+                is_native: true,
+                lookup_success: true,
+            },
+        }]);
+
+        dis.dispatch({
+            action: Action.DialNumber,
+            number: '01818118181',
+        }, true);
+
+        const viewRoomPayload = await untilDispatch('view_room');
+        expect(viewRoomPayload.room_id).toEqual(MAPPED_ROOM_ID);
+    });
+
     it('should move calls between rooms when remote asserted identity changes', async () => {
-        const realRoom = mkStubDM(REAL_ROOM_ID, '@user1:example.org');
-        const mappedRoom = mkStubDM(MAPPED_ROOM_ID, '@user2:example.org');
-        const mappedRoom2 = mkStubDM(MAPPED_ROOM_ID_2, '@user3:example.org');
-
-        MatrixClientPeg.get().getRoom = roomId => {
-            switch (roomId) {
-                case REAL_ROOM_ID:
-                    return realRoom;
-                case MAPPED_ROOM_ID:
-                    return mappedRoom;
-                case MAPPED_ROOM_ID_2:
-                    return mappedRoom2;
-            }
-        };
-
         dis.dispatch({
             action: 'place_call',
             type: PlaceCallType.Voice,
             room_id: REAL_ROOM_ID,
         }, true);
 
-        let dispatchHandle;
         // wait for the call to be set up
-        await new Promise<void>(resolve => {
-            dispatchHandle = dis.register(payload => {
-                if (payload.action === 'call_state') {
-                    resolve();
-                }
-            });
-        });
-        dis.unregister(dispatchHandle);
+        await untilDispatch('call_state');
 
         // should start off in the actual room ID it's in at the protocol level
         expect(callHandler.getCallForRoom(REAL_ROOM_ID)).toBe(fakeCall);

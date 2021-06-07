@@ -167,7 +167,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
     const onKeyDownHandler = useCallback((ev) => {
         let handled = false;
         // Don't interfere with input default keydown behaviour
-        if (handleHomeEnd && ev.target.tagName !== "INPUT") {
+        if (handleHomeEnd && ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
             // check if we actually have any items
             switch (ev.key) {
                 case Key.HOME:

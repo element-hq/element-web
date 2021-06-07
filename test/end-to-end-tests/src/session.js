@@ -208,7 +208,7 @@ module.exports = class ElementSession {
         this.log.done();
     }
 
-    close() {
+    async close() {
         return this.browser.close();
     }
 

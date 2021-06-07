@@ -50,7 +50,7 @@ export class VisibilityProvider {
         }
 
         // hide space rooms as they'll be shown in the SpacePanel
-        if (room.isSpaceRoom() && SettingsStore.getValue("feature_spaces")) {
+        if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
             return false;
         }
 

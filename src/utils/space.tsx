@@ -83,6 +83,7 @@ export const showCreateNewRoom = async (cli: MatrixClient, space: Room) => {
     if (shouldCreate) {
         await createRoom(opts);
     }
+    return shouldCreate;
 };
 
 export const showSpaceInvite = (space: Room, initialText = "") => {

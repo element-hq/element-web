@@ -23,11 +23,9 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { CSSTransition } from "react-transition-group";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
-import { DefaultTagID } from "../../../stores/room-list/models";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -84,8 +82,6 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
 
     public render(): React.ReactElement {
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
-            const roomTags = RoomListStore.instance.getTagsForRoom(r);
-            const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
             return (
                 <RovingAccessibleTooltipButton
                     className="mx_RoomBreadcrumbs_crumb"
@@ -98,7 +94,6 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
                     <DecoratedRoomAvatar
                         room={r}
                         avatarSize={32}
-                        tag={roomTag}
                         displayBadge={true}
                         forceCount={true}
                     />

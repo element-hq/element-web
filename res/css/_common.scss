@@ -45,6 +45,8 @@ html {
        N.B. Breaks things when we have legitimate horizontal overscroll */
     height: 100%;
     overflow: hidden;
+    // Stop similar overscroll bounce in Firefox Nightly for macOS
+    overscroll-behavior: none;
 }
 
 body {
@@ -289,6 +291,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_staticWrapper .mx_Dialog {
     z-index: 4010;
+    contain: content;
 }
 
 .mx_Dialog_background {
