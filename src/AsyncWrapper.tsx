@@ -16,11 +16,9 @@ limitations under the License.
 
 import React, { ComponentType } from "react";
 
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import { IDialogProps } from "./components/views/dialogs/IDialogProps";
-import BaseDialog from "./components/views/dialogs/BaseDialog";
-import DialogButtons from "./components/views/elements/DialogButtons";
-import Spinner from "./components/views/elements/Spinner";
 
 type AsyncImport<T> = { default: T };
 
@@ -79,6 +77,8 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
             const Component = this.state.component;
             return <Component {...this.props} />;
         } else if (this.state.error) {
+            const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             return <BaseDialog onFinished={this.props.onFinished} title={_t("Error")}>
                 { _t("Unable to load! Check your network connectivity and try again.") }
                 <DialogButtons primaryButton={_t("Dismiss")}
@@ -88,6 +88,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
             </BaseDialog>;
         } else {
             // show a spinner until the component is loaded.
+            const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
         }
     }
