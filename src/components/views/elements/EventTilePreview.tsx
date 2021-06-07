@@ -128,6 +128,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                 mxEvent={event}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                as="div"
             />
         </div>;
     }
