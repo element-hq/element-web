@@ -332,7 +332,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     }
 
     public getContainerWidgets(room: Room, container: Container): IApp[] {
-        return this.byRoom[room.roomId]?.[container]?.ordered || [];
+        return this.byRoom[room?.roomId]?.[container]?.ordered || [];
     }
 
     public isInContainer(room: Room, widget: IApp, container: Container): boolean {

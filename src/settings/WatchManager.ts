@@ -63,8 +63,7 @@ export class WatchManager {
 
         if (!inRoomId) {
             // Fire updates to all the individual room watchers too, as they probably care about the change higher up.
-            const callbacks = Array.from(roomWatchers.values()).flat(1);
-            callbacks.push(...callbacks);
+            callbacks.push(...Array.from(roomWatchers.values()).flat(1));
         } else if (roomWatchers.has(IRRELEVANT_ROOM)) {
             callbacks.push(...roomWatchers.get(IRRELEVANT_ROOM));
         }
