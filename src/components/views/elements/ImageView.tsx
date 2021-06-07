@@ -19,20 +19,20 @@ limitations under the License.
 import React, { createRef } from 'react';
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
-import {Key} from "../../../Keyboard";
+import { Key } from "../../../Keyboard";
 import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
-import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import {aboveLeftOf, ContextMenu} from '../../structures/ContextMenu';
+import { aboveLeftOf, ContextMenu } from '../../structures/ContextMenu';
 import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
-import {formatFullDate} from "../../../DateUtils";
+import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks"
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {normalizeWheelEvent} from "../../../utils/Mouse";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks"
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { normalizeWheelEvent } from "../../../utils/Mouse";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -172,7 +172,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             return;
         }
         if (newZoom >= this.state.maxZoom) {
-            this.setState({zoom: this.state.maxZoom});
+            this.setState({ zoom: this.state.maxZoom });
             return;
         }
 
@@ -185,7 +185,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         ev.stopPropagation();
         ev.preventDefault();
 
-        const {deltaY} = normalizeWheelEvent(ev);
+        const { deltaY } = normalizeWheelEvent(ev);
         this.zoom(-(deltaY * ZOOM_COEFFICIENT));
     };
 
@@ -259,11 +259,11 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         // Zoom in if we are completely zoomed out
         if (this.state.zoom === this.state.minZoom) {
-            this.setState({zoom: this.state.maxZoom});
+            this.setState({ zoom: this.state.maxZoom });
             return;
         }
 
-        this.setState({moving: true});
+        this.setState({ moving: true });
         this.previousX = this.state.translationX;
         this.previousY = this.state.translationY;
         this.initX = ev.pageX - this.state.translationX;
@@ -297,7 +297,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             this.initX = 0;
             this.initY = 0;
         }
-        this.setState({moving: false});
+        this.setState({ moving: false });
     };
 
     private renderContextMenu() {
