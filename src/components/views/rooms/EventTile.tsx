@@ -906,6 +906,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
 
+        // we can't use local echoes as scroll tokens, because their event IDs change.
+        // Local echos have a send "status".
         const scrollToken = this.props.mxEvent.status
             ? undefined
             : this.props.mxEvent.getId();
@@ -1153,8 +1155,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "tabIndex": -1,
                         "aria-live": ariaLive,
                         "aria-atomic": "true",
-                        // we can't use local echoes as scroll tokens, because their event IDs change.
-                        // Local echos have a send "status".
                         "data-scroll-tokens": scrollToken,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
