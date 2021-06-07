@@ -33,6 +33,7 @@ import {USER_LABS_TAB} from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import RoomAliasField from "../elements/RoomAliasField";
 
 const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
     return (
@@ -58,6 +59,11 @@ const spaceNameValidator = withValidation({
     ],
 });
 
+const nameToAlias = (name: string, domain: string): string => {
+    const localpart = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9_-]+/gi, "");
+    return `#${localpart}:${domain}`;
+};
+
 const SpaceCreateMenu = ({ onFinished }) => {
     const cli = useContext(MatrixClientContext);
     const [visibility, setVisibility] = useState<Visibility>(null);
@@ -65,6 +71,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
 
     const [name, setName] = useState("");
     const spaceNameField = useRef<Field>();
+    const [alias, setAlias] = useState("");
+    const spaceAliasField = useRef<RoomAliasField>();
     const [avatar, setAvatar] = useState<File>(null);
     const [topic, setTopic] = useState<string>("");
 
@@ -77,6 +85,13 @@ const SpaceCreateMenu = ({ onFinished }) => {
         if (!await spaceNameField.current.validate({ allowEmpty: false })) {
             spaceNameField.current.focus();
             spaceNameField.current.validate({ allowEmpty: false, focused: true });
+            setBusy(false);
+            return;
+        }
+        // validate the space name alias field but do not require it
+        if (visibility === Visibility.Public && !await spaceAliasField.current.validate({ allowEmpty: true })) {
+            spaceAliasField.current.focus();
+            spaceAliasField.current.validate({ allowEmpty: true, focused: true });
             setBusy(false);
             return;
         }
@@ -97,12 +112,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 content: { url },
             });
         }
-        if (topic) {
-            initialState.push({
-                type: EventType.RoomTopic,
-                content: { topic },
-            });
-        }
 
         try {
             await createRoom({
@@ -110,7 +119,6 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     preset: visibility === Visibility.Public ? Preset.PublicChat : Preset.PrivateChat,
                     name,
                     creation_content: {
-                        // Based on MSC1840
                         [RoomCreateTypeField]: RoomType.Space,
                     },
                     initial_state: initialState,
@@ -119,6 +127,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
                         events_default: 100,
                         ...Visibility.Public ? { invite: 0 } : {},
                     },
+                    room_alias_name: alias ? alias.substr(1, alias.indexOf(":") - 1) : undefined,
+                    topic,
                 },
                 spinner: false,
                 encryption: false,
@@ -157,6 +167,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
             <SpaceFeedbackPrompt onClick={onFinished} />
         </React.Fragment>;
     } else {
+        const domain = cli.getDomain();
         body = <React.Fragment>
             <AccessibleTooltipButton
                 className="mx_SpaceCreateMenu_back"
@@ -185,11 +196,29 @@ const SpaceCreateMenu = ({ onFinished }) => {
                     label={_t("Name")}
                     autoFocus={true}
                     value={name}
-                    onChange={ev => setName(ev.target.value)}
+                    onChange={ev => {
+                        const newName = ev.target.value;
+                        if (!alias || alias === nameToAlias(name, domain)) {
+                            setAlias(nameToAlias(newName, domain));
+                        }
+                        setName(newName);
+                    }}
                     ref={spaceNameField}
                     onValidate={spaceNameValidator}
                     disabled={busy}
                 />
+
+                { visibility === Visibility.Public
+                    ? <RoomAliasField
+                        ref={spaceAliasField}
+                        onChange={setAlias}
+                        domain={domain}
+                        value={alias}
+                        placeholder={name ? nameToAlias(name, domain) : _t("e.g. my-space")}
+                        label={_t("Address")}
+                    />
+                    : null
+                }
 
                 <Field
                     name="spaceTopic"
