@@ -906,6 +906,12 @@ export default class EventTile extends React.Component<IProps, IState> {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
 
+        // we can't use local echoes as scroll tokens, because their event IDs change.
+        // Local echos have a send "status".
+        const scrollToken = this.props.mxEvent.status
+            ? undefined
+            : this.props.mxEvent.getId();
+
         let avatar;
         let sender;
         let avatarSize;
@@ -1046,7 +1052,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
+                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
                         <div className="mx_EventTile_roomName">
                             <RoomAvatar room={room} width={28} height={28} />
                             <a href={permalink} onClick={this.onPermalinkClicked}>
@@ -1069,12 +1075,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onHeightChanged={this.props.onHeightChanged}
                             />
                         </div>
-                    </div>
+                    </li>
                 );
             }
             case 'file_grid': {
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
+                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
@@ -1095,7 +1101,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 { timestamp }
                             </div>
                         </a>
-                    </div>
+                    </li>
                 );
             }
 
@@ -1111,7 +1117,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     );
                 }
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
+                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
                         { ircTimestamp }
                         { avatar }
                         { sender }
@@ -1129,7 +1135,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 showUrlPreview={false}
                             />
                         </div>
-                    </div>
+                    </li>
                 );
             }
             default: {
@@ -1143,13 +1149,13 @@ export default class EventTile extends React.Component<IProps, IState> {
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    React.createElement(this.props.as || "div", {
+                    React.createElement(this.props.as || "li", {
                         "ref": this.ref,
                         "className": classes,
                         "tabIndex": -1,
                         "aria-live": ariaLive,
                         "aria-atomic": "true",
-                        "data-scroll-tokens": this.props["data-scroll-tokens"],
+                        "data-scroll-tokens": scrollToken,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                     }, [
