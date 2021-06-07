@@ -211,6 +211,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                 layout={previewLayout}
                 enableFlair={flairEnabled}
                 permalinkCreator={permalinkCreator}
+                as="div"
             />
         </div>
         <hr />
