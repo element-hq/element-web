@@ -104,18 +104,18 @@ export default class ImageView extends React.Component<IProps, IState> {
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener('wheel', this.onWheel, { passive: false });
         // We want to recalculate zoom whenever the window's size changes
-        window.addEventListener("resize", this.calculateZoomAndRotate);
+        window.addEventListener("resize", this.setZoomAndRotation);
         // After the image loads for the first time we want to calculate the zoom
-        this.image.current.addEventListener("load", this.calculateZoomAndRotate);
+        this.image.current.addEventListener("load", this.setZoomAndRotation);
     }
 
     componentWillUnmount() {
         this.focusLock.current.removeEventListener('wheel', this.onWheel);
-        window.removeEventListener("resize", this.calculateZoomAndRotate);
-        this.image.current.removeEventListener("load", this.calculateZoomAndRotate);
+        window.removeEventListener("resize", this.setZoomAndRotation);
+        this.image.current.removeEventListener("load", this.setZoomAndRotation);
     }
 
-    private calculateZoomAndRotate = () => {
+    private setZoomAndRotation = () => {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
@@ -203,13 +203,13 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onRotateCounterClockwiseClick = () => {
         const cur = this.state.rotation;
         this.rotation = cur - 90;
-        this.calculateZoomAndRotate();
+        this.setZoomAndRotation();
     };
 
     private onRotateClockwiseClick = () => {
         const cur = this.state.rotation;
         this.rotation = cur + 90;
-        this.calculateZoomAndRotate();
+        this.setZoomAndRotation();
     };
 
     private onDownloadClick = () => {
