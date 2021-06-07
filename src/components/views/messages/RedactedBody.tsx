@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext} from "react";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import React, { useContext } from "react";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {formatFullDate} from "../../../DateUtils";
+import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -28,8 +29,9 @@ interface IProps {
 }
 
 const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, isExporting}, ref) => {
-    const cli: MatrixClient = useContext(MatrixClientContext);
-
+    let cli: MatrixClient = useContext(MatrixClientContext);
+    // As context doesn't propagate during export, we'll have to explicitly declare
+    if (isExporting) cli = MatrixClientPeg.get();
     let text = _t("Message deleted");
     const unsigned = mxEvent.getUnsigned();
     const redactedBecauseUserId = unsigned && unsigned.redacted_because && unsigned.redacted_because.sender;
@@ -45,7 +47,7 @@ const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, isExporting}, ref)
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>
-            { isExporting ? <img className="mx_export_trash_icon" src="icons/trash.svg" title="Redacted" /> : null }
+            { isExporting ? <img alt="Redacted" className="mx_export_trash_icon" src="icons/trash.svg" /> : null }
             { text }
         </span>
     );
