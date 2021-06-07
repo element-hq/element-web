@@ -82,7 +82,6 @@ limitations under the License.
     color: $primary-fg-color;
     font-size: $font-12px;
     display: inline;
-    padding-left: 0px;
 }
 
 .mx_NotificationPanel .mx_EventTile_senderDetails {
@@ -103,6 +102,7 @@ limitations under the License.
     visibility: visible;
     position: initial;
     display: inline;
+    padding-left: 5px;
 }
 
 .mx_NotificationPanel .mx_EventTile_line {
