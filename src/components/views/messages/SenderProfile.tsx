@@ -118,18 +118,6 @@ export default class SenderProfile extends React.Component<IProps, IState> {
             return null; // emote message must include the name so don't duplicate it
         }
 
-        let flair;
-        if (this.props.enableFlair) {
-            const displayedGroups = this._getDisplayedGroups(
-                this.state.userGroups, this.state.relatedGroups,
-            );
-
-            flair = <Flair key='flair'
-                userId={mxEvent.getSender()}
-                groups={displayedGroups}
-            />;
-        }
-
         const displayNameElement = (
             <span className={`mx_SenderProfile_displayName ${colorClass}`}>
                 { displayName }
@@ -143,6 +131,18 @@ export default class SenderProfile extends React.Component<IProps, IState> {
                     { mxid }
                 </span>
             );
+        }
+
+        let flair;
+        if (this.props.enableFlair) {
+            const displayedGroups = this._getDisplayedGroups(
+                this.state.userGroups, this.state.relatedGroups,
+            );
+
+            flair = <Flair key='flair'
+                userId={mxEvent.getSender()}
+                groups={displayedGroups}
+            />;
         }
 
         return (
