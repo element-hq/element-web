@@ -182,6 +182,7 @@ export interface IState {
     canReact: boolean;
     canReply: boolean;
     layout: Layout;
+    lowBandwidth: boolean;
     showReadReceipts: boolean;
     showRedactions: boolean;
     showJoinLeaves: boolean;
@@ -244,6 +245,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             canReact: false,
             canReply: false,
             layout: SettingsStore.getValue("layout"),
+            lowBandwidth: SettingsStore.getValue("lowBandwidth"),
             showReadReceipts: true,
             showRedactions: true,
             showJoinLeaves: true,
@@ -278,6 +280,9 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.settingWatchers = [
             SettingsStore.watchSetting("layout", null, () =>
                 this.setState({ layout: SettingsStore.getValue("layout") }),
+            ),
+            SettingsStore.watchSetting("lowBandwidth", null, () =>
+                this.setState({ lowBandwidth: SettingsStore.getValue("lowBandwidth") }),
             ),
         ];
     }
