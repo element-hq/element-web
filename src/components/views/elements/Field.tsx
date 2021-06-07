@@ -29,6 +29,11 @@ function getId() {
     return `${BASE_ID}_${count++}`;
 }
 
+export interface IValidateOpts {
+    focused?: boolean;
+    allowEmpty?: boolean;
+}
+
 interface IProps {
     // The field's ID, which binds the input and label together. Immutable.
     id?: string;
@@ -180,7 +185,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     };
 
-    public async validate({ focused, allowEmpty = true }: {focused?: boolean, allowEmpty?: boolean}) {
+    public async validate({ focused, allowEmpty = true }: IValidateOpts) {
         if (!this.props.onValidate) {
             return;
         }

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,67 +13,74 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import React, { createRef } from "react";
+
 import { _t } from '../../../languageHandler';
-import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import withValidation from './Validation';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Field, { IValidateOpts } from "./Field";
+
+interface IProps {
+    domain: string;
+    value: string;
+    label?: string;
+    placeholder?: string;
+    onChange?(value: string): void;
+}
+
+interface IState {
+    isValid: boolean;
+}
 
 // Controlled form component wrapping Field for inputting a room alias scoped to a given domain
 @replaceableComponent("views.elements.RoomAliasField")
-export default class RoomAliasField extends React.PureComponent {
-    static propTypes = {
-        domain: PropTypes.string.isRequired,
-        onChange: PropTypes.func,
-        value: PropTypes.string.isRequired,
+export default class RoomAliasField extends React.PureComponent<IProps, IState> {
+    private fieldRef = createRef<Field>();
+
+    public state = {
+        isValid: true,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {isValid: true};
-    }
-
-    _asFullAlias(localpart) {
+    private asFullAlias(localpart: string): string {
         return `#${localpart}:${this.props.domain}`;
     }
 
     render() {
-        const Field = sdk.getComponent('views.elements.Field');
         const poundSign = (<span>#</span>);
         const aliasPostfix = ":" + this.props.domain;
         const domain = (<span title={aliasPostfix}>{aliasPostfix}</span>);
         const maxlength = 255 - this.props.domain.length - 2;   // 2 for # and :
         return (
             <Field
-                label={_t("Room address")}
+                label={this.props.label || _t("Room address")}
                 className="mx_RoomAliasField"
                 prefixComponent={poundSign}
                 postfixComponent={domain}
-                ref={ref => this._fieldRef = ref}
-                onValidate={this._onValidate}
-                placeholder={_t("e.g. my-room")}
-                onChange={this._onChange}
+                ref={this.fieldRef}
+                onValidate={this.onValidate}
+                placeholder={this.props.placeholder || _t("e.g. my-room")}
+                onChange={this.onChange}
                 value={this.props.value.substring(1, this.props.value.length - this.props.domain.length - 1)}
                 maxLength={maxlength}
             />
         );
     }
 
-    _onChange = (ev) => {
+    private onChange = (ev) => {
         if (this.props.onChange) {
-            this.props.onChange(this._asFullAlias(ev.target.value));
+            this.props.onChange(this.asFullAlias(ev.target.value));
         }
     };
 
-    _onValidate = async (fieldState) => {
-        const result = await this._validationRules(fieldState);
+    private onValidate = async (fieldState) => {
+        const result = await this.validationRules(fieldState);
         this.setState({isValid: result.valid});
         return result;
     };
 
-    _validationRules = withValidation({
+    private validationRules = withValidation({
         rules: [
             {
                 key: "safeLocalpart",
@@ -81,7 +88,7 @@ export default class RoomAliasField extends React.PureComponent {
                     if (!value) {
                         return true;
                     }
-                    const fullAlias = this._asFullAlias(value);
+                    const fullAlias = this.asFullAlias(value);
                     // XXX: FIXME https://github.com/matrix-org/matrix-doc/issues/668
                     return !value.includes("#") && !value.includes(":") && !value.includes(",") &&
                         encodeURI(fullAlias) === fullAlias;
@@ -90,7 +97,7 @@ export default class RoomAliasField extends React.PureComponent {
             }, {
                 key: "required",
                 test: async ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Please provide a room address"),
+                invalid: () => _t("Please provide an address"),
             }, {
                 key: "taken",
                 final: true,
@@ -100,7 +107,7 @@ export default class RoomAliasField extends React.PureComponent {
                     }
                     const client = MatrixClientPeg.get();
                     try {
-                        await client.getRoomIdForAlias(this._asFullAlias(value));
+                        await client.getRoomIdForAlias(this.asFullAlias(value));
                         // we got a room id, so the alias is taken
                         return false;
                     } catch (err) {
@@ -120,11 +127,11 @@ export default class RoomAliasField extends React.PureComponent {
         return this.state.isValid;
     }
 
-    validate(options) {
-        return this._fieldRef.validate(options);
+    validate(options: IValidateOpts) {
+        return this.fieldRef.current?.validate(options);
     }
 
     focus() {
-        this._fieldRef.focus();
+        this.fieldRef.current?.focus();
     }
 }
