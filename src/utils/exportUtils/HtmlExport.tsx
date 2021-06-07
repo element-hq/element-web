@@ -77,7 +77,7 @@ export default class HTMLExporter extends Exporter {
              exportDate,
              roomName: this.room.name,
              exporterDetails: `<a href="https://matrix.to/#/${exporter}" target="_blank" rel="noopener noreferrer">
-                ${exporterName ? `<b>${ exporterName }</b>(${ exporter })` : `<b>${ exporter }</b>`} 
+                ${exporterName ? `<b>${ exporterName }</b>(${ exporter })` : `<b>${ exporter }</b>`}
              </a>`,
         });
 
@@ -108,7 +108,7 @@ export default class HTMLExporter extends Exporter {
                         <div class="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
                             <div class="mx_RoomHeader_avatar">
                             <div class="mx_DecoratedRoomAvatar">
-                               ${roomAvatar} 
+                               ${roomAvatar}
                             </div>
                             </div>
                             <div class="mx_RoomHeader_name">
@@ -172,8 +172,7 @@ export default class HTMLExporter extends Exporter {
 
     protected hasAvatar(event: MatrixEvent): boolean {
         const member = event.sender;
-        if (member.getMxcAvatarUrl()) return true;
-        return false;
+        return !!member.getMxcAvatarUrl();
     }
 
     protected async saveAvatarIfNeeded(event: MatrixEvent) {
@@ -244,8 +243,7 @@ export default class HTMLExporter extends Exporter {
         }
         const fileDate = formatFullDateNoDay(new Date(event.getTs()));
         const [fileName, fileExt] = this.splitFileName(event.getContent().body);
-        const filePath = fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
-        return filePath;
+        return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 
 
@@ -313,7 +311,7 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export() {
-        const res = this.getTimelineConversation();
+        const res = await this.getRequiredEvents();
         const html = await this.createHTML(res);
 
         this.zip.file("index.html", html);
@@ -342,7 +340,7 @@ export default class HTMLExporter extends Exporter {
             const blobPiece = blob.slice(fPointer, fPointer + sliceSize);
             const reader = new FileReader();
 
-            const waiter = new Promise<void>((resolve, reject) => {
+            const waiter = new Promise<void>((resolve) => {
                 reader.onloadend = evt => {
                     const arrayBufferNew: any = evt.target.result;
                     const uint8ArrayNew = new Uint8Array(arrayBufferNew);
@@ -353,7 +351,7 @@ export default class HTMLExporter extends Exporter {
             });
             await waiter;
         }
-        writer.close();
+        await writer.close();
 
         return blob;
     }

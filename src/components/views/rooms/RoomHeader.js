@@ -84,8 +84,8 @@ export default class RoomHeader extends React.Component {
     }, 500);
 
 
-    _exportConvertionalHistory = async () => {
-        await exportConversationalHistory(this.props.room, exportFormats.HTML, exportTypes.LAST_N_MESSAGES, 30);
+    _exportConversationalHistory = async () => {
+        await exportConversationalHistory(this.props.room, exportFormats.HTML, exportTypes.LAST_N_MESSAGES, 250);
     }
 
     render() {
@@ -198,7 +198,7 @@ export default class RoomHeader extends React.Component {
 
         const exportButton = <AccessibleTooltipButton
             className="mx_RoomHeader_button mx_ImageView_button_download"
-            onClick={this._exportConvertionalHistory}
+            onClick={this._exportConversationalHistory}
             title={_t("Export conversation")} />;
 
         const rightRow =
