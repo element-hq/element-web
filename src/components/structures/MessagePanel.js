@@ -19,7 +19,6 @@ limitations under the License.
 import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import {wantsDateSeparator} from '../../DateUtils';
 import * as sdk from '../../index';
@@ -849,13 +848,6 @@ export default class MessagePanel extends React.Component {
 
         const style = this.props.hidden ? { display: 'none' } : {};
 
-        const className = classNames(
-            this.props.className,
-            {
-                "mx_MessagePanel_alwaysShowTimestamps": this.props.alwaysShowTimestamps,
-            },
-        );
-
         let whoIsTyping;
         if (this.props.room && !this.props.tileShape && this.state.showTypingNotifications) {
             whoIsTyping = (<WhoIsTypingTile
@@ -879,7 +871,7 @@ export default class MessagePanel extends React.Component {
             <ErrorBoundary>
                 <ScrollPanel
                     ref={this._scrollPanel}
-                    className={className}
+                    className={this.props.className}
                     onScroll={this.props.onScroll}
                     onUserScroll={this.props.onUserScroll}
                     onResize={this.onResize}

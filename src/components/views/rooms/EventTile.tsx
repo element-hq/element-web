@@ -981,7 +981,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const showTimestamp = this.props.mxEvent.getTs() && (this.props.alwaysShowTimestamps || this.state.hover);
+        const showTimestamp = this.props.mxEvent.getTs() &&
+            (this.props.alwaysShowTimestamps || this.props.last || this.state.hover || this.state.actionBarFocused);
         const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
@@ -1114,6 +1115,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                         this.props.onHeightChanged,
                         this.props.permalinkCreator,
                         this.replyThread,
+                        null,
+                        this.props.alwaysShowTimestamps || this.state.hover,
                     );
                 }
                 return (
@@ -1145,6 +1148,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.permalinkCreator,
                     this.replyThread,
                     this.props.layout,
+                    this.props.alwaysShowTimestamps || this.state.hover,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
