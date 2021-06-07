@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@ limitations under the License.
  * A similar thing could also be achieved via `pushState` with a state object,
  * but keeping it separate like this seems easier in case we do want to extend.
  */
-const aliasToIDMap = new Map();
+const aliasToIDMap = new Map<string, string>();
 
-export function storeRoomAliasInCache(alias, id) {
+export function storeRoomAliasInCache(alias: string, id: string): void {
     aliasToIDMap.set(alias, id);
 }
 
-export function getCachedRoomIDForAlias(alias) {
+export function getCachedRoomIDForAlias(alias: string): string {
     return aliasToIDMap.get(alias);
 }
