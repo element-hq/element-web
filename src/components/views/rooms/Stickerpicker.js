@@ -40,7 +40,7 @@ const STICKERPICKER_Z_INDEX = 3500;
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 @replaceableComponent("views.rooms.Stickerpicker")
-export default class Stickerpicker extends React.Component {
+export default class Stickerpicker extends React.PureComponent {
     static currentWidget;
 
     constructor(props) {
@@ -266,25 +266,25 @@ export default class Stickerpicker extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
-                    <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
-                        <AppTile
-                            app={stickerApp}
-                            room={this.props.room}
-                            fullWidth={true}
-                            userId={MatrixClientPeg.get().credentials.userId}
-                            creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
-                            waitForIframeLoad={true}
-                            showMenubar={true}
-                            onEditClick={this._launchManageIntegrations}
-                            onDeleteClick={this._removeStickerpickerWidgets}
-                            showTitle={false}
-                            showCancel={false}
-                            showPopout={false}
-                            onMinimiseClick={this._onHideStickersClick}
-                            handleMinimisePointerEvents={true}
-                            userWidget={true}
-                        />
-                    </PersistedElement>
+                        <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
+                            <AppTile
+                                app={stickerApp}
+                                room={this.props.room}
+                                fullWidth={true}
+                                userId={MatrixClientPeg.get().credentials.userId}
+                                creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
+                                waitForIframeLoad={true}
+                                showMenubar={true}
+                                onEditClick={this._launchManageIntegrations}
+                                onDeleteClick={this._removeStickerpickerWidgets}
+                                showTitle={false}
+                                showCancel={false}
+                                showPopout={false}
+                                onMinimiseClick={this._onHideStickersClick}
+                                handleMinimisePointerEvents={true}
+                                userWidget={true}
+                            />
+                        </PersistedElement>
                     </div>
                 </div>
             );
@@ -341,21 +341,27 @@ export default class Stickerpicker extends React.Component {
      * @param  {Event} ev Event that triggered the function call
      */
     _onHideStickersClick(ev) {
-        this.setState({showStickers: false});
+        if (this.state.showStickers) {
+            this.setState({showStickers: false});
+        }
     }
 
     /**
      * Called when the window is resized
      */
     _onResize() {
-        this.setState({showStickers: false});
+        if (this.state.showStickers) {
+            this.setState({showStickers: false});
+        }
     }
 
     /**
      * The stickers picker was hidden
      */
     _onFinished() {
-        this.setState({showStickers: false});
+        if (this.state.showStickers) {
+            this.setState({showStickers: false});
+        }
     }
 
     /**

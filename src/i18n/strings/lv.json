@@ -1581,5 +1581,6 @@
     "Failed to set topic": "Neizdevās iestatīt tematu",
     "Upload files": "Failu augšupielāde",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Šie faili <b>pārsniedz</b> augšupielādes izmēra limitu %(limit)s.",
-    "Upload files (%(current)s of %(total)s)": "Failu augšupielāde (%(current)s no %(total)s)"
+    "Upload files (%(current)s of %(total)s)": "Failu augšupielāde (%(current)s no %(total)s)",
+    "Check your devices": "Pārskatiet savas ierīces"
 }

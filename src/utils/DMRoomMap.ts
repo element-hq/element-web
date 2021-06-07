@@ -56,6 +56,15 @@ export default class DMRoomMap {
     }
 
     /**
+     * Set the shared instance to the instance supplied
+     * Used by tests
+     * @param inst the new shared instance
+     */
+    public static setShared(inst: DMRoomMap) {
+        DMRoomMap.sharedInstance = inst;
+    }
+
+    /**
      * Returns a shared instance of the class
      * that uses the singleton matrix client
      * The shared instance must be started before use.

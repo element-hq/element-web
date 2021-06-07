@@ -25,6 +25,7 @@ limitations under the License.
     padding: 4px 0;
     box-sizing: border-box;
     height: 100%;
+    contain: strict;
 
     .mx_RoomView_MessageList {
         padding: 14px 18px; // top and bottom is 4px smaller to balance with the padding set above
@@ -96,6 +97,48 @@ limitations under the License.
 .mx_RightPanel_roomsButton::before {
     mask-image: url('$(res)/img/element-icons/community-rooms.svg');
     mask-position: center;
+}
+
+$dot-size: 8px;
+$pulse-color: $pinned-unread-color;
+
+.mx_RightPanel_pinnedMessagesButton {
+    &::before {
+        mask-image: url('$(res)/img/element-icons/room/pin.svg');
+        mask-position: center;
+    }
+
+    .mx_RightPanel_pinnedMessagesButton_unreadIndicator {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 4px;
+        width: $dot-size;
+        height: $dot-size;
+        border-radius: 50%;
+        transform: scale(1);
+        background: rgba($pulse-color, 1);
+        box-shadow: 0 0 0 0 rgba($pulse-color, 1);
+        animation: mx_RightPanel_indicator_pulse 2s infinite;
+        animation-iteration-count: 1;
+    }
+}
+
+@keyframes mx_RightPanel_indicator_pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba($pulse-color, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba($pulse-color, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba($pulse-color, 0);
+    }
 }
 
 .mx_RightPanel_headerButton_highlight {

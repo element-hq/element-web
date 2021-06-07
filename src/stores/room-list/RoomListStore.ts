@@ -426,6 +426,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             return; // don't do anything on rooms that aren't visible
         }
 
+        if ((cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.PossibleTagChange) &&
+            !this.prefilterConditions.every(c => c.isVisible(room))
+        ) {
+            return; // don't do anything on new/moved rooms which ought not to be shown
+        }
+
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
         if (shouldUpdate) {
             if (SettingsStore.getValue("advancedRoomListLogging")) {
@@ -599,13 +605,13 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private getPlausibleRooms(): Room[] {
         if (!this.matrixClient) return [];
 
-        let rooms = [
-            ...this.matrixClient.getVisibleRooms(),
-            // also show space invites in the room list
-            ...this.matrixClient.getRooms().filter(r => r.isSpaceRoom() && r.getMyMembership() === "invite"),
-        ].filter(r => VisibilityProvider.instance.isRoomVisible(r));
+        let rooms = this.matrixClient.getVisibleRooms().filter(r => VisibilityProvider.instance.isRoomVisible(r));
 
-        if (this.prefilterConditions.length > 0) {
+        // if spaces are enabled only consider the prefilter conditions when there are no runtime conditions
+        // for the search all spaces feature
+        if (this.prefilterConditions.length > 0
+            && (!SettingsStore.getValue("feature_spaces") || !this.filterConditions.length)
+        ) {
             rooms = rooms.filter(r => {
                 for (const filter of this.prefilterConditions) {
                     if (!filter.isVisible(r)) {
@@ -664,7 +670,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
      * and thus might not cause an update to the store immediately.
      * @param {IFilterCondition} filter The filter condition to add.
      */
-    public addFilter(filter: IFilterCondition): void {
+    public async addFilter(filter: IFilterCondition): Promise<void> {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log("Adding filter condition:", filter);
@@ -676,6 +682,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             promise = this.recalculatePrefiltering();
         } else {
             this.filterConditions.push(filter);
+            // Runtime filters with spaces disable prefiltering for the search all spaces feature
+            if (SettingsStore.getValue("feature_spaces")) {
+                // this has to be awaited so that `setKnownRooms` is called in time for the `addFilterCondition` below
+                // this way the runtime filters are only evaluated on one dataset and not both.
+                await this.recalculatePrefiltering();
+            }
             if (this.algorithm) {
                 this.algorithm.addFilterCondition(filter);
             }
@@ -702,6 +714,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
             if (this.algorithm) {
                 this.algorithm.removeFilterCondition(filter);
+            }
+            // Runtime filters with spaces disable prefiltering for the search all spaces feature
+            if (SettingsStore.getValue("feature_spaces")) {
+                promise = this.recalculatePrefiltering();
             }
         }
         idx = this.prefilterConditions.indexOf(filter);

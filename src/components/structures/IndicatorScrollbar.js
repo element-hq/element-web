@@ -59,7 +59,9 @@ export default class IndicatorScrollbar extends React.Component {
     _collectScroller(scroller) {
         if (scroller && !this._scrollElement) {
             this._scrollElement = scroller;
-            this._scrollElement.addEventListener("scroll", this.checkOverflow);
+            // Using the passive option to not block the main thread
+            // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+            this._scrollElement.addEventListener("scroll", this.checkOverflow, { passive: true });
             this.checkOverflow();
         }
     }

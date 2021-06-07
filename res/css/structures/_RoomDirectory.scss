@@ -61,6 +61,39 @@ limitations under the License.
 .mx_RoomDirectory_tableWrapper {
     overflow-y: auto;
     flex: 1 1 0;
+
+    .mx_RoomDirectory_footer {
+        margin-top: 24px;
+        text-align: center;
+
+        > h5 {
+            margin: 0;
+            font-weight: $font-semi-bold;
+            font-size: $font-15px;
+            line-height: $font-18px;
+            color: $primary-fg-color;
+        }
+
+        > p {
+            margin: 40px auto 60px;
+            font-size: $font-14px;
+            line-height: $font-20px;
+            color: $secondary-fg-color;
+            max-width: 464px; // easier reading
+        }
+
+        > hr {
+            margin: 0;
+            border: none;
+            height: 1px;
+            background-color: $header-panel-bg-color;
+        }
+
+        .mx_RoomDirectory_newRoom {
+            margin: 24px auto 0;
+            width: max-content;
+        }
+    }
 }
 
 .mx_RoomDirectory_table {
@@ -136,11 +169,6 @@ limitations under the License.
 .mx_RoomDirectory_alias {
     font-size: $font-12px;
     color: $settings-grey-fg-color;
-}
-
-.mx_RoomDirectory_table tr {
-    padding-bottom: 10px;
-    cursor: pointer;
 }
 
 .mx_RoomDirectory .mx_RoomView_MessageList {

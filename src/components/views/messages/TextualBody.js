@@ -36,6 +36,7 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext} from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
 @replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
@@ -143,7 +144,7 @@ export default class TextualBody extends React.Component {
     _addCodeExpansionButton(div, pre) {
         // Calculate how many percent does the pre element take up.
         // If it's less than 30% we don't add the expansion button.
-        const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
+        const percentageOfViewport = pre.offsetHeight / UIStore.instance.windowHeight * 100;
         if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");
@@ -277,15 +278,15 @@ export default class TextualBody extends React.Component {
             // pass only the first child which is the event tile otherwise this recurses on edited events
             let links = this.findLinks([this._content.current]);
             if (links.length) {
-                // de-dup the links (but preserve ordering)
-                const seen = new Set();
-                links = links.filter((link) => {
-                    if (seen.has(link)) return false;
-                    seen.add(link);
-                    return true;
-                });
+                // de-duplicate the links after stripping hashes as they don't affect the preview
+                // using a set here maintains the order
+                links = Array.from(new Set(links.map(link => {
+                    const url = new URL(link);
+                    url.hash = "";
+                    return url.toString();
+                })));
 
-                this.setState({ links: links });
+                this.setState({ links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {
@@ -521,11 +522,12 @@ export default class TextualBody extends React.Component {
             const LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget
-                            key={link}
-                            link={link}
-                            mxEvent={this.props.mxEvent}
-                            onCancelClick={this.onCancelClick}
-                            onHeightChanged={this.props.onHeightChanged} />;
+                    key={link}
+                    link={link}
+                    mxEvent={this.props.mxEvent}
+                    onCancelClick={this.onCancelClick}
+                    onHeightChanged={this.props.onHeightChanged}
+                />;
             });
         }
 

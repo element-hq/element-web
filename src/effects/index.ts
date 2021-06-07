@@ -15,80 +15,11 @@
  limitations under the License.
  */
 import { _t, _td } from "../languageHandler";
-
-export type Effect<TOptions extends { [key: string]: any }> = {
-    /**
-     * one or more emojis that will trigger this effect
-     */
-    emojis: Array<string>;
-    /**
-     * the matrix message type that will trigger this effect
-     */
-    msgType: string;
-    /**
-     * the room command to trigger this effect
-     */
-    command: string;
-    /**
-     * a function that returns the translated description of the effect
-     */
-    description: () => string;
-    /**
-     * a function that returns the translated fallback message. this message will be shown if the user did not provide a custom message
-     */
-    fallbackMessage: () => string;
-    /**
-     * animation options
-     */
-    options: TOptions;
-}
-
-type ConfettiOptions = {
-    /**
-     * max confetti count
-     */
-    maxCount: number;
-    /**
-     * particle animation speed
-     */
-    speed: number;
-    /**
-     * the confetti animation frame interval in milliseconds
-     */
-    frameInterval: number;
-    /**
-     * the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
-     */
-    alpha: number;
-    /**
-     * use gradient instead of solid particle color
-     */
-    gradient: boolean;
-};
-type FireworksOptions = {
-    /**
-     * max fireworks count
-     */
-    maxCount: number;
-    /**
-     * gravity value that firework adds to shift from it's start position
-     */
-    gravity: number;
-}
-type SnowfallOptions = {
-    /**
-     * The maximum number of snowflakes to render at a given time
-     */
-    maxCount: number;
-    /**
-     * The amount of gravity to apply to the snowflakes
-     */
-    gravity: number;
-    /**
-     * The amount of drift (horizontal sway) to apply to the snowflakes. Each snowflake varies.
-     */
-    maxDrift: number;
-}
+import { ConfettiOptions } from "./confetti";
+import { Effect } from "./effect";
+import { FireworksOptions } from "./fireworks";
+import { SnowfallOptions } from "./snowfall";
+import { SpaceInvadersOptions } from "./spaceinvaders";
 
 /**
  * This configuration defines room effects that can be triggered by custom message types and emojis
@@ -131,6 +62,17 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
             maxDrift: 5,
         },
     } as Effect<SnowfallOptions>,
+    {
+        emojis: ["👾", "🌌"],
+        msgType: "io.element.effects.space_invaders",
+        command: "spaceinvaders",
+        description: () => _td("Sends the given message with a space themed effect"),
+        fallbackMessage: () => _t("sends space invaders") + " 👾",
+        options: {
+            maxCount: 50,
+            gravity: 0.01,
+        },
+    } as Effect<SpaceInvadersOptions>,
 ];
 
 

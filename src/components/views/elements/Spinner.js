@@ -18,33 +18,21 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import {_t} from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
 
-const Spinner = ({w = 32, h = 32, imgClassName, message}) => {
-    let imageSource;
-    if (SettingsStore.getValue('feature_new_spinner')) {
-        imageSource = require("../../../../res/img/spinner.svg");
-    } else {
-        imageSource = require("../../../../res/img/spinner.gif");
-    }
+const Spinner = ({w = 32, h = 32, message}) => (
+    <div className="mx_Spinner">
+        { message && <React.Fragment><div className="mx_Spinner_Msg">{ message }</div>&nbsp;</React.Fragment> }
+        <div
+            className="mx_Spinner_icon"
+            style={{width: w, height: h}}
+            aria-label={_t("Loading...")}
+        ></div>
+    </div>
+);
 
-    return (
-        <div className="mx_Spinner">
-            { message && <React.Fragment><div className="mx_Spinner_Msg">{ message}</div>&nbsp;</React.Fragment> }
-            <img
-                src={imageSource}
-                width={w}
-                height={h}
-                className={imgClassName}
-                aria-label={_t("Loading...")}
-            />
-        </div>
-    );
-};
 Spinner.propTypes = {
     w: PropTypes.number,
     h: PropTypes.number,
-    imgClassName: PropTypes.string,
     message: PropTypes.node,
 };
 

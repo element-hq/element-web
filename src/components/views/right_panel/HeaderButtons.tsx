@@ -21,14 +21,14 @@ limitations under the License.
 import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {Action} from '../../../dispatcher/actions';
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { Action } from '../../../dispatcher/actions';
 import {
     SetRightPanelPhasePayload,
     SetRightPanelPhaseRefireParams,
 } from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
-import {EventSubscription} from "fbemitter";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import type { EventSubscription } from "fbemitter";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export enum HeaderKind {
   Room = "room",
@@ -43,11 +43,11 @@ interface IState {
 interface IProps {}
 
 @replaceableComponent("views.right_panel.HeaderButtons")
-export default abstract class HeaderButtons extends React.Component<IProps, IState> {
+export default abstract class HeaderButtons<P = {}> extends React.Component<IProps & P, IState> {
     private storeToken: EventSubscription;
     private dispatcherRef: string;
 
-    constructor(props: IProps, kind: HeaderKind) {
+    constructor(props: IProps & P, kind: HeaderKind) {
         super(props);
 
         const rps = RightPanelStore.getSharedInstance();
@@ -95,7 +95,7 @@ export default abstract class HeaderButtons extends React.Component<IProps, ISta
     }
 
     // XXX: Make renderButtons a prop
-    public abstract renderButtons(): JSX.Element[];
+    public abstract renderButtons(): JSX.Element;
 
     public render() {
         return <div className="mx_HeaderButtons">

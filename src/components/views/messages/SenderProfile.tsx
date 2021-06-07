@@ -40,9 +40,10 @@ export default class SenderProfile extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props)
+        const senderId = this.props.mxEvent.getSender();
 
         this.state = {
-            userGroups: null,
+            userGroups: FlairStore.cachedPublicisedGroups(senderId) || [],
             relatedGroups: [],
         };
     }
@@ -51,12 +52,10 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         this.unmounted = false;
         this._updateRelatedGroups();
 
-        FlairStore.getPublicisedGroupsCached(
-            this.context, this.props.mxEvent.getSender(),
-        ).then((userGroups) => {
-            if (this.unmounted) return;
-            this.setState({userGroups});
-        });
+        if (this.state.userGroups.length === 0) {
+            this.getPublicisedGroups();
+        }
+
 
         this.context.on('RoomState.events', this.onRoomStateEvents);
     }
@@ -64,6 +63,15 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('RoomState.events', this.onRoomStateEvents);
+    }
+
+    async getPublicisedGroups() {
+        if (!this.unmounted) {
+            const userGroups = await FlairStore.getPublicisedGroupsCached(
+                this.context, this.props.mxEvent.getSender(),
+            );
+            this.setState({userGroups});
+        }
     }
 
     onRoomStateEvents = event => {
@@ -107,7 +115,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         const mxid = mxEvent.sender?.userId || mxEvent.getSender() || "";
 
         if (msgtype === 'm.emote') {
-            return <span />; // emote message must include the name so don't duplicate it
+            return null; // emote message must include the name so don't duplicate it
         }
 
         let flair;

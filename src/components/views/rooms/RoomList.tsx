@@ -1,7 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017, 2018 Vector Creations Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2018, 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +35,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
 import ExtraTile from "./ExtraTile";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
@@ -49,17 +46,16 @@ import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../con
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
-import SpaceStore, {SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
+import SpaceStore, {ISuggestedRoom, SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
 import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
-import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
-    onResize: () => void;
+    onListCollapse?: (isExpanded: boolean) => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
     activeSpace: Room;
@@ -69,7 +65,7 @@ interface IState {
     sublists: ITagMap;
     isNameFiltering: boolean;
     currentRoomId?: string;
-    suggestedRooms: ISpaceSummaryRoom[];
+    suggestedRooms: ISuggestedRoom[];
 }
 
 const TAG_ORDER: TagID[] = [
@@ -366,7 +362,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         return room;
     };
 
-    private updateSuggestedRooms = (suggestedRooms: ISpaceSummaryRoom[]) => {
+    private updateSuggestedRooms = (suggestedRooms: ISuggestedRoom[]) => {
         this.setState({ suggestedRooms });
     };
 
@@ -408,9 +404,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
-            this.setState({sublists, isNameFiltering}, () => {
-                this.props.onResize();
-            });
+            this.setState({sublists, isNameFiltering});
         }
     };
 
@@ -431,7 +425,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
         return this.state.suggestedRooms.map(room => {
-            const name = room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room");
+            const name = room.name || room.canonical_alias || room.aliases?.[0] || _t("Empty room");
             const avatar = (
                 <RoomAvatar
                     oobData={{
@@ -446,7 +440,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const viewRoom = () => {
                 defaultDispatcher.dispatch({
                     action: "view_room",
+                    room_alias: room.canonical_alias || room.aliases?.[0],
                     room_id: room.room_id,
+                    via_servers: room.viaServers,
                     oobData: {
                         avatarUrl: room.avatar_url,
                         name,
@@ -492,7 +488,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     isSelected={false}
                     displayName={g.name}
                     avatar={avatar}
-                    notificationState={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                    notificationState={StaticNotificationState.RED_EXCLAMATION}
                     onClick={openGroup}
                     key={`temporaryGroupTile_${g.groupId}`}
                 />
@@ -539,15 +535,19 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
                     addRoomContextMenu={aesthetics.addRoomContextMenu}
                     isMinimized={this.props.isMinimized}
-                    onResize={this.props.onResize}
                     showSkeleton={showSkeleton}
                     extraTiles={extraTiles}
+                    resizeNotifier={this.props.resizeNotifier}
                     alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
+                    onListCollapse={this.props.onListCollapse}
                 />
             });
     }
 
     public render() {
+        const cli = MatrixClientPeg.get();
+        const userId = cli.getUserId();
+
         let explorePrompt: JSX.Element;
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
@@ -568,21 +568,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         { this.props.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
                     </AccessibleButton>
                 </div>;
-            } else if (this.props.activeSpace) {
+            } else if (
+                this.props.activeSpace?.canInvite(userId) || this.props.activeSpace?.getMyMembership() === "join"
+            ) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
                     <div>{ _t("Quick actions") }</div>
-                    { this.props.activeSpace.canInvite(MatrixClientPeg.get().getUserId()) && <AccessibleButton
+                    { this.props.activeSpace.canInvite(userId) && <AccessibleButton
                         className="mx_RoomList_explorePrompt_spaceInvite"
                         onClick={this.onSpaceInviteClick}
                     >
                         {_t("Invite people")}
                     </AccessibleButton> }
-                    <AccessibleButton
+                    { this.props.activeSpace.getMyMembership() === "join" && <AccessibleButton
                         className="mx_RoomList_explorePrompt_spaceExplore"
                         onClick={this.onExplore}
                     >
                         {_t("Explore rooms")}
-                    </AccessibleButton>
+                    </AccessibleButton> }
                 </div>;
             } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
                 const unfilteredLists = RoomListStore.instance.unfilteredLists

@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ export interface MatrixProfile {
 export interface CrawlerCheckpoint {
     roomId: string;
     token: string;
-    fullCrawl: boolean;
+    fullCrawl?: boolean;
     direction: string;
 }
 
@@ -73,14 +73,14 @@ export interface EventAndProfile {
 export interface LoadArgs {
     roomId: string;
     limit: number;
-    fromEvent: string;
-    direction: string;
+    fromEvent?: string;
+    direction?: string;
 }
 
 export interface IndexStats {
     size: number;
-    event_count: number;
-    room_count: number;
+    eventCount: number;
+    roomCount: number;
 }
 
 /**
@@ -130,6 +130,10 @@ export default abstract class BaseEventIndexManager {
     }
 
     async deleteEvent(eventId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    async isEventIndexEmpty(): Promise<boolean> {
         throw new Error("Unimplemented");
     }
 

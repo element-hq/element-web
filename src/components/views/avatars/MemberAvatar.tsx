@@ -68,8 +68,8 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
             let imageUrl = null;
             if (props.member.getMxcAvatarUrl()) {
                 imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
-                    Math.floor(props.width * window.devicePixelRatio),
-                    Math.floor(props.height * window.devicePixelRatio),
+                    props.width,
+                    props.height,
                     props.resizeMethod,
                 );
             }
