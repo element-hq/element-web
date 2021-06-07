@@ -50,6 +50,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
                     showUrlPreview={false}
                     tileShape="notif"
                     empty={emptyState}
+                    alwaysShowTimestamps={true}
                 />
             );
         } else {
