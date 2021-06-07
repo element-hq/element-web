@@ -368,7 +368,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
             const sender = (
                 <div className="mx_ImageView_info_sender">
-                    {senderName}
+                    { senderName }
                 </div>
             );
             const messageTimestamp = (
@@ -395,10 +395,10 @@ export default class ImageView extends React.Component<IProps, IState> {
 
             info = (
                 <div className="mx_ImageView_info_wrapper">
-                    {avatar}
+                    { avatar }
                     <div className="mx_ImageView_info">
-                        {sender}
-                        {messageTimestamp}
+                        { sender }
+                        { messageTimestamp }
                     </div>
                 </div>
             );
@@ -438,7 +438,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <AccessibleTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_zoomIn"
                     title={_t("Zoom in")}
-                    onClick={ this.onZoomInClick }>
+                    onClick={this.onZoomInClick}>
                 </AccessibleTooltipButton>
             );
         }
@@ -454,7 +454,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 ref={this.focusLock}
             >
                 <div className="mx_ImageView_panel">
-                    {info}
+                    { info }
                     <div className="mx_ImageView_toolbar">
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_rotateCCW"
@@ -466,20 +466,20 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("Rotate Right")}
                             onClick={this.onRotateClockwiseClick}>
                         </AccessibleTooltipButton>
-                        {zoomOutButton}
-                        {zoomInButton}
+                        { zoomOutButton }
+                        { zoomInButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
                             title={_t("Download")}
                             onClick={ this.onDownloadClick }>
                         </AccessibleTooltipButton>
-                        {contextMenuButton}
+                        { contextMenuButton }
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
                             title={_t("Close")}
                             onClick={ this.props.onFinished }>
                         </AccessibleTooltipButton>
-                        {this.renderContextMenu()}
+                        { this.renderContextMenu() }
                     </div>
                 </div>
                 <div
