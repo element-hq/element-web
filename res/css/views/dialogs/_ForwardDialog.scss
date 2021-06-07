@@ -49,6 +49,11 @@ limitations under the License.
         .mx_EventTile_e2eIcon_unencrypted {
             display: none;
         }
+
+        // We also hide download links to not encourage users to try interacting
+        .mx_MFileBody_download {
+            display: none;
+        }
     }
 
     > hr {
