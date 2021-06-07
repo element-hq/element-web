@@ -146,12 +146,10 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
-                <div className="mx_SenderProfile_hover">
-                    { displayNameElement }
-                    { mxidElement }
-                    { flair }
-                </div>
+            <div className="mx_SenderProfile mx_SenderProfile_hover" dir="auto" onClick={this.props.onClick}>
+                { displayNameElement }
+                { mxidElement }
+                { flair }
             </div>
         );
     }
