@@ -69,6 +69,7 @@ export default abstract class Exporter {
 
             prevToken = res.end;
         }
+        //Reverse the events so that we preserve the order
         events = events.reverse();
 
         const decryptionPromises = events
@@ -83,9 +84,7 @@ export default abstract class Exporter {
         //Wait for all the events to get decrypted.
         await Promise.all(decryptionPromises);
 
-        events.map((event) => {
-            return this.setEventMetadata(event);
-        })
+        for (let i = 0; i < events.length; i++) this.setEventMetadata(events[i]);
 
         return events;
     }
