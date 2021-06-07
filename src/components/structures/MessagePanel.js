@@ -616,10 +616,6 @@ export default class MessagePanel extends React.Component {
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
 
-        // we can't use local echoes as scroll tokens, because their event IDs change.
-        // Local echos have a send "status".
-        const scrollToken = mxEv.status ? undefined : eventId;
-
         const readReceipts = this._readReceiptsByEvent[eventId];
 
         let isLastSuccessful = false;
@@ -651,7 +647,6 @@ export default class MessagePanel extends React.Component {
             <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>
                 <EventTile
                     as="li"
-                    data-scroll-tokens={scrollToken}
                     ref={this._collectEventNode.bind(this, eventId)}
                     alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                     mxEvent={mxEv}
