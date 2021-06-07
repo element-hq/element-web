@@ -124,11 +124,11 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         const rotation = inputRotation || this.state.rotation;
 
-        const landscape = rotation % 180 === 0;
+        const imageIsNotFlipped = rotation % 180 === 0;
 
         // If the image is rotated take it into account
-        const width = landscape ? image.naturalWidth : image.naturalHeight;
-        const height = landscape ? image.naturalHeight : image.naturalWidth;
+        const width = imageIsNotFlipped ? image.naturalWidth : image.naturalHeight;
+        const height = imageIsNotFlipped ? image.naturalHeight : image.naturalWidth;
 
         const zoomX = imageWrapper.clientWidth / width;
         const zoomY = imageWrapper.clientHeight / height;
