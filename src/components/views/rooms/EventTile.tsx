@@ -644,7 +644,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            return (<span className="mx_EventTile_readAvatars" />);
+            return null;
         }
 
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
@@ -1346,11 +1346,15 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
             tooltip = <Tooltip className="mx_EventTile_readAvatars_receiptTooltip" label={label} yOffset={20} />;
         }
 
-        return <span className="mx_EventTile_readAvatars">
-            <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                {nonCssBadge}
-                {tooltip}
-            </span>
-        </span>;
+        return (
+            <div className="mx_EventTile_msgOption">
+                <span className="mx_EventTile_readAvatars">
+                    <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
+                        {nonCssBadge}
+                        {tooltip}
+                    </span>
+                </span>
+            </div>
+        );
     }
 }

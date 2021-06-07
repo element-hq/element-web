@@ -126,7 +126,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             if (membership === EffectiveMembership.Invite) {
                 try {
                     const path = utils.encodeUri("/rooms/$roomId/group_info", {$roomId: room.roomId});
-                    const profile = await this.matrixClient._http.authedRequest(
+                    const profile = await this.matrixClient.http.authedRequest(
                         undefined, "GET", path,
                         undefined, undefined,
                         {prefix: "/_matrix/client/unstable/im.vector.custom"});

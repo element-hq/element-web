@@ -90,7 +90,7 @@ export function createTestClient() {
         }),
 
         // Used by various internal bits we aren't concerned with (yet)
-        _sessionStore: {
+        sessionStore: {
             store: {
                 getItem: jest.fn(),
             },
