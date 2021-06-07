@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,35 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
+import { Room } from 'matrix-js-sdk/src/models/room';
+
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
-import { EventStatus } from 'matrix-js-sdk/src/models/event';
 
 export default class Resend {
-    static resendUnsentEvents(room) {
-        return Promise.all(room.getPendingEvents().filter(function(ev) {
+    static resendUnsentEvents(room: Room): Promise<void[]> {
+        return Promise.all(room.getPendingEvents().filter(function(ev: MatrixEvent) {
             return ev.status === EventStatus.NOT_SENT;
-        }).map(function(event) {
+        }).map(function(event: MatrixEvent) {
             return Resend.resend(event);
         }));
     }
 
-    static cancelUnsentEvents(room) {
-        room.getPendingEvents().filter(function(ev) {
+    static cancelUnsentEvents(room: Room): void {
+        room.getPendingEvents().filter(function(ev: MatrixEvent) {
             return ev.status === EventStatus.NOT_SENT;
-        }).forEach(function(event) {
+        }).forEach(function(event: MatrixEvent) {
             Resend.removeFromQueue(event);
         });
     }
 
-    static resend(event) {
+    static resend(event: MatrixEvent): Promise<void> {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
         return MatrixClientPeg.get().resendEvent(event, room).then(function(res) {
             dis.dispatch({
                 action: 'message_sent',
                 event: event,
             });
-        }, function(err) {
+        }, function(err: Error) {
             // XXX: temporary logging to try to diagnose
             // https://github.com/vector-im/element-web/issues/3148
             console.log('Resend got send failure: ' + err.name + '(' + err + ')');
@@ -55,7 +56,7 @@ export default class Resend {
         });
     }
 
-    static removeFromQueue(event) {
+    static removeFromQueue(event: MatrixEvent): void {
         MatrixClientPeg.get().cancelPendingEvent(event);
     }
 }
