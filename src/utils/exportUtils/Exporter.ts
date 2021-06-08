@@ -69,7 +69,7 @@ export default abstract class Exporter {
 
             prevToken = res.end;
         }
-        //Reverse the events so that we preserve the order
+        // Reverse the events so that we preserve the order
         events = events.reverse();
 
         const decryptionPromises = events
