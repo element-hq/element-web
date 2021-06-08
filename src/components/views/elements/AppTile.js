@@ -353,7 +353,7 @@ export default class AppTile extends React.Component {
         if (this._sgWidget === null) {
             appTileBody = (
                 <div className={appTileBodyClass} style={appTileBodyStyles}>
-                    <AppWarning errorMsg="Error loading Widget" />
+                    <AppWarning errorMsg={_t("Error loading Widget")} />
                 </div>
             );
         } else if (!this.state.hasPermissionToLoad) {
@@ -380,7 +380,7 @@ export default class AppTile extends React.Component {
             if (this.isMixedContent()) {
                 appTileBody = (
                     <div className={appTileBodyClass} style={appTileBodyStyles}>
-                        <AppWarning errorMsg="Error - Mixed content" />
+                        <AppWarning errorMsg={_t("Error - Mixed content")} />
                     </div>
                 );
             } else {
