@@ -76,7 +76,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
 
     private upgradeRoom = (e) => {
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, {room: room});
+        Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room });
     };
 
     private openDevtools = (e) => {
@@ -143,7 +143,9 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{_t("Room information")}</span>
+                    <span className='mx_SettingsTab_subheading'>
+                        { room?.isSpaceRoom() ? _t("Space information") : _t("Room information") }
+                    </span>
                     <div>
                         <span>{_t("Internal room ID:")}</span>&nbsp;
                         { this.props.roomId }
