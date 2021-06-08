@@ -417,6 +417,8 @@ export default class AppTile extends React.Component {
                     onFinished={this._closeContextMenu}
                     showUnpin={!this.props.userWidget}
                     userWidget={this.props.userWidget}
+                    onEditClick={this.props.onEditClick}
+                    onDeleteClick={this.props.onDeleteClick}
                 />
             );
         }
