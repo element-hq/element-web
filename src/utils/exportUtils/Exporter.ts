@@ -81,7 +81,7 @@ export default abstract class Exporter {
                 });
             });
 
-        //Wait for all the events to get decrypted.
+        // Wait for all the events to get decrypted.
         await Promise.all(decryptionPromises);
 
         for (let i = 0; i < events.length; i++) this.setEventMetadata(events[i]);
