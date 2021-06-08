@@ -1925,6 +1925,8 @@
     "Widgets do not use message encryption.": "Widgets do not use message encryption.",
     "Widget added by": "Widget added by",
     "This widget may use cookies.": "This widget may use cookies.",
+    "Error loading Widget": "Error loading Widget",
+    "Error - Mixed content": "Error - Mixed content",
     "Popout widget": "Popout widget",
     "Use the <a>Desktop app</a> to see all encrypted files": "Use the <a>Desktop app</a> to see all encrypted files",
     "Use the <a>Desktop app</a> to search encrypted messages": "Use the <a>Desktop app</a> to search encrypted messages",
