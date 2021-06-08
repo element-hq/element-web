@@ -80,7 +80,7 @@ interface IProps {
     canSetCanonicalAlias: boolean;
     canSetAliases: boolean;
     canonicalAliasEvent?: MatrixEvent;
-    aliasEvents?: MatrixEvent[];
+    hidePublishSetting?: boolean;
 }
 
 interface IState {
@@ -99,7 +99,6 @@ export default class AliasSettings extends React.Component<IProps, IState> {
     static defaultProps = {
         canSetAliases: false,
         canSetCanonicalAlias: false,
-        aliasEvents: [],
     };
 
     constructor(props) {
@@ -317,7 +316,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
     }
 
     render() {
-        const localDomain = MatrixClientPeg.get().getDomain();
+        const cli = MatrixClientPeg.get();
+        const localDomain = cli.getDomain();
+        const isSpaceRoom = cli.getRoom(this.props.roomId)?.isSpaceRoom();
 
         let found = false;
         const canonicalValue = this.state.canonicalAlias || "";
@@ -363,7 +364,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 canEdit={this.props.canSetAliases}
                 onItemAdded={this.onLocalAliasAdded}
                 onItemRemoved={this.onLocalAliasDeleted}
-                noItemsLabel={_t('This room has no local addresses')}
+                noItemsLabel={isSpaceRoom
+                    ? _t("This space has no local addresses")
+                    : _t("This room has no local addresses")}
                 placeholder={_t('Local address')}
                 domain={localDomain}
             />);
@@ -372,10 +375,20 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         return (
             <div className='mx_AliasSettings'>
                 <span className='mx_SettingsTab_subheading'>{_t("Published Addresses")}</span>
-                <p>{_t("Published addresses can be used by anyone on any server to join your room. " +
-                    "To publish an address, it needs to be set as a local address first.")}</p>
-                {canonicalAliasSection}
-                <RoomPublishSetting roomId={this.props.roomId} canSetCanonicalAlias={this.props.canSetCanonicalAlias} />
+                <p>
+                    { isSpaceRoom
+                        ? _t("Published addresses can be used by anyone on any server to join your space.")
+                        : _t("Published addresses can be used by anyone on any server to join your room.")}
+                    &nbsp;
+                    { _t("To publish an address, it needs to be set as a local address first.") }
+                </p>
+                { canonicalAliasSection }
+                { this.props.hidePublishSetting
+                    ? null
+                    : <RoomPublishSetting
+                        roomId={this.props.roomId}
+                        canSetCanonicalAlias={this.props.canSetCanonicalAlias}
+                    /> }
                 <datalist id="mx_AliasSettings_altRecommendations">
                     {this.getLocalNonAltAliases().map(alias => {
                         return <option value={alias} key={alias} />;
@@ -399,7 +412,10 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     { _t("Local Addresses") }
                 </span>
                 <p>
-                    { _t("Set addresses for this room so users can find this room " +
+                    { isSpaceRoom
+                        ? _t("Set addresses for this space so users can find this space " +
+                            "through your homeserver (%(localDomain)s)", { localDomain })
+                        : _t("Set addresses for this room so users can find this room " +
                         "through your homeserver (%(localDomain)s)", { localDomain }) }
                 </p>
                 <details onToggle={this.onLocalAliasesToggled}>
