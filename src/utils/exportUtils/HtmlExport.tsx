@@ -23,16 +23,20 @@ import exportCSS from "./exportCSS";
 import exportJS from "./exportJS";
 import exportIcons from "./exportIcons";
 import { exportTypes } from "./exportUtils";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { MatrixClient } from "matrix-js-sdk";
 
 export default class HTMLExporter extends Exporter {
     protected zip: JSZip;
     protected avatars: Map<string, boolean>;
     protected permalinkCreator: RoomPermalinkCreator;
+    protected matrixClient: MatrixClient;
 
     constructor(room: Room, exportType: exportTypes, numberOfEvents?: number) {
         super(room, exportType, numberOfEvents);
         this.zip = new JSZip();
         this.avatars = new Map<string, boolean>();
+        this.matrixClient = MatrixClientPeg.get();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
         window.addEventListener("beforeunload", this.onBeforeUnload)
     }
@@ -214,7 +218,7 @@ export default class HTMLExporter extends Exporter {
 
     protected getDateSeparator(event: MatrixEvent) {
         const ts = event.getTs();
-        const dateSeparator = <li key={ts}><DateSeparator isExporting={true} key={ts} ts={ts} /></li>;
+        const dateSeparator = <li key={ts}><DateSeparator forExport={true} key={ts} ts={ts} /></li>;
         return renderToStaticMarkup(dateSeparator);
     }
 
@@ -258,30 +262,32 @@ export default class HTMLExporter extends Exporter {
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
 
         return <li className="mx_Export_EventWrapper" id={mxEv.getId()}>
-            <EventTile
-                mxEvent={mxEv}
-                continuation={continuation}
-                isRedacted={mxEv.isRedacted()}
-                replacingEventId={mxEv.replacingEventId()}
-                isExporting={true}
-                readReceipts={null}
-                readReceiptMap={null}
-                showUrlPreview={false}
-                checkUnmounting={() => false}
-                isTwelveHour={false}
-                last={false}
-                mediaSrc={mediaSrc}
-                avatarSrc={hasAvatar ? `users/${mxEv.sender.userId}` : null}
-                lastInSection={false}
-                permalinkCreator={this.permalinkCreator}
-                lastSuccessful={false}
-                isSelectedEvent={false}
-                getRelationsForEvent={null}
-                showReactions={false}
-                layout={Layout.Group}
-                enableFlair={false}
-                showReadReceipts={false}
-            />
+            <MatrixClientContext.Provider value = {this.matrixClient}>
+                <EventTile
+                    mxEvent={mxEv}
+                    continuation={continuation}
+                    isRedacted={mxEv.isRedacted()}
+                    replacingEventId={mxEv.replacingEventId()}
+                    forExport={true}
+                    readReceipts={null}
+                    readReceiptMap={null}
+                    showUrlPreview={false}
+                    checkUnmounting={() => false}
+                    isTwelveHour={false}
+                    last={false}
+                    mediaSrc={mediaSrc}
+                    avatarSrc={hasAvatar ? `users/${mxEv.sender.userId}` : null}
+                    lastInSection={false}
+                    permalinkCreator={this.permalinkCreator}
+                    lastSuccessful={false}
+                    isSelectedEvent={false}
+                    getRelationsForEvent={null}
+                    showReactions={false}
+                    layout={Layout.Group}
+                    enableFlair={false}
+                    showReadReceipts={false}
+                />
+            </MatrixClientContext.Provider>
         </li>
     }
 

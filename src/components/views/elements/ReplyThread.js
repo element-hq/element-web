@@ -46,7 +46,7 @@ export default class ReplyThread extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
         // Specifies which layout to use.
         layout: LayoutPropType,
-        isExporting: PropTypes.bool,
+        forExport: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -69,7 +69,7 @@ export default class ReplyThread extends React.Component {
 
         this.unmounted = false;
 
-        if (this.props.isExporting) return;
+        if (this.props.forExport) return;
 
         this.context.on("Event.replaced", this.onEventReplaced);
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
@@ -216,13 +216,13 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, isExporting) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, forExport) {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return null;
         }
         return <ReplyThread
             parentEv={parentEv}
-            isExporting={isExporting}
+            forExport={forExport}
             onHeightChanged={onHeightChanged}
             ref={ref}
             permalinkCreator={permalinkCreator}
@@ -367,7 +367,7 @@ export default class ReplyThread extends React.Component {
                     })
                 }
             </blockquote>;
-        } else if (this.props.isExporting) {
+        } else if (this.props.forExport) {
             const eventId = ReplyThread.getParentEventId(this.props.parentEv);
             header = <p style={{ marginTop: -5, marginBottom: 5 }}>
                 In reply to <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}>this message</a>

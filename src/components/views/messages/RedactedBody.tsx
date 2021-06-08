@@ -21,17 +21,14 @@ import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     mxEvent: MatrixEvent;
-    isExporting: boolean;
+    forExport: boolean;
 }
 
-const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, isExporting}, ref) => {
-    let cli: MatrixClient = useContext(MatrixClientContext);
-    // As context doesn't propagate during export, we'll have to explicitly declare
-    if (isExporting) cli = MatrixClientPeg.get();
+const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, forExport}, ref) => {
+    const cli: MatrixClient = useContext(MatrixClientContext);
     let text = _t("Message deleted");
     const unsigned = mxEvent.getUnsigned();
     const redactedBecauseUserId = unsigned && unsigned.redacted_because && unsigned.redacted_because.sender;
@@ -47,7 +44,7 @@ const RedactedBody = React.forwardRef<any, IProps>(({mxEvent, isExporting}, ref)
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>
-            { isExporting ? <img alt="Redacted" className="mx_export_trash_icon" src="icons/trash.svg" /> : null }
+            { forExport ? <img alt="Redacted" className="mx_export_trash_icon" src="icons/trash.svg" /> : null }
             { text }
         </span>
     );

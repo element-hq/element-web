@@ -249,7 +249,7 @@ interface IProps {
     // for now.
     tileShape?: 'notif' | 'file_grid' | 'reply' | 'reply_preview';
 
-    isExporting?: boolean;
+    forExport?: boolean;
 
     // Used while exporting to refer to the local source rather than the online one
     mediaSrc?: string;
@@ -320,7 +320,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
         onHeightChanged: function() {},
-        isExporting: false,
+        forExport: false,
     };
 
     static contextType = MatrixClientContext;
@@ -427,8 +427,6 @@ export default class EventTile extends React.Component<IProps, IState> {
     // TODO: [REACT-WARNING] Move into constructor
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
-        // Context isn't propagated through renderToStaticMarkup so we'll have to explicitly set it during export
-        if (this.props.isExporting) this.context = MatrixClientPeg.get();
         this.verifyEvent(this.props.mxEvent);
     }
 
@@ -631,7 +629,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     shouldHighlight() {
-        if (this.props.isExporting) return false;
+        if (this.props.forExport) return false;
         const actions = this.context.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
@@ -981,7 +979,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         const MessageActionBar = sdk.getComponent('messages.MessageActionBar');
-        const showMessageActionBar = !isEditing && !this.props.isExporting;
+        const showMessageActionBar = !isEditing && !this.props.forExport;
         const actionBar = showMessageActionBar ? <MessageActionBar
             mxEvent={this.props.mxEvent}
             reactions={this.state.reactions}
@@ -1155,7 +1153,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.permalinkCreator,
                     this.replyThread,
                     this.props.layout,
-                    this.props.isExporting,
+                    this.props.forExport,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
@@ -1179,7 +1177,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             { thread }
                             <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
-                                isExporting={this.props.isExporting}
+                                forExport={this.props.forExport}
                                 replacingEventId={this.props.replacingEventId}
                                 editState={this.props.editState}
                                 mediaSrc={this.props.mediaSrc}

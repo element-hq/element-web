@@ -10,6 +10,7 @@ export enum exportFormats {
 export enum exportTypes {
     TIMELINE = "TIMELINE",
     BEGINNING = "BEGINNING",
+    START_DATE = "START_DATE",
     LAST_N_MESSAGES = "LAST_N_MESSAGES",
 }
 
@@ -17,11 +18,11 @@ const exportConversationalHistory = async (
     room: Room,
     format: string,
     exportType: exportTypes,
-    numberOfEvents?: number,
+    exportTypeMetadata?: number,
 ) => {
     switch (format) {
         case exportFormats.HTML:
-            await new HTMLExporter(room, exportType, numberOfEvents).export();
+            await new HTMLExporter(room, exportType, exportTypeMetadata).export();
             break;
         case exportFormats.JSON:
             break;
