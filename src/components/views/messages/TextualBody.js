@@ -262,6 +262,7 @@ export default class TextualBody extends React.Component {
 
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
+                nextProps.mxEvent !== this.props.mxEvent ||
                 nextProps.highlights !== this.props.highlights ||
                 nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
