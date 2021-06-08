@@ -26,8 +26,8 @@ export default abstract class Exporter {
         // Clone and reverse the events so that we preserve the order
         arrayFastClone(events)
             .reverse()
-            .forEach(event => {
-                cli.decryptEventIfNeeded(event);
+            .forEach(async (event) => {
+                await cli.decryptEventIfNeeded(event);
             });
 
         return events;

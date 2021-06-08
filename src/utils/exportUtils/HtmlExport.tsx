@@ -34,6 +34,12 @@ export default class HTMLExporter extends Exporter {
         this.zip = new JSZip();
         this.avatars = new Map<string, boolean>();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
+        window.addEventListener("beforeunload", this.onBeforeUnload)
+    }
+
+    protected onBeforeUnload = (e: BeforeUnloadEvent) => {
+        e.preventDefault();
+        return e.returnValue = "Are you sure you want to exit during this export?";
     }
 
     protected async getRoomAvatar() {
@@ -311,12 +317,21 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export() {
+        console.info("Starting export process...");
+        console.info("Fetching events...");
+        const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
+        const fetchEnd = performance.now();
+
+        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000} s`);
+        console.info("Creating HTML...");
+
         const html = await this.createHTML(res);
 
         this.zip.file("index.html", html);
         this.zip.file("css/style.css", exportCSS);
         this.zip.file("js/script.js", exportJS);
+
 
         for (const iconName in exportIcons) {
             this.zip.file(`icons/${iconName}`, exportIcons[iconName]);
@@ -324,9 +339,13 @@ export default class HTMLExporter extends Exporter {
 
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
+        console.info("HTML creation successful!");
+        console.info("Generating a ZIP...");
         //Generate the zip file asynchronously
         const blob = await this.zip.generateAsync({ type: "blob" });
 
+        console.log("ZIP generated successfully");
+        console.info("Writing to file system...")
         //Support for firefox browser
         streamSaver.WritableStream = ponyfill.WritableStream
         //Create a writable stream to the directory
@@ -352,7 +371,9 @@ export default class HTMLExporter extends Exporter {
             await waiter;
         }
         await writer.close();
-
+        const exportEnd = performance.now();
+        console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        window.removeEventListener("beforeunload", this.onBeforeUnload);
         return blob;
     }
 }
