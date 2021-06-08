@@ -59,7 +59,6 @@ import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
-import ForwardMessage from "../views/rooms/ForwardMessage";
 import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
@@ -136,7 +135,6 @@ export interface IState {
     // Whether to highlight the event scrolled to
     isInitialEventHighlighted?: boolean;
     replyToEvent?: MatrixEvent;
-    forwardingEvent?: MatrixEvent;
     numUnreadMessages: number;
     draggingFile: boolean;
     searching: boolean;
@@ -323,7 +321,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             initialEventId: RoomViewStore.getInitialEventId(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             replyToEvent: RoomViewStore.getQuotingEvent(),
-            forwardingEvent: RoomViewStore.getForwardingEvent(),
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
@@ -1410,18 +1407,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         dis.dispatch({ action: "open_room_settings" });
     };
 
-    private onCancelClick = () => {
-        console.log("updateTint from onCancelClick");
-        this.updateTint();
-        if (this.state.forwardingEvent) {
-            dis.dispatch({
-                action: 'forward_event',
-                event: null,
-            });
-        }
-        dis.fire(Action.FocusComposer);
-    };
-
     private onAppsClick = () => {
         dis.dispatch({
             action: "appsDrawer",
@@ -1837,11 +1822,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         let aux = null;
         let previewBar;
-        let hideCancel = false;
-        if (this.state.forwardingEvent) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
-        } else if (this.state.searching) {
-            hideCancel = true; // has own cancel
+        if (this.state.searching) {
             aux = <SearchBar
                 searchInProgress={this.state.searchInProgress}
                 onCancelClick={this.onCancelSearchClick}
@@ -1850,7 +1831,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
-            hideCancel = true;
         } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -1859,7 +1839,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 inviterName = this.props.oobData.inviterName;
             }
             const invitedEmail = this.props.threepidInvite?.toEmail;
-            hideCancel = true;
             previewBar = (
                 <RoomPreviewBar
                     onJoinClick={this.onJoinButtonClicked}
@@ -1977,11 +1956,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             hideMessagePanel = true;
         }
 
-        const shouldHighlight = this.state.isInitialEventHighlighted;
         let highlightedEventId = null;
-        if (this.state.forwardingEvent) {
-            highlightedEventId = this.state.forwardingEvent.getId();
-        } else if (shouldHighlight) {
+        if (this.state.isInitialEventHighlighted) {
             highlightedEventId = this.state.initialEventId;
         }
 
@@ -2070,7 +2046,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                             inRoom={myMembership === 'join'}
                             onSearchClick={this.onSearchClick}
                             onSettingsClick={this.onSettingsClick}
-                            onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
