@@ -20,8 +20,11 @@ import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 import { useEventEmitter } from "./useEventEmitter";
 
+type Mapper<T> = (roomState: RoomState) => T;
+const defaultMapper: Mapper<RoomState> = (roomState: RoomState) => roomState;
+
 // Hook to simplify watching Matrix Room state
-export const useRoomState = <T extends any>(room: Room, mapper: (state: RoomState) => T): T => {
+export const useRoomState = <T extends any = RoomState>(room: Room, mapper: Mapper<T> = defaultMapper): T => {
     const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);
 
     const update = useCallback(() => {
