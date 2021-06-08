@@ -57,7 +57,6 @@ const useLocalEcho = <T extends any>(
 };
 
 const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
-    const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
 
     const userId = cli.getUserId();
