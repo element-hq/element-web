@@ -8,7 +8,7 @@ import { exportTypes } from "./exportUtils";
 export default abstract class Exporter {
     protected constructor(protected room: Room, protected exportType: exportTypes, protected numberOfEvents?: number) {}
 
-    protected getTimelineConversation = () : MatrixEvent[] => {
+    protected getTimelineConversation = (): MatrixEvent[] => {
         if (!this.room) return;
 
         const cli = MatrixClientPeg.get();
