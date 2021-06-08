@@ -47,6 +47,10 @@ export default class ReplyThread extends React.Component {
         // Specifies which layout to use.
         layout: LayoutPropType,
         forExport: PropTypes.bool,
+
+        // Whether to always show a timestamp
+        alwaysShowTimestamps: PropTypes.bool,
+
     };
 
     static contextType = MatrixClientContext;
@@ -216,7 +220,7 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, forExport) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, forExport, alwaysShowTimestamps) {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return null;
         }
@@ -227,6 +231,7 @@ export default class ReplyThread extends React.Component {
             ref={ref}
             permalinkCreator={permalinkCreator}
             layout={layout}
+            alwaysShowTimestamps={alwaysShowTimestamps}
         />;
     }
 
@@ -396,6 +401,7 @@ export default class ReplyThread extends React.Component {
                     isRedacted={ev.isRedacted()}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     layout={this.props.layout}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                     replacingEventId={ev.replacingEventId()}
                 />

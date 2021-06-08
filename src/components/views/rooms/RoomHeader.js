@@ -22,7 +22,6 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
-import { CancelButton } from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
@@ -44,7 +43,6 @@ export default class RoomHeader extends React.Component {
         onSettingsClick: PropTypes.func,
         onSearchClick: PropTypes.func,
         onLeaveClick: PropTypes.func,
-        onCancelClick: PropTypes.func,
         e2eStatus: PropTypes.string,
         onAppsClick: PropTypes.func,
         appsShown: PropTypes.bool,
@@ -54,7 +52,6 @@ export default class RoomHeader extends React.Component {
     static defaultProps = {
         editing: false,
         inRoom: false,
-        onCancelClick: null,
     };
 
     componentDidMount() {
@@ -90,11 +87,6 @@ export default class RoomHeader extends React.Component {
 
     render() {
         let searchStatus = null;
-        let cancelButton = null;
-
-        if (this.props.onCancelClick) {
-            cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
-        }
 
         // don't display the search count until the search completes and
         // gives us a valid (possibly zero) searchCount.
@@ -220,7 +212,6 @@ export default class RoomHeader extends React.Component {
                     <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
                     { name }
                     { topicElement }
-                    { cancelButton }
                     { rightRow }
                     <RoomHeaderButtons room={this.props.room} />
                 </div>
