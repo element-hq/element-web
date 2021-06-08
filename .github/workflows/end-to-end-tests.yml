@@ -1,0 +1,32 @@
+name: "end-to-end_tests"
+on: [push]
+jobs:
+    "end-to-end_tests":
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                shell: bash
+                working-directory: ${{ github.workspace }}
+        container:
+            image: vectorim/element-web-ci-e2etests-env:latest
+            env:
+                CI_PACKAGE: true
+                GITHUB_HEAD_REF: ${{ github.head_ref }}
+                GITHUB_BASE_REF: ${{ github.base_ref }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: End-to-End tests
+              run: ./scripts/ci/end-to-end-tests.sh
+            - name: Archive logs
+              uses: actions/upload-artifact@v2
+              with:
+                path: |
+                    test/end-to-end-tests/logs/**/*
+                    test/end-to-end-tests/synapse/installations/consent/homeserver.log
+                retention-days: 14
+            - name: Archive performance benchmark
+              uses: actions/upload-artifact@v2
+              with:
+                name: performance-entries.json
+                path: test/end-to-end-tests/performance-entries.json
