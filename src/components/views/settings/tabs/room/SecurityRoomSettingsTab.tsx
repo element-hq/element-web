@@ -29,19 +29,19 @@ import {UIFeature} from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 // Knock and private are reserved keywords which are not yet implemented.
-enum JoinRule {
+export enum JoinRule {
     Public = "public",
     Knock = "knock",
     Invite = "invite",
     Private = "private",
 }
 
-enum GuestAccess {
+export enum GuestAccess {
     CanJoin = "can_join",
     Forbidden = "forbidden",
 }
 
-enum HistoryVisibility {
+export enum HistoryVisibility {
     Invited = "invited",
     Joined = "joined",
     Shared = "shared",
