@@ -7,16 +7,7 @@ on:
 jobs:
     end-to-end:
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                shell: bash
-                working-directory: ${{ github.workspace }}
-        container:
-            image: vectorim/element-web-ci-e2etests-env:latest
-            env:
-                CI_PACKAGE: true
-                GITHUB_HEAD_REF: ${{ github.head_ref }}
-                GITHUB_BASE_REF: ${{ github.base_ref }}
+        container: vectorim/element-web-ci-e2etests-env:latest
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
