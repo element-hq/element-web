@@ -25,7 +25,7 @@ import {WIDGET_LAYOUT_EVENT_TYPE} from "./stores/widgets/WidgetLayoutStore";
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-function textForMemberEvent(ev) {
+function textForMemberEvent(ev): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender ? ev.sender.name : ev.getSender();
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
@@ -107,7 +107,7 @@ function textForMemberEvent(ev) {
     }
 }
 
-function textForTopicEvent(ev) {
+function textForTopicEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () => _t('%(senderDisplayName)s changed the topic to "%(topic)s".', {
         senderDisplayName,
@@ -115,7 +115,7 @@ function textForTopicEvent(ev) {
     });
 }
 
-function textForRoomNameEvent(ev) {
+function textForRoomNameEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
@@ -134,12 +134,12 @@ function textForRoomNameEvent(ev) {
     });
 }
 
-function textForTombstoneEvent(ev) {
+function textForTombstoneEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () => _t('%(senderDisplayName)s upgraded this room.', {senderDisplayName});
 }
 
-function textForJoinRulesEvent(ev) {
+function textForJoinRulesEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().join_rule) {
         case "public":
@@ -159,7 +159,7 @@ function textForJoinRulesEvent(ev) {
     }
 }
 
-function textForGuestAccessEvent(ev) {
+function textForGuestAccessEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().guest_access) {
         case "can_join":
@@ -175,7 +175,7 @@ function textForGuestAccessEvent(ev) {
     }
 }
 
-function textForRelatedGroupsEvent(ev) {
+function textForRelatedGroupsEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const groups = ev.getContent().groups || [];
     const prevGroups = ev.getPrevContent().groups || [];
@@ -205,7 +205,7 @@ function textForRelatedGroupsEvent(ev) {
     }
 }
 
-function textForServerACLEvent(ev) {
+function textForServerACLEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
     const current = ev.getContent();
@@ -235,7 +235,7 @@ function textForServerACLEvent(ev) {
     return getText;
 }
 
-function textForMessageEvent(ev) {
+function textForMessageEvent(ev): () => string | null {
     return () => {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
         let message = senderDisplayName + ': ' + ev.getContent().body;
@@ -248,7 +248,7 @@ function textForMessageEvent(ev) {
     };
 }
 
-function textForCanonicalAliasEvent(ev) {
+function textForCanonicalAliasEvent(ev): () => string | null {
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAlias = ev.getPrevContent().alias;
     const oldAltAliases = ev.getPrevContent().alt_aliases || [];
@@ -299,7 +299,7 @@ function textForCanonicalAliasEvent(ev) {
     });
 }
 
-function textForCallAnswerEvent(event) {
+function textForCallAnswerEvent(event): () => string | null {
     return () => {
         const senderName = event.sender ? event.sender.name : _t('Someone');
         const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
@@ -307,7 +307,7 @@ function textForCallAnswerEvent(event) {
     };
 }
 
-function textForCallHangupEvent(event) {
+function textForCallHangupEvent(event): () => string | null {
     const getSenderName = () => event.sender ? event.sender.name : _t('Someone');
     const eventContent = event.getContent();
     let getReason = () => "";
@@ -344,14 +344,14 @@ function textForCallHangupEvent(event) {
     return () => _t('%(senderName)s ended the call.', {senderName: getSenderName()}) + ' ' + getReason();
 }
 
-function textForCallRejectEvent(event) {
+function textForCallRejectEvent(event): () => string | null {
     return () => {
         const senderName = event.sender ? event.sender.name : _t('Someone');
         return _t('%(senderName)s declined the call.', {senderName});
     };
 }
 
-function textForCallInviteEvent(event) {
+function textForCallInviteEvent(event): () => string | null {
     const getSenderName = () => event.sender ? event.sender.name : _t('Someone');
     // FIXME: Find a better way to determine this from the event?
     let isVoice = true;
@@ -383,7 +383,7 @@ function textForCallInviteEvent(event) {
     }
 }
 
-function textForThreePidInviteEvent(event) {
+function textForThreePidInviteEvent(event): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
 
     if (!isValid3pidInvite(event)) {
@@ -399,7 +399,7 @@ function textForThreePidInviteEvent(event) {
     });
 }
 
-function textForHistoryVisibilityEvent(event) {
+function textForHistoryVisibilityEvent(event): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     switch (event.getContent().history_visibility) {
         case 'invited':
@@ -421,7 +421,7 @@ function textForHistoryVisibilityEvent(event) {
 }
 
 // Currently will only display a change if a user's power level is changed
-function textForPowerEvent(event) {
+function textForPowerEvent(event): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     if (!event.getPrevContent() || !event.getPrevContent().users ||
         !event.getContent() || !event.getContent().users) {
@@ -466,12 +466,12 @@ function textForPowerEvent(event) {
     });
 }
 
-function textForPinnedEvent(event) {
+function textForPinnedEvent(event): () => string | null {
     const senderName = event.sender ? event.sender.name : event.getSender();
     return () => _t("%(senderName)s changed the pinned messages for the room.", {senderName});
 }
 
-function textForWidgetEvent(event) {
+function textForWidgetEvent(event): () => string | null {
     const senderName = event.getSender();
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
@@ -501,12 +501,12 @@ function textForWidgetEvent(event) {
     }
 }
 
-function textForWidgetLayoutEvent(event) {
+function textForWidgetLayoutEvent(event): () => string | null {
     const senderName = event.sender?.name || event.getSender();
     return () => _t("%(senderName)s has updated the widget layout", {senderName});
 }
 
-function textForMjolnirEvent(event) {
+function textForMjolnirEvent(event): () => string | null {
     const senderName = event.getSender();
     const {entity: prevEntity} = event.getPrevContent();
     const {entity, recommendation, reason} = event.getContent();
@@ -593,7 +593,11 @@ function textForMjolnirEvent(event) {
         "for %(reason)s", {senderName, oldGlob: prevEntity, newGlob: entity, reason});
 }
 
-const handlers = {
+interface IHandlers {
+    [type: string]: (ev: any) => (() => string | null);
+}
+
+const handlers: IHandlers = {
     'm.room.message': textForMessageEvent,
     'm.call.invite': textForCallInviteEvent,
     'm.call.answer': textForCallAnswerEvent,
@@ -601,7 +605,7 @@ const handlers = {
     'm.call.reject': textForCallRejectEvent,
 };
 
-const stateHandlers = {
+const stateHandlers: IHandlers = {
     'm.room.canonical_alias': textForCanonicalAliasEvent,
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
@@ -626,12 +630,12 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-export function hasText(ev) {
+export function hasText(ev): boolean {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return Boolean(handler?.(ev));
 }
 
-export function textForEvent(ev) {
+export function textForEvent(ev): string {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return handler?.(ev)?.() || '';
 }
