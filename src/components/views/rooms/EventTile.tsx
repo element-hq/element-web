@@ -647,7 +647,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             // We currently must include `mx_EventTile_readAvatars` in the DOM
             // of all events, as it is the positioned parent of the animated
             // read receipts. We can't let it unmount when a receipt moves
-            // events, so for now we mount it for all events. With out it, the
+            // events, so for now we mount it for all events. Without it, the
             // animation will start from the top of the timeline (because it
             // lost its container).
             // See also https://github.com/vector-im/element-web/issues/17561
