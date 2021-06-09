@@ -439,6 +439,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
             activeSpace={this.state.activeSpace}
+            onResize={this.refreshStickyHeaders}
             onListCollapse={this.refreshStickyHeaders}
         />;
 
