@@ -644,7 +644,18 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            return null;
+            // We currently must include `mx_EventTile_readAvatars` in the DOM
+            // of all events, as it is the positioned parent of the animated
+            // read receipts. We can't let it unmount when a receipt moves
+            // events, so for now we mount it for all events. Without it, the
+            // animation will start from the top of the timeline (because it
+            // lost its container).
+            // See also https://github.com/vector-im/element-web/issues/17561
+            return (
+                <div className="mx_EventTile_msgOption">
+                    <span className="mx_EventTile_readAvatars" />
+                </div>
+            );
         }
 
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
@@ -652,11 +663,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const receiptOffset = 15;
         let left = 0;
 
-        const receipts = this.props.readReceipts || [];
-
-        if (receipts.length === 0) {
-            return null;
-        }
+        const receipts = this.props.readReceipts;
 
         for (let i = 0; i < receipts.length; ++i) {
             const receipt = receipts[i];
