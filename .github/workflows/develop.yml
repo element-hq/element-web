@@ -1,11 +1,11 @@
-name: "end-to-end_tests"
+name: Develop jobs
 on:
     push:
         branches: [develop]
     pull_request:
         branches: [develop]
 jobs:
-    "end-to-end_tests":
+    end-to-end:
         runs-on: ubuntu-latest
         defaults:
             run:
