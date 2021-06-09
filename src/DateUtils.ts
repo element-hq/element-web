@@ -138,19 +138,14 @@ export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): bo
 }
 
 export function formatFullDateNoDay(date: Date) {
-    return (
-        date.getFullYear() +
-        "-" +
-        pad(date.getMonth() + 1) +
-        "-" +
-        pad(date.getDate()) +
-        _t(" at ") +
-        pad(date.getHours()) +
-        "." +
-        pad(date.getMinutes()) +
-        "." +
-        pad(date.getSeconds())
-    );
+    return _t("%(year)s-%(month)s-%(day)s at %(hours)s.%(minutes)s.%(seconds)s", {
+        year: date.getFullYear(),
+        month: pad(date.getMonth() + 1),
+        day: pad(date.getDate()),
+        hours: pad(date.getHours()),
+        minutes: pad(date.getMinutes()),
+        seconds: pad(date.getSeconds()),
+    });
 }
 
 export function formatFullDateNoDayNoTime(date: Date) {

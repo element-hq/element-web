@@ -82,14 +82,36 @@ export default class HTMLExporter extends Exporter {
             creatorName,
         });
 
-        const exportedText = _t(`This is the start of export of <b>%(roomName)s</b>.
-         Exported by %(exporterDetails)s at %(exportDate)s. `, {
-             exportDate,
-             roomName: this.room.name,
-             exporterDetails: `<a href="https://matrix.to/#/${exporter}" target="_blank" rel="noopener noreferrer">
-                ${exporterName ? `<b>${ exporterName }</b>(${ exporter })` : `<b>${ exporter }</b>`}
-             </a>`,
-        });
+        const exportedText = renderToStaticMarkup(
+            <p>
+                {_t(
+                    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
+                    {
+                        exportDate,
+                    },
+                    {
+                        roomName: () => <b>{this.room.name}</b>,
+                        exporterDetails: () => (
+                            <a
+                                href={`https://matrix.to/#/${exporter}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {exporterName ? (
+                                    <>
+                                        <b>{exporterName}</b>
+                                        {exporter}
+                                    </>
+                                ) : (
+                                    <b>{exporter}</b>
+                                )}
+                            </a>
+                        ),
+                    },
+                )}
+            </p>,
+        );
+
 
         const topicText = topic ? _t("Topic: %(topic)s", { topic }) : "";
 
