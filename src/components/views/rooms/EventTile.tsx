@@ -663,11 +663,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const receiptOffset = 15;
         let left = 0;
 
-        const receipts = this.props.readReceipts || [];
-
-        if (receipts.length === 0) {
-            return null;
-        }
+        const receipts = this.props.readReceipts;
 
         for (let i = 0; i < receipts.length; ++i) {
             const receipt = receipts[i];
