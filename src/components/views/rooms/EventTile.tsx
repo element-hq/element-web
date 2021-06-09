@@ -25,7 +25,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
-import * as TextForEvent from "../../../TextForEvent";
+import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -1220,7 +1220,7 @@ export function haveTileForEvent(e: MatrixEvent): boolean {
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
-        return TextForEvent.textForEvent(e) !== '';
+        return hasText(e);
     } else if (handler === 'messages.RoomCreate') {
         return Boolean(e.getContent()['predecessor']);
     } else {
