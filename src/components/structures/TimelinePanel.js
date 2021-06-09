@@ -26,6 +26,7 @@ import {EventTimeline} from "matrix-js-sdk/src/models/event-timeline";
 import {TimelineWindow} from "matrix-js-sdk/src/timeline-window";
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
+import RoomContext from "../../contexts/RoomContext";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
@@ -120,7 +121,12 @@ class TimelinePanel extends React.Component {
 
         // which layout to use
         layout: LayoutPropType,
+
+        // whether to always show timestamps for an event
+        alwaysShowTimestamps: PropTypes.bool,
     }
+
+    static contextType = RoomContext;
 
     // a map from room id to read marker event timestamp
     static roomReadMarkerTsMap = {};
@@ -1285,7 +1291,7 @@ class TimelinePanel extends React.Component {
 
             const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev);
+            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1440,7 +1446,7 @@ class TimelinePanel extends React.Component {
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
                 isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.state.alwaysShowTimestamps}
+                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
