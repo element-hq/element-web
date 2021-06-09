@@ -172,7 +172,7 @@ export default class MImageBody extends React.Component {
     }
 
     _getContentUrl() {
-        if (this.props.mediaSrc) return this.props.mediaSrc;
+        if (this.props.forExport) return "forExport";
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
@@ -370,9 +370,9 @@ export default class MImageBody extends React.Component {
         let gifLabel = null;
 
         // e2e image hasn't been decrypted yet
-        if (!this.props.mediaSrc && content.file !== undefined && this.state.decryptedUrl === null) {
+        if (!this.props.forExport && content.file !== undefined && this.state.decryptedUrl === null) {
             placeholder = <InlineSpinner w={32} h={32} />;
-        } else if (!this.props.mediaSrc && !this.state.imgLoaded) {
+        } else if (!this.props.forExport && !this.state.imgLoaded) {
             // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
             placeholder = this.getPlaceholder();
         }
@@ -418,7 +418,7 @@ export default class MImageBody extends React.Component {
                     </div>
                 }
 
-                <div style={{display: this.props.mediaSrc ? "block" : !showPlaceholder ? undefined : 'none'}}>
+                <div style={{display: showPlaceholder ? 'none' : undefined}}>
                     { img }
                     { gifLabel }
                 </div>
@@ -450,7 +450,7 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     getFileBody() {
-        if (this.props.mediaSrc) return null;
+        if (this.props.forExport) return null;
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
@@ -468,7 +468,7 @@ export default class MImageBody extends React.Component {
 
         const contentUrl = this._getContentUrl();
         let thumbUrl;
-        if ((this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) || this.props.mediaSrc) {
+        if (this.props.forExport || (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos"))) {
             thumbUrl = contentUrl;
         } else {
             thumbUrl = this._getThumbUrl();

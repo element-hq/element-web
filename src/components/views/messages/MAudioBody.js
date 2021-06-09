@@ -42,7 +42,7 @@ export default class MAudioBody extends React.Component {
     }
 
     _getContentUrl() {
-        if (this.props.mediaSrc) return this.props.mediaSrc;
+        if (this.props.forExport) return "forExport";
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
@@ -52,7 +52,7 @@ export default class MAudioBody extends React.Component {
     }
 
     getFileBody() {
-        if (this.props.mediaSrc) return null;
+        if (this.props.forExport) return null;
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
@@ -95,7 +95,7 @@ export default class MAudioBody extends React.Component {
             );
         }
 
-        if (!this.props.mediaSrc && content.file !== undefined && this.state.decryptedUrl === null) {
+        if (!this.props.forExport && content.file !== undefined && this.state.decryptedUrl === null) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a 16x16 spinner.

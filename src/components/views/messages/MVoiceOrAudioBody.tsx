@@ -23,7 +23,7 @@ import MVoiceMessageBody from "./MVoiceMessageBody";
 
 interface IProps {
     mxEvent: MatrixEvent;
-    mediaSrc?: string;
+    forExport?: boolean;
 }
 
 @replaceableComponent("views.messages.MVoiceOrAudioBody")
@@ -31,7 +31,7 @@ export default class MVoiceOrAudioBody extends React.PureComponent<IProps> {
     public render() {
         const isVoiceMessage = !!this.props.mxEvent.getContent()['org.matrix.msc2516.voice'];
         const voiceMessagesEnabled = SettingsStore.getValue("feature_voice_messages");
-        if (isVoiceMessage && voiceMessagesEnabled && !this.props.mediaSrc) {
+        if (!this.props.forExport && isVoiceMessage && voiceMessagesEnabled) {
             return <MVoiceMessageBody {...this.props} />;
         } else {
             return <MAudioBody {...this.props} />;

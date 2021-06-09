@@ -34,10 +34,10 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     resizeMethod?: ResizeMethod;
     // The onClick to give the avatar
     onClick?: React.MouseEventHandler;
-    // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
+    // Whether the onClick of the avatar should be overridden to dispatch `Action.ViewUser`
     viewUserOnClick?: boolean;
     title?: string;
-    avatarSrc?: string;
+    forExport?: boolean;
 }
 
 interface IState {
@@ -68,7 +68,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     private static getState(props: IProps): IState {
         if (props.member?.name) {
             let imageUrl = null;
-            if (props.avatarSrc) imageUrl = props.avatarSrc;
+            if (props.forExport && props.member.getMxcAvatarUrl()) imageUrl = "AvatarForExport";
             else if (props.member.getMxcAvatarUrl()) {
                 imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
                     props.width,
@@ -95,7 +95,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
         let {member, fallbackUserId, onClick, viewUserOnClick, ...otherProps} = this.props;
         const userId = member ? member.userId : fallbackUserId;
 
-        otherProps = omit(otherProps, "avatarSrc");
+        otherProps = omit(otherProps, "forExport");
 
         if (viewUserOnClick) {
             onClick = () => {

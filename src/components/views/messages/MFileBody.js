@@ -102,8 +102,7 @@ export default class MFileBody extends React.Component {
         tileShape: PropTypes.string,
         /* whether or not to show the default placeholder for the file. Defaults to true. */
         showGenericPlaceholder: PropTypes.bool,
-        /* to set source to local file path during export */
-        mediaSrc: PropTypes.string,
+
         forExport: PropTypes.bool,
     };
 
@@ -152,6 +151,7 @@ export default class MFileBody extends React.Component {
     }
 
     _getContentUrl() {
+        if (this.props.forExport) return null;
         const media = mediaFromContent(this.props.mxEvent.getContent());
         return media.srcHttp;
     }
@@ -185,9 +185,9 @@ export default class MFileBody extends React.Component {
             );
         }
 
-        if (this.props.mediaSrc) {
+        if (this.props.forExport) {
             return <span className="mx_MFileBody">
-                <a href={this.props.mediaSrc}>
+                <a href="forExport">
                     { placeholder }
                 </a>
             </span>;

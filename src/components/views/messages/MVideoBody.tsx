@@ -30,7 +30,7 @@ interface IProps {
     /* called when the video has loaded */
     onHeightChanged: () => void;
     /* used to refer to the local file while exporting */
-    mediaSrc?: string;
+    forExport?: boolean;
 }
 
 interface IState {
@@ -78,7 +78,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     private getContentUrl(): string|null {
-        if (this.props.mediaSrc) return this.props.mediaSrc;
+        if (this.props.forExport) return "forExport";
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
@@ -94,7 +94,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
 
     private getThumbUrl(): string|null {
         // there's no need of thumbnail when the content is local
-        if (this.props.mediaSrc) return null;
+        if (this.props.forExport) return null;
 
         const content = this.props.mxEvent.getContent();
         const media = mediaFromContent(content);
@@ -191,7 +191,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     private getFileBody = () => {
-        if (this.props.mediaSrc) return null;
+        if (this.props.forExport) return null;
         return <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />;
     }
 
@@ -209,7 +209,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
         }
 
         // Important: If we aren't autoplaying and we haven't decrypted it yet, show a video with a poster.
-        if (!this.props.mediaSrc && content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
+        if (!this.props.forExport && content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.

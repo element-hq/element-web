@@ -257,11 +257,10 @@ export default class HTMLExporter extends Exporter {
     }
 
 
-    protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, mediaSrc?: string) {
+    protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
         const hasAvatar = this.hasAvatar(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
-
-        return <li className="mx_Export_EventWrapper" id={mxEv.getId()}>
+        const eventTile = <li className="mx_Export_EventWrapper" id={mxEv.getId()}>
             <MatrixClientContext.Provider value = {this.matrixClient}>
                 <EventTile
                     mxEvent={mxEv}
@@ -275,8 +274,6 @@ export default class HTMLExporter extends Exporter {
                     checkUnmounting={() => false}
                     isTwelveHour={false}
                     last={false}
-                    mediaSrc={mediaSrc}
-                    avatarSrc={hasAvatar ? `users/${mxEv.sender.userId}` : null}
                     lastInSection={false}
                     permalinkCreator={this.permalinkCreator}
                     lastSuccessful={false}
@@ -289,10 +286,16 @@ export default class HTMLExporter extends Exporter {
                 />
             </MatrixClientContext.Provider>
         </li>
+        let eventTileMarkup = renderToStaticMarkup(eventTile);
+        if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/, `$1"${filePath}"`);
+        if (hasAvatar) {
+            eventTileMarkup = eventTileMarkup.replace(/src="AvatarForExport"/, `src="users/${mxEv.sender.userId}"`);
+        }
+        return eventTileMarkup;
     }
 
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
-        let eventTile: JSX.Element;
+        let eventTile: string;
         const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"]
 
         if (mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype)) {
@@ -302,7 +305,7 @@ export default class HTMLExporter extends Exporter {
             this.zip.file(filePath, blob);
         } else eventTile = await this.getEventTile(mxEv, joined);
 
-        return renderToStaticMarkup(eventTile);
+        return eventTile;
     }
 
     protected async createHTML(events: MatrixEvent[]) {

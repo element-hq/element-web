@@ -251,12 +251,6 @@ interface IProps {
 
     forExport?: boolean;
 
-    // Used while exporting to refer to the local source rather than the online one
-    mediaSrc?: string;
-
-    // Used while exporting to refer to the local avatar rather than the online one
-    avatarSrc?: string;
-
     // show twelve hour timestamps
     isTwelveHour?: boolean;
 
@@ -963,7 +957,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             avatar = (
                 <div className="mx_EventTile_avatar">
                     <MemberAvatar
-                        avatarSrc={this.props.avatarSrc}
+                        forExport={this.props.forExport}
                         member={member}
                         width={avatarSize}
                         height={avatarSize}
@@ -1190,7 +1184,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 forExport={this.props.forExport}
                                 replacingEventId={this.props.replacingEventId}
                                 editState={this.props.editState}
-                                mediaSrc={this.props.mediaSrc}
                                 highlights={this.props.highlights}
                                 highlightLink={this.props.highlightLink}
                                 showUrlPreview={this.props.showUrlPreview}
