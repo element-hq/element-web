@@ -51,8 +51,20 @@ class WrappedMessagePanel extends React.Component {
     };
 
     render() {
+        const roomContext = {
+            room,
+            roomId: room.roomId,
+            canReact: true,
+            canReply: true,
+            showReadReceipts: true,
+            showRedactions: false,
+            showJoinLeaves: false,
+            showAvatarChanges: false,
+            showDisplaynameChanges: true,
+        };
+
         return <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ canReact: true, canReply: true, room, roomId: room.roomId }}>
+            <RoomContext.Provider value={roomContext}>
                 <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>;
