@@ -105,7 +105,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "%(year)s-%(month)s-%(day)s at %(hours)s.%(minutes)s.%(seconds)s": "%(year)s-%(month)s-%(day)s at %(hours)s.%(minutes)s.%(seconds)s",
+    "%(date)s at %(time)s": "%(date)s at %(time)s",
     "Who would you like to add to this community?": "Who would you like to add to this community?",
     "Warning: any person you add to a community will be publicly visible to anyone who knows the community ID": "Warning: any person you add to a community will be publicly visible to anyone who knows the community ID",
     "Invite new community members": "Invite new community members",
