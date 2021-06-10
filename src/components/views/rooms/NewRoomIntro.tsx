@@ -185,10 +185,12 @@ const NewRoomIntro = () => {
         });
     }
 
-    const sub2 = _t("Your private messages are normally encrypted, but this room isn't. "+
-    "Usually this is due to an unsupported device or method being used, " +
-    "like email invites. <a>Enable encryption in settings.</a>", {},
-    { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> });
+    const sub2 = _t(
+        "Your private messages are normally encrypted, but this room isn't. "+
+        "Usually this is due to an unsupported device or method being used, " +
+        "like email invites. <a>Enable encryption in settings.</a>", {},
+        { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> },
+    );
 
     return <div className="mx_NewRoomIntro">
 
