@@ -1,9 +1,10 @@
+/* eslint-disable quote-props */
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const webpack = require("webpack");
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
 
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
@@ -143,11 +144,11 @@ module.exports = (env, argv) => {
                 // overflows (https://github.com/webpack/webpack/issues/1721), and
                 // there is no need for webpack to parse them - they can just be
                 // included as-is.
-                /highlight\.js[\\\/]lib[\\\/]languages/,
+                /highlight\.js[\\/]lib[\\/]languages/,
 
                 // olm takes ages for webpack to process, and it's already heavily
                 // optimised, so there is little to gain by us uglifying it.
-                /olm[\\\/](javascript[\\\/])?olm\.js$/,
+                /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
                 {
