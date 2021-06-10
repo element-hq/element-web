@@ -185,9 +185,9 @@ const NewRoomIntro = () => {
         });
     }
 
-    const sub2 = _t("Your private messages are normally encrypted, but this room isn't." +
-    "Usually this is because the room was created with a device or method that doesn't support " +
-    "encryption, like email invites. <a>Enable encryption in settings.</a>", {},
+    const sub2 = _t("Your private messages are normally encrypted, but this room isn't. "+
+    "Usually this is due to an unsupported device or method being used, " +
+    "like email invites. <a>Enable encryption in settings.</a>", {},
     { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> });
 
     return <div className="mx_NewRoomIntro">
@@ -195,7 +195,7 @@ const NewRoomIntro = () => {
         { !hasExpectedEncryptionSettings(room) && (
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
-                title={_t("This room isn't end to end encrypted")}
+                title={_t("End-to-end encryption isn't enabled")}
                 subtitle={sub2}
             />
         )}
