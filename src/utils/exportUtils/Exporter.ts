@@ -56,12 +56,12 @@ export default abstract class Exporter {
         let events: MatrixEvent[] = [];
 
         while (limit) {
-            const eventsPerCrawl = Math.min(limit, 100);
+            const eventsPerCrawl = Math.min(limit, 1000);
             const res: any = await client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
 
             if (res.chunk.length === 0) break;
 
-            limit -= eventsPerCrawl;
+            limit -= res.chunk.length;
 
             const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
 
