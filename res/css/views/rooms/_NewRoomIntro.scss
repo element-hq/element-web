@@ -69,24 +69,4 @@ limitations under the License.
         font-size: $font-15px;
         color: $secondary-fg-color;
     }
-
-    .mx_NewRoomIntro_message:not(:first-child) {
-        padding-top: 1em;
-        margin-top: 1em;
-        border-top: 1px solid currentColor;
-    }
-
-    .mx_NewRoomIntro_message[role=alert]::before {
-        --size: 25px;
-        content: "!";
-        float: left;
-        border-radius: 50%;
-        width: var(--size);
-        height: var(--size);
-        line-height: var(--size);
-        text-align: center;
-        background: $button-danger-bg-color;
-        color: #fff;
-        margin-right: calc(var(--size) / 2);
-    }
 }
