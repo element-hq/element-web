@@ -32,7 +32,7 @@ import Matrix from 'matrix-js-sdk';
 const test_utils = require('../../test-utils');
 const mockclock = require('../../mock-clock');
 
-import Adapter from "enzyme-adapter-react-16";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
@@ -89,7 +89,7 @@ describe('MessagePanel', function() {
         DMRoomMap.makeShared();
     });
 
-    afterEach(function () {
+    afterEach(function() {
         clock.uninstall();
     });
 
@@ -282,7 +282,7 @@ describe('MessagePanel', function() {
 
     it('should show the events', function() {
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} />,
+            <WrappedMessagePanel className="cls" events={events} />,
         );
 
         // just check we have the right number of tiles for now
@@ -310,8 +310,8 @@ describe('MessagePanel', function() {
 
     it('should insert the read-marker in the right place', function() {
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true} />,
+            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                readMarkerVisible={true} />,
         );
 
         const tiles = TestUtils.scryRenderedComponentsWithType(
@@ -328,8 +328,8 @@ describe('MessagePanel', function() {
     it('should show the read-marker that fall in summarised events after the summary', function() {
         const melsEvents = mkMelsEvents();
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
-                    readMarkerVisible={true} />,
+            <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
+                readMarkerVisible={true} />,
         );
 
         const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
@@ -346,8 +346,8 @@ describe('MessagePanel', function() {
     it('should hide the read-marker at the end of summarised events', function() {
         const melsEvents = mkMelsEventsOnly();
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[9].getId()}
-                    readMarkerVisible={true} />,
+            <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[9].getId()}
+                readMarkerVisible={true} />,
         );
 
         const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
@@ -370,9 +370,9 @@ describe('MessagePanel', function() {
 
         // first render with the RM in one place
         let mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
+            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                readMarkerVisible={true}
+            />, parentDiv);
 
         const tiles = TestUtils.scryRenderedComponentsWithType(
             mp, sdk.getComponent('rooms.EventTile'));
@@ -386,9 +386,9 @@ describe('MessagePanel', function() {
 
         // now move the RM
         mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
+            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
+                readMarkerVisible={true}
+            />, parentDiv);
 
         // now there should be two RM containers
         const found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
@@ -463,7 +463,7 @@ describe('MessagePanel', function() {
         expect(isReadMarkerVisible(rm)).toBeFalsy();
     });
 
-    it('should render Date separators for the events', function () {
+    it('should render Date separators for the events', function() {
         const events = mkOneDayEvents();
         const res = mount(
             <WrappedMessagePanel
