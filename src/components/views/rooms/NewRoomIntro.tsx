@@ -37,7 +37,7 @@ import EventTileBubble from "../messages/EventTileBubble";
 import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
 
 function hasExpectedEncryptionSettings(room): boolean {
-    const isEncrypted: boolean = room._client.isRoomEncrypted(room.roomId);
+    const isEncrypted: boolean = room._client?.isRoomEncrypted(room.roomId);
     const isPublic: boolean = room.getJoinRule() === "public";
     return isPublic || !privateShouldBeEncrypted() || isEncrypted;
 }
