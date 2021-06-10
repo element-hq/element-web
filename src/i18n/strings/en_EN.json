@@ -1509,6 +1509,8 @@
     "Invite to just this room": "Invite to just this room",
     "Add a photo, so people can easily spot your room.": "Add a photo, so people can easily spot your room.",
     "This is the start of <roomName/>.": "This is the start of <roomName/>.",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>",
+    "End-to-end encryption isn't enabled": "End-to-end encryption isn't enabled",
     "Unpin": "Unpin",
     "View message": "View message",
     "%(duration)ss": "%(duration)ss",

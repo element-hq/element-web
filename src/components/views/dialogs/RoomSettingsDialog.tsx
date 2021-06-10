@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import TabbedView, {Tab} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
@@ -39,31 +38,36 @@ export const ROOM_NOTIFICATIONS_TAB = "ROOM_NOTIFICATIONS_TAB";
 export const ROOM_BRIDGES_TAB = "ROOM_BRIDGES_TAB";
 export const ROOM_ADVANCED_TAB = "ROOM_ADVANCED_TAB";
 
+interface IProps {
+    roomId: string;
+    onFinished: (success: boolean) => void;
+    initialTabId?: string;
+}
+
 @replaceableComponent("views.dialogs.RoomSettingsDialog")
-export default class RoomSettingsDialog extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
+export default class RoomSettingsDialog extends React.Component<IProps> {
+    private dispatcherRef: string;
 
-    componentDidMount() {
-        this._dispatcherRef = dis.register(this._onAction);
+    public componentDidMount() {
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
-    componentWillUnmount() {
-        if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
+    public componentWillUnmount() {
+        if (this.dispatcherRef) {
+            dis.unregister(this.dispatcherRef);
+        }
     }
 
-    _onAction = (payload) => {
+    private onAction = (payload): void => {
         // When view changes below us, close the room settings
         // whilst the modal is open this can only be triggered when someone hits Leave Room
         if (payload.action === 'view_home_page') {
-            this.props.onFinished();
+            this.props.onFinished(true);
         }
     };
 
-    _getTabs() {
-        const tabs = [];
+    private getTabs(): Tab[] {
+        const tabs: Tab[] = [];
 
         tabs.push(new Tab(
             ROOM_GENERAL_TAB,
@@ -123,7 +127,10 @@ export default class RoomSettingsDialog extends React.Component {
                 title={_t("Room Settings - %(roomName)s", {roomName})}
             >
                 <div className='mx_SettingsDialog_content'>
-                    <TabbedView tabs={this._getTabs()} />
+                    <TabbedView
+                        tabs={this.getTabs()}
+                        initialTabId={this.props.initialTabId}
+                    />
                 </div>
             </BaseDialog>
         );
