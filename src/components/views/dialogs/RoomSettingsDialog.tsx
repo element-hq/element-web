@@ -41,6 +41,7 @@ export const ROOM_ADVANCED_TAB = "ROOM_ADVANCED_TAB";
 interface IProps {
     roomId: string;
     onFinished: (success: boolean) => void;
+    initialTabId?: string;
 }
 
 @replaceableComponent("views.dialogs.RoomSettingsDialog")
@@ -126,7 +127,10 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
                 title={_t("Room Settings - %(roomName)s", {roomName})}
             >
                 <div className='mx_SettingsDialog_content'>
-                    <TabbedView tabs={this.getTabs()} />
+                    <TabbedView
+                        tabs={this.getTabs()}
+                        initialTabId={this.props.initialTabId}
+                    />
                 </div>
             </BaseDialog>
         );

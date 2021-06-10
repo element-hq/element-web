@@ -33,6 +33,9 @@ import {showSpaceInvite} from "../../../utils/space";
 
 import { privateShouldBeEncrypted } from "../../../createRoom";
 
+import EventTileBubble from "../messages/EventTileBubble";
+import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+
 function hasExpectedEncryptionSettings(room): boolean {
     const isEncrypted: boolean = room._client.isRoomEncrypted(room.roomId);
     const isPublic: boolean = room.getJoinRule() === "public";
@@ -174,20 +177,30 @@ const NewRoomIntro = () => {
         </React.Fragment>;
     }
 
+    function openRoomSettings(event) {
+        event.preventDefault();
+        dis.dispatch({
+            action: "open_room_settings",
+            initial_tab_id: ROOM_SECURITY_TAB,
+        });
+    }
+
+    const sub2 = _t("Your private messages are normally encrypted, but this room isn't." +
+    "Usually this is because the room was created with a device or method that doesn't support " +
+    "encryption, like email invites. <a>Enable encryption in settings.</a>", {},
+    { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> });
+
     return <div className="mx_NewRoomIntro">
+
+        { !hasExpectedEncryptionSettings(room) && (
+            <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                title={_t("This room isn't end to end encrypted")}
+                subtitle={sub2}
+            />
+        )}
+
         { body }
-
-        { !hasExpectedEncryptionSettings(room) && <p className="mx_NewRoomIntro_message" role="alert">
-            {_t("Messages in this room are not end-to-end encrypted. " +
-                    "Messages sent in an unencrypted room can be seen by the server and third parties. " +
-                    "<a>Learn more about encryption.</a>", {},
-            {
-                a: sub => <a href="https://element.io/help#encryption"
-                    rel="noreferrer noopener" target="_blank"
-                >{sub}</a>,
-            })}
-
-        </p>}
     </div>;
 };
 
