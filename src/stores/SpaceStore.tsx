@@ -34,6 +34,12 @@ import {setHasDiff} from "../utils/sets";
 import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
 import RoomViewStore from "./RoomViewStore";
 import { arrayHasOrderChange } from "../utils/arrays";
+import {
+    ALPHABET_END,
+    ALPHABET_START,
+    averageBetweenStrings,
+    midPointsBetweenStrings,
+} from "../utils/stringOrderField";
 
 interface IState {}
 
@@ -61,18 +67,19 @@ const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces,
     }, [[], []]);
 };
 
-// For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
-export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
-    let validatedOrder: string = null;
-
-    if (typeof order === "string" && Array.from(order).every((c: string) => {
+const validOrder = (order: string): string | null => {
+    if (typeof order === "string" && order.length <= 50 && Array.from(order).every((c: string) => {
         const charCode = c.charCodeAt(0);
         return charCode >= 0x20 && charCode <= 0x7E;
     })) {
-        validatedOrder = order;
+        return order;
     }
+    return undefined;
+};
 
-    return [validatedOrder, creationTs, roomId];
+// For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
+export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
+    return [validOrder(order), creationTs, roomId];
 }
 
 const getRoomFn: FetchRoomFn = (room: Room) => {
@@ -625,8 +632,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     private getSpaceTagOrdering = (space: Room): string | undefined => {
         if (this.spaceOrderLocalEchoMap.has(space.roomId)) return this.spaceOrderLocalEchoMap.get(space.roomId);
-        const order = space.getAccountData(EventType.SpaceOrder)?.getContent()?.order;
-        return typeof order === "string" ? order : undefined;
+        return validOrder(space.getAccountData(EventType.SpaceOrder)?.getContent()?.order);
     };
 
     private sortRootSpaces(spaces: Room[]): Room[] {
@@ -635,7 +641,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     private setRootSpaceOrder(space: Room, order: string): void {
         this.spaceOrderLocalEchoMap.set(space.roomId, order);
-        this.matrixClient.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order });
+        this.matrixClient.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order }); // TODO retrying, failure
     }
 
     public moveRootSpace(fromIndex: number, toIndex: number): void {
@@ -653,32 +659,42 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         let nextOrder: string;
 
         if (toIndex > fromIndex) {
-            prevOrder = toIndex >= 0 ? orders[toIndex] : "aaaaa";
-            nextOrder = toIndex <= orders.length ? orders[toIndex + 1] : "zzzzz";
+            // moving down
+            prevOrder = orders[toIndex];
+            nextOrder = orders[toIndex + 1];
         } else {
             // accounts for downwards displacement of existing inhabitant of this index
-            prevOrder = toIndex > 0 ? orders[toIndex - 1] : "aaaaa";
-            nextOrder = toIndex < orders.length ? orders[toIndex] : "zzzzz";
+            prevOrder = toIndex > 0 ? orders[toIndex - 1] : String.fromCharCode(ALPHABET_START).repeat(5); // TODO
+            nextOrder = orders[toIndex];
         }
         console.log("@@ start", {fromIndex, toIndex, orders, prevOrder, nextOrder});
 
         if (prevOrder === undefined) {
+            // to be able to move to this toIndex we will first need to insert a bunch of orders for earlier elements
             const firstUndefinedIndex = orders.indexOf(undefined);
             const numUndefined = orders.length - firstUndefinedIndex;
-            const lastOrder = orders[firstUndefinedIndex - 1];
-            console.log("@@ precalc", {firstUndefinedIndex, numUndefined, lastOrder});
-            nextOrder = lastOrder + step;
-            for (let i = firstUndefinedIndex; i < toIndex; i++, nextOrder += step) {
-                console.log("@@ preset", {i, nextOrder});
-                this.setRootSpaceOrder(this.rootSpaces[i], nextOrder);
-            }
+            const lastOrder = orders[firstUndefinedIndex - 1] ?? String.fromCharCode(ALPHABET_START); // TODO
+            nextOrder = String.fromCharCode(ALPHABET_END).repeat(lastOrder.length + 1);
+            const newOrders = midPointsBetweenStrings(lastOrder, nextOrder, numUndefined);
 
-            prevOrder = nextOrder;
-            nextOrder += step;
+            if (newOrders.length === numUndefined) {
+                console.log("@@ precalc", {firstUndefinedIndex, numUndefined, lastOrder, newOrders});
+                for (let i = firstUndefinedIndex, j = 0; i <= toIndex; i++, j++) {
+                    if (i === toIndex && toIndex < fromIndex) continue;
+                    if (i === fromIndex) continue;
+                    const newOrder = newOrders[j];
+                    console.log("@@ preset", {i, j, newOrder});
+                    this.setRootSpaceOrder(this.rootSpaces[i], newOrder);
+                }
+
+                prevOrder = newOrders[newOrders.length - 1];
+            } else {
+                prevOrder = nextOrder; // rebuild
+            }
         }
 
         if (prevOrder !== nextOrder) {
-            const order = prevOrder + ((nextOrder - prevOrder) / 2);
+            const order = averageBetweenStrings(prevOrder, nextOrder ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length + 1));
             console.log("@@ set", {prevOrder, nextOrder, order});
             this.setRootSpaceOrder(space, order);
         } else {
@@ -686,6 +702,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         this.notifyIfOrderChanged();
+        console.log("@@ done", this.rootSpaces.map(this.getSpaceTagOrdering));
     }
 }
 
