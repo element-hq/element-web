@@ -98,8 +98,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             hasUnsentEvents: this.countUnsentEvents() > 0,
 
             // generatePreview() will return nothing if the user has previews disabled
-            messagePreview: this.generatePreview(),
+            messagePreview: "",
         };
+        this.generatePreview();
+
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
     }
@@ -135,8 +137,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
-        if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
-            this.setState({messagePreview: this.generatePreview()});
+        const showMessageChanged = prevProps.showMessagePreview !== this.props.showMessagePreview;
+        const minimizedChanged = prevProps.isMinimized !== this.props.isMinimized;
+        if (showMessageChanged || minimizedChanged) {
+            this.generatePreview();
         }
         if (prevProps.room?.roomId !== this.props.room?.roomId) {
             MessagePreviewStore.instance.off(
@@ -222,17 +226,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private onRoomPreviewChanged = (room: Room) => {
         if (this.props.room && room.roomId === this.props.room.roomId) {
-            // generatePreview() will return nothing if the user has previews disabled
-            this.setState({messagePreview: this.generatePreview()});
+            this.generatePreview();
         }
     };
 
-    private generatePreview(): string | null {
+    private async generatePreview() {
         if (!this.showMessagePreview) {
             return null;
         }
 
-        return MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+        const messagePreview = await MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+        this.setState({ messagePreview });
     }
 
     private scrollIntoView = () => {
@@ -562,7 +566,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         const roomAvatar = <DecoratedRoomAvatar
             room={this.props.room}
             avatarSize={32}
-            tag={this.props.tag}
             displayBadge={this.props.isMinimized}
             oobData={({avatarUrl: roomProfile.avatarMxc})}
         />;

@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {percentageOf, percentageWithin} from "./numbers";
+
 /**
  * Quickly resample an array to have less/more data points. If an input which is larger
  * than the desired size is provided, it will be downsampled. Similarly, if the input
@@ -27,7 +29,7 @@ export function arrayFastResample(input: number[], points: number): number[] {
 
     // Heavily inspired by matrix-media-repo (used with permission)
     // https://github.com/turt2live/matrix-media-repo/blob/abe72c87d2e29/util/util_audio/fastsample.go#L10
-    let samples: number[] = [];
+    const samples: number[] = [];
     if (input.length > points) {
         // Danger: this loop can cause out of memory conditions if the input is too small.
         const everyNth = Math.round(input.length / points);
@@ -36,27 +38,71 @@ export function arrayFastResample(input: number[], points: number): number[] {
         }
     } else {
         // Smaller inputs mean we have to spread the values over the desired length. We
-        // end up overshooting the target length in doing this, so we'll resample down
-        // before returning. This recursion is risky, but mathematically should not go
-        // further than 1 level deep.
+        // end up overshooting the target length in doing this, but we're not looking to
+        // be super accurate so we'll let the sanity trims do their job.
         const spreadFactor = Math.ceil(points / input.length);
         for (const val of input) {
             samples.push(...arraySeed(val, spreadFactor));
         }
-        samples = arrayFastResample(samples, points);
     }
 
-    // Sanity fill, just in case
-    while (samples.length < points) {
-        samples.push(input[input.length - 1]);
-    }
+    // Trim to size & return
+    return arrayTrimFill(samples, points, arraySeed(input[input.length - 1], points));
+}
 
-    // Sanity trim, just in case
-    if (samples.length > points) {
-        samples = samples.slice(0, points);
-    }
+/**
+ * Attempts a smooth resample of the given array. This is functionally similar to arrayFastResample
+ * though can take longer due to the smoothing of data.
+ * @param {number[]} input The input array to resample.
+ * @param {number} points The number of samples to end up with.
+ * @returns {number[]} The resampled array.
+ */
+export function arraySmoothingResample(input: number[], points: number): number[] {
+    if (input.length === points) return input; // short-circuit a complicated call
 
-    return samples;
+    let samples: number[] = [];
+    if (input.length > points) {
+        // We're downsampling. To preserve the curve we'll actually reduce our sample
+        // selection and average some points between them.
+
+        // All we're doing here is repeatedly averaging the waveform down to near our
+        // target value. We don't average down to exactly our target as the loop might
+        // never end, and we can over-average the data. Instead, we'll get as far as
+        // we can and do a followup fast resample (the neighbouring points will be close
+        // to the actual waveform, so we can get away with this safely).
+        while (samples.length > (points * 2) || samples.length === 0) {
+            samples = [];
+            for (let i = 1; i < input.length - 1; i += 2) {
+                const prevPoint = input[i - 1];
+                const nextPoint = input[i + 1];
+                const currPoint = input[i];
+                const average = (prevPoint + nextPoint + currPoint) / 3;
+                samples.push(average);
+            }
+            input = samples;
+        }
+
+        return arrayFastResample(samples, points);
+    } else {
+        // In practice there's not much purpose in burning CPU for short arrays only to
+        // end up with a result that can't possibly look much different than the fast
+        // resample, so just skip ahead to the fast resample.
+        return arrayFastResample(input, points);
+    }
+}
+
+/**
+ * Rescales the input array to have values that are inclusively within the provided
+ * minimum and maximum.
+ * @param {number[]} input The array to rescale.
+ * @param {number} newMin The minimum value to scale to.
+ * @param {number} newMax The maximum value to scale to.
+ * @returns {number[]} The rescaled array.
+ */
+export function arrayRescale(input: number[], newMin: number, newMax: number): number[] {
+    const min: number = Math.min(...input);
+    const max: number = Math.max(...input);
+    return input.map(v => percentageWithin(percentageOf(v, min, max), newMin, newMax));
 }
 
 /**
@@ -71,6 +117,26 @@ export function arraySeed<T>(val: T, length: number): T[] {
         a.push(val);
     }
     return a;
+}
+
+/**
+ * Trims or fills the array to ensure it meets the desired length. The seed array
+ * given is pulled from to fill any missing slots - it is recommended that this be
+ * at least `len` long. The resulting array will be exactly `len` long, either
+ * trimmed from the source or filled with the some/all of the seed array.
+ * @param {T[]} a The array to trim/fill.
+ * @param {number} len The length to trim or fill to, as needed.
+ * @param {T[]} seed Values to pull from if the array needs filling.
+ * @returns {T[]} The resulting array of `len` length.
+ */
+export function arrayTrimFill<T>(a: T[], len: number, seed: T[]): T[] {
+    // Dev note: we do length checks because the spread operator can result in some
+    // performance penalties in more critical code paths. As a utility, it should be
+    // as fast as possible to not cause a problem for the call stack, no matter how
+    // critical that stack is.
+    if (a.length === len) return a;
+    if (a.length > len) return a.slice(0, len);
+    return a.concat(seed.slice(0, len - a.length));
 }
 
 /**

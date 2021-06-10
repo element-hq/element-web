@@ -125,9 +125,9 @@ export default class MImageBody extends React.Component {
     _isGif() {
         const content = this.props.mxEvent.getContent();
         return (
-          content &&
-          content.info &&
-          content.info.mimetype === "image/gif"
+            content &&
+            content.info &&
+            content.info.mimetype === "image/gif"
         );
     }
 
@@ -346,9 +346,9 @@ export default class MImageBody extends React.Component {
                 } else {
                     imageElement = (
                         <img style={{display: 'none'}} src={thumbUrl} ref={this._image}
-                             alt={content.body}
-                             onError={this.onImageError}
-                             onLoad={this.onImageLoad}
+                            alt={content.body}
+                            onError={this.onImageError}
+                            onLoad={this.onImageLoad}
                         />
                     );
                 }
@@ -384,12 +384,12 @@ export default class MImageBody extends React.Component {
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
                 <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref={this._image}
-                     style={{ maxWidth: maxWidth + "px" }}
-                     alt={content.body}
-                     onError={this.onImageError}
-                     onLoad={this.onImageLoad}
-                     onMouseEnter={this.onImageEnter}
-                     onMouseLeave={this.onImageLeave} />
+                    style={{ maxWidth: maxWidth + "px" }}
+                    alt={content.body}
+                    onError={this.onImageError}
+                    onLoad={this.onImageLoad}
+                    onMouseEnter={this.onImageEnter}
+                    onMouseLeave={this.onImageLeave} />
             );
         }
 
@@ -467,9 +467,9 @@ export default class MImageBody extends React.Component {
         const contentUrl = this._getContentUrl();
         let thumbUrl;
         if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
-          thumbUrl = contentUrl;
+            thumbUrl = contentUrl;
         } else {
-          thumbUrl = this._getThumbUrl();
+            thumbUrl = this._getThumbUrl();
         }
 
         const thumbnail = this._messageContent(contentUrl, thumbUrl, content);

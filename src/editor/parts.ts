@@ -34,7 +34,7 @@ interface ISerializedPart {
 interface ISerializedPillPart {
     type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
     text: string;
-    resourceId: string;
+    resourceId?: string;
 }
 
 export type SerializedPart = ISerializedPart | ISerializedPillPart;
@@ -287,6 +287,14 @@ abstract class PillPart extends BasePart implements IPillPart {
         }
     }
 
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+            resourceId: this.resourceId,
+        };
+    }
+
     get canEdit() {
         return false;
     }
@@ -366,6 +374,13 @@ class AtRoomPillPart extends RoomPillPart {
     get type(): IPillPart["type"] {
         return Type.AtRoomPill;
     }
+
+    serialize(): ISerializedPillPart {
+        return {
+            type: this.type,
+            text: this.text,
+        };
+    }
 }
 
 class UserPillPart extends PillPart {
@@ -393,14 +408,6 @@ class UserPillPart extends PillPart {
 
     get className() {
         return "mx_UserPill mx_Pill";
-    }
-
-    serialize(): ISerializedPillPart {
-        return {
-            type: this.type,
-            text: this.text,
-            resourceId: this.resourceId,
-        };
     }
 }
 
@@ -495,7 +502,7 @@ export class PartCreator {
             case Type.PillCandidate:
                 return this.pillCandidate(part.text);
             case Type.RoomPill:
-                return this.roomPill(part.text);
+                return this.roomPill(part.resourceId);
             case Type.UserPill:
                 return this.userPill(part.text, part.resourceId);
         }
@@ -535,9 +542,9 @@ export class PartCreator {
         return new UserPillPart(userId, displayName, member);
     }
 
-    createMentionParts(partIndex: number, displayName: string, userId: string) {
+    createMentionParts(insertTrailingCharacter: boolean, displayName: string, userId: string) {
         const pill = this.userPill(displayName, userId);
-        const postfix = this.plain(partIndex === 0 ? ": " : " ");
+        const postfix = this.plain(insertTrailingCharacter ? ": " : " ");
         return [pill, postfix];
     }
 }

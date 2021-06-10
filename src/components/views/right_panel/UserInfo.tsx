@@ -17,18 +17,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import {MatrixClient} from 'matrix-js-sdk/src/client';
-import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
-import {User} from 'matrix-js-sdk/src/models/user';
-import {Room} from 'matrix-js-sdk/src/models/room';
-import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
-import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { User } from 'matrix-js-sdk/src/models/user';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import createRoom, { findDMForUser, privateShouldBeEncrypted } from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -39,18 +40,18 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {textualPowerLevel} from '../../../Roles';
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { textualPowerLevel } from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
-import {useAsyncMemo} from '../../../hooks/useAsyncMemo';
-import {legacyVerifyUser, verifyDevice, verifyUser} from '../../../verification';
-import {Action} from "../../../dispatcher/actions";
+import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
+import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
+import { Action } from "../../../dispatcher/actions";
 import { USER_SECURITY_TAB } from "../dialogs/UserSettingsDialog";
-import {useIsEncrypted} from "../../../hooks/useIsEncrypted";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
-import {E2EStatus} from "../../../utils/ShieldUtils";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 import ImageView from "../elements/ImageView";
 import Spinner from "../elements/Spinner";
 import PowerSelector from "../elements/PowerSelector";
@@ -65,9 +66,10 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { mediaFromMxc } from "../../../customisations/Media";
+import UIStore from "../../../stores/UIStore";
 
-interface IDevice {
+export interface IDevice {
     deviceId: string;
     ambiguous?: boolean;
     getDisplayName(): string;
@@ -187,9 +189,15 @@ function DeviceItem({userId, device}: {userId: string, device: IDevice}) {
         verifyDevice(cli.getUser(userId), device);
     };
 
-    const deviceName = device.ambiguous ?
-        (device.getDisplayName() ? device.getDisplayName() : "") + " (" + device.deviceId + ")" :
-        device.getDisplayName();
+    let deviceName;
+    if (!device.getDisplayName()?.trim()) {
+        deviceName = device.deviceId;
+    } else {
+        deviceName = device.ambiguous ?
+            device.getDisplayName() + " (" + device.deviceId + ")" :
+            device.getDisplayName();
+    }
+
     let trustedLabel = null;
     if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
 
@@ -440,7 +448,7 @@ const UserOptionsSection: React.FC<{
     );
 };
 
-const warnSelfDemote = async (isSpace) => {
+const warnSelfDemote = async (isSpace: boolean) => {
     const {finished} = Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
         title: _t("Demote yourself?"),
         description:
@@ -507,9 +515,6 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
         } else {
             setPowerLevels({});
         }
-        return () => {
-            setPowerLevels({});
-        };
     }, [room]);
 
     useEventEmitter(cli, "RoomState.events", update);
@@ -727,7 +732,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({member, room, powerLevels, 
         // if muting self, warn as it may be irreversible
         if (target === cli.getUserId()) {
             try {
-                if (!(await warnSelfDemote(room?.isSpaceRoom()))) return;
+                if (!(await warnSelfDemote(SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()))) return;
             } catch (e) {
                 console.error("Failed to warn about self demotion: ", e);
                 return;
@@ -816,7 +821,7 @@ const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
     if (canAffectUser && me.powerLevel >= kickPowerLevel) {
         kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
-    if (me.powerLevel >= redactPowerLevel && !room.isSpaceRoom()) {
+    if (me.powerLevel >= redactPowerLevel && (!SettingsStore.getValue("feature_spaces") || !room.isSpaceRoom())) {
         redactButton = (
             <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
@@ -1095,7 +1100,7 @@ const PowerLevelEditor: React.FC<{
         } else if (myUserId === target) {
             // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
             try {
-                if (!(await warnSelfDemote(room?.isSpaceRoom()))) return;
+                if (!(await warnSelfDemote(SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()))) return;
             } catch (e) {
                 console.error("Failed to warn about self demotion: ", e);
             }
@@ -1301,7 +1306,7 @@ const BasicUserInfo: React.FC<{
     }
 
     if (pendingUpdateCount > 0) {
-        spinner = <Spinner imgClassName="mx_ContextualMenu_spinner" />;
+        spinner = <Spinner />;
     }
 
     let memberDetails;
@@ -1325,10 +1330,10 @@ const BasicUserInfo: React.FC<{
     if (!isRoomEncrypted) {
         if (!cryptoEnabled) {
             text = _t("This client does not support end-to-end encryption.");
-        } else if (room && !room.isSpaceRoom()) {
+        } else if (room && (!SettingsStore.getValue("feature_spaces") || !room.isSpaceRoom())) {
             text = _t("Messages in this room are not end-to-end encrypted.");
         }
-    } else if (!room.isSpaceRoom()) {
+    } else if (!SettingsStore.getValue("feature_spaces") || !room.isSpaceRoom()) {
         text = _t("Messages in this room are end-to-end encrypted.");
     }
 
@@ -1405,7 +1410,7 @@ const BasicUserInfo: React.FC<{
             canInvite={roomPermissions.canInvite}
             isIgnored={isIgnored}
             member={member}
-            isSpace={room?.isSpaceRoom()}
+            isSpace={SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()}
         />
 
         { adminToolsContainer }
@@ -1442,8 +1447,8 @@ const UserInfoHeader: React.FC<{
                     <MemberAvatar
                         key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member}
-                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        width={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
+                        height={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
                         resizeMethod="scale"
                         fallbackUserId={member.userId}
                         onClick={onMemberAvatarClick}
@@ -1523,21 +1528,16 @@ interface IProps {
     user: Member;
     groupId?: string;
     room?: Room;
-    phase: RightPanelPhases.RoomMemberInfo | RightPanelPhases.GroupMemberInfo | RightPanelPhases.SpaceMemberInfo;
+    phase: RightPanelPhases.RoomMemberInfo
+        | RightPanelPhases.GroupMemberInfo
+        | RightPanelPhases.SpaceMemberInfo
+        | RightPanelPhases.EncryptionPanel;
     onClose(): void;
+    verificationRequest?: VerificationRequest;
+    verificationRequestPromise?: Promise<VerificationRequest>;
 }
 
-interface IPropsWithEncryptionPanel extends React.ComponentProps<typeof EncryptionPanel> {
-    user: Member;
-    groupId: void;
-    room: Room;
-    phase: RightPanelPhases.EncryptionPanel;
-    onClose(): void;
-}
-
-type Props = IProps | IPropsWithEncryptionPanel;
-
-const UserInfo: React.FC<Props> = ({
+const UserInfo: React.FC<IProps> = ({
     user,
     groupId,
     room,
@@ -1567,7 +1567,7 @@ const UserInfo: React.FC<Props> = ({
         previousPhase = RightPanelPhases.RoomMemberInfo;
         refireParams = {member: member};
     } else if (room) {
-        previousPhase = previousPhase = room.isSpaceRoom()
+        previousPhase = previousPhase = SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()
             ? RightPanelPhases.SpaceMemberList
             : RightPanelPhases.RoomMemberList;
     }
@@ -1616,7 +1616,7 @@ const UserInfo: React.FC<Props> = ({
     }
 
     let scopeHeader;
-    if (room?.isSpaceRoom()) {
+    if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
         scopeHeader = <div className="mx_RightPanel_scopeHeader">
             <RoomAvatar room={room} height={32} width={32} />
             <RoomName room={room} />

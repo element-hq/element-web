@@ -32,6 +32,7 @@ export default class ActionButton extends React.Component {
         label: PropTypes.string.isRequired,
         iconPath: PropTypes.string,
         className: PropTypes.string,
+        children: PropTypes.node,
     };
 
     static defaultProps = {
@@ -70,8 +71,8 @@ export default class ActionButton extends React.Component {
         }
 
         const icon = this.props.iconPath ?
-                (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
-                undefined;
+            (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+            undefined;
 
         const classNames = ["mx_RoleButton"];
         if (this.props.className) {
@@ -79,7 +80,8 @@ export default class ActionButton extends React.Component {
         }
 
         return (
-            <AccessibleButton className={classNames.join(" ")}
+            <AccessibleButton
+                className={classNames.join(" ")}
                 onClick={this._onClick}
                 onMouseEnter={this._onMouseEnter}
                 onMouseLeave={this._onMouseLeave}
@@ -87,6 +89,7 @@ export default class ActionButton extends React.Component {
             >
                 { icon }
                 { tooltip }
+                { this.props.children }
             </AccessibleButton>
         );
     }

@@ -25,6 +25,7 @@ import {EventType} from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { compare } from "../../../../../utils/strings";
 
 const plEventsToLabels = {
     // These will be translated for us later.
@@ -312,7 +313,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             // comparator for sorting PL users lexicographically on PL descending, MXID ascending. (case-insensitive)
             const comparator = (a, b) => {
                 const plDiff = userLevels[b.key] - userLevels[a.key];
-                return plDiff !== 0 ? plDiff : a.key.toLocaleLowerCase().localeCompare(b.key.toLocaleLowerCase());
+                return plDiff !== 0 ? plDiff : compare(a.key.toLocaleLowerCase(), b.key.toLocaleLowerCase());
             };
 
             privilegedUsers.sort(comparator);
