@@ -431,7 +431,7 @@ module.exports = (env, argv) => {
             }),
 
             new HtmlWebpackInjectPreload({
-                files: [{ match: /.*Inter.*\.woff2?$/ }],
+                files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
 
             ...additionalPlugins,
