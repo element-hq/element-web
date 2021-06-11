@@ -34,12 +34,7 @@ import {setHasDiff} from "../utils/sets";
 import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
 import RoomViewStore from "./RoomViewStore";
 import { arrayHasOrderChange } from "../utils/arrays";
-import {
-    ALPHABET_END,
-    ALPHABET_START,
-    averageBetweenStrings,
-    midPointsBetweenStrings,
-} from "../utils/stringOrderField";
+import { reorderLexicographically } from "../utils/stringOrderField";
 
 interface IState {}
 
@@ -645,64 +640,18 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     public moveRootSpace(fromIndex: number, toIndex: number): void {
-        if (
-            fromIndex < 0 || toIndex < 0 ||
-            fromIndex > this.rootSpaces.length || toIndex > this.rootSpaces.length ||
-            fromIndex === toIndex
-        ) {
-            return;
-        }
-        const space = this.rootSpaces[fromIndex];
-        const orders = this.rootSpaces.map(this.getSpaceTagOrdering);
+        const currentOrders = this.rootSpaces.map(this.getSpaceTagOrdering);
+        const changes = reorderLexicographically(currentOrders, fromIndex, toIndex);
 
-        let prevOrder: string;
-        let nextOrder: string;
+        changes.forEach(({ index, order }) => {
+            this.setRootSpaceOrder(this.rootSpaces[index], order);
+        });
 
-        if (toIndex > fromIndex) {
-            // moving down
-            prevOrder = orders[toIndex];
-            nextOrder = orders[toIndex + 1];
+        if (changes.length) {
+            this.notifyIfOrderChanged();
         } else {
-            // accounts for downwards displacement of existing inhabitant of this index
-            prevOrder = toIndex > 0 ? orders[toIndex - 1] : String.fromCharCode(ALPHABET_START).repeat(5); // TODO
-            nextOrder = orders[toIndex];
+            // TODO
         }
-        console.log("@@ start", {fromIndex, toIndex, orders, prevOrder, nextOrder});
-
-        if (prevOrder === undefined) {
-            // to be able to move to this toIndex we will first need to insert a bunch of orders for earlier elements
-            const firstUndefinedIndex = orders.indexOf(undefined);
-            const numUndefined = orders.length - firstUndefinedIndex;
-            const lastOrder = orders[firstUndefinedIndex - 1] ?? String.fromCharCode(ALPHABET_START); // TODO
-            nextOrder = String.fromCharCode(ALPHABET_END).repeat(lastOrder.length + 1);
-            const newOrders = midPointsBetweenStrings(lastOrder, nextOrder, numUndefined);
-
-            if (newOrders.length === numUndefined) {
-                console.log("@@ precalc", {firstUndefinedIndex, numUndefined, lastOrder, newOrders});
-                for (let i = firstUndefinedIndex, j = 0; i <= toIndex; i++, j++) {
-                    if (i === toIndex && toIndex < fromIndex) continue;
-                    if (i === fromIndex) continue;
-                    const newOrder = newOrders[j];
-                    console.log("@@ preset", {i, j, newOrder});
-                    this.setRootSpaceOrder(this.rootSpaces[i], newOrder);
-                }
-
-                prevOrder = newOrders[newOrders.length - 1];
-            } else {
-                prevOrder = nextOrder; // rebuild
-            }
-        }
-
-        if (prevOrder !== nextOrder) {
-            const order = averageBetweenStrings(prevOrder, nextOrder ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length + 1));
-            console.log("@@ set", {prevOrder, nextOrder, order});
-            this.setRootSpaceOrder(space, order);
-        } else {
-            // TODO REBUILD
-        }
-
-        this.notifyIfOrderChanged();
-        console.log("@@ done", this.rootSpaces.map(this.getSpaceTagOrdering));
     }
 }
 

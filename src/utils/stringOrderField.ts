@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { reorder } from "./arrays";
+
 export const ALPHABET_START = 0x20;
 export const ALPHABET_END = 0x7E;
 export const ALPHABET = new Array(1 + ALPHABET_END - ALPHABET_START)
@@ -53,4 +55,81 @@ export const midPointsBetweenStrings = (a: string, b: string, count: number, alp
         return [];
     }
     return Array(count).fill(undefined).map((_, i) => baseToString(aBase + step + (i * step), alphabet));
+};
+
+interface IEntry {
+    index: number;
+    order: string;
+}
+
+export const reorderLexicographically = (
+    orders: Array<string | undefined>,
+    fromIndex: number,
+    toIndex: number,
+): IEntry[] => {
+    if (
+        fromIndex < 0 || toIndex < 0 ||
+        fromIndex > orders.length || toIndex > orders.length ||
+        fromIndex === toIndex
+    ) {
+        return [];
+    }
+
+    const ordersWithIndices: IEntry[] = orders.map((order, index) => ({ index, order }));
+    const newOrder = reorder(ordersWithIndices, fromIndex, toIndex);
+
+    const isMoveTowardsRight = toIndex > fromIndex;
+    const orderToLeftUndefined = newOrder[toIndex - 1]?.order === undefined;
+
+    let leftBoundIdx = toIndex;
+    let rightBoundIdx = toIndex;
+
+    const canDisplaceLeft = isMoveTowardsRight || orderToLeftUndefined || true; // TODO
+    if (canDisplaceLeft) {
+        const nextBase = newOrder[toIndex + 1]?.order !== undefined
+            ? stringToBase(newOrder[toIndex + 1].order)
+            : Number.MAX_VALUE;
+        for (let i = toIndex - 1, j = 0; i >= 0; i--, j++) {
+            if (newOrder[i]?.order !== undefined && nextBase - stringToBase(newOrder[i].order) > j) break;
+            leftBoundIdx = i;
+        }
+    }
+
+    const canDisplaceRight = !orderToLeftUndefined;
+    // TODO check if there is enough space on the right hand side at all,
+    // I guess find the last set order and then compare it to prevBase + $requiredGap
+    if (canDisplaceRight) {
+        const prevBase = newOrder[toIndex - 1]?.order !== undefined
+            ? stringToBase(newOrder[toIndex - 1]?.order)
+            : Number.MIN_VALUE;
+        for (let i = toIndex + 1, j = 0; i < newOrder.length; i++, j++) {
+            if (newOrder[i]?.order === undefined || stringToBase(newOrder[i].order) - prevBase > j) break; // TODO verify
+            rightBoundIdx = i;
+        }
+    }
+
+    const leftDiff = toIndex - leftBoundIdx;
+    const rightDiff = rightBoundIdx - toIndex;
+
+    if (orderToLeftUndefined || leftDiff < rightDiff) {
+        rightBoundIdx = toIndex;
+    } else {
+        leftBoundIdx = toIndex;
+    }
+
+    const prevOrder = newOrder[leftBoundIdx - 1]?.order
+        ?? String.fromCharCode(ALPHABET_START).repeat(5); // TODO
+    const nextOrder = newOrder[rightBoundIdx + 1]?.order
+        ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length + 1); // TODO
+
+    const changes = midPointsBetweenStrings(prevOrder, nextOrder, 1 + rightBoundIdx - leftBoundIdx);
+    // TODO If we exceed maxLen then reorder EVERYTHING
+
+    console.log("@@ test", { prevOrder, nextOrder, changes, leftBoundIdx, rightBoundIdx, orders, fromIndex, toIndex, newOrder, orderToLeftUndefined });
+
+    return changes.map((order, i) => {
+        const index = newOrder[leftBoundIdx + i].index;
+
+        return { index, order };
+    });
 };
