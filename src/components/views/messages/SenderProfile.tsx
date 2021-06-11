@@ -118,12 +118,6 @@ export default class SenderProfile extends React.Component<IProps, IState> {
             return null; // emote message must include the name so don't duplicate it
         }
 
-        const displayNameElement = (
-            <span className={`mx_SenderProfile_displayName ${colorClass}`}>
-                { displayName }
-            </span>
-        );
-
         let mxidElement;
         if (disambiguate) {
             mxidElement = (
@@ -147,7 +141,9 @@ export default class SenderProfile extends React.Component<IProps, IState> {
 
         return (
             <div className="mx_SenderProfile mx_SenderProfile_hover" dir="auto" onClick={this.props.onClick}>
-                { displayNameElement }
+                <span className={`mx_SenderProfile_displayName ${colorClass}`}>
+                    { displayName }
+                </span>
                 { mxidElement }
                 { flair }
             </div>
