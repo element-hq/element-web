@@ -1059,58 +1059,65 @@ export default class EventTile extends React.Component<IProps, IState> {
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
-                return (
-                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
-                        <div className="mx_EventTile_roomName">
-                            <RoomAvatar room={room} width={28} height={28} />
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                { room ? room.name : '' }
-                            </a>
-                        </div>
-                        <div className="mx_EventTile_senderDetails">
-                            { avatar }
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                { sender }
-                                { timestamp }
-                            </a>
-                        </div>
-                        <div className="mx_EventTile_line">
-                            <EventTileType ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                showUrlPreview={this.props.showUrlPreview}
-                                onHeightChanged={this.props.onHeightChanged}
-                            />
-                        </div>
-                    </li>
-                );
+                return React.createElement(this.props.as || "li", {
+                    "className": classes,
+                    "aria-live": ariaLive,
+                    "aria-atomic": true,
+                    "data-scroll-tokens": scrollToken,
+                }, [
+                    <div className="mx_EventTile_roomName" key="mx_EventTile_roomName">
+                        <RoomAvatar room={room} width={28} height={28} />
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                            { room ? room.name : '' }
+                        </a>
+                    </div>,
+                    <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
+                        { avatar }
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                            { sender }
+                            { timestamp }
+                        </a>
+                    </div>,
+                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                        <EventTileType ref={this.tile}
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            onHeightChanged={this.props.onHeightChanged}
+                        />
+                    </div>,
+                ]);
             }
             case 'file_grid': {
-                return (
-                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
-                        <div className="mx_EventTile_line">
-                            <EventTileType ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                showUrlPreview={this.props.showUrlPreview}
-                                tileShape={this.props.tileShape}
-                                onHeightChanged={this.props.onHeightChanged}
-                            />
+                return React.createElement(this.props.as || "li", {
+                    "className": classes,
+                    "aria-live": ariaLive,
+                    "aria-atomic": true,
+                    "data-scroll-tokens": scrollToken,
+                }, [
+                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                        <EventTileType ref={this.tile}
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            tileShape={this.props.tileShape}
+                            onHeightChanged={this.props.onHeightChanged}
+                        />
+                    </div>,
+                    <a
+                        className="mx_EventTile_senderDetailsLink"
+                        key="mx_EventTile_senderDetailsLink"
+                        href={permalink}
+                        onClick={this.onPermalinkClicked}
+                    >
+                        <div className="mx_EventTile_senderDetails">
+                            { sender }
+                            { timestamp }
                         </div>
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails">
-                                { sender }
-                                { timestamp }
-                            </div>
-                        </a>
-                    </li>
-                );
+                    </a>,
+                ]);
             }
 
             case 'reply':
@@ -1126,27 +1133,30 @@ export default class EventTile extends React.Component<IProps, IState> {
                         this.props.alwaysShowTimestamps || this.state.hover,
                     );
                 }
-                return (
-                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
-                        { ircTimestamp }
-                        { avatar }
-                        { sender }
-                        { ircPadlock }
-                        <div className="mx_EventTile_reply">
-                            { groupTimestamp }
-                            { groupPadlock }
-                            { thread }
-                            <EventTileType ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                onHeightChanged={this.props.onHeightChanged}
-                                replacingEventId={this.props.replacingEventId}
-                                showUrlPreview={false}
-                            />
-                        </div>
-                    </li>
-                );
+                return React.createElement(this.props.as || "li", {
+                    "className": classes,
+                    "aria-live": ariaLive,
+                    "aria-atomic": true,
+                    "data-scroll-tokens": scrollToken,
+                }, [
+                    ircTimestamp,
+                    avatar,
+                    sender,
+                    ircPadlock,
+                    <div className="mx_EventTile_reply" key="mx_EventTile_reply">
+                        { groupTimestamp }
+                        { groupPadlock }
+                        { thread }
+                        <EventTileType ref={this.tile}
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            onHeightChanged={this.props.onHeightChanged}
+                            replacingEventId={this.props.replacingEventId}
+                            showUrlPreview={false}
+                        />
+                    </div>,
+                ]);
             }
             default: {
                 const thread = ReplyThread.makeThread(
