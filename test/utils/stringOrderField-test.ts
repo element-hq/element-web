@@ -18,7 +18,6 @@ import { sortBy } from "lodash";
 
 import {
     ALPHABET,
-    averageBetweenStrings,
     baseToString,
     midPointsBetweenStrings,
     reorderLexicographically,
@@ -29,10 +28,10 @@ const moveLexicographicallyTest = (
     orders: Array<string | undefined>,
     fromIndex: number,
     toIndex: number,
-    expectedIndices: number[],
+    expectedChanges: number,
+    maxLength?: number,
 ): void => {
-    const ops = reorderLexicographically(orders, fromIndex, toIndex);
-    expect(ops.map(o => o.index).sort()).toStrictEqual(expectedIndices.sort());
+    const ops = reorderLexicographically(orders, fromIndex, toIndex, maxLength);
 
     const zipped: Array<[number, string | undefined]> = orders.map((o, i) => [i, o]);
     ops.forEach(({ index, order }) => {
@@ -42,6 +41,7 @@ const moveLexicographicallyTest = (
     const newOrders = sortBy(zipped, i => i[1]);
     console.log("@@ moveLexicographicallyTest", {orders, zipped, newOrders, fromIndex, toIndex, ops});
     expect(newOrders[toIndex][0]).toBe(fromIndex);
+    expect(ops).toHaveLength(expectedChanges);
 };
 
 describe("stringOrderField", () => {
@@ -70,44 +70,20 @@ describe("stringOrderField", () => {
         expect(baseToString(1234)).toBe(",~");
     });
 
-    it("averageBetweenStrings", () => {
-        [
-            { a: "a", b: "z", output: `m` },
-            { a: "ba", b: "z", output: `n@` },
-            { a: "z", b: "ba", output: `n@` },
-            { a: "#    ", b: "$8888", output: `#[[[[` },
-            { a: "cat", b: "doggo", output: `d9>Cw` },
-            { a: "cat", b: "doggo", output: "cumqh", alphabet: "abcdefghijklmnopqrstuvwxyz" },
-            { a: "aa", b: "zz", output: "mz", alphabet: "abcdefghijklmnopqrstuvwxyz" },
-            { a: "a", b: "z", output: "m", alphabet: "abcdefghijklmnopqrstuvwxyz" },
-            { a: "AA", b: "zz", output: "^." },
-            { a: "A", b: "z", output: "]" },
-            {
-                a: "A".repeat(50),
-                b: "Z".repeat(50),
-                output: "M}M}M}N ba`54Qpt\\\\Z+kNA#O(9}z>@2jJm]%Y^$m<8lRzz/2[Y",
-            },
-        ].forEach((c) => {
-            // assert that the output string falls lexicographically between `a` and `b`
-            expect([c.a, c.b, c.output].sort()[1]).toBe(c.output);
-            expect(averageBetweenStrings(c.a, c.b, c.alphabet)).toBe(c.output);
-        });
-
-        expect(averageBetweenStrings("Q#!x+k", "V6yr>L")).toBe("S\\Mu5,");
-    });
-
     it("midPointsBetweenStrings", () => {
-        expect(midPointsBetweenStrings("a", "e", 3)).toStrictEqual(["b", "c", "d"]);
-        expect(midPointsBetweenStrings("a", "e", 0)).toStrictEqual([]);
-        expect(midPointsBetweenStrings("a", "e", 4)).toStrictEqual([]);
+        const midpoints = ["a", ...midPointsBetweenStrings("a", "e", 3, 1), "e"].sort();
+        expect(midpoints[0]).toBe("a");
+        expect(midpoints[4]).toBe("e");
+        expect(midPointsBetweenStrings("a", "e", 0, 1)).toStrictEqual([]);
+        expect(midPointsBetweenStrings("a", "e", 4, 1)).toStrictEqual([]);
     });
 
     it("moveLexicographically left", () => {
-        moveLexicographicallyTest(["a", "c", "e", "g", "i"], 2, 1, [2]);
+        moveLexicographicallyTest(["a", "c", "e", "g", "i"], 2, 1, 1);
     });
 
     it("moveLexicographically right", () => {
-        moveLexicographicallyTest(["a", "c", "e", "g", "i"], 1, 2, [1]);
+        moveLexicographicallyTest(["a", "c", "e", "g", "i"], 1, 2, 1);
     });
 
     it("moveLexicographically all undefined", () => {
@@ -115,7 +91,7 @@ describe("stringOrderField", () => {
             [undefined, undefined, undefined, undefined, undefined, undefined],
             4,
             1,
-            [0, 4],
+            2,
         );
     });
 
@@ -124,7 +100,7 @@ describe("stringOrderField", () => {
             [undefined, undefined, undefined, undefined, undefined, undefined],
             1,
             4,
-            [0, 1, 2, 3, 4],
+            5,
         );
     });
 
@@ -133,7 +109,7 @@ describe("stringOrderField", () => {
             ["a", "c", "e", undefined, undefined, undefined],
             5,
             2,
-            [5],
+            1,
         );
     });
 
@@ -142,7 +118,144 @@ describe("stringOrderField", () => {
             ["a", "a", "e", undefined, undefined, undefined],
             5,
             1,
-            [1, 5],
+            2,
+        );
+    });
+
+    it("test A moving to the start when all is undefined", () => {
+        moveLexicographicallyTest(
+            [undefined, undefined, undefined, undefined],
+            2,
+            0,
+            1,
+        );
+    });
+
+    it("test B moving to the end when all is undefined", () => {
+        moveLexicographicallyTest(
+            [undefined, undefined, undefined, undefined],
+            1,
+            3,
+            4,
+        );
+    });
+
+    it("test C moving left when all is undefined", () => {
+        moveLexicographicallyTest(
+            [undefined, undefined, undefined, undefined, undefined, undefined],
+            4,
+            1,
+            2,
+        );
+    });
+
+    it("test D moving right when all is undefined", () => {
+        moveLexicographicallyTest(
+            [undefined, undefined, undefined, undefined],
+            1,
+            2,
+            3,
+        );
+    });
+
+    it("test E moving more right when all is undefined", () => {
+        moveLexicographicallyTest(
+            [undefined, undefined, undefined, undefined, undefined, /**/ undefined, undefined],
+            1,
+            4,
+            5,
+        );
+    });
+
+    it("test F moving left when right is undefined", () => {
+        moveLexicographicallyTest(
+            ["20", undefined, undefined, undefined, undefined, undefined],
+            4,
+            2,
+            2,
+        );
+    });
+
+    it("test G moving right when right is undefined", () => {
+        moveLexicographicallyTest(
+            ["50", undefined, undefined, undefined, undefined, /**/ undefined, undefined],
+            1,
+            4,
+            4,
+        );
+    });
+
+    it("test H moving left when right is defined", () => {
+        moveLexicographicallyTest(
+            ["10", "20", "30", "40", undefined, undefined],
+            3,
+            1,
+            1,
+        );
+    });
+
+    it("test I moving right when right is defined", () => {
+        moveLexicographicallyTest(
+            ["10", "20", "30", "40", "50", undefined],
+            1,
+            3,
+            1,
+        );
+    });
+
+    it("test J moving left when all is defined", () => {
+        moveLexicographicallyTest(
+            ["11", "13", "15", "17", "19"],
+            2,
+            1,
+            1,
+        );
+    });
+
+    it("test K moving right when all is defined", () => {
+        moveLexicographicallyTest(
+            ["11", "13", "15", "17", "19"],
+            1,
+            2,
+            1,
+        );
+    });
+
+    it("test L moving left into no left space", () => {
+        moveLexicographicallyTest(
+            ["11", "12", "13", "14", "19"],
+            3,
+            1,
+            2,
+            2,
+        );
+    });
+
+    it("test M moving right into no right space", () => {
+        moveLexicographicallyTest(
+            ["15", "16", "17", "18", "19"],
+            1,
+            3,
+            2,
+            2,
+        );
+    });
+
+    it("test N moving right into no left space", () => {
+        moveLexicographicallyTest(
+            ["11", "12", "13", "14", "15", "16", undefined],
+            1,
+            3,
+            3,
+        );
+    });
+
+    it("test O moving left into no right space", () => {
+        moveLexicographicallyTest(
+            ["15", "16", "17", "18", "19"],
+            4,
+            3,
+            2,
         );
     });
 });

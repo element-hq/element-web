@@ -39,21 +39,32 @@ export const stringToBase = (str: string, alphabet = ALPHABET): number => {
 
 const pad = (str: string, length: number, alphabet = ALPHABET): string => str.padEnd(length, alphabet[0]);
 
-export const averageBetweenStrings = (a: string, b: string, alphabet = ALPHABET): string => {
-    const n = Math.max(a.length, b.length);
-    const aBase = stringToBase(pad(a, n, alphabet), alphabet);
-    const bBase = stringToBase(pad(b, n, alphabet), alphabet);
-    return baseToString((aBase + bBase) / 2, alphabet);
-};
-
-export const midPointsBetweenStrings = (a: string, b: string, count: number, alphabet = ALPHABET): string[] => {
-    const n = Math.max(a.length, b.length);
-    const aBase = stringToBase(pad(a, n, alphabet), alphabet);
-    const bBase = stringToBase(pad(b, n, alphabet), alphabet);
-    const step = (bBase - aBase) / (count + 1);
-    if (step < 1) {
+export const midPointsBetweenStrings = (
+    a: string,
+    b: string,
+    count: number,
+    maxLen: number,
+    alphabet = ALPHABET,
+): string[] => {
+    const n = Math.min(maxLen, Math.max(a.length, b.length));
+    const aPadded = pad(a, n, alphabet);
+    const bPadded = pad(b, n, alphabet);
+    const aBase = stringToBase(aPadded, alphabet);
+    const bBase = stringToBase(bPadded, alphabet);
+    if (bBase - aBase - 1 < count) {
+        if (n < maxLen) {
+            // this recurses once at most due to the new limit of n+1
+            return midPointsBetweenStrings(
+                pad(aPadded, n + 1, alphabet),
+                pad(bPadded, n + 1, alphabet),
+                count,
+                n + 1,
+                alphabet,
+            );
+        }
         return [];
     }
+    const step = (bBase - aBase) / (count + 1);
     return Array(count).fill(undefined).map((_, i) => baseToString(aBase + step + (i * step), alphabet));
 };
 
@@ -66,6 +77,7 @@ export const reorderLexicographically = (
     orders: Array<string | undefined>,
     fromIndex: number,
     toIndex: number,
+    maxLen = 50,
 ): IEntry[] => {
     if (
         fromIndex < 0 || toIndex < 0 ||
@@ -89,7 +101,7 @@ export const reorderLexicographically = (
         const nextBase = newOrder[toIndex + 1]?.order !== undefined
             ? stringToBase(newOrder[toIndex + 1].order)
             : Number.MAX_VALUE;
-        for (let i = toIndex - 1, j = 0; i >= 0; i--, j++) {
+        for (let i = toIndex - 1, j = 1; i >= 0; i--, j++) {
             if (newOrder[i]?.order !== undefined && nextBase - stringToBase(newOrder[i].order) > j) break;
             leftBoundIdx = i;
         }
@@ -102,7 +114,7 @@ export const reorderLexicographically = (
         const prevBase = newOrder[toIndex - 1]?.order !== undefined
             ? stringToBase(newOrder[toIndex - 1]?.order)
             : Number.MIN_VALUE;
-        for (let i = toIndex + 1, j = 0; i < newOrder.length; i++, j++) {
+        for (let i = toIndex + 1, j = 1; i < newOrder.length; i++, j++) {
             if (newOrder[i]?.order === undefined || stringToBase(newOrder[i].order) - prevBase > j) break; // TODO verify
             rightBoundIdx = i;
         }
@@ -122,10 +134,10 @@ export const reorderLexicographically = (
     const nextOrder = newOrder[rightBoundIdx + 1]?.order
         ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length + 1); // TODO
 
-    const changes = midPointsBetweenStrings(prevOrder, nextOrder, 1 + rightBoundIdx - leftBoundIdx);
+    const changes = midPointsBetweenStrings(prevOrder, nextOrder, 1 + rightBoundIdx - leftBoundIdx, maxLen);
     // TODO If we exceed maxLen then reorder EVERYTHING
 
-    console.log("@@ test", { prevOrder, nextOrder, changes, leftBoundIdx, rightBoundIdx, orders, fromIndex, toIndex, newOrder, orderToLeftUndefined });
+    console.log("@@ test", { prevOrder, nextOrder, changes, leftBoundIdx, rightBoundIdx, orders, fromIndex, toIndex, newOrder, orderToLeftUndefined, leftDiff, rightDiff });
 
     return changes.map((order, i) => {
         const index = newOrder[leftBoundIdx + i].index;
