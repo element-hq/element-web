@@ -23,6 +23,7 @@ import exportCSS from "./exportCSS";
 import exportJS from "./exportJS";
 import exportIcons from "./exportIcons";
 import { exportTypes } from "./exportUtils";
+import { exportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { MatrixClient } from "matrix-js-sdk";
 
@@ -32,8 +33,8 @@ export default class HTMLExporter extends Exporter {
     protected permalinkCreator: RoomPermalinkCreator;
     protected matrixClient: MatrixClient;
 
-    constructor(room: Room, exportType: exportTypes, numberOfEvents?: number) {
-        super(room, exportType, numberOfEvents);
+    constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
+        super(room, exportType, exportOptions);
         this.zip = new JSZip();
         this.avatars = new Map<string, boolean>();
         this.matrixClient = MatrixClientPeg.get();
@@ -282,7 +283,7 @@ export default class HTMLExporter extends Exporter {
     protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
         const hasAvatar = this.hasAvatar(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
-        const eventTile = <li className="mx_Export_EventWrapper" id={mxEv.getId()}>
+        const eventTile = <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
             <MatrixClientContext.Provider value = {this.matrixClient}>
                 <EventTile
                     mxEvent={mxEv}
@@ -307,11 +308,11 @@ export default class HTMLExporter extends Exporter {
                     showReadReceipts={false}
                 />
             </MatrixClientContext.Provider>
-        </li>
+        </div>
         let eventTileMarkup = renderToStaticMarkup(eventTile);
-        if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/, `$1"${filePath}"`);
+        if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/g, `$1"${filePath}"`);
         if (hasAvatar) {
-            eventTileMarkup = eventTileMarkup.replace(/src="AvatarForExport"/, `src="users/${mxEv.sender.userId}"`);
+            eventTileMarkup = eventTileMarkup.replace(/src="AvatarForExport"/g, `src="users/${mxEv.sender.userId}"`);
         }
         return eventTileMarkup;
     }

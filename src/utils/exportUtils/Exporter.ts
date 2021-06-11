@@ -1,37 +1,15 @@
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
-import { arrayFastClone } from "../arrays";
 import { exportTypes } from "./exportUtils";
+import { exportOptions } from "./exportUtils";
 
 export default abstract class Exporter {
-    protected constructor(protected room: Room, protected exportType: exportTypes, protected numberOfEvents?: number) {}
-
-    protected getTimelineConversation = (): MatrixEvent[] => {
-        if (!this.room) return;
-
-        const cli = MatrixClientPeg.get();
-
-        const timelineSet = this.room.getUnfilteredTimelineSet();
-
-        const timelineWindow = new TimelineWindow(
-            cli, timelineSet,
-            {windowLimit: Number.MAX_VALUE});
-
-        timelineWindow.load(null, 30);
-
-        const events: MatrixEvent[] = timelineWindow.getEvents();
-
-        // Clone and reverse the events so that we preserve the order
-        arrayFastClone(events)
-            .reverse()
-            .forEach(async (event) => {
-                await cli.decryptEventIfNeeded(event);
-            });
-
-        return events;
-    };
+    protected constructor(
+        protected room: Room,
+        protected exportType: exportTypes,
+        protected exportOptions?: exportOptions,
+    ) {}
 
     protected setEventMetadata = (event: MatrixEvent) => {
         const client = MatrixClientPeg.get();
@@ -47,12 +25,27 @@ export default abstract class Exporter {
         return event;
     }
 
+    protected getLimit = () => {
+        let limit: number;
+        switch (this.exportType) {
+            case exportTypes.LAST_N_MESSAGES:
+                limit = this.exportOptions.numberOfMessages;
+                break;
+            case exportTypes.TIMELINE:
+                limit = 40;
+                break;
+            default:
+                limit = Number.MAX_VALUE;
+        }
+        return limit;
+    }
+
     protected getRequiredEvents = async () : Promise<MatrixEvent[]> => {
         const client = MatrixClientPeg.get();
         const eventMapper = client.getEventMapper();
 
         let prevToken: string|null = null;
-        let limit = this.numberOfEvents || Number.MAX_VALUE;
+        let limit = this.getLimit();
         let events: MatrixEvent[] = [];
 
         while (limit) {
@@ -65,7 +58,14 @@ export default abstract class Exporter {
 
             const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
 
-            matrixEvents.forEach(mxEv => events.push(mxEv));
+            for (const mxEv of matrixEvents) {
+                if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
+                    // Once the last message received is older than the start date, we break out of both the loops
+                    limit = 0;
+                    break;
+                }
+                events.push(mxEv);
+            }
 
             prevToken = res.end;
         }

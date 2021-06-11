@@ -14,15 +14,20 @@ export enum exportTypes {
     LAST_N_MESSAGES = "LAST_N_MESSAGES",
 }
 
+export interface exportOptions {
+    startDate?: number;
+    numberOfMessages?: number;
+}
+
 const exportConversationalHistory = async (
     room: Room,
     format: string,
     exportType: exportTypes,
-    exportTypeMetadata?: number,
+    exportOptions?: exportOptions,
 ) => {
     switch (format) {
         case exportFormats.HTML:
-            await new HTMLExporter(room, exportType, exportTypeMetadata).export();
+            await new HTMLExporter(room, exportType, exportOptions).export();
             break;
         case exportFormats.JSON:
             break;

@@ -432,7 +432,7 @@ export default class MImageBody extends React.Component {
 
     // Overidden by MStickerBody
     wrapImage(contentUrl, children) {
-        return <a href={contentUrl} onClick={this.onClick}>
+        return <a href={contentUrl} target={this.props.forExport ? "__blank" : undefined} onClick={this.onClick}>
             {children}
         </a>;
     }

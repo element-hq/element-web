@@ -19537,7 +19537,7 @@ a.mx_reply_anchor:hover{
 }
 
 
-li.mx_Export_EventWrapper:target {
+.mx_Export_EventWrapper:target {
   background: white;
   animation: mx_event_highlight_animation 2s linear;
 }
