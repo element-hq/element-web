@@ -32,31 +32,14 @@ limitations under the License.
     }
 }
 
-.mx_VideoFeed_nonPrimary {
-    max-width: 25%;
-    max-height: 25%;
-    position: absolute;
-    z-index: 100;
+.mx_VideoFeed_secondary {
     border-radius: 4px;
+    width: 100%;
+    margin-bottom: 12px;
 
     &.mx_VideoFeed_video {
         background-color: transparent;
     }
-}
-
-.mx_VideoFeed_secondary {
-    right: 10px;
-    top: 10px;
-}
-
-.mx_VideoFeed_tertiary {
-    right: 10px;
-    bottom: 10px;
-}
-
-.mx_VideoFeed_quaternary {
-    left: 10px;
-    top: 10px;
 }
 
 .mx_VideoFeed_mirror {

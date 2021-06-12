@@ -35,13 +35,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
 import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker";
 import Modal from '../../../Modal';
 import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
-
-const FEED_CLASS_NAMES = [
-    "mx_VideoFeed_primary",
-    "mx_VideoFeed_secondary",
-    "mx_VideoFeed_tertiary",
-    "mx_VideoFeed_quaternary",
-];
+import CallViewSidebar from './CallViewSidebar';
 
 interface IProps {
         // The call for us to display
@@ -404,29 +398,6 @@ export default class CallView extends React.Component<IProps, IState> {
         this.props.call.transferToCall(transfereeCall);
     }
 
-    private renderFeeds(feeds: Array<CallFeed>, offset = 0) {
-        return feeds.map((feed, i) => {
-            i += offset;
-            // TODO: Later the CallView should probably be reworked to support
-            // any number of feeds but now we can't render more than 4 feeds
-            if (i >= 4) return;
-            // Here we check to hide any non-main audio feeds from the UI
-            // This is because we don't want them to obstruct the view
-            // But once again this might be subject to change
-            if (feed.isVideoMuted() && i > 0) return;
-            return (
-                <VideoFeed
-                    key={feed.stream.id}
-                    className={FEED_CLASS_NAMES[i]}
-                    feed={feed}
-                    call={this.props.call}
-                    pipMode={this.props.pipMode}
-                    onResize={this.props.onResize}
-                />
-            );
-        });
-    }
-
     public render() {
         const client = MatrixClientPeg.get();
         const callRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
@@ -674,37 +645,63 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_voice: true,
             });
 
-            // We pass offset of one to avoid a feed being rendered as primary
-            const feeds = this.renderFeeds(this.props.call.getLocalFeeds(), 1);
-
             // Saying "Connecting" here isn't really true, but the best thing
             // I can come up with, but this might be subject to change as well
-            contentView = <div className={classes} onMouseMove={this.onMouseMove}>
-                {feeds}
-                <div className="mx_CallView_voice_avatarsContainer">
-                    <div className="mx_CallView_voice_avatarContainer" style={{width: avatarSize, height: avatarSize}}>
-                        <RoomAvatar
-                            room={callRoom}
-                            height={avatarSize}
-                            width={avatarSize}
-                        />
+            contentView = (
+                <div
+                    className={classes}
+                    onMouseMove={this.onMouseMove}
+                >
+                    <CallViewSidebar
+                        feeds={this.state.feeds}
+                        call={this.props.call}
+                    />
+                    <div className="mx_CallView_voice_avatarsContainer">
+                        <div
+                            className="mx_CallView_voice_avatarContainer"
+                            style={{width: avatarSize, height: avatarSize}}
+                        >
+                            <RoomAvatar
+                                room={callRoom}
+                                height={avatarSize}
+                                width={avatarSize}
+                            />
+                        </div>
                     </div>
+                    <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
+                    {callControls}
                 </div>
-                <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
-                {callControls}
-            </div>;
+            );
         } else {
             const containerClasses = classNames({
                 mx_CallView_content: true,
                 mx_CallView_video: true,
             });
 
-            const feeds = this.renderFeeds(this.state.feeds);
+            // Don't show the primary feed in the sidebar
+            const feedsForSidebar = [...this.state.feeds];
+            feedsForSidebar.shift();
 
-            contentView = <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
-                {feeds}
-                {callControls}
-            </div>;
+            contentView = (
+                <div
+                    className={containerClasses}
+                    ref={this.contentRef}
+                    onMouseMove={this.onMouseMove}
+                >
+                    <CallViewSidebar
+                        feeds={feedsForSidebar}
+                        call={this.props.call}
+                    />
+                    <VideoFeed
+                        feed={this.state.feeds[0]}
+                        call={this.props.call}
+                        pipMode={this.props.pipMode}
+                        onResize={this.props.onResize}
+                        primary={true}
+                    />
+                    { callControls }
+                </div>
+            );
         }
 
         const callTypeText = this.props.call.type === CallType.Video ? _t("Video Call") : _t("Voice Call");
