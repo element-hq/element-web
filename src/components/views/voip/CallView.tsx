@@ -65,7 +65,8 @@ interface IState {
     controlsVisible: boolean,
     showMoreMenu: boolean,
     showDialpad: boolean,
-    feeds: CallFeed[],
+    primaryFeed: CallFeed,
+    secondaryFeeds: Array<CallFeed>,
 }
 
 function getFullScreenElement() {
@@ -112,6 +113,8 @@ export default class CallView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
+        const { primary, secondary } = this.getOrderedFeeds(this.props.call.getFeeds());
+
         this.state = {
             isLocalOnHold: this.props.call.isLocalOnHold(),
             isRemoteOnHold: this.props.call.isRemoteOnHold(),
@@ -122,7 +125,8 @@ export default class CallView extends React.Component<IProps, IState> {
             controlsVisible: true,
             showMoreMenu: false,
             showDialpad: false,
-            feeds: this.sortFeeds(this.props.call.getFeeds()),
+            primaryFeed: primary,
+            secondaryFeeds: secondary,
         }
 
         this.updateCallListeners(null, this.props.call);
@@ -197,7 +201,11 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private onFeedsChanged = (newFeeds: Array<CallFeed>) => {
-        this.setState({feeds: this.sortFeeds(newFeeds)});
+        const { primary, secondary } = this.getOrderedFeeds(newFeeds);
+        this.setState({
+            primaryFeed: primary,
+            secondaryFeeds: secondary,
+        });
     };
 
     private onCallLocalHoldUnhold = () => {
@@ -240,13 +248,28 @@ export default class CallView extends React.Component<IProps, IState> {
         this.showControls();
     }
 
-    private sortFeeds(feeds: Array<CallFeed>) {
-        // Sort the feeds so that screensharing and remote feeds have priority
-        return [...feeds].sort((a, b) => {
-            if (b.purpose === SDPStreamMetadataPurpose.Screenshare && !b.isLocal()) return 1;
-            if (a.isLocal() && !b.isLocal()) return 1;
-            return -1;
+    private getOrderedFeeds(feeds: Array<CallFeed>): { primary: CallFeed, secondary: Array<CallFeed> } {
+        let primary;
+
+        // First try to find remote screen-sharing stream
+        primary = feeds.find((feed) => {
+            return feed.purpose === SDPStreamMetadataPurpose.Screenshare && !feed.isLocal();
         });
+        // If we didn't find remote screen-sharing stream, try to find any remote stream
+        if (!primary) {
+            primary = feeds.find((feed) => !feed.isLocal());
+        }
+
+        const secondary = [...feeds];
+        // Remove the primary feed from the array
+        if (primary) secondary.splice(secondary.indexOf(primary), 1);
+        secondary.sort((a, b) => {
+            if (a.isLocal() && !b.isLocal()) return -1;
+            if (!a.isLocal() && b.isLocal()) return 1;
+            return 0;
+        });
+
+        return { primary, secondary };
     }
 
     private showControls() {
@@ -653,7 +676,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     onMouseMove={this.onMouseMove}
                 >
                     <CallViewSidebar
-                        feeds={this.state.feeds}
+                        feeds={this.state.secondaryFeeds}
                         call={this.props.call}
                     />
                     <div className="mx_CallView_voice_avatarsContainer">
@@ -678,10 +701,6 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video: true,
             });
 
-            // Don't show the primary feed in the sidebar
-            const feedsForSidebar = [...this.state.feeds];
-            feedsForSidebar.shift();
-
             contentView = (
                 <div
                     className={containerClasses}
@@ -689,11 +708,11 @@ export default class CallView extends React.Component<IProps, IState> {
                     onMouseMove={this.onMouseMove}
                 >
                     <CallViewSidebar
-                        feeds={feedsForSidebar}
+                        feeds={this.state.secondaryFeeds}
                         call={this.props.call}
                     />
                     <VideoFeed
-                        feed={this.state.feeds[0]}
+                        feed={this.state.primaryFeed}
                         call={this.props.call}
                         pipMode={this.props.pipMode}
                         onResize={this.props.onResize}
