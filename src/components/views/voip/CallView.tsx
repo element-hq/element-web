@@ -431,7 +431,15 @@ export default class CallView extends React.Component<IProps, IState> {
     }
 
     private onToggleSidebar = () => {
-        this.setState({ sidebarShown: !this.state.sidebarShown });
+        let vidMuted = this.state.vidMuted;
+        if (this.state.screensharing) {
+            vidMuted = this.state.sidebarShown;
+            this.props.call.setLocalVideoMuted(vidMuted);
+        }
+        this.setState({
+            vidMuted: vidMuted,
+            sidebarShown: !this.state.sidebarShown,
+        });
     }
 
     private renderCallControls(): JSX.Element {
