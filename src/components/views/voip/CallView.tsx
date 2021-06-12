@@ -608,6 +608,16 @@ export default class CallView extends React.Component<IProps, IState> {
             </div>;
         }
 
+        let sidebar;
+        if (!isOnHold && !transfereeCall && !this.props.pipMode) {
+            sidebar = (
+                <CallViewSidebar
+                    feeds={this.state.secondaryFeeds}
+                    call={this.props.call}
+                />
+            );
+        }
+
         // This is a bit messy. I can't see a reason to have two onHold/transfer screens
         if (isOnHold || transfereeCall) {
             if (this.props.call.type === CallType.Video) {
@@ -675,10 +685,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     className={classes}
                     onMouseMove={this.onMouseMove}
                 >
-                    <CallViewSidebar
-                        feeds={this.state.secondaryFeeds}
-                        call={this.props.call}
-                    />
+                    { sidebar }
                     <div className="mx_CallView_voice_avatarsContainer">
                         <div
                             className="mx_CallView_voice_avatarContainer"
@@ -707,10 +714,7 @@ export default class CallView extends React.Component<IProps, IState> {
                     ref={this.contentRef}
                     onMouseMove={this.onMouseMove}
                 >
-                    <CallViewSidebar
-                        feeds={this.state.secondaryFeeds}
-                        call={this.props.call}
-                    />
+                    { sidebar }
                     <VideoFeed
                         feed={this.state.primaryFeed}
                         call={this.props.call}
