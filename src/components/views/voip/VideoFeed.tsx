@@ -73,6 +73,13 @@ export default class VideoFeed extends React.Component<IProps, IState> {
         this.updateFeed(prevProps.feed, this.props.feed);
     }
 
+    static getDerivedStateFromProps(props: IProps) {
+        return {
+            audioMuted: props.feed.isAudioMuted(),
+            videoMuted: props.feed.isVideoMuted(),
+        };
+    }
+
     private updateFeed(oldFeed: CallFeed, newFeed: CallFeed) {
         if (oldFeed === newFeed) return;
 
