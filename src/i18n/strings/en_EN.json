@@ -895,6 +895,7 @@
     "More": "More",
     "Unmute the microphone": "Unmute the microphone",
     "Mute the microphone": "Mute the microphone",
+    "Hangup": "Hangup",
     "unknown person": "unknown person",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
     "You held the call <a>Switch</a>": "You held the call <a>Switch</a>",
