@@ -60,14 +60,30 @@ export default class VideoFeed extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
-        this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
+        this.updateFeed(null, this.props.feed);
         this.playMedia();
     }
 
     componentWillUnmount() {
-        this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
+        this.updateFeed(this.props.feed, null);
         this.element.current?.removeEventListener('resize', this.onResize);
-        this.stopMedia();
+    }
+
+    componentDidUpdate(prevProps: IProps) {
+        this.updateFeed(prevProps.feed, this.props.feed);
+    }
+
+    private updateFeed(oldFeed: CallFeed, newFeed: CallFeed) {
+        if (oldFeed === newFeed) return;
+
+        if (oldFeed) {
+            this.props.feed.removeListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.stopMedia();
+        }
+        if (newFeed) {
+            this.props.feed.addListener(CallFeedEvent.NewStream, this.onNewStream);
+            this.playMedia();
+        }
     }
 
     private playMedia() {
