@@ -32,12 +32,12 @@ export enum Tabs {
     Windows = "windows",
 }
 
-export interface DesktopCapturerSourceIProps {
+export interface ExistingSourceIProps {
     source: DesktopCapturerSource;
     onSelect(source: DesktopCapturerSource): void;
 }
 
-export class ExistingSource extends React.Component<DesktopCapturerSourceIProps> {
+export class ExistingSource extends React.Component<ExistingSourceIProps> {
     constructor(props) {
         super(props);
     }
@@ -62,18 +62,18 @@ export class ExistingSource extends React.Component<DesktopCapturerSourceIProps>
     }
 }
 
-export interface DesktopCapturerSourcePickerIState {
+export interface PickerIState {
     selectedTab: Tabs;
     sources: Array<DesktopCapturerSource>;
 }
-export interface DesktopCapturerSourcePickerIProps {
+export interface PickerIProps {
     onFinished(source: DesktopCapturerSource): void;
 }
 
 @replaceableComponent("views.elements.DesktopCapturerSourcePicker")
 export default class DesktopCapturerSourcePicker extends React.Component<
-    DesktopCapturerSourcePickerIProps,
-    DesktopCapturerSourcePickerIState
+    PickerIProps,
+    PickerIState
     > {
     interval;
 
