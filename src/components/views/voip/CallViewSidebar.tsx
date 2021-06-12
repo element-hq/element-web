@@ -23,11 +23,14 @@ import VideoFeed from "./VideoFeed";
 interface IProps {
     feeds: Array<CallFeed>;
     call: MatrixCall;
+    hideFeedsWithMutedVideo: boolean;
 }
 
 export default class CallViewSidebar extends React.Component<IProps> {
     render() {
         const feeds = this.props.feeds.map((feed) => {
+            if (feed.isVideoMuted() && this.props.hideFeedsWithMutedVideo) return;
+
             return (
                 <VideoFeed
                     key={feed.stream.id}

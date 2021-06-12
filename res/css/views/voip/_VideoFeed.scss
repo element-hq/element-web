@@ -38,7 +38,7 @@ limitations under the License.
     margin-bottom: 12px;
 
     &.mx_VideoFeed_voice {
-        background-color: #17191c; // Same on both themes
+        background-color: $inverted-bg-color;
 
         display: flex;
         align-items: center;
