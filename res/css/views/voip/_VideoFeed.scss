@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_VideoFeed_voice {
-    // We don't want to collide with the call controls that have 52px of height
-    padding-bottom: 52px;
-    background-color: $inverted-bg-color;
-}
-
 .mx_VideoFeed_primary {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &.mx_VideoFeed_voice {
+        // We don't want to collide with the call controls that have 52px of height
+        padding-bottom: 52px;
+        background-color: $inverted-bg-color;
+    }
 
     &.mx_VideoFeed_video {
         background-color: #000;
@@ -36,6 +36,17 @@ limitations under the License.
     border-radius: 4px;
     width: 100%;
     margin-bottom: 12px;
+
+    &.mx_VideoFeed_voice {
+        background-color: #17191c; // Same on both themes
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 160px;
+        min-height: 90px;
+    }
 
     &.mx_VideoFeed_video {
         background-color: transparent;

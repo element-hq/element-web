@@ -151,7 +151,10 @@ export default class VideoFeed extends React.Component<IProps, IState> {
 
         if (this.state.videoMuted) {
             const member = this.props.feed.getMember();
-            const avatarSize = this.props.pipMode ? 76 : 160;
+            let avatarSize;
+            if (this.props.pipMode) avatarSize = 76;
+            else if (!this.props.primary) avatarSize = 34;
+            else avatarSize = 160;
 
             return (
                 <div className={classnames(videoClasses)} >
