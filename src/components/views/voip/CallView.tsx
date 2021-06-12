@@ -421,40 +421,14 @@ export default class CallView extends React.Component<IProps, IState> {
         this.props.call.transferToCall(transfereeCall);
     }
 
-    public render() {
-        const client = MatrixClientPeg.get();
-        const callRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
-        const secondaryCallRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
-        const callRoom = client.getRoom(callRoomId);
-        const secCallRoom = this.props.secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
+    private onHangupClick = () => {
+        dis.dispatch({
+            action: 'hangup',
+            room_id: CallHandler.sharedInstance().roomIdForCall(this.props.call),
+        });
+    }
 
-        let dialPad;
-        let contextMenu;
-
-        if (this.state.showDialpad) {
-            dialPad = <DialpadContextMenu
-                {...alwaysAboveRightOf(
-                    this.dialpadButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                onFinished={this.closeDialpad}
-                call={this.props.call}
-            />;
-        }
-
-        if (this.state.showMoreMenu) {
-            contextMenu = <CallContextMenu
-                {...alwaysAboveLeftOf(
-                    this.contextMenuButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                onFinished={this.closeContextMenu}
-                call={this.props.call}
-            />;
-        }
-
+    private renderCallControls(): JSX.Element {
         const micClasses = classNames({
             mx_CallView_callControls_button: true,
             mx_CallView_callControls_button_micOn: !this.state.micMuted,
@@ -494,16 +468,22 @@ export default class CallView extends React.Component<IProps, IState> {
             mx_CallView_callControls_hidden: !this.state.controlsVisible,
         });
 
-        const vidMuteButton = this.props.call.type === CallType.Video ? <AccessibleButton
-            className={vidClasses}
-            onClick={this.onVidMuteClick}
-        /> : null;
+        // We don't support call upgrades (yet) so hide the video mute button in voice calls
+        let vidMuteButton;
+        if (this.props.call.type === CallType.Video) {
+            vidMuteButton = (
+                <AccessibleButton
+                    className={vidClasses}
+                    onClick={this.onVidMuteClick}
+                />
+            );
+        }
 
-        let screensharingButton;
         // Screensharing is possible, if we can send a second stream and
         // identify it using SDPStreamMetadata or if we can replace the already
         // existing usermedia track by a screensharing track. We also need to be
         // connected to know the state of the other side
+        let screensharingButton;
         if (
             (this.props.call.opponentSupportsSDPStreamMetadata() || this.props.call.type === CallType.Video) &&
             this.props.call.state === CallState.Connected
@@ -532,39 +512,39 @@ export default class CallView extends React.Component<IProps, IState> {
             isExpanded={this.state.showMoreMenu}
         /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_more_hidden" />;
 
-        // in the near future, the dial pad button will go on the left. For now, it's the nothing button
-        // because something needs to have margin-right: auto to make the alignment correct.
-        const callControls = <div className={callControlsClasses}>
-            {dialpadButton}
-            <AccessibleButton
-                className={micClasses}
-                onClick={this.onMicMuteClick}
-            />
-            <AccessibleButton
-                className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
-                onClick={() => {
-                    dis.dispatch({
-                        action: 'hangup',
-                        room_id: callRoomId,
-                    });
-                }}
-            />
-            {vidMuteButton}
-            {screensharingButton}
-            <div className={micCacheClasses} />
-            <div className={vidCacheClasses} />
-            {contextMenuButton}
-        </div>;
+        return (
+            <div className={callControlsClasses}>
+                { dialpadButton }
+                <AccessibleButton
+                    className={micClasses}
+                    onClick={this.onMicMuteClick}
+                />
+                <AccessibleButton
+                    className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
+                    onClick={this.onHangupClick}
+                />
+                { vidMuteButton }
+                { screensharingButton }
+                <div className={micCacheClasses} />
+                <div className={vidCacheClasses} />
+                { contextMenuButton }
+            </div>
+        );
+    }
 
+    public render() {
+        const client = MatrixClientPeg.get();
+        const callRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.call);
+        const secondaryCallRoomId = CallHandler.sharedInstance().roomIdForCall(this.props.secondaryCall);
+        const callRoom = client.getRoom(callRoomId);
+        const secCallRoom = this.props.secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
         const avatarSize = this.props.pipMode ? 76 : 160;
-
-        // The 'content' for the call, ie. the videos for a video call and profile picture
-        // for voice calls (fills the bg)
-        let contentView: React.ReactNode;
-
         const transfereeCall = CallHandler.sharedInstance().getTransfereeForCallId(this.props.call.callId);
         const isOnHold = this.state.isLocalOnHold || this.state.isRemoteOnHold;
+
+        let contentView: React.ReactNode;
         let holdTransferContent;
+
         if (transfereeCall) {
             const transferTargetRoom = MatrixClientPeg.get().getRoom(
                 CallHandler.sharedInstance().roomIdForCall(this.props.call),
@@ -638,9 +618,9 @@ export default class CallView extends React.Component<IProps, IState> {
 
                 contentView = (
                     <div className={containerClasses} ref={this.contentRef} onMouseMove={this.onMouseMove}>
-                        {onHoldBackground}
-                        {holdTransferContent}
-                        {callControls}
+                        { onHoldBackground }
+                        { holdTransferContent }
+                        { this.renderCallControls() }
                     </div>
                 );
             } else {
@@ -664,8 +644,8 @@ export default class CallView extends React.Component<IProps, IState> {
                                 />
                             </div>
                         </div>
-                        {holdTransferContent}
-                        {callControls}
+                        { holdTransferContent }
+                        { this.renderCallControls() }
                     </div>
                 );
             }
@@ -700,7 +680,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         </div>
                     </div>
                     <div className="mx_CallView_holdTransferContent">{_t("Connecting")}</div>
-                    {callControls}
+                    { this.renderCallControls() }
                 </div>
             );
         } else {
@@ -739,7 +719,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         onResize={this.props.onResize}
                         primary={true}
                     />
-                    { callControls }
+                    { this.renderCallControls() }
                 </div>
             );
         }
@@ -803,11 +783,37 @@ export default class CallView extends React.Component<IProps, IState> {
             myClassName = 'mx_CallView_pip';
         }
 
+        let dialPad;
+        if (this.state.showDialpad) {
+            dialPad = <DialpadContextMenu
+                {...alwaysAboveRightOf(
+                    this.dialpadButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                onFinished={this.closeDialpad}
+                call={this.props.call}
+            />;
+        }
+
+        let contextMenu;
+        if (this.state.showMoreMenu) {
+            contextMenu = <CallContextMenu
+                {...alwaysAboveLeftOf(
+                    this.contextMenuButton.current.getBoundingClientRect(),
+                    ChevronFace.None,
+                    CONTEXT_MENU_VPADDING,
+                )}
+                onFinished={this.closeContextMenu}
+                call={this.props.call}
+            />;
+        }
+
         return <div className={"mx_CallView " + myClassName}>
-            {header}
-            {contentView}
-            {dialPad}
-            {contextMenu}
+            { header }
+            { contentView }
+            { dialPad }
+            { contextMenu }
         </div>;
     }
 }
