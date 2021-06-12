@@ -708,12 +708,28 @@ export default class CallView extends React.Component<IProps, IState> {
                 mx_CallView_video: true,
             });
 
+            let presenting;
+            if (this.state.primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare) {
+                const presentingClasses = classNames({
+                    mx_CallView_presenting: true,
+                    mx_CallView_presenting_hidden: !this.state.controlsVisible,
+                });
+                const sharerName = this.state.primaryFeed.getMember().name;
+
+                presenting = (
+                    <div className={presentingClasses}>
+                        { _t('%(sharerName)s is presenting', {sharerName}) }
+                    </div>
+                );
+            }
+
             contentView = (
                 <div
                     className={containerClasses}
                     ref={this.contentRef}
                     onMouseMove={this.onMouseMove}
                 >
+                    { presenting }
                     { sidebar }
                     <VideoFeed
                         feed={this.state.primaryFeed}

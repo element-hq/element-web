@@ -68,6 +68,7 @@ limitations under the License.
 .mx_CallView_content {
     position: relative;
     display: flex;
+    justify-content: center;
     border-radius: 8px;
 }
 
@@ -295,6 +296,25 @@ limitations under the License.
 }
 
 .mx_CallView_callControls_hidden {
+    opacity: 0.001; // opacity 0 can cause a re-layout
+    pointer-events: none;
+}
+
+.mx_CallView_presenting {
+    opacity: 1;
+    transition: opacity 0.5s;
+
+    position: absolute;
+    margin-top: 18px;
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    // Same on both themes
+    color: white;
+    background-color: #17191c;
+}
+
+.mx_CallView_presenting_hidden {
     opacity: 0.001; // opacity 0 can cause a re-layout
     pointer-events: none;
 }
