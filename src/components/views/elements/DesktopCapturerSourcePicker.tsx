@@ -17,9 +17,11 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog"
+import DialogButtons from "./DialogButtons"
 import AccessibleButton from './AccessibleButton';
-import {getDesktopCapturerSources} from "matrix-js-sdk/src/webrtc/call";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getDesktopCapturerSources } from "matrix-js-sdk/src/webrtc/call";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import classNames from 'classnames';
 
 export interface DesktopCapturerSource {
     id: string;
@@ -28,13 +30,14 @@ export interface DesktopCapturerSource {
 }
 
 export enum Tabs {
-    Screens = "screens",
-    Windows = "windows",
+    Screens = "screen",
+    Windows = "window",
 }
 
 export interface ExistingSourceIProps {
     source: DesktopCapturerSource;
     onSelect(source: DesktopCapturerSource): void;
+    selected: boolean;
 }
 
 export class ExistingSource extends React.Component<ExistingSourceIProps> {
@@ -47,9 +50,14 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
     }
 
     render() {
+        const classes = classNames({
+            mx_desktopCapturerSourcePicker_stream_button: true,
+            mx_desktopCapturerSourcePicker_stream_button_selected: this.props.selected,
+        });
+
         return (
             <AccessibleButton
-                className="mx_desktopCapturerSourcePicker_stream_button"
+                className={classes}
                 title={this.props.source.name}
                 onClick={this.onClick} >
                 <img
@@ -65,6 +73,7 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
 export interface PickerIState {
     selectedTab: Tabs;
     sources: Array<DesktopCapturerSource>;
+    selectedSource: DesktopCapturerSource | null;
 }
 export interface PickerIProps {
     onFinished(source: DesktopCapturerSource): void;
@@ -83,6 +92,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
         this.state = {
             selectedTab: Tabs.Screens,
             sources: [],
+            selectedSource: null,
         };
     }
 
@@ -107,40 +117,47 @@ export default class DesktopCapturerSourcePicker extends React.Component<
     }
 
     onSelect = (source) => {
-        this.props.onFinished(source);
+        this.setState({ selectedSource: source });
     }
 
-    onScreensClick = (ev) => {
-        this.setState({selectedTab: Tabs.Screens});
+    onShare = () => {
+        this.props.onFinished(this.state.selectedSource);
     }
 
-    onWindowsClick = (ev) => {
-        this.setState({selectedTab: Tabs.Windows});
+    onScreensClick = () => {
+        if (this.state.selectedTab === Tabs.Screens) return;
+        this.setState({
+            selectedTab: Tabs.Screens,
+            selectedSource: null,
+        });
     }
 
-    onCloseClick = (ev) => {
+    onWindowsClick = () => {
+        if (this.state.selectedTab === Tabs.Windows) return;
+        this.setState({
+            selectedTab: Tabs.Windows,
+            selectedSource: null,
+        });
+    }
+
+    onCloseClick = () => {
         this.props.onFinished(null);
     }
 
     render() {
-        let sources;
-        if (this.state.selectedTab === Tabs.Screens) {
-            sources = this.state.sources
-                .filter((source) => {
-                    return source.id.startsWith("screen");
-                })
-                .map((source) => {
-                    return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
-                });
-        } else {
-            sources = this.state.sources
-                .filter((source) => {
-                    return source.id.startsWith("window");
-                })
-                .map((source) => {
-                    return <ExistingSource source={source} onSelect={this.onSelect} key={source.id} />;
-                });
-        }
+        const sources = this.state.sources.filter((source) => {
+            return source.id.startsWith(this.state.selectedTab)
+        });
+        const sourceElements = sources.map((source) => {
+            return (
+                <ExistingSource
+                    selected={this.state.selectedSource?.id === source.id}
+                    source={source}
+                    onSelect={this.onSelect}
+                    key={source.id}
+                />
+            );
+        });
 
         const buttonStyle = "mx_desktopCapturerSourcePicker_tabLabel";
         const screensButtonStyle = buttonStyle + ((this.state.selectedTab === Tabs.Screens) ? "_selected" : "");
@@ -167,8 +184,15 @@ export default class DesktopCapturerSourcePicker extends React.Component<
                     </AccessibleButton>
                 </div>
                 <div className="mx_desktopCapturerSourcePicker_panel">
-                    { sources }
+                    { sourceElements }
                 </div>
+                <DialogButtons
+                    primaryButton={_t("Share")}
+                    hasCancel={true}
+                    onCancel={this.onCloseClick}
+                    onPrimaryButtonClick={this.onShare}
+                    primaryDisabled={!this.state.selectedSource}
+                />
             </BaseDialog>
         );
     }

@@ -53,6 +53,7 @@ limitations under the License.
     border-radius: 4px;
 }
 
+.mx_desktopCapturerSourcePicker_stream_button_selected,
 .mx_desktopCapturerSourcePicker_stream_button:hover,
 .mx_desktopCapturerSourcePicker_stream_button:focus {
     background: $roomtile-selected-bg-color;
