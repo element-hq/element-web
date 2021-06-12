@@ -441,6 +441,7 @@ export default class CallView extends React.Component<IProps, IState> {
         const vidMuteButton = this.props.call.type === CallType.Video ? <AccessibleButton
             className={vidClasses}
             onClick={this.onVidMuteClick}
+            aria-label={this.state.vidMuted ? _t("Start the camera") : _t("Stop the camera")}
         /> : null;
 
         // The dial pad & 'more' button actions are only relevant in a connected call
@@ -450,6 +451,7 @@ export default class CallView extends React.Component<IProps, IState> {
             inputRef={this.dialpadButton}
             onClick={this.onDialpadClick}
             isExpanded={this.state.showDialpad}
+            aria-label={_t("Dialpad")}
         /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_dialpad_hidden" />;
 
         const contextMenuButton = this.state.callState === CallState.Connected ? <ContextMenuButton
@@ -457,6 +459,7 @@ export default class CallView extends React.Component<IProps, IState> {
             onClick={this.onMoreClick}
             inputRef={this.contextMenuButton}
             isExpanded={this.state.showMoreMenu}
+            aria-label={_t("More")}
         /> : <div className="mx_CallView_callControls_button mx_CallView_callControls_button_more_hidden" />;
 
         // in the near future, the dial pad button will go on the left. For now, it's the nothing button
@@ -466,6 +469,7 @@ export default class CallView extends React.Component<IProps, IState> {
             <AccessibleButton
                 className={micClasses}
                 onClick={this.onMicMuteClick}
+                aria-label={this.state.micMuted ? _t("Unmute the microphone") : _t("Mute the microphone")}
             />
             <AccessibleButton
                 className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
