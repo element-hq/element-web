@@ -19,7 +19,8 @@ limitations under the License.
     right: 16px;
     top: 16px;
     z-index: 100; // To be above the primary feed
-    max-width: 15%;
+    max-width: 20%;
+    min-width: 160px; // To match .mx_VideoFeed_voice
     display: flex;
     flex-direction: column;
 }
