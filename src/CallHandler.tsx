@@ -535,6 +535,7 @@ export default class CallHandler extends EventEmitter {
                 if (newMappedRoomId !== mappedRoomId) {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
+                    console.log("Moving call to room " + mappedRoomId);
                     this.calls.set(mappedRoomId, call);
                     this.emit(CallHandlerEvent.CallChangeRoom, call);
                 }
@@ -600,6 +601,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     private removeCallForRoom(roomId: string) {
+        console.log("Removing call for room ", roomId);
         this.calls.delete(roomId);
         this.emit(CallHandlerEvent.CallsChanged, this.calls);
     }
@@ -673,6 +675,7 @@ export default class CallHandler extends EventEmitter {
         console.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
         const call = MatrixClientPeg.get().createCall(mappedRoomId);
 
+        console.log("Adding call for room ", roomId);
         this.calls.set(roomId, call);
         this.emit(CallHandlerEvent.CallsChanged, this.calls);
         if (transferee) {
@@ -786,6 +789,7 @@ export default class CallHandler extends EventEmitter {
                     }
 
                     Analytics.trackEvent('voip', 'receiveCall', 'type', call.type);
+                    console.log("Adding call for room ", mappedRoomId);
                     this.calls.set(mappedRoomId, call)
                     this.emit(CallHandlerEvent.CallsChanged, this.calls);
                     this.setCallListeners(call);

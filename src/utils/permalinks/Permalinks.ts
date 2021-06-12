@@ -149,7 +149,7 @@ export class RoomPermalinkCreator {
             // Prefer to use canonical alias for permalink if possible
             const alias = this.room.getCanonicalAlias();
             if (alias) {
-                return getPermalinkConstructor().forRoom(alias, this._serverCandidates);
+                return getPermalinkConstructor().forRoom(alias);
             }
         }
         return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
@@ -302,7 +302,7 @@ export function makeRoomPermalink(roomId: string): string {
     }
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
-    return permalinkCreator.forRoom();
+    return permalinkCreator.forShareableRoom();
 }
 
 export function makeGroupPermalink(groupId: string): string {

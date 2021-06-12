@@ -15,17 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
-let TextDecoder = window.TextDecoder;
-if (!TextDecoder) {
-    TextDecoder = TextEncodingUtf8.TextDecoder;
-}
-
 import { _t } from '../languageHandler';
 import SdkConfig from '../SdkConfig';
 

@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,52 +14,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentType } from "react";
+
 import * as sdk from './index';
-import PropTypes from 'prop-types';
 import { _t } from './languageHandler';
+import { IDialogProps } from "./components/views/dialogs/IDialogProps";
+
+type AsyncImport<T> = { default: T };
+
+interface IProps extends IDialogProps {
+    // A promise which resolves with the real component
+    prom: Promise<ComponentType | AsyncImport<ComponentType>>;
+}
+
+interface IState {
+    component?: ComponentType;
+    error?: Error;
+}
 
 /**
  * Wrap an asynchronous loader function with a react component which shows a
  * spinner until the real component loads.
  */
-export default class AsyncWrapper extends React.Component {
-    static propTypes = {
-        /** A promise which resolves with the real component
-         */
-        prom: PropTypes.object.isRequired,
-    };
+export default class AsyncWrapper extends React.Component<IProps, IState> {
+    private unmounted = false;
 
-    state = {
+    public state = {
         component: null,
         error: null,
     };
 
     componentDidMount() {
-        this._unmounted = false;
         // XXX: temporary logging to try to diagnose
         // https://github.com/vector-im/element-web/issues/3148
         console.log('Starting load of AsyncWrapper for modal');
         this.props.prom.then((result) => {
-            if (this._unmounted) {
-                return;
-            }
+            if (this.unmounted) return;
+
             // Take the 'default' member if it's there, then we support
             // passing in just an import()ed module, since ES6 async import
             // always returns a module *namespace*.
-            const component = result.default ? result.default : result;
-            this.setState({component});
+            const component = (result as AsyncImport<ComponentType>).default
+                ? (result as AsyncImport<ComponentType>).default
+                : result as ComponentType;
+            this.setState({ component });
         }).catch((e) => {
             console.warn('AsyncWrapper promise failed', e);
-            this.setState({error: e});
+            this.setState({ error: e });
         });
     }
 
     componentWillUnmount() {
-        this._unmounted = true;
+        this.unmounted = true;
     }
 
-    _onWrapperCancelClick = () => {
+    private onWrapperCancelClick = () => {
         this.props.onFinished(false);
     };
 
@@ -71,12 +79,10 @@ export default class AsyncWrapper extends React.Component {
         } else if (this.state.error) {
             const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            return <BaseDialog onFinished={this.props.onFinished}
-                title={_t("Error")}
-            >
-                {_t("Unable to load! Check your network connectivity and try again.")}
+            return <BaseDialog onFinished={this.props.onFinished} title={_t("Error")}>
+                { _t("Unable to load! Check your network connectivity and try again.") }
                 <DialogButtons primaryButton={_t("Dismiss")}
-                    onPrimaryButtonClick={this._onWrapperCancelClick}
+                    onPrimaryButtonClick={this.onWrapperCancelClick}
                     hasCancel={false}
                 />
             </BaseDialog>;

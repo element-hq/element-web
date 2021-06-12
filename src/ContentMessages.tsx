@@ -28,8 +28,6 @@ import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
 
-// Polyfill for Canvas.toBlob API using Canvas.toDataURL
-import "blueimp-canvas-to-blob";
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
 import {

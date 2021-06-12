@@ -34,7 +34,7 @@ function mockRoom(roomId, members, serverACL) {
 
     return {
         roomId,
-        getCanonicalAlias: () => roomId,
+        getCanonicalAlias: () => null,
         getJoinedMembers: () => members,
         getMember: (userId) => members.find(m => m.userId === userId),
         currentState: {

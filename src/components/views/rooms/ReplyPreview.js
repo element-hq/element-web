@@ -89,7 +89,7 @@ export default class ReplyPreview extends React.Component {
                 </div>
                 <div className="mx_ReplyPreview_clear" />
                 <EventTile
-                    last={true}
+                    alwaysShowTimestamps={true}
                     tileShape="reply_preview"
                     mxEvent={this.state.event}
                     permalinkCreator={this.props.permalinkCreator}

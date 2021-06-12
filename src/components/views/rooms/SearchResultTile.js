@@ -47,6 +47,7 @@ export default class SearchResultTile extends React.Component {
 
         const ts1 = mxEv.getTs();
         const ret = [<DateSeparator key={ts1 + "-search"} ts={ts1} />];
+        const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
 
         const timeline = result.context.getTimeline();
         for (let j = 0; j < timeline.length; j++) {
@@ -67,6 +68,7 @@ export default class SearchResultTile extends React.Component {
                         highlightLink={this.props.resultLink}
                         onHeightChanged={this.props.onHeightChanged}
                         isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
+                        alwaysShowTimestamps={alwaysShowTimestamps}
                         enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                     />
                 ));

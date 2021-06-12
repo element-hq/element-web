@@ -21,7 +21,7 @@ import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore, {
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
-    UPDATE_TOP_LEVEL_SPACES
+    UPDATE_TOP_LEVEL_SPACES,
 } from "../../src/stores/SpaceStore";
 import { resetAsyncStoreWithClient, setupAsyncStoreWithClient } from "../utils/test-utils";
 import { mkEvent, mkStubRoom, stubClient } from "../test-utils";

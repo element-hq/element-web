@@ -17,6 +17,7 @@
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 
 import SettingsStore from "./settings/SettingsStore";
+import {IState} from "./components/structures/RoomView";
 
 interface IDiff {
     isMemberEvent: boolean;
@@ -47,11 +48,18 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
     return diff;
 }
 
-export default function shouldHideEvent(ev: MatrixEvent): boolean {
-    // Wrap getValue() for readability. Calling the SettingsStore can be
-    // fairly resource heavy, so the checks below should avoid hitting it
-    // where possible.
-    const isEnabled = (name) => SettingsStore.getValue(name, ev.getRoomId());
+/**
+ * Determines whether the given event should be hidden from timelines.
+ * @param ev The event
+ * @param ctx An optional RoomContext to pull cached settings values from to avoid
+ *     hitting the settings store
+ */
+export default function shouldHideEvent(ev: MatrixEvent, ctx?: IState): boolean {
+    // Accessing the settings store directly can be expensive if done frequently,
+    // so we should prefer using cached values if a RoomContext is available
+    const isEnabled = ctx ?
+        name => ctx[name] :
+        name => SettingsStore.getValue(name, ev.getRoomId());
 
     // Hide redacted events
     if (ev.isRedacted() && !isEnabled('showRedactions')) return true;

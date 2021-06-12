@@ -25,7 +25,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
-import * as TextForEvent from "../../../TextForEvent";
+import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -644,7 +644,18 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            return null;
+            // We currently must include `mx_EventTile_readAvatars` in the DOM
+            // of all events, as it is the positioned parent of the animated
+            // read receipts. We can't let it unmount when a receipt moves
+            // events, so for now we mount it for all events. Without it, the
+            // animation will start from the top of the timeline (because it
+            // lost its container).
+            // See also https://github.com/vector-im/element-web/issues/17561
+            return (
+                <div className="mx_EventTile_msgOption">
+                    <span className="mx_EventTile_readAvatars" />
+                </div>
+            );
         }
 
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
@@ -652,11 +663,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const receiptOffset = 15;
         let left = 0;
 
-        const receipts = this.props.readReceipts || [];
-
-        if (receipts.length === 0) {
-            return null;
-        }
+        const receipts = this.props.readReceipts;
 
         for (let i = 0; i < receipts.length; ++i) {
             const receipt = receipts[i];
@@ -906,6 +913,12 @@ export default class EventTile extends React.Component<IProps, IState> {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
 
+        // we can't use local echoes as scroll tokens, because their event IDs change.
+        // Local echos have a send "status".
+        const scrollToken = this.props.mxEvent.status
+            ? undefined
+            : this.props.mxEvent.getId();
+
         let avatar;
         let sender;
         let avatarSize;
@@ -975,7 +988,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const showTimestamp = this.props.mxEvent.getTs() && (this.props.alwaysShowTimestamps || this.state.hover);
+        const showTimestamp = this.props.mxEvent.getTs() &&
+            (this.props.alwaysShowTimestamps || this.props.last || this.state.hover || this.state.actionBarFocused);
         const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
@@ -1046,7 +1060,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
+                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
                         <div className="mx_EventTile_roomName">
                             <RoomAvatar room={room} width={28} height={28} />
                             <a href={permalink} onClick={this.onPermalinkClicked}>
@@ -1069,12 +1083,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onHeightChanged={this.props.onHeightChanged}
                             />
                         </div>
-                    </div>
+                    </li>
                 );
             }
             case 'file_grid': {
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
+                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this.tile}
                                 mxEvent={this.props.mxEvent}
@@ -1095,7 +1109,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 { timestamp }
                             </div>
                         </a>
-                    </div>
+                    </li>
                 );
             }
 
@@ -1108,10 +1122,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                         this.props.onHeightChanged,
                         this.props.permalinkCreator,
                         this.replyThread,
+                        null,
+                        this.props.alwaysShowTimestamps || this.state.hover,
                     );
                 }
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
+                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
                         { ircTimestamp }
                         { avatar }
                         { sender }
@@ -1129,7 +1145,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 showUrlPreview={false}
                             />
                         </div>
-                    </div>
+                    </li>
                 );
             }
             default: {
@@ -1139,17 +1155,18 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.permalinkCreator,
                     this.replyThread,
                     this.props.layout,
+                    this.props.alwaysShowTimestamps || this.state.hover,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    React.createElement(this.props.as || "div", {
+                    React.createElement(this.props.as || "li", {
                         "ref": this.ref,
                         "className": classes,
                         "tabIndex": -1,
                         "aria-live": ariaLive,
                         "aria-atomic": "true",
-                        "data-scroll-tokens": this.props["data-scroll-tokens"],
+                        "data-scroll-tokens": scrollToken,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                     }, [
@@ -1200,7 +1217,7 @@ export function haveTileForEvent(e) {
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
-        return TextForEvent.textForEvent(e) !== '';
+        return hasText(e);
     } else if (handler === 'messages.RoomCreate') {
         return Boolean(e.getContent()['predecessor']);
     } else {
@@ -1340,11 +1357,15 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
             tooltip = <Tooltip className="mx_EventTile_readAvatars_receiptTooltip" label={label} yOffset={20} />;
         }
 
-        return <span className="mx_EventTile_readAvatars">
-            <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                {nonCssBadge}
-                {tooltip}
-            </span>
-        </span>;
+        return (
+            <div className="mx_EventTile_msgOption">
+                <span className="mx_EventTile_readAvatars">
+                    <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
+                        {nonCssBadge}
+                        {tooltip}
+                    </span>
+                </span>
+            </div>
+        );
     }
 }

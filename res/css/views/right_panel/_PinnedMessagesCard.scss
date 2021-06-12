@@ -32,4 +32,59 @@ limitations under the License.
             margin-right: 6px;
         }
     }
+
+    .mx_PinnedMessagesCard_empty {
+        display: flex;
+        height: 100%;
+
+        > div {
+            height: max-content;
+            text-align: center;
+            margin: auto 40px;
+
+            .mx_PinnedMessagesCard_MessageActionBar {
+                pointer-events: none;
+                display: flex;
+                height: 32px;
+                line-height: $font-24px;
+                border-radius: 8px;
+                background: $primary-bg-color;
+                border: 1px solid $input-border-color;
+                padding: 1px;
+                width: max-content;
+                margin: 0 auto;
+                box-sizing: border-box;
+
+                .mx_MessageActionBar_maskButton {
+                    display: inline-block;
+                    position: relative;
+                }
+
+                .mx_MessageActionBar_optionsButton {
+                    background: $roomlist-button-bg-color;
+                    border-radius: 6px;
+                    z-index: 1;
+
+                    &::after {
+                        background-color: $primary-fg-color;
+                    }
+                }
+            }
+
+            > h2 {
+                font-weight: $font-semi-bold;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-fg-color;
+                margin-top: 24px;
+                margin-bottom: 20px;
+            }
+
+            > span {
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $secondary-fg-color;
+            }
+        }
+    }
 }
