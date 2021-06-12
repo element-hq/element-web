@@ -67,6 +67,7 @@ interface IState {
     showDialpad: boolean,
     primaryFeed: CallFeed,
     secondaryFeeds: Array<CallFeed>,
+    sidebarShown: boolean,
 }
 
 function getFullScreenElement() {
@@ -127,6 +128,7 @@ export default class CallView extends React.Component<IProps, IState> {
             showDialpad: false,
             primaryFeed: primary,
             secondaryFeeds: secondary,
+            sidebarShown: true,
         }
 
         this.updateCallListeners(null, this.props.call);
@@ -428,6 +430,10 @@ export default class CallView extends React.Component<IProps, IState> {
         });
     }
 
+    private onToggleSidebar = () => {
+        this.setState({ sidebarShown: !this.state.sidebarShown });
+    }
+
     private renderCallControls(): JSX.Element {
         const micClasses = classNames({
             mx_CallView_callControls_button: true,
@@ -445,6 +451,12 @@ export default class CallView extends React.Component<IProps, IState> {
             mx_CallView_callControls_button: true,
             mx_CallView_callControls_button_screensharingOn: this.state.screensharing,
             mx_CallView_callControls_button_screensharingOff: !this.state.screensharing,
+        });
+
+        const sidebarButtonClasses = classNames({
+            mx_CallView_callControls_button: true,
+            mx_CallView_callControls_button_sidebarOn: this.state.sidebarShown,
+            mx_CallView_callControls_button_sidebarOff: !this.state.sidebarShown,
         });
 
         // Put the other states of the mic/video icons in the document to make sure they're cached
@@ -496,6 +508,23 @@ export default class CallView extends React.Component<IProps, IState> {
             );
         }
 
+        // To show the sidebar we need secondary feeds, if we don't have them,
+        // we can hide this button. If we are in PiP, sidebar is also hidden, so
+        // we can hide the button too
+        let sidebarButton;
+        if (
+            (this.props.call.type === CallType.Video ||
+            this.state.primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare) &&
+            !this.props.pipMode
+        ) {
+            sidebarButton = (
+                <AccessibleButton
+                    className={sidebarButtonClasses}
+                    onClick={this.onToggleSidebar}
+                />
+            );
+        }
+
         // The dial pad & 'more' button actions are only relevant in a connected call
         // When not connected, we have to put something there to make the flexbox alignment correct
         const dialpadButton = this.state.callState === CallState.Connected ? <ContextMenuButton
@@ -519,12 +548,13 @@ export default class CallView extends React.Component<IProps, IState> {
                     className={micClasses}
                     onClick={this.onMicMuteClick}
                 />
+                { vidMuteButton }
                 <AccessibleButton
                     className="mx_CallView_callControls_button mx_CallView_callControls_button_hangup"
                     onClick={this.onHangupClick}
                 />
-                { vidMuteButton }
                 { screensharingButton }
+                { sidebarButton }
                 <div className={micCacheClasses} />
                 <div className={vidCacheClasses} />
                 { contextMenuButton }
@@ -589,7 +619,7 @@ export default class CallView extends React.Component<IProps, IState> {
         }
 
         let sidebar;
-        if (!isOnHold && !transfereeCall && !this.props.pipMode) {
+        if (!isOnHold && !transfereeCall && !this.props.pipMode && this.state.sidebarShown) {
             sidebar = (
                 <CallViewSidebar
                     feeds={this.state.secondaryFeeds}

@@ -386,6 +386,18 @@ limitations under the License.
     }
 }
 
+.mx_CallView_callControls_button_sidebarOn {
+    &::before {
+        background-image: url('$(res)/img/voip/sidebar-on.svg');
+    }
+}
+
+.mx_CallView_callControls_button_sidebarOff {
+    &::before {
+        background-image: url('$(res)/img/voip/sidebar-off.svg');
+    }
+}
+
 .mx_CallView_callControls_button_hangup {
     &::before {
         background-image: url('$(res)/img/voip/hangup.svg');
