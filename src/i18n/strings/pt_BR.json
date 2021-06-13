@@ -4,7 +4,7 @@
     "Unknown device": "Dispositivo desconhecido",
     "You need to be using HTTPS to place a screen-sharing call.": "Você precisa estar usando HTTPS para começar uma chamada de compartilhamento de tela.",
     "Welcome to Element": "Boas-vindas a Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat e colaboração descentralizados e encriptados poderados por [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat &amp; colaboração descentralizados e encriptados powered by [matrix]",
     "Sign In": "Fazer signin",
     "Create Account": "Criar Conta",
     "Explore rooms": "Explorar salas",
@@ -32,6 +32,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Sua configuração de Element contém JSON inválido. Por favor corrija o problema e recarregue a página.",
     "Your browser can't run %(brand)s": "Seu browser não consegue rodar %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funcionalidade de browser avançada que não é suportada por seu browser atual.",
-    "Powered by Matrix": "Poderado por Matrix",
+    "Powered by Matrix": "Powered by Matrix",
     "Use %(brand)s on mobile": "Usar %(brand)s em celular"
 }
