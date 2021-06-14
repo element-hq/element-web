@@ -31,7 +31,6 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {
     canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
-    IInvite3PID,
 } from "../../../createRoom";
 import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
@@ -50,6 +49,7 @@ import {getAddressType} from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import { compare } from '../../../utils/strings';
+import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */

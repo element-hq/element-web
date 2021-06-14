@@ -18,7 +18,7 @@ module.exports = {
     },
 
     overrides: [{
-        "files": ["src/**/*.{ts,tsx}"],
+        "files": ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}"],
         "extends": ["matrix-org/ts"],
         "rules": {
             // We're okay being explicit at the moment

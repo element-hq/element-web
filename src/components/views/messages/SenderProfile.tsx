@@ -15,37 +15,47 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import MatrixEvent from "matrix-js-sdk/src/models/event";
+
+interface IProps {
+    mxEvent: MatrixEvent;
+    onClick(): void;
+    enableFlair: boolean;
+}
+
+interface IState {
+    userGroups;
+    relatedGroups;
+}
 
 @replaceableComponent("views.messages.SenderProfile")
-export default class SenderProfile extends React.Component {
-    static propTypes = {
-        mxEvent: PropTypes.object.isRequired, // event whose sender we're showing
-        onClick: PropTypes.func,
-    };
-
+export default class SenderProfile extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
+    private unmounted: boolean;
 
-    state = {
-        userGroups: null,
-        relatedGroups: [],
-    };
+    constructor(props: IProps) {
+        super(props)
+        const senderId = this.props.mxEvent.getSender();
+
+        this.state = {
+            userGroups: FlairStore.cachedPublicisedGroups(senderId) || [],
+            relatedGroups: [],
+        };
+    }
 
     componentDidMount() {
         this.unmounted = false;
         this._updateRelatedGroups();
 
-        FlairStore.getPublicisedGroupsCached(
-            this.context, this.props.mxEvent.getSender(),
-        ).then((userGroups) => {
-            if (this.unmounted) return;
-            this.setState({userGroups});
-        });
+        if (this.state.userGroups.length === 0) {
+            this.getPublicisedGroups();
+        }
+
 
         this.context.on('RoomState.events', this.onRoomStateEvents);
     }
@@ -53,6 +63,15 @@ export default class SenderProfile extends React.Component {
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('RoomState.events', this.onRoomStateEvents);
+    }
+
+    async getPublicisedGroups() {
+        if (!this.unmounted) {
+            const userGroups = await FlairStore.getPublicisedGroupsCached(
+                this.context, this.props.mxEvent.getSender(),
+            );
+            this.setState({userGroups});
+        }
     }
 
     onRoomStateEvents = event => {
@@ -89,14 +108,26 @@ export default class SenderProfile extends React.Component {
     render() {
         const {mxEvent} = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
-        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         const {msgtype} = mxEvent.getContent();
 
+        const disambiguate = mxEvent.sender?.disambiguate;
+        const displayName = mxEvent.sender?.rawDisplayName || mxEvent.getSender() || "";
+        const mxid = mxEvent.sender?.userId || mxEvent.getSender() || "";
+
         if (msgtype === 'm.emote') {
-            return <span />; // emote message must include the name so don't duplicate it
+            return null; // emote message must include the name so don't duplicate it
         }
 
-        let flair = <div />;
+        let mxidElement;
+        if (disambiguate) {
+            mxidElement = (
+                <span className="mx_SenderProfile_mxid">
+                    { mxid }
+                </span>
+            );
+        }
+
+        let flair;
         if (this.props.enableFlair) {
             const displayedGroups = this._getDisplayedGroups(
                 this.state.userGroups, this.state.relatedGroups,
@@ -108,21 +139,13 @@ export default class SenderProfile extends React.Component {
             />;
         }
 
-        const nameElem = name || '';
-
-        // Name + flair
-        const nameFlair = <span>
-            <span className={`mx_SenderProfile_name ${colorClass}`}>
-                { nameElem }
-            </span>
-            { flair }
-        </span>;
-
         return (
-            <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
-                <div className="mx_SenderProfile_hover">
-                    { nameFlair }
-                </div>
+            <div className="mx_SenderProfile mx_SenderProfile_hover" dir="auto" onClick={this.props.onClick}>
+                <span className={`mx_SenderProfile_displayName ${colorClass}`}>
+                    { displayName }
+                </span>
+                { mxidElement }
+                { flair }
             </div>
         );
     }

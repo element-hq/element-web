@@ -1,7 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2016, 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,29 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from "prop-types";
+import React from "react";
 
 import { _t } from '../../languageHandler';
-import {MatrixClientPeg} from "../../MatrixClientPeg";
-import * as sdk from "../../index";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseCard from "../views/right_panel/BaseCard";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import TimelinePanel from "./TimelinePanel";
+import Spinner from "../views/elements/Spinner";
+
+interface IProps {
+    onClose(): void;
+}
 
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
 @replaceableComponent("structures.NotificationPanel")
-class NotificationPanel extends React.Component {
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-    };
-
+export default class NotificationPanel extends React.PureComponent<IProps> {
     render() {
-        // wrap a TimelinePanel with the jump-to-event bits turned off.
-        const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
-        const Loader = sdk.getComponent("elements.Spinner");
-
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
             <h2>{_t('You’re all caught up')}</h2>
             <p>{_t('You have no visible notifications.')}</p>
@@ -47,6 +41,7 @@ class NotificationPanel extends React.Component {
         let content;
         const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
         if (timelineSet) {
+            // wrap a TimelinePanel with the jump-to-event bits turned off.
             content = (
                 <TimelinePanel
                     manageReadReceipts={false}
@@ -55,11 +50,12 @@ class NotificationPanel extends React.Component {
                     showUrlPreview={false}
                     tileShape="notif"
                     empty={emptyState}
+                    alwaysShowTimestamps={true}
                 />
             );
         } else {
             console.error("No notifTimelineSet available!");
-            content = <Loader />;
+            content = <Spinner />;
         }
 
         return <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
@@ -67,5 +63,3 @@ class NotificationPanel extends React.Component {
         </BaseCard>;
     }
 }
-
-export default NotificationPanel;

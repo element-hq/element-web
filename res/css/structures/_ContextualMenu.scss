@@ -38,6 +38,7 @@ limitations under the License.
     position: absolute;
     font-size: $font-14px;
     z-index: 5001;
+    contain: content;
 }
 
 .mx_ContextualMenu_right {
