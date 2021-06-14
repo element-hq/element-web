@@ -15,13 +15,12 @@ limitations under the License.
 */
 
 import { sortBy } from "lodash";
+import { stringToBase, baseToString, averageBetweenStrings } from "matrix-js-sdk/src/utils";
 
 import {
     ALPHABET,
-    baseToString,
     midPointsBetweenStrings,
     reorderLexicographically,
-    stringToBase,
 } from "../../src/utils/stringOrderField";
 
 const moveLexicographicallyTest = (
@@ -39,43 +38,58 @@ const moveLexicographicallyTest = (
     });
 
     const newOrders = sortBy(zipped, i => i[1]);
-    console.log("@@ moveLexicographicallyTest", {orders, zipped, newOrders, fromIndex, toIndex, ops});
     expect(newOrders[toIndex][0]).toBe(fromIndex);
     expect(ops).toHaveLength(expectedChanges);
 };
 
 describe("stringOrderField", () => {
     it("stringToBase", () => {
-        expect(Number(stringToBase(" "))).toBe(0);
-        expect(Number(stringToBase("a"))).toBe(65);
-        expect(Number(stringToBase("aa"))).toBe(6240);
-        expect(Number(stringToBase("cat"))).toBe(610934);
-        expect(Number(stringToBase("doggo"))).toBe(5607022724);
-        expect(Number(stringToBase(" "))).toEqual(0);
-        expect(Number(stringToBase("a", "abcdefghijklmnopqrstuvwxyz"))).toEqual(0);
-        expect(Number(stringToBase("a"))).toEqual(65);
-        expect(Number(stringToBase("c", "abcdefghijklmnopqrstuvwxyz"))).toEqual(2);
-        expect(Number(stringToBase("ab"))).toEqual(6241);
-        expect(Number(stringToBase("cb", "abcdefghijklmnopqrstuvwxyz"))).toEqual(53);
-        expect(Number(stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))).toEqual(4.511596985796182e+78);
-        expect(Number(stringToBase("~".repeat(50)))).toEqual(7.694497527671333e+98);
-        // expect(typeof stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).toEqual("bigint");
+        expect(Number(stringToBase(""))).toBe(0);
+        expect(Number(stringToBase(" "))).toBe(1);
+        expect(Number(stringToBase("a"))).toBe(66);
+        expect(Number(stringToBase(" !"))).toBe(97);
+        expect(Number(stringToBase("aa"))).toBe(6336);
+        expect(Number(stringToBase("cat"))).toBe(620055);
+        expect(Number(stringToBase("doggo"))).toBe(5689339845);
+        expect(Number(stringToBase("a", "abcdefghijklmnopqrstuvwxyz"))).toEqual(1);
+        expect(Number(stringToBase("a"))).toEqual(66);
+        expect(Number(stringToBase("c", "abcdefghijklmnopqrstuvwxyz"))).toEqual(3);
+        expect(Number(stringToBase("ab"))).toEqual(6337);
+        expect(Number(stringToBase("cb", "abcdefghijklmnopqrstuvwxyz"))).toEqual(80);
+        expect(Number(stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))).toEqual(4.648312045971824e+78);
+        expect(Number(stringToBase("~".repeat(50)))).toEqual(7.776353884348688e+98);
+        expect(Number(stringToBase("      "))).toEqual(7820126496);
+        expect(Number(stringToBase("  "))).toEqual(96);
+        expect(Number(stringToBase(" !"))).toEqual(97);
+        expect(Number(stringToBase("S:J\\~"))).toEqual(4258975590);
+        expect(Number(stringToBase("!'Tu:}"))).toEqual(16173443434);
     });
 
     it("baseToString", () => {
-        expect(baseToString(BigInt(10))).toBe(ALPHABET[10]);
-        expect(baseToString(BigInt(10), "abcdefghijklmnopqrstuvwxyz")).toEqual("k");
-        expect(baseToString(BigInt(6241))).toEqual("ab");
-        expect(baseToString(BigInt(53), "abcdefghijklmnopqrstuvwxyz")).toEqual("cb");
-        expect(baseToString(BigInt(1234))).toBe(",~");
+        expect(baseToString(BigInt(10))).toBe(ALPHABET[9]);
+        expect(baseToString(BigInt(10), "abcdefghijklmnopqrstuvwxyz")).toEqual("j");
+        expect(baseToString(BigInt(6241))).toEqual("`a");
+        expect(baseToString(BigInt(53), "abcdefghijklmnopqrstuvwxyz")).toEqual("ba");
+        expect(baseToString(BigInt(1234))).toBe("+}");
+        expect(baseToString(BigInt(0))).toBe(""); // TODO
+        expect(baseToString(BigInt(1))).toBe(" ");
+        expect(baseToString(BigInt(95))).toBe("~");
+        expect(baseToString(BigInt(96))).toBe("  ");
+        expect(baseToString(BigInt(97))).toBe(" !");
+        expect(baseToString(BigInt(98))).toBe(' "');
+        expect(baseToString(BigInt(1))).toBe(" ");
     });
 
     it("midPointsBetweenStrings", () => {
+        expect(averageBetweenStrings("!!", "##")).toBe('""');
         const midpoints = ["a", ...midPointsBetweenStrings("a", "e", 3, 1), "e"].sort();
         expect(midpoints[0]).toBe("a");
         expect(midpoints[4]).toBe("e");
         expect(midPointsBetweenStrings("a", "e", 0, 1)).toStrictEqual([]);
         expect(midPointsBetweenStrings("a", "e", 4, 1)).toStrictEqual([]);
+        expect(midPointsBetweenStrings("      ", "!'Tu:}", 1, 50)).toStrictEqual([" S:J\\~"]);
+        expect(averageBetweenStrings("  ", "!!")).toBe(" P");
+        expect(averageBetweenStrings("! ", "!!")).toBe("!  ");
     });
 
     it("moveLexicographically left", () => {
@@ -221,7 +235,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it.skip("test moving left into no left space", () => {
+    it("test moving left into no left space", () => {
         moveLexicographicallyTest(
             ["11", "12", "13", "14", "19"],
             3,
@@ -229,41 +243,11 @@ describe("stringOrderField", () => {
             2,
             2,
         );
-    });
 
-    it("test moving right into no right space", () => {
-        moveLexicographicallyTest(
-            ["15", "16", "17", "18", "19"],
-            1,
-            3,
-            3,
-            2,
-        );
-    });
-
-    it("test moving right into no left space", () => {
-        moveLexicographicallyTest(
-            ["11", "12", "13", "14", "15", "16", undefined],
-            1,
-            3,
-            3,
-        );
-    });
-
-    it("test moving left into no right space", () => {
-        moveLexicographicallyTest(
-            ["15", "16", "17", "18", "19"],
-            4,
-            3,
-            4,
-            2,
-        );
-    });
-
-    it("test moving left into no left space", () => {
         moveLexicographicallyTest(
             [
                 ALPHABET.charAt(0),
+                // Target
                 ALPHABET.charAt(1),
                 ALPHABET.charAt(2),
                 ALPHABET.charAt(3),
@@ -278,6 +262,14 @@ describe("stringOrderField", () => {
     });
 
     it("test moving right into no right space", () => {
+        moveLexicographicallyTest(
+            ["15", "16", "17", "18", "19"],
+            1,
+            3,
+            3,
+            2,
+        );
+
         moveLexicographicallyTest(
             [
                 ALPHABET.charAt(ALPHABET.length - 5),
@@ -295,6 +287,13 @@ describe("stringOrderField", () => {
 
     it("test moving right into no left space", () => {
         moveLexicographicallyTest(
+            ["11", "12", "13", "14", "15", "16", undefined],
+            1,
+            3,
+            3,
+        );
+
+        moveLexicographicallyTest(
             ["0", "1", "2", "3", "4", "5"],
             1,
             3,
@@ -304,6 +303,14 @@ describe("stringOrderField", () => {
     });
 
     it("test moving left into no right space", () => {
+        moveLexicographicallyTest(
+            ["15", "16", "17", "18", "19"],
+            4,
+            3,
+            4,
+            2,
+        );
+
         moveLexicographicallyTest(
             [
                 ALPHABET.charAt(ALPHABET.length - 5),
@@ -329,11 +336,11 @@ describe("stringOrderField", () => {
 
     it("rolls over sanely", () => {
         const maxSpaceValue = "~".repeat(50);
-        const fiftyFirstChar = "!" + " ".repeat(50);
+        const fiftyFirstChar = " ".repeat(51);
         expect(next(maxSpaceValue)).toBe(fiftyFirstChar);
         expect(prev(fiftyFirstChar)).toBe(maxSpaceValue);
-        expect(stringToBase(ALPHABET[0])).toEqual(BigInt(0));
-        expect(stringToBase(ALPHABET[1])).toEqual(BigInt(1));
+        expect(Number(stringToBase(ALPHABET[0]))).toEqual(1);
+        expect(Number(stringToBase(ALPHABET[1]))).toEqual(2);
         expect(ALPHABET[ALPHABET.length - 1]).toBe("~");
         expect(ALPHABET[0]).toBe(" ");
     });
