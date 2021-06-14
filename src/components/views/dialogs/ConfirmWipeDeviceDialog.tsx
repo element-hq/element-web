@@ -20,17 +20,17 @@ import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.dialogs.ConfirmWipeDeviceDialog")
-export default class ConfirmWipeDeviceDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
 
-    _onConfirm = () => {
+@replaceableComponent("views.dialogs.ConfirmWipeDeviceDialog")
+export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
+    private onConfirm = (): void => {
         this.props.onFinished(true);
     };
 
-    _onDecline = () => {
+    private onDecline = (): void => {
         this.props.onFinished(false);
     };
 
@@ -55,10 +55,10 @@ export default class ConfirmWipeDeviceDialog extends React.Component {
                 </div>
                 <DialogButtons
                     primaryButton={_t("Clear all data")}
-                    onPrimaryButtonClick={this._onConfirm}
+                    onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
                     cancelButton={_t("Cancel")}
-                    onCancel={this._onDecline}
+                    onCancel={this.onDecline}
                 />
             </BaseDialog>
         );
