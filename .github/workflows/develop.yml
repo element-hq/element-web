@@ -20,8 +20,21 @@ jobs:
                     test/end-to-end-tests/logs/**/*
                     test/end-to-end-tests/synapse/installations/consent/homeserver.log
                 retention-days: 14
-            - name: Archive performance benchmark
-              uses: actions/upload-artifact@v2
+            - name: Download previous benchmark data
+              uses: actions/cache@v1
               with:
-                name: performance-entries.json
-                path: test/end-to-end-tests/performance-entries.json
+                path: ./cache
+                key: ${{ runner.os }}-benchmark
+            - name: Temporary step before having a fully release GitHub action
+              run: npm install && npm run build
+              working-directory: /home/runner/work/_actions/matrix-org/github-action-benchmark/9f891b47906b73678ba486f7a53e4807e24fff19
+            - name: Store benchmark result
+              uses: matrix-org/github-action-benchmark@9f891b47906b73678ba486f7a53e4807e24fff19
+              with:
+                tool: 'jsperformanceentry'
+                output-file-path: test/end-to-end-tests/performance-entries.json
+                external-data-json-path: ./cache/benchmark-data-template.json
+                fail-on-alert: false
+            - name: Push benchmark result
+              if: ${{ github.ref == 'refs/heads/develop' }}
+              run: git push 'https://matrixbot:${{ secrets.DEPLOY_GH_PAGES }}@github.com/matrix-org/matrix-react-sdk.git' gh-pages:gh-pages
