@@ -72,7 +72,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             canChangeEncryption: true,
         };
 
-        MatrixClientPeg.get().doesServerForceEncryptionForPreset("private")
+        MatrixClientPeg.get().doesServerForceEncryptionForPreset(Preset.PrivateChat)
             .then(isForced => this.setState({ canChangeEncryption: !isForced }));
     }
 
