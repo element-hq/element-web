@@ -2,8 +2,7 @@ import React from "react"
 import streamSaver from "streamsaver";
 import JSZip from "jszip";
 import Exporter from "./Exporter";
-import { decryptFile } from "../DecryptFile";
-import { mediaFromContent, mediaFromMxc } from "../../customisations/Media";
+import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -216,26 +215,6 @@ export default class HTMLExporter extends Exporter {
         }
     }
 
-    protected async getMediaBlob(event: MatrixEvent) {
-        let blob: Blob;
-        try {
-            const isEncrypted = event.isEncrypted();
-            const content = event.getContent();
-            const shouldDecrypt = isEncrypted && !content.hasOwnProperty("org.matrix.msc1767.file")
-                                  && event.getType() !== "m.sticker";
-            if (shouldDecrypt) {
-                blob = await decryptFile(content.file);
-            } else {
-                const media = mediaFromContent(event.getContent());
-                const image = await fetch(media.srcHttp);
-                blob = await image.blob();
-            }
-        } catch (err) {
-            console.log("Error decrypting media");
-        }
-        return blob;
-    }
-
     protected getDateSeparator(event: MatrixEvent) {
         const ts = event.getTs();
         const dateSeparator = <li key={ts}><DateSeparator forExport={true} key={ts} ts={ts} /></li>;
@@ -245,35 +224,6 @@ export default class HTMLExporter extends Exporter {
     protected _wantsDateSeparator(event: MatrixEvent, prevEvent: MatrixEvent) {
         if (prevEvent == null) return true;
         return wantsDateSeparator(prevEvent.getDate(), event.getDate());
-    }
-
-    protected splitFileName(file: string) {
-        const lastDot = file.lastIndexOf('.');
-        if (lastDot === -1) return [file, ""];
-        const fileName = file.slice(0, lastDot);
-        const ext = file.slice(lastDot + 1);
-        return [fileName, '.' + ext];
-    }
-
-    protected getFilePath(event: MatrixEvent) {
-        const mediaType = event.getContent().msgtype;
-        let fileDirectory: string;
-        switch (mediaType) {
-            case "m.image":
-                fileDirectory = "images";
-                break;
-            case "m.video":
-                fileDirectory = "videos";
-                break;
-            case "m.audio":
-                fileDirectory = "audio";
-                break;
-            default:
-                fileDirectory = event.getType() === "m.sticker" ? "stickers" : "files";
-        }
-        const fileDate = formatFullDateNoDay(new Date(event.getTs()));
-        const [fileName, fileExt] = this.splitFileName(event.getContent().body);
-        return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 
     protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
@@ -312,11 +262,6 @@ export default class HTMLExporter extends Exporter {
             eventTileMarkup = eventTileMarkup.replace(/src="AvatarForExport"/g, `src="users/${mxEv.sender.userId}"`);
         }
         return eventTileMarkup;
-    }
-
-    protected isAttachment(mxEv: MatrixEvent) {
-        const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
-        return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
     }
 
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {

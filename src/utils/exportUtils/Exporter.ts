@@ -3,6 +3,9 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
+import { decryptFile } from "../DecryptFile";
+import { mediaFromContent } from "../../customisations/Media";
+import { formatFullDateNoDay } from "../../DateUtils";
 
 export default abstract class Exporter {
     protected constructor(
@@ -87,6 +90,60 @@ export default abstract class Exporter {
         for (let i = 0; i < events.length; i++) this.setEventMetadata(events[i]);
 
         return events;
+    }
+
+    protected async getMediaBlob(event: MatrixEvent) {
+        let blob: Blob;
+        try {
+            const isEncrypted = event.isEncrypted();
+            const content = event.getContent();
+            const shouldDecrypt = isEncrypted && !content.hasOwnProperty("org.matrix.msc1767.file")
+                && event.getType() !== "m.sticker";
+            if (shouldDecrypt) {
+                blob = await decryptFile(content.file);
+            } else {
+                const media = mediaFromContent(event.getContent());
+                const image = await fetch(media.srcHttp);
+                blob = await image.blob();
+            }
+        } catch (err) {
+            console.log("Error decrypting media");
+        }
+        return blob;
+    }
+
+    protected splitFileName(file: string) {
+        const lastDot = file.lastIndexOf('.');
+        if (lastDot === -1) return [file, ""];
+        const fileName = file.slice(0, lastDot);
+        const ext = file.slice(lastDot + 1);
+        return [fileName, '.' + ext];
+    }
+
+    protected getFilePath(event: MatrixEvent) {
+        const mediaType = event.getContent().msgtype;
+        let fileDirectory: string;
+        switch (mediaType) {
+            case "m.image":
+                fileDirectory = "images";
+                break;
+            case "m.video":
+                fileDirectory = "videos";
+                break;
+            case "m.audio":
+                fileDirectory = "audio";
+                break;
+            default:
+                fileDirectory = event.getType() === "m.sticker" ? "stickers" : "files";
+        }
+        const fileDate = formatFullDateNoDay(new Date(event.getTs()));
+        const [fileName, fileExt] = this.splitFileName(event.getContent().body);
+        return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
+    }
+
+    protected isAttachment(mxEv: MatrixEvent) {
+        const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
+        return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
     }
 
     abstract export(): Promise<Blob>;
