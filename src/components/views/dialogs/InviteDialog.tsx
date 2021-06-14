@@ -33,7 +33,6 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {
     canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
-    IInvite3PID,
 } from "../../../createRoom";
 import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
@@ -52,6 +51,7 @@ import {getAddressType} from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import { compare } from '../../../utils/strings';
+import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { copyPlaintext, selectText } from "../../../utils/strings";
 import * as ContextMenu from "../../structures/ContextMenu";

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import '../../../skinned-sdk'; // Must be first for skinning to work
-import Adapter from "enzyme-adapter-react-16";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 import React from "react";
 import {act} from "react-dom/test-utils";
