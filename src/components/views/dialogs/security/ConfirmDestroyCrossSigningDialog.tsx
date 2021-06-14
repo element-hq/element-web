@@ -15,22 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import {_t} from "../../../../languageHandler";
+import { _t } from "../../../../languageHandler";
 import * as sdk from "../../../../index";
-import {replaceableComponent} from "../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
+
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
 
 @replaceableComponent("views.dialogs.security.ConfirmDestroyCrossSigningDialog")
-export default class ConfirmDestroyCrossSigningDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    _onConfirm = () => {
+export default class ConfirmDestroyCrossSigningDialog extends React.Component<IProps> {
+    private onConfirm = (): void => {
         this.props.onFinished(true);
     };
 
-    _onDecline = () => {
+    private onDecline = (): void => {
         this.props.onFinished(false);
     };
 
@@ -57,10 +56,10 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component {
                 </div>
                 <DialogButtons
                     primaryButton={_t("Clear cross-signing keys")}
-                    onPrimaryButtonClick={this._onConfirm}
+                    onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
                     cancelButton={_t("Cancel")}
-                    onCancel={this._onDecline}
+                    onCancel={this.onDecline}
                 />
             </BaseDialog>
         );
