@@ -25,11 +25,8 @@ jobs:
               with:
                 path: ./cache
                 key: ${{ runner.os }}-benchmark
-            - name: Temporary step before having a fully release GitHub action
-              run: npm install && npm run build
-              working-directory: /home/runner/work/_actions/matrix-org/github-action-benchmark/9f891b47906b73678ba486f7a53e4807e24fff19
             - name: Store benchmark result
-              uses: matrix-org/github-action-benchmark@9f891b47906b73678ba486f7a53e4807e24fff19
+              uses: matrix-org/github-action-benchmark@jsperfentry
               with:
                 tool: 'jsperformanceentry'
                 output-file-path: test/end-to-end-tests/performance-entries.json
