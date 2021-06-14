@@ -15,13 +15,9 @@ limitations under the License.
 */
 
 import { sortBy } from "lodash";
-import { stringToBase, baseToString, averageBetweenStrings } from "matrix-js-sdk/src/utils";
+import { stringToBase, baseToString, averageBetweenStrings, DEFAULT_ALPHABET } from "matrix-js-sdk/src/utils";
 
-import {
-    ALPHABET,
-    midPointsBetweenStrings,
-    reorderLexicographically,
-} from "../../src/utils/stringOrderField";
+import { midPointsBetweenStrings, reorderLexicographically } from "../../src/utils/stringOrderField";
 
 const moveLexicographicallyTest = (
     orders: Array<string | undefined>,
@@ -66,7 +62,7 @@ describe("stringOrderField", () => {
     });
 
     it("baseToString", () => {
-        expect(baseToString(BigInt(10))).toBe(ALPHABET[9]);
+        expect(baseToString(BigInt(10))).toBe(DEFAULT_ALPHABET[9]);
         expect(baseToString(BigInt(10), "abcdefghijklmnopqrstuvwxyz")).toEqual("j");
         expect(baseToString(BigInt(6241))).toEqual("`a");
         expect(baseToString(BigInt(53), "abcdefghijklmnopqrstuvwxyz")).toEqual("ba");
@@ -246,13 +242,13 @@ describe("stringOrderField", () => {
 
         moveLexicographicallyTest(
             [
-                ALPHABET.charAt(0),
+                DEFAULT_ALPHABET.charAt(0),
                 // Target
-                ALPHABET.charAt(1),
-                ALPHABET.charAt(2),
-                ALPHABET.charAt(3),
-                ALPHABET.charAt(4),
-                ALPHABET.charAt(5),
+                DEFAULT_ALPHABET.charAt(1),
+                DEFAULT_ALPHABET.charAt(2),
+                DEFAULT_ALPHABET.charAt(3),
+                DEFAULT_ALPHABET.charAt(4),
+                DEFAULT_ALPHABET.charAt(5),
             ],
             5,
             1,
@@ -272,11 +268,11 @@ describe("stringOrderField", () => {
 
         moveLexicographicallyTest(
             [
-                ALPHABET.charAt(ALPHABET.length - 5),
-                ALPHABET.charAt(ALPHABET.length - 4),
-                ALPHABET.charAt(ALPHABET.length - 3),
-                ALPHABET.charAt(ALPHABET.length - 2),
-                ALPHABET.charAt(ALPHABET.length - 1),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 5),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 4),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 3),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 2),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1),
             ],
             1,
             3,
@@ -313,11 +309,11 @@ describe("stringOrderField", () => {
 
         moveLexicographicallyTest(
             [
-                ALPHABET.charAt(ALPHABET.length - 5),
-                ALPHABET.charAt(ALPHABET.length - 4),
-                ALPHABET.charAt(ALPHABET.length - 3),
-                ALPHABET.charAt(ALPHABET.length - 2),
-                ALPHABET.charAt(ALPHABET.length - 1),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 5),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 4),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 3),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 2),
+                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1),
             ],
             4,
             3,
@@ -339,10 +335,10 @@ describe("stringOrderField", () => {
         const fiftyFirstChar = " ".repeat(51);
         expect(next(maxSpaceValue)).toBe(fiftyFirstChar);
         expect(prev(fiftyFirstChar)).toBe(maxSpaceValue);
-        expect(Number(stringToBase(ALPHABET[0]))).toEqual(1);
-        expect(Number(stringToBase(ALPHABET[1]))).toEqual(2);
-        expect(ALPHABET[ALPHABET.length - 1]).toBe("~");
-        expect(ALPHABET[0]).toBe(" ");
+        expect(Number(stringToBase(DEFAULT_ALPHABET[0]))).toEqual(1);
+        expect(Number(stringToBase(DEFAULT_ALPHABET[1]))).toEqual(2);
+        expect(DEFAULT_ALPHABET[DEFAULT_ALPHABET.length - 1]).toBe("~");
+        expect(DEFAULT_ALPHABET[0]).toBe(" ");
     });
 });
 

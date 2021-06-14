@@ -14,23 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { alphabetPad, baseToString, stringToBase } from "matrix-js-sdk/src/utils";
+import { alphabetPad, baseToString, stringToBase, DEFAULT_ALPHABET } from "matrix-js-sdk/src/utils";
 
 import { reorder } from "./arrays";
-
-export const ALPHABET_START = 0x20;
-export const ALPHABET_END = 0x7E;
-export const ALPHABET = new Array(1 + ALPHABET_END - ALPHABET_START)
-    .fill(undefined)
-    .map((_, i) => String.fromCharCode(ALPHABET_START + i))
-    .join("");
 
 export const midPointsBetweenStrings = (
     a: string,
     b: string,
     count: number,
     maxLen: number,
-    alphabet = ALPHABET,
+    alphabet = DEFAULT_ALPHABET,
 ): string[] => {
     const padN = Math.min(Math.max(a.length, b.length), maxLen);
     const padA = alphabetPad(a, padN, alphabet);
@@ -144,7 +137,7 @@ export const reorderLexicographically = (
 
     const prevOrder = newOrder[leftBoundIdx - 1]?.order ?? "";
     const nextOrder = newOrder[rightBoundIdx + 1]?.order
-        ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length || 1);
+        ?? DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1).repeat(prevOrder.length || 1);
 
     const changes = midPointsBetweenStrings(prevOrder, nextOrder, 1 + rightBoundIdx - leftBoundIdx, maxLen);
 
