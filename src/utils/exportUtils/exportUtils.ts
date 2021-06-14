@@ -17,6 +17,7 @@ export enum exportTypes {
 export interface exportOptions {
     startDate?: number;
     numberOfMessages?: number;
+    attachmentsIncluded: boolean;
 }
 
 const exportConversationalHistory = async (

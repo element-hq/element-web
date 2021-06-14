@@ -72,10 +72,9 @@ export default class HTMLExporter extends Exporter {
     protected async wrapHTML(content: string) {
         const roomAvatar = await this.getRoomAvatar();
         const exportDate = formatFullDateNoDayNoTime(new Date());
-        const cli = MatrixClientPeg.get();
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
         const creatorName = this.room?.getMember(creator)?.rawDisplayName || creator;
-        const exporter = cli.getUserId();
+        const exporter = this.matrixClient.getUserId();
         const exporterName = this.room?.getMember(exporter)?.rawDisplayName;
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic
                      || this.room.topic || "";
@@ -113,9 +112,7 @@ export default class HTMLExporter extends Exporter {
             </p>,
         );
 
-
         const topicText = topic ? _t("Topic: %(topic)s", { topic }) : "";
-
 
         return `
           <!DOCTYPE html>
@@ -279,10 +276,10 @@ export default class HTMLExporter extends Exporter {
         return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 
-
     protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
         const hasAvatar = this.hasAvatar(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
+
         const eventTile = <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
             <MatrixClientContext.Provider value = {this.matrixClient}>
                 <EventTile
@@ -317,15 +314,36 @@ export default class HTMLExporter extends Exporter {
         return eventTileMarkup;
     }
 
+    protected isAttachment(mxEv: MatrixEvent) {
+        const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
+        return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
+    }
+
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
         let eventTile: string;
-        const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"]
 
-        if (mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype)) {
-            const blob = await this.getMediaBlob(mxEv);
-            const filePath = this.getFilePath(mxEv);
-            eventTile = await this.getEventTile(mxEv, joined, filePath);
-            this.zip.file(filePath, blob);
+        if (this.isAttachment(mxEv)) {
+            if (this.exportOptions.attachmentsIncluded) {
+                const blob = await this.getMediaBlob(mxEv);
+                const filePath = this.getFilePath(mxEv);
+                eventTile = await this.getEventTile(mxEv, joined, filePath);
+                this.zip.file(filePath, blob);
+            } else {
+                const modifiedContent = {
+                    msgtype: "m.text",
+                    body: "**Media omitted**",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "<strong>Media omitted</strong>",
+                }
+                if (mxEv.isEncrypted()) {
+                    mxEv._clearEvent.content = modifiedContent;
+                    mxEv._clearEvent.type = "m.room.message";
+                } else {
+                    mxEv.event.content = modifiedContent;
+                    mxEv.event.type = "m.room.message";
+                }
+                eventTile = await this.getEventTile(mxEv, joined);
+            }
         } else eventTile = await this.getEventTile(mxEv, joined);
 
         return eventTile;
