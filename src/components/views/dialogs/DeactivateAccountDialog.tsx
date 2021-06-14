@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
@@ -28,8 +27,25 @@ import {DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry} from "../auth/Interactiv
 import StyledCheckbox from "../elements/StyledCheckbox";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
+
+interface IState {
+    shouldErase: boolean;
+    errStr: string;
+    authData: any; // for UIA
+    authEnabled: boolean; // see usages for information
+
+    // A few strings that are passed to InteractiveAuth for design or are displayed
+    // next to the InteractiveAuth component.
+    bodyText: string;
+    continueText: string;
+    continueKind: string;
+}
+
 @replaceableComponent("views.dialogs.DeactivateAccountDialog")
-export default class DeactivateAccountDialog extends React.Component {
+export default class DeactivateAccountDialog extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
@@ -46,10 +62,10 @@ export default class DeactivateAccountDialog extends React.Component {
             continueKind: null,
         };
 
-        this._initAuth(/* shouldErase= */false);
+        this.initAuth(/* shouldErase= */false);
     }
 
-    _onStagePhaseChange = (stage, phase) => {
+    private onStagePhaseChange = (stage: string, phase: string): void => {
         const dialogAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 body: _t("Confirm your account deactivation by using Single Sign On to prove your identity."),
@@ -87,19 +103,19 @@ export default class DeactivateAccountDialog extends React.Component {
         this.setState({bodyText, continueText, continueKind});
     };
 
-    _onUIAuthFinished = (success, result, extra) => {
+    private onUIAuthFinished = (success: boolean, result: Error) => {
         if (success) return; // great! makeRequest() will be called too.
 
         if (result === ERROR_USER_CANCELLED) {
-            this._onCancel();
+            this.onCancel();
             return;
         }
 
-        console.error("Error during UI Auth:", {result, extra});
+        console.error("Error during UI Auth:", { result });
         this.setState({errStr: _t("There was a problem communicating with the server. Please try again.")});
     };
 
-    _onUIAuthComplete = (auth) => {
+    private onUIAuthComplete = (auth): void => {
         MatrixClientPeg.get().deactivateAccount(auth, this.state.shouldErase).then(r => {
             // Deactivation worked - logout & close this dialog
             Analytics.trackEvent('Account', 'Deactivate Account');
@@ -111,9 +127,9 @@ export default class DeactivateAccountDialog extends React.Component {
         });
     };
 
-    _onEraseFieldChange = (ev) => {
+    private onEraseFieldChange = (ev: React.FormEvent<HTMLInputElement>): void => {
         this.setState({
-            shouldErase: ev.target.checked,
+            shouldErase: ev.currentTarget.checked,
 
             // Disable the auth form because we're going to have to reinitialize the auth
             // information. We do this because we can't modify the parameters in the UIA
@@ -123,14 +139,14 @@ export default class DeactivateAccountDialog extends React.Component {
         });
 
         // As mentioned above, set up for auth again to get updated UIA session info
-        this._initAuth(/* shouldErase= */ev.target.checked);
+        this.initAuth(/* shouldErase= */ev.currentTarget.checked);
     };
 
-    _onCancel() {
+    private onCancel(): void {
         this.props.onFinished(false);
     }
 
-    _initAuth(shouldErase) {
+    private initAuth(shouldErase: boolean): void {
         MatrixClientPeg.get().deactivateAccount(null, shouldErase).then(r => {
             // If we got here, oops. The server didn't require any auth.
             // Our application lifecycle will catch the error and do the logout bits.
@@ -148,7 +164,7 @@ export default class DeactivateAccountDialog extends React.Component {
         });
     }
 
-    render() {
+    public render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         let error = null;
@@ -166,9 +182,9 @@ export default class DeactivateAccountDialog extends React.Component {
                     <InteractiveAuth
                         matrixClient={MatrixClientPeg.get()}
                         authData={this.state.authData}
-                        makeRequest={this._onUIAuthComplete}
-                        onAuthFinished={this._onUIAuthFinished}
-                        onStagePhaseChange={this._onStagePhaseChange}
+                        makeRequest={this.onUIAuthComplete}
+                        onAuthFinished={this.onUIAuthFinished}
+                        onStagePhaseChange={this.onStagePhaseChange}
                         continueText={this.state.continueText}
                         continueKind={this.state.continueKind}
                     />
@@ -214,7 +230,7 @@ export default class DeactivateAccountDialog extends React.Component {
                         <p>
                             <StyledCheckbox
                                 checked={this.state.shouldErase}
-                                onChange={this._onEraseFieldChange}
+                                onChange={this.onEraseFieldChange}
                             >
                                 {_t(
                                     "Please forget all messages I have sent when my account is deactivated " +
@@ -235,7 +251,3 @@ export default class DeactivateAccountDialog extends React.Component {
         );
     }
 }
-
-DeactivateAccountDialog.propTypes = {
-    onFinished: PropTypes.func.isRequired,
-};
