@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
 import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';
 import { SetupEncryptionStore, PHASE_DONE } from '../../../../stores/SetupEncryptionStore';
 import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
-function iconFromPhase(phase) {
+function iconFromPhase(phase: string) {
     if (phase === PHASE_DONE) {
         return require("../../../../../res/img/e2e/verified.svg");
     } else {
@@ -30,32 +29,38 @@ function iconFromPhase(phase) {
     }
 }
 
-@replaceableComponent("views.dialogs.security.SetupEncryptionDialog")
-export default class SetupEncryptionDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
 
-    constructor() {
-        super();
+interface IState {
+    icon: any;
+}
+
+@replaceableComponent("views.dialogs.security.SetupEncryptionDialog")
+export default class SetupEncryptionDialog extends React.Component<IProps, IState> {
+    private store: SetupEncryptionStore;
+
+    constructor(props) {
+        super(props);
 
         this.store = SetupEncryptionStore.sharedInstance();
         this.state = {icon: iconFromPhase(this.store.phase)};
     }
 
-    componentDidMount() {
-        this.store.on("update", this._onStoreUpdate);
+    public componentDidMount() {
+        this.store.on("update", this.onStoreUpdate);
     }
 
-    componentWillUnmount() {
-        this.store.removeListener("update", this._onStoreUpdate);
+    public componentWillUnmount() {
+        this.store.removeListener("update", this.onStoreUpdate);
     }
 
-    _onStoreUpdate = () => {
+    private onStoreUpdate = (): void => {
         this.setState({icon: iconFromPhase(this.store.phase)});
     };
 
-    render() {
+    public render() {
         return <BaseDialog
             headerImage={this.state.icon}
             onFinished={this.props.onFinished}
