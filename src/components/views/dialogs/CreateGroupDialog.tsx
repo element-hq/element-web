@@ -15,44 +15,51 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.dialogs.CreateGroupDialog")
-export default class CreateGroupDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
 
-    state = {
+interface IState {
+    groupName: string;
+    groupId: string;
+    groupIdError: string;
+    creating: boolean;
+    createError: Error;
+}
+
+@replaceableComponent("views.dialogs.CreateGroupDialog")
+export default class CreateGroupDialog extends React.Component<IProps, IState> {
+    public state = {
         groupName: '',
         groupId: '',
-        groupError: null,
+        groupIdError: '',
         creating: false,
         createError: null,
     };
 
-    _onGroupNameChange = e => {
+    private onGroupNameChange = (e: React.FormEvent<HTMLInputElement>): void => {
         this.setState({
-            groupName: e.target.value,
+            groupName: e.currentTarget.value,
         });
     };
 
-    _onGroupIdChange = e => {
+    private onGroupIdChange = (e: React.FormEvent<HTMLInputElement>): void => {
         this.setState({
-            groupId: e.target.value,
+            groupId: e.currentTarget.value,
         });
     };
 
-    _onGroupIdBlur = e => {
-        this._checkGroupId();
+    private onGroupIdBlur = (): void => {
+        this.checkGroupId();
     };
 
-    _checkGroupId(e) {
+    private checkGroupId() {
         let error = null;
         if (!this.state.groupId) {
             error = _t("Community IDs cannot be empty.");
@@ -67,12 +74,12 @@ export default class CreateGroupDialog extends React.Component {
         return error;
     }
 
-    _onFormSubmit = e => {
+    private onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (this._checkGroupId()) return;
+        if (this.checkGroupId()) return;
 
-        const profile = {};
+        const profile: any = {};
         if (this.state.groupName !== '') {
             profile.name = this.state.groupName;
         }
@@ -121,7 +128,7 @@ export default class CreateGroupDialog extends React.Component {
             <BaseDialog className="mx_CreateGroupDialog" onFinished={this.props.onFinished}
                 title={_t('Create Community')}
             >
-                <form onSubmit={this._onFormSubmit}>
+                <form onSubmit={this.onFormSubmit}>
                     <div className="mx_Dialog_content">
                         <div className="mx_CreateGroupDialog_inputRow">
                             <div className="mx_CreateGroupDialog_label">
@@ -129,9 +136,9 @@ export default class CreateGroupDialog extends React.Component {
                             </div>
                             <div>
                                 <input id="groupname" className="mx_CreateGroupDialog_input"
-                                    autoFocus={true} size="64"
+                                    autoFocus={true} size={64}
                                     placeholder={_t('Example')}
-                                    onChange={this._onGroupNameChange}
+                                    onChange={this.onGroupNameChange}
                                     value={this.state.groupName}
                                 />
                             </div>
@@ -144,10 +151,10 @@ export default class CreateGroupDialog extends React.Component {
                                 <span className="mx_CreateGroupDialog_prefix">+</span>
                                 <input id="groupid"
                                     className="mx_CreateGroupDialog_input mx_CreateGroupDialog_input_hasPrefixAndSuffix"
-                                    size="32"
+                                    size={32}
                                     placeholder={_t('example')}
-                                    onChange={this._onGroupIdChange}
-                                    onBlur={this._onGroupIdBlur}
+                                    onChange={this.onGroupIdChange}
+                                    onBlur={this.onGroupIdBlur}
                                     value={this.state.groupId}
                                 />
                                 <span className="mx_CreateGroupDialog_suffix">
