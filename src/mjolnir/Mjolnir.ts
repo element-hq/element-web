@@ -20,7 +20,7 @@ import SettingsStore from "../settings/SettingsStore";
 import {_t} from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import {SettingLevel} from "../settings/SettingLevel";
-import { Preset } from "../createRoom";
+import { Preset } from "matrix-js-sdk/src/@types/partials";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
