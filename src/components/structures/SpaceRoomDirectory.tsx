@@ -520,6 +520,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                             setError("Failed to update some suggestions. Try again later");
                         }
                         setSaving(false);
+                        setSelected(new Map());
                     }}
                     kind="primary_outline"
                     disabled={disabled}
