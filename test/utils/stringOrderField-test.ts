@@ -46,28 +46,28 @@ const moveLexicographicallyTest = (
 
 describe("stringOrderField", () => {
     it("stringToBase", () => {
-        expect(stringToBase(" ")).toBe(0);
-        expect(stringToBase("a")).toBe(65);
-        expect(stringToBase("aa")).toBe(6240);
-        expect(stringToBase("cat")).toBe(610934);
-        expect(stringToBase("doggo")).toBe(5607022724);
-        expect(stringToBase(" ")).toEqual(0);
-        expect(stringToBase("a", "abcdefghijklmnopqrstuvwxyz")).toEqual(0);
-        expect(stringToBase("a")).toEqual(65);
-        expect(stringToBase("c", "abcdefghijklmnopqrstuvwxyz")).toEqual(2);
-        expect(stringToBase("ab")).toEqual(6241);
-        expect(stringToBase("cb", "abcdefghijklmnopqrstuvwxyz")).toEqual(53);
-        expect(stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).toEqual(4.5115969857961825e+78);
-        expect(stringToBase("~".repeat(50))).toEqual(7.694497527671333e+98);
+        expect(Number(stringToBase(" "))).toBe(0);
+        expect(Number(stringToBase("a"))).toBe(65);
+        expect(Number(stringToBase("aa"))).toBe(6240);
+        expect(Number(stringToBase("cat"))).toBe(610934);
+        expect(Number(stringToBase("doggo"))).toBe(5607022724);
+        expect(Number(stringToBase(" "))).toEqual(0);
+        expect(Number(stringToBase("a", "abcdefghijklmnopqrstuvwxyz"))).toEqual(0);
+        expect(Number(stringToBase("a"))).toEqual(65);
+        expect(Number(stringToBase("c", "abcdefghijklmnopqrstuvwxyz"))).toEqual(2);
+        expect(Number(stringToBase("ab"))).toEqual(6241);
+        expect(Number(stringToBase("cb", "abcdefghijklmnopqrstuvwxyz"))).toEqual(53);
+        expect(Number(stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))).toEqual(4.511596985796182e+78);
+        expect(Number(stringToBase("~".repeat(50)))).toEqual(7.694497527671333e+98);
         // expect(typeof stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).toEqual("bigint");
     });
 
     it("baseToString", () => {
-        expect(baseToString(10)).toBe(ALPHABET[10]);
-        expect(baseToString(10, "abcdefghijklmnopqrstuvwxyz")).toEqual("k");
-        expect(baseToString(6241)).toEqual("ab");
-        expect(baseToString(53, "abcdefghijklmnopqrstuvwxyz")).toEqual("cb");
-        expect(baseToString(1234)).toBe(",~");
+        expect(baseToString(BigInt(10))).toBe(ALPHABET[10]);
+        expect(baseToString(BigInt(10), "abcdefghijklmnopqrstuvwxyz")).toEqual("k");
+        expect(baseToString(BigInt(6241))).toEqual("ab");
+        expect(baseToString(BigInt(53), "abcdefghijklmnopqrstuvwxyz")).toEqual("cb");
+        expect(baseToString(BigInt(1234))).toBe(",~");
     });
 
     it("midPointsBetweenStrings", () => {
@@ -122,7 +122,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test A moving to the start when all is undefined", () => {
+    it("test moving to the start when all is undefined", () => {
         moveLexicographicallyTest(
             [undefined, undefined, undefined, undefined],
             2,
@@ -131,7 +131,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test B moving to the end when all is undefined", () => {
+    it("test moving to the end when all is undefined", () => {
         moveLexicographicallyTest(
             [undefined, undefined, undefined, undefined],
             1,
@@ -140,7 +140,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test C moving left when all is undefined", () => {
+    it("test moving left when all is undefined", () => {
         moveLexicographicallyTest(
             [undefined, undefined, undefined, undefined, undefined, undefined],
             4,
@@ -149,7 +149,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test D moving right when all is undefined", () => {
+    it("test moving right when all is undefined", () => {
         moveLexicographicallyTest(
             [undefined, undefined, undefined, undefined],
             1,
@@ -158,7 +158,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test E moving more right when all is undefined", () => {
+    it("test moving more right when all is undefined", () => {
         moveLexicographicallyTest(
             [undefined, undefined, undefined, undefined, undefined, /**/ undefined, undefined],
             1,
@@ -167,7 +167,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test F moving left when right is undefined", () => {
+    it("test moving left when right is undefined", () => {
         moveLexicographicallyTest(
             ["20", undefined, undefined, undefined, undefined, undefined],
             4,
@@ -176,7 +176,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test G moving right when right is undefined", () => {
+    it("test moving right when right is undefined", () => {
         moveLexicographicallyTest(
             ["50", undefined, undefined, undefined, undefined, /**/ undefined, undefined],
             1,
@@ -185,7 +185,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test H moving left when right is defined", () => {
+    it("test moving left when right is defined", () => {
         moveLexicographicallyTest(
             ["10", "20", "30", "40", undefined, undefined],
             3,
@@ -194,7 +194,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test I moving right when right is defined", () => {
+    it("test moving right when right is defined", () => {
         moveLexicographicallyTest(
             ["10", "20", "30", "40", "50", undefined],
             1,
@@ -203,7 +203,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test J moving left when all is defined", () => {
+    it("test moving left when all is defined", () => {
         moveLexicographicallyTest(
             ["11", "13", "15", "17", "19"],
             2,
@@ -212,7 +212,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test K moving right when all is defined", () => {
+    it("test moving right when all is defined", () => {
         moveLexicographicallyTest(
             ["11", "13", "15", "17", "19"],
             1,
@@ -221,7 +221,7 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test L moving left into no left space", () => {
+    it.skip("test moving left into no left space", () => {
         moveLexicographicallyTest(
             ["11", "12", "13", "14", "19"],
             3,
@@ -231,17 +231,17 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test M moving right into no right space", () => {
+    it("test moving right into no right space", () => {
         moveLexicographicallyTest(
             ["15", "16", "17", "18", "19"],
             1,
             3,
-            2,
+            3,
             2,
         );
     });
 
-    it("test N moving right into no left space", () => {
+    it("test moving right into no left space", () => {
         moveLexicographicallyTest(
             ["11", "12", "13", "14", "15", "16", undefined],
             1,
@@ -250,13 +250,92 @@ describe("stringOrderField", () => {
         );
     });
 
-    it("test O moving left into no right space", () => {
+    it("test moving left into no right space", () => {
         moveLexicographicallyTest(
             ["15", "16", "17", "18", "19"],
             4,
             3,
+            4,
             2,
         );
+    });
+
+    it("test moving left into no left space", () => {
+        moveLexicographicallyTest(
+            [
+                ALPHABET.charAt(0),
+                ALPHABET.charAt(1),
+                ALPHABET.charAt(2),
+                ALPHABET.charAt(3),
+                ALPHABET.charAt(4),
+                ALPHABET.charAt(5),
+            ],
+            5,
+            1,
+            5,
+            1,
+        );
+    });
+
+    it("test moving right into no right space", () => {
+        moveLexicographicallyTest(
+            [
+                ALPHABET.charAt(ALPHABET.length - 5),
+                ALPHABET.charAt(ALPHABET.length - 4),
+                ALPHABET.charAt(ALPHABET.length - 3),
+                ALPHABET.charAt(ALPHABET.length - 2),
+                ALPHABET.charAt(ALPHABET.length - 1),
+            ],
+            1,
+            3,
+            3,
+            1,
+        );
+    });
+
+    it("test moving right into no left space", () => {
+        moveLexicographicallyTest(
+            ["0", "1", "2", "3", "4", "5"],
+            1,
+            3,
+            3,
+            1,
+        );
+    });
+
+    it("test moving left into no right space", () => {
+        moveLexicographicallyTest(
+            [
+                ALPHABET.charAt(ALPHABET.length - 5),
+                ALPHABET.charAt(ALPHABET.length - 4),
+                ALPHABET.charAt(ALPHABET.length - 3),
+                ALPHABET.charAt(ALPHABET.length - 2),
+                ALPHABET.charAt(ALPHABET.length - 1),
+            ],
+            4,
+            3,
+            4,
+            1,
+        );
+    });
+
+    const prev = (str: string) => baseToString(stringToBase(str) - BigInt(1));
+    const next = (str: string) => baseToString(stringToBase(str) + BigInt(1));
+
+    it("baseN calculation is correctly consecutive", () => {
+        const str = "this-is-a-test";
+        expect(next(prev(str))).toBe(str);
+    });
+
+    it("rolls over sanely", () => {
+        const maxSpaceValue = "~".repeat(50);
+        const fiftyFirstChar = "!" + " ".repeat(50);
+        expect(next(maxSpaceValue)).toBe(fiftyFirstChar);
+        expect(prev(fiftyFirstChar)).toBe(maxSpaceValue);
+        expect(stringToBase(ALPHABET[0])).toEqual(BigInt(0));
+        expect(stringToBase(ALPHABET[1])).toEqual(BigInt(1));
+        expect(ALPHABET[ALPHABET.length - 1]).toBe("~");
+        expect(ALPHABET[0]).toBe(" ");
     });
 });
 

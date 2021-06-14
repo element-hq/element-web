@@ -23,16 +23,17 @@ export const ALPHABET = new Array(1 + ALPHABET_END - ALPHABET_START)
     .map((_, i) => String.fromCharCode(ALPHABET_START + i))
     .join("");
 
-export const baseToString = (base: number, alphabet = ALPHABET): string => {
-    base = Math.floor(base);
-    if (base < alphabet.length) return alphabet[base];
-    return baseToString(Math.floor(base / alphabet.length), alphabet) + alphabet[base % alphabet.length];
+export const baseToString = (base: bigint, alphabet = ALPHABET): string => {
+    const len = BigInt(alphabet.length);
+    if (base < len) return alphabet[Number(base)];
+    return baseToString(base / len, alphabet) + alphabet[Number(base % len)];
 };
 
-export const stringToBase = (str: string, alphabet = ALPHABET): number => {
-    let result = 0;
-    for (let i = str.length - 1, j = 0; i >= 0; i--, j++) {
-        result += (str.charCodeAt(i) - alphabet.charCodeAt(0)) * (alphabet.length ** j);
+export const stringToBase = (str: string, alphabet = ALPHABET): bigint => {
+    let result = BigInt(0);
+    const len = BigInt(alphabet.length);
+    for (let i = str.length - 1, j = BigInt(0); i >= 0; i--, j++) {
+        result += BigInt(str.charCodeAt(i) - alphabet.charCodeAt(0)) * (len ** j);
     }
     return result;
 };
@@ -51,7 +52,7 @@ export const midPointsBetweenStrings = (
     const bPadded = pad(b, n, alphabet);
     const aBase = stringToBase(aPadded, alphabet);
     const bBase = stringToBase(bPadded, alphabet);
-    if (bBase - aBase - 1 < count) {
+    if (bBase - aBase - BigInt(1) < count) {
         if (n < maxLen) {
             // this recurses once at most due to the new limit of n+1
             return midPointsBetweenStrings(
@@ -64,8 +65,9 @@ export const midPointsBetweenStrings = (
         }
         return [];
     }
-    const step = (bBase - aBase) / (count + 1);
-    return Array(count).fill(undefined).map((_, i) => baseToString(aBase + step + (i * step), alphabet));
+    const step = (bBase - aBase) / BigInt(count + 1);
+    const start = BigInt(aBase + step);
+    return Array(count).fill(undefined).map((_, i) => baseToString(start + (BigInt(i) * step), alphabet));
 };
 
 interface IEntry {
@@ -79,6 +81,7 @@ export const reorderLexicographically = (
     toIndex: number,
     maxLen = 50,
 ): IEntry[] => {
+    // sanity check inputs
     if (
         fromIndex < 0 || toIndex < 0 ||
         fromIndex > orders.length || toIndex > orders.length ||
@@ -87,41 +90,56 @@ export const reorderLexicographically = (
         return [];
     }
 
+    // zip orders with their indices to simplify later index wrangling
     const ordersWithIndices: IEntry[] = orders.map((order, index) => ({ index, order }));
+    // apply the fundamental order update to the zipped array
     const newOrder = reorder(ordersWithIndices, fromIndex, toIndex);
 
-    const isMoveTowardsRight = toIndex > fromIndex;
     const orderToLeftUndefined = newOrder[toIndex - 1]?.order === undefined;
 
     let leftBoundIdx = toIndex;
     let rightBoundIdx = toIndex;
 
-    const canDisplaceLeft = isMoveTowardsRight || orderToLeftUndefined || true; // TODO
-    if (canDisplaceLeft) {
-        const nextBase = newOrder[toIndex + 1]?.order !== undefined
-            ? stringToBase(newOrder[toIndex + 1].order)
-            : Number.MAX_VALUE;
-        for (let i = toIndex - 1, j = 1; i >= 0; i--, j++) {
-            if (newOrder[i]?.order !== undefined && nextBase - stringToBase(newOrder[i].order) > j) break;
-            leftBoundIdx = i;
-        }
+    let canMoveLeft = true;
+    const nextBase = newOrder[toIndex + 1]?.order !== undefined
+        ? stringToBase(newOrder[toIndex + 1].order)
+        : BigInt(Number.MAX_VALUE);
+
+    for (let i = toIndex - 1, j = 1; i >= 0; i--, j++) {
+        if (newOrder[i]?.order !== undefined && nextBase - stringToBase(newOrder[i].order) > j) break;
+        leftBoundIdx = i;
+    }
+
+    if (leftBoundIdx === 0 &&
+        newOrder[0].order !== undefined &&
+        nextBase - stringToBase(newOrder[0].order) < toIndex
+    ) {
+        canMoveLeft = false;
     }
 
     const canDisplaceRight = !orderToLeftUndefined;
-    // TODO check if there is enough space on the right hand side at all,
-    // I guess find the last set order and then compare it to prevBase + $requiredGap
+    let canMoveRight = canDisplaceRight;
     if (canDisplaceRight) {
         const prevBase = newOrder[toIndex - 1]?.order !== undefined
             ? stringToBase(newOrder[toIndex - 1]?.order)
-            : Number.MIN_VALUE;
+            : BigInt(Number.MIN_VALUE);
+
         for (let i = toIndex + 1, j = 1; i < newOrder.length; i++, j++) {
             if (newOrder[i]?.order === undefined || stringToBase(newOrder[i].order) - prevBase > j) break; // TODO verify
             rightBoundIdx = i;
         }
+
+        if (rightBoundIdx === newOrder.length - 1 &&
+            (newOrder[rightBoundIdx]
+                ? stringToBase(newOrder[rightBoundIdx].order)
+                : BigInt(Number.MAX_VALUE)) - prevBase <= (rightBoundIdx - toIndex)
+        ) {
+            canMoveRight = false;
+        }
     }
 
-    const leftDiff = toIndex - leftBoundIdx;
-    const rightDiff = rightBoundIdx - toIndex;
+    const leftDiff = canMoveLeft ? toIndex - leftBoundIdx : Number.MAX_SAFE_INTEGER;
+    const rightDiff = canMoveRight ? rightBoundIdx - toIndex : Number.MAX_SAFE_INTEGER;
 
     if (orderToLeftUndefined || leftDiff < rightDiff) {
         rightBoundIdx = toIndex;
@@ -130,14 +148,13 @@ export const reorderLexicographically = (
     }
 
     const prevOrder = newOrder[leftBoundIdx - 1]?.order
-        ?? String.fromCharCode(ALPHABET_START).repeat(5); // TODO
+        ?? String.fromCharCode(ALPHABET_START).repeat(5);
     const nextOrder = newOrder[rightBoundIdx + 1]?.order
-        ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length + 1); // TODO
+        ?? String.fromCharCode(ALPHABET_END).repeat(prevOrder.length);
 
     const changes = midPointsBetweenStrings(prevOrder, nextOrder, 1 + rightBoundIdx - leftBoundIdx, maxLen);
-    // TODO If we exceed maxLen then reorder EVERYTHING
 
-    console.log("@@ test", { prevOrder, nextOrder, changes, leftBoundIdx, rightBoundIdx, orders, fromIndex, toIndex, newOrder, orderToLeftUndefined, leftDiff, rightDiff });
+    console.log("@@ test", { canMoveLeft, canMoveRight, prevOrder, nextOrder, changes, leftBoundIdx, rightBoundIdx, orders, fromIndex, toIndex, newOrder, orderToLeftUndefined, leftDiff, rightDiff });
 
     return changes.map((order, i) => {
         const index = newOrder[leftBoundIdx + i].index;
