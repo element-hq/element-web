@@ -3368,5 +3368,7 @@
     "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Provoni fjalë të ndryshme, ose kontrolloni për gabime shkrimi. Disa përfundime mund të mos jenë të dukshme, ngaqë janë private dhe ju duhet një ftesë për të marrë pjesë në to.",
     "No results for \"%(query)s\"": "S’ka përfundime për \"%(query)s\"",
     "The user you called is busy.": "Përdoruesi që thirrët është i zënë.",
-    "User Busy": "Përdoruesi Është i Zënë"
+    "User Busy": "Përdoruesi Është i Zënë",
+    "Kick, ban, or invite people to your active room, and make you leave": "Përzini, dëboni, ose ftoni persona te dhoma juaj aktive, dhe bëni largimin tuaj",
+    "Kick, ban, or invite people to this room, and make you leave": "Përzini, dëboni, ose ftoni persona në këtë dhomë, dhe bëni largimin tuaj"
 }
