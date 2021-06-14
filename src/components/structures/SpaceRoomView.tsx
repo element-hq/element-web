@@ -59,7 +59,7 @@ import IconizedContextMenu, {
 } from "../views/context_menus/IconizedContextMenu";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import {BetaPill} from "../views/beta/BetaCard";
-import {USER_LABS_TAB} from "../views/dialogs/UserSettingsDialog";
+import { USER_TAB } from "../views/dialogs/UserSettingsDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
@@ -165,7 +165,7 @@ const SpaceInfo = ({ space }) => {
 const onBetaClick = () => {
     defaultDispatcher.dispatch({
         action: Action.ViewUserSettings,
-        initialTabId: USER_LABS_TAB,
+        initialTabId: USER_TAB.LABS,
     });
 };
 
