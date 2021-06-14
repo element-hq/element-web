@@ -18,11 +18,11 @@ import React from 'react';
 import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
 import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';
-import { SetupEncryptionStore, PHASE_DONE } from '../../../../stores/SetupEncryptionStore';
+import { SetupEncryptionStore, PHASE } from '../../../../stores/SetupEncryptionStore';
 import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
-function iconFromPhase(phase: string) {
-    if (phase === PHASE_DONE) {
+function iconFromPhase(phase: PHASE) {
+    if (phase === PHASE.DONE) {
         return require("../../../../../res/img/e2e/verified.svg");
     } else {
         return require("../../../../../res/img/e2e/warning.svg");
@@ -34,7 +34,7 @@ interface IProps {
 }
 
 interface IState {
-    icon: any;
+    icon: PHASE;
 }
 
 @replaceableComponent("views.dialogs.security.SetupEncryptionDialog")
