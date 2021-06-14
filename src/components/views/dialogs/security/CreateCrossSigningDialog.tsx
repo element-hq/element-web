@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
@@ -25,7 +24,19 @@ import DialogButtons from '../../elements/DialogButtons';
 import BaseDialog from '../BaseDialog';
 import Spinner from '../../elements/Spinner';
 import InteractiveAuthDialog from '../InteractiveAuthDialog';
-import {replaceableComponent} from "../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
+
+interface IProps {
+    accountPassword?: string;
+    tokenLogin?: boolean;
+    onFinished?: (success: boolean) => void;
+}
+
+interface IState {
+    error: Error | null;
+    canUploadKeysWithPasswordOnly: boolean | null;
+    accountPassword: string;
+}
 
 /*
  * Walks the user through the process of creating a cross-signing keys. In most
@@ -33,12 +44,7 @@ import {replaceableComponent} from "../../../../utils/replaceableComponent";
  * may need to complete some steps to proceed.
  */
 @replaceableComponent("views.dialogs.security.CreateCrossSigningDialog")
-export default class CreateCrossSigningDialog extends React.PureComponent {
-    static propTypes = {
-        accountPassword: PropTypes.string,
-        tokenLogin: PropTypes.bool,
-    };
-
+export default class CreateCrossSigningDialog extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
 
@@ -46,26 +52,24 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
             error: null,
             // Does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
-            canUploadKeysWithPasswordOnly: null,
-            accountPassword: props.accountPassword || "",
-        };
-
-        if (this.state.accountPassword) {
             // If we have an account password in memory, let's simplify and
             // assume it means password auth is also supported for device
             // signing key upload as well. This avoids hitting the server to
             // test auth flows, which may be slow under high load.
-            this.state.canUploadKeysWithPasswordOnly = true;
-        } else {
-            this._queryKeyUploadAuth();
+            canUploadKeysWithPasswordOnly: props.accountPassword ? true : null,
+            accountPassword: props.accountPassword || "",
+        };
+
+        if (!this.state.accountPassword) {
+            this.queryKeyUploadAuth();
         }
     }
 
-    componentDidMount() {
-        this._bootstrapCrossSigning();
+    public componentDidMount(): void {
+        this.bootstrapCrossSigning();
     }
 
-    async _queryKeyUploadAuth() {
+    private async queryKeyUploadAuth(): Promise<void> {
         try {
             await MatrixClientPeg.get().uploadDeviceSigningKeys(null, {});
             // We should never get here: the server should always require
@@ -86,7 +90,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
         }
     }
 
-    _doBootstrapUIAuth = async (makeRequest) => {
+    private doBootstrapUIAuth = async (makeRequest): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
             await makeRequest({
                 type: 'm.login.password',
@@ -137,7 +141,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
         }
     }
 
-    _bootstrapCrossSigning = async () => {
+    private bootstrapCrossSigning = async (): Promise<void> => {
         this.setState({
             error: null,
         });
@@ -146,13 +150,13 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
 
         try {
             await cli.bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
+                authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
             });
             this.props.onFinished(true);
         } catch (e) {
             if (this.props.tokenLogin) {
                 // ignore any failures, we are relying on grace period here
-                this.props.onFinished();
+                this.props.onFinished(false);
                 return;
             }
 
@@ -161,7 +165,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
         }
     }
 
-    _onCancel = () => {
+    private onCancel = (): void => {
         this.props.onFinished(false);
     }
 
@@ -172,8 +176,8 @@ export default class CreateCrossSigningDialog extends React.PureComponent {
                 <p>{_t("Unable to set up keys")}</p>
                 <div className="mx_Dialog_buttons">
                     <DialogButtons primaryButton={_t('Retry')}
-                        onPrimaryButtonClick={this._bootstrapCrossSigning}
-                        onCancel={this._onCancel}
+                        onPrimaryButtonClick={this.bootstrapCrossSigning}
+                        onCancel={this.onCancel}
                     />
                 </div>
             </div>;
