@@ -17,18 +17,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import {MatrixClient} from 'matrix-js-sdk/src/client';
-import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
-import {User} from 'matrix-js-sdk/src/models/user';
-import {Room} from 'matrix-js-sdk/src/models/room';
-import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
-import {MatrixEvent} from 'matrix-js-sdk/src/models/event';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { User } from 'matrix-js-sdk/src/models/user';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import createRoom, { findDMForUser, privateShouldBeEncrypted } from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -39,18 +40,18 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {textualPowerLevel} from '../../../Roles';
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { textualPowerLevel } from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
-import {useAsyncMemo} from '../../../hooks/useAsyncMemo';
-import {legacyVerifyUser, verifyDevice, verifyUser} from '../../../verification';
-import {Action} from "../../../dispatcher/actions";
+import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
+import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
+import { Action } from "../../../dispatcher/actions";
 import { USER_SECURITY_TAB } from "../dialogs/UserSettingsDialog";
-import {useIsEncrypted} from "../../../hooks/useIsEncrypted";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
-import {E2EStatus} from "../../../utils/ShieldUtils";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 import ImageView from "../elements/ImageView";
 import Spinner from "../elements/Spinner";
 import PowerSelector from "../elements/PowerSelector";
@@ -65,7 +66,8 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { mediaFromMxc } from "../../../customisations/Media";
+import UIStore from "../../../stores/UIStore";
 
 export interface IDevice {
     deviceId: string;
@@ -513,9 +515,6 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
         } else {
             setPowerLevels({});
         }
-        return () => {
-            setPowerLevels({});
-        };
     }, [room]);
 
     useEventEmitter(cli, "RoomState.events", update);
@@ -1307,7 +1306,7 @@ const BasicUserInfo: React.FC<{
     }
 
     if (pendingUpdateCount > 0) {
-        spinner = <Spinner imgClassName="mx_ContextualMenu_spinner" />;
+        spinner = <Spinner />;
     }
 
     let memberDetails;
@@ -1448,8 +1447,8 @@ const UserInfoHeader: React.FC<{
                     <MemberAvatar
                         key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member}
-                        width={2 * 0.3 * window.innerHeight} // 2x@30vh
-                        height={2 * 0.3 * window.innerHeight} // 2x@30vh
+                        width={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
+                        height={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
                         resizeMethod="scale"
                         fallbackUserId={member.userId}
                         onClick={onMemberAvatarClick}
@@ -1529,21 +1528,16 @@ interface IProps {
     user: Member;
     groupId?: string;
     room?: Room;
-    phase: RightPanelPhases.RoomMemberInfo | RightPanelPhases.GroupMemberInfo | RightPanelPhases.SpaceMemberInfo;
+    phase: RightPanelPhases.RoomMemberInfo
+        | RightPanelPhases.GroupMemberInfo
+        | RightPanelPhases.SpaceMemberInfo
+        | RightPanelPhases.EncryptionPanel;
     onClose(): void;
+    verificationRequest?: VerificationRequest;
+    verificationRequestPromise?: Promise<VerificationRequest>;
 }
 
-interface IPropsWithEncryptionPanel extends React.ComponentProps<typeof EncryptionPanel> {
-    user: Member;
-    groupId: void;
-    room: Room;
-    phase: RightPanelPhases.EncryptionPanel;
-    onClose(): void;
-}
-
-type Props = IProps | IPropsWithEncryptionPanel;
-
-const UserInfo: React.FC<Props> = ({
+const UserInfo: React.FC<IProps> = ({
     user,
     groupId,
     room,

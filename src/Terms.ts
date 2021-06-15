@@ -36,14 +36,18 @@ export class Service {
     }
 }
 
-interface Policy {
+export interface LocalisedPolicy {
+    name: string;
+    url: string;
+}
+
+export interface Policy {
     // @ts-ignore: No great way to express indexed types together with other keys
     version: string;
-    [lang: string]: {
-        url: string;
-    };
+    [lang: string]: LocalisedPolicy;
 }
-type Policies = {
+
+export type Policies = {
     [policy: string]: Policy,
 };
 
@@ -99,7 +103,7 @@ export async function startTermsFlow(
 
     // fetch the set of agreed policy URLs from account data
     const currentAcceptedTerms = await MatrixClientPeg.get().getAccountData('m.accepted_terms');
-    let agreedUrlSet;
+    let agreedUrlSet: Set<string>;
     if (!currentAcceptedTerms || !currentAcceptedTerms.getContent() || !currentAcceptedTerms.getContent().accepted) {
         agreedUrlSet = new Set();
     } else {

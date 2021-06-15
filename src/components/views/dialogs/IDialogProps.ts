@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 export interface IDialogProps {
-    onFinished: (bool) => void;
+    onFinished(...args: any): void;
 }

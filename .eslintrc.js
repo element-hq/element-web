@@ -18,7 +18,7 @@ module.exports = {
     },
 
     overrides: [{
-        "files": ["src/**/*.{ts,tsx}"],
+        "files": ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}"],
         "extends": ["matrix-org/ts"],
         "rules": {
             // We're okay being explicit at the moment
@@ -30,6 +30,24 @@ module.exports = {
 
             "quotes": "off",
             "no-extra-boolean-cast": "off",
+            "no-restricted-properties": [
+                "error",
+                ...buildRestrictedPropertiesOptions(
+                    ["window.innerHeight", "window.innerWidth", "window.visualViewport"],
+                    "Use UIStore to access window dimensions instead",
+                ),
+            ],
         },
     }],
 };
+
+function buildRestrictedPropertiesOptions(properties, message) {
+    return properties.map(prop => {
+        const [object, property] = prop.split(".");
+        return {
+            object,
+            property,
+            message,
+        };
+    });
+}

@@ -45,6 +45,8 @@ import {ChevronFace, ContextMenuTooltipButton, useContextMenu} from "../../struc
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import RoomName from "../elements/RoomName";
+import UIStore from "../../../stores/UIStore";
 
 interface IProps {
     room: Room;
@@ -115,8 +117,8 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = <WidgetContextMenu
             chevronFace={ChevronFace.None}
-            right={window.innerWidth - rect.right}
-            bottom={window.innerHeight - rect.top}
+            right={UIStore.instance.windowWidth - rect.right}
+            bottom={UIStore.instance.windowHeight - rect.top}
             onFinished={closeMenu}
             app={app}
         />;
@@ -249,7 +251,13 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             />
         </div>
 
-        <h2 title={room.name}>{ room.name }</h2>
+        <RoomName room={room}>
+            { name => (
+                <h2 title={name}>
+                    { name }
+                </h2>
+            )}
+        </RoomName>
         <div className="mx_RoomSummaryCard_alias" title={alias}>
             { alias }
         </div>
