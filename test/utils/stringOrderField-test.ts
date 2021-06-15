@@ -67,7 +67,7 @@ describe("stringOrderField", () => {
         expect(baseToString(BigInt(6241))).toEqual("`a");
         expect(baseToString(BigInt(53), "abcdefghijklmnopqrstuvwxyz")).toEqual("ba");
         expect(baseToString(BigInt(1234))).toBe("+}");
-        expect(baseToString(BigInt(0))).toBe(""); // TODO
+        expect(baseToString(BigInt(0))).toBe("");
         expect(baseToString(BigInt(1))).toBe(" ");
         expect(baseToString(BigInt(95))).toBe("~");
         expect(baseToString(BigInt(96))).toBe("  ");

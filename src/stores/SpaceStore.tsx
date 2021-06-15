@@ -634,9 +634,16 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return sortBy(spaces, [this.getSpaceTagOrdering, "roomId"]);
     }
 
-    private setRootSpaceOrder(space: Room, order: string): void {
+    private async setRootSpaceOrder(space: Room, order: string): Promise<void> {
         this.spaceOrderLocalEchoMap.set(space.roomId, order);
-        this.matrixClient.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order }); // TODO retrying, failure
+        try {
+            await this.matrixClient.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order });
+        } catch (e) {
+            console.log("Failed to set root space order", e);
+            if (this.spaceOrderLocalEchoMap.get(space.roomId) === order) {
+                this.spaceOrderLocalEchoMap.delete(space.roomId);
+            }
+        }
     }
 
     public moveRootSpace(fromIndex: number, toIndex: number): void {
@@ -647,11 +654,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             this.setRootSpaceOrder(this.rootSpaces[index], order);
         });
 
-        if (changes.length) {
-            this.notifyIfOrderChanged();
-        } else {
-            // TODO
-        }
+        this.notifyIfOrderChanged();
     }
 }
 
