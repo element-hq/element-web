@@ -3375,5 +3375,11 @@
     "Kick, ban, or invite people to your active room, and make you leave": "Buttare fuori, bandire o invitare persone nella tua stanza attiva e farti uscire",
     "See when people join, leave, or are invited to this room": "Vedere quando le persone entrano, escono o sono invitate in questa stanza",
     "Kick, ban, or invite people to this room, and make you leave": "Buttare fuori, bandire o invitare persone in questa stanza e farti uscire",
-    "See when people join, leave, or are invited to your active room": "Vedere quando le persone entrano, escono o sono invitate nella tua stanza attiva"
+    "See when people join, leave, or are invited to your active room": "Vedere quando le persone entrano, escono o sono invitate nella tua stanza attiva",
+    "Currently joining %(count)s rooms|one": "Stai entrando in %(count)s stanza",
+    "Currently joining %(count)s rooms|other": "Stai entrando in %(count)s stanze",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Prova parole diverse o controlla errori di battitura. Alcuni risultati potrebbero non essere visibili dato che sono privati e ti servirebbe un invito per unirti.",
+    "No results for \"%(query)s\"": "Nessun risultato per \"%(query)s\"",
+    "The user you called is busy.": "L'utente che hai chiamato è occupato.",
+    "User Busy": "Utente occupato"
 }
