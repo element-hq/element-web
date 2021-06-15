@@ -120,6 +120,22 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
         </>;
     }
 
+    let addressesSection;
+    if (visibility !== SpaceVisibility.Private) {
+        addressesSection = <>
+            <span className="mx_SettingsTab_subheading">{_t("Address")}</span>
+            <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
+                <AliasSettings
+                    roomId={space.roomId}
+                    canSetCanonicalAlias={canSetCanonical}
+                    canSetAliases={true}
+                    canonicalAliasEvent={canonicalAliasEv}
+                    hidePublishSetting={true}
+                />
+            </div>
+        </>;
+    }
+
     return <div className="mx_SettingsTab">
         <div className="mx_SettingsTab_heading">{_t("Visibility")}</div>
 
@@ -164,16 +180,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
             <b>{ _t("Recommended for public spaces.") }</b>
         </div>
 
-        <span className="mx_SettingsTab_subheading">{_t("Address")}</span>
-        <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-            <AliasSettings
-                roomId={space.roomId}
-                canSetCanonicalAlias={canSetCanonical}
-                canSetAliases={true}
-                canonicalAliasEvent={canonicalAliasEv}
-                hidePublishSetting={true}
-            />
-        </div>
+        { addressesSection }
     </div>;
 };
 
