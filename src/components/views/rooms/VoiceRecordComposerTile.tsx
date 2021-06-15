@@ -77,7 +77,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 size: this.state.recorder.contentLength,
             },
 
-            // MSC1767 experiment
+            // MSC1767 + Ideals of MSC2516 as MSC3245
+            // https://github.com/matrix-org/matrix-doc/pull/3245
             "org.matrix.msc1767.text": "Voice message",
             "org.matrix.msc1767.file": {
                 url: mxc,
@@ -88,14 +89,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             "org.matrix.msc1767.audio": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
-                // Events can't have floats, so we try to maintain resolution by using 1024
-                // as a maximum value. The waveform contains values between zero and 1, so this
-                // should come out largely sane.
-                //
-                // We're expecting about one data point per second of audio.
+                // https://github.com/matrix-org/matrix-doc/pull/3246
                 waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
             },
-            "org.matrix.msc2516.voice": {}, // No content, this is a rendering hint
+            "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
         });
         await this.disposeRecording();
     }
