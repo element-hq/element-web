@@ -5733,10 +5733,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-test-utils@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
-  integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
+matrix-react-test-utils@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.3.tgz#27653f9d6bbfddd1856e51860fad1503b039d617"
+  integrity sha512-NKZDlMEQzDZDQhBYyKBUtqidRvpkww3n9/GmGICkxtU2D6NetyBIfvm1Lf9o7167KSkPHJUVvDS9dzaS55jUnA==
 
 "matrix-web-i18n@github:matrix-org/matrix-web-i18n":
   version "1.1.2"
