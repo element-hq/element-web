@@ -33,7 +33,7 @@ export default class VoipUserMapper {
 
     private async userToVirtualUser(userId: string): Promise<string> {
         const results = await CallHandler.sharedInstance().sipVirtualLookup(userId);
-        if (results.length === 0) return null;
+        if (results.length === 0 || !results[0].fields.lookup_success) return null;
         return results[0].userid;
     }
 
@@ -82,14 +82,14 @@ export default class VoipUserMapper {
         return Boolean(claimedNativeRoomId);
     }
 
-    public async onNewInvitedRoom(invitedRoom: Room) {
+    public async onNewInvitedRoom(invitedRoom: Room): Promise<void> {
         if (!CallHandler.sharedInstance().getSupportsVirtualRooms()) return;
 
         const inviterId = invitedRoom.getDMInviter();
         console.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
         const result = await CallHandler.sharedInstance().sipNativeLookup(inviterId);
         if (result.length === 0) {
-            return true;
+            return;
         }
 
         if (result[0].fields.is_virtual) {

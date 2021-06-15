@@ -101,14 +101,12 @@ const Tile: React.FC<ITileProps> = ({
     numChildRooms,
     children,
 }) => {
-    const name = room.name || room.canonical_alias || room.aliases?.[0]
+    const cli = MatrixClientPeg.get();
+    const joinedRoom = cli.getRoom(room.room_id)?.getMyMembership() === "join" ? cli.getRoom(room.room_id) : null;
+    const name = joinedRoom?.name || room.name || room.canonical_alias || room.aliases?.[0]
         || (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
 
     const [showChildren, toggleShowChildren] = useStateToggle(true);
-
-    const cli = MatrixClientPeg.get();
-    const cliRoom = cli.getRoom(room.room_id);
-    const myMembership = cliRoom?.getMyMembership();
 
     const onPreviewClick = (ev: ButtonEvent) => {
         ev.preventDefault();
@@ -122,7 +120,7 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     let button;
-    if (myMembership === "join") {
+    if (joinedRoom) {
         button = <AccessibleButton onClick={onPreviewClick} kind="primary_outline">
             { _t("View") }
         </AccessibleButton>;
@@ -146,17 +144,27 @@ const Tile: React.FC<ITileProps> = ({
         }
     }
 
-    let url: string;
-    if (room.avatar_url) {
-        url = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20);
+    let avatar;
+    if (joinedRoom) {
+        avatar = <RoomAvatar room={joinedRoom} width={20} height={20} />;
+    } else {
+        avatar = <BaseAvatar
+            name={name}
+            idName={room.room_id}
+            url={room.avatar_url ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20) : null}
+            width={20}
+            height={20}
+        />;
     }
 
     let description = _t("%(count)s members", { count: room.num_joined_members });
     if (numChildRooms !== undefined) {
         description += " · " + _t("%(count)s rooms", { count: numChildRooms });
     }
-    if (room.topic) {
-        description += " · " + room.topic;
+
+    const topic = joinedRoom?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || room.topic;
+    if (topic) {
+        description += " · " + topic;
     }
 
     let suggestedSection;
@@ -167,7 +175,7 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     const content = <React.Fragment>
-        <BaseAvatar name={name} idName={room.room_id} url={url} width={20} height={20} />
+        { avatar }
         <div className="mx_SpaceRoomDirectory_roomTile_name">
             { name }
             { suggestedSection }
@@ -311,7 +319,7 @@ export const HierarchyLevel = ({
                     key={roomId}
                     room={rooms.get(roomId)}
                     numChildRooms={Array.from(relations.get(roomId)?.values() || [])
-                        .filter(ev => rooms.get(ev.state_key)?.room_type !== RoomType.Space).length}
+                        .filter(ev => rooms.has(ev.state_key) && !rooms.get(ev.state_key).room_type).length}
                     suggested={relations.get(spaceId)?.get(roomId)?.content.suggested}
                     selected={selectedMap?.get(spaceId)?.has(roomId)}
                     onViewRoomClick={(autoJoin) => {
@@ -429,7 +437,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
 
     let content;
     if (roomsMap) {
-        const numRooms = Array.from(roomsMap.values()).filter(r => r.room_type !== RoomType.Space).length;
+        const numRooms = Array.from(roomsMap.values()).filter(r => !r.room_type).length;
         const numSpaces = roomsMap.size - numRooms - 1; // -1 at the end to exclude the space we are looking at
 
         let countsStr;
@@ -512,6 +520,7 @@ export const SpaceHierarchy: React.FC<IHierarchyProps> = ({
                             setError("Failed to update some suggestions. Try again later");
                         }
                         setSaving(false);
+                        setSelected(new Map());
                     }}
                     kind="primary_outline"
                     disabled={disabled}

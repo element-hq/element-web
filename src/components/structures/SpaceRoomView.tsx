@@ -28,7 +28,7 @@ import RoomTopic from "../views/elements/RoomTopic";
 import InlineSpinner from "../views/elements/InlineSpinner";
 import {inviteMultipleToRoom, showRoomInviteDialog} from "../../RoomInvite";
 import {useRoomMembers} from "../../hooks/useRoomMembers";
-import createRoom, {IOpts, Preset} from "../../createRoom";
+import createRoom, {IOpts} from "../../createRoom";
 import Field from "../views/elements/Field";
 import {useEventEmitter} from "../../hooks/useEventEmitter";
 import withValidation from "../views/elements/Validation";
@@ -65,6 +65,7 @@ import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
 import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../SdkConfig";
+import { Preset } from "matrix-js-sdk/src/@types/partials";
 
 interface IProps {
     space: Room;
@@ -417,9 +418,13 @@ const SpaceLanding = ({ space }) => {
             { inviteButton }
             { settingsButton }
         </div>
-        <div className="mx_SpaceRoomView_landing_topic">
-            <RoomTopic room={space} />
-        </div>
+        <RoomTopic room={space}>
+            {(topic, ref) => (
+                <div className="mx_SpaceRoomView_landing_topic" ref={ref}>
+                    { topic }
+                </div>
+            )}
+        </RoomTopic>
         <SpaceFeedbackPrompt />
         <hr />
 
@@ -437,7 +442,6 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
     const [error, setError] = useState("");
     const numFields = 3;
     const placeholders = [_t("General"), _t("Random"), _t("Support")];
-    // TODO vary default prefills for "Just Me" spaces
     const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("Random"), ""]);
     const fields = new Array(numFields).fill(0).map((_, i) => {
         const name = "roomName" + i;
@@ -584,6 +588,10 @@ const SpaceSetupPrivateScope = ({ space, justCreatedOpts, onFinished }) => {
             <h3>{ _t("Me and my teammates") }</h3>
             <div>{ _t("A private space for you and your teammates") }</div>
         </AccessibleButton>
+        <div className="mx_SpaceRoomView_betaWarning">
+            <h3>{ _t("Teammates might not be able to view or join any private rooms you make.") }</h3>
+            <p>{ _t("We're working on this as part of the beta, but just want to let you know.") }</p>
+        </div>
         <SpaceFeedbackPrompt />
     </div>;
 };

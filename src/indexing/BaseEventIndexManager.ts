@@ -35,7 +35,7 @@ export interface MatrixProfile {
 export interface CrawlerCheckpoint {
     roomId: string;
     token: string;
-    fullCrawl: boolean;
+    fullCrawl?: boolean;
     direction: string;
 }
 
@@ -73,14 +73,14 @@ export interface EventAndProfile {
 export interface LoadArgs {
     roomId: string;
     limit: number;
-    fromEvent: string;
-    direction: string;
+    fromEvent?: string;
+    direction?: string;
 }
 
 export interface IndexStats {
     size: number;
-    event_count: number;
-    room_count: number;
+    eventCount: number;
+    roomCount: number;
 }
 
 /**

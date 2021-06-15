@@ -133,6 +133,10 @@ export default class ScrollPanel extends React.Component {
          */
         onScroll: PropTypes.func,
 
+        /* onUserScroll: callback which is called when the user interacts with the room timeline
+         */
+        onUserScroll: PropTypes.func,
+
         /* className: classnames to add to the top-level div
          */
         className: PropTypes.string,
@@ -535,20 +539,28 @@ export default class ScrollPanel extends React.Component {
      * @param {object} ev the keyboard event
      */
     handleScrollKey = ev => {
+        let isScrolling = false;
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
             case RoomAction.ScrollUp:
                 this.scrollRelative(-1);
+                isScrolling = true;
                 break;
             case RoomAction.RoomScrollDown:
                 this.scrollRelative(1);
+                isScrolling = true;
                 break;
             case RoomAction.JumpToFirstMessage:
                 this.scrollToTop();
+                isScrolling = true;
                 break;
             case RoomAction.JumpToLatestMessage:
                 this.scrollToBottom();
+                isScrolling = true;
                 break;
+        }
+        if (isScrolling && this.props.onUserScroll) {
+            this.props.onUserScroll(ev);
         }
     };
 
@@ -888,9 +900,8 @@ export default class ScrollPanel extends React.Component {
             <AutoHideScrollbar
                 wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
-                className={`mx_ScrollPanel ${this.props.className}`}
-                style={this.props.style}
-            >
+                onWheel={this.props.onUserScroll}
+                className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
                 { this.props.fixedChildren }
                 <div className="mx_RoomView_messageListWrapper">
                     <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">

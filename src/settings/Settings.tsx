@@ -601,10 +601,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Enable widget screenshots on supported widgets'),
         default: false,
     },
-    "PinnedEvents.isOpen": {
-        supportedLevels: [SettingLevel.ROOM_DEVICE],
-        default: false,
-    },
     "promptBeforeInviteUnknownUsers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Prompt before sending invites to potentially invalid matrix IDs'),

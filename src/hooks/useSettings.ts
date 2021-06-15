@@ -35,8 +35,8 @@ export const useSettingValue = <T>(settingName: string, roomId: string = null, e
 };
 
 // Hook to fetch whether a feature is enabled and dynamically update when that changes
-export const useFeatureEnabled = (featureName: string, roomId: string = null) => {
-    const [enabled, setEnabled] = useState(SettingsStore.getValue(featureName, roomId));
+export const useFeatureEnabled = (featureName: string, roomId: string = null): boolean => {
+    const [enabled, setEnabled] = useState(SettingsStore.getValue<boolean>(featureName, roomId));
 
     useEffect(() => {
         const ref = SettingsStore.watchSetting(featureName, roomId, () => {
