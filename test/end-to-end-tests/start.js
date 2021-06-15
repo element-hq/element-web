@@ -88,6 +88,10 @@ async function runTests() {
             window.mxPerformanceMonitor.addPerformanceDataCallback({
                 entryNames: [
                     window.mxPerformanceEntryNames.REGISTER,
+                    window.mxPerformanceEntryNames.LOGIN,
+                    window.mxPerformanceEntryNames.JOIN_ROOM,
+                    window.mxPerformanceEntryNames.CREATE_DM,
+                    window.mxPerformanceEntryNames.VERIFY_E2EE_USER,
                 ],
                 callback: (events) => {
                     measurements = JSON.stringify(events);

@@ -26,3 +26,15 @@ module.exports.range = function(start, amount, step = 1) {
 module.exports.delay = function(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+module.exports.measureStart = function(session, name) {
+    return session.page.evaluate(() => {
+        window.mxPerformanceMonitor.start(name);
+    });
+};
+
+module.exports.measureStop = function(session, name) {
+    return session.page.evaluate(() => {
+        window.mxPerformanceMonitor.stop(name);
+    });
+};
