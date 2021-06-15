@@ -54,8 +54,6 @@ const INITIAL_STATE = {
     // Any error that has occurred during loading
     roomLoadError: null,
 
-    forwardingEvent: null,
-
     quotingEvent: null,
 
     replyingToEvent: null,
@@ -150,11 +148,6 @@ class RoomViewStore extends Store<ActionPayload> {
             case 'on_logged_out':
                 this.reset();
                 break;
-            case 'forward_event':
-                this.setState({
-                    forwardingEvent: payload.event,
-                });
-                break;
             case 'reply_to_event':
                 // If currently viewed room does not match the room in which we wish to reply then change rooms
                 // this can happen when performing a search across all rooms
@@ -174,6 +167,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this.state.roomId,
+                    initialTabId: payload.initial_tab_id,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
@@ -187,7 +181,6 @@ class RoomViewStore extends Store<ActionPayload> {
                 roomAlias: payload.room_alias,
                 initialEventId: payload.event_id,
                 isInitialEventHighlighted: payload.highlighted,
-                forwardingEvent: null,
                 roomLoading: false,
                 roomLoadError: null,
                 // should peek by default
@@ -205,14 +198,6 @@ class RoomViewStore extends Store<ActionPayload> {
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
             if (payload.replyingToEvent && payload.replyingToEvent.getRoomId() === payload.room_id) {
                 newState.replyingToEvent = payload.replyingToEvent;
-            }
-
-            if (this.state.forwardingEvent) {
-                dis.dispatch({
-                    action: 'send_event',
-                    room_id: newState.roomId,
-                    event: this.state.forwardingEvent,
-                });
             }
 
             this.setState(newState);
@@ -426,11 +411,6 @@ class RoomViewStore extends Store<ActionPayload> {
     // Any error that has occurred during joining
     public getJoinError() {
         return this.state.joinError;
-    }
-
-    // The mxEvent if one is about to be forwarded
-    public getForwardingEvent() {
-        return this.state.forwardingEvent;
     }
 
     // The mxEvent if one is currently being replied to/quoted

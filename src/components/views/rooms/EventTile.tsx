@@ -25,7 +25,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import ReplyThread from "../elements/ReplyThread";
 import { _t } from '../../../languageHandler';
-import * as TextForEvent from "../../../TextForEvent";
+import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -644,7 +644,18 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            return null;
+            // We currently must include `mx_EventTile_readAvatars` in the DOM
+            // of all events, as it is the positioned parent of the animated
+            // read receipts. We can't let it unmount when a receipt moves
+            // events, so for now we mount it for all events. Without it, the
+            // animation will start from the top of the timeline (because it
+            // lost its container).
+            // See also https://github.com/vector-im/element-web/issues/17561
+            return (
+                <div className="mx_EventTile_msgOption">
+                    <span className="mx_EventTile_readAvatars" />
+                </div>
+            );
         }
 
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
@@ -652,11 +663,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const receiptOffset = 15;
         let left = 0;
 
-        const receipts = this.props.readReceipts || [];
-
-        if (receipts.length === 0) {
-            return null;
-        }
+        const receipts = this.props.readReceipts;
 
         for (let i = 0; i < receipts.length; ++i) {
             const receipt = receipts[i];
@@ -1052,58 +1059,65 @@ export default class EventTile extends React.Component<IProps, IState> {
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
-                return (
-                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
-                        <div className="mx_EventTile_roomName">
-                            <RoomAvatar room={room} width={28} height={28} />
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                { room ? room.name : '' }
-                            </a>
-                        </div>
-                        <div className="mx_EventTile_senderDetails">
-                            { avatar }
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                { sender }
-                                { timestamp }
-                            </a>
-                        </div>
-                        <div className="mx_EventTile_line">
-                            <EventTileType ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                showUrlPreview={this.props.showUrlPreview}
-                                onHeightChanged={this.props.onHeightChanged}
-                            />
-                        </div>
-                    </li>
-                );
+                return React.createElement(this.props.as || "li", {
+                    "className": classes,
+                    "aria-live": ariaLive,
+                    "aria-atomic": true,
+                    "data-scroll-tokens": scrollToken,
+                }, [
+                    <div className="mx_EventTile_roomName" key="mx_EventTile_roomName">
+                        <RoomAvatar room={room} width={28} height={28} />
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                            { room ? room.name : '' }
+                        </a>
+                    </div>,
+                    <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
+                        { avatar }
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                            { sender }
+                            { timestamp }
+                        </a>
+                    </div>,
+                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                        <EventTileType ref={this.tile}
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            onHeightChanged={this.props.onHeightChanged}
+                        />
+                    </div>,
+                ]);
             }
             case 'file_grid': {
-                return (
-                    <li className={classes} aria-live={ariaLive} aria-atomic="true" data-scroll-tokens={scrollToken}>
-                        <div className="mx_EventTile_line">
-                            <EventTileType ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                showUrlPreview={this.props.showUrlPreview}
-                                tileShape={this.props.tileShape}
-                                onHeightChanged={this.props.onHeightChanged}
-                            />
+                return React.createElement(this.props.as || "li", {
+                    "className": classes,
+                    "aria-live": ariaLive,
+                    "aria-atomic": true,
+                    "data-scroll-tokens": scrollToken,
+                }, [
+                    <div className="mx_EventTile_line" key="mx_EventTile_line">
+                        <EventTileType ref={this.tile}
+                            mxEvent={this.props.mxEvent}
+                            highlights={this.props.highlights}
+                            highlightLink={this.props.highlightLink}
+                            showUrlPreview={this.props.showUrlPreview}
+                            tileShape={this.props.tileShape}
+                            onHeightChanged={this.props.onHeightChanged}
+                        />
+                    </div>,
+                    <a
+                        className="mx_EventTile_senderDetailsLink"
+                        key="mx_EventTile_senderDetailsLink"
+                        href={permalink}
+                        onClick={this.onPermalinkClicked}
+                    >
+                        <div className="mx_EventTile_senderDetails">
+                            { sender }
+                            { timestamp }
                         </div>
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails">
-                                { sender }
-                                { timestamp }
-                            </div>
-                        </a>
-                    </li>
-                );
+                    </a>,
+                ]);
             }
 
             default: {
@@ -1175,7 +1189,7 @@ export function haveTileForEvent(e) {
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
     if (handler === 'messages.TextualEvent') {
-        return TextForEvent.textForEvent(e) !== '';
+        return hasText(e);
     } else if (handler === 'messages.RoomCreate') {
         return Boolean(e.getContent()['predecessor']);
     } else {

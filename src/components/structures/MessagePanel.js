@@ -25,10 +25,11 @@ import * as sdk from '../../index';
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
+import RoomContext from "../../contexts/RoomContext";
 import {Layout, LayoutPropType} from "../../settings/Layout";
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
-import {textForEvent} from "../../TextForEvent";
+import {hasText} from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
@@ -150,6 +151,8 @@ export default class MessagePanel extends React.Component {
         // whether or not to show flair at all
         enableFlair: PropTypes.bool,
     };
+
+    static contextType = RoomContext;
 
     constructor(props) {
         super(props);
@@ -380,7 +383,7 @@ export default class MessagePanel extends React.Component {
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        return !shouldHideEvent(mxEv);
+        return !shouldHideEvent(mxEv, this.context);
     }
 
     _readMarkerForEvent(eventId, isLastEvent) {
@@ -1164,11 +1167,8 @@ class MemberGrouper {
 
     add(ev) {
         if (ev.getType() === 'm.room.member') {
-            // We'll just double check that it's worth our time to do so, through an
-            // ugly hack. If textForEvent returns something, we should group it for
-            // rendering but if it doesn't then we'll exclude it.
-            const renderText = textForEvent(ev);
-            if (!renderText || renderText.trim().length === 0) return; // quietly ignore
+            // We can ignore any events that don't actually have a message to display
+            if (!hasText(ev)) return;
         }
         this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
             ev.getId(),

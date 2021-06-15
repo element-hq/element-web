@@ -328,7 +328,8 @@ $SpaceRoomViewInnerWidth: 428px;
             font-size: $font-15px;
             margin-top: 12px;
             margin-bottom: 16px;
-            white-space: pre;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         > hr {
@@ -362,6 +363,45 @@ $SpaceRoomViewInnerWidth: 428px;
 
         .mx_SpaceRoomView_privateScope_meAndMyTeammatesButton::before {
             mask-image: url('$(res)/img/element-icons/community-members.svg');
+        }
+    }
+
+    .mx_SpaceRoomView_betaWarning {
+        padding: 12px 12px 12px 54px;
+        position: relative;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        width: 432px;
+        border-radius: 8px;
+        background-color: $info-plinth-bg-color;
+        color: $secondary-fg-color;
+        box-sizing: border-box;
+
+        > h3 {
+            font-weight: $font-semi-bold;
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0;
+        }
+
+        > p {
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0;
+        }
+
+        &::before {
+            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            content: '';
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background-color: $secondary-fg-color;
         }
     }
 

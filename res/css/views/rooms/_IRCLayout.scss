@@ -178,7 +178,7 @@ $irc-line-height: $font-18px;
         overflow: hidden;
         display: flex;
 
-        > .mx_SenderProfile_name {
+        > .mx_SenderProfile_displayName {
             overflow: hidden;
             text-overflow: ellipsis;
             min-width: var(--name-width);
@@ -207,7 +207,7 @@ $irc-line-height: $font-18px;
             background: transparent;
 
             > span {
-                > .mx_SenderProfile_name {
+                > .mx_SenderProfile_displayName {
                     min-width: inherit;
                 }
             }

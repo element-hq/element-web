@@ -89,7 +89,7 @@ export default class ReplyPreview extends React.Component {
                 <div className="mx_ReplyPreview_tile">
                     <ReplyTile
                         isRedacted={this.state.event.isRedacted()}
-                        mxEvent={this.state.event}
+                         mxEvent={this.state.event}
                         permalinkCreator={this.props.permalinkCreator}
                     />
                 </div>
