@@ -97,6 +97,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     public componentDidMount() {
         UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
         UIStore.instance.on("ListContainer", this.refreshStickyHeaders);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        this.listContainerRef.current?.addEventListener("scroll", this.onScroll, { passive: true });
     }
 
     public componentWillUnmount() {
@@ -108,6 +111,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
         UIStore.instance.stopTrackingElementDimensions("ListContainer");
         UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
+        this.listContainerRef.current?.removeEventListener("scroll", this.onScroll);
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
@@ -295,7 +299,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     }
 
-    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
+    private onScroll = (ev: Event) => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
     };
@@ -435,6 +439,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
             activeSpace={this.state.activeSpace}
+            onResize={this.refreshStickyHeaders}
             onListCollapse={this.refreshStickyHeaders}
         />;
 
@@ -459,7 +464,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
-                            onScroll={this.onScroll}
                             ref={this.listContainerRef}
                             // Firefox sometimes makes this element focusable due to
                             // overflow:scroll;, so force it out of tab order.

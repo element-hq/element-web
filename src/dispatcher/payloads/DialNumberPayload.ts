@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Travis Ralston
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_PinnedEventsPanel {
-    border-top: 1px solid $primary-hairline-color;
-}
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
 
-.mx_PinnedEventsPanel_body {
-    max-height: 300px;
-    overflow-y: auto;
-    padding-bottom: 15px;
-}
-
-.mx_PinnedEventsPanel_header {
-    margin: 0;
-    padding-top: 8px;
-    padding-bottom: 15px;
-}
-
-.mx_PinnedEventsPanel_cancel {
-    margin: 12px;
-    float: right;
-    display: inline-block;
+export interface DialNumberPayload extends ActionPayload {
+    action: Action.DialNumber;
+    number: string;
 }

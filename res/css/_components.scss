@@ -76,6 +76,7 @@
 @import "./views/dialogs/_DevtoolsDialog.scss";
 @import "./views/dialogs/_EditCommunityPrototypeDialog.scss";
 @import "./views/dialogs/_FeedbackDialog.scss";
+@import "./views/dialogs/_ForwardDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_HostSignupDialog.scss";
 @import "./views/dialogs/_IncomingSasDialog.scss";
@@ -179,6 +180,7 @@
 @import "./views/messages/_common_CryptoEvent.scss";
 @import "./views/right_panel/_BaseCard.scss";
 @import "./views/right_panel/_EncryptionInfo.scss";
+@import "./views/right_panel/_PinnedMessagesCard.scss";
 @import "./views/right_panel/_RoomSummaryCard.scss";
 @import "./views/right_panel/_UserInfo.scss";
 @import "./views/right_panel/_VerificationPanel.scss";
@@ -203,7 +205,6 @@
 @import "./views/rooms/_NewRoomIntro.scss";
 @import "./views/rooms/_NotificationBadge.scss";
 @import "./views/rooms/_PinnedEventTile.scss";
-@import "./views/rooms/_PinnedEventsPanel.scss";
 @import "./views/rooms/_PresenceLabel.scss";
 @import "./views/rooms/_ReplyPreview.scss";
 @import "./views/rooms/_RoomBreadcrumbs.scss";

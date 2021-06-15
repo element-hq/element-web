@@ -271,7 +271,7 @@ async function onSecretRequested(
         }
         return key && encodeBase64(key);
     } else if (name === "m.megolm_backup.v1") {
-        const key = await client._crypto.getSessionBackupPrivateKey();
+        const key = await client.crypto.getSessionBackupPrivateKey();
         if (!key) {
             console.log(
                 `session backup key requested by ${deviceId}, but not found in cache`,

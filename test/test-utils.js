@@ -90,7 +90,7 @@ export function createTestClient() {
         }),
 
         // Used by various internal bits we aren't concerned with (yet)
-        _sessionStore: {
+        sessionStore: {
             store: {
                 getItem: jest.fn(),
             },
@@ -219,7 +219,7 @@ export function mkMessage(opts) {
     return mkEvent(opts);
 }
 
-export function mkStubRoom(roomId = null) {
+export function mkStubRoom(roomId = null, name) {
     const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
@@ -238,6 +238,7 @@ export function mkStubRoom(roomId = null) {
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
         getUnfilteredTimelineSet: () => null,
+        findEventById: () => null,
         getAccountData: () => null,
         hasMembershipState: () => null,
         getVersion: () => '1',
@@ -255,13 +256,17 @@ export function mkStubRoom(roomId = null) {
         tags: {},
         setBlacklistUnverifiedDevices: jest.fn(),
         on: jest.fn(),
+        off: jest.fn(),
         removeListener: jest.fn(),
         getDMInviter: jest.fn(),
+        name,
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
         isSpaceRoom: jest.fn(() => false),
         getUnreadNotificationCount: jest.fn(() => 0),
         getEventReadUpTo: jest.fn(() => null),
+        getCanonicalAlias: jest.fn(),
+        getAltAliases: jest.fn().mockReturnValue([]),
         timeline: [],
     };
 }

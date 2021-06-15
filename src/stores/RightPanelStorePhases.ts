@@ -24,6 +24,7 @@ export enum RightPanelPhases {
     EncryptionPanel = 'EncryptionPanel',
     RoomSummary = 'RoomSummary',
     Widget = 'Widget',
+    PinnedMessages = "PinnedMessages",
 
     Room3pidMemberInfo = 'Room3pidMemberInfo',
     // Group stuff
@@ -43,6 +44,7 @@ export enum RightPanelPhases {
 export const RIGHT_PANEL_PHASES_NO_ARGS = [
     RightPanelPhases.RoomSummary,
     RightPanelPhases.NotificationPanel,
+    RightPanelPhases.PinnedMessages,
     RightPanelPhases.FilePanel,
     RightPanelPhases.RoomMemberList,
     RightPanelPhases.GroupMemberList,

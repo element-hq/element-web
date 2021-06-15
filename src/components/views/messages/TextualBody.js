@@ -278,15 +278,15 @@ export default class TextualBody extends React.Component {
             // pass only the first child which is the event tile otherwise this recurses on edited events
             let links = this.findLinks([this._content.current]);
             if (links.length) {
-                // de-dup the links (but preserve ordering)
-                const seen = new Set();
-                links = links.filter((link) => {
-                    if (seen.has(link)) return false;
-                    seen.add(link);
-                    return true;
-                });
+                // de-duplicate the links after stripping hashes as they don't affect the preview
+                // using a set here maintains the order
+                links = Array.from(new Set(links.map(link => {
+                    const url = new URL(link);
+                    url.hash = "";
+                    return url.toString();
+                })));
 
-                this.setState({ links: links });
+                this.setState({ links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {

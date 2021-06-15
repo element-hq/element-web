@@ -25,6 +25,7 @@ $roomListCollapsedWidth: 68px;
 
     // Create a row-based flexbox for the GroupFilterPanel and the room list
     display: flex;
+    contain: content;
 
     .mx_LeftPanel_GroupFilterPanelContainer {
         flex-grow: 0;
@@ -70,6 +71,7 @@ $roomListCollapsedWidth: 68px;
             // aligned correctly. This is also a row-based flexbox.
             display: flex;
             align-items: center;
+            contain: content;
 
             &.mx_IndicatorScrollbar_leftOverflow {
                 mask-image: linear-gradient(90deg, transparent, black 5%);
