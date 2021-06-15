@@ -18,6 +18,7 @@ export interface exportOptions {
     startDate?: number;
     numberOfMessages?: number;
     attachmentsIncluded: boolean;
+    maxSize: number;
 }
 
 const exportConversationalHistory = async (

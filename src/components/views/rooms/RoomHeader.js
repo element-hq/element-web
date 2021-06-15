@@ -86,7 +86,11 @@ export default class RoomHeader extends React.Component {
             this.props.room,
             exportFormats.HTML,
             exportTypes.START_DATE,
-            { startDate: parseInt(new Date("2021.05.20").getTime().toFixed(0)), attachmentsIncluded: false },
+            {
+                startDate: parseInt(new Date("2021.05.20").getTime().toFixed(0)),
+                attachmentsIncluded: true,
+                maxSize: 3 * 1024 * 1024, // 3 MB
+            },
         );
     }
 

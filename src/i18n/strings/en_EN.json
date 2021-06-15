@@ -727,6 +727,8 @@
     "Invite to %(spaceName)s": "Invite to %(spaceName)s",
     "Share your public space": "Share your public space",
     "Unknown App": "Unknown App",
+    "Media omitted": "Media omitted",
+    "Media omitted - file size limit exceeded": "Media omitted - file size limit exceeded",
     "%(creatorName)s created this room.": "%(creatorName)s created this room.",
     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
     "Topic: %(topic)s": "Topic: %(topic)s",

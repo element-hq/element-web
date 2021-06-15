@@ -31,6 +31,8 @@ export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;
     protected permalinkCreator: RoomPermalinkCreator;
     protected matrixClient: MatrixClient;
+    protected totalSize: number;
+    protected mediaOmitText: string;
 
     constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
         super(room, exportType, exportOptions);
@@ -38,6 +40,10 @@ export default class HTMLExporter extends Exporter {
         this.avatars = new Map<string, boolean>();
         this.matrixClient = MatrixClientPeg.get();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
+        this.totalSize = 0;
+        this.mediaOmitText = !this.exportOptions.attachmentsIncluded
+            ? _t("Media omitted")
+            : _t("Media omitted - file size limit exceeded");
         window.addEventListener("beforeunload", this.onBeforeUnload)
     }
 
@@ -270,15 +276,19 @@ export default class HTMLExporter extends Exporter {
         if (this.isAttachment(mxEv)) {
             if (this.exportOptions.attachmentsIncluded) {
                 const blob = await this.getMediaBlob(mxEv);
+                this.totalSize += blob.size;
                 const filePath = this.getFilePath(mxEv);
                 eventTile = await this.getEventTile(mxEv, joined, filePath);
+                if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
+                    this.exportOptions.attachmentsIncluded = false;
+                }
                 this.zip.file(filePath, blob);
             } else {
                 const modifiedContent = {
                     msgtype: "m.text",
-                    body: "**Media omitted**",
+                    body: `**${this.mediaOmitText}**`,
                     format: "org.matrix.custom.html",
-                    formatted_body: "<strong>Media omitted</strong>",
+                    formatted_body: `<strong>${this.mediaOmitText}</strong>`,
                 }
                 if (mxEv.isEncrypted()) {
                     mxEv._clearEvent.content = modifiedContent;
