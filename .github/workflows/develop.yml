@@ -31,7 +31,9 @@ jobs:
                 tool: 'jsperformanceentry'
                 output-file-path: test/end-to-end-tests/performance-entries.json
                 fail-on-alert: false
-                comment-on-alert: true
+                # Secrets are not passed to fork, the action won't be able to comment
+                # for community PRs
+                comment-on-alert: ${{ github.repository_owner == 'matrix-org' }}
                 # Only temporary to monitor where failures occur
                 alert-comment-cc-users: '@gsouquet'
                 github-token: ${{ secrets.DEPLOY_GH_PAGES }}
