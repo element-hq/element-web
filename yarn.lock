@@ -7675,6 +7675,7 @@ matrix-mock-request@^1.2.3:
   dependencies:
     "@babel/runtime" "^7.12.5"
     await-lock "^2.1.0"
+    blueimp-canvas-to-blob "^3.28.0"
     browser-encrypt-attachment "^0.3.0"
     browser-request "^0.3.3"
     cheerio "^1.0.0-rc.9"
@@ -7707,24 +7708,26 @@ matrix-mock-request@^1.2.3:
     png-chunks-extract "^1.0.0"
     prop-types "^15.7.2"
     qrcode "^1.4.4"
+    qs "^6.9.6"
     re-resizable "^6.9.0"
-    react "^17.0.2"
+    react "^16.14.0"
     react-beautiful-dnd "^4.0.1"
-    react-dom "^17.0.2"
+    react-dom "^16.14.0"
     react-focus-lock "^2.5.0"
     react-transition-group "^4.4.1"
     resize-observer-polyfill "^1.5.1"
     rfc4648 "^1.4.0"
     sanitize-html "^2.3.2"
     tar-js "^0.3.0"
+    text-encoding-utf-8 "^1.0.2"
     url "^0.11.0"
     what-input "^5.2.10"
     zxcvbn "^4.4.2"
 
-matrix-react-test-utils@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.2.tgz#c87144d3b910c7edc544a6699d13c7c2bf02f853"
-  integrity sha512-49+7gfV6smvBIVbeloql+37IeWMTD+fiywalwCqk8Dnz53zAFjKSltB3rmWHso1uecLtQEcPtCijfhzcLXAxTQ==
+matrix-react-test-utils@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.3.tgz#27653f9d6bbfddd1856e51860fad1503b039d617"
+  integrity sha512-NKZDlMEQzDZDQhBYyKBUtqidRvpkww3n9/GmGICkxtU2D6NetyBIfvm1Lf9o7167KSkPHJUVvDS9dzaS55jUnA==
 
 "matrix-web-i18n@github:matrix-org/matrix-web-i18n":
   version "1.1.2"
