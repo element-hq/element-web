@@ -1954,11 +1954,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
 
-        // artifically slowing down the registration
-        await (new Promise((resolve) => {
-            setTimeout(resolve, 1337);
-        }));
-
         PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };

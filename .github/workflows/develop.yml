@@ -31,8 +31,8 @@ jobs:
                 tool: 'jsperformanceentry'
                 output-file-path: test/end-to-end-tests/performance-entries.json
                 fail-on-alert: false
-                # Personal access token to deploy GitHub Pages branch
+                comment-on-alert: true
+                # Only temporary to monitor where failures occur
+                alert-comment-cc-users: '@gsouquet'
                 github-token: ${{ secrets.DEPLOY_GH_PAGES }}
-                # Push and deploy GitHub pages branch automatically
-                auto-push: true
-                # auto-push: ${{ github.ref == 'refs/heads/develop' }}
+                auto-push: ${{ github.ref == 'refs/heads/develop' }}
