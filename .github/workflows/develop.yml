@@ -30,8 +30,8 @@ jobs:
               with:
                 tool: 'jsperformanceentry'
                 output-file-path: test/end-to-end-tests/performance-entries.json
-                external-data-json-path: ./cache/benchmark-data-template.json
                 fail-on-alert: false
-            - name: Push benchmark result
-            #   if: ${{ github.ref == 'refs/heads/develop' }}
-              run: git push 'https://RiotRobot:${{ secrets.DEPLOY_GH_PAGES }}@github.com/matrix-org/matrix-react-sdk.git' gh-pages:gh-pages
+                # Personal access token to deploy GitHub Pages branch
+                github-token: ${{ secrets.DEPLOY_GH_PAGES }}
+                # Push and deploy GitHub pages branch automatically
+                auto-push: true
