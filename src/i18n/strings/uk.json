@@ -21,7 +21,7 @@
     "Failed to start": "Запуск не вдався",
     "Download Completed": "Завантаження завершено",
     "Missing indexeddb worker script!": "Відсутній робочий сценарій IndexedDB!",
-    "Your Element is misconfigured": "Ваш Element налаштовано невірно",
+    "Your Element is misconfigured": "Ваш Element налаштовано неправильно",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Ваша конфігурація Element містить хибний JSON. Виправте проблему та оновіть сторінку.",
     "Unable to load config file: please refresh the page to try again.": "Неможливо завантажити файл конфігурації. Оновіть, будь ласка, сторінку, щоб спробувати знову.",
     "Open": "Відкрити",
