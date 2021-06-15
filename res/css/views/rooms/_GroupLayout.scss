@@ -24,10 +24,6 @@ $left-gutter: 64px;
             margin-left: $left-gutter;
         }
 
-        > .mx_EventTile_line {
-            padding-left: $left-gutter;
-        }
-
         > .mx_EventTile_avatar {
             position: absolute;
         }
@@ -42,10 +38,6 @@ $left-gutter: 64px;
             padding-bottom: 3px;
             line-height: $font-22px;
         }
-    }
-
-    .mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px);
     }
 }
 

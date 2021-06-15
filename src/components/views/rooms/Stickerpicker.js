@@ -367,7 +367,7 @@ export default class Stickerpicker extends React.PureComponent {
     /**
      * Launch the integration manager on the stickers integration page
      */
-    _launchManageIntegrations() {
+    _launchManageIntegrations = () => {
         // TODO: Open the right integration manager for the widget
         if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll(
@@ -382,7 +382,7 @@ export default class Stickerpicker extends React.PureComponent {
                 this.state.widgetId,
             );
         }
-    }
+    };
 
     render() {
         let stickerPicker;
@@ -401,7 +401,7 @@ export default class Stickerpicker extends React.PureComponent {
                     key="controls_hide_stickers"
                     className={className}
                     onClick={this._onHideStickersClick}
-                    active={this.state.showStickers}
+                    active={this.state.showStickers.toString()}
                     title={_t("Hide Stickers")}
                 >
                 </AccessibleButton>;
