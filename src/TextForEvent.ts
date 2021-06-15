@@ -27,7 +27,7 @@ import {WIDGET_LAYOUT_EVENT_TYPE} from "./stores/widgets/WidgetLayoutStore";
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-function textForMemberEvent(ev: MatrixEvent): () => string | null {
+function textForMemberEvent(ev: MatrixEvent, showHiddenEvents?: boolean): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     const senderName = ev.sender ? ev.sender.name : ev.getSender();
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
@@ -77,7 +77,7 @@ function textForMemberEvent(ev: MatrixEvent): () => string | null {
                     return () => _t('%(senderName)s changed their profile picture.', {senderName});
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return () => _t('%(senderName)s set a profile picture.', {senderName});
-                } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+                } else if (showHiddenEvents ?? SettingsStore.getValue("showHiddenEventsInTimeline")) {
                     // This is a null rejoin, it will only be visible if the Labs option is enabled
                     return () => _t("%(senderName)s made no change.", {senderName});
                 } else {
@@ -596,7 +596,7 @@ function textForMjolnirEvent(event: MatrixEvent): () => string | null {
 }
 
 interface IHandlers {
-    [type: string]: (ev: MatrixEvent) => (() => string | null);
+    [type: string]: (ev: MatrixEvent, showHiddenEvents?: boolean) => (() => string | null);
 }
 
 const handlers: IHandlers = {
@@ -632,12 +632,24 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-export function hasText(ev: MatrixEvent): boolean {
+/**
+ * Determines whether the given event has text to display.
+ * @param ev The event
+ * @param showHiddenEvents An optional cached setting value for showHiddenEventsInTimeline
+ *     to avoid hitting the settings store
+ */
+export function hasText(ev: MatrixEvent, showHiddenEvents?: boolean): boolean {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return Boolean(handler?.(ev));
+    return Boolean(handler?.(ev, showHiddenEvents));
 }
 
-export function textForEvent(ev: MatrixEvent): string {
+/**
+ * Gets the textual content of the given event.
+ * @param ev The event
+ * @param showHiddenEvents An optional cached setting value for showHiddenEventsInTimeline
+ *     to avoid hitting the settings store
+ */
+export function textForEvent(ev: MatrixEvent, showHiddenEvents?: boolean): string {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return handler?.(ev)?.() || '';
+    return handler?.(ev, showHiddenEvents)?.() || '';
 }
