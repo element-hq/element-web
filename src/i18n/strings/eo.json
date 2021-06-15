@@ -1591,10 +1591,10 @@
     "Room Autocomplete": "Memkompletigo de ĉambroj",
     "User Autocomplete": "Memkompletigo de uzantoj",
     "Custom (%(level)s)": "Propra (%(level)s)",
-    "%(senderName)s placed a voice call.": "%(senderName)s metis voĉvokon.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s metis voĉvokon. (mankas subteno en ĉi tiu foliumilo)",
-    "%(senderName)s placed a video call.": "%(senderName)s metis vidvokon.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s metis vidvokon. (mankas subteno en ĉi tiu foliumilo)",
+    "%(senderName)s placed a voice call.": "%(senderName)s ekigis voĉvokon.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s ekigis voĉvokon. (mankas subteno en ĉi tiu foliumilo)",
+    "%(senderName)s placed a video call.": "%(senderName)s ekigis vidvokon.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s ekigis vidvokon. (mankas subteno en ĉi tiu foliumilo)",
     "Try out new ways to ignore people (experimental)": "Elprovi novajn manierojn malatenti personojn (eksperimente)",
     "Match system theme": "Similiĝi la sisteman haŭton",
     "My Ban List": "Mia listo de forbaroj",
@@ -3320,5 +3320,11 @@
     "Reset event store": "Restarigi deponejon de okazoj",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Se vi tamen tion faras, sciu ke neniu el viaj mesaĝoj foriĝos, sed via sperto pri serĉado povas malboniĝi momente, dum la indekso estas refarata",
     "You most likely do not want to reset your event index store": "Plej probable, vi ne volas restarigi vian deponejon de indeksoj de okazoj",
-    "Reset event store?": "Ĉu restarigi deponejon de okazoj?"
+    "Reset event store?": "Ĉu restarigi deponejon de okazoj?",
+    "Currently joining %(count)s rooms|one": "Nun aliĝante al %(count)s ĉambro",
+    "Currently joining %(count)s rooms|other": "Nun aliĝante al %(count)s ĉambroj",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Provu aliajn vortojn aŭ kontorolu, ĉu vi ne tajperaris. Iuj rezultoj eble ne videblos, ĉar ili estas privataj kaj vi bezonus inviton por aliĝi.",
+    "No results for \"%(query)s\"": "Neniuj rezultoj por «%(query)s»",
+    "The user you called is busy.": "La uzanto, kiun vi vokis, estas okupata.",
+    "User Busy": "Uzanto estas okupata"
 }

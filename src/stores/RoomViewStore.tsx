@@ -167,6 +167,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this.state.roomId,
+                    initialTabId: payload.initial_tab_id,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }

@@ -1,0 +1,40 @@
+name: Develop jobs
+on:
+    push:
+        branches: [develop]
+    pull_request:
+        branches: [develop]
+jobs:
+    end-to-end:
+        runs-on: ubuntu-latest
+        container: vectorim/element-web-ci-e2etests-env:latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: End-to-End tests
+              run: ./scripts/ci/end-to-end-tests.sh
+            - name: Archive logs
+              uses: actions/upload-artifact@v2
+              with:
+                path: |
+                    test/end-to-end-tests/logs/**/*
+                    test/end-to-end-tests/synapse/installations/consent/homeserver.log
+                retention-days: 14
+            - name: Download previous benchmark data
+              uses: actions/cache@v1
+              with:
+                path: ./cache
+                key: ${{ runner.os }}-benchmark
+            - name: Store benchmark result
+              uses: matrix-org/github-action-benchmark@jsperfentry-1
+              with:
+                tool: 'jsperformanceentry'
+                output-file-path: test/end-to-end-tests/performance-entries.json
+                fail-on-alert: false
+                # Secrets are not passed to fork, the action won't be able to comment
+                # for community PRs
+                comment-on-alert: ${{ github.repository_owner == 'matrix-org' }}
+                # Only temporary to monitor where failures occur
+                alert-comment-cc-users: '@gsouquet'
+                github-token: ${{ secrets.DEPLOY_GH_PAGES }}
+                auto-push: ${{ github.ref == 'refs/heads/develop' }}

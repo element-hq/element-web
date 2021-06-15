@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {forwardRef, ReactNode} from "react";
+import React, {forwardRef, ReactNode, ReactChildren} from "react";
 import classNames from "classnames";
 
 interface IProps {
     className: string;
     title: string;
     subtitle?: ReactNode;
+    children?: ReactChildren;
 }
 
 const EventTileBubble = forwardRef<HTMLDivElement, IProps>(({ className, title, subtitle, children }, ref) => {
