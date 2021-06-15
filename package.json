@@ -119,7 +119,7 @@
     "json-loader": "^0.5.7",
     "loader-utils": "^1.4.0",
     "matrix-mock-request": "^1.2.3",
-    "matrix-react-test-utils": "^0.2.2",
+    "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
     "mini-css-extract-plugin": "^0.12.0",
     "minimist": "^1.2.5",
