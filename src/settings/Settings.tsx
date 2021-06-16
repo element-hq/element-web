@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018, 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -127,6 +127,7 @@ export interface ISetting {
         image: string; // require(...)
         feedbackSubheading?: string;
         feedbackLabel?: string;
+        extraSettings?: string[];
     };
 }
 
@@ -167,7 +168,30 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             feedbackSubheading: _td("Your feedback will help make spaces better. " +
                 "The more detail you can go into, the better."),
             feedbackLabel: "spaces-feedback",
+            extraSettings: [
+                "feature_spaces.all_rooms",
+                "feature_spaces.space_member_dms",
+                "feature_spaces.space_dm_badges",
+            ],
         },
+    },
+    "feature_spaces.all_rooms": {
+        displayName: _td("Use an all rooms space instead of a home space."),
+        supportedLevels: LEVELS_FEATURE,
+        default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_spaces.space_member_dms": {
+        displayName: _td("Show DMs for joined/invited members in the space."),
+        supportedLevels: LEVELS_FEATURE,
+        default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_spaces.space_dm_badges": {
+        displayName: _td("Show notification badges for DMs in spaces."),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
     },
     "feature_dnd": {
         isFeature: true,

@@ -42,7 +42,7 @@ limitations under the License.
             margin-bottom: 20px;
         }
 
-        .mx_AccessibleButton {
+        .mx_BetaCard_buttons .mx_AccessibleButton {
             display: block;
             margin: 12px 0;
             padding: 7px 40px;
@@ -54,6 +54,12 @@ limitations under the License.
             line-height: $font-15px;
             color: $secondary-fg-color;
             margin-top: 20px;
+        }
+
+        .mx_BetaCard_relatedSettings {
+            summary + .mx_SettingsFlag {
+                margin-top: 4px;
+            }
         }
     }
 

@@ -44,7 +44,12 @@ const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
     const sendFeedback = async (ok: boolean) => {
         if (!ok) return onFinished(false);
 
-        submitFeedback(SdkConfig.get().bug_report_endpoint_url, info.feedbackLabel, comment, canContact);
+        const extraData = SettingsStore.getBetaInfo(featureId)?.extraSettings.reduce((o, k) => {
+            o[k] = SettingsStore.getValue(k);
+            return o;
+        }, {});
+
+        submitFeedback(SdkConfig.get().bug_report_endpoint_url, info.feedbackLabel, comment, canContact, extraData);
         onFinished(true);
 
         Modal.createTrackedDialog("Beta Dialog Sent", featureId, InfoDialog, {

@@ -25,6 +25,7 @@ import TextWithTooltip from "../elements/TextWithTooltip";
 import Modal from "../../../Modal";
 import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
+import SettingsFlag from "../elements/SettingsFlag";
 
 interface IProps {
     title?: string;
@@ -66,7 +67,7 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
     const info = SettingsStore.getBetaInfo(featureId);
     if (!info) return null; // Beta is invalid/disabled
 
-    const { title, caption, disclaimer, image, feedbackLabel, feedbackSubheading } = info;
+    const { title, caption, disclaimer, image, feedbackLabel, feedbackSubheading, extraSettings } = info;
     const value = SettingsStore.getValue(featureId);
 
     let feedbackButton;
@@ -88,7 +89,7 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
                 <BetaPill />
             </h3>
             <span className="mx_BetaCard_caption">{ _t(caption) }</span>
-            <div>
+            <div className="mx_BetaCard_buttons">
                 { feedbackButton }
                 <AccessibleButton
                     onClick={() => SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value)}
@@ -100,6 +101,12 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
             { disclaimer && <div className="mx_BetaCard_disclaimer">
                 { disclaimer(value) }
             </div> }
+            { extraSettings && <details className="mx_BetaCard_relatedSettings">
+                <summary>{ _t("Experimental options") }</summary>
+                { extraSettings.map(key => (
+                    <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
+                )) }
+            </details> }
         </div>
         <img src={image} alt="" />
     </div>;

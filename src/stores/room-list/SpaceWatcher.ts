@@ -19,6 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomListStoreClass } from "./RoomListStore";
 import { SpaceFilterCondition } from "./filters/SpaceFilterCondition";
 import SpaceStore, { UPDATE_SELECTED_SPACE } from "../SpaceStore";
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * Watches for changes in spaces to manage the filter on the provided RoomListStore
@@ -28,6 +29,10 @@ export class SpaceWatcher {
     private activeSpace: Room = SpaceStore.instance.activeSpace;
 
     constructor(private store: RoomListStoreClass) {
+        if (!SettingsStore.getValue("feature_spaces.all_rooms")) {
+            this.updateFilter();
+            store.addFilter(this.filter);
+        }
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
     }
 
@@ -35,7 +40,7 @@ export class SpaceWatcher {
         this.activeSpace = activeSpace;
 
         if (this.filter) {
-            if (activeSpace) {
+            if (activeSpace || !SettingsStore.getValue("feature_spaces.all_rooms")) {
                 this.updateFilter();
             } else {
                 this.store.removeFilter(this.filter);
@@ -49,9 +54,11 @@ export class SpaceWatcher {
     };
 
     private updateFilter = () => {
-        SpaceStore.instance.traverseSpace(this.activeSpace.roomId, roomId => {
-            this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
-        });
+        if (this.activeSpace) {
+            SpaceStore.instance.traverseSpace(this.activeSpace.roomId, roomId => {
+                this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+            });
+        }
         this.filter.updateSpace(this.activeSpace);
     };
 }
