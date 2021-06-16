@@ -62,14 +62,13 @@ const partitionSpacesAndRooms = (arr: Room[]): [Room[], Room[]] => { // [spaces,
     }, [[], []]);
 };
 
-const validOrder = (order: string): string | null => {
+const validOrder = (order: string): string | undefined => {
     if (typeof order === "string" && order.length <= 50 && Array.from(order).every((c: string) => {
         const charCode = c.charCodeAt(0);
         return charCode >= 0x20 && charCode <= 0x7E;
     })) {
         return order;
     }
-    return undefined;
 };
 
 // For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
@@ -639,7 +638,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         try {
             await this.matrixClient.setRoomAccountData(space.roomId, EventType.SpaceOrder, { order });
         } catch (e) {
-            console.log("Failed to set root space order", e);
+            console.warn("Failed to set root space order", e);
             if (this.spaceOrderLocalEchoMap.get(space.roomId) === order) {
                 this.spaceOrderLocalEchoMap.delete(space.roomId);
             }

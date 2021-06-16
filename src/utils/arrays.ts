@@ -230,7 +230,7 @@ export function arrayMerge<T>(...a: T[][]): T[] {
  * @param toIndex the index of where to put the element.
  * @returns A new array with the requested value moved.
  */
-export function reorder<T>(list: T[], fromIndex: number, toIndex: number): T[] {
+export function moveElement<T>(list: T[], fromIndex: number, toIndex: number): T[] {
     const result = Array.from(list);
     const [removed] = result.splice(fromIndex, 1);
     result.splice(toIndex, 0, removed);

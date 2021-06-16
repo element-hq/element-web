@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {InputHTMLAttributes, LegacyRef} from "react";
+import React, { InputHTMLAttributes, LegacyRef } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/SpaceStore";
 import SpaceTreeLevelLayoutStore from "../../../stores/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
-import {RovingAccessibleButton} from "../../../accessibility/roving/RovingAccessibleButton";
-import {RovingAccessibleTooltipButton} from "../../../accessibility/roving/RovingAccessibleTooltipButton";
+import { RovingAccessibleButton } from "../../../accessibility/roving/RovingAccessibleButton";
+import { RovingAccessibleTooltipButton } from "../../../accessibility/roving/RovingAccessibleTooltipButton";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import {_t} from "../../../languageHandler";
-import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
-import {toRightOf} from "../../structures/ContextMenu";
+import { _t } from "../../../languageHandler";
+import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import { toRightOf } from "../../structures/ContextMenu";
 import {
     shouldShowSpaceSettings,
     showAddExistingRooms,
@@ -39,15 +39,15 @@ import {
     showSpaceSettings,
 } from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import AccessibleButton, {ButtonEvent} from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import RoomViewStore from "../../../stores/RoomViewStore";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {EventType} from "matrix-js-sdk/src/@types/event";
-import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
-import {NotificationColor} from "../../../stores/notifications/NotificationColor";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     space?: Room;

@@ -16,7 +16,7 @@ limitations under the License.
 
 import { alphabetPad, baseToString, stringToBase, DEFAULT_ALPHABET } from "matrix-js-sdk/src/utils";
 
-import { reorder } from "./arrays";
+import { moveElement } from "./arrays";
 
 export const midPointsBetweenStrings = (
     a: string,
@@ -73,7 +73,7 @@ export const reorderLexicographically = (
     // zip orders with their indices to simplify later index wrangling
     const ordersWithIndices: IEntry[] = orders.map((order, index) => ({ index, order }));
     // apply the fundamental order update to the zipped array
-    const newOrder = reorder(ordersWithIndices, fromIndex, toIndex);
+    const newOrder = moveElement(ordersWithIndices, fromIndex, toIndex);
 
     // check if we have to fill undefined orders to complete placement
     const orderToLeftUndefined = newOrder[toIndex - 1]?.order === undefined;
