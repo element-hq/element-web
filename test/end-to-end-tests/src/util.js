@@ -28,13 +28,13 @@ module.exports.delay = function(ms) {
 };
 
 module.exports.measureStart = function(session, name) {
-    return session.page.evaluate(() => {
-        window.mxPerformanceMonitor.start(name);
-    });
+    return session.page.evaluate(_name => {
+        window.mxPerformanceMonitor.start(_name);
+    }, name);
 };
 
 module.exports.measureStop = function(session, name) {
-    return session.page.evaluate(() => {
-        window.mxPerformanceMonitor.stop(name);
-    });
+    return session.page.evaluate(_name => {
+        window.mxPerformanceMonitor.stop(_name);
+    }, name);
 };
