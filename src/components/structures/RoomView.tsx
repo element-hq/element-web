@@ -80,7 +80,6 @@ import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { omit } from 'lodash';
 import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
@@ -572,16 +571,12 @@ export default class RoomView extends React.Component<IProps, IState> {
     shouldComponentUpdate(nextProps, nextState) {
         const hasPropsDiff = objectHasDiff(this.props, nextProps);
 
-        // React only shallow comparison and we only want to trigger
-        // a component re-render if a room requires an upgrade
-        const newUpgradeRecommendation = nextState.upgradeRecommendation || {}
-
-        const state = omit(this.state, ['upgradeRecommendation']);
-        const newState = omit(nextState, ['upgradeRecommendation'])
+        const { upgradeRecommendation, ...state } = this.state;
+        const { upgradeRecommendation: newUpgradeRecommendation, ...newState } = nextState;
 
         const hasStateDiff =
-            objectHasDiff(state, newState) ||
-            (newUpgradeRecommendation.needsUpgrade === true)
+            newUpgradeRecommendation?.needsUpgrade !== upgradeRecommendation?.needsUpgrade ||
+            objectHasDiff(state, newState);
 
         return hasPropsDiff || hasStateDiff;
     }
