@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { sortBy } from "lodash";
-import { stringToBase, baseToString, averageBetweenStrings, DEFAULT_ALPHABET } from "matrix-js-sdk/src/utils";
+import { averageBetweenStrings, DEFAULT_ALPHABET } from "matrix-js-sdk/src/utils";
 
 import { midPointsBetweenStrings, reorderLexicographically } from "../../src/utils/stringOrderField";
 
