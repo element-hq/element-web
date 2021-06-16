@@ -709,7 +709,7 @@
     "Error saving email notification preferences": "Fehler beim Speichern der E-Mail-Benachrichtigungseinstellungen",
     "Tuesday": "Dienstag",
     "Enter keywords separated by a comma:": "Gib die Schlüsselwörter durch einen Beistrich getrennt ein:",
-    "Forward Message": "Nachricht weiterleiten",
+    "Forward Message": "Weiterleiten",
     "You have successfully set a password and an email address!": "Du hast erfolgreich ein Passwort und eine E-Mail-Adresse gesetzt!",
     "Remove %(name)s from the directory?": "Soll der Raum %(name)s aus dem Verzeichnis entfernt werden?",
     "%(brand)s uses many advanced browser features, some of which are not available or experimental in your current browser.": "%(brand)s nutzt zahlreiche fortgeschrittene Browser-Funktionen, die teilweise in deinem aktuell verwendeten Browser noch nicht verfügbar sind oder sich noch im experimentellen Status befinden.",
