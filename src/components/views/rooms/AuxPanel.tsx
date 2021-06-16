@@ -96,16 +96,6 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    onConferenceNotificationClick = (ev, type) => {
-        dis.dispatch({
-            action: 'place_call',
-            type: type,
-            room_id: this.props.room.roomId,
-        });
-        ev.stopPropagation();
-        ev.preventDefault();
-    };
-
     _rateLimitedUpdate = new RateLimitedFunc(() => {
         if (SettingsStore.getValue("feature_state_counters")) {
             this.setState({counters: this._computeCounters()});

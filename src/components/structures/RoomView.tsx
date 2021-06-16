@@ -705,12 +705,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     }
 
-    private onLayoutChange = () => {
-        this.setState({
-            layout: SettingsStore.getValue("layout"),
-        });
-    };
-
     private onRightPanelStoreUpdate = () => {
         this.setState({
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
