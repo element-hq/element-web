@@ -41,7 +41,7 @@ export function getUnsentMessages(room) {
 }
 
 @replaceableComponent("structures.RoomStatusBar")
-export default class RoomStatusBar extends React.Component {
+export default class RoomStatusBar extends React.PureComponent {
     static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,

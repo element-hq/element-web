@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { Room } from 'matrix-js-sdk/src/models/room'
-import dis from "../../../dispatcher/dispatcher";
 import AppsDrawer from './AppsDrawer';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
@@ -75,12 +74,14 @@ export default class AuxPanel extends React.Component<IProps, IState> {
 
     componentDidMount() {
         const cli = MatrixClientPeg.get();
-        cli.on("RoomState.events", this._rateLimitedUpdate);
+        if (SettingsStore.getValue("feature_state_counters")) {
+            cli.on("RoomState.events", this._rateLimitedUpdate);
+        }
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
-        if (cli) {
+        if (cli && SettingsStore.getValue("feature_state_counters")) {
             cli.removeListener("RoomState.events", this._rateLimitedUpdate);
         }
     }
@@ -97,9 +98,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
     }
 
     _rateLimitedUpdate = new RateLimitedFunc(() => {
-        if (SettingsStore.getValue("feature_state_counters")) {
-            this.setState({counters: this._computeCounters()});
-        }
+        this.setState({ counters: this._computeCounters() });
     }, 500);
 
     _computeCounters() {
@@ -215,7 +214,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
 
         return (
-            <AutoHideScrollbar className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style}>
                 { stateViews }
                 { appsDrawer }
                 { callView }
