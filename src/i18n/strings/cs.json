@@ -3292,5 +3292,11 @@
     "See when people join, leave, or are invited to your active room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do vaší aktivní místnosti",
     "Kick, ban, or invite people to this room, and make you leave": "Vykopnout, vykázat, pozvat lidi do této místnosti nebo odejít",
     "Kick, ban, or invite people to your active room, and make you leave": "Vykopnout, vykázat, pozvat lidi do vaší aktivní místnosti nebo odejít",
-    "See when people join, leave, or are invited to this room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do této místnosti"
+    "See when people join, leave, or are invited to this room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do této místnosti",
+    "Currently joining %(count)s rooms|one": "Momentálně se připojuje %(count)s místnost",
+    "Currently joining %(count)s rooms|other": "Momentálně se připojuje %(count)s místností",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Vyzkoušejte jiná slova nebo zkontrolujte překlepy. Některé výsledky nemusí být viditelné, protože jsou soukromé a potřebujete k nim pozvánku.",
+    "No results for \"%(query)s\"": "Žádné výsledky pro \"%(query)s\"",
+    "The user you called is busy.": "Volaný uživatel je zaneprázdněn.",
+    "User Busy": "Uživatel zaneprázdněn"
 }

@@ -79,7 +79,7 @@ async function runTests() {
         await new Promise((resolve) => setTimeout(resolve, 5 * 60 * 1000));
     }
 
-    const performanceEntries = {};
+    let performanceEntries;
 
     await Promise.all(sessions.map(async (session) => {
         // Collecting all performance monitoring data before closing the session
@@ -95,7 +95,11 @@ async function runTests() {
             }, true);
             return measurements;
         });
-        performanceEntries[session.username] = JSON.parse(measurements);
+
+        /**
+         * TODO: temporary only use one user session data
+         */
+        performanceEntries = JSON.parse(measurements);
         return session.close();
     }));
     fs.writeFileSync(`performance-entries.json`, JSON.stringify(performanceEntries));

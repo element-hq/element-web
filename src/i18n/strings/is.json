@@ -720,5 +720,13 @@
     "%(count)s messages deleted.|one": "%(count)s skilaboð eytt.",
     "%(count)s messages deleted.|other": "%(count)s skilaboðum eytt.",
     "Message deleted on %(date)s": "Skilaboð eytt á %(date)s",
-    "Message edits": "Skilaboðs breytingar"
+    "Message edits": "Skilaboðs breytingar",
+    "List options": "Lista valkosti",
+    "Create a Group Chat": "Búa Til Hópspjall",
+    "Explore Public Rooms": "Kanna Almenningsherbergi",
+    "Explore public rooms": "Kanna almenningsherbergi",
+    "Explore all public rooms": "Kanna öll almenningsherbergi",
+    "Liberate your communication": "Frelsaðu samskipti þín",
+    "Welcome to <name/>": "Velkomin til <name/>",
+    "Welcome to %(appName)s": "Velkomin til %(appName)s"
 }

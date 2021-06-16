@@ -3378,5 +3378,11 @@
     "See when people join, leave, or are invited to your active room": "檢視人們何時加入、離開或被邀請至您活躍的聊天室",
     "Kick, ban, or invite people to your active room, and make you leave": "踢除、封鎖或邀請人們到您作用中的聊天室，然後讓您離開",
     "See when people join, leave, or are invited to this room": "檢視人們何時加入、離開或被邀請至此聊天室",
-    "Kick, ban, or invite people to this room, and make you leave": "踢除、封鎖或邀請人們到此聊天室，然後讓您離開"
+    "Kick, ban, or invite people to this room, and make you leave": "踢除、封鎖或邀請人們到此聊天室，然後讓您離開",
+    "Currently joining %(count)s rooms|one": "目前正在加入 %(count)s 個聊天室",
+    "Currently joining %(count)s rooms|other": "目前正在加入 %(count)s 個聊天室",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "嘗試不同的詞或是檢查拼字。某些結果可能不可見，因為其為私人的，您必須要有邀請才能加入。",
+    "No results for \"%(query)s\"": "「%(query)s」沒有結果",
+    "The user you called is busy.": "您想要通話的使用者目前忙碌中。",
+    "User Busy": "使用者忙碌"
 }

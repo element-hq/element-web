@@ -3274,5 +3274,11 @@
     "Send stickers to your active room as you": "发送贴纸到你所活跃的聊天室",
     "See when people join, leave, or are invited to your active room": "查看人们何时加入、离开或被邀请到你所活跃的聊天室",
     "See when people join, leave, or are invited to this room": "查看人们何时加入、离开或被邀请到这个房间",
-    "Kick, ban, or invite people to this room, and make you leave": "移除、封禁或邀请用户到此聊天室，并让你离开"
+    "Kick, ban, or invite people to this room, and make you leave": "移除、封禁或邀请用户到此聊天室，并让你离开",
+    "Currently joining %(count)s rooms|one": "目前正在加入 %(count)s 个聊天室",
+    "Currently joining %(count)s rooms|other": "目前正在加入 %(count)s 个聊天室",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "尝试不同的单词或检查拼写错误。某些结果可能不可见，因为它们属于私有的，你需要一个邀请才能加入。",
+    "No results for \"%(query)s\"": "「%(query)s」没有结果",
+    "The user you called is busy.": "你所拨打的用户正在忙碌中。",
+    "User Busy": "用户正在忙"
 }

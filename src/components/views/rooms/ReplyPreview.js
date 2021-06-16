@@ -95,6 +95,7 @@ export default class ReplyPreview extends React.Component {
                     permalinkCreator={this.props.permalinkCreator}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                    as="div"
                 />
             </div>
         </div>;
