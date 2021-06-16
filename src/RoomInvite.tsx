@@ -27,6 +27,11 @@ import InviteDialog, { KIND_DM, KIND_INVITE } from "./components/views/dialogs/I
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
 
+export interface IInviteResult {
+    states: CompletionStates;
+    inviter: MultiInviter;
+}
+
 /**
  * Invites multiple addresses to a room
  * Simpler interface to utils/MultiInviter but with
@@ -36,10 +41,7 @@ import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
  * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(
-    roomId: string,
-    addresses: string[],
-): Promise<{ states: CompletionStates, inviter: MultiInviter }> {
+export function inviteMultipleToRoom(roomId: string, addresses: string[]): Promise<IInviteResult> {
     const inviter = new MultiInviter(roomId);
     return inviter.invite(addresses).then(states => Promise.resolve({ states, inviter }));
 }

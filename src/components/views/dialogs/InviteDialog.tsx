@@ -34,7 +34,12 @@ import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {
     canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
 } from "../../../createRoom";
-import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
+import {
+    IInviteResult,
+    inviteMultipleToRoom,
+    showAnyInviteErrors,
+    showCommunityInviteDialog,
+} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
@@ -601,19 +606,9 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return members.map(m => ({userId: m.member.userId, user: m.member}));
     }
 
-    private shouldAbortAfterInviteError(result): boolean {
-        const failedUsers = Object.keys(result.states).filter(a => result.states[a] === 'error');
-        if (failedUsers.length > 0) {
-            console.log("Failed to invite users: ", result);
-            this.setState({
-                busy: false,
-                errorText: _t("Failed to invite the following users to chat: %(csvUsers)s", {
-                    csvUsers: failedUsers.join(", "),
-                }),
-            });
-            return true; // abort
-        }
-        return false;
+    private shouldAbortAfterInviteError(result: IInviteResult, room: Room): boolean {
+        this.setState({ busy: false });
+        return !showAnyInviteErrors(result.states, room, result.inviter);
     }
 
     private convertFilter(): Member[] {
@@ -731,7 +726,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         try {
             const result = await inviteMultipleToRoom(this.props.roomId, targetIds)
             CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
-            if (!this.shouldAbortAfterInviteError(result)) { // handles setting error message too
+            if (!this.shouldAbortAfterInviteError(result, room)) { // handles setting error message too
                 this.props.onFinished();
             }
 
