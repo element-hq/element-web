@@ -1640,7 +1640,9 @@ export default class RoomView extends React.Component<IProps, IState> {
         // but it's better than the video going missing entirely
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
-        this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
+        if (this.state.auxPanelMaxHeight !== auxPanelMaxHeight) {
+            this.setState({ auxPanelMaxHeight });
+        }
     };
 
     private onStatusBarVisible = () => {
