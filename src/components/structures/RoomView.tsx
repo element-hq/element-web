@@ -701,6 +701,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 room_id: this.state.room.roomId,
                 event_id: this.state.initialEventId,
                 highlighted: false,
+                replyingToEvent: this.state.replyToEvent,
             });
         }
     }
