@@ -49,18 +49,6 @@ $irc-line-height: $font-18px;
             }
         }
 
-        > .mx_SenderProfile {
-            order: 2;
-            flex-shrink: 0;
-            width: var(--name-width);
-            text-overflow: ellipsis;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            overflow: visible;
-            justify-content: flex-end;
-        }
-
         .mx_EventTile_line, .mx_EventTile_reply {
             padding: 0;
             display: flex;
@@ -173,27 +161,37 @@ $irc-line-height: $font-18px;
         border-left: 0;
     }
 
-    .mx_SenderProfile_hover {
-        background-color: $primary-bg-color;
-        overflow: hidden;
+    .mx_SenderProfile {
+        width: var(--name-width);
         display: flex;
+        order: 2;
+        flex-shrink: 0;
+        justify-content: flex-start;
+        align-items: center;
 
-        > .mx_SenderProfile_displayName, .mx_SenderProfile_mxid {
+        > .mx_SenderProfile_displayName {
+            width: 100%;
+            text-align: end;
             overflow: hidden;
             text-overflow: ellipsis;
-            min-width: var(--name-width);
-            text-align: end;
+        }
+
+        > .mx_SenderProfile_mxid {
+            visibility: collapse;
         }
     }
 
     .mx_SenderProfile:hover {
-        justify-content: flex-start;
-    }
-
-    .mx_SenderProfile_hover:hover {
         overflow: visible;
-        width: max(auto, 100%);
         z-index: 10;
+
+        > .mx_SenderProfile_displayName {
+            overflow: visible;
+        }
+
+        > .mx_SenderProfile_mxid {
+            visibility: visible;
+        }
     }
 
     .mx_ReplyThread {
@@ -201,16 +199,7 @@ $irc-line-height: $font-18px;
         .mx_SenderProfile {
             width: unset;
             max-width: var(--name-width);
-        }
-
-        .mx_SenderProfile_hover {
             background: transparent;
-
-            > span {
-                > .mx_SenderProfile_displayName, .mx_SenderProfile_mxid {
-                    min-width: inherit;
-                }
-            }
         }
 
         .mx_EventTile_emote {
