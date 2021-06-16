@@ -3343,5 +3343,14 @@
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "Dein Feedback hilfst uns, die Spaces zu verbessern. Je genauer, desto besser.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Durchs Verlassen lädt %(brand)s mit deaktivierten Spaces neu. Danach kannst du Communities und Custom Tags wieder verwenden.",
     "sends space invaders": "sendet Space Invaders",
-    "Sends the given message with a space themed effect": "Sendet die Nachricht mit Raumschiffen"
+    "Sends the given message with a space themed effect": "Sendet die Nachricht mit Raumschiffen",
+    "Space Autocomplete": "Spaces automatisch vervollständigen",
+    "Currently joining %(count)s rooms|one": "Betrete %(count)s Raum",
+    "Currently joining %(count)s rooms|other": "Betrete %(count)s Räume",
+    "Go to my space": "Zu meinem Space",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Überprüfe auf Tippfehler oder verwende andere Suchbegriffe. Beachte, dass Ergebnisse aus privaten Räumen, in die du nicht eingeladen wurdest, nicht angezeigt werden.",
+    "See when people join, leave, or are invited to this room": "Anzeigen, wenn Leute eingeladen werden oder den Raum betreten und verlassen",
+    "The user you called is busy.": "Der angerufene Benutzer ist momentan beschäftigt.",
+    "User Busy": "Benutzer beschäftigt",
+    "No results for \"%(query)s\"": "Keine Ergebnisse für \"%(query)s\""
 }

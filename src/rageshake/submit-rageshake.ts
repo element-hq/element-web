@@ -25,14 +25,8 @@ import Tar from "tar-js";
 
 import * as rageshake from './rageshake';
 
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
 
 interface IOpts {
     label?: string;

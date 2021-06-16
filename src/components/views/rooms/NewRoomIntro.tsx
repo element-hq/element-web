@@ -31,6 +31,17 @@ import dis from "../../../dispatcher/dispatcher";
 import SpaceStore from "../../../stores/SpaceStore";
 import {showSpaceInvite} from "../../../utils/space";
 
+import { privateShouldBeEncrypted } from "../../../createRoom";
+
+import EventTileBubble from "../messages/EventTileBubble";
+import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+
+function hasExpectedEncryptionSettings(room): boolean {
+    const isEncrypted: boolean = room._client?.isRoomEncrypted(room.roomId);
+    const isPublic: boolean = room.getJoinRule() === "public";
+    return isPublic || !privateShouldBeEncrypted() || isEncrypted;
+}
+
 const NewRoomIntro = () => {
     const cli = useContext(MatrixClientContext);
     const {room, roomId} = useContext(RoomContext);
@@ -166,7 +177,31 @@ const NewRoomIntro = () => {
         </React.Fragment>;
     }
 
+    function openRoomSettings(event) {
+        event.preventDefault();
+        dis.dispatch({
+            action: "open_room_settings",
+            initial_tab_id: ROOM_SECURITY_TAB,
+        });
+    }
+
+    const sub2 = _t(
+        "Your private messages are normally encrypted, but this room isn't. "+
+        "Usually this is due to an unsupported device or method being used, " +
+        "like email invites. <a>Enable encryption in settings.</a>", {},
+        { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> },
+    );
+
     return <div className="mx_NewRoomIntro">
+
+        { !hasExpectedEncryptionSettings(room) && (
+            <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                title={_t("End-to-end encryption isn't enabled")}
+                subtitle={sub2}
+            />
+        )}
+
         { body }
     </div>;
 };

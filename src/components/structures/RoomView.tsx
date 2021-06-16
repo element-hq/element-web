@@ -1670,6 +1670,24 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    private handleScrollKey = ev => {
+        let panel;
+        if (this.searchResultsPanel.current) {
+            panel = this.searchResultsPanel.current;
+        } else if (this.messagePanel) {
+            panel = this.messagePanel;
+        }
+
+        if (panel) {
+            panel.handleScrollKey(ev);
+        }
+    };
+
+    /**
      * get any current call for this room
      */
     private getCallForRoom(): MatrixCall {
