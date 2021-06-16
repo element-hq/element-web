@@ -24,7 +24,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.rooms.RoomUpgradeWarningBar")
-export default class RoomUpgradeWarningBar extends React.Component {
+export default class RoomUpgradeWarningBar extends React.PureComponent {
     static propTypes = {
         room: PropTypes.object.isRequired,
         recommendation: PropTypes.object.isRequired,
