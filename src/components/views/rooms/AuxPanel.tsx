@@ -15,18 +15,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Room } from 'matrix-js-sdk/src/models/room'
 import AppsDrawer from './AppsDrawer';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {UIFeature} from "../../../settings/UIFeature";
+import { UIFeature } from "../../../settings/UIFeature";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
-import {objectHasDiff} from "../../../utils/objects";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { objectHasDiff } from "../../../utils/objects";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // js-sdk room object
@@ -68,21 +68,21 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            counters: this._computeCounters(),
+            counters: this.computeCounters(),
         };
     }
 
     componentDidMount() {
         const cli = MatrixClientPeg.get();
         if (SettingsStore.getValue("feature_state_counters")) {
-            cli.on("RoomState.events", this._rateLimitedUpdate);
+            cli.on("RoomState.events", this.rateLimitedUpdate);
         }
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli && SettingsStore.getValue("feature_state_counters")) {
-            cli.removeListener("RoomState.events", this._rateLimitedUpdate);
+            cli.removeListener("RoomState.events", this.rateLimitedUpdate);
         }
     }
 
@@ -97,11 +97,11 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    _rateLimitedUpdate = new RateLimitedFunc(() => {
-        this.setState({ counters: this._computeCounters() });
+    private rateLimitedUpdate = new RateLimitedFunc(() => {
+        this.setState({ counters: this.computeCounters() });
     }, 500);
 
-    _computeCounters() {
+    private computeCounters() {
         const counters = [];
 
         if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
