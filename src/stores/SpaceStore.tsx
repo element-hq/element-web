@@ -262,7 +262,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!space && SettingsStore.getValue("feature_spaces.all_rooms")) {
             return new Set(this.matrixClient.getVisibleRooms().map(r => r.roomId));
         }
-        return this.spaceFilteredRooms.get(space.roomId) || new Set();
+        return this.spaceFilteredRooms.get(space?.roomId || HOME_SPACE) || new Set();
     };
 
     private rebuild = throttle(() => {

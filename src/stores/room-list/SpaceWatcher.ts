@@ -30,6 +30,7 @@ export class SpaceWatcher {
 
     constructor(private store: RoomListStoreClass) {
         if (!SettingsStore.getValue("feature_spaces.all_rooms")) {
+            this.filter = new SpaceFilterCondition();
             this.updateFilter();
             store.addFilter(this.filter);
         }
