@@ -2241,7 +2241,6 @@
     "Confirm to continue": "Confirm to continue",
     "Click the button below to confirm your identity.": "Click the button below to confirm your identity.",
     "Invite by email": "Invite by email",
-    "Failed to invite the following users to chat: %(csvUsers)s": "Failed to invite the following users to chat: %(csvUsers)s",
     "We couldn't create your DM.": "We couldn't create your DM.",
     "Something went wrong trying to invite the users.": "Something went wrong trying to invite the users.",
     "We couldn't invite those users. Please check the users you want to invite and try again.": "We couldn't invite those users. Please check the users you want to invite and try again.",
