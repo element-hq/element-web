@@ -26,9 +26,13 @@ import { CallState, CallType, MatrixCall, CallEvent } from 'matrix-js-sdk/src/we
 import classNames from 'classnames';
 import AccessibleButton from '../elements/AccessibleButton';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../../Keyboard';
-import {alwaysAboveLeftOf, alwaysAboveRightOf, ChevronFace, ContextMenuButton} from '../../structures/ContextMenu';
+import {
+    alwaysAboveLeftOf,
+    alwaysAboveRightOf,
+    ChevronFace,
+    ContextMenuTooltipButton,
+} from '../../structures/ContextMenu';
 import CallContextMenu from '../context_menus/CallContextMenu';
 import { avatarUrlForMember } from '../../../Avatar';
 import DialpadContextMenu from '../context_menus/DialpadContextMenu';
