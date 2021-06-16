@@ -39,306 +39,253 @@ const moveLexicographicallyTest = (
 };
 
 describe("stringOrderField", () => {
-    it("stringToBase", () => {
-        expect(Number(stringToBase(""))).toBe(0);
-        expect(Number(stringToBase(" "))).toBe(1);
-        expect(Number(stringToBase("a"))).toBe(66);
-        expect(Number(stringToBase(" !"))).toBe(97);
-        expect(Number(stringToBase("aa"))).toBe(6336);
-        expect(Number(stringToBase("cat"))).toBe(620055);
-        expect(Number(stringToBase("doggo"))).toBe(5689339845);
-        expect(Number(stringToBase("a", "abcdefghijklmnopqrstuvwxyz"))).toEqual(1);
-        expect(Number(stringToBase("a"))).toEqual(66);
-        expect(Number(stringToBase("c", "abcdefghijklmnopqrstuvwxyz"))).toEqual(3);
-        expect(Number(stringToBase("ab"))).toEqual(6337);
-        expect(Number(stringToBase("cb", "abcdefghijklmnopqrstuvwxyz"))).toEqual(80);
-        expect(Number(stringToBase("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))).toEqual(4.648312045971824e+78);
-        expect(Number(stringToBase("~".repeat(50)))).toEqual(7.776353884348688e+98);
-        expect(Number(stringToBase("      "))).toEqual(7820126496);
-        expect(Number(stringToBase("  "))).toEqual(96);
-        expect(Number(stringToBase(" !"))).toEqual(97);
-        expect(Number(stringToBase("S:J\\~"))).toEqual(4258975590);
-        expect(Number(stringToBase("!'Tu:}"))).toEqual(16173443434);
+    describe("midPointsBetweenStrings", () => {
+        it("should work", () => {
+            expect(averageBetweenStrings("!!", "##")).toBe('""');
+            const midpoints = ["a", ...midPointsBetweenStrings("a", "e", 3, 1), "e"].sort();
+            expect(midpoints[0]).toBe("a");
+            expect(midpoints[4]).toBe("e");
+            expect(midPointsBetweenStrings("      ", "!'Tu:}", 1, 50)).toStrictEqual([" S:J\\~"]);
+        });
+
+        it("should return empty array when the request is not possible", () => {
+            expect(midPointsBetweenStrings("a", "e", 0, 1)).toStrictEqual([]);
+            expect(midPointsBetweenStrings("a", "e", 4, 1)).toStrictEqual([]);
+        });
     });
 
-    it("baseToString", () => {
-        expect(baseToString(BigInt(10))).toBe(DEFAULT_ALPHABET[9]);
-        expect(baseToString(BigInt(10), "abcdefghijklmnopqrstuvwxyz")).toEqual("j");
-        expect(baseToString(BigInt(6241))).toEqual("`a");
-        expect(baseToString(BigInt(53), "abcdefghijklmnopqrstuvwxyz")).toEqual("ba");
-        expect(baseToString(BigInt(1234))).toBe("+}");
-        expect(baseToString(BigInt(0))).toBe("");
-        expect(baseToString(BigInt(1))).toBe(" ");
-        expect(baseToString(BigInt(95))).toBe("~");
-        expect(baseToString(BigInt(96))).toBe("  ");
-        expect(baseToString(BigInt(97))).toBe(" !");
-        expect(baseToString(BigInt(98))).toBe(' "');
-        expect(baseToString(BigInt(1))).toBe(" ");
-    });
+    describe("reorderLexicographically", () => {
+        it("should work when moving left", () => {
+            moveLexicographicallyTest(["a", "c", "e", "g", "i"], 2, 1, 1);
+        });
 
-    it("midPointsBetweenStrings", () => {
-        expect(averageBetweenStrings("!!", "##")).toBe('""');
-        const midpoints = ["a", ...midPointsBetweenStrings("a", "e", 3, 1), "e"].sort();
-        expect(midpoints[0]).toBe("a");
-        expect(midpoints[4]).toBe("e");
-        expect(midPointsBetweenStrings("a", "e", 0, 1)).toStrictEqual([]);
-        expect(midPointsBetweenStrings("a", "e", 4, 1)).toStrictEqual([]);
-        expect(midPointsBetweenStrings("      ", "!'Tu:}", 1, 50)).toStrictEqual([" S:J\\~"]);
-        expect(averageBetweenStrings("  ", "!!")).toBe(" P");
-        expect(averageBetweenStrings("! ", "!!")).toBe("!  ");
-    });
+        it("should work when moving right", () => {
+            moveLexicographicallyTest(["a", "c", "e", "g", "i"], 1, 2, 1);
+        });
 
-    it("moveLexicographically left", () => {
-        moveLexicographicallyTest(["a", "c", "e", "g", "i"], 2, 1, 1);
-    });
+        it("should work when all orders are undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined, undefined, undefined],
+                4,
+                1,
+                2,
+            );
+        });
 
-    it("moveLexicographically right", () => {
-        moveLexicographicallyTest(["a", "c", "e", "g", "i"], 1, 2, 1);
-    });
+        it("should work when moving to end and all orders are undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined, undefined, undefined],
+                1,
+                4,
+                5,
+            );
+        });
 
-    it("moveLexicographically all undefined", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined, undefined, undefined],
-            4,
-            1,
-            2,
-        );
-    });
+        it("should work when moving left and some orders are undefined", () => {
+            moveLexicographicallyTest(
+                ["a", "c", "e", undefined, undefined, undefined],
+                5,
+                2,
+                1,
+            );
 
-    it("moveLexicographically all undefined to end", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined, undefined, undefined],
-            1,
-            4,
-            5,
-        );
-    });
+            moveLexicographicallyTest(
+                ["a", "a", "e", undefined, undefined, undefined],
+                5,
+                1,
+                2,
+            );
+        });
 
-    it("moveLexicographically some undefined move left", () => {
-        moveLexicographicallyTest(
-            ["a", "c", "e", undefined, undefined, undefined],
-            5,
-            2,
-            1,
-        );
-    });
+        it("should work moving to the start when all is undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined],
+                2,
+                0,
+                1,
+            );
+        });
 
-    it("moveLexicographically some undefined move left close", () => {
-        moveLexicographicallyTest(
-            ["a", "a", "e", undefined, undefined, undefined],
-            5,
-            1,
-            2,
-        );
-    });
+        it("should work moving to the end when all is undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined],
+                1,
+                3,
+                4,
+            );
+        });
 
-    it("test moving to the start when all is undefined", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined],
-            2,
-            0,
-            1,
-        );
-    });
+        it("should work moving left when all is undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined, undefined, undefined],
+                4,
+                1,
+                2,
+            );
+        });
 
-    it("test moving to the end when all is undefined", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined],
-            1,
-            3,
-            4,
-        );
-    });
+        it("should work moving right when all is undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined],
+                1,
+                2,
+                3,
+            );
+        });
 
-    it("test moving left when all is undefined", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined, undefined, undefined],
-            4,
-            1,
-            2,
-        );
-    });
+        it("should work moving more right when all is undefined", () => {
+            moveLexicographicallyTest(
+                [undefined, undefined, undefined, undefined, undefined, /**/ undefined, undefined],
+                1,
+                4,
+                5,
+            );
+        });
 
-    it("test moving right when all is undefined", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined],
-            1,
-            2,
-            3,
-        );
-    });
+        it("should work moving left when right is undefined", () => {
+            moveLexicographicallyTest(
+                ["20", undefined, undefined, undefined, undefined, undefined],
+                4,
+                2,
+                2,
+            );
+        });
 
-    it("test moving more right when all is undefined", () => {
-        moveLexicographicallyTest(
-            [undefined, undefined, undefined, undefined, undefined, /**/ undefined, undefined],
-            1,
-            4,
-            5,
-        );
-    });
+        it("should work moving right when right is undefined", () => {
+            moveLexicographicallyTest(
+                ["50", undefined, undefined, undefined, undefined, /**/ undefined, undefined],
+                1,
+                4,
+                4,
+            );
+        });
 
-    it("test moving left when right is undefined", () => {
-        moveLexicographicallyTest(
-            ["20", undefined, undefined, undefined, undefined, undefined],
-            4,
-            2,
-            2,
-        );
-    });
+        it("should work moving left when right is defined", () => {
+            moveLexicographicallyTest(
+                ["10", "20", "30", "40", undefined, undefined],
+                3,
+                1,
+                1,
+            );
+        });
 
-    it("test moving right when right is undefined", () => {
-        moveLexicographicallyTest(
-            ["50", undefined, undefined, undefined, undefined, /**/ undefined, undefined],
-            1,
-            4,
-            4,
-        );
-    });
+        it("should work moving right when right is defined", () => {
+            moveLexicographicallyTest(
+                ["10", "20", "30", "40", "50", undefined],
+                1,
+                3,
+                1,
+            );
+        });
 
-    it("test moving left when right is defined", () => {
-        moveLexicographicallyTest(
-            ["10", "20", "30", "40", undefined, undefined],
-            3,
-            1,
-            1,
-        );
-    });
+        it("should work moving left when all is defined", () => {
+            moveLexicographicallyTest(
+                ["11", "13", "15", "17", "19"],
+                2,
+                1,
+                1,
+            );
+        });
 
-    it("test moving right when right is defined", () => {
-        moveLexicographicallyTest(
-            ["10", "20", "30", "40", "50", undefined],
-            1,
-            3,
-            1,
-        );
-    });
+        it("should work moving right when all is defined", () => {
+            moveLexicographicallyTest(
+                ["11", "13", "15", "17", "19"],
+                1,
+                2,
+                1,
+            );
+        });
 
-    it("test moving left when all is defined", () => {
-        moveLexicographicallyTest(
-            ["11", "13", "15", "17", "19"],
-            2,
-            1,
-            1,
-        );
-    });
+        it("should work moving left into no left space", () => {
+            moveLexicographicallyTest(
+                ["11", "12", "13", "14", "19"],
+                3,
+                1,
+                2,
+                2,
+            );
 
-    it("test moving right when all is defined", () => {
-        moveLexicographicallyTest(
-            ["11", "13", "15", "17", "19"],
-            1,
-            2,
-            1,
-        );
-    });
+            moveLexicographicallyTest(
+                [
+                    DEFAULT_ALPHABET.charAt(0),
+                    // Target
+                    DEFAULT_ALPHABET.charAt(1),
+                    DEFAULT_ALPHABET.charAt(2),
+                    DEFAULT_ALPHABET.charAt(3),
+                    DEFAULT_ALPHABET.charAt(4),
+                    DEFAULT_ALPHABET.charAt(5),
+                ],
+                5,
+                1,
+                5,
+                1,
+            );
+        });
 
-    it("test moving left into no left space", () => {
-        moveLexicographicallyTest(
-            ["11", "12", "13", "14", "19"],
-            3,
-            1,
-            2,
-            2,
-        );
+        it("should work moving right into no right space", () => {
+            moveLexicographicallyTest(
+                ["15", "16", "17", "18", "19"],
+                1,
+                3,
+                3,
+                2,
+            );
 
-        moveLexicographicallyTest(
-            [
-                DEFAULT_ALPHABET.charAt(0),
-                // Target
-                DEFAULT_ALPHABET.charAt(1),
-                DEFAULT_ALPHABET.charAt(2),
-                DEFAULT_ALPHABET.charAt(3),
-                DEFAULT_ALPHABET.charAt(4),
-                DEFAULT_ALPHABET.charAt(5),
-            ],
-            5,
-            1,
-            5,
-            1,
-        );
-    });
+            moveLexicographicallyTest(
+                [
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 5),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 4),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 3),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 2),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1),
+                ],
+                1,
+                3,
+                3,
+                1,
+            );
+        });
 
-    it("test moving right into no right space", () => {
-        moveLexicographicallyTest(
-            ["15", "16", "17", "18", "19"],
-            1,
-            3,
-            3,
-            2,
-        );
+        it("should work moving right into no left space", () => {
+            moveLexicographicallyTest(
+                ["11", "12", "13", "14", "15", "16", undefined],
+                1,
+                3,
+                3,
+            );
 
-        moveLexicographicallyTest(
-            [
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 5),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 4),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 3),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 2),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1),
-            ],
-            1,
-            3,
-            3,
-            1,
-        );
-    });
+            moveLexicographicallyTest(
+                ["0", "1", "2", "3", "4", "5"],
+                1,
+                3,
+                3,
+                1,
+            );
+        });
 
-    it("test moving right into no left space", () => {
-        moveLexicographicallyTest(
-            ["11", "12", "13", "14", "15", "16", undefined],
-            1,
-            3,
-            3,
-        );
+        it("should work moving left into no right space", () => {
+            moveLexicographicallyTest(
+                ["15", "16", "17", "18", "19"],
+                4,
+                3,
+                4,
+                2,
+            );
 
-        moveLexicographicallyTest(
-            ["0", "1", "2", "3", "4", "5"],
-            1,
-            3,
-            3,
-            1,
-        );
-    });
-
-    it("test moving left into no right space", () => {
-        moveLexicographicallyTest(
-            ["15", "16", "17", "18", "19"],
-            4,
-            3,
-            4,
-            2,
-        );
-
-        moveLexicographicallyTest(
-            [
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 5),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 4),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 3),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 2),
-                DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1),
-            ],
-            4,
-            3,
-            4,
-            1,
-        );
-    });
-
-    const prev = (str: string) => baseToString(stringToBase(str) - BigInt(1));
-    const next = (str: string) => baseToString(stringToBase(str) + BigInt(1));
-
-    it("baseN calculation is correctly consecutive", () => {
-        const str = "this-is-a-test";
-        expect(next(prev(str))).toBe(str);
-    });
-
-    it("rolls over sanely", () => {
-        const maxSpaceValue = "~".repeat(50);
-        const fiftyFirstChar = " ".repeat(51);
-        expect(next(maxSpaceValue)).toBe(fiftyFirstChar);
-        expect(prev(fiftyFirstChar)).toBe(maxSpaceValue);
-        expect(Number(stringToBase(DEFAULT_ALPHABET[0]))).toEqual(1);
-        expect(Number(stringToBase(DEFAULT_ALPHABET[1]))).toEqual(2);
-        expect(DEFAULT_ALPHABET[DEFAULT_ALPHABET.length - 1]).toBe("~");
-        expect(DEFAULT_ALPHABET[0]).toBe(" ");
+            moveLexicographicallyTest(
+                [
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 5),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 4),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 3),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 2),
+                    DEFAULT_ALPHABET.charAt(DEFAULT_ALPHABET.length - 1),
+                ],
+                4,
+                3,
+                4,
+                1,
+            );
+        });
     });
 });
 
