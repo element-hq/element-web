@@ -1,7 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2017, 2018 New Vector Ltd
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import {MatrixClientPeg} from './MatrixClientPeg';
-import MultiInviter from './utils/MultiInviter';
+import React from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+import { MatrixClientPeg } from './MatrixClientPeg';
+import MultiInviter, { CompletionStates } from './utils/MultiInviter';
 import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
-import InviteDialog, {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
+import InviteDialog, { KIND_DM, KIND_INVITE } from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
-import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
+import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
 
 /**
  * Invites multiple addresses to a room
@@ -32,15 +33,18 @@ import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
  * no option to cancel.
  *
  * @param {string} roomId The ID of the room to invite to
- * @param {string[]} addrs Array of strings of addresses to invite. May be matrix IDs or 3pids.
+ * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(roomId, addrs) {
+export function inviteMultipleToRoom(
+    roomId: string,
+    addresses: string[],
+): Promise<{ states: CompletionStates, inviter: MultiInviter }> {
     const inviter = new MultiInviter(roomId);
-    return inviter.invite(addrs).then(states => Promise.resolve({states, inviter}));
+    return inviter.invite(addresses).then(states => Promise.resolve({ states, inviter }));
 }
 
-export function showStartChatInviteDialog(initialText) {
+export function showStartChatInviteDialog(initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
     const InviteDialog = sdk.getComponent("dialogs.InviteDialog");
     Modal.createTrackedDialog(
@@ -49,7 +53,7 @@ export function showStartChatInviteDialog(initialText) {
     );
 }
 
-export function showRoomInviteDialog(roomId, initialText = "") {
+export function showRoomInviteDialog(roomId: string, initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
     Modal.createTrackedDialog(
         "Invite Users", "", InviteDialog, {
@@ -61,14 +65,14 @@ export function showRoomInviteDialog(roomId, initialText = "") {
     );
 }
 
-export function showCommunityRoomInviteDialog(roomId, communityName) {
+export function showCommunityRoomInviteDialog(roomId: string, communityName: string): void {
     Modal.createTrackedDialog(
         'Invite Users to Community', '', CommunityPrototypeInviteDialog, {communityName, roomId},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }
 
-export function showCommunityInviteDialog(communityId) {
+export function showCommunityInviteDialog(communityId: string): void {
     const chat = CommunityPrototypeStore.instance.getGeneralChat(communityId);
     if (chat) {
         const name = CommunityPrototypeStore.instance.getCommunityName(communityId);
@@ -83,7 +87,7 @@ export function showCommunityInviteDialog(communityId) {
  * @param {MatrixEvent} event The event to check
  * @returns {boolean} True if valid, false otherwise
  */
-export function isValid3pidInvite(event) {
+export function isValid3pidInvite(event: MatrixEvent): boolean {
     if (!event || event.getType() !== "m.room.third_party_invite") return false;
 
     // any events without these keys are not valid 3pid invites, so we ignore them
@@ -96,7 +100,7 @@ export function isValid3pidInvite(event) {
     return true;
 }
 
-export function inviteUsersToRoom(roomId, userIds) {
+export function inviteUsersToRoom(roomId: string, userIds: string[]): Promise<void> {
     return inviteMultipleToRoom(roomId, userIds).then((result) => {
         const room = MatrixClientPeg.get().getRoom(roomId);
         showAnyInviteErrors(result.states, room, result.inviter);
@@ -110,9 +114,9 @@ export function inviteUsersToRoom(roomId, userIds) {
     });
 }
 
-export function showAnyInviteErrors(addrs, room, inviter) {
+export function showAnyInviteErrors(states: CompletionStates, room: Room, inviter: MultiInviter): boolean {
     // Show user any errors
-    const failedUsers = Object.keys(addrs).filter(a => addrs[a] === 'error');
+    const failedUsers = Object.keys(states).filter(a => states[a] === 'error');
     if (failedUsers.length === 1 && inviter.fatal) {
         // Just get the first message because there was a fatal problem on the first
         // user. This usually means that no other users were attempted, making it
@@ -126,7 +130,7 @@ export function showAnyInviteErrors(addrs, room, inviter) {
     } else {
         const errorList = [];
         for (const addr of failedUsers) {
-            if (addrs[addr] === "error") {
+            if (states[addr] === "error") {
                 const reason = inviter.getErrorText(addr);
                 errorList.push(addr + ": " + reason);
             }
