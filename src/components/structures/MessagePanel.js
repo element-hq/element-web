@@ -537,7 +537,7 @@ export default class MessagePanel extends React.Component {
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
-                    grouper.add(mxEv);
+                    grouper.add(mxEv, this.context?.showHiddenEventsInTimeline);
                     continue;
                 } else {
                     // not part of group, so get the group tiles, close the
@@ -1167,10 +1167,10 @@ class MemberGrouper {
         return isMembershipChange(ev);
     }
 
-    add(ev) {
+    add(ev, showHiddenEvents) {
         if (ev.getType() === 'm.room.member') {
             // We can ignore any events that don't actually have a message to display
-            if (!hasText(ev, this.context?.showHiddenEventsInTimeline)) return;
+            if (!hasText(ev, showHiddenEvents)) return;
         }
         this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
             ev.getId(),
