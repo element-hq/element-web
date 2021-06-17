@@ -28,7 +28,7 @@ import {MatrixClientPeg} from '../MatrixClientPeg';
 
 import MatrixEvent from "matrix-js-sdk/src/models/event";
 import Room from "matrix-js-sdk/src/models/room";
-import RoomMember from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import RoomState from "matrix-js-sdk/src/models/room-state";
 import EventTimeline from "matrix-js-sdk/src/models/event-timeline";
 import {makeUserPermalink} from "../utils/permalinks/Permalinks";
