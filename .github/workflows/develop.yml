@@ -1,4 +1,4 @@
-name: Develop jobs
+name: Develop
 on:
     push:
         branches: [develop]
