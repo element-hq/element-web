@@ -130,11 +130,6 @@ $left-gutter: 64px;
     .mx_EventTile_msgOption {
         grid-column: 2;
     }
-
-    .hidden {
-        // override the overriden padding for hidden events
-        padding-left: 64px !important;
-    }
 }
 
 .mx_EventTile_reply {
