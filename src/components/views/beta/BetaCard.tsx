@@ -83,32 +83,33 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
     }
 
     return <div className="mx_BetaCard">
-        <div>
-            <h3 className="mx_BetaCard_title">
-                { titleOverride || _t(title) }
-                <BetaPill />
-            </h3>
-            <span className="mx_BetaCard_caption">{ _t(caption) }</span>
-            <div className="mx_BetaCard_buttons">
-                { feedbackButton }
-                <AccessibleButton
-                    onClick={() => SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value)}
-                    kind={feedbackButton ? "primary_outline" : "primary"}
-                >
-                    { value ? _t("Leave the beta") : _t("Join the beta") }
-                </AccessibleButton>
+        <div className="mx_BetaCard_columns">
+            <div>
+                <h3 className="mx_BetaCard_title">
+                    { titleOverride || _t(title) }
+                    <BetaPill />
+                </h3>
+                <span className="mx_BetaCard_caption">{ _t(caption) }</span>
+                <div className="mx_BetaCard_buttons">
+                    { feedbackButton }
+                    <AccessibleButton
+                        onClick={() => SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value)}
+                        kind={feedbackButton ? "primary_outline" : "primary"}
+                    >
+                        { value ? _t("Leave the beta") : _t("Join the beta") }
+                    </AccessibleButton>
+                </div>
+                { disclaimer && <div className="mx_BetaCard_disclaimer">
+                    { disclaimer(value) }
+                </div> }
             </div>
-            { disclaimer && <div className="mx_BetaCard_disclaimer">
-                { disclaimer(value) }
-            </div> }
-            { extraSettings && <details className="mx_BetaCard_relatedSettings">
-                <summary>{ _t("Experimental options") }</summary>
-                { extraSettings.map(key => (
-                    <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
-                )) }
-            </details> }
+            <img src={image} alt="" />
         </div>
-        <img src={image} alt="" />
+        { extraSettings && <div className="mx_BetaCard_relatedSettings">
+            { extraSettings.map(key => (
+                <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
+            )) }
+        </div> }
     </div>;
 };
 

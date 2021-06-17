@@ -94,6 +94,9 @@ export interface ISetting {
         [level: SettingLevel]: string;
     };
 
+    // Optional description which will be shown as microCopy under SettingsFlags
+    description?: string;
+
     // The supported levels are required. Preferably, use the preset arrays
     // at the top of this file to define this rather than a custom array.
     supportedLevels?: SettingLevel[];
@@ -176,19 +179,21 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         },
     },
     "feature_spaces.all_rooms": {
-        displayName: _td("Use an all rooms space instead of a home space."),
+        displayName: _td("Show all rooms in Home"),
         supportedLevels: LEVELS_FEATURE,
         default: true,
         controller: new ReloadOnChangeController(),
     },
     "feature_spaces.space_member_dms": {
-        displayName: _td("Show DMs for joined/invited members in the space."),
+        displayName: _td("Show people in spaces"),
+        description: _td("If disabled, you can still add Direct Messages to Personal Spaces. " +
+            "If enabled, you'll automatically see everyone who is a member of the Space."),
         supportedLevels: LEVELS_FEATURE,
         default: true,
         controller: new ReloadOnChangeController(),
     },
     "feature_spaces.space_dm_badges": {
-        displayName: _td("Show notification badges for DMs in spaces."),
+        displayName: _td("Show notification badges for DMs in Spaces."),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
