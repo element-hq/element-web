@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
-import {uniq} from "lodash";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {Event} from "matrix-js-sdk/src/models/event";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { uniq } from "lodash";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+
+import { MatrixClientPeg } from '../MatrixClientPeg';
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -35,7 +36,7 @@ export default class DMRoomMap {
     private roomToUser: {[key: string]: string} = null;
     private userToRooms: {[key: string]: string[]} = null;
     private hasSentOutPatchDirectAccountDataPatch: boolean;
-    private mDirectEvent: Event;
+    private mDirectEvent: MatrixEvent;
 
     constructor(matrixClient) {
         this.matrixClient = matrixClient;

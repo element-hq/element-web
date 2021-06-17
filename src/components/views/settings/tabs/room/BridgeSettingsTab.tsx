@@ -44,7 +44,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         return <BridgeTile key={event.getId()} room={room} ev={event} />;
     }
 
-    static getBridgeStateEvents(roomId: string) {
+    static getBridgeStateEvents(roomId: string): MatrixEvent[] {
         const client = MatrixClientPeg.get();
         const roomState = client.getRoom(roomId).currentState;
 

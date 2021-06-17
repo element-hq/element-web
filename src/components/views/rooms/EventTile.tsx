@@ -376,7 +376,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             EventType.RoomMessage,
             EventType.RoomMessageEncrypted,
         ];
-        if (!simpleSendableEvents.includes(this.props.mxEvent.getType())) return false;
+        if (!simpleSendableEvents.includes(this.props.mxEvent.getType() as EventType)) return false;
 
         // Default case
         return true;
