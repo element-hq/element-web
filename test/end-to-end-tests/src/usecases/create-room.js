@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const { measureStart, measureStop } = require('../util');
+
 async function openRoomDirectory(session) {
     const roomDirectoryButton = await session.query('.mx_LeftPanel_exploreButton');
     await roomDirectoryButton.click();
@@ -52,6 +54,8 @@ async function createRoom(session, roomName, encrypted=false) {
 async function createDm(session, invitees) {
     session.log.step(`creates DM with ${JSON.stringify(invitees)}`);
 
+    await measureStart(session, "mx_CreateDM");
+
     const dmsSublist = await findSublist(session, "people");
     const startChatButton = await dmsSublist.$(".mx_RoomSublist_auxButton");
     await startChatButton.click();
@@ -76,6 +80,8 @@ async function createDm(session, invitees) {
 
     await session.query('.mx_MessageComposer');
     session.log.done();
+
+    await measureStop(session, "mx_CreateDM");
 }
 
 module.exports = {openRoomDirectory, findSublist, createRoom, createDm};
