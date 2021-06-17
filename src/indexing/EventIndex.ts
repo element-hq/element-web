@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,33 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { EventEmitter } from "events";
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
+import { RoomState } from 'matrix-js-sdk/src/models/room-state';
+import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+
 import PlatformPeg from "../PlatformPeg";
-import {MatrixClientPeg} from "../MatrixClientPeg";
-import {RoomMember} from 'matrix-js-sdk/src/models/room-member';
-import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
-import {sleep} from "../utils/promise";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { sleep } from "../utils/promise";
 import SettingsStore from "../settings/SettingsStore";
-import {EventEmitter} from "events";
-import {SettingLevel} from "../settings/SettingLevel";
+import { SettingLevel } from "../settings/SettingLevel";
+import {CrawlerCheckpoint, LoadArgs, SearchArgs} from "./BaseEventIndexManager";
+
+// The time in ms that the crawler will wait loop iterations if there
+// have not been any checkpoints to consume in the last iteration.
+const CRAWLER_IDLE_TIME = 5000;
+
+// The maximum number of events our crawler should fetch in a single crawl.
+const EVENTS_PER_CRAWL = 100;
+
+interface ICrawler {
+    cancel(): void;
+}
 
 /*
  * Event indexing class that wraps the platform specific event indexing.
  */
 export default class EventIndex extends EventEmitter {
-    constructor() {
-        super();
-        this.crawlerCheckpoints = [];
-        // The time in ms that the crawler will wait loop iterations if there
-        // have not been any checkpoints to consume in the last iteration.
-        this._crawlerIdleTime = 5000;
-        // The maximum number of events our crawler should fetch in a single
-        // crawl.
-        this._eventsPerCrawl = 100;
-        this._crawler = null;
-        this._currentCheckpoint = null;
-    }
+    private crawlerCheckpoints: CrawlerCheckpoint[] = [];
+    private crawler: ICrawler = null;
+    private currentCheckpoint: CrawlerCheckpoint = null;
 
-    async init() {
+    public async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
@@ -52,7 +61,7 @@ export default class EventIndex extends EventEmitter {
     /**
      * Register event listeners that are necessary for the event index to work.
      */
-    registerListeners() {
+    public registerListeners() {
         const client = MatrixClientPeg.get();
 
         client.on('sync', this.onSync);
@@ -66,7 +75,7 @@ export default class EventIndex extends EventEmitter {
     /**
      * Remove the event index specific event listeners.
      */
-    removeListeners() {
+    public removeListeners() {
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
@@ -81,7 +90,7 @@ export default class EventIndex extends EventEmitter {
     /**
      * Get crawler checkpoints for the encrypted rooms and store them in the index.
      */
-    async addInitialCheckpoints() {
+    public async addInitialCheckpoints() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         const client = MatrixClientPeg.get();
         const rooms = client.getRooms();
@@ -102,14 +111,14 @@ export default class EventIndex extends EventEmitter {
             const timeline = room.getLiveTimeline();
             const token = timeline.getPaginationToken("b");
 
-            const backCheckpoint = {
+            const backCheckpoint: CrawlerCheckpoint = {
                 roomId: room.roomId,
                 token: token,
                 direction: "b",
                 fullCrawl: true,
             };
 
-            const forwardCheckpoint = {
+            const forwardCheckpoint: CrawlerCheckpoint = {
                 roomId: room.roomId,
                 token: token,
                 direction: "f",
@@ -146,7 +155,7 @@ export default class EventIndex extends EventEmitter {
      *     - Every other sync, tell the event index to commit all the queued up
      *         live events
      */
-    onSync = async (state, prevState, data) => {
+    private onSync = async (state: string, prevState: string, data: object) => {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (prevState === "PREPARED" && state === "SYNCING") {
@@ -176,7 +185,15 @@ export default class EventIndex extends EventEmitter {
      * otherwise we save their event id and wait for them in the Event.decrypted
      * listener.
      */
-    onRoomTimeline = async (ev, room, toStartOfTimeline, removed, data) => {
+    private onRoomTimeline = async (
+        ev: MatrixEvent,
+        room: Room,
+        toStartOfTimeline: boolean,
+        removed: boolean,
+        data: {
+            liveEvent: boolean;
+        },
+    ) => {
         const client = MatrixClientPeg.get();
 
         // We only index encrypted rooms locally.
@@ -194,7 +211,7 @@ export default class EventIndex extends EventEmitter {
         await this.addLiveEventToIndex(ev);
     }
 
-    onRoomStateEvent = async (ev, state) => {
+    private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState) => {
         if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
 
         if (ev.getType() === "m.room.encryption" && !await this.isRoomIndexed(state.roomId)) {
@@ -209,7 +226,7 @@ export default class EventIndex extends EventEmitter {
      * Checks if the event was marked for addition in the Room.timeline
      * listener, if so queues it up to be added to the index.
      */
-    onEventDecrypted = async (ev, err) => {
+    private onEventDecrypted = async (ev: MatrixEvent, err: Error) => {
         // If the event isn't in our live event set, ignore it.
         if (err) return;
         await this.addLiveEventToIndex(ev);
@@ -220,7 +237,7 @@ export default class EventIndex extends EventEmitter {
      *
      * Removes a redacted event from our event index.
      */
-    onRedaction = async (ev, room) => {
+    private onRedaction = async (ev: MatrixEvent, room: Room) => {
         // We only index encrypted rooms locally.
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
         const indexManager = PlatformPeg.get().getEventIndexingManager();
@@ -238,7 +255,7 @@ export default class EventIndex extends EventEmitter {
      * Listens for timeline resets that are caused by a limited timeline to
      * re-add checkpoints for rooms that need to be crawled again.
      */
-    onTimelineReset = async (room, timelineSet, resetAllTimelines) => {
+    private onTimelineReset = async (room: Room, timelineSet: EventTimelineSet, resetAllTimelines: boolean) => {
         if (room === null) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
@@ -258,7 +275,7 @@ export default class EventIndex extends EventEmitter {
      * @returns {bool} Returns true if the event can be indexed, false
      * otherwise.
      */
-    isValidEvent(ev) {
+    private isValidEvent(ev: MatrixEvent) {
         const isUsefulType = ["m.room.message", "m.room.name", "m.room.topic"].includes(ev.getType());
         const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
@@ -282,7 +299,7 @@ export default class EventIndex extends EventEmitter {
         return validEventType && validMsgType && hasContentValue;
     }
 
-    eventToJson(ev) {
+    private eventToJson(ev: MatrixEvent) {
         const jsonEvent = ev.toJSON();
         const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
 
@@ -314,7 +331,7 @@ export default class EventIndex extends EventEmitter {
      *
      * @param {MatrixEvent} ev The event that should be added to the index.
      */
-    async addLiveEventToIndex(ev) {
+    private async addLiveEventToIndex(ev: MatrixEvent) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (!this.isValidEvent(ev)) return;
@@ -333,11 +350,11 @@ export default class EventIndex extends EventEmitter {
      * Emmit that the crawler has changed the checkpoint that it's currently
      * handling.
      */
-    emitNewCheckpoint() {
+    private emitNewCheckpoint() {
         this.emit("changedCheckpoint", this.currentRoom());
     }
 
-    async addEventsFromLiveTimeline(timeline) {
+    private async addEventsFromLiveTimeline(timeline: EventTimeline) {
         const events = timeline.getEvents();
 
         for (let i = 0; i < events.length; i++) {
@@ -346,7 +363,7 @@ export default class EventIndex extends EventEmitter {
         }
     }
 
-    async addRoomCheckpoint(roomId, fullCrawl = false) {
+    private async addRoomCheckpoint(roomId: string, fullCrawl = false) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
@@ -396,16 +413,16 @@ export default class EventIndex extends EventEmitter {
      * crawl, otherwise create a new checkpoint and push it to the
      * crawlerCheckpoints queue so we go through them in a round-robin way.
      */
-    async crawlerFunc() {
+    private async crawlerFunc() {
         let cancelled = false;
 
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        this._crawler = {};
-
-        this._crawler.cancel = () => {
-            cancelled = true;
+        this.crawler = {
+            cancel: () => {
+                cancelled = true;
+            },
         };
 
         let idle = false;
@@ -417,11 +434,11 @@ export default class EventIndex extends EventEmitter {
             sleepTime = Math.max(sleepTime, 100);
 
             if (idle) {
-                sleepTime = this._crawlerIdleTime;
+                sleepTime = CRAWLER_IDLE_TIME;
             }
 
-            if (this._currentCheckpoint !== null) {
-                this._currentCheckpoint = null;
+            if (this.currentCheckpoint !== null) {
+                this.currentCheckpoint = null;
                 this.emitNewCheckpoint();
             }
 
@@ -440,7 +457,7 @@ export default class EventIndex extends EventEmitter {
                 continue;
             }
 
-            this._currentCheckpoint = checkpoint;
+            this.currentCheckpoint = checkpoint;
             this.emitNewCheckpoint();
 
             idle = false;
@@ -453,9 +470,12 @@ export default class EventIndex extends EventEmitter {
             let res;
 
             try {
-                res = await client._createMessagesRequest(
-                    checkpoint.roomId, checkpoint.token, this._eventsPerCrawl,
-                    checkpoint.direction);
+                res = await client.createMessagesRequest(
+                    checkpoint.roomId,
+                    checkpoint.token,
+                    EVENTS_PER_CRAWL,
+                    checkpoint.direction,
+                );
             } catch (e) {
                 if (e.httpStatus === 403) {
                     console.log("EventIndex: Removing checkpoint as we don't have ",
@@ -612,23 +632,23 @@ export default class EventIndex extends EventEmitter {
             }
         }
 
-        this._crawler = null;
+        this.crawler = null;
     }
 
     /**
      * Start the crawler background task.
      */
-    startCrawler() {
-        if (this._crawler !== null) return;
+    public startCrawler() {
+        if (this.crawler !== null) return;
         this.crawlerFunc();
     }
 
     /**
      * Stop the crawler background task.
      */
-    stopCrawler() {
-        if (this._crawler === null) return;
-        this._crawler.cancel();
+    public stopCrawler() {
+        if (this.crawler === null) return;
+        this.crawler.cancel();
     }
 
     /**
@@ -637,7 +657,7 @@ export default class EventIndex extends EventEmitter {
      * This removes all the MatrixClient event listeners, stops the crawler
      * task, and closes the index.
      */
-    async close() {
+    public async close() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         this.removeListeners();
         this.stopCrawler();
@@ -654,7 +674,7 @@ export default class EventIndex extends EventEmitter {
      * @return {Promise<[SearchResult]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    async search(searchArgs) {
+    public async search(searchArgs: SearchArgs) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
     }
@@ -680,11 +700,16 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<MatrixEvent[]>} Resolves to an array of events that
      * contain URLs.
      */
-    async loadFileEvents(room, limit = 10, fromEvent = null, direction = EventTimeline.BACKWARDS) {
+    public async loadFileEvents(
+        room: Room,
+        limit = 10,
+        fromEvent: string = null,
+        direction: string = EventTimeline.BACKWARDS,
+    ) {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        const loadArgs = {
+        const loadArgs: LoadArgs = {
             roomId: room.roomId,
             limit: limit,
         };
@@ -772,13 +797,13 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to true if events were added to the
      * timeline, false otherwise.
      */
-    async populateFileTimeline(
-        timelineSet,
-        timeline,
-        room,
+    public async populateFileTimeline(
+        timelineSet: EventTimelineSet,
+        timeline: EventTimeline,
+        room: Room,
         limit = 10,
-        fromEvent = null,
-        direction = EventTimeline.BACKWARDS,
+        fromEvent: string = null,
+        direction: string = EventTimeline.BACKWARDS,
     ) {
         const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
 
@@ -837,7 +862,7 @@ export default class EventIndex extends EventEmitter {
      * @returns {Promise<boolean>} Resolves to a boolean which is true if more
      * events were successfully retrieved.
      */
-    paginateTimelineWindow(room, timelineWindow, direction, limit) {
+    public paginateTimelineWindow(room: Room, timelineWindow: TimelineWindow, direction: string, limit: number) {
         const tl = timelineWindow.getTimelineIndex(direction);
 
         if (!tl) return Promise.resolve(false);
@@ -871,7 +896,7 @@ export default class EventIndex extends EventEmitter {
      * @return {Promise<IndexStats>} A promise that will resolve to the index
      * statistics.
      */
-    async getStats() {
+    public async getStats() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.getStats();
     }
@@ -885,7 +910,7 @@ export default class EventIndex extends EventEmitter {
      * @return {Promise<boolean>} Returns true if the index contains events for
      * the given room, false otherwise.
      */
-    async isRoomIndexed(roomId) {
+    public async isRoomIndexed(roomId) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.isRoomIndexed(roomId);
     }
@@ -896,21 +921,21 @@ export default class EventIndex extends EventEmitter {
      * @returns {Room} A MatrixRoom that is being currently crawled, null
      * if no room is currently being crawled.
      */
-    currentRoom() {
-        if (this._currentCheckpoint === null && this.crawlerCheckpoints.length === 0) {
+    public currentRoom() {
+        if (this.currentCheckpoint === null && this.crawlerCheckpoints.length === 0) {
             return null;
         }
 
         const client = MatrixClientPeg.get();
 
-        if (this._currentCheckpoint !== null) {
-            return client.getRoom(this._currentCheckpoint.roomId);
+        if (this.currentCheckpoint !== null) {
+            return client.getRoom(this.currentCheckpoint.roomId);
         } else {
             return client.getRoom(this.crawlerCheckpoints[0].roomId);
         }
     }
 
-    crawlingRooms() {
+    public crawlingRooms() {
         const totalRooms = new Set();
         const crawlingRooms = new Set();
 
@@ -918,14 +943,14 @@ export default class EventIndex extends EventEmitter {
             crawlingRooms.add(checkpoint.roomId);
         });
 
-        if (this._currentCheckpoint !== null) {
-            crawlingRooms.add(this._currentCheckpoint.roomId);
+        if (this.currentCheckpoint !== null) {
+            crawlingRooms.add(this.currentCheckpoint.roomId);
         }
 
         const client = MatrixClientPeg.get();
         const rooms = client.getRooms();
 
-        const isRoomEncrypted = (room) => {
+        const isRoomEncrypted = (room: Room) => {
             return client.isRoomEncrypted(room.roomId);
         };
 
@@ -934,6 +959,6 @@ export default class EventIndex extends EventEmitter {
             totalRooms.add(room.roomId);
         });
 
-        return {crawlingRooms, totalRooms};
+        return { crawlingRooms, totalRooms };
     }
 }

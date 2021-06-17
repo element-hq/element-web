@@ -112,7 +112,7 @@ interface IProps {
 const MAX_PER_ROW = 6;
 
 const SSOButtons: React.FC<IProps> = ({matrixClient, flow, loginType, fragmentAfterLogin, primary}) => {
-    const providers = flow["org.matrix.msc2858.identity_providers"] || [];
+    const providers = flow.identity_providers || [];
     if (providers.length < 2) {
         return <div className="mx_SSOButtons">
             <SSOButton

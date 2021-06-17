@@ -22,6 +22,7 @@ import classNames from 'classnames';
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
+import RoomContext from "../../../contexts/RoomContext";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
@@ -44,12 +45,12 @@ interface IProps {
     className?: string;
 }
 
-const calculateUrls = (url, urls) => {
+const calculateUrls = (url, urls, lowBandwidth) => {
     // work out the full set of urls to try to load. This is formed like so:
     // imageUrls: [ props.url, ...props.urls ]
 
     let _urls = [];
-    if (!SettingsStore.getValue("lowBandwidth")) {
+    if (!lowBandwidth) {
         _urls = urls || [];
 
         if (url) {
@@ -63,7 +64,13 @@ const calculateUrls = (url, urls) => {
 };
 
 const useImageUrl = ({url, urls}): [string, () => void] => {
-    const [imageUrls, setUrls] = useState<string[]>(calculateUrls(url, urls));
+    // Since this is a hot code path and the settings store can be slow, we
+    // use the cached lowBandwidth value from the room context if it exists
+    const roomContext = useContext(RoomContext);
+    const lowBandwidth = roomContext ?
+        roomContext.lowBandwidth : SettingsStore.getValue("lowBandwidth");
+
+    const [imageUrls, setUrls] = useState<string[]>(calculateUrls(url, urls, lowBandwidth));
     const [urlsIndex, setIndex] = useState<number>(0);
 
     const onError = useCallback(() => {
@@ -71,7 +78,7 @@ const useImageUrl = ({url, urls}): [string, () => void] => {
     }, []);
 
     useEffect(() => {
-        setUrls(calculateUrls(url, urls));
+        setUrls(calculateUrls(url, urls, lowBandwidth));
         setIndex(0);
     }, [url, JSON.stringify(urls)]); // eslint-disable-line react-hooks/exhaustive-deps
 

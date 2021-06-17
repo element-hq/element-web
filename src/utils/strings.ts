@@ -73,3 +73,14 @@ export function copyNode(ref: Element): boolean {
     selectText(ref);
     return document.execCommand('copy');
 }
+
+
+const collator = new Intl.Collator();
+/**
+ * Performant language-sensitive string comparison
+ * @param a the first string to compare
+ * @param b the second string to compare
+ */
+export function compare(a: string, b: string): number {
+    return collator.compare(a, b);
+}

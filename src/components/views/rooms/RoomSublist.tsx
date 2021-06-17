@@ -78,6 +78,7 @@ interface IProps {
     alwaysVisible?: boolean;
     resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
+    onListCollapse?: (isExpanded: boolean) => void;
 
     // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
@@ -104,6 +105,7 @@ interface IState {
 export default class RoomSublist extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
+    private tilesRef = createRef<HTMLDivElement>();
     private dispatcherRef: string;
     private layout: ListLayout;
     private heightAtStart: number;
@@ -245,11 +247,15 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        this.tilesRef.current?.addEventListener("scroll", this.onScrollPrevent, { passive: true });
     }
 
     public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
+        this.tilesRef.current?.removeEventListener("scroll", this.onScrollPrevent);
     }
 
     private onListsUpdated = () => {
@@ -448,8 +454,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const sublist = possibleSticky.parentElement.parentElement;
         const list = sublist.parentElement.parentElement;
         // the scrollTop is capped at the height of the header in LeftPanel, the top header is always sticky
-        const isAtTop = list.scrollTop <= HEADER_HEIGHT;
-        const isAtBottom = list.scrollTop >= list.scrollHeight - list.offsetHeight;
+        const listScrollTop = Math.round(list.scrollTop);
+        const isAtTop = listScrollTop <= Math.round(HEADER_HEIGHT);
+        const isAtBottom = listScrollTop >= Math.round(list.scrollHeight - list.offsetHeight);
         const isStickyTop = possibleSticky.classList.contains('mx_RoomSublist_headerContainer_stickyTop');
         const isStickyBottom = possibleSticky.classList.contains('mx_RoomSublist_headerContainer_stickyBottom');
 
@@ -472,6 +479,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private toggleCollapsed = () => {
         this.layout.isCollapsed = this.state.isExpanded;
         this.setState({isExpanded: !this.layout.isCollapsed});
+        if (this.props.onListCollapse) {
+            this.props.onListCollapse(!this.layout.isCollapsed)
+        }
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
@@ -751,7 +761,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         );
     }
 
-    private onScrollPrevent(e: React.UIEvent<HTMLDivElement>) {
+    private onScrollPrevent(e: Event) {
         // the RoomTile calls scrollIntoView and the browser may scroll a div we do not wish to be scrollable
         // this fixes https://github.com/vector-im/element-web/issues/14413
         (e.target as HTMLDivElement).scrollTop = 0;
@@ -880,7 +890,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                         className="mx_RoomSublist_resizeBox"
                         enable={handles}
                     >
-                        <div className="mx_RoomSublist_tiles" onScroll={this.onScrollPrevent}>
+                        <div className="mx_RoomSublist_tiles" ref={this.tilesRef}>
                             {visibleTiles}
                         </div>
                         {showNButton}

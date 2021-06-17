@@ -26,6 +26,7 @@ import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { _t } from '../../languageHandler';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import RoomContext from "../../contexts/RoomContext";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
@@ -36,7 +37,6 @@ import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import { haveTileForEvent } from "../views/rooms/EventTile";
 import { UIFeature } from "../../settings/UIFeature";
-import { objectHasDiff } from "../../utils/objects";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
 import { Action } from "../../dispatcher/actions";
@@ -95,6 +95,9 @@ class TimelinePanel extends React.Component {
         // callback which is called when the panel is scrolled.
         onScroll: PropTypes.func,
 
+        // callback which is called when the user interacts with the room timeline
+        onUserScroll: PropTypes.func,
+
         // callback which is called when the read-up-to mark is updated.
         onReadMarkerUpdated: PropTypes.func,
 
@@ -119,7 +122,12 @@ class TimelinePanel extends React.Component {
 
         // which layout to use
         layout: LayoutPropType,
+
+        // whether to always show timestamps for an event
+        alwaysShowTimestamps: PropTypes.bool,
     }
+
+    static contextType = RoomContext;
 
     // a map from room id to read marker event timestamp
     static roomReadMarkerTsMap = {};
@@ -259,35 +267,13 @@ class TimelinePanel extends React.Component {
             console.warn("Replacing timelineSet on a TimelinePanel - confusion may ensue");
         }
 
-        if (newProps.eventId != this.props.eventId) {
+        const differentEventId = newProps.eventId != this.props.eventId;
+        const differentHighlightedEventId = newProps.highlightedEventId != this.props.highlightedEventId;
+        if (differentEventId || differentHighlightedEventId) {
             console.log("TimelinePanel switching to eventId " + newProps.eventId +
                         " (was " + this.props.eventId + ")");
             return this._initTimeline(newProps);
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (objectHasDiff(this.props, nextProps)) {
-            if (DEBUG) {
-                console.group("Timeline.shouldComponentUpdate: props change");
-                console.log("props before:", this.props);
-                console.log("props after:", nextProps);
-                console.groupEnd();
-            }
-            return true;
-        }
-
-        if (objectHasDiff(this.state, nextState)) {
-            if (DEBUG) {
-                console.group("Timeline.shouldComponentUpdate: state change");
-                console.log("state before:", this.state);
-                console.log("state after:", nextState);
-                console.groupEnd();
-            }
-            return true;
-        }
-
-        return false;
     }
 
     componentWillUnmount() {
@@ -1327,7 +1313,7 @@ class TimelinePanel extends React.Component {
 
             const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.sender && ev.sender.userId == myUserId);   // own message
-            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev);
+            const isWithoutTile = !haveTileForEvent(ev) || shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,
@@ -1478,10 +1464,11 @@ class TimelinePanel extends React.Component {
                 ourUserId={MatrixClientPeg.get().credentials.userId}
                 stickyBottom={stickyBottom}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
                 isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.state.alwaysShowTimestamps}
+                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}

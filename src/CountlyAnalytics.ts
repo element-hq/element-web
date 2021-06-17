@@ -24,13 +24,6 @@ import {sleep} from "./utils/promise";
 import RoomViewStore from "./stores/RoomViewStore";
 import { Action } from "./dispatcher/actions";
 
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
-
 const INACTIVITY_TIME = 20; // seconds
 const HEARTBEAT_INTERVAL = 5_000; // ms
 const SESSION_UPDATE_INTERVAL = 60; // seconds
@@ -816,7 +809,9 @@ export default class CountlyAnalytics {
         window.addEventListener("mousemove", this.onUserActivity);
         window.addEventListener("click", this.onUserActivity);
         window.addEventListener("keydown", this.onUserActivity);
-        window.addEventListener("scroll", this.onUserActivity);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        window.addEventListener("scroll", this.onUserActivity, { passive: true });
 
         this.activityIntervalId = setInterval(() => {
             this.inactivityCounter++;

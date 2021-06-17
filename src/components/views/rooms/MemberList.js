@@ -238,6 +238,8 @@ export default class MemberList extends React.Component {
                 member.user = cli.getUser(member.userId);
             }
 
+            member.sortName = (member.name[0] === '@' ? member.name.substr(1) : member.name).replace(SORT_REGEX, "");
+
             // XXX: this user may have no lastPresenceTs value!
             // the right solution here is to fix the race rather than leave it as 0
         });
@@ -252,6 +254,8 @@ export default class MemberList extends React.Component {
                 m.membership === 'join' || m.membership === 'invite'
             );
         });
+        const language = SettingsStore.getValue("language");
+        this.collator = new Intl.Collator(language, { sensitivity: 'base', usePunctuation: true });
         filteredAndSortedMembers.sort(this.memberSort);
         return filteredAndSortedMembers;
     }
@@ -351,13 +355,7 @@ export default class MemberList extends React.Component {
         }
 
         // Fourth by name (alphabetical)
-        const nameA = (memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name).replace(SORT_REGEX, "");
-        const nameB = (memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name).replace(SORT_REGEX, "");
-        // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
-        return nameA.localeCompare(nameB, {
-            ignorePunctuation: true,
-            sensitivity: "base",
-        });
+        return this.collator.compare(memberA.sortName, memberB.sortName);
     };
 
     onSearchQueryChanged = searchQuery => {
@@ -422,7 +420,7 @@ export default class MemberList extends React.Component {
             } else {
                 // Is a 3pid invite
                 return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
-                                   onClick={() => this._onPending3pidInviteClick(m)} />;
+                    onClick={() => this._onPending3pidInviteClick(m)} />;
             }
         });
     }
@@ -484,10 +482,10 @@ export default class MemberList extends React.Component {
         if (this._getChildCountInvited() > 0) {
             invitedHeader = <h2>{ _t("Invited") }</h2>;
             invitedSection = <TruncatedList className="mx_MemberList_section mx_MemberList_invited" truncateAt={this.state.truncateAtInvited}
-                        createOverflowElement={this._createOverflowTileInvited}
-                        getChildren={this._getChildrenInvited}
-                        getChildCount={this._getChildCountInvited}
-                />;
+                createOverflowElement={this._createOverflowTileInvited}
+                getChildren={this._getChildrenInvited}
+                getChildCount={this._getChildCountInvited}
+            />;
         }
 
         const footer = (
@@ -520,9 +518,9 @@ export default class MemberList extends React.Component {
         >
             <div className="mx_MemberList_wrapper">
                 <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
-                               createOverflowElement={this._createOverflowTileJoined}
-                               getChildren={this._getChildrenJoined}
-                               getChildCount={this._getChildCountJoined} />
+                    createOverflowElement={this._createOverflowTileJoined}
+                    getChildren={this._getChildrenJoined}
+                    getChildCount={this._getChildCountJoined} />
                 { invitedHeader }
                 { invitedSection }
             </div>
