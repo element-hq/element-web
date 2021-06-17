@@ -392,6 +392,7 @@ export default class ReplyThread extends React.Component {
                     alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                     replacingEventId={ev.replacingEventId()}
+                    as="div"
                 />
             </blockquote>;
         });
