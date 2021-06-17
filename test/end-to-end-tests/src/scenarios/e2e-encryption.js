@@ -40,7 +40,7 @@ module.exports = async function e2eEncryptionScenarios(alice, bob) {
     // the logs get a bit messy here, but that's fine enough for debugging (hopefully)
     const [bobSas, aliceSas] = await Promise.all([bobSasPromise, aliceSasPromise]);
     assert.deepEqual(bobSas, aliceSas);
-    await measureStop(bob, "mx_VerifyE2EEUser"); //
+    await measureStop(bob, "mx_VerifyE2EEUser");
     bob.log.done(`done (match for ${bobSas.join(", ")})`);
     const aliceMessage = "Guess what I just heard?!";
     await sendMessage(alice, aliceMessage);
