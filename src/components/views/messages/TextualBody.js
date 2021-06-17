@@ -261,8 +261,8 @@ export default class TextualBody extends React.Component {
         //console.info("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         // exploit that events are immutable :)
-        return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
-                nextProps.mxEvent !== this.props.mxEvent ||
+        return (nextProps.mxEvent !== this.props.mxEvent ||
+                nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
                 nextProps.highlights !== this.props.highlights ||
                 nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
