@@ -46,7 +46,7 @@ limitations under the License.
     }
 
     .mx_Clock {
-        width: 42px; // we're not using a monospace font, so fake it
+        width: $font-42px; // we're not using a monospace font, so fake it
         padding-right: 6px; // with the fixed width this ends up as a visual 8px most of the time, as intended.
         padding-left: 8px; // isolate from recording circle / play control
     }

@@ -59,6 +59,7 @@ interface IProps {
     fallbackHsUrl?: string;
     defaultDeviceDisplayName?: string;
     fragmentAfterLogin?: string;
+    defaultUsername?: string;
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
@@ -119,7 +120,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
             flows: null,
 
-            username: "",
+            username: props.defaultUsername? props.defaultUsername: '',
             phoneCountry: null,
             phoneNumber: "",
 

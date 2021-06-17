@@ -26,3 +26,19 @@ limitations under the License.
 .mx_MatrixChat_middlePanel .mx_Spinner {
     height: auto;
 }
+
+@keyframes spin {
+    from {
+        transform: rotateZ(0deg);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
+}
+
+.mx_Spinner_icon {
+    background-color: $primary-fg-color;
+    mask: url('$(res)/img/spinner.svg');
+    mask-size: contain;
+    animation: 1.1s steps(12, end) infinite spin;
+}

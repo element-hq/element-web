@@ -25,13 +25,8 @@ import Tar from "tar-js";
 
 import * as rageshake from './rageshake';
 
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
 import SettingsStore from "../settings/SettingsStore";
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
+import SdkConfig from "../SdkConfig";
 
 interface IOpts {
     label?: string;
@@ -91,8 +86,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append('cross_signing_key', client.getCrossSigningId());
 
             // add cross-signing status information
-            const crossSigning = client._crypto._crossSigningInfo;
-            const secretStorage = client._crypto._secretStorage;
+            const crossSigning = client.crypto._crossSigningInfo;
+            const secretStorage = client.crypto._secretStorage;
 
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
             body.append("cross_signing_supported_by_hs",
@@ -113,7 +108,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));
 
             body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
-            const sessionBackupKeyFromCache = await client._crypto.getSessionBackupPrivateKey();
+            const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
         }
@@ -266,6 +261,25 @@ function uint8ToString(buf: Buffer) {
         out += String.fromCharCode(buf[i]);
     }
     return out;
+}
+
+export async function submitFeedback(endpoint: string, label: string, comment: string, canContact = false) {
+    let version = "UNKNOWN";
+    try {
+        version = await PlatformPeg.get().getAppVersion();
+    } catch (err) {} // PlatformPeg already logs this.
+
+    const body = new FormData();
+    body.append("label", label);
+    body.append("text", comment);
+    body.append("can_contact", canContact ? "yes" : "no");
+
+    body.append("app", "element-web");
+    body.append("version", version);
+    body.append("platform", PlatformPeg.get().getHumanReadableName());
+    body.append("user_id", MatrixClientPeg.get()?.getUserId());
+
+    await _submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
 }
 
 function _submitReport(endpoint: string, body: FormData, progressCallback: (string) => void) {

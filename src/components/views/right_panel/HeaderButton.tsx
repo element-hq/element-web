@@ -22,15 +22,13 @@ import React from 'react';
 import classNames from 'classnames';
 import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // Whether this button is highlighted
     isHighlighted: boolean;
     // click handler
     onClick: () => void;
-    // The badge to display above the icon
-    badge?: React.ReactNode;
     // The parameters to track the click event
     analytics: Parameters<typeof Analytics.trackEvent>;
 
@@ -40,31 +38,29 @@ interface IProps {
     title: string;
 }
 
-// TODO: replace this, the composer buttons and the right panel buttons with a unified
-// representation
+// TODO: replace this, the composer buttons and the right panel buttons with a unified representation
 @replaceableComponent("views.right_panel.HeaderButton")
 export default class HeaderButton extends React.Component<IProps> {
-    constructor(props: IProps) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-    }
-
-    private onClick() {
+    private onClick = () => {
         Analytics.trackEvent(...this.props.analytics);
         this.props.onClick();
-    }
+    };
 
     public render() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const {isHighlighted, onClick, analytics, name, title, ...props} = this.props;
+
         const classes = classNames({
             mx_RightPanel_headerButton: true,
-            mx_RightPanel_headerButton_highlight: this.props.isHighlighted,
-            [`mx_RightPanel_${this.props.name}`]: true,
+            mx_RightPanel_headerButton_highlight: isHighlighted,
+            [`mx_RightPanel_${name}`]: true,
         });
 
         return <AccessibleTooltipButton
-            aria-selected={this.props.isHighlighted}
+            {...props}
+            aria-selected={isHighlighted}
             role="tab"
-            title={this.props.title}
+            title={title}
             className={classes}
             onClick={this.onClick}
         />;

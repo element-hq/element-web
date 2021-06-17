@@ -46,17 +46,17 @@ import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../con
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import CallHandler from "../../../CallHandler";
-import SpaceStore, {SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
+import SpaceStore, {ISuggestedRoom, SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
 import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
-import { ISpaceSummaryRoom } from "../../structures/SpaceRoomDirectory";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
     onResize: () => void;
+    onListCollapse?: (isExpanded: boolean) => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
     activeSpace: Room;
@@ -66,7 +66,7 @@ interface IState {
     sublists: ITagMap;
     isNameFiltering: boolean;
     currentRoomId?: string;
-    suggestedRooms: ISpaceSummaryRoom[];
+    suggestedRooms: ISuggestedRoom[];
 }
 
 const TAG_ORDER: TagID[] = [
@@ -363,7 +363,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         return room;
     };
 
-    private updateSuggestedRooms = (suggestedRooms: ISpaceSummaryRoom[]) => {
+    private updateSuggestedRooms = (suggestedRooms: ISuggestedRoom[]) => {
         this.setState({ suggestedRooms });
     };
 
@@ -428,7 +428,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
         return this.state.suggestedRooms.map(room => {
-            const name = room.name || room.canonical_alias || room.aliases.pop() || _t("Empty room");
+            const name = room.name || room.canonical_alias || room.aliases?.[0] || _t("Empty room");
             const avatar = (
                 <RoomAvatar
                     oobData={{
@@ -443,7 +443,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const viewRoom = () => {
                 defaultDispatcher.dispatch({
                     action: "view_room",
+                    room_alias: room.canonical_alias || room.aliases?.[0],
                     room_id: room.room_id,
+                    via_servers: room.viaServers,
                     oobData: {
                         avatarUrl: room.avatar_url,
                         name,
@@ -536,11 +538,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
                     addRoomContextMenu={aesthetics.addRoomContextMenu}
                     isMinimized={this.props.isMinimized}
-                    onResize={this.props.onResize}
                     showSkeleton={showSkeleton}
                     extraTiles={extraTiles}
                     resizeNotifier={this.props.resizeNotifier}
                     alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
+                    onListCollapse={this.props.onListCollapse}
                 />
             });
     }
