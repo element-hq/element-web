@@ -297,6 +297,7 @@ export default class ReplyThread extends React.Component {
     }
 
     async getEvent(eventId) {
+        if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
 
