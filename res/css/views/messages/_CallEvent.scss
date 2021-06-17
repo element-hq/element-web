@@ -21,7 +21,7 @@ limitations under the License.
     justify-content: space-between;
 
     background-color: $dark-panel-bg-color;
-    padding: 10px;
+    padding: 12px 16px 12px 12px;
     border-radius: 8px;
     margin: 10px auto;
     max-width: 75%;
@@ -37,10 +37,17 @@ limitations under the License.
             flex-direction: column;
             margin-left: 10px; // To match mx_CallEvent
 
+            .mx_CallEvent_sender {
+                font-weight: 600;
+                font-size: 1.5rem;
+                line-height: 1.8rem;
+            }
+
             .mx_CallEvent_type {
                 font-weight: 400;
                 color: gray;
-                line-height: $font-14px;
+                font-size: 1.2rem;
+                line-height: 1.5rem;
             }
         }
     }
