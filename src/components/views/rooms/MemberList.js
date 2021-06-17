@@ -30,6 +30,7 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -132,6 +133,12 @@ export default class MemberList extends React.Component {
         }
     }
 
+    get canInvite() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
+        return room && room.canInvite(cli.getUserId());
+    }
+
     _getMembersState(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
@@ -140,6 +147,7 @@ export default class MemberList extends React.Component {
             members: members,
             filteredJoinedMembers: this._filterMembers(members, 'join'),
             filteredInvitedMembers: this._filterMembers(members, 'invite'),
+            canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
@@ -195,6 +203,8 @@ export default class MemberList extends React.Component {
             event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
+
+        if (this.canInvite !== this.state.canInvite) this.setState({ canInvite: this.canInvite });
     };
 
     _updateList = rate_limited_func(() => {
@@ -228,6 +238,8 @@ export default class MemberList extends React.Component {
                 member.user = cli.getUser(member.userId);
             }
 
+            member.sortName = (member.name[0] === '@' ? member.name.substr(1) : member.name).replace(SORT_REGEX, "");
+
             // XXX: this user may have no lastPresenceTs value!
             // the right solution here is to fix the race rather than leave it as 0
         });
@@ -242,6 +254,8 @@ export default class MemberList extends React.Component {
                 m.membership === 'join' || m.membership === 'invite'
             );
         });
+        const language = SettingsStore.getValue("language");
+        this.collator = new Intl.Collator(language, { sensitivity: 'base', usePunctuation: true });
         filteredAndSortedMembers.sort(this.memberSort);
         return filteredAndSortedMembers;
     }
@@ -341,13 +355,7 @@ export default class MemberList extends React.Component {
         }
 
         // Fourth by name (alphabetical)
-        const nameA = (memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name).replace(SORT_REGEX, "");
-        const nameB = (memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name).replace(SORT_REGEX, "");
-        // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
-        return nameA.localeCompare(nameB, {
-            ignorePunctuation: true,
-            sensitivity: "base",
-        });
+        return this.collator.compare(memberA.sortName, memberB.sortName);
     };
 
     onSearchQueryChanged = searchQuery => {
@@ -412,7 +420,7 @@ export default class MemberList extends React.Component {
             } else {
                 // Is a 3pid invite
                 return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
-                                   onClick={() => this._onPending3pidInviteClick(m)} />;
+                    onClick={() => this._onPending3pidInviteClick(m)} />;
             }
         });
     }
@@ -454,19 +462,17 @@ export default class MemberList extends React.Component {
         let inviteButton;
 
         if (room && room.getMyMembership() === 'join') {
-            const canInvite = room.canInvite(cli.getUserId());
-
             let inviteButtonText = _t("Invite to this room");
             const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
             if (chat && chat.roomId === this.props.roomId) {
                 inviteButtonText = _t("Invite to this community");
-            } else if (room.isSpaceRoom()) {
+            } else if (SettingsStore.getValue("feature_spaces") && room.isSpaceRoom()) {
                 inviteButtonText = _t("Invite to this space");
             }
 
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
-                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
+                <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!this.state.canInvite}>
                     <span>{ inviteButtonText }</span>
                 </AccessibleButton>;
         }
@@ -476,10 +482,10 @@ export default class MemberList extends React.Component {
         if (this._getChildCountInvited() > 0) {
             invitedHeader = <h2>{ _t("Invited") }</h2>;
             invitedSection = <TruncatedList className="mx_MemberList_section mx_MemberList_invited" truncateAt={this.state.truncateAtInvited}
-                        createOverflowElement={this._createOverflowTileInvited}
-                        getChildren={this._getChildrenInvited}
-                        getChildCount={this._getChildCountInvited}
-                />;
+                createOverflowElement={this._createOverflowTileInvited}
+                getChildren={this._getChildrenInvited}
+                getChildCount={this._getChildCountInvited}
+            />;
         }
 
         const footer = (
@@ -492,7 +498,7 @@ export default class MemberList extends React.Component {
         let previousPhase = RightPanelPhases.RoomSummary;
         // We have no previousPhase for when viewing a MemberList from a Space
         let scopeHeader;
-        if (room?.isSpaceRoom()) {
+        if (SettingsStore.getValue("feature_spaces") && room?.isSpaceRoom()) {
             previousPhase = undefined;
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={room} height={32} width={32} />
@@ -512,9 +518,9 @@ export default class MemberList extends React.Component {
         >
             <div className="mx_MemberList_wrapper">
                 <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
-                               createOverflowElement={this._createOverflowTileJoined}
-                               getChildren={this._getChildrenJoined}
-                               getChildCount={this._getChildCountJoined} />
+                    createOverflowElement={this._createOverflowTileJoined}
+                    getChildren={this._getChildrenJoined}
+                    getChildCount={this._getChildCountJoined} />
                 { invitedHeader }
                 { invitedSection }
             </div>

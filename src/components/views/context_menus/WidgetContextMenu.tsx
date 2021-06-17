@@ -40,6 +40,8 @@ interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     showUnpin?: boolean;
     // override delete handler
     onDeleteClick?(): void;
+    // override edit handler
+    onEditClick?(): void;
 }
 
 const WidgetContextMenu: React.FC<IProps> = ({
@@ -47,6 +49,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     app,
     userWidget,
     onDeleteClick,
+    onEditClick,
     showUnpin,
     ...props
 }) => {
@@ -89,12 +92,16 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let editButton;
     if (canModify && WidgetUtils.isManagedByManager(app)) {
-        const onEditClick = () => {
-            WidgetUtils.editWidget(room, app);
+        const _onEditClick = () => {
+            if (onEditClick) {
+                onEditClick();
+            } else {
+                WidgetUtils.editWidget(room, app);
+            }
             onFinished();
         };
 
-        editButton = <IconizedContextMenuOption onClick={onEditClick} label={_t("Edit")} />;
+        editButton = <IconizedContextMenuOption onClick={_onEditClick} label={_t("Edit")} />;
     }
 
     let snapshotButton;
@@ -116,24 +123,29 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let deleteButton;
     if (onDeleteClick || canModify) {
-        const onDeleteClickDefault = () => {
-            // Show delete confirmation dialog
-            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
-                title: _t("Delete Widget"),
-                description: _t(
-                    "Deleting a widget removes it for all users in this room." +
-                    " Are you sure you want to delete this widget?"),
-                button: _t("Delete widget"),
-                onFinished: (confirmed) => {
-                    if (!confirmed) return;
-                    WidgetUtils.setRoomWidget(roomId, app.id);
-                },
-            });
+        const _onDeleteClick = () => {
+            if (onDeleteClick) {
+                onDeleteClick();
+            } else {
+                // Show delete confirmation dialog
+                Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                    title: _t("Delete Widget"),
+                    description: _t(
+                        "Deleting a widget removes it for all users in this room." +
+                        " Are you sure you want to delete this widget?"),
+                    button: _t("Delete widget"),
+                    onFinished: (confirmed) => {
+                        if (!confirmed) return;
+                        WidgetUtils.setRoomWidget(roomId, app.id);
+                    },
+                });
+            }
+
             onFinished();
         };
 
         deleteButton = <IconizedContextMenuOption
-            onClick={onDeleteClick || onDeleteClickDefault}
+            onClick={_onDeleteClick}
             label={userWidget ? _t("Remove") : _t("Remove for everyone")}
         />;
     }

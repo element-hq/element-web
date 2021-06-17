@@ -30,8 +30,8 @@ import ToggleSwitch from "../elements/ToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {allSettled} from "../../../utils/promise";
 import {useDispatcher} from "../../../hooks/useDispatcher";
+import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -73,9 +73,13 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
         const promises = [];
 
         if (avatarChanged) {
-            promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {
-                url: await cli.uploadContent(newAvatar),
-            }, ""));
+            if (newAvatar) {
+                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {
+                    url: await cli.uploadContent(newAvatar),
+                }, ""));
+            } else {
+                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {}, ""));
+            }
         }
 
         if (nameChanged) {
@@ -90,7 +94,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             promises.push(cli.sendStateEvent(space.roomId, EventType.RoomJoinRules, { join_rule: joinRule }, ""));
         }
 
-        const results = await allSettled(promises);
+        const results = await Promise.allSettled(promises);
         setBusy(false);
         const failures = results.filter(r => r.status === "rejected");
         if (failures.length > 0) {
@@ -111,15 +115,17 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
 
             { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
 
+            <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
+
             <SpaceBasicSettings
                 avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
-                avatarDisabled={!canSetAvatar}
+                avatarDisabled={busy || !canSetAvatar}
                 setAvatar={setNewAvatar}
                 name={name}
-                nameDisabled={!canSetName}
+                nameDisabled={busy || !canSetName}
                 setName={setName}
                 topic={topic}
-                topicDisabled={!canSetTopic}
+                topicDisabled={busy || !canSetTopic}
                 setTopic={setTopic}
             />
 

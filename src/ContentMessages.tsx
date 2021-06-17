@@ -28,8 +28,6 @@ import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
 
-// Polyfill for Canvas.toBlob API using Canvas.toDataURL
-import "blueimp-canvas-to-blob";
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
 import {
@@ -40,6 +38,7 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import {IUpload} from "./models/IUpload";
+import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -208,12 +207,12 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
     }
 
     let imageInfo;
-    return loadImageElement(imageFile).then(function(r) {
+    return loadImageElement(imageFile).then((r) => {
         return createThumbnail(r.img, r.width, r.height, thumbnailType);
-    }).then(function(result) {
+    }).then((result) => {
         imageInfo = result.info;
         return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then(function(result) {
+    }).then((result) => {
         imageInfo.thumbnail_url = result.url;
         imageInfo.thumbnail_file = result.file;
         return imageInfo;
@@ -264,12 +263,12 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
     const thumbnailType = "image/jpeg";
 
     let videoInfo;
-    return loadVideoElement(videoFile).then(function(video) {
+    return loadVideoElement(videoFile).then((video) => {
         return createThumbnail(video, video.videoWidth, video.videoHeight, thumbnailType);
-    }).then(function(result) {
+    }).then((result) => {
         videoInfo = result.info;
         return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then(function(result) {
+    }).then((result) => {
         videoInfo.thumbnail_url = result.url;
         videoInfo.thumbnail_file = result.file;
         return videoInfo;
@@ -308,7 +307,12 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blob, progressHandler?: any) {
+function uploadFile(
+    matrixClient: MatrixClient,
+    roomId: string,
+    file: File | Blob,
+    progressHandler?: any, // TODO: Types
+): Promise<{url?: string, file?: any}> { // TODO: Types
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
@@ -355,7 +359,7 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
             // If the attachment isn't encrypted then include the URL directly.
             return {"url": url};
         });
-        promise1.abort = () => {
+        (promise1 as any).abort = () => {
             canceled = true;
             MatrixClientPeg.get().cancelUpload(basePromise);
         };
@@ -367,7 +371,7 @@ export default class ContentMessages {
     private inprogress: IUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
-    sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
+    sendStickerContentToRoom(url: string, roomId: string, info: IImageInfo, text: string, matrixClient: MatrixClient) {
         const startTime = CountlyAnalytics.getTimestamp();
         const prom = MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
@@ -441,7 +445,7 @@ export default class ContentMessages {
         let uploadAll = false;
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
-        let promBefore = Promise.resolve();
+        let promBefore: Promise<any> = Promise.resolve();
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {

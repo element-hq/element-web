@@ -79,17 +79,23 @@ export default class ReplyPreview extends React.Component {
                     { _t('Replying') }
                 </div>
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
-                    <img className="mx_filterFlipColor" src={require("../../../../res/img/cancel.svg")} width="18" height="18"
-                         onClick={cancelQuoting} />
+                    <img
+                        className="mx_filterFlipColor"
+                        src={require("../../../../res/img/cancel.svg")}
+                        width="18"
+                        height="18"
+                        onClick={cancelQuoting}
+                    />
                 </div>
                 <div className="mx_ReplyPreview_clear" />
                 <EventTile
-                    last={true}
+                    alwaysShowTimestamps={true}
                     tileShape="reply_preview"
                     mxEvent={this.state.event}
                     permalinkCreator={this.props.permalinkCreator}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+                    as="div"
                 />
             </div>
         </div>;

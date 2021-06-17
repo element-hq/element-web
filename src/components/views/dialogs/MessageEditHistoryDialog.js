@@ -159,13 +159,17 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
                 stickyBottom={false}
                 startAtBottom={false}
             >
-                <ul className="mx_MessageEditHistoryDialog_edits mx_MessagePanel_alwaysShowTimestamps">{this._renderEdits()}</ul>
+                <ul className="mx_MessageEditHistoryDialog_edits">{this._renderEdits()}</ul>
             </ScrollPanel>);
         }
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <BaseDialog className='mx_MessageEditHistoryDialog' hasCancel={true}
-                        onFinished={this.props.onFinished} title={_t("Message edits")}>
+            <BaseDialog
+                className='mx_MessageEditHistoryDialog'
+                hasCancel={true}
+                onFinished={this.props.onFinished}
+                title={_t("Message edits")}
+            >
                 {content}
             </BaseDialog>
         );

@@ -40,6 +40,8 @@ export function eventTriggersUnreadCount(ev) {
         return false;
     } else if (ev.getType() == 'm.room.server_acl') {
         return false;
+    } else if (ev.isRedacted()) {
+        return false;
     }
     return haveTileForEvent(ev);
 }

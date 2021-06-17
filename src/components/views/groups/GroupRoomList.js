@@ -141,9 +141,14 @@ export default class GroupRoomList extends React.Component {
             );
         }
         const inputBox = (
-            <input className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query" type="text"
-                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder={_t('Filter community rooms')} autoComplete="off" />
+            <input
+                className="mx_GroupRoomList_query mx_textinput" id="mx_GroupRoomList_query"
+                type="text"
+                onChange={this.onSearchQueryChanged}
+                value={this.state.searchQuery}
+                placeholder={_t('Filter community rooms')}
+                autoComplete="off"
+            />
         );
 
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
@@ -152,7 +157,7 @@ export default class GroupRoomList extends React.Component {
                 { inviteButton }
                 <AutoHideScrollbar className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}>
+                        createOverflowElement={this._createOverflowTile}>
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
                 </AutoHideScrollbar>

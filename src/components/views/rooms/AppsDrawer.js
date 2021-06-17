@@ -36,6 +36,7 @@ import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayout
 import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
 import {useStateCallback} from "../../../hooks/useStateCallback";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
 @replaceableComponent("views.rooms.AppsDrawer")
 export default class AppsDrawer extends React.Component {
@@ -79,13 +80,6 @@ export default class AppsDrawer extends React.Component {
             this.resizer.detach();
         }
         this.props.resizeNotifier.off("isResizing", this.onIsResizing);
-    }
-
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
-        // Room has changed probably, update apps
-        this._updateApps();
     }
 
     onIsResizing = (resizing) => {
@@ -140,7 +134,10 @@ export default class AppsDrawer extends React.Component {
     _getAppsHash = (apps) => apps.map(app => app.id).join("~");
 
     componentDidUpdate(prevProps, prevState) {
-        if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
+        if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
+            // Room has changed, update apps
+            this._updateApps();
+        } else if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
             this._loadResizerPreferences();
         }
     }
@@ -290,7 +287,7 @@ const PersistentVResizer = ({
 
     // Arbitrary defaults to avoid NaN problems. 100 px or 3/4 of the visible window.
     if (!minHeight) minHeight = 100;
-    if (!maxHeight) maxHeight = (window.innerHeight / 4) * 3;
+    if (!maxHeight) maxHeight = (UIStore.instance.windowHeight / 4) * 3;
 
     // Convert from percentage to height. Note that the default height is 280px.
     if (defaultHeight) {
