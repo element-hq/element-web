@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import RoomContext from "../../../contexts/RoomContext";
 import * as TextForEvent from "../../../TextForEvent";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
@@ -27,8 +28,10 @@ export default class TextualEvent extends React.Component {
         mxEvent: PropTypes.object.isRequired,
     };
 
+    static contextType = RoomContext;
+
     render() {
-        const text = TextForEvent.textForEvent(this.props.mxEvent);
+        const text = TextForEvent.textForEvent(this.props.mxEvent, this.context?.showHiddenEventsInTimeline);
         if (text == null || text.length === 0) return null;
         return (
             <div className="mx_TextualEvent">{ text }</div>

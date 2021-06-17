@@ -41,6 +41,7 @@ const RoomContext = createContext<IState>({
     canReply: false,
     layout: Layout.Group,
     lowBandwidth: false,
+    showHiddenEventsInTimeline: false,
     showReadReceipts: true,
     showRedactions: true,
     showJoinLeaves: true,

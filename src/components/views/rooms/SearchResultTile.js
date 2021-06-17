@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
+import RoomContext from "../../../contexts/RoomContext";
 import {haveTileForEvent} from "./EventTile";
 import SettingsStore from "../../../settings/SettingsStore";
 import {UIFeature} from "../../../settings/UIFeature";
@@ -38,6 +39,8 @@ export default class SearchResultTile extends React.Component {
         onHeightChanged: PropTypes.func,
     };
 
+    static contextType = RoomContext;
+
     render() {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventTile = sdk.getComponent('rooms.EventTile');
@@ -57,7 +60,7 @@ export default class SearchResultTile extends React.Component {
             if (!contextual) {
                 highlights = this.props.searchHighlights;
             }
-            if (haveTileForEvent(ev)) {
+            if (haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline)) {
                 ret.push((
                     <EventTile
                         key={`${eventId}+${j}`}

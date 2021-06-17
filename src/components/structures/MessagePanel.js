@@ -41,7 +41,7 @@ const continuedTypes = ['m.sticker', 'm.room.message'];
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
-function shouldFormContinuation(prevEvent, mxEvent) {
+function shouldFormContinuation(prevEvent, mxEvent, showHiddenEvents) {
     // sanity check inputs
     if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
     // check if within the max continuation period
@@ -61,7 +61,7 @@ function shouldFormContinuation(prevEvent, mxEvent) {
         mxEvent.sender.getMxcAvatarUrl() !== prevEvent.sender.getMxcAvatarUrl()) return false;
 
     // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
-    if (!haveTileForEvent(prevEvent)) return false;
+    if (!haveTileForEvent(prevEvent, showHiddenEvents)) return false;
 
     return true;
 }
@@ -202,7 +202,8 @@ export default class MessagePanel extends React.Component {
         this._readReceiptsByUserId = {};
 
         // Cache hidden events setting on mount since Settings is expensive to
-        // query, and we check this in a hot code path.
+        // query, and we check this in a hot code path. This is also cached in
+        // our RoomContext, however we still need a fallback for roomless MessagePanels.
         this._showHiddenEventsInTimeline =
             SettingsStore.getValue("showHiddenEventsInTimeline");
 
@@ -372,11 +373,11 @@ export default class MessagePanel extends React.Component {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
-        if (this._showHiddenEventsInTimeline) {
+        if (this.context?.showHiddenEventsInTimeline ?? this._showHiddenEventsInTimeline) {
             return true;
         }
 
-        if (!haveTileForEvent(mxEv)) {
+        if (!haveTileForEvent(mxEv, this.context?.showHiddenEventsInTimeline)) {
             return false; // no tile = no show
         }
 
@@ -613,7 +614,8 @@ export default class MessagePanel extends React.Component {
         }
 
         // is this a continuation of the previous message?
-        const continuation = !wantsDateSeparator && shouldFormContinuation(prevEvent, mxEv);
+        const continuation = !wantsDateSeparator &&
+            shouldFormContinuation(prevEvent, mxEv, this.context?.showHiddenEventsInTimeline);
 
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
@@ -1168,7 +1170,7 @@ class MemberGrouper {
     add(ev) {
         if (ev.getType() === 'm.room.member') {
             // We can ignore any events that don't actually have a message to display
-            if (!hasText(ev)) return;
+            if (!hasText(ev, this.context?.showHiddenEventsInTimeline)) return;
         }
         this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
             ev.getId(),
