@@ -45,9 +45,35 @@ limitations under the License.
 
             .mx_CallEvent_type {
                 font-weight: 400;
-                color: gray;
+                color: $secondary-fg-color;
                 font-size: 1.2rem;
                 line-height: 1.5rem;
+                display: flex;
+                align-items: center;
+
+                .mx_CallEvent_type_icon {
+                    height: 13px;
+                    width: 13px;
+                    margin-right: 5px;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        height: 13px;
+                        width: 13px;
+                        background-color: $tertiary-fg-color;
+                        mask-repeat: no-repeat;
+                        mask-size: contain;
+                    }
+                }
+
+                .mx_CallEvent_type_icon_voice::before {
+                    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+                }
+
+                .mx_CallEvent_type_icon_video::before {
+                    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+                }
             }
         }
     }

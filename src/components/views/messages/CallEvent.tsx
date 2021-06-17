@@ -23,6 +23,7 @@ import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../
 import FormButton from '../elements/FormButton';
 import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
+import classNames from 'classnames';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -158,8 +159,14 @@ export default class CallEvent extends React.Component<IProps, IState> {
     render() {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
-        const callType = this.props.callEventGrouper.isVoice ? _t("Voice call") : _t("Video call");
+        const isVoice = this.props.callEventGrouper.isVoice;
+        const callType = isVoice ? _t("Voice call") : _t("Video call");
         const content = this.renderContent(this.state.callState);
+        const callTypeIconClass = classNames({
+            mx_CallEvent_type_icon: true,
+            mx_CallEvent_type_icon_voice: isVoice,
+            mx_CallEvent_type_icon_video: !isVoice,
+        })
 
         return (
             <div className="mx_CallEvent">
@@ -174,6 +181,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                             { sender }
                         </div>
                         <div className="mx_CallEvent_type">
+                            <div className={callTypeIconClass}></div>
                             { callType }
                         </div>
                     </div>
