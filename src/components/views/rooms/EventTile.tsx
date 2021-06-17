@@ -335,7 +335,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
 
-            mxEvent: this.mxEvent.getSnapshotCopy(), // snapshot up front to verify it all works
+            mxEvent: this.mxEvent.toSnapshot(), // snapshot up front to verify it all works
 
             hover: false,
         };
@@ -497,7 +497,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         // a second state update to re-render child components, which ultimately calls didUpdate
         // again, so we break that loop with a reference check first (faster than comparing events).
         if (this.state.mxEvent === prevState.mxEvent && !this.state?.mxEvent.isEquivalentTo(this.props.mxEvent)) {
-            this.setState({mxEvent: this.props.mxEvent.getSnapshotCopy()});
+            this.setState({mxEvent: this.props.mxEvent.toSnapshot()});
         }
     }
 
