@@ -56,6 +56,7 @@ limitations under the License.
         display: flex;
         flex-direction: row;
         align-items: center;
+        color: $secondary-fg-color;
 
         .mx_CallEvent_content_callBack {
             margin-left: 10px; // To match mx_callEvent
