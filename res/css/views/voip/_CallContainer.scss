@@ -98,5 +98,29 @@ limitations under the License.
                 line-height: $font-24px;
             }
         }
+
+        .mx_IncomingCallBox_iconButton {
+            position: absolute;
+            right: 8px;
+
+            &::before {
+                content: '';
+
+                height: 20px;
+                width: 20px;
+                background-color: $icon-button-color;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-position: center;
+            }
+        }
+
+        .mx_IncomingCallBox_silence::before {
+            mask-image: url('$(res)/img/voip/silence.svg');
+        }
+
+        .mx_IncomingCallBox_unSilence::before {
+            mask-image: url('$(res)/img/voip/un-silence.svg');
+        }
     }
 }
