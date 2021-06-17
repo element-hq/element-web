@@ -27,6 +27,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from '../../../stores/UIStore';
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -118,7 +119,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             roomId,
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
-            translationX: window.innerWidth - DEFAULT_X_OFFSET - PIP_VIEW_WIDTH,
+            translationX: UIStore.instance.windowWidth - DEFAULT_X_OFFSET - PIP_VIEW_WIDTH,
             translationY: DEFAULT_Y_OFFSET,
             moving: false,
         };
@@ -164,8 +165,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
         let outTranslationY;
 
         // Avoid overflow on the x axis
-        if (inTranslationX + width >= window.innerWidth) {
-            outTranslationX = window.innerWidth - width;
+        if (inTranslationX + width >= UIStore.instance.windowWidth) {
+            outTranslationX = UIStore.instance.windowWidth - width;
         } else if (inTranslationX <= 0) {
             outTranslationX = 0;
         } else {
@@ -173,8 +174,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
         }
 
         // Avoid overflow on the y axis
-        if (inTranslationY + height >= window.innerHeight) {
-            outTranslationY = window.innerHeight - height;
+        if (inTranslationY + height >= UIStore.instance.windowHeight) {
+            outTranslationY = UIStore.instance.windowHeight - height;
         } else if (inTranslationY <= 0) {
             outTranslationY = 0;
         } else {
