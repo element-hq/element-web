@@ -84,7 +84,7 @@ export default class RoomHeader extends React.Component {
     _exportConversationalHistory = async () => {
         await exportConversationalHistory(
             this.props.room,
-            exportFormats.HTML,
+            exportFormats.LOGS,
             exportTypes.START_DATE,
             {
                 startDate: parseInt(new Date("2021.05.20").getTime().toFixed(0)),

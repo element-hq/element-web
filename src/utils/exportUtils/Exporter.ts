@@ -146,5 +146,5 @@ export default abstract class Exporter {
         return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype);
     }
 
-    abstract export(): Promise<Blob>;
+    abstract export(): Promise<any>;
 }

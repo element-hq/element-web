@@ -238,12 +238,12 @@ function textForServerACLEvent(ev): () => string | null {
 function textForMessageEvent(ev): () => string | null {
     return () => {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-        let message = senderDisplayName + ': ' + ev.getContent().body;
+        let message = ev.getContent().body;
         if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {
             message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
-        }
+        } else message = senderDisplayName + ': ' + message;
         return message;
     };
 }
