@@ -176,7 +176,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (!client || !roomId || !room) throw new Error("Not in a room or not attached to a client");
 
         const results: MatrixEvent[] = [];
-        const state = room.currentState.events.get(eventType);
+        const state: Map<string, MatrixEvent> = room.currentState.events.get(eventType);
         if (state) {
             if (stateKey === "" || !!stateKey) {
                 const forKey = state.get(stateKey);
