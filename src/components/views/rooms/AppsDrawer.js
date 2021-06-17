@@ -82,13 +82,6 @@ export default class AppsDrawer extends React.Component {
         this.props.resizeNotifier.off("isResizing", this.onIsResizing);
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
-        // Room has changed probably, update apps
-        this._updateApps();
-    }
-
     onIsResizing = (resizing) => {
         // This one is the vertical, ie. change height of apps drawer
         this.setState({ resizingVertical: resizing });
@@ -141,7 +134,10 @@ export default class AppsDrawer extends React.Component {
     _getAppsHash = (apps) => apps.map(app => app.id).join("~");
 
     componentDidUpdate(prevProps, prevState) {
-        if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
+        if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
+            // Room has changed, update apps
+            this._updateApps();
+        } else if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
             this._loadResizerPreferences();
         }
     }
