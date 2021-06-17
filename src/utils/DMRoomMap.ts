@@ -16,7 +16,6 @@ limitations under the License.
 
 import { uniq } from "lodash";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -31,15 +30,13 @@ import { MatrixClientPeg } from '../MatrixClientPeg';
 export default class DMRoomMap {
     private static sharedInstance: DMRoomMap;
 
-    private matrixClient: MatrixClient;
     // TODO: convert these to maps
     private roomToUser: {[key: string]: string} = null;
     private userToRooms: {[key: string]: string[]} = null;
     private hasSentOutPatchDirectAccountDataPatch: boolean;
     private mDirectEvent: object;
 
-    constructor(matrixClient) {
-        this.matrixClient = matrixClient;
+    constructor(private readonly matrixClient: MatrixClient) {
         // see onAccountData
         this.hasSentOutPatchDirectAccountDataPatch = false;
 
