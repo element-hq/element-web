@@ -15,38 +15,20 @@ limitations under the License.
 */
 
 import React from 'react';
+import { JoinRule, GuestAccess, HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import {_t} from "../../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+
+import { _t } from "../../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import StyledRadioGroup from '../../../elements/StyledRadioGroup';
-import {SettingLevel} from "../../../../../settings/SettingLevel";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import {UIFeature} from "../../../../../settings/UIFeature";
+import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
-
-// Knock and private are reserved keywords which are not yet implemented.
-enum JoinRule {
-    Public = "public",
-    Knock = "knock",
-    Invite = "invite",
-    Private = "private",
-}
-
-enum GuestAccess {
-    CanJoin = "can_join",
-    Forbidden = "forbidden",
-}
-
-enum HistoryVisibility {
-    Invited = "invited",
-    Joined = "joined",
-    Shared = "shared",
-    WorldReadable = "world_readable",
-}
 
 interface IProps {
     roomId: string;
