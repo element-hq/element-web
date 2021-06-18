@@ -17,11 +17,12 @@ limitations under the License.
 
 import React, {forwardRef} from "react";
 
-export default forwardRef(({mxEvent}, ref) => {
+export default forwardRef(({mxEvent, children}, ref) => {
     const text = mxEvent.getContent().body;
     return (
         <span className="mx_UnknownBody" ref={ref}>
             { text }
+            { children }
         </span>
     );
 });

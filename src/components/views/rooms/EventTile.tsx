@@ -29,7 +29,7 @@ import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
+import { Layout } from "../../../settings/Layout";
 import {formatTime} from "../../../DateUtils";
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
@@ -988,8 +988,13 @@ export default class EventTile extends React.Component<IProps, IState> {
             onFocusChange={this.onActionBarFocusChange}
         /> : undefined;
 
-        const showTimestamp = this.props.mxEvent.getTs() &&
-            (this.props.alwaysShowTimestamps || this.props.last || this.state.hover || this.state.actionBarFocused);
+        const showTimestamp = this.props.mxEvent.getTs()
+            && (this.props.alwaysShowTimestamps
+            || this.props.last
+            || this.state.hover
+            || this.state.actionBarFocused)
+            || this.props.layout === Layout.Bubble;
+
         const timestamp = showTimestamp ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
@@ -1168,6 +1173,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                     this.props.alwaysShowTimestamps || this.state.hover,
                 );
 
+                const isOwnEvent = this.props.mxEvent.sender.userId === MatrixClientPeg.get().getUserId();
+
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     React.createElement(this.props.as || "li", {
@@ -1177,6 +1184,8 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "aria-live": ariaLive,
                         "aria-atomic": "true",
                         "data-scroll-tokens": scrollToken,
+                        "data-layout": this.props.layout,
+                        "data-self": isOwnEvent,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                     }, [
@@ -1198,9 +1207,9 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onHeightChanged={this.props.onHeightChanged}
                             />
                             { keyRequestInfo }
-                            { reactionsRow }
                             { actionBar }
                         </div>,
+                        reactionsRow,
                         msgOption,
                         avatar,
 
