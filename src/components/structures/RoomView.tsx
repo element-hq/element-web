@@ -23,7 +23,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { IRecommendedVersion, Room } from "matrix-js-sdk/src/models/room";
+import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
@@ -2054,7 +2054,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
             const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
-                highlight={this.state.room.getUnreadNotificationCount('highlight') > 0}
+                highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
                 roomId={this.state.roomId}
