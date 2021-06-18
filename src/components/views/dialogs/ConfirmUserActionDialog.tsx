@@ -58,12 +58,6 @@ export default class ConfirmUserActionDialog extends React.Component<IProps> {
         askReason: false,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.reasonField = null;
-    }
-
     public onOk = (): void => {
         let reason;
         if (this.reasonField) {

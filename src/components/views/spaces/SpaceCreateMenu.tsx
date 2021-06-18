@@ -29,7 +29,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import {BetaPill} from "../beta/BetaCard";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
-import { USER_TAB } from "../dialogs/UserSettingsDialog";
+import { UserTab } from "../dialogs/UserSettingsDialog";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
@@ -224,7 +224,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 onFinished();
                 defaultDispatcher.dispatch({
                     action: Action.ViewUserSettings,
-                    initialTabId: USER_TAB.LABS,
+                    initialTabId: UserTab.Labs,
                 });
             }} />
             { body }

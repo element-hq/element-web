@@ -34,7 +34,7 @@ interface IProps {
 
 interface IState {
     error: Error | null;
-    canUploadKeysWithPasswordOnly: boolean | null;
+    canUploadKeysWithPasswordOnly?: boolean;
     accountPassword: string;
 }
 
@@ -45,7 +45,7 @@ interface IState {
  */
 @replaceableComponent("views.dialogs.security.CreateCrossSigningDialog")
 export default class CreateCrossSigningDialog extends React.PureComponent<IProps, IState> {
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -90,7 +90,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         }
     }
 
-    private doBootstrapUIAuth = async (makeRequest): Promise<void> => {
+    private doBootstrapUIAuth = async (makeRequest: (authData: any) => void): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
             await makeRequest({
                 type: 'm.login.password',

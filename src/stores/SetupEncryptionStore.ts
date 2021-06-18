@@ -22,18 +22,18 @@ import { MatrixClientPeg } from '../MatrixClientPeg';
 import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-export enum PHASE {
-    LOADING = 0,
-    INTRO = 1,
-    BUSY = 2,
-    DONE = 3, // final done stage, but still showing UX
-    CONFIRM_SKIP = 4,
-    FINISHED = 5, // UX can be closed
+export enum Phase {
+    Loading = 0,
+    Intro = 1,
+    Busy = 2,
+    Done = 3, // final done stage, but still showing UX
+    ConfirmSkip = 4,
+    Finished = 5, // UX can be closed
 }
 
 export class SetupEncryptionStore extends EventEmitter {
     private started: boolean;
-    public phase: PHASE;
+    public phase: Phase;
     public verificationRequest: VerificationRequest;
     public backupInfo: IKeyBackupVersion;
     public keyId: string;
@@ -50,7 +50,7 @@ export class SetupEncryptionStore extends EventEmitter {
             return;
         }
         this.started = true;
-        this.phase = PHASE.LOADING;
+        this.phase = Phase.Loading;
         this.verificationRequest = null;
         this.backupInfo = null;
 
@@ -110,15 +110,15 @@ export class SetupEncryptionStore extends EventEmitter {
 
         if (!this.hasDevicesToVerifyAgainst && !this.keyInfo) {
             // skip before we can even render anything.
-            this.phase = PHASE.FINISHED;
+            this.phase = Phase.Finished;
         } else {
-            this.phase = PHASE.INTRO;
+            this.phase = Phase.Intro;
         }
         this.emit("update");
     }
 
     public async usePassPhrase(): Promise<void> {
-        this.phase = PHASE.BUSY;
+        this.phase = Phase.Busy;
         this.emit("update");
         const cli = MatrixClientPeg.get();
         try {
@@ -147,7 +147,7 @@ export class SetupEncryptionStore extends EventEmitter {
             });
 
             if (cli.getCrossSigningId()) {
-                this.phase = PHASE.DONE;
+                this.phase = Phase.Done;
                 this.emit("update");
             }
         } catch (e) {
@@ -155,7 +155,7 @@ export class SetupEncryptionStore extends EventEmitter {
                 console.log(e);
             }
             // this will throw if the user hits cancel, so ignore
-            this.phase = PHASE.INTRO;
+            this.phase = Phase.Intro;
             this.emit("update");
         }
     }
@@ -164,7 +164,7 @@ export class SetupEncryptionStore extends EventEmitter {
         if (userId !== MatrixClientPeg.get().getUserId()) return;
         const publicKeysTrusted = MatrixClientPeg.get().getCrossSigningId();
         if (publicKeysTrusted) {
-            this.phase = PHASE.DONE;
+            this.phase = Phase.Done;
             this.emit("update");
         }
     }
@@ -185,28 +185,28 @@ export class SetupEncryptionStore extends EventEmitter {
             // cross signing to be ready to use, so wait for the user trust status to
             // change (or change to DONE if it's already ready).
             const publicKeysTrusted = MatrixClientPeg.get().getCrossSigningId();
-            this.phase = publicKeysTrusted ? PHASE.DONE : PHASE.BUSY;
+            this.phase = publicKeysTrusted ? Phase.Done : Phase.Busy;
             this.emit("update");
         }
     }
 
     public skip(): void {
-        this.phase = PHASE.CONFIRM_SKIP;
+        this.phase = Phase.ConfirmSkip;
         this.emit("update");
     }
 
     public skipConfirm(): void {
-        this.phase = PHASE.FINISHED;
+        this.phase = Phase.Finished;
         this.emit("update");
     }
 
     public returnAfterSkip(): void {
-        this.phase = PHASE.INTRO;
+        this.phase = Phase.Intro;
         this.emit("update");
     }
 
     public done(): void {
-        this.phase = PHASE.FINISHED;
+        this.phase = Phase.Finished;
         this.emit("update");
         // async - ask other clients for keys, if necessary
         MatrixClientPeg.get().crypto.cancelAndResendAllOutgoingKeyRequests();

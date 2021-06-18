@@ -115,7 +115,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         this.setState({errStr: _t("There was a problem communicating with the server. Please try again.")});
     };
 
-    private onUIAuthComplete = (auth): void => {
+    private onUIAuthComplete = (auth: any): void => {
         MatrixClientPeg.get().deactivateAccount(auth, this.state.shouldErase).then(r => {
             // Deactivation worked - logout & close this dialog
             Analytics.trackEvent('Account', 'Deactivate Account');

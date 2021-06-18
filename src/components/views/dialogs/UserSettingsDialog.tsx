@@ -19,7 +19,7 @@ import React from 'react';
 import TabbedView, {Tab} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
-import SettingsStore from "../../../settings/SettingsStore";
+import SettingsStore, { CallbackFn } from "../../../settings/SettingsStore";
 import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
 import AppearanceUserSettingsTab from "../settings/tabs/user/AppearanceUserSettingsTab";
 import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
@@ -34,17 +34,17 @@ import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab
 import {UIFeature} from "../../../settings/UIFeature";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-export enum USER_TAB {
-    GENERAL = "USER_GENERAL_TAB",
-    APPEARANCE = "USER_APPEARANCE_TAB",
-    FLAIR = "USER_FLAIR_TAB",
-    NOTIFICATIONS = "USER_NOTIFICATIONS_TAB",
-    PREFERENCES = "USER_PREFERENCES_TAB",
-    VOICE = "USER_VOICE_TAB",
-    SECURITY = "USER_SECURITY_TAB",
-    LABS = "USER_LABS_TAB",
-    MJOLNIR = "USER_MJOLNIR_TAB",
-    HELP = "USER_HELP_TAB",
+export enum UserTab {
+    General = "USER_GENERAL_TAB",
+    Appearance = "USER_APPEARANCE_TAB",
+    Flair = "USER_FLAIR_TAB",
+    Notifications = "USER_NOTIFICATIONS_TAB",
+    Preferences = "USER_PREFERENCES_TAB",
+    Voice = "USER_VOICE_TAB",
+    Security = "USER_SECURITY_TAB",
+    Labs = "USER_LABS_TAB",
+    Mjolnir = "USER_MJOLNIR_TAB",
+    Help = "USER_HELP_TAB",
 }
 
 interface IProps {
@@ -76,7 +76,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         SettingsStore.unwatchSetting(this.mjolnirWatcher);
     }
 
-    private mjolnirChanged = (settingName, roomId, atLevel, newValue: boolean) => {
+    private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
         // We can cheat because we know what levels a feature is tracked at, and how it is tracked
         this.setState({mjolnirEnabled: newValue});
     }
@@ -85,33 +85,33 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         const tabs = [];
 
         tabs.push(new Tab(
-            USER_TAB.GENERAL,
+            UserTab.General,
             _td("General"),
             "mx_UserSettingsDialog_settingsIcon",
             <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
         tabs.push(new Tab(
-            USER_TAB.APPEARANCE,
+            UserTab.Appearance,
             _td("Appearance"),
             "mx_UserSettingsDialog_appearanceIcon",
             <AppearanceUserSettingsTab />,
         ));
         if (SettingsStore.getValue(UIFeature.Flair)) {
             tabs.push(new Tab(
-                USER_TAB.FLAIR,
+                UserTab.Flair,
                 _td("Flair"),
                 "mx_UserSettingsDialog_flairIcon",
                 <FlairUserSettingsTab />,
             ));
         }
         tabs.push(new Tab(
-            USER_TAB.NOTIFICATIONS,
+            UserTab.Notifications,
             _td("Notifications"),
             "mx_UserSettingsDialog_bellIcon",
             <NotificationUserSettingsTab />,
         ));
         tabs.push(new Tab(
-            USER_TAB.PREFERENCES,
+            UserTab.Preferences,
             _td("Preferences"),
             "mx_UserSettingsDialog_preferencesIcon",
             <PreferencesUserSettingsTab />,
@@ -119,7 +119,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
 
         if (SettingsStore.getValue(UIFeature.Voip)) {
             tabs.push(new Tab(
-                USER_TAB.VOICE,
+                UserTab.Voice,
                 _td("Voice & Video"),
                 "mx_UserSettingsDialog_voiceIcon",
                 <VoiceUserSettingsTab />,
@@ -127,7 +127,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         }
 
         tabs.push(new Tab(
-            USER_TAB.SECURITY,
+            UserTab.Security,
             _td("Security & Privacy"),
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
@@ -137,7 +137,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
         ) {
             tabs.push(new Tab(
-                USER_TAB.LABS,
+                UserTab.Labs,
                 _td("Labs"),
                 "mx_UserSettingsDialog_labsIcon",
                 <LabsUserSettingsTab />,
@@ -145,14 +145,14 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         }
         if (this.state.mjolnirEnabled) {
             tabs.push(new Tab(
-                USER_TAB.MJOLNIR,
+                UserTab.Mjolnir,
                 _td("Ignored users"),
                 "mx_UserSettingsDialog_mjolnirIcon",
                 <MjolnirUserSettingsTab />,
             ));
         }
         tabs.push(new Tab(
-            USER_TAB.HELP,
+            UserTab.Help,
             _td("Help & About"),
             "mx_UserSettingsDialog_helpIcon",
             <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished(true)} />,
