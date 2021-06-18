@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import RoomMember from "matrix-js-sdk/src/models/room-member.js";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
