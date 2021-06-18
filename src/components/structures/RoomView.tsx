@@ -23,7 +23,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { Room } from "matrix-js-sdk/src/models/room";
+import { IRecommendedVersion, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
@@ -172,11 +172,7 @@ export interface IState {
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
 
-    upgradeRecommendation?: {
-        version: string;
-        needsUpgrade: boolean;
-        urgent: boolean;
-    };
+    upgradeRecommendation?: IRecommendedVersion;
     canReact: boolean;
     canReply: boolean;
     layout: Layout;
