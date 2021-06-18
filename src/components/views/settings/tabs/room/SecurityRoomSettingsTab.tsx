@@ -42,12 +42,14 @@ interface IState {
     history: HistoryVisibility;
     hasAliases: boolean;
     encrypted: boolean;
+    roomVersionsCapability?: IRoomVersionsCapability;
 }
 
 enum RoomVisibility {
     InviteOnly = "invite_only",
     PublicNoGuests = "public_no_guests",
     PublicWithGuests = "public_with_guests",
+    Restricted = "restricted",
 }
 
 @replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
@@ -92,6 +94,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({ joinRule, guestAccess, history, encrypted });
 
         this.hasAliases().then(hasAliases => this.setState({ hasAliases }));
+        cli.getCapabilities().then(capabilities => this.setState({
+            roomVersionsCapability: capabilities["m.room_versions"],
+        }));
     }
 
     private pullContentPropertyFromEvent<T>(event: MatrixEvent, key: string, defaultValue: T): T {
@@ -166,12 +171,12 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private onRoomAccessRadioToggle = (roomAccess: RoomVisibility) => {
         //                         join_rule
-        //                      INVITE  |  PUBLIC
-        //        ----------------------+----------------
-        // guest  CAN_JOIN   | inv_only | pub_with_guest
-        // access ----------------------+----------------
-        //        FORBIDDEN  | inv_only | pub_no_guest
-        //        ----------------------+----------------
+        //                      INVITE  |  PUBLIC        | RESTRICTED
+        //        -----------+----------+----------------+-------------
+        // guest  CAN_JOIN   | inv_only | pub_with_guest | restricted
+        // access -----------+----------+----------------+-------------
+        //        FORBIDDEN  | inv_only | pub_no_guest   | restricted
+        //        -----------+----------+----------------+-------------
 
         // we always set guests can_join here as it makes no sense to have
         // an invite-only room that guests can't join.  If you explicitly
@@ -184,6 +189,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         switch (roomAccess) {
             case RoomVisibility.InviteOnly:
                 // no change - use defaults above
+                break;
+            case RoomVisibility.Restricted:
+                joinRule = JoinRule.Restricted;
                 break;
             case RoomVisibility.PublicNoGuests:
                 joinRule = JoinRule.Public;
@@ -294,6 +302,19 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 checked: joinRule === JoinRule.Public && guestAccess === GuestAccess.CanJoin,
             },
         ];
+
+        const roomCapabilities = this.state.roomVersionsCapability?.["org.matrix.msc3244.room_capabilities"];
+        if (roomCapabilities?.["restricted"]) {
+            if (Array.isArray(roomCapabilities["restricted"]?.support) &&
+                roomCapabilities["restricted"].support.includes(room.getVersion() ?? "1")
+            ) {
+                radioDefinitions.unshift({
+                    value: RoomVisibility.Restricted,
+                    label: _t("Only people in certain spaces or those who have been invited (TODO copy)"),
+                    checked: joinRule === JoinRule.Restricted,
+                });
+            }
+        }
 
         return (
             <div>

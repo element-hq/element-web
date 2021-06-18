@@ -18,6 +18,8 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import { JoinRule, Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -35,8 +37,6 @@ import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { Action } from "./dispatcher/actions"
-import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -72,7 +72,7 @@ export interface IOpts {
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-export default function createRoom(opts: IOpts): Promise<string | null> {
+export default async function createRoom(opts: IOpts): Promise<string | null> {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
@@ -86,7 +86,7 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
         dis.dispatch({action: 'require_registration'});
-        return Promise.resolve(null);
+        return null;
     }
 
     const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
@@ -150,6 +150,26 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
                 "history_visibility": opts.createOpts.preset === Preset.PublicChat ? "world_readable" : "invited",
             },
         });
+
+        if (opts.parentSpace.getJoinRule() !== JoinRule.Public && opts.createOpts.preset !== Preset.PublicChat) {
+            const serverCapabilities = await client.getCapabilities();
+            const roomCapabilities = serverCapabilities?.["m.room_versions"]?.["org.matrix.msc3244.room_capabilities"];
+            if (roomCapabilities?.["restricted"]) {
+                opts.createOpts.room_version = roomCapabilities?.["restricted"].preferred;
+
+                opts.createOpts.initial_state.push({
+                    type: EventType.RoomJoinRules,
+                    content: {
+                        "join_rule": JoinRule.Restricted,
+                        "allow": [{
+                            "type": "m.room_membership",
+                            "room_id": opts.parentSpace.roomId,
+                        }],
+                        "authorised_servers": [client.getDomain()], // TODO this might want tweaking
+                    },
+                })
+            }
+        }
     }
 
     let modal;
