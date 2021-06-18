@@ -18,14 +18,14 @@ limitations under the License.
 */
 
 import SettingsStore from "../../settings/SettingsStore";
-import {LayoutPropType} from "../../settings/Layout";
-import React, {createRef} from 'react';
+import { LayoutPropType } from "../../settings/Layout";
+import React, { createRef } from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
-import {EventTimeline} from "matrix-js-sdk/src/models/event-timeline";
-import {TimelineWindow} from "matrix-js-sdk/src/timeline-window";
+import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { _t } from '../../languageHandler';
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomContext from "../../contexts/RoomContext";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
@@ -35,10 +35,11 @@ import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
-import {haveTileForEvent} from "../views/rooms/EventTile";
-import {UIFeature} from "../../settings/UIFeature";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { haveTileForEvent } from "../views/rooms/EventTile";
+import { UIFeature } from "../../settings/UIFeature";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
+import { Action } from "../../dispatcher/actions";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -439,21 +440,42 @@ class TimelinePanel extends React.Component {
     };
 
     onAction = payload => {
-        if (payload.action === 'ignore_state_changed') {
-            this.forceUpdate();
-        }
-        if (payload.action === "edit_event") {
-            const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-            this.setState({editState}, () => {
-                if (payload.event && this._messagePanel.current) {
-                    this._messagePanel.current.scrollToEventIfNeeded(
-                        payload.event.getId(),
-                    );
+        switch (payload.action) {
+            case "ignore_state_changed":
+                this.forceUpdate();
+                break;
+
+            case "edit_event": {
+                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+                this.setState({editState}, () => {
+                    if (payload.event && this._messagePanel.current) {
+                        this._messagePanel.current.scrollToEventIfNeeded(
+                            payload.event.getId(),
+                        );
+                    }
+                });
+                break;
+            }
+
+            case Action.ComposerInsert: {
+                // re-dispatch to the correct composer
+                if (this.state.editState) {
+                    dis.dispatch({
+                        ...payload,
+                        action: "edit_composer_insert",
+                    });
+                } else {
+                    dis.dispatch({
+                        ...payload,
+                        action: "send_composer_insert",
+                    });
                 }
-            });
-        }
-        if (payload.action === "scroll_to_bottom") {
-            this.jumpToLiveTimeline();
+                break;
+            }
+
+            case "scroll_to_bottom":
+                this.jumpToLiveTimeline();
+                break;
         }
     };
 
