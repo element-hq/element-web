@@ -38,7 +38,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { textualPowerLevel } from '../../../Roles';
@@ -68,6 +68,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { mediaFromMxc } from "../../../customisations/Media";
 import UIStore from "../../../stores/UIStore";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 
 export interface IDevice {
     deviceId: string;
@@ -368,9 +369,9 @@ const UserOptionsSection: React.FC<{
             };
 
             const onInsertPillButton = function() {
-                dis.dispatch({
-                    action: 'insert_mention',
-                    user_id: member.userId,
+                dis.dispatch<ComposerInsertPayload>({
+                    action: Action.ComposerInsert,
+                    userId: member.userId,
                 });
             };
 
