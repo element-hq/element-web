@@ -29,7 +29,7 @@ import { setHasDiff } from "../../../utils/sets";
  *  + All DMs
  */
 export class SpaceFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
-    private roomIds = new Set<Room>();
+    private roomIds = new Set<string>();
     private space: Room = null;
 
     public get kind(): FilterKind {
