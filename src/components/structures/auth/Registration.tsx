@@ -269,7 +269,7 @@ export default class Registration extends React.Component<IProps, IState> {
         );
     }
 
-    private onUIAuthFinished = async (success, response, extra) => {
+    private onUIAuthFinished = async (success: boolean, response: any) => {
         if (!success) {
             let msg = response.message || response.toString();
             // can we give a better error message?

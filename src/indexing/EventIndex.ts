@@ -300,7 +300,7 @@ export default class EventIndex extends EventEmitter {
     }
 
     private eventToJson(ev: MatrixEvent) {
-        const jsonEvent = ev.toJSON();
+        const jsonEvent: any = ev.toJSON();
         const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
 
         if (ev.isEncrypted()) {
