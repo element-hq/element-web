@@ -16,22 +16,21 @@ limitations under the License.
 
 import url from 'url';
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 
-class TermsCheckbox extends React.PureComponent {
-    static propTypes = {
-        onChange: PropTypes.func.isRequired,
-        url: PropTypes.string.isRequired,
-        checked: PropTypes.bool.isRequired,
-    }
+interface ITermsCheckboxProps {
+    onChange: (url: string, checked: boolean) => void;
+    url: string;
+    checked: boolean;
+}
 
-    onChange = (ev) => {
-        this.props.onChange(this.props.url, ev.target.checked);
+class TermsCheckbox extends React.PureComponent<ITermsCheckboxProps> {
+    private onChange = (ev: React.FormEvent<HTMLInputElement>): void => {
+        this.props.onChange(this.props.url, ev.currentTarget.checked);
     }
 
     render() {
@@ -42,30 +41,34 @@ class TermsCheckbox extends React.PureComponent {
     }
 }
 
+interface ITermsDialogProps {
+    /**
+     * Array of [Service, policies] pairs, where policies is the response from the
+     * /terms endpoint for that service
+     */
+    policiesAndServicePairs: any[],
+
+    /**
+     * urls that the user has already agreed to
+     */
+    agreedUrls?: string[],
+
+    /**
+     * Called with:
+     *     * success {bool} True if the user accepted any douments, false if cancelled
+     *     * agreedUrls {string[]} List of agreed URLs
+     */
+    onFinished: (success: boolean, agreedUrls?: string[]) => void,
+}
+
+interface IState {
+    agreedUrls: any;
+}
+
 @replaceableComponent("views.dialogs.TermsDialog")
-export default class TermsDialog extends React.PureComponent {
-    static propTypes = {
-        /**
-         * Array of [Service, policies] pairs, where policies is the response from the
-         * /terms endpoint for that service
-         */
-        policiesAndServicePairs: PropTypes.array.isRequired,
-
-        /**
-         * urls that the user has already agreed to
-         */
-        agreedUrls: PropTypes.arrayOf(PropTypes.string),
-
-        /**
-         * Called with:
-         *     * success {bool} True if the user accepted any douments, false if cancelled
-         *     * agreedUrls {string[]} List of agreed URLs
-         */
-        onFinished: PropTypes.func.isRequired,
-    }
-
+export default class TermsDialog extends React.PureComponent<ITermsDialogProps, IState> {
     constructor(props) {
-        super();
+        super(props);
         this.state = {
             // url -> boolean
             agreedUrls: {},
@@ -75,15 +78,15 @@ export default class TermsDialog extends React.PureComponent {
         }
     }
 
-    _onCancelClick = () => {
+    private onCancelClick = (): void => {
         this.props.onFinished(false);
     }
 
-    _onNextClick = () => {
+    private onNextClick = (): void => {
         this.props.onFinished(true, Object.keys(this.state.agreedUrls).filter((url) => this.state.agreedUrls[url]));
     }
 
-    _nameForServiceType(serviceType, host) {
+    private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Element {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
                 return <div>{_t("Identity Server")}<br />({host})</div>;
@@ -92,7 +95,7 @@ export default class TermsDialog extends React.PureComponent {
         }
     }
 
-    _summaryForServiceType(serviceType) {
+    private summaryForServiceType(serviceType: SERVICE_TYPES): JSX.Element {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
                 return <div>
@@ -107,13 +110,13 @@ export default class TermsDialog extends React.PureComponent {
         }
     }
 
-    _onTermsCheckboxChange = (url, checked) => {
+    private onTermsCheckboxChange = (url: string, checked: boolean) => {
         this.setState({
             agreedUrls: Object.assign({}, this.state.agreedUrls, { [url]: checked }),
         });
     }
 
-    render() {
+    public render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
@@ -128,8 +131,8 @@ export default class TermsDialog extends React.PureComponent {
                 let serviceName;
                 let summary;
                 if (i === 0) {
-                    serviceName = this._nameForServiceType(policiesAndService.service.serviceType, parsedBaseUrl.host);
-                    summary = this._summaryForServiceType(
+                    serviceName = this.nameForServiceType(policiesAndService.service.serviceType, parsedBaseUrl.host);
+                    summary = this.summaryForServiceType(
                         policiesAndService.service.serviceType,
                     );
                 }
@@ -137,12 +140,15 @@ export default class TermsDialog extends React.PureComponent {
                 rows.push(<tr key={termDoc[termsLang].url}>
                     <td className="mx_TermsDialog_service">{serviceName}</td>
                     <td className="mx_TermsDialog_summary">{summary}</td>
-                    <td>{termDoc[termsLang].name} <a rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
-                        <span className="mx_TermsDialog_link" />
-                    </a></td>
+                    <td>
+                        {termDoc[termsLang].name}
+                        <a rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
+                            <span className="mx_TermsDialog_link" />
+                        </a>
+                    </td>
                     <td><TermsCheckbox
                         url={termDoc[termsLang].url}
-                        onChange={this._onTermsCheckboxChange}
+                        onChange={this.onTermsCheckboxChange}
                         checked={Boolean(this.state.agreedUrls[termDoc[termsLang].url])}
                     /></td>
                 </tr>);
@@ -176,7 +182,7 @@ export default class TermsDialog extends React.PureComponent {
         return (
             <BaseDialog
                 fixedWidth={false}
-                onFinished={this._onCancelClick}
+                onFinished={this.onCancelClick}
                 title={_t("Terms of Service")}
                 contentId='mx_Dialog_content'
                 hasCancel={false}
@@ -197,8 +203,8 @@ export default class TermsDialog extends React.PureComponent {
 
                 <DialogButtons primaryButton={_t('Next')}
                     hasCancel={true}
-                    onCancel={this._onCancelClick}
-                    onPrimaryButtonClick={this._onNextClick}
+                    onCancel={this.onCancelClick}
+                    onPrimaryButtonClick={this.onNextClick}
                     primaryDisabled={!enableSubmit}
                 />
             </BaseDialog>
