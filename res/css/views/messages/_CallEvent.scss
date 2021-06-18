@@ -40,14 +40,15 @@ limitations under the License.
             .mx_CallEvent_sender {
                 font-weight: 600;
                 font-size: 1.5rem;
-                line-height: 1.9rem;
+                line-height: 1.8rem;
+                margin-bottom: 3px;
             }
 
             .mx_CallEvent_type {
                 font-weight: 400;
                 color: $secondary-fg-color;
                 font-size: 1.2rem;
-                line-height: 1.5rem;
+                line-height: $font-13px;
                 display: flex;
                 align-items: center;
 
