@@ -16,21 +16,26 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import request from 'browser-request';
 import { _t } from '../../../languageHandler';
 
+interface IProps {
+    newVersion: string;
+    version: string;
+    onFinished: (success: boolean) => void;
+}
+
 const REPOS = ['vector-im/element-web', 'matrix-org/matrix-react-sdk', 'matrix-org/matrix-js-sdk'];
 
-export default class ChangelogDialog extends React.Component {
+export default class ChangelogDialog extends React.Component<IProps> {
     constructor(props) {
         super(props);
 
         this.state = {};
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const version = this.props.newVersion.split('-');
         const version2 = this.props.version.split('-');
         if (version == null || version2 == null) return;
@@ -49,7 +54,7 @@ export default class ChangelogDialog extends React.Component {
         }
     }
 
-    _elementsForCommit(commit) {
+    private elementsForCommit(commit): JSX.Element {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
                 <a href={commit.html_url} target="_blank" rel="noreferrer noopener">
@@ -59,7 +64,7 @@ export default class ChangelogDialog extends React.Component {
         );
     }
 
-    render() {
+    public render() {
         const Spinner = sdk.getComponent('views.elements.Spinner');
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
 
@@ -72,7 +77,7 @@ export default class ChangelogDialog extends React.Component {
                     msg: this.state[repo],
                 });
             } else {
-                content = this.state[repo].map(this._elementsForCommit);
+                content = this.state[repo].map(this.elementsForCommit);
             }
             return (
                 <div key={repo}>
@@ -99,9 +104,3 @@ export default class ChangelogDialog extends React.Component {
         );
     }
 }
-
-ChangelogDialog.propTypes = {
-    version: PropTypes.string.isRequired,
-    newVersion: PropTypes.string.isRequired,
-    onFinished: PropTypes.func.isRequired,
-};

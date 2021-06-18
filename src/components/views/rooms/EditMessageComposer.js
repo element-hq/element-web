@@ -16,25 +16,25 @@ limitations under the License.
 */
 import React from 'react';
 import * as sdk from '../../../index';
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
-import {getCaretOffsetAndText} from '../../../editor/dom';
-import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
-import {findEditableEvent} from '../../../utils/EventUtils';
-import {parseEvent} from '../../../editor/deserialize';
-import {CommandPartCreator} from '../../../editor/parts';
+import { getCaretOffsetAndText } from '../../../editor/dom';
+import { htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand } from '../../../editor/serialize';
+import { findEditableEvent } from '../../../utils/EventUtils';
+import { parseEvent } from '../../../editor/deserialize';
+import { CommandPartCreator } from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
-import {EventStatus} from 'matrix-js-sdk/src/models/event';
+import { EventStatus } from 'matrix-js-sdk/src/models/event';
 import BasicMessageComposer from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {CommandCategories, getCommand} from '../../../SlashCommands';
-import {Action} from "../../../dispatcher/actions";
+import { CommandCategories, getCommand } from '../../../SlashCommands';
+import { Action } from "../../../dispatcher/actions";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SendHistoryManager from '../../../SendHistoryManager';
 import Modal from '../../../Modal';
 
@@ -124,6 +124,7 @@ export default class EditMessageComposer extends React.Component {
         };
         this._createEditorModel();
         window.addEventListener("beforeunload", this._saveStoredEditorState);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     _setEditorRef = ref => {
@@ -399,6 +400,7 @@ export default class EditMessageComposer extends React.Component {
         if (this._shouldSaveStoredEditorState) {
             this._saveStoredEditorState();
         }
+        dis.unregister(this.dispatcherRef);
     }
 
     _createEditorModel() {
@@ -441,6 +443,18 @@ export default class EditMessageComposer extends React.Component {
         this.setState({
             saveDisabled: false,
         });
+    };
+
+    onAction = payload => {
+        if (payload.action === "edit_composer_insert" && this._editorRef) {
+            if (payload.userId) {
+                this._editorRef.insertMention(payload.userId);
+            } else if (payload.event) {
+                this._editorRef.insertQuotedMessage(payload.event);
+            } else if (payload.text) {
+                this._editorRef.insertPlaintext(payload.text);
+            }
+        }
     };
 
     render() {

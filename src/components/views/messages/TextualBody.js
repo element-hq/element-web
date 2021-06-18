@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
-import {formatDate} from '../../../DateUtils';
+import { formatDate } from '../../../DateUtils';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher/dispatcher';
@@ -29,14 +29,16 @@ import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
-import {pillifyLinks, unmountPills} from '../../../utils/pillify';
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
-import {toRightOf} from "../../structures/ContextMenu";
-import {copyPlaintext} from "../../../utils/strings";
+import { pillifyLinks, unmountPills } from '../../../utils/pillify';
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { isPermalinkHost } from "../../../utils/permalinks/Permalinks";
+import { toRightOf } from "../../structures/ContextMenu";
+import { copyPlaintext } from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from "../../../dispatcher/actions";
 
 @replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
@@ -391,9 +393,9 @@ export default class TextualBody extends React.Component {
 
     onEmoteSenderClick = event => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch({
-            action: 'insert_mention',
-            user_id: mxEvent.getSender(),
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            userId: mxEvent.getSender(),
         });
     };
 
