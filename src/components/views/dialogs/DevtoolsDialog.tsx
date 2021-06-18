@@ -525,11 +525,11 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
 }
 
 interface IAccountDataExplorerState {
+    [inputId: string]: boolean | string | any;
     isRoomAccountData: boolean;
     event?: MatrixEvent;
     editing: boolean;
     queryEventType: string;
-    [inputId: string]: boolean | string;
 }
 
 class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDataExplorerState> {

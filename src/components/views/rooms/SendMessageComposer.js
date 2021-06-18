@@ -27,27 +27,26 @@ import {
     startsWith,
     stripPrefix,
 } from '../../../editor/serialize';
-import {CommandPartCreator} from '../../../editor/parts';
+import { CommandPartCreator } from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyThread from "../elements/ReplyThread";
-import {parseEvent} from '../../../editor/deserialize';
-import {findEditableEvent} from '../../../utils/EventUtils';
+import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import {CommandCategories, getCommand} from '../../../SlashCommands';
+import { CommandCategories, getCommand } from '../../../SlashCommands';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RateLimitedFunc from '../../../ratelimitedfunc';
-import {Action} from "../../../dispatcher/actions";
-import {containsEmoji} from "../../../effects/utils";
-import {CHAT_EFFECTS} from '../../../effects';
+import { Action } from "../../../dispatcher/actions";
+import { containsEmoji } from "../../../effects/utils";
+import { CHAT_EFFECTS } from '../../../effects';
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EMOJI_REGEX from 'emojibase-regex';
-import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from '../../../settings/SettingsStore';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
@@ -486,60 +485,16 @@ export default class SendMessageComposer extends React.Component {
             case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;
-            case 'insert_mention':
-                this._insertMention(payload.user_id);
-                break;
-            case 'quote':
-                this._insertQuotedMessage(payload.event);
-                break;
-            case 'insert_emoji':
-                this._insertEmoji(payload.emoji);
+            case "send_composer_insert":
+                if (payload.userId) {
+                    this._editorRef && this._editorRef.insertMention(payload.userId);
+                } else if (payload.event) {
+                    this._editorRef && this._editorRef.insertQuotedMessage(payload.event);
+                } else if (payload.text) {
+                    this._editorRef && this._editorRef.insertPlaintext(payload.text);
+                }
                 break;
         }
-    };
-
-    _insertMention(userId) {
-        const {model} = this;
-        const {partCreator} = model;
-        const member = this.props.room.getMember(userId);
-        const displayName = member ?
-            member.rawDisplayName : userId;
-        const caret = this._editorRef.getCaret();
-        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        // Insert suffix only if the caret is at the start of the composer
-        const parts = partCreator.createMentionParts(caret.offset === 0, displayName, userId);
-        model.transform(() => {
-            const addedLen = model.insert(parts, position);
-            return model.positionForOffset(caret.offset + addedLen, true);
-        });
-        // refocus on composer, as we just clicked "Mention"
-        this._editorRef && this._editorRef.focus();
-    }
-
-    _insertQuotedMessage(event) {
-        const {model} = this;
-        const {partCreator} = model;
-        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
-        // add two newlines
-        quoteParts.push(partCreator.newline());
-        quoteParts.push(partCreator.newline());
-        model.transform(() => {
-            const addedLen = model.insert(quoteParts, model.positionForOffset(0));
-            return model.positionForOffset(addedLen, true);
-        });
-        // refocus on composer, as we just clicked "Quote"
-        this._editorRef && this._editorRef.focus();
-    }
-
-    _insertEmoji = (emoji) => {
-        const {model} = this;
-        const {partCreator} = model;
-        const caret = this._editorRef.getCaret();
-        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        model.transform(() => {
-            const addedLen = model.insert([partCreator.plain(emoji)], position);
-            return model.positionForOffset(caret.offset + addedLen, true);
-        });
     };
 
     _onPaste = (event) => {

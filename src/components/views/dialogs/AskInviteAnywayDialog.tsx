@@ -15,39 +15,41 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
-import {SettingLevel} from "../../../settings/SettingLevel";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    unknownProfileUsers: Array<{
+        userId: string;
+        errorText: string;
+    }>;
+    onInviteAnyways: () => void;
+    onGiveUp: () => void;
+    onFinished: (success: boolean) => void;
+}
 
 @replaceableComponent("views.dialogs.AskInviteAnywayDialog")
-export default class AskInviteAnywayDialog extends React.Component {
-    static propTypes = {
-        unknownProfileUsers: PropTypes.array.isRequired, // [ {userId, errorText}... ]
-        onInviteAnyways: PropTypes.func.isRequired,
-        onGiveUp: PropTypes.func.isRequired,
-        onFinished: PropTypes.func.isRequired,
-    };
-
-    _onInviteClicked = () => {
+export default class AskInviteAnywayDialog extends React.Component<IProps> {
+    private onInviteClicked = (): void => {
         this.props.onInviteAnyways();
         this.props.onFinished(true);
     };
 
-    _onInviteNeverWarnClicked = () => {
+    private onInviteNeverWarnClicked = (): void => {
         SettingsStore.setValue("promptBeforeInviteUnknownUsers", null, SettingLevel.ACCOUNT, false);
         this.props.onInviteAnyways();
         this.props.onFinished(true);
     };
 
-    _onGiveUpClicked = () => {
+    private onGiveUpClicked = (): void => {
         this.props.onGiveUp();
         this.props.onFinished(false);
     };
 
-    render() {
+    public render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         const errorList = this.props.unknownProfileUsers
@@ -55,11 +57,12 @@ export default class AskInviteAnywayDialog extends React.Component {
 
         return (
             <BaseDialog className='mx_RetryInvitesDialog'
-                onFinished={this._onGiveUpClicked}
+                onFinished={this.onGiveUpClicked}
                 title={_t('The following users may not exist')}
                 contentId='mx_Dialog_content'
             >
                 <div id='mx_Dialog_content'>
+                    {/* eslint-disable-next-line */}
                     <p>{_t("Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?")}</p>
                     <ul>
                         { errorList }
@@ -67,13 +70,13 @@ export default class AskInviteAnywayDialog extends React.Component {
                 </div>
 
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this._onGiveUpClicked}>
+                    <button onClick={this.onGiveUpClicked}>
                         { _t('Close') }
                     </button>
-                    <button onClick={this._onInviteNeverWarnClicked}>
+                    <button onClick={this.onInviteNeverWarnClicked}>
                         { _t('Invite anyway and never warn me again') }
                     </button>
-                    <button onClick={this._onInviteClicked} autoFocus={true}>
+                    <button onClick={this.onInviteClicked} autoFocus={true}>
                         { _t('Invite anyway') }
                     </button>
                 </div>
