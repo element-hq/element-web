@@ -25,6 +25,7 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
 
 import shouldHideEvent from '../../shouldHideEvent';
@@ -142,7 +143,7 @@ export interface IState {
     searchResults?: XOR<{}, {
         count: number;
         highlights: string[];
-        results: MatrixEvent[];
+        results: SearchResult[];
         next_batch: string; // eslint-disable-line camelcase
     }>;
     searchHighlights?: string[];
