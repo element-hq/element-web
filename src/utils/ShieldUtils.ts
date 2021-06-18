@@ -1,22 +1,23 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import DMRoomMap from './DMRoomMap';
-
-/* For now, a cut-down type spec for the client */
-interface Client {
-    getUserId: () => string;
-    checkUserTrust: (userId: string) => {
-        isCrossSigningVerified: () => boolean
-        wasCrossSigningVerified: () => boolean
-    };
-    getStoredDevicesForUser: (userId: string) => [{ deviceId: string }];
-    checkDeviceTrust: (userId: string, deviceId: string) => {
-        isVerified: () => boolean
-    };
-}
-
-interface Room {
-    getEncryptionTargetMembers: () => Promise<[{userId: string}]>;
-    roomId: string;
-}
 
 export enum E2EStatus {
     Warning = "warning",
@@ -24,7 +25,7 @@ export enum E2EStatus {
     Normal = "normal"
 }
 
-export async function shieldStatusForRoom(client: Client, room: Room): Promise<E2EStatus> {
+export async function shieldStatusForRoom(client: MatrixClient, room: Room): Promise<E2EStatus> {
     const members = (await room.getEncryptionTargetMembers()).map(({userId}) => userId);
     const inDMMap = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
