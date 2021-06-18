@@ -32,8 +32,12 @@ import UIStore from '../../../stores/UIStore';
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
 
-const DEFAULT_X_OFFSET = 16;
-const DEFAULT_Y_OFFSET = 48;
+const PADDING = {
+    top: 58,
+    bottom: 58,
+    left: 76,
+    right: 8,
+}
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -43,6 +47,7 @@ const SHOW_CALL_IN_STATES = [
     CallState.CreateOffer,
     CallState.WaitLocalMedia,
 ];
+
 
 interface IProps {
 }
@@ -116,8 +121,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
             roomId,
             primaryCall: primaryCall,
             secondaryCall: secondaryCalls[0],
-            translationX: UIStore.instance.windowWidth - DEFAULT_X_OFFSET - PIP_VIEW_WIDTH,
-            translationY: DEFAULT_Y_OFFSET,
+            translationX: UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH,
+            translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH,
         };
     }
 
@@ -132,7 +137,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
-        window.addEventListener("resize", this.onWindowSizeChanged);
+        window.addEventListener("resize", this.snap);
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
     }
@@ -142,17 +147,13 @@ export default class CallPreview extends React.Component<IProps, IState> {
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         document.removeEventListener("mousemove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
-        window.removeEventListener("resize", this.onWindowSizeChanged);
+        window.removeEventListener("resize", this.snap);
         if (this.roomStoreToken) {
             this.roomStoreToken.remove();
         }
         dis.unregister(this.dispatcherRef);
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
     }
-
-    private onWindowSizeChanged = () => {
-        this.setTranslation(this.state.translationX, this.state.translationY);
-    };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
         const width = this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH;
@@ -183,6 +184,44 @@ export default class CallPreview extends React.Component<IProps, IState> {
             translationX: outTranslationX,
             translationY: outTranslationY,
         });
+    }
+
+    private snap = () => {
+        const translationX = this.state.translationX;
+        const translationY = this.state.translationY;
+        // We subtract the PiP size from the window size in order to calculate
+        // the position to snap to from the PiP center and not its top-left
+        // corner
+        const windowWidth = (
+            UIStore.instance.windowWidth -
+            (this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH)
+        );
+        const windowHeight = (
+            UIStore.instance.windowHeight -
+            (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT)
+        );
+
+        if (translationX >= windowWidth / 2 && translationY >= windowHeight / 2) {
+            this.setState({
+                translationX: windowWidth - PADDING.right,
+                translationY: windowHeight - PADDING.bottom,
+            });
+        } else if (translationX >= windowWidth / 2 && translationY <= windowHeight / 2) {
+            this.setState({
+                translationX: windowWidth - PADDING.right,
+                translationY: PADDING.top,
+            });
+        } else if (translationX <= windowWidth / 2 && translationY >= windowHeight / 2) {
+            this.setState({
+                translationX: PADDING.left,
+                translationY: windowHeight - PADDING.bottom,
+            });
+        } else {
+            this.setState({
+                translationX: PADDING.left,
+                translationY: PADDING.top,
+            });
+        }
     }
 
     private onRoomViewStoreUpdate = (payload) => {
@@ -253,6 +292,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
     };
 
     private onEndMoving = () => {
+        this.snap();
         this.moving = false;
     };
 
