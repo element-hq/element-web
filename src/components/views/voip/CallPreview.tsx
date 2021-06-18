@@ -60,9 +60,6 @@ interface IState {
     // Position of the CallPreview
     translationX: number;
     translationY: number;
-
-    // True if the CallPreview is being dragged
-    moving: boolean;
 }
 
 // Splits a list of calls into one 'primary' one and a list
@@ -121,7 +118,6 @@ export default class CallPreview extends React.Component<IProps, IState> {
             secondaryCall: secondaryCalls[0],
             translationX: UIStore.instance.windowWidth - DEFAULT_X_OFFSET - PIP_VIEW_WIDTH,
             translationY: DEFAULT_Y_OFFSET,
-            moving: false,
         };
     }
 
@@ -129,6 +125,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
 
     private initX = 0;
     private initY = 0;
+    private moving = false;
 
     public componentDidMount() {
         CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
@@ -240,14 +237,14 @@ export default class CallPreview extends React.Component<IProps, IState> {
         event.preventDefault();
         event.stopPropagation();
 
-        this.setState({moving: true});
+        this.moving = true;
 
         this.initX = event.pageX - this.state.translationX;
         this.initY = event.pageY - this.state.translationY;
     };
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
-        if (!this.state.moving) return;
+        if (!this.moving) return;
 
         event.preventDefault();
         event.stopPropagation();
@@ -256,7 +253,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
     };
 
     private onEndMoving = () => {
-        this.setState({moving: false});
+        this.moving = false;
     };
 
     public render() {
