@@ -24,6 +24,7 @@ import {_t} from "../../../languageHandler";
 import {mediaFromContent} from "../../../customisations/Media";
 import {decryptFile} from "../../../utils/DecryptFile";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
+import {IMediaEventContent} from "../../../customisations/models/IMediaEventContent";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -45,7 +46,7 @@ export default class MVoiceMessageBody extends React.PureComponent<IProps, IStat
 
     public async componentDidMount() {
         let buffer: ArrayBuffer;
-        const content = this.props.mxEvent.getContent();
+        const content: IMediaEventContent = this.props.mxEvent.getContent();
         const media = mediaFromContent(content);
         if (media.isEncrypted) {
             try {
