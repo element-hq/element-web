@@ -602,9 +602,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             case "9":
             case "0":
                 if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
-                    const keyNum = parseInt(ev.key, 10);
-                    // map keyNum {1..0} to a {0..9} where key 1 is the home space
-                    this.navigateToSpace((keyNum + 9) % 10);
+                    this.navigateToSpace(parseInt(ev.key, 10));
                     handled = true;
                 }
                 break;
