@@ -37,8 +37,8 @@ import { privateShouldBeEncrypted } from "../../../createRoom";
 import EventTileBubble from "../messages/EventTileBubble";
 import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
 
-function hasExpectedEncryptionSettings(room): boolean {
-    const isEncrypted: boolean = room._client?.isRoomEncrypted(room.roomId);
+function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
+    const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
     const isPublic: boolean = room.getJoinRule() === "public";
     return isPublic || !privateShouldBeEncrypted() || isEncrypted;
 }
@@ -195,7 +195,7 @@ const NewRoomIntro = () => {
 
     return <div className="mx_NewRoomIntro">
 
-        { !hasExpectedEncryptionSettings(room) && (
+        { !hasExpectedEncryptionSettings(cli, room) && (
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
                 title={_t("End-to-end encryption isn't enabled")}
