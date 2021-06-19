@@ -29,6 +29,7 @@ $irc-line-height: $font-18px;
         // timestamps are links which shouldn't be underlined
         > a {
             text-decoration: none;
+            min-width: 45px;
         }
 
         display: flex;
