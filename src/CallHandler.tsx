@@ -99,7 +99,7 @@ const CHECK_PROTOCOLS_ATTEMPTS = 3;
 // (and store the ID of their native room)
 export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
 
-export enum AudioID {
+enum AudioID {
     Ring = 'ringAudio',
     Ringback = 'ringbackAudio',
     CallEnd = 'callendAudio',
@@ -142,6 +142,7 @@ export enum PlaceCallType {
 export enum CallHandlerEvent {
     CallsChanged = "calls_changed",
     CallChangeRoom = "call_change_room",
+    SilencedCallsChanged = "silenced_calls_changed",
 }
 
 export default class CallHandler extends EventEmitter {
@@ -163,6 +164,8 @@ export default class CallHandler extends EventEmitter {
     // We need to be be able to determine the mapped room synchronously, so we
     // do the async lookup when we get new information and then store these mappings here
     private assertedIdentityNativeUsers = new Map<string, string>();
+
+    private silencedCalls = new Map<string, boolean>(); // callId -> silenced
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -222,6 +225,33 @@ export default class CallHandler extends EventEmitter {
             dis.unregister(this.dispatcherRef);
             this.dispatcherRef = null;
         }
+    }
+
+    public silenceCall(callId: string) {
+        this.silencedCalls.set(callId, true);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
+
+        // Don't pause audio if we have calls which are still ringing
+        if (this.areAnyCallsUnsilenced()) return;
+        this.pause(AudioID.Ring);
+    }
+
+    public unSilenceCall(callId: string) {
+        this.silencedCalls.set(callId, false);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
+        this.play(AudioID.Ring);
+    }
+
+    public isCallSilenced(callId: string): boolean {
+        return this.silencedCalls.get(callId);
+    }
+
+    /**
+     * Returns true if there is at least one unsilenced call
+     * @returns {boolean}
+     */
+    private areAnyCallsUnsilenced(): boolean {
+        return [...this.silencedCalls.values()].includes(false);
     }
 
     private async checkProtocols(maxTries) {
@@ -616,6 +646,8 @@ export default class CallHandler extends EventEmitter {
 
     private removeCallForRoom(roomId: string) {
         console.log("Removing call for room ", roomId);
+        this.silencedCalls.delete(this.calls.get(roomId).callId);
+        this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
         this.calls.delete(roomId);
         this.emit(CallHandlerEvent.CallsChanged, this.calls);
     }
@@ -825,6 +857,8 @@ export default class CallHandler extends EventEmitter {
                     console.log("Adding call for room ", mappedRoomId);
                     this.calls.set(mappedRoomId, call)
                     this.emit(CallHandlerEvent.CallsChanged, this.calls);
+                    this.silencedCalls.set(call.callId, false);
+                    this.emit(CallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
                     this.setCallListeners(call);
 
                     // get ready to send encrypted events in the room, so if the user does answer
