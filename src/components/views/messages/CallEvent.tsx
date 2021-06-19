@@ -24,6 +24,7 @@ import FormButton from '../elements/FormButton';
 import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
+import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -32,6 +33,7 @@ interface IProps {
 
 interface IState {
     callState: CallState | CustomCallState;
+    silenced: boolean;
 }
 
 const TEXTUAL_STATES: Map<CallState | CustomCallState, string> = new Map([
@@ -45,25 +47,43 @@ export default class CallEvent extends React.Component<IProps, IState> {
 
         this.state = {
             callState: this.props.callEventGrouper.state,
+            silenced: false,
         }
     }
 
     componentDidMount() {
         this.props.callEventGrouper.addListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
+        this.props.callEventGrouper.addListener(CallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
     }
 
     componentWillUnmount() {
         this.props.callEventGrouper.removeListener(CallEventGrouperEvent.StateChanged, this.onStateChanged);
+        this.props.callEventGrouper.removeListener(CallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
     }
+
+    private onSilencedChanged = (newState) => {
+        this.setState({ silenced: newState });
+    };
 
     private onStateChanged = (newState: CallState) => {
         this.setState({callState: newState});
-    }
+    };
 
     private renderContent(state: CallState | CustomCallState): JSX.Element {
         if (state === CallState.Ringing) {
+            const silenceClass = classNames({
+                "mx_CallEvent_iconButton": true,
+                "mx_CallEvent_unSilence": this.state.silenced,
+                "mx_CallEvent_silence": !this.state.silenced,
+            });
+
             return (
                 <div className="mx_CallEvent_content">
+                    <AccessibleTooltipButton
+                        className={silenceClass}
+                        onClick={this.props.callEventGrouper.toggleSilenced}
+                        title={this.state.silenced ? _t("Sound on"): _t("Silence call")}
+                    />
                     <FormButton
                         onClick={ this.props.callEventGrouper.rejectCall }
                         kind="danger"

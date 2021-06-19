@@ -94,5 +94,29 @@ limitations under the License.
         .mx_CallEvent_content_tooltip {
             margin-right: 5px;
         }
+
+        .mx_CallEvent_iconButton {
+            display: inline-flex;
+            margin-right: 16px;
+
+            &::before {
+                content: '';
+
+                height: 16px;
+                width: 16px;
+                background-color: $icon-button-color;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-position: center;
+            }
+        }
+
+        .mx_CallEvent_silence::before {
+            mask-image: url('$(res)/img/voip/silence.svg');
+        }
+
+        .mx_CallEvent_unSilence::before {
+            mask-image: url('$(res)/img/voip/un-silence.svg');
+        }
     }
 }

@@ -24,6 +24,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 
 export enum CallEventGrouperEvent {
     StateChanged = "state_changed",
+    SilencedChanged = "silenced_changed",
 }
 
 const SUPPORTED_STATES = [
@@ -44,7 +45,8 @@ export default class CallEventGrouper extends EventEmitter {
     constructor() {
         super();
 
-        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallsChanged, this.setCall)
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.CallsChanged, this.setCall);
+        CallHandler.sharedInstance().addListener(CallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged);
     }
 
     private get invite(): MatrixEvent {
@@ -79,6 +81,15 @@ export default class CallEventGrouper extends EventEmitter {
         return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
     }
 
+    private get callId(): string {
+        return [...this.events][0].getContent().call_id;
+    }
+
+    private onSilencedCallsChanged = () => {
+        const newState = CallHandler.sharedInstance().isCallSilenced(this.callId);
+        this.emit(CallEventGrouperEvent.SilencedChanged, newState)
+    }
+
     public answerCall = () => {
         this.call?.answer();
     }
@@ -95,6 +106,12 @@ export default class CallEventGrouper extends EventEmitter {
         });
     }
 
+    public toggleSilenced = () => {
+        const silenced = CallHandler.sharedInstance().isCallSilenced(this.callId);
+        silenced ?
+            CallHandler.sharedInstance().unSilenceCall(this.callId) :
+            CallHandler.sharedInstance().silenceCall(this.callId);
+    }
 
     private setCallListeners() {
         if (!this.call) return;
@@ -116,8 +133,7 @@ export default class CallEventGrouper extends EventEmitter {
     private setCall = () => {
         if (this.call) return;
 
-        const callId = [...this.events][0].getContent().call_id;
-        this.call = CallHandler.sharedInstance().getCallById(callId);
+        this.call = CallHandler.sharedInstance().getCallById(this.callId);
         this.setCallListeners();
         this.setState();
     }
