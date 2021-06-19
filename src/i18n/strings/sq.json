@@ -3361,5 +3361,14 @@
     "sends space invaders": "dërgon pushtues hapësire",
     "Sends the given message with a space themed effect": "E dërgon mesazhin e dhënë me një efekt teme hapësinore",
     "See when people join, leave, or are invited to your active room": "Shihni kur persona vijnë, ikin ose janë ftuar në dhomën tuaj aktive",
-    "See when people join, leave, or are invited to this room": "Shihni kur persona vijnë, ikin ose janë ftuar në këtë dhomë"
+    "See when people join, leave, or are invited to this room": "Shihni kur persona vijnë, ikin ose janë ftuar në këtë dhomë",
+    "Space Autocomplete": "Vetëplotësim Hapësire",
+    "Currently joining %(count)s rooms|one": "Aktualisht duke hyrë në %(count)s dhomë",
+    "Currently joining %(count)s rooms|other": "Aktualisht duke hyrë në %(count)s dhoma",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Provoni fjalë të ndryshme, ose kontrolloni për gabime shkrimi. Disa përfundime mund të mos jenë të dukshme, ngaqë janë private dhe ju duhet një ftesë për të marrë pjesë në to.",
+    "No results for \"%(query)s\"": "S’ka përfundime për \"%(query)s\"",
+    "The user you called is busy.": "Përdoruesi që thirrët është i zënë.",
+    "User Busy": "Përdoruesi Është i Zënë",
+    "Kick, ban, or invite people to your active room, and make you leave": "Përzini, dëboni, ose ftoni persona te dhoma juaj aktive, dhe bëni largimin tuaj",
+    "Kick, ban, or invite people to this room, and make you leave": "Përzini, dëboni, ose ftoni persona në këtë dhomë, dhe bëni largimin tuaj"
 }

@@ -297,6 +297,7 @@ export default class ReplyThread extends React.Component {
     }
 
     async getEvent(eventId) {
+        if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
 
@@ -387,6 +388,7 @@ export default class ReplyThread extends React.Component {
                     alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                     replacingEventId={ev.replacingEventId()}
+                    as="div"
                 />
             </blockquote>;
         });

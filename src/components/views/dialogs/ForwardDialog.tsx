@@ -162,6 +162,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     });
     mockEvent.sender = {
         name: profileInfo.displayname || userId,
+        rawDisplayName: profileInfo.displayname,
         userId,
         getAvatarUrl: (..._) => {
             return avatarUrlForUser(

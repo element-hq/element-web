@@ -17,7 +17,17 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    redact: () => Promise<void>;
+    onFinished: (success: boolean) => void;
+}
+
+interface IState {
+    isRedacting: boolean;
+    redactionErrorCode: string | number;
+}
 
 /*
  * A dialog for confirming a redaction.
@@ -32,7 +42,7 @@ import {replaceableComponent} from "../../../utils/replaceableComponent";
  * To avoid this, we keep the dialog open as long as /redact is in progress.
  */
 @replaceableComponent("views.dialogs.ConfirmAndWaitRedactDialog")
-export default class ConfirmAndWaitRedactDialog extends React.PureComponent {
+export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,7 +51,7 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent {
         };
     }
 
-    onParentFinished = async (proceed) => {
+    public onParentFinished = async (proceed: boolean): Promise<void> => {
         if (proceed) {
             this.setState({isRedacting: true});
             try {
@@ -60,7 +70,7 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent {
         }
     };
 
-    render() {
+    public render() {
         if (this.state.isRedacting) {
             if (this.state.redactionErrorCode) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
