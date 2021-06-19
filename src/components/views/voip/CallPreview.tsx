@@ -28,9 +28,13 @@ import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call'
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import UIStore from '../../../stores/UIStore';
+import { lerp } from '../../../utils/AnimationUtils';
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
+
+const MOVING_AMT = 0.2;
+const SNAPPING_AMT = 0.05;
 
 const PADDING = {
     top: 58,
@@ -107,6 +111,12 @@ export default class CallPreview extends React.Component<IProps, IState> {
     private roomStoreToken: any;
     private dispatcherRef: string;
     private settingsWatcherRef: string;
+    private callViewWrapper = createRef<HTMLDivElement>();
+    private initX = 0;
+    private initY = 0;
+    private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
+    private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH;
+    private moving = false;
 
     constructor(props: IProps) {
         super(props);
@@ -125,12 +135,6 @@ export default class CallPreview extends React.Component<IProps, IState> {
             translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_WIDTH,
         };
     }
-
-    private callViewWrapper = createRef<HTMLDivElement>();
-
-    private initX = 0;
-    private initY = 0;
-    private moving = false;
 
     public componentDidMount() {
         CallHandler.sharedInstance().addListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
@@ -155,40 +159,52 @@ export default class CallPreview extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
     }
 
+    private animationCallback = () => {
+        // If the PiP isn't being dragged and there is only a tiny difference in
+        // the desiredTranslation and translation, quit the animationCallback
+        // loop. If that is the case, it means the PiP has snapped into its
+        // position and there is nothing to do. Not doing this would cause an
+        // infinite loop
+        if (
+            !this.moving &&
+            Math.abs(this.state.translationX - this.desiredTranslationX) <= 1 &&
+            Math.abs(this.state.translationY - this.desiredTranslationY) <= 1
+        ) return;
+
+        const amt = this.moving ? MOVING_AMT : SNAPPING_AMT;
+        this.setState({
+            translationX: lerp(this.state.translationX, this.desiredTranslationX, amt),
+            translationY: lerp(this.state.translationY, this.desiredTranslationY, amt),
+        });
+        requestAnimationFrame(this.animationCallback);
+    }
+
     private setTranslation(inTranslationX: number, inTranslationY: number) {
         const width = this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH;
         const height = this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT;
 
-        let outTranslationX;
-        let outTranslationY;
-
         // Avoid overflow on the x axis
         if (inTranslationX + width >= UIStore.instance.windowWidth) {
-            outTranslationX = UIStore.instance.windowWidth - width;
+            this.desiredTranslationX = UIStore.instance.windowWidth - width;
         } else if (inTranslationX <= 0) {
-            outTranslationX = 0;
+            this.desiredTranslationX = 0;
         } else {
-            outTranslationX = inTranslationX;
+            this.desiredTranslationX = inTranslationX;
         }
 
         // Avoid overflow on the y axis
         if (inTranslationY + height >= UIStore.instance.windowHeight) {
-            outTranslationY = UIStore.instance.windowHeight - height;
+            this.desiredTranslationY = UIStore.instance.windowHeight - height;
         } else if (inTranslationY <= 0) {
-            outTranslationY = 0;
+            this.desiredTranslationY = 0;
         } else {
-            outTranslationY = inTranslationY;
+            this.desiredTranslationY = inTranslationY;
         }
-
-        this.setState({
-            translationX: outTranslationX,
-            translationY: outTranslationY,
-        });
     }
 
     private snap = () => {
-        const translationX = this.state.translationX;
-        const translationY = this.state.translationY;
+        const translationX = this.desiredTranslationX;
+        const translationY = this.desiredTranslationY;
         // We subtract the PiP size from the window size in order to calculate
         // the position to snap to from the PiP center and not its top-left
         // corner
@@ -202,26 +218,22 @@ export default class CallPreview extends React.Component<IProps, IState> {
         );
 
         if (translationX >= windowWidth / 2 && translationY >= windowHeight / 2) {
-            this.setState({
-                translationX: windowWidth - PADDING.right,
-                translationY: windowHeight - PADDING.bottom,
-            });
+            this.desiredTranslationX = windowWidth - PADDING.right;
+            this.desiredTranslationY = windowHeight - PADDING.bottom;
         } else if (translationX >= windowWidth / 2 && translationY <= windowHeight / 2) {
-            this.setState({
-                translationX: windowWidth - PADDING.right,
-                translationY: PADDING.top,
-            });
+            this.desiredTranslationX = windowWidth - PADDING.right;
+            this.desiredTranslationY = PADDING.top;
         } else if (translationX <= windowWidth / 2 && translationY >= windowHeight / 2) {
-            this.setState({
-                translationX: PADDING.left,
-                translationY: windowHeight - PADDING.bottom,
-            });
+            this.desiredTranslationX = PADDING.left;
+            this.desiredTranslationY = windowHeight - PADDING.bottom;
         } else {
-            this.setState({
-                translationX: PADDING.left,
-                translationY: PADDING.top,
-            });
+            this.desiredTranslationX = PADDING.left;
+            this.desiredTranslationY = PADDING.top;
         }
+
+        // We start animating here because we want the PiP to move when we're
+        // resizing the window
+        requestAnimationFrame(this.animationCallback);
     }
 
     private onRoomViewStoreUpdate = (payload) => {
@@ -277,9 +289,9 @@ export default class CallPreview extends React.Component<IProps, IState> {
         event.stopPropagation();
 
         this.moving = true;
-
-        this.initX = event.pageX - this.state.translationX;
-        this.initY = event.pageY - this.state.translationY;
+        this.initX = event.pageX - this.desiredTranslationX;
+        this.initY = event.pageY - this.desiredTranslationY;
+        requestAnimationFrame(this.animationCallback);
     };
 
     private onMoving = (event: React.MouseEvent | MouseEvent) => {
@@ -292,8 +304,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
     };
 
     private onEndMoving = () => {
-        this.snap();
         this.moving = false;
+        this.snap();
     };
 
     public render() {
