@@ -441,10 +441,6 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private onKeyDown = (event: React.KeyboardEvent) => {
-        const selectionRange = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
-        // trim the range as we want it to exclude leading/trailing spaces
-        selectionRange.trim();
-
         const model = this.props.model;
         let handled = false;
 
@@ -452,6 +448,15 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             // This surrounds the selected text with a character. This is
             // intentionally left out of the keybinding manager as the keybinds
             // here shouldn't be changeable
+
+            const selectionRange = getRangeForSelection(
+                this.editorRef.current,
+                this.props.model,
+                document.getSelection(),
+            );
+            // trim the range as we want it to exclude leading/trailing spaces
+            selectionRange.trim();
+
             if (SURROUND_WITH_CHARACTERS.includes(event.key)) {
                 this.historyManager.ensureLastChangesPushed(this.props.model);
                 this.modifiedFlag = true;
