@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +28,19 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ViewUserPayload} from "../../../dispatcher/payloads/ViewUserPayload";
 import {Action} from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";
+import SpaceStore from "../../../stores/SpaceStore";
+import {showSpaceInvite} from "../../../utils/space";
+
+import { privateShouldBeEncrypted } from "../../../createRoom";
+
+import EventTileBubble from "../messages/EventTileBubble";
+import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+
+function hasExpectedEncryptionSettings(room): boolean {
+    const isEncrypted: boolean = room._client?.isRoomEncrypted(room.roomId);
+    const isPublic: boolean = room.getJoinRule() === "public";
+    return isPublic || !privateShouldBeEncrypted() || isEncrypted;
+}
 
 const NewRoomIntro = () => {
     const cli = useContext(MatrixClientContext);
@@ -100,24 +113,48 @@ const NewRoomIntro = () => {
             });
         }
 
-        let canInvite = inRoom;
-        const powerLevels = room.currentState.getStateEvents(EventType.RoomPowerLevels, "")?.getContent();
-        const me = room.getMember(cli.getUserId());
-        if (powerLevels && me && powerLevels.invite > me.powerLevel) {
-            canInvite = false;
+        let parentSpace;
+        if (
+            SpaceStore.instance.activeSpace?.canInvite(cli.getUserId()) &&
+            SpaceStore.instance.getSpaceFilteredRoomIds(SpaceStore.instance.activeSpace).has(room.roomId)
+        ) {
+            parentSpace = SpaceStore.instance.activeSpace;
         }
 
         let buttons;
-        if (canInvite) {
-            const onInviteClick = () => {
-                dis.dispatch({ action: "view_invite", roomId });
-            };
-
+        if (parentSpace) {
             buttons = <div className="mx_NewRoomIntro_buttons">
-                <AccessibleButton className="mx_NewRoomIntro_inviteButton" kind="primary" onClick={onInviteClick}>
+                <AccessibleButton
+                    className="mx_NewRoomIntro_inviteButton"
+                    kind="primary"
+                    onClick={() => {
+                        showSpaceInvite(parentSpace);
+                    }}
+                >
+                    {_t("Invite to %(spaceName)s", { spaceName: parentSpace.name })}
+                </AccessibleButton>
+                { room.canInvite(cli.getUserId()) && <AccessibleButton
+                    className="mx_NewRoomIntro_inviteButton"
+                    kind="primary_outline"
+                    onClick={() => {
+                        dis.dispatch({ action: "view_invite", roomId });
+                    }}
+                >
+                    {_t("Invite to just this room")}
+                </AccessibleButton> }
+            </div>;
+        } else if (room.canInvite(cli.getUserId())) {
+            buttons = <div className="mx_NewRoomIntro_buttons">
+                <AccessibleButton
+                    className="mx_NewRoomIntro_inviteButton"
+                    kind="primary"
+                    onClick={() => {
+                        dis.dispatch({ action: "view_invite", roomId });
+                    }}
+                >
                     {_t("Invite to this room")}
                 </AccessibleButton>
-            </div>
+            </div>;
         }
 
         const avatarUrl = room.currentState.getStateEvents(EventType.RoomAvatar, "")?.getContent()?.url;
@@ -140,7 +177,31 @@ const NewRoomIntro = () => {
         </React.Fragment>;
     }
 
+    function openRoomSettings(event) {
+        event.preventDefault();
+        dis.dispatch({
+            action: "open_room_settings",
+            initial_tab_id: ROOM_SECURITY_TAB,
+        });
+    }
+
+    const sub2 = _t(
+        "Your private messages are normally encrypted, but this room isn't. "+
+        "Usually this is due to an unsupported device or method being used, " +
+        "like email invites. <a>Enable encryption in settings.</a>", {},
+        { a: sub => <a onClick={openRoomSettings} href="#">{sub}</a> },
+    );
+
     return <div className="mx_NewRoomIntro">
+
+        { !hasExpectedEncryptionSettings(room) && (
+            <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                title={_t("End-to-end encryption isn't enabled")}
+                subtitle={sub2}
+            />
+        )}
+
         { body }
     </div>;
 };

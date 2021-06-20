@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import AccessibleButton from "../elements/AccessibleButton";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'];
 
@@ -59,6 +60,7 @@ interface IProps {
     onDialPress?: (string) => void;
 }
 
+@replaceableComponent("views.voip.DialPad")
 export default class Dialpad extends React.PureComponent<IProps> {
     render() {
         const buttonNodes = [];

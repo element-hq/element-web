@@ -23,6 +23,7 @@ import {MatrixClientPeg} from "../../../../MatrixClientPeg";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
+import {replaceableComponent} from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -246,6 +247,7 @@ export class PhoneNumber extends React.Component {
     }
 }
 
+@replaceableComponent("views.settings.discovery.PhoneNumbers")
 export default class PhoneNumbers extends React.Component {
     static propTypes = {
         msisdns: PropTypes.array.isRequired,

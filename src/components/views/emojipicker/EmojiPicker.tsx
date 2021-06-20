@@ -26,6 +26,7 @@ import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
 import Category, {ICategory, CategoryKey} from "./Category";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 export const CATEGORY_HEADER_HEIGHT = 22;
 export const EMOJI_HEIGHT = 37;
@@ -47,6 +48,7 @@ interface IState {
     viewportHeight: number;
 }
 
+@replaceableComponent("views.emojipicker.EmojiPicker")
 class EmojiPicker extends React.Component<IProps, IState> {
     private readonly recentlyUsed: IEmoji[];
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;

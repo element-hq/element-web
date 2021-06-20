@@ -380,5 +380,8 @@
     "%(senderDisplayName)s disabled flair for %(groups)s in this room.": "Bu otaqda %(groups)s üçün %(senderDisplayName)s aktiv oldu.",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
     "Custom Server Options": "Fərdi Server Seçimləri",
-    "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "Bu otaqda %(newGroups)s üçün aktiv və %(oldGroups)s üçün %(senderDisplayName)s deaktiv oldu."
+    "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "Bu otaqda %(newGroups)s üçün aktiv və %(oldGroups)s üçün %(senderDisplayName)s deaktiv oldu.",
+    "Create Account": "Hesab Aç",
+    "Explore rooms": "Otaqları kəşf edin",
+    "Sign In": "Daxil ol"
 }

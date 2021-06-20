@@ -28,9 +28,11 @@ import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import ErrorDialog from "../dialogs/ErrorDialog";
 import {WidgetType} from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
@@ -38,6 +40,8 @@ interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     showUnpin?: boolean;
     // override delete handler
     onDeleteClick?(): void;
+    // override edit handler
+    onEditClick?(): void;
 }
 
 const WidgetContextMenu: React.FC<IProps> = ({
@@ -45,6 +49,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     app,
     userWidget,
     onDeleteClick,
+    onEditClick,
     showUnpin,
     ...props
 }) => {
@@ -53,6 +58,27 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
+
+    let streamAudioStreamButton;
+    if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
+        const onStreamAudioClick = async () => {
+            try {
+                await startJitsiAudioLivestream(widgetMessaging, roomId);
+            } catch (err) {
+                console.error("Failed to start livestream", err);
+                // XXX: won't i18n well, but looks like widget api only support 'message'?
+                const message = err.message || _t("Unable to start audio streaming.");
+                Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
+                    title: _t('Failed to start livestream'),
+                    description: message,
+                });
+            }
+            onFinished();
+        };
+        streamAudioStreamButton = <IconizedContextMenuOption
+            onClick={onStreamAudioClick} label={_t("Start audio stream")}
+        />;
+    }
 
     let unpinButton;
     if (showUnpin) {
@@ -66,12 +92,16 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let editButton;
     if (canModify && WidgetUtils.isManagedByManager(app)) {
-        const onEditClick = () => {
-            WidgetUtils.editWidget(room, app);
+        const _onEditClick = () => {
+            if (onEditClick) {
+                onEditClick();
+            } else {
+                WidgetUtils.editWidget(room, app);
+            }
             onFinished();
         };
 
-        editButton = <IconizedContextMenuOption onClick={onEditClick} label={_t("Edit")} />;
+        editButton = <IconizedContextMenuOption onClick={_onEditClick} label={_t("Edit")} />;
     }
 
     let snapshotButton;
@@ -93,24 +123,29 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let deleteButton;
     if (onDeleteClick || canModify) {
-        const onDeleteClickDefault = () => {
-            // Show delete confirmation dialog
-            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
-                title: _t("Delete Widget"),
-                description: _t(
-                    "Deleting a widget removes it for all users in this room." +
-                    " Are you sure you want to delete this widget?"),
-                button: _t("Delete widget"),
-                onFinished: (confirmed) => {
-                    if (!confirmed) return;
-                    WidgetUtils.setRoomWidget(roomId, app.id);
-                },
-            });
+        const _onDeleteClick = () => {
+            if (onDeleteClick) {
+                onDeleteClick();
+            } else {
+                // Show delete confirmation dialog
+                Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                    title: _t("Delete Widget"),
+                    description: _t(
+                        "Deleting a widget removes it for all users in this room." +
+                        " Are you sure you want to delete this widget?"),
+                    button: _t("Delete widget"),
+                    onFinished: (confirmed) => {
+                        if (!confirmed) return;
+                        WidgetUtils.setRoomWidget(roomId, app.id);
+                    },
+                });
+            }
+
             onFinished();
         };
 
         deleteButton = <IconizedContextMenuOption
-            onClick={onDeleteClick || onDeleteClickDefault}
+            onClick={_onDeleteClick}
             label={userWidget ? _t("Remove") : _t("Remove for everyone")}
         />;
     }
@@ -163,6 +198,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
         <IconizedContextMenuOptionList>
+            { streamAudioStreamButton }
             { editButton }
             { revokeButton }
             { deleteButton }
@@ -175,4 +211,3 @@ const WidgetContextMenu: React.FC<IProps> = ({
 };
 
 export default WidgetContextMenu;
-

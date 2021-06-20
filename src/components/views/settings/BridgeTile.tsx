@@ -16,9 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Pill from "../elements/Pill";
 import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
@@ -26,6 +24,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isUrlPermitted } from '../../../HtmlUtils';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import {mediaFromMxc} from "../../../customisations/Media";
 
 interface IProps {
     ev: MatrixEvent;
@@ -64,6 +64,7 @@ interface IBridgeStateEvent {
     };
 }
 
+@replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,
@@ -112,10 +113,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         let networkIcon;
 
         if (protocol.avatar_url) {
-            const avatarUrl = getHttpUriForMxc(
-                MatrixClientPeg.get().getHomeserverUrl(),
-                protocol.avatar_url, 64, 64, "crop",
-            );
+            const avatarUrl = mediaFromMxc(protocol.avatar_url).getSquareThumbnailHttp(64);
 
             networkIcon = <BaseAvatar className="protocol-icon"
                 width={48}

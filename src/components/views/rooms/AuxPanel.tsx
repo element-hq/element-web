@@ -15,29 +15,24 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Room } from 'matrix-js-sdk/src/models/room'
-import * as sdk from '../../../index';
-import dis from "../../../dispatcher/dispatcher";
-import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
-import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {UIFeature} from "../../../settings/UIFeature";
+import { UIFeature } from "../../../settings/UIFeature";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
+import { objectHasDiff } from "../../../utils/objects";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // js-sdk room object
     room: Room,
     userId: string,
     showApps: boolean, // Render apps
-
-    // set to true to show the file drop target
-    draggingFile: boolean,
 
     // maxHeight attribute for the aux panel and the video
     // therein
@@ -63,6 +58,7 @@ interface IState {
     counters: Counter[],
 }
 
+@replaceableComponent("views.rooms.AuxPanel")
 export default class AuxPanel extends React.Component<IProps, IState> {
     static defaultProps = {
         showApps: true,
@@ -72,25 +68,26 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            counters: this._computeCounters(),
+            counters: this.computeCounters(),
         };
     }
 
     componentDidMount() {
         const cli = MatrixClientPeg.get();
-        cli.on("RoomState.events", this._rateLimitedUpdate);
+        if (SettingsStore.getValue("feature_state_counters")) {
+            cli.on("RoomState.events", this.rateLimitedUpdate);
+        }
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
-        if (cli) {
-            cli.removeListener("RoomState.events", this._rateLimitedUpdate);
+        if (cli && SettingsStore.getValue("feature_state_counters")) {
+            cli.removeListener("RoomState.events", this.rateLimitedUpdate);
         }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
-                !ObjectUtils.shallowEqual(this.state, nextState));
+        return objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -100,23 +97,11 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    onConferenceNotificationClick = (ev, type) => {
-        dis.dispatch({
-            action: 'place_call',
-            type: type,
-            room_id: this.props.room.roomId,
-        });
-        ev.stopPropagation();
-        ev.preventDefault();
-    };
-
-    _rateLimitedUpdate = new RateLimitedFunc(() => {
-        if (SettingsStore.getValue("feature_state_counters")) {
-            this.setState({counters: this._computeCounters()});
-        }
+    private rateLimitedUpdate = new RateLimitedFunc(() => {
+        this.setState({ counters: this.computeCounters() });
     }, 500);
 
-    _computeCounters() {
+    private computeCounters() {
         const counters = [];
 
         if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
@@ -150,26 +135,11 @@ export default class AuxPanel extends React.Component<IProps, IState> {
     }
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        let fileDropTarget = null;
-        if (this.props.draggingFile) {
-            fileDropTarget = (
-                <div className="mx_RoomView_fileDropTarget">
-                    <div className="mx_RoomView_fileDropTargetLabel" title={_t("Drop File Here")}>
-                        <TintableSvg src={require("../../../../res/img/upload-big.svg")} width="45" height="59" />
-                        <br />
-                        { _t("Drop file here to upload") }
-                    </div>
-                </div>
-            );
-        }
-
         const callView = (
             <CallViewForRoom
                 roomId={this.props.room.roomId}
-                onResize={this.props.onResize}
                 maxVideoHeight={this.props.maxHeight}
+                resizeNotifier={this.props.resizeNotifier}
             />
         );
 
@@ -244,10 +214,9 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
 
         return (
-            <AutoHideScrollbar className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style}>
                 { stateViews }
                 { appsDrawer }
-                { fileDropTarget }
                 { callView }
                 { this.props.children }
             </AutoHideScrollbar>

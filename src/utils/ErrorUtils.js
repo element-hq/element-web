@@ -49,12 +49,6 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
     }
 }
 
-export function messageForSendError(errorData) {
-    if (errorData.errcode === "M_TOO_LARGE") {
-        return _t("The message you are trying to send is too large.");
-    }
-}
-
 export function messageForSyncError(err) {
     if (err.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
         const limitError = messageForResourceLimitError(
@@ -62,6 +56,7 @@ export function messageForSyncError(err) {
             err.data.admin_contact,
             {
                 'monthly_active_user': _td("This homeserver has hit its Monthly Active User limit."),
+                'hs_blocked': _td("This homeserver has been blocked by its administrator."),
                 '': _td("This homeserver has exceeded one of its resource limits."),
             },
         );

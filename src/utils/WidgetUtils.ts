@@ -392,7 +392,7 @@ export default class WidgetUtils {
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets: IWidgetEvent[] = widgets.getContent() || {};
+        const userWidgets: Record<string, IWidgetEvent> = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];
@@ -477,6 +477,7 @@ export default class WidgetUtils {
             'userId=$matrix_user_id',
             'roomId=$matrix_room_id',
             'theme=$theme',
+            'roomName=$roomName',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);

@@ -15,13 +15,18 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import classNames from "classnames";
+import * as fbEmitter from "fbemitter";
+
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "./ContextMenu";
-import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
+import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
@@ -30,11 +35,10 @@ import SettingsStore from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
-import {getHomePageUrl} from "../../utils/pages";
+import { getHomePageUrl } from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
-import classNames from "classnames";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { SettingLevel } from "../../settings/SettingLevel";
 import IconizedContextMenu, {
@@ -42,17 +46,19 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
-import * as fbEmitter from "fbemitter";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import { showCommunityInviteDialog } from "../../RoomInvite";
-import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
-import {UIFeature} from "../../settings/UIFeature";
+import { UIFeature } from "../../settings/UIFeature";
 import HostSignupAction from "./HostSignupAction";
-import {IHostSignupConfig} from "../views/dialogs/HostSignupDialogTypes";
-
+import { IHostSignupConfig } from "../views/dialogs/HostSignupDialogTypes";
+import SpaceStore, { UPDATE_SELECTED_SPACE } from "../../stores/SpaceStore";
+import RoomName from "../views/elements/RoomName";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import InlineSpinner from "../views/elements/InlineSpinner";
+import TooltipButton from "../views/elements/TooltipButton";
 interface IProps {
     isMinimized: boolean;
 }
@@ -62,11 +68,15 @@ type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
 interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
+    selectedSpace?: Room;
+    pendingRoomJoin: Set<string>;
 }
 
+@replaceableComponent("structures.UserMenu")
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;
+    private dndWatcherRef: string;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
     private tagStoreRef: fbEmitter.EventSubscription;
 
@@ -76,9 +86,16 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
+            pendingRoomJoin: new Set<string>(),
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
+        if (SettingsStore.getValue("feature_spaces")) {
+            SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
+        }
+
+        // Force update is the easiest way to trigger the UI update (we don't store state for this)
+        this.dndWatcherRef = SettingsStore.watchSetting("doNotDisturb", null, () => this.forceUpdate());
     }
 
     private get hasHomePage(): boolean {
@@ -89,13 +106,23 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
         this.tagStoreRef = GroupFilterOrderStore.addListener(this.onTagStoreUpdate);
+        MatrixClientPeg.get().on("Room", this.onRoom);
     }
 
     public componentWillUnmount() {
         if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
+        if (this.dndWatcherRef) SettingsStore.unwatchSetting(this.dndWatcherRef);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         this.tagStoreRef.remove();
+        if (SettingsStore.getValue("feature_spaces")) {
+            SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
+        }
+        MatrixClientPeg.get().removeListener("Room", this.onRoom);
+    }
+
+    private onRoom = (room: Room): void => {
+        this.removePendingJoinRoom(room.roomId);
     }
 
     private onTagStoreUpdate = () => {
@@ -103,11 +130,15 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private isUserOnDarkTheme(): boolean {
-        const theme = SettingsStore.getValue("theme");
-        if (theme.startsWith("custom-")) {
-            return getCustomTheme(theme.substring("custom-".length)).is_dark;
+        if (SettingsStore.getValue("use_system_theme")) {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        } else {
+            const theme = SettingsStore.getValue("theme");
+            if (theme.startsWith("custom-")) {
+                return getCustomTheme(theme.substring("custom-".length)).is_dark;
+            }
+            return theme === "dark";
         }
-        return theme === "dark";
     }
 
     private onProfileUpdate = async () => {
@@ -116,19 +147,47 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.forceUpdate();
     };
 
+    private onSelectedSpaceUpdate = async (selectedSpace?: Room) => {
+        this.setState({ selectedSpace });
+    };
+
     private onThemeChanged = () => {
         this.setState({isDarkTheme: this.isUserOnDarkTheme()});
     };
 
     private onAction = (ev: ActionPayload) => {
-        if (ev.action !== Action.ToggleUserMenu) return; // not interested
-
-        if (this.state.contextMenuPosition) {
-            this.setState({contextMenuPosition: null});
-        } else {
-            if (this.buttonRef.current) this.buttonRef.current.click();
+        switch (ev.action) {
+            case Action.ToggleUserMenu:
+                if (this.state.contextMenuPosition) {
+                    this.setState({contextMenuPosition: null});
+                } else {
+                    if (this.buttonRef.current) this.buttonRef.current.click();
+                }
+                break;
+            case Action.JoinRoom:
+                this.addPendingJoinRoom(ev.roomId);
+                break;
+            case Action.JoinRoomReady:
+            case Action.JoinRoomError:
+                this.removePendingJoinRoom(ev.roomId);
+                break;
         }
     };
+
+    private addPendingJoinRoom(roomId: string): void {
+        this.setState({
+            pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin)
+                .add(roomId),
+        });
+    }
+
+    private removePendingJoinRoom(roomId: string): void {
+        if (this.state.pendingRoomJoin.delete(roomId)) {
+            this.setState({
+                pendingRoomJoin: new Set<string>(this.state.pendingRoomJoin),
+            })
+        }
+    }
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
@@ -267,6 +326,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
+    private onDndToggle = (ev) => {
+        ev.stopPropagation();
+        const current = SettingsStore.getValue("doNotDisturb");
+        SettingsStore.setValue("doNotDisturb", null, SettingLevel.DEVICE, !current);
+    };
+
     private renderContextMenu = (): React.ReactNode => {
         if (!this.state.contextMenuPosition) return null;
 
@@ -300,10 +365,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 const hostSignupDomains = hostSignupConfig.domains || [];
                 const mxDomain = MatrixClientPeg.get().getDomain();
                 const validDomains = hostSignupDomains.filter(d => (d === mxDomain || mxDomain.endsWith(`.${d}`)));
-                if (!hostSignupDomains || validDomains.length > 0) {
-                    topSection = <div onClick={this.onCloseMenu}>
-                        <HostSignupAction />
-                    </div>;
+                if (!hostSignupConfig.domains || validDomains.length > 0) {
+                    topSection = <HostSignupAction onClick={this.onCloseMenu} />;
                 }
             }
         }
@@ -345,12 +408,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconBell"
                         label={_t("Notification settings")}
-                        onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
+                        onClick={(e) => this.onSettingsOpen(e, UserTab.Notifications)}
                     />
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconLock"
                         label={_t("Security & privacy")}
-                        onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
+                        onClick={(e) => this.onSettingsOpen(e, UserTab.Security)}
                     />
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
@@ -513,7 +576,17 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 {/* masked image in CSS */}
             </span>
         );
-        if (prototypeCommunityName) {
+        let dnd;
+        if (this.state.selectedSpace) {
+            name = (
+                <div className="mx_UserMenu_doubleName">
+                    <span className="mx_UserMenu_userName">{displayName}</span>
+                    <RoomName room={this.state.selectedSpace}>
+                        {(roomName) => <span className="mx_UserMenu_subUserName">{roomName}</span>}
+                    </RoomName>
+                </div>
+            );
+        } else if (prototypeCommunityName) {
             name = (
                 <div className="mx_UserMenu_doubleName">
                     <span className="mx_UserMenu_userName">{prototypeCommunityName}</span>
@@ -530,6 +603,16 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </div>
             );
             isPrototype = true;
+        } else if (SettingsStore.getValue("feature_dnd")) {
+            const isDnd = SettingsStore.getValue("doNotDisturb");
+            dnd = <AccessibleButton
+                onClick={this.onDndToggle}
+                className={classNames({
+                    "mx_UserMenu_dnd": true,
+                    "mx_UserMenu_dnd_noisy": !isDnd,
+                    "mx_UserMenu_dnd_muted": isDnd,
+                })}
+            />;
         }
         if (this.props.isMinimized) {
             name = null;
@@ -565,6 +648,15 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             />
                         </span>
                         {name}
+                        {this.state.pendingRoomJoin.size > 0 && (
+                            <InlineSpinner>
+                                <TooltipButton helpText={_t(
+                                    "Currently joining %(count)s rooms",
+                                    { count: this.state.pendingRoomJoin.size },
+                                )} />
+                            </InlineSpinner>
+                        )}
+                        {dnd}
                         {buttons}
                     </div>
                 </ContextMenuButton>

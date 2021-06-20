@@ -24,6 +24,7 @@ export enum RightPanelPhases {
     EncryptionPanel = 'EncryptionPanel',
     RoomSummary = 'RoomSummary',
     Widget = 'Widget',
+    PinnedMessages = "PinnedMessages",
 
     Room3pidMemberInfo = 'Room3pidMemberInfo',
     // Group stuff
@@ -31,6 +32,11 @@ export enum RightPanelPhases {
     GroupRoomList = 'GroupRoomList',
     GroupRoomInfo = 'GroupRoomInfo',
     GroupMemberInfo = 'GroupMemberInfo',
+
+    // Space stuff
+    SpaceMemberList = "SpaceMemberList",
+    SpaceMemberInfo = "SpaceMemberInfo",
+    Space3pidMemberInfo = "Space3pidMemberInfo",
 }
 
 // These are the phases that are safe to persist (the ones that don't require additional
@@ -38,8 +44,16 @@ export enum RightPanelPhases {
 export const RIGHT_PANEL_PHASES_NO_ARGS = [
     RightPanelPhases.RoomSummary,
     RightPanelPhases.NotificationPanel,
+    RightPanelPhases.PinnedMessages,
     RightPanelPhases.FilePanel,
     RightPanelPhases.RoomMemberList,
     RightPanelPhases.GroupMemberList,
     RightPanelPhases.GroupRoomList,
+];
+
+// Subset of phases visible in the Space View
+export const RIGHT_PANEL_SPACE_PHASES = [
+    RightPanelPhases.SpaceMemberList,
+    RightPanelPhases.Space3pidMemberInfo,
+    RightPanelPhases.SpaceMemberInfo,
 ];

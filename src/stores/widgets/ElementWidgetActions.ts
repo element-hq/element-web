@@ -19,6 +19,7 @@ import { IWidgetApiRequest } from "matrix-widget-api";
 export enum ElementWidgetActions {
     ClientReady = "im.vector.ready",
     HangupCall = "im.vector.hangup",
+    StartLiveStream = "im.vector.start_live_stream",
     OpenIntegrationManager = "integration_manager_open",
 
     /**

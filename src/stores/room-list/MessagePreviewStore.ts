@@ -94,10 +94,10 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
      * @param inTagId The tag ID in which the room resides
      * @returns The preview, or null if none present.
      */
-    public getPreviewForRoom(room: Room, inTagId: TagID): string {
+    public async getPreviewForRoom(room: Room, inTagId: TagID): Promise<string> {
         if (!room) return null; // invalid room, just return nothing
 
-        if (!this.previews.has(room.roomId)) this.generatePreview(room, inTagId);
+        if (!this.previews.has(room.roomId)) await this.generatePreview(room, inTagId);
 
         const previews = this.previews.get(room.roomId);
         if (!previews) return null;
@@ -108,7 +108,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         return previews.get(inTagId);
     }
 
-    private generatePreview(room: Room, tagId?: TagID) {
+    private async generatePreview(room: Room, tagId?: TagID) {
         const events = room.timeline;
         if (!events) return; // should only happen in tests
 
@@ -124,9 +124,15 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         let changed = false;
         for (let i = events.length - 1; i >= 0; i--) {
-            if (i === events.length - MAX_EVENTS_BACKWARDS) return; // limit reached
+            if (i === events.length - MAX_EVENTS_BACKWARDS) {
+                // limit reached - clear the preview by breaking out of the loop
+                break;
+            }
 
             const event = events[i];
+
+            await this.matrixClient.decryptEventIfNeeded(event);
+
             const previewDef = PREVIEWS[event.getType()];
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
@@ -170,8 +176,9 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher
-            if (!this.previews.has(event.getRoomId())) return; // not important
-            this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
+            const isHistoricalEvent = payload.hasOwnProperty("isLiveEvent") && !payload.isLiveEvent
+            if (!this.previews.has(event.getRoomId()) || isHistoricalEvent) return; // not important
+            await this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
         }
     }
 }

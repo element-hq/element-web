@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +19,19 @@ import { EventEmitter } from "events";
 
 export const FILTER_CHANGED = "filter_changed";
 
-export enum FilterPriority {
-    Lowest,
-    // in the middle would be Low, Normal, and High if we had a need
-    Highest,
+export enum FilterKind {
+    /**
+     * A prefilter is one which coarsely determines which rooms are
+     * available for runtime filtering/rendering. Typically this will
+     * be things like Space selection.
+     */
+    Prefilter,
+
+    /**
+     * Runtime filters operate on the data set exposed by prefilters.
+     * Typically these are dynamic values like room name searching.
+     */
+    Runtime,
 }
 
 /**
@@ -39,10 +48,9 @@ export enum FilterPriority {
  */
 export interface IFilterCondition extends EventEmitter {
     /**
-     * The relative priority that this filter should be applied with.
-     * Lower priorities get applied first.
+     * The kind of filter this presents.
      */
-    relativePriority: FilterPriority;
+    kind: FilterKind;
 
     /**
      * Determines if a given room should be visible under this

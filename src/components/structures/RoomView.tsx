@@ -25,6 +25,7 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
 
 import shouldHideEvent from '../../shouldHideEvent';
@@ -34,20 +35,19 @@ import ResizeNotifier from '../../utils/ResizeNotifier';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import * as sdk from '../../index';
-import CallHandler from '../../CallHandler';
+import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
 import Tinter from '../../Tinter';
 import rateLimitedFunc from '../../ratelimitedfunc';
-import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
-import { isOnlyCtrlOrCmdIgnoreShiftKeyEvent, Key } from '../../Keyboard';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
+import { Layout } from "../../settings/Layout";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import { haveTileForEvent } from "../views/rooms/EventTile";
@@ -55,16 +55,13 @@ import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { E2EStatus, shieldStatusForRoom } from '../../utils/ShieldUtils';
 import { Action } from "../../dispatcher/actions";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
-import ForwardMessage from "../views/rooms/ForwardMessage";
 import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
-import PinnedEventsPanel from "../views/rooms/PinnedEventsPanel";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import { XOR } from "../../@types/common";
@@ -79,6 +76,12 @@ import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { getKeyBindingsManager, RoomAction } from '../../KeyBindingsManager';
+import { objectHasDiff } from "../../utils/objects";
+import SpaceRoomView from "./SpaceRoomView";
+import { IOpts } from "../../createRoom";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -108,11 +111,8 @@ interface IProps {
         inviterName?: string;
     };
 
-    // Servers the RoomView can use to try and assist joins
-    viaServers?: string[];
-
-    autoJoin?: boolean;
     resizeNotifier: ResizeNotifier;
+    justCreatedOpts?: IOpts;
 
     // Called with the credentials of a registered user (if they were a ROU that transitioned to PWLU)
     onRegistered?(credentials: IMatrixClientCreds): void;
@@ -135,7 +135,6 @@ export interface IState {
     // Whether to highlight the event scrolled to
     isInitialEventHighlighted?: boolean;
     replyToEvent?: MatrixEvent;
-    forwardingEvent?: MatrixEvent;
     numUnreadMessages: number;
     draggingFile: boolean;
     searching: boolean;
@@ -144,7 +143,7 @@ export interface IState {
     searchResults?: XOR<{}, {
         count: number;
         highlights: string[];
-        results: MatrixEvent[];
+        results: SearchResult[];
         next_batch: string; // eslint-disable-line camelcase
     }>;
     searchHighlights?: string[];
@@ -154,8 +153,6 @@ export interface IState {
     canPeek: boolean;
     showApps: boolean;
     isPeeking: boolean;
-    showingPinned: boolean;
-    showReadReceipts: boolean;
     showRightPanel: boolean;
     // error object, as from the matrix client/server API
     // If we failed to load information about the room,
@@ -174,6 +171,7 @@ export interface IState {
     statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
+
     upgradeRecommendation?: {
         version: string;
         needsUpgrade: boolean;
@@ -181,21 +179,31 @@ export interface IState {
     };
     canReact: boolean;
     canReply: boolean;
-    useIRCLayout: boolean;
+    layout: Layout;
+    lowBandwidth: boolean;
+    showReadReceipts: boolean;
+    showRedactions: boolean;
+    showJoinLeaves: boolean;
+    showAvatarChanges: boolean;
+    showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     rejectError?: Error;
     hasPinnedWidgets?: boolean;
+    dragCounter: number;
+    // whether or not a spaces context switch brought us here,
+    // if it did we don't want the room to be marked as read as soon as it is loaded.
+    wasContextSwitch?: boolean;
 }
 
+@replaceableComponent("structures.RoomView")
 export default class RoomView extends React.Component<IProps, IState> {
     private readonly dispatcherRef: string;
     private readonly roomStoreToken: EventSubscription;
     private readonly rightPanelStoreToken: EventSubscription;
-    private readonly showReadReceiptsWatchRef: string;
-    private readonly layoutWatcherRef: string;
+    private settingWatchers: string[];
 
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
@@ -226,8 +234,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             canPeek: false,
             showApps: false,
             isPeeking: false,
-            showingPinned: false,
-            showReadReceipts: true,
             showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
             joining: false,
             atEndOfLiveTimeline: true,
@@ -236,8 +242,15 @@ export default class RoomView extends React.Component<IProps, IState> {
             statusBarVisible: false,
             canReact: false,
             canReply: false,
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            layout: SettingsStore.getValue("layout"),
+            lowBandwidth: SettingsStore.getValue("lowBandwidth"),
+            showReadReceipts: true,
+            showRedactions: true,
+            showJoinLeaves: true,
+            showAvatarChanges: true,
+            showDisplaynameChanges: true,
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
+            dragCounter: 0,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -262,9 +275,14 @@ export default class RoomView extends React.Component<IProps, IState> {
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        this.showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
-            this.onReadReceiptsChange);
-        this.layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
+        this.settingWatchers = [
+            SettingsStore.watchSetting("layout", null, () =>
+                this.setState({ layout: SettingsStore.getValue("layout") }),
+            ),
+            SettingsStore.watchSetting("lowBandwidth", null, () =>
+                this.setState({ lowBandwidth: SettingsStore.getValue("lowBandwidth") }),
+            ),
+        ];
     }
 
     private onWidgetStoreUpdate = () => {
@@ -317,12 +335,44 @@ export default class RoomView extends React.Component<IProps, IState> {
             initialEventId: RoomViewStore.getInitialEventId(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             replyToEvent: RoomViewStore.getQuotingEvent(),
-            forwardingEvent: RoomViewStore.getForwardingEvent(),
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
-            showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
+            showRedactions: SettingsStore.getValue("showRedactions", roomId),
+            showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
+            showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
+            showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
+            wasContextSwitch: RoomViewStore.getWasContextSwitch(),
         };
+
+        // Add watchers for each of the settings we just looked up
+        this.settingWatchers = this.settingWatchers.concat([
+            SettingsStore.watchSetting("showReadReceipts", null, () =>
+                this.setState({
+                    showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showRedactions", null, () =>
+                this.setState({
+                    showRedactions: SettingsStore.getValue("showRedactions", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showJoinLeaves", null, () =>
+                this.setState({
+                    showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showAvatarChanges", null, () =>
+                this.setState({
+                    showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
+                }),
+            ),
+            SettingsStore.watchSetting("showDisplaynameChanges", null, () =>
+                this.setState({
+                    showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
+                }),
+            ),
+        ]);
 
         if (!initial && this.state.shouldPeek && !newState.shouldPeek) {
             // Stop peeking because we have joined this room now
@@ -442,9 +492,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
         if (!joining && roomId) {
-            if (this.props.autoJoin) {
-                this.onJoinButtonClicked();
-            } else if (!room && shouldPeek) {
+            if (!room && shouldPeek) {
                 console.info("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
@@ -522,8 +570,16 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
-                !ObjectUtils.shallowEqual(this.state, nextState));
+        const hasPropsDiff = objectHasDiff(this.props, nextProps);
+
+        const { upgradeRecommendation, ...state } = this.state;
+        const { upgradeRecommendation: newUpgradeRecommendation, ...newState } = nextState;
+
+        const hasStateDiff =
+            newUpgradeRecommendation?.needsUpgrade !== upgradeRecommendation?.needsUpgrade ||
+            objectHasDiff(state, newState);
+
+        return hasPropsDiff || hasStateDiff;
     }
 
     componentDidUpdate() {
@@ -532,8 +588,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             if (!roomView.ondrop) {
                 roomView.addEventListener('drop', this.onDrop);
                 roomView.addEventListener('dragover', this.onDragOver);
-                roomView.addEventListener('dragleave', this.onDragLeaveOrEnd);
-                roomView.addEventListener('dragend', this.onDragLeaveOrEnd);
+                roomView.addEventListener('dragenter', this.onDragEnter);
+                roomView.addEventListener('dragleave', this.onDragLeave);
             }
         }
 
@@ -577,8 +633,8 @@ export default class RoomView extends React.Component<IProps, IState> {
             const roomView = this.roomView.current;
             roomView.removeEventListener('drop', this.onDrop);
             roomView.removeEventListener('dragover', this.onDragOver);
-            roomView.removeEventListener('dragleave', this.onDragLeaveOrEnd);
-            roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
+            roomView.removeEventListener('dragenter', this.onDragEnter);
+            roomView.removeEventListener('dragleave', this.onDragLeave);
         }
         dis.unregister(this.dispatcherRef);
         if (this.context) {
@@ -622,10 +678,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
-        if (this.showReadReceiptsWatchRef) {
-            SettingsStore.unwatchSetting(this.showReadReceiptsWatchRef);
-        }
-
         // cancel any pending calls to the rate_limited_funcs
         this.updateRoomMembers.cancelPendingCall();
 
@@ -633,14 +685,22 @@ export default class RoomView extends React.Component<IProps, IState> {
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
 
-        SettingsStore.unwatchSetting(this.layoutWatcherRef);
+        for (const watcher of this.settingWatchers) {
+            SettingsStore.unwatchSetting(watcher);
+        }
     }
 
-    private onLayoutChange = () => {
-        this.setState({
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
-        });
-    };
+    private onUserScroll = () => {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.room.roomId,
+                event_id: this.state.initialEventId,
+                highlighted: false,
+                replyingToEvent: this.state.replyToEvent,
+            });
+        }
+    }
 
     private onRightPanelStoreUpdate = () => {
         this.setState({
@@ -661,26 +721,20 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onReactKeyDown = ev => {
         let handled = false;
 
-        switch (ev.key) {
-            case Key.ESCAPE:
-                if (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey) {
-                    this.messagePanel.forgetReadMarker();
-                    this.jumpToLiveTimeline();
-                    handled = true;
-                }
+        const action = getKeyBindingsManager().getRoomAction(ev);
+        switch (action) {
+            case RoomAction.DismissReadMarker:
+                this.messagePanel.forgetReadMarker();
+                this.jumpToLiveTimeline();
+                handled = true;
                 break;
-            case Key.PAGE_UP:
-                if (!ev.altKey && !ev.ctrlKey && ev.shiftKey && !ev.metaKey) {
-                    this.jumpToReadMarker();
-                    handled = true;
-                }
+            case RoomAction.JumpToOldestUnread:
+                this.jumpToReadMarker();
+                handled = true;
                 break;
-            case Key.U: // Mac returns lowercase
-            case Key.U.toUpperCase():
-                if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
-                    dis.dispatch({ action: "upload_file" }, true);
-                    handled = true;
-                }
+            case RoomAction.UploadFile:
+                dis.dispatch({ action: "upload_file" }, true);
+                handled = true;
                 break;
         }
 
@@ -706,9 +760,9 @@ export default class RoomView extends React.Component<IProps, IState> {
                     [payload.file], this.state.room.roomId, this.context);
                 break;
             case 'notifier_enabled':
-            case 'upload_started':
-            case 'upload_finished':
-            case 'upload_canceled':
+            case Action.UploadStarted:
+            case Action.UploadFinished:
+            case Action.UploadCanceled:
                 this.forceUpdate();
                 break;
             case 'call_state': {
@@ -798,7 +852,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            } else if (!shouldHideEvent(ev)) {
+            } else if (!shouldHideEvent(ev, this.state)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
@@ -1115,8 +1169,9 @@ export default class RoomView extends React.Component<IProps, IState> {
             Promise.resolve().then(() => {
                 const signUrl = this.props.threepidInvite?.signUrl;
                 dis.dispatch({
-                    action: 'join_room',
-                    opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
+                    action: Action.JoinRoom,
+                    roomId: this.getRoomId(),
+                    opts: { inviteSignUrl: signUrl },
                     _type: "unknown", // TODO: instrumentation
                 });
                 return Promise.resolve();
@@ -1138,14 +1193,47 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.updateTopUnreadMessagesBar();
     };
 
+    private onDragEnter = ev => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        // We always increment the counter no matter the types, because dragging is
+        // still happening. If we didn't, the drag counter would get out of sync.
+        this.setState({dragCounter: this.state.dragCounter + 1});
+
+        // See:
+        // https://docs.w3cub.com/dom/datatransfer/types
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
+        if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
+            this.setState({draggingFile: true});
+        }
+    };
+
+    private onDragLeave = ev => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        this.setState({
+            dragCounter: this.state.dragCounter - 1,
+        });
+
+        if (this.state.dragCounter === 0) {
+            this.setState({
+                draggingFile: false,
+            });
+        }
+    };
+
     private onDragOver = ev => {
         ev.stopPropagation();
         ev.preventDefault();
 
         ev.dataTransfer.dropEffect = 'none';
 
+        // See:
+        // https://docs.w3cub.com/dom/datatransfer/types
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
         if (ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")) {
-            this.setState({ draggingFile: true });
             ev.dataTransfer.dropEffect = 'copy';
         }
     };
@@ -1156,14 +1244,12 @@ export default class RoomView extends React.Component<IProps, IState> {
         ContentMessages.sharedInstance().sendContentListToRoom(
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
-        this.setState({ draggingFile: false });
         dis.fire(Action.FocusComposer);
-    };
 
-    private onDragLeaveOrEnd = ev => {
-        ev.stopPropagation();
-        ev.preventDefault();
-        this.setState({ draggingFile: false });
+        this.setState({
+            draggingFile: false,
+            dragCounter: this.state.dragCounter - 1,
+        });
     };
 
     private injectSticker(url, info, text) {
@@ -1345,27 +1431,16 @@ export default class RoomView extends React.Component<IProps, IState> {
         return ret;
     }
 
-    private onPinnedClick = () => {
-        const nowShowingPinned = !this.state.showingPinned;
-        const roomId = this.state.room.roomId;
-        this.setState({showingPinned: nowShowingPinned, searching: false});
-        SettingsStore.setValue("PinnedEvents.isOpen", roomId, SettingLevel.ROOM_DEVICE, nowShowingPinned);
+    private onCallPlaced = (type: PlaceCallType) => {
+        dis.dispatch({
+            action: 'place_call',
+            type: type,
+            room_id: this.state.room.roomId,
+        });
     };
 
     private onSettingsClick = () => {
         dis.dispatch({ action: "open_room_settings" });
-    };
-
-    private onCancelClick = () => {
-        console.log("updateTint from onCancelClick");
-        this.updateTint();
-        if (this.state.forwardingEvent) {
-            dis.dispatch({
-                action: 'forward_event',
-                event: null,
-            });
-        }
-        dis.fire(Action.FocusComposer);
     };
 
     private onAppsClick = () => {
@@ -1389,7 +1464,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         });
     };
 
-    private onRejectButtonClicked = ev => {
+    private onRejectButtonClicked = () => {
         this.setState({
             rejecting: true,
         });
@@ -1449,7 +1524,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     };
 
-    private onRejectThreepidInviteButtonClicked = ev => {
+    private onRejectThreepidInviteButtonClicked = () => {
         // We can reject 3pid invites in the same way that we accept them,
         // using /leave rather than /join. In the short term though, we
         // just ignore them.
@@ -1460,7 +1535,6 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onSearchClick = () => {
         this.setState({
             searching: !this.state.searching,
-            showingPinned: false,
         });
     };
 
@@ -1473,8 +1547,19 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     // jump down to the bottom of this room, where new events are arriving
     private jumpToLiveTimeline = () => {
-        this.messagePanel.jumpToLiveTimeline();
-        dis.fire(Action.FocusComposer);
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            // If we were viewing a highlighted event, firing view_room without
+            // an event will take care of both clearing the URL fragment and
+            // jumping to the bottom
+            dis.dispatch({
+                action: 'view_room',
+                room_id: this.state.room.roomId,
+            });
+        } else {
+            // Otherwise we have to jump manually
+            this.messagePanel.jumpToLiveTimeline();
+            dis.fire(Action.FocusComposer);
+        }
     };
 
     // jump up to wherever our read marker is
@@ -1547,59 +1632,30 @@ export default class RoomView extends React.Component<IProps, IState> {
         // a maxHeight on the underlying remote video tag.
 
         // header + footer + status + give us at least 120px of scrollback at all times.
-        let auxPanelMaxHeight = window.innerHeight -
+        let auxPanelMaxHeight = UIStore.instance.windowHeight -
                 (54 + // height of RoomHeader
                  36 + // height of the status area
-                 51 + // minimum height of the message compmoser
+                 51 + // minimum height of the message composer
                  120); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
         // but it's better than the video going missing entirely
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
-        this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
-    };
-
-    private onFullscreenClick = () => {
-        dis.dispatch({
-            action: 'video_fullscreen',
-            fullscreen: true,
-        }, true);
-    };
-
-    private onMuteAudioClick = () => {
-        const call = this.getCallForRoom();
-        if (!call) {
-            return;
+        if (this.state.auxPanelMaxHeight !== auxPanelMaxHeight) {
+            this.setState({ auxPanelMaxHeight });
         }
-        const newState = !call.isMicrophoneMuted();
-        call.setMicrophoneMuted(newState);
-        this.forceUpdate(); // TODO: just update the voip buttons
-    };
-
-    private onMuteVideoClick = () => {
-        const call = this.getCallForRoom();
-        if (!call) {
-            return;
-        }
-        const newState = !call.isLocalVideoMuted();
-        call.setLocalVideoMuted(newState);
-        this.forceUpdate(); // TODO: just update the voip buttons
     };
 
     private onStatusBarVisible = () => {
-        if (this.unmounted) return;
-        this.setState({
-            statusBarVisible: true,
-        });
+        if (this.unmounted || this.state.statusBarVisible) return;
+        this.setState({ statusBarVisible: true });
     };
 
     private onStatusBarHidden = () => {
         // This is currently not desired as it is annoying if it keeps expanding and collapsing
-        if (this.unmounted) return;
-        this.setState({
-            statusBarVisible: false,
-        });
+        if (this.unmounted || !this.state.statusBarVisible) return;
+        this.setState({ statusBarVisible: false });
     };
 
     /**
@@ -1712,7 +1768,10 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
-        if (myMembership == 'invite') {
+        if (myMembership === "invite"
+            // SpaceRoomView handles invites itself
+            && (!SettingsStore.getValue("feature_spaces") || !this.state.room.isSpaceRoom())
+        ) {
             if (this.state.joining || this.state.rejecting) {
                 return (
                     <ErrorBoundary>
@@ -1755,6 +1814,19 @@ export default class RoomView extends React.Component<IProps, IState> {
                     </div>
                 );
             }
+        }
+
+        let fileDropTarget = null;
+        if (this.state.draggingFile) {
+            fileDropTarget = (
+                <div className="mx_RoomView_fileDropTarget">
+                    <img
+                        src={require("../../../res/img/upload-big.svg")}
+                        className="mx_RoomView_fileDropTarget_image"
+                    />
+                    { _t("Drop file here to upload") }
+                </div>
+            );
         }
 
         // We have successfully loaded this room, and are not previewing.
@@ -1802,11 +1874,7 @@ export default class RoomView extends React.Component<IProps, IState> {
 
         let aux = null;
         let previewBar;
-        let hideCancel = false;
-        if (this.state.forwardingEvent) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
-        } else if (this.state.searching) {
-            hideCancel = true; // has own cancel
+        if (this.state.searching) {
             aux = <SearchBar
                 searchInProgress={this.state.searchInProgress}
                 onCancelClick={this.onCancelSearchClick}
@@ -1815,10 +1883,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
-            hideCancel = true;
-        } else if (this.state.showingPinned) {
-            hideCancel = true; // has own cancel
-            aux = <PinnedEventsPanel room={this.state.room} onCancelClick={this.onPinnedClick} />;
         } else if (myMembership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -1827,7 +1891,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 inviterName = this.props.oobData.inviterName;
             }
             const invitedEmail = this.props.threepidInvite?.toEmail;
-            hideCancel = true;
             previewBar = (
                 <RoomPreviewBar
                     onJoinClick={this.onJoinButtonClicked}
@@ -1841,7 +1904,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                     room={this.state.room}
                 />
             );
-            if (!this.state.canPeek) {
+            if (!this.state.canPeek && (!SettingsStore.getValue("feature_spaces") || !this.state.room?.isSpaceRoom())) {
                 return (
                     <div className="mx_RoomView">
                         { previewBar }
@@ -1863,12 +1926,23 @@ export default class RoomView extends React.Component<IProps, IState> {
             );
         }
 
+        if (this.state.room?.isSpaceRoom()) {
+            return <SpaceRoomView
+                space={this.state.room}
+                justCreatedOpts={this.props.justCreatedOpts}
+                resizeNotifier={this.props.resizeNotifier}
+                onJoinButtonClicked={this.onJoinButtonClicked}
+                onRejectButtonClicked={this.props.threepidInvite
+                    ? this.onRejectThreepidInviteButtonClicked
+                    : this.onRejectButtonClicked}
+            />;
+        }
+
         const auxPanel = (
             <AuxPanel
                 room={this.state.room}
                 fullHeight={false}
                 userId={this.context.credentials.userId}
-                draggingFile={this.state.draggingFile}
                 maxHeight={this.state.auxPanelMaxHeight}
                 showApps={this.state.showApps}
                 onResize={this.onResize}
@@ -1934,19 +2008,16 @@ export default class RoomView extends React.Component<IProps, IState> {
             hideMessagePanel = true;
         }
 
-        const shouldHighlight = this.state.isInitialEventHighlighted;
         let highlightedEventId = null;
-        if (this.state.forwardingEvent) {
-            highlightedEventId = this.state.forwardingEvent.getId();
-        } else if (shouldHighlight) {
+        if (this.state.isInitialEventHighlighted) {
             highlightedEventId = this.state.initialEventId;
         }
 
         const messagePanelClassNames = classNames(
             "mx_RoomView_messagePanel",
             {
-                "mx_IRCLayout": this.state.useIRCLayout,
-                "mx_GroupLayout": !this.state.useIRCLayout,
+                "mx_IRCLayout": this.state.layout == Layout.IRC,
+                "mx_GroupLayout": this.state.layout == Layout.Group,
             });
 
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
@@ -1956,12 +2027,14 @@ export default class RoomView extends React.Component<IProps, IState> {
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 showReadReceipts={this.state.showReadReceipts}
                 manageReadReceipts={!this.state.isPeeking}
+                sendReadReceiptOnLoad={!this.state.wasContextSwitch}
                 manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}
                 highlightedEventId={highlightedEventId}
                 eventId={this.state.initialEventId}
                 eventPixelOffset={this.state.initialEventPixelOffset}
                 onScroll={this.onMessageListScroll}
+                onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
                 className={messagePanelClassNames}
@@ -1969,7 +2042,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
                 showReactions={true}
-                useIRCLayout={this.state.useIRCLayout}
+                layout={this.state.layout}
             />);
 
         let topUnreadMessagesBar = null;
@@ -1988,6 +2061,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 highlight={this.state.room.getUnreadNotificationCount('highlight') > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
+                roomId={this.state.roomId}
             />);
         }
 
@@ -2024,18 +2098,18 @@ export default class RoomView extends React.Component<IProps, IState> {
                             inRoom={myMembership === 'join'}
                             onSearchClick={this.onSearchClick}
                             onSettingsClick={this.onSettingsClick}
-                            onPinnedClick={this.onPinnedClick}
-                            onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                             onForgetClick={(myMembership === "leave") ? this.onForgetClick : null}
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? this.onAppsClick : null}
                             appsShown={this.state.showApps}
+                            onCallPlaced={this.onCallPlaced}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className="mx_RoomView_body">
                                 {auxPanel}
                                 <div className={timelineClasses}>
+                                    {fileDropTarget}
                                     {topUnreadMessagesBar}
                                     {jumpToBottom}
                                     {messagePanel}

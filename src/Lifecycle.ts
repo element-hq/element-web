@@ -17,8 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
-import Matrix from 'matrix-js-sdk';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import {decryptAES, encryptAES} from "matrix-js-sdk/src/crypto/aes";
@@ -219,7 +218,7 @@ export function attemptTokenLogin(
             button: _t("Try again"),
             onFinished: tryAgain => {
                 if (tryAgain) {
-                    const cli = Matrix.createClient({
+                    const cli = createClient({
                         baseUrl: homeserver,
                         idBaseUrl: identityServer,
                     });
@@ -276,7 +275,7 @@ function registerAsGuest(
     console.log(`Doing guest login on ${hsUrl}`);
 
     // create a temporary MatrixClient to do the login
-    const client = Matrix.createClient({
+    const client = createClient({
         baseUrl: hsUrl,
     });
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { EventEmitter } from "events";
-import { arrayDiff, arrayHasDiff, ArrayUtil } from "../../../utils/arrays";
-import { getEnumValues } from "../../../utils/enums";
+import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";
 import { DefaultTagID, RoomUpdateCause, TagID } from "../models";
 import {
     IListOrderingMap,
@@ -29,7 +28,7 @@ import {
     ListAlgorithm,
     SortAlgorithm,
 } from "./models";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
+import { FILTER_CHANGED, IFilterCondition } from "../filters/IFilterCondition";
 import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
@@ -79,12 +78,25 @@ export class Algorithm extends EventEmitter {
     private allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
     private allowedRoomsByFilters: Set<Room> = new Set<Room>();
 
+    /**
+     * Set to true to suspend emissions of algorithm updates.
+     */
+    public updatesInhibited = false;
+
     public constructor() {
         super();
     }
 
     public get stickyRoom(): Room {
         return this._stickyRoom ? this._stickyRoom.room : null;
+    }
+
+    public get knownRooms(): Room[] {
+        return this.rooms;
+    }
+
+    public get hasTagSortingMap(): boolean {
+        return !!this.sortAlgorithms;
     }
 
     protected get hasFilters(): boolean {
@@ -164,7 +176,7 @@ export class Algorithm extends EventEmitter {
 
             // If we removed the last filter, tell consumers that we've "updated" our filtered
             // view. This will trick them into getting the complete room list.
-            if (!this.hasFilters) {
+            if (!this.hasFilters && !this.updatesInhibited) {
                 this.emit(LIST_UPDATED_EVENT);
             }
         }
@@ -174,6 +186,7 @@ export class Algorithm extends EventEmitter {
         await this.recalculateFilteredRooms();
 
         // re-emit the update so the list store can fire an off-cycle update if needed
+        if (this.updatesInhibited) return;
         this.emit(FILTER_CHANGED);
     }
 
@@ -186,6 +199,11 @@ export class Algorithm extends EventEmitter {
     }
 
     private async doUpdateStickyRoom(val: Room) {
+        if (SettingsStore.getValue("feature_spaces") && val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
+            // no-op sticky rooms for spaces - they're effectively virtual rooms
+            val = null;
+        }
+
         // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
         // otherwise we risk duplicating rooms.
 
@@ -211,7 +229,7 @@ export class Algorithm extends EventEmitter {
         }
 
         // When we do have a room though, we expect to be able to find it
-        let tag = this.roomIdsToTags[val.roomId][0];
+        let tag = this.roomIdsToTags[val.roomId]?.[0];
         if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
 
         // We specifically do NOT use the ordered rooms set as it contains the sticky room, which
@@ -296,6 +314,7 @@ export class Algorithm extends EventEmitter {
         this.recalculateStickyRoom();
 
         // Finally, trigger an update
+        if (this.updatesInhibited) return;
         this.emit(LIST_UPDATED_EVENT);
     }
 
@@ -306,10 +325,6 @@ export class Algorithm extends EventEmitter {
 
         console.warn("Recalculating filtered room list");
         const filters = Array.from(this.allowedByFilter.keys());
-        const orderedFilters = new ArrayUtil(filters)
-            .groupBy(f => f.relativePriority)
-            .orderBy(getEnumValues(FilterPriority))
-            .value;
         const newMap: ITagMap = {};
         for (const tagId of Object.keys(this.cachedRooms)) {
             // Cheaply clone the rooms so we can more easily do operations on the list.
@@ -317,18 +332,9 @@ export class Algorithm extends EventEmitter {
             // to the rooms we know will be deduped by the Set.
             const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
             this.tryInsertStickyRoomToFilterSet(rooms, tagId);
-            let remainingRooms = rooms.map(r => r);
-            let allowedRoomsInThisTag = [];
-            let lastFilterPriority = orderedFilters[0].relativePriority;
-            for (const filter of orderedFilters) {
-                if (filter.relativePriority !== lastFilterPriority) {
-                    // Every time the filter changes priority, we want more specific filtering.
-                    // To accomplish that, reset the variables to make it look like the process
-                    // has started over, but using the filtered rooms as the seed.
-                    remainingRooms = allowedRoomsInThisTag;
-                    allowedRoomsInThisTag = [];
-                    lastFilterPriority = filter.relativePriority;
-                }
+            const remainingRooms = rooms.map(r => r);
+            const allowedRoomsInThisTag = [];
+            for (const filter of filters) {
                 const filteredRooms = remainingRooms.filter(r => filter.isVisible(r));
                 for (const room of filteredRooms) {
                     const idx = remainingRooms.indexOf(room);
@@ -347,6 +353,7 @@ export class Algorithm extends EventEmitter {
         const allowedRooms = Object.values(newMap).reduce((rv, v) => { rv.push(...v); return rv; }, <Room[]>[]);
         this.allowedRoomsByFilters = new Set(allowedRooms);
         this.filteredRooms = newMap;
+        if (this.updatesInhibited) return;
         this.emit(LIST_UPDATED_EVENT);
     }
 
@@ -401,6 +408,7 @@ export class Algorithm extends EventEmitter {
             if (!!this._cachedStickyRooms) {
                 // Clear the cache if we won't be needing it
                 this._cachedStickyRooms = null;
+                if (this.updatesInhibited) return;
                 this.emit(LIST_UPDATED_EVENT);
             }
             return;
@@ -443,6 +451,7 @@ export class Algorithm extends EventEmitter {
         }
 
         // Finally, trigger an update
+        if (this.updatesInhibited) return;
         this.emit(LIST_UPDATED_EVENT);
     }
 
@@ -509,7 +518,12 @@ export class Algorithm extends EventEmitter {
         if (isNullOrUndefined(rooms)) throw new Error(`Array of rooms cannot be null`);
         if (!this.sortAlgorithms) throw new Error(`Cannot set known rooms without a tag sorting map`);
 
-        console.warn("Resetting known rooms, initiating regeneration");
+        if (!this.updatesInhibited) {
+            // We only log this if we're expecting to be publishing updates, which means that
+            // this could be an unexpected invocation. If we're inhibited, then this is probably
+            // an intentional invocation.
+            console.warn("Resetting known rooms, initiating regeneration");
+        }
 
         // Before we go any further we need to clear (but remember) the sticky room to
         // avoid accidentally duplicating it in the list.
@@ -565,9 +579,8 @@ export class Algorithm extends EventEmitter {
 
         await this.generateFreshTags(newTags);
 
-        this.cachedRooms = newTags;
+        this.cachedRooms = newTags; // this recalculates the filtered rooms for us
         this.updateTagsFromCache();
-        this.recalculateFilteredRooms();
 
         // Now that we've finished generation, we need to update the sticky room to what
         // it was. It's entirely possible that it changed lists though, so if it did then

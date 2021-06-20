@@ -19,6 +19,7 @@ import React from 'react';
 
 import {MenuItem} from "../../structures/ContextMenu";
 import {IEmoji} from "../../../emoji";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps {
     emoji: IEmoji;
@@ -28,6 +29,7 @@ interface IProps {
     onMouseLeave(emoji: IEmoji): void;
 }
 
+@replaceableComponent("views.emojipicker.Emoji")
 class Emoji extends React.PureComponent<IProps> {
     render() {
         const { onClick, onMouseEnter, onMouseLeave, emoji, selectedEmojis } = this.props;

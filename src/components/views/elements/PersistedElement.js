@@ -24,6 +24,7 @@ import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {isNullOrUndefined} from "matrix-js-sdk/src/utils";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -56,6 +57,7 @@ function getOrCreateContainer(containerId) {
  * children are made visible and are positioned into a div that is given the same
  * bounding rect as the parent of PE.
  */
+@replaceableComponent("views.elements.PersistedElement")
 export default class PersistedElement extends React.Component {
     static propTypes = {
         // Unique identifier for this PersistedElement instance
@@ -137,6 +139,8 @@ export default class PersistedElement extends React.Component {
     _onAction(payload) {
         if (payload.action === 'timeline_resize') {
             this._repositionChild();
+        } else if (payload.action === 'logout') {
+            PersistedElement.destroyElement(this.props.persistKey);
         }
     }
 

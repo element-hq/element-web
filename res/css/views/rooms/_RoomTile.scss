@@ -19,6 +19,10 @@ limitations under the License.
     margin-bottom: 4px;
     padding: 4px;
 
+    contain: content; // Not strict as it will break when resizing a sublist vertically
+    height: 40px;
+    box-sizing: border-box;
+
     // The tile is also a flexbox row itself
     display: flex;
 
@@ -187,6 +191,10 @@ limitations under the License.
 
     .mx_RoomTile_iconSettings::before {
         mask-image: url('$(res)/img/element-icons/settings.svg');
+    }
+
+    .mx_RoomTile_iconInvite::before {
+        mask-image: url('$(res)/img/element-icons/room/invite.svg');
     }
 
     .mx_RoomTile_iconSignOut::before {

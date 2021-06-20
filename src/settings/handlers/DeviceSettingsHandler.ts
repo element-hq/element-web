@@ -20,6 +20,7 @@ import SettingsHandler from "./SettingsHandler";
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import {SettingLevel} from "../SettingLevel";
 import { CallbackFn, WatchManager } from "../WatchManager";
+import { Layout } from "../Layout";
 
 /**
  * Gets and sets settings at the "device" level for the current device.
@@ -67,6 +68,13 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return val['value'];
         }
 
+        // Special case for old useIRCLayout setting
+        if (settingName === "layout") {
+            const settings = this.getSettings() || {};
+            if (settings["useIRCLayout"]) return Layout.IRC;
+            return settings[settingName];
+        }
+
         const settings = this.getSettings() || {};
         return settings[settingName];
     }
@@ -102,6 +110,18 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             "lastRightPanelPhaseForGroup",
         ].includes(settingName)) {
             localStorage.setItem(`mx_${settingName}`, JSON.stringify({value: newValue}));
+            this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
+            return Promise.resolve();
+        }
+
+        // Special case for old useIRCLayout setting
+        if (settingName === "layout") {
+            const settings = this.getSettings() || {};
+
+            delete settings["useIRCLayout"];
+            settings["layout"] = newValue;
+            localStorage.setItem("mx_local_settings", JSON.stringify(settings));
+
             this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         }

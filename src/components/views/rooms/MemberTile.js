@@ -23,7 +23,9 @@ import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import {Action} from "../../../dispatcher/actions";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.rooms.MemberTile")
 export default class MemberTile extends React.Component {
     static propTypes = {
         member: PropTypes.any.isRequired, // RoomMember

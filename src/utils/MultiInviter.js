@@ -53,13 +53,15 @@ export default class MultiInviter {
      * instance of the class.
      *
      * @param {array} addrs Array of addresses to invite
+     * @param {string} reason Reason for inviting (optional)
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
-    invite(addrs) {
+    invite(addrs, reason) {
         if (this.addrs.length > 0) {
             throw new Error("Already inviting/invited");
         }
         this.addrs.push(...addrs);
+        this.reason = reason;
 
         for (const addr of this.addrs) {
             if (getAddressType(addr) === null) {
@@ -109,21 +111,14 @@ export default class MultiInviter {
             }
 
             if (!ignoreProfile && SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
-                try {
-                    const profile = await MatrixClientPeg.get().getProfileInfo(addr);
-                    if (!profile) {
-                        // noinspection ExceptionCaughtLocallyJS
-                        throw new Error("User has no profile");
-                    }
-                } catch (e) {
-                    throw {
-                        errcode: "RIOT.USER_NOT_FOUND",
-                        error: "User does not have a profile or does not exist."
-                    };
+                const profile = await MatrixClientPeg.get().getProfileInfo(addr);
+                if (!profile) {
+                    // noinspection ExceptionCaughtLocallyJS
+                    throw new Error("User has no profile");
                 }
             }
 
-            return MatrixClientPeg.get().invite(roomId, addr);
+            return MatrixClientPeg.get().invite(roomId, addr, undefined, this.reason);
         } else {
             throw new Error('Unsupported address');
         }
@@ -169,7 +164,7 @@ export default class MultiInviter {
                         this._doInvite(address, ignoreProfile).then(resolve, reject);
                     }, 5000);
                     return;
-                } else if (['M_NOT_FOUND', 'M_USER_NOT_FOUND', 'RIOT.USER_NOT_FOUND'].includes(err.errcode)) {
+                } else if (['M_NOT_FOUND', 'M_USER_NOT_FOUND'].includes(err.errcode)) {
                     errorText = _t("User %(user_id)s does not exist", {user_id: address});
                 } else if (err.errcode === 'M_PROFILE_UNDISCLOSED') {
                     errorText = _t("User %(user_id)s may or may not exist", {user_id: address});
@@ -210,7 +205,7 @@ export default class MultiInviter {
             if (Object.keys(this.errors).length > 0 && !this.groupId) {
                 // There were problems inviting some people - see if we can invite them
                 // without caring if they exist or not.
-                const unknownProfileErrors = ['M_NOT_FOUND', 'M_USER_NOT_FOUND', 'M_PROFILE_UNDISCLOSED', 'M_PROFILE_NOT_FOUND', 'RIOT.USER_NOT_FOUND'];
+                const unknownProfileErrors = ['M_NOT_FOUND', 'M_USER_NOT_FOUND', 'M_PROFILE_UNDISCLOSED', 'M_PROFILE_NOT_FOUND'];
                 const unknownProfileUsers = Object.keys(this.errors).filter(a => unknownProfileErrors.includes(this.errors[a].errcode));
 
                 if (unknownProfileUsers.length > 0) {
@@ -226,7 +221,7 @@ export default class MultiInviter {
 
                     const AskInviteAnywayDialog = sdk.getComponent("dialogs.AskInviteAnywayDialog");
                     console.log("Showing failed to invite dialog...");
-                    Modal.createTrackedDialog('Failed to invite the following users to the room', '', AskInviteAnywayDialog, {
+                    Modal.createTrackedDialog('Failed to invite', '', AskInviteAnywayDialog, {
                         unknownProfileUsers: unknownProfileUsers.map(u => {return {userId: u, errorText: this.errors[u].errorText};}),
                         onInviteAnyways: () => inviteUnknowns(),
                         onGiveUp: () => {

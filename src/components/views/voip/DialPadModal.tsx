@@ -15,15 +15,14 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { ensureDMExists } from "../../../createRoom";
 import { _t } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import DialPad from './DialPad';
 import dis from '../../../dispatcher/dispatcher';
-import Modal from "../../../Modal";
-import ErrorDialog from "../../views/dialogs/ErrorDialog";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { DialNumberPayload } from "../../../dispatcher/payloads/DialNumberPayload";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
     onFinished: (boolean) => void;
@@ -33,6 +32,7 @@ interface IState {
     value: string;
 }
 
+@replaceableComponent("views.voip.DialPadModal")
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);
@@ -64,23 +64,11 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     }
 
     onDialPress = async () => {
-        const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-            'm.id.phone': this.state.value,
-        });
-        if (!results || results.length === 0 || !results[0].userid) {
-            Modal.createTrackedDialog('', '', ErrorDialog, {
-                title: _t("Unable to look up phone number"),
-                description: _t("There was an error looking up the phone number"),
-            });
-        }
-        const userId = results[0].userid;
-
-        const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
-
-        dis.dispatch({
-            action: 'view_room',
-            room_id: roomId,
-        });
+        const payload: DialNumberPayload = {
+            action: Action.DialNumber,
+            number: this.state.value,
+        };
+        dis.dispatch(payload);
 
         this.props.onFinished(true);
     }

@@ -18,7 +18,9 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {Key} from "../../../Keyboard";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.EditableText")
 export default class EditableText extends React.Component {
     static propTypes = {
         onValueChanged: PropTypes.func,
@@ -219,13 +221,15 @@ export default class EditableText extends React.Component {
             </div>;
         } else {
             // show the content editable div, but manually manage its contents as react and contentEditable don't play nice together
-            editableEl = <div ref={this._editable_div}
-                              contentEditable={true}
-                              className={className}
-                              onKeyDown={this.onKeyDown}
-                              onKeyUp={this.onKeyUp}
-                              onFocus={this.onFocus}
-                              onBlur={this.onBlur} />;
+            editableEl = <div
+                ref={this._editable_div}
+                contentEditable={true}
+                className={className}
+                onKeyDown={this.onKeyDown}
+                onKeyUp={this.onKeyUp}
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+            />;
         }
 
         return editableEl;

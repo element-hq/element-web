@@ -22,6 +22,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { User } from "matrix-js-sdk/src/models/user";
 import {ReciprocateQRCode} from "matrix-js-sdk/src/crypto/verification/QRCode";
 import {SAS} from "matrix-js-sdk/src/crypto/verification/SAS";
 
@@ -36,6 +37,7 @@ import {
     PHASE_CANCELLED,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // XXX: Should be defined in matrix-js-sdk
 enum VerificationPhase {
@@ -50,7 +52,7 @@ enum VerificationPhase {
 interface IProps {
     layout: string;
     request: VerificationRequest;
-    member: RoomMember;
+    member: RoomMember | User;
     phase: VerificationPhase;
     onClose: () => void;
     isRoomEncrypted: boolean;
@@ -65,6 +67,7 @@ interface IState {
     reciprocateQREvent?: ReciprocateQRCode;
 }
 
+@replaceableComponent("views.right_panel.VerificationPanel")
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
     private hasVerifier: boolean;
 
@@ -132,7 +135,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             qrBlock = <div className="mx_UserInfo_container">
                 <h3>{_t("Verify by scanning")}</h3>
                 <p>{_t("Ask %(displayName)s to scan your code:", {
-                    displayName: member.displayName || member.name || member.userId,
+                    displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
                 })}</p>
 
                 <div className="mx_VerificationPanel_qrCode">
@@ -203,7 +206,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const description = request.isSelfVerification ?
             _t("Almost there! Is your other session showing the same shield?") :
             _t("Almost there! Is %(displayName)s showing the same shield?", {
-                displayName: member.displayName || member.name || member.userId,
+                displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
             });
         let body: JSX.Element;
         if (this.state.reciprocateQREvent) {
@@ -262,7 +265,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             }
         } else {
             description = _t("You've successfully verified %(displayName)s!", {
-                displayName: member.displayName || member.name || member.userId,
+                displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
             });
         }
 
@@ -300,7 +303,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 text = _t("You cancelled verification on your other session.");
             } else {
                 text = _t("%(displayName)s cancelled verification.", {
-                    displayName: member.displayName || member.name || member.userId,
+                    displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
                 });
             }
             text = `${text} ${startAgainInstruction}`;
@@ -323,7 +326,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     public render() {
         const {member, phase, request} = this.props;
 
-        const displayName = member.displayName || member.name || member.userId;
+        const displayName = (member as User).displayName || (member as RoomMember).name || member.userId;
 
         switch (phase) {
             case PHASE_READY:

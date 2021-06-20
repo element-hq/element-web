@@ -32,10 +32,9 @@ import Matrix from 'matrix-js-sdk';
 const test_utils = require('../../test-utils');
 const mockclock = require('../../mock-clock');
 
-import Adapter from "enzyme-adapter-react-16";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure, mount } from "enzyme";
 
-import Velocity from 'velocity-animate';
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
@@ -52,8 +51,20 @@ class WrappedMessagePanel extends React.Component {
     };
 
     render() {
+        const roomContext = {
+            room,
+            roomId: room.roomId,
+            canReact: true,
+            canReply: true,
+            showReadReceipts: true,
+            showRedactions: false,
+            showJoinLeaves: false,
+            showAvatarChanges: false,
+            showDisplaynameChanges: true,
+        };
+
         return <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ canReact: true, canReply: true, room, roomId: room.roomId }}>
+            <RoomContext.Provider value={roomContext}>
                 <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>;
@@ -75,18 +86,10 @@ describe('MessagePanel', function() {
             return arg === "showDisplaynameChanges";
         });
 
-        // This option clobbers the duration of all animations to be 1ms
-        // which makes unit testing a lot simpler (the animation doesn't
-        // complete without this even if we mock the clock and tick it
-        // what should be the correct amount of time).
-        Velocity.mock = true;
-
         DMRoomMap.makeShared();
     });
 
     afterEach(function() {
-        delete Velocity.mock;
-
         clock.uninstall();
     });
 
@@ -97,7 +100,21 @@ describe('MessagePanel', function() {
             events.push(test_utils.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
-                    ts: ts0 + i*1000,
+                    ts: ts0 + i * 1000,
+                }));
+        }
+        return events;
+    }
+
+    // Just to avoid breaking Dateseparator tests that might run at 00hrs
+    function mkOneDayEvents() {
+        const events = [];
+        const ts0 = Date.parse('09 May 2004 00:12:00 GMT');
+        for (let i = 0; i < 10; i++) {
+            events.push(test_utils.mkMessage(
+                {
+                    event: true, room: "!room:id", user: "@user:id",
+                    ts: ts0 + i * 1000,
                 }));
         }
         return events;
@@ -113,7 +130,7 @@ describe('MessagePanel', function() {
         let i = 0;
         events.push(test_utils.mkMessage({
             event: true, room: "!room:id", user: "@user:id",
-            ts: ts0 + ++i*1000,
+            ts: ts0 + ++i * 1000,
         }));
 
         for (i = 0; i < 10; i++) {
@@ -125,6 +142,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + i*1000,
                 mship: 'join',
@@ -157,8 +175,9 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
-                ts: ts0 + i*1000,
+                ts: ts0 + i * 1000,
                 mship: 'join',
                 prevMship: 'join',
                 name: 'A user',
@@ -202,6 +221,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 1,
                 mship: 'join',
@@ -248,6 +268,7 @@ describe('MessagePanel', function() {
                     getAvatarUrl: () => {
                         return "avatar.jpeg";
                     },
+                    getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
                 },
                 ts: ts0 + 5,
                 mship: 'invite',
@@ -255,14 +276,13 @@ describe('MessagePanel', function() {
             }),
         ];
     }
-
     function isReadMarkerVisible(rmContainer) {
         return rmContainer && rmContainer.children.length > 0;
     }
 
     it('should show the events', function() {
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} />,
+            <WrappedMessagePanel className="cls" events={events} />,
         );
 
         // just check we have the right number of tiles for now
@@ -290,8 +310,8 @@ describe('MessagePanel', function() {
 
     it('should insert the read-marker in the right place', function() {
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true} />,
+            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                readMarkerVisible={true} />,
         );
 
         const tiles = TestUtils.scryRenderedComponentsWithType(
@@ -301,15 +321,15 @@ describe('MessagePanel', function() {
         const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
 
         // it should follow the <li> which wraps the event tile for event 4
-        const eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
+        const eventContainer = ReactDOM.findDOMNode(tiles[4]);
         expect(rm.previousSibling).toEqual(eventContainer);
     });
 
     it('should show the read-marker that fall in summarised events after the summary', function() {
         const melsEvents = mkMelsEvents();
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
-                    readMarkerVisible={true} />,
+            <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
+                readMarkerVisible={true} />,
         );
 
         const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
@@ -326,8 +346,8 @@ describe('MessagePanel', function() {
     it('should hide the read-marker at the end of summarised events', function() {
         const melsEvents = mkMelsEventsOnly();
         const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[9].getId()}
-                    readMarkerVisible={true} />,
+            <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[9].getId()}
+                readMarkerVisible={true} />,
         );
 
         const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
@@ -350,14 +370,14 @@ describe('MessagePanel', function() {
 
         // first render with the RM in one place
         let mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
+            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                readMarkerVisible={true}
+            />, parentDiv);
 
         const tiles = TestUtils.scryRenderedComponentsWithType(
             mp, sdk.getComponent('rooms.EventTile'));
         const tileContainers = tiles.map(function(t) {
-            return ReactDOM.findDOMNode(t).parentNode;
+            return ReactDOM.findDOMNode(t);
         });
 
         // find the <li> which wraps the read marker
@@ -366,9 +386,9 @@ describe('MessagePanel', function() {
 
         // now move the RM
         mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
+            <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
+                readMarkerVisible={true}
+            />, parentDiv);
 
         // now there should be two RM containers
         const found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
@@ -441,5 +461,18 @@ describe('MessagePanel', function() {
 
         // read marker should be hidden given props and at the last event
         expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+
+    it('should render Date separators for the events', function() {
+        const events = mkOneDayEvents();
+        const res = mount(
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+            />,
+        );
+        const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
+
+        expect(Dates.length).toEqual(1);
     });
 });

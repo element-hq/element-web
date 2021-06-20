@@ -20,6 +20,7 @@ limitations under the License.
 
 import * as React from 'react';
 
+import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
@@ -37,7 +38,7 @@ import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 import {inviteUsersToRoom} from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
-import { parseFragment as parseHtml } from "parse5";
+import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
 import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
@@ -126,10 +127,10 @@ export class Command {
         return this.getCommand() + " " + this.args;
     }
 
-    run(roomId: string, args: string, cmd: string) {
+    run(roomId: string, args: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
         if (!this.runFn) return reject(_t("Command error"));
-        return this.runFn.bind(this)(roomId, args, cmd);
+        return this.runFn.bind(this)(roomId, args);
     }
 
     getUsage() {
@@ -149,11 +150,27 @@ function success(promise?: Promise<any>) {
     return {promise};
 }
 
+function successSync(value: any) {
+    return success(Promise.resolve(value));
+}
+
 /* Disable the "unexpected this" error for these commands - all of the run
  * functions are called with `this` bound to the Command instance.
  */
 
 export const Commands = [
+    new Command({
+        command: 'spoiler',
+        args: '<message>',
+        description: _td('Sends the given message as a spoiler'),
+        runFn: function(roomId, message) {
+            return successSync(ContentHelpers.makeHtmlMessage(
+                message,
+                `<span data-mx-spoiler>${message}</span>`,
+            ));
+        },
+        category: CommandCategories.messages,
+    }),
     new Command({
         command: 'shrug',
         args: '<message>',
@@ -163,7 +180,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -176,7 +193,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -189,7 +206,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -202,7 +219,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -211,7 +228,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(MatrixClientPeg.get().sendTextMessage(roomId, messages));
+            return successSync(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
     }),
@@ -220,7 +237,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as html, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
+            return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
     }),
@@ -441,15 +458,14 @@ export const Commands = [
     }),
     new Command({
         command: 'invite',
-        args: '<user-id>',
+        args: '<user-id> [<reason>]',
         description: _td('Invites user with given id to current room'),
         runFn: function(roomId, args) {
             if (args) {
-                const matches = args.match(/^(\S+)$/);
-                if (matches) {
+                const [address, reason] = args.split(/\s+(.+)/);
+                if (address) {
                     // We use a MultiInviter to re-use the invite logic, even though
                     // we're only inviting one user.
-                    const address = matches[1];
                     // If we need an identity server but don't have one, things
                     // get a bit more complex here, but we try to show something
                     // meaningful.
@@ -490,7 +506,7 @@ export const Commands = [
                     }
                     const inviter = new MultiInviter(roomId);
                     return success(prom.then(() => {
-                        return inviter.invite([address]);
+                        return inviter.invite([address], reason);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
                             throw new Error(inviter.getErrorText(address));
@@ -844,7 +860,7 @@ export const Commands = [
                 // some superfast regex over the text so we don't have to.
                 const embed = parseHtml(widgetUrl);
                 if (embed && embed.childNodes && embed.childNodes.length === 1) {
-                    const iframe = embed.childNodes[0];
+                    const iframe = embed.childNodes[0] as ChildElement;
                     if (iframe.tagName.toLowerCase() === 'iframe' && iframe.attrs) {
                         const srcAttr = iframe.attrs.find(a => a.name === 'src');
                         console.log("Pulling URL out of iframe (embed code)");
@@ -966,7 +982,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -976,7 +992,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(MatrixClientPeg.get().sendHtmlEmote(roomId, args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -1040,9 +1056,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await MatrixClientPeg.get().getThirdpartyUser('im.vector.protocol.pstn', {
-                        'm.id.phone': userId,
-                    });
+                    const results = await CallHandler.sharedInstance().pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw new Error("Unable to find Matrix ID for phone number");
                     }
@@ -1182,7 +1196,7 @@ export function parseCommandString(input: string) {
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return {}; // not a command
 
-    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {
@@ -1203,10 +1217,14 @@ export function parseCommandString(input: string) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(roomId: string, input: string) {
+export function getCommand(input: string) {
     const {cmd, args} = parseCommandString(input);
 
     if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
-        return () => CommandMap.get(cmd).run(roomId, args, cmd);
+        return {
+            cmd: CommandMap.get(cmd),
+            args,
+        };
     }
+    return {};
 }

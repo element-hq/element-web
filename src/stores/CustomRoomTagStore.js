@@ -124,15 +124,15 @@ class CustomRoomTagStore extends EventEmitter {
                     const tags = Object.assign({}, oldTags, tag);
                     this._setState({tags});
                 }
+                break;
             }
-            break;
             case 'on_client_not_viable':
             case 'on_logged_out': {
                 // we assume to always have a tags object in the state
                 this._state = {tags: {}};
                 RoomListStore.instance.off(LISTS_UPDATE_EVENT, this._onListsUpdated);
+                break;
             }
-            break;
         }
     }
 

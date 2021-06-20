@@ -22,7 +22,9 @@ import dis from '../../dispatcher/dispatcher';
 import {throttle} from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';
+import {replaceableComponent} from "../../utils/replaceableComponent";
 
+@replaceableComponent("structures.SearchBox")
 export default class SearchBox extends React.Component {
     static propTypes = {
         onSearch: PropTypes.func,
@@ -30,6 +32,8 @@ export default class SearchBox extends React.Component {
         onKeyDown: PropTypes.func,
         className: PropTypes.string,
         placeholder: PropTypes.string.isRequired,
+        autoFocus: PropTypes.bool,
+        initialValue: PropTypes.string,
 
         // If true, the search box will focus and clear itself
         // on room search focus action (it would be nicer to take
@@ -47,7 +51,7 @@ export default class SearchBox extends React.Component {
         this._search = createRef();
 
         this.state = {
-            searchTerm: "",
+            searchTerm: this.props.initialValue || "",
             blurred: true,
         };
     }
@@ -156,6 +160,7 @@ export default class SearchBox extends React.Component {
                     onBlur={this._onBlur}
                     placeholder={ placeholder }
                     autoComplete="off"
+                    autoFocus={this.props.autoFocus}
                 />
                 { clearButton }
             </div>

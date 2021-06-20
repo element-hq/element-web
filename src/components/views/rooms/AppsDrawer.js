@@ -35,7 +35,10 @@ import PercentageDistributor from "../../../resizer/distributors/percentage";
 import {Container, WidgetLayoutStore} from "../../../stores/widgets/WidgetLayoutStore";
 import {clamp, percentageOf, percentageWithin} from "../../../utils/numbers";
 import {useStateCallback} from "../../../hooks/useStateCallback";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
 
+@replaceableComponent("views.rooms.AppsDrawer")
 export default class AppsDrawer extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
@@ -53,6 +56,8 @@ export default class AppsDrawer extends React.Component {
 
         this.state = {
             apps: this._getApps(),
+            resizingVertical: false, // true when changing the height of the apps drawer
+            resizingHorizontal: false, // true when chagning the distribution of the width between widgets
         };
 
         this._resizeContainer = null;
@@ -77,21 +82,17 @@ export default class AppsDrawer extends React.Component {
         this.props.resizeNotifier.off("isResizing", this.onIsResizing);
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(newProps) {
-        // Room has changed probably, update apps
-        this._updateApps();
-    }
-
     onIsResizing = (resizing) => {
-        this.setState({ resizing });
+        // This one is the vertical, ie. change height of apps drawer
+        this.setState({ resizingVertical: resizing });
         if (!resizing) {
             this._relaxResizer();
         }
     };
 
     _createResizer() {
+        // This is the horizontal one, changing the distribution of the width between the app tiles
+        // (ie. a vertical resize handle because, the handle itself is vertical...)
         const classNames = {
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
@@ -100,6 +101,7 @@ export default class AppsDrawer extends React.Component {
         const collapseConfig = {
             onResizeStart: () => {
                 this._resizeContainer.classList.add("mx_AppsDrawer_resizing");
+                this.setState({ resizingHorizontal: true });
             },
             onResizeStop: () => {
                 this._resizeContainer.classList.remove("mx_AppsDrawer_resizing");
@@ -107,6 +109,7 @@ export default class AppsDrawer extends React.Component {
                     this.props.room, Container.Top,
                     this.state.apps.slice(1).map((_, i) => this.resizer.forHandleAt(i).size),
                 );
+                this.setState({ resizingHorizontal: false });
             },
         };
         // pass a truthy container for now, we won't call attach until we update it
@@ -131,7 +134,10 @@ export default class AppsDrawer extends React.Component {
     _getAppsHash = (apps) => apps.map(app => app.id).join("~");
 
     componentDidUpdate(prevProps, prevState) {
-        if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
+        if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
+            // Room has changed, update apps
+            this._updateApps();
+        } else if (this._getAppsHash(this.state.apps) !== this._getAppsHash(prevState.apps)) {
             this._loadResizerPreferences();
         }
     }
@@ -161,6 +167,10 @@ export default class AppsDrawer extends React.Component {
             distributors.forEach(d => d.finish());
         }
     };
+
+    isResizing() {
+        return this.state.resizingVertical || this.state.resizingHorizontal;
+    }
 
     onAction = (action) => {
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
@@ -209,6 +219,7 @@ export default class AppsDrawer extends React.Component {
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}
+                pointerEvents={this.isResizing() ? 'none' : undefined}
             />);
         });
 
@@ -276,7 +287,7 @@ const PersistentVResizer = ({
 
     // Arbitrary defaults to avoid NaN problems. 100 px or 3/4 of the visible window.
     if (!minHeight) minHeight = 100;
-    if (!maxHeight) maxHeight = (window.innerHeight / 4) * 3;
+    if (!maxHeight) maxHeight = (UIStore.instance.windowHeight / 4) * 3;
 
     // Convert from percentage to height. Note that the default height is 280px.
     if (defaultHeight) {

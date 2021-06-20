@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import '../skinned-sdk'; // Must be first for skinning to work
 import {parseEvent} from "../../src/editor/deserialize";
 import {createPartCreator} from "./mock";
 
@@ -177,7 +178,7 @@ describe('editor/deserialize', function() {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({type: "plain", text: "Try "});
-            expect(parts[1]).toStrictEqual({type: "room-pill", text: "#room:hs.tld"});
+            expect(parts[1]).toStrictEqual({type: "room-pill", text: "#room:hs.tld", resourceId: "#room:hs.tld"});
             expect(parts[2]).toStrictEqual({type: "plain", text: "?"});
         });
         it('@room pill', function() {

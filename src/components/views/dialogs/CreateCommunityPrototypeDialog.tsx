@@ -25,6 +25,7 @@ import InfoTooltip from "../elements/InfoTooltip";
 import dis from "../../../dispatcher/dispatcher";
 import {showCommunityRoomInviteDialog} from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
 }
@@ -38,6 +39,7 @@ interface IState {
     avatarPreview: string;
 }
 
+@replaceableComponent("views.dialogs.CreateCommunityPrototypeDialog")
 export default class CreateCommunityPrototypeDialog extends React.PureComponent<IProps, IState> {
     private avatarUploadRef: React.RefObject<HTMLInputElement> = React.createRef();
 

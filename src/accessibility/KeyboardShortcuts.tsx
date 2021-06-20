@@ -265,7 +265,7 @@ const shortcuts: Record<Categories, IShortcut[]> = {
             description: _td("Toggle this dialog"),
         }, {
             keybinds: [{
-                modifiers: [CMD_OR_CTRL, Modifiers.ALT],
+                modifiers: [Modifiers.CONTROL, isMac ? Modifiers.SHIFT : Modifiers.ALT],
                 key: Key.H,
             }],
             description: _td("Go to Home View"),

@@ -25,7 +25,9 @@ import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
 import {SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.dialogs.InteractiveAuthDialog")
 export default class InteractiveAuthDialog extends React.Component {
     static propTypes = {
         // matrix client to use for UI auth requests

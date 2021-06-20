@@ -9,6 +9,8 @@ import sdk from '../../../skinned-sdk';
 
 import {Room, RoomMember, User} from 'matrix-js-sdk';
 
+import { compare } from "../../../../src/utils/strings";
+
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
 }
@@ -88,7 +90,8 @@ describe('MemberList', () => {
         };
         memberListRoom.currentState = {
             members: {},
-            getStateEvents: () => [], // ignore 3pid invites
+            getMember: jest.fn(),
+            getStateEvents: (eventType, stateKey) => stateKey === undefined ? [] : null, // ignore 3pid invites
         };
         for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
             memberListRoom.currentState.members[member.userId] = member;
@@ -100,7 +103,7 @@ describe('MemberList', () => {
             memberList = r;
         };
         root = ReactDOM.render(<WrappedMemberList roomId={memberListRoom.roomId}
-                                                  wrappedRef={gatherWrappedRef} />, parentDiv);
+            wrappedRef={gatherWrappedRef} />, parentDiv);
     });
 
     afterEach((done) => {
@@ -172,7 +175,7 @@ describe('MemberList', () => {
             if (!groupChange) {
                 const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
                 const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
-                const nameCompare = nameB.localeCompare(nameA);
+                const nameCompare = compare(nameB, nameA);
                 console.log("Comparing name");
                 expect(nameCompare).toBeGreaterThanOrEqual(0);
             } else {

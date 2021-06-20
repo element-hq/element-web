@@ -38,16 +38,23 @@ import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions
 import {MatrixCapabilities} from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component {
     constructor(props) {
         super(props);
 
         // The key used for PersistedElement
         this._persistKey = getPersistKey(this.props.app.id);
-        this._sgWidget = new StopGapWidget(this.props);
-        this._sgWidget.on("preparing", this._onWidgetPrepared);
-        this._sgWidget.on("ready", this._onWidgetReady);
+        try {
+            this._sgWidget = new StopGapWidget(this.props);
+            this._sgWidget.on("preparing", this._onWidgetPrepared);
+            this._sgWidget.on("ready", this._onWidgetReady);
+        } catch (e) {
+            console.log("Failed to construct widget", e);
+            this._sgWidget = null;
+        }
         this.iframe = null; // ref to the iframe (callback style)
 
         this.state = this._getNewState(props);
@@ -95,7 +102,7 @@ export default class AppTile extends React.Component {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
             ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
             PersistedElement.destroyElement(this._persistKey);
-            this._sgWidget.stop();
+            if (this._sgWidget) this._sgWidget.stop();
         }
 
         this.setState({ hasPermissionToLoad });
@@ -107,7 +114,7 @@ export default class AppTile extends React.Component {
         const childContentProtocol = u.protocol;
         if (parentContentProtocol === 'https:' && childContentProtocol !== 'https:') {
             console.warn("Refusing to load mixed-content app:",
-            parentContentProtocol, childContentProtocol, window.location, this.props.app.url);
+                parentContentProtocol, childContentProtocol, window.location, this.props.app.url);
             return true;
         }
         return false;
@@ -115,7 +122,7 @@ export default class AppTile extends React.Component {
 
     componentDidMount() {
         // Only fetch IM token on mount if we're showing and have permission to load
-        if (this.state.hasPermissionToLoad) {
+        if (this._sgWidget && this.state.hasPermissionToLoad) {
             this._startWidget();
         }
 
@@ -144,10 +151,15 @@ export default class AppTile extends React.Component {
         if (this._sgWidget) {
             this._sgWidget.stop();
         }
-        this._sgWidget = new StopGapWidget(newProps);
-        this._sgWidget.on("preparing", this._onWidgetPrepared);
-        this._sgWidget.on("ready", this._onWidgetReady);
-        this._startWidget();
+        try {
+            this._sgWidget = new StopGapWidget(newProps);
+            this._sgWidget.on("preparing", this._onWidgetPrepared);
+            this._sgWidget.on("ready", this._onWidgetReady);
+            this._startWidget();
+        } catch (e) {
+            console.log("Failed to construct widget", e);
+            this._sgWidget = null;
+        }
     }
 
     _startWidget() {
@@ -159,7 +171,7 @@ export default class AppTile extends React.Component {
     _iframeRefChange = (ref) => {
         this.iframe = ref;
         if (ref) {
-            this._sgWidget.start(ref);
+            if (this._sgWidget) this._sgWidget.start(ref);
         } else {
             this._resetWidget(this.props);
         }
@@ -207,7 +219,7 @@ export default class AppTile extends React.Component {
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this._persistKey);
 
-        this._sgWidget.stop({forceDestroy: true});
+        if (this._sgWidget) this._sgWidget.stop({forceDestroy: true});
     }
 
     _onWidgetPrepared = () => {
@@ -325,20 +337,30 @@ export default class AppTile extends React.Component {
 
         // Additional iframe feature pemissions
         // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
-        const iframeFeatures = "microphone; camera; encrypted-media; autoplay; display-capture;";
+        const iframeFeatures = "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write;";
 
         const appTileBodyClass = 'mx_AppTileBody' + (this.props.miniMode ? '_mini  ' : ' ');
+        const appTileBodyStyles = {};
+        if (this.props.pointerEvents) {
+            appTileBodyStyles['pointer-events'] = this.props.pointerEvents;
+        }
 
         const loadingElement = (
             <div className="mx_AppLoading_spinner_fadeIn">
                 <Spinner message={_t("Loading...")} />
             </div>
         );
-        if (!this.state.hasPermissionToLoad) {
+        if (this._sgWidget === null) {
+            appTileBody = (
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
+                    <AppWarning errorMsg={_t("Error loading Widget")} />
+                </div>
+            );
+        } else if (!this.state.hasPermissionToLoad) {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
-                <div className={appTileBodyClass}>
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
                     <AppPermission
                         roomId={this.props.room.roomId}
                         creatorUserId={this.props.creatorUserId}
@@ -350,20 +372,20 @@ export default class AppTile extends React.Component {
             );
         } else if (this.state.initialising) {
             appTileBody = (
-                <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
+                <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')} style={appTileBodyStyles}>
                     { loadingElement }
                 </div>
             );
         } else {
             if (this.isMixedContent()) {
                 appTileBody = (
-                    <div className={appTileBodyClass}>
-                        <AppWarning errorMsg="Error - Mixed content" />
+                    <div className={appTileBodyClass} style={appTileBodyStyles}>
+                        <AppWarning errorMsg={_t("Error - Mixed content")} />
                     </div>
                 );
             } else {
                 appTileBody = (
-                    <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')}>
+                    <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')} style={appTileBodyStyles}>
                         { this.state.loading && loadingElement }
                         <iframe
                             allow={iframeFeatures}
@@ -411,6 +433,8 @@ export default class AppTile extends React.Component {
                     onFinished={this._closeContextMenu}
                     showUnpin={!this.props.userWidget}
                     userWidget={this.props.userWidget}
+                    onEditClick={this.props.onEditClick}
+                    onDeleteClick={this.props.onDeleteClick}
                 />
             );
         }
@@ -477,6 +501,8 @@ AppTile.propTypes = {
     showPopout: PropTypes.bool,
     // Is this an instance of a user widget
     userWidget: PropTypes.bool,
+    // sets the pointer-events property on the iframe
+    pointerEvents: PropTypes.string,
 };
 
 AppTile.defaultProps = {

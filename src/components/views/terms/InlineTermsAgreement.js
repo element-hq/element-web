@@ -20,7 +20,9 @@ import {_t, pickBestLanguage} from "../../../languageHandler";
 import * as sdk from "../../..";
 import {objectClone} from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.terms.InlineTermsAgreement")
 export default class InlineTermsAgreement extends React.Component {
     static propTypes = {
         policiesAndServicePairs: PropTypes.array.isRequired, // array of service/policy pairs

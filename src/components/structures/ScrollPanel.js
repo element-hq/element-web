@@ -16,9 +16,10 @@ limitations under the License.
 
 import React, {createRef} from "react";
 import PropTypes from 'prop-types';
-import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import {replaceableComponent} from "../../utils/replaceableComponent";
+import {getKeyBindingsManager, RoomAction} from "../../KeyBindingsManager";
 
 const DEBUG_SCROLL = false;
 
@@ -83,6 +84,7 @@ if (DEBUG_SCROLL) {
  * offset as normal.
  */
 
+@replaceableComponent("structures.ScrollPanel")
 export default class ScrollPanel extends React.Component {
     static propTypes = {
         /* stickyBottom: if set to true, then once the user hits the bottom of
@@ -130,6 +132,10 @@ export default class ScrollPanel extends React.Component {
         /* onScroll: a callback which is called whenever any scroll happens.
          */
         onScroll: PropTypes.func,
+
+        /* onUserScroll: callback which is called when the user interacts with the room timeline
+         */
+        onUserScroll: PropTypes.func,
 
         /* className: classnames to add to the top-level div
          */
@@ -523,7 +529,7 @@ export default class ScrollPanel extends React.Component {
      */
     scrollRelative = mult => {
         const scrollNode = this._getScrollNode();
-        const delta = mult * scrollNode.clientHeight * 0.5;
+        const delta = mult * scrollNode.clientHeight * 0.9;
         scrollNode.scrollBy(0, delta);
         this._saveScrollState();
     };
@@ -533,30 +539,28 @@ export default class ScrollPanel extends React.Component {
      * @param {object} ev the keyboard event
      */
     handleScrollKey = ev => {
-        switch (ev.key) {
-            case Key.PAGE_UP:
-                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollRelative(-1);
-                }
+        let isScrolling = false;
+        const roomAction = getKeyBindingsManager().getRoomAction(ev);
+        switch (roomAction) {
+            case RoomAction.ScrollUp:
+                this.scrollRelative(-1);
+                isScrolling = true;
                 break;
-
-            case Key.PAGE_DOWN:
-                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollRelative(1);
-                }
+            case RoomAction.RoomScrollDown:
+                this.scrollRelative(1);
+                isScrolling = true;
                 break;
-
-            case Key.HOME:
-                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollToTop();
-                }
+            case RoomAction.JumpToFirstMessage:
+                this.scrollToTop();
+                isScrolling = true;
                 break;
-
-            case Key.END:
-                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
-                    this.scrollToBottom();
-                }
+            case RoomAction.JumpToLatestMessage:
+                this.scrollToBottom();
+                isScrolling = true;
                 break;
+        }
+        if (isScrolling && this.props.onUserScroll) {
+            this.props.onUserScroll(ev);
         }
     };
 
@@ -892,16 +896,19 @@ export default class ScrollPanel extends React.Component {
 
         // give the <ol> an explicit role=list because Safari+VoiceOver seems to think an ordered-list with
         // list-style-type: none; is no longer a list
-        return (<AutoHideScrollbar wrappedRef={this._collectScroll}
+        return (
+            <AutoHideScrollbar
+                wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
+                onWheel={this.props.onUserScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
-                    { this.props.fixedChildren }
-                    <div className="mx_RoomView_messageListWrapper">
-                        <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
-                            { this.props.children }
-                        </ol>
-                    </div>
-                </AutoHideScrollbar>
-            );
+                { this.props.fixedChildren }
+                <div className="mx_RoomView_messageListWrapper">
+                    <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
+                        { this.props.children }
+                    </ol>
+                </div>
+            </AutoHideScrollbar>
+        );
     }
 }

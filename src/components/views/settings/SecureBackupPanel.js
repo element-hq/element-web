@@ -26,7 +26,9 @@ import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -129,10 +131,10 @@ export default class SecureBackupPanel extends React.PureComponent {
 
     async _getUpdatedDiagnostics() {
         const cli = MatrixClientPeg.get();
-        const secretStorage = cli._crypto._secretStorage;
+        const secretStorage = cli.crypto._secretStorage;
 
         const backupKeyStored = !!(await cli.isKeyBackupKeyStored());
-        const backupKeyFromCache = await cli._crypto.getSessionBackupPrivateKey();
+        const backupKeyFromCache = await cli.crypto.getSessionBackupPrivateKey();
         const backupKeyCached = !!(backupKeyFromCache);
         const backupKeyWellFormed = backupKeyFromCache instanceof Uint8Array;
         const secretStorageKeyInAccount = await secretStorage.hasKey();

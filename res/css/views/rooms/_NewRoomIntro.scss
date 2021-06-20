@@ -18,8 +18,8 @@ limitations under the License.
     margin: 40px 0 48px 64px;
 
     .mx_MiniAvatarUploader_hasAvatar:not(.mx_MiniAvatarUploader_busy):not(:hover) {
-        &::before, &::after {
-            content: unset;
+        .mx_MiniAvatarUploader_indicator {
+            display: none;
         }
     }
 
@@ -33,8 +33,13 @@ limitations under the License.
 
         .mx_AccessibleButton {
             line-height: $font-24px;
+            display: inline-block;
 
-            &::before {
+            & + .mx_AccessibleButton {
+                margin-left: 12px;
+            }
+
+            &:not(.mx_AccessibleButton_kind_primary_outline)::before {
                 content: '';
                 display: inline-block;
                 background-color: $button-fg-color;

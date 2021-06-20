@@ -19,6 +19,11 @@ limitations under the License.
     max-width: 580px;
     height: 80vh;
     max-height: 600px;
+    // Ensure dialog borders are always white as the HostSignupDialog
+    // does not yet support dark mode or theming in general.
+    // In the future we might want to pass the theme to the called
+    // iframe, should some hosting provider have that need.
+    background-color: #ffffff;
 
     .mx_HostSignupDialog_info {
         text-align: center;

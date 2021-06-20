@@ -114,7 +114,7 @@
     "New passwords must match each other.": "Οι νέοι κωδικοί πρόσβασης πρέπει να ταιριάζουν.",
     "(not supported by this browser)": "(δεν υποστηρίζεται από τον περιηγητή)",
     "<not supported>": "<δεν υποστηρίζεται>",
-    "No more results": "Δεν υπάρχουν αποτελέσματα",
+    "No more results": "Δεν υπάρχουν άλλα αποτελέσματα",
     "No results": "Κανένα αποτέλεσμα",
     "OK": "Εντάξει",
     "olm version:": "Έκδοση olm:",
@@ -921,5 +921,9 @@
     "Your user agent": "Η συσκευή σας",
     "Confirm adding phone number": "Επιβεβαιώστε την προσθήκη του τηλεφωνικού αριθμού",
     "Click the button below to confirm adding this email address.": "Πιέστε το κουμπί από κάτω για να επιβεβαιώσετε την προσθήκη της διεύθυνσης ηλ. ταχυδρομείου.",
-    "Confirm adding email": "Επιβεβαιώστε την προσθήκη διεύθυνσης ηλ. ταχυδρομείου"
+    "Confirm adding email": "Επιβεβαιώστε την προσθήκη διεύθυνσης ηλ. ταχυδρομείου",
+    "Done": "Τέλος",
+    "Not Trusted": "Μη Έμπιστο",
+    "You're already in a call with this person.": "Είστε ήδη σε κλήση με αυτόν τον χρήστη.",
+    "Already in call": "Ήδη σε κλήση"
 }

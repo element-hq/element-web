@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016, 2017, 2018, 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -58,6 +59,7 @@ interface IProps {
     fallbackHsUrl?: string;
     defaultDeviceDisplayName?: string;
     fragmentAfterLogin?: string;
+    defaultUsername?: string;
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
@@ -93,12 +95,13 @@ interface IState {
     // be seeing.
     serverIsAlive: boolean;
     serverErrorIsFatal: boolean;
-    serverDeadError: string;
+    serverDeadError?: ReactNode;
 }
 
 /*
  * A wire component which glues together login UI components and Login logic
  */
+@replaceableComponent("structures.auth.LoginComponent")
 export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     private loginLogic: Login;
@@ -117,7 +120,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
             flows: null,
 
-            username: "",
+            username: props.defaultUsername? props.defaultUsername: '',
             phoneCountry: null,
             phoneNumber: "",
 
@@ -217,6 +220,9 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     {
                         'monthly_active_user': _td(
                             "This homeserver has hit its Monthly Active User limit.",
+                        ),
+                        'hs_blocked': _td(
+                            "This homeserver has been blocked by it's administrator.",
                         ),
                         '': _td(
                             "This homeserver has exceeded one of its resource limits.",

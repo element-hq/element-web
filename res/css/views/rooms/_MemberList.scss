@@ -44,6 +44,12 @@ limitations under the License.
     .mx_AutoHideScrollbar {
         flex: 1 1 0;
     }
+
+    .mx_RightPanel_scopeHeader {
+        // vertically align with position on other right panel cards
+        // to prevent it bouncing as user navigates right panel
+        margin-top: -8px;
+    }
 }
 
 .mx_GroupMemberList_query,

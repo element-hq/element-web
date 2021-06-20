@@ -21,11 +21,7 @@ $left-gutter: 64px;
     .mx_EventTile {
         > .mx_SenderProfile {
             line-height: $font-20px;
-            padding-left: $left-gutter;
-        }
-
-        > .mx_EventTile_line {
-            padding-left: $left-gutter;
+            margin-left: $left-gutter;
         }
 
         > .mx_EventTile_avatar {
@@ -42,10 +38,6 @@ $left-gutter: 64px;
             padding-bottom: 3px;
             line-height: $font-22px;
         }
-    }
-
-    .mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px);
     }
 }
 
@@ -105,16 +97,9 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_readAvatars {
-            top: 27px;
-        }
-
-        &.mx_EventTile_continuation .mx_EventTile_readAvatars,
-        &.mx_EventTile_emote .mx_EventTile_readAvatars {
-            top: 5px;
-        }
-
-        &.mx_EventTile_info .mx_EventTile_readAvatars {
-            top: 4px;
+            // This aligns the avatar with the last line of the
+            // message. We want to move it one line up - 2rem
+            top: -2rem;
         }
 
         .mx_EventTile_content .markdown-body {
