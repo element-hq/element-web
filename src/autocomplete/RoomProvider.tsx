@@ -32,6 +32,11 @@ import SettingsStore from "../settings/SettingsStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
+// Prefer canonical aliases over non-canonical ones
+function canonicalScore(displayedAlias: string, room: Room): number {
+    return displayedAlias === room.getCanonicalAlias() ? 0 : 1;
+}
+
 function matcherObject(room: Room, displayedAlias: string, matchName = "") {
     return {
         room,
@@ -97,6 +102,7 @@ export default class RoomProvider extends AutocompleteProvider {
             const matchedString = command[0];
             completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
+                (c) => canonicalScore(c.displayedAlias, c.room),
                 (c) => c.displayedAlias.length,
             ]);
             completions = uniqBy(completions, (match) => match.room);
