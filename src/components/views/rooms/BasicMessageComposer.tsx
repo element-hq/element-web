@@ -107,6 +107,7 @@ interface IState {
     showVisualBell?: boolean;
     autoComplete?: AutocompleteWrapperModel;
     completionIndex?: number;
+    surroundWith: boolean,
 }
 
 @replaceableComponent("views.rooms.BasicMessageEditor")
@@ -125,12 +126,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private readonly emoticonSettingHandle: string;
     private readonly shouldShowPillAvatarSettingHandle: string;
+    private readonly surroundWithHandle: string;
     private readonly historyManager = new HistoryManager();
 
     constructor(props) {
         super(props);
         this.state = {
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+            surroundWith: SettingsStore.getValue("MessageComposerInput.surroundWith"),
         };
 
         this.emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
@@ -138,6 +141,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.configureEmoticonAutoReplace();
         this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting("Pill.shouldShowPillAvatar", null,
             this.configureShouldShowPillAvatar);
+        this.surroundWithHandle = SettingsStore.watchSetting("MessageComposerInput.surroundWith", null,
+            this.surroundWithSettingChanged);
     }
 
     public componentDidUpdate(prevProps: IProps) {
@@ -428,7 +433,6 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private onKeyDown = (event: React.KeyboardEvent) => {
-        const surroundWith = SettingsStore.getValue("MessageComposerInput.surroundWith");
         const selectionRange = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
         // trim the range as we want it to exclude leading/trailing spaces
         selectionRange.trim();
@@ -436,7 +440,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const model = this.props.model;
         let handled = false;
 
-        if (surroundWith && document.getSelection().type != "Caret") {
+        if (this.state.surroundWith && document.getSelection().type != "Caret") {
             // Surround selected text with a character
             if (event.key === '(') {
                 this.historyManager.ensureLastChangesPushed(this.props.model);
@@ -628,6 +632,11 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.setState({ showPillAvatar });
     };
 
+    private surroundWithSettingChanged = () => {
+        const surroundWith = SettingsStore.getValue("MessageComposerInput.surroundWith");
+        this.setState({ surroundWith });
+    };
+
     componentWillUnmount() {
         document.removeEventListener("selectionchange", this.onSelectionChange);
         this.editorRef.current.removeEventListener("input", this.onInput, true);
@@ -635,6 +644,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current.removeEventListener("compositionend", this.onCompositionEnd, true);
         SettingsStore.unwatchSetting(this.emoticonSettingHandle);
         SettingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
+        SettingsStore.unwatchSetting(this.surroundWithHandle);
     }
 
     componentDidMount() {
