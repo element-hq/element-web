@@ -55,6 +55,14 @@ const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.sourc
 
 const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
+const SURROUND_WITH_CHARACTERS = ["\"", "_", "`", "'", "*", "~", "$"];
+const SURROUND_WITH_DOUBLE_CHARACTERS = new Map([
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"],
+    ["<", ">"],
+]);
+
 function ctrlShortcutLabel(key) {
     return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
 }
@@ -441,41 +449,18 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         let handled = false;
 
         if (this.state.surroundWith && document.getSelection().type != "Caret") {
-            // Surround selected text with a character
-            if (event.key === '(') {
+            // This surrounds the selected text with a character. This is
+            // intentionally left out of the keybinding manager as the keybinds
+            // here shouldn't be changeable
+            if (SURROUND_WITH_CHARACTERS.includes(event.key)) {
                 this.historyManager.ensureLastChangesPushed(this.props.model);
                 this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "(", ")");
+                toggleInlineFormat(selectionRange, event.key);
                 handled = true;
-            } else if (event.key === '[') {
+            } else if ([...SURROUND_WITH_DOUBLE_CHARACTERS.keys()].includes(event.key)) {
                 this.historyManager.ensureLastChangesPushed(this.props.model);
                 this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "[", "]");
-                handled = true;
-            } else if (event.key === '{') {
-                this.historyManager.ensureLastChangesPushed(this.props.model);
-                this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "{", "}");
-                handled = true;
-            } else if (event.key === '<') {
-                this.historyManager.ensureLastChangesPushed(this.props.model);
-                this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "<", ">");
-                handled = true;
-            } else if (event.key === '"') {
-                this.historyManager.ensureLastChangesPushed(this.props.model);
-                this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "\"");
-                handled = true;
-            } else if (event.key === '`') {
-                this.historyManager.ensureLastChangesPushed(this.props.model);
-                this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "`");
-                handled = true;
-            } else if (event.key === '\'') {
-                this.historyManager.ensureLastChangesPushed(this.props.model);
-                this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, "'");
+                toggleInlineFormat(selectionRange, event.key, SURROUND_WITH_DOUBLE_CHARACTERS.get(event.key));
                 handled = true;
             }
         }
