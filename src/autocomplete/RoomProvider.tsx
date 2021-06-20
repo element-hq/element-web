@@ -32,15 +32,6 @@ import SettingsStore from "../settings/SettingsStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
-function score(query: string, space: string) {
-    const index = space.indexOf(query);
-    if (index === -1) {
-        return Infinity;
-    } else {
-        return index;
-    }
-}
-
 function matcherObject(room: Room, displayedAlias: string, matchName = "") {
     return {
         room,
@@ -106,7 +97,6 @@ export default class RoomProvider extends AutocompleteProvider {
             const matchedString = command[0];
             completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
-                (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
             ]);
             completions = uniqBy(completions, (match) => match.room);
