@@ -195,14 +195,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private renderQRReciprocatePhase() {
         const {member, request} = this.props;
-        let Button;
-        // a bit of a hack, but the FormButton should only be used in the right panel
-        // they should probably just be the same component with a css class applied to it?
-        if (this.props.inDialog) {
-            Button = sdk.getComponent("elements.AccessibleButton");
-        } else {
-            Button = sdk.getComponent("elements.FormButton");
-        }
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         const description = request.isSelfVerification ?
             _t("Almost there! Is your other session showing the same shield?") :
             _t("Almost there! Is %(displayName)s showing the same shield?", {
@@ -211,21 +204,18 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         let body: JSX.Element;
         if (this.state.reciprocateQREvent) {
             // Element Web doesn't support scanning yet, so assume here we're the client being scanned.
-            //
-            // we're passing both a label and a child string to Button as
-            // FormButton and AccessibleButton expect this differently
             body = <React.Fragment>
                 <p>{description}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <div className="mx_VerificationPanel_reciprocateButtons">
-                    <Button
+                    <AccessibleButton
                         label={_t("No")} kind="danger"
                         disabled={this.state.reciprocateButtonClicked}
-                        onClick={this.onReciprocateNoClick}>{_t("No")}</Button>
-                    <Button
+                        onClick={this.onReciprocateNoClick} />
+                    <AccessibleButton
                         label={_t("Yes")} kind="primary"
                         disabled={this.state.reciprocateButtonClicked}
-                        onClick={this.onReciprocateYesClick}>{_t("Yes")}</Button>
+                        onClick={this.onReciprocateYesClick} />
                 </div>
             </React.Fragment>;
         } else {

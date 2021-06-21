@@ -116,7 +116,6 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
 
     public render() {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        const FormButton = sdk.getComponent("elements.FormButton");
 
         const {mxEvent} = this.props;
         const request = mxEvent.verificationRequest;
@@ -152,8 +151,12 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             subtitle = userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId());
             if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
-                    <FormButton kind="danger" onClick={this.onRejectClicked} label={_t("Decline")} />
-                    <FormButton onClick={this.onAcceptClicked} label={_t("Accept")} />
+                    <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
+                        {_t("Decline")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onAcceptClicked}>
+                        {_t("Accept")}
+                    </AccessibleButton>
                 </div>);
             }
         } else { // request sent by us
