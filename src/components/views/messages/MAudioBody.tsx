@@ -15,16 +15,16 @@ limitations under the License.
 */
 
 import React from "react";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {Playback} from "../../../voice/Playback";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Playback } from "../../../voice/Playback";
 import MFileBody from "./MFileBody";
 import InlineSpinner from '../elements/InlineSpinner';
-import {_t} from "../../../languageHandler";
-import {mediaFromContent} from "../../../customisations/Media";
-import {decryptFile} from "../../../utils/DecryptFile";
-import RecordingPlayback from "../audio_messages/RecordingPlayback";
-import {IMediaEventContent} from "../../../customisations/models/IMediaEventContent";
+import { _t } from "../../../languageHandler";
+import { mediaFromContent } from "../../../customisations/Media";
+import { decryptFile } from "../../../utils/DecryptFile";
+import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import AudioPlayer from "../audio_messages/AudioPlayer";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -52,9 +52,9 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
             try {
                 const blob = await decryptFile(content.file);
                 buffer = await blob.arrayBuffer();
-                this.setState({decryptedBlob: blob});
+                this.setState({ decryptedBlob: blob });
             } catch (e) {
-                this.setState({error: e});
+                this.setState({ error: e });
                 console.warn("Unable to decrypt audio message", e);
                 return; // stop processing the audio file
             }
@@ -62,7 +62,7 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
             try {
                 buffer = await media.downloadSource().then(r => r.blob()).then(r => r.arrayBuffer());
             } catch (e) {
-                this.setState({error: e});
+                this.setState({ error: e });
                 console.warn("Unable to download audio message", e);
                 return; // stop processing the audio file
             }
@@ -70,6 +70,7 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
 
         // We should have a buffer to work with now: let's set it up
         const playback = new Playback(buffer);
+        playback.clockInfo.populatePlaceholdersFrom(this.props.mxEvent);
         this.setState({ playback });
         // Note: the RecordingPlayback component will handle preparing the Playback class for us.
     }
@@ -101,7 +102,7 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
         // At this point we should have a playable state
         return (
             <span className="mx_MAudioBody">
-                <RecordingPlayback playback={this.state.playback} />
+                <AudioPlayer playback={this.state.playback} />
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
         )

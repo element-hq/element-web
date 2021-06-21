@@ -58,6 +58,7 @@ export class Playback extends EventEmitter implements IDestroyable {
     private resampledWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
+    private readonly fileSize: number;
 
     /**
      * Creates a new playback instance from a buffer.
@@ -67,10 +68,20 @@ export class Playback extends EventEmitter implements IDestroyable {
      */
     constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
         super();
+        // Capture the file size early as reading the buffer will result in a 0-length buffer left behind
+        this.fileSize = this.buf.byteLength;
         this.context = createAudioContext();
         this.resampledWaveform = arrayFastResample(seedWaveform ?? DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES);
         this.waveformObservable.update(this.resampledWaveform);
         this.clock = new PlaybackClock(this.context);
+    }
+
+    /**
+     * Size of the audio clip in bytes. May be zero if unknown. This is updated
+     * when the playback goes through phase changes.
+     */
+    public get sizeBytes(): number {
+        return this.fileSize;
     }
 
     /**

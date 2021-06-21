@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {SimpleObservable} from "matrix-widget-api";
-import {IDestroyable} from "../utils/IDestroyable";
+import { SimpleObservable } from "matrix-widget-api";
+import { IDestroyable } from "../utils/IDestroyable";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // Because keeping track of time is sufficiently complicated...
 export class PlaybackClock implements IDestroyable {
@@ -25,12 +26,13 @@ export class PlaybackClock implements IDestroyable {
     private observable = new SimpleObservable<number[]>();
     private timerId: number;
     private clipDuration = 0;
+    private placeholderDuration = 0;
 
     public constructor(private context: AudioContext) {
     }
 
     public get durationSeconds(): number {
-        return this.clipDuration;
+        return this.clipDuration || this.placeholderDuration;
     }
 
     public set durationSeconds(val: number) {
@@ -53,6 +55,16 @@ export class PlaybackClock implements IDestroyable {
             this.lastCheck = now;
         }
     };
+
+    /**
+     * Populates default information about the audio clip from the event body.
+     * The placeholders will be overridden once known.
+     * @param {MatrixEvent} event The event to use for placeholders.
+     */
+    public populatePlaceholdersFrom(event: MatrixEvent) {
+        const durationSeconds = Number(event.getContent()['info']?.['duration']);
+        if (Number.isFinite(durationSeconds)) this.placeholderDuration = durationSeconds;
+    }
 
     /**
      * Mark the time in the audio context where the clip starts/has been loaded.

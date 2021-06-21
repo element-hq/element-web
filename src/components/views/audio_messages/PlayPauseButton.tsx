@@ -21,7 +21,8 @@ import { _t } from "../../../languageHandler";
 import { Playback, PlaybackState } from "../../../voice/Playback";
 import classNames from "classnames";
 
-interface IProps {
+// omitted props are handled by render function
+interface IProps extends Omit<React.ComponentProps<typeof AccessibleTooltipButton>, "title" | "onClick" | "disabled"> {
     // Playback instance to manipulate. Cannot change during the component lifecycle.
     playback: Playback;
 
@@ -39,13 +40,19 @@ export default class PlayPauseButton extends React.PureComponent<IProps> {
         super(props);
     }
 
-    private onClick = async () => {
-        await this.props.playback.toggle();
+    private onClick = () => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.toggle();
     };
 
+    public async toggle() {
+        await this.props.playback.toggle();
+    }
+
     public render(): ReactNode {
-        const isPlaying = this.props.playback.isPlaying;
-        const isDisabled = this.props.playbackPhase === PlaybackState.Decoding;
+        const { playback, playbackPhase, ...restProps } = this.props;
+        const isPlaying = playback.isPlaying;
+        const isDisabled = playbackPhase === PlaybackState.Decoding;
         const classes = classNames('mx_PlayPauseButton', {
             'mx_PlayPauseButton_play': !isPlaying,
             'mx_PlayPauseButton_pause': isPlaying,
@@ -56,6 +63,7 @@ export default class PlayPauseButton extends React.PureComponent<IProps> {
             title={isPlaying ? _t("Pause") : _t("Play")}
             onClick={this.onClick}
             disabled={isDisabled}
+            {...restProps}
         />;
     }
 }
