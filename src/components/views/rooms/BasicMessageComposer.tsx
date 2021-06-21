@@ -457,12 +457,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             // trim the range as we want it to exclude leading/trailing spaces
             selectionRange.trim();
 
-            if (SURROUND_WITH_CHARACTERS.includes(event.key)) {
-                this.historyManager.ensureLastChangesPushed(this.props.model);
-                this.modifiedFlag = true;
-                toggleInlineFormat(selectionRange, event.key);
-                handled = true;
-            } else if ([...SURROUND_WITH_DOUBLE_CHARACTERS.keys()].includes(event.key)) {
+            if ([...SURROUND_WITH_DOUBLE_CHARACTERS.keys(), ...SURROUND_WITH_CHARACTERS].includes(event.key)) {
                 this.historyManager.ensureLastChangesPushed(this.props.model);
                 this.modifiedFlag = true;
                 toggleInlineFormat(selectionRange, event.key, SURROUND_WITH_DOUBLE_CHARACTERS.get(event.key));
