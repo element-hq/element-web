@@ -1,3 +1,25 @@
+Changes in [1.7.31](https://github.com/vector-im/element-web/releases/tag/v1.7.31) (2021-06-21)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.31-rc.1...v1.7.31)
+
+ * Upgrade to React SDK 3.24.0 and JS SDK 12.0.0
+
+Changes in [1.7.31-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.31-rc.1) (2021-06-15)
+=========================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.30...v1.7.31-rc.1)
+
+ * Upgrade to React SDK 3.24.0-rc.1 and JS SDK 12.0.0-rc.1
+ * Translations update from Weblate
+   [\#17655](https://github.com/vector-im/element-web/pull/17655)
+ * Upgrade matrix-react-test-utils for React 17 peer deps
+   [\#17653](https://github.com/vector-im/element-web/pull/17653)
+ * Fix lint errors in Webpack config
+   [\#17626](https://github.com/vector-im/element-web/pull/17626)
+ * Preload only `woff2` fonts
+   [\#17614](https://github.com/vector-im/element-web/pull/17614)
+ * ⚛️ Upgrade to React@17
+   [\#17601](https://github.com/vector-im/element-web/pull/17601)
+
 Changes in [1.7.30](https://github.com/vector-im/element-web/releases/tag/v1.7.30) (2021-06-07)
 ===============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.30-rc.1...v1.7.30)
