@@ -36,13 +36,19 @@ else
 	head=$(curl $apiEndpoint | jq -r '.head.label')
 fi
 
-# If head is set, it will contain either:
+# If head is set, it will contain on BuilKite either:
 #   * "branch" when the author's branch and target branch are in the same repo
 #   * "fork:branch" when the author's branch is in their fork or if this is a Netlify build
 # We can split on `:` into an array to check.
+# For GitHub Actions we need to inspect GITHUB_REPOSITORY and GITHUB_ACTOR
+# to determine whether the branch is from a fork or not
 BRANCH_ARRAY=(${head//:/ })
 if [[ "${#BRANCH_ARRAY[@]}" == "1" ]]; then
-    clone $deforg $defrepo $head
+    if [[ "$GITHUB_REPOSITORY" = "$deforg/$defrepo" ]]; then
+        clone $deforg $defrepo $head
+    else
+        clone $GITHUB_ACTOR $defrepo $head
+    fi
 elif [[ "${#BRANCH_ARRAY[@]}" == "2" ]]; then
     clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
 fi
