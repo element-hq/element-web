@@ -22,15 +22,18 @@ clone() {
 }
 
 # Try the PR author's branch in case it exists on the deps as well.
-# First we check if BUILDKITE_BRANCH is defined,
+# First we check if GITHUB_HEAD_REF is defined,
+# Then we check if BUILDKITE_BRANCH is defined,
 # if it isn't we can assume this is a Netlify build
-if [ -z ${BUILDKITE_BRANCH+x} ]; then 
+if [ -n ${GITHUB_HEAD_REF+x} ]; then
+	head=$GITHUB_HEAD_REF
+elif [ -n ${BUILDKITE_BRANCH+x} ]; then
+	head=$BUILDKITE_BRANCH
+else
 	# Netlify doesn't give us info about the fork so we have to get it from GitHub API
 	apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
 	apiEndpoint+=$REVIEW_ID
 	head=$(curl $apiEndpoint | jq -r '.head.label')
-else 
-	head=$BUILDKITE_BRANCH
 fi
 
 # If head is set, it will contain either:
@@ -39,12 +42,18 @@ fi
 # We can split on `:` into an array to check.
 BRANCH_ARRAY=(${head//:/ })
 if [[ "${#BRANCH_ARRAY[@]}" == "1" ]]; then
-    clone $deforg $defrepo $BUILDKITE_BRANCH
+    clone $deforg $defrepo $head
 elif [[ "${#BRANCH_ARRAY[@]}" == "2" ]]; then
     clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
 fi
+
 # Try the target branch of the push or PR.
-clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH
+if [ -n ${GITHUB_BASE_REF+x} ]; then
+    clone $deforg $defrepo $GITHUB_BASE_REF
+elif [ -n ${BUILDKITE_PULL_REQUEST_BASE_BRANCH+x} ]; then
+    clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH
+fi
+
 # Try HEAD which is the branch name in Netlify (not BRANCH which is pull/xxxx/head for PR builds)
 clone $deforg $defrepo $HEAD
 # Use the default branch as the last resort.
