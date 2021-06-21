@@ -1,3 +1,15 @@
+Changes in [3.24.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.24.0) (2021-06-21)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.24.0-rc.1...v3.24.0)
+
+ * Upgrade to JS SDK 12.0.0
+ * [Release] Keep composer reply when scrolling away from a highlighted event
+   [\#6211](https://github.com/matrix-org/matrix-react-sdk/pull/6211)
+ * [Release] Remove stray bullet point in reply preview
+   [\#6210](https://github.com/matrix-org/matrix-react-sdk/pull/6210)
+ * [Release] Stop requesting null next replies from the server
+   [\#6209](https://github.com/matrix-org/matrix-react-sdk/pull/6209)
+
 Changes in [3.24.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.24.0-rc.1) (2021-06-15)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.23.0...v3.24.0-rc.1)
