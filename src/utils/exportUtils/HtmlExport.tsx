@@ -217,7 +217,7 @@ export default class HTMLExporter extends Exporter {
             this.avatars.set(member.userId, true);
             const image = await fetch(avatarUrl);
             const blob = await image.blob();
-            this.zip.file(`users/${member.userId}`, blob);
+            this.zip.file(`users/${member.userId.replace(/:/g, '-')}`, blob);
         }
     }
 
@@ -265,7 +265,10 @@ export default class HTMLExporter extends Exporter {
         let eventTileMarkup = renderToStaticMarkup(eventTile);
         if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/g, `$1"${filePath}"`);
         if (hasAvatar) {
-            eventTileMarkup = eventTileMarkup.replace(/src="AvatarForExport"/g, `src="users/${mxEv.sender.userId}"`);
+            eventTileMarkup = eventTileMarkup.replace(
+                /src="avatarForExport"/g,
+                `src="users/${mxEv.sender.userId.replace(/:/g, "-")}"`,
+            );
         }
         return eventTileMarkup;
     }
@@ -291,8 +294,8 @@ export default class HTMLExporter extends Exporter {
                     formatted_body: `<strong>${this.mediaOmitText}</strong>`,
                 }
                 if (mxEv.isEncrypted()) {
-                    mxEv._clearEvent.content = modifiedContent;
-                    mxEv._clearEvent.type = "m.room.message";
+                    mxEv.clearEvent.content = modifiedContent;
+                    mxEv.clearEvent.type = "m.room.message";
                 } else {
                     mxEv.event.content = modifiedContent;
                     mxEv.event.type = "m.room.message";
