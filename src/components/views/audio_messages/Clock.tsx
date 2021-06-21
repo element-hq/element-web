@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     seconds: number;
@@ -28,7 +28,7 @@ interface IState {
  * Simply converts seconds into minutes and seconds. Note that hours will not be
  * displayed, making it possible to see "82:29".
  */
-@replaceableComponent("views.voice_messages.Clock")
+@replaceableComponent("views.audio_messages.Clock")
 export default class Clock extends React.Component<IProps, IState> {
     public constructor(props) {
         super(props);

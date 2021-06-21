@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
-import {Playback, PlaybackState} from "../../../voice/Playback";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { Playback, PlaybackState } from "../../../voice/Playback";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     playback: Playback;
@@ -33,7 +33,7 @@ interface IState {
 /**
  * A clock for a playback of a recording.
  */
-@replaceableComponent("views.voice_messages.PlaybackClock")
+@replaceableComponent("views.audio_messages.PlaybackClock")
 export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

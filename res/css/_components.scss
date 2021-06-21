@@ -37,6 +37,9 @@
 @import "./structures/_ViewSource.scss";
 @import "./structures/auth/_CompleteSecurity.scss";
 @import "./structures/auth/_Login.scss";
+@import "./views/audio_messages/_PlayPauseButton.scss";
+@import "./views/audio_messages/_PlaybackContainer.scss";
+@import "./views/audio_messages/_Waveform.scss";
 @import "./views/auth/_AuthBody.scss";
 @import "./views/auth/_AuthButtons.scss";
 @import "./views/auth/_AuthFooter.scss";
@@ -254,9 +257,6 @@
 @import "./views/toasts/_AnalyticsToast.scss";
 @import "./views/toasts/_NonUrgentEchoFailureToast.scss";
 @import "./views/verification/_VerificationShowSas.scss";
-@import "./views/voice_messages/_PlayPauseButton.scss";
-@import "./views/voice_messages/_PlaybackContainer.scss";
-@import "./views/voice_messages/_Waveform.scss";
 @import "./views/voip/_CallContainer.scss";
 @import "./views/voip/_CallView.scss";
 @import "./views/voip/_CallViewForRoom.scss";

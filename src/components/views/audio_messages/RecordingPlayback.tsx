@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Playback, PlaybackState} from "../../../voice/Playback";
+import { Playback, PlaybackState } from "../../../voice/Playback";
 import React, {ReactNode} from "react";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import PlaybackWaveform from "./PlaybackWaveform";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create
@@ -31,6 +32,7 @@ interface IState {
     playbackPhase: PlaybackState;
 }
 
+@replaceableComponent("views.audio_messages.RecordingPlayback")
 export default class RecordingPlayback extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);

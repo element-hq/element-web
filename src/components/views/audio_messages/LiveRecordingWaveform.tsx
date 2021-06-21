@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording} from "../../../voice/VoiceRecording";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {arrayFastResample, arraySeed} from "../../../utils/arrays";
-import {percentageOf} from "../../../utils/numbers";
+import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../voice/VoiceRecording";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { arrayFastResample, arraySeed } from "../../../utils/arrays";
+import { percentageOf } from "../../../utils/numbers";
 import Waveform from "./Waveform";
 
 interface IProps {
@@ -32,7 +32,7 @@ interface IState {
 /**
  * A waveform which shows the waveform of a live recording
  */
-@replaceableComponent("views.voice_messages.LiveRecordingWaveform")
+@replaceableComponent("views.audio_messages.LiveRecordingWaveform")
 export default class LiveRecordingWaveform extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

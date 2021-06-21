@@ -23,7 +23,7 @@ import InlineSpinner from '../elements/InlineSpinner';
 import {_t} from "../../../languageHandler";
 import {mediaFromContent} from "../../../customisations/Media";
 import {decryptFile} from "../../../utils/DecryptFile";
-import RecordingPlayback from "../voice_messages/RecordingPlayback";
+import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import {IMediaEventContent} from "../../../customisations/models/IMediaEventContent";
 
 interface IProps {

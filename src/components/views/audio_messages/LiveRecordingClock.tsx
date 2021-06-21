@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import {IRecordingUpdate, VoiceRecording} from "../../../voice/VoiceRecording";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { IRecordingUpdate, VoiceRecording } from "../../../voice/VoiceRecording";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
 
 interface IProps {
@@ -30,7 +30,7 @@ interface IState {
 /**
  * A clock for a live recording.
  */
-@replaceableComponent("views.voice_messages.LiveRecordingClock")
+@replaceableComponent("views.audio_messages.LiveRecordingClock")
 export default class LiveRecordingClock extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

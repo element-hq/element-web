@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import classNames from "classnames";
 
 interface IProps {
@@ -34,7 +34,7 @@ interface IState {
  * For CSS purposes, a mx_Waveform_bar_100pct class is added when the bar should be
  * "filled", as a demonstration of the progress property.
  */
-@replaceableComponent("views.voice_messages.Waveform")
+@replaceableComponent("views.audio_messages.Waveform")
 export default class Waveform extends React.PureComponent<IProps, IState> {
     public static defaultProps = {
         progress: 1,
