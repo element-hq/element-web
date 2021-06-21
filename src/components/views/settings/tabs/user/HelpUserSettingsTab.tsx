@@ -68,6 +68,18 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
+    private getVersionInfo(): { appVersion: string, olmVersion: string } {
+        const brand = SdkConfig.get().brand;
+        const appVersion = this.state.appVersion || 'unknown';
+        let olmVersion = MatrixClientPeg.get().olmVersion;
+        olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
+
+        return {
+            appVersion: `${_t("%(brand)s version:", { brand })} ${appVersion}`,
+            olmVersion: `${_t("Olm version:")} ${olmVersion}`,
+        };
+    }
+
     private onClearCacheAndReload = (e) => {
         if (!PlatformPeg.get()) return;
 
@@ -179,6 +191,21 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         this.closeCopiedTooltip = target.onmouseleave = close;
     }
 
+    private onCopyVersionClicked = async (e) => {
+        e.preventDefault();
+        const target = e.target; // copy target before we go async and React throws it away
+
+        const { appVersion, olmVersion } = this.getVersionInfo();
+        const successful = await copyPlaintext(`${appVersion}\n${olmVersion}`);
+        const buttonRect = target.getBoundingClientRect();
+        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
+            ...toRightOf(buttonRect, 2),
+            message: successful ? _t('Copied!') : _t('Failed to copy'),
+        });
+        this.closeCopiedTooltip = target.onmouseleave = close;
+    };
+
     render() {
         const brand = SdkConfig.get().brand;
 
@@ -225,11 +252,6 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             );
         }
 
-        const appVersion = this.state.appVersion || 'unknown';
-
-        let olmVersion = MatrixClientPeg.get().olmVersion;
-        olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
-
         let updateButton = null;
         if (this.state.canUpdate) {
             updateButton = <UpdateCheckButton />;
@@ -267,6 +289,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             );
         }
 
+        const { appVersion, olmVersion } = this.getVersionInfo();
+
         return (
             <div className="mx_SettingsTab mx_HelpUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
@@ -283,8 +307,15 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("%(brand)s version:", { brand })} {appVersion}<br />
-                        {_t("olm version:")} {olmVersion}<br />
+                        <div className="mx_HelpUserSettingsTab_copy">
+                            { appVersion }<br />
+                            { olmVersion }<br />
+                            <AccessibleTooltipButton
+                                title={_t("Copy")}
+                                onClick={this.onCopyVersionClicked}
+                                className="mx_HelpUserSettingsTab_copyButton"
+                            />
+                        </div>
                         {updateButton}
                     </div>
                 </div>
