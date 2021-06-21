@@ -1,3 +1,9 @@
+Changes in [1.7.31](https://github.com/vector-im/element-web/releases/tag/v1.7.31) (2021-06-21)
+===============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.31-rc.1...v1.7.31)
+
+ * Upgrade to React SDK 3.24.0 and JS SDK 12.0.0
+
 Changes in [1.7.31-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.31-rc.1) (2021-06-15)
 =========================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.30...v1.7.31-rc.1)
