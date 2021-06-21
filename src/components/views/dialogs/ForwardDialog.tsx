@@ -39,6 +39,9 @@ import NotificationBadge from "../rooms/NotificationBadge";
 import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
+import TruncatedList from "../elements/TruncatedList";
+import EntityTile from "../rooms/EntityTile";
+import BaseAvatar from "../avatars/BaseAvatar";
 
 const AVATAR_SIZE = 30;
 
@@ -195,6 +198,17 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         }).match(lcQuery);
     }
 
+    const [truncateAt, setTruncateAt] = useState(20);
+    function overflowTile(overflowCount, totalCount) {
+        const text = _t("and %(count)s others...", { count: overflowCount });
+        return (
+            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={() => setTruncateAt(totalCount)} />
+        );
+    }
+
     return <BaseDialog
         title={_t("Forward message")}
         className="mx_ForwardDialog"
@@ -227,15 +241,20 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <AutoHideScrollbar className="mx_ForwardList_content">
                 { rooms.length > 0 ? (
                     <div className="mx_ForwardList_results">
-                        { rooms.map(room =>
-                            <Entry
-                                key={room.roomId}
-                                room={room}
-                                event={event}
-                                matrixClient={cli}
-                                onFinished={onFinished}
-                            />,
-                        ) }
+                        <TruncatedList
+                            truncateAt={truncateAt}
+                            createOverflowElement={overflowTile}
+                            getChildren={(start, end) => rooms.slice(start, end).map(room =>
+                                <Entry
+                                    key={room.roomId}
+                                    room={room}
+                                    event={event}
+                                    matrixClient={cli}
+                                    onFinished={onFinished}
+                                />,
+                            )}
+                            getChildCount={() => rooms.length}
+                        />
                     </div>
                 ) : <span className="mx_ForwardList_noResults">
                     { _t("No results") }
