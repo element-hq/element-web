@@ -85,12 +85,14 @@ export default class CallEvent extends React.Component<IProps, IState> {
                         title={this.state.silenced ? _t("Sound on"): _t("Silence call")}
                     />
                     <AccessibleButton
+                        className="mx_CallEvent_content_button"
                         onClick={ this.props.callEventGrouper.rejectCall }
                         kind="danger"
                     >
                         { _t("Decline") }
                     </AccessibleButton>
                     <AccessibleButton
+                        className="mx_CallEvent_content_button"
                         onClick={ this.props.callEventGrouper.answerCall }
                         kind="primary"
                     >
@@ -162,7 +164,7 @@ export default class CallEvent extends React.Component<IProps, IState> {
                 <div className="mx_CallEvent_content">
                     { _t("You missed this call") }
                     <AccessibleButton
-                        className="mx_CallEvent_content_callBack"
+                        className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
                         onClick={ this.props.callEventGrouper.callBack }
                         kind="primary"
                     >
