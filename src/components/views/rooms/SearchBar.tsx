@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, {createRef, RefObject} from 'react';
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
@@ -23,27 +23,42 @@ import {Key} from "../../../Keyboard";
 import DesktopBuildsNotice, {WarningKind} from "../elements/DesktopBuildsNotice";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    onCancelClick: () => void;
+    onSearch: (query: string, scope: string) => void;
+    searchInProgress?: boolean;
+    isRoomEncrypted?: boolean;
+}
+
+interface IState {
+    scope: SearchScope;
+}
+
+export enum SearchScope {
+    Room = "Room",
+    All = "All",
+}
+
 @replaceableComponent("views.rooms.SearchBar")
-export default class SearchBar extends React.Component {
-    constructor(props) {
+export default class SearchBar extends React.Component<IProps, IState> {
+    private searchTerm: RefObject<HTMLInputElement> = createRef();
+
+    constructor(props: IProps) {
         super(props);
-
-        this._search_term = createRef();
-
         this.state = {
-            scope: 'Room',
+            scope: SearchScope.Room,
         };
     }
 
-    onThisRoomClick = () => {
-        this.setState({ scope: 'Room' }, () => this._searchIfQuery());
+    public onThisRoomClick = () => {
+        this.setState({ scope: SearchScope.Room }, () => this._searchIfQuery());
     };
 
-    onAllRoomsClick = () => {
-        this.setState({ scope: 'All' }, () => this._searchIfQuery());
+    public onAllRoomsClick = () => {
+        this.setState({ scope: SearchScope.All }, () => this._searchIfQuery());
     };
 
-    onSearchChange = (e) => {
+    public onSearchChange = (e: React.KeyboardEvent) => {
         switch (e.key) {
             case Key.ENTER:
                 this.onSearch();
@@ -55,13 +70,13 @@ export default class SearchBar extends React.Component {
     };
 
     _searchIfQuery() {
-        if (this._search_term.current.value) {
+        if (this.searchTerm.current.value) {
             this.onSearch();
         }
     }
 
     onSearch = () => {
-        this.props.onSearch(this._search_term.current.value, this.state.scope);
+        this.props.onSearch(this.searchTerm.current.value, this.state.scope);
     };
 
     render() {
@@ -69,25 +84,41 @@ export default class SearchBar extends React.Component {
             mx_SearchBar_searching: this.props.searchInProgress,
         });
         const thisRoomClasses = classNames("mx_SearchBar_button", {
-            mx_SearchBar_unselected: this.state.scope !== 'Room',
+            mx_SearchBar_unselected: this.state.scope !== SearchScope.Room,
         });
         const allRoomsClasses = classNames("mx_SearchBar_button", {
-            mx_SearchBar_unselected: this.state.scope !== 'All',
+            mx_SearchBar_unselected: this.state.scope !== SearchScope.All,
         });
 
         return (
             <>
                 <div className="mx_SearchBar">
                     <div className="mx_SearchBar_buttons" role="radiogroup">
-                        <AccessibleButton className={ thisRoomClasses } onClick={this.onThisRoomClick} aria-checked={this.state.scope === 'Room'} role="radio">
+                        <AccessibleButton
+                            className={ thisRoomClasses }
+                            onClick={this.onThisRoomClick}
+                            aria-checked={this.state.scope === SearchScope.Room}
+                            role="radio"
+                        >
                             {_t("This Room")}
                         </AccessibleButton>
-                        <AccessibleButton className={ allRoomsClasses } onClick={this.onAllRoomsClick} aria-checked={this.state.scope === 'All'} role="radio">
+                        <AccessibleButton
+                            className={ allRoomsClasses }
+                            onClick={this.onAllRoomsClick}
+                            aria-checked={this.state.scope === SearchScope.All}
+                            role="radio"
+                        >
                             {_t("All Rooms")}
                         </AccessibleButton>
                     </div>
                     <div className="mx_SearchBar_input mx_textinput">
-                        <input ref={this._search_term} type="text" autoFocus={true} placeholder={_t("Search…")} onKeyDown={this.onSearchChange} />
+                        <input
+                            ref={this.searchTerm}
+                            type="text"
+                            autoFocus={true}
+                            placeholder={_t("Search…")}
+                            onKeyDown={this.onSearchChange}
+                        />
                         <AccessibleButton className={ searchButtonClasses } onClick={this.onSearch} />
                     </div>
                     <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
