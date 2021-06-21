@@ -15,41 +15,40 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixEvent } from 'matrix-js-sdk/src';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {getNameForEventRoom, userLabelForEventRoom}
+import { getNameForEventRoom, userLabelForEventRoom }
     from '../../../utils/KeyVerificationStateObserver';
 import dis from "../../../dispatcher/dispatcher";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {Action} from "../../../dispatcher/actions";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { Action } from "../../../dispatcher/actions";
 import EventTileBubble from "./EventTileBubble";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    mxEvent: MatrixEvent
+}
 
 @replaceableComponent("views.messages.MKeyVerificationRequest")
-export default class MKeyVerificationRequest extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    componentDidMount() {
+export default class MKeyVerificationRequest extends React.Component<IProps> {
+    public componentDidMount() {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
-            request.on("change", this._onRequestChanged);
+            request.on("change", this.onRequestChanged);
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
-            request.off("change", this._onRequestChanged);
+            request.off("change", this.onRequestChanged);
         }
     }
 
-    _openRequest = () => {
-        const {verificationRequest} = this.props.mxEvent;
+    private openRequest = () => {
+        const { verificationRequest } = this.props.mxEvent;
         const member = MatrixClientPeg.get().getUser(verificationRequest.otherUserId);
         dis.dispatch({
             action: Action.SetRightPanelPhase,
@@ -58,15 +57,15 @@ export default class MKeyVerificationRequest extends React.Component {
         });
     };
 
-    _onRequestChanged = () => {
+    private onRequestChanged = () => {
         this.forceUpdate();
     };
 
-    _onAcceptClicked = async () => {
+    private onAcceptClicked = async () => {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
-                this._openRequest();
+                this.openRequest();
                 await request.accept();
             } catch (err) {
                 console.error(err.message);
@@ -74,7 +73,7 @@ export default class MKeyVerificationRequest extends React.Component {
         }
     };
 
-    _onRejectClicked = async () => {
+    private onRejectClicked = async () => {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
@@ -85,7 +84,7 @@ export default class MKeyVerificationRequest extends React.Component {
         }
     };
 
-    _acceptedLabel(userId) {
+    private acceptedLabel(userId: string) {
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
         if (userId === myUserId) {
@@ -95,7 +94,7 @@ export default class MKeyVerificationRequest extends React.Component {
         }
     }
 
-    _cancelledLabel(userId) {
+    private cancelledLabel(userId: string) {
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
         const {cancellationCode} = this.props.mxEvent.verificationRequest;
@@ -115,7 +114,7 @@ export default class MKeyVerificationRequest extends React.Component {
         }
     }
 
-    render() {
+    public render() {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         const FormButton = sdk.getComponent("elements.FormButton");
 
@@ -134,11 +133,11 @@ export default class MKeyVerificationRequest extends React.Component {
             let stateLabel;
             const accepted = request.ready || request.started || request.done;
             if (accepted) {
-                stateLabel = (<AccessibleButton onClick={this._openRequest}>
-                    {this._acceptedLabel(request.receivingUserId)}
+                stateLabel = (<AccessibleButton onClick={this.openRequest}>
+                    {this.acceptedLabel(request.receivingUserId)}
                 </AccessibleButton>);
             } else if (request.cancelled) {
-                stateLabel = this._cancelledLabel(request.cancellingUserId);
+                stateLabel = this.cancelledLabel(request.cancellingUserId);
             } else if (request.accepting) {
                 stateLabel = _t("Accepting …");
             } else if (request.declining) {
@@ -153,8 +152,8 @@ export default class MKeyVerificationRequest extends React.Component {
             subtitle = userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId());
             if (request.canAccept) {
                 stateNode = (<div className="mx_cryptoEvent_buttons">
-                    <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
-                    <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />
+                    <FormButton kind="danger" onClick={this.onRejectClicked} label={_t("Decline")} />
+                    <FormButton onClick={this.onAcceptClicked} label={_t("Accept")} />
                 </div>);
             }
         } else { // request sent by us
@@ -174,8 +173,3 @@ export default class MKeyVerificationRequest extends React.Component {
         return null;
     }
 }
-
-MKeyVerificationRequest.propTypes = {
-    /* the MatrixEvent to show */
-    mxEvent: PropTypes.object.isRequired,
-};
