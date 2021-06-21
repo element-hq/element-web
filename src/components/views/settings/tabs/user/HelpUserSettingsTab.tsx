@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import {_t, getCurrentLanguage} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
-import AccessibleButton from "../../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import AccessibleTooltipButton from '../../../elements/AccessibleTooltipButton';
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
@@ -177,11 +177,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         );
     }
 
-    onAccessTokenCopyClick = async (e) => {
+    private async copy(text: string, e: ButtonEvent) {
         e.preventDefault();
-        const target = e.target; // copy target before we go async and React throws it away
+        const target = e.target as HTMLDivElement; // copy target before we go async and React throws it away
 
-        const successful = await copyPlaintext(MatrixClientPeg.get().getAccessToken());
+        const successful = await copyPlaintext(text);
         const buttonRect = target.getBoundingClientRect();
         const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
         const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
@@ -191,19 +191,13 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         this.closeCopiedTooltip = target.onmouseleave = close;
     }
 
-    private onCopyVersionClicked = async (e) => {
-        e.preventDefault();
-        const target = e.target; // copy target before we go async and React throws it away
+    private onAccessTokenCopyClick = (e: ButtonEvent) => {
+        this.copy(MatrixClientPeg.get().getAccessToken(), e);
+    };
 
+    private onCopyVersionClicked = (e: ButtonEvent) => {
         const { appVersion, olmVersion } = this.getVersionInfo();
-        const successful = await copyPlaintext(`${appVersion}\n${olmVersion}`);
-        const buttonRect = target.getBoundingClientRect();
-        const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
-        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
-            ...toRightOf(buttonRect, 2),
-            message: successful ? _t('Copied!') : _t('Failed to copy'),
-        });
-        this.closeCopiedTooltip = target.onmouseleave = close;
+        this.copy(`${appVersion}\n${olmVersion}`, e);
     };
 
     render() {
