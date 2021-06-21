@@ -55,7 +55,7 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
                 this.setState({decryptedBlob: blob});
             } catch (e) {
                 this.setState({error: e});
-                console.warn("Unable to decrypt voice message", e);
+                console.warn("Unable to decrypt audio message", e);
                 return; // stop processing the audio file
             }
         } else {
@@ -63,15 +63,13 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
                 buffer = await media.downloadSource().then(r => r.blob()).then(r => r.arrayBuffer());
             } catch (e) {
                 this.setState({error: e});
-                console.warn("Unable to download voice message", e);
+                console.warn("Unable to download audio message", e);
                 return; // stop processing the audio file
             }
         }
 
-        const waveform = content?.["org.matrix.msc1767.audio"]?.waveform?.map(p => p / 1024);
-
         // We should have a buffer to work with now: let's set it up
-        const playback = new Playback(buffer, waveform);
+        const playback = new Playback(buffer);
         this.setState({ playback });
         // Note: the RecordingPlayback component will handle preparing the Playback class for us.
     }
@@ -84,9 +82,9 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
         if (this.state.error) {
             // TODO: @@TR: Verify error state
             return (
-                <span className="mx_MVoiceMessageBody">
+                <span className="mx_MAudioBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
-                    { _t("Error processing voice message") }
+                    { _t("Error processing audio message") }
                 </span>
             );
         }
@@ -94,7 +92,7 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
         if (!this.state.playback) {
             // TODO: @@TR: Verify loading/decrypting state
             return (
-                <span className="mx_MVoiceMessageBody">
+                <span className="mx_MAudioBody">
                     <InlineSpinner />
                 </span>
             );
@@ -102,7 +100,7 @@ export default class MAudioBody extends React.PureComponent<IProps, IState> {
 
         // At this point we should have a playable state
         return (
-            <span className="mx_MVoiceMessageBody">
+            <span className="mx_MAudioBody">
                 <RecordingPlayback playback={this.state.playback} />
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} showGenericPlaceholder={false} />
             </span>
