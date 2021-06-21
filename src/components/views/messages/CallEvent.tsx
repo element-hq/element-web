@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t, _td } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
 import CallEventGrouper, { CallEventGrouperEvent, CustomCallState } from '../../structures/CallEventGrouper';
-import FormButton from '../elements/FormButton';
+import AccessibleButton from '../elements/AccessibleButton';
 import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
 import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import classNames from 'classnames';
@@ -84,16 +84,18 @@ export default class CallEvent extends React.Component<IProps, IState> {
                         onClick={this.props.callEventGrouper.toggleSilenced}
                         title={this.state.silenced ? _t("Sound on"): _t("Silence call")}
                     />
-                    <FormButton
+                    <AccessibleButton
                         onClick={ this.props.callEventGrouper.rejectCall }
                         kind="danger"
-                        label={ _t("Decline") }
-                    />
-                    <FormButton
+                    >
+                        { _t("Decline") }
+                    </AccessibleButton>
+                    <AccessibleButton
                         onClick={ this.props.callEventGrouper.answerCall }
                         kind="primary"
-                        label={ _t("Accept") }
-                    />
+                    >
+                        { _t("Accept") }
+                    </AccessibleButton>
                 </div>
             );
         }
@@ -159,12 +161,13 @@ export default class CallEvent extends React.Component<IProps, IState> {
             return (
                 <div className="mx_CallEvent_content">
                     { _t("You missed this call") }
-                    <FormButton
+                    <AccessibleButton
                         className="mx_CallEvent_content_callBack"
                         onClick={ this.props.callEventGrouper.callBack }
                         kind="primary"
-                        label={ _t("Call back") }
-                    />
+                    >
+                        { _t("Call back") }
+                    </AccessibleButton>
                 </div>
             );
         }
