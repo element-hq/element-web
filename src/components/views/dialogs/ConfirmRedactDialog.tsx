@@ -19,11 +19,15 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
+
 /*
  * A dialog for confirming a redaction.
  */
 @replaceableComponent("views.dialogs.ConfirmRedactDialog")
-export default class ConfirmRedactDialog extends React.Component {
+export default class ConfirmRedactDialog extends React.Component<IProps> {
     render() {
         const TextInputDialog = sdk.getComponent('views.dialogs.TextInputDialog');
         return (

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,22 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import {_t} from "../../../languageHandler";
-import * as sdk from "../../../index";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { _t } from "../../../../languageHandler";
+import * as sdk from "../../../../index";
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
-@replaceableComponent("views.dialogs.ConfirmWipeDeviceDialog")
-export default class ConfirmWipeDeviceDialog extends React.Component {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-    };
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
 
-    _onConfirm = () => {
+@replaceableComponent("views.dialogs.security.ConfirmDestroyCrossSigningDialog")
+export default class ConfirmDestroyCrossSigningDialog extends React.Component<IProps> {
+    private onConfirm = (): void => {
         this.props.onFinished(true);
     };
 
-    _onDecline = () => {
+    private onDecline = (): void => {
         this.props.onFinished(false);
     };
 
@@ -40,25 +39,27 @@ export default class ConfirmWipeDeviceDialog extends React.Component {
 
         return (
             <BaseDialog
-                className='mx_ConfirmWipeDeviceDialog'
+                className='mx_ConfirmDestroyCrossSigningDialog'
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Clear all data in this session?")}
+                title={_t("Destroy cross-signing keys?")}
             >
-                <div className='mx_ConfirmWipeDeviceDialog_content'>
+                <div className='mx_ConfirmDestroyCrossSigningDialog_content'>
                     <p>
                         {_t(
-                            "Clearing all data from this session is permanent. Encrypted messages will be lost " +
-                            "unless their keys have been backed up.",
+                            "Deleting cross-signing keys is permanent. " +
+                            "Anyone you have verified with will see security alerts. " +
+                            "You almost certainly don't want to do this, unless " +
+                            "you've lost every device you can cross-sign from.",
                         )}
                     </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Clear all data")}
-                    onPrimaryButtonClick={this._onConfirm}
+                    primaryButton={_t("Clear cross-signing keys")}
+                    onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
                     cancelButton={_t("Cancel")}
-                    onCancel={this._onDecline}
+                    onCancel={this.onDecline}
                 />
             </BaseDialog>
         );
