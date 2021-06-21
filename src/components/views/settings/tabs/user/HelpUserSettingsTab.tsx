@@ -300,12 +300,12 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             <summary>{_t("Access Token")}</summary><br />
                             <b>{_t("Your access token gives full access to your account."
                                + " Do not share it with anyone." )}</b>
-                            <div className="mx_HelpUserSettingsTab_accessToken">
+                            <div className="mx_HelpUserSettingsTab_copy">
                                 <code>{MatrixClientPeg.get().getAccessToken()}</code>
                                 <AccessibleTooltipButton
                                     title={_t("Copy")}
                                     onClick={this.onAccessTokenCopyClick}
-                                    className="mx_HelpUserSettingsTab_accessToken_copy"
+                                    className="mx_HelpUserSettingsTab_copyButton"
                                 />
                             </div>
                         </details><br />
