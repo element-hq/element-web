@@ -116,6 +116,11 @@ function textForTopicEvent(ev): () => string | null {
     });
 }
 
+function textForRoomAvatarEvent(ev: MatrixEvent): () => string | null {
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    return () => _t('%(senderDisplayName)s changed the room avatar.', {senderDisplayName});
+}
+
 function textForRoomNameEvent(ev): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
@@ -242,10 +247,12 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         const isRedacted = ev.isRedacted();
         let message = ev.getContent().body;
         if (isRedacted) message = _t("Message Deleted");
-        else if (ev.getContent().msgtype === "m.emote") {
+        if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {
             message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
+        } else if (ev.getType() == "m.sticker") {
+            message = _t('%(senderDisplayName)s sent a sticker.', {senderDisplayName});
         } else message = senderDisplayName + ': ' + message;
         return message;
     };
@@ -603,6 +610,7 @@ interface IHandlers {
 const handlers: IHandlers = {
     'm.room.message': textForMessageEvent,
     'm.call.invite': textForCallInviteEvent,
+    'm.sticker': textForMessageEvent,
     'm.call.answer': textForCallAnswerEvent,
     'm.call.hangup': textForCallHangupEvent,
     'm.call.reject': textForCallRejectEvent,
@@ -613,6 +621,7 @@ const stateHandlers: IHandlers = {
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent,
+    "m.room.avatar": textForRoomAvatarEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.power_levels': textForPowerEvent,
@@ -638,7 +647,7 @@ export function hasText(ev): boolean {
     return Boolean(handler?.(ev));
 }
 
-export function textForEvent(ev): string {
+export function textForEvent(ev: MatrixEvent): string {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return handler?.(ev)?.() || '';
 }

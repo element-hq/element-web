@@ -140,8 +140,11 @@ export default abstract class Exporter {
         return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 
-    protected isReply(mxEvent) {
-        const relatesTo = mxEvent.getContent()["m.relates_to"];
+    protected isReply(event: MatrixEvent) {
+        const isEncrypted = event.isEncrypted();
+        // If encrypted, in_reply_to lies in event.event.content
+        const content = isEncrypted ? event.event.content : event.getContent();
+        const relatesTo = content["m.relates_to"];
         return !!(relatesTo && relatesTo["m.in_reply_to"]);
     }
 

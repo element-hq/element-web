@@ -71,7 +71,8 @@ export default class PlainTextExporter extends Exporter {
         let content = "";
         for (const event of events) {
             if (!haveTileForEvent(event)) continue;
-            content += `${new Date(event.getTs()).toLocaleString()} - ${this._textForEvent(event)}\n`;
+            const textForEvent = this._textForEvent(event);
+            content += textForEvent && `${new Date(event.getTs()).toLocaleString()} - ${textForEvent}\n`;
         }
         return content;
     }
