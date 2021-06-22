@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { Room } from "matrix-js-sdk/src/models/room";
+
+import { MatrixClientPeg } from './MatrixClientPeg';
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -25,11 +27,11 @@ import {MatrixClientPeg} from './MatrixClientPeg';
  * @param {Object} room The room object
  * @returns {string} A display alias for the given room
  */
-export function getDisplayAliasForRoom(room) {
+export function getDisplayAliasForRoom(room: Room): string {
     return room.getCanonicalAlias() || room.getAltAliases()[0];
 }
 
-export function looksLikeDirectMessageRoom(room, myUserId) {
+export function looksLikeDirectMessageRoom(room: Room, myUserId: string): boolean {
     const myMembership = room.getMyMembership();
     const me = room.getMember(myUserId);
 
@@ -48,7 +50,7 @@ export function looksLikeDirectMessageRoom(room, myUserId) {
     return false;
 }
 
-export function guessAndSetDMRoom(room, isDirect) {
+export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {
     let newTarget;
     if (isDirect) {
         const guessedUserId = guessDMRoomTargetId(
@@ -70,7 +72,7 @@ export function guessAndSetDMRoom(room, isDirect) {
                    this room as a DM room
  * @returns {object} A promise
  */
-export function setDMRoom(roomId, userId) {
+export function setDMRoom(roomId: string, userId: string): Promise<void> {
     if (MatrixClientPeg.get().isGuest()) {
         return Promise.resolve();
     }
@@ -114,7 +116,7 @@ export function setDMRoom(roomId, userId) {
  * @param {string} myUserId User ID of the current user
  * @returns {string} User ID of the user that the room is probably a DM with
  */
-function guessDMRoomTargetId(room, myUserId) {
+function guessDMRoomTargetId(room: Room, myUserId: string): string {
     let oldestTs;
     let oldestUser;
 
