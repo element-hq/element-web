@@ -225,10 +225,10 @@ export function arrayMerge<T>(...a: T[][]): T[] {
 
 /**
  * Moves a single element from fromIndex to toIndex.
- * @param list the list from which to construct the new list.
- * @param fromIndex the index of the element to move.
- * @param toIndex the index of where to put the element.
- * @returns A new array with the requested value moved.
+ * @param {array} list the list from which to construct the new list.
+ * @param {number} fromIndex the index of the element to move.
+ * @param {number} toIndex the index of where to put the element.
+ * @returns {array} A new array with the requested value moved.
  */
 export function moveElement<T>(list: T[], fromIndex: number, toIndex: number): T[] {
     const result = Array.from(list);

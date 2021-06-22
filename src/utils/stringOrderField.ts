@@ -18,13 +18,13 @@ import { alphabetPad, baseToString, stringToBase, DEFAULT_ALPHABET } from "matri
 
 import { moveElement } from "./arrays";
 
-export const midPointsBetweenStrings = (
+export function midPointsBetweenStrings(
     a: string,
     b: string,
     count: number,
     maxLen: number,
     alphabet = DEFAULT_ALPHABET,
-): string[] => {
+): string[] {
     const padN = Math.min(Math.max(a.length, b.length), maxLen);
     const padA = alphabetPad(a, padN, alphabet);
     const padB = alphabetPad(b, padN, alphabet);
@@ -48,7 +48,7 @@ export const midPointsBetweenStrings = (
     const step = (baseB - baseA) / BigInt(count + 1);
     const start = BigInt(baseA + step);
     return Array(count).fill(undefined).map((_, i) => baseToString(start + (BigInt(i) * step), alphabet));
-};
+}
 
 interface IEntry {
     index: number;
