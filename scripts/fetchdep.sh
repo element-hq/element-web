@@ -49,7 +49,8 @@ if [[ "${#BRANCH_ARRAY[@]}" == "1" ]]; then
         if [[ "$GITHUB_REPOSITORY" == "$deforg"* ]]; then
             clone $deforg $defrepo $GITHUB_HEAD_REF
         else
-            clone $GITHUB_ACTOR $defrepo $GITHUB_HEAD_REF
+            REPO_ARRAY=(${GITHUB_REPOSITORY//\// })
+            clone $REPO_ARRAY[0] $defrepo $GITHUB_HEAD_REF
         fi
     else
         clone $deforg $defrepo $BUILDKITE_BRANCH
