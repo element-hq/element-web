@@ -244,9 +244,17 @@ function textForServerACLEvent(ev): () => string | null {
 function textForMessageEvent(ev: MatrixEvent): () => string | null {
     return () => {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-        const isRedacted = ev.isRedacted();
         let message = ev.getContent().body;
-        if (isRedacted) message = _t("Message Deleted");
+        if (ev.isRedacted()) {
+            message = _t("Message deleted");
+            const unsigned = ev.getUnsigned();
+            const redactedBecauseUserId = unsigned && unsigned.redacted_because && unsigned.redacted_because.sender;
+            if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
+                const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+                const sender = room && room.getMember(redactedBecauseUserId);
+                message = _t("Message deleted by %(name)s", { name: sender ? sender.name : redactedBecauseUserId });
+            }
+        }
         if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {
