@@ -335,7 +335,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         //     rootSpaces.push(space);
         // });
 
-        this.orphanedRooms = new Set(orphanedRooms);
+        this.orphanedRooms = new Set(orphanedRooms.map(r => r.roomId));
         this.rootSpaces = rootSpaces;
         this.parentMap = backrefs;
 
