@@ -468,7 +468,7 @@ function restoreEncryptionInfo(searchResultSlice = []) {
                     ev.event.curve25519Key,
                     ev.event.ed25519Key,
                 );
-                ev._forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
+                ev.forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
 
                 delete ev.event.curve25519Key;
                 delete ev.event.ed25519Key;

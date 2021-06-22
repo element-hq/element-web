@@ -44,6 +44,7 @@ import { EventIndexPeg } from "../indexing/EventIndexPeg";
 import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
 import PerformanceMonitor from "../performance";
 import UIStore from "../stores/UIStore";
+import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 
 declare global {
     interface Window {
@@ -84,6 +85,7 @@ declare global {
         mxPerformanceMonitor: PerformanceMonitor;
         mxPerformanceEntryNames: any;
         mxUIStore: UIStore;
+        mxSetupEncryptionStore?: SetupEncryptionStore;
     }
 
     interface Document {

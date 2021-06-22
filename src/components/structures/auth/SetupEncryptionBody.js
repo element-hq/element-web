@@ -21,15 +21,7 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
 import * as sdk from '../../../index';
-import {
-    SetupEncryptionStore,
-    PHASE_LOADING,
-    PHASE_INTRO,
-    PHASE_BUSY,
-    PHASE_DONE,
-    PHASE_CONFIRM_SKIP,
-    PHASE_FINISHED,
-} from '../../../stores/SetupEncryptionStore';
+import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
 function keyHasPassphrase(keyInfo) {
@@ -63,7 +55,7 @@ export default class SetupEncryptionBody extends React.Component {
 
     _onStoreUpdate = () => {
         const store = SetupEncryptionStore.sharedInstance();
-        if (store.phase === PHASE_FINISHED) {
+        if (store.phase === Phase.Finished) {
             this.props.onFinished();
             return;
         }
@@ -136,7 +128,7 @@ export default class SetupEncryptionBody extends React.Component {
                 onClose={this.props.onFinished}
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
-        } else if (phase === PHASE_INTRO) {
+        } else if (phase === Phase.Intro) {
             const store = SetupEncryptionStore.sharedInstance();
             let recoveryKeyPrompt;
             if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
@@ -174,7 +166,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
                 </div>
             );
-        } else if (phase === PHASE_DONE) {
+        } else if (phase === Phase.Done) {
             let message;
             if (this.state.backupInfo) {
                 message = <p>{_t(
@@ -200,7 +192,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
                 </div>
             );
-        } else if (phase === PHASE_CONFIRM_SKIP) {
+        } else if (phase === Phase.ConfirmSkip) {
             return (
                 <div>
                     <p>{_t(
@@ -224,7 +216,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
                 </div>
             );
-        } else if (phase === PHASE_BUSY || phase === PHASE_LOADING) {
+        } else if (phase === Phase.Busy || phase === Phase.Loading) {
             const Spinner = sdk.getComponent('views.elements.Spinner');
             return <Spinner />;
         } else {

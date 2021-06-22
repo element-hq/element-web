@@ -16,38 +16,39 @@ limitations under the License.
 */
 
 import classNames from 'classnames';
-import React, {createRef, ClipboardEvent} from 'react';
-import {Room} from 'matrix-js-sdk/src/models/room';
+import React, { createRef, ClipboardEvent } from 'react';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
-import {Caret, setSelection} from '../../../editor/caret';
+import { Caret, setSelection } from '../../../editor/caret';
 import {
     formatRangeAsQuote,
     formatRangeAsCode,
     toggleInlineFormat,
     replaceRangeAndMoveCaret,
 } from '../../../editor/operations';
-import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
-import Autocomplete, {generateCompletionDomId} from '../rooms/Autocomplete';
-import {getAutoCompleteCreator} from '../../../editor/parts';
-import {parsePlainTextMessage} from '../../../editor/deserialize';
-import {renderModel} from '../../../editor/render';
+import { getCaretOffsetAndText, getRangeForSelection } from '../../../editor/dom';
+import Autocomplete, { generateCompletionDomId } from '../rooms/Autocomplete';
+import { getAutoCompleteCreator } from '../../../editor/parts';
+import { parseEvent, parsePlainTextMessage } from '../../../editor/deserialize';
+import { renderModel } from '../../../editor/render';
 import TypingStore from "../../../stores/TypingStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import {Key} from "../../../Keyboard";
-import {EMOTICON_TO_EMOJI} from "../../../emoji";
-import {CommandCategories, CommandMap, parseCommandString} from "../../../SlashCommands";
+import { Key } from "../../../Keyboard";
+import { EMOTICON_TO_EMOJI } from "../../../emoji";
+import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
 import MessageComposerFormatBar from "./MessageComposerFormatBar";
 import DocumentOffset from "../../../editor/offset";
-import {IDiff} from "../../../editor/diff";
+import { IDiff } from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
-import {ICompletion} from "../../../autocomplete/Autocompleter";
+import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
@@ -715,5 +716,49 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     focus() {
         this.editorRef.current.focus();
+    }
+
+    public insertMention(userId: string) {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const member = this.props.room.getMember(userId);
+        const displayName = member ?
+            member.rawDisplayName : userId;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        // Insert suffix only if the caret is at the start of the composer
+        const parts = partCreator.createMentionParts(caret.offset === 0, displayName, userId);
+        model.transform(() => {
+            const addedLen = model.insert(parts, position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+        // refocus on composer, as we just clicked "Mention"
+        this.focus();
+    }
+
+    public insertQuotedMessage(event: MatrixEvent) {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const quoteParts = parseEvent(event, partCreator, {isQuotedMessage: true});
+        // add two newlines
+        quoteParts.push(partCreator.newline());
+        quoteParts.push(partCreator.newline());
+        model.transform(() => {
+            const addedLen = model.insert(quoteParts, model.positionForOffset(0));
+            return model.positionForOffset(addedLen, true);
+        });
+        // refocus on composer, as we just clicked "Quote"
+        this.focus();
+    }
+
+    public insertPlaintext(text: string) {
+        const {model} = this.props;
+        const {partCreator} = model;
+        const caret = this.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([partCreator.plain(text)], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
     }
 }

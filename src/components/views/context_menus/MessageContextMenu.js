@@ -33,6 +33,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ReadPinsEventId } from "../right_panel/PinnedMessagesCard";
 import ForwardDialog from "../dialogs/ForwardDialog";
+import { Action } from "../../../dispatcher/actions";
 
 export function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -200,7 +201,7 @@ export default class MessageContextMenu extends React.Component {
 
     onQuoteClick = () => {
         dis.dispatch({
-            action: 'quote',
+            action: Action.ComposerInsert,
             event: this.props.mxEvent,
         });
         this.closeMenu();
