@@ -209,13 +209,19 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <div className="mx_VerificationPanel_reciprocateButtons">
                     <AccessibleButton
-                        label={_t("No")} kind="danger"
+                        kind="danger"
                         disabled={this.state.reciprocateButtonClicked}
-                        onClick={this.onReciprocateNoClick} />
+                        onClick={this.onReciprocateNoClick}
+                    >
+                        { _t("No") }
+                    </AccessibleButton>
                     <AccessibleButton
-                        label={_t("Yes")} kind="primary"
+                        kind="primary"
                         disabled={this.state.reciprocateButtonClicked}
-                        onClick={this.onReciprocateYesClick} />
+                        onClick={this.onReciprocateYesClick}
+                    >
+                        { _t("Yes") }
+                    </AccessibleButton>
                 </div>
             </React.Fragment>;
         } else {
