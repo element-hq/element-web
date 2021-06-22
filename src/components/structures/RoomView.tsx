@@ -82,7 +82,6 @@ import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
-import Search from '../views/emojipicker/Search';
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};

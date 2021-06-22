@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef, RefObject} from 'react';
+import React, { createRef, RefObject } from 'react';
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
 import {Key} from "../../../Keyboard";
 import DesktopBuildsNotice, {WarningKind} from "../elements/DesktopBuildsNotice";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     onCancelClick: () => void;
@@ -50,15 +50,15 @@ export default class SearchBar extends React.Component<IProps, IState> {
         };
     }
 
-    public onThisRoomClick = () => {
-        this.setState({ scope: SearchScope.Room }, () => this._searchIfQuery());
+    private onThisRoomClick = () => {
+        this.setState({ scope: SearchScope.Room }, () => this.searchIfQuery());
     };
 
-    public onAllRoomsClick = () => {
-        this.setState({ scope: SearchScope.All }, () => this._searchIfQuery());
+    private onAllRoomsClick = () => {
+        this.setState({ scope: SearchScope.All }, () => this.searchIfQuery());
     };
 
-    public onSearchChange = (e: React.KeyboardEvent) => {
+    private onSearchChange = (e: React.KeyboardEvent) => {
         switch (e.key) {
             case Key.ENTER:
                 this.onSearch();
@@ -69,17 +69,17 @@ export default class SearchBar extends React.Component<IProps, IState> {
         }
     };
 
-    _searchIfQuery() {
+    private searchIfQuery(): void {
         if (this.searchTerm.current.value) {
             this.onSearch();
         }
     }
 
-    onSearch = () => {
+    private onSearch = (): void => {
         this.props.onSearch(this.searchTerm.current.value, this.state.scope);
     };
 
-    render() {
+    public render() {
         const searchButtonClasses = classNames("mx_SearchBar_searchButton", {
             mx_SearchBar_searching: this.props.searchInProgress,
         });
