@@ -1,10 +1,10 @@
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
-import {exportOptions, exportTypes} from "./exportUtils";
-import {decryptFile} from "../DecryptFile";
-import {mediaFromContent} from "../../customisations/Media";
-import {formatFullDateNoDay} from "../../DateUtils";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { exportOptions, exportTypes } from "./exportUtils";
+import { decryptFile } from "../DecryptFile";
+import { mediaFromContent } from "../../customisations/Media";
+import { formatFullDateNoDay } from "../../DateUtils";
 
 export default abstract class Exporter {
     protected constructor(
