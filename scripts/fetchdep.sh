@@ -38,7 +38,7 @@ else
 	head=$BUILDKITE_BRANCH
 fi
 
-# If head is set, it will contain on BuildKite either:
+# If head is set, it will contain on Buildkite either:
 #   * "branch" when the author's branch and target branch are in the same repo
 #   * "fork:branch" when the author's branch is in their fork or if this is a Netlify build
 # We can split on `:` into an array to check.
