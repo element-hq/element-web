@@ -466,6 +466,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private renderCommunityInvites(): ReactComponentElement<typeof ExtraTile>[] {
+        if (SettingsStore.getValue("feature_spaces")) return [];
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
