@@ -25,10 +25,10 @@ clone() {
 # First we check if GITHUB_HEAD_REF is defined,
 # Then we check if BUILDKITE_BRANCH is defined,
 # if it isn't we can assume this is a Netlify build
-if [ -n "$BUILDKITE_BRANCH" ]; then
-	head=$BUILDKITE_BRANCH
-elif [ -n "$GITHUB_HEAD_REF" ]; then
+if [ -n "$GITHUB_HEAD_REF" ]; then
     head=$GITHUB_HEAD_REF
+elif [ -n "$BUILDKITE_BRANCH" ]; then
+	head=$BUILDKITE_BRANCH
 else
     # Netlify doesn't give us info about the fork so we have to get it from GitHub API
     apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
