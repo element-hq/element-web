@@ -527,17 +527,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEv?: MatrixEvent) => {
-        if (!room.isSpaceRoom() || ev.getType() !== EventType.SpaceOrder) return;
-
-        this.spaceOrderLocalEchoMap.delete(room.roomId); // clear any local echo
-        const order = ev.getContent()?.order;
-        const lastOrder = lastEv?.getContent()?.order;
-        if (order !== lastOrder) {
-            this.notifyIfOrderChanged();
-        }
-    };
-
     private notifyIfOrderChanged(): void {
         const rootSpaces = this.sortRootSpaces(this.rootSpaces);
         if (arrayHasOrderChange(this.rootSpaces, rootSpaces)) {
@@ -577,10 +566,19 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEvent?: MatrixEvent) => {
-        if (ev.getType() === EventType.Tag && !room.isSpaceRoom()) {
+    private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEv?: MatrixEvent) => {
+        if (!room.isSpaceRoom()) return;
+
+        if (ev.getType() === EventType.SpaceOrder) {
+            this.spaceOrderLocalEchoMap.delete(room.roomId); // clear any local echo
+            const order = ev.getContent()?.order;
+            const lastOrder = lastEv?.getContent()?.order;
+            if (order !== lastOrder) {
+                this.notifyIfOrderChanged();
+            }
+        } else if (ev.getType() === EventType.Tag && !SettingsStore.getValue("feature_spaces.all_rooms")) {
             // If the room was in favourites and now isn't or the opposite then update its position in the trees
-            const oldTags = lastEvent?.getContent()?.tags || {};
+            const oldTags = lastEv?.getContent()?.tags || {};
             const newTags = ev.getContent()?.tags || {};
             if (!!oldTags[DefaultTagID.Favourite] !== !!newTags[DefaultTagID.Favourite]) {
                 this.onRoomUpdate(room);
@@ -625,7 +623,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             this.matrixClient.removeListener("Room.accountData", this.onRoomAccountData);
             this.matrixClient.removeListener("RoomState.events", this.onRoomState);
             if (!SettingsStore.getValue("feature_spaces.all_rooms")) {
-                this.matrixClient.removeListener("Room.accountData", this.onRoomAccountData);
                 this.matrixClient.removeListener("accountData", this.onAccountData);
             }
         }
@@ -639,7 +636,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.matrixClient.on("Room.accountData", this.onRoomAccountData);
         this.matrixClient.on("RoomState.events", this.onRoomState);
         if (!SettingsStore.getValue("feature_spaces.all_rooms")) {
-            this.matrixClient.on("Room.accountData", this.onRoomAccountData);
             this.matrixClient.on("accountData", this.onAccountData);
         }
 
