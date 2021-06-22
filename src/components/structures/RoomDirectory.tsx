@@ -589,12 +589,23 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 onMouseDown={(ev) => {ev.preventDefault();}}
                 className="mx_RoomDirectory_roomDescription"
             >
-                <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
-                <div className="mx_RoomDirectory_topic"
-                    onClick={ (ev) => { ev.stopPropagation(); } }
+                <div
+                    className="mx_RoomDirectory_name"
+                    onClick={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { name }
+                </div>&nbsp;
+                <div
+                    className="mx_RoomDirectory_topic"
+                    onClick={(ev) => this.onRoomClicked(room, ev)}
                     dangerouslySetInnerHTML={{ __html: topic }}
                 />
-                <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>
+                <div
+                    className="mx_RoomDirectory_alias"
+                    onClick={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { getDisplayAliasForRoom(room) }
+                </div>
             </div>,
             <div key={ `${room.room_id}_memberCount` }
                 onClick={(ev) => this.onRoomClicked(room, ev)}
