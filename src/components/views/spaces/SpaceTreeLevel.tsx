@@ -409,6 +409,8 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             <AccessibleButton
                 className="mx_SpaceButton_toggleCollapse"
                 onClick={this.toggleCollapse}
+                tabIndex={-1}
+                aria-label={collapsed ? _t("Expand") : _t("Collapse")}
             /> : null;
 
         return (
@@ -420,6 +422,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     onContextMenu={this.onContextMenu}
                     forceHide={!isNarrow || !!this.state.contextMenuPosition}
                     role="treeitem"
+                    aria-expanded={!collapsed}
                     inputRef={this.buttonRef}
                     onKeyDown={this.onKeyDown}
                 >
