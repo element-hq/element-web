@@ -137,7 +137,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
     }
 
     return <div className="mx_SettingsTab">
-        <div className="mx_SettingsTab_heading">{_t("Visibility")}</div>
+        <div className="mx_SettingsTab_heading">{ _t("Visibility") }</div>
 
         { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
 

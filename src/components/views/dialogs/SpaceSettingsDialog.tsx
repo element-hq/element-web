@@ -27,7 +27,7 @@ import TabbedView, { Tab } from "../../structures/TabbedView";
 import SpaceSettingsGeneralTab from '../spaces/SpaceSettingsGeneralTab';
 import SpaceSettingsVisibilityTab from "../spaces/SpaceSettingsVisibilityTab";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
+import { UIFeature } from "../../../settings/UIFeature";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
 
 export enum SpaceSettingsTab {
@@ -91,4 +91,3 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
 };
 
 export default SpaceSettingsDialog;
-

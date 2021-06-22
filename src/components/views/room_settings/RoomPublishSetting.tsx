@@ -1,5 +1,5 @@
 /*
-Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,9 +33,13 @@ interface IState {
 
 @replaceableComponent("views.room_settings.RoomPublishSetting")
 export default class RoomPublishSetting extends React.PureComponent<IProps, IState> {
-    public state = {
-        isRoomPublished: false,
-    };
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            isRoomPublished: false,
+        };
+    }
 
     private onRoomPublishChange = (e) => {
         const valueBefore = this.state.isRoomPublished;
@@ -67,7 +71,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
                 onChange={this.onRoomPublishChange}
                 disabled={!this.props.canSetCanonicalAlias}
                 label={_t("Publish this room to the public in %(domain)s's room directory?", {
-                  domain: client.getDomain(),
+                    domain: client.getDomain(),
                 })}
             />
         );

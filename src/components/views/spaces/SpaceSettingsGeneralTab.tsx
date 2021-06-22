@@ -90,7 +90,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
     };
 
     return <div className="mx_SettingsTab">
-        <div className="mx_SettingsTab_heading">{_t("General")}</div>
+        <div className="mx_SettingsTab_heading">{ _t("General") }</div>
 
         <div>{ _t("Edit settings relating to your space.") }</div>
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,9 +39,13 @@ interface IState {
 export default class RoomAliasField extends React.PureComponent<IProps, IState> {
     private fieldRef = createRef<Field>();
 
-    public state = {
-        isValid: true,
-    };
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            isValid: true,
+        };
+    }
 
     private asFullAlias(localpart: string): string {
         return `#${localpart}:${this.props.domain}`;
@@ -123,15 +127,15 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
         ],
     });
 
-    get isValid() {
+    public get isValid() {
         return this.state.isValid;
     }
 
-    validate(options: IValidateOpts) {
+    public validate(options: IValidateOpts) {
         return this.fieldRef.current?.validate(options);
     }
 
-    focus() {
+    public focus() {
         this.fieldRef.current?.focus();
     }
 }
