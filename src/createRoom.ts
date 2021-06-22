@@ -19,7 +19,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { JoinRule, Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule, Preset, RestrictedAllowType, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -162,10 +162,9 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                     content: {
                         "join_rule": JoinRule.Restricted,
                         "allow": [{
-                            "type": "m.room_membership",
+                            "type": RestrictedAllowType.RoomMembership,
                             "room_id": opts.parentSpace.roomId,
                         }],
-                        "authorised_servers": [client.getDomain()], // TODO this might want tweaking
                     },
                 })
             }
