@@ -1,4 +1,5 @@
 /*
+Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2021 Michael Weimann <mail@michael-weimann.eu>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +43,7 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconLink::before {
-        mask-image: url('$(res)/img/element-icons/message/link.svg');
+        mask-image: url('$(res)/img/element-icons/link.svg');
     }
 
     .mx_MessageContextMenu_iconPermalink::before {
@@ -50,7 +51,7 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconUnhidePreview::before {
-        mask-image: url('$(res)/img/feather-customised/eye.svg');
+        mask-image: url('$(res)/img/element-icons/settings/appearance.svg');
     }
 
     .mx_MessageContextMenu_iconForward::before {
@@ -62,7 +63,7 @@ limitations under the License.
     }
 
     .mx_MessageContextMenu_iconResend::before {
-        mask-image: url('$(res)/img/element-icons/message/repeat.svg');
+        mask-image: url('$(res)/img/element-icons/retry.svg');
     }
 
     .mx_MessageContextMenu_iconSource::before {

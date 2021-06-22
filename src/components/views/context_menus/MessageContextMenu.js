@@ -22,13 +22,13 @@ import { EventStatus } from 'matrix-js-sdk/src/models/event';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
-import {_t} from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
-import IconizedContextMenu, {IconizedContextMenuOption, IconizedContextMenuOptionList} from "./IconizedContextMenu";
+import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ReadPinsEventId } from "../right_panel/PinnedMessagesCard";
@@ -306,7 +306,7 @@ export default class MessageContextMenu extends React.Component {
         const viewSourceButton = (
             <IconizedContextMenuOption
                 iconClassName="mx_MessageContextMenu_iconSource"
-                label={_t("View Source")}
+                label={_t("View source")}
                 onClick={this.onViewSourceClick}
             />
         );
@@ -316,7 +316,7 @@ export default class MessageContextMenu extends React.Component {
                 unhidePreviewButton = (
                     <IconizedContextMenuOption
                         iconClassName="mx_MessageContextMenu_iconUnhidePreview"
-                        label={_t("Unhide Preview")}
+                        label={_t("Show preview")}
                         onClick={this.onUnhidePreviewClick}
                     />
                 );
@@ -351,8 +351,7 @@ export default class MessageContextMenu extends React.Component {
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        if (true ||
-            typeof (mxEvent.event.content.external_url) === "string" &&
+        if (typeof (mxEvent.event.content.external_url) === "string" &&
             isUrlPermitted(mxEvent.event.content.external_url)
         ) {
             externalURLButton = (
@@ -372,7 +371,7 @@ export default class MessageContextMenu extends React.Component {
             collapseReplyThread = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconCollapse"
-                    label={_t("Collapse Reply Thread")}
+                    label={_t("Collapse reply thread")}
                     onClick={this.onCollapseReplyThreadClick}
                 />
             );
@@ -383,7 +382,7 @@ export default class MessageContextMenu extends React.Component {
             reportEventButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconReport"
-                    label={_t("Report Content")}
+                    label={_t("Report")}
                     onClick={this.onReportEventClick}
                 />
             );
@@ -391,23 +390,23 @@ export default class MessageContextMenu extends React.Component {
 
         optionLists.push((
             <IconizedContextMenuOptionList key={'group1'}>
-                {quoteButton}
-                {forwardButton}
-                {pinButton}
-                {permalinkButton}
-                {reportEventButton}
-                {externalURLButton}
-                {viewSourceButton}
-                {unhidePreviewButton}
-                {resendReactionsButton}
-                {collapseReplyThread}
+                { quoteButton }
+                { forwardButton }
+                { pinButton }
+                { permalinkButton }
+                { reportEventButton }
+                { externalURLButton }
+                { unhidePreviewButton }
+                { viewSourceButton }
+                { resendReactionsButton }
+                { collapseReplyThread }
             </IconizedContextMenuOptionList>
         ));
 
         if (redactButton) {
             optionLists.push((
                 <IconizedContextMenuOptionList key={'group2'} red>
-                    {redactButton}
+                    { redactButton }
                 </IconizedContextMenuOptionList>
             ));
         }
@@ -418,7 +417,7 @@ export default class MessageContextMenu extends React.Component {
                 className="mx_MessageContextMenu"
                 compact={true}
             >
-                {optionLists}
+                { optionLists }
             </IconizedContextMenu>
         );
     }
