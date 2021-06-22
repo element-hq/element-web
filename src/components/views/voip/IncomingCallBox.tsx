@@ -148,7 +148,7 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                     onClick={this.onRejectClick}
                     kind="danger"
                 >
-                    {_t("Decline")}
+                    { _t("Decline") }
                 </AccessibleButton>
                 <div className="mx_IncomingCallBox_spacer" />
                 <AccessibleButton
@@ -156,10 +156,9 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                     onClick={this.onAnswerClick}
                     kind="primary"
                 >
-                    {_t("Accept")}
+                    { _t("Accept") }
                 </AccessibleButton>
             </div>
         </div>;
     }
 }
-
