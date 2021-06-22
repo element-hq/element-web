@@ -217,7 +217,7 @@ export default class HTMLExporter extends Exporter {
             this.avatars.set(member.userId, true);
             const image = await fetch(avatarUrl);
             const blob = await image.blob();
-            this.zip.file(`users/${member.userId}`, blob);
+            this.zip.file(`users/${member.userId.replace(/:/g, '-')}`, blob);
         }
     }
 
@@ -265,7 +265,10 @@ export default class HTMLExporter extends Exporter {
         let eventTileMarkup = renderToStaticMarkup(eventTile);
         if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/g, `$1"${filePath}"`);
         if (hasAvatar) {
-            eventTileMarkup = eventTileMarkup.replace(/src="AvatarForExport"/g, `src="users/${mxEv.sender.userId}"`);
+            eventTileMarkup = eventTileMarkup.replace(
+                /src="avatarForExport"/g,
+                `src="users/${mxEv.sender.userId.replace(/:/g, "-")}"`,
+            );
         }
         return eventTileMarkup;
     }
@@ -286,18 +289,16 @@ export default class HTMLExporter extends Exporter {
             } else {
                 const modifiedContent = {
                     msgtype: "m.text",
-                    body: `**${this.mediaOmitText}**`,
+                    body: `*${this.mediaOmitText}*`,
                     format: "org.matrix.custom.html",
-                    formatted_body: `<strong>${this.mediaOmitText}</strong>`,
+                    formatted_body: `<em>${this.mediaOmitText}</em>`,
                 }
-                if (mxEv.isEncrypted()) {
-                    mxEv._clearEvent.content = modifiedContent;
-                    mxEv._clearEvent.type = "m.room.message";
-                } else {
-                    mxEv.event.content = modifiedContent;
-                    mxEv.event.type = "m.room.message";
-                }
-                eventTile = await this.getEventTile(mxEv, joined);
+                const modifiedEvent = new MatrixEvent();
+                modifiedEvent.event = mxEv.event;
+                modifiedEvent.sender = mxEv.sender;
+                modifiedEvent.event.type = "m.room.message";
+                modifiedEvent.event.content = modifiedContent;
+                eventTile = await this.getEventTile(modifiedEvent, joined);
             }
         } else eventTile = await this.getEventTile(mxEv, joined);
 
