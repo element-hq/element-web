@@ -207,9 +207,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         this.getMoreRooms();
     };
 
-    private getMoreRooms() {
-        if (this.state.selectedCommunityId) return Promise.resolve(); // no more rooms
-        if (!MatrixClientPeg.get()) return Promise.resolve();
+    private getMoreRooms(): Promise<boolean> {
+        if (this.state.selectedCommunityId) return Promise.resolve(false); // no more rooms
+        if (!MatrixClientPeg.get()) return Promise.resolve(false);
 
         this.setState({
             loading: true,
@@ -239,12 +239,12 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 // if the filter or server has changed since this request was sent,
                 // throw away the result (don't even clear the busy flag
                 // since we must still have a request in flight)
-                return;
+                return false;
             }
 
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
-                return;
+                return false;
             }
 
             if (this.state.filterString) {
@@ -264,14 +264,13 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 filterString != this.state.filterString ||
                 roomServer != this.state.roomServer ||
                 nextBatch != this.nextBatch) {
-                // as above: we don't care about errors for old
-                // requests either
-                return;
+                // as above: we don't care about errors for old requests either
+                return false;
             }
 
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
-                return;
+                return false;
             }
 
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));

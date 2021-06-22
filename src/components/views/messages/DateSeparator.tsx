@@ -1,6 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
-import {formatFullDateNoTime} from '../../../DateUtils';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-function getdaysArray() {
+import { _t } from '../../../languageHandler';
+import { formatFullDateNoTime } from '../../../DateUtils';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+function getDaysArray(): string[] {
     return [
         _t('Sunday'),
         _t('Monday'),
@@ -33,17 +33,17 @@ function getdaysArray() {
     ];
 }
 
-@replaceableComponent("views.messages.DateSeparator")
-export default class DateSeparator extends React.Component {
-    static propTypes = {
-        ts: PropTypes.number.isRequired,
-    };
+interface IProps {
+    ts: number;
+}
 
-    getLabel() {
+@replaceableComponent("views.messages.DateSeparator")
+export default class DateSeparator extends React.Component<IProps> {
+    private getLabel() {
         const date = new Date(this.props.ts);
         const today = new Date();
         const yesterday = new Date();
-        const days = getdaysArray();
+        const days = getDaysArray();
         yesterday.setDate(today.getDate() - 1);
 
         if (date.toDateString() === today.toDateString()) {

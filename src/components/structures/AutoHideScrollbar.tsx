@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { WheelEvent } from "react";
 
 interface IProps {
     className?: string;
-    onScroll?: () => void;
-    onWheel?: () => void;
+    onScroll?: (event: Event) => void;
+    onWheel?: (event: WheelEvent) => void;
     style?: React.CSSProperties
     tabIndex?: number,
     wrappedRef?: (ref: HTMLDivElement) => void;
