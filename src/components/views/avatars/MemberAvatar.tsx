@@ -68,7 +68,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     private static getState(props: IProps): IState {
         if (props.member?.name) {
             let imageUrl = null;
-            if (props.forExport && props.member.getMxcAvatarUrl()) imageUrl = "AvatarForExport";
+            if (props.forExport && props.member.getMxcAvatarUrl()) imageUrl = "avatarForExport";
             else if (props.member.getMxcAvatarUrl()) {
                 imageUrl = mediaFromMxc(props.member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
                     props.width,
