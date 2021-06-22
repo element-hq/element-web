@@ -1933,6 +1933,7 @@
     "Error loading Widget": "Error loading Widget",
     "Error - Mixed content": "Error - Mixed content",
     "Popout widget": "Popout widget",
+    "Message search initialisation failed, check <a>your settings</a> for more information": "Message search initialisation failed, check <a>your settings</a> for more information",
     "Use the <a>Desktop app</a> to see all encrypted files": "Use the <a>Desktop app</a> to see all encrypted files",
     "Use the <a>Desktop app</a> to search encrypted messages": "Use the <a>Desktop app</a> to search encrypted messages",
     "This version of %(brand)s does not support viewing some encrypted files": "This version of %(brand)s does not support viewing some encrypted files",

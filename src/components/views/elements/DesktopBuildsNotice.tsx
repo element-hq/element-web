@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import React from "react";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { UserTab } from "../dialogs/UserSettingsDialog";
+
 
 export enum WarningKind {
     Files,
@@ -32,6 +36,22 @@ interface IProps {
 export default function DesktopBuildsNotice({isRoomEncrypted, kind}: IProps) {
     if (!isRoomEncrypted) return null;
     if (EventIndexPeg.get()) return null;
+
+    if (EventIndexPeg.error) {
+        return <>
+            {_t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
+                a: sub => (<a onClick={(evt) => {
+                    evt.preventDefault();
+                    dis.dispatch({
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.Security,
+                    });
+                }}>
+                    {sub}
+                </a>),
+            })}
+        </>;
+    }
 
     const {desktopBuilds, brand} = SdkConfig.get();
 
