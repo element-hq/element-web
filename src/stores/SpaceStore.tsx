@@ -134,7 +134,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             // if the space being selected is an invite then always view that invite
             // else if the last viewed room in this space is joined then view that
             // else view space home or home depending on what is being clicked on
-            if (space?.getMyMembership !== "invite" &&
+            if (space?.getMyMembership() !== "invite" &&
                 this.matrixClient?.getRoom(roomId)?.getMyMembership() === "join"
             ) {
                 defaultDispatcher.dispatch({
@@ -424,8 +424,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             parent = this.rootSpaces.find(s => this.spaceFilteredRooms.get(s.roomId)?.has(roomId));
         }
         if (!parent) {
-            const parents = Array.from(this.parentMap.get(roomId) || []);
-            parent = parents.find(p => this.matrixClient.getRoom(p));
+            const parentIds = Array.from(this.parentMap.get(roomId) || []);
+            for (const parentId of parentIds) {
+                const room = this.matrixClient.getRoom(parentId);
+                if (room) {
+                    parent = room;
+                    break;
+                }
+            }
         }
 
         // don't trigger a context switch when we are switching a space to match the chosen room
