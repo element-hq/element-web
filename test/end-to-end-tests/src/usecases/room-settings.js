@@ -140,8 +140,6 @@ async function changeRoomSettings(session, settings) {
 
     if (settings.alias) {
         session.log.step(`sets alias to ${settings.alias}`);
-        const summary = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings summary");
-        await summary.click();
         const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details input[type=text]");
         await session.replaceInputText(aliasField, settings.alias.substring(1, settings.alias.lastIndexOf(":")));
         const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details .mx_AccessibleButton");
