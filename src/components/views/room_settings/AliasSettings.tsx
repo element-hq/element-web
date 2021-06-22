@@ -1,5 +1,5 @@
 /*
-Copyright 2016-2021 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -145,6 +145,10 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 }
             }
             this.setState({ localAliases });
+
+            if (localAliases.length === 0) {
+                this.setState({ detailsOpen: true });
+            }
         } finally {
             this.setState({ localAliasesLoading: false });
         }
@@ -418,7 +422,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         : _t("Set addresses for this room so users can find this room " +
                         "through your homeserver (%(localDomain)s)", { localDomain }) }
                 </p>
-                <details onToggle={this.onLocalAliasesToggled}>
+                <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
                     <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more")}</summary>
                     { localAliasesList }
                 </details>

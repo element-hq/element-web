@@ -16,19 +16,20 @@ limitations under the License.
 */
 
 import * as url from "url";
+import { Capability, IWidget, IWidgetData, MatrixCapabilities } from "matrix-widget-api";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher/dispatcher';
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 import SettingsStore from "../settings/SettingsStore";
-import {IntegrationManagers} from "../integrations/IntegrationManagers";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {WidgetType} from "../widgets/WidgetType";
-import {objectClone} from "./objects";
-import {_t} from "../languageHandler";
-import {Capability, IWidget, IWidgetData, MatrixCapabilities} from "matrix-widget-api";
-import {IApp} from "../stores/WidgetStore";
+import { IntegrationManagers } from "../integrations/IntegrationManagers";
+import { WidgetType } from "../widgets/WidgetType";
+import { objectClone } from "./objects";
+import { _t } from "../languageHandler";
+import { IApp } from "../stores/WidgetStore";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -377,9 +378,9 @@ export default class WidgetUtils {
         return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
     }
 
-    static getRoomWidgetsOfType(room: Room, type: WidgetType): IWidgetEvent[] {
-        const widgets = WidgetUtils.getRoomWidgets(room);
-        return (widgets || []).filter(w => {
+    static getRoomWidgetsOfType(room: Room, type: WidgetType): MatrixEvent[] {
+        const widgets = WidgetUtils.getRoomWidgets(room) || [];
+        return widgets.filter(w => {
             const content = w.getContent();
             return content.url && type.matches(content.type);
         });
@@ -392,7 +393,7 @@ export default class WidgetUtils {
         }
         const widgets = client.getAccountData('m.widgets');
         if (!widgets) return;
-        const userWidgets: IWidgetEvent[] = widgets.getContent() || {};
+        const userWidgets: Record<string, IWidgetEvent> = widgets.getContent() || {};
         Object.entries(userWidgets).forEach(([key, widget]) => {
             if (widget.content && widget.content.type === "m.integration_manager") {
                 delete userWidgets[key];

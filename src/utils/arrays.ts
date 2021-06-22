@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {percentageOf, percentageWithin} from "./numbers";
+import { percentageOf, percentageWithin } from "./numbers";
 
 /**
  * Quickly resample an array to have less/more data points. If an input which is larger
@@ -221,6 +221,21 @@ export function arrayMerge<T>(...a: T[][]): T[] {
         v.forEach(i => c.add(i));
         return c;
     }, new Set<T>()));
+}
+
+/**
+ * Moves a single element from fromIndex to toIndex.
+ * @param {array} list the list from which to construct the new list.
+ * @param {number} fromIndex the index of the element to move.
+ * @param {number} toIndex the index of where to put the element.
+ * @returns {array} A new array with the requested value moved.
+ */
+export function moveElement<T>(list: T[], fromIndex: number, toIndex: number): T[] {
+    const result = Array.from(list);
+    const [removed] = result.splice(fromIndex, 1);
+    result.splice(toIndex, 0, removed);
+
+    return result;
 }
 
 /**

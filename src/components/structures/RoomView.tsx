@@ -23,8 +23,9 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { Room } from "matrix-js-sdk/src/models/room";
+import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
 
 import shouldHideEvent from '../../shouldHideEvent';
@@ -59,7 +60,7 @@ import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
-import SearchBar from "../views/rooms/SearchBar";
+import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
@@ -80,7 +81,6 @@ import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { omit } from 'lodash';
 import UIStore from "../../stores/UIStore";
 
 const DEBUG = false;
@@ -139,11 +139,11 @@ export interface IState {
     draggingFile: boolean;
     searching: boolean;
     searchTerm?: string;
-    searchScope?: "All" | "Room";
+    searchScope?: SearchScope;
     searchResults?: XOR<{}, {
         count: number;
         highlights: string[];
-        results: MatrixEvent[];
+        results: SearchResult[];
         next_batch: string; // eslint-disable-line camelcase
     }>;
     searchHighlights?: string[];
@@ -172,11 +172,7 @@ export interface IState {
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
 
-    upgradeRecommendation?: {
-        version: string;
-        needsUpgrade: boolean;
-        urgent: boolean;
-    };
+    upgradeRecommendation?: IRecommendedVersion;
     canReact: boolean;
     canReply: boolean;
     layout: Layout;
@@ -572,16 +568,12 @@ export default class RoomView extends React.Component<IProps, IState> {
     shouldComponentUpdate(nextProps, nextState) {
         const hasPropsDiff = objectHasDiff(this.props, nextProps);
 
-        // React only shallow comparison and we only want to trigger
-        // a component re-render if a room requires an upgrade
-        const newUpgradeRecommendation = nextState.upgradeRecommendation || {}
-
-        const state = omit(this.state, ['upgradeRecommendation']);
-        const newState = omit(nextState, ['upgradeRecommendation'])
+        const { upgradeRecommendation, ...state } = this.state;
+        const { upgradeRecommendation: newUpgradeRecommendation, ...newState } = nextState;
 
         const hasStateDiff =
-            objectHasDiff(state, newState) ||
-            (newUpgradeRecommendation.needsUpgrade === true)
+            newUpgradeRecommendation?.needsUpgrade !== upgradeRecommendation?.needsUpgrade ||
+            objectHasDiff(state, newState);
 
         return hasPropsDiff || hasStateDiff;
     }
@@ -701,15 +693,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                 room_id: this.state.room.roomId,
                 event_id: this.state.initialEventId,
                 highlighted: false,
+                replyingToEvent: this.state.replyToEvent,
             });
         }
     }
-
-    private onLayoutChange = () => {
-        this.setState({
-            layout: SettingsStore.getValue("layout"),
-        });
-    };
 
     private onRightPanelStoreUpdate = () => {
         this.setState({
@@ -1276,7 +1263,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             });
     }
 
-    private onSearch = (term: string, scope) => {
+    private onSearch = (term: string, scope: SearchScope) => {
         this.setState({
             searchTerm: term,
             searchScope: scope,
@@ -1297,7 +1284,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.searchId = new Date().getTime();
 
         let roomId;
-        if (scope === "Room") roomId = this.state.room.roomId;
+        if (scope === SearchScope.Room) roomId = this.state.room.roomId;
 
         debuglog("sending search request");
         const searchPromise = eventSearch(term, roomId);
@@ -1644,29 +1631,27 @@ export default class RoomView extends React.Component<IProps, IState> {
         let auxPanelMaxHeight = UIStore.instance.windowHeight -
                 (54 + // height of RoomHeader
                  36 + // height of the status area
-                 51 + // minimum height of the message compmoser
+                 51 + // minimum height of the message composer
                  120); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
         // but it's better than the video going missing entirely
         if (auxPanelMaxHeight < 50) auxPanelMaxHeight = 50;
 
-        this.setState({auxPanelMaxHeight: auxPanelMaxHeight});
+        if (this.state.auxPanelMaxHeight !== auxPanelMaxHeight) {
+            this.setState({ auxPanelMaxHeight });
+        }
     };
 
     private onStatusBarVisible = () => {
-        if (this.unmounted) return;
-        this.setState({
-            statusBarVisible: true,
-        });
+        if (this.unmounted || this.state.statusBarVisible) return;
+        this.setState({ statusBarVisible: true });
     };
 
     private onStatusBarHidden = () => {
         // This is currently not desired as it is annoying if it keeps expanding and collapsing
-        if (this.unmounted) return;
-        this.setState({
-            statusBarVisible: false,
-        });
+        if (this.unmounted || !this.state.statusBarVisible) return;
+        this.setState({ statusBarVisible: false });
     };
 
     /**
@@ -2069,7 +2054,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
             const JumpToBottomButton = sdk.getComponent('rooms.JumpToBottomButton');
             jumpToBottom = (<JumpToBottomButton
-                highlight={this.state.room.getUnreadNotificationCount('highlight') > 0}
+                highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
                 roomId={this.state.roomId}

@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
-interface IProps {
+interface IProps extends HTMLAttributes<HTMLDivElement> {
     className?: string;
     onScroll?: () => void;
     onWheel?: () => void;
@@ -52,14 +52,18 @@ export default class AutoHideScrollbar extends React.Component<IProps> {
     }
 
     public render() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { className, onScroll, onWheel, style, tabIndex, wrappedRef, children, ...otherProps } = this.props;
+
         return (<div
+            {...otherProps}
             ref={this.containerRef}
-            style={this.props.style}
-            className={["mx_AutoHideScrollbar", this.props.className].join(" ")}
-            onWheel={this.props.onWheel}
-            tabIndex={this.props.tabIndex}
+            style={style}
+            className={["mx_AutoHideScrollbar", className].join(" ")}
+            onWheel={onWheel}
+            tabIndex={tabIndex}
         >
-            { this.props.children }
+            { children }
         </div>);
     }
 }
