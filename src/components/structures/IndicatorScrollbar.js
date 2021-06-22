@@ -185,21 +185,24 @@ export default class IndicatorScrollbar extends React.Component {
     };
 
     render() {
+        // eslint-disable-next-line no-unused-vars
+        const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
+
         const leftIndicatorStyle = {left: this.state.leftIndicatorOffset};
         const rightIndicatorStyle = {right: this.state.rightIndicatorOffset};
-        const leftOverflowIndicator = this.props.trackHorizontalOverflow
+        const leftOverflowIndicator = trackHorizontalOverflow
             ? <div className="mx_IndicatorScrollbar_leftOverflowIndicator" style={leftIndicatorStyle} /> : null;
-        const rightOverflowIndicator = this.props.trackHorizontalOverflow
+        const rightOverflowIndicator = trackHorizontalOverflow
             ? <div className="mx_IndicatorScrollbar_rightOverflowIndicator" style={rightIndicatorStyle} /> : null;
 
         return (<AutoHideScrollbar
             ref={this._collectScrollerComponent}
             wrappedRef={this._collectScroller}
             onWheel={this.onMouseWheel}
-            {...this.props}
+            {...otherProps}
         >
             { leftOverflowIndicator }
-            { this.props.children }
+            { children }
             { rightOverflowIndicator }
         </AutoHideScrollbar>);
     }

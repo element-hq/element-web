@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { InputHTMLAttributes, LegacyRef } from "react";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/SpaceStore";
 import SpaceTreeLevelLayoutStore from "../../../stores/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
-import {RovingAccessibleButton} from "../../../accessibility/roving/RovingAccessibleButton";
-import {RovingAccessibleTooltipButton} from "../../../accessibility/roving/RovingAccessibleTooltipButton";
+import { RovingAccessibleButton } from "../../../accessibility/roving/RovingAccessibleButton";
+import { RovingAccessibleTooltipButton } from "../../../accessibility/roving/RovingAccessibleTooltipButton";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import {_t} from "../../../languageHandler";
-import {ContextMenuTooltipButton} from "../../../accessibility/context_menu/ContextMenuTooltipButton";
-import {toRightOf} from "../../structures/ContextMenu";
+import { _t } from "../../../languageHandler";
+import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
+import { toRightOf } from "../../structures/ContextMenu";
 import {
     shouldShowSpaceSettings,
     showAddExistingRooms,
@@ -39,23 +39,24 @@ import {
     showSpaceSettings,
 } from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import AccessibleButton, {ButtonEvent} from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {Action} from "../../../dispatcher/actions";
+import { Action } from "../../../dispatcher/actions";
 import RoomViewStore from "../../../stores/RoomViewStore";
-import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
-import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
-import {EventType} from "matrix-js-sdk/src/@types/event";
-import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
-import {NotificationColor} from "../../../stores/notifications/NotificationColor";
+import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
-interface IItemProps {
+interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     space?: Room;
     activeSpaces: Room[];
     isNested?: boolean;
     isPanelCollapsed?: boolean;
     onExpand?: Function;
     parents?: Set<string>;
+    innerRef?: LegacyRef<HTMLLIElement>;
 }
 
 interface IItemState {
@@ -300,18 +301,18 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     }
 
     render() {
-        const {space, activeSpaces, isNested} = this.props;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { space, activeSpaces, isNested, isPanelCollapsed, onExpand, parents, innerRef,
+            ...otherProps } = this.props;
 
-        const forceCollapsed = this.props.isPanelCollapsed;
-        const isNarrow = this.props.isPanelCollapsed;
-        const collapsed = this.state.collapsed || forceCollapsed;
+        const collapsed = this.state.collapsed || isPanelCollapsed;
 
         const childSpaces = SpaceStore.instance.getChildSpaces(space.roomId)
-            .filter(s => !this.props.parents?.has(s.roomId));
+            .filter(s => !parents?.has(s.roomId));
         const isActive = activeSpaces.includes(space);
-        const itemClasses = classNames({
+        const itemClasses = classNames(this.props.className, {
             "mx_SpaceItem": true,
-            "mx_SpaceItem_narrow": isNarrow,
+            "mx_SpaceItem_narrow": isPanelCollapsed,
             "collapsed": collapsed,
             "hasSubSpaces": childSpaces && childSpaces.length,
         });
@@ -320,7 +321,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const classes = classNames("mx_SpaceButton", {
             mx_SpaceButton_active: isActive,
             mx_SpaceButton_hasMenuOpen: !!this.state.contextMenuPosition,
-            mx_SpaceButton_narrow: isNarrow,
+            mx_SpaceButton_narrow: isPanelCollapsed,
             mx_SpaceButton_invite: isInvite,
         });
         const notificationState = isInvite
@@ -333,7 +334,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 spaces={childSpaces}
                 activeSpaces={activeSpaces}
                 isNested={true}
-                parents={new Set(this.props.parents).add(this.props.space.roomId)}
+                parents={new Set(parents).add(space.roomId)}
             />;
         }
 
@@ -353,7 +354,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             /> : null;
 
         let button;
-        if (isNarrow) {
+        if (isPanelCollapsed) {
             button = (
                 <RovingAccessibleTooltipButton
                     className={classes}
@@ -391,7 +392,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         }
 
         return (
-            <li className={itemClasses}>
+            <li {...otherProps} className={itemClasses} ref={innerRef}>
                 { button }
                 { childItems }
             </li>
