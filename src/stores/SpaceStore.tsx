@@ -33,6 +33,7 @@ import {EnhancedMap, mapDiff} from "../utils/maps";
 import {setHasDiff} from "../utils/sets";
 import {ISpaceSummaryEvent, ISpaceSummaryRoom} from "../components/structures/SpaceRoomDirectory";
 import RoomViewStore from "./RoomViewStore";
+import {Action} from "../dispatcher/actions";
 
 interface IState {}
 
@@ -565,6 +566,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     this.setActiveSpace(null, false);
                 }
                 break;
+            case Action.SwitchSpace:
+                if (payload.num === 0) {
+                    this.setActiveSpace(null);
+                } else if (this.spacePanelSpaces.length >= payload.num) {
+                    this.setActiveSpace(this.spacePanelSpaces[payload.num - 1]);
+                }
         }
     }
 

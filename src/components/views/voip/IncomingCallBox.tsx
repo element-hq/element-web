@@ -23,7 +23,7 @@ import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import CallHandler, { AudioID } from '../../../CallHandler';
 import RoomAvatar from '../avatars/RoomAvatar';
-import FormButton from '../elements/FormButton';
+import AccessibleButton from '../elements/AccessibleButton';
 import { CallState } from 'matrix-js-sdk/src/webrtc/call';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
@@ -143,21 +143,22 @@ export default class IncomingCallBox extends React.Component<IProps, IState> {
                 />
             </div>
             <div className="mx_IncomingCallBox_buttons">
-                <FormButton
+                <AccessibleButton
                     className={"mx_IncomingCallBox_decline"}
                     onClick={this.onRejectClick}
                     kind="danger"
-                    label={_t("Decline")}
-                />
+                >
+                    { _t("Decline") }
+                </AccessibleButton>
                 <div className="mx_IncomingCallBox_spacer" />
-                <FormButton
+                <AccessibleButton
                     className={"mx_IncomingCallBox_accept"}
                     onClick={this.onAnswerClick}
                     kind="primary"
-                    label={_t("Accept")}
-                />
+                >
+                    { _t("Accept") }
+                </AccessibleButton>
             </div>
         </div>;
     }
 }
-
