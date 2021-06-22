@@ -13,17 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, {ComponentProps} from 'react';
-import Room from 'matrix-js-sdk/src/models/room';
+import React, { ComponentProps } from 'react';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
 
 import BaseAvatar from './BaseAvatar';
 import ImageView from '../elements/ImageView';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
-import {ResizeMethod} from "../../../Avatar";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,

@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+
 import BaseAvatar from './BaseAvatar';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
-import {ResizeMethod} from "../../../Avatar";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 export interface IProps {
         groupId?: string;

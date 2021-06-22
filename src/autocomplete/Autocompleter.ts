@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {ReactElement} from 'react';
-import Room from 'matrix-js-sdk/src/models/room';
+import { ReactElement } from 'react';
+import { Room } from 'matrix-js-sdk/src/models/room';
+
 import CommandProvider from './CommandProvider';
 import CommunityProvider from './CommunityProvider';
 import DuckDuckGoProvider from './DuckDuckGoProvider';
@@ -24,7 +25,7 @@ import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
 import NotifProvider from './NotifProvider';
-import {timeout} from "../utils/promise";
+import { timeout } from "../utils/promise";
 import AutocompleteProvider, {ICommand} from "./AutocompleteProvider";
 import SettingsStore from "../settings/SettingsStore";
 import SpaceProvider from "./SpaceProvider";

@@ -17,16 +17,16 @@ limitations under the License.
 */
 
 import React from "react";
-import {uniqBy, sortBy} from "lodash";
-import Room from "matrix-js-sdk/src/models/room";
+import { uniqBy, sortBy } from "lodash";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
-import {PillCompletion} from './Components';
-import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { PillCompletion } from './Components';
+import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
 import SettingsStore from "../settings/SettingsStore";
 
