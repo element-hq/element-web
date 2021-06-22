@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@ limitations under the License.
 */
 
 import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
+
 import SdkConfig from '../SdkConfig';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 
-export function getDefaultIdentityServerUrl() {
+export function getDefaultIdentityServerUrl(): string {
     return SdkConfig.get()['validated_server_config']['isUrl'];
 }
 
-export function useDefaultIdentityServer() {
+export function useDefaultIdentityServer(): void {
     const url = getDefaultIdentityServerUrl();
     // Account data change will update localstorage, client, etc through dispatcher
     MatrixClientPeg.get().setAccountData("m.identity_server", {
@@ -30,7 +31,7 @@ export function useDefaultIdentityServer() {
     });
 }
 
-export async function doesIdentityServerHaveTerms(fullUrl) {
+export async function doesIdentityServerHaveTerms(fullUrl: string): Promise<boolean> {
     let terms;
     try {
         terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
@@ -46,7 +47,7 @@ export async function doesIdentityServerHaveTerms(fullUrl) {
     return terms && terms["policies"] && (Object.keys(terms["policies"]).length > 0);
 }
 
-export function doesAccountDataHaveIdentityServer() {
+export function doesAccountDataHaveIdentityServer(): boolean {
     const event = MatrixClientPeg.get().getAccountData("m.identity_server");
     return event && event.getContent() && event.getContent()['base_url'];
 }

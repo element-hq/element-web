@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import classnames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 
 import * as Avatar from '../../../Avatar';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Layout } from "../../../settings/Layout";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     /**
@@ -111,7 +112,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                 );
             },
             getMxcAvatarUrl: () => this.props.avatarUrl,
-        };
+        } as RoomMember;
 
         return event;
     }
