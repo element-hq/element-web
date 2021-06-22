@@ -1067,6 +1067,8 @@
     "Manage & explore rooms": "Manage & explore rooms",
     "Explore rooms": "Explore rooms",
     "Space options": "Space options",
+    "Expand": "Expand",
+    "Collapse": "Collapse",
     "Remove": "Remove",
     "This bridge was provisioned by <user />.": "This bridge was provisioned by <user />.",
     "This bridge is managed by <user />.": "This bridge is managed by <user />.",
