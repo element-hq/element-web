@@ -19,8 +19,8 @@ import React, { createRef, RefObject } from 'react';
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
-import {Key} from "../../../Keyboard";
-import DesktopBuildsNotice, {WarningKind} from "../elements/DesktopBuildsNotice";
+import { Key } from "../../../Keyboard";
+import DesktopBuildsNotice, { WarningKind } from "../elements/DesktopBuildsNotice";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
@@ -95,7 +95,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                 <div className="mx_SearchBar">
                     <div className="mx_SearchBar_buttons" role="radiogroup">
                         <AccessibleButton
-                            className={ thisRoomClasses }
+                            className={thisRoomClasses}
                             onClick={this.onThisRoomClick}
                             aria-checked={this.state.scope === SearchScope.Room}
                             role="radio"
@@ -103,7 +103,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             {_t("This Room")}
                         </AccessibleButton>
                         <AccessibleButton
-                            className={ allRoomsClasses }
+                            className={allRoomsClasses}
                             onClick={this.onAllRoomsClick}
                             aria-checked={this.state.scope === SearchScope.All}
                             role="radio"
