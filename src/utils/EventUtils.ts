@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventStatus } from 'matrix-js-sdk/src/models/event';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { MatrixEvent, EventStatus } from 'matrix-js-sdk/src/models/event';
+
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
+
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
  * which effectively checks whether it's a regular message that has been sent and that we
@@ -25,7 +28,7 @@ import shouldHideEvent from "../shouldHideEvent";
  * @param {MatrixEvent} mxEvent The event to check
  * @returns {boolean} true if actionable
  */
-export function isContentActionable(mxEvent) {
+export function isContentActionable(mxEvent: MatrixEvent): boolean {
     const { status: eventStatus } = mxEvent;
 
     // status is SENT before remote-echo, null after
@@ -45,7 +48,7 @@ export function isContentActionable(mxEvent) {
     return false;
 }
 
-export function canEditContent(mxEvent) {
+export function canEditContent(mxEvent: MatrixEvent): boolean {
     if (mxEvent.status === EventStatus.CANCELLED || mxEvent.getType() !== "m.room.message" || mxEvent.isRedacted()) {
         return false;
     }
@@ -56,7 +59,7 @@ export function canEditContent(mxEvent) {
         mxEvent.getSender() === MatrixClientPeg.get().getUserId();
 }
 
-export function canEditOwnEvent(mxEvent) {
+export function canEditOwnEvent(mxEvent: MatrixEvent): boolean {
     // for now we only allow editing
     // your own events. So this just call through
     // In the future though, moderators will be able to
@@ -67,7 +70,7 @@ export function canEditOwnEvent(mxEvent) {
 }
 
 const MAX_JUMP_DISTANCE = 100;
-export function findEditableEvent(room, isForward, fromEventId = undefined) {
+export function findEditableEvent(room: Room, isForward: boolean, fromEventId: string = undefined): MatrixEvent {
     const liveTimeline = room.getLiveTimeline();
     const events = liveTimeline.getEvents().concat(room.getPendingEvents());
     const maxIdx = events.length - 1;

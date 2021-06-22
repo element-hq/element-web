@@ -123,6 +123,7 @@
     "@sinonjs/fake-timers": "^7.0.2",
     "@types/classnames": "^2.2.11",
     "@types/counterpart": "^0.18.1",
+    "@types/diff-match-patch": "^1.0.5",
     "@types/flux": "^3.1.9",
     "@types/jest": "^26.0.20",
     "@types/linkifyjs": "^2.1.3",
