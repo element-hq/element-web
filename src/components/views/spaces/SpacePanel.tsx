@@ -27,6 +27,7 @@ import { SpaceItem } from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import SpaceStore, {
+    HOME_SPACE,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
@@ -41,6 +42,7 @@ import {
 import { Key } from "../../../Keyboard";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IButtonProps {
     space?: Room;
@@ -132,13 +134,16 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
     const [invites, spaces, activeSpace] = useSpaces();
     const activeSpaces = activeSpace ? [activeSpace] : [];
 
+    const homeNotificationState = SettingsStore.getValue("feature_spaces.all_rooms")
+        ? RoomNotificationStateStore.instance.globalState : SpaceStore.instance.getNotificationState(HOME_SPACE);
+
     return <div className="mx_SpaceTreeLevel">
         <SpaceButton
             className="mx_SpaceButton_home"
             onClick={() => SpaceStore.instance.setActiveSpace(null)}
             selected={!activeSpace}
-            tooltip={_t("All rooms")}
-            notificationState={RoomNotificationStateStore.instance.globalState}
+            tooltip={SettingsStore.getValue("feature_spaces.all_rooms") ? _t("All rooms") : _t("Home")}
+            notificationState={homeNotificationState}
             isNarrow={isPanelCollapsed}
         />
         { invites.map(s => (

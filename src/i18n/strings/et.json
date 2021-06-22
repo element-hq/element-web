@@ -3345,5 +3345,14 @@
     "Send and receive voice messages": "Saada ja võta vastu häälsõnumeid",
     "Your feedback will help make spaces better. The more detail you can go into, the better.": "Sinu tagasiside aitab teha kogukonnakeskuseid paremaks. Mida detailsemalt sa oma arvamust kirjeldad, seda parem.",
     "If you leave, %(brand)s will reload with Spaces disabled. Communities and custom tags will be visible again.": "Kui sa lahkud, siis käivitame %(brand)s uuesti nii, et kogukonnakeskused ei ole kasutusel. Vana tüüpi kogukonnad ja kohandatud sildid saavad jälle olema kasutusel.",
-    "Message search initialisation failed": "Sõnumite otsingu alustamine ei õnnestunud"
+    "Message search initialisation failed": "Sõnumite otsingu alustamine ei õnnestunud",
+    "sends space invaders": "korraldab ühe pisikese tulnukate vallutusretke",
+    "Sends the given message with a space themed effect": "Saadab antud sõnumi kosmoseteemalise efektiga",
+    "Go to my space": "Palun vaata minu kogukonnakeskust",
+    "User Busy": "Kasutaja on hõivatud",
+    "The user you called is busy.": "Kasutaja, kellele sa helistasid, on hõivatud.",
+    "No results for \"%(query)s\"": "Päringule „%(query)s“ pole vastuseid",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Proovi muid otsingusõnu või kontrolli, et neis polnud trükivigu. Kuna mõned otsingutulemused on privaatsed ja sa vajad kutset nende nägemiseks, siis kõiki tulemusi siin ei pruugi näha olla.",
+    "Currently joining %(count)s rooms|other": "Parasjagu liitun %(count)s jututoaga",
+    "Currently joining %(count)s rooms|one": "Parasjagu liitun %(count)s jututoaga"
 }

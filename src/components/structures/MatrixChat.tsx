@@ -1953,6 +1953,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
+
         PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };

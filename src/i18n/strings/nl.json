@@ -3261,5 +3261,11 @@
     "See when people join, leave, or are invited to your active room": "Zie wanneer personen deelnemen, vertrekken of worden uitgenodigd in uw actieve gesprek",
     "Kick, ban, or invite people to your active room, and make you leave": "Verwijder, verban of nodig personen uit voor uw actieve gesprek en uzelf laten vertrekken",
     "See when people join, leave, or are invited to this room": "Zie wanneer personen deelnemen, vertrekken of worden uitgenodigd voor dit gesprek",
-    "Kick, ban, or invite people to this room, and make you leave": "Verwijder, verban of verwijder personen uit dit gesprek en uzelf laten vertrekken"
+    "Kick, ban, or invite people to this room, and make you leave": "Verwijder, verban of verwijder personen uit dit gesprek en uzelf laten vertrekken",
+    "Currently joining %(count)s rooms|one": "Momenteel aan het toetreden tot %(count)s gesprek",
+    "Currently joining %(count)s rooms|other": "Momenteel aan het toetreden tot %(count)s gesprekken",
+    "Try different words or check for typos. Some results may not be visible as they're private and you need an invite to join them.": "Probeer andere woorden of controleer op typefouten. Sommige resultaten zijn mogelijk niet zichtbaar omdat ze privé zijn of u een uitnodiging nodig heeft om deel te nemen.",
+    "No results for \"%(query)s\"": "Geen resultaten voor \"%(query)s\"",
+    "The user you called is busy.": "De gebruiker die u belde is bezet.",
+    "User Busy": "Gebruiker Bezet"
 }
