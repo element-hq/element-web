@@ -35,12 +35,13 @@ export default class PlainTextExporter extends Exporter {
 
         const match = REPLY_REGEX.exec(content.body);
 
+        if (!match) return content.body;
+
         let rplSource: string;
         const rplName = match[1];
         const rplText = match[3];
-        const sourceMatch = REPLY_REGEX.exec(content.body);
-        rplSource = sourceMatch && sourceMatch.length === 4 ? sourceMatch[3] : content.body;
-        rplSource = rplSource.substring(0, REPLY_SOURCE_MAX_LENGTH);
+
+        rplSource = match[2].substring(1, REPLY_SOURCE_MAX_LENGTH);
         // Get the first non-blank line from the source.
         const lines = rplSource.split('\n').filter((line) => !/^\s*$/.test(line))
         if (lines.length > 0) {
