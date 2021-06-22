@@ -134,6 +134,10 @@ export default class AliasSettings extends React.Component {
                 }
             }
             this.setState({ localAliases });
+
+            if (localAliases.length === 0) {
+                this.setState({ detailsOpen: true });
+            }
         } finally {
             this.setState({ localAliasesLoading: false });
         }
@@ -388,7 +392,7 @@ export default class AliasSettings extends React.Component {
                 />
                 <span className='mx_SettingsTab_subheading mx_AliasSettings_localAliasHeader'>{_t("Local Addresses")}</span>
                 <p>{_t("Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)", {localDomain})}</p>
-                <details onToggle={this.onLocalAliasesToggled}>
+                <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
                     <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more")}</summary>
                     {localAliasesList}
                 </details>

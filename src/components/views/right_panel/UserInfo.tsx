@@ -1594,7 +1594,7 @@ const UserInfo: React.FC<IProps> = ({
             content = (
                 <BasicUserInfo
                     room={room}
-                    member={member}
+                    member={member as User}
                     groupId={groupId as string}
                     devices={devices}
                     isRoomEncrypted={isRoomEncrypted} />
@@ -1605,7 +1605,7 @@ const UserInfo: React.FC<IProps> = ({
             content = (
                 <EncryptionPanel
                     {...props as React.ComponentProps<typeof EncryptionPanel>}
-                    member={member}
+                    member={member as User | RoomMember}
                     onClose={onEncryptionPanelClose}
                     isRoomEncrypted={isRoomEncrypted}
                 />

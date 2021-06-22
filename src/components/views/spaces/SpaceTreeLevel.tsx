@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, InputHTMLAttributes, LegacyRef } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 
@@ -49,13 +49,14 @@ import { StaticNotificationState } from "../../../stores/notifications/StaticNot
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
 
-interface IItemProps {
+interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     space?: Room;
     activeSpaces: Room[];
     isNested?: boolean;
     isPanelCollapsed?: boolean;
     onExpand?: Function;
     parents?: Set<string>;
+    innerRef?: LegacyRef<HTMLLIElement>;
 }
 
 interface IItemState {
@@ -362,15 +363,16 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     }
 
     render() {
-        const {space, activeSpaces, isNested} = this.props;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { space, activeSpaces, isNested, isPanelCollapsed, onExpand, parents, innerRef,
+            ...otherProps } = this.props;
 
-        const isNarrow = this.props.isPanelCollapsed;
         const collapsed = this.isCollapsed;
 
         const isActive = activeSpaces.includes(space);
-        const itemClasses = classNames({
+        const itemClasses = classNames(this.props.className, {
             "mx_SpaceItem": true,
-            "mx_SpaceItem_narrow": isNarrow,
+            "mx_SpaceItem_narrow": isPanelCollapsed,
             "collapsed": collapsed,
             "hasSubSpaces": this.state.childSpaces?.length,
         });
@@ -379,7 +381,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const classes = classNames("mx_SpaceButton", {
             mx_SpaceButton_active: isActive,
             mx_SpaceButton_hasMenuOpen: !!this.state.contextMenuPosition,
-            mx_SpaceButton_narrow: isNarrow,
+            mx_SpaceButton_narrow: isPanelCollapsed,
             mx_SpaceButton_invite: isInvite,
         });
         const notificationState = isInvite
@@ -392,7 +394,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 spaces={this.state.childSpaces}
                 activeSpaces={activeSpaces}
                 isNested={true}
-                parents={new Set(this.props.parents).add(this.props.space.roomId)}
+                parents={new Set(parents).add(space.roomId)}
             />;
         }
 
@@ -414,13 +416,13 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             /> : null;
 
         return (
-            <li className={itemClasses}>
+            <li {...otherProps} className={itemClasses} ref={innerRef}>
                 <RovingAccessibleTooltipButton
                     className={classes}
                     title={space.name}
                     onClick={this.onClick}
                     onContextMenu={this.onContextMenu}
-                    forceHide={!isNarrow || !!this.state.contextMenuPosition}
+                    forceHide={!isPanelCollapsed || !!this.state.contextMenuPosition}
                     role="treeitem"
                     aria-expanded={!collapsed}
                     inputRef={this.buttonRef}
@@ -429,7 +431,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     { toggleCollapseButton }
                     <div className="mx_SpaceButton_selectionWrapper">
                         <RoomAvatar width={avatarSize} height={avatarSize} room={space} />
-                        { !isNarrow && <span className="mx_SpaceButton_name">{ space.name }</span> }
+                        { !isPanelCollapsed && <span className="mx_SpaceButton_name">{ space.name }</span> }
                         { notifBadge }
                         { this.renderContextMenu() }
                     </div>
