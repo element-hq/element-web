@@ -337,11 +337,10 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     }
 
     private onRoomClicked = (room: IRoom, ev: ButtonEvent) => {
+        // If room was shift-clicked, remove it from the room directory
         if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();
             this.removeFromDirectory(room);
-        } else {
-            this.showRoom(room);
         }
     };
 
