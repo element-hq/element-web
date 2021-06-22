@@ -1,11 +1,10 @@
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { exportTypes } from "./exportUtils";
-import { exportOptions } from "./exportUtils";
-import { decryptFile } from "../DecryptFile";
-import { mediaFromContent } from "../../customisations/Media";
-import { formatFullDateNoDay } from "../../DateUtils";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import {exportOptions, exportTypes} from "./exportUtils";
+import {decryptFile} from "../DecryptFile";
+import {mediaFromContent} from "../../customisations/Media";
+import {formatFullDateNoDay} from "../../DateUtils";
 
 export default abstract class Exporter {
     protected constructor(
@@ -139,6 +138,11 @@ export default abstract class Exporter {
         const fileDate = formatFullDateNoDay(new Date(event.getTs()));
         const [fileName, fileExt] = this.splitFileName(event.getContent().body);
         return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
+    }
+
+    protected isReply(mxEvent) {
+        const relatesTo = mxEvent.getContent()["m.relates_to"];
+        return !!(relatesTo && relatesTo["m.in_reply_to"]);
     }
 
     protected isAttachment(mxEv: MatrixEvent) {

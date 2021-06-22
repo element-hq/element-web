@@ -28,11 +28,49 @@ export default class PlainTextExporter extends Exporter {
         return e.returnValue = "Are you sure you want to exit during this export?";
     }
 
+    protected textForReplyEvent = (ev : MatrixEvent) => {
+        const REPLY_REGEX = /> <(.*?)>(.*?)\n\n(.*)/;
+        const REPLY_SOURCE_MAX_LENGTH = 32;
+        const content = ev.getContent();
+
+        const match = REPLY_REGEX.exec(content.body);
+
+        let rplSource: string;
+        const rplName = match[1];
+        const rplText = match[3];
+        const sourceMatch = REPLY_REGEX.exec(content.body);
+        rplSource = sourceMatch && sourceMatch.length === 4 ? sourceMatch[3] : content.body;
+        rplSource = rplSource.substring(0, REPLY_SOURCE_MAX_LENGTH);
+        // Get the first non-blank line from the source.
+        const lines = rplSource.split('\n').filter((line) => !/^\s*$/.test(line))
+        if (lines.length > 0) {
+            // Cut to a maximum length.
+            rplSource = lines[0].substring(0, REPLY_SOURCE_MAX_LENGTH);
+            // Ellipsis if needed.
+            if (lines[0].length > REPLY_SOURCE_MAX_LENGTH) {
+                rplSource = rplSource + "...";
+            }
+            // Wrap in formatting
+            rplSource = ` "${rplSource}"`;
+        } else {
+            // Don't show a source because we couldn't format one.
+            rplSource = "";
+        }
+
+        return `<${rplName}${rplSource}> ${rplText}`;
+    }
+
+    protected _textForEvent = (mxEv: MatrixEvent) => {
+        const senderDisplayName = mxEv.sender && mxEv.sender.name ? mxEv.sender.name : mxEv.getSender();
+        if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv);
+        else return textForEvent(mxEv);
+    }
+
     protected async createOutput(events: MatrixEvent[]) {
         let content = "";
         for (const event of events) {
             if (!haveTileForEvent(event)) continue;
-            content += `${new Date(event.getTs()).toLocaleString()} - ${textForEvent(event)}\n`;
+            content += `${new Date(event.getTs()).toLocaleString()} - ${this._textForEvent(event)}\n`;
         }
         return content;
     }
