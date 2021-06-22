@@ -17,12 +17,11 @@ limitations under the License.
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 
 import DMRoomMap from './utils/DMRoomMap';
 import { mediaFromMxc } from "./customisations/Media";
 import SettingsStore from "./settings/SettingsStore";
-
-export type ResizeMethod = "crop" | "scale";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(

@@ -113,19 +113,6 @@ declare global {
         usageDetails?: {[key: string]: number};
     }
 
-    export interface ISettledFulfilled<T> {
-        status: "fulfilled";
-        value: T;
-    }
-    export interface ISettledRejected {
-        status: "rejected";
-        reason: any;
-    }
-
-    interface PromiseConstructor {
-        allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>>;
-    }
-
     interface HTMLAudioElement {
         type?: string;
         // sinkId & setSinkId are experimental and typescript doesn't know about them
