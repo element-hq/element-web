@@ -241,7 +241,7 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
         const isRedacted = ev.isRedacted();
         let message = ev.getContent().body;
-        if (isRedacted) message = "Message Deleted";
+        if (isRedacted) message = _t("Message Deleted");
         else if (ev.getContent().msgtype === "m.emote") {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === "m.image") {

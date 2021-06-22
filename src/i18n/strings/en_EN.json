@@ -525,6 +525,7 @@
     "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s set the server ACLs for this room.",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s changed the server ACLs for this room.",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 All servers are banned from participating! This room can no longer be used.",
+    "Message Deleted": "Message Deleted",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sent an image.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s set the main address for this room to %(address)s.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s removed the main address for this room.",
