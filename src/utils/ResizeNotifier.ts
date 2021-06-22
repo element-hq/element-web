@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,59 +22,58 @@ limitations under the License.
  * Fires when the middle panel has been resized by a pixel.
  * @event module:utils~ResizeNotifier#"middlePanelResizedNoisy"
  */
+
 import { EventEmitter } from "events";
 import { throttle } from "lodash";
 
 export default class ResizeNotifier extends EventEmitter {
-    constructor() {
-        super();
-        // with default options, will call fn once at first call, and then every x ms
-        // if there was another call in that timespan
-        this._throttledMiddlePanel = throttle(() => this.emit("middlePanelResized"), 200);
-        this._isResizing = false;
-    }
+    private _isResizing = false;
 
-    get isResizing() {
+    // with default options, will call fn once at first call, and then every x ms
+    // if there was another call in that timespan
+    private throttledMiddlePanel = throttle(() => this.emit("middlePanelResized"), 200);
+
+    public get isResizing() {
         return this._isResizing;
     }
 
-    startResizing() {
+    public startResizing() {
         this._isResizing = true;
         this.emit("isResizing", true);
     }
 
-    stopResizing() {
+    public stopResizing() {
         this._isResizing = false;
         this.emit("isResizing", false);
     }
 
-    _noisyMiddlePanel() {
+    private noisyMiddlePanel() {
         this.emit("middlePanelResizedNoisy");
     }
 
-    _updateMiddlePanel() {
-        this._throttledMiddlePanel();
-        this._noisyMiddlePanel();
+    private updateMiddlePanel() {
+        this.throttledMiddlePanel();
+        this.noisyMiddlePanel();
     }
 
     // can be called in quick succession
-    notifyLeftHandleResized() {
+    public notifyLeftHandleResized() {
         // don't emit event for own region
-        this._updateMiddlePanel();
+        this.updateMiddlePanel();
     }
 
     // can be called in quick succession
-    notifyRightHandleResized() {
-        this._updateMiddlePanel();
+    public notifyRightHandleResized() {
+        this.updateMiddlePanel();
     }
 
-    notifyTimelineHeightChanged() {
-        this._updateMiddlePanel();
+    public notifyTimelineHeightChanged() {
+        this.updateMiddlePanel();
     }
 
     // can be called in quick succession
-    notifyWindowResized() {
-        this._updateMiddlePanel();
+    public notifyWindowResized() {
+        this.updateMiddlePanel();
     }
 }
 
