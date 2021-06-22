@@ -24,7 +24,7 @@ clone() {
 # Try the PR author's branch in case it exists on the deps as well.
 # First we check if GITHUB_HEAD_REF is defined,
 # Then we check if BUILDKITE_BRANCH is defined,
-# if it isn't we can assume this is a Netlify build
+# if they aren't we can assume this is a Netlify build
 if [ -n "$GITHUB_HEAD_REF" ]; then
     head=$GITHUB_HEAD_REF
 elif [ -n "$BUILDKITE_BRANCH" ]; then
