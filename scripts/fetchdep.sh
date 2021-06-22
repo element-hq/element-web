@@ -25,18 +25,20 @@ clone() {
 # First we check if GITHUB_HEAD_REF is defined,
 # Then we check if BUILDKITE_BRANCH is defined,
 # if it isn't we can assume this is a Netlify build
-if [ -n ${GITHUB_HEAD_REF+x} ]; then
-	head=$GITHUB_HEAD_REF
-elif [ -n ${BUILDKITE_BRANCH+x} ]; then
-	head=$BUILDKITE_BRANCH
+if [ -z ${BUILDKITE_BRANCH+x} ]; then
+    if [ -z ${GITHUB_HEAD_REF+x} ]; then
+        # Netlify doesn't give us info about the fork so we have to get it from GitHub API
+        apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
+        apiEndpoint+=$REVIEW_ID
+        head=$(curl $apiEndpoint | jq -r '.head.label')
+    else
+    	head=$GITHUB_HEAD_REF
+    fi
 else
-	# Netlify doesn't give us info about the fork so we have to get it from GitHub API
-	apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
-	apiEndpoint+=$REVIEW_ID
-	head=$(curl $apiEndpoint | jq -r '.head.label')
+	head=$BUILDKITE_BRANCH
 fi
 
-# If head is set, it will contain on BuilKite either:
+# If head is set, it will contain on BuildKite either:
 #   * "branch" when the author's branch and target branch are in the same repo
 #   * "fork:branch" when the author's branch is in their fork or if this is a Netlify build
 # We can split on `:` into an array to check.
@@ -44,11 +46,16 @@ fi
 # to determine whether the branch is from a fork or not
 BRANCH_ARRAY=(${head//:/ })
 if [[ "${#BRANCH_ARRAY[@]}" == "1" ]]; then
-    if [[ "$GITHUB_REPOSITORY" = "$deforg/$defrepo" ]]; then
-        clone $deforg $defrepo $head
+    if [ -z ${BUILDKITE_BRANCH+x} ]; then
+        if [[ "$GITHUB_REPOSITORY" == "$deforg"* ]]; then
+            clone $deforg $defrepo $GITHUB_HEAD_REF
+        else
+            clone $GITHUB_ACTOR $defrepo $GITHUB_HEAD_REF
+        fi
     else
-        clone $GITHUB_ACTOR $defrepo $head
+        clone $deforg $defrepo $BUILDKITE_BRANCH
     fi
+
 elif [[ "${#BRANCH_ARRAY[@]}" == "2" ]]; then
     clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
 fi
