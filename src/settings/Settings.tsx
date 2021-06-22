@@ -193,7 +193,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         controller: new ReloadOnChangeController(),
     },
     "feature_spaces.space_dm_badges": {
-        displayName: _td("Show notification badges for DMs in Spaces."),
+        displayName: _td("Show notification badges for DMs in Spaces"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
