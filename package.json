@@ -89,7 +89,6 @@
     "qrcode": "^1.4.4",
     "re-resizable": "^6.9.0",
     "react": "^17.0.2",
-    "react-beautiful-dnd": "^4.0.1",
     "react-dom": "^17.0.2",
     "react-focus-lock": "^2.5.0",
     "react-transition-group": "^4.4.1",
