@@ -32,7 +32,7 @@ import * as ContextMenu from "../../../../structures/ContextMenu";
 import { toRightOf } from "../../../../structures/ContextMenu";
 
 interface IProps {
-    closeSettingsFn: () => {};
+    closeSettingsFn: () => void;
 }
 
 interface IState {

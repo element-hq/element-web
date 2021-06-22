@@ -29,7 +29,7 @@ import InfoDialog from "./InfoDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
-import {USER_LABS_TAB} from "./UserSettingsDialog";
+import { UserTab } from "./UserSettingsDialog";
 
 interface IProps extends IDialogProps {
     featureId: string;
@@ -75,7 +75,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({featureId, onFinished}) => {
                     onFinished(false);
                     defaultDispatcher.dispatch({
                         action: Action.ViewUserSettings,
-                        initialTabId: USER_LABS_TAB,
+                        initialTabId: UserTab.Labs,
                     });
                 }}>
                     { _t("To leave the beta, visit your settings.") }

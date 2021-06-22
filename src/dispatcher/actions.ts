@@ -159,4 +159,14 @@ export enum Action {
      * Fired when joining a room failed
      */
     JoinRoomError = "join_room_error",
+
+    /**
+     * Inserts content into the active composer. Should be used with ComposerInsertPayload
+     */
+    ComposerInsert = "composer_insert",
+
+    /**
+     * Switches space. Should be used with SwitchSpacePayload.
+     */
+    SwitchSpace = "switch_space",
 }

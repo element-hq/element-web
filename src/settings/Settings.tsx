@@ -135,6 +135,13 @@ export interface ISetting {
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
+    "feature_report_to_moderators": {
+        isFeature: true,
+        displayName: _td("Report to moderators prototype. " +
+            "In rooms that support moderation, the `report` button will let you report abuse to room moderators"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_spaces": {
         isFeature: true,
         displayName: _td("Spaces prototype. Incompatible with Communities, Communities v2 and Custom Tags. " +

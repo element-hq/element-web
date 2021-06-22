@@ -25,6 +25,7 @@ import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { EventSubscription } from "fbemitter";
 
 import shouldHideEvent from '../../shouldHideEvent';
@@ -59,7 +60,7 @@ import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
-import SearchBar from "../views/rooms/SearchBar";
+import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
@@ -138,11 +139,11 @@ export interface IState {
     draggingFile: boolean;
     searching: boolean;
     searchTerm?: string;
-    searchScope?: "All" | "Room";
+    searchScope?: SearchScope;
     searchResults?: XOR<{}, {
         count: number;
         highlights: string[];
-        results: MatrixEvent[];
+        results: SearchResult[];
         next_batch: string; // eslint-disable-line camelcase
     }>;
     searchHighlights?: string[];
@@ -1266,7 +1267,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             });
     }
 
-    private onSearch = (term: string, scope) => {
+    private onSearch = (term: string, scope: SearchScope) => {
         this.setState({
             searchTerm: term,
             searchScope: scope,
@@ -1287,7 +1288,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.searchId = new Date().getTime();
 
         let roomId;
-        if (scope === "Room") roomId = this.state.room.roomId;
+        if (scope === SearchScope.Room) roomId = this.state.room.roomId;
 
         debuglog("sending search request");
         const searchPromise = eventSearch(term, roomId);
