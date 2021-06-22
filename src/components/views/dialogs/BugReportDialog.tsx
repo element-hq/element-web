@@ -18,7 +18,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
@@ -27,8 +26,27 @@ import sendBugReport, {downloadBugReport} from '../../../rageshake/submit-ragesh
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    onFinished: (success: boolean) => void;
+    initialText?: string;
+    label?: string;
+}
+
+interface IState {
+    sendLogs: boolean;
+    busy: boolean;
+    err: string;
+    issueUrl: string;
+    text: string;
+    progress: string;
+    downloadBusy: boolean;
+    downloadProgress: string;
+}
+
 @replaceableComponent("views.dialogs.BugReportDialog")
-export default class BugReportDialog extends React.Component {
+export default class BugReportDialog extends React.Component<IProps, IState> {
+    private unmounted: boolean;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -41,25 +59,18 @@ export default class BugReportDialog extends React.Component {
             downloadBusy: false,
             downloadProgress: null,
         };
-        this._unmounted = false;
-        this._onSubmit = this._onSubmit.bind(this);
-        this._onCancel = this._onCancel.bind(this);
-        this._onTextChange = this._onTextChange.bind(this);
-        this._onIssueUrlChange = this._onIssueUrlChange.bind(this);
-        this._onSendLogsChange = this._onSendLogsChange.bind(this);
-        this._sendProgressCallback = this._sendProgressCallback.bind(this);
-        this._downloadProgressCallback = this._downloadProgressCallback.bind(this);
+        this.unmounted = false;
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
+    public componentWillUnmount() {
+        this.unmounted = true;
     }
 
-    _onCancel(ev) {
+    private onCancel = (): void => {
         this.props.onFinished(false);
     }
 
-    _onSubmit(ev) {
+    private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
             this.setState({
                 err: _t("Please tell us what went wrong or, better, create a GitHub issue that describes the problem."),
@@ -72,15 +83,15 @@ export default class BugReportDialog extends React.Component {
             (this.state.issueUrl.length > 0 ? this.state.issueUrl : 'No issue link given');
 
         this.setState({ busy: true, progress: null, err: null });
-        this._sendProgressCallback(_t("Preparing to send logs"));
+        this.sendProgressCallback(_t("Preparing to send logs"));
 
         sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
             userText,
             sendLogs: true,
-            progressCallback: this._sendProgressCallback,
+            progressCallback: this.sendProgressCallback,
             label: this.props.label,
         }).then(() => {
-            if (!this._unmounted) {
+            if (!this.unmounted) {
                 this.props.onFinished(false);
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 // N.B. first param is passed to piwik and so doesn't want i18n
@@ -91,7 +102,7 @@ export default class BugReportDialog extends React.Component {
                 });
             }
         }, (err) => {
-            if (!this._unmounted) {
+            if (!this.unmounted) {
                 this.setState({
                     busy: false,
                     progress: null,
@@ -101,14 +112,14 @@ export default class BugReportDialog extends React.Component {
         });
     }
 
-    _onDownload = async (ev) => {
+    private onDownload = async (): Promise<void> => {
         this.setState({ downloadBusy: true });
-        this._downloadProgressCallback(_t("Preparing to download logs"));
+        this.downloadProgressCallback(_t("Preparing to download logs"));
 
         try {
             await downloadBugReport({
                 sendLogs: true,
-                progressCallback: this._downloadProgressCallback,
+                progressCallback: this.downloadProgressCallback,
                 label: this.props.label,
             });
 
@@ -117,7 +128,7 @@ export default class BugReportDialog extends React.Component {
                 downloadProgress: null,
             });
         } catch (err) {
-            if (!this._unmounted) {
+            if (!this.unmounted) {
                 this.setState({
                     downloadBusy: false,
                     downloadProgress: _t("Failed to send logs: ") + `${err.message}`,
@@ -126,33 +137,29 @@ export default class BugReportDialog extends React.Component {
         }
     };
 
-    _onTextChange(ev) {
-        this.setState({ text: ev.target.value });
+    private onTextChange = (ev: React.FormEvent<HTMLTextAreaElement>): void => {
+        this.setState({ text: ev.currentTarget.value });
     }
 
-    _onIssueUrlChange(ev) {
-        this.setState({ issueUrl: ev.target.value });
+    private onIssueUrlChange = (ev: React.FormEvent<HTMLInputElement>): void => {
+        this.setState({ issueUrl: ev.currentTarget.value });
     }
 
-    _onSendLogsChange(ev) {
-        this.setState({ sendLogs: ev.target.checked });
-    }
-
-    _sendProgressCallback(progress) {
-        if (this._unmounted) {
+    private sendProgressCallback = (progress: string): void => {
+        if (this.unmounted) {
             return;
         }
-        this.setState({progress: progress});
+        this.setState({ progress });
     }
 
-    _downloadProgressCallback(downloadProgress) {
-        if (this._unmounted) {
+    private downloadProgressCallback = (downloadProgress: string): void => {
+        if (this.unmounted) {
             return;
         }
         this.setState({ downloadProgress });
     }
 
-    render() {
+    public render() {
         const Loader = sdk.getComponent("elements.Spinner");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -183,7 +190,7 @@ export default class BugReportDialog extends React.Component {
         }
 
         return (
-            <BaseDialog className="mx_BugReportDialog" onFinished={this._onCancel}
+            <BaseDialog className="mx_BugReportDialog" onFinished={this.onCancel}
                 title={_t('Submit debug logs')}
                 contentId='mx_Dialog_content'
             >
@@ -213,7 +220,7 @@ export default class BugReportDialog extends React.Component {
                     </b></p>
 
                     <div className="mx_BugReportDialog_download">
-                        <AccessibleButton onClick={this._onDownload} kind="link" disabled={this.state.downloadBusy}>
+                        <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
                             { _t("Download logs") }
                         </AccessibleButton>
                         {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
@@ -223,7 +230,7 @@ export default class BugReportDialog extends React.Component {
                         type="text"
                         className="mx_BugReportDialog_field_input"
                         label={_t("GitHub issue")}
-                        onChange={this._onIssueUrlChange}
+                        onChange={this.onIssueUrlChange}
                         value={this.state.issueUrl}
                         placeholder="https://github.com/vector-im/element-web/issues/..."
                     />
@@ -232,7 +239,7 @@ export default class BugReportDialog extends React.Component {
                         element="textarea"
                         label={_t("Notes")}
                         rows={5}
-                        onChange={this._onTextChange}
+                        onChange={this.onTextChange}
                         value={this.state.text}
                         placeholder={_t(
                             "If there is additional context that would help in " +
@@ -245,17 +252,12 @@ export default class BugReportDialog extends React.Component {
                     {error}
                 </div>
                 <DialogButtons primaryButton={_t("Send logs")}
-                    onPrimaryButtonClick={this._onSubmit}
+                    onPrimaryButtonClick={this.onSubmit}
                     focus={true}
-                    onCancel={this._onCancel}
+                    onCancel={this.onCancel}
                     disabled={this.state.busy}
                 />
             </BaseDialog>
         );
     }
 }
-
-BugReportDialog.propTypes = {
-    onFinished: PropTypes.func.isRequired,
-    initialText: PropTypes.string,
-};

@@ -26,37 +26,37 @@ limitations under the License.
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.dialogs.ErrorDialog")
-export default class ErrorDialog extends React.Component {
-    static propTypes = {
-        title: PropTypes.string,
-        description: PropTypes.oneOfType([
-            PropTypes.element,
-            PropTypes.string,
-        ]),
-        button: PropTypes.string,
-        focus: PropTypes.bool,
-        onFinished: PropTypes.func.isRequired,
-        headerImage: PropTypes.string,
-    };
+interface IProps {
+    onFinished: (success: boolean) => void;
+    title?: string;
+    description?: React.ReactNode;
+    button?: string;
+    focus?: boolean;
+    headerImage?: string;
+}
 
-    static defaultProps = {
+interface IState {
+    onFinished: (success: boolean) => void;
+}
+
+@replaceableComponent("views.dialogs.ErrorDialog")
+export default class ErrorDialog extends React.Component<IProps, IState> {
+    public static defaultProps = {
         focus: true,
         title: null,
         description: null,
         button: null,
     };
 
-    onClick = () => {
+    private onClick = () => {
         this.props.onFinished(true);
     };
 
-    render() {
+    public render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog

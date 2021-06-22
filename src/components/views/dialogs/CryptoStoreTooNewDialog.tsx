@@ -22,7 +22,11 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 
-export default (props) => {
+interface IProps {
+    onFinished: (success: boolean) => void;
+}
+
+export default (props: IProps) => {
     const brand = SdkConfig.get().brand;
 
     const _onLogoutClicked = () => {
@@ -40,7 +44,7 @@ export default (props) => {
             onFinished: (doLogout) => {
                 if (doLogout) {
                     dis.dispatch({action: 'logout'});
-                    props.onFinished();
+                    props.onFinished(true);
                 }
             },
         });

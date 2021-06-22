@@ -15,13 +15,31 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
+
+interface IProps {
+    // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
+    member: RoomMember;
+    // group member object. Supply either this or 'member'
+    groupMember: GroupMemberType;
+    // needed if a group member is specified
+    matrixClient?: MatrixClient,
+    action: string; // eg. 'Ban'
+    title: string; // eg. 'Ban this user?'
+
+    // Whether to display a text field for a reason
+    // If true, the second argument to onFinished will
+    // be the string entered.
+    askReason?: boolean;
+    danger?: boolean;
+    onFinished: (success: boolean, reason?: string) => void;
+}
 
 /*
  * A dialog for confirming an operation on another user.
@@ -32,53 +50,23 @@ import {mediaFromMxc} from "../../../customisations/Media";
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
  */
 @replaceableComponent("views.dialogs.ConfirmUserActionDialog")
-export default class ConfirmUserActionDialog extends React.Component {
-    static propTypes = {
-        // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
-        member: PropTypes.object,
-        // group member object. Supply either this or 'member'
-        groupMember: GroupMemberType,
-        // needed if a group member is specified
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-        action: PropTypes.string.isRequired, // eg. 'Ban'
-        title: PropTypes.string.isRequired, // eg. 'Ban this user?'
-
-        // Whether to display a text field for a reason
-        // If true, the second argument to onFinished will
-        // be the string entered.
-        askReason: PropTypes.bool,
-        danger: PropTypes.bool,
-        onFinished: PropTypes.func.isRequired,
-    };
+export default class ConfirmUserActionDialog extends React.Component<IProps> {
+    private reasonField: React.RefObject<HTMLInputElement> = React.createRef();
 
     static defaultProps = {
         danger: false,
         askReason: false,
     };
 
-    constructor(props) {
-        super(props);
-
-        this._reasonField = null;
-    }
-
-    onOk = () => {
-        let reason;
-        if (this._reasonField) {
-            reason = this._reasonField.value;
-        }
-        this.props.onFinished(true, reason);
+    public onOk = (): void => {
+        this.props.onFinished(true, this.reasonField.current?.value);
     };
 
-    onCancel = () => {
+    public onCancel = (): void => {
         this.props.onFinished(false);
     };
 
-    _collectReasonField = e => {
-        this._reasonField = e;
-    };
-
-    render() {
+    public render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
@@ -92,7 +80,7 @@ export default class ConfirmUserActionDialog extends React.Component {
                 <div>
                     <form onSubmit={this.onOk}>
                         <input className="mx_ConfirmUserActionDialog_reasonField"
-                            ref={this._collectReasonField}
+                            ref={this.reasonField}
                             placeholder={_t("Reason")}
                             autoFocus={true}
                         />

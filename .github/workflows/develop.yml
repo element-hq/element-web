@@ -1,4 +1,4 @@
-name: Develop jobs
+name: Develop
 on:
     push:
         branches: [develop]
@@ -11,10 +11,13 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
-            - name: End-to-End tests
-              run: ./scripts/ci/end-to-end-tests.sh
+            - name: Prepare End-to-End tests
+              run: ./scripts/ci/prepare-end-to-end-tests.sh
+            - name: Run End-to-End tests
+              run: ./scripts/ci/run-end-to-end-tests.sh
             - name: Archive logs
               uses: actions/upload-artifact@v2
+              if: ${{ always() }}
               with:
                 path: |
                     test/end-to-end-tests/logs/**/*
@@ -31,9 +34,7 @@ jobs:
                 tool: 'jsperformanceentry'
                 output-file-path: test/end-to-end-tests/performance-entries.json
                 fail-on-alert: false
-                # Secrets are not passed to fork, the action won't be able to comment
-                # for community PRs
-                comment-on-alert: ${{ github.repository_owner == 'matrix-org' }}
+                comment-on-alert: false
                 # Only temporary to monitor where failures occur
                 alert-comment-cc-users: '@gsouquet'
                 github-token: ${{ secrets.DEPLOY_GH_PAGES }}

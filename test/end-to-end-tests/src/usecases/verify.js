@@ -74,7 +74,7 @@ async function doSasVerification(session) {
     return sasCodes;
 }
 
-module.exports.startSasVerifcation = async function(session, name) {
+module.exports.startSasVerification = async function(session, name) {
     session.log.startGroup("starts verification");
     await startVerification(session, name);
 
