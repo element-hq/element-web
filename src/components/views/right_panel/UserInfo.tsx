@@ -48,7 +48,7 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
 import { Action } from "../../../dispatcher/actions";
-import { USER_SECURITY_TAB } from "../dialogs/UserSettingsDialog";
+import { UserTab } from "../dialogs/UserSettingsDialog";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import { E2EStatus } from "../../../utils/ShieldUtils";
@@ -503,19 +503,15 @@ const isMuted = (member: RoomMember, powerLevelContent: IPowerLevelsContent) => 
     return member.powerLevel < levelToSend;
 };
 
+const getPowerLevels = room => room.currentState.getStateEvents(EventType.RoomPowerLevels, "")?.getContent() || {};
+
 export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
-    const [powerLevels, setPowerLevels] = useState<IPowerLevelsContent>({});
+    const [powerLevels, setPowerLevels] = useState<IPowerLevelsContent>(getPowerLevels(room));
 
     const update = useCallback((ev?: MatrixEvent) => {
         if (!room) return;
         if (ev && ev.getType() !== EventType.RoomPowerLevels) return;
-
-        const event = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-        if (event) {
-            setPowerLevels(event.getContent());
-        } else {
-            setPowerLevels({});
-        }
+        setPowerLevels(getPowerLevels(room));
     }, [room]);
 
     useEventEmitter(cli, "RoomState.events", update);
@@ -1381,7 +1377,7 @@ const BasicUserInfo: React.FC<{
             <AccessibleButton className="mx_UserInfo_field" onClick={() => {
                 dis.dispatch({
                     action: Action.ViewUserSettings,
-                    initialTabId: USER_SECURITY_TAB,
+                    initialTabId: UserTab.Security,
                 });
             }}>
                 { _t("Edit devices") }
