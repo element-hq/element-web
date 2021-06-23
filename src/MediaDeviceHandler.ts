@@ -76,6 +76,9 @@ export default class MediaDeviceHandler extends EventEmitter {
         }
     }
 
+    /**
+     * Retrieves devices from the SettingsStore and tells the js-sdk to use them
+     */
     public static loadDevices(): void {
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
@@ -89,12 +92,22 @@ export default class MediaDeviceHandler extends EventEmitter {
         this.emit(MediaDeviceHandlerEvent.AudioOutputChanged, deviceId);
     }
 
+    /**
+     * This will not change the device that a potential call uses. The call will
+     * need to be ended and started again for this change to take effect
+     * @param {string} deviceId
+     */
     public setAudioInput(deviceId: string): void {
         SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallAudioInput(deviceId);
         this.emit(MediaDeviceHandlerEvent.AudioInputChanged, deviceId);
     }
 
+    /**
+     * This will not change the device that a potential call uses. The call will
+     * need to be ended and started again for this change to take effect
+     * @param {string} deviceId
+     */
     public setVideoInput(deviceId: string): void {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallVideoInput(deviceId);
