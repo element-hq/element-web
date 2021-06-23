@@ -100,21 +100,21 @@ export default class VoiceUserSettingsTab extends React.Component {
     };
 
     _setAudioOutput = (e) => {
-        MediaDeviceHandler.setAudioOutput(e.target.value);
+        MediaDeviceHandler.instance.setAudioOutput(e.target.value);
         this.setState({
             activeAudioOutput: e.target.value,
         });
     };
 
     _setAudioInput = (e) => {
-        MediaDeviceHandler.setAudioInput(e.target.value);
+        MediaDeviceHandler.instance.setAudioInput(e.target.value);
         this.setState({
             activeAudioInput: e.target.value,
         });
     };
 
     _setVideoInput = (e) => {
-        MediaDeviceHandler.setVideoInput(e.target.value);
+        MediaDeviceHandler.instance.setVideoInput(e.target.value);
         this.setState({
             activeVideoInput: e.target.value,
         });

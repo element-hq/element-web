@@ -18,6 +18,7 @@ limitations under the License.
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import { setMatrixCallAudioInput, setMatrixCallVideoInput } from "matrix-js-sdk/src/matrix";
+import EventEmitter from 'events';
 
 interface IMediaDevices {
     audioOutput: Array<MediaDeviceInfo>;
@@ -25,7 +26,22 @@ interface IMediaDevices {
     videoInput: Array<MediaDeviceInfo>;
 }
 
-export default class MediaDeviceHandler {
+export enum MediaDeviceHandlerEvent {
+    AudioOutputChanged = "audio_output_changed",
+    AudioInputChanged = "audio_input_changed",
+    VideoInputChanged = "video_input_changed",
+}
+
+export default class MediaDeviceHandler extends EventEmitter {
+    private static internalInstance;
+
+    public static get instance(): MediaDeviceHandler {
+        if (!MediaDeviceHandler.internalInstance) {
+            MediaDeviceHandler.internalInstance = new MediaDeviceHandler();
+        }
+        return MediaDeviceHandler.internalInstance;
+    }
+
     static async hasAnyLabeledDevices(): Promise<boolean> {
         const devices = await navigator.mediaDevices.enumerateDevices();
         return devices.some(d => Boolean(d.label));
@@ -68,18 +84,21 @@ export default class MediaDeviceHandler {
         setMatrixCallVideoInput(videoDeviceId);
     }
 
-    static setAudioOutput(deviceId: string) {
+    public setAudioOutput(deviceId: string) {
         SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
+        this.emit(MediaDeviceHandlerEvent.AudioOutputChanged, deviceId);
     }
 
-    static setAudioInput(deviceId: string) {
+    public setAudioInput(deviceId: string) {
         SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallAudioInput(deviceId);
+        this.emit(MediaDeviceHandlerEvent.AudioInputChanged, deviceId);
     }
 
-    static setVideoInput(deviceId: string) {
+    public setVideoInput(deviceId: string) {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallVideoInput(deviceId);
+        this.emit(MediaDeviceHandlerEvent.VideoInputChanged, deviceId);
     }
 
     static getAudioOutput(): string {
