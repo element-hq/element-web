@@ -444,12 +444,12 @@ function textForPowerEvent(event): () => string | null {
     const diffs = [];
     users.forEach((userId) => {
         // Previous power level
-        var from = event.getPrevContent().users[userId];
+        let from = event.getPrevContent().users[userId];
         if (!Number.isInteger(from)) {
             from = previousUserDefault;
         }
         // Current power level
-        var to = event.getContent().users[userId];
+        let to = event.getContent().users[userId];
         if (!Number.isInteger(to)) {
             to = currentUserDefault;
         }
