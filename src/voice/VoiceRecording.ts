@@ -17,7 +17,7 @@ limitations under the License.
 import * as Recorder from 'opus-recorder';
 import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
 import {MatrixClient} from "matrix-js-sdk/src/client";
-import CallMediaHandler from "../CallMediaHandler";
+import MediaDeviceHandler from "../MediaDeviceHandler";
 import {SimpleObservable} from "matrix-widget-api";
 import {clamp, percentageOf, percentageWithin} from "../utils/numbers";
 import EventEmitter from "events";
@@ -97,7 +97,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 audio: {
                     channelCount: CHANNELS,
                     noiseSuppression: true, // browsers ignore constraints they can't honour
-                    deviceId: CallMediaHandler.getAudioInput(),
+                    deviceId: MediaDeviceHandler.getAudioInput(),
                 },
             });
             this.recorderContext = createAudioContext({
