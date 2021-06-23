@@ -66,7 +66,7 @@ export default class MediaDeviceHandler extends EventEmitter {
 
             return { audioOutput, audioInput, videoInput };
         } catch (error) {
-            console.log('Unable to refresh WebRTC Devices: ', error);
+            console.warn('Unable to refresh WebRTC Devices: ', error);
         }
     }
 
