@@ -42,12 +42,12 @@ export default class MediaDeviceHandler extends EventEmitter {
         return MediaDeviceHandler.internalInstance;
     }
 
-    static async hasAnyLabeledDevices(): Promise<boolean> {
+    public static async hasAnyLabeledDevices(): Promise<boolean> {
         const devices = await navigator.mediaDevices.enumerateDevices();
         return devices.some(d => Boolean(d.label));
     }
 
-    static async getDevices(): Promise<IMediaDevices> {
+    public static async getDevices(): Promise<IMediaDevices> {
         // Only needed for Electron atm, though should work in modern browsers
         // once permission has been granted to the webapp
 
@@ -76,7 +76,7 @@ export default class MediaDeviceHandler extends EventEmitter {
         }
     }
 
-    static loadDevices() {
+    public static loadDevices(): void {
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
 
@@ -84,32 +84,32 @@ export default class MediaDeviceHandler extends EventEmitter {
         setMatrixCallVideoInput(videoDeviceId);
     }
 
-    public setAudioOutput(deviceId: string) {
+    public setAudioOutput(deviceId: string): void {
         SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
         this.emit(MediaDeviceHandlerEvent.AudioOutputChanged, deviceId);
     }
 
-    public setAudioInput(deviceId: string) {
+    public setAudioInput(deviceId: string): void {
         SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallAudioInput(deviceId);
         this.emit(MediaDeviceHandlerEvent.AudioInputChanged, deviceId);
     }
 
-    public setVideoInput(deviceId: string) {
+    public setVideoInput(deviceId: string): void {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallVideoInput(deviceId);
         this.emit(MediaDeviceHandlerEvent.VideoInputChanged, deviceId);
     }
 
-    static getAudioOutput(): string {
+    public static getAudioOutput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audiooutput");
     }
 
-    static getAudioInput(): string {
+    public static getAudioInput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audioinput");
     }
 
-    static getVideoInput(): string {
+    public static getVideoInput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_videoinput");
     }
 }
