@@ -22,7 +22,7 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import {Key} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
-import CallMediaHandler from '../../CallMediaHandler';
+import MediaDeviceHandler from '../../MediaDeviceHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
@@ -167,7 +167,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
-        CallMediaHandler.loadDevices();
+        MediaDeviceHandler.loadDevices();
 
         fixupColorFonts();
 

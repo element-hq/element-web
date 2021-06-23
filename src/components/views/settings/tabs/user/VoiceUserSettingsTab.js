@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import CallMediaHandler from "../../../../../CallMediaHandler";
+import MediaDeviceHandler from "../../../../../MediaDeviceHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
@@ -41,7 +41,7 @@ export default class VoiceUserSettingsTab extends React.Component {
     }
 
     async componentDidMount() {
-        const canSeeDeviceLabels = await CallMediaHandler.hasAnyLabeledDevices();
+        const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
         if (canSeeDeviceLabels) {
             this._refreshMediaDevices();
         }
@@ -49,10 +49,10 @@ export default class VoiceUserSettingsTab extends React.Component {
 
     _refreshMediaDevices = async (stream) => {
         this.setState({
-            mediaDevices: await CallMediaHandler.getDevices(),
-            activeAudioOutput: CallMediaHandler.getAudioOutput(),
-            activeAudioInput: CallMediaHandler.getAudioInput(),
-            activeVideoInput: CallMediaHandler.getVideoInput(),
+            mediaDevices: await MediaDeviceHandler.getDevices(),
+            activeAudioOutput: MediaDeviceHandler.getAudioOutput(),
+            activeAudioInput: MediaDeviceHandler.getAudioInput(),
+            activeVideoInput: MediaDeviceHandler.getVideoInput(),
         });
         if (stream) {
             // kill stream (after we've enumerated the devices, otherwise we'd get empty labels again)
@@ -100,21 +100,21 @@ export default class VoiceUserSettingsTab extends React.Component {
     };
 
     _setAudioOutput = (e) => {
-        CallMediaHandler.setAudioOutput(e.target.value);
+        MediaDeviceHandler.instance.setAudioOutput(e.target.value);
         this.setState({
             activeAudioOutput: e.target.value,
         });
     };
 
     _setAudioInput = (e) => {
-        CallMediaHandler.setAudioInput(e.target.value);
+        MediaDeviceHandler.instance.setAudioInput(e.target.value);
         this.setState({
             activeAudioInput: e.target.value,
         });
     };
 
     _setVideoInput = (e) => {
-        CallMediaHandler.setVideoInput(e.target.value);
+        MediaDeviceHandler.instance.setVideoInput(e.target.value);
         this.setState({
             activeVideoInput: e.target.value,
         });
@@ -171,7 +171,7 @@ export default class VoiceUserSettingsTab extends React.Component {
                 }
             };
 
-            const audioOutputs = this.state.mediaDevices.audiooutput.slice(0);
+            const audioOutputs = this.state.mediaDevices.audioOutput.slice(0);
             if (audioOutputs.length > 0) {
                 const defaultDevice = getDefaultDevice(audioOutputs);
                 speakerDropdown = (
@@ -183,7 +183,7 @@ export default class VoiceUserSettingsTab extends React.Component {
                 );
             }
 
-            const audioInputs = this.state.mediaDevices.audioinput.slice(0);
+            const audioInputs = this.state.mediaDevices.audioInput.slice(0);
             if (audioInputs.length > 0) {
                 const defaultDevice = getDefaultDevice(audioInputs);
                 microphoneDropdown = (
@@ -195,7 +195,7 @@ export default class VoiceUserSettingsTab extends React.Component {
                 );
             }
 
-            const videoInputs = this.state.mediaDevices.videoinput.slice(0);
+            const videoInputs = this.state.mediaDevices.videoInput.slice(0);
             if (videoInputs.length > 0) {
                 const defaultDevice = getDefaultDevice(videoInputs);
                 webcamDropdown = (
