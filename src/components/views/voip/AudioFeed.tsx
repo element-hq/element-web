@@ -17,7 +17,7 @@ limitations under the License.
 import React, {createRef} from 'react';
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
-import CallMediaHandler from "../../../CallMediaHandler";
+import MediaDeviceHandler from "../../../MediaDeviceHandler";
 
 interface IProps {
     feed: CallFeed,
@@ -38,7 +38,7 @@ export default class AudioFeed extends React.Component<IProps> {
 
     private playMedia() {
         const element = this.element.current;
-        const audioOutput = CallMediaHandler.getAudioOutput();
+        const audioOutput = MediaDeviceHandler.getAudioOutput();
 
         if (audioOutput) {
             try {
