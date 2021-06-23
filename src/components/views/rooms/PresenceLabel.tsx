@@ -15,26 +15,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    // number of milliseconds ago this user was last active.
+    // zero = unknown
+    activeAgo?: number,
+    // if true, activeAgo is an approximation and "Now" should
+    // be shown instead
+    currentlyActive?: boolean,
+    // offline, online, etc
+    presenceState?: string,
+}
+
 @replaceableComponent("views.rooms.PresenceLabel")
-export default class PresenceLabel extends React.Component {
-    static propTypes = {
-        // number of milliseconds ago this user was last active.
-        // zero = unknown
-        activeAgo: PropTypes.number,
-
-        // if true, activeAgo is an approximation and "Now" should
-        // be shown instead
-        currentlyActive: PropTypes.bool,
-
-        // offline, online, etc
-        presenceState: PropTypes.string,
-    };
-
+export default class PresenceLabel extends React.Component<IProps> {
     static defaultProps = {
         activeAgo: -1,
         presenceState: null,
@@ -42,29 +39,29 @@ export default class PresenceLabel extends React.Component {
 
     // Return duration as a string using appropriate time units
     // XXX: This would be better handled using a culture-aware library, but we don't use one yet.
-    getDuration(time) {
+    private getDuration(time: number): string {
         if (!time) return;
-        const t = parseInt(time / 1000);
+        const t = time / 1000;
         const s = t % 60;
-        const m = parseInt(t / 60) % 60;
-        const h = parseInt(t / (60 * 60)) % 24;
-        const d = parseInt(t / (60 * 60 * 24));
+        const m = t / 60 % 60;
+        const h = t / (60 * 60) % 24;
+        const d = t / (60 * 60 * 24);
         if (t < 60) {
             if (t < 0) {
-                return _t("%(duration)ss", {duration: 0});
+                return _t("%(duration)ss", { duration: 0 });
             }
-            return _t("%(duration)ss", {duration: s});
+            return _t("%(duration)ss", { duration: s });
         }
         if (t < 60 * 60) {
-            return _t("%(duration)sm", {duration: m});
+            return _t("%(duration)sm", { duration: m });
         }
         if (t < 24 * 60 * 60) {
-            return _t("%(duration)sh", {duration: h});
+            return _t("%(duration)sh", { duration: h });
         }
-        return _t("%(duration)sd", {duration: d});
+        return _t("%(duration)sd", { duration: d });
     }
 
-    getPrettyPresence(presence, activeAgo, currentlyActive) {
+    private getPrettyPresence(presence: string, activeAgo: number, currentlyActive: boolean): string {
         if (!currentlyActive && activeAgo !== undefined && activeAgo > 0) {
             const duration = this.getDuration(activeAgo);
             if (presence === "online") return _t("Online for %(duration)s", { duration: duration });
