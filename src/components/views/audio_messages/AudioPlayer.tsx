@@ -17,7 +17,6 @@ limitations under the License.
 import { Playback, PlaybackState } from "../../../voice/Playback";
 import React, { createRef, ReactNode, RefObject } from "react";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import PlaybackWaveform from "./PlaybackWaveform";
 import PlayPauseButton from "./PlayPauseButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";
@@ -76,7 +75,7 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
     public render(): ReactNode {
         // tabIndex=0 to ensure that the whole component becomes a tab stop, where we handle keyboard
         // events for accessibility
-        return <div className='mx_AudioPlayer_container' tabIndex={0} onKeyPress={this.onKeyPress}>
+        return <div className='mx_MediaBody mx_AudioPlayer_container' tabIndex={0} onKeyPress={this.onKeyPress}>
             <div className='mx_AudioPlayer_primaryContainer'>
                 <PlayPauseButton
                     playback={this.props.playback}
@@ -90,7 +89,7 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
                     { this.renderFileSize() }
                 </div>
             </div>
-            <PlaybackWaveform playback={this.props.playback} />
+            <span>TODO: Seek bar</span>
         </div>
     }
 }

@@ -55,7 +55,7 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
     };
 
     public render(): ReactNode {
-        return <div className='mx_VoiceMessagePrimaryContainer'>
+        return <div className='mx_MediaBody mx_VoiceMessagePrimaryContainer'>
             <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />
             <PlaybackClock playback={this.props.playback} />
             <PlaybackWaveform playback={this.props.playback} />

@@ -22,16 +22,10 @@ limitations under the License.
     // 7px top and bottom for visual design. 12px left & right, but the waveform (right)
     // has a 1px padding on it that we want to account for.
     padding: 7px 12px 7px 11px;
-    background-color: $message-body-panel-bg-color;
-    border-radius: 12px;
 
     // Cheat at alignment a bit
     display: flex;
     align-items: center;
-
-    color: $message-body-panel-fg-color;
-    font-size: $font-14px;
-    line-height: $font-24px;
 
     .mx_Waveform {
         .mx_Waveform_bar {
