@@ -172,7 +172,7 @@
   "jest": {
     "testEnvironment": "./__test-utils__/environment.js",
     "testMatch": [
-      "<rootDir>/test/**/*-test.[jt]s"
+      "<rootDir>/test/**/*-test.[jt]s?(x)"
     ],
     "setupFiles": [
       "jest-canvas-mock"
