@@ -131,7 +131,7 @@ export default class SecureBackupPanel extends React.PureComponent {
 
     async _getUpdatedDiagnostics() {
         const cli = MatrixClientPeg.get();
-        const secretStorage = cli.crypto._secretStorage;
+        const secretStorage = cli.crypto.secretStorage;
 
         const backupKeyStored = !!(await cli.isKeyBackupKeyStored());
         const backupKeyFromCache = await cli.crypto.getSessionBackupPrivateKey();
