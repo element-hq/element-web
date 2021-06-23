@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import React from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-interface IProps {
+export interface IProps {
     seconds: number;
 }
 

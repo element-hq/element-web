@@ -26,11 +26,11 @@ import {
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
-import Waveform from "../voice_messages/Waveform";
+import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import { percentageOf } from "../../../utils/numbers";
-import Clock from "../voice_messages/Clock";
+import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
@@ -227,8 +227,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         // only other UI is the recording-in-progress UI
         return <div className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
-            <Clock seconds={this.state.seconds} />
-            <Waveform relHeights={this.state.relHeights} />
+            <LiveRecordingClock seconds={this.state.seconds} />
+            <LiveRecordingWaveform relHeights={this.state.relHeights} />
         </div>;
     }
 
