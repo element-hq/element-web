@@ -79,8 +79,7 @@ export default class HTMLExporter extends Exporter {
         const creatorName = this.room?.getMember(creator)?.rawDisplayName || creator;
         const exporter = this.matrixClient.getUserId();
         const exporterName = this.room?.getMember(exporter)?.rawDisplayName;
-        const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic
-                     || this.room.topic || "";
+        const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
         const createdText = _t("%(creatorName)s created this room.", {
             creatorName,
         });
