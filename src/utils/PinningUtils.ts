@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2017 Travis Ralston
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { User } from "matrix-js-sdk/src/models/user";
-import { ActionPayload } from "../payloads";
-import { Action } from "../actions";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-export interface ViewUserPayload extends ActionPayload {
-    action: Action.ViewUser;
-
+export default class PinningUtils {
     /**
-     * The member to view. May be null or falsy to indicate that no member
-     * should be shown (hide whichever relevant components).
+     * Determines if the given event may be pinned.
+     * @param {MatrixEvent} event The event to check.
+     * @return {boolean} True if the event may be pinned, false otherwise.
      */
-    member?: RoomMember | User;
+    static isPinnable(event: MatrixEvent): boolean {
+        if (!event) return false;
+        if (event.getType() !== "m.room.message") return false;
+        if (event.isRedacted()) return false;
+
+        return true;
+    }
 }

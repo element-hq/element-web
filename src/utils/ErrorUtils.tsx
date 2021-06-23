@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t, _td } from '../languageHandler';
+import React, { ReactNode } from "react";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
+
+import { _t, _td, Tags, TranslatedString } from '../languageHandler';
 
 /**
  * Produce a translated error message for a
@@ -30,7 +33,12 @@ import { _t, _td } from '../languageHandler';
  *     for any tags in the strings apart from 'a'
  * @returns {*} Translated string or react component
  */
-export function messageForResourceLimitError(limitType, adminContact, strings, extraTranslations) {
+export function messageForResourceLimitError(
+    limitType: string,
+    adminContact: string,
+    strings: Record<string, string>,
+    extraTranslations?: Tags,
+): TranslatedString {
     let errString = strings[limitType];
     if (errString === undefined) errString = strings[''];
 
@@ -49,7 +57,7 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
     }
 }
 
-export function messageForSyncError(err) {
+export function messageForSyncError(err: MatrixError | Error): ReactNode {
     if (err.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
         const limitError = messageForResourceLimitError(
             err.data.limit_type,

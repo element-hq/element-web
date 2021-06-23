@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd
+Copyright 2017 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {createClient} from "matrix-js-sdk/src/matrix";
-import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
-import {WebStorageSessionStore} from "matrix-js-sdk/src/store/session/webstorage";
-import {IndexedDBStore} from "matrix-js-sdk/src/store/indexeddb";
+import { createClient, ICreateClientOpts } from "matrix-js-sdk/src/matrix";
+import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
+import { WebStorageSessionStore } from "matrix-js-sdk/src/store/session/webstorage";
+import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
 
 const localStorage = window.localStorage;
 
@@ -41,8 +41,8 @@ try {
  *
  * @returns {MatrixClient} the newly-created MatrixClient
  */
-export default function createMatrixClient(opts) {
-    const storeOpts = {
+export default function createMatrixClient(opts: ICreateClientOpts) {
+    const storeOpts: Partial<ICreateClientOpts> = {
         useAuthorizationHeader: true,
     };
 
@@ -65,9 +65,10 @@ export default function createMatrixClient(opts) {
         );
     }
 
-    opts = Object.assign(storeOpts, opts);
-
-    return createClient(opts);
+    return createClient({
+        ...storeOpts,
+        ...opts,
+    });
 }
 
 createMatrixClient.indexedDbWorkerScript = null;

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import {MatrixClientPeg} from "../MatrixClientPeg";
-import {IMediaEventContent, IPreparedMedia, prepEventContentAsMedia} from "./models/IMediaEventContent";
-import {ResizeMethod} from "../Avatar";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
+
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { IMediaEventContent, IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 
 // Populate this class with the details of your customisations when copying it.
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,38 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from "prop-types";
+import React from "react";
+
 import ToggleSwitch from "./ToggleSwitch";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+interface IProps {
+    // The value for the toggle switch
+    value: boolean;
+    // The translated label for the switch
+    label: string;
+    // Whether or not to disable the toggle switch
+    disabled?: boolean;
+    // True to put the toggle in front of the label
+    // Default false.
+    toggleInFront?: boolean;
+    // Additional class names to append to the switch. Optional.
+    className?: string;
+    // The function to call when the value changes
+    onChange(checked: boolean): void;
+}
+
 @replaceableComponent("views.elements.LabelledToggleSwitch")
-export default class LabelledToggleSwitch extends React.Component {
-    static propTypes = {
-        // The value for the toggle switch
-        value: PropTypes.bool.isRequired,
-
-        // The function to call when the value changes
-        onChange: PropTypes.func.isRequired,
-
-        // The translated label for the switch
-        label: PropTypes.string.isRequired,
-
-        // Whether or not to disable the toggle switch
-        disabled: PropTypes.bool,
-
-        // True to put the toggle in front of the label
-        // Default false.
-        toggleInFront: PropTypes.bool,
-
-        // Additional class names to append to the switch. Optional.
-        className: PropTypes.string,
-    };
-
+export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
     render() {
         // This is a minimal version of a SettingsFlag
 
-        let firstPart = <span className="mx_SettingsFlag_label">{this.props.label}</span>;
+        let firstPart = <span className="mx_SettingsFlag_label">{ this.props.label }</span>;
         let secondPart = <ToggleSwitch
             checked={this.props.value}
             disabled={this.props.disabled}

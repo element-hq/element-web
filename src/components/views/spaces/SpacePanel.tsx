@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import classNames from "classnames";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import RoomAvatar from "../avatars/RoomAvatar";
-import {useContextMenu} from "../../structures/ContextMenu";
+import { useContextMenu } from "../../structures/ContextMenu";
 import SpaceCreateMenu from "./SpaceCreateMenu";
-import {SpaceItem} from "./SpaceTreeLevel";
+import { SpaceItem } from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import SpaceStore, {
+    HOME_SPACE,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
@@ -37,9 +39,10 @@ import {
     RovingAccessibleTooltipButton,
     RovingTabIndexProvider,
 } from "../../../accessibility/RovingTabIndex";
-import {Key} from "../../../Keyboard";
-import {RoomNotificationStateStore} from "../../../stores/notifications/RoomNotificationStateStore";
-import {NotificationState} from "../../../stores/notifications/NotificationState";
+import { Key } from "../../../Keyboard";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import { NotificationState } from "../../../stores/notifications/NotificationState";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IButtonProps {
     space?: Room;
@@ -120,11 +123,65 @@ const useSpaces = (): [Room[], Room[], Room | null] => {
     return [invites, spaces, activeSpace];
 };
 
+interface IInnerSpacePanelProps {
+    children?: ReactNode;
+    isPanelCollapsed: boolean;
+    setPanelCollapsed: Dispatch<SetStateAction<boolean>>;
+}
+
+// Optimisation based on https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/api/droppable.md#recommended-droppable--performance-optimisation
+const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCollapsed, setPanelCollapsed }) => {
+    const [invites, spaces, activeSpace] = useSpaces();
+    const activeSpaces = activeSpace ? [activeSpace] : [];
+
+    const homeNotificationState = SettingsStore.getValue("feature_spaces.all_rooms")
+        ? RoomNotificationStateStore.instance.globalState : SpaceStore.instance.getNotificationState(HOME_SPACE);
+
+    return <div className="mx_SpaceTreeLevel">
+        <SpaceButton
+            className="mx_SpaceButton_home"
+            onClick={() => SpaceStore.instance.setActiveSpace(null)}
+            selected={!activeSpace}
+            tooltip={SettingsStore.getValue("feature_spaces.all_rooms") ? _t("All rooms") : _t("Home")}
+            notificationState={homeNotificationState}
+            isNarrow={isPanelCollapsed}
+        />
+        { invites.map(s => (
+            <SpaceItem
+                key={s.roomId}
+                space={s}
+                activeSpaces={activeSpaces}
+                isPanelCollapsed={isPanelCollapsed}
+                onExpand={() => setPanelCollapsed(false)}
+            />
+        )) }
+        { spaces.map((s, i) => (
+            <Draggable key={s.roomId} draggableId={s.roomId} index={i}>
+                {(provided, snapshot) => (
+                    <SpaceItem
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        key={s.roomId}
+                        innerRef={provided.innerRef}
+                        className={snapshot.isDragging
+                            ? "mx_SpaceItem_dragging"
+                            : undefined}
+                        space={s}
+                        activeSpaces={activeSpaces}
+                        isPanelCollapsed={isPanelCollapsed}
+                        onExpand={() => setPanelCollapsed(false)}
+                    />
+                )}
+            </Draggable>
+        )) }
+        { children }
+    </div>;
+});
+
 const SpacePanel = () => {
     // We don't need the handle as we position the menu in a constant location
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
-    const [invites, spaces, activeSpace] = useSpaces();
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 
     useEffect(() => {
@@ -132,10 +189,6 @@ const SpacePanel = () => {
             closeMenu();
         }
     }, [isPanelCollapsed]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const newClasses = classNames("mx_SpaceButton_new", {
-        mx_SpaceButton_newCancel: menuDisplayed,
-    });
 
     let contextMenu = null;
     if (menuDisplayed) {
@@ -203,59 +256,61 @@ const SpacePanel = () => {
         }
     };
 
-    const activeSpaces = activeSpace ? [activeSpace] : [];
-    const expandCollapseButtonTitle = isPanelCollapsed ? _t("Expand space panel") : _t("Collapse space panel");
-    // TODO drag and drop for re-arranging order
-    return <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
-        {({onKeyDownHandler}) => (
-            <ul
-                className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
-                onKeyDown={onKeyDownHandler}
-            >
-                <AutoHideScrollbar className="mx_SpacePanel_spaceTreeWrapper">
-                    <div className="mx_SpaceTreeLevel">
-                        <SpaceButton
-                            className="mx_SpaceButton_home"
-                            onClick={() => SpaceStore.instance.setActiveSpace(null)}
-                            selected={!activeSpace}
-                            tooltip={_t("All rooms")}
-                            notificationState={RoomNotificationStateStore.instance.globalState}
-                            isNarrow={isPanelCollapsed}
+    const onNewClick = menuDisplayed ? closeMenu : () => {
+        if (!isPanelCollapsed) setPanelCollapsed(true);
+        openMenu();
+    };
+
+    return (
+        <DragDropContext onDragEnd={result => {
+            if (!result.destination) return; // dropped outside the list
+            SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
+        }}>
+            <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+                {({onKeyDownHandler}) => (
+                    <ul
+                        className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
+                        onKeyDown={onKeyDownHandler}
+                    >
+                        <Droppable droppableId="top-level-spaces">
+                            {(provided, snapshot) => (
+                                <AutoHideScrollbar
+                                    {...provided.droppableProps}
+                                    wrappedRef={provided.innerRef}
+                                    className="mx_SpacePanel_spaceTreeWrapper"
+                                    style={snapshot.isDraggingOver ? {
+                                        pointerEvents: "none",
+                                    } : undefined}
+                                >
+                                    <InnerSpacePanel
+                                        isPanelCollapsed={isPanelCollapsed}
+                                        setPanelCollapsed={setPanelCollapsed}
+                                    >
+                                        { provided.placeholder }
+                                    </InnerSpacePanel>
+
+                                    <SpaceButton
+                                        className={classNames("mx_SpaceButton_new", {
+                                            mx_SpaceButton_newCancel: menuDisplayed,
+                                        })}
+                                        tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
+                                        onClick={onNewClick}
+                                        isNarrow={isPanelCollapsed}
+                                    />
+                                </AutoHideScrollbar>
+                            )}
+                        </Droppable>
+                        <AccessibleTooltipButton
+                            className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
+                            onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                            title={isPanelCollapsed ? _t("Expand space panel") : _t("Collapse space panel")}
                         />
-                        { invites.map(s => <SpaceItem
-                            key={s.roomId}
-                            space={s}
-                            activeSpaces={activeSpaces}
-                            isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => setPanelCollapsed(false)}
-                        />) }
-                        { spaces.map(s => <SpaceItem
-                            key={s.roomId}
-                            space={s}
-                            activeSpaces={activeSpaces}
-                            isPanelCollapsed={isPanelCollapsed}
-                            onExpand={() => setPanelCollapsed(false)}
-                        />) }
-                    </div>
-                    <SpaceButton
-                        className={newClasses}
-                        tooltip={menuDisplayed ? _t("Cancel") : _t("Create a space")}
-                        onClick={menuDisplayed ? closeMenu : () => {
-                            if (!isPanelCollapsed) setPanelCollapsed(true);
-                            openMenu();
-                        }}
-                        isNarrow={isPanelCollapsed}
-                    />
-                </AutoHideScrollbar>
-                <AccessibleTooltipButton
-                    className={classNames("mx_SpacePanel_toggleCollapse", {expanded: !isPanelCollapsed})}
-                    onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                    title={expandCollapseButtonTitle}
-                />
-                { contextMenu }
-            </ul>
-        )}
-    </RovingTabIndexProvider>
+                        { contextMenu }
+                    </ul>
+                )}
+            </RovingTabIndexProvider>
+        </DragDropContext>
+    );
 };
 
 export default SpacePanel;

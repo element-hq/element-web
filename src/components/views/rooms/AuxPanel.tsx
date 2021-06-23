@@ -15,15 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { Room } from 'matrix-js-sdk/src/models/room'
-import AppsDrawer from './AppsDrawer';
 import classNames from 'classnames';
+import { lexicographicCompare } from 'matrix-js-sdk/src/utils';
+import { Room } from 'matrix-js-sdk/src/models/room'
+
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import AppsDrawer from './AppsDrawer';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
-import { ResizeNotifier } from "../../../utils/ResizeNotifier";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
 import { objectHasDiff } from "../../../utils/objects";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -106,9 +108,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
 
         if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
             const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
-            stateEvs.sort((a, b) => {
-                return a.getStateKey() < b.getStateKey();
-            });
+            stateEvs.sort((a, b) => lexicographicCompare(a.getStateKey(), b.getStateKey()));
 
             for (const ev of stateEvs) {
                 const title = ev.getContent().title;

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,31 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
-import DiffMatchPatch from 'diff-match-patch';
-import {DiffDOM} from "diff-dom";
-import { checkBlockNode, bodyToHtml } from "../HtmlUtils";
+import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
+import { Action, DiffDOM, IDiff } from "diff-dom";
+import { IContent } from "matrix-js-sdk/src/models/event";
+
+import { bodyToHtml, checkBlockNode, IOptsReturnString } from "../HtmlUtils";
 
 const decodeEntities = (function() {
     let textarea = null;
-    return function(string) {
+    return function(str: string): string {
         if (!textarea) {
             textarea = document.createElement("textarea");
         }
-        textarea.innerHTML = string;
+        textarea.innerHTML = str;
         return textarea.value;
     };
 })();
 
-function textToHtml(text) {
+function textToHtml(text: string): string {
     const container = document.createElement("div");
     container.textContent = text;
     return container.innerHTML;
 }
 
-function getSanitizedHtmlBody(content) {
-    const opts = {
+function getSanitizedHtmlBody(content: IContent): string {
+    const opts: IOptsReturnString = {
         stripReplyFallback: true,
         returnString: true,
     };
@@ -57,21 +59,21 @@ function getSanitizedHtmlBody(content) {
     }
 }
 
-function wrapInsertion(child) {
+function wrapInsertion(child: Node): HTMLElement {
     const wrapper = document.createElement(checkBlockNode(child) ? "div" : "span");
     wrapper.className = "mx_EditHistoryMessage_insertion";
     wrapper.appendChild(child);
     return wrapper;
 }
 
-function wrapDeletion(child) {
+function wrapDeletion(child: Node): HTMLElement {
     const wrapper = document.createElement(checkBlockNode(child) ? "div" : "span");
     wrapper.className = "mx_EditHistoryMessage_deletion";
     wrapper.appendChild(child);
     return wrapper;
 }
 
-function findRefNodes(root, route, isAddition) {
+function findRefNodes(root: Node, route: number[], isAddition = false) {
     let refNode = root;
     let refParentNode;
     const end = isAddition ? route.length - 1 : route.length;
@@ -79,7 +81,7 @@ function findRefNodes(root, route, isAddition) {
         refParentNode = refNode;
         refNode = refNode.childNodes[route[i]];
     }
-    return {refNode, refParentNode};
+    return { refNode, refParentNode };
 }
 
 function diffTreeToDOM(desc) {
@@ -101,7 +103,7 @@ function diffTreeToDOM(desc) {
     }
 }
 
-function insertBefore(parent, nextSibling, child) {
+function insertBefore(parent: Node, nextSibling: Node | null, child: Node): void {
     if (nextSibling) {
         parent.insertBefore(child, nextSibling);
     } else {
@@ -109,7 +111,7 @@ function insertBefore(parent, nextSibling, child) {
     }
 }
 
-function isRouteOfNextSibling(route1, route2) {
+function isRouteOfNextSibling(route1: number[], route2: number[]): boolean {
     // routes are arrays with indices,
     // to be interpreted as a path in the dom tree
 
@@ -127,7 +129,7 @@ function isRouteOfNextSibling(route1, route2) {
     return route2[lastD1Idx] >= route1[lastD1Idx];
 }
 
-function adjustRoutes(diff, remainingDiffs) {
+function adjustRoutes(diff: IDiff, remainingDiffs: IDiff[]): void {
     if (diff.action === "removeTextElement" || diff.action === "removeElement") {
         // as removed text is not removed from the html, but marked as deleted,
         // we need to readjust indices that assume the current node has been removed.
@@ -140,14 +142,14 @@ function adjustRoutes(diff, remainingDiffs) {
     }
 }
 
-function stringAsTextNode(string) {
+function stringAsTextNode(string: string): Text {
     return document.createTextNode(decodeEntities(string));
 }
 
-function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
+function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatch: DiffMatchPatch): void {
     const {refNode, refParentNode} = findRefNodes(originalRootNode, diff.route);
     switch (diff.action) {
-        case "replaceElement": {
+        case Action.ReplaceElement: {
             const container = document.createElement("span");
             const delNode = wrapDeletion(diffTreeToDOM(diff.oldValue));
             const insNode = wrapInsertion(diffTreeToDOM(diff.newValue));
@@ -156,22 +158,22 @@ function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
             refNode.parentNode.replaceChild(container, refNode);
             break;
         }
-        case "removeTextElement": {
+        case Action.RemoveTextElement: {
             const delNode = wrapDeletion(stringAsTextNode(diff.value));
             refNode.parentNode.replaceChild(delNode, refNode);
             break;
         }
-        case "removeElement": {
+        case Action.RemoveElement: {
             const delNode = wrapDeletion(diffTreeToDOM(diff.element));
             refNode.parentNode.replaceChild(delNode, refNode);
             break;
         }
-        case "modifyTextElement": {
+        case Action.ModifyTextElement: {
             const textDiffs = diffMathPatch.diff_main(diff.oldValue, diff.newValue);
             diffMathPatch.diff_cleanupSemantic(textDiffs);
             const container = document.createElement("span");
             for (const [modifier, text] of textDiffs) {
-                let textDiffNode = stringAsTextNode(text);
+                let textDiffNode: Node = stringAsTextNode(text);
                 if (modifier < 0) {
                     textDiffNode = wrapDeletion(textDiffNode);
                 } else if (modifier > 0) {
@@ -182,12 +184,12 @@ function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
             refNode.parentNode.replaceChild(container, refNode);
             break;
         }
-        case "addElement": {
+        case Action.AddElement: {
             const insNode = wrapInsertion(diffTreeToDOM(diff.element));
             insertBefore(refParentNode, refNode, insNode);
             break;
         }
-        case "addTextElement": {
+        case Action.AddTextElement: {
             // XXX: sometimes diffDOM says insert a newline when there shouldn't be one
             // but we must insert the node anyway so that we don't break the route child IDs.
             // See https://github.com/fiduswriter/diffDOM/issues/100
@@ -197,11 +199,11 @@ function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
         }
         // e.g. when changing a the href of a link,
         // show the link with old href as removed and with the new href as added
-        case "removeAttribute":
-        case "addAttribute":
-        case "modifyAttribute": {
+        case Action.RemoveAttribute:
+        case Action.AddAttribute:
+        case Action.ModifyAttribute: {
             const delNode = wrapDeletion(refNode.cloneNode(true));
-            const updatedNode = refNode.cloneNode(true);
+            const updatedNode = refNode.cloneNode(true) as HTMLElement;
             if (diff.action === "addAttribute" || diff.action === "modifyAttribute") {
                 updatedNode.setAttribute(diff.name, diff.newValue);
             } else {
@@ -220,12 +222,12 @@ function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
     }
 }
 
-function routeIsEqual(r1, r2) {
+function routeIsEqual(r1: number[], r2: number[]): boolean {
     return r1.length === r2.length && !r1.some((e, i) => e !== r2[i]);
 }
 
 // workaround for https://github.com/fiduswriter/diffDOM/issues/90
-function filterCancelingOutDiffs(originalDiffActions) {
+function filterCancelingOutDiffs(originalDiffActions: IDiff[]): IDiff[] {
     const diffActions = originalDiffActions.slice();
 
     for (let i = 0; i < diffActions.length; ++i) {
@@ -252,7 +254,7 @@ function filterCancelingOutDiffs(originalDiffActions) {
  * @param {object} editContent the content for the edit message
  * @return {object} a react element similar to what `bodyToHtml` returns
  */
-export function editBodyDiffToHtml(originalContent, editContent) {
+export function editBodyDiffToHtml(originalContent: IContent, editContent: IContent): ReactNode {
     // wrap the body in a div, DiffDOM needs a root element
     const originalBody = `<div>${getSanitizedHtmlBody(originalContent)}</div>`;
     const editBody = `<div>${getSanitizedHtmlBody(editContent)}</div>`;

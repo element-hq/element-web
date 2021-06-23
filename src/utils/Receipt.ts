@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 /**
  * Given MatrixEvent containing receipts, return the first
  * read receipt from the given user ID, or null if no such
@@ -23,7 +25,7 @@ limitations under the License.
  * @param {string} userId A user ID
  * @returns {Object} Read receipt
  */
-export function findReadReceiptFromUserId(receiptEvent, userId) {
+export function findReadReceiptFromUserId(receiptEvent: MatrixEvent, userId: string): object | null {
     const receiptKeys = Object.keys(receiptEvent.getContent());
     for (let i = 0; i < receiptKeys.length; ++i) {
         const rcpt = receiptEvent.getContent()[receiptKeys[i]];

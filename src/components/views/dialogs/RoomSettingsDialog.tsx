@@ -108,7 +108,10 @@ export default class RoomSettingsDialog extends React.Component<IProps> {
                 ROOM_ADVANCED_TAB,
                 _td("Advanced"),
                 "mx_RoomSettingsDialog_warningIcon",
-                <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
+                <AdvancedRoomSettingsTab
+                    roomId={this.props.roomId}
+                    closeSettingsFn={() => this.props.onFinished(true)}
+                />,
             ));
         }
 

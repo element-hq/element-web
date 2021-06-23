@@ -17,13 +17,12 @@ limitations under the License.
 
 import React from 'react';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-
+import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseAvatar from "./BaseAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { ResizeMethod } from "../../../Avatar";
 import { omit } from "lodash";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
