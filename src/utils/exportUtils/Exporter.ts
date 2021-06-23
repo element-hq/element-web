@@ -6,12 +6,37 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 
+type FileStream = {
+    name: string,
+    stream(): ReadableStream,
+};
+
 export default abstract class Exporter {
+    protected files: FileStream[];
     protected constructor(
         protected room: Room,
         protected exportType: exportTypes,
         protected exportOptions?: exportOptions,
-    ) {}
+    ) {
+        this.files = [];
+    }
+
+    protected addFile = (filePath: string, blob: Blob) => {
+        const file = {
+            name: filePath,
+            stream: () => blob.stream(),
+        }
+        this.files.push(file);
+    }
+
+    protected pumpToFileStream = async (reader: ReadableStreamDefaultReader, writer: WritableStreamDefaultWriter) => {
+        const res = await reader.read();
+        if (res.done) await writer.close();
+        else {
+            await writer.write(res.value);
+            await this.pumpToFileStream(reader, writer)
+        }
+    }
 
     protected setEventMetadata = (event: MatrixEvent) => {
         const client = MatrixClientPeg.get();

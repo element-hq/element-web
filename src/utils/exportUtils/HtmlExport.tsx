@@ -1,6 +1,5 @@
 import React from "react"
 import streamSaver from "streamsaver";
-import JSZip from "jszip";
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -25,9 +24,9 @@ import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { MatrixClient } from "matrix-js-sdk";
+import zip from "./StreamToZip";
 
 export default class HTMLExporter extends Exporter {
-    protected zip: JSZip;
     protected avatars: Map<string, boolean>;
     protected permalinkCreator: RoomPermalinkCreator;
     protected matrixClient: MatrixClient;
@@ -36,7 +35,6 @@ export default class HTMLExporter extends Exporter {
 
     constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
         super(room, exportType, exportOptions);
-        this.zip = new JSZip();
         this.avatars = new Map<string, boolean>();
         this.matrixClient = MatrixClientPeg.get();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
@@ -59,7 +57,7 @@ export default class HTMLExporter extends Exporter {
         if (avatarUrl) {
             const image = await fetch(avatarUrl);
             blob = await image.blob();
-            this.zip.file(avatarPath, blob);
+            this.addFile(avatarPath, blob);
         }
         const avatar = (
             <BaseAvatar
@@ -217,7 +215,7 @@ export default class HTMLExporter extends Exporter {
             this.avatars.set(member.userId, true);
             const image = await fetch(avatarUrl);
             const blob = await image.blob();
-            this.zip.file(`users/${member.userId.replace(/:/g, '-')}`, blob);
+            this.addFile(`users/${member.userId.replace(/:/g, '-')}`, blob);
         }
     }
 
@@ -285,7 +283,7 @@ export default class HTMLExporter extends Exporter {
                 if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
                     this.exportOptions.attachmentsIncluded = false;
                 }
-                this.zip.file(filePath, blob);
+                this.addFile(filePath, blob);
             } else {
                 const modifiedContent = {
                     msgtype: "m.text",
@@ -334,53 +332,43 @@ export default class HTMLExporter extends Exporter {
 
         const html = await this.createHTML(res);
 
-        this.zip.file("index.html", html);
-        this.zip.file("css/style.css", exportCSS);
-        this.zip.file("js/script.js", exportJS);
+        this.addFile("index.html", new Blob([html]));
+        this.addFile("css/style.css", new Blob([exportCSS]));
+        this.addFile("js/script.js", new Blob([exportJS]));
 
 
         for (const iconName in exportIcons) {
-            this.zip.file(`icons/${iconName}`, exportIcons[iconName]);
+            this.addFile(`icons/${iconName}`, new Blob([exportIcons[iconName]]));
         }
 
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
 
         console.info("HTML creation successful!");
-        console.info("Generating a ZIP...");
-        //Generate the zip file asynchronously
-        const blob = await this.zip.generateAsync({ type: "blob" });
 
-        console.log("ZIP generated successfully");
-        console.info("Writing to file system...")
         //Support for firefox browser
         streamSaver.WritableStream = ponyfill.WritableStream
         //Create a writable stream to the directory
-        const fileStream = streamSaver.createWriteStream(filename, { size: blob.size });
+        const fileStream = streamSaver.createWriteStream(filename);
+
         const writer = fileStream.getWriter();
+        const files = this.files;
 
-        // Here we chunk the blob into pieces of 10 MB, the size might be dynamically generated.
-        // This can be used to keep track of the progress
-        const sliceSize = 10 * 1e6;
-        for (let fPointer = 0; fPointer < blob.size; fPointer += sliceSize) {
-            const blobPiece = blob.slice(fPointer, fPointer + sliceSize);
-            const reader = new FileReader();
+        console.info("Generating a ZIP...");
+        const readableZipStream = zip({
+            start(ctrl) {
+                for (const file of files) ctrl.enqueue(file);
+                ctrl.close();
+            },
+        });
 
-            const waiter = new Promise<void>((resolve) => {
-                reader.onloadend = evt => {
-                    const arrayBufferNew: any = evt.target.result;
-                    const uint8ArrayNew = new Uint8Array(arrayBufferNew);
-                    writer.write(uint8ArrayNew);
-                    resolve();
-                };
-                reader.readAsArrayBuffer(blobPiece);
-            });
-            await waiter;
-        }
-        await writer.close();
+        console.info("Writing to file system...")
+
+        const reader = readableZipStream.getReader()
+        await this.pumpToFileStream(reader, writer);
+
         const exportEnd = performance.now();
         console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         window.removeEventListener("beforeunload", this.onBeforeUnload);
-        return blob;
     }
 }
 

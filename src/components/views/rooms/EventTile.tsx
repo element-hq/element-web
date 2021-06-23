@@ -105,7 +105,7 @@ for (const evType of ALL_RULE_TYPES) {
     stateEventTileTypes[evType] = 'messages.TextualEvent';
 }
 
-export function getHandlerTile(ev: MatrixEvent) {
+export function getHandlerTile(ev) {
     const type = ev.getType();
 
     // don't show verification requests we're not involved in,
