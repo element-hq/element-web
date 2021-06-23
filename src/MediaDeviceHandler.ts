@@ -28,8 +28,6 @@ interface IMediaDevices {
 
 export enum MediaDeviceHandlerEvent {
     AudioOutputChanged = "audio_output_changed",
-    AudioInputChanged = "audio_input_changed",
-    VideoInputChanged = "video_input_changed",
 }
 
 export default class MediaDeviceHandler extends EventEmitter {
@@ -100,7 +98,6 @@ export default class MediaDeviceHandler extends EventEmitter {
     public setAudioInput(deviceId: string): void {
         SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallAudioInput(deviceId);
-        this.emit(MediaDeviceHandlerEvent.AudioInputChanged, deviceId);
     }
 
     /**
@@ -111,7 +108,6 @@ export default class MediaDeviceHandler extends EventEmitter {
     public setVideoInput(deviceId: string): void {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         setMatrixCallVideoInput(deviceId);
-        this.emit(MediaDeviceHandlerEvent.VideoInputChanged, deviceId);
     }
 
     public static getAudioOutput(): string {
