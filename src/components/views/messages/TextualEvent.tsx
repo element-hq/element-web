@@ -15,26 +15,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import RoomContext from "../../../contexts/RoomContext";
 import * as TextForEvent from "../../../TextForEvent";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    // The event to show
+    mxEvent: MatrixEvent;
+}
 
 @replaceableComponent("views.messages.TextualEvent")
-export default class TextualEvent extends React.Component {
-    static propTypes = {
-        /* the MatrixEvent to show */
-        mxEvent: PropTypes.object.isRequired,
-    };
-
+export default class TextualEvent extends React.Component<IProps> {
     static contextType = RoomContext;
 
-    render() {
+    public render() {
         const text = TextForEvent.textForEvent(this.props.mxEvent, this.context?.showHiddenEventsInTimeline);
         if (text == null || text.length === 0) return null;
-        return (
-            <div className="mx_TextualEvent">{ text }</div>
-        );
+        return <div className="mx_TextualEvent">{ text }</div>;
     }
 }

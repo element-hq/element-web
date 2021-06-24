@@ -15,41 +15,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
+import React from "react";
+import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import RoomContext from "../../../contexts/RoomContext";
-import {haveTileForEvent} from "./EventTile";
+import { haveTileForEvent } from "./EventTile";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { UIFeature } from "../../../settings/UIFeature";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import DateSeparator from "../messages/DateSeparator";
+import EventTile from "./EventTile";
+
+interface IProps {
+    // The details of this result
+    searchResult: SearchResult;
+    // Strings to be highlighted in the results
+    searchHighlights?: string[];
+    // href for the highlights in this result
+    resultLink?: string;
+    onHeightChanged: () => void;
+    permalinkCreator: RoomPermalinkCreator;
+}
 
 @replaceableComponent("views.rooms.SearchResultTile")
-export default class SearchResultTile extends React.Component {
-    static propTypes = {
-        // a matrix-js-sdk SearchResult containing the details of this result
-        searchResult: PropTypes.object.isRequired,
-
-        // a list of strings to be highlighted in the results
-        searchHighlights: PropTypes.array,
-
-        // href for the highlights in this result
-        resultLink: PropTypes.string,
-
-        onHeightChanged: PropTypes.func,
-    };
-
+export default class SearchResultTile extends React.Component<IProps> {
     static contextType = RoomContext;
 
-    render() {
-        const DateSeparator = sdk.getComponent('messages.DateSeparator');
-        const EventTile = sdk.getComponent('rooms.EventTile');
+    public render() {
         const result = this.props.searchResult;
         const mxEv = result.context.getEvent();
         const eventId = mxEv.getId();
 
         const ts1 = mxEv.getTs();
         const ret = [<DateSeparator key={ts1 + "-search"} ts={ts1} />];
+        const layout = SettingsStore.getValue("layout");
+        const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
 
         const timeline = result.context.getTimeline();
@@ -61,25 +61,24 @@ export default class SearchResultTile extends React.Component {
                 highlights = this.props.searchHighlights;
             }
             if (haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline)) {
-                ret.push((
+                ret.push(
                     <EventTile
                         key={`${eventId}+${j}`}
                         mxEvent={ev}
+                        layout={layout}
                         contextual={contextual}
                         highlights={highlights}
                         permalinkCreator={this.props.permalinkCreator}
                         highlightLink={this.props.resultLink}
                         onHeightChanged={this.props.onHeightChanged}
-                        isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
+                        isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
                         enableFlair={SettingsStore.getValue(UIFeature.Flair)}
-                    />
-                ));
+                    />,
+                );
             }
         }
-        return (
-            <li data-scroll-tokens={eventId}>
-                { ret }
-            </li>);
+
+        return <li data-scroll-tokens={eventId}>{ ret }</li>;
     }
 }
