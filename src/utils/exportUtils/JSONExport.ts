@@ -28,21 +28,21 @@ export default class JSONExporter extends Exporter {
         const exporter = this.client.getUserId();
         const exporterName = this.room?.getMember(exporter)?.rawDisplayName || exporter;
         return `{
-"room_name": "${this.room.name}",
-"room_creator": "${creatorName}",
-"topic": "${topic}",
-"export_date": "${exportDate}",
-"exported_by": "${exporterName}",
-"messages": [
+ "room_name": "${this.room.name}",
+ "room_creator": "${creatorName}",
+ "topic": "${topic}",
+ "export_date": "${exportDate}",
+ "exported_by": "${exporterName}",
+ "messages": [
 ${json}
-]
+ ]
 }`
     }
 
     protected indentEachLine(string: string) {
         const indent = ' ';
         const regex = /^(?!\s*$)/gm;
-        return string.replace(regex, indent.repeat(1));
+        return string.replace(regex, indent.repeat(2));
     }
 
     protected onBeforeUnload = (e: BeforeUnloadEvent) => {
