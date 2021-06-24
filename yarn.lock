@@ -1486,7 +1486,7 @@
   resolved "https://registry.yarnpkg.com/@types/counterpart/-/counterpart-0.18.1.tgz#b1b784d9e54d9879f0a8cb12f2caedab65430fe8"
   integrity sha512-PRuFlBBkvdDOtxlIASzTmkEFar+S66Ek48NVVTWMUjtJAdn5vyMSN8y6IZIoIymGpR36q2nZbIYazBWyFxL+IQ==
 
-"@types/diff-match-patch@^1.0.5":
+"@types/diff-match-patch@^1.0.32":
   version "1.0.32"
   resolved "https://registry.yarnpkg.com/@types/diff-match-patch/-/diff-match-patch-1.0.32.tgz#d9c3b8c914aa8229485351db4865328337a3d09f"
   integrity sha512-bPYT5ECFiblzsVzyURaNhljBH2Gh1t9LowgUwciMrNAhFewLkHT2H0Mto07Y4/3KCOGZHRQll3CTtQZ0X11D/A==
@@ -5777,10 +5777,10 @@ matrix-react-test-utils@^0.2.3:
     "@babel/traverse" "^7.13.17"
     walk "^2.3.14"
 
-matrix-widget-api@^0.1.0-beta.14:
-  version "0.1.0-beta.14"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.14.tgz#e38beed71c5ebd62c1ac1d79ef262d7150b42c70"
-  integrity sha512-5tC6LO1vCblKg/Hfzf5U1eHPz1nHUZIobAm3gkEKV5vpYPgRpr8KdkLiGB78VZid0tB17CVtAb4VKI8CQ3lhAQ==
+matrix-widget-api@^0.1.0-beta.15:
+  version "0.1.0-beta.15"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.15.tgz#b02511f93fe1a3634868b6e246d736107f182745"
+  integrity sha512-sWmtb8ZarSbHVbk5ni7IHBR9jOh7m1+5R4soky0fEO9VKl+MN7skT0+qNux3J9WuUAu2D80dZW9xPUT9cxfxbg==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
