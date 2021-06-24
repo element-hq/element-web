@@ -17,7 +17,6 @@ limitations under the License.
 
 import SettingsStore from "../../../settings/SettingsStore";
 import React from 'react';
-import * as sdk from "../../../index";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
