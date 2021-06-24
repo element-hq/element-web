@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { User } from "matrix-js-sdk/src/models/user";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import MultiInviter, { CompletionStates } from './utils/MultiInviter';
@@ -26,6 +27,8 @@ import { _t } from './languageHandler';
 import InviteDialog, { KIND_DM, KIND_INVITE } from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
+import BaseAvatar from "./components/views/avatars/BaseAvatar";
+import { mediaFromMxc } from "./customisations/Media";
 
 export interface IInviteResult {
     states: CompletionStates;
@@ -116,7 +119,12 @@ export function inviteUsersToRoom(roomId: string, userIds: string[]): Promise<vo
     });
 }
 
-export function showAnyInviteErrors(states: CompletionStates, room: Room, inviter: MultiInviter): boolean {
+export function showAnyInviteErrors(
+    states: CompletionStates,
+    room: Room,
+    inviter: MultiInviter,
+    userMap?: Map<string, Member>,
+): boolean {
     // Show user any errors
     const failedUsers = Object.keys(states).filter(a => states[a] === 'error');
     if (failedUsers.length === 1 && inviter.fatal) {
@@ -138,13 +146,41 @@ export function showAnyInviteErrors(states: CompletionStates, room: Room, invite
             }
         }
 
+        const cli = MatrixClientPeg.get();
         if (errorList.length > 0) {
             // React 16 doesn't let us use `errorList.join(<br />)` anymore, so this is our solution
-            const description = <div>{errorList.map(e => <div key={e}>{e}</div>)}</div>;
+            const description = <div className="mx_InviteDialog_multiInviterError">
+                <h4>{ _t("We sent the others, but the below people couldn't be invited to <RoomName/>", {}, {
+                    RoomName: () => <b>{ room.name }</b>,
+                }) }</h4>
+                <div>
+                    { failedUsers.map(addr => {
+                        const user = userMap?.get(addr) || cli.getUser(addr);
+                        const name = (user as Member).name || (user as User).rawDisplayName;
+                        const avatarUrl = (user as Member).getMxcAvatarUrl?.() || (user as User).avatarUrl;
+                        return <div key={addr} className="mx_InviteDialog_multiInviterError_entry">
+                            <div className="mx_InviteDialog_multiInviterError_entry_userProfile">
+                                <BaseAvatar
+                                    url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24) : null}
+                                    name={name}
+                                    idName={user.userId}
+                                    width={24}
+                                    height={24}
+                                />
+                                <span className="mx_InviteDialog_multiInviterError_entry_name">{ name }</span>
+                                <span className="mx_InviteDialog_multiInviterError_entry_userId">{ user.userId }</span>
+                            </div>
+                            <div className="mx_InviteDialog_multiInviterError_entry_error">
+                                { inviter.getErrorText(addr) }
+                            </div>
+                        </div>;
+                    }) }
+                </div>
+            </div>;
 
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
-                title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
+            Modal.createTrackedDialog("Some invites could not be sent", "", ErrorDialog, {
+                title: _t("Some invites couldn't be sent"),
                 description,
             });
             return false;
@@ -152,4 +188,27 @@ export function showAnyInviteErrors(states: CompletionStates, room: Room, invite
     }
 
     return true;
+}
+
+// This is the interface that is expected by various components in the Invite Dialog and RoomInvite.
+// It is a bit awkward because it also matches the RoomMember class from the js-sdk with some extra support
+// for 3PIDs/email addresses.
+export abstract class Member {
+    /**
+     * The display name of this Member. For users this should be their profile's display
+     * name or user ID if none set. For 3PIDs this should be the 3PID address (email).
+     */
+    public abstract get name(): string;
+
+    /**
+     * The ID of this Member. For users this should be their user ID. For 3PIDs this should
+     * be the 3PID address (email).
+     */
+    public abstract get userId(): string;
+
+    /**
+     * Gets the MXC URL of this Member's avatar. For users this should be their profile's
+     * avatar MXC URL or null if none set. For 3PIDs this should always be null.
+     */
+    public abstract getMxcAvatarUrl(): string;
 }

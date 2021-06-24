@@ -17,42 +17,46 @@ limitations under the License.
 import React, { createRef } from 'react';
 import classNames from 'classnames';
 
-import {_t, _td} from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import * as sdk from "../../../index";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
-import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
-import {abbreviateUrl} from "../../../utils/UrlUtils";
+import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
+import { abbreviateUrl } from "../../../utils/UrlUtils";
 import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
-import {humanizeTime} from "../../../utils/humanize";
+import { humanizeTime } from "../../../utils/humanize";
 import createRoom, {
-    canEncryptToAllUsers, ensureDMExists, findDMForUser, privateShouldBeEncrypted,
+    canEncryptToAllUsers,
+    ensureDMExists,
+    findDMForUser,
+    privateShouldBeEncrypted,
 } from "../../../createRoom";
 import {
     IInviteResult,
     inviteMultipleToRoom,
+    Member,
     showAnyInviteErrors,
     showCommunityInviteDialog,
 } from "../../../RoomInvite";
-import {Key} from "../../../Keyboard";
-import {Action} from "../../../dispatcher/actions";
-import {DefaultTagID} from "../../../stores/room-list/models";
+import { Key } from "../../../Keyboard";
+import { Action } from "../../../dispatcher/actions";
+import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
-import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import {UIFeature} from "../../../settings/UIFeature";
+import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
-import {getAddressType} from "../../../UserAddress";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
+import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import { compare } from '../../../utils/strings';
@@ -79,35 +83,13 @@ export const KIND_CALL_TRANSFER = "call_transfer";
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
-// This is the interface that is expected by various components in this file. It is a bit
-// awkward because it also matches the RoomMember class from the js-sdk with some extra support
-// for 3PIDs/email addresses.
-abstract class Member {
-    /**
-     * The display name of this Member. For users this should be their profile's display
-     * name or user ID if none set. For 3PIDs this should be the 3PID address (email).
-     */
-    public abstract get name(): string;
-
-    /**
-     * The ID of this Member. For users this should be their user ID. For 3PIDs this should
-     * be the 3PID address (email).
-     */
-    public abstract get userId(): string;
-
-    /**
-     * Gets the MXC URL of this Member's avatar. For users this should be their profile's
-     * avatar MXC URL or null if none set. For 3PIDs this should always be null.
-     */
-    public abstract getMxcAvatarUrl(): string;
-}
-
 class DirectoryMember extends Member {
     private readonly _userId: string;
     private readonly displayName: string;
     private readonly avatarUrl: string;
 
-    constructor(userDirResult: {user_id: string, display_name: string, avatar_url: string}) {
+    // eslint-disable-next-line camelcase
+    constructor(userDirResult: { user_id: string, display_name: string, avatar_url: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
@@ -608,7 +590,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     private shouldAbortAfterInviteError(result: IInviteResult, room: Room): boolean {
         this.setState({ busy: false });
-        return !showAnyInviteErrors(result.states, room, result.inviter);
+        const userMap = new Map<string, Member>(this.state.targets.map(member => [member.userId, member]));
+        return !showAnyInviteErrors(result.states, room, result.inviter, userMap);
     }
 
     private convertFilter(): Member[] {
