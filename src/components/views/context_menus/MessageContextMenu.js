@@ -257,7 +257,7 @@ export default class MessageContextMenu extends React.Component {
         let externalURLButton;
         let quoteButton;
         let collapseReplyThread;
-        const optionLists = [];
+        let redactItemList;
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
@@ -388,7 +388,7 @@ export default class MessageContextMenu extends React.Component {
             );
         }
 
-        optionLists.push((
+        const commonItemsList = (
             <IconizedContextMenuOptionList key={'group1'}>
                 { quoteButton }
                 { forwardButton }
@@ -401,14 +401,14 @@ export default class MessageContextMenu extends React.Component {
                 { resendReactionsButton }
                 { collapseReplyThread }
             </IconizedContextMenuOptionList>
-        ));
+        );
 
         if (redactButton) {
-            optionLists.push((
+            redactItemList = (
                 <IconizedContextMenuOptionList key={'group2'} red>
                     { redactButton }
                 </IconizedContextMenuOptionList>
-            ));
+            );
         }
 
         return (
@@ -417,7 +417,8 @@ export default class MessageContextMenu extends React.Component {
                 className="mx_MessageContextMenu"
                 compact={true}
             >
-                { optionLists }
+                { commonItemsList }
+                { redactItemList }
             </IconizedContextMenu>
         );
     }
