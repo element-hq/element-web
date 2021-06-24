@@ -29,14 +29,14 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto";
 
 interface IProps {
-    member: RoomMember,
-    showPresence?: boolean,
+    member: RoomMember;
+    showPresence?: boolean;
 }
 
 interface IState {
-    statusMessage: string,
-    isRoomEncrypted: boolean,
-    e2eStatus: string,
+    statusMessage: string;
+    isRoomEncrypted: boolean;
+    e2eStatus: string;
 }
 
 @replaceableComponent("views.rooms.MemberTile")
