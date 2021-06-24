@@ -91,7 +91,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         const hsUrl = MatrixClientPeg.get().baseUrl;
         this.showPresence = true;
         if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
-            this.showPresence = enablePresenceByHsUrl[hsUrl];
+            this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
         }
     }
 
