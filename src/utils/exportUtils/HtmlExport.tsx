@@ -57,6 +57,7 @@ export default class HTMLExporter extends Exporter {
         if (avatarUrl) {
             const image = await fetch(avatarUrl);
             blob = await image.blob();
+            this.totalSize += blob.size;
             this.addFile(avatarPath, blob);
         }
         const avatar = (
@@ -270,32 +271,44 @@ export default class HTMLExporter extends Exporter {
         return eventTileMarkup;
     }
 
+    protected createModifiedEvent = (text: string, mxEv: MatrixEvent) => {
+        const modifiedContent = {
+            msgtype: "m.text",
+            body: `*${text}*`,
+            format: "org.matrix.custom.html",
+            formatted_body: `<em>${text}</em>`,
+        }
+        const modifiedEvent = new MatrixEvent();
+        modifiedEvent.event = mxEv.event;
+        modifiedEvent.sender = mxEv.sender;
+        modifiedEvent.event.type = "m.room.message";
+        modifiedEvent.event.content = modifiedContent;
+        return modifiedEvent;
+    }
+
     protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
         let eventTile: string;
 
         if (this.isAttachment(mxEv)) {
             if (this.exportOptions.attachmentsIncluded) {
-                const blob = await this.getMediaBlob(mxEv);
-                this.totalSize += blob.size;
-                const filePath = this.getFilePath(mxEv);
-                eventTile = await this.getEventTile(mxEv, joined, filePath);
-                if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
-                    this.exportOptions.attachmentsIncluded = false;
+                try {
+                    const blob = await this.getMediaBlob(mxEv);
+                    this.totalSize += blob.size;
+                    const filePath = this.getFilePath(mxEv);
+                    eventTile = await this.getEventTile(mxEv, joined, filePath);
+                    if (this.totalSize > this.exportOptions.maxSize - 1024 * 512) {
+                        this.exportOptions.attachmentsIncluded = false;
+                    }
+                    this.addFile(filePath, blob);
+                } catch (e) {
+                    console.log("Error while fetching file");
+                    eventTile = await this.getEventTile(
+                        this.createModifiedEvent(_t("Error fetching file"), mxEv),
+                        joined,
+                    );
                 }
-                this.addFile(filePath, blob);
             } else {
-                const modifiedContent = {
-                    msgtype: "m.text",
-                    body: `*${this.mediaOmitText}*`,
-                    format: "org.matrix.custom.html",
-                    formatted_body: `<em>${this.mediaOmitText}</em>`,
-                }
-                const modifiedEvent = new MatrixEvent();
-                modifiedEvent.event = mxEv.event;
-                modifiedEvent.sender = mxEv.sender;
-                modifiedEvent.event.type = "m.room.message";
-                modifiedEvent.event.content = modifiedContent;
-                eventTile = await this.getEventTile(modifiedEvent, joined);
+                eventTile = await this.getEventTile(this.createModifiedEvent(this.mediaOmitText, mxEv), joined);
             }
         } else eventTile = await this.getEventTile(mxEv, joined);
 
@@ -305,14 +318,16 @@ export default class HTMLExporter extends Exporter {
     protected async createHTML(events: MatrixEvent[]) {
         let content = "";
         let prevEvent = null;
-        for (const event of events) {
+        for (let i = 0; i < events.length; i++) {
+            const event = events[i];
+            console.log("Processing event " + i + " out of " + events.length);
             if (!haveTileForEvent(event)) continue;
 
             content += this._wantsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
             const shouldBeJoined = !this._wantsDateSeparator(event, prevEvent)
                                        && shouldFormContinuation(prevEvent, event);
             const body = await this.createMessageBody(event, shouldBeJoined);
-
+            this.totalSize += Buffer.byteLength(body);
             content += body;
             prevEvent = event;
         }
