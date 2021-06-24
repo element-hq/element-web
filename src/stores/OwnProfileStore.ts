@@ -23,6 +23,7 @@ import { throttle } from "lodash";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import {mediaFromMxc} from "../customisations/Media";
+import SettingsStore from "../settings/SettingsStore";
 
 interface IState {
     displayName?: string;
@@ -136,6 +137,22 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         }
         await this.updateState({displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url});
     };
+
+    public async getAvatarBitmap(avatarSize = 32): Promise<ImageBitmap> {
+        let avatarUrl = this.getHttpAvatarUrl(avatarSize);
+        const settingBgMxc = SettingsStore.getValue("RoomList.backgroundImage");
+        if (settingBgMxc) {
+            avatarUrl = mediaFromMxc(settingBgMxc).getSquareThumbnailHttp(avatarSize);
+        }
+
+        if (avatarUrl) {
+            const response = await fetch(avatarUrl);
+            const blob = await response.blob();
+            return await createImageBitmap(blob);
+        } else {
+            return null;
+        }
+    }
 
     private onStateEvents = throttle(async (ev: MatrixEvent) => {
         const myUserId = MatrixClientPeg.get().getUserId();

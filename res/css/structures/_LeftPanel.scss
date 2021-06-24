@@ -43,7 +43,6 @@ $roomListCollapsedWidth: 68px;
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel_roomListContainer {
-        background-color: $roomlist-bg-color;
         flex: 1 0 0;
         min-width: 0;
         // Create another flexbox (this time a column) for the room list components

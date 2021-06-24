@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -43,6 +43,8 @@ import { Key } from "../../../Keyboard";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SettingsStore from "../../../settings/SettingsStore";
+import BackdropPanel from "../../structures/BackdropPanel";
+import UIStore from "../../../stores/UIStore";
 
 interface IButtonProps {
     space?: Room;
@@ -178,7 +180,11 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
     </div>;
 });
 
-const SpacePanel = () => {
+interface IProps {
+    backgroundImage?: ImageBitmap;
+}
+
+const SpacePanel = (props: IProps) => {
     // We don't need the handle as we position the menu in a constant location
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
@@ -261,6 +267,15 @@ const SpacePanel = () => {
         openMenu();
     };
 
+    const ref: React.RefObject<HTMLUListElement> = useRef(null);
+    useEffect(() => {
+        UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
+        return () => {
+            UIStore.instance.stopTrackingElementDimensions("SpacePanel");
+        }
+    }, []);
+    const panelDimensions = UIStore.instance.getElementDimensions("SpacePanel");
+
     return (
         <DragDropContext onDragEnd={result => {
             if (!result.destination) return; // dropped outside the list
@@ -271,7 +286,13 @@ const SpacePanel = () => {
                     <ul
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
                         onKeyDown={onKeyDownHandler}
+                        ref={ref}
                     >
+                        <BackdropPanel
+                            backgroundImage={props.backgroundImage}
+                            width={panelDimensions?.width}
+                            height={panelDimensions?.height}
+                        />
                         <Droppable droppableId="top-level-spaces">
                             {(provided, snapshot) => (
                                 <AutoHideScrollbar

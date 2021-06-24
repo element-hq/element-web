@@ -27,6 +27,7 @@ $activeBorderColor: $secondary-fg-color;
     background-color: $groupFilterPanel-bg-color;
     padding: 0;
     margin: 0;
+    position: relative;
 
     // Create another flexbox so the Panel fills the container
     display: flex;

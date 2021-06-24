@@ -35,6 +35,16 @@ limitations under the License.
     height: 100%;
 }
 
+.mx_BackdropPanel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    z-index: 0;
+    opacity: .15;
+}
+
 .mx_MatrixToolbar {
     order: 1;
 
