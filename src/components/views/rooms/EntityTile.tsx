@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React from 'react';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _td } from '../../../languageHandler';
 import classNames from "classnames";
@@ -25,7 +25,12 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseAvatar from '../avatars/BaseAvatar';
 import PresenceLabel from "./PresenceLabel";
 
-const PowerLabel: Record<string, string> = {
+enum PowerStatus {
+    Admin = "admin",
+    Moderator = "moderator",
+}
+
+const PowerLabel: Record<PowerStatus, string> = {
     "admin": _td("Admin"),
     "moderator": _td("Mod"),
 }
@@ -36,7 +41,7 @@ const PRESENCE_CLASS = {
     "unavailable": "mx_EntityTile_unavailable",
 };
 
-function presenceClassForMember(presenceState: string, lastActiveAgo: number, showPresence: boolean) {
+function presenceClassForMember(presenceState: string, lastActiveAgo: number, showPresence: boolean): string {
     if (showPresence === false) {
         return 'mx_EntityTile_online_beenactive';
     }
@@ -66,13 +71,12 @@ interface IProps {
     presenceLastTs?: number,
     presenceCurrentlyActive?: boolean,
     showInviteButton?: boolean,
-    shouldComponentUpdate?(nextProps: IProps, nextState: IState): boolean,
     onClick?(): void,
     suppressOnHover?: boolean,
     showPresence?: boolean,
     subtextLabel?: string,
     e2eStatus?: string,
-    powerStatus?: string,
+    powerStatus?: PowerStatus,
 }
 
 interface IState {
@@ -82,7 +86,6 @@ interface IState {
 @replaceableComponent("views.rooms.EntityTile")
 export default class EntityTile extends React.Component<IProps, IState> {
     static defaultProps = {
-        shouldComponentUpdate: (nextProps: IProps, nextState: IState) => { return true; },
         onClick: () => {},
         presenceState: "offline",
         presenceLastActiveAgo: 0,
@@ -91,7 +94,6 @@ export default class EntityTile extends React.Component<IProps, IState> {
         suppressOnHover: false,
         showPresence: true,
     };
-    private container = createRef<HTMLDivElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -103,7 +105,6 @@ export default class EntityTile extends React.Component<IProps, IState> {
 
     shouldComponentUpdate(nextProps: IProps, nextState: IState) {
         if (this.state.hover !== nextState.hover) return true;
-        return this.props.shouldComponentUpdate(nextProps, nextState);
     }
 
     render() {
@@ -184,7 +185,7 @@ export default class EntityTile extends React.Component<IProps, IState> {
 
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
-            <div ref={this.container} >
+            <div>
                 <AccessibleButton
                     className={classNames(mainClassNames)}
                     title={this.props.title}
