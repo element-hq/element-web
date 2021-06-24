@@ -24,7 +24,7 @@ import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
-import { addressTypes, getAddressType } from '../../../UserAddress.js';
+import { addressTypes, getAddressType } from '../../../UserAddress';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
 import IdentityAuthClient from '../../../IdentityAuthClient';

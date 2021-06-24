@@ -1,20 +1,35 @@
+/*
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
 
 import * as TestUtils from '../../../test-utils';
-
-import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import sdk from '../../../skinned-sdk';
-
-import {Room, RoomMember, User} from 'matrix-js-sdk';
-
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { User } from "matrix-js-sdk/src/models/user";
 import { compare } from "../../../../src/utils/strings";
+import MemberList from "../../../../src/components/views/rooms/MemberList";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
 }
-
 
 describe('MemberList', () => {
     function createRoom(opts) {
@@ -97,13 +112,19 @@ describe('MemberList', () => {
             memberListRoom.currentState.members[member.userId] = member;
         }
 
-        const MemberList = sdk.getComponent('views.rooms.MemberList');
         const WrappedMemberList = TestUtils.wrapInMatrixClientContext(MemberList);
         const gatherWrappedRef = (r) => {
             memberList = r;
         };
-        root = ReactDOM.render(<WrappedMemberList roomId={memberListRoom.roomId}
-            wrappedRef={gatherWrappedRef} />, parentDiv);
+        root = ReactDOM.render(
+            (
+                <WrappedMemberList
+                    roomId={memberListRoom.roomId}
+                    wrappedRef={gatherWrappedRef}
+                />
+            ),
+            parentDiv,
+        );
     });
 
     afterEach((done) => {
@@ -213,8 +234,8 @@ describe('MemberList', () => {
                 });
 
                 // Bypass all the event listeners and skip to the good part
-                memberList._showPresence = enablePresence;
-                memberList._updateListNow();
+                memberList.showPresence = enablePresence;
+                memberList.updateListNow();
 
                 const tiles = ReactTestUtils.scryRenderedComponentsWithType(root, MemberTile);
                 expectOrderedByPresenceAndPowerLevel(tiles, enablePresence);
@@ -225,7 +246,7 @@ describe('MemberList', () => {
 
                 // Bypass all the event listeners and skip to the good part
                 memberList._showPresence = enablePresence;
-                memberList._updateListNow();
+                memberList.updateListNow();
 
                 const tiles = ReactTestUtils.scryRenderedComponentsWithType(root, MemberTile);
                 expectOrderedByPresenceAndPowerLevel(tiles, enablePresence);
@@ -254,8 +275,8 @@ describe('MemberList', () => {
                 });
 
                 // Bypass all the event listeners and skip to the good part
-                memberList._showPresence = enablePresence;
-                memberList._updateListNow();
+                memberList.showPresence = enablePresence;
+                memberList.updateListNow();
 
                 const tiles = ReactTestUtils.scryRenderedComponentsWithType(root, MemberTile);
                 expectOrderedByPresenceAndPowerLevel(tiles, enablePresence);
@@ -273,8 +294,8 @@ describe('MemberList', () => {
                 });
 
                 // Bypass all the event listeners and skip to the good part
-                memberList._showPresence = enablePresence;
-                memberList._updateListNow();
+                memberList.showPresence = enablePresence;
+                memberList.updateListNow();
 
                 const tiles = ReactTestUtils.scryRenderedComponentsWithType(root, MemberTile);
                 expectOrderedByPresenceAndPowerLevel(tiles, enablePresence);
