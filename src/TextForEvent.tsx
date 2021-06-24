@@ -669,6 +669,7 @@ export function hasText(ev): boolean {
     return Boolean(handler?.(ev));
 }
 
+export function textForEvent(ev: MatrixEvent): string
 export function textForEvent(ev: MatrixEvent, allowJSX = false): string | JSX.Element {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return handler?.(ev, allowJSX)?.() || '';
