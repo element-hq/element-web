@@ -249,6 +249,16 @@ export default class SettingsStore {
     }
 
     /**
+     * Gets the translated description for a given setting
+     * @param {string} settingName The setting to look up.
+     * @return {String} The description for the setting, or null if not found.
+     */
+    public static getDescription(settingName: string) {
+        if (!SETTINGS[settingName]?.description) return null;
+        return _t(SETTINGS[settingName].description);
+    }
+
+    /**
      * Determines if a setting is also a feature.
      * @param {string} settingName The setting to look up.
      * @return {boolean} True if the setting is a feature.

@@ -123,8 +123,15 @@ describe("SpaceStore", () => {
         jest.runAllTimers();
         client.getVisibleRooms.mockReturnValue(rooms = []);
         getValue.mockImplementation(settingName => {
-            if (settingName === "feature_spaces") {
-                return true;
+            switch (settingName) {
+                case "feature_spaces":
+                    return true;
+                case "feature_spaces.all_rooms":
+                    return true;
+                case "feature_spaces.space_member_dms":
+                    return true;
+                case "feature_spaces.space_dm_badges":
+                    return false;
             }
         });
     });

@@ -37,7 +37,7 @@ import RecordingPlayback from "../voice_messages/RecordingPlayback";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import CallMediaHandler from "../../../CallMediaHandler";
+import MediaDeviceHandler from "../../../MediaDeviceHandler";
 
 interface IProps {
     room: Room;
@@ -178,8 +178,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         // Do a sanity test to ensure we're about to grab a valid microphone reference. Things might
         // change between this and recording, but at least we will have tried.
         try {
-            const devices = await CallMediaHandler.getDevices();
-            if (!devices?.['audioinput']?.length) {
+            const devices = await MediaDeviceHandler.getDevices();
+            if (!devices?.['audioInput']?.length) {
                 Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
                     title: _t("No microphone found"),
                     description: <>

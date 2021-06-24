@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from "./MatrixClientPeg";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
-import {haveTileForEvent} from "./components/views/rooms/EventTile";
+import { haveTileForEvent } from "./components/views/rooms/EventTile";
 
 /**
  * Returns true iff this event arriving in a room should affect the room's
@@ -25,28 +29,33 @@ import {haveTileForEvent} from "./components/views/rooms/EventTile";
  * @param {Object} ev The event
  * @returns {boolean} True if the given event should affect the unread message count
  */
-export function eventTriggersUnreadCount(ev) {
+export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
     if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
         return false;
-    } else if (ev.getType() == 'm.room.member') {
-        return false;
-    } else if (ev.getType() == 'm.room.third_party_invite') {
-        return false;
-    } else if (ev.getType() == 'm.call.answer' || ev.getType() == 'm.call.hangup') {
-        return false;
-    } else if (ev.getType() == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
-        return false;
-    } else if (ev.getType() == 'm.room.aliases' || ev.getType() == 'm.room.canonical_alias') {
-        return false;
-    } else if (ev.getType() == 'm.room.server_acl') {
-        return false;
-    } else if (ev.isRedacted()) {
-        return false;
     }
+
+    switch (ev.getType()) {
+        case EventType.RoomMember:
+        case EventType.RoomThirdPartyInvite:
+        case EventType.CallAnswer:
+        case EventType.CallHangup:
+        case EventType.RoomAliases:
+        case EventType.RoomCanonicalAlias:
+        case EventType.RoomServerAcl:
+            return false;
+
+        case EventType.RoomMessage:
+            if (ev.getContent().msgtype === MsgType.Notice) {
+                return false;
+            }
+            break;
+    }
+
+    if (ev.isRedacted()) return false;
     return haveTileForEvent(ev);
 }
 
-export function doesRoomHaveUnreadMessages(room) {
+export function doesRoomHaveUnreadMessages(room: Room): boolean {
     const myUserId = MatrixClientPeg.get().getUserId();
 
     // get the most recent read receipt sent by our account.

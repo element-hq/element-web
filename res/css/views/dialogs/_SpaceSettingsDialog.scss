@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_SpaceSettingsDialog {
-    width: 480px;
     color: $primary-fg-color;
 
     .mx_SpaceSettings_errorText {
@@ -32,8 +31,44 @@ limitations under the License.
         margin-left: 16px;
     }
 
-    .mx_AccessibleButton_kind_danger {
-        margin-top: 28px;
+    .mx_SettingsTab_section {
+        .mx_SettingsTab_section_caption {
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        & + .mx_SettingsTab_subheading {
+            border-top: 1px solid $message-body-panel-bg-color;
+            margin-top: 0;
+            padding-top: 24px;
+        }
+
+        .mx_RadioButton {
+            margin-top: 8px;
+            margin-bottom: 4px;
+
+            .mx_RadioButton_content {
+                font-weight: $font-semi-bold;
+                line-height: $font-18px;
+                color: $primary-fg-color;
+            }
+
+            & + span {
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $secondary-fg-color;
+                margin-left: 26px;
+            }
+        }
+
+        .mx_SettingsTab_showAdvanced {
+            margin: 16px 0;
+            padding: 0;
+        }
+
+        .mx_SettingsFlag {
+            margin-top: 24px;
+        }
     }
 
     .mx_SpaceSettingsDialog_buttons {
@@ -51,5 +86,15 @@ limitations under the License.
 
     .mx_AccessibleButton_hasKind {
         padding: 8px 22px;
+    }
+
+    .mx_TabbedView_tabLabel {
+        .mx_SpaceSettingsDialog_generalIcon::before {
+            mask-image: url('$(res)/img/element-icons/settings.svg');
+        }
+
+        .mx_SpaceSettingsDialog_visibilityIcon::before {
+            mask-image: url('$(res)/img/element-icons/eye.svg');
+        }
     }
 }

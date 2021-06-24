@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,36 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
+import { SerializedPart } from "../editor/parts";
+import { Caret } from "../editor/caret";
+
 /**
  * Used while editing, to pass the event, and to preserve editor state
  * from one editor instance to another when remounting the editor
  * upon receiving the remote echo for an unsent event.
  */
 export default class EditorStateTransfer {
-    constructor(event) {
-        this._event = event;
-        this._serializedParts = null;
-        this.caret = null;
+    private serializedParts: SerializedPart[] = null;
+    private caret: Caret = null;
+
+    constructor(private readonly event: MatrixEvent) {}
+
+    public setEditorState(caret: Caret, serializedParts: SerializedPart[]) {
+        this.caret = caret;
+        this.serializedParts = serializedParts;
     }
 
-    setEditorState(caret, serializedParts) {
-        this._caret = caret;
-        this._serializedParts = serializedParts;
+    public hasEditorState() {
+        return !!this.serializedParts;
     }
 
-    hasEditorState() {
-        return !!this._serializedParts;
+    public getSerializedParts() {
+        return this.serializedParts;
     }
 
-    getSerializedParts() {
-        return this._serializedParts;
+    public getCaret() {
+        return this.caret;
     }
 
-    getCaret() {
-        return this._caret;
-    }
-
-    getEvent() {
-        return this._event;
+    public getEvent() {
+        return this.event;
     }
 }

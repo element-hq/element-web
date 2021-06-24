@@ -66,9 +66,7 @@ export default class GroupPublicityToggle extends React.Component {
     render() {
         const GroupTile = sdk.getComponent('groups.GroupTile');
         return <div className="mx_GroupPublicity_toggle">
-            <GroupTile groupId={this.props.groupId} showDescription={false}
-                avatarHeight={40} draggable={false}
-            />
+            <GroupTile groupId={this.props.groupId} showDescription={false} avatarHeight={40} />
             <ToggleSwitch checked={this.state.isGroupPublicised}
                 disabled={!this.state.ready || this.state.busy}
                 onChange={this._onPublicityToggle} />

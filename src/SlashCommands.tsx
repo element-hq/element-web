@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import * as React from 'react';
+import { User } from "matrix-js-sdk/src/models/user";
 
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import {MatrixClientPeg} from './MatrixClientPeg';
@@ -1019,9 +1019,8 @@ export const Commands = [
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
             dis.dispatch<ViewUserPayload>({
                 action: Action.ViewUser,
-                // XXX: We should be using a real member object and not assuming what the
-                // receiver wants.
-                member: member || {userId},
+                // XXX: We should be using a real member object and not assuming what the receiver wants.
+                member: member || { userId } as User,
             });
             return success();
         },
