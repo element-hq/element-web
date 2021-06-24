@@ -473,19 +473,19 @@ function textForPowerEvent(event): () => string | null {
     });
 }
 
+const onPinnedMessagesClick = (): void => {
+    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+        action: Action.SetRightPanelPhase,
+        phase: RightPanelPhases.PinnedMessages,
+        allowClose: false,
+    });
+}
+
 function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
     if (!SettingsStore.getValue("feature_pinning")) return null;
     const senderName = event.sender ? event.sender.name : event.getSender();
 
     if (allowJSX) {
-        const onPinnedMessagesClick = () => {
-            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                action: Action.SetRightPanelPhase,
-                phase: RightPanelPhases.PinnedMessages,
-                allowClose: false,
-            });
-        }
-
         return () => (
             <span>
                 {
@@ -498,10 +498,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
             </span>
         );
     } else {
-        return () => _t(
-            "%(senderName)s changed the pinned messages for the room.",
-            { senderName },
-        );
+        return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
     }
 }
 
