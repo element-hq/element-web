@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { HTMLAttributes, WheelEvent } from "react";
 
-interface IProps extends HTMLAttributes<HTMLDivElement> {
+interface IProps extends Omit<HTMLAttributes<HTMLDivElement>, "onScroll"> {
     className?: string;
     onScroll?: (event: Event) => void;
     onWheel?: (event: WheelEvent) => void;
