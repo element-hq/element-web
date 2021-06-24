@@ -511,7 +511,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
             </span>
         );
     }
-    
+
     return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
 }
 
