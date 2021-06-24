@@ -26,6 +26,7 @@ import { RightPanelPhases } from './stores/RightPanelStorePhases';
 import { Action } from './dispatcher/actions';
 import defaultDispatcher from './dispatcher/dispatcher';
 import { SetRightPanelPhasePayload } from './dispatcher/payloads/SetRightPanelPhasePayload';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // These functions are frequently used just to check whether an event has
 // any text to display at all. For this reason they return deferred values
@@ -472,7 +473,7 @@ function textForPowerEvent(event): () => string | null {
     });
 }
 
-function textForPinnedEvent(event): () => JSX.Element | null {
+function textForPinnedEvent(event: MatrixEvent): () => JSX.Element | null {
     if (!SettingsStore.getValue("feature_pinning")) return null;
 
     const senderName = event.sender ? event.sender.name : event.getSender();
