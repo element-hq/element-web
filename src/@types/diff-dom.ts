@@ -15,20 +15,8 @@ limitations under the License.
 */
 
 declare module "diff-dom" {
-    enum Action {
-        AddElement = "addElement",
-        AddTextElement = "addTextElement",
-        RemoveTextElement = "removeTextElement",
-        RemoveElement = "removeElement",
-        ReplaceElement = "replaceElement",
-        ModifyTextElement = "modifyTextElement",
-        AddAttribute = "addAttribute",
-        RemoveAttribute = "removeAttribute",
-        ModifyAttribute = "modifyAttribute",
-    }
-
     export interface IDiff {
-        action: Action;
+        action: string;
         name: string;
         text?: string;
         route: number[];

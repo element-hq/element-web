@@ -25,7 +25,7 @@ export class DecryptionFailure {
     }
 }
 
-type Fn = (count: number, trackedErrCode: string) => void;
+type TrackingFn = (count: number, trackedErrCode: string) => void;
 type ErrCodeMapFn = (errcode: string) => string;
 
 export class DecryptionFailureTracker {
@@ -73,7 +73,7 @@ export class DecryptionFailureTracker {
      * @param {function?} errorCodeMapFn The function used to map error codes to the
      * trackedErrorCode. If not provided, the `.code` of errors will be used.
      */
-    constructor(private readonly fn: Fn, private readonly errorCodeMapFn?: ErrCodeMapFn) {
+    constructor(private readonly fn: TrackingFn, private readonly errorCodeMapFn?: ErrCodeMapFn) {
         if (!fn || typeof fn !== 'function') {
             throw new Error('DecryptionFailureTracker requires tracking function');
         }

@@ -102,7 +102,8 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
 
         // Fake it more
         event.sender = {
-            name: this.props.displayName,
+            name: this.props.displayName || this.props.userId,
+            rawDisplayName: this.props.displayName,
             userId: this.props.userId,
             getAvatarUrl: (..._) => {
                 return Avatar.avatarUrlForUser(

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,20 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
+
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import {_t} from "../../../languageHandler";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+
+interface IProps {
+    roomId: string;
+    label?: string;
+    canSetCanonicalAlias?: boolean;
+}
+
+interface IState {
+    isRoomPublished: boolean;
+}
 
 @replaceableComponent("views.room_settings.RoomPublishSetting")
-export default class RoomPublishSetting extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {isRoomPublished: false};
+export default class RoomPublishSetting extends React.PureComponent<IProps, IState> {
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            isRoomPublished: false,
+        };
     }
 
-    onRoomPublishChange = (e) => {
+    private onRoomPublishChange = (e) => {
         const valueBefore = this.state.isRoomPublished;
         const newValue = !valueBefore;
         this.setState({isRoomPublished: newValue});
@@ -52,11 +66,14 @@ export default class RoomPublishSetting extends React.PureComponent {
     render() {
         const client = MatrixClientPeg.get();
 
-        return (<LabelledToggleSwitch value={this.state.isRoomPublished}
-            onChange={this.onRoomPublishChange}
-            disabled={!this.props.canSetCanonicalAlias}
-            label={_t("Publish this room to the public in %(domain)s's room directory?", {
-              domain: client.getDomain(),
-            })} />);
+        return (
+            <LabelledToggleSwitch value={this.state.isRoomPublished}
+                onChange={this.onRoomPublishChange}
+                disabled={!this.props.canSetCanonicalAlias}
+                label={_t("Publish this room to the public in %(domain)s's room directory?", {
+                    domain: client.getDomain(),
+                })}
+            />
+        );
     }
 }

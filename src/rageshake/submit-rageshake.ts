@@ -86,8 +86,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append('cross_signing_key', client.getCrossSigningId());
 
             // add cross-signing status information
-            const crossSigning = client.crypto._crossSigningInfo;
-            const secretStorage = client.crypto._secretStorage;
+            const crossSigning = client.crypto.crossSigningInfo;
+            const secretStorage = client.crypto.secretStorage;
 
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
             body.append("cross_signing_supported_by_hs",
