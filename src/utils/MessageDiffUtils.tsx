@@ -149,7 +149,7 @@ function stringAsTextNode(string: string): Text {
 function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatch: DiffMatchPatch): void {
     const {refNode, refParentNode} = findRefNodes(originalRootNode, diff.route);
     switch (diff.action) {
-        case Action.ReplaceElement: {
+        case "replaceElement": {
             const container = document.createElement("span");
             const delNode = wrapDeletion(diffTreeToDOM(diff.oldValue));
             const insNode = wrapInsertion(diffTreeToDOM(diff.newValue));
@@ -158,17 +158,17 @@ function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatc
             refNode.parentNode.replaceChild(container, refNode);
             break;
         }
-        case Action.RemoveTextElement: {
+        case "removeTextElement": {
             const delNode = wrapDeletion(stringAsTextNode(diff.value));
             refNode.parentNode.replaceChild(delNode, refNode);
             break;
         }
-        case Action.RemoveElement: {
+        case "removeElement": {
             const delNode = wrapDeletion(diffTreeToDOM(diff.element));
             refNode.parentNode.replaceChild(delNode, refNode);
             break;
         }
-        case Action.ModifyTextElement: {
+        case "modifyTextElement": {
             const textDiffs = diffMathPatch.diff_main(diff.oldValue, diff.newValue);
             diffMathPatch.diff_cleanupSemantic(textDiffs);
             const container = document.createElement("span");
@@ -184,12 +184,12 @@ function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatc
             refNode.parentNode.replaceChild(container, refNode);
             break;
         }
-        case Action.AddElement: {
+        case "addElement": {
             const insNode = wrapInsertion(diffTreeToDOM(diff.element));
             insertBefore(refParentNode, refNode, insNode);
             break;
         }
-        case Action.AddTextElement: {
+        case "addTextElement": {
             // XXX: sometimes diffDOM says insert a newline when there shouldn't be one
             // but we must insert the node anyway so that we don't break the route child IDs.
             // See https://github.com/fiduswriter/diffDOM/issues/100
@@ -199,9 +199,9 @@ function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatc
         }
         // e.g. when changing a the href of a link,
         // show the link with old href as removed and with the new href as added
-        case Action.RemoveAttribute:
-        case Action.AddAttribute:
-        case Action.ModifyAttribute: {
+        case "removeAttribute":
+        case "addAttribute":
+        case "modifyAttribute": {
             const delNode = wrapDeletion(refNode.cloneNode(true));
             const updatedNode = refNode.cloneNode(true) as HTMLElement;
             if (diff.action === "addAttribute" || diff.action === "modifyAttribute") {
