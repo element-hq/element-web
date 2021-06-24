@@ -17,17 +17,17 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // number of milliseconds ago this user was last active.
     // zero = unknown
-    activeAgo?: number,
+    activeAgo?: number;
     // if true, activeAgo is an approximation and "Now" should
     // be shown instead
-    currentlyActive?: boolean,
+    currentlyActive?: boolean;
     // offline, online, etc
-    presenceState?: string,
+    presenceState?: string;
 }
 
 @replaceableComponent("views.rooms.PresenceLabel")
