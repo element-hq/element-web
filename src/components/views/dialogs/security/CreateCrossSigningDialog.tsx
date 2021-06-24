@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import { CrossSigningKeys } from 'matrix-js-sdk/src/client';
+
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
@@ -71,7 +73,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
     private async queryKeyUploadAuth(): Promise<void> {
         try {
-            await MatrixClientPeg.get().uploadDeviceSigningKeys(null, {});
+            await MatrixClientPeg.get().uploadDeviceSigningKeys(null, {} as CrossSigningKeys);
             // We should never get here: the server should always require
             // UI auth to upload device signing keys. If we do, we upload
             // no keys which would be a no-op.
