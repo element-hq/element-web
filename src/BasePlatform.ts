@@ -348,7 +348,7 @@ export default abstract class BasePlatform {
     /**
      * Create and store a pickle key for encrypting libolm objects.
      * @param {string} userId the user ID for the user that the pickle key is for.
-     * @param {string} userId the device ID that the pickle key is for.
+     * @param {string} deviceId the device ID that the pickle key is for.
      * @returns {string|null} the pickle key, or null if the platform does not
      *     support storing pickle keys.
      */

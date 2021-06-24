@@ -20,7 +20,7 @@ limitations under the License.
 import { createClient } from 'matrix-js-sdk/src/matrix';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import {decryptAES, encryptAES} from "matrix-js-sdk/src/crypto/aes";
+import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 
 import {IMatrixClientCreds, MatrixClientPeg} from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
@@ -303,7 +303,7 @@ export interface IStoredSession {
     hsUrl: string;
     isUrl: string;
     hasAccessToken: boolean;
-    accessToken: string | object;
+    accessToken: string | IEncryptedPayload;
     userId: string;
     deviceId: string;
     isGuest: boolean;
@@ -346,11 +346,11 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
         isGuest = localStorage.getItem("matrix-is-guest") === "true";
     }
 
-    return {hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest};
+    return { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest };
 }
 
 // The pickle key is a string of unspecified length and format.  For AES, we
-// need a 256-bit Uint8Array.  So we HKDF the pickle key to generate the AES
+// need a 256-bit Uint8Array. So we HKDF the pickle key to generate the AES
 // key.  The AES key should be zeroed after it is used.
 async function pickleKeyToAesKey(pickleKey: string): Promise<Uint8Array> {
     const pickleKeyBuffer = new Uint8Array(pickleKey.length);
