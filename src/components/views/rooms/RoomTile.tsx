@@ -119,7 +119,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     };
 
     private onLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
-        if (!room?.roomId === this.props.room.roomId) return;
+        if (room?.roomId !== this.props.room.roomId) return;
         this.setState({hasUnsentEvents: this.countUnsentEvents() > 0});
     };
 
@@ -316,7 +316,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 0,
             ));
         } else {
-            console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);
+            console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.roomId}`);
         }
 
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {

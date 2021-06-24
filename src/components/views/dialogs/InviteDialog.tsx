@@ -158,8 +158,8 @@ class ThreepidMember extends Member {
 }
 
 interface IDMUserTileProps {
-    member: RoomMember;
-    onRemove(member: RoomMember): void;
+    member: Member;
+    onRemove(member: Member): void;
 }
 
 class DMUserTile extends React.PureComponent<IDMUserTileProps> {
@@ -173,7 +173,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
 
     render() {
         const avatarSize = 20;
-        const avatar = this.props.member.isEmail
+        const avatar = (this.props.member as ThreepidMember).isEmail
             ? <img
                 className='mx_InviteDialog_userTile_avatar mx_InviteDialog_userTile_threepidAvatar'
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
@@ -215,9 +215,9 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
 }
 
 interface IDMRoomTileProps {
-    member: RoomMember;
+    member: Member;
     lastActiveTs: number;
-    onToggle(member: RoomMember): void;
+    onToggle(member: Member): void;
     highlightWord: string;
     isSelected: boolean;
 }
@@ -275,7 +275,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         }
 
         const avatarSize = 36;
-        const avatar = this.props.member.isEmail
+        const avatar = (this.props.member as ThreepidMember).isEmail
             ? <img
                 src={require("../../../../res/img/icon-email-pill-avatar.svg")}
                 width={avatarSize} height={avatarSize} />
@@ -303,7 +303,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             </span>
         );
 
-        const caption = this.props.member.isEmail
+        const caption = (this.props.member as ThreepidMember).isEmail
             ? _t("Invite by email")
             : this.highlightName(this.props.member.userId);
 
@@ -339,7 +339,7 @@ interface IInviteDialogProps {
 }
 
 interface IInviteDialogState {
-    targets: RoomMember[]; // array of Member objects (see interface above)
+    targets: Member[]; // array of Member objects (see interface above)
     filterText: string;
     recents: { user: Member, userId: string }[];
     numRecentsShown: number;

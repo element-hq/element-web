@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import classNames from "classnames";
-
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
@@ -29,23 +28,25 @@ import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
-import {formatTime} from "../../../DateUtils";
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
+import { Layout } from "../../../settings/Layout";
+import { formatTime } from "../../../DateUtils";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { ALL_RULE_TYPES } from "../../../mjolnir/BanList";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {E2E_STATE} from "./E2EIcon";
-import {toRem} from "../../../utils/units";
-import {WidgetType} from "../../../widgets/WidgetType";
+import { E2E_STATE } from "./E2EIcon";
+import { toRem } from "../../../utils/units";
+import { WidgetType } from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
-import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
-import {objectHasDiff} from "../../../utils/objects";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { WIDGET_LAYOUT_EVENT_TYPE } from "../../../stores/widgets/WidgetLayoutStore";
+import { objectHasDiff } from "../../../utils/objects";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
-import { EditorStateTransfer } from "../../../utils/EditorStateTransfer";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
-import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "./NotificationBadge";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from '../../../dispatcher/actions';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -376,7 +377,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             EventType.RoomMessage,
             EventType.RoomMessageEncrypted,
         ];
-        if (!simpleSendableEvents.includes(this.props.mxEvent.getType())) return false;
+        if (!simpleSendableEvents.includes(this.props.mxEvent.getType() as EventType)) return false;
 
         // Default case
         return true;
@@ -727,9 +728,9 @@ export default class EventTile extends React.Component<IProps, IState> {
 
     onSenderProfileClick = event => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch({
-            action: 'insert_mention',
-            user_id: mxEvent.getSender(),
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            userId: mxEvent.getSender(),
         });
     };
 

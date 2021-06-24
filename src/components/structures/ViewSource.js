@@ -55,7 +55,7 @@ export default class ViewSource extends React.Component {
     viewSourceContent() {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
         const isEncrypted = mxEvent.isEncrypted();
-        const decryptedEventSource = mxEvent._clearEvent; // FIXME: _clearEvent is private
+        const decryptedEventSource = mxEvent.clearEvent; // FIXME: clearEvent is private
         const originalEventSource = mxEvent.event;
 
         if (isEncrypted) {

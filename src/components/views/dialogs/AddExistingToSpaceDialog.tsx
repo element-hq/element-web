@@ -39,6 +39,9 @@ import ProgressBar from "../elements/ProgressBar";
 import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
+import TruncatedList from "../elements/TruncatedList";
+import EntityTile from "../rooms/EntityTile";
+import BaseAvatar from "../avatars/BaseAvatar";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -204,6 +207,17 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         setSelectedToAdd(new Set(selectedToAdd));
     } : null;
 
+    const [truncateAt, setTruncateAt] = useState(20);
+    function overflowTile(overflowCount, totalCount) {
+        const text = _t("and %(count)s others...", { count: overflowCount });
+        return (
+            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={() => setTruncateAt(totalCount)} />
+        );
+    }
+
     return <div className="mx_AddExistingToSpace">
         <SearchBox
             className="mx_textinput_icon mx_textinput_search"
@@ -216,16 +230,21 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             { rooms.length > 0 ? (
                 <div className="mx_AddExistingToSpace_section">
                     <h3>{ _t("Rooms") }</h3>
-                    { rooms.map(room => {
-                        return <Entry
-                            key={room.roomId}
-                            room={room}
-                            checked={selectedToAdd.has(room)}
-                            onChange={onChange ? (checked) => {
-                                onChange(checked, room);
-                            } : null}
-                        />;
-                    }) }
+                    <TruncatedList
+                        truncateAt={truncateAt}
+                        createOverflowElement={overflowTile}
+                        getChildren={(start, end) => rooms.slice(start, end).map(room =>
+                            <Entry
+                                key={room.roomId}
+                                room={room}
+                                checked={selectedToAdd.has(room)}
+                                onChange={onChange ? (checked) => {
+                                    onChange(checked, room);
+                                } : null}
+                            />,
+                        )}
+                        getChildCount={() => rooms.length}
+                    />
                 </div>
             ) : undefined }
 

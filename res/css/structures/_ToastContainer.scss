@@ -71,7 +71,7 @@ limitations under the License.
                 &::before {
                     background-color: #ffffff;
                     mask-image: url('$(res)/img/e2e/normal.svg');
-                    mask-size: 90%;
+                    mask-size: 80%;
                 }
 
                 &::after {
@@ -134,8 +134,9 @@ limitations under the License.
         .mx_Toast_buttons {
             float: right;
             display: flex;
+            gap: 5px;
 
-            .mx_FormButton {
+            .mx_AccessibleButton {
                 min-width: 96px;
                 box-sizing: border-box;
             }

@@ -17,10 +17,10 @@
 import React from 'react';
 import Flair from '../elements/Flair';
 import FlairStore from '../../../stores/FlairStore';
-import {getUserNameColorClass} from '../../../utils/FormattingUtils';
+import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import MatrixEvent from "matrix-js-sdk/src/models/event";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 interface IProps {
     mxEvent: MatrixEvent;

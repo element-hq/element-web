@@ -14,24 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useState} from 'react';
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
-import {EventType} from "matrix-js-sdk/src/@types/event";
+import React, { useMemo } from 'react';
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import {_t} from '../../../languageHandler';
-import {IDialogProps} from "./IDialogProps";
+import { _t, _td } from '../../../languageHandler';
+import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
-import DevtoolsDialog from "./DevtoolsDialog";
-import SpaceBasicSettings from '../spaces/SpaceBasicSettings';
-import {getTopic} from "../elements/RoomTopic";
-import {avatarUrlForRoom} from "../../../Avatar";
-import ToggleSwitch from "../elements/ToggleSwitch";
-import AccessibleButton from "../elements/AccessibleButton";
-import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {useDispatcher} from "../../../hooks/useDispatcher";
-import {SpaceFeedbackPrompt} from "../../structures/SpaceRoomView";
+import { useDispatcher } from "../../../hooks/useDispatcher";
+import TabbedView, { Tab } from "../../structures/TabbedView";
+import SpaceSettingsGeneralTab from '../spaces/SpaceSettingsGeneralTab';
+import SpaceSettingsVisibilityTab from "../spaces/SpaceSettingsVisibilityTab";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
+import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
+
+export enum SpaceSettingsTab {
+    General = "SPACE_GENERAL_TAB",
+    Visibility = "SPACE_VISIBILITY_TAB",
+    Advanced = "SPACE_ADVANCED_TAB",
+}
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
@@ -45,63 +48,30 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
         }
     });
 
-    const [busy, setBusy] = useState(false);
-    const [error, setError] = useState("");
-
-    const userId = cli.getUserId();
-
-    const [newAvatar, setNewAvatar] = useState<File>(null); // undefined means to remove avatar
-    const canSetAvatar = space.currentState.maySendStateEvent(EventType.RoomAvatar, userId);
-    const avatarChanged = newAvatar !== null;
-
-    const [name, setName] = useState<string>(space.name);
-    const canSetName = space.currentState.maySendStateEvent(EventType.RoomName, userId);
-    const nameChanged = name !== space.name;
-
-    const currentTopic = getTopic(space);
-    const [topic, setTopic] = useState<string>(currentTopic);
-    const canSetTopic = space.currentState.maySendStateEvent(EventType.RoomTopic, userId);
-    const topicChanged = topic !== currentTopic;
-
-    const currentJoinRule = space.getJoinRule();
-    const [joinRule, setJoinRule] = useState(currentJoinRule);
-    const canSetJoinRule = space.currentState.maySendStateEvent(EventType.RoomJoinRules, userId);
-    const joinRuleChanged = joinRule !== currentJoinRule;
-
-    const onSave = async () => {
-        setBusy(true);
-        const promises = [];
-
-        if (avatarChanged) {
-            if (newAvatar) {
-                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {
-                    url: await cli.uploadContent(newAvatar),
-                }, ""));
-            } else {
-                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {}, ""));
-            }
-        }
-
-        if (nameChanged) {
-            promises.push(cli.setRoomName(space.roomId, name));
-        }
-
-        if (topicChanged) {
-            promises.push(cli.setRoomTopic(space.roomId, topic));
-        }
-
-        if (joinRuleChanged) {
-            promises.push(cli.sendStateEvent(space.roomId, EventType.RoomJoinRules, { join_rule: joinRule }, ""));
-        }
-
-        const results = await Promise.allSettled(promises);
-        setBusy(false);
-        const failures = results.filter(r => r.status === "rejected");
-        if (failures.length > 0) {
-            console.error("Failed to save space settings: ", failures);
-            setError(_t("Failed to save space settings."));
-        }
-    };
+    const tabs = useMemo(() => {
+        return [
+            new Tab(
+                SpaceSettingsTab.General,
+                _td("General"),
+                "mx_SpaceSettingsDialog_generalIcon",
+                <SpaceSettingsGeneralTab matrixClient={cli} space={space} onFinished={onFinished} />,
+            ),
+            new Tab(
+                SpaceSettingsTab.Visibility,
+                _td("Visibility"),
+                "mx_SpaceSettingsDialog_visibilityIcon",
+                <SpaceSettingsVisibilityTab matrixClient={cli} space={space} />,
+            ),
+            SettingsStore.getValue(UIFeature.AdvancedSettings)
+                ? new Tab(
+                    SpaceSettingsTab.Advanced,
+                    _td("Advanced"),
+                    "mx_RoomSettingsDialog_warningIcon",
+                    <AdvancedRoomSettingsTab roomId={space.roomId} closeSettingsFn={onFinished} />,
+                )
+                : null,
+        ].filter(Boolean);
+    }, [cli, space, onFinished]);
 
     return <BaseDialog
         title={_t("Space settings")}
@@ -110,61 +80,14 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
         onFinished={onFinished}
         fixedWidth={false}
     >
-        <div className="mx_SpaceSettingsDialog_content" id="mx_SpaceSettingsDialog">
-            <div>{ _t("Edit settings relating to your space.") }</div>
-
-            { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
-
-            <SpaceFeedbackPrompt onClick={() => onFinished(false)} />
-
-            <SpaceBasicSettings
-                avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
-                avatarDisabled={busy || !canSetAvatar}
-                setAvatar={setNewAvatar}
-                name={name}
-                nameDisabled={busy || !canSetName}
-                setName={setName}
-                topic={topic}
-                topicDisabled={busy || !canSetTopic}
-                setTopic={setTopic}
-            />
-
-            <div>
-                { _t("Make this space private") }
-                <ToggleSwitch
-                    checked={joinRule !== "public"}
-                    onChange={checked => setJoinRule(checked ? "invite" : "public")}
-                    disabled={!canSetJoinRule}
-                    aria-label={_t("Make this space private")}
-                />
-            </div>
-
-            <AccessibleButton
-                kind="danger"
-                onClick={() => {
-                    defaultDispatcher.dispatch({
-                        action: "leave_room",
-                        room_id: space.roomId,
-                    });
-                }}
-            >
-                { _t("Leave Space") }
-            </AccessibleButton>
-
-            <div className="mx_SpaceSettingsDialog_buttons">
-                <AccessibleButton onClick={() => Modal.createDialog(DevtoolsDialog, {roomId: space.roomId})}>
-                    { _t("View dev tools") }
-                </AccessibleButton>
-                <AccessibleButton onClick={onFinished} disabled={busy} kind="link">
-                    { _t("Cancel") }
-                </AccessibleButton>
-                <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
-                    { busy ? _t("Saving...") : _t("Save Changes") }
-                </AccessibleButton>
-            </div>
+        <div
+            className="mx_SpaceSettingsDialog_content"
+            id="mx_SpaceSettingsDialog"
+            title={_t("Settings - %(spaceName)s", { spaceName: space.name })}
+        >
+            <TabbedView tabs={tabs} />
         </div>
     </BaseDialog>;
 };
 
 export default SpaceSettingsDialog;
-

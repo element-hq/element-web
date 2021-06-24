@@ -17,8 +17,9 @@ limitations under the License.
 import React from "react";
 
 import * as sdk from "../../../index";
-import {_t} from "../../../languageHandler";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import { _t } from "../../../languageHandler";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { User } from "matrix-js-sdk/src/models/user";
 
 export const PendingActionSpinner = ({text}) => {
     const Spinner = sdk.getComponent('elements.Spinner');
@@ -31,7 +32,7 @@ export const PendingActionSpinner = ({text}) => {
 interface IProps {
     waitingForOtherParty: boolean;
     waitingForNetwork: boolean;
-    member: RoomMember;
+    member: RoomMember | User;
     onStartVerification: () => Promise<void>;
     isRoomEncrypted: boolean;
     inDialog: boolean;
@@ -55,7 +56,7 @@ const EncryptionInfo: React.FC<IProps> = ({
                 text = _t("Accept on your other login…");
             } else {
                 text = _t("Waiting for %(displayName)s to accept…", {
-                    displayName: member.displayName || member.name || member.userId,
+                    displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
                 });
             }
         } else {
