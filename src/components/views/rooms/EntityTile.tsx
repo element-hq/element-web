@@ -62,21 +62,21 @@ function presenceClassForMember(presenceState: string, lastActiveAgo: number, sh
 }
 
 interface IProps {
-    name?: string,
-    title?: string,
-    avatarJsx?: JSX.Element, // <BaseAvatar />
-    className?: string,
-    presenceState?: string,
-    presenceLastActiveAgo?: number,
-    presenceLastTs?: number,
-    presenceCurrentlyActive?: boolean,
-    showInviteButton?: boolean,
-    onClick?(): void,
-    suppressOnHover?: boolean,
-    showPresence?: boolean,
-    subtextLabel?: string,
-    e2eStatus?: string,
-    powerStatus?: PowerStatus,
+    name?: string;
+    title?: string;
+    avatarJsx?: JSX.Element; // <BaseAvatar />
+    className?: string;
+    presenceState?: string;
+    presenceLastActiveAgo?: number;
+    presenceLastTs?: number;
+    presenceCurrentlyActive?: boolean;
+    showInviteButton?: boolean;
+    onClick?(): void;
+    suppressOnHover?: boolean;
+    showPresence?: boolean;
+    subtextLabel?: string;
+    e2eStatus?: string;
+    powerStatus?: PowerStatus;
 }
 
 interface IState {
