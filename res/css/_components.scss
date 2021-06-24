@@ -37,8 +37,10 @@
 @import "./structures/_ViewSource.scss";
 @import "./structures/auth/_CompleteSecurity.scss";
 @import "./structures/auth/_Login.scss";
+@import "./views/audio_messages/_AudioPlayer.scss";
 @import "./views/audio_messages/_PlayPauseButton.scss";
 @import "./views/audio_messages/_PlaybackContainer.scss";
+@import "./views/audio_messages/_SeekBar.scss";
 @import "./views/audio_messages/_Waveform.scss";
 @import "./views/auth/_AuthBody.scss";
 @import "./views/auth/_AuthButtons.scss";
@@ -159,7 +161,6 @@
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
 @import "./views/messages/_EventTileBubble.scss";
-@import "./views/messages/_MAudioBody.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";

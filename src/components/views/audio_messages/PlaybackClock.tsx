@@ -22,6 +22,11 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     playback: Playback;
+
+    // The default number of seconds to show when the playback has completed or
+    // has not started. Not used during playback, even when paused. Defaults to
+    // clip duration length.
+    defaultDisplaySeconds?: number;
 }
 
 interface IState {
@@ -64,7 +69,11 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     public render() {
         let seconds = this.state.seconds;
         if (this.state.playbackPhase === PlaybackState.Stopped) {
-            seconds = this.state.durationSeconds;
+            if (Number.isFinite(this.props.defaultDisplaySeconds)) {
+                seconds = this.props.defaultDisplaySeconds;
+            } else {
+                seconds = this.state.durationSeconds;
+            }
         }
         return <Clock seconds={seconds} />;
     }

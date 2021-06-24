@@ -22,11 +22,16 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";
 import DurationClock from "./DurationClock";
 import { Key } from "../../../Keyboard";
+import { _t } from "../../../languageHandler";
+import SeekBar from "./SeekBar";
+import PlaybackClock from "./PlaybackClock";
 
 interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create
     // an all-new component instead.
     playback: Playback;
+
+    mediaName: string;
 }
 
 interface IState {
@@ -83,13 +88,21 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
                     tabIndex={-1} // prevent tabbing into the button
                     ref={this.playPauseRef}
                 />
-                <div className='mx_AudioPlayer_byline'>
-                    <DurationClock playback={this.props.playback} />
-                    &nbsp; {/* easiest way to introduce a gap between the components */}
-                    { this.renderFileSize() }
+                <div className='mx_AudioPlayer_mediaInfo'>
+                    <span className='mx_AudioPlayer_mediaName'>
+                        {this.props.mediaName || _t("Unnamed audio")}
+                    </span>
+                    <div className='mx_AudioPlayer_byline'>
+                        <DurationClock playback={this.props.playback} />
+                        &nbsp; {/* easiest way to introduce a gap between the components */}
+                        { this.renderFileSize() }
+                    </div>
                 </div>
             </div>
-            <span>TODO: Seek bar</span>
+            <div className='mx_AudioPlayer_seek'>
+                <SeekBar playback={this.props.playback} tabIndex={-1} playbackPhase={this.state.playbackPhase} />
+                <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />
+            </div>
         </div>
     }
 }

@@ -28,6 +28,9 @@ $tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
+// Legacy theme backports
+$quaternary-fg-color: #C1C6CD;
+
 // used for dialog box text
 $light-fg-color: #747474;
 
