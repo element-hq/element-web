@@ -207,9 +207,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         this.getMoreRooms();
     };
 
-    private getMoreRooms() {
-        if (this.state.selectedCommunityId) return Promise.resolve(); // no more rooms
-        if (!MatrixClientPeg.get()) return Promise.resolve();
+    private getMoreRooms(): Promise<boolean> {
+        if (this.state.selectedCommunityId) return Promise.resolve(false); // no more rooms
+        if (!MatrixClientPeg.get()) return Promise.resolve(false);
 
         this.setState({
             loading: true,
@@ -239,12 +239,12 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 // if the filter or server has changed since this request was sent,
                 // throw away the result (don't even clear the busy flag
                 // since we must still have a request in flight)
-                return;
+                return false;
             }
 
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
-                return;
+                return false;
             }
 
             if (this.state.filterString) {
@@ -264,14 +264,13 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 filterString != this.state.filterString ||
                 roomServer != this.state.roomServer ||
                 nextBatch != this.nextBatch) {
-                // as above: we don't care about errors for old
-                // requests either
-                return;
+                // as above: we don't care about errors for old requests either
+                return false;
             }
 
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
-                return;
+                return false;
             }
 
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
@@ -337,11 +336,10 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     }
 
     private onRoomClicked = (room: IRoom, ev: ButtonEvent) => {
+        // If room was shift-clicked, remove it from the room directory
         if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();
             this.removeFromDirectory(room);
-        } else {
-            this.showRoom(room);
         }
     };
 
@@ -568,11 +566,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         let avatarUrl = null;
         if (room.avatar_url) avatarUrl = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(32);
 
+        // We use onMouseDown instead of onClick, so that we can avoid text getting selected
         return [
-            <div key={ `${room.room_id}_avatar` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_avatar` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomAvatar"
             >
                 <BaseAvatar
@@ -584,42 +582,50 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     url={avatarUrl}
                 />
             </div>,
-            <div key={ `${room.room_id}_description` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_description` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomDescription"
             >
-                <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
-                <div className="mx_RoomDirectory_topic"
-                    onClick={ (ev) => { ev.stopPropagation(); } }
+                <div
+                    className="mx_RoomDirectory_name"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { name }
+                </div>&nbsp;
+                <div
+                    className="mx_RoomDirectory_topic"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                     dangerouslySetInnerHTML={{ __html: topic }}
                 />
-                <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>
+                <div
+                    className="mx_RoomDirectory_alias"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { getDisplayAliasForRoom(room) }
+                </div>
             </div>,
-            <div key={ `${room.room_id}_memberCount` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_memberCount` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomMemberCount"
             >
                 { room.num_joined_members }
             </div>,
-            <div key={ `${room.room_id}_preview` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
+            <div
+                key={ `${room.room_id}_preview` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
                 className="mx_RoomDirectory_preview"
             >
-                {previewButton}
+                { previewButton }
             </div>,
-            <div key={ `${room.room_id}_join` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_join` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_join"
             >
-                {joinOrViewButton}
+                { joinOrViewButton }
             </div>,
         ];
     }

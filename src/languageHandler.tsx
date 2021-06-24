@@ -112,7 +112,7 @@ export interface IVariables {
     [key: string]: SubstitutionValue;
 }
 
-type Tags = Record<string, SubstitutionValue>;
+export type Tags = Record<string, SubstitutionValue>;
 
 export type TranslatedString = string | React.ReactNode;
 

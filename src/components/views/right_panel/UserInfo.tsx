@@ -503,19 +503,15 @@ const isMuted = (member: RoomMember, powerLevelContent: IPowerLevelsContent) => 
     return member.powerLevel < levelToSend;
 };
 
+const getPowerLevels = room => room?.currentState?.getStateEvents(EventType.RoomPowerLevels, "")?.getContent() || {};
+
 export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
-    const [powerLevels, setPowerLevels] = useState<IPowerLevelsContent>({});
+    const [powerLevels, setPowerLevels] = useState<IPowerLevelsContent>(getPowerLevels(room));
 
     const update = useCallback((ev?: MatrixEvent) => {
         if (!room) return;
         if (ev && ev.getType() !== EventType.RoomPowerLevels) return;
-
-        const event = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-        if (event) {
-            setPowerLevels(event.getContent());
-        } else {
-            setPowerLevels({});
-        }
+        setPowerLevels(getPowerLevels(room));
     }, [room]);
 
     useEventEmitter(cli, "RoomState.events", update);
@@ -1594,7 +1590,7 @@ const UserInfo: React.FC<IProps> = ({
             content = (
                 <BasicUserInfo
                     room={room}
-                    member={member}
+                    member={member as User}
                     groupId={groupId as string}
                     devices={devices}
                     isRoomEncrypted={isRoomEncrypted} />
@@ -1605,7 +1601,7 @@ const UserInfo: React.FC<IProps> = ({
             content = (
                 <EncryptionPanel
                     {...props as React.ComponentProps<typeof EncryptionPanel>}
-                    member={member}
+                    member={member as User | RoomMember}
                     onClose={onEncryptionPanelClose}
                     isRoomEncrypted={isRoomEncrypted}
                 />
