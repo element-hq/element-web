@@ -12,18 +12,66 @@ limitations under the License.
 */
 
 import React from "react";
-import Waveform, { IProps as IWaveformProps } from "./Waveform";
+import Waveform from "./Waveform";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MarkedExecution } from "../../../utils/MarkedExecution";
+import {
+    IRecordingUpdate,
+    VoiceRecording,
+} from "../../../voice/VoiceRecording";
+
+interface IProps {
+    recorder?: VoiceRecording;
+}
+
+interface IState {
+    waveform: number[]
+}
 
 /**
  * A waveform which shows the waveform of a live recording
  */
 @replaceableComponent("views.voice_messages.LiveRecordingWaveform")
-export default class LiveRecordingWaveform extends React.PureComponent<IWaveformProps> {
+export default class LiveRecordingWaveform extends React.PureComponent<IProps, IState> {
     public static defaultProps = {
         progress: 1,
     };
+
+    private waveform: number[] = [];
+    private rafId: number;
+
+    state = {
+        waveform: [],
+    }
+
+    componentDidMount() {
+        this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
+            this.waveform = update.waveform;
+            this.scheduledUpdate.mark();
+        });
+    }
+
+    private scheduledUpdate = new MarkedExecution(
+        () => this.updateWaveform(),
+        () => this.onLiveDataUpdate(),
+    )
+
+    private onLiveDataUpdate() {
+        if (this.rafId) {
+            cancelAnimationFrame(this.rafId);
+        }
+
+        this.rafId = requestAnimationFrame(() => this.scheduledUpdate.trigger())
+    }
+
+    private updateWaveform() {
+        this.setState({
+            waveform: this.waveform,
+        })
+        this.rafId = null;
+    }
+
     public render() {
-        return <Waveform relHeights={this.props.relHeights} />;
+        return <Waveform relHeights={this.state.waveform} />;
     }
 }

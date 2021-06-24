@@ -22,7 +22,7 @@ limitations under the License.
  * The function starts unmarked.
  */
 export class MarkedExecution {
-    private marked = false;
+    private _marked = false;
 
     /**
      * Creates a MarkedExecution for the provided function.
@@ -34,25 +34,32 @@ export class MarkedExecution {
     }
 
     /**
+     * Getter for the _marked property
+     */
+    public get marked() {
+        return this._marked;
+    }
+
+    /**
      * Resets the mark without calling the function.
      */
     public reset() {
-        this.marked = false;
+        this._marked = false;
     }
 
     /**
      * Marks the function to be called upon trigger().
      */
     public mark() {
-        if (!this.marked) this.onMarkCallback?.();
-        this.marked = true;
+        if (!this._marked) this.onMarkCallback?.();
+        this._marked = true;
     }
 
     /**
      * If marked, the function will be called, otherwise this does nothing.
      */
     public trigger() {
-        if (!this.marked) return;
+        if (!this._marked) return;
         this.reset(); // reset first just in case the fn() causes a trigger()
         this.fn();
     }

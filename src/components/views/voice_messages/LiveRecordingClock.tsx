@@ -12,15 +12,62 @@ limitations under the License.
 */
 
 import React from "react";
-import Clock, { IProps as IClockProps } from "./Clock";
+import Clock from "./Clock";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MarkedExecution } from "../../../utils/MarkedExecution";
+import {
+    IRecordingUpdate,
+    VoiceRecording,
+} from "../../../voice/VoiceRecording";
+
+interface IProps {
+    recorder?: VoiceRecording;
+}
+
+interface IState {
+    seconds: number;
+}
 
 /**
  * A clock for a live recording.
  */
 @replaceableComponent("views.voice_messages.LiveRecordingClock")
-export default class LiveRecordingClock extends React.PureComponent<IClockProps> {
+export default class LiveRecordingClock extends React.PureComponent<IProps, IState> {
+    private seconds = 0;
+    private rafId: number;
+
+    state = {
+        seconds: 0,
+    }
+
+    componentDidMount() {
+        this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
+            this.seconds = update.timeSeconds;
+            this.scheduledUpdate.mark();
+        });
+    }
+
+    private scheduledUpdate = new MarkedExecution(
+        () => this.updateClock(),
+        () => this.onLiveDataUpdate(),
+    )
+
+    private onLiveDataUpdate() {
+        if (this.rafId) {
+            cancelAnimationFrame(this.rafId);
+        }
+
+        this.rafId = requestAnimationFrame(() => this.scheduledUpdate.trigger())
+    }
+
+    private updateClock() {
+        this.setState({
+            seconds: this.seconds,
+        })
+        this.rafId = null;
+    }
+
     public render() {
-        return <Clock seconds={this.props.seconds} />;
+        return <Clock seconds={this.state.seconds} />;
     }
 }
