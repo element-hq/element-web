@@ -559,6 +559,7 @@
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
     "%(senderName)s changed the <a>pinned messages</a> for the room.": "%(senderName)s changed the <a>pinned messages</a> for the room.",
+    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s changed the pinned messages for the room.",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget added by %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",

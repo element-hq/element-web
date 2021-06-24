@@ -473,29 +473,36 @@ function textForPowerEvent(event): () => string | null {
     });
 }
 
-function textForPinnedEvent(event: MatrixEvent): () => JSX.Element | null {
+function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
     if (!SettingsStore.getValue("feature_pinning")) return null;
-
     const senderName = event.sender ? event.sender.name : event.getSender();
-    const onPinnedMessagesClick = () => {
-        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-            action: Action.SetRightPanelPhase,
-            phase: RightPanelPhases.PinnedMessages,
-            allowClose: false,
-        });
-    }
 
-    return () => (
-        <span>
-            {
-                _t(
-                    "%(senderName)s changed the <a>pinned messages</a> for the room.",
-                    { senderName },
-                    { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> },
-                )
-            }
-        </span>
-    );
+    if (allowJSX) {
+        const onPinnedMessagesClick = () => {
+            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.PinnedMessages,
+                allowClose: false,
+            });
+        }
+
+        return () => (
+            <span>
+                {
+                    _t(
+                        "%(senderName)s changed the <a>pinned messages</a> for the room.",
+                        { senderName },
+                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> },
+                    )
+                }
+            </span>
+        );
+    } else {
+        return () => _t(
+            "%(senderName)s changed the pinned messages for the room.",
+            { senderName },
+        );
+    }
 }
 
 function textForWidgetEvent(event): () => string | null {
@@ -621,7 +628,7 @@ function textForMjolnirEvent(event): () => string | null {
 }
 
 interface IHandlers {
-    [type: string]: (ev: any) => (() => string | JSX.Element | null);
+    [type: string]: (ev: MatrixEvent, allowJSX?: boolean) => (() => string | JSX.Element | null);
 }
 
 const handlers: IHandlers = {
@@ -662,7 +669,7 @@ export function hasText(ev): boolean {
     return Boolean(handler?.(ev));
 }
 
-export function textForEvent(ev): string | JSX.Element {
+export function textForEvent(ev: MatrixEvent, allowJSX = false): string | JSX.Element {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return handler?.(ev)?.() || '';
+    return handler?.(ev, allowJSX)?.() || '';
 }
