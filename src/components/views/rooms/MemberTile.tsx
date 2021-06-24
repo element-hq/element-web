@@ -25,7 +25,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import EntityTile, { PowerStatus } from "./EntityTile";
 import MemberAvatar from "./../avatars/MemberAvatar";
 
@@ -194,7 +194,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         return false;
     }
 
-    private onClick = (e: MouseEvent): void => {
+    private onClick = (): void => {
         dis.dispatch({
             action: Action.ViewUser,
             member: this.props.member,
