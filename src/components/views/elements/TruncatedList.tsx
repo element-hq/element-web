@@ -16,31 +16,29 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.elements.TruncatedList")
-export default class TruncatedList extends React.Component {
-    static propTypes = {
-        // The number of elements to show before truncating. If negative, no truncation is done.
-        truncateAt: PropTypes.number,
-        // The className to apply to the wrapping div
-        className: PropTypes.string,
-        // A function that returns the children to be rendered into the element.
-        // function getChildren(start: number, end: number): Array<React.Node>
-        // The start element is included, the end is not (as in `slice`).
-        // If omitted, the React child elements will be used. This parameter can be used
-        // to avoid creating unnecessary React elements.
-        getChildren: PropTypes.func,
-        // A function that should return the total number of child element available.
-        // Required if getChildren is supplied.
-        getChildCount: PropTypes.func,
-        // A function which will be invoked when an overflow element is required.
-        // This will be inserted after the children.
-        createOverflowElement: PropTypes.func,
-    };
+interface IProps {
+    // The number of elements to show before truncating. If negative, no truncation is done.
+    truncateAt?: number;
+    // The className to apply to the wrapping div
+    className?: string;
+    // A function that returns the children to be rendered into the element.
+    // The start element is included, the end is not (as in `slice`).
+    // If omitted, the React child elements will be used. This parameter can be used
+    // to avoid creating unnecessary React elements.
+    getChildren?: (start: number, end: number) => Array<React.ReactNode>;
+    // A function that should return the total number of child element available.
+    // Required if getChildren is supplied.
+    getChildCount?: () => number;
+    // A function which will be invoked when an overflow element is required.
+    // This will be inserted after the children.
+    createOverflowElement?: (overflowCount: number, totalCount: number) => React.ReactNode;
+}
 
+@replaceableComponent("views.elements.TruncatedList")
+export default class TruncatedList extends React.Component<IProps> {
     static defaultProps ={
         truncateAt: 2,
         createOverflowElement(overflowCount, totalCount) {
@@ -50,7 +48,7 @@ export default class TruncatedList extends React.Component {
         },
     };
 
-    _getChildren(start, end) {
+    private getChildren(start: number, end: number): Array<React.ReactNode> {
         if (this.props.getChildren && this.props.getChildCount) {
             return this.props.getChildren(start, end);
         } else {
@@ -63,7 +61,7 @@ export default class TruncatedList extends React.Component {
         }
     }
 
-    _getChildCount() {
+    private getChildCount(): number {
         if (this.props.getChildren && this.props.getChildCount) {
             return this.props.getChildCount();
         } else {
@@ -73,10 +71,10 @@ export default class TruncatedList extends React.Component {
         }
     }
 
-    render() {
+    public render() {
         let overflowNode = null;
 
-        const totalChildren = this._getChildCount();
+        const totalChildren = this.getChildCount();
         let upperBound = totalChildren;
         if (this.props.truncateAt >= 0) {
             const overflowCount = totalChildren - this.props.truncateAt;
@@ -87,7 +85,7 @@ export default class TruncatedList extends React.Component {
                 upperBound = this.props.truncateAt;
             }
         }
-        const childNodes = this._getChildren(0, upperBound);
+        const childNodes = this.getChildren(0, upperBound);
 
         return (
             <div className={this.props.className}>

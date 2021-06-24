@@ -1,5 +1,5 @@
 /*
-Copyright 2017, 2019 New Vector Ltd.
+Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,48 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import {_t} from '../../../languageHandler';
+import React from "react";
+
+import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-export class EditableItem extends React.Component {
-    static propTypes = {
-        index: PropTypes.number,
-        value: PropTypes.string,
-        onRemove: PropTypes.func,
+interface IItemProps {
+    index?: number;
+    value?: string;
+    onRemove?(index: number): void;
+}
+
+interface IItemState {
+    verifyRemove: boolean;
+}
+
+export class EditableItem extends React.Component<IItemProps, IItemState> {
+    public state = {
+        verifyRemove: false,
     };
 
-    constructor() {
-        super();
-
-        this.state = {
-            verifyRemove: false,
-        };
-    }
-
-    _onRemove = (e) => {
+    private onRemove = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({verifyRemove: true});
+        this.setState({ verifyRemove: true });
     };
 
-    _onDontRemove = (e) => {
+    private onDontRemove = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({verifyRemove: false});
+        this.setState({ verifyRemove: false });
     };
 
-    _onActuallyRemove = (e) => {
+    private onActuallyRemove = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
         if (this.props.onRemove) this.props.onRemove(this.props.index);
-        this.setState({verifyRemove: false});
+        this.setState({ verifyRemove: false });
     };
 
     render() {
@@ -66,14 +66,14 @@ export class EditableItem extends React.Component {
                         {_t("Are you sure?")}
                     </span>
                     <AccessibleButton
-                        onClick={this._onActuallyRemove}
+                        onClick={this.onActuallyRemove}
                         kind="primary_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
                         {_t("Yes")}
                     </AccessibleButton>
                     <AccessibleButton
-                        onClick={this._onDontRemove}
+                        onClick={this.onDontRemove}
                         kind="danger_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
@@ -85,59 +85,68 @@ export class EditableItem extends React.Component {
 
         return (
             <div className="mx_EditableItem">
-                <div onClick={this._onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
+                <div onClick={this.onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );
     }
 }
 
+interface IProps {
+    id: string;
+    items: string[];
+    itemsLabel?: string;
+    noItemsLabel?: string;
+    placeholder?: string;
+    newItem?: string;
+    canEdit?: boolean;
+    canRemove?: boolean;
+    suggestionsListId?: string;
+    onItemAdded?(item: string): void;
+    onItemRemoved?(index: number): void;
+    onNewItemChanged?(item: string): void;
+}
+
 @replaceableComponent("views.elements.EditableItemList")
-export default class EditableItemList extends React.Component {
-    static propTypes = {
-        id: PropTypes.string.isRequired,
-        items: PropTypes.arrayOf(PropTypes.string).isRequired,
-        itemsLabel: PropTypes.string,
-        noItemsLabel: PropTypes.string,
-        placeholder: PropTypes.string,
-        newItem: PropTypes.string,
-
-        onItemAdded: PropTypes.func,
-        onItemRemoved: PropTypes.func,
-        onNewItemChanged: PropTypes.func,
-
-        canEdit: PropTypes.bool,
-        canRemove: PropTypes.bool,
-    };
-
-    _onItemAdded = (e) => {
+export default class EditableItemList<P = {}> extends React.PureComponent<IProps & P> {
+    protected onItemAdded = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
         if (this.props.onItemAdded) this.props.onItemAdded(this.props.newItem);
     };
 
-    _onItemRemoved = (index) => {
+    protected onItemRemoved = (index) => {
         if (this.props.onItemRemoved) this.props.onItemRemoved(index);
     };
 
-    _onNewItemChanged = (e) => {
+    protected onNewItemChanged = (e) => {
         if (this.props.onNewItemChanged) this.props.onNewItemChanged(e.target.value);
     };
 
-    _renderNewItemField() {
+    protected renderNewItemField() {
         return (
             <form
-                onSubmit={this._onItemAdded}
+                onSubmit={this.onItemAdded}
                 autoComplete="off"
                 noValidate={true}
                 className="mx_EditableItemList_newItem"
             >
-                <Field label={this.props.placeholder} type="text"
-                    autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
-                    list={this.props.suggestionsListId} />
-                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit" disabled={!this.props.newItem}>
-                    {_t("Add")}
+                <Field
+                    label={this.props.placeholder}
+                    type="text"
+                    autoComplete="off"
+                    value={this.props.newItem || ""}
+                    onChange={this.onNewItemChanged}
+                    list={this.props.suggestionsListId}
+                />
+                <AccessibleButton
+                    onClick={this.onItemAdded}
+                    kind="primary"
+                    type="submit"
+                    disabled={!this.props.newItem}
+                >
+                    { _t("Add") }
                 </AccessibleButton>
             </form>
         );
@@ -153,19 +162,21 @@ export default class EditableItemList extends React.Component {
                 key={item}
                 index={index}
                 value={item}
-                onRemove={this._onItemRemoved}
+                onRemove={this.onItemRemoved}
             />;
         });
 
         const editableItemsSection = this.props.canRemove ? editableItems : <ul>{editableItems}</ul>;
         const label = this.props.items.length > 0 ? this.props.itemsLabel : this.props.noItemsLabel;
 
-        return (<div className="mx_EditableItemList">
-            <div className="mx_EditableItemList_label">
-                { label }
+        return (
+            <div className="mx_EditableItemList">
+                <div className="mx_EditableItemList_label">
+                    { label }
+                </div>
+                { editableItemsSection }
+                { this.props.canEdit ? this.renderNewItemField() : <div /> }
             </div>
-            { editableItemsSection }
-            { this.props.canEdit ? this._renderNewItemField() : <div /> }
-        </div>);
+        );
     }
 }

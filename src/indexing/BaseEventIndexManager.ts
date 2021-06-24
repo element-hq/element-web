@@ -17,7 +17,7 @@ limitations under the License.
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
 
-export interface MatrixEvent {
+export interface IMatrixEvent {
     type: string;
     sender: string;
     content: {};
@@ -27,37 +27,37 @@ export interface MatrixEvent {
     roomId: string;
 }
 
-export interface MatrixProfile {
+export interface IMatrixProfile {
     avatar_url: string;
     displayname: string;
 }
 
-export interface CrawlerCheckpoint {
+export interface ICrawlerCheckpoint {
     roomId: string;
     token: string;
     fullCrawl?: boolean;
     direction: string;
 }
 
-export interface ResultContext {
-    events_before: [MatrixEvent];
-    events_after: [MatrixEvent];
-    profile_info: Map<string, MatrixProfile>;
+export interface IResultContext {
+    events_before: [IMatrixEvent];
+    events_after: [IMatrixEvent];
+    profile_info: Map<string, IMatrixProfile>;
 }
 
-export interface ResultsElement {
+export interface IResultsElement {
     rank: number;
-    result: MatrixEvent;
-    context: ResultContext;
+    result: IMatrixEvent;
+    context: IResultContext;
 }
 
-export interface SearchResult {
+export interface ISearchResult {
     count: number;
-    results: [ResultsElement];
+    results: [IResultsElement];
     highlights: [string];
 }
 
-export interface SearchArgs {
+export interface ISearchArgs {
     search_term: string;
     before_limit: number;
     after_limit: number;
@@ -65,19 +65,19 @@ export interface SearchArgs {
     room_id?: string;
 }
 
-export interface EventAndProfile {
-    event: MatrixEvent;
-    profile: MatrixProfile;
+export interface IEventAndProfile {
+    event: IMatrixEvent;
+    profile: IMatrixProfile;
 }
 
-export interface LoadArgs {
+export interface ILoadArgs {
     roomId: string;
     limit: number;
     fromEvent?: string;
     direction?: string;
 }
 
-export interface IndexStats {
+export interface IIndexStats {
     size: number;
     eventCount: number;
     roomCount: number;
@@ -119,13 +119,13 @@ export default abstract class BaseEventIndexManager {
      * Queue up an event to be added to the index.
      *
      * @param {MatrixEvent} ev The event that should be added to the index.
-     * @param {MatrixProfile} profile The profile of the event sender at the
+     * @param {IMatrixProfile} profile The profile of the event sender at the
      * time of the event receival.
      *
      * @return {Promise} A promise that will resolve when the was queued up for
      * addition.
      */
-    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<void> {
+    async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -160,10 +160,10 @@ export default abstract class BaseEventIndexManager {
     /**
      * Get statistical information of the index.
      *
-     * @return {Promise<IndexStats>} A promise that will resolve to the index
+     * @return {Promise<IIndexStats>} A promise that will resolve to the index
      * statistics.
      */
-    async getStats(): Promise<IndexStats> {
+    async getStats(): Promise<IIndexStats> {
         throw new Error("Unimplemented");
     }
 
@@ -203,13 +203,13 @@ export default abstract class BaseEventIndexManager {
     /**
      * Search the event index using the given term for matching events.
      *
-     * @param {SearchArgs} searchArgs The search configuration for the search,
+     * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
-     * @return {Promise<[SearchResult]>} A promise that will resolve to an array
+     * @return {Promise<[ISearchResult]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    async searchEventIndex(searchArgs: SearchArgs): Promise<SearchResult> {
+    async searchEventIndex(searchArgs: ISearchArgs): Promise<ISearchResult> {
         throw new Error("Unimplemented");
     }
 
@@ -218,12 +218,12 @@ export default abstract class BaseEventIndexManager {
      *
      * This is used to add a batch of events to the index.
      *
-     * @param {[EventAndProfile]} events The list of events and profiles that
+     * @param {[IEventAndProfile]} events The list of events and profiles that
      * should be added to the event index.
-     * @param {[CrawlerCheckpoint]} checkpoint A new crawler checkpoint that
+     * @param {[ICrawlerCheckpoint]} checkpoint A new crawler checkpoint that
      * should be stored in the index which should be used to continue crawling
      * the room.
-     * @param {[CrawlerCheckpoint]} oldCheckpoint The checkpoint that was used
+     * @param {[ICrawlerCheckpoint]} oldCheckpoint The checkpoint that was used
      * to fetch the current batch of events. This checkpoint will be removed
      * from the index.
      *
@@ -231,9 +231,9 @@ export default abstract class BaseEventIndexManager {
      * were already added to the index, false otherwise.
      */
     async addHistoricEvents(
-        events: [EventAndProfile],
-        checkpoint: CrawlerCheckpoint | null,
-        oldCheckpoint: CrawlerCheckpoint | null,
+        events: IEventAndProfile[],
+        checkpoint: ICrawlerCheckpoint | null,
+        oldCheckpoint: ICrawlerCheckpoint | null,
     ): Promise<boolean> {
         throw new Error("Unimplemented");
     }
@@ -241,36 +241,36 @@ export default abstract class BaseEventIndexManager {
     /**
      * Add a new crawler checkpoint to the index.
      *
-     * @param {CrawlerCheckpoint} checkpoint The checkpoint that should be added
+     * @param {ICrawlerCheckpoint} checkpoint The checkpoint that should be added
      * to the index.
      *
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been stored.
      */
-    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
+    async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
     /**
      * Add a new crawler checkpoint to the index.
      *
-     * @param {CrawlerCheckpoint} checkpoint The checkpoint that should be
+     * @param {ICrawlerCheckpoint} checkpoint The checkpoint that should be
      * removed from the index.
      *
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been removed.
      */
-    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
+    async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
     /**
      * Load the stored checkpoints from the index.
      *
-     * @return {Promise<[CrawlerCheckpoint]>} A promise that will resolve to an
+     * @return {Promise<[ICrawlerCheckpoint]>} A promise that will resolve to an
      * array of crawler checkpoints once they have been loaded from the index.
      */
-    async loadCheckpoints(): Promise<[CrawlerCheckpoint]> {
+    async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
         throw new Error("Unimplemented");
     }
 
@@ -286,11 +286,11 @@ export default abstract class BaseEventIndexManager {
      * @param  {string} args.direction The direction to which we should continue
      * loading events from. This is used only if fromEvent is used as well.
      *
-     * @return {Promise<[EventAndProfile]>} A promise that will resolve to an
+     * @return {Promise<[IEventAndProfile]>} A promise that will resolve to an
      * array of Matrix events that contain mxc URLs accompanied with the
      * historic profile of the sender.
      */
-    async loadFileEvents(args: LoadArgs): Promise<[EventAndProfile]> {
+    async loadFileEvents(args: ILoadArgs): Promise<IEventAndProfile[]> {
         throw new Error("Unimplemented");
     }
 

@@ -30,24 +30,24 @@ export default class EditorStateTransfer {
 
     constructor(private readonly event: MatrixEvent) {}
 
-    setEditorState(caret: Caret, serializedParts: SerializedPart[]) {
+    public setEditorState(caret: Caret, serializedParts: SerializedPart[]) {
         this.caret = caret;
         this.serializedParts = serializedParts;
     }
 
-    hasEditorState() {
+    public hasEditorState() {
         return !!this.serializedParts;
     }
 
-    getSerializedParts() {
+    public getSerializedParts() {
         return this.serializedParts;
     }
 
-    getCaret() {
+    public getCaret() {
         return this.caret;
     }
 
-    getEvent() {
+    public getEvent() {
         return this.event;
     }
 }

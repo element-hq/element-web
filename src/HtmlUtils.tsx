@@ -505,7 +505,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
  * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string} Linkified string
  */
-export function linkifyString(str: string, options = linkifyMatrix.options) {
+export function linkifyString(str: string, options = linkifyMatrix.options): string {
     return _linkifyString(str, options);
 }
 
@@ -516,7 +516,7 @@ export function linkifyString(str: string, options = linkifyMatrix.options) {
  * @param {object} [options] Options for linkifyElement. Default: linkifyMatrix.options
  * @returns {object}
  */
-export function linkifyElement(element: HTMLElement, options = linkifyMatrix.options) {
+export function linkifyElement(element: HTMLElement, options = linkifyMatrix.options): HTMLElement {
     return _linkifyElement(element, options);
 }
 
