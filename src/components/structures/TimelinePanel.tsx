@@ -699,8 +699,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private readMarkerTimeout(readMarkerPosition: number): number {
         return readMarkerPosition === 0 ?
-            this.state.readMarkerInViewThresholdMs :
-            this.state.readMarkerOutOfViewThresholdMs;
+            this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs :
+            this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;
     }
 
     private async updateReadMarkerOnUserActivity(): Promise<void> {
@@ -1520,8 +1520,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 onUserScroll={this.props.onUserScroll}
                 onFillRequest={this.onMessageListFillRequest}
                 onUnfillRequest={this.onMessageListUnfillRequest}
-                isTwelveHour={this.state.isTwelveHour}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.alwaysShowTimestamps}
+                isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                alwaysShowTimestamps={
+                    this.props.alwaysShowTimestamps ??
+                    this.context?.alwaysShowTimestamps ??
+                    this.state.alwaysShowTimestamps
+                }
                 className={this.props.className}
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
