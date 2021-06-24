@@ -31,8 +31,8 @@ enum PowerStatus {
 }
 
 const PowerLabel: Record<PowerStatus, string> = {
-    "admin": _td("Admin"),
-    "moderator": _td("Mod"),
+    [PowerStatus.Admin]: _td("Admin"),
+    [PowerStatus.Moderator]: _td("Mod"),
 }
 
 const PRESENCE_CLASS = {
@@ -84,7 +84,7 @@ interface IState {
 }
 
 @replaceableComponent("views.rooms.EntityTile")
-export default class EntityTile extends React.Component<IProps, IState> {
+export default class EntityTile extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onClick: () => {},
         presenceState: "offline",
@@ -101,10 +101,6 @@ export default class EntityTile extends React.Component<IProps, IState> {
         this.state = {
             hover: false,
         };
-    }
-
-    shouldComponentUpdate(nextProps: IProps, nextState: IState) {
-        if (this.state.hover !== nextState.hover) return true;
     }
 
     render() {
