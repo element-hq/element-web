@@ -89,10 +89,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         cli.on("Room", this.onRoom); // invites & joining after peek
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
         const hsUrl = MatrixClientPeg.get().baseUrl;
-        this.showPresence = true;
-        if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
-            this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
-        }
+        this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
     }
 
     // eslint-disable-next-line camelcase
