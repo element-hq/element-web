@@ -25,7 +25,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseAvatar from '../avatars/BaseAvatar';
 import PresenceLabel from "./PresenceLabel";
 
-enum PowerStatus {
+export enum PowerStatus {
     Admin = "admin",
     Moderator = "moderator",
 }

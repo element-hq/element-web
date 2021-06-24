@@ -27,6 +27,8 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto";
+import EntityTile, { PowerStatus } from "./EntityTile";
+import MemberAvatar from "./../avatars/MemberAvatar";
 
 interface IProps {
     member: RoomMember;
@@ -212,9 +214,6 @@ export default class MemberTile extends React.Component<IProps, IState> {
     }
 
     render() {
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        const EntityTile = sdk.getComponent('rooms.EntityTile');
-
         const member = this.props.member;
         const name = this.getDisplayName();
         const presenceState = member.user ? member.user.presence : null;
@@ -234,8 +233,8 @@ export default class MemberTile extends React.Component<IProps, IState> {
         this.memberLastModifiedTime = member.getLastModifiedTime();
 
         const powerStatusMap = new Map([
-            [100, EntityTile.POWER_STATUS_ADMIN],
-            [50, EntityTile.POWER_STATUS_MODERATOR],
+            [100, PowerStatus.Admin],
+            [50, PowerStatus.Moderator],
         ]);
 
         // Find the nearest power level with a badge
