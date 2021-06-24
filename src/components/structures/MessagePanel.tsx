@@ -56,7 +56,7 @@ const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
 function shouldFormContinuation(
     prevEvent: MatrixEvent,
     mxEvent: MatrixEvent,
-    showHiddenEvents: boolean
+    showHiddenEvents: boolean,
 ): boolean {
     // sanity check inputs
     if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
