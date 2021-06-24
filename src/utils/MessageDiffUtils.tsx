@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
-import { Action, DiffDOM, IDiff } from "diff-dom";
+import { DiffDOM, IDiff } from "diff-dom";
 import { IContent } from "matrix-js-sdk/src/models/event";
 
 import { bodyToHtml, checkBlockNode, IOptsReturnString } from "../HtmlUtils";
