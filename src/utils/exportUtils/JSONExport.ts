@@ -8,7 +8,7 @@ import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import zip from "./StreamToZip";
-import { EventType } from "../../../../matrix-js-sdk/src/@types/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 
 export default class JSONExporter extends Exporter {
