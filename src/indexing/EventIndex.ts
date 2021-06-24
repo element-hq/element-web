@@ -28,7 +28,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { sleep } from "../utils/promise";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
-import {CrawlerCheckpoint, LoadArgs, SearchArgs} from "./BaseEventIndexManager";
+import { ICrawlerCheckpoint, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
 
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.
@@ -45,9 +45,9 @@ interface ICrawler {
  * Event indexing class that wraps the platform specific event indexing.
  */
 export default class EventIndex extends EventEmitter {
-    private crawlerCheckpoints: CrawlerCheckpoint[] = [];
+    private crawlerCheckpoints: ICrawlerCheckpoint[] = [];
     private crawler: ICrawler = null;
-    private currentCheckpoint: CrawlerCheckpoint = null;
+    private currentCheckpoint: ICrawlerCheckpoint = null;
 
     public async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
@@ -111,14 +111,14 @@ export default class EventIndex extends EventEmitter {
             const timeline = room.getLiveTimeline();
             const token = timeline.getPaginationToken("b");
 
-            const backCheckpoint: CrawlerCheckpoint = {
+            const backCheckpoint: ICrawlerCheckpoint = {
                 roomId: room.roomId,
                 token: token,
                 direction: "b",
                 fullCrawl: true,
             };
 
-            const forwardCheckpoint: CrawlerCheckpoint = {
+            const forwardCheckpoint: ICrawlerCheckpoint = {
                 roomId: room.roomId,
                 token: token,
                 direction: "f",
@@ -668,13 +668,13 @@ export default class EventIndex extends EventEmitter {
     /**
      * Search the event index using the given term for matching events.
      *
-     * @param {SearchArgs} searchArgs The search configuration for the search,
+     * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
      * @return {Promise<[SearchResult]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    public async search(searchArgs: SearchArgs) {
+    public async search(searchArgs: ISearchArgs) {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.searchEventIndex(searchArgs);
     }
@@ -709,7 +709,7 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        const loadArgs: LoadArgs = {
+        const loadArgs: ILoadArgs = {
             roomId: room.roomId,
             limit: limit,
         };
