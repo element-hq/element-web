@@ -39,6 +39,7 @@ limitations under the License.
         .mx_Waveform_bar {
             background-color: $voice-record-waveform-incomplete-fg-color;
             height: 100%;
+            /* Variable set by a JS component */
             transform: scaleY(max(0.05, var(--barHeight)));
 
             &.mx_Waveform_bar_100pct {
