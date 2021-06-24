@@ -510,9 +510,9 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
                 }
             </span>
         );
-    } else {
-        return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
     }
+    
+    return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
 }
 
 function textForWidgetEvent(event): () => string | null {
