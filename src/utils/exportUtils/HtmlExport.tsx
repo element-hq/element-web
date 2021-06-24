@@ -10,7 +10,6 @@ import { shouldFormContinuation } from "../../components/structures/MessagePanel
 import { formatFullDateNoDay, formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import { _t } from "../../languageHandler";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
 import * as Avatar from "../../Avatar";
@@ -23,20 +22,17 @@ import exportIcons from "./exportIcons";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { MatrixClient } from "matrix-js-sdk";
 import zip from "./StreamToZip";
 
 export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;
     protected permalinkCreator: RoomPermalinkCreator;
-    protected matrixClient: MatrixClient;
     protected totalSize: number;
     protected mediaOmitText: string;
 
     constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
         super(room, exportType, exportOptions);
         this.avatars = new Map<string, boolean>();
-        this.matrixClient = MatrixClientPeg.get();
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
         this.totalSize = 0;
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
@@ -78,7 +74,7 @@ export default class HTMLExporter extends Exporter {
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
         const creatorName = this.room?.getMember(creator)?.rawDisplayName || creator;
-        const exporter = this.matrixClient.getUserId();
+        const exporter = this.client.getUserId();
         const exporterName = this.room?.getMember(exporter)?.rawDisplayName;
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
         const createdText = _t("%(creatorName)s created this room.", {
@@ -235,7 +231,7 @@ export default class HTMLExporter extends Exporter {
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
 
         const eventTile = <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
-            <MatrixClientContext.Provider value = {this.matrixClient}>
+            <MatrixClientContext.Provider value = {this.client}>
                 <EventTile
                     mxEvent={mxEv}
                     continuation={continuation}

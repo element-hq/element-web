@@ -5,7 +5,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
-import "web-streams-polyfill/ponyfill" // to support blob.stream()
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";

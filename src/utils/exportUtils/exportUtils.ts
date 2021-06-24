@@ -1,5 +1,6 @@
 import { Room } from "matrix-js-sdk/src/models/room";
 import HTMLExporter from "./HtmlExport";
+import JSONExporter from "./JSONExport";
 import PlainTextExporter from "./PlainTextExport";
 
 export enum exportFormats {
@@ -33,6 +34,7 @@ const exportConversationalHistory = async (
             await new HTMLExporter(room, exportType, exportOptions).export();
             break;
         case exportFormats.JSON:
+            await new JSONExporter(room, exportType, exportOptions).export();
             break;
         case exportFormats.LOGS:
             await new PlainTextExporter(room, exportType, exportOptions).export();

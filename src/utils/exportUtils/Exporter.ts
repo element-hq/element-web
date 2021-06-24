@@ -5,6 +5,7 @@ import { exportOptions, exportTypes } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
+import { MatrixClient } from "matrix-js-sdk";
 
 type FileStream = {
     name: string,
@@ -13,12 +14,14 @@ type FileStream = {
 
 export default abstract class Exporter {
     protected files: FileStream[];
+    protected client: MatrixClient;
     protected constructor(
         protected room: Room,
         protected exportType: exportTypes,
         protected exportOptions?: exportOptions,
     ) {
         this.files = [];
+        this.client = MatrixClientPeg.get();
     }
 
     protected addFile = (filePath: string, blob: Blob) => {
@@ -39,8 +42,7 @@ export default abstract class Exporter {
     }
 
     protected setEventMetadata = (event: MatrixEvent) => {
-        const client = MatrixClientPeg.get();
-        const roomState = client.getRoom(this.room.roomId).currentState;
+        const roomState = this.client.getRoom(this.room.roomId).currentState;
         event.sender = roomState.getSentinelMember(
             event.getSender(),
         );
@@ -68,8 +70,7 @@ export default abstract class Exporter {
     }
 
     protected getRequiredEvents = async () : Promise<MatrixEvent[]> => {
-        const client = MatrixClientPeg.get();
-        const eventMapper = client.getEventMapper();
+        const eventMapper = this.client.getEventMapper();
 
         let prevToken: string|null = null;
         let limit = this.getLimit();
@@ -77,7 +78,7 @@ export default abstract class Exporter {
 
         while (limit) {
             const eventsPerCrawl = Math.min(limit, 1000);
-            const res: any = await client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
+            const res: any = await this.client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
 
             if (res.chunk.length === 0) break;
 
@@ -102,7 +103,7 @@ export default abstract class Exporter {
         const decryptionPromises = events
             .filter(event => event.isEncrypted())
             .map(event => {
-                return client.decryptEventIfNeeded(event, {
+                return this.client.decryptEventIfNeeded(event, {
                     isRetry: true,
                     emit: false,
                 });
