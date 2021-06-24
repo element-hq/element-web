@@ -32,76 +32,89 @@ function textForMemberEvent(ev): () => string | null {
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
+    const reason = content.reason;
 
-    const getReason = () => content.reason ? (_t('Reason') + ': ' + content.reason) : '';
     switch (content.membership) {
         case 'invite': {
             const threePidContent = content.third_party_invite;
             if (threePidContent) {
                 if (threePidContent.display_name) {
-                    return () => _t('%(targetName)s accepted the invitation for %(displayName)s.', {
+                    return () => _t('%(targetName)s accepted the invitation for %(displayName)s', {
                         targetName,
                         displayName: threePidContent.display_name,
                     });
                 } else {
-                    return () => _t('%(targetName)s accepted an invitation.', {targetName});
+                    return () => _t('%(targetName)s accepted an invitation', { targetName });
                 }
             } else {
-                return () => _t('%(senderName)s invited %(targetName)s.', {senderName, targetName});
+                return () => _t('%(senderName)s invited %(targetName)s', { senderName, targetName });
             }
         }
         case 'ban':
-            return () => _t('%(senderName)s banned %(targetName)s.', {senderName, targetName}) + ' ' + getReason();
+            return () => reason
+                ? _t('%(senderName)s banned %(targetName)s: %(reason)s', { senderName, targetName, reason })
+                : _t('%(senderName)s banned %(targetName)s', { senderName, targetName });
         case 'join':
             if (prevContent && prevContent.membership === 'join') {
                 if (prevContent.displayname && content.displayname && prevContent.displayname !== content.displayname) {
-                    return () => _t('%(oldDisplayName)s changed their display name to %(displayName)s.', {
+                    return () => _t('%(oldDisplayName)s changed their display name to %(displayName)s', {
                         oldDisplayName: prevContent.displayname,
                         displayName: content.displayname,
                     });
                 } else if (!prevContent.displayname && content.displayname) {
-                    return () => _t('%(senderName)s set their display name to %(displayName)s.', {
+                    return () => _t('%(senderName)s set their display name to %(displayName)s', {
                         senderName: ev.getSender(),
                         displayName: content.displayname,
                     });
                 } else if (prevContent.displayname && !content.displayname) {
-                    return () => _t('%(senderName)s removed their display name (%(oldDisplayName)s).', {
+                    return () => _t('%(senderName)s removed their display name (%(oldDisplayName)s)', {
                         senderName,
                         oldDisplayName: prevContent.displayname,
                     });
                 } else if (prevContent.avatar_url && !content.avatar_url) {
-                    return () => _t('%(senderName)s removed their profile picture.', {senderName});
+                    return () => _t('%(senderName)s removed their profile picture', { senderName });
                 } else if (prevContent.avatar_url && content.avatar_url &&
                     prevContent.avatar_url !== content.avatar_url) {
-                    return () => _t('%(senderName)s changed their profile picture.', {senderName});
+                    return () => _t('%(senderName)s changed their profile picture', { senderName });
                 } else if (!prevContent.avatar_url && content.avatar_url) {
-                    return () => _t('%(senderName)s set a profile picture.', {senderName});
+                    return () => _t('%(senderName)s set a profile picture', { senderName });
                 } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
-                    // This is a null rejoin, it will only be visible if the Labs option is enabled
-                    return () => _t("%(senderName)s made no change.", {senderName});
+                    // This is a null rejoin, it will only be visible if using 'show hidden events' (labs)
+                    return () => _t("%(senderName)s made no change", { senderName });
                 } else {
                     return null;
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
-                return () => _t('%(targetName)s joined the room.', {targetName});
+                return () => _t('%(targetName)s joined the room', { targetName });
             }
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
                 if (prevContent.membership === "invite") {
-                    return () => _t('%(targetName)s rejected the invitation.', {targetName});
+                    return () => _t('%(targetName)s rejected the invitation', { targetName });
                 } else {
-                    return () => _t('%(targetName)s left the room.', {targetName});
+                    return () => reason
+                        ? _t('%(targetName)s left the room: %(reason)s', { targetName, reason })
+                        : _t('%(targetName)s left the room', { targetName });
                 }
             } else if (prevContent.membership === "ban") {
-                return () => _t('%(senderName)s unbanned %(targetName)s.', {senderName, targetName});
+                return () => _t('%(senderName)s unbanned %(targetName)s', { senderName, targetName });
             } else if (prevContent.membership === "invite") {
-                return () => _t('%(senderName)s withdrew %(targetName)s\'s invitation.', {
-                    senderName,
-                    targetName,
-                }) + ' ' + getReason();
+                return () => reason
+                    ? _t('%(senderName)s withdrew %(targetName)s\'s invitation: %(reason)s', {
+                        senderName,
+                        targetName,
+                        reason,
+                    })
+                    : _t('%(senderName)s withdrew %(targetName)s\'s invitation', { senderName, targetName })
             } else if (prevContent.membership === "join") {
-                return () => _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + getReason();
+                return () => reason
+                    ? _t('%(senderName)s kicked %(targetName)s: %(reason)s', {
+                        senderName,
+                        targetName,
+                        reason,
+                    })
+                    : _t('%(senderName)s kicked %(targetName)s', { senderName, targetName });
             } else {
                 return null;
             }

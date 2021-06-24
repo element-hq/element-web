@@ -17,13 +17,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
-import { _t } from '../../../languageHandler';
+import { _td } from '../../../languageHandler';
 import classNames from "classnames";
 import E2EIcon from './E2EIcon';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import BaseAvatar from '../avatars/BaseAvatar';
+import PresenceLabel from "./PresenceLabel";
+
+export enum PowerStatus {
+    Admin = "admin",
+    Moderator = "moderator",
+}
+
+const PowerLabel: Record<PowerStatus, string> = {
+    [PowerStatus.Admin]: _td("Admin"),
+    [PowerStatus.Moderator]: _td("Mod"),
+}
 
 const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
@@ -31,14 +41,14 @@ const PRESENCE_CLASS = {
     "unavailable": "mx_EntityTile_unavailable",
 };
 
-function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
+function presenceClassForMember(presenceState: string, lastActiveAgo: number, showPresence: boolean): string {
     if (showPresence === false) {
         return 'mx_EntityTile_online_beenactive';
     }
 
     // offline is split into two categories depending on whether we have
     // a last_active_ago for them.
-    if (presenceState == 'offline') {
+    if (presenceState === 'offline') {
         if (lastActiveAgo) {
             return PRESENCE_CLASS['offline'] + '_beenactive';
         } else {
@@ -51,29 +61,32 @@ function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     }
 }
 
-@replaceableComponent("views.rooms.EntityTile")
-class EntityTile extends React.Component {
-    static propTypes = {
-        name: PropTypes.string,
-        title: PropTypes.string,
-        avatarJsx: PropTypes.any, // <BaseAvatar />
-        className: PropTypes.string,
-        presenceState: PropTypes.string,
-        presenceLastActiveAgo: PropTypes.number,
-        presenceLastTs: PropTypes.number,
-        presenceCurrentlyActive: PropTypes.bool,
-        showInviteButton: PropTypes.bool,
-        shouldComponentUpdate: PropTypes.func,
-        onClick: PropTypes.func,
-        suppressOnHover: PropTypes.bool,
-        showPresence: PropTypes.bool,
-        subtextLabel: PropTypes.string,
-        e2eStatus: PropTypes.string,
-    };
+interface IProps {
+    name?: string;
+    title?: string;
+    avatarJsx?: JSX.Element; // <BaseAvatar />
+    className?: string;
+    presenceState?: string;
+    presenceLastActiveAgo?: number;
+    presenceLastTs?: number;
+    presenceCurrentlyActive?: boolean;
+    showInviteButton?: boolean;
+    onClick?(): void;
+    suppressOnHover?: boolean;
+    showPresence?: boolean;
+    subtextLabel?: string;
+    e2eStatus?: string;
+    powerStatus?: PowerStatus;
+}
 
+interface IState {
+    hover: boolean;
+}
+
+@replaceableComponent("views.rooms.EntityTile")
+export default class EntityTile extends React.PureComponent<IProps, IState> {
     static defaultProps = {
-        shouldComponentUpdate: function(nextProps, nextState) { return true; },
-        onClick: function() {},
+        onClick: () => {},
         presenceState: "offline",
         presenceLastActiveAgo: 0,
         presenceLastTs: 0,
@@ -82,13 +95,12 @@ class EntityTile extends React.Component {
         showPresence: true,
     };
 
-    state = {
-        hover: false,
-    };
+    constructor(props: IProps) {
+        super(props);
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.state.hover !== nextState.hover) return true;
-        return this.props.shouldComponentUpdate(nextProps, nextState);
+        this.state = {
+            hover: false,
+        };
     }
 
     render() {
@@ -110,7 +122,6 @@ class EntityTile extends React.Component {
             const activeAgo = this.props.presenceLastActiveAgo ?
                 (Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)) : -1;
 
-            const PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             let presenceLabel = null;
             if (this.props.showPresence) {
                 presenceLabel = <PresenceLabel activeAgo={activeAgo}
@@ -155,10 +166,7 @@ class EntityTile extends React.Component {
         let powerLabel;
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
-            const powerText = {
-                [EntityTile.POWER_STATUS_MODERATOR]: _t("Mod"),
-                [EntityTile.POWER_STATUS_ADMIN]: _t("Admin"),
-            }[powerStatus];
+            const powerText = PowerLabel[powerStatus];
             powerLabel = <div className="mx_EntityTile_power">{powerText}</div>;
         }
 
@@ -168,14 +176,12 @@ class EntityTile extends React.Component {
             e2eIcon = <E2EIcon status={e2eStatus} isUser={true} bordered={true} />;
         }
 
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-
         const av = this.props.avatarJsx ||
             <BaseAvatar name={this.props.name} width={36} height={36} aria-hidden="true" />;
 
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
-            <div ref={(c) => this.container = c} >
+            <div>
                 <AccessibleButton
                     className={classNames(mainClassNames)}
                     title={this.props.title}
@@ -193,8 +199,3 @@ class EntityTile extends React.Component {
         );
     }
 }
-
-EntityTile.POWER_STATUS_MODERATOR = "moderator";
-EntityTile.POWER_STATUS_ADMIN = "admin";
-
-export default EntityTile;
