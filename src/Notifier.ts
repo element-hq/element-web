@@ -68,7 +68,7 @@ export const Notifier = {
     // or not
     pendingEncryptedEventIds: [],
 
-    notificationMessageForEvent: function(ev: MatrixEvent) {
+    notificationMessageForEvent: function(ev: MatrixEvent): string {
         if (typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
             return typehandlers[ev.getContent().msgtype](ev);
         }
