@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICryptoCallbacks, IDeviceTrustLevel, ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
+import { ICryptoCallbacks, ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matrix';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import Modal from './Modal';
 import * as sdk from './index';
@@ -28,6 +28,7 @@ import AccessSecretStorageDialog from './components/views/dialogs/security/Acces
 import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
+import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -244,7 +245,7 @@ async function onSecretRequested(
     deviceId: string,
     requestId: string,
     name: string,
-    deviceTrust: IDeviceTrustLevel,
+    deviceTrust: DeviceTrustLevel,
 ): Promise<string> {
     console.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.get();

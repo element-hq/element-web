@@ -18,6 +18,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import { ContextMenu, IProps as IContextMenuProps } from '../../structures/ContextMenu';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import Field from "../elements/Field";
 import Dialpad from '../voip/DialPad';
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 
@@ -44,13 +45,21 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         this.setState({value: this.state.value + digit});
     }
 
+    onChange = (ev) => {
+        this.setState({value: ev.target.value});
+    }
+
+
     render() {
         return <ContextMenu {...this.props}>
             <div className="mx_DialPadContextMenu_header">
                 <div>
                     <span className="mx_DialPadContextMenu_title">{_t("Dial pad")}</span>
                 </div>
-                <div className="mx_DialPadContextMenu_dialled">{this.state.value}</div>
+                <Field className="mx_DialPadContextMenu_dialled"
+                    value={this.state.value} autoFocus={true}
+                    onChange={this.onChange}
+                />
             </div>
             <div className="mx_DialPadContextMenu_horizSep" />
             <div className="mx_DialPadContextMenu_dialPad">
