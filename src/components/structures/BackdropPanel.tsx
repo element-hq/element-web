@@ -26,7 +26,7 @@ interface IProps {
 
 
 export default class BackdropPanel extends React.PureComponent<IProps> {
-    private canvasRef: React.RefObject<HTMLCanvasElement> = createRef();
+    private canvasRef = createRef<HTMLCanvasElement>();
     private ctx: CanvasRenderingContext2D;
 
     static defaultProps = {
