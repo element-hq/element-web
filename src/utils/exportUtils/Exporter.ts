@@ -148,7 +148,7 @@ export default abstract class Exporter {
                 }
                 events.push(mxEv);
             }
-
+            console.log("Fetched " + events.length + " events so far.");
             prevToken = res.end;
         }
         // Reverse the events so that we preserve the order
@@ -216,7 +216,8 @@ export default abstract class Exporter {
                 fileDirectory = event.getType() === "m.sticker" ? "stickers" : "files";
         }
         const fileDate = formatFullDateNoDay(new Date(event.getTs()));
-        const [fileName, fileExt] = this.splitFileName(event.getContent().body);
+        let [fileName, fileExt] = this.splitFileName(event.getContent().body);
+        if (event.getType() === "m.sticker") fileExt = ".png";
         return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
     }
 

@@ -77,8 +77,8 @@ ${json}
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000} s`);
-        console.info("Creating Output...");
+        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
+        console.info("Creating output...");
 
         const text = await this.createOutput(res);
 
@@ -91,7 +91,8 @@ ${json}
         }
 
         const exportEnd = performance.now();
-        console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        console.info(`Export successful!`)
+        console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         window.removeEventListener("beforeunload", this.onBeforeUnload);
         window.removeEventListener("onunload", this.abortExport);
     }

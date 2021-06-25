@@ -328,7 +328,7 @@ export default class HTMLExporter extends Exporter {
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000} s`);
+        console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
         console.info("Creating HTML...");
 
         const html = await this.createHTML(res);
