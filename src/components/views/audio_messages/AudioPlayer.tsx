@@ -63,10 +63,13 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
         this.setState({ playbackPhase: ev });
     };
 
-    private onKeyPress = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent) => {
+        // stopPropagation() prevents the FocusComposer catch-all from triggering,
+        // but we need to do it on key down instead of press (even though the user
+        // interaction is typically on press).
         if (ev.key === Key.SPACE) {
             ev.stopPropagation();
-            this.playPauseRef.current?.toggle();
+            this.playPauseRef.current?.toggleState();
         } else if (ev.key === Key.ARROW_LEFT) {
             ev.stopPropagation();
             this.seekRef.current?.left();
@@ -87,7 +90,7 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
     public render(): ReactNode {
         // tabIndex=0 to ensure that the whole component becomes a tab stop, where we handle keyboard
         // events for accessibility
-        return <div className='mx_MediaBody mx_AudioPlayer_container' tabIndex={0} onKeyPress={this.onKeyPress}>
+        return <div className='mx_MediaBody mx_AudioPlayer_container' tabIndex={0} onKeyDown={this.onKeyDown}>
             <div className='mx_AudioPlayer_primaryContainer'>
                 <PlayPauseButton
                     playback={this.props.playback}
@@ -107,7 +110,12 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
                 </div>
             </div>
             <div className='mx_AudioPlayer_seek'>
-                <SeekBar playback={this.props.playback} tabIndex={-1} playbackPhase={this.state.playbackPhase} />
+                <SeekBar
+                    playback={this.props.playback}
+                    tabIndex={-1} // prevent tabbing into the bar
+                    playbackPhase={this.state.playbackPhase}
+                    ref={this.seekRef}
+                />
                 <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />
             </div>
         </div>
