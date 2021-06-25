@@ -130,7 +130,8 @@ limitations under the License.
                 mask-size: contain;
                 width: 18px;
                 height: 18px;
-                top: calc(50% - 9px); // text sizes are dynamic
+                top: 50%; // text sizes are dynamic
+                transform: translateY(-50%);
             }
 
             &.mx_RoomStatusBar_unsentCancelAllBtn::before {
