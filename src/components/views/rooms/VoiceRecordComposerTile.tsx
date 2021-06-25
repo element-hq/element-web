@@ -177,7 +177,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         // only other UI is the recording-in-progress UI
-        return <div className="mx_MediaBody mx_VoiceRecordComposerTile_recording">
+        return <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
             <LiveRecordingClock recorder={this.state.recorder} />
             <LiveRecordingWaveform recorder={this.state.recorder} />
         </div>;
