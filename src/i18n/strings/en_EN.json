@@ -2767,6 +2767,7 @@
     "<inviter/> invites you": "<inviter/> invites you",
     "To view %(spaceName)s, turn on the <a>Spaces beta</a>": "To view %(spaceName)s, turn on the <a>Spaces beta</a>",
     "To join %(spaceName)s, turn on the <a>Spaces beta</a>": "To join %(spaceName)s, turn on the <a>Spaces beta</a>",
+    "To view %(spaceName)s, you need an invite": "To view %(spaceName)s, you need an invite",
     "Welcome to <name/>": "Welcome to <name/>",
     "Random": "Random",
     "Support": "Support",
