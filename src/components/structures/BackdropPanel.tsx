@@ -37,16 +37,28 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
         const imageHeight = (backgroundImage as ImageBitmap).height
                 || (backgroundImage as HTMLImageElement).naturalHeight;
 
-        const destinationX = width - imageWidth;
-        const destinationY = height - imageHeight;
+        const contentRatio = imageWidth / imageHeight;
+        const containerRatio = width / height;
+        let resultHeight;
+        let resultWidth;
+        if (contentRatio > containerRatio) {
+            resultHeight = height;
+            resultWidth = height * contentRatio;
+        } else {
+            resultWidth = width;
+            resultHeight = width / contentRatio;
+        }
+
+        const x = (width - resultWidth) / 2;
+        const y = (height - resultHeight) / 2;
 
         this.ctx.filter = `blur(${this.props.blur})`;
         this.ctx.drawImage(
             backgroundImage,
-            Math.min(destinationX, 0),
-            Math.min(destinationY, 0),
-            Math.max(width, imageWidth),
-            Math.max(height, imageHeight),
+            x,
+            y,
+            resultWidth,
+            resultHeight,
         );
     }
 

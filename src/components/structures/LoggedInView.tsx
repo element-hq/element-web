@@ -61,7 +61,6 @@ import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
 import { OwnProfileStore } from '../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { mediaFromMxc } from "../../customisations/Media";
 
 
 // We need to fetch each pinned message individually (if we don't already have it)
