@@ -82,8 +82,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             // https://github.com/matrix-org/matrix-doc/pull/3245
             "org.matrix.msc1767.text": "Voice message",
             "org.matrix.msc1767.file": {
-                "url": upload.mxc,
-                "file": upload.encrypted,
+                url: upload.mxc,
+                file: upload.encrypted,
                 name: "Voice message.ogg",
                 mimetype: this.state.recorder.contentType,
                 size: this.state.recorder.contentLength,
