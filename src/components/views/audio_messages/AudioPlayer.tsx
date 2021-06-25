@@ -41,6 +41,7 @@ interface IState {
 @replaceableComponent("views.audio_messages.AudioPlayer")
 export default class AudioPlayer extends React.PureComponent<IProps, IState> {
     private playPauseRef: RefObject<PlayPauseButton> = createRef();
+    private seekRef: RefObject<SeekBar> = createRef();
 
     constructor(props: IProps) {
         super(props);
@@ -66,6 +67,12 @@ export default class AudioPlayer extends React.PureComponent<IProps, IState> {
         if (ev.key === Key.SPACE) {
             ev.stopPropagation();
             this.playPauseRef.current?.toggle();
+        } else if (ev.key === Key.ARROW_LEFT) {
+            ev.stopPropagation();
+            this.seekRef.current?.left();
+        } else if (ev.key === Key.ARROW_RIGHT) {
+            ev.stopPropagation();
+            this.seekRef.current?.right();
         }
     };
 

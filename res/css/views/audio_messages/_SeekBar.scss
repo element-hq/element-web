@@ -31,6 +31,8 @@ limitations under the License.
     outline: none; // remove blue selection border
     position: relative; // for progress bar support later on
 
+    cursor: pointer;
+
     &::-webkit-slider-thumb {
         appearance: none; // default style override
 

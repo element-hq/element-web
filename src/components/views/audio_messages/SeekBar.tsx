@@ -46,6 +46,8 @@ interface ISeekCSS extends CSSProperties {
     '--fillTo': number;
 }
 
+const ARROW_SKIP_SECONDS = 5; // arbitrary
+
 @replaceableComponent("views.audio_messages.SeekBar")
 export default class SeekBar extends React.PureComponent<IProps, IState> {
     // We use an animation frame request to avoid overly spamming prop updates, even if we aren't
@@ -80,15 +82,21 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
     }
 
     public left() {
-        console.log("@@ LEFT");
+        // noinspection JSIgnoredPromiseFromCall
+        this.props.playback.skipTo(this.props.playback.clockInfo.timeSeconds - ARROW_SKIP_SECONDS);
     }
 
     public right() {
-        console.log("@@ RIGHT");
+        // noinspection JSIgnoredPromiseFromCall
+        this.props.playback.skipTo(this.props.playback.clockInfo.timeSeconds + ARROW_SKIP_SECONDS);
     }
 
     private onChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        console.log('@@ CHANGE', ev.target.value);
+        // Thankfully, onChange is only called when the user changes the value, not when we
+        // change the value on the component. We can use this as a reliable "skip to X" function.
+        //
+        // noinspection JSIgnoredPromiseFromCall
+        this.props.playback.skipTo(Number(ev.target.value) * this.props.playback.clockInfo.durationSeconds);
     };
 
     public render(): ReactNode {
