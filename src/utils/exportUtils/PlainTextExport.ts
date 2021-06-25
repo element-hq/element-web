@@ -56,16 +56,25 @@ export default class PlainTextExporter extends Exporter {
 
     protected _textForEvent = async (mxEv: MatrixEvent) => {
         const senderDisplayName = mxEv.sender && mxEv.sender.name ? mxEv.sender.name : mxEv.getSender();
-        if (this.exportOptions.attachmentsIncluded && this.isAttachment(mxEv)) {
-            const blob = await this.getMediaBlob(mxEv);
-            this.totalSize += blob.size;
-            const filePath = this.getFilePath(mxEv);
-            this.addFile(filePath, blob);
-            if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
-                this.exportOptions.attachmentsIncluded = false;
-            }
+        let mediaText = "";
+        if (this.isAttachment(mxEv)) {
+            if (this.exportOptions.attachmentsIncluded) {
+                try {
+                    const blob = await this.getMediaBlob(mxEv);
+                    this.totalSize += blob.size;
+                    const filePath = this.getFilePath(mxEv);
+                    mediaText = " (" + _t("File Attached") + ")";
+                    this.addFile(filePath, blob);
+                    if (this.totalSize > this.exportOptions.maxSize - 1024 * 1024) {
+                        this.exportOptions.attachmentsIncluded = false;
+                    }
+                } catch (error) {
+                    mediaText = " (" + _t("Error fetching file") + ")";
+                    console.log("Error fetching file" + error);
+                }
+            } else mediaText = ` (${this.mediaOmitText})`;
         }
-        if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv);
+        if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv) + mediaText;
         else return textForEvent(mxEv);
     }
 

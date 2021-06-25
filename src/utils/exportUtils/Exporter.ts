@@ -118,7 +118,7 @@ export default abstract class Exporter {
                 limit = 40;
                 break;
             default:
-                limit = Number.MAX_VALUE;
+                limit = 10**8;
         }
         return limit;
     }
