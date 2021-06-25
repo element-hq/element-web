@@ -292,6 +292,7 @@ const SpacePanel = (props: IProps) => {
                             backgroundImage={props.backgroundImage}
                             width={panelDimensions?.width}
                             height={panelDimensions?.height}
+                            opacity={.3}
                         />
                         <Droppable droppableId="top-level-spaces">
                             {(provided, snapshot) => (

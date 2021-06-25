@@ -405,7 +405,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         if (this.state.showGroupFilterPanel) {
             leftLeftPanel = (
                 <div className="mx_LeftPanel_GroupFilterPanelContainer">
-                    <GroupFilterPanel />
+                    <GroupFilterPanel backgroundImage={this.props.backgroundImage} />
                     {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
                 </div>
             );

@@ -16,8 +16,8 @@ limitations under the License.
 
 .mx_GroupFilterPanel {
     flex: 1;
-    background-color: $groupFilterPanel-bg-color;
     cursor: pointer;
+    position: relative;
 
     display: flex;
     flex-direction: column;

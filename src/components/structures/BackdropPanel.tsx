@@ -22,6 +22,7 @@ interface IProps {
     height?: number;
     backgroundImage?: CanvasImageSource;
     blur?: string;
+    opacity?: number;
 }
 
 
@@ -31,6 +32,7 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
 
     static defaultProps = {
         blur: "60px",
+        opacity: .15,
     }
 
     public componentDidMount() {
@@ -82,6 +84,9 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
         return <canvas
             ref={this.canvasRef}
             className="mx_BackdropPanel"
+            style={{
+                opacity: this.props.opacity,
+            }}
         />;
     }
 }
