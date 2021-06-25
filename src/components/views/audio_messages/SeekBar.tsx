@@ -15,14 +15,8 @@ limitations under the License.
 */
 
 import { Playback, PlaybackState } from "../../../voice/Playback";
-import React, { ChangeEvent, createRef, CSSProperties, ReactNode, RefObject } from "react";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import PlayPauseButton from "./PlayPauseButton";
+import React, { ChangeEvent, CSSProperties, ReactNode } from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { formatBytes } from "../../../utils/FormattingUtils";
-import DurationClock from "./DurationClock";
-import { Key } from "../../../Keyboard";
-import { _t } from "../../../languageHandler";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
 import { percentageOf } from "../../../utils/numbers";
 
