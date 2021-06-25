@@ -25,7 +25,7 @@ export async function getDrawable(url: string): Promise<CanvasImageSource> {
         const blob = await response.blob();
         return await createImageBitmap(blob);
     } else {
-        return new Promise((resolve, reject) => {
+        return new Promise<HTMLImageElement>((resolve, reject) => {
             const img = document.createElement("img");
             img.crossOrigin = "anonymous";
             img.onload = function() {
