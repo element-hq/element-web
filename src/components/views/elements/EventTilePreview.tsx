@@ -107,7 +107,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             userId: this.props.userId,
             getAvatarUrl: (..._) => {
                 return Avatar.avatarUrlForUser(
-                    {avatarUrl: this.props.avatarUrl},
+                    { avatarUrl: this.props.avatarUrl },
                     AVATAR_SIZE, AVATAR_SIZE, "crop",
                 );
             },
