@@ -75,7 +75,7 @@ export default class PlainTextExporter extends Exporter {
             } else mediaText = ` (${this.mediaOmitText})`;
         }
         if (this.isReply(mxEv)) return senderDisplayName + ": " + this.textForReplyEvent(mxEv) + mediaText;
-        else return textForEvent(mxEv);
+        else return textForEvent(mxEv) + mediaText;
     }
 
     protected async createOutput(events: MatrixEvent[]) {
