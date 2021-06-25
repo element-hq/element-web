@@ -1,35 +1,24 @@
-import streamSaver from "streamsaver";
 import Exporter from "./Exporter";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
-import * as ponyfill from "web-streams-polyfill/ponyfill"
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
-import zip from "./StreamToZip";
 
 
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
     protected mediaOmitText: string;
-    private readonly fileDir: string;
 
     constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
         super(room, exportType, exportOptions);
         this.totalSize = 0;
-        this.fileDir = `matrix-export-${formatFullDateNoDay(new Date())}`;
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")
             : _t("Media omitted - file size limit exceeded");
-        window.addEventListener("beforeunload", this.onBeforeUnload)
-    }
-
-    protected onBeforeUnload = (e: BeforeUnloadEvent) => {
-        e.preventDefault();
-        return e.returnValue = "Are you sure you want to exit during this export?";
     }
 
     protected textForReplyEvent = (ev : MatrixEvent) => {
@@ -90,12 +79,6 @@ export default class PlainTextExporter extends Exporter {
         return content;
     }
 
-    protected getFileName = () => {
-        if (this.exportOptions.attachmentsIncluded) {
-            return `${this.room.name}.txt`;
-        } else return `${this.fileDir}.txt`
-    }
-
     public async export() {
         console.info("Starting export process...");
         console.info("Fetching events...");
@@ -108,32 +91,17 @@ export default class PlainTextExporter extends Exporter {
 
         const text = await this.createOutput(res);
 
-        console.info("Writing to the file system...");
-        streamSaver.WritableStream = ponyfill.WritableStream
-
-        const files = this.files;
-        if (files.length) {
-            this.addFile(this.getFileName(), new Blob([text]));
-            const fileStream = streamSaver.createWriteStream(`${this.fileDir}.zip`);
-            const readableZipStream = zip({
-                start(ctrl) {
-                    for (const file of files) ctrl.enqueue(file);
-                    ctrl.close();
-                },
-            });
-            const writer = fileStream.getWriter()
-            const reader = readableZipStream.getReader()
-            await this.pumpToFileStream(reader, writer);
+        if (this.files.length) {
+            this.addFile("export.txt", new Blob([text]));
+            await this.downloadZIP();
         } else {
-            const fileStream = streamSaver.createWriteStream(`${this.fileDir}.txt`);
-            const writer = fileStream.getWriter()
-            const data = new TextEncoder().encode(text);
-            await writer.write(data);
-            await writer.close();
+            const fileName = `matrix-export-${formatFullDateNoDay(new Date())}.txt`;
+            await this.downloadPlainText(fileName, text);
         }
 
         const exportEnd = performance.now();
         console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        window.removeEventListener("onunload", this.abortExport);
         window.removeEventListener("beforeunload", this.onBeforeUnload);
     }
 }

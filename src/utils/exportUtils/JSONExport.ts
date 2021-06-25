@@ -1,13 +1,10 @@
-import streamSaver from "streamsaver";
 import Exporter from "./Exporter";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatFullDateNoDay, formatFullDateNoDayNoTime } from "../../DateUtils";
-import * as ponyfill from "web-streams-polyfill/ponyfill"
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
-import zip from "./StreamToZip";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 
@@ -17,7 +14,6 @@ export default class JSONExporter extends Exporter {
     constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
         super(room, exportType, exportOptions);
         this.totalSize = 0;
-        window.addEventListener("beforeunload", this.onBeforeUnload)
     }
 
     protected wrapJSON(json: string): string {
@@ -39,15 +35,10 @@ ${json}
 }`
     }
 
-    protected indentEachLine(string: string) {
+    protected indentEachLine(JSONString: string, spaces: number) {
         const indent = ' ';
         const regex = /^(?!\s*$)/gm;
-        return string.replace(regex, indent.repeat(2));
-    }
-
-    protected onBeforeUnload = (e: BeforeUnloadEvent) => {
-        e.preventDefault();
-        return e.returnValue = "Are you sure you want to exit during this export?";
+        return JSONString.replace(regex, indent.repeat(spaces));
     }
 
     protected async getJSONString(mxEv: MatrixEvent) {
@@ -76,7 +67,7 @@ ${json}
             if (!haveTileForEvent(event)) continue;
             content += await this.getJSONString(event);
         }
-        return this.wrapJSON(this.indentEachLine(content.slice(0, -2)));
+        return this.wrapJSON(this.indentEachLine(content.slice(0, -2), 2));
     }
 
     public async export() {
@@ -91,34 +82,18 @@ ${json}
 
         const text = await this.createOutput(res);
 
-        console.info("Writing to the file system...");
-        streamSaver.WritableStream = ponyfill.WritableStream
-
-        const fileName = `matrix-export-${formatFullDateNoDay(new Date())}.json`;
-        const files = this.files;
-        if (files.length) {
-            this.addFile("result.json", new Blob([text]));
-            const fileStream = streamSaver.createWriteStream(fileName.slice(0, -5) + ".zip");
-            const readableZipStream = zip({
-                start(ctrl) {
-                    for (const file of files) ctrl.enqueue(file);
-                    ctrl.close();
-                },
-            });
-            const writer = fileStream.getWriter()
-            const reader = readableZipStream.getReader()
-            await this.pumpToFileStream(reader, writer);
+        if (this.files.length) {
+            this.addFile("export.json", new Blob([text]));
+            await this.downloadZIP();
         } else {
-            const fileStream = streamSaver.createWriteStream(fileName);
-            const writer = fileStream.getWriter()
-            const data = new TextEncoder().encode(text);
-            await writer.write(data);
-            await writer.close();
+            const fileName = `matrix-export-${formatFullDateNoDay(new Date())}.json`;
+            await this.downloadPlainText(fileName, text);
         }
 
         const exportEnd = performance.now();
         console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         window.removeEventListener("beforeunload", this.onBeforeUnload);
+        window.removeEventListener("onunload", this.abortExport);
     }
 }
 

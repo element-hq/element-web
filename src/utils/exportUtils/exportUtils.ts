@@ -6,7 +6,7 @@ import PlainTextExporter from "./PlainTextExport";
 export enum exportFormats {
     HTML = "HTML",
     JSON = "JSON",
-    LOGS = "LOGS",
+    PLAIN_TEXT = "PLAIN_TEXT",
 }
 
 export enum exportTypes {
@@ -36,7 +36,7 @@ const exportConversationalHistory = async (
         case exportFormats.JSON:
             await new JSONExporter(room, exportType, exportOptions).export();
             break;
-        case exportFormats.LOGS:
+        case exportFormats.PLAIN_TEXT:
             await new PlainTextExporter(room, exportType, exportOptions).export();
             break;
     }

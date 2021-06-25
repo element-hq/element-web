@@ -1,3 +1,4 @@
+import streamSaver from "streamsaver";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -6,6 +7,9 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { MatrixClient } from "matrix-js-sdk";
+import streamToZIP from "./StreamToZip";
+import * as ponyfill from "web-streams-polyfill/ponyfill"
+import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
 
 type FileStream = {
     name: string,
@@ -15,6 +19,9 @@ type FileStream = {
 export default abstract class Exporter {
     protected files: FileStream[];
     protected client: MatrixClient;
+    protected writer: WritableStreamDefaultWriter<any>;
+    protected fileStream: WritableStream<any>;
+
     protected constructor(
         protected room: Room,
         protected exportType: exportTypes,
@@ -22,9 +29,16 @@ export default abstract class Exporter {
     ) {
         this.files = [];
         this.client = MatrixClientPeg.get();
+        window.addEventListener("beforeunload", this.onBeforeUnload);
+        window.addEventListener("onunload", this.abortExport);
     }
 
-    protected addFile = (filePath: string, blob: Blob) => {
+    protected onBeforeUnload(e: BeforeUnloadEvent) {
+        e.preventDefault();
+        return e.returnValue = "Are you sure you want to exit during this export?";
+    }
+
+    protected addFile(filePath: string, blob: Blob) {
         const file = {
             name: filePath,
             stream: () => blob.stream(),
@@ -32,16 +46,53 @@ export default abstract class Exporter {
         this.files.push(file);
     }
 
-    protected pumpToFileStream = async (reader: ReadableStreamDefaultReader, writer: WritableStreamDefaultWriter) => {
+    protected async downloadZIP() {
+        const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
+        //Support for firefox browser
+        streamSaver.WritableStream = ponyfill.WritableStream
+        //Create a writable stream to the directory
+        this.fileStream = streamSaver.createWriteStream(filename);
+
+        this.writer = this.fileStream.getWriter();
+        const files = this.files;
+
+        console.info("Generating a ZIP...");
+        const readableZipStream = streamToZIP({
+            start(ctrl) {
+                for (const file of files) ctrl.enqueue(file);
+                ctrl.close();
+            },
+        });
+
+        console.info("Writing to the file system...")
+
+        const reader = readableZipStream.getReader()
+        await this.pumpToFileStream(reader);
+    }
+
+    protected async downloadPlainText(fileName: string, text: string): Promise<any> {
+        this.fileStream = streamSaver.createWriteStream(fileName);
+        this.writer = this.fileStream.getWriter()
+        const data = new TextEncoder().encode(text);
+        await this.writer.write(data);
+        await this.writer.close();
+    }
+
+    protected async abortExport(): Promise<void> {
+        if (this.fileStream) await this.fileStream.abort();
+        if (this.writer) await this.writer.abort();
+    }
+
+    protected async pumpToFileStream(reader: ReadableStreamDefaultReader) {
         const res = await reader.read();
-        if (res.done) await writer.close();
+        if (res.done) await this.writer.close();
         else {
-            await writer.write(res.value);
-            await this.pumpToFileStream(reader, writer)
+            await this.writer.write(res.value);
+            await this.pumpToFileStream(reader);
         }
     }
 
-    protected setEventMetadata = (event: MatrixEvent) => {
+    protected setEventMetadata(event: MatrixEvent) {
         const roomState = this.client.getRoom(this.room.roomId).currentState;
         event.sender = roomState.getSentinelMember(
             event.getSender(),
@@ -54,7 +105,7 @@ export default abstract class Exporter {
         return event;
     }
 
-    protected getLimit = () => {
+    protected getLimit() {
         let limit: number;
         switch (this.exportType) {
             case exportTypes.LAST_N_MESSAGES:
@@ -69,7 +120,7 @@ export default abstract class Exporter {
         return limit;
     }
 
-    protected getRequiredEvents = async () : Promise<MatrixEvent[]> => {
+    protected async getRequiredEvents():Promise<MatrixEvent[]> {
         const eventMapper = this.client.getEventMapper();
 
         let prevToken: string|null = null;

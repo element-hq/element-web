@@ -1,5 +1,4 @@
 import React from "react"
-import streamSaver from "streamsaver";
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -7,11 +6,10 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Layout } from "../../settings/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
-import { formatFullDateNoDay, formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
+import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import { _t } from "../../languageHandler";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import * as ponyfill from "web-streams-polyfill/ponyfill"
 import * as Avatar from "../../Avatar";
 import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
@@ -22,7 +20,6 @@ import exportIcons from "./exportIcons";
 import { exportTypes } from "./exportUtils";
 import { exportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import zip from "./StreamToZip";
 
 export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;
@@ -38,12 +35,6 @@ export default class HTMLExporter extends Exporter {
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")
             : _t("Media omitted - file size limit exceeded");
-        window.addEventListener("beforeunload", this.onBeforeUnload)
-    }
-
-    protected onBeforeUnload = (e: BeforeUnloadEvent) => {
-        e.preventDefault();
-        return e.returnValue = "Are you sure you want to exit during this export?";
     }
 
     protected async getRoomAvatar() {
@@ -267,7 +258,7 @@ export default class HTMLExporter extends Exporter {
         return eventTileMarkup;
     }
 
-    protected createModifiedEvent = (text: string, mxEv: MatrixEvent) => {
+    protected createModifiedEvent(text: string, mxEv: MatrixEvent) {
         const modifiedContent = {
             msgtype: "m.text",
             body: `*${text}*`,
@@ -351,34 +342,14 @@ export default class HTMLExporter extends Exporter {
             this.addFile(`icons/${iconName}`, new Blob([exportIcons[iconName]]));
         }
 
-        const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
-
         console.info("HTML creation successful!");
 
-        //Support for firefox browser
-        streamSaver.WritableStream = ponyfill.WritableStream
-        //Create a writable stream to the directory
-        const fileStream = streamSaver.createWriteStream(filename);
-
-        const writer = fileStream.getWriter();
-        const files = this.files;
-
-        console.info("Generating a ZIP...");
-        const readableZipStream = zip({
-            start(ctrl) {
-                for (const file of files) ctrl.enqueue(file);
-                ctrl.close();
-            },
-        });
-
-        console.info("Writing to file system...")
-
-        const reader = readableZipStream.getReader()
-        await this.pumpToFileStream(reader, writer);
+        await this.downloadZIP();
 
         const exportEnd = performance.now();
         console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
         window.removeEventListener("beforeunload", this.onBeforeUnload);
+        window.removeEventListener("onunload", this.abortExport);
     }
 }
 

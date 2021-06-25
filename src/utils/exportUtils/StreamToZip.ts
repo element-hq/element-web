@@ -101,7 +101,7 @@ const pump = (zipObj: ZipObj) => zipObj.reader ? zipObj.reader.read().then(chunk
     }
 }) : undefined;
 
-export default function ZIP(underlyingSource: UnderlyingSource) {
+export default function streamToZIP(underlyingSource: UnderlyingSource) {
     const files = Object.create(null);
     const filenames: string[] = [];
     const encoder = new TextEncoder();
