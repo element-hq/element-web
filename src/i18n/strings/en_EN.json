@@ -741,6 +741,7 @@
     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
     "Topic: %(topic)s": "Topic: %(topic)s",
     "Error fetching file": "Error fetching file",
+    "File Attached": "File Attached",
     "Help us improve %(brand)s": "Help us improve %(brand)s",
     "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.": "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.",
     "Yes": "Yes",

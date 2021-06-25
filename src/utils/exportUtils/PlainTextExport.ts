@@ -70,7 +70,7 @@ export default class PlainTextExporter extends Exporter {
                     }
                 } catch (error) {
                     mediaText = " (" + _t("Error fetching file") + ")";
-                    console.log("Error fetching file" + error);
+                    console.log("Error fetching file " + error);
                 }
             } else mediaText = ` (${this.mediaOmitText})`;
         }
