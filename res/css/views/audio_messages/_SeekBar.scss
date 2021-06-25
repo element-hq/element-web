@@ -92,7 +92,7 @@ limitations under the License.
     // Increase clickable area for the slider (approximately same size as browser default)
     // We do it this way to keep the same padding and margins of the element, avoiding margin math.
     // Source: https://front-back.com/expand-clickable-areas-for-a-better-touch-experience/
-    &:after {
+    &::after {
         content: '';
         position: absolute;
         top: -6px;
