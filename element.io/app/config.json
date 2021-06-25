@@ -21,7 +21,8 @@
     "roomDirectory": {
         "servers": [
             "matrix.org",
-            "gitter.im"
+            "gitter.im",
+            "libera.chat"
         ]
     },
     "enable_presence_by_hs_url": {
