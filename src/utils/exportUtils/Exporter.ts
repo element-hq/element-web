@@ -48,15 +48,18 @@ export default abstract class Exporter {
 
     protected async downloadZIP() {
         const filename = `matrix-export-${formatFullDateNoDay(new Date())}.zip`;
-        //Support for firefox browser
+
+        // Support for older browsers
         streamSaver.WritableStream = ponyfill.WritableStream
-        //Create a writable stream to the directory
+
+        // Create a writable stream to the directory
         this.fileStream = streamSaver.createWriteStream(filename);
+
+        console.info("Generating a ZIP...");
 
         this.writer = this.fileStream.getWriter();
         const files = this.files;
 
-        console.info("Generating a ZIP...");
         const readableZipStream = streamToZIP({
             start(ctrl) {
                 for (const file of files) ctrl.enqueue(file);
@@ -79,8 +82,8 @@ export default abstract class Exporter {
     }
 
     protected async abortExport(): Promise<void> {
-        if (this.fileStream) await this.fileStream.abort();
-        if (this.writer) await this.writer.abort();
+        await this.fileStream?.abort();
+        await this.writer?.abort();
     }
 
     protected async pumpToFileStream(reader: ReadableStreamDefaultReader) {
