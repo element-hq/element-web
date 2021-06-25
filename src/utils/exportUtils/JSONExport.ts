@@ -73,13 +73,14 @@ ${json}
     public async export() {
         console.info("Starting export process...");
         console.info("Fetching events...");
+
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
         console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
-        console.info("Creating output...");
 
+        console.info("Creating output...");
         const text = await this.createOutput(res);
 
         if (this.files.length) {
@@ -91,8 +92,10 @@ ${json}
         }
 
         const exportEnd = performance.now();
-        console.info(`Export successful!`)
+
+        console.info("Export successful!")
         console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+
         window.removeEventListener("beforeunload", this.onBeforeUnload);
         window.removeEventListener("onunload", this.abortExport);
     }

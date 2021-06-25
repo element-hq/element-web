@@ -324,19 +324,19 @@ export default class HTMLExporter extends Exporter {
     public async export() {
         console.info("Starting export process...");
         console.info("Fetching events...");
+
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
         console.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
-        console.info("Creating HTML...");
 
+        console.info("Creating HTML...");
         const html = await this.createHTML(res);
 
         this.addFile("index.html", new Blob([html]));
         this.addFile("css/style.css", new Blob([exportCSS]));
         this.addFile("js/script.js", new Blob([exportJS]));
-
 
         for (const iconName in exportIcons) {
             this.addFile(`icons/${iconName}`, new Blob([exportIcons[iconName]]));
@@ -347,7 +347,10 @@ export default class HTMLExporter extends Exporter {
         await this.downloadZIP();
 
         const exportEnd = performance.now();
-        console.info(`Export Successful! Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+
+        console.info("Export successful!")
+        console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+
         window.removeEventListener("beforeunload", this.onBeforeUnload);
         window.removeEventListener("onunload", this.abortExport);
     }
