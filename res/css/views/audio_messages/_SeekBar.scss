@@ -29,7 +29,7 @@ limitations under the License.
     height: 1px;
     background: $quaternary-fg-color;
     outline: none; // remove blue selection border
-    position: relative; // for progress bar support later on
+    position: relative; // for before+after pseudo elements later on
 
     cursor: pointer;
 
@@ -87,5 +87,17 @@ limitations under the License.
 
     &:disabled {
         opacity: 0.5;
+    }
+
+    // Increase clickable area for the slider (approximately same size as browser default)
+    // We do it this way to keep the same padding and margins of the element, avoiding margin math.
+    // Source: https://front-back.com/expand-clickable-areas-for-a-better-touch-experience/
+    &:after {
+        content: '';
+        position: absolute;
+        top: -6px;
+        bottom: -6px;
+        left: 0;
+        right: 0;
     }
 }
