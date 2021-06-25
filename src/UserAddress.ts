@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const emailRegex = /^\S+@\S+\.\S+$/;
+import PropTypes from "prop-types";
 
+const emailRegex = /^\S+@\S+\.\S+$/;
 const mxUserIdRegex = /^@\S+:\S+$/;
 const mxRoomIdRegex = /^!\S+:\S+$/;
 
-import PropTypes from 'prop-types';
-export const addressTypes = [
-    'mx-user-id', 'mx-room-id', 'email',
-];
+export const addressTypes = ['mx-user-id', 'mx-room-id', 'email'];
+
+export enum AddressType {
+    Email = "email",
+    MatrixUserId = "mx-user-id",
+    MatrixRoomId = "mx-room-id",
+}
 
 // PropType definition for an object describing
 // an address that can be invited to a room (which
@@ -40,18 +44,13 @@ export const UserAddressType = PropTypes.shape({
     isKnown: PropTypes.bool,
 });
 
-export function getAddressType(inputText) {
-    const isEmailAddress = emailRegex.test(inputText);
-    const isUserId = mxUserIdRegex.test(inputText);
-    const isRoomId = mxRoomIdRegex.test(inputText);
-
-    // sanity check the input for user IDs
-    if (isEmailAddress) {
-        return 'email';
-    } else if (isUserId) {
-        return 'mx-user-id';
-    } else if (isRoomId) {
-        return 'mx-room-id';
+export function getAddressType(inputText: string): AddressType | null {
+    if (emailRegex.test(inputText)) {
+        return AddressType.Email;
+    } else if (mxUserIdRegex.test(inputText)) {
+        return AddressType.MatrixUserId;
+    } else if (mxRoomIdRegex.test(inputText)) {
+        return AddressType.MatrixRoomId;
     } else {
         return null;
     }
