@@ -350,6 +350,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
+    public allowOverridingNativeContextMenus(): boolean {
+        return true;
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
