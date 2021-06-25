@@ -1790,6 +1790,7 @@
     "Show files": "Show files",
     "Share room": "Share room",
     "Room settings": "Room settings",
+    "Export chat": "Export chat",
     "Trusted": "Trusted",
     "Not trusted": "Not trusted",
     "%(count)s verified sessions|other": "%(count)s verified sessions",

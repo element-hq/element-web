@@ -279,6 +279,9 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>
                 {_t("Room settings")}
             </Button>
+            <Button className="mx_RoomSummaryCard_icon_export" onClick = {() => {}}>
+                {_t("Export chat")}
+            </Button>
         </Group>
 
         { SettingsStore.getValue(UIFeature.Widgets) && <AppsSection room={room} /> }
