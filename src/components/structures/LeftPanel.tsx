@@ -47,7 +47,7 @@ import BackdropPanel from "./BackdropPanel";
 interface IProps {
     isMinimized: boolean;
     resizeNotifier: ResizeNotifier;
-    backgroundImage?: ImageBitmap;
+    backgroundImage?: CanvasImageSource;
 }
 
 interface IState {

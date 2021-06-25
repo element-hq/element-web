@@ -1,9 +1,10 @@
 import React, { createRef } from "react";
+import "context-filter-polyfill";
 
 interface IProps {
     width?: number;
     height?: number;
-    backgroundImage?: ImageBitmap;
+    backgroundImage?: CanvasImageSource;
     blur?: string;
 }
 
@@ -31,20 +32,28 @@ export default class BackdropPanel extends React.PureComponent<IProps> {
         this.canvasRef.current.width = width;
         this.canvasRef.current.height = height;
 
-        const destinationX = width - backgroundImage.width;
-        const destinationY = height - backgroundImage.height;
+        const imageWidth = (backgroundImage as ImageBitmap).width
+            || (backgroundImage as HTMLImageElement).naturalWidth;
+        const imageHeight = (backgroundImage as ImageBitmap).height
+                || (backgroundImage as HTMLImageElement).naturalHeight;
+
+        const destinationX = width - imageWidth;
+        const destinationY = height - imageHeight;
 
         this.ctx.filter = `blur(${this.props.blur})`;
         this.ctx.drawImage(
             backgroundImage,
             Math.min(destinationX, 0),
             Math.min(destinationY, 0),
-            Math.max(width, backgroundImage.width),
-            Math.max(height, backgroundImage.height),
+            Math.max(width, imageWidth),
+            Math.max(height, imageHeight),
         );
     }
 
     public render() {
-        return <canvas ref={this.canvasRef} className="mx_BackdropPanel" />;
+        return <canvas
+            ref={this.canvasRef}
+            className="mx_BackdropPanel"
+        />;
     }
 }

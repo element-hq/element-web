@@ -124,7 +124,7 @@ interface IState {
     usageLimitEventTs?: number;
     useCompactLayout: boolean;
     activeCalls: Array<MatrixCall>;
-    backgroundImage?: ImageBitmap;
+    backgroundImage?: CanvasImageSource;
 }
 
 /**

@@ -181,7 +181,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
 });
 
 interface IProps {
-    backgroundImage?: ImageBitmap;
+    backgroundImage?: CanvasImageSource;
 }
 
 const SpacePanel = (props: IProps) => {
