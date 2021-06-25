@@ -129,7 +129,9 @@ const SpaceCreateMenu = ({ onFinished }) => {
                         events_default: 100,
                         ...Visibility.Public ? { invite: 0 } : {},
                     },
-                    room_alias_name: alias ? alias.substr(1, alias.indexOf(":") - 1) : undefined,
+                    room_alias_name: visibility === Visibility.Public && alias
+                        ? alias.substr(1, alias.indexOf(":") - 1)
+                        : undefined,
                     topic,
                 },
                 spinner: false,
