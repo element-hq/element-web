@@ -6,8 +6,8 @@ import PlainTextExporter from "./PlainTextExport";
 
 export enum exportFormats {
     HTML = "HTML",
-    JSON = "JSON",
     PLAIN_TEXT = "PLAIN_TEXT",
+    JSON = "JSON",
 }
 
 export enum exportTypes {
