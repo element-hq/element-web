@@ -190,19 +190,26 @@ export default class HTMLExporter extends Exporter {
         </html>`
     }
 
-    protected hasAvatar(event: MatrixEvent): boolean {
+    protected getAvatarURL(event: MatrixEvent): string {
         const member = event.sender;
-        return !!member.getMxcAvatarUrl();
+        return (
+            member.getMxcAvatarUrl() &&
+            mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
+                30,
+                30,
+                "crop",
+            )
+        );
     }
 
     protected async saveAvatarIfNeeded(event: MatrixEvent) {
         const member = event.sender;
-        const avatarUrl = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(30, 30, "crop");
         if (!this.avatars.has(member.userId)) {
+            const avatarUrl = this.getAvatarURL(event);
             this.avatars.set(member.userId, true);
             const image = await fetch(avatarUrl);
             const blob = await image.blob();
-            this.addFile(`users/${member.userId.replace(/:/g, '-')}`, blob);
+            this.addFile(`users/${member.userId.replace(/:/g, '-')}.png`, blob);
         }
     }
 
@@ -218,7 +225,7 @@ export default class HTMLExporter extends Exporter {
     }
 
     protected async getEventTile(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
-        const hasAvatar = this.hasAvatar(mxEv);
+        const hasAvatar = !!this.getAvatarURL(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
 
         const eventTile = <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
@@ -251,8 +258,8 @@ export default class HTMLExporter extends Exporter {
         if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/g, `$1"${filePath}"`);
         if (hasAvatar) {
             eventTileMarkup = eventTileMarkup.replace(
-                /src="avatarForExport"/g,
-                `src="users/${mxEv.sender.userId.replace(/:/g, "-")}"`,
+                encodeURI(this.getAvatarURL(mxEv)).replace(/&/g, '&amp;'),
+                `users/${mxEv.sender.userId.replace(/:/g, "-")}.png`,
             );
         }
         return eventTileMarkup;
