@@ -104,6 +104,7 @@ a:visited {
 input[type=text],
 input[type=search],
 input[type=password] {
+    font-family: inherit;
     padding: 9px;
     font-size: $font-14px;
     font-weight: 600;
