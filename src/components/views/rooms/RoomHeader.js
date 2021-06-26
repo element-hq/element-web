@@ -31,7 +31,6 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { PlaceCallType } from "../../../CallHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import exportConversationalHistory, { exportTypes, exportFormats } from '../../../utils/exportUtils/exportUtils';
 
 
 @replaceableComponent("views.rooms.RoomHeader")
@@ -79,20 +78,6 @@ export default class RoomHeader extends React.Component {
         /* eslint-disable babel/no-invalid-this */
         this.forceUpdate();
     }, 500);
-
-
-    _exportConversationalHistory = async () => {
-        await exportConversationalHistory(
-            this.props.room,
-            exportFormats.PLAIN_TEXT,
-            exportTypes.START_DATE,
-            {
-                startDate: parseInt(new Date("2021.05.20").getTime().toFixed(0)),
-                attachmentsIncluded: true,
-                maxSize: 7 * 1024 * 1024, // 7 MB
-            },
-        );
-    }
 
     render() {
         let searchStatus = null;
@@ -197,14 +182,8 @@ export default class RoomHeader extends React.Component {
                     title={_t("Video call")} />;
         }
 
-        const exportButton = <AccessibleTooltipButton
-            className="mx_RoomHeader_button mx_ImageView_button_download"
-            onClick={this._exportConversationalHistory}
-            title={_t("Export conversation")} />;
-
         const rightRow =
             <div className="mx_RoomHeader_buttons">
-                { exportButton }
                 { videoCallButton }
                 { voiceCallButton }
                 { forgetButton }

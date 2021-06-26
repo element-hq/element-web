@@ -47,6 +47,7 @@ import {useRoomMemberCount} from "../../../hooks/useRoomMembers";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
+import ExportDialog from "../dialogs/ExportDialog";
 
 interface IProps {
     room: Room;
@@ -233,6 +234,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         });
     };
 
+    const onRoomExportClick = () => {
+        Modal.createTrackedDialog('export room dialog', '', ExportDialog, {
+            room,
+        });
+    };
+
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useContext(RoomContext);
     const e2eStatus = roomContext.e2eStatus;
@@ -279,7 +286,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>
                 {_t("Room settings")}
             </Button>
-            <Button className="mx_RoomSummaryCard_icon_export" onClick = {() => {}}>
+            <Button className="mx_RoomSummaryCard_icon_export" onClick = {onRoomExportClick}>
                 {_t("Export chat")}
             </Button>
         </Group>
