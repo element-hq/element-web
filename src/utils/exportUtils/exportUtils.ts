@@ -4,26 +4,41 @@ import HTMLExporter from "./HtmlExport";
 import JSONExporter from "./JSONExport";
 import PlainTextExporter from "./PlainTextExport";
 
-_t("HTML");
-_t("JSON");
-_t("Plain Text");
-
 export enum exportFormats {
     HTML = "HTML",
     JSON = "JSON",
-    PLAIN_TEXT = "Plain Text",
+    PLAIN_TEXT = "PLAIN_TEXT",
 }
 
-_t("Current Timeline");
-_t("From the beginning")
-_t("From a specific date")
-_t("Last n messages");
-
 export enum exportTypes {
-    TIMELINE = "Current Timeline",
-    BEGINNING = "From the beginning",
-    START_DATE = "From a specific date",
-    LAST_N_MESSAGES = "Last n messages",
+    TIMELINE = "TIMELINE",
+    BEGINNING = "BEGINNING",
+    // START_DATE = "START_DATE",
+    LAST_N_MESSAGES = "LAST_N_MESSAGES",
+}
+
+export const textForFormat = (format: string) => {
+    switch (format) {
+        case exportFormats.HTML:
+            return _t("HTML");
+        case exportFormats.JSON:
+            return _t("JSON");
+        case exportFormats.PLAIN_TEXT:
+            return _t("Plain Text");
+    }
+}
+
+export const textForType = (type: string) => {
+    switch (type) {
+        case exportTypes.BEGINNING:
+            return _t("From the beginning");
+        case exportTypes.LAST_N_MESSAGES:
+            return _t("For a number of messages");
+        case exportTypes.TIMELINE:
+            return _t("Current Timeline");
+        // case exportTypes.START_DATE:
+        //     return _t("From a specific date");
+    }
 }
 
 export interface exportOptions {

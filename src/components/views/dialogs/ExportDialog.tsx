@@ -4,10 +4,14 @@ import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import Dropdown from "../elements/Dropdown";
+import Field from "../elements/Field";
+import StyledRadioGroup from "../elements/StyledRadioGroup";
+import StyledCheckbox from "../elements/StyledCheckbox";
 import exportConversationalHistory, {
     exportFormats,
     exportTypes,
+    textForFormat,
+    textForType,
 } from "../../../utils/exportUtils/exportUtils";
 
 interface IProps extends IDialogProps {
@@ -15,18 +19,21 @@ interface IProps extends IDialogProps {
 }
 
 const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
-    const [format, setFormat] = useState("HTML");
+    const [exportFormat, setExportFormat] = useState("HTML");
+    const [exportType, setExportType] = useState("TIMELINE");
+    const [includeAttachments, setAttachments] = useState(false);
+    const [numberOfMessages, setNumberOfMessages] = useState<number | null>();
+    const [sizeLimit, setSizeLimit] = useState<number | null>(8);
+
     const onExportClick = async () => {
         await exportConversationalHistory(
             room,
-            exportFormats.PLAIN_TEXT,
-            exportTypes.START_DATE,
+            exportFormats[exportFormat],
+            exportTypes[exportType],
             {
-                startDate: parseInt(
-                    new Date("2021.05.20").getTime().toFixed(0),
-                ),
-                attachmentsIncluded: true,
-                maxSize: 7 * 1024 * 1024, // 7 MB
+                numberOfMessages,
+                attachmentsIncluded: includeAttachments,
+                maxSize: sizeLimit * 1024 * 1024,
             },
         );
     };
@@ -35,15 +42,40 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         onFinished(false);
     };
 
-    const options = Object.keys(exportFormats).map(key => {
-        return <div key={key}>
-            { exportFormats[key] }
-        </div>
-    })
+    const exportFormatOptions = Object.keys(exportFormats).map((format) => ({
+        value: format,
+        label: textForFormat(format),
+    }));
+
+    const exportTypeOptions = Object.keys(exportTypes).map((type) => {
+        return (
+            <option key={type} value={type}>
+                {textForType(type)}
+            </option>
+        );
+    });
+
+    let MessageCount = null;
+    if (exportType === exportTypes.LAST_N_MESSAGES) {
+        MessageCount = (
+            <Field
+                element="input"
+                value={numberOfMessages}
+                label={_t("Number of messages")}
+                onChange={(e) => {
+                    setNumberOfMessages(parseInt(e.target.value));
+                }}
+                type="number"
+            />
+        );
+    }
+
+    const sizePostFix = (<span title={_t("MB")}>{_t("MB")}</span>);
 
     return (
         <BaseDialog
             title={_t("Export Chat")}
+            className="mx_ExportDialog"
             contentId="mx_Dialog_content"
             hasCancel={true}
             onFinished={onFinished}
@@ -55,13 +87,48 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 )}
             </p>
 
-            <Dropdown
-                onOptionChange={(key: string) => { setFormat(key) }}
-                value={format}
-                label={_t("Export formats")}
+            <span className="mx_ExportDialog_subheading">{_t("Format")}</span>
+
+            <StyledRadioGroup
+                name="feedbackRating"
+                value={exportFormat}
+                onChange={(key) => setExportFormat(key)}
+                definitions={exportFormatOptions}
+            />
+
+            <span className="mx_ExportDialog_subheading">{_t("Messages")}</span>
+
+            <Field
+                element="select"
+                value={exportType}
+                onChange={(e) => {
+                    setExportType(e.target.value);
+                }}
             >
-                { options }
-            </Dropdown>
+                {exportTypeOptions}
+            </Field>
+            { MessageCount }
+
+            <span className="mx_ExportDialog_subheading">
+                {_t("Size Limit")}
+            </span>
+
+            <Field
+                type="number"
+                autoComplete="off"
+                value={sizeLimit}
+                postfixComponent={sizePostFix}
+                onChange={(e) => setSizeLimit(e.target.value)}
+            />
+
+            <StyledCheckbox
+                checked={includeAttachments}
+                onChange={(e) =>
+                    setAttachments((e.target as HTMLInputElement).checked)
+                }
+            >
+                {_t("Include Attachments")}
+            </StyledCheckbox>
 
             <DialogButtons
                 primaryButton={_t("Export")}
