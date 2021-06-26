@@ -389,7 +389,7 @@ export default class MessageContextMenu extends React.Component {
         }
 
         const commonItemsList = (
-            <IconizedContextMenuOptionList key={'group1'}>
+            <IconizedContextMenuOptionList>
                 { quoteButton }
                 { forwardButton }
                 { pinButton }
@@ -405,7 +405,7 @@ export default class MessageContextMenu extends React.Component {
 
         if (redactButton) {
             redactItemList = (
-                <IconizedContextMenuOptionList key={'group2'} red>
+                <IconizedContextMenuOptionList red>
                     { redactButton }
                 </IconizedContextMenuOptionList>
             );
