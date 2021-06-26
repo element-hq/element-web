@@ -41,11 +41,11 @@ export default class PresenceLabel extends React.Component<IProps> {
     // XXX: This would be better handled using a culture-aware library, but we don't use one yet.
     private getDuration(time: number): string {
         if (!time) return;
-        const t = time / 1000;
+        const t = Math.round(time / 1000);
         const s = t % 60;
-        const m = t / 60 % 60;
-        const h = t / (60 * 60) % 24;
-        const d = t / (60 * 60 * 24);
+        const m = Math.round(t / 60) % 60;
+        const h = Math.round(t / (60 * 60)) % 24;
+        const d = Math.round(t / (60 * 60 * 24));
         if (t < 60) {
             if (t < 0) {
                 return _t("%(duration)ss", { duration: 0 });

@@ -28,7 +28,7 @@ export default class TextualEvent extends React.Component {
     };
 
     render() {
-        const text = TextForEvent.textForEvent(this.props.mxEvent);
+        const text = TextForEvent.textForEvent(this.props.mxEvent, true);
         if (text == null || text.length === 0) return null;
         return (
             <div className="mx_TextualEvent">{ text }</div>

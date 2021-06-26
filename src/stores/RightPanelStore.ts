@@ -161,6 +161,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
             case Action.SetRightPanelPhase: {
                 let targetPhase = payload.phase;
                 let refireParams = payload.refireParams;
+                const allowClose = payload.allowClose ?? true;
                 // redirect to EncryptionPanel if there is an ongoing verification request
                 if (targetPhase === RightPanelPhases.RoomMemberInfo && payload.refireParams) {
                     const {member} = payload.refireParams;
@@ -192,7 +193,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
                         });
                     }
                 } else {
-                    if (targetPhase === this.state.lastRoomPhase && !refireParams) {
+                    if (targetPhase === this.state.lastRoomPhase && !refireParams && allowClose) {
                         this.setState({
                             showRoomPanel: !this.state.showRoomPanel,
                             previousPhase: null,

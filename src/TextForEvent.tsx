@@ -13,13 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { MatrixClientPeg } from './MatrixClientPeg';
+
+import React from 'react';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import { isValid3pidInvite } from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
-import { ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES } from "./mjolnir/BanList";
-import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
+import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
+import {WIDGET_LAYOUT_EVENT_TYPE} from "./stores/widgets/WidgetLayoutStore";
+import { RightPanelPhases } from './stores/RightPanelStorePhases';
+import { Action } from './dispatcher/actions';
+import defaultDispatcher from './dispatcher/dispatcher';
+import { SetRightPanelPhasePayload } from './dispatcher/payloads/SetRightPanelPhasePayload';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 // These functions are frequently used just to check whether an event has
@@ -497,9 +503,33 @@ function textForPowerEvent(event): () => string | null {
     });
 }
 
-function textForPinnedEvent(event): () => string | null {
+const onPinnedMessagesClick = (): void => {
+    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+        action: Action.SetRightPanelPhase,
+        phase: RightPanelPhases.PinnedMessages,
+        allowClose: false,
+    });
+}
+
+function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
+    if (!SettingsStore.getValue("feature_pinning")) return null;
     const senderName = event.sender ? event.sender.name : event.getSender();
-    return () => _t("%(senderName)s changed the pinned messages for the room.", {senderName});
+
+    if (allowJSX) {
+        return () => (
+            <span>
+                {
+                    _t(
+                        "%(senderName)s changed the <a>pinned messages</a> for the room.",
+                        { senderName },
+                        { "a": (sub) => <a onClick={onPinnedMessagesClick}> { sub } </a> },
+                    )
+                }
+            </span>
+        );
+    }
+
+    return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
 }
 
 function textForWidgetEvent(event): () => string | null {
@@ -625,7 +655,7 @@ function textForMjolnirEvent(event): () => string | null {
 }
 
 interface IHandlers {
-    [type: string]: (ev: any) => (() => string | null);
+    [type: string]: (ev: MatrixEvent, allowJSX?: boolean) => (() => string | JSX.Element | null);
 }
 
 const handlers: IHandlers = {
@@ -668,7 +698,9 @@ export function hasText(ev): boolean {
     return Boolean(handler?.(ev));
 }
 
-export function textForEvent(ev: MatrixEvent): string {
+export function textForEvent(ev: MatrixEvent): string;
+export function textForEvent(ev: MatrixEvent, allowJSX: true): string | JSX.Element;
+export function textForEvent(ev: MatrixEvent, allowJSX = false): string | JSX.Element {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    return handler?.(ev)?.() || '';
+    return handler?.(ev, allowJSX)?.() || '';
 }
