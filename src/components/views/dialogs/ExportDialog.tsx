@@ -18,6 +18,8 @@ import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
 import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
 import { useStateCallback } from "../../../hooks/useStateCallback";
+import Modal from "../../../Modal";
+import QuestionDialog from "./QuestionDialog";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -27,13 +29,14 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [exportFormat, setExportFormat] = useState("HTML");
     const [exportType, setExportType] = useState("TIMELINE");
     const [includeAttachments, setAttachments] = useState(false);
+    const [isExporting, setExporting] = useState(false);
     const [numberOfMessages, setNumberOfMessages] = useState<number>(100);
     const [sizeLimit, setSizeLimit] = useState<number | null>(8);
     const [sizeLimitRef, messageCountRef] = [useRef<any>(), useRef<any>()];
     const [Exporter, setExporter] = useStateCallback(
         null,
         async (Exporter: HTMLExporter | PlainTextExporter | JSONExporter) => {
-            await Exporter?.export();
+            await Exporter?.export().then(() => setExporting(false));
         },
     );
 
@@ -93,6 +96,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 return;
             }
         }
+        setExporting(true);
         await startExport();
     };
 
@@ -160,8 +164,31 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     };
 
     const onCancel = async () => {
-        await Exporter?.cancelExport();
-        onFinished(false);
+        if (isExporting) {
+            const { finished } = Modal.createTrackedDialog(
+                "Warning",
+                "",
+                QuestionDialog,
+                {
+                    title: _t("Warning"),
+                    description: (
+                        <div>
+                            <p>
+                                {_t(`Are you sure you want to stop exporting your data? 
+                        If you do, you'll need to start over.`)}
+                            </p>
+                        </div>
+                    ),
+                    danger: true,
+                    button: _t("Yes"),
+                },
+            );
+            const [proceed] = await finished;
+            if (!proceed) return;
+            await Exporter?.cancelExport();
+            setExporting(false);
+            setExporter(null);
+        } else onFinished(false);
     };
 
     const exportFormatOptions = Object.keys(exportFormats).map((format) => ({
@@ -195,7 +222,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     const sizePostFix = <span title={_t("MB")}>{_t("MB")}</span>;
 
-    return (
+    const ExportSettings = (
         <BaseDialog
             title={_t("Export Chat")}
             className="mx_ExportDialog"
@@ -259,10 +286,29 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             <DialogButtons
                 primaryButton={_t("Export")}
                 onPrimaryButtonClick={onExportClick}
+                onCancel={() => onFinished(false)}
+            />
+        </BaseDialog>
+    );
+
+    const ExportProgress = (
+        <BaseDialog
+            title={_t("Exporting you data...")}
+            className="mx_ExportDialog"
+            contentId="mx_Dialog_content"
+            onFinished={onFinished}
+            fixedWidth={true}
+        >
+            <DialogButtons
+                primaryButton={_t("Cancel")}
+                primaryButtonClass="danger"
+                hasCancel={false}
                 onCancel={onCancel}
             />
         </BaseDialog>
     );
+
+    return isExporting ? ExportProgress : ExportSettings;
 };
 
 export default ExportDialog;
