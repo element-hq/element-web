@@ -679,7 +679,7 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s muutis oma kuvatava nime %(displayName)s-ks.",
     "%(senderName)s set their display name to %(displayName)s.": "%(senderName)s määras oma kuvatava nime %(displayName)s-ks.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s eemaldas oma kuvatava nime (%(oldDisplayName)s).",
-    "%(senderName)s removed their profile picture.": "%(senderName)s eemaldas om profiilipildi.",
+    "%(senderName)s removed their profile picture.": "%(senderName)s eemaldas oma profiilipildi.",
     "%(senderName)s changed their profile picture.": "%(senderName)s muutis oma profiilipilti.",
     "%(senderName)s set a profile picture.": "%(senderName)s määras oma profiilipildi.",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
