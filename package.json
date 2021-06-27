@@ -169,7 +169,7 @@
       "decoderWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "decoderWorker\\.min\\.wasm": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
       "waveWorker\\.min\\.js": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
-      "context-filter-polyfill": "<rootDir>/__mocks__/empty.js"
+      "context-filter-polyfill": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
