@@ -1107,7 +1107,7 @@
     "Security & Privacy": "Sicherheit",
     "Encryption": "Verschlüsselung",
     "Once enabled, encryption cannot be disabled.": "Sobald du die Verschlüsselung aktivierst, kann du sie nicht mehr deaktivieren.",
-    "Encrypted": "Verschlüsselt",
+    "Encrypted": "Verschlüsseln",
     "Ignored users": "Blockierte Benutzer",
     "Key backup": "Schlüsselsicherung",
     "Gets or sets the room topic": "Raumthema anzeigen oder ändern",
@@ -3219,7 +3219,7 @@
     "Warn before quitting": "Vor Beenden warnen",
     "Spell check dictionaries": "Wörterbücher für Rechtschreibprüfung",
     "Space options": "Matrix-Space-Optionen",
-    "Manage & explore rooms": "Räume entdecken und verwalten",
+    "Manage & explore rooms": "Räume erkunden und verwalten",
     "unknown person": "unbekannte Person",
     "Send and receive voice messages (in development)": "Sprachnachrichten senden und empfangen (in der Entwicklung)",
     "Check your devices": "Überprüfe deine Sitzungen",
@@ -3370,5 +3370,7 @@
     "End-to-end encryption isn't enabled": "Ende-zu-Ende-Verschlüsselung ist deaktiviert",
     "See when people join, leave, or are invited to your active room": "Anzeigen, wenn Leute den aktuellen Raum betreten, verlassen oder in ihn eingeladen werden",
     "Teammates might not be able to view or join any private rooms you make.": "Mitglieder werden private Räume möglicherweise weder sehen noch betreten können.",
-    "Error - Mixed content": "Fehler - Uneinheitlicher Inhalt"
+    "Error - Mixed content": "Fehler - Uneinheitlicher Inhalt",
+    "Kick, ban, or invite people to your active room, and make you leave": "Den aktiven Raum verlassen, Leute einladen, kicken oder bannen",
+    "Kick, ban, or invite people to this room, and make you leave": "Diesen Raum verlassen, Leute einladen, kicken oder bannen"
 }
