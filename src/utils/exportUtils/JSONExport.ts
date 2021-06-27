@@ -64,6 +64,7 @@ ${json}
     protected async createOutput(events: MatrixEvent[]) {
         let content = "";
         for (const event of events) {
+            if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
             content += await this.getJSONString(event);
         }
@@ -93,11 +94,14 @@ ${json}
 
         const exportEnd = performance.now();
 
-        console.info("Export successful!")
-        console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        if (this.cancelled) {
+            console.info("Export cancelled successfully");
+        } else {
+            console.info("Export successful!")
+            console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        }
 
-        window.removeEventListener("beforeunload", this.onBeforeUnload);
-        window.removeEventListener("onunload", this.abortExport);
+        this.cleanUp()
     }
 }
 

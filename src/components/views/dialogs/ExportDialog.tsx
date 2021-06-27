@@ -7,13 +7,17 @@ import DialogButtons from "../elements/DialogButtons";
 import Field from "../elements/Field";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import exportConversationalHistory, {
+import {
     exportFormats,
     exportTypes,
     textForFormat,
     textForType,
 } from "../../../utils/exportUtils/exportUtils";
 import { IFieldState, IValidationResult } from "../elements/Validation";
+import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
+import JSONExporter from "../../../utils/exportUtils/JSONExport";
+import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
+import { useStateCallback } from "../../../hooks/useStateCallback";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -26,6 +30,52 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [numberOfMessages, setNumberOfMessages] = useState<number>(100);
     const [sizeLimit, setSizeLimit] = useState<number | null>(8);
     const [sizeLimitRef, messageCountRef] = [useRef<any>(), useRef<any>()];
+    const [Exporter, setExporter] = useStateCallback(
+        null,
+        async (Exporter: HTMLExporter | PlainTextExporter | JSONExporter) => {
+            await Exporter?.export();
+        },
+    );
+
+    const startExport = async () => {
+        const exportOptions = {
+            numberOfMessages,
+            attachmentsIncluded: includeAttachments,
+            maxSize: sizeLimit * 1024 * 1024,
+        };
+        switch (exportFormat) {
+            case exportFormats.HTML:
+                setExporter(
+                    new HTMLExporter(
+                        room,
+                        exportTypes[exportType],
+                        exportOptions,
+                    ),
+                );
+                break;
+            case exportFormats.JSON:
+                setExporter(
+                    new JSONExporter(
+                        room,
+                        exportTypes[exportType],
+                        exportOptions,
+                    ),
+                );
+                break;
+            case exportFormats.PLAIN_TEXT:
+                setExporter(
+                    new PlainTextExporter(
+                        room,
+                        exportTypes[exportType],
+                        exportOptions,
+                    ),
+                );
+                break;
+            default:
+                console.error("Unknown export format");
+                return;
+        }
+    };
 
     const onExportClick = async () => {
         const isValidSize = await sizeLimitRef.current.validate({
@@ -43,16 +93,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 return;
             }
         }
-        await exportConversationalHistory(
-            room,
-            exportFormats[exportFormat],
-            exportTypes[exportType],
-            {
-                numberOfMessages,
-                attachmentsIncluded: includeAttachments,
-                maxSize: sizeLimit * 1024 * 1024,
-            },
-        );
+        await startExport();
     };
 
     const onValidateSize = async ({
@@ -118,7 +159,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         };
     };
 
-    const onCancel = () => {
+    const onCancel = async () => {
+        await Exporter?.cancelExport();
         onFinished(false);
     };
 

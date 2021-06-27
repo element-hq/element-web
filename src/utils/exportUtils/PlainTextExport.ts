@@ -81,6 +81,7 @@ export default class PlainTextExporter extends Exporter {
     protected async createOutput(events: MatrixEvent[]) {
         let content = "";
         for (const event of events) {
+            if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
             const textForEvent = await this._textForEvent(event);
             content += textForEvent && `${new Date(event.getTs()).toLocaleString()} - ${textForEvent}\n`;
@@ -101,6 +102,8 @@ export default class PlainTextExporter extends Exporter {
         console.info("Creating output...");
         const text = await this.createOutput(res);
 
+        if (this.cancelled) return this.cleanUp();
+
         if (this.files.length) {
             this.addFile("export.txt", new Blob([text]));
             await this.downloadZIP();
@@ -111,11 +114,14 @@ export default class PlainTextExporter extends Exporter {
 
         const exportEnd = performance.now();
 
-        console.info("Export successful!")
-        console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        if (this.cancelled) {
+            console.info("Export cancelled successfully");
+        } else {
+            console.info("Export successful!")
+            console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        }
 
-        window.removeEventListener("onunload", this.abortExport);
-        window.removeEventListener("beforeunload", this.onBeforeUnload);
+        this.cleanUp();
     }
 }
 

@@ -314,7 +314,7 @@ export default class HTMLExporter extends Exporter {
         let prevEvent = null;
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
-            console.log("Processing event " + i + " out of " + events.length);
+            if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
 
             content += this._wantsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
@@ -349,17 +349,18 @@ export default class HTMLExporter extends Exporter {
             this.addFile(`icons/${iconName}`, new Blob([exportIcons[iconName]]));
         }
 
-        console.info("HTML creation successful!");
-
         await this.downloadZIP();
 
         const exportEnd = performance.now();
 
-        console.info("Export successful!")
-        console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        if (this.cancelled) {
+            console.info("Export cancelled successfully");
+        } else {
+            console.info("Export successful!")
+            console.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+        }
 
-        window.removeEventListener("beforeunload", this.onBeforeUnload);
-        window.removeEventListener("onunload", this.abortExport);
+        this.cleanUp();
     }
 }
 

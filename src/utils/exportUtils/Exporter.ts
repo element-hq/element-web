@@ -21,16 +21,18 @@ export default abstract class Exporter {
     protected client: MatrixClient;
     protected writer: WritableStreamDefaultWriter<any>;
     protected fileStream: WritableStream<any>;
+    protected cancelled: boolean;
 
     protected constructor(
         protected room: Room,
         protected exportType: exportTypes,
         protected exportOptions?: exportOptions,
     ) {
+        this.cancelled = false;
         this.files = [];
         this.client = MatrixClientPeg.get();
         window.addEventListener("beforeunload", this.onBeforeUnload);
-        window.addEventListener("onunload", this.abortExport);
+        window.addEventListener("onunload", this.abortWriter);
     }
 
     protected onBeforeUnload(e: BeforeUnloadEvent) {
@@ -55,7 +57,8 @@ export default abstract class Exporter {
         // Create a writable stream to the directory
         this.fileStream = streamSaver.createWriteStream(filename);
 
-        console.info("Generating a ZIP...");
+        if (!this.cancelled) console.info("Generating a ZIP...");
+        else return this.cleanUp();
 
         this.writer = this.fileStream.getWriter();
         const files = this.files;
@@ -67,21 +70,37 @@ export default abstract class Exporter {
             },
         });
 
+        if (this.cancelled) return this.cleanUp();
+
         console.info("Writing to the file system...")
 
         const reader = readableZipStream.getReader()
         await this.pumpToFileStream(reader);
     }
 
+    protected cleanUp() {
+        console.log("Cleaning up...");
+        window.removeEventListener("beforeunload", this.onBeforeUnload);
+        window.removeEventListener("onunload", this.abortWriter);
+        return "";
+    }
+
+    public async cancelExport() {
+        console.log("Cancelling export...");
+        this.cancelled = true;
+        await this.abortWriter();
+    }
+
     protected async downloadPlainText(fileName: string, text: string): Promise<any> {
         this.fileStream = streamSaver.createWriteStream(fileName);
         this.writer = this.fileStream.getWriter()
         const data = new TextEncoder().encode(text);
+        if (this.cancelled) return this.cleanUp();
         await this.writer.write(data);
         await this.writer.close();
     }
 
-    protected async abortExport(): Promise<void> {
+    protected async abortWriter(): Promise<void> {
         await this.fileStream?.abort();
         await this.writer?.abort();
     }
@@ -133,6 +152,11 @@ export default abstract class Exporter {
         while (limit) {
             const eventsPerCrawl = Math.min(limit, 1000);
             const res: any = await this.client.createMessagesRequest(this.room.roomId, prevToken, eventsPerCrawl, "b");
+
+            if (this.cancelled) {
+                this.cleanUp();
+                return [];
+            }
 
             if (res.chunk.length === 0) break;
 
