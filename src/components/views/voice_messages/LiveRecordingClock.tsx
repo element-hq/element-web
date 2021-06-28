@@ -34,10 +34,16 @@ interface IState {
 @replaceableComponent("views.voice_messages.LiveRecordingClock")
 export default class LiveRecordingClock extends React.PureComponent<IProps, IState> {
     private seconds = 0;
-    private rafId: number;
+    private scheduledUpdate = new MarkedExecution(
+        () => this.updateClock(),
+        () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
+    )
 
-    state = {
-        seconds: 0,
+    constructor(props) {
+        super(props);
+        this.state = {
+            seconds: 0,
+        }
     }
 
     componentDidMount() {
@@ -47,24 +53,10 @@ export default class LiveRecordingClock extends React.PureComponent<IProps, ISta
         });
     }
 
-    private scheduledUpdate = new MarkedExecution(
-        () => this.updateClock(),
-        () => this.onLiveDataUpdate(),
-    )
-
-    private onLiveDataUpdate() {
-        if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-        }
-
-        this.rafId = requestAnimationFrame(() => this.scheduledUpdate.trigger())
-    }
-
     private updateClock() {
         this.setState({
             seconds: this.seconds,
         })
-        this.rafId = null;
     }
 
     public render() {

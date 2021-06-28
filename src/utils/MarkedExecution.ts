@@ -34,13 +34,6 @@ export class MarkedExecution {
     }
 
     /**
-     * Getter for the _marked property
-     */
-    public get marked() {
-        return this._marked;
-    }
-
-    /**
      * Resets the mark without calling the function.
      */
     public reset() {

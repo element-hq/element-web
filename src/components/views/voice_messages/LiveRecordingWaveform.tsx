@@ -38,10 +38,16 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
     };
 
     private waveform: number[] = [];
-    private rafId: number;
+    private scheduledUpdate = new MarkedExecution(
+        () => this.updateWaveform(),
+        () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
+    )
 
-    state = {
-        waveform: [],
+    constructor(props) {
+        super(props);
+        this.state = {
+            waveform: [],
+        }
     }
 
     componentDidMount() {
@@ -51,24 +57,10 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         });
     }
 
-    private scheduledUpdate = new MarkedExecution(
-        () => this.updateWaveform(),
-        () => this.onLiveDataUpdate(),
-    )
-
-    private onLiveDataUpdate() {
-        if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-        }
-
-        this.rafId = requestAnimationFrame(() => this.scheduledUpdate.trigger())
-    }
-
     private updateWaveform() {
         this.setState({
             waveform: this.waveform,
         })
-        this.rafId = null;
     }
 
     public render() {
