@@ -34,12 +34,10 @@ import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
-import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import { haveTileForEvent } from "../views/rooms/EventTile";
 import { UIFeature } from "../../settings/UIFeature";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
-import { Action } from "../../dispatcher/actions";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -72,6 +70,8 @@ class TimelinePanel extends React.Component {
         manageReadReceipts: PropTypes.bool,
         sendReadReceiptOnLoad: PropTypes.bool,
         manageReadMarkers: PropTypes.bool,
+        // with this enabled it'll listen and react to Action.ComposerInsert and `edit_event`
+        manageComposerDispatches: PropTypes.bool,
 
         // true to give the component a 'display: none' style.
         hidden: PropTypes.bool,
@@ -443,38 +443,6 @@ class TimelinePanel extends React.Component {
         switch (payload.action) {
             case "ignore_state_changed":
                 this.forceUpdate();
-                break;
-
-            case "edit_event": {
-                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                this.setState({editState}, () => {
-                    if (payload.event && this._messagePanel.current) {
-                        this._messagePanel.current.scrollToEventIfNeeded(
-                            payload.event.getId(),
-                        );
-                    }
-                });
-                break;
-            }
-
-            case Action.ComposerInsert: {
-                // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
-                break;
-            }
-
-            case "scroll_to_bottom":
-                this.jumpToLiveTimeline();
                 break;
         }
     };
@@ -865,6 +833,12 @@ class TimelinePanel extends React.Component {
             }
         }
     };
+
+    scrollToEventIfNeeded = (eventId) => {
+        if (this._messagePanel.current) {
+            this._messagePanel.current.scrollToEventIfNeeded(eventId);
+        }
+    }
 
     /* scroll to show the read-up-to marker. We put it 1/3 of the way down
      * the container.
@@ -1473,7 +1447,7 @@ class TimelinePanel extends React.Component {
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
-                editState={this.state.editState}
+                editState={this.props.editState}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
