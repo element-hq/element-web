@@ -843,6 +843,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                 }
                 break;
             }
+
+            case "scroll_to_bottom":
+                this.messagePanel?.jumpToLiveTimeline();
+                break;
         }
     };
 

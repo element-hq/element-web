@@ -446,10 +446,6 @@ class TimelinePanel extends React.Component {
             case "ignore_state_changed":
                 this.forceUpdate();
                 break;
-
-            case "scroll_to_bottom":
-                this.jumpToLiveTimeline();
-                break;
         }
     };
 
