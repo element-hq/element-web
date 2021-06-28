@@ -43,12 +43,6 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
         case EventType.RoomCanonicalAlias:
         case EventType.RoomServerAcl:
             return false;
-
-        case EventType.RoomMessage:
-            if (ev.getContent().msgtype === MsgType.Notice) {
-                return false;
-            }
-            break;
     }
 
     if (ev.isRedacted()) return false;
