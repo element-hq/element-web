@@ -42,10 +42,14 @@ export default class HTMLExporter extends Exporter {
         const avatarUrl = Avatar.avatarUrlForRoom(this.room, 32, 32, "crop");
         const avatarPath = "room.png";
         if (avatarUrl) {
-            const image = await fetch(avatarUrl);
-            blob = await image.blob();
-            this.totalSize += blob.size;
-            this.addFile(avatarPath, blob);
+            try {
+                const image = await fetch(avatarUrl);
+                blob = await image.blob();
+                this.totalSize += blob.size;
+                this.addFile(avatarPath, blob);
+            } catch (err) {
+                console.log("Failed to fetch room's avatar" + err);
+            }
         }
         const avatar = (
             <BaseAvatar
@@ -205,11 +209,15 @@ export default class HTMLExporter extends Exporter {
     protected async saveAvatarIfNeeded(event: MatrixEvent) {
         const member = event.sender;
         if (!this.avatars.has(member.userId)) {
-            const avatarUrl = this.getAvatarURL(event);
-            this.avatars.set(member.userId, true);
-            const image = await fetch(avatarUrl);
-            const blob = await image.blob();
-            this.addFile(`users/${member.userId.replace(/:/g, '-')}.png`, blob);
+            try {
+                const avatarUrl = this.getAvatarURL(event);
+                this.avatars.set(member.userId, true);
+                const image = await fetch(avatarUrl);
+                const blob = await image.blob();
+                this.addFile(`users/${member.userId.replace(/:/g, '-')}.png`, blob);
+            } catch (err) {
+                console.log("Failed to fetch user's avatar" + err);
+            }
         }
     }
 
