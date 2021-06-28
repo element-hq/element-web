@@ -65,12 +65,13 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         await this.state.recorder.stop();
-        const mxc = await this.state.recorder.upload();
+        const upload = await this.state.recorder.upload(this.props.room.roomId);
         MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
             "body": "Voice message",
             //"msgtype": "org.matrix.msc2516.voice",
             "msgtype": MsgType.Audio,
-            "url": mxc,
+            "url": upload.mxc,
+            "file": upload.encrypted,
             "info": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
                 mimetype: this.state.recorder.contentType,
@@ -81,7 +82,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             // https://github.com/matrix-org/matrix-doc/pull/3245
             "org.matrix.msc1767.text": "Voice message",
             "org.matrix.msc1767.file": {
-                url: mxc,
+                url: upload.mxc,
+                file: upload.encrypted,
                 name: "Voice message.ogg",
                 mimetype: this.state.recorder.contentType,
                 size: this.state.recorder.contentLength,
