@@ -447,38 +447,6 @@ class TimelinePanel extends React.Component {
                 this.forceUpdate();
                 break;
 
-            case "edit_event": {
-                if (this.props.manageComposerDispatches) {
-                    const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                    this.setState({editState}, () => {
-                        if (payload.event && this._messagePanel.current) {
-                            this._messagePanel.current.scrollToEventIfNeeded(
-                                payload.event.getId(),
-                            );
-                        }
-                    });
-                }
-                break;
-            }
-
-            case Action.ComposerInsert: {
-                if (this.props.manageComposerDispatches) {
-                    // re-dispatch to the correct composer
-                    if (this.state.editState) {
-                        dis.dispatch({
-                            ...payload,
-                            action: "edit_composer_insert",
-                        });
-                    } else {
-                        dis.dispatch({
-                            ...payload,
-                            action: "send_composer_insert",
-                        });
-                    }
-                }
-                break;
-            }
-
             case "scroll_to_bottom":
                 this.jumpToLiveTimeline();
                 break;
@@ -871,6 +839,12 @@ class TimelinePanel extends React.Component {
             }
         }
     };
+
+    scrollToEventIfNeeded = (eventId) => {
+        if (this._messagePanel.current) {
+            this._messagePanel.current.scrollToEventIfNeeded(eventId);
+        }
+    }
 
     /* scroll to show the read-up-to marker. We put it 1/3 of the way down
      * the container.
@@ -1479,7 +1453,7 @@ class TimelinePanel extends React.Component {
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
-                editState={this.state.editState}
+                editState={this.props.editState}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}
