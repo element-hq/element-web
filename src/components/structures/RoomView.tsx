@@ -37,7 +37,6 @@ import Modal from '../../Modal';
 import * as sdk from '../../index';
 import CallHandler, { PlaceCallType } from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
-import Tinter from '../../Tinter';
 import rateLimitedFunc from '../../ratelimitedfunc';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
@@ -677,10 +676,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         // cancel any pending calls to the rate_limited_funcs
         this.updateRoomMembers.cancelPendingCall();
 
-        // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
-        // console.log("Tinter.tint from RoomView.unmount");
-        // Tinter.tint(); // reset colourscheme
-
         for (const watcher of this.settingWatchers) {
             SettingsStore.unwatchSetting(watcher);
         }
@@ -1030,10 +1025,6 @@ export default class RoomView extends React.Component<IProps, IState> {
     private updateTint() {
         const room = this.state.room;
         if (!room) return;
-
-        console.log("Tinter.tint from updateTint");
-        const colorScheme = SettingsStore.getValue("roomColor", room.roomId);
-        Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
     }
 
     private onAccountData = (event: MatrixEvent) => {
@@ -1047,12 +1038,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     private onRoomAccountData = (event: MatrixEvent, room: Room) => {
         if (room.roomId == this.state.roomId) {
             const type = event.getType();
-            if (type === "org.matrix.room.color_scheme") {
-                const colorScheme = event.getContent();
-                // XXX: we should validate the event
-                console.log("Tinter.tint from onRoomAccountData");
-                Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
-            } else if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
+            if (type === "org.matrix.room.preview_urls" || type === "im.vector.web.settings") {
                 // non-e2ee url previews are stored in legacy event type `org.matrix.room.preview_urls`
                 this.updatePreviewUrlVisibility(room);
             }
