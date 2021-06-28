@@ -102,8 +102,6 @@ export default class PlainTextExporter extends Exporter {
         console.info("Creating output...");
         const text = await this.createOutput(res);
 
-        if (this.cancelled) return this.cleanUp();
-
         if (this.files.length) {
             this.addFile("export.txt", new Blob([text]));
             await this.downloadZIP();
