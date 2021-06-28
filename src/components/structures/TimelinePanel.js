@@ -34,12 +34,10 @@ import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
-import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import { haveTileForEvent } from "../views/rooms/EventTile";
 import { UIFeature } from "../../settings/UIFeature";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
-import { Action } from "../../dispatcher/actions";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
