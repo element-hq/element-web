@@ -575,9 +575,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
     onKeyDown(ev: KeyboardEvent): boolean {
         let handled = false;
 
-        switch (ev.code) {
-            case "BracketLeft":
-            case "BracketRight":
+        switch (ev.key) {
+            case Key.SQUARE_BRACKET_LEFT:
+            case Key.SQUARE_BRACKET_RIGHT:
                 if (isMac && ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey) {
                     this.navigateForwardBack(ev.key === Key.SQUARE_BRACKET_LEFT);
                     handled = true;
@@ -591,23 +591,17 @@ export default class ElectronPlatform extends VectorBasePlatform {
                     handled = true;
                 }
                 break;
+        }
 
-            case "Digit1":
-            case "Digit2":
-            case "Digit3":
-            case "Digit4":
-            case "Digit5":
-            case "Digit6":
-            case "Digit7":
-            case "Digit8":
-            case "Digit9":
-            case "Digit0":
-                if (SettingsStore.getValue("feature_spaces") && isOnlyCtrlOrCmdKeyEvent(ev)) {
-                    const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"
-                    this.navigateToSpace(parseInt(spaceNumber, 10));
-                    handled = true;
-                }
-                break;
+        if (
+            !handled &&
+            SettingsStore.getValue("feature_spaces") &&
+            ev.code.startsWith("Digit") &&
+            isOnlyCtrlOrCmdKeyEvent(ev)
+        ) {
+            const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"
+            this.navigateToSpace(parseInt(spaceNumber, 10));
+            handled = true;
         }
 
         return handled;
