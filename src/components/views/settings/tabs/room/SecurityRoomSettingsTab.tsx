@@ -33,6 +33,9 @@ export enum JoinRule {
     Public = "public",
     Knock = "knock",
     Invite = "invite",
+    /**
+     * @deprecated Reserved. Should not be used.
+     */
     Private = "private",
 }
 
