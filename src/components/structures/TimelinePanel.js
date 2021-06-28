@@ -72,6 +72,8 @@ class TimelinePanel extends React.Component {
         manageReadReceipts: PropTypes.bool,
         sendReadReceiptOnLoad: PropTypes.bool,
         manageReadMarkers: PropTypes.bool,
+        // with this enabled it'll listen and react to Action.ComposerInsert and `edit_event`
+        manageComposerDispatches: PropTypes.bool,
 
         // true to give the component a 'display: none' style.
         hidden: PropTypes.bool,
@@ -446,29 +448,33 @@ class TimelinePanel extends React.Component {
                 break;
 
             case "edit_event": {
-                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                this.setState({editState}, () => {
-                    if (payload.event && this._messagePanel.current) {
-                        this._messagePanel.current.scrollToEventIfNeeded(
-                            payload.event.getId(),
-                        );
-                    }
-                });
+                if (this.props.manageComposerDispatches) {
+                    const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+                    this.setState({editState}, () => {
+                        if (payload.event && this._messagePanel.current) {
+                            this._messagePanel.current.scrollToEventIfNeeded(
+                                payload.event.getId(),
+                            );
+                        }
+                    });
+                }
                 break;
             }
 
             case Action.ComposerInsert: {
-                // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
+                if (this.props.manageComposerDispatches) {
+                    // re-dispatch to the correct composer
+                    if (this.state.editState) {
+                        dis.dispatch({
+                            ...payload,
+                            action: "edit_composer_insert",
+                        });
+                    } else {
+                        dis.dispatch({
+                            ...payload,
+                            action: "send_composer_insert",
+                        });
+                    }
                 }
                 break;
             }
