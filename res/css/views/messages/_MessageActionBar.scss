@@ -20,11 +20,12 @@ limitations under the License.
     visibility: hidden;
     cursor: pointer;
     display: flex;
-    height: 24px;
+    height: 32px;
     line-height: $font-24px;
-    border-radius: 4px;
-    background: $message-action-bar-bg-color;
-    top: -26px;
+    border-radius: 8px;
+    background: $primary-bg-color;
+    border: 1px solid $input-border-color;
+    top: -32px;
     right: 8px;
     user-select: none;
     // Ensure the action bar appears above over things, like the read marker.
@@ -51,31 +52,19 @@ limitations under the License.
         white-space: nowrap;
         display: inline-block;
         position: relative;
-        border: 1px solid $message-action-bar-border-color;
-        margin-left: -1px;
+        margin: 2px;
 
         &:hover {
-            border-color: $message-action-bar-hover-border-color;
+            background: $roomlist-button-bg-color;
+            border-radius: 6px;
             z-index: 1;
-        }
-
-        &:first-child {
-            border-radius: 3px 0 0 3px;
-        }
-
-        &:last-child {
-            border-radius: 0 3px 3px 0;
-        }
-
-        &:only-child {
-            border-radius: 3px;
         }
     }
 }
 
-
 .mx_MessageActionBar_maskButton {
-    width: 27px;
+    width: 28px;
+    height: 28px;
 }
 
 .mx_MessageActionBar_maskButton::after {
@@ -85,9 +74,14 @@ limitations under the License.
     left: 0;
     height: 100%;
     width: 100%;
+    mask-size: 18px;
     mask-repeat: no-repeat;
     mask-position: center;
-    background-color: $message-action-bar-fg-color;
+    background-color: $secondary-fg-color;
+}
+
+.mx_MessageActionBar_maskButton:hover::after {
+    background-color: $primary-fg-color;
 }
 
 .mx_MessageActionBar_reactButton::after {

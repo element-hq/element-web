@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
-import {formatDate} from '../../../DateUtils';
+import { formatDate } from '../../../DateUtils';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import dis from '../../../dispatcher/dispatcher';
@@ -29,13 +29,16 @@ import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
-import {pillifyLinks, unmountPills} from '../../../utils/pillify';
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
-import {toRightOf} from "../../structures/ContextMenu";
-import {copyPlaintext} from "../../../utils/strings";
+import { pillifyLinks, unmountPills } from '../../../utils/pillify';
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { isPermalinkHost } from "../../../utils/permalinks/Permalinks";
+import { toRightOf } from "../../structures/ContextMenu";
+import { copyPlaintext } from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import UIStore from "../../../stores/UIStore";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { Action } from "../../../dispatcher/actions";
 
 @replaceableComponent("views.messages.TextualBody")
 export default class TextualBody extends React.Component {
@@ -143,7 +146,7 @@ export default class TextualBody extends React.Component {
     _addCodeExpansionButton(div, pre) {
         // Calculate how many percent does the pre element take up.
         // If it's less than 30% we don't add the expansion button.
-        const percentageOfViewport = pre.offsetHeight / window.innerHeight * 100;
+        const percentageOfViewport = pre.offsetHeight / UIStore.instance.windowHeight * 100;
         if (percentageOfViewport < 30) return;
 
         const button = document.createElement("span");
@@ -277,15 +280,15 @@ export default class TextualBody extends React.Component {
             // pass only the first child which is the event tile otherwise this recurses on edited events
             let links = this.findLinks([this._content.current]);
             if (links.length) {
-                // de-dup the links (but preserve ordering)
-                const seen = new Set();
-                links = links.filter((link) => {
-                    if (seen.has(link)) return false;
-                    seen.add(link);
-                    return true;
-                });
+                // de-duplicate the links after stripping hashes as they don't affect the preview
+                // using a set here maintains the order
+                links = Array.from(new Set(links.map(link => {
+                    const url = new URL(link);
+                    url.hash = "";
+                    return url.toString();
+                })));
 
-                this.setState({ links: links });
+                this.setState({ links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {
@@ -389,9 +392,9 @@ export default class TextualBody extends React.Component {
 
     onEmoteSenderClick = event => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch({
-            action: 'insert_mention',
-            user_id: mxEvent.getSender(),
+        dis.dispatch<ComposerInsertPayload>({
+            action: Action.ComposerInsert,
+            userId: mxEvent.getSender(),
         });
     };
 

@@ -15,22 +15,29 @@ limitations under the License.
 */
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import React, {ReactNode} from "react";
-import {RecordingState, VoiceRecording} from "../../../voice/VoiceRecording";
+import {
+    IRecordingUpdate,
+    RECORDING_PLAYBACK_SAMPLES,
+    RecordingState,
+    VoiceRecording,
+} from "../../../voice/VoiceRecording";
 import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
 import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { arrayFastResample, arraySeed } from "../../../utils/arrays";
+import { percentageOf } from "../../../utils/numbers";
 import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
-import {VoiceRecordingStore} from "../../../stores/VoiceRecordingStore";
+import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
 import RecordingPlayback from "../voice_messages/RecordingPlayback";
-import {MsgType} from "matrix-js-sdk/src/@types/event";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import CallMediaHandler from "../../../CallMediaHandler";
+import MediaDeviceHandler from "../../../MediaDeviceHandler";
 
 interface IProps {
     room: Room;
@@ -39,6 +46,8 @@ interface IProps {
 interface IState {
     recorder?: VoiceRecording;
     recordingPhase?: RecordingState;
+    relHeights: number[];
+    seconds: number;
 }
 
 /**
@@ -46,16 +55,56 @@ interface IState {
  */
 @replaceableComponent("views.rooms.VoiceRecordComposerTile")
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
+    private waveform: number[] = [];
+    private seconds = 0;
+    private scheduledAnimationFrame = false;
+
     public constructor(props) {
         super(props);
 
         this.state = {
             recorder: null, // no recording started by default
+            seconds: 0,
+            relHeights: arraySeed(0, RECORDING_PLAYBACK_SAMPLES),
         };
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        if (!prevState.recorder && this.state.recorder) {
+            this.state.recorder.liveData.onUpdate(this.onRecordingUpdate);
+        }
     }
 
     public async componentWillUnmount() {
         await VoiceRecordingStore.instance.disposeRecording();
+    }
+
+    private onRecordingUpdate = (update: IRecordingUpdate): void => {
+        this.waveform = update.waveform;
+        this.seconds = update.timeSeconds;
+
+        if (this.scheduledAnimationFrame) {
+            return;
+        }
+
+        this.scheduledAnimationFrame = true;
+        // The audio recorder flushes data faster than the screen refresh rate
+        // Using requestAnimationFrame makes sure that we only flush the data
+        // to react once per tick to avoid unneeded work.
+        requestAnimationFrame(() => {
+            // The waveform and the downsample target are pretty close, so we should be fine to
+            // do this, despite the docs on arrayFastResample.
+            const bars = arrayFastResample(Array.from(this.waveform), RECORDING_PLAYBACK_SAMPLES);
+            this.setState({
+                // The incoming data is between zero and one, but typically even screaming into a
+                // microphone won't send you over 0.6, so we artificially adjust the gain for the
+                // waveform. This results in a slightly more cinematic/animated waveform for the
+                // user.
+                relHeights: bars.map(b => percentageOf(b, 0, 0.50)),
+                seconds: this.seconds,
+            });
+            this.scheduledAnimationFrame = false;
+        });
     }
 
     // called by composer
@@ -65,22 +114,25 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
 
         await this.state.recorder.stop();
-        const mxc = await this.state.recorder.upload();
+        const upload = await this.state.recorder.upload(this.props.room.roomId);
         MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
             "body": "Voice message",
             //"msgtype": "org.matrix.msc2516.voice",
             "msgtype": MsgType.Audio,
-            "url": mxc,
+            "url": upload.mxc,
+            "file": upload.encrypted,
             "info": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
                 mimetype: this.state.recorder.contentType,
                 size: this.state.recorder.contentLength,
             },
 
-            // MSC1767 experiment
+            // MSC1767 + Ideals of MSC2516 as MSC3245
+            // https://github.com/matrix-org/matrix-doc/pull/3245
             "org.matrix.msc1767.text": "Voice message",
             "org.matrix.msc1767.file": {
-                url: mxc,
+                url: upload.mxc,
+                file: upload.encrypted,
                 name: "Voice message.ogg",
                 mimetype: this.state.recorder.contentType,
                 size: this.state.recorder.contentLength,
@@ -88,14 +140,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             "org.matrix.msc1767.audio": {
                 duration: Math.round(this.state.recorder.durationSeconds * 1000),
 
-                // Events can't have floats, so we try to maintain resolution by using 1024
-                // as a maximum value. The waveform contains values between zero and 1, so this
-                // should come out largely sane.
-                //
-                // We're expecting about one data point per second of audio.
+                // https://github.com/matrix-org/matrix-doc/pull/3246
                 waveform: this.state.recorder.getPlayback().waveform.map(v => Math.round(v * 1024)),
             },
-            "org.matrix.msc2516.voice": {}, // No content, this is a rendering hint
+            "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
         });
         await this.disposeRecording();
     }
@@ -132,8 +180,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         // Do a sanity test to ensure we're about to grab a valid microphone reference. Things might
         // change between this and recording, but at least we will have tried.
         try {
-            const devices = await CallMediaHandler.getDevices();
-            if (!devices?.['audioinput']?.length) {
+            const devices = await MediaDeviceHandler.getDevices();
+            if (!devices?.['audioInput']?.length) {
                 Modal.createTrackedDialog('No Microphone Error', '', ErrorDialog, {
                     title: _t("No microphone found"),
                     description: <>

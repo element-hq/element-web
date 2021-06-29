@@ -93,6 +93,10 @@ $SpaceRoomViewInnerWidth: 428px;
             }
         }
 
+        &:not(.mx_SpaceRoomView_landing) .mx_SpaceFeedbackPrompt {
+            width: $SpaceRoomViewInnerWidth;
+        }
+
         .mx_SpaceRoomView_buttons {
             display: block;
             margin-top: 44px;
@@ -102,6 +106,10 @@ $SpaceRoomViewInnerWidth: 428px;
             .mx_AccessibleButton_hasKind {
                 padding: 8px 22px;
                 margin-left: 16px;
+            }
+
+            input.mx_AccessibleButton {
+                border: none; // override default styles
             }
         }
 
@@ -133,6 +141,44 @@ $SpaceRoomViewInnerWidth: 428px;
         box-sizing: border-box;
         box-shadow: 2px 15px 30px $dialog-shadow-color;
         border-radius: 8px;
+        position: relative;
+
+        // XXX remove this when spaces leaves Beta
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            right: 24px;
+            top: 32px;
+        }
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_preview_spaceBetaPrompt {
+            font-weight: $font-semi-bold;
+            font-size: $font-14px;
+            line-height: $font-24px;
+            color: $primary-fg-color;
+            margin-top: 24px;
+            position: relative;
+            padding-left: 24px;
+
+            .mx_AccessibleButton_kind_link {
+                display: inline;
+                padding: 0;
+                font-size: inherit;
+                line-height: inherit;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: $font-24px;
+                width: 20px;
+                left: 0;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+                background-color: $secondary-fg-color;
+            }
+        }
 
         .mx_SpaceRoomView_preview_inviter {
             display: flex;
@@ -282,6 +328,8 @@ $SpaceRoomViewInnerWidth: 428px;
             font-size: $font-15px;
             margin-top: 12px;
             margin-bottom: 16px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         > hr {
@@ -293,10 +341,19 @@ $SpaceRoomViewInnerWidth: 428px;
         .mx_SearchBox {
             margin: 0 0 20px;
         }
+
+        .mx_SpaceFeedbackPrompt {
+            margin-bottom: 16px;
+
+            // hide the HR as we have our own
+            & + hr {
+                display: none;
+            }
+        }
     }
 
     .mx_SpaceRoomView_privateScope {
-        .mx_AccessibleButton {
+        > .mx_AccessibleButton {
             @mixin SpacePillButton;
         }
 
@@ -309,7 +366,63 @@ $SpaceRoomViewInnerWidth: 428px;
         }
     }
 
+    .mx_SpaceRoomView_betaWarning {
+        padding: 12px 12px 12px 54px;
+        position: relative;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        width: 432px;
+        border-radius: 8px;
+        background-color: $info-plinth-bg-color;
+        color: $secondary-fg-color;
+        box-sizing: border-box;
+
+        > h3 {
+            font-weight: $font-semi-bold;
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0;
+        }
+
+        > p {
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0;
+        }
+
+        &::before {
+            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            content: '';
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background-color: $secondary-fg-color;
+        }
+    }
+
     .mx_SpaceRoomView_inviteTeammates {
+        // XXX remove this when spaces leaves Beta
+        .mx_SpaceRoomView_inviteTeammates_betaDisclaimer {
+            padding: 58px 16px 16px;
+            position: relative;
+            border-radius: 8px;
+            background-color: $header-panel-bg-color;
+            max-width: $SpaceRoomViewInnerWidth;
+            margin: 20px 0 30px;
+            box-sizing: border-box;
+
+            .mx_BetaCard_betaPill {
+                position: absolute;
+                left: 16px;
+                top: 16px;
+            }
+        }
+
         .mx_SpaceRoomView_inviteTeammates_buttons {
             color: $secondary-fg-color;
             margin-top: 28px;
@@ -388,6 +501,69 @@ $SpaceRoomViewInnerWidth: 428px;
             content: "·"; // visual separator
             position: absolute;
             left: 6px;
+        }
+    }
+}
+
+.mx_SpaceFeedbackPrompt {
+    margin-top: 18px;
+    margin-bottom: 12px;
+
+    > hr {
+        border: none;
+        border-top: 1px solid $input-border-color;
+        margin-bottom: 12px;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        font-size: $font-15px;
+        line-height: $font-24px;
+
+        > span {
+            color: $secondary-fg-color;
+            position: relative;
+            padding-left: 32px;
+            font-size: inherit;
+            line-height: inherit;
+            margin-right: auto;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 2px;
+                height: 20px;
+                width: 20px;
+                background-color: $secondary-fg-color;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+                mask-position: center;
+            }
+        }
+
+        .mx_AccessibleButton_kind_link {
+            color: $accent-color;
+            position: relative;
+            padding: 0 0 0 24px;
+            margin-left: 8px;
+            font-size: inherit;
+            line-height: inherit;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                height: 16px;
+                width: 16px;
+                background-color: $accent-color;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/chat-bubbles.svg');
+                mask-position: center;
+            }
         }
     }
 }

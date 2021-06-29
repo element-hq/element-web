@@ -385,7 +385,7 @@ export class ModalManager {
                 </div>
             );
 
-            ReactDOM.render(dialog, ModalManager.getOrCreateContainer());
+            setImmediate(() => ReactDOM.render(dialog, ModalManager.getOrCreateContainer()));
         } else {
             // This is safe to call repeatedly if we happen to do that
             ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());

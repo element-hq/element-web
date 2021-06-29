@@ -20,9 +20,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import { UserAddressType } from '../../../UserAddress.js';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { UserAddressType } from '../../../UserAddress';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 
 @replaceableComponent("views.elements.AddressTile")
 export default class AddressTile extends React.Component {

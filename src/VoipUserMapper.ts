@@ -24,7 +24,9 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 // is sip virtual: there could be others in the future.
 
 export default class VoipUserMapper {
-    private virtualRoomIdCache = new Set<string>();
+    // We store mappings of virtual -> native room IDs here until the local echo for the
+    // account data arrives.
+    private virtualToNativeRoomIdCache = new Map<string, string>();
 
     public static sharedInstance(): VoipUserMapper {
         if (window.mxVoipUserMapper === undefined) window.mxVoipUserMapper = new VoipUserMapper();
@@ -33,7 +35,7 @@ export default class VoipUserMapper {
 
     private async userToVirtualUser(userId: string): Promise<string> {
         const results = await CallHandler.sharedInstance().sipVirtualLookup(userId);
-        if (results.length === 0) return null;
+        if (results.length === 0 || !results[0].fields.lookup_success) return null;
         return results[0].userid;
     }
 
@@ -49,10 +51,20 @@ export default class VoipUserMapper {
             native_room: roomId,
         });
 
+        this.virtualToNativeRoomIdCache.set(virtualRoomId, roomId);
+
         return virtualRoomId;
     }
 
     public nativeRoomForVirtualRoom(roomId: string): string {
+        const cachedNativeRoomId = this.virtualToNativeRoomIdCache.get(roomId);
+        if (cachedNativeRoomId) {
+            console.log(
+                "Returning native room ID " + cachedNativeRoomId + " for virtual room ID " + roomId + " from cache",
+            );
+            return cachedNativeRoomId;
+        }
+
         const virtualRoom = MatrixClientPeg.get().getRoom(roomId);
         if (!virtualRoom) return null;
         const virtualRoomEvent = virtualRoom.getAccountData(VIRTUAL_ROOM_EVENT_TYPE);
@@ -67,7 +79,7 @@ export default class VoipUserMapper {
     public isVirtualRoom(room: Room): boolean {
         if (this.nativeRoomForVirtualRoom(room.roomId)) return true;
 
-        if (this.virtualRoomIdCache.has(room.roomId)) return true;
+        if (this.virtualToNativeRoomIdCache.has(room.roomId)) return true;
 
         // also look in the create event for the claimed native room ID, which is the only
         // way we can recognise a virtual room we've created when it first arrives down
@@ -82,14 +94,14 @@ export default class VoipUserMapper {
         return Boolean(claimedNativeRoomId);
     }
 
-    public async onNewInvitedRoom(invitedRoom: Room) {
+    public async onNewInvitedRoom(invitedRoom: Room): Promise<void> {
         if (!CallHandler.sharedInstance().getSupportsVirtualRooms()) return;
 
         const inviterId = invitedRoom.getDMInviter();
         console.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
         const result = await CallHandler.sharedInstance().sipNativeLookup(inviterId);
         if (result.length === 0) {
-            return true;
+            return;
         }
 
         if (result[0].fields.is_virtual) {
@@ -110,7 +122,7 @@ export default class VoipUserMapper {
 
             // also put this room in the virtual room ID cache so isVirtualRoom return the right answer
             // in however long it takes for the echo of setAccountData to come down the sync
-            this.virtualRoomIdCache.add(invitedRoom.roomId);
+            this.virtualToNativeRoomIdCache.set(invitedRoom.roomId, nativeRoom.roomId);
         }
     }
 }

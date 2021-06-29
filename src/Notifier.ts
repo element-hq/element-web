@@ -68,7 +68,7 @@ export const Notifier = {
     // or not
     pendingEncryptedEventIds: [],
 
-    notificationMessageForEvent: function(ev: MatrixEvent) {
+    notificationMessageForEvent: function(ev: MatrixEvent): string {
         if (typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
             return typehandlers[ev.getContent().msgtype](ev);
         }
@@ -330,6 +330,8 @@ export const Notifier = {
     onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
+
+        MatrixClientPeg.get().decryptEventIfNeeded(ev);
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.

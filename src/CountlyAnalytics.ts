@@ -22,13 +22,7 @@ import SdkConfig from './SdkConfig';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import {sleep} from "./utils/promise";
 import RoomViewStore from "./stores/RoomViewStore";
-
-// polyfill textencoder if necessary
-import * as TextEncodingUtf8 from 'text-encoding-utf-8';
-let TextEncoder = window.TextEncoder;
-if (!TextEncoder) {
-    TextEncoder = TextEncodingUtf8.TextEncoder;
-}
+import { Action } from "./dispatcher/actions";
 
 const INACTIVITY_TIME = 20; // seconds
 const HEARTBEAT_INTERVAL = 5_000; // ms
@@ -265,7 +259,7 @@ interface ICreateRoomEvent extends IEvent {
 }
 
 interface IJoinRoomEvent extends IEvent {
-    key: "join_room";
+    key: Action.JoinRoom;
     dur: number; // how long it took to join (until remote echo)
     segmentation: {
         room_id: string; // hashed
@@ -684,7 +678,9 @@ export default class CountlyAnalytics {
     }
 
     private getOrientation = (): Orientation => {
-        return window.innerWidth > window.innerHeight ? Orientation.Landscape : Orientation.Portrait;
+        return window.matchMedia("(orientation: landscape)").matches
+            ? Orientation.Landscape
+            : Orientation.Portrait
     };
 
     private reportOrientation = () => {
@@ -813,7 +809,9 @@ export default class CountlyAnalytics {
         window.addEventListener("mousemove", this.onUserActivity);
         window.addEventListener("click", this.onUserActivity);
         window.addEventListener("keydown", this.onUserActivity);
-        window.addEventListener("scroll", this.onUserActivity);
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        window.addEventListener("scroll", this.onUserActivity, { passive: true });
 
         this.activityIntervalId = setInterval(() => {
             this.inactivityCounter++;
@@ -858,7 +856,7 @@ export default class CountlyAnalytics {
     }
 
     public trackRoomJoin(startTime: number, roomId: string, type: IJoinRoomEvent["segmentation"]["type"]) {
-        this.track<IJoinRoomEvent>("join_room", { type }, roomId, {
+        this.track<IJoinRoomEvent>(Action.JoinRoom, { type }, roomId, {
             dur: CountlyAnalytics.getTimestamp() - startTime,
         });
     }

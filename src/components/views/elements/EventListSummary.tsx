@@ -63,9 +63,9 @@ const EventListSummary: React.FC<IProps> = ({
     // If we are only given few events then just pass them through
     if (events.length < threshold) {
         return (
-            <div className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+            <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
                 { children }
-            </div>
+            </li>
         );
     }
 

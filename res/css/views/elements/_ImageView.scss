@@ -22,6 +22,7 @@ limitations under the License.
 }
 
 .mx_ImageView_image_wrapper {
+    pointer-events: initial;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,7 +31,6 @@ limitations under the License.
 }
 
 .mx_ImageView_image {
-    pointer-events: all;
     flex-shrink: 0;
 }
 
@@ -43,7 +43,7 @@ limitations under the License.
 }
 
 .mx_ImageView_info_wrapper {
-    pointer-events: all;
+    pointer-events: initial;
     padding-left: 32px;
     display: flex;
     flex-direction: row;
@@ -63,7 +63,7 @@ limitations under the License.
 
 .mx_ImageView_toolbar {
     padding-right: 16px;
-    pointer-events: all;
+    pointer-events: initial;
     display: flex;
     align-items: center;
 }

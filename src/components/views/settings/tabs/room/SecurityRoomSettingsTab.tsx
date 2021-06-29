@@ -29,19 +29,22 @@ import {UIFeature} from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 // Knock and private are reserved keywords which are not yet implemented.
-enum JoinRule {
+export enum JoinRule {
     Public = "public",
     Knock = "knock",
     Invite = "invite",
+    /**
+     * @deprecated Reserved. Should not be used.
+     */
     Private = "private",
 }
 
-enum GuestAccess {
+export enum GuestAccess {
     CanJoin = "can_join",
     Forbidden = "forbidden",
 }
 
-enum HistoryVisibility {
+export enum HistoryVisibility {
     Invited = "invited",
     Joined = "joined",
     Shared = "shared",
@@ -121,7 +124,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (refreshWhenTypes.includes(e.getType())) this.forceUpdate();
     };
 
-    private onEncryptionChange = (e: React.ChangeEvent) => {
+    private onEncryptionChange = () => {
         Modal.createTrackedDialog('Enable encryption', '', QuestionDialog, {
             title: _t('Enable encryption?'),
             description: _t(

@@ -48,7 +48,7 @@ import createRoom, {IOpts} from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
-import { startAnyRegistrationFlow } from "../../Registration.js";
+import { startAnyRegistrationFlow } from "../../Registration";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
@@ -85,6 +85,9 @@ import RoomListStore from "../../stores/room-list/RoomListStore";
 import {RoomUpdateCause} from "../../stores/room-list/models";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import SecurityCustomisations from "../../customisations/Security";
+
+import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
+import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -223,13 +226,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     firstSyncPromise: IDeferred<void>;
 
     private screenAfterLogin?: IScreen;
-    private windowWidth: number;
     private pageChanging: boolean;
     private tokenLogin?: boolean;
     private accountPassword?: string;
     private accountPasswordTimer?: NodeJS.Timeout;
     private focusComposer: boolean;
     private subTitleStatus: string;
+    private prevWindowWidth: number;
 
     private readonly loggedInView: React.RefObject<LoggedInViewType>;
     private readonly dispatcherRef: any;
@@ -275,9 +278,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         }
 
-        this.windowWidth = 10000;
-        this.handleResize();
-        window.addEventListener('resize', this.handleResize);
+        this.prevWindowWidth = UIStore.instance.windowWidth || 1000;
+        UIStore.instance.on(UI_EVENTS.Resize, this.handleResize);
 
         this.pageChanging = false;
 
@@ -376,7 +378,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.onLoggedIn();
         }
 
-        const promisesList = [this.firstSyncPromise.promise];
+        const promisesList: Promise<any>[] = [this.firstSyncPromise.promise];
         if (cryptoEnabled) {
             // wait for the client to finish downloading cross-signing keys for us so we
             // know whether or not we have keys set up on this account
@@ -434,7 +436,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         dis.unregister(this.dispatcherRef);
         this.themeWatcher.stop();
         this.fontWatcher.stop();
-        window.removeEventListener('resize', this.handleResize);
+        UIStore.destroy();
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
 
         if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);
@@ -484,42 +486,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     startPageChangeTimer() {
-        // Tor doesn't support performance
-        if (!performance || !performance.mark) return null;
-
-        // This shouldn't happen because UNSAFE_componentWillUpdate and componentDidUpdate
-        // are used.
-        if (this.pageChanging) {
-            console.warn('MatrixChat.startPageChangeTimer: timer already started');
-            return;
-        }
-        this.pageChanging = true;
-        performance.mark('element_MatrixChat_page_change_start');
+        PerformanceMonitor.instance.start(PerformanceEntryNames.PAGE_CHANGE);
     }
 
     stopPageChangeTimer() {
-        // Tor doesn't support performance
-        if (!performance || !performance.mark) return null;
+        const perfMonitor = PerformanceMonitor.instance;
 
-        if (!this.pageChanging) {
-            console.warn('MatrixChat.stopPageChangeTimer: timer not started');
-            return;
-        }
-        this.pageChanging = false;
-        performance.mark('element_MatrixChat_page_change_stop');
-        performance.measure(
-            'element_MatrixChat_page_change_delta',
-            'element_MatrixChat_page_change_start',
-            'element_MatrixChat_page_change_stop',
-        );
-        performance.clearMarks('element_MatrixChat_page_change_start');
-        performance.clearMarks('element_MatrixChat_page_change_stop');
-        const measurement = performance.getEntriesByName('element_MatrixChat_page_change_delta').pop();
+        perfMonitor.stop(PerformanceEntryNames.PAGE_CHANGE);
 
-        // In practice, sometimes the entries list is empty, so we get no measurement
-        if (!measurement) return null;
+        const entries = perfMonitor.getEntries({
+            name: PerformanceEntryNames.PAGE_CHANGE,
+        });
+        const measurement = entries.pop();
 
-        return measurement.duration;
+        return measurement
+            ? measurement.duration
+            : null;
     }
 
     shouldTrackPageChange(prevState: IState, state: IState) {
@@ -683,7 +665,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case 'view_create_room':
-                this.createRoom(payload.public);
+                this.createRoom(payload.public, payload.defaultName);
                 break;
             case 'view_create_group': {
                 let CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog")
@@ -740,6 +722,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.showScreenAfterLogin();
                 break;
             case 'toggle_my_groups':
+                // persist that the user has interacted with this, use it to dismiss the beta dot
+                localStorage.setItem("mx_seenSpacesBeta", "1");
                 // We just dispatch the page change rather than have to worry about
                 // what the logic is for each of these branches.
                 if (this.state.page_type === PageTypes.MyGroups) {
@@ -906,6 +890,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
+                // Not all timeline events are decrypted ahead of time anymore
+                // Only the critical ones for a typical UI are
+                // This will start the decryption process for all events when a
+                // user views a room
+                room.decryptAllEvents();
                 const theAlias = Rooms.getDisplayAliasForRoom(room);
                 if (theAlias) {
                     presentedId = theAlias;
@@ -1022,7 +1011,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private async createRoom(defaultPublic = false) {
+    private async createRoom(defaultPublic = false, defaultName?: string) {
         const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
         if (communityId) {
             // double check the user will have permission to associate this room with the community
@@ -1036,7 +1025,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
-        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, { defaultPublic });
+        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
+            defaultPublic,
+            defaultName,
+        });
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
@@ -1469,7 +1461,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         const dft = new DecryptionFailureTracker((total, errorCode) => {
-            Analytics.trackEvent('E2E', 'Decryption failure', errorCode, total);
+            Analytics.trackEvent('E2E', 'Decryption failure', errorCode, String(total));
             CountlyAnalytics.instance.track("decryption_failure", { errorCode }, null, { sum: total });
         }, (errorCode) => {
             // Map JS-SDK error codes to tracker codes for aggregation
@@ -1625,11 +1617,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'start_registration',
                 params: params,
             });
+            PerformanceMonitor.instance.start(PerformanceEntryNames.REGISTER);
         } else if (screen === 'login') {
             dis.dispatch({
                 action: 'start_login',
                 params: params,
             });
+            PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
         } else if (screen === 'forgot_password') {
             dis.dispatch({
                 action: 'start_password_recovery',
@@ -1684,6 +1678,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const type = screen === "start_sso" ? "sso" : "cas";
             PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen === 'groups') {
+            if (SettingsStore.getValue("feature_spaces")) {
+                dis.dispatch({ action: "view_home_page" });
+                return;
+            }
             dis.dispatch({
                 action: 'view_my_groups',
             });
@@ -1767,6 +1765,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 subAction: params.action,
             });
         } else if (screen.indexOf('group/') === 0) {
+            if (SettingsStore.getValue("feature_spaces")) {
+                dis.dispatch({ action: "view_home_page" });
+                return;
+            }
+
             const groupId = screen.substring(6);
 
             // TODO: Check valid group ID
@@ -1817,18 +1820,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     handleResize = () => {
-        const hideLhsThreshold = 1000;
-        const showLhsThreshold = 1000;
+        const LHS_THRESHOLD = 1000;
+        const width = UIStore.instance.windowWidth;
 
-        if (this.windowWidth > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
-            dis.dispatch({ action: 'hide_left_panel' });
-        }
-        if (this.windowWidth <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
+        if (this.prevWindowWidth < LHS_THRESHOLD && width >= LHS_THRESHOLD) {
             dis.dispatch({ action: 'show_left_panel' });
         }
 
+        if (this.prevWindowWidth >= LHS_THRESHOLD && width < LHS_THRESHOLD) {
+            dis.dispatch({ action: 'hide_left_panel' });
+        }
+
+        this.prevWindowWidth = width;
         this.state.resizeNotifier.notifyWindowResized();
-        this.windowWidth = window.innerWidth;
     };
 
     private dispatchTimelineResize() {
@@ -1949,6 +1953,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
+
+        PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
+        PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };
 
     // complete security / e2e setup has finished
@@ -2085,6 +2092,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
+                    defaultUsername={this.props.startingFragmentQueryParams.defaultUsername}
                     {...this.getServerProperties()}
                 />
             );

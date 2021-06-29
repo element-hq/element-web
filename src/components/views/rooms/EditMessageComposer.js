@@ -16,25 +16,26 @@ limitations under the License.
 */
 import React from 'react';
 import * as sdk from '../../../index';
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
-import {getCaretOffsetAndText} from '../../../editor/dom';
-import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
-import {findEditableEvent} from '../../../utils/EventUtils';
-import {parseEvent} from '../../../editor/deserialize';
-import {CommandPartCreator} from '../../../editor/parts';
+import { getCaretOffsetAndText } from '../../../editor/dom';
+import { htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand } from '../../../editor/serialize';
+import { findEditableEvent } from '../../../utils/EventUtils';
+import { parseEvent } from '../../../editor/deserialize';
+import { CommandPartCreator } from '../../../editor/parts';
 import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
-import {EventStatus} from 'matrix-js-sdk/src/models/event';
+import { EventStatus } from 'matrix-js-sdk/src/models/event';
 import BasicMessageComposer from "./BasicMessageComposer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {CommandCategories, getCommand} from '../../../SlashCommands';
-import {Action} from "../../../dispatcher/actions";
+import { CommandCategories, getCommand } from '../../../SlashCommands';
+import { Action } from "../../../dispatcher/actions";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import {getKeyBindingsManager, MessageComposerAction} from '../../../KeyBindingsManager';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import SendHistoryManager from '../../../SendHistoryManager';
 import Modal from '../../../Modal';
 
 function _isReply(mxEvent) {
@@ -122,6 +123,8 @@ export default class EditMessageComposer extends React.Component {
             saveDisabled: true,
         };
         this._createEditorModel();
+        window.addEventListener("beforeunload", this._saveStoredEditorState);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     _setEditorRef = ref => {
@@ -166,6 +169,7 @@ export default class EditMessageComposer extends React.Component {
                 if (nextEvent) {
                     dis.dispatch({action: 'edit_event', event: nextEvent});
                 } else {
+                    this._clearStoredEditorState();
                     dis.dispatch({action: 'edit_event', event: null});
                     dis.fire(Action.FocusComposer);
                 }
@@ -175,9 +179,53 @@ export default class EditMessageComposer extends React.Component {
         }
     }
 
+    get _editorRoomKey() {
+        return `mx_edit_room_${this._getRoom().roomId}`;
+    }
+
+    get _editorStateKey() {
+        return `mx_edit_state_${this.props.editState.getEvent().getId()}`;
+    }
+
     _cancelEdit = () => {
+        this._clearStoredEditorState();
         dis.dispatch({action: "edit_event", event: null});
         dis.fire(Action.FocusComposer);
+    }
+
+    get _shouldSaveStoredEditorState() {
+        return localStorage.getItem(this._editorRoomKey) !== null;
+    }
+
+    _restoreStoredEditorState(partCreator) {
+        const json = localStorage.getItem(this._editorStateKey);
+        if (json) {
+            try {
+                const {parts: serializedParts} = JSON.parse(json);
+                const parts = serializedParts.map(p => partCreator.deserializePart(p));
+                return parts;
+            } catch (e) {
+                console.error("Error parsing editing state: ", e);
+            }
+        }
+    }
+
+    _clearStoredEditorState() {
+        localStorage.removeItem(this._editorRoomKey);
+        localStorage.removeItem(this._editorStateKey);
+    }
+
+    _clearPreviousEdit() {
+        if (localStorage.getItem(this._editorRoomKey)) {
+            localStorage.removeItem(`mx_edit_state_${localStorage.getItem(this._editorRoomKey)}`);
+        }
+    }
+
+    _saveStoredEditorState() {
+        const item = SendHistoryManager.createItem(this.model);
+        this._clearPreviousEdit();
+        localStorage.setItem(this._editorRoomKey, this.props.editState.getEvent().getId());
+        localStorage.setItem(this._editorStateKey, JSON.stringify(item));
     }
 
     _isSlashCommand() {
@@ -266,6 +314,7 @@ export default class EditMessageComposer extends React.Component {
         const editedEvent = this.props.editState.getEvent();
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
+
         let shouldSend = true;
 
         // If content is modified then send an updated event into the room
@@ -311,6 +360,7 @@ export default class EditMessageComposer extends React.Component {
             if (shouldSend) {
                 this._cancelPreviousPendingEdit();
                 const prom = this.context.sendMessage(roomId, editContent);
+                this._clearStoredEditorState();
                 dis.dispatch({action: "message_sent"});
                 CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, true, false, editContent);
             }
@@ -346,6 +396,11 @@ export default class EditMessageComposer extends React.Component {
         // then when mounting the editor again with the same editor state,
         // it will set the cursor at the end.
         this.props.editState.setEditorState(caret, parts);
+        window.removeEventListener("beforeunload", this._saveStoredEditorState);
+        if (this._shouldSaveStoredEditorState) {
+            this._saveStoredEditorState();
+        }
+        dis.unregister(this.dispatcherRef);
     }
 
     _createEditorModel() {
@@ -358,10 +413,11 @@ export default class EditMessageComposer extends React.Component {
             // restore serialized parts from the state
             parts = editState.getSerializedParts().map(p => partCreator.deserializePart(p));
         } else {
-            // otherwise, parse the body of the event
-            parts = parseEvent(editState.getEvent(), partCreator);
+            //otherwise, either restore serialized parts from localStorage or parse the body of the event
+            parts = this._restoreStoredEditorState(partCreator) || parseEvent(editState.getEvent(), partCreator);
         }
         this.model = new EditorModel(parts, partCreator);
+        this._saveStoredEditorState();
     }
 
     _getInitialCaretPosition() {
@@ -387,6 +443,18 @@ export default class EditMessageComposer extends React.Component {
         this.setState({
             saveDisabled: false,
         });
+    };
+
+    onAction = payload => {
+        if (payload.action === "edit_composer_insert" && this._editorRef) {
+            if (payload.userId) {
+                this._editorRef.insertMention(payload.userId);
+            } else if (payload.event) {
+                this._editorRef.insertQuotedMessage(payload.event);
+            } else if (payload.text) {
+                this._editorRef.insertPlaintext(payload.text);
+            }
+        }
     };
 
     render() {

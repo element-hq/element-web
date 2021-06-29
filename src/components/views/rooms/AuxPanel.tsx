@@ -15,19 +15,20 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import { Room } from 'matrix-js-sdk/src/models/room'
-import dis from "../../../dispatcher/dispatcher";
-import AppsDrawer from './AppsDrawer';
 import classNames from 'classnames';
+import { lexicographicCompare } from 'matrix-js-sdk/src/utils';
+import { Room } from 'matrix-js-sdk/src/models/room'
+
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import AppsDrawer from './AppsDrawer';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {UIFeature} from "../../../settings/UIFeature";
-import { ResizeNotifier } from "../../../utils/ResizeNotifier";
+import { UIFeature } from "../../../settings/UIFeature";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
-import {objectHasDiff} from "../../../utils/objects";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { objectHasDiff } from "../../../utils/objects";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // js-sdk room object
@@ -69,19 +70,21 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            counters: this._computeCounters(),
+            counters: this.computeCounters(),
         };
     }
 
     componentDidMount() {
         const cli = MatrixClientPeg.get();
-        cli.on("RoomState.events", this._rateLimitedUpdate);
+        if (SettingsStore.getValue("feature_state_counters")) {
+            cli.on("RoomState.events", this.rateLimitedUpdate);
+        }
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
-        if (cli) {
-            cli.removeListener("RoomState.events", this._rateLimitedUpdate);
+        if (cli && SettingsStore.getValue("feature_state_counters")) {
+            cli.removeListener("RoomState.events", this.rateLimitedUpdate);
         }
     }
 
@@ -96,30 +99,16 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    onConferenceNotificationClick = (ev, type) => {
-        dis.dispatch({
-            action: 'place_call',
-            type: type,
-            room_id: this.props.room.roomId,
-        });
-        ev.stopPropagation();
-        ev.preventDefault();
-    };
-
-    _rateLimitedUpdate = new RateLimitedFunc(() => {
-        if (SettingsStore.getValue("feature_state_counters")) {
-            this.setState({counters: this._computeCounters()});
-        }
+    private rateLimitedUpdate = new RateLimitedFunc(() => {
+        this.setState({ counters: this.computeCounters() });
     }, 500);
 
-    _computeCounters() {
+    private computeCounters() {
         const counters = [];
 
         if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
             const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
-            stateEvs.sort((a, b) => {
-                return a.getStateKey() < b.getStateKey();
-            });
+            stateEvs.sort((a, b) => lexicographicCompare(a.getStateKey(), b.getStateKey()));
 
             for (const ev of stateEvs) {
                 const title = ev.getContent().title;
@@ -225,7 +214,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
 
         return (
-            <AutoHideScrollbar className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style}>
                 { stateViews }
                 { appsDrawer }
                 { callView }

@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 import * as React from 'react';
+import { User } from "matrix-js-sdk/src/models/user";
 
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import {MatrixClientPeg} from './MatrixClientPeg';
@@ -150,6 +150,10 @@ function success(promise?: Promise<any>) {
     return {promise};
 }
 
+function successSync(value: any) {
+    return success(Promise.resolve(value));
+}
+
 /* Disable the "unexpected this" error for these commands - all of the run
  * functions are called with `this` bound to the Command instance.
  */
@@ -160,7 +164,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends the given message as a spoiler'),
         runFn: function(roomId, message) {
-            return success(ContentHelpers.makeHtmlMessage(
+            return successSync(ContentHelpers.makeHtmlMessage(
                 message,
                 `<span data-mx-spoiler>${message}</span>`,
             ));
@@ -176,7 +180,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -189,7 +193,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -202,7 +206,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -215,7 +219,7 @@ export const Commands = [
             if (args) {
                 message = message + ' ' + args;
             }
-            return success(ContentHelpers.makeTextMessage(message));
+            return successSync(ContentHelpers.makeTextMessage(message));
         },
         category: CommandCategories.messages,
     }),
@@ -224,7 +228,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(ContentHelpers.makeTextMessage(messages));
+            return successSync(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
     }),
@@ -233,7 +237,7 @@ export const Commands = [
         args: '<message>',
         description: _td('Sends a message as html, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
-            return success(ContentHelpers.makeHtmlMessage(messages, messages));
+            return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
     }),
@@ -978,7 +982,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -988,7 +992,7 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             if (!args) return reject(this.getUserId());
-            return success(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
+            return successSync(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
     }),
@@ -1015,9 +1019,8 @@ export const Commands = [
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
             dis.dispatch<ViewUserPayload>({
                 action: Action.ViewUser,
-                // XXX: We should be using a real member object and not assuming what the
-                // receiver wants.
-                member: member || {userId},
+                // XXX: We should be using a real member object and not assuming what the receiver wants.
+                member: member || { userId } as User,
             });
             return success();
         },

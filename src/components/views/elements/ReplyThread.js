@@ -46,6 +46,8 @@ export default class ReplyThread extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
         // Specifies which layout to use.
         layout: LayoutPropType,
+        // Whether to always show a timestamp
+        alwaysShowTimestamps: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -212,9 +214,9 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, layout, alwaysShowTimestamps) {
         if (!ReplyThread.getParentEventId(parentEv)) {
-            return <div className="mx_ReplyThread_wrapper_empty" />;
+            return null;
         }
         return <ReplyThread
             parentEv={parentEv}
@@ -222,6 +224,7 @@ export default class ReplyThread extends React.Component {
             ref={ref}
             permalinkCreator={permalinkCreator}
             layout={layout}
+            alwaysShowTimestamps={alwaysShowTimestamps}
         />;
     }
 
@@ -269,40 +272,32 @@ export default class ReplyThread extends React.Component {
         const {parentEv} = this.props;
         // at time of making this component we checked that props.parentEv has a parentEventId
         const ev = await this.getEvent(ReplyThread.getParentEventId(parentEv));
+
         if (this.unmounted) return;
 
         if (ev) {
+            const loadedEv = await this.getNextEvent(ev);
             this.setState({
                 events: [ev],
-            }, this.loadNextEvent);
+                loadedEv,
+                loading: false,
+            });
         } else {
             this.setState({err: true});
         }
     }
 
-    async loadNextEvent() {
-        if (this.unmounted) return;
-        const ev = this.state.events[0];
-        const inReplyToEventId = ReplyThread.getParentEventId(ev);
-
-        if (!inReplyToEventId) {
-            this.setState({
-                loading: false,
-            });
-            return;
-        }
-
-        const loadedEv = await this.getEvent(inReplyToEventId);
-        if (this.unmounted) return;
-
-        if (loadedEv) {
-            this.setState({loadedEv});
-        } else {
-            this.setState({err: true});
+    async getNextEvent(ev) {
+        try {
+            const inReplyToEventId = ReplyThread.getParentEventId(ev);
+            return await this.getEvent(inReplyToEventId);
+        } catch (e) {
+            return null;
         }
     }
 
     async getEvent(eventId) {
+        if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
 
@@ -326,13 +321,18 @@ export default class ReplyThread extends React.Component {
         this.initialize();
     }
 
-    onQuoteClick() {
+    async onQuoteClick() {
         const events = [this.state.loadedEv, ...this.state.events];
 
+        let loadedEv = null;
+        if (events.length > 0) {
+            loadedEv = await this.getNextEvent(events[0]);
+        }
+
         this.setState({
-            loadedEv: null,
+            loadedEv,
             events,
-        }, this.loadNextEvent);
+        });
 
         dis.fire(Action.FocusComposer);
     }
@@ -390,8 +390,10 @@ export default class ReplyThread extends React.Component {
                     isRedacted={ev.isRedacted()}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     layout={this.props.layout}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps}
                     enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                     replacingEventId={ev.replacingEventId()}
+                    as="div"
                 />
             </blockquote>;
         });

@@ -42,6 +42,9 @@ import {SpaceStoreClass} from "../stores/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
 import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
+import PerformanceMonitor from "../performance";
+import UIStore from "../stores/UIStore";
+import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 
 declare global {
     interface Window {
@@ -51,6 +54,9 @@ declare global {
         Olm: {
             init: () => Promise<void>;
         };
+
+        // Needed for Safari, unknown to TypeScript
+        webkitAudioContext: typeof AudioContext;
 
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
@@ -76,6 +82,10 @@ declare global {
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
+        mxPerformanceMonitor: PerformanceMonitor;
+        mxPerformanceEntryNames: any;
+        mxUIStore: UIStore;
+        mxSetupEncryptionStore?: SetupEncryptionStore;
     }
 
     interface Document {
@@ -101,19 +111,6 @@ declare global {
 
     interface StorageEstimate {
         usageDetails?: {[key: string]: number};
-    }
-
-    export interface ISettledFulfilled<T> {
-        status: "fulfilled";
-        value: T;
-    }
-    export interface ISettledRejected {
-        status: "rejected";
-        reason: any;
-    }
-
-    interface PromiseConstructor {
-        allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>>;
     }
 
     interface HTMLAudioElement {

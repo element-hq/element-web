@@ -17,7 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
-import { removeHiddenChars } from "matrix-js-sdk/src/utils";
+import { normalize } from "matrix-js-sdk/src/utils";
 import { throttle } from "lodash";
 
 /**
@@ -62,20 +62,10 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
         if (!room.name) return false; // should realistically not happen: the js-sdk always calculates a name
 
-        return this.matches(room.name);
+        return this.matches(room.normalizedName);
     }
 
-    private normalize(val: string): string {
-        // Note: we have to match the filter with the removeHiddenChars() room name because the
-        // function strips spaces and other characters (M becomes RN for example, in lowercase).
-        return removeHiddenChars(val.toLowerCase())
-            // Strip all punctuation
-            .replace(/[\\'!"#$%&()*+,\-./:;<=>?@[\]^_`{|}~\u2000-\u206f\u2e00-\u2e7f]/g, "")
-            // We also doubly convert to lowercase to work around oddities of the library.
-            .toLowerCase();
-    }
-
-    public matches(val: string): boolean {
-        return this.normalize(val).includes(this.normalize(this.search));
+    public matches(normalizedName: string): boolean {
+        return normalizedName.includes(normalize(this.search));
     }
 }

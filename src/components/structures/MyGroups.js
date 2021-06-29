@@ -25,6 +25,7 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import {replaceableComponent} from "../../utils/replaceableComponent";
+import BetaCard from "../views/beta/BetaCard";
 
 @replaceableComponent("structures.MyGroups")
 export default class MyGroups extends React.Component {
@@ -81,8 +82,7 @@ export default class MyGroups extends React.Component {
                         </p>
                         <p>
                             { _t(
-                                "To set up a filter, drag a community avatar over to the filter panel on " +
-                                "the far left hand side of the screen. You can click on an avatar in the " +
+                                "You can click on an avatar in the " +
                                 "filter panel at any time to see only the rooms and people associated " +
                                 "with that community.",
                             ) }
@@ -139,6 +139,7 @@ export default class MyGroups extends React.Component {
                     </div>
                 </div>*/}
             </div>
+            <BetaCard featureId="feature_spaces" title={_t("Communities are changing to Spaces")} />
             <div className="mx_MyGroups_content">
                 { contentHeader }
                 { content }

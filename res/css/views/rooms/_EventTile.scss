@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 $left-gutter: 64px;
+$hover-select-border: 4px;
 
 .mx_EventTile {
     max-width: 100%;
@@ -85,12 +86,11 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_isEditing .mx_MessageTimestamp {
-    visibility: hidden !important;
+    visibility: hidden;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
-    visibility: hidden;
     white-space: nowrap;
     left: 0px;
     text-align: center;
@@ -104,7 +104,7 @@ $left-gutter: 64px;
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
     padding-left: $left-gutter;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .mx_RoomView_timeline_rr_enabled,
@@ -142,27 +142,8 @@ $left-gutter: 64px;
     line-height: 57px !important;
 }
 
-.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
-    visibility: visible;
-}
-
 .mx_EventTile_selected > div > a > .mx_MessageTimestamp {
-    left: 3px;
-    width: auto;
-}
-
-// Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
-// The first set is to handle the 'group layout' (default) and the second for the IRC layout
-.mx_EventTile_last > div > a > .mx_MessageTimestamp,
-.mx_EventTile:hover > div > a > .mx_MessageTimestamp,
-.mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp,
-.mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile_last > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile:hover > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_ReplyThread .mx_EventTile > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile.mx_EventTile_actionBarFocused > a > .mx_MessageTimestamp,
-.mx_IRCLayout .mx_EventTile.focus-visible:focus-within > a > .mx_MessageTimestamp {
-    visibility: visible;
+    left: calc(-$hover-select-border);
 }
 
 .mx_EventTile:hover .mx_MessageActionBar,
@@ -177,7 +158,7 @@ $left-gutter: 64px;
  */
 .mx_EventTile_selected > .mx_EventTile_line {
     border-left: $accent-color 4px solid;
-    padding-left: 60px;
+    padding-left: calc($left-gutter - $hover-select-border);
     background-color: $event-selected-color;
 }
 
@@ -190,8 +171,12 @@ $left-gutter: 64px;
     }
 }
 
+.mx_EventTile_info .mx_EventTile_line {
+    padding-left: calc($left-gutter + 18px);
+}
+
 .mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 78px;
+    padding-left: calc($left-gutter + 18px - $hover-select-border);
 }
 
 .mx_EventTile:hover .mx_EventTile_line,
@@ -280,6 +265,7 @@ $left-gutter: 64px;
     height: $font-14px;
     width: $font-14px;
 
+    will-change: left, top;
     transition:
         left var(--transition-short) ease-out,
         top var(--transition-standard) ease-out;
@@ -359,7 +345,7 @@ $left-gutter: 64px;
         mask-image: url('$(res)/img/e2e/normal.svg');
         mask-repeat: no-repeat;
         mask-position: center;
-        mask-size: 90%;
+        mask-size: 80%;
     }
 }
 
@@ -426,7 +412,7 @@ $left-gutter: 64px;
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
-    padding-left: 60px;
+    padding-left: calc($left-gutter - $hover-select-border);
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line {
@@ -444,7 +430,7 @@ $left-gutter: 64px;
 .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 78px;
+    padding-left: calc($left-gutter + 18px - $hover-select-border);
 }
 
 /* End to end encryption stuff */
@@ -456,7 +442,7 @@ $left-gutter: 64px;
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line > a > .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line > a > .mx_MessageTimestamp {
-    width: $MessageTimestamp_width_hover;
+    left: calc(-$hover-select-border);
 }
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
