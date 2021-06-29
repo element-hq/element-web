@@ -1143,7 +1143,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         }
     }
 
-    private onSearchResultsFillRequest = (backwards: boolean) => {
+    private onSearchResultsFillRequest = (backwards: boolean): Promise<boolean> => {
         if (!backwards) {
             return Promise.resolve(false);
         }
@@ -1309,7 +1309,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         this.handleSearchResult(searchPromise);
     };
 
-    private handleSearchResult(searchPromise: Promise<any>) {
+    private handleSearchResult(searchPromise: Promise<any>): Promise<boolean> {
         // keep a record of the current search id, so that if the search terms
         // change before we get a response, we can ignore the results.
         const localSearchId = this.searchId;
@@ -1322,7 +1322,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             debuglog("search complete");
             if (this.unmounted || !this.state.searching || this.searchId != localSearchId) {
                 console.error("Discarding stale search results");
-                return;
+                return false;
             }
 
             // postgres on synapse returns us precise details of the strings
@@ -1354,6 +1354,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 description: ((error && error.message) ? error.message :
                     _t("Server may be unavailable, overloaded, or search timed out :(")),
             });
+            return false;
         }).finally(() => {
             this.setState({
                 searchInProgress: false,

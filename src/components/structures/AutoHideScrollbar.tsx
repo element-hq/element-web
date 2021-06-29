@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes, WheelEvent } from "react";
 
-interface IProps extends HTMLAttributes<HTMLDivElement> {
+interface IProps extends Omit<HTMLAttributes<HTMLDivElement>, "onScroll"> {
     className?: string;
-    onScroll?: () => void;
-    onWheel?: () => void;
+    onScroll?: (event: Event) => void;
+    onWheel?: (event: WheelEvent) => void;
     style?: React.CSSProperties
     tabIndex?: number,
     wrappedRef?: (ref: HTMLDivElement) => void;

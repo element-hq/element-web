@@ -16,6 +16,7 @@ limitations under the License.
 
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import * as ModernizrStatic from "modernizr";
+
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
@@ -127,11 +128,24 @@ declare global {
         setSinkId(outputId: string);
     }
 
+    // Add Chrome-specific `instant` ScrollBehaviour
+    type _ScrollBehavior = ScrollBehavior | "instant";
+
+    interface _ScrollOptions {
+        behavior?: _ScrollBehavior;
+    }
+
+    interface _ScrollIntoViewOptions extends _ScrollOptions {
+        block?: ScrollLogicalPosition;
+        inline?: ScrollLogicalPosition;
+    }
+
     interface Element {
         // Safari & IE11 only have this prefixed: we used prefixed versions
         // previously so let's continue to support them for now
         webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;
         msRequestFullscreen(options?: FullscreenOptions): Promise<void>;
+        scrollIntoView(arg?: boolean | _ScrollIntoViewOptions): void;
     }
 
     interface Error {

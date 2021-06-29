@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -176,10 +176,17 @@ const MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-interface IReadReceiptProps {
+export interface IReadReceiptProps {
     userId: string;
     roomMember: RoomMember;
     ts: number;
+}
+
+export enum TileShape {
+    Notif = "notif",
+    FileGrid = "file_grid",
+    Reply = "reply",
+    ReplyPreview = "reply_preview",
 }
 
 interface IProps {
@@ -248,7 +255,7 @@ interface IProps {
     // It could also be done by subclassing EventTile, but that'd be quite
     // boiilerplatey.  So just make the necessary render decisions conditional
     // for now.
-    tileShape?: 'notif' | 'file_grid' | 'reply' | 'reply_preview';
+    tileShape?: TileShape;
 
     // show twelve hour timestamps
     isTwelveHour?: boolean;
@@ -306,9 +313,10 @@ interface IState {
 export default class EventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
-    private ref: React.RefObject<unknown>;
     private tile = React.createRef();
     private replyThread = React.createRef();
+
+    public readonly ref = createRef<HTMLElement>();
 
     static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
@@ -345,8 +353,6 @@ export default class EventTile extends React.Component<IProps, IState> {
         // to determine if we've already subscribed and use a combination of other flags to find
         // out if we should even be subscribed at all.
         this.isListeningForReceipts = false;
-
-        this.ref = React.createRef();
     }
 
     /**
