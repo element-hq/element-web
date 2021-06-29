@@ -847,7 +847,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let tileHandler = getHandlerTile(this.props.mxEvent);
 
         // Info messages are basically information about commands processed on a room
-        const isBubbleMessage = eventType.startsWith("m.key.verification") ||
+        let isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
             (eventType === EventType.RoomCreate) ||
             (eventType === EventType.RoomEncryption) ||
@@ -863,6 +863,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         // duplicate of the thing they are replacing).
         if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
             tileHandler = "messages.ViewSourceEvent";
+            isBubbleMessage = false;
             // Reuse info message avatar and sender profile styling
             isInfoMessage = true;
         }

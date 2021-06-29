@@ -179,7 +179,7 @@ export default class MessageContextMenu extends React.Component {
             pinnedIds.push(eventId);
             cli.setRoomAccountData(room.roomId, ReadPinsEventId, {
                 event_ids: [
-                    ...room.getAccountData(ReadPinsEventId)?.getContent()?.event_ids,
+                    ...(room.getAccountData(ReadPinsEventId)?.getContent()?.event_ids || []),
                     eventId,
                 ],
             });

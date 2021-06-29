@@ -48,7 +48,7 @@ import createRoom, {IOpts} from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
-import { startAnyRegistrationFlow } from "../../Registration.js";
+import { startAnyRegistrationFlow } from "../../Registration";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
