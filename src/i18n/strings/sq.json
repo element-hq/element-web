@@ -3370,5 +3370,21 @@
     "The user you called is busy.": "Përdoruesi që thirrët është i zënë.",
     "User Busy": "Përdoruesi Është i Zënë",
     "Kick, ban, or invite people to your active room, and make you leave": "Përzini, dëboni, ose ftoni persona te dhoma juaj aktive, dhe bëni largimin tuaj",
-    "Kick, ban, or invite people to this room, and make you leave": "Përzini, dëboni, ose ftoni persona në këtë dhomë, dhe bëni largimin tuaj"
+    "Kick, ban, or invite people to this room, and make you leave": "Përzini, dëboni, ose ftoni persona në këtë dhomë, dhe bëni largimin tuaj",
+    "We're working on this as part of the beta, but just want to let you know.": "Po merremi me këtë, si pjesë e versionit beta, thjesht duam ta dini.",
+    "Teammates might not be able to view or join any private rooms you make.": "Anëtarët e ekipit mund të mos jenë në gjendje të shohin ose hyjnë në çfarëdo dhome private që krijoni.",
+    "Or send invite link": "Ose dërgoni një lidhje ftese",
+    "If you can't see who you’re looking for, send them your invite link below.": "Nëse s’e shihni atë që po kërkoni, dërgojini nga më poshtë një lidhje ftese.",
+    "Some suggestions may be hidden for privacy.": "Disa sugjerime mund të jenë fshehur, për arsye privatësie.",
+    "Search for rooms or people": "Kërkoni për dhoma ose persona",
+    "Forward message": "Përcille mesazhin",
+    "Open link": "Hape lidhjen",
+    "You don't have permission to do this": "S’keni leje ta bëni këtë",
+    "Error - Mixed content": "Gabim - Lëndë e përzierë",
+    "Error loading Widget": "Gabim në ngarkim Widget-i",
+    "Pinned messages": "Mesazhe të fiksuar",
+    "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Nëse keni leje, hapni menunë për çfarëdo mesazhi dhe përzgjidhni <b>Fiksoje</b>, për ta ngjitur këtu.",
+    "Nothing pinned, yet": "Ende pa fiksuar gjë",
+    "End-to-end encryption isn't enabled": "Fshehtëzimi skaj-më-skaj s’është i aktivizuar",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites. <a>Enable encryption in settings.</a>": "Mesazhet tuaja private normalisht fshehtëzohen, por kjo dhomë nuk fshehtëzohet. Zakonisht kjo vjen si pasojë e përdorimit të një pajisjeje apo metode të pambuluar, bie fjala, ftesa me email. <a>Aktivizoni fshehtëzimin që nga rregullimet.</a>"
 }
