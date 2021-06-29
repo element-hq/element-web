@@ -2071,6 +2071,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 resizeNotifier={this.props.resizeNotifier}
                 showReactions={true}
                 layout={this.state.layout}
+                editState={this.state.editState}
             />);
 
         let topUnreadMessagesBar = null;
