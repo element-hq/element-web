@@ -22,7 +22,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import { ResizeNotifier } from "../../../utils/ResizeNotifier";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
@@ -45,7 +45,6 @@ import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
-import CallHandler from "../../../CallHandler";
 import SpaceStore, {ISuggestedRoom, SUGGESTED_ROOMS} from "../../../stores/SpaceStore";
 import {showAddExistingRooms, showCreateNewRoom, showSpaceInvite} from "../../../utils/space";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
@@ -103,38 +102,6 @@ interface ITagAestheticsMap {
     [tagId: TagID]: ITagAesthetics;
 }
 
-// If we have no dialer support, we just show the create chat dialog
-const dmOnAddRoom = (dispatcher?: Dispatcher<ActionPayload>) => {
-    (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
-};
-
-// If we have dialer support, show a context menu so the user can pick between
-// the dialer and the create chat dialog
-const dmAddRoomContextMenu = (onFinished: () => void) => {
-    return <IconizedContextMenuOptionList first>
-        <IconizedContextMenuOption
-            label={_t("Start a Conversation")}
-            iconClassName="mx_RoomList_iconPlus"
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onFinished();
-                defaultDispatcher.dispatch({action: "view_create_chat"});
-            }}
-        />
-        <IconizedContextMenuOption
-            label={_t("Open dial pad")}
-            iconClassName="mx_RoomList_iconDialpad"
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onFinished();
-                defaultDispatcher.fire(Action.OpenDialPad);
-            }}
-        />
-    </IconizedContextMenuOptionList>;
-};
-
 const TAG_AESTHETICS: ITagAestheticsMap = {
     [DefaultTagID.Invite]: {
         sectionLabel: _td("Invites"),
@@ -151,8 +118,9 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         isInvite: false,
         defaultHidden: false,
         addRoomLabel: _td("Start chat"),
-        // Either onAddRoom or addRoomContextMenu are set depending on whether we
-        // have dialer support.
+        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
+            (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
+        },
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
@@ -271,7 +239,6 @@ function customTagAesthetics(tagId: TagID): ITagAesthetics {
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private customTagStoreRef;
-    private tagAesthetics: ITagAestheticsMap;
     private roomStoreToken: fbEmitter.EventSubscription;
 
     constructor(props: IProps) {
@@ -282,10 +249,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
             suggestedRooms: SpaceStore.instance.suggestedRooms,
         };
-
-        // shallow-copy from the template as we need to make modifications to it
-        this.tagAesthetics = objectShallowClone(TAG_AESTHETICS);
-        this.updateDmAddRoomAction();
     }
 
     public componentDidMount(): void {
@@ -311,17 +274,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         });
     };
 
-    private updateDmAddRoomAction() {
-        const dmTagAesthetics = objectShallowClone(TAG_AESTHETICS[DefaultTagID.DM]);
-        if (CallHandler.sharedInstance().getSupportsPstnProtocol()) {
-            dmTagAesthetics.addRoomContextMenu = dmAddRoomContextMenu;
-        } else {
-            dmTagAesthetics.onAddRoom = dmOnAddRoom;
-        }
-
-        this.tagAesthetics[DefaultTagID.DM] = dmTagAesthetics;
-    }
-
     private onAction = (payload: ActionPayload) => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
@@ -335,7 +287,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 });
             }
         } else if (payload.action === Action.PstnSupportUpdated) {
-            this.updateDmAddRoomAction();
             this.updateLists();
         }
     };
@@ -466,6 +417,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     private renderCommunityInvites(): ReactComponentElement<typeof ExtraTile>[] {
+        if (SettingsStore.getValue("feature_spaces")) return [];
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
@@ -523,7 +475,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
                 const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)
                     ? customTagAesthetics(orderedTagId)
-                    : this.tagAesthetics[orderedTagId];
+                    : TAG_AESTHETICS[orderedTagId];
                 if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
                 // The cost of mounting/unmounting this component offsets the cost

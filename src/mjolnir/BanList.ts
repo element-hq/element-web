@@ -92,7 +92,7 @@ export class BanList {
         if (!room) return;
 
         for (const eventType of ALL_RULE_TYPES) {
-            const events = room.currentState.getStateEvents(eventType, undefined);
+            const events = room.currentState.getStateEvents(eventType);
             for (const ev of events) {
                 if (!ev.getStateKey()) continue;
 

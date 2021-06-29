@@ -33,9 +33,14 @@ limitations under the License.
     font-size: $font-14px;
     line-height: $font-24px;
 
+    contain: content;
+
     .mx_Waveform {
         .mx_Waveform_bar {
             background-color: $voice-record-waveform-incomplete-fg-color;
+            height: 100%;
+            /* Variable set by a JS component */
+            transform: scaleY(max(0.05, var(--barHeight)));
 
             &.mx_Waveform_bar_100pct {
                 // Small animation to remove the mechanical feel of progress

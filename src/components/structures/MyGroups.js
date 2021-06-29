@@ -82,8 +82,7 @@ export default class MyGroups extends React.Component {
                         </p>
                         <p>
                             { _t(
-                                "To set up a filter, drag a community avatar over to the filter panel on " +
-                                "the far left hand side of the screen. You can click on an avatar in the " +
+                                "You can click on an avatar in the " +
                                 "filter panel at any time to see only the rooms and people associated " +
                                 "with that community.",
                             ) }

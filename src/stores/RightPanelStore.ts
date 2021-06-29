@@ -22,6 +22,7 @@ import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePha
 import {ActionPayload} from "../dispatcher/payloads";
 import {Action} from '../dispatcher/actions';
 import { SettingLevel } from "../settings/SettingLevel";
+import RoomViewStore from './RoomViewStore';
 
 interface RightPanelStoreState {
     // Whether or not to show the right panel at all. We split out rooms and groups
@@ -147,6 +148,8 @@ export default class RightPanelStore extends Store<ActionPayload> {
         switch (payload.action) {
             case 'view_room':
             case 'view_group':
+                if (payload.room_id === RoomViewStore.getRoomId()) break; // skip this transition, probably a permalink
+
                 // Reset to the member list if we're viewing member info
                 if (MEMBER_INFO_PHASES.includes(this.state.lastRoomPhase)) {
                     this.setState({lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {}});
@@ -161,6 +164,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
             case Action.SetRightPanelPhase: {
                 let targetPhase = payload.phase;
                 let refireParams = payload.refireParams;
+                const allowClose = payload.allowClose ?? true;
                 // redirect to EncryptionPanel if there is an ongoing verification request
                 if (targetPhase === RightPanelPhases.RoomMemberInfo && payload.refireParams) {
                     const {member} = payload.refireParams;
@@ -192,7 +196,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
                         });
                     }
                 } else {
-                    if (targetPhase === this.state.lastRoomPhase && !refireParams) {
+                    if (targetPhase === this.state.lastRoomPhase && !refireParams && allowClose) {
                         this.setState({
                             showRoomPanel: !this.state.showRoomPanel,
                             previousPhase: null,

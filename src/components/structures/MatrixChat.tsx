@@ -48,7 +48,7 @@ import createRoom, {IOpts} from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
-import { startAnyRegistrationFlow } from "../../Registration.js";
+import { startAnyRegistrationFlow } from "../../Registration";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
@@ -1461,7 +1461,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         const dft = new DecryptionFailureTracker((total, errorCode) => {
-            Analytics.trackEvent('E2E', 'Decryption failure', errorCode, total);
+            Analytics.trackEvent('E2E', 'Decryption failure', errorCode, String(total));
             CountlyAnalytics.instance.track("decryption_failure", { errorCode }, null, { sum: total });
         }, (errorCode) => {
             // Map JS-SDK error codes to tracker codes for aggregation

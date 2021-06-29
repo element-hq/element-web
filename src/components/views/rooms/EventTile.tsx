@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import classNames from "classnames";
-
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
@@ -29,24 +28,24 @@ import { hasText } from "../../../TextForEvent";
 import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
-import {Layout} from "../../../settings/Layout";
-import {formatTime} from "../../../DateUtils";
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
+import { Layout } from "../../../settings/Layout";
+import { formatTime } from "../../../DateUtils";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { ALL_RULE_TYPES } from "../../../mjolnir/BanList";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {E2E_STATE} from "./E2EIcon";
-import {toRem} from "../../../utils/units";
-import {WidgetType} from "../../../widgets/WidgetType";
+import { E2E_STATE } from "./E2EIcon";
+import { toRem } from "../../../utils/units";
+import { WidgetType } from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
-import {WIDGET_LAYOUT_EVENT_TYPE} from "../../../stores/widgets/WidgetLayoutStore";
-import {objectHasDiff} from "../../../utils/objects";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { WIDGET_LAYOUT_EVENT_TYPE } from "../../../stores/widgets/WidgetLayoutStore";
+import { objectHasDiff } from "../../../utils/objects";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
-import { EditorStateTransfer } from "../../../utils/EditorStateTransfer";
+import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
-import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "./NotificationBadge";
-import {ComposerInsertPayload} from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from '../../../dispatcher/actions';
 
 const eventTileTypes = {
@@ -848,7 +847,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let tileHandler = getHandlerTile(this.props.mxEvent);
 
         // Info messages are basically information about commands processed on a room
-        const isBubbleMessage = eventType.startsWith("m.key.verification") ||
+        let isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
             (eventType === EventType.RoomCreate) ||
             (eventType === EventType.RoomEncryption) ||
@@ -864,6 +863,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         // duplicate of the thing they are replacing).
         if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
             tileHandler = "messages.ViewSourceEvent";
+            isBubbleMessage = false;
             // Reuse info message avatar and sender profile styling
             isInfoMessage = true;
         }

@@ -48,15 +48,14 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         const replyThread = getReplyThread && getReplyThread();
 
         const buttonRect = button.current.getBoundingClientRect();
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
-            <MessageContextMenu
-                mxEvent={mxEvent}
-                permalinkCreator={permalinkCreator}
-                eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
-                collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
-                onFinished={closeMenu}
-            />
-        </ContextMenu>;
+        contextMenu = <MessageContextMenu
+            {...aboveLeftOf(buttonRect)}
+            mxEvent={mxEvent}
+            permalinkCreator={permalinkCreator}
+            eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
+            collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
+            onFinished={closeMenu}
+        />;
     }
 
     return <React.Fragment>

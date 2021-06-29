@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_SpaceBasicSettings {
     .mx_Field {
-        margin: 32px 0;
+        margin: 24px 0;
     }
 
     .mx_SpaceBasicSettings_avatarContainer {
@@ -73,7 +73,7 @@ limitations under the License.
         }
     }
 
-    .mx_FormButton {
+    .mx_AccessibleButton_hasKind {
         padding: 8px 22px;
         margin-left: auto;
         display: block;

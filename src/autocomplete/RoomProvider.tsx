@@ -17,28 +17,24 @@ limitations under the License.
 */
 
 import React from "react";
-import {uniqBy, sortBy} from "lodash";
-import Room from "matrix-js-sdk/src/models/room";
+import { uniqBy, sortBy } from "lodash";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
-import {PillCompletion} from './Components';
-import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { PillCompletion } from './Components';
+import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
 import SettingsStore from "../settings/SettingsStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
-function score(query: string, space: string) {
-    const index = space.indexOf(query);
-    if (index === -1) {
-        return Infinity;
-    } else {
-        return index;
-    }
+// Prefer canonical aliases over non-canonical ones
+function canonicalScore(displayedAlias: string, room: Room): number {
+    return displayedAlias === room.getCanonicalAlias() ? 0 : 1;
 }
 
 function matcherObject(room: Room, displayedAlias: string, matchName = "") {
@@ -106,7 +102,7 @@ export default class RoomProvider extends AutocompleteProvider {
             const matchedString = command[0];
             completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
-                (c) => score(matchedString, c.displayedAlias),
+                (c) => canonicalScore(c.displayedAlias, c.room),
                 (c) => c.displayedAlias.length,
             ]);
             completions = uniqBy(completions, (match) => match.room);

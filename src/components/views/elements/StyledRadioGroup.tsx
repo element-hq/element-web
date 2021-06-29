@@ -62,9 +62,9 @@ function StyledRadioGroup<T extends string>({
                 disabled={d.disabled ?? disabled}
                 outlined={outlined}
             >
-                {d.label}
+                { d.label }
             </StyledRadioButton>
-            {d.description}
+            { d.description ? <span>{ d.description }</span> : null }
         </React.Fragment>)}
     </React.Fragment>;
 }
