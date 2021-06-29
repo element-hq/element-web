@@ -294,7 +294,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     setAttachments((e.target as HTMLInputElement).checked)
                 }
             >
-                {_t("Include Attachments")}
+                { _t("Include Attachments") }
             </StyledCheckbox>
 
             <DialogButtons
