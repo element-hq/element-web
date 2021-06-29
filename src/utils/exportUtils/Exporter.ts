@@ -7,7 +7,7 @@ import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { MatrixClient } from "matrix-js-sdk";
-import streamToZIP from "./StreamToZip";
+import streamToZIP from "./ZipStream";
 import * as ponyfill from "web-streams-polyfill/ponyfill"
 import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
 

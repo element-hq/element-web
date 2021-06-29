@@ -73,7 +73,7 @@ export default class ReplyThread extends React.Component {
 
         this.unmounted = false;
 
-        if (this.props.forExport) {
+        if (!this.props.forExport) {
             this.context.on("Event.replaced", this.onEventReplaced);
             this.room = this.context.getRoom(this.props.parentEv.getRoomId());
             this.room.on("Room.redaction", this.onRoomRedaction);

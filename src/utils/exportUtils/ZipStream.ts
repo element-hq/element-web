@@ -1,3 +1,5 @@
+// Based on https://github.com/jimmywarting/StreamSaver.js/blob/master/examples/zip-stream.js
+
 /* global ReadableStream */
 
 type TypedArray =
