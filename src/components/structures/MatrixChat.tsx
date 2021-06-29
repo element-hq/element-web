@@ -34,7 +34,6 @@ import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
-import Tinter from "../../Tinter";
 import * as sdk from '../../index';
 import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
@@ -282,11 +281,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         UIStore.instance.on(UI_EVENTS.Resize, this.handleResize);
 
         this.pageChanging = false;
-
-        // check we have the right tint applied for this theme.
-        // N.B. we don't call the whole of setTheme() here as we may be
-        // racing with the theme CSS download finishing from index.js
-        Tinter.tint();
 
         // For PersistentElement
         this.state.resizeNotifier.on("middlePanelResized", this.dispatchTimelineResize);
@@ -1579,10 +1573,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
             }
         });
-        // Fire the tinter right on startup to ensure the default theme is applied
-        // A later sync can/will correct the tint to be the right value for the user
-        const colorScheme = SettingsStore.getValue("roomColor");
-        Tinter.tint(colorScheme.primary_color, colorScheme.secondary_color);
     }
 
     /**

@@ -857,7 +857,6 @@
     "Enable inline URL previews by default": "Enable inline URL previews by default",
     "Enable URL previews for this room (only affects you)": "Enable URL previews for this room (only affects you)",
     "Enable URL previews by default for participants in this room": "Enable URL previews by default for participants in this room",
-    "Room Colour": "Room Colour",
     "Enable widget screenshots on supported widgets": "Enable widget screenshots on supported widgets",
     "Prompt before sending invites to potentially invalid matrix IDs": "Prompt before sending invites to potentially invalid matrix IDs",
     "Show developer tools": "Show developer tools",

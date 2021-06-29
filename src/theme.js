@@ -18,7 +18,6 @@ limitations under the License.
 import { _t } from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
-import Tinter from "./Tinter";
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
@@ -214,7 +213,6 @@ export async function setTheme(theme) {
             if (bodyStyles.backgroundColor) {
                 document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
             }
-            Tinter.setTheme(theme);
             resolve();
         };
 
