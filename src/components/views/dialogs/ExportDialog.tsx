@@ -35,7 +35,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
-    const [Exporter, setExporter] = useStateCallback(
+    const [Exporter, setExporter] = useStateCallback<Exporter>(
         null,
         async (Exporter: HTMLExporter | PlainTextExporter | JSONExporter) => {
             await Exporter?.export().then(() => {
