@@ -274,7 +274,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             { MessageCount }
 
             <span className="mx_ExportDialog_subheading">
-                {_t("Size Limit")}
+                { _t("Size Limit") }
             </span>
 
             <Field
