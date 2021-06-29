@@ -19,7 +19,8 @@ import React from 'react';
 
 import { Filter } from 'matrix-js-sdk/src/filter';
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
-import { MatrixEvent, Room } from 'matrix-js-sdk/src';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 
 import * as sdk from '../../index';
@@ -57,7 +58,7 @@ class FilePanel extends React.Component<IProps, IState> {
         timelineSet: null,
     };
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: true, removed: true, data: any) => {
+    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: true, removed: true, data: any): void => {
         if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
@@ -71,7 +72,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     };
 
-    private onEventDecrypted = (ev: MatrixEvent, err?: any) => {
+    private onEventDecrypted = (ev: MatrixEvent, err?: any): void => {
         if (ev.getRoomId() !== this.props.roomId) return;
         const eventId = ev.getId();
 
@@ -81,7 +82,7 @@ class FilePanel extends React.Component<IProps, IState> {
         this.addEncryptedLiveEvent(ev);
     };
 
-    public addEncryptedLiveEvent(ev: MatrixEvent) {
+    public addEncryptedLiveEvent(ev: MatrixEvent): void {
         if (!this.state.timelineSet) return;
 
         const timeline = this.state.timelineSet.getLiveTimeline();
@@ -95,7 +96,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         const client = MatrixClientPeg.get();
 
         await this.updateTimelineSet(this.props.roomId);
@@ -116,7 +117,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
@@ -128,7 +129,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public async fetchFileEventsServer(room: Room) {
+    public async fetchFileEventsServer(room: Room): Promise<void> {
         const client = MatrixClientPeg.get();
 
         const filter = new Filter(client.credentials.userId);
@@ -152,7 +153,7 @@ class FilePanel extends React.Component<IProps, IState> {
         return timelineSet;
     }
 
-    private onPaginationRequest = (timelineWindow: TimelineWindow, direction: string, limit: number) => {
+    private onPaginationRequest = (timelineWindow: TimelineWindow, direction: string, limit: number): void => {
         const client = MatrixClientPeg.get();
         const eventIndex = EventIndexPeg.get();
         const roomId = this.props.roomId;
@@ -170,7 +171,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     };
 
-    public async updateTimelineSet(roomId: string) {
+    public async updateTimelineSet(roomId: string): Promise<void> {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
         const eventIndex = EventIndexPeg.get();
