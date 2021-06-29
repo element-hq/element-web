@@ -251,7 +251,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 )}
             </p>
 
-            <span className="mx_ExportDialog_subheading">{_t("Format")}</span>
+            <span className="mx_ExportDialog_subheading">{ _t("Format") }</span>
 
             <StyledRadioGroup
                 name="feedbackRating"
