@@ -159,7 +159,7 @@ class FilePanel extends React.Component {
         }
     };
 
-    async updateTimelineSet(roomId: string) {
+    async updateTimelineSet(roomId) {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
         const eventIndex = EventIndexPeg.get();

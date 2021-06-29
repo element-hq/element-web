@@ -63,11 +63,11 @@ export default class TabbedIntegrationManagerDialog extends React.Component {
         };
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         this.openManager(0, true);
     }
 
-    openManager = async (i: number, force = false) => {
+    openManager = async (i, force = false) => {
         if (i === this.state.currentIndex && !force) return;
 
         const manager = this.state.managers[i];

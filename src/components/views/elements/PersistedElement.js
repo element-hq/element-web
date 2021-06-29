@@ -187,4 +187,4 @@ export default class PersistedElement extends React.Component {
     }
 }
 
-export const getPersistKey = (appId: string) => 'widget_' + appId;
+export const getPersistKey = (appId) => 'widget_' + appId;

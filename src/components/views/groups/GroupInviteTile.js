@@ -32,7 +32,7 @@ import {mediaFromMxc} from "../../../customisations/Media";
 // XXX this class copies a lot from RoomTile.js
 @replaceableComponent("views.groups.GroupInviteTile")
 export default class GroupInviteTile extends React.Component {
-    static propTypes: {
+    static propTypes = {
         group: PropTypes.object.isRequired,
     };
 

@@ -207,7 +207,7 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onPermalinkClick = (e: Event) => {
+    onPermalinkClick = (e) => {
         e.preventDefault();
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
