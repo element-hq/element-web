@@ -73,13 +73,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
     constructor() {
         super(defaultDispatcher);
-
-        this.checkLoggingEnabled();
-        for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
-        RoomViewStore.addListener(() => this.handleRVSUpdate({}));
-        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
-        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
-        this.setupWatchers();
     }
 
     private setupWatchers() {
@@ -126,6 +119,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         this.checkLoggingEnabled();
+
+        for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
+        RoomViewStore.addListener(() => this.handleRVSUpdate({}));
+        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
+        this.setupWatchers();
 
         // Update any settings here, as some may have happened before we were logically ready.
         // Update any settings here, as some may have happened before we were logically ready.
