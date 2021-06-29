@@ -16,9 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import {Filter} from 'matrix-js-sdk/src/filter';
+import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { MatrixEvent, Room } from 'matrix-js-sdk/src';
+import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+
 import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
@@ -28,25 +31,33 @@ import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import DesktopBuildsNotice, {WarningKind} from "../views/elements/DesktopBuildsNotice";
 import {replaceableComponent} from "../../utils/replaceableComponent";
 
+import ResizeNotifier from '../../utils/ResizeNotifier';
+
+interface IProps {
+    roomId: string;
+    onClose: () => void;
+    resizeNotifier: ResizeNotifier
+}
+
+interface IState {
+    timelineSet: EventTimelineSet;
+}
+
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
 @replaceableComponent("structures.FilePanel")
-class FilePanel extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-        onClose: PropTypes.func.isRequired,
-    };
-
+class FilePanel extends React.Component<IProps, IState> {
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.
-    decryptingEvents = new Set();
+    private decryptingEvents = new Set<string>();
+    public noRoom: boolean;
 
     state = {
         timelineSet: null,
     };
 
-    onRoomTimeline = (ev, room, toStartOfTimeline, removed, data) => {
+    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: true, removed: true, data: any) => {
         if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
@@ -60,7 +71,7 @@ class FilePanel extends React.Component {
         }
     };
 
-    onEventDecrypted = (ev, err) => {
+    private onEventDecrypted = (ev: MatrixEvent, err?: any) => {
         if (ev.getRoomId() !== this.props.roomId) return;
         const eventId = ev.getId();
 
@@ -70,7 +81,7 @@ class FilePanel extends React.Component {
         this.addEncryptedLiveEvent(ev);
     };
 
-    addEncryptedLiveEvent(ev, toStartOfTimeline) {
+    public addEncryptedLiveEvent(ev: MatrixEvent) {
         if (!this.state.timelineSet) return;
 
         const timeline = this.state.timelineSet.getLiveTimeline();
@@ -84,7 +95,7 @@ class FilePanel extends React.Component {
         }
     }
 
-    async componentDidMount() {
+    public async componentDidMount() {
         const client = MatrixClientPeg.get();
 
         await this.updateTimelineSet(this.props.roomId);
@@ -105,7 +116,7 @@ class FilePanel extends React.Component {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
@@ -117,7 +128,7 @@ class FilePanel extends React.Component {
         }
     }
 
-    async fetchFileEventsServer(room) {
+    public async fetchFileEventsServer(room: Room) {
         const client = MatrixClientPeg.get();
 
         const filter = new Filter(client.credentials.userId);
@@ -141,7 +152,7 @@ class FilePanel extends React.Component {
         return timelineSet;
     }
 
-    onPaginationRequest = (timelineWindow, direction, limit) => {
+    private onPaginationRequest = (timelineWindow: TimelineWindow, direction: string, limit: number) => {
         const client = MatrixClientPeg.get();
         const eventIndex = EventIndexPeg.get();
         const roomId = this.props.roomId;
@@ -159,7 +170,7 @@ class FilePanel extends React.Component {
         }
     };
 
-    async updateTimelineSet(roomId: string) {
+    public async updateTimelineSet(roomId: string) {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
         const eventIndex = EventIndexPeg.get();
@@ -195,7 +206,7 @@ class FilePanel extends React.Component {
         }
     }
 
-    render() {
+    public render() {
         if (MatrixClientPeg.get().isGuest()) {
             return <BaseCard
                 className="mx_FilePanel mx_RoomView_messageListWrapper"
