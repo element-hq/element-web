@@ -331,7 +331,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             onFinished={onFinished}
             fixedWidth={true}
         >
-            <p> {_t("The export was cancelled successfully")} </p>
+            <p>{ _t("The export was cancelled successfully") }</p>
 
             <DialogButtons
                 primaryButton={_t("Okay")}
