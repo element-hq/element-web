@@ -374,7 +374,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 events,
                 liveEvents,
                 firstVisibleEventIndex,
-            }
+            };
 
             // We can now paginate in the unpaginated direction
             if (backwards) {
@@ -661,7 +661,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     private onSync = (clientSyncState: SyncState, prevState: SyncState, data: object): void => {
-        this.setState({ clientSyncState  });
+        this.setState({ clientSyncState });
     };
 
     private readMarkerTimeout(readMarkerPosition: number): number {
@@ -885,15 +885,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             this.loadTimeline();
         } else {
-            if (this.messagePanel.current) {
-                this.messagePanel.current.scrollToBottom();
-            }
+            this.messagePanel.current?.scrollToBottom();
         }
     };
 
     public scrollToEventIfNeeded = (eventId: string): void => {
         this.messagePanel.current?.scrollToEventIfNeeded(eventId);
-    }
+    };
 
     /* scroll to show the read-up-to marker. We put it 1/3 of the way down
      * the container.
@@ -948,11 +946,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * at the end of the live timeline.
      */
     public isAtEndOfLiveTimeline = (): boolean => {
-        return this.messagePanel.current
-            && this.messagePanel.current.isAtBottom()
+        return this.messagePanel.current?.isAtBottom()
             && this.timelineWindow
             && !this.timelineWindow.canPaginate(EventTimeline.FORWARDS);
-    }
+    };
 
     /* get the current scroll state. See ScrollPanel.getScrollState for
      * details.

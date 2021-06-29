@@ -814,7 +814,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private collectEventNode = (eventId: string, node: EventTile): void => {
         this.eventNodes[eventId] = node?.ref?.current;
-    }
+    };
 
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
@@ -1085,7 +1085,7 @@ class CreationGrouper extends BaseGrouper {
 class RedactionGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
         return panel.shouldShowEvent(ev) && ev.isRedacted();
-    }
+    };
 
     constructor(
         panel: MessagePanel,
@@ -1181,7 +1181,7 @@ class RedactionGrouper extends BaseGrouper {
 class MemberGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
         return panel.shouldShowEvent(ev) && membershipTypes.includes(ev.getType() as EventType);
-    }
+    };
 
     constructor(
         public readonly panel: MessagePanel,

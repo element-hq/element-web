@@ -170,7 +170,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         userId,
         getAvatarUrl: (..._) => {
             return avatarUrlForUser(
-                {avatarUrl: profileInfo.avatar_url},
+                { avatarUrl: profileInfo.avatar_url },
                 AVATAR_SIZE, AVATAR_SIZE, "crop",
             );
         },
