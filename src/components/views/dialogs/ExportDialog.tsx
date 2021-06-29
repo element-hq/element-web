@@ -269,7 +269,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     setExportType(exportTypes[e.target.value]);
                 }}
             >
-                {exportTypeOptions}
+                { exportTypeOptions }
             </Field>
             {MessageCount}
 
