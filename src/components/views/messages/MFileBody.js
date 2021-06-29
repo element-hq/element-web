@@ -186,8 +186,9 @@ export default class MFileBody extends React.Component {
         }
 
         if (this.props.forExport) {
+            const content = this.props.mxEvent.getContent();
             return <span className="mx_MFileBody">
-                <a href={this.props.mxEvent.getContent().url}>
+                <a href={content.file?.url || content.url}>
                     { placeholder }
                 </a>
             </span>;

@@ -264,7 +264,8 @@ export default class HTMLExporter extends Exporter {
         </div>
         let eventTileMarkup = renderToStaticMarkup(eventTile);
         if (filePath) {
-            eventTileMarkup = eventTileMarkup.split(mxEv.getContent().url).join(filePath);
+            const mxc = mxEv.getContent().url || mxEv.getContent().file?.url;
+            eventTileMarkup = eventTileMarkup.split(mxc).join(filePath);
         }
         if (hasAvatar) {
             eventTileMarkup = eventTileMarkup.replace(
@@ -305,7 +306,7 @@ export default class HTMLExporter extends Exporter {
                     }
                     this.addFile(filePath, blob);
                 } catch (e) {
-                    console.log("Error while fetching file");
+                    console.log("Error while fetching file" + e);
                     eventTile = await this.getEventTile(
                         this.createModifiedEvent(_t("Error fetching file"), mxEv),
                         joined,

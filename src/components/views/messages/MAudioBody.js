@@ -42,8 +42,9 @@ export default class MAudioBody extends React.Component {
     }
 
     _getContentUrl() {
-        if (this.props.forExport) return this.props.mxEvent.getContent().url;
-        const media = mediaFromContent(this.props.mxEvent.getContent());
+        const content = this.props.mxEvent.getContent();
+        if (this.props.forExport) return content.file?.url || content.url;
+        const media = mediaFromContent(content);
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {

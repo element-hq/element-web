@@ -172,8 +172,9 @@ export default class MImageBody extends React.Component {
     }
 
     _getContentUrl() {
-        if (this.props.forExport) return this.props.mxEvent.getContent().url;
-        const media = mediaFromContent(this.props.mxEvent.getContent());
+        const content = this.props.mxEvent.getContent();
+        if (this.props.forExport) return content.url || content.file.url;
+        const media = mediaFromContent(content);
         if (media.isEncrypted) {
             return this.state.decryptedUrl;
         } else {
