@@ -12,8 +12,8 @@ import * as ponyfill from "web-streams-polyfill/ponyfill"
 import "web-streams-polyfill/ponyfill"; // to support streams API for older browsers
 
 type FileStream = {
-    name: string,
-    stream(): ReadableStream,
+    name: string;
+    stream(): ReadableStream;
 };
 
 export default abstract class Exporter {
