@@ -14,31 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useMemo, useState, useEffect} from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import classnames from "classnames";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import {_t} from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import {useSettingValue, useFeatureEnabled} from "../../../hooks/useSettings";
-import {UIFeature} from "../../../settings/UIFeature";
-import {Layout} from "../../../settings/Layout";
-import {IDialogProps} from "./IDialogProps";
+import { useSettingValue, useFeatureEnabled } from "../../../hooks/useSettings";
+import { UIFeature } from "../../../settings/UIFeature";
+import { Layout } from "../../../settings/Layout";
+import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
-import {avatarUrlForUser} from "../../../Avatar";
+import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import {Alignment} from '../elements/Tooltip';
+import { Alignment } from '../elements/Tooltip';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
-import {StaticNotificationState} from "../../../stores/notifications/StaticNotificationState";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
-import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
-import {sortRooms} from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
+import TruncatedList from "../elements/TruncatedList";
+import EntityTile from "../rooms/EntityTile";
+import BaseAvatar from "../avatars/BaseAvatar";
 
 const AVATAR_SIZE = 30;
 
@@ -162,6 +166,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     });
     mockEvent.sender = {
         name: profileInfo.displayname || userId,
+        rawDisplayName: profileInfo.displayname,
         userId,
         getAvatarUrl: (..._) => {
             return avatarUrlForUser(
@@ -170,7 +175,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             );
         },
         getMxcAvatarUrl: () => profileInfo.avatar_url,
-    };
+    } as RoomMember;
 
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
@@ -192,6 +197,17 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             funcs: [r => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
             shouldMatchWordsOnly: false,
         }).match(lcQuery);
+    }
+
+    const [truncateAt, setTruncateAt] = useState(20);
+    function overflowTile(overflowCount, totalCount) {
+        const text = _t("and %(count)s others...", { count: overflowCount });
+        return (
+            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
+                <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={() => setTruncateAt(totalCount)} />
+        );
     }
 
     return <BaseDialog
@@ -226,15 +242,20 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <AutoHideScrollbar className="mx_ForwardList_content">
                 { rooms.length > 0 ? (
                     <div className="mx_ForwardList_results">
-                        { rooms.map(room =>
-                            <Entry
-                                key={room.roomId}
-                                room={room}
-                                event={event}
-                                matrixClient={cli}
-                                onFinished={onFinished}
-                            />,
-                        ) }
+                        <TruncatedList
+                            truncateAt={truncateAt}
+                            createOverflowElement={overflowTile}
+                            getChildren={(start, end) => rooms.slice(start, end).map(room =>
+                                <Entry
+                                    key={room.roomId}
+                                    room={room}
+                                    event={event}
+                                    matrixClient={cli}
+                                    onFinished={onFinished}
+                                />,
+                            )}
+                            getChildCount={() => rooms.length}
+                        />
                     </div>
                 ) : <span className="mx_ForwardList_noResults">
                     { _t("No results") }

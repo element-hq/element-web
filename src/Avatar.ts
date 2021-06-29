@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {User} from "matrix-js-sdk/src/models/user";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { User } from "matrix-js-sdk/src/models/user";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 
 import DMRoomMap from './utils/DMRoomMap';
-import {mediaFromMxc} from "./customisations/Media";
+import { mediaFromMxc } from "./customisations/Media";
 import SettingsStore from "./settings/SettingsStore";
 
-export type ResizeMethod = "crop" | "scale";
-
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
-export function avatarUrlForMember(member: RoomMember, width: number, height: number, resizeMethod: ResizeMethod) {
+export function avatarUrlForMember(
+    member: RoomMember,
+    width: number,
+    height: number,
+    resizeMethod: ResizeMethod,
+): string {
     let url: string;
     if (member?.getMxcAvatarUrl()) {
         url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
@@ -39,7 +43,12 @@ export function avatarUrlForMember(member: RoomMember, width: number, height: nu
     return url;
 }
 
-export function avatarUrlForUser(user: User, width: number, height: number, resizeMethod?: ResizeMethod) {
+export function avatarUrlForUser(
+    user: Pick<User, "avatarUrl">,
+    width: number,
+    height: number,
+    resizeMethod?: ResizeMethod,
+): string | null {
     if (!user.avatarUrl) return null;
     return mediaFromMxc(user.avatarUrl).getThumbnailOfSourceHttp(width, height, resizeMethod);
 }

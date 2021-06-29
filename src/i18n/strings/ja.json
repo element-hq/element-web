@@ -2502,5 +2502,6 @@
     "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "部屋や会話を追加できます。これはあなた専用のスペースで、他の人からは見えません。後から部屋や会話を追加することもできます。",
     "Support": "サポート",
     "You can change these anytime.": "ここで入力した情報はいつでも編集できます。",
-    "Add some details to help people recognise it.": "情報を入力してください。"
+    "Add some details to help people recognise it.": "情報を入力してください。",
+    "View dev tools": "開発者ツールを表示"
 }

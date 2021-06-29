@@ -88,6 +88,10 @@ async function runTests() {
             window.mxPerformanceMonitor.addPerformanceDataCallback({
                 entryNames: [
                     window.mxPerformanceEntryNames.REGISTER,
+                    window.mxPerformanceEntryNames.LOGIN,
+                    window.mxPerformanceEntryNames.JOIN_ROOM,
+                    window.mxPerformanceEntryNames.CREATE_DM,
+                    window.mxPerformanceEntryNames.VERIFY_E2EE_USER,
                 ],
                 callback: (events) => {
                     measurements = JSON.stringify(events);
@@ -129,7 +133,7 @@ async function writeLogs(sessions, dir) {
         fs.writeFileSync(appHtmlName, documentHtml);
         fs.writeFileSync(networkLogName, session.networkLogs());
         fs.writeFileSync(consoleLogName, session.consoleLogs());
-        await session.page.screenshot({path: `${userLogDir}/screenshot.png`});
+        await session.page.screenshot({ path: `${userLogDir}/screenshot.png` });
     }
     return logs;
 }

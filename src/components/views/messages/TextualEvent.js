@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as TextForEvent from "../../../TextForEvent";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.messages.TextualEvent")
 export default class TextualEvent extends React.Component {
@@ -28,7 +28,7 @@ export default class TextualEvent extends React.Component {
     };
 
     render() {
-        const text = TextForEvent.textForEvent(this.props.mxEvent);
+        const text = TextForEvent.textForEvent(this.props.mxEvent, true);
         if (text == null || text.length === 0) return null;
         return (
             <div className="mx_TextualEvent">{ text }</div>

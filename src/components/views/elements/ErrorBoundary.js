@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import Modal from '../../../Modal';
 import SdkConfig from "../../../SdkConfig";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 /**
  * This error boundary component can be used to wrap large content areas and

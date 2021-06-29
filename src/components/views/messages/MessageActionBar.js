@@ -16,24 +16,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { EventStatus } from 'matrix-js-sdk/src/models/event';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
-import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from '../../structures/ContextMenu';
+import { aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
 import Toolbar from "../../../accessibility/Toolbar";
-import {RovingAccessibleTooltipButton, useRovingTabIndex} from "../../../accessibility/RovingTabIndex";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {canCancel} from "../context_menus/MessageContextMenu";
+import { RovingAccessibleTooltipButton, useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
-const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
+const OptionsButton = ({ mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const [onFocus, isActive, ref] = useRovingTabIndex(button);
     useEffect(() => {
@@ -48,15 +48,14 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         const replyThread = getReplyThread && getReplyThread();
 
         const buttonRect = button.current.getBoundingClientRect();
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
-            <MessageContextMenu
-                mxEvent={mxEvent}
-                permalinkCreator={permalinkCreator}
-                eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
-                collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
-                onFinished={closeMenu}
-            />
-        </ContextMenu>;
+        contextMenu = <MessageContextMenu
+            {...aboveLeftOf(buttonRect)}
+            mxEvent={mxEvent}
+            permalinkCreator={permalinkCreator}
+            eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
+            collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
+            onFinished={closeMenu}
+        />;
     }
 
     return <React.Fragment>
@@ -74,7 +73,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
     </React.Fragment>;
 };
 
-const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
+const ReactButton = ({ mxEvent, reactions, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const [onFocus, isActive, ref] = useRovingTabIndex(button);
     useEffect(() => {

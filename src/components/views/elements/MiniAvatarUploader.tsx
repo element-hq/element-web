@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext, useRef, useState} from 'react';
-import {EventType} from 'matrix-js-sdk/src/@types/event';
+import React, { useContext, useRef, useState } from 'react';
+import { EventType } from 'matrix-js-sdk/src/@types/event';
 import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {useTimeout} from "../../../hooks/useTimeout";
+import { useTimeout } from "../../../hooks/useTimeout";
 import Analytics from "../../../Analytics";
 import CountlyAnalytics from '../../../CountlyAnalytics';
 import RoomContext from "../../../contexts/RoomContext";
@@ -52,7 +52,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
 
     const label = (hasAvatar || busy) ? hasAvatarLabel : noAvatarLabel;
 
-    const {room} = useContext(RoomContext);
+    const { room } = useContext(RoomContext);
     const canSetAvatar = room?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId());
     if (!canSetAvatar) return <React.Fragment>{ children }</React.Fragment>;
 

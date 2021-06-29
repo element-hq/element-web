@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg as peg} from '../../../src/MatrixClientPeg';
+import { MatrixClientPeg as peg } from '../../../src/MatrixClientPeg';
 import {
     makeGroupPermalink,
     makeRoomPermalink,
@@ -48,7 +48,7 @@ function mockRoom(roomId, members, serverACL) {
                         content = serverACL;
                         break;
                     case "m.room.power_levels":
-                        content = {users: powerLevelsUsers, users_default: 0};
+                        content = { users: powerLevelsUsers, users_default: 0 };
                         break;
                 }
                 if (content) {

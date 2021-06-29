@@ -46,7 +46,7 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
     private callUpdate = throttle(() => {
         this.emit(FILTER_CHANGED);
-    }, 200, {trailing: true, leading: true});
+    }, 200, { trailing: true, leading: true });
 
     public isVisible(room: Room): boolean {
         const lcFilter = this.search.toLowerCase();

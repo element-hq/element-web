@@ -15,22 +15,22 @@ limitations under the License.
 */
 import React from 'react';
 import classNames from 'classnames';
-import {_t, _td} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import PersistedElement from "../elements/PersistedElement";
-import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
-import {ContextMenu} from "../../structures/ContextMenu";
-import {WidgetType} from "../../../widgets/WidgetType";
+import { ContextMenu } from "../../structures/ContextMenu";
+import { WidgetType } from "../../../widgets/WidgetType";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {Action} from "../../../dispatcher/actions";
-import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -103,7 +103,7 @@ export default class Stickerpicker extends React.PureComponent {
             console.warn('No widget ID specified, not disabling assets');
         }
 
-        this.setState({showStickers: false});
+        this.setState({ showStickers: false });
         WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
@@ -150,7 +150,7 @@ export default class Stickerpicker extends React.PureComponent {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         if (!stickerpickerWidget) {
             Stickerpicker.currentWidget = null;
-            this.setState({stickerpickerWidget: null, widgetId: null});
+            this.setState({ stickerpickerWidget: null, widgetId: null });
             return;
         }
 
@@ -183,12 +183,12 @@ export default class Stickerpicker extends React.PureComponent {
                 this.forceUpdate();
                 break;
             case "stickerpicker_close":
-                this.setState({showStickers: false});
+                this.setState({ showStickers: false });
                 break;
             case Action.AfterRightPanelPhaseChange:
             case "show_left_panel":
             case "hide_left_panel":
-                this.setState({showStickers: false});
+                this.setState({ showStickers: false });
                 break;
         }
     }
@@ -206,7 +206,7 @@ export default class Stickerpicker extends React.PureComponent {
 
     _errorStickerpickerContent() {
         return (
-            <div style={{"text-align": "center"}} className="error">
+            <div style={{ "text-align": "center" }} className="error">
                 <p> { this.state.imError } </p>
             </div>
         );
@@ -342,7 +342,7 @@ export default class Stickerpicker extends React.PureComponent {
      */
     _onHideStickersClick(ev) {
         if (this.state.showStickers) {
-            this.setState({showStickers: false});
+            this.setState({ showStickers: false });
         }
     }
 
@@ -351,7 +351,7 @@ export default class Stickerpicker extends React.PureComponent {
      */
     _onResize() {
         if (this.state.showStickers) {
-            this.setState({showStickers: false});
+            this.setState({ showStickers: false });
         }
     }
 
@@ -360,7 +360,7 @@ export default class Stickerpicker extends React.PureComponent {
      */
     _onFinished() {
         if (this.state.showStickers) {
-            this.setState({showStickers: false});
+            this.setState({ showStickers: false });
         }
     }
 

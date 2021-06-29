@@ -23,27 +23,28 @@ import DeviceListener from "../DeviceListener";
 import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
-import {IntegrationManagers} from "../integrations/IntegrationManagers";
-import {ModalManager} from "../Modal";
+import { IntegrationManagers } from "../integrations/IntegrationManagers";
+import { ModalManager } from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
-import {ActiveRoomObserver} from "../ActiveRoomObserver";
-import {Notifier} from "../Notifier";
-import type {Renderer} from "react-dom";
+import { ActiveRoomObserver } from "../ActiveRoomObserver";
+import { Notifier } from "../Notifier";
+import type { Renderer } from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
 import CallHandler from "../CallHandler";
-import {Analytics} from "../Analytics";
+import { Analytics } from "../Analytics";
 import CountlyAnalytics from "../CountlyAnalytics";
 import UserActivity from "../UserActivity";
-import {ModalWidgetStore} from "../stores/ModalWidgetStore";
+import { ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import VoipUserMapper from "../VoipUserMapper";
-import {SpaceStoreClass} from "../stores/SpaceStore";
+import { SpaceStoreClass } from "../stores/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
-import {VoiceRecordingStore} from "../stores/VoiceRecordingStore";
+import { VoiceRecordingStore } from "../stores/VoiceRecordingStore";
 import PerformanceMonitor from "../performance";
 import UIStore from "../stores/UIStore";
+import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 
 declare global {
     interface Window {
@@ -84,6 +85,7 @@ declare global {
         mxPerformanceMonitor: PerformanceMonitor;
         mxPerformanceEntryNames: any;
         mxUIStore: UIStore;
+        mxSetupEncryptionStore?: SetupEncryptionStore;
     }
 
     interface Document {
@@ -109,19 +111,6 @@ declare global {
 
     interface StorageEstimate {
         usageDetails?: {[key: string]: number};
-    }
-
-    export interface ISettledFulfilled<T> {
-        status: "fulfilled";
-        value: T;
-    }
-    export interface ISettledRejected {
-        status: "rejected";
-        reason: any;
-    }
-
-    interface PromiseConstructor {
-        allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>>;
     }
 
     interface HTMLAudioElement {

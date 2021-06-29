@@ -15,15 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import FileSaver from 'file-saver';
 import * as sdk from '../../../../index';
-import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
-import {_t, _td} from '../../../../languageHandler';
+import { _t, _td } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../SecurityManager';
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
-import {copyNode} from "../../../../utils/strings";
+import { copyNode } from "../../../../utils/strings";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
 
 const PHASE_PASSPHRASE = 0;
@@ -152,11 +152,11 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
     }
 
     _onOptOutClick = () => {
-        this.setState({phase: PHASE_OPTOUT_CONFIRM});
+        this.setState({ phase: PHASE_OPTOUT_CONFIRM });
     }
 
     _onSetUpClick = () => {
-        this.setState({phase: PHASE_PASSPHRASE});
+        this.setState({ phase: PHASE_PASSPHRASE });
     }
 
     _onSkipPassPhraseClick = async () => {
@@ -179,7 +179,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             return;
         }
 
-        this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
+        this.setState({ phase: PHASE_PASSPHRASE_CONFIRM });
     };
 
     _onPassPhraseConfirmNextClick = async (e) => {
@@ -370,21 +370,21 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         if (this.state.copied) {
             introText = _t(
                 "Your Security Key has been <b>copied to your clipboard</b>, paste it to:",
-                {}, {b: s => <b>{s}</b>},
+                {}, { b: s => <b>{s}</b> },
             );
         } else if (this.state.downloaded) {
             introText = _t(
                 "Your Security Key is in your <b>Downloads</b> folder.",
-                {}, {b: s => <b>{s}</b>},
+                {}, { b: s => <b>{s}</b> },
             );
         }
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             {introText}
             <ul>
-                <li>{_t("<b>Print it</b> and store it somewhere safe", {}, {b: s => <b>{s}</b>})}</li>
-                <li>{_t("<b>Save it</b> on a USB key or backup drive", {}, {b: s => <b>{s}</b>})}</li>
-                <li>{_t("<b>Copy it</b> to your personal cloud storage", {}, {b: s => <b>{s}</b>})}</li>
+                <li>{_t("<b>Print it</b> and store it somewhere safe", {}, { b: s => <b>{s}</b> })}</li>
+                <li>{_t("<b>Save it</b> on a USB key or backup drive", {}, { b: s => <b>{s}</b> })}</li>
+                <li>{_t("<b>Copy it</b> to your personal cloud storage", {}, { b: s => <b>{s}</b> })}</li>
             </ul>
             <DialogButtons primaryButton={_t("Continue")}
                 onPrimaryButtonClick={this._createBackup}

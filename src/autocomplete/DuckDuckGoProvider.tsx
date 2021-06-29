@@ -20,8 +20,8 @@ import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 
-import {TextualCompletion} from './Components';
-import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { TextualCompletion } from './Components';
+import { ICompletion, ISelectionRange } from "./Autocompleter";
 
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
@@ -42,7 +42,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const {command, range} = this.getCurrentCommand(query, selection);
+        const { command, range } = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];
         }

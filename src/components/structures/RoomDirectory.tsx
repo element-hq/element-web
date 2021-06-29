@@ -25,7 +25,7 @@ import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-import {ALL_ROOMS, IFieldType, IInstance, IProtocol, Protocols} from "../views/directory/NetworkDropdown";
+import { ALL_ROOMS, IFieldType, IInstance, IProtocol, Protocols } from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
@@ -34,7 +34,7 @@ import CountlyAnalytics from "../../CountlyAnalytics";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
@@ -44,7 +44,6 @@ import NetworkDropdown from "../views/directory/NetworkDropdown";
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
 import { ActionPayload } from "../../dispatcher/payloads";
-
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -95,7 +94,7 @@ interface IPublicRoomsRequest {
 @replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component<IProps, IState> {
     private readonly startTime: number;
-    private unmounted = false
+    private unmounted = false;
     private nextBatch: string = null;
     private filterTimeout: NodeJS.Timeout;
     private protocols: Protocols;
@@ -300,9 +299,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
         let desc;
         if (alias) {
-            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', {alias, name});
+            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', { alias, name });
         } else {
-            desc = _t('Remove %(name)s from the directory?', {name: name});
+            desc = _t('Remove %(name)s from the directory?', { name: name });
         }
 
         Modal.createTrackedDialog('Remove from Directory', '', QuestionDialog, {
@@ -312,7 +311,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 if (!shouldDelete) return;
 
                 const modal = Modal.createDialog(Spinner);
-                let step = _t('remove %(name)s from the directory.', {name: name});
+                let step = _t('remove %(name)s from the directory.', { name: name });
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
@@ -337,11 +336,10 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     }
 
     private onRoomClicked = (room: IRoom, ev: ButtonEvent) => {
+        // If room was shift-clicked, remove it from the room directory
         if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();
             this.removeFromDirectory(room);
-        } else {
-            this.showRoom(room);
         }
     };
 
@@ -484,7 +482,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    dis.dispatch({action: 'require_registration'});
+                    dis.dispatch({ action: 'require_registration' });
                     return;
                 }
             }
@@ -568,11 +566,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         let avatarUrl = null;
         if (room.avatar_url) avatarUrl = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(32);
 
+        // We use onMouseDown instead of onClick, so that we can avoid text getting selected
         return [
-            <div key={ `${room.room_id}_avatar` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_avatar` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomAvatar"
             >
                 <BaseAvatar
@@ -584,42 +582,50 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     url={avatarUrl}
                 />
             </div>,
-            <div key={ `${room.room_id}_description` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_description` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomDescription"
             >
-                <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
-                <div className="mx_RoomDirectory_topic"
-                    onClick={ (ev) => { ev.stopPropagation(); } }
+                <div
+                    className="mx_RoomDirectory_name"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { name }
+                </div>&nbsp;
+                <div
+                    className="mx_RoomDirectory_topic"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                     dangerouslySetInnerHTML={{ __html: topic }}
                 />
-                <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>
+                <div
+                    className="mx_RoomDirectory_alias"
+                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
+                >
+                    { getDisplayAliasForRoom(room) }
+                </div>
             </div>,
-            <div key={ `${room.room_id}_memberCount` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_memberCount` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomMemberCount"
             >
                 { room.num_joined_members }
             </div>,
-            <div key={ `${room.room_id}_preview` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
+            <div
+                key={ `${room.room_id}_preview` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
                 className="mx_RoomDirectory_preview"
             >
-                {previewButton}
+                { previewButton }
             </div>,
-            <div key={ `${room.room_id}_join` }
-                onClick={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
-                onMouseDown={(ev) => {ev.preventDefault();}}
+            <div
+                key={ `${room.room_id}_join` }
+                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_join"
             >
-                {joinOrViewButton}
+                { joinOrViewButton }
             </div>,
         ];
     }
@@ -775,11 +781,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         }
         const explanation =
             _t("If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.", null,
-                {a: sub => (
+                { a: sub => (
                     <AccessibleButton kind="secondary" onClick={this.onCreateRoomClick}>
                         { sub }
                     </AccessibleButton>
-                )},
+                ) },
             );
 
         const title = this.state.selectedCommunityId

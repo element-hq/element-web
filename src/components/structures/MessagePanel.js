@@ -16,28 +16,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import shouldHideEvent from '../../shouldHideEvent';
-import {wantsDateSeparator} from '../../DateUtils';
+import { wantsDateSeparator } from '../../DateUtils';
 import * as sdk from '../../index';
 
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import RoomContext from "../../contexts/RoomContext";
-import {Layout, LayoutPropType} from "../../settings/Layout";
-import {_t} from "../../languageHandler";
-import {haveTileForEvent} from "../views/rooms/EventTile";
-import {hasText} from "../../TextForEvent";
+import { Layout, LayoutPropType } from "../../settings/Layout";
+import { _t } from "../../languageHandler";
+import { haveTileForEvent } from "../views/rooms/EventTile";
+import { hasText } from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 import defaultDispatcher from '../../dispatcher/dispatcher';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
+const membershipTypes = ['m.room.member', 'm.room.third_party_invite', 'm.room.server_acl'];
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
@@ -65,8 +66,6 @@ function shouldFormContinuation(prevEvent, mxEvent) {
 
     return true;
 }
-
-const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType() === 'm.room.third_party_invite';
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -350,7 +349,7 @@ export default class MessagePanel extends React.Component {
     scrollToEventIfNeeded(eventId) {
         const node = this.eventNodes[eventId];
         if (node) {
-            node.scrollIntoView({block: "nearest", behavior: "instant"});
+            node.scrollIntoView({ block: "nearest", behavior: "instant" });
         }
     }
 
@@ -399,7 +398,7 @@ export default class MessagePanel extends React.Component {
             // confused.
             if (visible) {
                 hr = <hr className="mx_RoomView_myReadMarker"
-                    style={{opacity: 1, width: '99%'}}
+                    style={{ opacity: 1, width: '99%' }}
                 />;
             }
 
@@ -474,7 +473,7 @@ export default class MessagePanel extends React.Component {
         // not-chat purposes.
         const nextTile = arr.slice(i + 1).find(e => this._shouldShowEvent(e));
 
-        return {nextEvent, nextTile};
+        return { nextEvent, nextTile };
     }
 
     get _roomHasPendingEdit() {
@@ -532,7 +531,7 @@ export default class MessagePanel extends React.Component {
             const mxEv = this.props.events[i];
             const eventId = mxEv.getId();
             const last = (mxEv === lastShownEvent);
-            const {nextEvent, nextTile} = this._getNextEventInfo(this.props.events, i);
+            const { nextEvent, nextTile } = this._getNextEventInfo(this.props.events, i);
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
@@ -1144,7 +1143,7 @@ class RedactionGrouper {
 // Wrap consecutive member events in a ListSummary, ignore if redacted
 class MemberGrouper {
     static canStartGroup = function(panel, ev) {
-        return panel._shouldShowEvent(ev) && isMembershipChange(ev);
+        return panel._shouldShowEvent(ev) && membershipTypes.includes(ev.getType());
     }
 
     constructor(panel, ev, prevEvent, lastShownEvent) {
@@ -1162,7 +1161,7 @@ class MemberGrouper {
         if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
-        return isMembershipChange(ev);
+        return membershipTypes.includes(ev.getType());
     }
 
     add(ev) {

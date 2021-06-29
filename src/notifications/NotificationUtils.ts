@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Action, Actions} from "./types";
+import { Action, Actions } from "./types";
 
 interface IEncodedActions {
     notify: boolean;
@@ -37,12 +37,12 @@ export class NotificationUtils {
         if (notify) {
             const actions: Action[] = [Actions.Notify];
             if (sound) {
-                actions.push({"set_tweak": "sound", "value": sound});
+                actions.push({ "set_tweak": "sound", "value": sound });
             }
             if (highlight) {
-                actions.push({"set_tweak": "highlight"});
+                actions.push({ "set_tweak": "highlight" });
             } else {
-                actions.push({"set_tweak": "highlight", "value": false});
+                actions.push({ "set_tweak": "highlight", "value": false });
             }
             return actions;
         } else {
