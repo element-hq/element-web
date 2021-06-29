@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Playback, PlaybackState} from "../../../voice/Playback";
-import React, {ReactNode} from "react";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { Playback, PlaybackState } from "../../../voice/Playback";
+import React, { ReactNode } from "react";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import PlaybackWaveform from "./PlaybackWaveform";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
@@ -49,7 +49,7 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
     }
 
     private onPlaybackUpdate = (ev: PlaybackState) => {
-        this.setState({playbackPhase: ev});
+        this.setState({ playbackPhase: ev });
     };
 
     public render(): ReactNode {
@@ -57,6 +57,6 @@ export default class RecordingPlayback extends React.PureComponent<IProps, IStat
             <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />
             <PlaybackClock playback={this.props.playback} />
             <PlaybackWaveform playback={this.props.playback} />
-        </div>
+        </div>;
     }
 }

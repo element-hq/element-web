@@ -16,12 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import EmojiPicker from "./EmojiPicker";
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -103,7 +103,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
                     "key": reaction,
                 },
             });
-            dis.dispatch({action: "message_sent"});
+            dis.dispatch({ action: "message_sent" });
             return true;
         }
     };

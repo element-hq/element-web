@@ -19,7 +19,7 @@ import React from 'react';
 import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 
 interface ITermsCheckboxProps {
@@ -31,7 +31,7 @@ interface ITermsCheckboxProps {
 class TermsCheckbox extends React.PureComponent<ITermsCheckboxProps> {
     private onChange = (ev: React.FormEvent<HTMLInputElement>): void => {
         this.props.onChange(this.props.url, ev.currentTarget.checked);
-    }
+    };
 
     render() {
         return <input type="checkbox"
@@ -80,11 +80,11 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
 
     private onCancelClick = (): void => {
         this.props.onFinished(false);
-    }
+    };
 
     private onNextClick = (): void => {
         this.props.onFinished(true, Object.keys(this.state.agreedUrls).filter((url) => this.state.agreedUrls[url]));
-    }
+    };
 
     private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Element {
         switch (serviceType) {
@@ -114,7 +114,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
         this.setState({
             agreedUrls: Object.assign({}, this.state.agreedUrls, { [url]: checked }),
         });
-    }
+    };
 
     public render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');

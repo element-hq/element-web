@@ -64,7 +64,7 @@ const calculateUrls = (url, urls, lowBandwidth) => {
     return Array.from(new Set(_urls));
 };
 
-const useImageUrl = ({url, urls}): [string, () => void] => {
+const useImageUrl = ({ url, urls }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
     const roomContext = useContext(RoomContext);
@@ -115,7 +115,7 @@ const BaseAvatar = (props: IProps) => {
         ...otherProps
     } = props;
 
-    const [imageUrl, onError] = useImageUrl({url, urls});
+    const [imageUrl, onError] = useImageUrl({ url, urls });
 
     if (!imageUrl && defaultToInitialLetter) {
         const initialLetter = AvatarLogic.getInitialLetter(name);

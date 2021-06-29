@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
-import {Playback, PlaybackState} from "../../../voice/Playback";
-import {UPDATE_EVENT} from "../../../stores/AsyncStore";
+import { Playback, PlaybackState } from "../../../voice/Playback";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     playback: Playback;
@@ -54,11 +54,11 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     private onPlaybackUpdate = (ev: PlaybackState) => {
         // Convert Decoding -> Stopped because we don't care about the distinction here
         if (ev === PlaybackState.Decoding) ev = PlaybackState.Stopped;
-        this.setState({playbackPhase: ev});
+        this.setState({ playbackPhase: ev });
     };
 
     private onTimeUpdate = (time: number[]) => {
-        this.setState({seconds: time[0], durationSeconds: time[1]});
+        this.setState({ seconds: time[0], durationSeconds: time[1] });
     };
 
     public render() {

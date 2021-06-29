@@ -17,15 +17,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../languageHandler";
-import {MatrixClientPeg} from "../../../../MatrixClientPeg";
+import { _t } from "../../../../languageHandler";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
-import {replaceableComponent} from "../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -57,14 +57,14 @@ export class ExistingEmailAddress extends React.Component {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({verifyRemove: true});
+        this.setState({ verifyRemove: true });
     };
 
     _onDontRemove = (e) => {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({verifyRemove: false});
+        this.setState({ verifyRemove: false });
     };
 
     _onActuallyRemove = (e) => {
@@ -88,7 +88,7 @@ export class ExistingEmailAddress extends React.Component {
             return (
                 <div className="mx_ExistingEmailAddress">
                     <span className="mx_ExistingEmailAddress_promptText">
-                        {_t("Remove %(email)s?", {email: this.props.email.address} )}
+                        {_t("Remove %(email)s?", { email: this.props.email.address } )}
                     </span>
                     <AccessibleButton
                         onClick={this._onActuallyRemove}
@@ -167,13 +167,13 @@ export default class EmailAddresses extends React.Component {
         }
 
         const task = new AddThreepid();
-        this.setState({verifying: true, continueDisabled: true, addTask: task});
+        this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addEmailAddress(email).then(() => {
-            this.setState({continueDisabled: false});
+            this.setState({ continueDisabled: false });
         }).catch((err) => {
             console.error("Unable to add email address " + email + " " + err);
-            this.setState({verifying: false, continueDisabled: false, addTask: null});
+            this.setState({ verifying: false, continueDisabled: false, addTask: null });
             Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
@@ -185,7 +185,7 @@ export default class EmailAddresses extends React.Component {
         e.stopPropagation();
         e.preventDefault();
 
-        this.setState({continueDisabled: true});
+        this.setState({ continueDisabled: true });
         this.state.addTask.checkEmailLinkClicked().then(([finished]) => {
             let newEmailAddress = this.state.newEmailAddress;
             if (finished) {
@@ -204,7 +204,7 @@ export default class EmailAddresses extends React.Component {
                 newEmailAddress,
             });
         }).catch((err) => {
-            this.setState({continueDisabled: false});
+            this.setState({ continueDisabled: false });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
                 Modal.createTrackedDialog("Email hasn't been verified yet", "", ErrorDialog, {

@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {CSSProperties, RefObject, useRef, useState} from "react";
+import React, { CSSProperties, RefObject, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
-import {Key} from "../../Keyboard";
-import {Writeable} from "../../@types/common";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { Key } from "../../Keyboard";
+import { Writeable } from "../../@types/common";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
@@ -371,7 +371,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         return (
             <div
                 className={classNames("mx_ContextualMenu_wrapper", this.props.wrapperClassName)}
-                style={{...position, ...wrapperStyle}}
+                style={{ ...position, ...wrapperStyle }}
                 onKeyDown={this.onKeyDown}
                 onContextMenu={this.onContextMenuPreventBubbling}
             >
@@ -399,7 +399,7 @@ export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
-    return {left, top, chevronOffset};
+    return { left, top, chevronOffset };
 };
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect,
@@ -498,15 +498,15 @@ export function createMenu(ElementClass, props) {
 
     ReactDOM.render(menu, getOrCreateContainer());
 
-    return {close: onFinished};
+    return { close: onFinished };
 }
 
 // re-export the semantic helper components for simplicity
-export {ContextMenuButton} from "../../accessibility/context_menu/ContextMenuButton";
-export {ContextMenuTooltipButton} from "../../accessibility/context_menu/ContextMenuTooltipButton";
-export {MenuGroup} from "../../accessibility/context_menu/MenuGroup";
-export {MenuItem} from "../../accessibility/context_menu/MenuItem";
-export {MenuItemCheckbox} from "../../accessibility/context_menu/MenuItemCheckbox";
-export {MenuItemRadio} from "../../accessibility/context_menu/MenuItemRadio";
-export {StyledMenuItemCheckbox} from "../../accessibility/context_menu/StyledMenuItemCheckbox";
-export {StyledMenuItemRadio} from "../../accessibility/context_menu/StyledMenuItemRadio";
+export { ContextMenuButton } from "../../accessibility/context_menu/ContextMenuButton";
+export { ContextMenuTooltipButton } from "../../accessibility/context_menu/ContextMenuTooltipButton";
+export { MenuGroup } from "../../accessibility/context_menu/MenuGroup";
+export { MenuItem } from "../../accessibility/context_menu/MenuItem";
+export { MenuItemCheckbox } from "../../accessibility/context_menu/MenuItemCheckbox";
+export { MenuItemRadio } from "../../accessibility/context_menu/MenuItemRadio";
+export { StyledMenuItemCheckbox } from "../../accessibility/context_menu/StyledMenuItemCheckbox";
+export { StyledMenuItemRadio } from "../../accessibility/context_menu/StyledMenuItemRadio";

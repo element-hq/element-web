@@ -29,7 +29,7 @@ import {
     ArrayUtil,
     GroupedArray,
 } from "../../src/utils/arrays";
-import {objectFromEntries} from "../../src/utils/objects";
+import { objectFromEntries } from "../../src/utils/objects";
 
 function expectSample(i: number, input: number[], expected: number[], smooth = false) {
     console.log(`Resample case index: ${i}`); // for debugging test failures
@@ -43,26 +43,26 @@ describe('arrays', () => {
     describe('arrayFastResample', () => {
         it('should downsample', () => {
             [
-                {input: [1, 2, 3, 4, 5], output: [1, 4]}, // Odd -> Even
-                {input: [1, 2, 3, 4, 5], output: [1, 3, 5]}, // Odd -> Odd
-                {input: [1, 2, 3, 4], output: [1, 2, 3]}, // Even -> Odd
-                {input: [1, 2, 3, 4], output: [1, 3]}, // Even -> Even
+                { input: [1, 2, 3, 4, 5], output: [1, 4] }, // Odd -> Even
+                { input: [1, 2, 3, 4, 5], output: [1, 3, 5] }, // Odd -> Odd
+                { input: [1, 2, 3, 4], output: [1, 2, 3] }, // Even -> Odd
+                { input: [1, 2, 3, 4], output: [1, 3] }, // Even -> Even
             ].forEach((c, i) => expectSample(i, c.input, c.output));
         });
 
         it('should upsample', () => {
             [
-                {input: [1, 2, 3], output: [1, 1, 2, 2, 3, 3]}, // Odd -> Even
-                {input: [1, 2, 3], output: [1, 1, 2, 2, 3]}, // Odd -> Odd
-                {input: [1, 2], output: [1, 1, 1, 2, 2]}, // Even -> Odd
-                {input: [1, 2], output: [1, 1, 1, 2, 2, 2]}, // Even -> Even
+                { input: [1, 2, 3], output: [1, 1, 2, 2, 3, 3] }, // Odd -> Even
+                { input: [1, 2, 3], output: [1, 1, 2, 2, 3] }, // Odd -> Odd
+                { input: [1, 2], output: [1, 1, 1, 2, 2] }, // Even -> Odd
+                { input: [1, 2], output: [1, 1, 1, 2, 2, 2] }, // Even -> Even
             ].forEach((c, i) => expectSample(i, c.input, c.output));
         });
 
         it('should maintain sample', () => {
             [
-                {input: [1, 2, 3], output: [1, 2, 3]}, // Odd
-                {input: [1, 2], output: [1, 2]}, // Even
+                { input: [1, 2, 3], output: [1, 2, 3] }, // Odd
+                { input: [1, 2], output: [1, 2] }, // Even
             ].forEach((c, i) => expectSample(i, c.input, c.output));
         });
     });
@@ -73,26 +73,26 @@ describe('arrays', () => {
             // we'd be feeding a thousand values in and seeing what a curve of 250 values looks like,
             // but that's not really feasible to manually verify accuracy.
             [
-                {input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3]}, // Odd -> Even
-                {input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3]}, // Odd -> Odd
-                {input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3]}, // Even -> Odd
-                {input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3]}, // Even -> Even
+                { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3] }, // Odd -> Even
+                { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3] }, // Odd -> Odd
+                { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3] }, // Even -> Odd
+                { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3] }, // Even -> Even
             ].forEach((c, i) => expectSample(i, c.input, c.output, true));
         });
 
         it('should upsample', () => {
             [
-                {input: [2, 0, 2], output: [2, 2, 0, 0, 2, 2]}, // Odd -> Even
-                {input: [2, 0, 2], output: [2, 2, 0, 0, 2]}, // Odd -> Odd
-                {input: [2, 0], output: [2, 2, 2, 0, 0]}, // Even -> Odd
-                {input: [2, 0], output: [2, 2, 2, 0, 0, 0]}, // Even -> Even
+                { input: [2, 0, 2], output: [2, 2, 0, 0, 2, 2] }, // Odd -> Even
+                { input: [2, 0, 2], output: [2, 2, 0, 0, 2] }, // Odd -> Odd
+                { input: [2, 0], output: [2, 2, 2, 0, 0] }, // Even -> Odd
+                { input: [2, 0], output: [2, 2, 2, 0, 0, 0] }, // Even -> Even
             ].forEach((c, i) => expectSample(i, c.input, c.output, true));
         });
 
         it('should maintain sample', () => {
             [
-                {input: [2, 0, 2], output: [2, 0, 2]}, // Odd
-                {input: [2, 0], output: [2, 0]}, // Even
+                { input: [2, 0, 2], output: [2, 0, 2] }, // Odd
+                { input: [2, 0], output: [2, 0] }, // Even
             ].forEach((c, i) => expectSample(i, c.input, c.output, true));
         });
     });

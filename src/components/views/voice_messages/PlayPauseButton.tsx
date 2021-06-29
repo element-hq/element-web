@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactNode} from "react";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import React, { ReactNode } from "react";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {_t} from "../../../languageHandler";
-import {Playback, PlaybackState} from "../../../voice/Playback";
+import { _t } from "../../../languageHandler";
+import { Playback, PlaybackState } from "../../../voice/Playback";
 import classNames from "classnames";
 
 interface IProps {

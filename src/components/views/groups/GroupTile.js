@@ -20,8 +20,8 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
-import {mediaFromMxc} from "../../../customisations/Media";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";
 import TagOrderActions from "../../../actions/TagOrderActions";
 import GroupFilterOrderStore from "../../../stores/GroupFilterOrderStore";
@@ -49,7 +49,7 @@ class GroupTile extends React.Component {
 
     componentDidMount() {
         FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
-            this.setState({profile});
+            this.setState({ profile });
         }).catch((err) => {
             console.error('Error whilst getting cached profile for GroupTile', err);
         });

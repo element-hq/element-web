@@ -17,24 +17,24 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
-import {sleep} from "../../../../../utils/promise";
+import { sleep } from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
-import {privateShouldBeEncrypted} from "../../../../../createRoom";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
+import { privateShouldBeEncrypted } from "../../../../../createRoom";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import {UIFeature} from "../../../../../settings/UIFeature";
-import {isE2eAdvancedPanelPossible} from "../../E2eAdvancedPanel";
+import { UIFeature } from "../../../../../settings/UIFeature";
+import { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
 import CountlyAnalytics from "../../../../../CountlyAnalytics";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -82,12 +82,11 @@ export default class SecurityUserSettingsTab extends React.Component {
         this._onAction = this._onAction.bind(this);
     }
 
-
-    _onAction({action}) {
+    _onAction({ action }) {
         if (action === "ignore_state_changed") {
             const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
             const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e));
-            this.setState({ignoredUserIds, waitingUnignored: newWaitingUnignored});
+            this.setState({ ignoredUserIds, waitingUnignored: newWaitingUnignored });
         }
     }
 
@@ -111,14 +110,14 @@ export default class SecurityUserSettingsTab extends React.Component {
     _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
             import('../../../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
-            {matrixClient: MatrixClientPeg.get()},
+            { matrixClient: MatrixClientPeg.get() },
         );
     };
 
     _onImportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Import E2E Keys', '',
             import('../../../../../async-components/views/dialogs/security/ImportE2eKeysDialog'),
-            {matrixClient: MatrixClientPeg.get()},
+            { matrixClient: MatrixClientPeg.get() },
         );
     };
 
@@ -131,13 +130,13 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
     _onUserUnignored = async (userId) => {
-        const {ignoredUserIds, waitingUnignored} = this.state;
+        const { ignoredUserIds, waitingUnignored } = this.state;
         const currentlyIgnoredUserIds = ignoredUserIds.filter(e => !waitingUnignored.includes(e));
 
         const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
-            this.setState(({waitingUnignored}) => ({waitingUnignored: [...waitingUnignored, userId]}));
+            this.setState(({ waitingUnignored }) => ({ waitingUnignored: [...waitingUnignored, userId] }));
             MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
         }
     };
@@ -168,7 +167,7 @@ export default class SecurityUserSettingsTab extends React.Component {
             // Accept/reject invite
             await action(roomId).then(() => {
                 // No error, update invited rooms button
-                this.setState({invitedRoomAmt: self.state.invitedRoomAmt - 1});
+                this.setState({ invitedRoomAmt: self.state.invitedRoomAmt - 1 });
             }, async (e) => {
                 // Action failure
                 if (e.errcode === "M_LIMIT_EXCEEDED") {
@@ -253,7 +252,7 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
     _renderIgnoredUsers() {
-        const {waitingUnignored, ignoredUserIds} = this.state;
+        const { waitingUnignored, ignoredUserIds } = this.state;
 
         const userIds = !ignoredUserIds?.length
             ? _t('You have no ignored users.')
@@ -291,10 +290,10 @@ export default class SecurityUserSettingsTab extends React.Component {
             <div className='mx_SettingsTab_section mx_SecurityUserSettingsTab_bulkOptions'>
                 <span className='mx_SettingsTab_subheading'>{_t('Bulk options')}</span>
                 <AccessibleButton onClick={onClickAccept} kind='primary' disabled={this.state.managingInvites}>
-                    {_t("Accept all %(invitedRooms)s invites", {invitedRooms: this.state.invitedRoomAmt})}
+                    {_t("Accept all %(invitedRooms)s invites", { invitedRooms: this.state.invitedRoomAmt })}
                 </AccessibleButton>
                 <AccessibleButton onClick={onClickReject} kind='danger' disabled={this.state.managingInvites}>
-                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: this.state.invitedRoomAmt})}
+                    {_t("Reject all %(invitedRooms)s invites", { invitedRooms: this.state.invitedRoomAmt })}
                 </AccessibleButton>
                 {this.state.managingInvites ? <InlineSpinner /> : <div />}
             </div>

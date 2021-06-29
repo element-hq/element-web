@@ -26,7 +26,7 @@ export enum E2EStatus {
 }
 
 export async function shieldStatusForRoom(client: MatrixClient, room: Room): Promise<E2EStatus> {
-    const members = (await room.getEncryptionTargetMembers()).map(({userId}) => userId);
+    const members = (await room.getEncryptionTargetMembers()).map(({ userId }) => userId);
     const inDMMap = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
     const verified: string[] = [];
@@ -53,7 +53,7 @@ export async function shieldStatusForRoom(client: MatrixClient, room: Room): Pro
     const targets = includeUser ? [...verified, client.getUserId()] : verified;
     for (const userId of targets) {
         const devices = client.getStoredDevicesForUser(userId);
-        const anyDeviceNotVerified = devices.some(({deviceId}) => {
+        const anyDeviceNotVerified = devices.some(({ deviceId }) => {
             return !client.checkDeviceTrust(userId, deviceId).isVerified();
         });
         if (anyDeviceNotVerified) {

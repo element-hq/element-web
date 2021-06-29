@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useContext} from "react";
-import {MatrixCapabilities} from "matrix-widget-api";
+import React, { useContext } from "react";
+import { MatrixCapabilities } from "matrix-widget-api";
 
-import IconizedContextMenu, {IconizedContextMenuOption, IconizedContextMenuOptionList} from "./IconizedContextMenu";
-import {ChevronFace} from "../../structures/ContextMenu";
-import {_t} from "../../../languageHandler";
-import {IApp} from "../../../stores/WidgetStore";
+import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
+import { ChevronFace } from "../../structures/ContextMenu";
+import { _t } from "../../../languageHandler";
+import { IApp } from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import RoomContext from "../../../contexts/RoomContext";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import {WidgetType} from "../../../widgets/WidgetType";
+import { WidgetType } from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
@@ -54,7 +54,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     ...props
 }) => {
     const cli = useContext(MatrixClientContext);
-    const {room, roomId} = useContext(RoomContext);
+    const { room, roomId } = useContext(RoomContext);
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);

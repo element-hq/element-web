@@ -53,11 +53,11 @@ export default class TagOrderActions {
             Analytics.trackEvent('TagOrderActions', 'commitTagOrdering');
             return matrixClient.setAccountData(
                 'im.vector.web.tag_ordering',
-                {tags, removedTags, _storeId: storeId},
+                { tags, removedTags, _storeId: storeId },
             );
         }, () => {
             // For an optimistic update
-            return {tags, removedTags};
+            return { tags, removedTags };
         });
     }
 
@@ -100,11 +100,11 @@ export default class TagOrderActions {
             Analytics.trackEvent('TagOrderActions', 'removeTag');
             return matrixClient.setAccountData(
                 'im.vector.web.tag_ordering',
-                {tags, removedTags, _storeId: storeId},
+                { tags, removedTags, _storeId: storeId },
             );
         }, () => {
             // For an optimistic update
-            return {removedTags};
+            return { removedTags };
         });
     }
 }

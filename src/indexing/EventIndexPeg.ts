@@ -21,9 +21,9 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";
-import {MatrixClientPeg} from "../MatrixClientPeg";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from '../settings/SettingsStore';
-import {SettingLevel} from "../settings/SettingLevel";
+import { SettingLevel } from "../settings/SettingLevel";
 
 const INDEX_VERSION = 1;
 

@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import dis from '../dispatcher/dispatcher';
-import {pendingVerificationRequestForUser} from '../verification';
-import {Store} from 'flux/utils';
+import { pendingVerificationRequestForUser } from '../verification';
+import { Store } from 'flux/utils';
 import SettingsStore from "../settings/SettingsStore";
-import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
-import {ActionPayload} from "../dispatcher/payloads";
-import {Action} from '../dispatcher/actions';
+import { RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS } from "./RightPanelStorePhases";
+import { ActionPayload } from "../dispatcher/payloads";
+import { Action } from '../dispatcher/actions';
 import { SettingLevel } from "../settings/SettingLevel";
 import RoomViewStore from './RoomViewStore';
 
@@ -152,12 +152,12 @@ export default class RightPanelStore extends Store<ActionPayload> {
 
                 // Reset to the member list if we're viewing member info
                 if (MEMBER_INFO_PHASES.includes(this.state.lastRoomPhase)) {
-                    this.setState({lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {}});
+                    this.setState({ lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {} });
                 }
 
                 // Do the same for groups
                 if (this.state.lastGroupPhase === RightPanelPhases.GroupMemberInfo) {
-                    this.setState({lastGroupPhase: RightPanelPhases.GroupMemberList});
+                    this.setState({ lastGroupPhase: RightPanelPhases.GroupMemberList });
                 }
                 break;
 
@@ -167,7 +167,7 @@ export default class RightPanelStore extends Store<ActionPayload> {
                 const allowClose = payload.allowClose ?? true;
                 // redirect to EncryptionPanel if there is an ongoing verification request
                 if (targetPhase === RightPanelPhases.RoomMemberInfo && payload.refireParams) {
-                    const {member} = payload.refireParams;
+                    const { member } = payload.refireParams;
                     const pendingRequest = pendingVerificationRequestForUser(member);
                     if (pendingRequest) {
                         targetPhase = RightPanelPhases.EncryptionPanel;

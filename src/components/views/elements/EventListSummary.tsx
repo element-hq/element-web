@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactChildren, useEffect} from 'react';
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import React, { ReactChildren, useEffect } from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
-import {useStateToggle} from "../../../hooks/useStateToggle";
+import { useStateToggle } from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
 
 interface IProps {

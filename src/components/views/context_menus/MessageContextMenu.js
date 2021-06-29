@@ -90,7 +90,7 @@ export default class MessageContextMenu extends React.Component {
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
         if (!SettingsStore.getValue("feature_pinning")) canPin = false;
 
-        this.setState({canRedact, canPin});
+        this.setState({ canRedact, canPin });
     };
 
     _isPinned() {
@@ -149,7 +149,7 @@ export default class MessageContextMenu extends React.Component {
                         // display error message stating you couldn't delete this.
                         Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
                             title: _t('Error'),
-                            description: _t('You cannot delete this message. (%(code)s)', {code}),
+                            description: _t('You cannot delete this message. (%(code)s)', { code }),
                         });
                     }
                 }
@@ -207,7 +207,7 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onPermalinkClick = (e: Event) => {
+    onPermalinkClick = (e) => {
         e.preventDefault();
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
@@ -266,7 +266,7 @@ export default class MessageContextMenu extends React.Component {
                 resendReactionsButton = (
                     <IconizedContextMenuOption
                         iconClassName="mx_MessageContextMenu_iconResend"
-                        label={ _t('Resend %(unsentCount)s reaction(s)', {unsentCount: unsentReactionsCount}) }
+                        label={ _t('Resend %(unsentCount)s reaction(s)', { unsentCount: unsentReactionsCount }) }
                         onClick={this.onResendReactionsClick}
                     />
                 );

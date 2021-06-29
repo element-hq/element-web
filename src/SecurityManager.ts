@@ -18,7 +18,7 @@ import { ICryptoCallbacks, ISecretStorageKeyInfo } from 'matrix-js-sdk/src/matri
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import Modal from './Modal';
 import * as sdk from './index';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
@@ -135,7 +135,7 @@ async function getSecretStorageKey(
 
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
-        console.log("Using key from security customisations (secret storage)")
+        console.log("Using key from security customisations (secret storage)");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
         return [keyId, keyFromCustomisations];
     }
@@ -185,7 +185,7 @@ export async function getDehydrationKey(
 ): Promise<Uint8Array> {
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
-        console.log("Using key from security customisations (dehydration)")
+        console.log("Using key from security customisations (dehydration)");
         return keyFromCustomisations;
     }
 
@@ -224,7 +224,7 @@ export async function getDehydrationKey(
     const key = await inputToKey(input);
 
     // need to copy the key because rehydration (unpickling) will clobber it
-    dehydrationCache = {key: new Uint8Array(key), keyInfo};
+    dehydrationCache = { key: new Uint8Array(key), keyInfo };
 
     return key;
 }

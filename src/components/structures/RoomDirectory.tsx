@@ -25,7 +25,7 @@ import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-import {ALL_ROOMS, IFieldType, IInstance, IProtocol, Protocols} from "../views/directory/NetworkDropdown";
+import { ALL_ROOMS, IFieldType, IInstance, IProtocol, Protocols } from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
@@ -34,7 +34,7 @@ import CountlyAnalytics from "../../CountlyAnalytics";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
@@ -44,7 +44,6 @@ import NetworkDropdown from "../views/directory/NetworkDropdown";
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
 import { ActionPayload } from "../../dispatcher/payloads";
-
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -95,7 +94,7 @@ interface IPublicRoomsRequest {
 @replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component<IProps, IState> {
     private readonly startTime: number;
-    private unmounted = false
+    private unmounted = false;
     private nextBatch: string = null;
     private filterTimeout: NodeJS.Timeout;
     private protocols: Protocols;
@@ -300,9 +299,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
         let desc;
         if (alias) {
-            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', {alias, name});
+            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', { alias, name });
         } else {
-            desc = _t('Remove %(name)s from the directory?', {name: name});
+            desc = _t('Remove %(name)s from the directory?', { name: name });
         }
 
         Modal.createTrackedDialog('Remove from Directory', '', QuestionDialog, {
@@ -312,7 +311,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 if (!shouldDelete) return;
 
                 const modal = Modal.createDialog(Spinner);
-                let step = _t('remove %(name)s from the directory.', {name: name});
+                let step = _t('remove %(name)s from the directory.', { name: name });
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
@@ -483,7 +482,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    dis.dispatch({action: 'require_registration'});
+                    dis.dispatch({ action: 'require_registration' });
                     return;
                 }
             }
@@ -782,11 +781,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         }
         const explanation =
             _t("If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.", null,
-                {a: sub => (
+                { a: sub => (
                     <AccessibleButton kind="secondary" onClick={this.onCreateRoomClick}>
                         { sub }
                     </AccessibleButton>
-                )},
+                ) },
             );
 
         const title = this.state.selectedCommunityId

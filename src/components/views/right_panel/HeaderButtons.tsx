@@ -88,9 +88,9 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
     private onRightPanelUpdate() {
         const rps = RightPanelStore.getSharedInstance();
         if (this.state.headerKind === HeaderKind.Room) {
-            this.setState({phase: rps.visibleRoomPanelPhase});
+            this.setState({ phase: rps.visibleRoomPanelPhase });
         } else if (this.state.headerKind === HeaderKind.Group) {
-            this.setState({phase: rps.visibleGroupPanelPhase});
+            this.setState({ phase: rps.visibleGroupPanelPhase });
         }
     }
 

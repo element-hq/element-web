@@ -147,7 +147,7 @@ function stringAsTextNode(string: string): Text {
 }
 
 function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatch: DiffMatchPatch): void {
-    const {refNode, refParentNode} = findRefNodes(originalRootNode, diff.route);
+    const { refNode, refParentNode } = findRefNodes(originalRootNode, diff.route);
     switch (diff.action) {
         case "replaceElement": {
             const container = document.createElement("span");

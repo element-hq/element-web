@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
-import {Key} from "../../../Keyboard";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Key } from "../../../Keyboard";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 class MenuOption extends React.Component {
     constructor(props) {

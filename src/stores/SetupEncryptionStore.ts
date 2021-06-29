@@ -167,11 +167,11 @@ export class SetupEncryptionStore extends EventEmitter {
             this.phase = Phase.Done;
             this.emit("update");
         }
-    }
+    };
 
     public onVerificationRequest = (request: VerificationRequest): void => {
         this.setActiveVerificationRequest(request);
-    }
+    };
 
     public onVerificationRequestChange = (): void => {
         if (this.verificationRequest.cancelled) {
@@ -188,7 +188,7 @@ export class SetupEncryptionStore extends EventEmitter {
             this.phase = publicKeysTrusted ? Phase.Done : Phase.Busy;
             this.emit("update");
         }
-    }
+    };
 
     public skip(): void {
         this.phase = Phase.ConfirmSkip;

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../MatrixClientPeg';
+import { MatrixClientPeg } from '../MatrixClientPeg';
 import { _t } from '../languageHandler';
 
 export function getNameForEventRoom(userId, roomId) {
@@ -27,7 +27,7 @@ export function getNameForEventRoom(userId, roomId) {
 export function userLabelForEventRoom(userId, roomId) {
     const name = getNameForEventRoom(userId, roomId);
     if (name !== userId) {
-        return _t("%(name)s (%(userId)s)", {name, userId});
+        return _t("%(name)s (%(userId)s)", { name, userId });
     } else {
         return userId;
     }

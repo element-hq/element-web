@@ -104,7 +104,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         const userForPanel = this.getUserForPanel();
         if (this.props.groupId) {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
-                dis.dispatch({action: Action.SetRightPanelPhase, phase: RightPanelPhases.GroupMemberList});
+                dis.dispatch({ action: Action.SetRightPanelPhase, phase: RightPanelPhases.GroupMemberList });
                 return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;

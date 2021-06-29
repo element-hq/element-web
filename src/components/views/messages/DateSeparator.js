@@ -18,8 +18,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import {formatFullDateNoTime} from '../../../DateUtils';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { formatFullDateNoTime } from '../../../DateUtils';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 function getdaysArray() {
     return [

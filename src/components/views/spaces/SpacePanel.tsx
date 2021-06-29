@@ -111,7 +111,7 @@ const SpaceButton: React.FC<IButtonProps> = ({
     })}>
         { button }
     </li>;
-}
+};
 
 const useSpaces = (): [Room[], Room[], Room | null] => {
     const [invites, setInvites] = useState<Room[]>(SpaceStore.instance.invitedSpaces);
@@ -267,7 +267,7 @@ const SpacePanel = () => {
             SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
         }}>
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
-                {({onKeyDownHandler}) => (
+                {({ onKeyDownHandler }) => (
                     <ul
                         className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
                         onKeyDown={onKeyDownHandler}

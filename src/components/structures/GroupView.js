@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import { getHostingLink } from '../../utils/HostingLink';
@@ -34,13 +34,13 @@ import classnames from 'classnames';
 import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
-import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Permalinks";
-import {Group} from "matrix-js-sdk/src/models/group";
-import {sleep} from "../../utils/promise";
+import { makeGroupPermalink, makeUserPermalink } from "../../utils/permalinks/Permalinks";
+import { Group } from "matrix-js-sdk/src/models/group";
+import { sleep } from "../../utils/promise";
 import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import {mediaFromMxc} from "../../customisations/Media";
-import {replaceableComponent} from "../../utils/replaceableComponent";
+import { mediaFromMxc } from "../../customisations/Media";
+import { replaceableComponent } from "../../utils/replaceableComponent";
 
 const LONG_DESC_PLACEHOLDER = _td(
     `<h1>HTML for your community's page</h1>
@@ -115,7 +115,7 @@ class CategoryRoomList extends React.Component {
                         {
                             title: _t(
                                 "Failed to add the following rooms to the summary of %(groupId)s:",
-                                {groupId: this.props.groupId},
+                                { groupId: this.props.groupId },
                             ),
                             description: errorList.join(", "),
                         },
@@ -194,9 +194,9 @@ class FeaturedRoom extends React.Component {
                 {
                     title: _t(
                         "Failed to remove the room from the summary of %(groupId)s",
-                        {groupId: this.props.groupId},
+                        { groupId: this.props.groupId },
                     ),
-                    description: _t("The room '%(roomName)s' could not be removed from the summary.", {roomName}),
+                    description: _t("The room '%(roomName)s' could not be removed from the summary.", { roomName }),
                 },
             );
         });
@@ -288,7 +288,7 @@ class RoleUserList extends React.Component {
                         {
                             title: _t(
                                 "Failed to add the following users to the summary of %(groupId)s:",
-                                {groupId: this.props.groupId},
+                                { groupId: this.props.groupId },
                             ),
                             description: errorList.join(", "),
                         },
@@ -359,9 +359,12 @@ class FeaturedUser extends React.Component {
                 {
                     title: _t(
                         "Failed to remove a user from the summary of %(groupId)s",
-                        {groupId: this.props.groupId},
+                        { groupId: this.props.groupId },
                     ),
-                    description: _t("The user '%(displayName)s' could not be removed from the summary.", {displayName}),
+                    description: _t(
+                        "The user '%(displayName)s' could not be removed from the summary.",
+                        { displayName },
+                    ),
                 },
             );
         });
@@ -468,7 +471,7 @@ export default class GroupView extends React.Component {
             // Leave settings - the user might have clicked the "Leave" button
             this._closeSettings();
         }
-        this.setState({membershipBusy: false});
+        this.setState({ membershipBusy: false });
     };
 
     _initGroupStore(groupId, firstInit) {
@@ -489,7 +492,7 @@ export default class GroupView extends React.Component {
                         group_id: groupId,
                     },
                 });
-                dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${groupId}`}});
+                dis.dispatch({ action: 'require_registration', screen_after: { screen: `group/${groupId}` } });
                 willDoOnboarding = true;
             }
             if (stateKey === GroupStore.STATE_KEY.Summary) {
@@ -590,7 +593,7 @@ export default class GroupView extends React.Component {
     };
 
     _closeSettings = () => {
-        dis.dispatch({action: 'close_settings'});
+        dis.dispatch({ action: 'close_settings' });
     };
 
     _onNameChange = (value) => {
@@ -618,7 +621,7 @@ export default class GroupView extends React.Component {
         const file = ev.target.files[0];
         if (!file) return;
 
-        this.setState({uploadingAvatar: true});
+        this.setState({ uploadingAvatar: true });
         this._matrixClient.uploadContent(file).then((url) => {
             const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: url });
             this.setState({
@@ -630,7 +633,7 @@ export default class GroupView extends React.Component {
                 avatarChanged: true,
             });
         }).catch((e) => {
-            this.setState({uploadingAvatar: false});
+            this.setState({ uploadingAvatar: false });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload avatar image", e);
             Modal.createTrackedDialog('Failed to upload image', '', ErrorDialog, {
@@ -647,7 +650,7 @@ export default class GroupView extends React.Component {
     };
 
     _onSaveClick = () => {
-        this.setState({saving: true});
+        this.setState({ saving: true });
         const savePromise = this.state.isUserPrivileged ? this._saveGroup() : Promise.resolve();
         savePromise.then((result) => {
             this.setState({
@@ -686,7 +689,7 @@ export default class GroupView extends React.Component {
     }
 
     _onAcceptInviteClick = async () => {
-        this.setState({membershipBusy: true});
+        this.setState({ membershipBusy: true });
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
@@ -695,7 +698,7 @@ export default class GroupView extends React.Component {
         GroupStore.acceptGroupInvite(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
-            this.setState({membershipBusy: false});
+            this.setState({ membershipBusy: false });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Error accepting invite', '', ErrorDialog, {
                 title: _t("Error"),
@@ -705,7 +708,7 @@ export default class GroupView extends React.Component {
     };
 
     _onRejectInviteClick = async () => {
-        this.setState({membershipBusy: true});
+        this.setState({ membershipBusy: true });
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
@@ -714,7 +717,7 @@ export default class GroupView extends React.Component {
         GroupStore.leaveGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
-            this.setState({membershipBusy: false});
+            this.setState({ membershipBusy: false });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Error rejecting invite', '', ErrorDialog, {
                 title: _t("Error"),
@@ -725,11 +728,11 @@ export default class GroupView extends React.Component {
 
     _onJoinClick = async () => {
         if (this._matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${this.props.groupId}`}});
+            dis.dispatch({ action: 'require_registration', screen_after: { screen: `group/${this.props.groupId}` } });
             return;
         }
 
-        this.setState({membershipBusy: true});
+        this.setState({ membershipBusy: true });
 
         // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
         // spinner disappearing after we have fetched new group data.
@@ -738,7 +741,7 @@ export default class GroupView extends React.Component {
         GroupStore.joinGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
-            this.setState({membershipBusy: false});
+            this.setState({ membershipBusy: false });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Error joining room', '', ErrorDialog, {
                 title: _t("Error"),
@@ -771,7 +774,7 @@ export default class GroupView extends React.Component {
             title: _t("Leave Community"),
             description: (
                 <span>
-                    { _t("Leave %(groupName)s?", {groupName: this.props.groupId}) }
+                    { _t("Leave %(groupName)s?", { groupName: this.props.groupId }) }
                     { warnings }
                 </span>
             ),
@@ -780,7 +783,7 @@ export default class GroupView extends React.Component {
             onFinished: async (confirmed) => {
                 if (!confirmed) return;
 
-                this.setState({membershipBusy: true});
+                this.setState({ membershipBusy: true });
 
                 // Wait 500ms to prevent flashing. Do this before sending a request otherwise we risk the
                 // spinner disappearing after we have fetched new group data.
@@ -789,7 +792,7 @@ export default class GroupView extends React.Component {
                 GroupStore.leaveGroup(this.props.groupId).then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
                 }).catch((e) => {
-                    this.setState({membershipBusy: false});
+                    this.setState({ membershipBusy: false });
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Error leaving community', '', ErrorDialog, {
                         title: _t("Error"),
@@ -1333,7 +1336,7 @@ export default class GroupView extends React.Component {
             if (this.state.error.httpStatus === 404) {
                 return (
                     <div className="mx_GroupView_error">
-                        { _t('Community %(groupId)s not found', {groupId: this.props.groupId}) }
+                        { _t('Community %(groupId)s not found', { groupId: this.props.groupId }) }
                     </div>
                 );
             } else {
@@ -1343,7 +1346,7 @@ export default class GroupView extends React.Component {
                 }
                 return (
                     <div className="mx_GroupView_error">
-                        { _t('Failed to load %(groupId)s', {groupId: this.props.groupId }) }
+                        { _t('Failed to load %(groupId)s', { groupId: this.props.groupId }) }
                         { extraText }
                     </div>
                 );
