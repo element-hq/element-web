@@ -217,34 +217,35 @@ async function verifyServerConfig(fragParams) {
 
             const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
             if (incompatibleOptions.length > 1) {
-               // noinspection ExceptionCaughtLocallyJS
-               throw newTranslatableError(_td(
-                   "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                   "or default_hs_url.",
-               ));
+                // noinspection ExceptionCaughtLocallyJS
+                throw newTranslatableError(_td(
+                    "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+                    "or default_hs_url.",
+                ));
             }
             if (incompatibleOptions.length < 1) {
-               // noinspection ExceptionCaughtLocallyJS
-               throw newTranslatableError(_td("Invalid configuration: no default server specified."));
+                // noinspection ExceptionCaughtLocallyJS
+                throw newTranslatableError(_td("Invalid configuration: no default server specified."));
             }
 
             if (hsUrl) {
-               console.log("Config uses a default_hs_url - constructing a default_server_config using this information");
-               console.warn(
-                   "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
-                   "default_server_config instead.",
-               );
+                console.log("Config uses a default_hs_url - constructing a default_server_config using this " +
+                            "information");
+                console.warn(
+                    "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
+                    "default_server_config instead.",
+                );
 
-               wkConfig = {
+                wkConfig = {
                    "m.homeserver": {
                        "base_url": hsUrl,
                    },
-               };
-               if (isUrl) {
-                   wkConfig["m.identity_server"] = {
+                };
+                if (isUrl) {
+                    wkConfig["m.identity_server"] = {
                        "base_url": isUrl,
-                   };
-               }
+                    };
+                }
             }
 
             if (wkConfig) {
