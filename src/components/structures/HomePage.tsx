@@ -15,29 +15,29 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {useContext, useState} from "react";
+import { useContext, useState } from "react";
 
 import AutoHideScrollbar from './AutoHideScrollbar';
-import {getHomePageUrl} from "../../utils/pages";
-import {_t} from "../../languageHandler";
+import { getHomePageUrl } from "../../utils/pages";
+import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import * as sdk from "../../index";
 import dis from "../../dispatcher/dispatcher";
-import {Action} from "../../dispatcher/actions";
+import { Action } from "../../dispatcher/actions";
 import BaseAvatar from "../views/avatars/BaseAvatar";
-import {OwnProfileStore} from "../../stores/OwnProfileStore";
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import AccessibleButton from "../views/elements/AccessibleButton";
-import {UPDATE_EVENT} from "../../stores/AsyncStore";
-import {useEventEmitter} from "../../hooks/useEventEmitter";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import { useEventEmitter } from "../../hooks/useEventEmitter";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import MiniAvatarUploader, {AVATAR_SIZE} from "../views/elements/MiniAvatarUploader";
+import MiniAvatarUploader, { AVATAR_SIZE } from "../views/elements/MiniAvatarUploader";
 import Analytics from "../../Analytics";
 import CountlyAnalytics from "../../CountlyAnalytics";
 
 const onClickSendDm = () => {
     Analytics.trackEvent('home_page', 'button', 'dm');
     CountlyAnalytics.instance.track("home_page_button", { button: "dm" });
-    dis.dispatch({action: 'view_create_chat'});
+    dis.dispatch({ action: 'view_create_chat' });
 };
 
 const onClickExplore = () => {
@@ -49,7 +49,7 @@ const onClickExplore = () => {
 const onClickNewRoom = () => {
     Analytics.trackEvent('home_page', 'button', 'create_room');
     CountlyAnalytics.instance.track("home_page_button", { button: "create_room" });
-    dis.dispatch({action: 'view_create_room'});
+    dis.dispatch({ action: 'view_create_room' });
 };
 
 interface IProps {
@@ -116,7 +116,6 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
             <h4>{ _t("Liberate your communication") }</h4>
         </React.Fragment>;
     }
-
 
     return <AutoHideScrollbar className="mx_HomePage mx_HomePage_default">
         <div className="mx_HomePage_default_wrapper">

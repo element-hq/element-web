@@ -20,7 +20,7 @@ import { ContextMenu, IProps as IContextMenuProps } from '../../structures/Conte
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import Field from "../elements/Field";
 import Dialpad from '../voip/DialPad';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -37,18 +37,17 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
 
         this.state = {
             value: '',
-        }
+        };
     }
 
     onDigitPress = (digit) => {
         this.props.call.sendDtmfDigit(digit);
-        this.setState({value: this.state.value + digit});
-    }
+        this.setState({ value: this.state.value + digit });
+    };
 
     onChange = (ev) => {
-        this.setState({value: ev.target.value});
-    }
-
+        this.setState({ value: ev.target.value });
+    };
 
     render() {
         return <ContextMenu {...this.props}>

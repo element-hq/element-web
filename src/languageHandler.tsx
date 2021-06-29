@@ -27,7 +27,7 @@ import PlatformPeg from "./PlatformPeg";
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 import { SettingLevel } from "./settings/SettingLevel";
-import {retry} from "./utils/promise";
+import { retry } from "./utils/promise";
 
 const i18nFolder = 'i18n/';
 
@@ -100,7 +100,7 @@ function safeCounterpartTranslate(text: string, options?: object) {
     if (translated === undefined && count !== undefined) {
         // counterpart does not do fallback if no pluralisation exists
         // in the preferred language, so do it here
-        translated = counterpart.translate(text, Object.assign({}, options, {locale: 'en'}));
+        translated = counterpart.translate(text, Object.assign({}, options, { locale: 'en' }));
     }
     return translated;
 }

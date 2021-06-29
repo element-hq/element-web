@@ -62,9 +62,9 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space }: IProps) => {
     const userId = cli.getUserId();
 
     const [visibility, setVisibility] = useLocalEcho<SpaceVisibility>(
-        () => space.getJoinRule() === JoinRule.Private ? SpaceVisibility.Private : SpaceVisibility.Unlisted,
+        () => space.getJoinRule() === JoinRule.Invite ? SpaceVisibility.Private : SpaceVisibility.Unlisted,
         visibility => cli.sendStateEvent(space.roomId, EventType.RoomJoinRules, {
-            join_rule: visibility === SpaceVisibility.Unlisted ? JoinRule.Public : JoinRule.Private,
+            join_rule: visibility === SpaceVisibility.Unlisted ? JoinRule.Public : JoinRule.Invite,
         }, ""),
         () => setError(_t("Failed to update the visibility of this space")),
     );

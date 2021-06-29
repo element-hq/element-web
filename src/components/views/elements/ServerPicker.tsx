@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 
 import AccessibleButton from "./AccessibleButton";
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
-import {_t} from "../../../languageHandler";
+import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import { _t } from "../../../languageHandler";
 import TextWithTooltip from "./TextWithTooltip";
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
@@ -87,7 +87,7 @@ const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }
         <span className="mx_ServerPicker_server">{serverName}</span>
         { editBtn }
         { desc }
-    </div>
-}
+    </div>;
+};
 
 export default ServerPicker;

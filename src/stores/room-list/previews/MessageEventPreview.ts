@@ -59,13 +59,13 @@ export class MessageEventPreview implements IPreview {
         }
 
         if (msgtype === 'm.emote') {
-            return _t("* %(senderName)s %(emote)s", {senderName: getSenderName(event), emote: body});
+            return _t("* %(senderName)s %(emote)s", { senderName: getSenderName(event), emote: body });
         }
 
         if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return body;
         } else {
-            return _t("%(senderName)s: %(message)s", {senderName: getSenderName(event), message: body});
+            return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: body });
         }
     }
 }

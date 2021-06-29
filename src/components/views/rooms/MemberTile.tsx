@@ -17,20 +17,33 @@ limitations under the License.
 
 import SettingsStore from "../../../settings/SettingsStore";
 import React from 'react';
-import PropTypes from 'prop-types';
-import * as sdk from "../../../index";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import {Action} from "../../../dispatcher/actions";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import EntityTile, { PowerStatus } from "./EntityTile";
+import MemberAvatar from "./../avatars/MemberAvatar";
+
+interface IProps {
+    member: RoomMember;
+    showPresence?: boolean;
+}
+
+interface IState {
+    statusMessage: string;
+    isRoomEncrypted: boolean;
+    e2eStatus: string;
+}
 
 @replaceableComponent("views.rooms.MemberTile")
-export default class MemberTile extends React.Component {
-    static propTypes = {
-        member: PropTypes.any.isRequired, // RoomMember
-        showPresence: PropTypes.bool,
-    };
+export default class MemberTile extends React.Component<IProps, IState> {
+    private userLastModifiedTime: number;
+    private memberLastModifiedTime: number;
 
     static defaultProps = {
         showPresence: true,
@@ -52,7 +65,7 @@ export default class MemberTile extends React.Component {
         if (SettingsStore.getValue("feature_custom_status")) {
             const { user } = this.props.member;
             if (user) {
-                user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
+                user.on("User._unstable_statusMessage", this.onStatusMessageCommitted);
             }
         }
 
@@ -80,7 +93,7 @@ export default class MemberTile extends React.Component {
         if (user) {
             user.removeListener(
                 "User._unstable_statusMessage",
-                this._onStatusMessageCommitted,
+                this.onStatusMessageCommitted,
             );
         }
 
@@ -91,8 +104,8 @@ export default class MemberTile extends React.Component {
         }
     }
 
-    onRoomStateEvents = ev => {
-        if (ev.getType() !== "m.room.encryption") return;
+    private onRoomStateEvents = (ev: MatrixEvent): void => {
+        if (ev.getType() !== EventType.RoomEncryption) return;
         const { roomId } = this.props.member;
         if (ev.getRoomId() !== roomId) return;
 
@@ -105,17 +118,17 @@ export default class MemberTile extends React.Component {
         this.updateE2EStatus();
     };
 
-    onUserTrustStatusChanged = (userId, trustStatus) => {
+    private onUserTrustStatusChanged = (userId: string, trustStatus: string): void => {
         if (userId !== this.props.member.userId) return;
         this.updateE2EStatus();
     };
 
-    onDeviceVerificationChanged = (userId, deviceId, deviceInfo) => {
+    private onDeviceVerificationChanged = (userId: string, deviceId: string, deviceInfo: DeviceInfo): void => {
         if (userId !== this.props.member.userId) return;
         this.updateE2EStatus();
     };
 
-    async updateE2EStatus() {
+    private async updateE2EStatus(): Promise<void> {
         const cli = MatrixClientPeg.get();
         const { userId } = this.props.member;
         const isMe = userId === cli.getUserId();
@@ -143,32 +156,32 @@ export default class MemberTile extends React.Component {
         });
     }
 
-    getStatusMessage() {
+    private getStatusMessage(): string {
         const { user } = this.props.member;
         if (!user) {
             return "";
         }
-        return user._unstable_statusMessage;
+        return user.unstable_statusMessage;
     }
 
-    _onStatusMessageCommitted = () => {
+    private onStatusMessageCommitted = (): void => {
         // The `User` object has observed a status message change.
         this.setState({
             statusMessage: this.getStatusMessage(),
         });
     };
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps: IProps, nextState: IState): boolean {
         if (
-            this.member_last_modified_time === undefined ||
-            this.member_last_modified_time < nextProps.member.getLastModifiedTime()
+            this.memberLastModifiedTime === undefined ||
+            this.memberLastModifiedTime < nextProps.member.getLastModifiedTime()
         ) {
             return true;
         }
         if (
             nextProps.member.user &&
-            (this.user_last_modified_time === undefined ||
-            this.user_last_modified_time < nextProps.member.user.getLastModifiedTime())
+            (this.userLastModifiedTime === undefined ||
+            this.userLastModifiedTime < nextProps.member.user.getLastModifiedTime())
         ) {
             return true;
         }
@@ -181,18 +194,18 @@ export default class MemberTile extends React.Component {
         return false;
     }
 
-    onClick = e => {
+    private onClick = (): void => {
         dis.dispatch({
             action: Action.ViewUser,
             member: this.props.member,
         });
     };
 
-    _getDisplayName() {
+    private getDisplayName(): string {
         return this.props.member.name;
     }
 
-    getPowerLabel() {
+    private getPowerLabel(): string {
         return _t("%(userName)s (power %(powerLevelNumber)s)", {
             userName: this.props.member.userId,
             powerLevelNumber: this.props.member.powerLevel,
@@ -200,11 +213,8 @@ export default class MemberTile extends React.Component {
     }
 
     render() {
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        const EntityTile = sdk.getComponent('rooms.EntityTile');
-
         const member = this.props.member;
-        const name = this._getDisplayName();
+        const name = this.getDisplayName();
         const presenceState = member.user ? member.user.presence : null;
 
         let statusMessage = null;
@@ -217,13 +227,13 @@ export default class MemberTile extends React.Component {
         );
 
         if (member.user) {
-            this.user_last_modified_time = member.user.getLastModifiedTime();
+            this.userLastModifiedTime = member.user.getLastModifiedTime();
         }
-        this.member_last_modified_time = member.getLastModifiedTime();
+        this.memberLastModifiedTime = member.getLastModifiedTime();
 
         const powerStatusMap = new Map([
-            [100, EntityTile.POWER_STATUS_ADMIN],
-            [50, EntityTile.POWER_STATUS_MODERATOR],
+            [100, PowerStatus.Admin],
+            [50, PowerStatus.Moderator],
         ]);
 
         // Find the nearest power level with a badge

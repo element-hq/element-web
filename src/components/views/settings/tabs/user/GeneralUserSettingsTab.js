@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -27,19 +27,19 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
 import PlatformPeg from "../../../../../PlatformPeg";
-import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
-import {Service, startTermsFlow} from "../../../../../Terms";
-import {SERVICE_TYPES} from "matrix-js-sdk/src/service-types";
+import { Service, startTermsFlow } from "../../../../../Terms";
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
-import {abbreviateUrl} from "../../../../../utils/UrlUtils";
+import { abbreviateUrl } from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 import Spinner from "../../../elements/Spinner";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
-import {UIFeature} from "../../../../../settings/UIFeature";
-import {replaceableComponent} from "../../../../../utils/replaceableComponent";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
+import { UIFeature } from "../../../../../settings/UIFeature";
+import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 @replaceableComponent("views.settings.tabs.user.GeneralUserSettingsTab")
 export default class GeneralUserSettingsTab extends React.Component {
@@ -84,7 +84,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         // the enabled flag value.
         const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
 
-        this.setState({serverSupportsSeparateAddAndBind, canChangePassword});
+        this.setState({ serverSupportsSeparateAddAndBind, canChangePassword });
 
         this._getThreepidState();
     }
@@ -104,7 +104,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     _onAction = (payload) => {
         if (payload.action === 'id_server_changed') {
-            this.setState({haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl())});
+            this.setState({ haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()) });
             this._getThreepidState();
         }
     };
@@ -145,7 +145,7 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     async _checkTerms() {
         if (!this.state.haveIdServer) {
-            this.setState({idServerHasUnsignedTerms: false});
+            this.setState({ idServerHasUnsignedTerms: false });
             return;
         }
 
@@ -191,7 +191,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         if (this.state.language === newLanguage) return;
 
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLanguage);
-        this.setState({language: newLanguage});
+        this.setState({ language: newLanguage });
         const platform = PlatformPeg.get();
         if (platform) {
             platform.setLanguage(newLanguage);
@@ -200,7 +200,7 @@ export default class GeneralUserSettingsTab extends React.Component {
     };
 
     _onSpellCheckLanguagesChange = (languages) => {
-        this.setState({spellCheckLanguages: languages});
+        this.setState({ spellCheckLanguages: languages });
 
         const plaf = PlatformPeg.get();
         if (plaf) {
@@ -353,7 +353,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {_t(
                     "Agree to the identity server (%(serverName)s) Terms of Service to " +
                     "allow yourself to be discoverable by email address or phone number.",
-                    {serverName: this.state.idServerName},
+                    { serverName: this.state.idServerName },
                 )}
             </span>;
             return (

@@ -28,7 +28,7 @@ import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
-import { MenuItem } from "../../structures/ContextMenu";
+import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ReadPinsEventId } from "../right_panel/PinnedMessagesCard";
@@ -90,7 +90,7 @@ export default class MessageContextMenu extends React.Component {
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
         if (!SettingsStore.getValue("feature_pinning")) canPin = false;
 
-        this.setState({canRedact, canPin});
+        this.setState({ canRedact, canPin });
     };
 
     _isPinned() {
@@ -149,7 +149,7 @@ export default class MessageContextMenu extends React.Component {
                         // display error message stating you couldn't delete this.
                         Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
                             title: _t('Error'),
-                            description: _t('You cannot delete this message. (%(code)s)', {code}),
+                            description: _t('You cannot delete this message. (%(code)s)', { code }),
                         });
                     }
                 }
@@ -207,7 +207,7 @@ export default class MessageContextMenu extends React.Component {
         this.closeMenu();
     };
 
-    onPermalinkClick = (e: Event) => {
+    onPermalinkClick = (e) => {
         e.preventDefault();
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
@@ -257,55 +257,68 @@ export default class MessageContextMenu extends React.Component {
         let externalURLButton;
         let quoteButton;
         let collapseReplyThread;
+        let redactItemList;
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
         if (!mxEvent.isRedacted()) {
             if (unsentReactionsCount !== 0) {
                 resendReactionsButton = (
-                    <MenuItem className="mx_MessageContextMenu_field" onClick={this.onResendReactionsClick}>
-                        { _t('Resend %(unsentCount)s reaction(s)', {unsentCount: unsentReactionsCount}) }
-                    </MenuItem>
+                    <IconizedContextMenuOption
+                        iconClassName="mx_MessageContextMenu_iconResend"
+                        label={ _t('Resend %(unsentCount)s reaction(s)', { unsentCount: unsentReactionsCount }) }
+                        onClick={this.onResendReactionsClick}
+                    />
                 );
             }
         }
 
         if (isSent && this.state.canRedact) {
             redactButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
-                    { _t('Remove') }
-                </MenuItem>
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconRedact"
+                    label={_t("Remove")}
+                    onClick={this.onRedactClick}
+                />
             );
         }
 
         if (isContentActionable(mxEvent)) {
             forwardButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
-                    { _t('Forward Message') }
-                </MenuItem>
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconForward"
+                    label={_t("Forward")}
+                    onClick={this.onForwardClick}
+                />
             );
 
             if (this.state.canPin) {
                 pinButton = (
-                    <MenuItem className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
-                        { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
-                    </MenuItem>
+                    <IconizedContextMenuOption
+                        iconClassName="mx_MessageContextMenu_iconPin"
+                        label={ this._isPinned() ? _t('Unpin') : _t('Pin') }
+                        onClick={this.onPinClick}
+                    />
                 );
             }
         }
 
         const viewSourceButton = (
-            <MenuItem className="mx_MessageContextMenu_field" onClick={this.onViewSourceClick}>
-                { _t('View Source') }
-            </MenuItem>
+            <IconizedContextMenuOption
+                iconClassName="mx_MessageContextMenu_iconSource"
+                label={_t("View source")}
+                onClick={this.onViewSourceClick}
+            />
         );
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
-                    <MenuItem className="mx_MessageContextMenu_field" onClick={this.onUnhidePreviewClick}>
-                        { _t('Unhide Preview') }
-                    </MenuItem>
+                    <IconizedContextMenuOption
+                        iconClassName="mx_MessageContextMenu_iconUnhidePreview"
+                        label={_t("Show preview")}
+                        onClick={this.onUnhidePreviewClick}
+                    />
                 );
             }
         }
@@ -316,77 +329,97 @@ export default class MessageContextMenu extends React.Component {
         }
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         const permalinkButton = (
-            <MenuItem
-                element="a"
-                className="mx_MessageContextMenu_field"
+            <IconizedContextMenuOption
+                iconClassName="mx_MessageContextMenu_iconPermalink"
                 onClick={this.onPermalinkClick}
+                label= {_t('Share')}
+                element="a"
                 href={permalink}
                 target="_blank"
                 rel="noreferrer noopener"
-            >
-                { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
-                    ? _t('Share Permalink') : _t('Share Message') }
-            </MenuItem>
+            />
         );
 
         if (this.props.eventTileOps) { // this event is rendered using TextualBody
             quoteButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
-                    { _t('Quote') }
-                </MenuItem>
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconQuote"
+                    label={_t("Quote")}
+                    onClick={this.onQuoteClick}
+                />
             );
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        if (
-            typeof(mxEvent.event.content.external_url) === "string" &&
+        if (typeof (mxEvent.event.content.external_url) === "string" &&
             isUrlPermitted(mxEvent.event.content.external_url)
         ) {
             externalURLButton = (
-                <MenuItem
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconLink"
+                    onClick={this.closeMenu}
+                    label={ _t('Source URL') }
                     element="a"
-                    className="mx_MessageContextMenu_field"
                     target="_blank"
                     rel="noreferrer noopener"
-                    onClick={this.closeMenu}
                     href={mxEvent.event.content.external_url}
-                >
-                    { _t('Source URL') }
-                </MenuItem>
+                />
             );
         }
 
         if (this.props.collapseReplyThread) {
             collapseReplyThread = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onCollapseReplyThreadClick}>
-                    { _t('Collapse Reply Thread') }
-                </MenuItem>
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconCollapse"
+                    label={_t("Collapse reply thread")}
+                    onClick={this.onCollapseReplyThreadClick}
+                />
             );
         }
 
         let reportEventButton;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.onReportEventClick}>
-                    { _t('Report Content') }
-                </MenuItem>
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconReport"
+                    label={_t("Report")}
+                    onClick={this.onReportEventClick}
+                />
+            );
+        }
+
+        const commonItemsList = (
+            <IconizedContextMenuOptionList>
+                { quoteButton }
+                { forwardButton }
+                { pinButton }
+                { permalinkButton }
+                { reportEventButton }
+                { externalURLButton }
+                { unhidePreviewButton }
+                { viewSourceButton }
+                { resendReactionsButton }
+                { collapseReplyThread }
+            </IconizedContextMenuOptionList>
+        );
+
+        if (redactButton) {
+            redactItemList = (
+                <IconizedContextMenuOptionList red>
+                    { redactButton }
+                </IconizedContextMenuOptionList>
             );
         }
 
         return (
-            <div className="mx_MessageContextMenu">
-                { resendReactionsButton }
-                { redactButton }
-                { forwardButton }
-                { pinButton }
-                { viewSourceButton }
-                { unhidePreviewButton }
-                { permalinkButton }
-                { quoteButton }
-                { externalURLButton }
-                { collapseReplyThread }
-                { reportEventButton }
-            </div>
+            <IconizedContextMenu
+                {...this.props}
+                className="mx_MessageContextMenu"
+                compact={true}
+            >
+                { commonItemsList }
+                { redactItemList }
+            </IconizedContextMenu>
         );
     }
 }

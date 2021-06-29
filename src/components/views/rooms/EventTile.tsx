@@ -723,7 +723,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     { avatars }
                 </span>
             </div>
-        )
+        );
     }
 
     onSenderProfileClick = event => {
@@ -847,7 +847,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         let tileHandler = getHandlerTile(this.props.mxEvent);
 
         // Info messages are basically information about commands processed on a room
-        const isBubbleMessage = eventType.startsWith("m.key.verification") ||
+        let isBubbleMessage = eventType.startsWith("m.key.verification") ||
             (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
             (eventType === EventType.RoomCreate) ||
             (eventType === EventType.RoomEncryption) ||
@@ -863,13 +863,14 @@ export default class EventTile extends React.Component<IProps, IState> {
         // duplicate of the thing they are replacing).
         if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(this.props.mxEvent)) {
             tileHandler = "messages.ViewSourceEvent";
+            isBubbleMessage = false;
             // Reuse info message avatar and sender profile styling
             isInfoMessage = true;
         }
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
-            const {mxEvent} = this.props;
+            const { mxEvent } = this.props;
             console.warn(`Event type not supported: type:${mxEvent.getType()} isState:${mxEvent.isState()}`);
             return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                 <div className="mx_EventTile_line">
@@ -1016,7 +1017,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             _t(
                 '<requestLink>Re-request encryption keys</requestLink> from your other sessions.',
                 {},
-                {'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a>},
+                { 'requestLink': (sub) => <a onClick={this.onRequestKeysClick}>{ sub }</a> },
             );
 
         const TooltipButton = sdk.getComponent('elements.TooltipButton');
@@ -1206,7 +1207,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         avatar,
 
                     ])
-                )
+                );
             }
         }
     }
@@ -1289,11 +1290,11 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
     }
 
     onHoverStart = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
     onHoverEnd = () => {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     };
 
     render() {
@@ -1331,11 +1332,11 @@ class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptSta
     }
 
     onHoverStart = () => {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     };
 
     onHoverEnd = () => {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     };
 
     render() {

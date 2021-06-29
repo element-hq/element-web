@@ -34,12 +34,10 @@ import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
-import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import { haveTileForEvent } from "../views/rooms/EventTile";
 import { UIFeature } from "../../settings/UIFeature";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
-import { Action } from "../../dispatcher/actions";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -72,6 +70,8 @@ class TimelinePanel extends React.Component {
         manageReadReceipts: PropTypes.bool,
         sendReadReceiptOnLoad: PropTypes.bool,
         manageReadMarkers: PropTypes.bool,
+        // with this enabled it'll listen and react to Action.ComposerInsert and `edit_event`
+        manageComposerDispatches: PropTypes.bool,
 
         // true to give the component a 'display: none' style.
         hidden: PropTypes.bool,
@@ -364,7 +364,7 @@ class TimelinePanel extends React.Component {
 
         if (!this._timelineWindow.canPaginate(dir)) {
             debuglog("TimelinePanel: can't", dir, "paginate any further");
-            this.setState({[canPaginateKey]: false});
+            this.setState({ [canPaginateKey]: false });
             return Promise.resolve(false);
         }
 
@@ -374,7 +374,7 @@ class TimelinePanel extends React.Component {
         }
 
         debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);
-        this.setState({[paginatingKey]: true});
+        this.setState({ [paginatingKey]: true });
 
         return this.onPaginationRequest(this._timelineWindow, dir, PAGINATE_SIZE).then((r) => {
             if (this.unmounted) { return; }
@@ -428,7 +428,7 @@ class TimelinePanel extends React.Component {
             // it goes back off the top of the screen (presumably because the user
             // clicks on the 'jump to bottom' button), we need to re-enable it.
             if (rmPosition < 0) {
-                this.setState({readMarkerVisible: true});
+                this.setState({ readMarkerVisible: true });
             }
 
             // if read marker position goes between 0 and -1/1,
@@ -443,38 +443,6 @@ class TimelinePanel extends React.Component {
         switch (payload.action) {
             case "ignore_state_changed":
                 this.forceUpdate();
-                break;
-
-            case "edit_event": {
-                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
-                this.setState({editState}, () => {
-                    if (payload.event && this._messagePanel.current) {
-                        this._messagePanel.current.scrollToEventIfNeeded(
-                            payload.event.getId(),
-                        );
-                    }
-                });
-                break;
-            }
-
-            case Action.ComposerInsert: {
-                // re-dispatch to the correct composer
-                if (this.state.editState) {
-                    dis.dispatch({
-                        ...payload,
-                        action: "edit_composer_insert",
-                    });
-                } else {
-                    dis.dispatch({
-                        ...payload,
-                        action: "send_composer_insert",
-                    });
-                }
-                break;
-            }
-
-            case "scroll_to_bottom":
-                this.jumpToLiveTimeline();
                 break;
         }
     };
@@ -493,7 +461,7 @@ class TimelinePanel extends React.Component {
             // we won't load this event now, because we don't want to push any
             // events off the other end of the timeline. But we need to note
             // that we can now paginate.
-            this.setState({canForwardPaginate: true});
+            this.setState({ canForwardPaginate: true });
             return;
         }
 
@@ -635,7 +603,7 @@ class TimelinePanel extends React.Component {
     };
 
     onSync = (state, prevState, data) => {
-        this.setState({clientSyncState: state});
+        this.setState({ clientSyncState: state });
     };
 
     _readMarkerTimeout(readMarkerPosition) {
@@ -813,7 +781,6 @@ class TimelinePanel extends React.Component {
         this.sendReadReceipt();
     };
 
-
     // advance the read marker past any events we sent ourselves.
     _advanceReadMarkerPastMyEvents() {
         if (!this.props.manageReadMarkers) return;
@@ -865,6 +832,12 @@ class TimelinePanel extends React.Component {
             }
         }
     };
+
+    scrollToEventIfNeeded = (eventId) => {
+        if (this._messagePanel.current) {
+            this._messagePanel.current.scrollToEventIfNeeded(eventId);
+        }
+    }
 
     /* scroll to show the read-up-to marker. We put it 1/3 of the way down
      * the container.
@@ -924,7 +897,6 @@ class TimelinePanel extends React.Component {
             && this._timelineWindow
             && !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
     }
-
 
     /* get the current scroll state. See ScrollPanel.getScrollState for
      * details.
@@ -1025,7 +997,7 @@ class TimelinePanel extends React.Component {
     _loadTimeline(eventId, pixelOffset, offsetBase) {
         this._timelineWindow = new TimelineWindow(
             MatrixClientPeg.get(), this.props.timelineSet,
-            {windowLimit: this.props.timelineCap});
+            { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
             // clear the timeline min-height when
@@ -1473,7 +1445,7 @@ class TimelinePanel extends React.Component {
                 tileShape={this.props.tileShape}
                 resizeNotifier={this.props.resizeNotifier}
                 getRelationsForEvent={this.getRelationsForEvent}
-                editState={this.state.editState}
+                editState={this.props.editState}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
                 enableFlair={SettingsStore.getValue(UIFeature.Flair)}

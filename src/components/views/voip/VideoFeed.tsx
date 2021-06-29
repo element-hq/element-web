@@ -16,12 +16,12 @@ limitations under the License.
 
 import classnames from 'classnames';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React, {createRef} from 'react';
+import React, { createRef } from 'react';
 import SettingsStore from "../../../settings/SettingsStore";
 import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { logger } from 'matrix-js-sdk/src/logger';
-import MemberAvatar from "../avatars/MemberAvatar"
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import MemberAvatar from "../avatars/MemberAvatar";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     call: MatrixCall,
@@ -85,7 +85,7 @@ export default class VideoFeed extends React.Component<IProps, IState> {
             // should serialise the ones that need to be serialised but then be able to interrupt
             // them with another load() which will cancel the pending one, but since we don't call
             // load() explicitly, it shouldn't be a problem. - Dave
-            element.play()
+            element.play();
         } catch (e) {
             logger.info("Failed to play media element with feed", this.props.feed, e);
         }

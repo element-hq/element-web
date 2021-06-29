@@ -42,7 +42,7 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
         this.setState({
             hidden: false,
         });
-    }
+    };
 
     render() {
         const classes = classNames({

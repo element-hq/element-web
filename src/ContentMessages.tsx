@@ -18,8 +18,8 @@ limitations under the License.
 
 import React from "react";
 import dis from './dispatcher/dispatcher';
-import {MatrixClientPeg} from './MatrixClientPeg';
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClientPeg } from './MatrixClientPeg';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
@@ -37,7 +37,7 @@ import {
     UploadProgressPayload,
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
-import {IUpload} from "./models/IUpload";
+import { IUpload } from "./models/IUpload";
 import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
 
 const MAX_WIDTH = 800;
@@ -189,7 +189,7 @@ async function loadImageElement(imageFile: File) {
     const [hidpi] = await Promise.all([parsePromise, imgPromise]);
     const width = hidpi ? (img.width >> 1) : img.width;
     const height = hidpi ? (img.height >> 1) : img.height;
-    return {width, height, img};
+    return { width, height, img };
 }
 
 /**
@@ -307,7 +307,7 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-function uploadFile(
+export function uploadFile(
     matrixClient: MatrixClient,
     roomId: string,
     file: File | Blob,
@@ -343,7 +343,7 @@ function uploadFile(
             if (file.type) {
                 encryptInfo.mimetype = file.type;
             }
-            return {"file": encryptInfo};
+            return { "file": encryptInfo };
         });
         (prom as IAbortablePromise<any>).abort = () => {
             canceled = true;
@@ -357,7 +357,7 @@ function uploadFile(
         const promise1 = basePromise.then(function(url) {
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
-            return {"url": url};
+            return { "url": url };
         });
         (promise1 as any).abort = () => {
             canceled = true;
@@ -377,7 +377,7 @@ export default class ContentMessages {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
-        CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, {msgtype: "m.sticker"});
+        CountlyAnalytics.instance.trackSendMessage(startTime, prom, roomId, false, false, { msgtype: "m.sticker" });
         return prom;
     }
 
@@ -391,14 +391,14 @@ export default class ContentMessages {
 
     async sendContentListToRoom(files: File[], roomId: string, matrixClient: MatrixClient) {
         if (matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({ action: 'require_registration' });
             return;
         }
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
         if (isQuoting) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            const {finished} = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
+            const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
                 description: (
                     <div>{_t(
@@ -432,7 +432,7 @@ export default class ContentMessages {
 
         if (tooBigFiles.length > 0) {
             const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
-            const {finished} = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
+            const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
                 contentMessages: this,
@@ -449,7 +449,7 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                const {finished} = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
+                const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
                         file,
                         currentIndex: i,
@@ -481,7 +481,7 @@ export default class ContentMessages {
         if (upload) {
             upload.canceled = true;
             MatrixClientPeg.get().cancelUpload(upload.promise);
-            dis.dispatch<UploadCanceledPayload>({action: Action.UploadCanceled, upload});
+            dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
         }
     }
 
@@ -542,7 +542,7 @@ export default class ContentMessages {
             promise: prom,
         };
         this.inprogress.push(upload);
-        dis.dispatch<UploadStartedPayload>({action: Action.UploadStarted, upload});
+        dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
         // Focus the composer view
         dis.fire(Action.FocusComposer);
@@ -550,7 +550,7 @@ export default class ContentMessages {
         function onProgress(ev) {
             upload.total = ev.total;
             upload.loaded = ev.loaded;
-            dis.dispatch<UploadProgressPayload>({action: Action.UploadProgress, upload});
+            dis.dispatch<UploadProgressPayload>({ action: Action.UploadProgress, upload });
         }
 
         let error;
@@ -577,11 +577,11 @@ export default class ContentMessages {
         }, function(err) {
             error = err;
             if (!upload.canceled) {
-                let desc = _t("The file '%(fileName)s' failed to upload.", {fileName: upload.fileName});
+                let desc = _t("The file '%(fileName)s' failed to upload.", { fileName: upload.fileName });
                 if (err.http_status === 413) {
                     desc = _t(
                         "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
-                        {fileName: upload.fileName},
+                        { fileName: upload.fileName },
                     );
                 }
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -604,10 +604,10 @@ export default class ContentMessages {
                 if (error && error.http_status === 413) {
                     this.mediaConfig = null;
                 }
-                dis.dispatch<UploadErrorPayload>({action: Action.UploadFailed, upload, error});
+                dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });
             } else {
-                dis.dispatch<UploadFinishedPayload>({action: Action.UploadFinished, upload});
-                dis.dispatch({action: 'message_sent'});
+                dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
+                dis.dispatch({ action: 'message_sent' });
             }
         });
     }

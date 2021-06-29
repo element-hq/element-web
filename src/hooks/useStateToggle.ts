@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Dispatch, SetStateAction, useState} from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 // Hook to simplify toggling of a boolean state value
 // Returns value, method to toggle boolean value and method to set the boolean value

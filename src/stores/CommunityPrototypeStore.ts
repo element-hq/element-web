@@ -126,11 +126,11 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
             if (membership === EffectiveMembership.Invite) {
                 try {
-                    const path = utils.encodeUri("/rooms/$roomId/group_info", {$roomId: room.roomId});
+                    const path = utils.encodeUri("/rooms/$roomId/group_info", { $roomId: room.roomId });
                     const profile = await this.matrixClient.http.authedRequest(
                         undefined, "GET", path,
                         undefined, undefined,
-                        {prefix: "/_matrix/client/unstable/im.vector.custom"});
+                        { prefix: "/_matrix/client/unstable/im.vector.custom" });
                     // we use global account data because per-room account data on invites is unreliable
                     await this.matrixClient.setAccountData("im.vector.group_info." + room.roomId, profile);
                 } catch (e) {
@@ -155,7 +155,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
     }
 
     public getInviteProfile(roomId: string): IRoomProfile {
-        if (!this.matrixClient) return {displayName: null, avatarMxc: null};
+        if (!this.matrixClient) return { displayName: null, avatarMxc: null };
         const room = this.matrixClient.getRoom(roomId);
         if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
             const data = this.matrixClient.getAccountData("im.vector.group_info." + roomId);

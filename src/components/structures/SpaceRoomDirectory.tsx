@@ -112,12 +112,12 @@ const Tile: React.FC<ITileProps> = ({
         ev.preventDefault();
         ev.stopPropagation();
         onViewRoomClick(false);
-    }
+    };
     const onJoinClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         onViewRoomClick(true);
-    }
+    };
 
     let button;
     if (joinedRoom) {
@@ -137,7 +137,7 @@ const Tile: React.FC<ITileProps> = ({
         } else {
             checkbox = <TextWithTooltip
                 tooltip={_t("You don't have permission")}
-                onClick={ev => { ev.stopPropagation() }}
+                onClick={ev => { ev.stopPropagation(); }}
             >
                 <StyledCheckbox disabled={true} />
             </TextWithTooltip>;
@@ -340,7 +340,7 @@ export const HierarchyLevel = ({
                 </Tile>
             ))
         }
-    </React.Fragment>
+    </React.Fragment>;
 };
 
 // mutate argument refreshToken to force a reload
@@ -635,9 +635,9 @@ const SpaceRoomDirectory: React.FC<IProps> = ({ space, onFinished, initialText }
             <div className="mx_Dialog_content">
                 { _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.",
                     null,
-                    {a: sub => {
+                    { a: sub => {
                         return <AccessibleButton kind="link" onClick={onCreateRoomClick}>{sub}</AccessibleButton>;
-                    }},
+                    } },
                 ) }
 
                 <SpaceHierarchy

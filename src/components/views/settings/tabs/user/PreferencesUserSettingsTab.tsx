@@ -16,13 +16,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import {_t} from "../../../../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
-import {SettingLevel} from "../../../../../settings/SettingLevel";
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 interface IState {
@@ -143,33 +143,33 @@ export default class PreferencesUserSettingsTab extends React.Component<{}, ISta
     }
 
     private onAutoLaunchChange = (checked: boolean) => {
-        PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({autoLaunch: checked}));
+        PlatformPeg.get().setAutoLaunchEnabled(checked).then(() => this.setState({ autoLaunch: checked }));
     };
 
     private onWarnBeforeExitChange = (checked: boolean) => {
-        PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({warnBeforeExit: checked}));
-    }
+        PlatformPeg.get().setWarnBeforeExit(checked).then(() => this.setState({ warnBeforeExit: checked }));
+    };
 
     private onAlwaysShowMenuBarChange = (checked: boolean) => {
-        PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({alwaysShowMenuBar: checked}));
+        PlatformPeg.get().setAutoHideMenuBarEnabled(!checked).then(() => this.setState({ alwaysShowMenuBar: checked }));
     };
 
     private onMinimizeToTrayChange = (checked: boolean) => {
-        PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({minimizeToTray: checked}));
+        PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({ minimizeToTray: checked }));
     };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({autocompleteDelay: e.target.value});
+        this.setState({ autocompleteDelay: e.target.value });
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
     };
 
     private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({readMarkerInViewThresholdMs: e.target.value});
+        this.setState({ readMarkerInViewThresholdMs: e.target.value });
         SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
     private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({readMarkerOutOfViewThresholdMs: e.target.value});
+        this.setState({ readMarkerOutOfViewThresholdMs: e.target.value });
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 

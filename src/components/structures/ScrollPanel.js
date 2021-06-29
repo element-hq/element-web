@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from "react";
+import React, { createRef } from "react";
 import PropTypes from 'prop-types';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import {replaceableComponent} from "../../utils/replaceableComponent";
-import {getKeyBindingsManager, RoomAction} from "../../KeyBindingsManager";
+import { replaceableComponent } from "../../utils/replaceableComponent";
+import { getKeyBindingsManager, RoomAction } from "../../KeyBindingsManager";
 
 const DEBUG_SCROLL = false;
 
@@ -166,7 +166,7 @@ export default class ScrollPanel extends React.Component {
     constructor(props) {
         super(props);
 
-        this._pendingFillRequests = {b: null, f: null};
+        this._pendingFillRequests = { b: null, f: null };
 
         if (this.props.resizeNotifier) {
             this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
@@ -593,7 +593,7 @@ export default class ScrollPanel extends React.Component {
             // This because when setting the scrollTop only 10 or so events might be loaded,
             // not giving enough content below the trackedNode to scroll downwards
             // enough so it ends up in the top of the viewport.
-            debuglog("scrollToken: setting scrollTop", {offsetBase, pixelOffset, offsetTop: trackedNode.offsetTop});
+            debuglog("scrollToken: setting scrollTop", { offsetBase, pixelOffset, offsetTop: trackedNode.offsetTop });
             scrollNode.scrollTop = (trackedNode.offsetTop - (scrollNode.clientHeight * offsetBase)) + pixelOffset;
             this._saveScrollState();
         }
@@ -730,7 +730,7 @@ export default class ScrollPanel extends React.Component {
                 // yield out of date values and cause a jump
                 // when setting it
                 sn.scrollBy(0, topDiff);
-                debuglog("updateHeight to", {newHeight, topDiff});
+                debuglog("updateHeight to", { newHeight, topDiff });
             }
         }
     }
@@ -862,7 +862,7 @@ export default class ScrollPanel extends React.Component {
             const sn = this._getScrollNode();
             const scrollState = this.scrollState;
             const messageList = this._itemlist.current;
-            const {offsetNode, offsetFromBottom} = this.preventShrinkingState;
+            const { offsetNode, offsetFromBottom } = this.preventShrinkingState;
             // element used to set paddingBottom to balance the typing notifs disappearing
             const balanceElement = messageList.parentElement;
             // if the offsetNode got unmounted, clear

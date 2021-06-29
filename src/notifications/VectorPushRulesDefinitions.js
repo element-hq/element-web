@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 import { _td } from '../languageHandler';
-import {StandardActions} from "./StandardActions";
-import {PushRuleVectorState} from "./PushRuleVectorState";
-import {NotificationUtils} from "./NotificationUtils";
+import { StandardActions } from "./StandardActions";
+import { PushRuleVectorState } from "./PushRuleVectorState";
+import { NotificationUtils } from "./NotificationUtils";
 
 class VectorPushRuleDefinition {
     constructor(opts) {

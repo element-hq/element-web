@@ -1,11 +1,11 @@
 import React from 'react';
-import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
+import { MatrixClientPeg as peg } from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
-import {makeType} from "../src/utils/TypeUtils";
-import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
+import { makeType } from "../src/utils/TypeUtils";
+import { ValidatedServerConfig } from "../src/utils/AutoDiscoveryUtils";
 import ShallowRenderer from 'react-test-renderer/shallow';
 import MatrixClientContext from "../src/contexts/MatrixClientContext";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 export function getRenderer() {
     // Old: ReactTestUtils.createRenderer();

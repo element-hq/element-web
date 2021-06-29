@@ -19,7 +19,7 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import ServerOfflineDialog from "../dialogs/ServerOfflineDialog";
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.toasts.NonUrgentEchoFailureToast")
 export default class NonUrgentEchoFailureToast extends React.PureComponent {
@@ -37,6 +37,6 @@ export default class NonUrgentEchoFailureToast extends React.PureComponent {
                     ),
                 })}
             </div>
-        )
+        );
     }
 }

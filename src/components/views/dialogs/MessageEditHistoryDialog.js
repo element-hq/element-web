@@ -16,12 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
-import {wantsDateSeparator} from '../../../DateUtils';
+import { wantsDateSeparator } from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
-import {replaceableComponent} from "../../../utils/replaceableComponent";
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 @replaceableComponent("views.dialogs.MessageEditHistoryDialog")
 export default class MessageEditHistoryDialog extends React.PureComponent {
@@ -46,7 +46,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             // bail out on backwards as we only paginate in one direction
             return false;
         }
-        const opts = {from: this.state.nextBatch};
+        const opts = { from: this.state.nextBatch };
         const roomId = this.props.mxEvent.getRoomId();
         const eventId = this.props.mxEvent.getId();
         const client = MatrixClientPeg.get();
@@ -62,7 +62,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
             if (error.errcode) {
                 console.error("fetching /relations failed with error", error);
             }
-            this.setState({error}, () => reject(error));
+            this.setState({ error }, () => reject(error));
             return promise;
         }
 
@@ -131,7 +131,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent {
     render() {
         let content;
         if (this.state.error) {
-            const {error} = this.state;
+            const { error } = this.state;
             if (error.errcode === "M_UNRECOGNIZED") {
                 content = (<p className="mx_MessageEditHistoryDialog_error">
                     {_t("Your homeserver doesn't seem to support this feature.")}

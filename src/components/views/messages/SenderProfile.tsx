@@ -39,7 +39,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     private unmounted: boolean;
 
     constructor(props: IProps) {
-        super(props)
+        super(props);
         const senderId = this.props.mxEvent.getSender();
 
         this.state = {
@@ -56,7 +56,6 @@ export default class SenderProfile extends React.Component<IProps, IState> {
             this.getPublicisedGroups();
         }
 
-
         this.context.on('RoomState.events', this.onRoomStateEvents);
     }
 
@@ -70,7 +69,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
             const userGroups = await FlairStore.getPublicisedGroupsCached(
                 this.context, this.props.mxEvent.getSender(),
             );
-            this.setState({userGroups});
+            this.setState({ userGroups });
         }
     }
 
@@ -106,9 +105,9 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     }
 
     render() {
-        const {mxEvent} = this.props;
+        const { mxEvent } = this.props;
         const colorClass = getUserNameColorClass(mxEvent.getSender());
-        const {msgtype} = mxEvent.getContent();
+        const { msgtype } = mxEvent.getContent();
 
         const disambiguate = mxEvent.sender?.disambiguate;
         const displayName = mxEvent.sender?.rawDisplayName || mxEvent.getSender() || "";
@@ -140,7 +139,7 @@ export default class SenderProfile extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_SenderProfile mx_SenderProfile_hover" dir="auto" onClick={this.props.onClick}>
+            <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
                 <span className={`mx_SenderProfile_displayName ${colorClass}`}>
                     { displayName }
                 </span>
