@@ -38,7 +38,6 @@ module.exports = {
             // Things we do that break the ideal style
             "prefer-promise-reject-errors": "off",
             "quotes": "off",
-            "indent": "off",
             "no-extra-boolean-cast": "off",
 
             // Remove Babel things manually due to override limitations
