@@ -56,6 +56,7 @@ enum TransitionType {
     ChangedName = "changed_name",
     ChangedAvatar = "changed_avatar",
     NoChange = "no_change",
+    ServerAcl = "server_acl",
 }
 
 const SEP = ",";
@@ -288,6 +289,12 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                     ? _t("%(severalUsers)smade no changes %(count)s times", { severalUsers: "", count: repeats })
                     : _t("%(oneUser)smade no changes %(count)s times", { oneUser: "", count: repeats });
                 break;
+            case "server_acl":
+                res = (userCount > 1)
+                    ? _t("%(severalUsers)schanged the server ACLs %(count)s times",
+                        { severalUsers: "", count: repeats })
+                    : _t("%(oneUser)schanged the server ACLs %(count)s times", { oneUser: "", count: repeats });
+                break;
         }
 
         return res;
@@ -312,6 +319,10 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                 return TransitionType.InviteWithdrawal;
             }
             return TransitionType.Invited;
+        }
+
+        if (e.mxEvent.getType() === 'm.room.server_acl') {
+            return TransitionType.ServerAcl;
         }
 
         switch (e.mxEvent.getContent().membership) {
@@ -400,19 +411,23 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         // Object mapping user IDs to an array of IUserEvents
         const userEvents: Record<string, IUserEvents[]> = {};
         eventsToRender.forEach((e, index) => {
-            const userId = e.getStateKey();
+            const userId = e.getType() === 'm.room.server_acl' ? e.getSender() : e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
             }
 
-            if (e.target) {
+            if (e.getType() === 'm.room.server_acl') {
+                latestUserAvatarMember.set(userId, e.sender);
+            } else if (e.target) {
                 latestUserAvatarMember.set(userId, e.target);
             }
 
             let displayName = userId;
             if (e.getType() === 'm.room.third_party_invite') {
                 displayName = e.getContent().display_name;
+            } else if (e.getType() === 'm.room.server_acl') {
+                displayName = e.sender.name;
             } else if (e.target) {
                 displayName = e.target.name;
             }

@@ -82,6 +82,7 @@ import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
+import EditorStateTransfer from "../../utils/EditorStateTransfer";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -192,6 +193,7 @@ export interface IState {
     // whether or not a spaces context switch brought us here,
     // if it did we don't want the room to be marked as read as soon as it is loaded.
     wasContextSwitch?: boolean;
+    editState?: EditorStateTransfer;
 }
 
 @replaceableComponent("structures.RoomView")
@@ -814,6 +816,36 @@ export default class RoomView extends React.Component<IProps, IState> {
                 break;
             case 'focus_search':
                 this.onSearchClick();
+                break;
+
+            case "edit_event": {
+                const editState = payload.event ? new EditorStateTransfer(payload.event) : null;
+                this.setState({ editState }, () => {
+                    if (payload.event) {
+                        this.messagePanel?.scrollToEventIfNeeded(payload.event.getId());
+                    }
+                });
+                break;
+            }
+
+            case Action.ComposerInsert: {
+                // re-dispatch to the correct composer
+                if (this.state.editState) {
+                    dis.dispatch({
+                        ...payload,
+                        action: "edit_composer_insert",
+                    });
+                } else {
+                    dis.dispatch({
+                        ...payload,
+                        action: "send_composer_insert",
+                    });
+                }
+                break;
+            }
+
+            case "scroll_to_bottom":
+                this.messagePanel?.jumpToLiveTimeline();
                 break;
         }
     };
@@ -2040,6 +2072,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 resizeNotifier={this.props.resizeNotifier}
                 showReactions={true}
                 layout={this.state.layout}
+                editState={this.state.editState}
             />);
 
         let topUnreadMessagesBar = null;

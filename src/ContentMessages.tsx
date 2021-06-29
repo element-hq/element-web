@@ -307,7 +307,7 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-function uploadFile(
+export function uploadFile(
     matrixClient: MatrixClient,
     roomId: string,
     file: File | Blob,

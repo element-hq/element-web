@@ -50,6 +50,7 @@ import EditorStateTransfer from "../../utils/EditorStateTransfer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
+const membershipTypes = [EventType.RoomMember, EventType.RoomThirdPartyInvite, EventType.RoomServerAcl];
 
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
@@ -76,10 +77,6 @@ function shouldFormContinuation(prevEvent: MatrixEvent, mxEvent: MatrixEvent): b
     if (!haveTileForEvent(prevEvent)) return false;
 
     return true;
-}
-
-const isMembershipChange = (e: MatrixEvent): boolean => {
-    return e.getType() === EventType.RoomMember || e.getType() === EventType.RoomThirdPartyInvite;
 }
 
 interface IProps {
@@ -1183,7 +1180,7 @@ class RedactionGrouper extends BaseGrouper {
 // Wrap consecutive member events in a ListSummary, ignore if redacted
 class MemberGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
-        return panel.shouldShowEvent(ev) && isMembershipChange(ev);
+        return panel.shouldShowEvent(ev) && membershipTypes.includes(ev.getType() as EventType);
     }
 
     constructor(
@@ -1200,7 +1197,7 @@ class MemberGrouper extends BaseGrouper {
         if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
-        return isMembershipChange(ev);
+        return membershipTypes.includes(ev.getType() as EventType);
     }
 
     public add(ev: MatrixEvent): void {

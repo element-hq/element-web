@@ -50,7 +50,7 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
             {detailContent}
         </div>
         <div className="mx_Toast_buttons" aria-live="off">
-            {onReject && rejectLabel && <AccessibleButton kind="danger" onClick={onReject}>
+            {onReject && rejectLabel && <AccessibleButton kind="danger_outline" onClick={onReject}>
                 { rejectLabel }
             </AccessibleButton> }
             <AccessibleButton onClick={onAccept} kind="primary">
