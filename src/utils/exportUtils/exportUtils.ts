@@ -24,7 +24,7 @@ export const textForFormat = (format: string): string => {
     }
 }
 
-export const textForType = (type: string) => {
+export const textForType = (type: string): string => {
     switch (type) {
         case exportTypes.BEGINNING:
             return _t("From the beginning");
