@@ -41,6 +41,9 @@ module.exports = {
             "indent": "off",
             "no-extra-boolean-cast": "off",
 
+            // Remove Babel things manually due to override limitations
+            "@babel/no-invalid-this": ["off"],
+
             // We're okay being explicit at the moment
             "@typescript-eslint/no-empty-interface": "off",
             // We disable this while we're transitioning
