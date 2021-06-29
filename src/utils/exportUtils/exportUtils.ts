@@ -13,7 +13,7 @@ export enum exportTypes {
     LAST_N_MESSAGES = "LAST_N_MESSAGES",
 }
 
-export const textForFormat = (format: string) => {
+export const textForFormat = (format: string): string => {
     switch (format) {
         case exportFormats.HTML:
             return _t("HTML");
@@ -43,4 +43,3 @@ export interface exportOptions {
     attachmentsIncluded: boolean;
     maxSize: number;
 }
-
