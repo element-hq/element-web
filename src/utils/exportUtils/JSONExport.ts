@@ -10,35 +10,30 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 export default class JSONExporter extends Exporter {
     protected totalSize: number;
+    protected messages: any[];
 
     constructor(room: Room, exportType: exportTypes, exportOptions: exportOptions) {
         super(room, exportType, exportOptions);
         this.totalSize = 0;
+        this.messages = [];
     }
 
-    protected wrapJSON(json: string): string {
+    protected createJSONString(): string {
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
         const creatorName = this.room?.getMember(creator)?.rawDisplayName || creator;
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
         const exporter = this.client.getUserId();
         const exporterName = this.room?.getMember(exporter)?.rawDisplayName || exporter;
-        return `{
- "room_name": "${this.room.name}",
- "room_creator": "${creatorName}",
- "topic": "${topic}",
- "export_date": "${exportDate}",
- "exported_by": "${exporterName}",
- "messages": [
-${json}
- ]
-}`
-    }
-
-    protected indentEachLine(JSONString: string, spaces: number) {
-        const indent = ' ';
-        const regex = /^(?!\s*$)/gm;
-        return JSONString.replace(regex, indent.repeat(spaces));
+        const jsonObject = {
+            room_name: this.room.name,
+            room_creator: creatorName,
+            topic,
+            export_date: exportDate,
+            exported_by: exporterName,
+            messages: this.messages,
+        }
+        return JSON.stringify(jsonObject, null, 2);
     }
 
     protected async getJSONString(mxEv: MatrixEvent) {
@@ -57,18 +52,16 @@ ${json}
         }
         const jsonEvent: any = mxEv.toJSON();
         const clearEvent = mxEv.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
-        const jsonString = JSON.stringify(clearEvent, null, 2);
-        return jsonString.length > 2 ? jsonString + ",\n" : "";
+        return clearEvent;
     }
 
     protected async createOutput(events: MatrixEvent[]) {
-        let content = "";
         for (const event of events) {
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
-            content += await this.getJSONString(event);
+            this.messages.push(await this.getJSONString(event));
         }
-        return this.wrapJSON(this.indentEachLine(content.slice(0, -2), 2));
+        return this.createJSONString();
     }
 
     public async export() {

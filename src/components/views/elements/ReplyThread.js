@@ -73,16 +73,16 @@ export default class ReplyThread extends React.Component {
 
         this.unmounted = false;
 
-        if (this.props.forExport) return;
+        if (this.props.forExport) {
+            this.context.on("Event.replaced", this.onEventReplaced);
+            this.room = this.context.getRoom(this.props.parentEv.getRoomId());
+            this.room.on("Room.redaction", this.onRoomRedaction);
+            this.room.on("Room.redactionCancelled", this.onRoomRedaction);
 
-        this.context.on("Event.replaced", this.onEventReplaced);
-        this.room = this.context.getRoom(this.props.parentEv.getRoomId());
-        this.room.on("Room.redaction", this.onRoomRedaction);
-        this.room.on("Room.redactionCancelled", this.onRoomRedaction);
-
-        this.onQuoteClick = this.onQuoteClick.bind(this);
-        this.canCollapse = this.canCollapse.bind(this);
-        this.collapse = this.collapse.bind(this);
+            this.onQuoteClick = this.onQuoteClick.bind(this);
+            this.canCollapse = this.canCollapse.bind(this);
+            this.collapse = this.collapse.bind(this);
+        }
     }
 
     static getParentEventId(ev) {

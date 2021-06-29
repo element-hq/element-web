@@ -212,151 +212,154 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
     const sizePostFix = <span>{ _t("MB") }</span>;
 
-    let componentToDisplay: JSX.Element;
     if (exportCancelled) {
         // Display successful cancellation message
-        return <BaseDialog
-            title={_t("Export Cancelled")}
-            className="mx_ExportDialog"
-            contentId="mx_Dialog_content"
-            onFinished={onFinished}
-            fixedWidth={true}
-        >
-            <p>{ _t("The export was cancelled successfully") }</p>
+        return (
+            <BaseDialog
+                title={_t("Export Cancelled")}
+                className="mx_ExportDialog"
+                contentId="mx_Dialog_content"
+                onFinished={onFinished}
+                fixedWidth={true}
+            >
+                <p>{ _t("The export was cancelled successfully") }</p>
 
-            <DialogButtons
-                primaryButton={_t("Okay")}
-                hasCancel={false}
-                onPrimaryButtonClick={onFinished}
-            />
-        </BaseDialog>
+                <DialogButtons
+                    primaryButton={ _t("Okay") }
+                    hasCancel={false}
+                    onPrimaryButtonClick={onFinished}
+                />
+            </BaseDialog>
+        );
     } else if (exportSuccessful) {
         // Display successful export message
-        return <BaseDialog
-            title={_t("Export Successful")}
-            className="mx_ExportDialog"
-            contentId="mx_Dialog_content"
-            onFinished={onFinished}
-            fixedWidth={true}
-        >
-            <p>{ _t("Your messages were successfully exported") }</p>
+        return (
+            <BaseDialog
+                title={_t("Export Successful")}
+                className="mx_ExportDialog"
+                contentId="mx_Dialog_content"
+                onFinished={onFinished}
+                fixedWidth={true}
+            >
+                <p>{ _t("Your messages were successfully exported") }</p>
 
-            <DialogButtons
-                primaryButton={_t("Okay")}
-                hasCancel={false}
-                onPrimaryButtonClick={onFinished}
-            />
-        </BaseDialog>
+                <DialogButtons
+                    primaryButton={_t("Okay")}
+                    hasCancel={false}
+                    onPrimaryButtonClick={onFinished}
+                />
+            </BaseDialog>
+        );
     } else if (!isExporting) {
         // Display export settings
-        <BaseDialog
-            title={_t("Export Chat")}
-            className="mx_ExportDialog"
-            contentId="mx_Dialog_content"
-            hasCancel={true}
-            onFinished={onFinished}
-            fixedWidth={true}
-        >
-            <p>
-                {_t(
-                    "Select from the options below to export chats from your timeline",
-                )}
-            </p>
-
-            <span className="mx_ExportDialog_subheading">{ _t("Format") }</span>
-
-            <StyledRadioGroup
-                name="feedbackRating"
-                value={exportFormat}
-                onChange={(key) => setExportFormat(exportFormats[key])}
-                definitions={exportFormatOptions}
-            />
-
-            <span className="mx_ExportDialog_subheading">{ _t("Messages") }</span>
-
-            <Field
-                element="select"
-                value={exportType}
-                onChange={(e) => {
-                    setExportType(exportTypes[e.target.value]);
-                }}
+        return (
+            <BaseDialog
+                title={_t("Export Chat")}
+                className="mx_ExportDialog"
+                contentId="mx_Dialog_content"
+                hasCancel={true}
+                onFinished={onFinished}
+                fixedWidth={true}
             >
-                { exportTypeOptions }
-            </Field>
-            { messageCount }
+                <p>
+                    { _t("Select from the options below to export chats from your timeline") }
+                </p>
 
-            <span className="mx_ExportDialog_subheading">
-                { _t("Size Limit") }
-            </span>
+                <span className="mx_ExportDialog_subheading">{ _t("Format") }</span>
 
-            <Field
-                type="number"
-                autoComplete="off"
-                onValidate={onValidateSize}
-                element="input"
-                ref={sizeLimitRef}
-                value={sizeLimit}
-                postfixComponent={sizePostFix}
-                onChange={(e) => setSizeLimit(parseInt(e.target.value))}
-            />
+                <StyledRadioGroup
+                    name="feedbackRating"
+                    value={exportFormat}
+                    onChange={(key) => setExportFormat(exportFormats[key])}
+                    definitions={exportFormatOptions}
+                />
 
-            <StyledCheckbox
-                checked={includeAttachments}
-                onChange={(e) =>
-                    setAttachments((e.target as HTMLInputElement).checked)
-                }
-            >
-                { _t("Include Attachments") }
-            </StyledCheckbox>
+                <span className="mx_ExportDialog_subheading">{ _t("Messages") }</span>
 
-            <DialogButtons
-                primaryButton={_t("Export")}
-                onPrimaryButtonClick={onExportClick}
-                onCancel={() => onFinished(false)}
-            />
-        </BaseDialog>
+                <Field
+                    element="select"
+                    value={exportType}
+                    onChange={(e) => {
+                        setExportType(exportTypes[e.target.value]);
+                    }}
+                >
+                    { exportTypeOptions }
+                </Field>
+                { messageCount }
+
+                <span className="mx_ExportDialog_subheading">{ _t("Size Limit") }</span>
+
+                <Field
+                    type="number"
+                    autoComplete="off"
+                    onValidate={onValidateSize}
+                    element="input"
+                    ref={sizeLimitRef}
+                    value={sizeLimit}
+                    postfixComponent={sizePostFix}
+                    onChange={(e) => setSizeLimit(parseInt(e.target.value))}
+                />
+
+                <StyledCheckbox
+                    checked={includeAttachments}
+                    onChange={(e) =>
+                        setAttachments((e.target as HTMLInputElement).checked)
+                    }
+                >
+                    { _t("Include Attachments") }
+                </StyledCheckbox>
+
+                <DialogButtons
+                    primaryButton={_t("Export")}
+                    onPrimaryButtonClick={onExportClick}
+                    onCancel={() => onFinished(false)}
+                />
+            </BaseDialog>
+        );
     } else if (displayCancel) {
         // Display cancel warning
-        <BaseDialog
-            title={_t("Warning")}
-            className="mx_ExportDialog"
-            contentId="mx_Dialog_content"
-            onFinished={onFinished}
-            fixedWidth={true}
-        >
-            <p>
-                {_t(
-                    "Are you sure you want to stop exporting your data? If you do, you'll need to start over.",
-                )}
-            </p>
-            <DialogButtons
-                primaryButton={_t("Abort export process")}
-                primaryButtonClass="danger"
-                hasCancel={true}
-                cancelButton={_t("Continue")}
-                onCancel={() => setCancelWarning(false)}
-                onPrimaryButtonClick={confirmCanel}
-            />
-        </BaseDialog>
+        return (
+            <BaseDialog
+                title={_t("Warning")}
+                className="mx_ExportDialog"
+                contentId="mx_Dialog_content"
+                onFinished={onFinished}
+                fixedWidth={true}
+            >
+                <p>
+                    {_t(
+                        "Are you sure you want to stop exporting your data? If you do, you'll need to start over.",
+                    )}
+                </p>
+                <DialogButtons
+                    primaryButton={_t("Abort export process")}
+                    primaryButtonClass="danger"
+                    hasCancel={true}
+                    cancelButton={_t("Continue")}
+                    onCancel={() => setCancelWarning(false)}
+                    onPrimaryButtonClick={confirmCanel}
+                />
+            </BaseDialog>
+        );
     } else {
         // Display progress dialog
-        return <BaseDialog
-            title={_t("Exporting your data...")}
-            className="mx_ExportDialog"
-            contentId="mx_Dialog_content"
-            onFinished={onFinished}
-            fixedWidth={true}
-        >
-            <DialogButtons
-                primaryButton={_t("Cancel")}
-                primaryButtonClass="danger"
-                hasCancel={false}
-                onPrimaryButtonClick={onCancel}
-            />
-        </BaseDialog>
+        return (
+            <BaseDialog
+                title={_t("Exporting your data...")}
+                className="mx_ExportDialog"
+                contentId="mx_Dialog_content"
+                onFinished={onFinished}
+                fixedWidth={true}
+            >
+                <DialogButtons
+                    primaryButton={_t("Cancel")}
+                    primaryButtonClass="danger"
+                    hasCancel={false}
+                    onPrimaryButtonClick={onCancel}
+                />
+            </BaseDialog>
+        );
     }
-
-    return componentToDisplay;
 };
 
 export default ExportDialog;
