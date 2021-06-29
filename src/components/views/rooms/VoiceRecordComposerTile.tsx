@@ -18,22 +18,18 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
 import React, {ReactNode} from "react";
 import {
-    IRecordingUpdate,
-    RECORDING_PLAYBACK_SAMPLES,
     RecordingState,
     VoiceRecording,
 } from "../../../voice/VoiceRecording";
 import {Room} from "matrix-js-sdk/src/models/room";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
-import LiveRecordingWaveform from "../voice_messages/LiveRecordingWaveform";
+import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { arrayFastResample, arraySeed } from "../../../utils/arrays";
-import { percentageOf } from "../../../utils/numbers";
-import LiveRecordingClock from "../voice_messages/LiveRecordingClock";
+import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import {UPDATE_EVENT} from "../../../stores/AsyncStore";
-import RecordingPlayback from "../voice_messages/RecordingPlayback";
+import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
@@ -46,8 +42,6 @@ interface IProps {
 interface IState {
     recorder?: VoiceRecording;
     recordingPhase?: RecordingState;
-    relHeights: number[];
-    seconds: number;
 }
 
 /**
@@ -55,56 +49,16 @@ interface IState {
  */
 @replaceableComponent("views.rooms.VoiceRecordComposerTile")
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
-    private waveform: number[] = [];
-    private seconds = 0;
-    private scheduledAnimationFrame = false;
-
     public constructor(props) {
         super(props);
 
         this.state = {
             recorder: null, // no recording started by default
-            seconds: 0,
-            relHeights: arraySeed(0, RECORDING_PLAYBACK_SAMPLES),
         };
-    }
-
-    public componentDidUpdate(prevProps, prevState) {
-        if (!prevState.recorder && this.state.recorder) {
-            this.state.recorder.liveData.onUpdate(this.onRecordingUpdate);
-        }
     }
 
     public async componentWillUnmount() {
         await VoiceRecordingStore.instance.disposeRecording();
-    }
-
-    private onRecordingUpdate = (update: IRecordingUpdate): void => {
-        this.waveform = update.waveform;
-        this.seconds = update.timeSeconds;
-
-        if (this.scheduledAnimationFrame) {
-            return;
-        }
-
-        this.scheduledAnimationFrame = true;
-        // The audio recorder flushes data faster than the screen refresh rate
-        // Using requestAnimationFrame makes sure that we only flush the data
-        // to react once per tick to avoid unneeded work.
-        requestAnimationFrame(() => {
-            // The waveform and the downsample target are pretty close, so we should be fine to
-            // do this, despite the docs on arrayFastResample.
-            const bars = arrayFastResample(Array.from(this.waveform), RECORDING_PLAYBACK_SAMPLES);
-            this.setState({
-                // The incoming data is between zero and one, but typically even screaming into a
-                // microphone won't send you over 0.6, so we artificially adjust the gain for the
-                // waveform. This results in a slightly more cinematic/animated waveform for the
-                // user.
-                relHeights: bars.map(b => percentageOf(b, 0, 0.50)),
-                seconds: this.seconds,
-            });
-            this.scheduledAnimationFrame = false;
-        });
     }
 
     // called by composer

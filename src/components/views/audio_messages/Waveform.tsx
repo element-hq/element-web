@@ -17,6 +17,11 @@ limitations under the License.
 import React from "react";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import classNames from "classnames";
+import { CSSProperties } from "react";
+
+interface WaveformCSSProperties extends CSSProperties {
+    '--barHeight': number;
+}
 
 interface IProps {
     relHeights: number[]; // relative heights (0-1)
@@ -40,10 +45,6 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
         progress: 1,
     };
 
-    public constructor(props) {
-        super(props);
-    }
-
     public render() {
         return <div className='mx_Waveform'>
             {this.props.relHeights.map((h, i) => {
@@ -53,7 +54,9 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
                     'mx_Waveform_bar': true,
                     'mx_Waveform_bar_100pct': isCompleteBar,
                 });
-                return <span key={i} style={{height: (h * 100) + '%'}} className={classes} />;
+                return <span key={i} style={{
+                    "--barHeight": h,
+                } as WaveformCSSProperties} className={classes} />;
             })}
         </div>;
     }

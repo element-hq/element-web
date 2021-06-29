@@ -20,13 +20,14 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import { percentageOf } from "../../../utils/numbers";
 import Waveform from "./Waveform";
+import { MarkedExecution } from "../../../utils/MarkedExecution";
 
 interface IProps {
     recorder: VoiceRecording;
 }
 
 interface IState {
-    heights: number[];
+    waveform: number[];
 }
 
 /**
@@ -34,27 +35,35 @@ interface IState {
  */
 @replaceableComponent("views.audio_messages.LiveRecordingWaveform")
 export default class LiveRecordingWaveform extends React.PureComponent<IProps, IState> {
-    public constructor(props) {
-        super(props);
-
-        this.state = {heights: arraySeed(0, RECORDING_PLAYBACK_SAMPLES)};
-        this.props.recorder.liveData.onUpdate(this.onRecordingUpdate);
-    }
-
-    private onRecordingUpdate = (update: IRecordingUpdate) => {
-        // The waveform and the downsample target are pretty close, so we should be fine to
-        // do this, despite the docs on arrayFastResample.
-        const bars = arrayFastResample(Array.from(update.waveform), RECORDING_PLAYBACK_SAMPLES);
-        this.setState({
-            // The incoming data is between zero and one, but typically even screaming into a
-            // microphone won't send you over 0.6, so we artificially adjust the gain for the
-            // waveform. This results in a slightly more cinematic/animated waveform for the
-            // user.
-            heights: bars.map(b => percentageOf(b, 0, 0.50)),
-        });
+    public static defaultProps = {
+        progress: 1,
     };
 
+    private waveform: number[] = [];
+    private scheduledUpdate = new MarkedExecution(
+        () => this.updateWaveform(),
+        () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
+    );
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            waveform: [],
+        };
+    }
+
+    componentDidMount() {
+        this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
+            this.waveform = update.waveform;
+            this.scheduledUpdate.mark();
+        });
+    }
+
+    private updateWaveform() {
+        this.setState({ waveform: this.waveform });
+    }
+
     public render() {
-        return <Waveform relHeights={this.state.heights} />;
+        return <Waveform relHeights={this.state.waveform} />;
     }
 }
