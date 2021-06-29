@@ -78,7 +78,7 @@ export default class MVideoBody extends React.PureComponent<IProps, IState> {
     }
 
     private getContentUrl(): string|null {
-        if (this.props.forExport) return "forExport";
+        if (this.props.forExport) return this.props.mxEvent.getContent().url;
         const media = mediaFromContent(this.props.mxEvent.getContent());
         if (media.isEncrypted) {
             return this.state.decryptedUrl;

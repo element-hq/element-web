@@ -263,7 +263,9 @@ export default class HTMLExporter extends Exporter {
             </MatrixClientContext.Provider>
         </div>
         let eventTileMarkup = renderToStaticMarkup(eventTile);
-        if (filePath) eventTileMarkup = eventTileMarkup.replace(/(src=|href=)"forExport"/g, `$1"${filePath}"`);
+        if (filePath) {
+            eventTileMarkup = eventTileMarkup.split(mxEv.getContent().url).join(filePath);
+        }
         if (hasAvatar) {
             eventTileMarkup = eventTileMarkup.replace(
                 encodeURI(this.getAvatarURL(mxEv)).replace(/&/g, '&amp;'),

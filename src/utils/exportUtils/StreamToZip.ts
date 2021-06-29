@@ -136,7 +136,8 @@ export default function streamToZIP(underlyingSource: UnderlyingSource) {
             const date = new Date(typeof fileLike.lastModified === 'undefined' ? Date.now() : fileLike.lastModified);
 
             if (fileLike.directory && !name.endsWith('/')) name += '/';
-            if (files[name]) throw new Error('File already exists.');
+            // if file already exists, do not enqueue
+            if (files[name]) return;
 
             const nameBuf = encoder.encode(name);
             filenames.push(name);
