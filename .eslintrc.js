@@ -26,15 +26,15 @@ module.exports = {
         "react/jsx-key": ["error"],
     },
     overrides: [{
-        "files": [
+        files: [
             "src/**/*.{ts,tsx}",
             "test/**/*.{ts,tsx}",
         ],
-        "extends": [
+        extends: [
             "plugin:matrix-org/typescript",
             "plugin:matrix-org/react",
         ],
-        "rules": {
+        rules: {
             // Things we do that break the ideal style
             "prefer-promise-reject-errors": "off",
             "quotes": "off",
