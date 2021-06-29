@@ -1131,8 +1131,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             description: (
                 <span>
                     { isSpace
-                        ? _t("Are you sure you want to leave the space '%(spaceName)s'?", { spaceName: roomToLeave.name })
-                        : _t("Are you sure you want to leave the room '%(roomName)s'?", { roomName: roomToLeave.name }) }
+                        ? _t(
+                            "Are you sure you want to leave the space '%(spaceName)s'?",
+                            { spaceName: roomToLeave.name },
+                        )
+                        : _t(
+                            "Are you sure you want to leave the room '%(roomName)s'?",
+                            { roomName: roomToLeave.name },
+                        )}
                     { warnings }
                 </span>
             ),

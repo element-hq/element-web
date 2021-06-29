@@ -169,11 +169,21 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({ joinRule, guestAccess });
 
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, "m.room.join_rules", { join_rule: joinRule }, "").catch((e) => {
+        client.sendStateEvent(
+            this.props.roomId,
+            "m.room.join_rules",
+            { join_rule: joinRule },
+            "",
+        ).catch((e) => {
             console.error(e);
             this.setState({ joinRule: beforeJoinRule });
         });
-        client.sendStateEvent(this.props.roomId, "m.room.guest_access", { guest_access: guestAccess }, "").catch((e) => {
+        client.sendStateEvent(
+            this.props.roomId,
+            "m.room.guest_access",
+            { guest_access: guestAccess },
+            "",
+        ).catch((e) => {
             console.error(e);
             this.setState({ guestAccess: beforeGuestAccess });
         });
@@ -215,11 +225,21 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.setState({ joinRule, guestAccess });
 
         const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, "m.room.join_rules", { join_rule: joinRule }, "").catch((e) => {
+        client.sendStateEvent(
+            this.props.roomId,
+            "m.room.join_rules",
+            { join_rule: joinRule },
+            "",
+        ).catch((e) => {
             console.error(e);
             this.setState({ joinRule: beforeJoinRule });
         });
-        client.sendStateEvent(this.props.roomId, "m.room.guest_access", { guest_access: guestAccess }, "").catch((e) => {
+        client.sendStateEvent(
+            this.props.roomId,
+            "m.room.guest_access",
+            { guest_access: guestAccess },
+            "",
+        ).catch((e) => {
             console.error(e);
             this.setState({ guestAccess: beforeGuestAccess });
         });

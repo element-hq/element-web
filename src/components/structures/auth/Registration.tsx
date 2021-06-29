@@ -487,7 +487,13 @@ export default class Registration extends React.Component<IProps, IState> {
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
                     />
                     <h3 className="mx_AuthBody_centered">
-                        { _t("%(ssoButtons)s Or %(usernamePassword)s", { ssoButtons: "", usernamePassword: "" }).trim() }
+                        {_t(
+                            "%(ssoButtons)s Or %(usernamePassword)s",
+                            {
+                                ssoButtons: "",
+                                usernamePassword: "",
+                            },
+                        ).trim()}
                     </h3>
                 </React.Fragment>;
             }

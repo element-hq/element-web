@@ -131,7 +131,9 @@ export default class BridgeTile extends React.PureComponent<IProps> {
             const networkName = network.displayname || network.id;
             let networkLink = <span>{networkName}</span>;
             if (typeof network.external_url === "string" && isUrlPermitted(network.external_url)) {
-                networkLink = <a href={network.external_url} target="_blank" rel="noreferrer noopener">{networkName}</a>;
+                networkLink = (
+                    <a href={network.external_url} target="_blank" rel="noreferrer noopener">{networkName}</a>
+                );
             }
             networkItem = _t("Workspace: <networkLink/>", {}, {
                 networkLink: () => networkLink,

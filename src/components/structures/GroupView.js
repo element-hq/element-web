@@ -363,7 +363,10 @@ class FeaturedUser extends React.Component {
                         "Failed to remove a user from the summary of %(groupId)s",
                         { groupId: this.props.groupId },
                     ),
-                    description: _t("The user '%(displayName)s' could not be removed from the summary.", { displayName }),
+                    description: _t(
+                        "The user '%(displayName)s' could not be removed from the summary.",
+                        { displayName },
+                    ),
                 },
             );
         });
