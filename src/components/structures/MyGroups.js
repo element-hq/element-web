@@ -123,7 +123,7 @@ export default class MyGroups extends React.Component {
                 </div>
                 {/*<div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
                     <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onJoinGroupClick}>
-                        <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="50" height="50" />
+                        <img src={require("../../../res/img/icons-create-room.svg")} width="50" height="50" />
                     </AccessibleButton>
                     <div className="mx_MyGroups_headerCard_content">
                         <div className="mx_MyGroups_headerCard_header">

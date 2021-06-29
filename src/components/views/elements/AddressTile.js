@@ -53,7 +53,6 @@ export default class AddressTile extends React.Component {
         }
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const nameClasses = classNames({
             "mx_AddressTile_name": true,
@@ -124,7 +123,7 @@ export default class AddressTile extends React.Component {
         if (this.props.canDismiss) {
             dismiss = (
                 <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed} >
-                    <TintableSvg src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
+                    <img src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
                 </div>
             );
         }

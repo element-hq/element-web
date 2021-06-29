@@ -126,12 +126,11 @@ class CategoryRoomList extends React.Component {
     };
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton"
                 onClick={this.onAddRoomsToSummaryClicked}
             >
-                <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
+                <img src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     { _t('Add a Room') }
                 </div>
@@ -300,10 +299,9 @@ class RoleUserList extends React.Component {
     };
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
-                <TintableSvg src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
+                <img src={require("../../../res/img/icons-create-room.svg")} width="64" height="64" />
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     { _t('Add a User') }
                 </div>
@@ -855,7 +853,6 @@ export default class GroupView extends React.Component {
     _getRoomsNode() {
         const RoomDetailList = sdk.getComponent('rooms.RoomDetailList');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const Spinner = sdk.getComponent('elements.Spinner');
         const TooltipButton = sdk.getComponent('elements.TooltipButton');
 
@@ -871,7 +868,7 @@ export default class GroupView extends React.Component {
                 onClick={this._onAddRoomsClick}
             >
                 <div className="mx_GroupView_rooms_header_addRow_button">
-                    <TintableSvg src={require("../../../res/img/icons-room-add.svg")} width="24" height="24" />
+                    <img src={require("../../../res/img/icons-room-add.svg")} width="24" height="24" />
                 </div>
                 <div className="mx_GroupView_rooms_header_addRow_label">
                     { _t('Add rooms to this community') }

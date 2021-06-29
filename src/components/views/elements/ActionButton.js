@@ -62,8 +62,6 @@ export default class ActionButton extends React.Component {
     };
 
     render() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
         let tooltip;
         if (this.state.showTooltip) {
             const Tooltip = sdk.getComponent("elements.Tooltip");
@@ -71,7 +69,7 @@ export default class ActionButton extends React.Component {
         }
 
         const icon = this.props.iconPath ?
-            (<TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
+            (<img src={this.props.iconPath} width={this.props.size} height={this.props.size} />) :
             undefined;
 
         const classNames = ["mx_RoleButton"];
