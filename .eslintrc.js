@@ -1,10 +1,9 @@
 module.exports = {
     plugins: ["matrix-org"],
     extends: [
-        "plugin:matrix-org/javascript",
+        "plugin:matrix-org/babel",
         "plugin:matrix-org/react",
     ],
-    parser: "@babel/eslint-parser",
     env: {
         browser: true,
         node: true,
