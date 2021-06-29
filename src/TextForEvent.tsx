@@ -137,7 +137,7 @@ function textForTopicEvent(ev): () => string | null {
 
 function textForRoomAvatarEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    return () => _t('%(senderDisplayName)s changed the room avatar.', {senderDisplayName});
+    return () => _t('%(senderDisplayName)s changed the room avatar.', { senderDisplayName });
 }
 
 function textForRoomNameEvent(ev): () => string | null {
